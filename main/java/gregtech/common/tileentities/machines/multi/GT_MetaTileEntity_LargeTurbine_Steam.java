@@ -66,21 +66,29 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
 		
 		@Override
 		int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow,	int aBaseEff) {
-		    int tEU=0;
-		    int tOut=0;
+    		    int tEU=0;
+		    int totalFlow = 0;
+		    int flow = 0;
+		    
 		    for(int i=0;i<aFluids.size();i++){
 		    	if(aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i)).equals("fluid.steam")||aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i)).equals("ic2.fluidSteam")){
-		    		tOut = Math.min((int)(aOptFlow*1.5f),aFluids.get(i).amount);
-		    		depleteInput(new FluidStack(aFluids.get(i), tOut));
+		    		flow = aFluids.get(i).amount;  
+		    		depleteInput(new FluidStack(aFluids.get(i), flow));
+		    		totalFlow += flow;
 		    	}
 		    }
-		    tOut = getAverage(tOut);
-		    tEU = Math.min(aOptFlow,tOut);
-		      addOutput(GT_ModHandler.getDistilledWater(useWater(tOut/160.0f)));
-		      if(tOut>0&&tOut<aOptFlow){
-		    	  tEU = tEU*(tOut*100/aOptFlow)+3;
-		      }
-			return tEU * aBaseEff / 20000;
+		    tEU = Math.min(aOptFlow, totalFlow);
+		    addOutput(GT_ModHandler.getDistilledWater(useWater(totalFlow/160.0f)));
+		    if(totalFlow > 0 && totalFlow != aOptFlow){
+			  float efficiency =  1.0f - Math.abs(((totalFlow - (float)aOptFlow) / aOptFlow));
+			  tEU *= efficiency;
+			  tEU = Math.max(1, tEU * aBaseEff / 20000);
+		    }
+		    else
+		    {
+		    	tEU = tEU * aBaseEff / 20000;
+		    }
+		    return  tEU;
 		}
 
 
