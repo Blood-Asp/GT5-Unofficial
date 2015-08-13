@@ -484,6 +484,8 @@ public int adjY = 9;
 				issueAchievement(player, "filterregulate");
 			}else if(stack.getUnlocalizedName().equals("gt.metaitem.01.32605")){
 				issueAchievement(player, "whatnow");
+			}else if(stack.getUnlocalizedName().equals("gt.metaitem.01.32703")){
+				issueAchievement(player, "stepforward");
 			}
 		}else if(stack.getUnlocalizedName().equals("ic2.itemPartCircuitAdv")){
 			issueAchievement(player, "stepforward");
