@@ -538,7 +538,7 @@ public class GT_Mod
     GT_ModHandler.addCraftingRecipe(new ItemStack(Blocks.wooden_slab, 6, 0), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[] { "WWW", Character.valueOf('W'), new ItemStack(Blocks.planks, 1, 0) });
     
     GT_Log.out.println("GT_Mod: Activating OreDictionary Handler, this can take some time, as it scans the whole OreDictionary");
-    FMLLog.info("If your Log stops here, you were too impatient. Wait a bit more next time, before killing Minecraft with the Task Manager.", new Object[0]);
+    FMLLog.info("If your Log stops here, you were too impatient. Wait a bit more next time, before killing Minecraft.", new Object[0]);
     gregtechproxy.activateOreDictHandler();
     FMLLog.info("Congratulations, you have been waiting long enough. Have a Cake.", new Object[0]);
     GT_Log.out.println("GT_Mod: " + GT_ModHandler.sSingleNonBlockDamagableRecipeList.size() + " Recipes were left unused.");
@@ -1109,8 +1109,12 @@ public void onIDChangingEvent(FMLModIdMappingEvent aEvent)
   }
 }
 
-
-/* Location:           F:\Torrent\minecraft\jd-gui-0.3.6.windows\gregtech_1.7.10-5.07.07-dev.jar
- * Qualified Name:     gregtech.GT_Mod
- * JD-Core Version:    0.7.0.1
+
+
+/* Location:           F:\Torrent\minecraft\jd-gui-0.3.6.windows\gregtech_1.7.10-5.07.07-dev.jar
+
+ * Qualified Name:     gregtech.GT_Mod
+
+ * JD-Core Version:    0.7.0.1
+
  */
