@@ -873,36 +873,24 @@ public class GT_Mod
       }
     }
     GT_Log.out.println("GT_Mod: Dungeon Loot");
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("dungeonChest").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
+
+    String[] chestLoots = {
+            "dungeonChest",
+            "bonusChest",
+            "villageBlacksmith",
+            "strongholdCrossing",
+            "strongholdLibrary",
+            "pyramidJungleDispenser",
+            "pyramidJungleChest",
+            "pyramidDesertyChest",
+            "mineshaftCorridor"
+    };
+    for (String chestLoot : chestLoots) {
+      for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo(chestLoot).getItems(new Random())) {
+        tStacks.add(tContent.theItemId);
+      }
     }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("bonusChest").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("villageBlacksmith").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("strongholdCrossing").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("strongholdLibrary").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("strongholdCorridor").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("pyramidJungleDispenser").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("pyramidJungleChest").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("pyramidDesertyChest").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
-    for (WeightedRandomChestContent tContent : ChestGenHooks.getInfo("mineshaftCorridor").getItems(new Random())) {
-      tStacks.add(tContent.theItemId);
-    }
+
     GT_Log.out.println("GT_Mod: Smelting");
     Object tStack;
     for (Iterator i$ = FurnaceRecipes.smelting().getSmeltingList().values().iterator(); i$.hasNext(); tStacks.add((ItemStack)tStack)) {
