@@ -151,6 +151,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private World mUniverse = null;
     private boolean isFirstServerWorldTick = true;
     private boolean mOreDictActivated = false;
+    public int[] mHarvestLevel= new int[1000];
+    public int mGraniteHavestLevel=3;
+    public int mMaxHarvestLevel=7;
+    public boolean mChangeHarvestLevels=false;
+
 
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
@@ -1575,6 +1580,24 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             rFuelValue = (short) Math.max(rFuelValue, 2000);
         }
         if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyLithium")) {
+            rFuelValue = (short) Math.max(rFuelValue, 888);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCaesium")) {
+            rFuelValue = (short) Math.max(rFuelValue, 6000);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCaesium")) {
+            rFuelValue = (short) Math.max(rFuelValue, 6000);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCaesium")) {
+            rFuelValue = (short) Math.max(rFuelValue, 6000);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCaesium")) {
+             rFuelValue = (short) Math.max(rFuelValue, 6000);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCaesium")) {
+            rFuelValue = (short) Math.max(rFuelValue, 2000);
+        }
+        if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCaesium")) {
             rFuelValue = (short) Math.max(rFuelValue, 888);
         }
         if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemLignite")) {
