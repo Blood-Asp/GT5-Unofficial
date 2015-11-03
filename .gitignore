@@ -70,3 +70,6 @@ local.properties
 .idea_modules/
 
 /out/
+eclipse/
+*.bat
+gradle/
