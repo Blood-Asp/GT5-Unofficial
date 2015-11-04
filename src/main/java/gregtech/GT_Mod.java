@@ -3,9 +3,9 @@ package gregtech;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import forestry.factory.recipes.ISqueezerRecipe;
-import forestry.factory.tiles.TileCentrifuge;
-import forestry.factory.tiles.TileSqueezer;
+import forestry.factory.gadgets.MachineCentrifuge;
+import forestry.factory.gadgets.MachineCentrifuge.RecipeManager;
+import forestry.factory.gadgets.MachineSqueezer;
 import gregtech.api.GregTech_API;
 import gregtech.api.enchants.Enchantment_EnderDamage;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -472,17 +472,24 @@ public class GT_Mod
             }
         }
         try {
-            for (Object tRecipe : TileCentrifuge.RecipeManager.recipes) {
-                Map<ItemStack, Float> outputs = ((TileCentrifuge.CentrifugeRecipe) tRecipe).getAllProducts();
+            for (Object tRecipe : MachineCentrifuge.RecipeManager.recipes)
+            {
+                Map<ItemStack,Float> outputs = ((MachineCentrifuge.CentrifugeRecipe)tRecipe).getAllProducts();
+
                 ItemStack[] tOutputs = new ItemStack[outputs.size()];
                 int[] tChances = new int[outputs.size()];
-                int i = 0;
+                int i =0;
                 for (Map.Entry<ItemStack, Float> entry : outputs.entrySet()) {
-                    tChances[i] = (int) (entry.getValue() * 10000);
+                    tChances[i] = (int) (entry.getValue()*10000);
                     tOutputs[i] = entry.getKey().copy();
                     i++;
                 }
-                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[]{((TileCentrifuge.CentrifugeRecipe) tRecipe).getInput()}, tOutputs, null, tChances, null, null, 128, 5, 0);
+//        for (int i = 0; i < outputs.size(); i++) {
+//                        tOutputs[i] = outputs.entrySet().
+//          tChances[i] = (tOriginalChances[i].intValue() * 100);
+//        }
+                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[] { ((MachineCentrifuge.CentrifugeRecipe)tRecipe).getInput() }, tOutputs, null, tChances, null, null, 128, 5, 0);
+
             }
         } catch (Throwable e) {
             if (GT_Values.D1) {
@@ -490,9 +497,9 @@ public class GT_Mod
             }
         }
         try {
-            for (Object tRecipe : TileSqueezer.RecipeManager.recipes) {
-                if ((((ISqueezerRecipe) tRecipe).getResources().length == 1) && (((ISqueezerRecipe) tRecipe).getFluidOutput() != null)) {
-                    GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[]{((ISqueezerRecipe) tRecipe).getResources()[0]}, new ItemStack[]{((ISqueezerRecipe) tRecipe).getRemnants()}, null, new int[]{(int) (((ISqueezerRecipe) tRecipe).getRemnantsChance() * 10000)}, null, new FluidStack[]{((ISqueezerRecipe) tRecipe).getFluidOutput()}, 400, 2, 0);
+            for (Object tRecipe : MachineSqueezer.RecipeManager.recipes) {
+                if ((((MachineSqueezer.Recipe)tRecipe).resources.length == 1) && (GT_Utility.getFluidForFilledItem(((MachineSqueezer.Recipe)tRecipe).resources[0], true) == null)) {
+                    GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[] { ((MachineSqueezer.Recipe)tRecipe).resources[0] }, new ItemStack[] { ((MachineSqueezer.Recipe)tRecipe).remnants }, null, new int[] { ((MachineSqueezer.Recipe)tRecipe).chance * 100 }, null, new FluidStack[] { ((MachineSqueezer.Recipe)tRecipe).liquid }, 400, 2, 0);
                 }
             }
         } catch (Throwable e) {
