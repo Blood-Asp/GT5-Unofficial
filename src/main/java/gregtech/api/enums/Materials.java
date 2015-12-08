@@ -704,7 +704,6 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
      * List of all Materials.
      */
     public static final Collection<Materials> VALUES = new HashSet<Materials>(Arrays.asList(values()));
-    public static volatile int VERSION = 508;
 
     static {
         SubTag.ELECTROMAGNETIC_SEPERATION_NEODYMIUM.addTo(Bastnasite, Monazite, Forcicium, Forcillium);
@@ -730,6 +729,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         Snow.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
         Ice.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
         Water.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
+        Silicon.add(SubTag.NO_RECYCLING);
         Sulfur.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE);
         Saltpeter.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE);
         Graphite.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.NO_SMELTING);
