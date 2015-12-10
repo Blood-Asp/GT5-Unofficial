@@ -73,3 +73,4 @@ local.properties
 eclipse/
 *.bat
 gradle/
+libs/libs.zip
