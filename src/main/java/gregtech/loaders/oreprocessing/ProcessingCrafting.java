@@ -50,12 +50,5 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
             GT_Values.RA.addLaserEngraverRecipe(new ItemStack(Blocks.quartz_block, 1, 0), GT_Utility.copyAmount(0L, new Object[]{aStack}), new ItemStack(Blocks.quartz_block, 1, 1), 50, 16);
             GT_Values.RA.addLaserEngraverRecipe(GT_ModHandler.getModItem("appliedenergistics2", "tile.BlockQuartz", 1L), GT_Utility.copyAmount(0L, new Object[]{aStack}), GT_ModHandler.getModItem("appliedenergistics2", "tile.BlockQuartzChiseled", 1L), 50, 16);
         }
-          if (Loader.isModLoaded("dreamcraft")) {
-             }
-             if (aOreDictName.equals(OreDictNames.craftingLensRed.toString())) {
-
-                 GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Tin, 1L), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.EtchedLowVoltageWiring.get(1L, new Object[0]), 60, 8);
-
-            }
     }
 }

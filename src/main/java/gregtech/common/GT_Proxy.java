@@ -338,8 +338,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ItemList.Food_Baked_Potato.set(new ItemStack(Items.baked_potato, 1, 0));
         ItemList.Food_Poisonous_Potato.set(new ItemStack(Items.poisonous_potato, 1, 0));
 
-        ItemList.EtchedLowVoltageWiring.set(com.dreammaster.item.ItemList.EtchedLowVoltageWiring.getIS());
-
         OrePrefixes.bottle.mContainerItem = ItemList.Bottle_Empty.get(1L, new Object[0]);
         OrePrefixes.bucket.mContainerItem = new ItemStack(Items.bucket, 1);
         OrePrefixes.cellPlasma.mContainerItem = ItemList.Cell_Empty.get(1L, new Object[0]);
