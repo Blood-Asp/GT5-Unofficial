@@ -7,6 +7,9 @@ import gregtech.api.enums.*;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
+import ic2.api.recipe.ILiquidHeatExchangerManager;
+import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
+import ic2.api.recipe.Recipes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -17,6 +20,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
 
 //import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 
@@ -1500,5 +1505,29 @@ public class GT_MachineRecipeLoader
                 GT_ModHandler.addAlloySmelterRecipe(tDust1, tDust2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
             }
         }
+
+        try {
+            Map<String, HeatExchangeProperty> tLiqExchange = ic2.api.recipe.Recipes.liquidCooldownManager.getHeatExchangeProperties();
+            Iterator<Map.Entry<String, HeatExchangeProperty>> tIterator = tLiqExchange.entrySet().iterator();
+            while (tIterator.hasNext()) {
+                Map.Entry<String, HeatExchangeProperty> tEntry = tIterator.next();
+                if(tEntry.getKey().equals("ic2hotcoolant")){
+                    tIterator.remove();
+                    Recipes.liquidCooldownManager.addFluid("ic2hotcoolant", "ic2coolant", 80);
+                }
+            }
+        } catch (Throwable e) {/*Do nothing*/}
+
+        try {
+            Map<String, HeatExchangeProperty> tLiqExchange = ic2.api.recipe.Recipes.liquidHeatupManager.getHeatExchangeProperties();
+            Iterator<Map.Entry<String, HeatExchangeProperty>> tIterator = tLiqExchange.entrySet().iterator();
+            while (tIterator.hasNext()) {
+                Map.Entry<String, HeatExchangeProperty> tEntry = tIterator.next();
+                if(tEntry.getKey().equals("ic2coolant")){
+                    tIterator.remove();
+                    Recipes.liquidHeatupManager.addFluid("ic2coolant", "ic2hotcoolant", 80);
+                }
+            }
+        } catch (Throwable e) {/*Do nothing*/}
     }
 }
