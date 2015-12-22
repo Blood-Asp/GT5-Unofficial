@@ -390,7 +390,6 @@ public class GT_CraftingRecipeLoader
         GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("Railcraft", "cart.loco.electric", 1L, 0), tBitMask, new Object[]{"LP" + tWrench, "PEP", "GCG", Character.valueOf('C'), new ItemStack(Items.minecart, 1), Character.valueOf('E'), GT_ModHandler.getModItem("Railcraft", "machine.epsilon", 1L, 0), Character.valueOf('G'), GT_ModHandler.getModItem("Railcraft", "part.gear", 1L, 2), Character.valueOf('L'), new ItemStack(Blocks.redstone_lamp, 1, 32767), Character.valueOf('P'), OrePrefixes.plate.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("Railcraft", "cart.bore", 1L, 0), tBitMask, new Object[]{"BCB", "FCF", tHammer + "A" + tWrench, Character.valueOf('C'), new ItemStack(Items.minecart, 1), Character.valueOf('A'), new ItemStack(Items.chest_minecart, 1), Character.valueOf('F'), OreDictNames.craftingFurnace, Character.valueOf('B'), OrePrefixes.block.get(Materials.Steel)});
 
-
         GT_Log.out.println("GT_Mod: Beginning to add regular Crafting Recipes.");
         GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("scaffold", 4L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"WWW", " S ", "S S", Character.valueOf('W'), OrePrefixes.plank.get(Materials.Wood), Character.valueOf('S'), OrePrefixes.stick.get(Materials.Wood)});
 
@@ -490,7 +489,6 @@ public class GT_CraftingRecipeLoader
 
         GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 5L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{OrePrefixes.dust.get(Materials.Potassium), OrePrefixes.cell.get(Materials.Nitrogen), OrePrefixes.cell.get(Materials.Oxygen), OrePrefixes.cell.get(Materials.Oxygen), OrePrefixes.cell.get(Materials.Oxygen)});
         GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("carbonFiber", 1L));
-
 
         if (GT_Mod.gregtechproxy.mDisableIC2Cables) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("copperCableItem", 1L));
@@ -658,10 +656,5 @@ public class GT_CraftingRecipeLoader
         if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.disabledrecipes, "QBoots", false)) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("quantumBoots", 1L));
         }
-        //HEE REcipes override
-        if (Loader.isModLoaded("HardcoreEnderExpansion")) {
-            GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("HardcoreEnderExpansion", "altar_nexus", 1L, 32767), tBitMask, new Object[]{"DED", "EDE", "DED", Character.valueOf('D'), OrePrefixes.gem.get(Materials.Diamond), Character.valueOf('E'), OrePrefixes.gem.get(Materials.EnderEye)});
-        }
-
     }
 }
