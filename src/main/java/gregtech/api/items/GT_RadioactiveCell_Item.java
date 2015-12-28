@@ -37,6 +37,10 @@ public class GT_RadioactiveCell_Item
         return b;
     }
 
+    protected static int triangularNumber(int x)
+        {
+           return (x * x + x) / 2;
+            }
     protected boolean outputPulseForStack(ItemStack aStack) {
         NBTTagCompound tNBT = aStack.getTagCompound();
         if (tNBT == null) {
