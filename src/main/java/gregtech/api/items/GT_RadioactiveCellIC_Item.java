@@ -84,16 +84,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
             }
         }
         if (getDamageOfStack(yourStack) >= getMaxDamageEx() - 1) {
-            // switch (this.numberOfCells) {
-            //       case 1:
-            //reactor.setItemAt(x, y, ItemList.Depleted_Thorium_1.get(1, new Object[0]));
-            //       break;
-            //       case 2:
-            //reactor.setItemAt(x, y, ItemList.Depleted_Thorium_2.get(1, new Object[0]));
-            //       break;
-            //       case 4:
-            // reactor.setItemAt(x, y, ItemList.Depleted_Thorium_4.get(1, new Object[0]));
-            //}
+
                         	reactor.setItemAt(x, y, sDepleted.copy());
         } else if (heatrun) {
             damageItemStack(yourStack, 1);
@@ -103,7 +94,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
         {
               if (sMox&&reactor.isFluidCooled())
                   {
-                            float breedereffectiveness = reactor.getHeat() / reactor.getMaxHeat();
+                            float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
                 if (breedereffectiveness > 0.5D) {
                       heat *= 2;
                     }
