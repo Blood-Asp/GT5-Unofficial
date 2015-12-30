@@ -22,7 +22,6 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     public final ItemStack sDepleted;
     public final boolean sMox;
 
-
     public GT_RadioactiveCellIC_Item(String aUnlocalized, String aEnglish, int aCellcount, int maxDamage, float aEnergy, int aRadiation, float aHeat, ItemStack aDepleted, boolean aMox) {
         super(aUnlocalized, aEnglish, aCellcount);
         setMaxStackSize(64);
@@ -59,10 +58,11 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
             } else {
                 pulses += checkPulseable(reactor, x - 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x + 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y - 1, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y + 1, yourStack, x, y, heatrun);
 
-                //int heat = sumUp(pulses) * 4;
+//                int heat = sumUp(pulses) * 4;
 
-                               int heat = triangularNumber(pulses) * 4;
-                                   heat = getFinalHeat(reactor, yourStack, x, y, heat);
+                int heat = triangularNumber(pulses) * 4;
+
+                heat = getFinalHeat(reactor, yourStack, x, y, heat);
 
                 ArrayList<ItemStackCoord> heatAcceptors = new ArrayList();
                 checkHeatAcceptor(reactor, x - 1, y, heatAcceptors);
@@ -84,23 +84,23 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
             }
         }
         if (getDamageOfStack(yourStack) >= getMaxDamageEx() - 1) {
-
-                        	reactor.setItemAt(x, y, sDepleted.copy());
+            reactor.setItemAt(x, y, sDepleted.copy());
         } else if (heatrun) {
             damageItemStack(yourStack, 1);
         }
     }
+
     protected int getFinalHeat(IReactor reactor, ItemStack stack, int x, int y, int heat)
+    {
+        if (sMox&&reactor.isFluidCooled())
         {
-              if (sMox&&reactor.isFluidCooled())
-                  {
-                            float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
-                if (breedereffectiveness > 0.5D) {
-                      heat *= 2;
-                    }
-              }
-              return heat;
+            float breedereffectiveness = reactor.getHeat() / reactor.getMaxHeat();
+            if (breedereffectiveness > 0.5D) {
+                heat *= 2;
             }
+        }
+        return heat;
+    }
 
     private void checkHeatAcceptor(IReactor reactor, int x, int y, ArrayList<ItemStackCoord> heatAcceptors) {
         ItemStack thing = reactor.getItemAt(x, y);
@@ -113,10 +113,10 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     public boolean acceptUraniumPulse(IReactor reactor, ItemStack yourStack, ItemStack pulsingStack, int youX, int youY, int pulseX, int pulseY, boolean heatrun) {
         if (!heatrun) {
             if(sMox){
-                      	      float breedereffectiveness = reactor.getHeat() / reactor.getMaxHeat();
-                      	      float ReaktorOutput = 1.5F * breedereffectiveness + 1.0F;
-                                reactor.addOutput(ReaktorOutput * this.sEnergy);
-                    	}else{
+                float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
+                float ReaktorOutput = 1.5F * breedereffectiveness + 1.0F;
+                reactor.addOutput(ReaktorOutput * this.sEnergy);
+            }else{
                 reactor.addOutput((float) (1.0F * this.sEnergy));}
         }
         return true;
