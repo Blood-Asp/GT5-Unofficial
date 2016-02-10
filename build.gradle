@@ -95,6 +95,7 @@ dependencies {
     provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
     provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
     provided name: 'Railcraft', version: config.railcraft.version, ext: 'jar'
+    compile files('lib/IC2NuclearControl-2.3.3a-Exist.jar')
 }
 
 processResources
