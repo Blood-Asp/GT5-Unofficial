@@ -14,7 +14,6 @@ thumbs.db
 *.jar
 *.war
 *.ear
-*.txt
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -33,7 +32,6 @@ tmp/
 local.properties
 .settings/
 .loadpath
-/eclipse
 
 # Eclipse Core
 .project
@@ -72,6 +70,3 @@ local.properties
 .idea_modules/
 
 /out/
-gradle/wrapper/gradle-wrapper.properties
-gradlew
-gradlew.bat

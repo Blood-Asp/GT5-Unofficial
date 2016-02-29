@@ -22,7 +22,7 @@ public class GT_FluidStack extends FluidStack {
     public GT_FluidStack(Fluid aFluid, int aAmount) {
         super(aFluid, aAmount);
         mFluid = aFluid;
-        if(!GregTech_API.mServerStarted){sAllFluidStacks.add(this);}
+        sAllFluidStacks.add(this);
     }
 
     public GT_FluidStack(FluidStack aFluid) {

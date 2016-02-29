@@ -491,8 +491,6 @@ public class GT_Achievements {
                 issueAchievement(player, "filterregulate");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32605")) {
                 issueAchievement(player, "whatnow");
-            } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
-            	issueAchievement(player, "newfuel");
             }
         }
     }

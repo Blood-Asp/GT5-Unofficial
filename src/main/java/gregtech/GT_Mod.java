@@ -3,10 +3,9 @@ package gregtech;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import forestry.api.core.ForestryAPI;
-import forestry.api.recipes.ICentrifugeRecipe;
-import forestry.api.recipes.ISqueezerRecipe;
-import forestry.api.recipes.RecipeManagers;
+import forestry.factory.recipes.ISqueezerRecipe;
+import forestry.factory.tiles.TileCentrifuge;
+import forestry.factory.tiles.TileSqueezer;
 import gregtech.api.GregTech_API;
 import gregtech.api.enchants.Enchantment_EnderDamage;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -460,8 +459,8 @@ public class GT_Mod
             }
         }
         try {
-            for (ICentrifugeRecipe tRecipe : RecipeManagers.centrifugeManager.recipes()) {
-                Map<ItemStack, Float> outputs = tRecipe.getAllProducts();
+            for (Object tRecipe : TileCentrifuge.RecipeManager.recipes) {
+                Map<ItemStack, Float> outputs = ((TileCentrifuge.CentrifugeRecipe) tRecipe).getAllProducts();
                 ItemStack[] tOutputs = new ItemStack[outputs.size()];
                 int[] tChances = new int[outputs.size()];
                 int i = 0;
@@ -470,7 +469,7 @@ public class GT_Mod
                     tOutputs[i] = entry.getKey().copy();
                     i++;
                 }
-                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[]{tRecipe.getInput()}, tOutputs, null, tChances, null, null, 128, 5, 0);
+                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[]{((TileCentrifuge.CentrifugeRecipe) tRecipe).getInput()}, tOutputs, null, tChances, null, null, 128, 5, 0);
             }
         } catch (Throwable e) {
             if (GT_Values.D1) {
@@ -478,10 +477,10 @@ public class GT_Mod
             }
         }
         try {
-            for (ISqueezerRecipe tRecipe : RecipeManagers.squeezerManager.recipes()) {
-            	if ((tRecipe.getResources().length == 1) && (tRecipe.getFluidOutput() != null)) {
-                   GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[]{tRecipe.getResources()[0]}, new ItemStack[]{tRecipe.getRemnants()}, null, new int[]{(int) (tRecipe.getRemnantsChance() * 10000)}, null, new FluidStack[]{tRecipe.getFluidOutput()}, 400, 2, 0);
-            	                 }
+            for (Object tRecipe : TileSqueezer.RecipeManager.recipes) {
+                if ((((ISqueezerRecipe) tRecipe).getResources().length == 1) && (((ISqueezerRecipe) tRecipe).getFluidOutput() != null)) {
+                    GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[]{((ISqueezerRecipe) tRecipe).getResources()[0]}, new ItemStack[]{((ISqueezerRecipe) tRecipe).getRemnants()}, null, new int[]{(int) (((ISqueezerRecipe) tRecipe).getRemnantsChance() * 10000)}, null, new FluidStack[]{((ISqueezerRecipe) tRecipe).getFluidOutput()}, 400, 2, 0);
+                }
             }
         } catch (Throwable e) {
             if (GT_Values.D1) {
@@ -805,7 +804,6 @@ public class GT_Mod
                 GT_OreDictUnificator.setStack(tOutput);
             }
         }
-        GregTech_API.mServerStarted = true;
         GT_Log.out.println("GT_Mod: ServerStarting-Phase finished!");
         GT_Log.ore.println("GT_Mod: ServerStarting-Phase finished!");
         for (Runnable tRunnable : GregTech_API.sAfterGTServerstart) {

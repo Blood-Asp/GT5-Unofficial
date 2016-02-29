@@ -1,7 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
 import cofh.api.energy.IEnergyReceiver;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
@@ -40,7 +39,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public final boolean mInsulated, mCanShock;
     public long mTransferredAmperage = 0, mTransferredAmperageLast20 = 0, mTransferredVoltageLast20 = 0;
     public long mRestRF;
-    public short mOverheat;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -199,8 +197,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredVoltageLast20 = Math.max(mTransferredVoltageLast20, aVoltage);
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
         if (aVoltage > mVoltage || mTransferredAmperage > mAmperage) {
-        	if(mOverheat>GT_Mod.gregtechproxy.mWireHeatingTicks * 100){
-        	   getBaseMetaTileEntity().setToFire();}else{mOverheat +=100;}
+            getBaseMetaTileEntity().setToFire();
             return aAmperage;
         }
         return rUsedAmperes;
@@ -210,8 +207,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
             mTransferredAmperage = 0;
-            if(mOverheat>0)mOverheat--;
-     
+
             if (aTick % 20 == 0) {
                 mTransferredVoltageLast20 = 0;
                 mTransferredAmperageLast20 = 0;
