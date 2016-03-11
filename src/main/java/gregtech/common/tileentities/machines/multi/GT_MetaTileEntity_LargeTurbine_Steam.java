@@ -107,9 +107,9 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         if (totalFlow > 0 && totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs(((totalFlow - (float) aOptFlow) / aOptFlow));
             tEU *= efficiency;
-            tEU = Math.max(1, tEU * aBaseEff / 20000);
+            tEU = Math.max(1, tEU * aBaseEff / 10000);
         } else {
-            tEU = tEU * aBaseEff / 20000;
+            tEU = tEU * aBaseEff / 10000;
         }
 
         return tEU;
