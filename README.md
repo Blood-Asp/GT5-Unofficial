@@ -1,13 +1,13 @@
-GT5-Unofficial
+GT5-Unofficial - Buidling New Dreams, the long way.
 ===
 
 ## About
 
-GT5-Unofficial is a decompiled and modified version of GT5.07.07. The goal of the mod is to maintain and extend the end game of GT5.
+This GT5 Repo contains a few bug fixes and content additions for the AlkalusCraft modpack & public Server.
 
 ## Downloads
 
-Builds can be found on the [IC2 Forums](http://forum.industrial-craft.net/index.php?page=Thread&threadID=11488).
+Builds can be found in the build/libs folder.
 
 ## Installation
 
@@ -18,6 +18,7 @@ Place the downloaded jar file into your mods/ folder.
 ## Issues
 
 Please report any issues you to find the issue tracker on this repository. Include as much information as possible including as version and steps to reproduce.
+DO NOT bother Blood-asp or GregoriousT about any issue you have with my edition of the mod.
 
 ## Contribution
 

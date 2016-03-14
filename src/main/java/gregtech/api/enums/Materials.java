@@ -208,7 +208,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     /**
      * Unknown Material Components. Dead End Section.
      */
-    Staballoy(319, TextureSet.SET_ROUGH, 10.0F, 5120, 4, 1 | 2 | 8 | 64 | 128, 85,107,47, 0, "Staballoy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Uranium235, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 3))),
+    Staballoy(319, TextureSet.SET_ROUGH, 10.0F, 5120, 4, 1 | 2 | 8 | 64 | 128, 48, 55, 46, 0, "Staballoy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Uranium, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 3))),
     Adamite(-1, TextureSet.SET_NONE, 1.0F, 0, 3, 1 | 8, 255, 255, 255, 0, "Adamite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
     Adluorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Adluorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
     Agate(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Agate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
