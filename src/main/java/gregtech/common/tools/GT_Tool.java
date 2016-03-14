@@ -4,6 +4,9 @@ import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.interfaces.IToolStats;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -15,8 +18,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.util.List;
 
 public abstract class GT_Tool
         implements IToolStats {

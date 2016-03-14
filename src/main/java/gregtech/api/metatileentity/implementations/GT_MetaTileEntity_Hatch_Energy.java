@@ -1,13 +1,12 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Hatch_Energy extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Energy(int aID, String aName, String aNameRegional, int aTier) {

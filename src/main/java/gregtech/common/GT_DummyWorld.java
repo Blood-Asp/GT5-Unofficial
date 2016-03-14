@@ -1,5 +1,7 @@
 package gregtech.common;
 
+import java.io.File;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -15,8 +17,6 @@ import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-
-import java.io.File;
 
 public class GT_DummyWorld
         extends World {

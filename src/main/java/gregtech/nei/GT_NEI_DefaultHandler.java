@@ -1,5 +1,30 @@
 package gregtech.nei;
 
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.gui.GT_GUIContainer_BasicMachine;
+import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.gui.GT_GUIContainer_FusionReactor;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.lwjgl.opengl.GL11;
+
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.guihook.GuiContainerManager;
@@ -10,27 +35,6 @@ import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.gui.GT_GUIContainer_BasicMachine;
-import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.gui.GT_GUIContainer_FusionReactor;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class GT_NEI_DefaultHandler
         extends TemplateRecipeHandler {

@@ -6,11 +6,12 @@ import gregtech.api.enums.Materials;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {

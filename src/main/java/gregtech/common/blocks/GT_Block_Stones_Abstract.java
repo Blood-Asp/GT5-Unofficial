@@ -1,13 +1,19 @@
 package gregtech.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OreDictNames;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IOreRecipeRegistrator;
 import gregtech.api.items.GT_Generic_Block;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
+
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,9 +26,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GT_Block_Stones_Abstract
         extends GT_Generic_Block

@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemDye;
+
 import org.lwjgl.opengl.GL11;
 
 /**

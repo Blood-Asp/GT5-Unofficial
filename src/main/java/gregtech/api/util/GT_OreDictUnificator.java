@@ -1,5 +1,8 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.E;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.W;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
@@ -9,15 +12,14 @@ import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import static gregtech.api.enums.GT_Values.*;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!

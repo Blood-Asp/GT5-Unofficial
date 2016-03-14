@@ -1,6 +1,11 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.*;
+import static gregtech.api.enums.GT_Values.RA;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -11,8 +16,6 @@ import gregtech.api.util.GT_ModHandler.RecipeBits;
 import gregtech.api.util.GT_OreDictUnificator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import static gregtech.api.enums.GT_Values.RA;
 
 public class GT_MetaPipeEntity_Frame extends MetaPipeEntity {
     public final Materials mMaterial;

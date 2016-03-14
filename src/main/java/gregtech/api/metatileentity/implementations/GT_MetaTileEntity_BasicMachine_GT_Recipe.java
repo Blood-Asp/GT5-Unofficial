@@ -1,6 +1,12 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.*;
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.W;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures;
+import gregtech.api.enums.Tier;
 import gregtech.api.gui.GT_Container_BasicMachine;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.interfaces.ITexture;
@@ -11,15 +17,13 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_ModHandler.RecipeBits;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+
+import java.util.Random;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Random;
-
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.W;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!

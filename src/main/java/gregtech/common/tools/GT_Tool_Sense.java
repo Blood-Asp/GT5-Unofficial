@@ -3,6 +3,9 @@ package gregtech.common.tools;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.common.items.behaviors.Behaviour_Sense;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,8 +16,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.util.List;
 
 public class GT_Tool_Sense
         extends GT_Tool {

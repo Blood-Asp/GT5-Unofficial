@@ -1,7 +1,14 @@
 package gregtech.api.util;
 
-import cofh.api.transport.IItemDuct;
-import cpw.mods.fml.common.FMLCommonHandler;
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.DW;
+import static gregtech.api.enums.GT_Values.E;
+import static gregtech.api.enums.GT_Values.GT;
+import static gregtech.api.enums.GT_Values.L;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.NW;
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.W;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -10,7 +17,12 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
-import gregtech.api.interfaces.tileentity.*;
+import gregtech.api.interfaces.tileentity.IBasicEnergyContainer;
+import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechDeviceInformation;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IMachineProgress;
+import gregtech.api.interfaces.tileentity.IUpgradableMachine;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
@@ -21,10 +33,36 @@ import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
 import ic2.api.recipe.RecipeOutput;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -54,19 +92,14 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.Map.Entry;
-
-import static gregtech.api.enums.GT_Values.*;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidHandler;
+import cofh.api.transport.IItemDuct;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!

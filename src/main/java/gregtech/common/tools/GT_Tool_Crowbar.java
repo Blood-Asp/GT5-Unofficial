@@ -7,6 +7,9 @@ import gregtech.api.interfaces.IToolStats;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.behaviors.Behaviour_Crowbar;
+
+import java.util.Iterator;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-
-import java.util.Iterator;
 
 public class GT_Tool_Crowbar
         extends GT_Tool {

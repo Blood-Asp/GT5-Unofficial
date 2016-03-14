@@ -1,12 +1,22 @@
 package gregtech.common.items;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
+import gregtech.api.enums.TC_Aspects;
 import gregtech.api.items.GT_MetaGenerated_Item_X32;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_FoodStat;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.items.behaviors.Behaviour_Arrow;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.enchantment.Enchantment;

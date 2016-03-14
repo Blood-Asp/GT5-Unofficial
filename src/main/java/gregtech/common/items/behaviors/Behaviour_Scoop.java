@@ -6,12 +6,13 @@ import forestry.api.lepidopterology.IEntityButterfly;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_LanguageManager;
+
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class Behaviour_Scoop
         extends Behaviour_None {

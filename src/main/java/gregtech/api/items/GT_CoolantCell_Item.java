@@ -2,11 +2,12 @@ package gregtech.api.items;
 
 import gregtech.api.GregTech_API;
 import ic2.core.util.StackUtil;
+
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-
-import java.util.List;
 
 public class GT_CoolantCell_Item
         extends GT_Generic_Item {

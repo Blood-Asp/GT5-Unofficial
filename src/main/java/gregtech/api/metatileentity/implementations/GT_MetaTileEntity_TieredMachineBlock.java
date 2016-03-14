@@ -1,9 +1,8 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.GT;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.MetaTileEntity;
-
-import static gregtech.api.enums.GT_Values.GT;
 
 public abstract class GT_MetaTileEntity_TieredMachineBlock extends MetaTileEntity {
     /**

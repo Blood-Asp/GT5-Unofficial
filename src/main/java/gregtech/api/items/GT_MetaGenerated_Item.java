@@ -1,9 +1,9 @@
 package gregtech.api.items;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.MOD_ID_APC;
+import static gregtech.api.enums.GT_Values.RA;
+import static gregtech.api.enums.GT_Values.RES_PATH_ITEM;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -18,6 +18,13 @@ import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,10 +36,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import squeek.applecore.api.food.FoodValues;
 import squeek.applecore.api.food.IEdible;
-
-import java.util.*;
-
-import static gregtech.api.enums.GT_Values.*;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * @author Gregorius Techneticies

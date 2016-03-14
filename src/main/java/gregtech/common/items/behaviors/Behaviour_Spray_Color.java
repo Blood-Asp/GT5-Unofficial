@@ -6,6 +6,11 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockColored;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,10 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 public class Behaviour_Spray_Color
         extends Behaviour_None {

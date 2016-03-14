@@ -5,13 +5,14 @@ import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Behaviour_Scanner
         extends Behaviour_None {

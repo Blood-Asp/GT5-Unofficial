@@ -5,14 +5,15 @@ import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import java.util.List;
 
 public class Behaviour_Plunger_Fluid
         extends Behaviour_None {

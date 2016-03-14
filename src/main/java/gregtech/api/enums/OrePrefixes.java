@@ -1,5 +1,8 @@
 package gregtech.api.enums;
 
+import static gregtech.api.enums.GT_Values.B;
+import static gregtech.api.enums.GT_Values.D2;
+import static gregtech.api.enums.GT_Values.M;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 import gregtech.api.interfaces.ICondition;
 import gregtech.api.interfaces.IOreRecipeRegistrator;
@@ -8,14 +11,13 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import static gregtech.api.enums.GT_Values.*;
+import net.minecraft.item.ItemStack;
 
 public enum OrePrefixes {
     @Deprecated pulp("Pulps", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),

@@ -1,6 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
-import cofh.api.energy.IEnergyReceiver;
+import static gregtech.api.enums.GT_Values.VN;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
@@ -18,6 +18,10 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import ic2.api.energy.tile.IEnergySink;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -27,11 +31,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static gregtech.api.enums.GT_Values.VN;
+import cofh.api.energy.IEnergyReceiver;
 
 public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTileEntityCable {
     public final float mThickNess;

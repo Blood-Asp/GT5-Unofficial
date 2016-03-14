@@ -3,10 +3,11 @@ package gregtech.api.enums;
 import gregtech.api.interfaces.IColorModulationContainer;
 import gregtech.api.objects.GT_ArrayList;
 import gregtech.api.util.GT_Utility;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public enum Dyes implements IColorModulationContainer {
     /**

@@ -2,12 +2,13 @@ package gregtech.common.blocks;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_LanguageManager;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public abstract class GT_Item_Casings_Abstract
         extends ItemBlock {

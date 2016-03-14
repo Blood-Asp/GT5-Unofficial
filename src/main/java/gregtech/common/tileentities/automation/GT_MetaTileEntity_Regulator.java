@@ -9,11 +9,12 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Regulator;
 import gregtech.common.gui.GT_GUIContainer_Regulator;
+
+import java.util.Arrays;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_Regulator
         extends GT_MetaTileEntity_Buffer {

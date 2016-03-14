@@ -5,6 +5,9 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,8 +19,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.util.List;
 
 public class GT_Tool_BranchCutter
         extends GT_Tool {

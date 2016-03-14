@@ -1,11 +1,11 @@
 package gregtech.api.interfaces.tileentity;
 
-import cofh.api.energy.IEnergyReceiver;
 import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_Utility;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
+import cofh.api.energy.IEnergyReceiver;
 
 /**
  * THIS IS GOING TO BE USED IN 1.8

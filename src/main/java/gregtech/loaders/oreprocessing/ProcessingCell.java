@@ -9,10 +9,11 @@ import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import net.minecraft.item.ItemStack;
 
 public class ProcessingCell
         implements IOreRecipeRegistrator {

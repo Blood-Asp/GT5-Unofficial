@@ -1,20 +1,20 @@
 package gregtech.api.items;
 
+import static gregtech.api.enums.GT_Values.W;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
+
+import java.util.Arrays;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Arrays;
-
-import static gregtech.api.enums.GT_Values.W;
 
 public class GT_Spray_Ice_Item extends GT_Tool_Item {
     public GT_Spray_Ice_Item(String aUnlocalized, String aEnglish, int aMaxDamage, int aEntityDamage) {

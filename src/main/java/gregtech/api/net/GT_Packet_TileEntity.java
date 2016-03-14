@@ -1,12 +1,13 @@
 package gregtech.api.net;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
 public class GT_Packet_TileEntity extends GT_Packet {
     private int mX, mZ, mC0, mC1, mC2, mC3, mC4, mC5;

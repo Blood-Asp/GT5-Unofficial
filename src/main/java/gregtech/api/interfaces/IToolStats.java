@@ -1,6 +1,9 @@
 package gregtech.api.interfaces;
 
 import gregtech.api.items.GT_MetaGenerated_Tool;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -9,8 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.world.BlockEvent;
-
-import java.util.List;
 
 /**
  * The Stats for GT Tools. Not including any Material Modifiers.

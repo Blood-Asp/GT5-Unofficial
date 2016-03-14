@@ -1,5 +1,7 @@
 package gregtech.api.metatileentity;
 
+import static gregtech.api.enums.GT_Values.GT;
+import static gregtech.api.enums.GT_Values.NW;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;
 import gregtech.api.net.GT_Packet_Block_Event;
@@ -14,9 +16,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import static gregtech.api.enums.GT_Values.GT;
-import static gregtech.api.enums.GT_Values.NW;
 
 /**
  * The Functions my old TileEntities and my BaseMetaTileEntities have in common.

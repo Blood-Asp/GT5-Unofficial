@@ -1,7 +1,15 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.*;
+import gregtech.api.gui.GT_Container_1by1;
+import gregtech.api.gui.GT_Container_2by2;
+import gregtech.api.gui.GT_Container_3by3;
+import gregtech.api.gui.GT_Container_4by4;
+import gregtech.api.gui.GT_GUIContainer_1by1;
+import gregtech.api.gui.GT_GUIContainer_2by2;
+import gregtech.api.gui.GT_GUIContainer_3by3;
+import gregtech.api.gui.GT_GUIContainer_4by4;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -13,8 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import static gregtech.api.enums.GT_Values.V;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!

@@ -2,6 +2,9 @@ package gregtech.api.interfaces;
 
 import gregtech.api.enums.SubTag;
 import gregtech.api.items.GT_MetaBase_Item;
+
+import java.util.List;
+
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,8 +13,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public interface IItemBehaviour<E extends Item> {
     public boolean onLeftClickEntity(E aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity);

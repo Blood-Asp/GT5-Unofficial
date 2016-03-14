@@ -1,7 +1,11 @@
 package gregtech.api.damagesources;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 public class GT_DamageSources {
     public static DamageSource getElectricDamage() {

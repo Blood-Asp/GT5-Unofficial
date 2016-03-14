@@ -8,14 +8,15 @@ import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class Behaviour_Plunger_Item
         extends Behaviour_None {

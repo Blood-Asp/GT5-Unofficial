@@ -1,10 +1,12 @@
 package gregtech.common.items.behaviors;
 
-import codechicken.lib.math.MathHelper;
 import gregtech.api.GregTech_API;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,8 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.List;
+import codechicken.lib.math.MathHelper;
 
 public class Behaviour_Lighter
         extends Behaviour_None {

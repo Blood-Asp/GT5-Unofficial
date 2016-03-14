@@ -1,6 +1,7 @@
 package gregtech.api.enums;
 
-import cpw.mods.fml.common.Loader;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.MOD_ID_TC;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 import gregtech.api.interfaces.IColorModulationContainer;
@@ -10,15 +11,18 @@ import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.*;
-
-import static gregtech.api.enums.GT_Values.M;
-import static gregtech.api.enums.GT_Values.MOD_ID_TC;
+import cpw.mods.fml.common.Loader;
 
 /**
  * This List contains every Material I know about, and is used to determine Recipes for the
@@ -204,7 +208,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     /**
      * Unknown Material Components. Dead End Section.
      */
-    Adamantium(319, TextureSet.SET_SHINY, 10.0F, 5120, 5, 1 | 2 | 8 | 64 | 128, 255, 255, 255, 0, "Adamantium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
+    Staballoy(319, TextureSet.SET_SHINY, 10.0F, 5120, 5, 1 | 2 | 8 | 64 | 128, 255, 255, 255, 0, "Staballoy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
     Adamite(-1, TextureSet.SET_NONE, 1.0F, 0, 3, 1 | 8, 255, 255, 255, 0, "Adamite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
     Adluorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Adluorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
     Agate(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Agate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
@@ -644,13 +648,13 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
      */
     @Deprecated IridiumAndSodiumOxide(IridiumSodiumOxide, false),
     @Deprecated Palygorskite(FullersEarth, false),
-    @Deprecated Adamantine(Adamantium, true),
+    @Deprecated Adamantine(Staballoy, true),
     @Deprecated FzDarkIron(DarkIron, true),
     @Deprecated FZDarkIron(DarkIron, true),
     @Deprecated Ashes(Ash, false),
     @Deprecated DarkAshes(DarkAsh, false),
     @Deprecated Abyssal(Basalt, false),
-    @Deprecated Adamant(Adamantium, true),
+    @Deprecated Adamant(Staballoy, true),
     @Deprecated AluminumBrass(AluminiumBrass, false),
     @Deprecated Aluminum(Aluminium, false),
     @Deprecated NaturalAluminum(Aluminium, false),
@@ -713,7 +717,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         SubTag.BLASTFURNACE_CALCITE_TRIPLE.addTo(Iron, PigIron, DeepIron, ShadowIron, WroughtIron, MeteoricIron, BrownLimonite);
         SubTag.WASHING_MERCURY.addTo(Gold, Silver, Osmium, Mithril, Platinum, Midasium, Cooperite, AstralSilver);
         SubTag.WASHING_SODIUMPERSULFATE.addTo(Zinc, Nickel, Copper, Cobalt, Cobaltite, Tetrahedrite);
-        SubTag.METAL.addTo(AnyIron, AnyCopper, AnyBronze, Metal, Aluminium, Americium, Antimony, Beryllium, Bismuth, Caesium, Cerium, Chrome, Cobalt, Copper, Dysprosium, Erbium, Europium, Gadolinium, Gallium, Gold, Holmium, Indium, Iridium, Iron, Lanthanum, Lead, Lutetium, Magnesium, Manganese, Mercury, Niobium, Molybdenum, Neodymium, Neutronium, Nickel, Osmium, Palladium, Platinum, Plutonium, Plutonium241, Praseodymium, Promethium, Rubidium, Samarium, Scandium, Silicon, Silver, Tantalum, Tellurium, Terbium, Thorium, Thulium, Tin, Titanium, Tungsten, Uranium, Uranium235, Vanadium, Ytterbium, Yttrium, Zinc, Satinspar, Selenite, Microcline, Serpentine, Sylvite, Signalum, Lumium, PhasedIron, PhasedGold, DarkSteel, Terrasteel, TerrasteelAlloyRaw, TerrasteelAlloyStrengthened, TinAlloy, ConductiveIron, ElectricalSteel, EnergeticAlloy, VibrantAlloy, PulsatingIron, Manasteel, DarkThaumium, ElvenElementium, EnrichedCopper, DiamondCopper, Adamantium, Amordrine, Angmallen, Ardite, Aredrite, Atlarus, Blutonium, Carmot, Celenegil, Ceruclase, DarkIron, Desh, Desichalkos, Duranium, ElectrumFlux, Enderium, EnderiumBase, Eximite, FierySteel, Force, Haderoth, Hematite, Hepatizon, HSLA, Infuscolium, InfusedGold, Inolashite, Mercassium, MeteoricIron, MeteoricSteel, Naquadah, NaquadahAlloy, NaquadahEnriched, Naquadria, ObsidianFlux, Orichalcum, Osmonium, Oureclase, Phoenixite, Prometheum, RefinedGlowstone, RefinedObsidian, Sanguinite, Starconium, Tartarite, Thyrium, Tritanium, Vulcanite, Vyroxeres, Yellorium, Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron, Electrum, Invar, IronCompressed, Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron, YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel, TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal);
+        SubTag.METAL.addTo(AnyIron, AnyCopper, AnyBronze, Metal, Aluminium, Americium, Antimony, Beryllium, Bismuth, Caesium, Cerium, Chrome, Cobalt, Copper, Dysprosium, Erbium, Europium, Gadolinium, Gallium, Gold, Holmium, Indium, Iridium, Iron, Lanthanum, Lead, Lutetium, Magnesium, Manganese, Mercury, Niobium, Molybdenum, Neodymium, Neutronium, Nickel, Osmium, Palladium, Platinum, Plutonium, Plutonium241, Praseodymium, Promethium, Rubidium, Samarium, Scandium, Silicon, Silver, Tantalum, Tellurium, Terbium, Thorium, Thulium, Tin, Titanium, Tungsten, Uranium, Uranium235, Vanadium, Ytterbium, Yttrium, Zinc, Satinspar, Selenite, Microcline, Serpentine, Sylvite, Signalum, Lumium, PhasedIron, PhasedGold, DarkSteel, Terrasteel, TerrasteelAlloyRaw, TerrasteelAlloyStrengthened, TinAlloy, ConductiveIron, ElectricalSteel, EnergeticAlloy, VibrantAlloy, PulsatingIron, Manasteel, DarkThaumium, ElvenElementium, EnrichedCopper, DiamondCopper, Staballoy, Amordrine, Angmallen, Ardite, Aredrite, Atlarus, Blutonium, Carmot, Celenegil, Ceruclase, DarkIron, Desh, Desichalkos, Duranium, ElectrumFlux, Enderium, EnderiumBase, Eximite, FierySteel, Force, Haderoth, Hematite, Hepatizon, HSLA, Infuscolium, InfusedGold, Inolashite, Mercassium, MeteoricIron, MeteoricSteel, Naquadah, NaquadahAlloy, NaquadahEnriched, Naquadria, ObsidianFlux, Orichalcum, Osmonium, Oureclase, Phoenixite, Prometheum, RefinedGlowstone, RefinedObsidian, Sanguinite, Starconium, Tartarite, Thyrium, Tritanium, Vulcanite, Vyroxeres, Yellorium, Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron, Electrum, Invar, IronCompressed, Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron, YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel, TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal);
 
         SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 
@@ -1041,7 +1045,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Stone					.setSpecialEffect(SpecialToolEffect.Crushing, 1);
 		GraniteRed				.setSpecialEffect(SpecialToolEffect.Crushing, 2);
 		GraniteBlack			.setSpecialEffect(SpecialToolEffect.Crushing, 2);
-		Adamantium				.setSpecialEffect(SpecialToolEffect.Crushing, 3);
+		Staballoy				.setSpecialEffect(SpecialToolEffect.Crushing, 3);
 
 		DeepIron				.setSpecialEffect(SpecialToolEffect.Magnetic, 1);
 		MeteoricIron			.setSpecialEffect(SpecialToolEffect.Magnetic, 2);

@@ -1,27 +1,34 @@
 package gregtech.common;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.net.*;
+import gregtech.api.net.GT_Packet;
+import gregtech.api.net.GT_Packet_Block_Event;
+import gregtech.api.net.GT_Packet_Sound;
+import gregtech.api.net.GT_Packet_TileEntity;
+import gregtech.api.net.IGT_NetworkHandler;
 import gregtech.common.blocks.GT_Packet_Ores;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.MessageToMessageCodec;
+
+import java.util.EnumMap;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-import java.util.EnumMap;
-import java.util.List;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
+
+import cpw.mods.fml.common.network.FMLEmbeddedChannel;
+import cpw.mods.fml.common.network.FMLOutboundHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import cpw.mods.fml.relauncher.Side;
 
 @ChannelHandler.Sharable
 public class GT_Network

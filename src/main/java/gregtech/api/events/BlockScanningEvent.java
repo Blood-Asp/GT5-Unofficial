@@ -1,11 +1,11 @@
 package gregtech.api.events;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
 
 @cpw.mods.fml.common.eventhandler.Cancelable
 public class BlockScanningEvent extends net.minecraftforge.event.world.WorldEvent {

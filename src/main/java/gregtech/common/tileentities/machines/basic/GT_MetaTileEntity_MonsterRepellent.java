@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -9,8 +10,6 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_SpawnEventHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
-import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_TieredMachineBlock {
 

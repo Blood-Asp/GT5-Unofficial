@@ -1,20 +1,21 @@
 package gregtech.common;
 
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.common.IWorldGenerator;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class GT_Worldgenerator
         implements IWorldGenerator {

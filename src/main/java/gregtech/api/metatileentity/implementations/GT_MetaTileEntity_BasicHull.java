@@ -1,13 +1,12 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_BasicHull extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_BasicHull(int aID, String aName, String aNameRegional, int aTier, String aDescription, ITexture... aTextures) {

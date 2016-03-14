@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+
 import org.lwjgl.opengl.GL11;
 
 public class GT_MetaGenerated_Tool_Renderer

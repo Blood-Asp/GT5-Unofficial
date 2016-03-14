@@ -11,6 +11,10 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Ores;
 import gregtech.common.blocks.GT_TileEntity_Ores;
+
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -19,9 +23,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.IFluidBlock;
-
-import java.util.List;
-import java.util.Random;
 
 public class Behaviour_Prospecting
         extends Behaviour_None {

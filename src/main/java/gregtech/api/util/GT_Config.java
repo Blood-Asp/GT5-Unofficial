@@ -1,11 +1,10 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.E;
 import gregtech.api.GregTech_API;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import static gregtech.api.enums.GT_Values.E;
 
 public class GT_Config implements Runnable {
     public static boolean troll = false;

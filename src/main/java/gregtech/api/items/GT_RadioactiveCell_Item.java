@@ -1,10 +1,11 @@
 package gregtech.api.items;
 
 import ic2.core.util.StackUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class GT_RadioactiveCell_Item
         extends GT_Generic_Item {

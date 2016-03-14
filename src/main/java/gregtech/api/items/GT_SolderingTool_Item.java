@@ -1,16 +1,16 @@
 package gregtech.api.items;
 
+import static gregtech.api.enums.GT_Values.W;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ToolDictNames;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import java.util.List;
 
-import static gregtech.api.enums.GT_Values.W;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class GT_SolderingTool_Item extends GT_Tool_Item {
     public GT_SolderingTool_Item(String aUnlocalized, String aEnglish, int aMaxDamage, int aEntityDamage, int aDischargedGTID) {

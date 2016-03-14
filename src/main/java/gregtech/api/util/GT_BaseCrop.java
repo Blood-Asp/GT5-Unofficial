@@ -1,17 +1,17 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.E;
 import gregtech.api.enums.ConfigCategories;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.api.crops.ICropTile;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.E;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 
 public class GT_BaseCrop extends CropCard {
     public static ArrayList<GT_BaseCrop> sCropList = new ArrayList<GT_BaseCrop>();

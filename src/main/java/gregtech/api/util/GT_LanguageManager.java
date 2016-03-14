@@ -1,17 +1,17 @@
 package gregtech.api.util;
 
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import static gregtech.api.enums.GT_Values.E;
 import gregtech.api.GregTech_API;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import static gregtech.api.enums.GT_Values.E;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class GT_LanguageManager {
     public static final HashMap<String, String> TEMPMAP = new HashMap<String, String>(), BUFFERMAP = new HashMap<String, String>();

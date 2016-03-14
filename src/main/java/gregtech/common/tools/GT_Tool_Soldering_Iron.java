@@ -5,6 +5,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.common.items.behaviors.Behaviour_Screwdriver;
+
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -16,9 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class GT_Tool_Soldering_Iron extends GT_Tool {
     public static final List<String> mEffectiveList = Arrays.asList(new String[]{EntityCaveSpider.class.getName(), EntitySpider.class.getName(), "EntityTFHedgeSpider", "EntityTFKingSpider", "EntityTFSwarmSpider", "EntityTFTowerBroodling"});

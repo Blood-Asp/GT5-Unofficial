@@ -1,13 +1,13 @@
 package gregtech.api.world;
 
+import java.util.Collection;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import java.util.Collection;
-import java.util.Random;
 
 public class GT_Worldgen_Ore_Normal extends GT_Worldgen_Ore {
     public GT_Worldgen_Ore_Normal(String aName, boolean aDefault, Block aBlock, int aBlockMeta, int aDimensionType, int aAmount, int aSize, int aProbability, int aMinY, int aMaxY, Collection<String> aBiomeList, boolean aAllowToGenerateinVoid) {

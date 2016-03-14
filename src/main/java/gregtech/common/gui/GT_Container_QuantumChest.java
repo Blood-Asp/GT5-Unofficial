@@ -1,17 +1,18 @@
 package gregtech.common.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.gui.GT_ContainerMetaTile_Machine;
 import gregtech.api.gui.GT_Slot_Output;
 import gregtech.api.gui.GT_Slot_Render;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
+
+import java.util.Iterator;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-
-import java.util.Iterator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GT_Container_QuantumChest extends GT_ContainerMetaTile_Machine {
 

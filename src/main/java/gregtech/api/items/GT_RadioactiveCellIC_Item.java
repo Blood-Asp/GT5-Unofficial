@@ -6,12 +6,13 @@ import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import ic2.core.IC2Potion;
 import ic2.core.item.armor.ItemArmorHazmat;
+
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
 
 
 public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implements IReactorComponent {

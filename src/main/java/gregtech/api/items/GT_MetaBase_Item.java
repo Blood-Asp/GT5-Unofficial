@@ -1,5 +1,7 @@
 package gregtech.api.items;
 
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.enums.SubTag;
 import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.util.GT_LanguageManager;
@@ -10,6 +12,11 @@ import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 import ic2.api.item.IElectricItemManager;
 import ic2.api.item.ISpecialElectricItem;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,13 +30,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static gregtech.api.enums.GT_Values.D1;
-import static gregtech.api.enums.GT_Values.V;
 
 public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpecialElectricItem, IElectricItemManager, IFluidContainerItem {
     /* ---------- CONSTRUCTOR AND MEMBER VARIABLES ---------- */

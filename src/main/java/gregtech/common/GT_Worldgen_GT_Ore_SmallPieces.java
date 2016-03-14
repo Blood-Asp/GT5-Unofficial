@@ -4,10 +4,11 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.Random;
+
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
 
 public class GT_Worldgen_GT_Ore_SmallPieces
         extends GT_Worldgen {

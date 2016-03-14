@@ -1,6 +1,6 @@
 package gregtech.common.tileentities.generators;
 
-import cpw.mods.fml.common.Loader;
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.TC_Aspects;
@@ -11,6 +11,9 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
+
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -26,10 +29,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IEssentiaContainerItem;
 import thaumcraft.api.visnet.VisNetHandler;
-
-import java.util.ArrayList;
-
-import static gregtech.api.enums.GT_Values.V;
+import cpw.mods.fml.common.Loader;
 
 public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_BasicGenerator {
 

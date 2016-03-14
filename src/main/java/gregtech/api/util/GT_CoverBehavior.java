@@ -1,12 +1,11 @@
 package gregtech.api.util;
 
+import static gregtech.api.enums.GT_Values.E;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.objects.GT_ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-
-import static gregtech.api.enums.GT_Values.E;
 
 /**
  * For Covers with a special behavior.

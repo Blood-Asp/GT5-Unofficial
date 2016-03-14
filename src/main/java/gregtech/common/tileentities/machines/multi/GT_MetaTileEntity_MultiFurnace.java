@@ -11,11 +11,12 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+
+import java.util.ArrayList;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
 
 public class GT_MetaTileEntity_MultiFurnace
         extends GT_MetaTileEntity_MultiBlockBase {

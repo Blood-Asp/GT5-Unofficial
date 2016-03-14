@@ -1,7 +1,8 @@
 package gregtech.api.net;
 
-import com.google.common.io.ByteArrayDataInput;
 import net.minecraft.world.IBlockAccess;
+
+import com.google.common.io.ByteArrayDataInput;
 
 public abstract class GT_Packet {
     public GT_Packet(boolean aIsReference) {

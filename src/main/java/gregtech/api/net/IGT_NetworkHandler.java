@@ -1,8 +1,8 @@
 package gregtech.api.net;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public interface IGT_NetworkHandler {
     public void sendToPlayer(GT_Packet aPacket, EntityPlayerMP aPlayer);

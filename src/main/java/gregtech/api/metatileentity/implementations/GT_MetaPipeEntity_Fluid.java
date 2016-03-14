@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.D1;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
@@ -14,6 +15,11 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -25,12 +31,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     public final float mThickNess;

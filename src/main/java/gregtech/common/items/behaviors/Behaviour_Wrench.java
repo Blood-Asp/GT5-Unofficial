@@ -7,6 +7,10 @@ import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import ic2.api.tile.IWrenchable;
+
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class Behaviour_Wrench
         extends Behaviour_None {

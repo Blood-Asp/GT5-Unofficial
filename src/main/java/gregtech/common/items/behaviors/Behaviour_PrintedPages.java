@@ -2,10 +2,11 @@ package gregtech.common.items.behaviors;
 
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Behaviour_PrintedPages
         extends Behaviour_None {

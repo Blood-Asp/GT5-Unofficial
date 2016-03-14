@@ -1,5 +1,6 @@
 package gregtech.api.items;
 
+import static gregtech.api.enums.GT_Values.D1;
 import gregtech.api.GregTech_API;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.util.GT_Log;
@@ -11,8 +12,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
-import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_Spray_Hardener_Item extends GT_Tool_Item {
     public GT_Spray_Hardener_Item(String aUnlocalized, String aEnglish, int aMaxDamage, int aEntityDamage) {

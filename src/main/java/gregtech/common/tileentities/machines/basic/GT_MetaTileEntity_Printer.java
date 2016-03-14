@@ -8,9 +8,10 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+
+import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Printer
         extends GT_MetaTileEntity_BasicMachine {

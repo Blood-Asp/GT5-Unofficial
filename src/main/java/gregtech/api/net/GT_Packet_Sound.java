@@ -1,10 +1,11 @@
 package gregtech.api.net;
 
+import gregtech.api.util.GT_Utility;
+import net.minecraft.world.IBlockAccess;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import gregtech.api.util.GT_Utility;
-import net.minecraft.world.IBlockAccess;
 
 public class GT_Packet_Sound extends GT_Packet {
     private int mX, mZ;

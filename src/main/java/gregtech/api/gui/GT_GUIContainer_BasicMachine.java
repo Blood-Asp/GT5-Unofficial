@@ -1,12 +1,12 @@
 package gregtech.api.gui;
 
+import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import net.minecraft.entity.player.InventoryPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
+import net.minecraft.entity.player.InventoryPlayer;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!

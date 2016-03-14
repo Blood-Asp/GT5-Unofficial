@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.steam;
 
+import static gregtech.api.enums.GT_Values.V;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
@@ -12,12 +13,11 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.V;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Macerator_Steel
         extends GT_MetaTileEntity_BasicMachine_Steel {

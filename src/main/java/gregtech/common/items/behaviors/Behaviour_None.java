@@ -3,6 +3,9 @@ package gregtech.common.items.behaviors;
 import gregtech.api.enums.SubTag;
 import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.items.GT_MetaBase_Item;
+
+import java.util.List;
+
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
@@ -14,8 +17,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class Behaviour_None
         implements IItemBehaviour<GT_MetaBase_Item> {

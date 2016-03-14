@@ -1,10 +1,11 @@
 package gregtech.api.net;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 
 /**
  * Used to transfer Block Events in a much better fashion

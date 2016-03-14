@@ -1,8 +1,16 @@
 package gregtech.common.items;
 
-import cpw.mods.fml.common.Loader;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OreDictNames;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
+import gregtech.api.enums.TC_Aspects;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.items.GT_MetaBase_Item;
@@ -11,9 +19,43 @@ import gregtech.api.objects.GT_MultiTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.util.*;
-import gregtech.common.covers.*;
-import gregtech.common.items.behaviors.*;
+import gregtech.api.util.GT_FoodStat;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.covers.GT_Cover_Arm;
+import gregtech.common.covers.GT_Cover_ControlsWork;
+import gregtech.common.covers.GT_Cover_Conveyor;
+import gregtech.common.covers.GT_Cover_Crafting;
+import gregtech.common.covers.GT_Cover_DoesWork;
+import gregtech.common.covers.GT_Cover_Drain;
+import gregtech.common.covers.GT_Cover_EUMeter;
+import gregtech.common.covers.GT_Cover_ItemMeter;
+import gregtech.common.covers.GT_Cover_LiquidMeter;
+import gregtech.common.covers.GT_Cover_NeedMaintainance;
+import gregtech.common.covers.GT_Cover_PlayerDetector;
+import gregtech.common.covers.GT_Cover_Pump;
+import gregtech.common.covers.GT_Cover_RedstoneReceiverExternal;
+import gregtech.common.covers.GT_Cover_RedstoneReceiverInternal;
+import gregtech.common.covers.GT_Cover_RedstoneTransmitterExternal;
+import gregtech.common.covers.GT_Cover_RedstoneTransmitterInternal;
+import gregtech.common.covers.GT_Cover_Screen;
+import gregtech.common.covers.GT_Cover_Shutter;
+import gregtech.common.covers.GT_Cover_SolarPanel;
+import gregtech.common.items.behaviors.Behaviour_Arrow_Potion;
+import gregtech.common.items.behaviors.Behaviour_DataOrb;
+import gregtech.common.items.behaviors.Behaviour_DataStick;
+import gregtech.common.items.behaviors.Behaviour_Lighter;
+import gregtech.common.items.behaviors.Behaviour_PrintedPages;
+import gregtech.common.items.behaviors.Behaviour_Scanner;
+import gregtech.common.items.behaviors.Behaviour_SensorKit;
+import gregtech.common.items.behaviors.Behaviour_Sonictron;
+import gregtech.common.items.behaviors.Behaviour_Spray_Color;
+import gregtech.common.items.behaviors.Behaviour_WrittenBook;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
@@ -23,8 +65,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
-
-import java.util.List;
+import cpw.mods.fml.common.Loader;
 
 public class GT_MetaGenerated_Item_01
         extends GT_MetaGenerated_Item_X32 {

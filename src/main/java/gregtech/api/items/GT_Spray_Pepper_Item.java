@@ -1,12 +1,13 @@
 package gregtech.api.items;
 
 import gregtech.api.util.GT_LanguageManager;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class GT_Spray_Pepper_Item extends GT_Tool_Item {
     public GT_Spray_Pepper_Item(String aUnlocalized, String aEnglish, int aMaxDamage, int aEntityDamage) {

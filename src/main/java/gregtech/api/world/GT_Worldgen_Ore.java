@@ -1,10 +1,11 @@
 package gregtech.api.world;
 
 import gregtech.api.GregTech_API;
-import net.minecraft.block.Block;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import net.minecraft.block.Block;
 
 public abstract class GT_Worldgen_Ore extends GT_Worldgen {
     public final int mBlockMeta, mAmount, mSize, mMinY, mMaxY, mProbability, mDimensionType;

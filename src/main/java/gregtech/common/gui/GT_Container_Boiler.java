@@ -1,15 +1,16 @@
 package gregtech.common.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.gui.GT_ContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.common.tileentities.boilers.GT_MetaTileEntity_Boiler;
+
+import java.util.Iterator;
+
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-
-import java.util.Iterator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class GT_Container_Boiler
         extends GT_ContainerMetaTile_Machine {

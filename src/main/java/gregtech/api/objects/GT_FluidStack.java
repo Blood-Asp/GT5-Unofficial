@@ -3,13 +3,14 @@ package gregtech.api.objects;
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
-import net.minecraftforge.common.ForgeVersion;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+
+import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Because Forge fucked this one up royally.
