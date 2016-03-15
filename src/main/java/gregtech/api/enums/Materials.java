@@ -175,17 +175,11 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Terrasteel(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Terrasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     TerrasteelAlloyRaw(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Raw Terrasteel Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     TerrasteelAlloyStrengthened(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Strengthened Terrasteel Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    ConductiveIron(-1, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 2, 164, 109, 100, 0, "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
-    ElectricalSteel(-1, TextureSet.SET_MAGNETIC, 1.0F, 0, 2, 1 | 2, 194, 194, 194, 0, "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes.dyeLightGray),
-    EnergeticAlloy(-1, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2, 173, 76, 0, 0, "Energetic Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange),
-    VibrantAlloy(-1, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2, 158, 206, 0, 0, "Vibrant Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLime),
-    PulsatingIron(-1, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2, 50, 91, 21, 0, "Pulsating Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen),
     Rutile(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Rutile", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL), // TiO2
     Teslatite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 60, 180, 200, 0, "Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Fluix(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 4, 255, 255, 255, 0, "Fluix", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Manasteel(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Manasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Tennantite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Tennantite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    VoidMetal(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Dark Thaumium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Alfium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Alfium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Ryu(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Ryu", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Mutation(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Mutation", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
@@ -207,9 +201,27 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 
     /**
      * Unknown Material Components. Dead End Section.
+     * 
+     * Alkalus Range 780-800
+     * (aMetaItemSubID, TextureSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, R, G, B, Alpha, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, true);
+     * 
      */
-    Staballoy(319, TextureSet.SET_ROUGH, 10.0F, 5120, 4, 1 | 2 | 8 | 64 | 128, 48, 55, 46, 0, "Staballoy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Uranium, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 3))),
-    Bedrockium(-1, TextureSet.SET_NONE, 100.0F, 0, 3, 1 | 8 | 16 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
+    Staballoy(319, TextureSet.SET_ROUGH, 10.0F, 5120, 4, 1 | 2 | 8 | 16 | 32 | 64 | 128, 48, 55, 46, 0, "Staballoy", 0, 0, 1500, 2800, true, false, 1, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Uranium, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 3))),
+    Bedrockium(780, TextureSet.SET_ROUGH, 8.0F, 8196, 3, 1 | 2 | 16 | 32 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 8), new TC_AspectStack(TC_Aspects.TUTAMEN, 3))),
+    BloodSteel(781, TextureSet.SET_MAGNETIC, 12.0F, 1024, 3, 1 | 2 | 8 | 16 | 32 | 64 | 128, 142, 28, 0, 0, "Blood Steel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.VICTUS, 8), new TC_AspectStack(TC_Aspects.IGNIS, 3))),
+    VoidMetal(782, TextureSet.SET_DULL, 6.0F, 2560, 2, 1 | 2 | 16 | 32 | 64 | 128, 5, 8, 12, 0, "Void Metal", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack),
+    ConductiveIron(783, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 2, 164, 109, 100, 0, "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
+    ElectricalSteel(784, TextureSet.SET_MAGNETIC, 1.0F, 0, 2, 1 | 2 | 64 | 128, 194, 194, 194, 0, "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes.dyeLightGray),
+    EnergeticAlloy(785, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 64 | 128, 173, 76, 0, 0, "Energetic Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange),
+    VibrantAlloy(786, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 64 | 128, 158, 206, 0, 0, "Vibrant Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLime),
+    PulsatingIron(787, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 64 | 128, 50, 91, 21, 0, "Pulsating Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen),
+    
+    //BlankMaterial(781, TextureSet.SET_METALLIC, 10.0F, 1024, 3, 1 | 8 | 16 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 8), new TC_AspectStack(TC_Aspects.TUTAMEN, 3))),
+    //Does this work?
+    
+   
+    
     Adluorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Adluorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
     Agate(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Agate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Alduorite(485, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 8 | 16, 159, 180, 180, 0, "Alduorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
