@@ -22,6 +22,10 @@ public class GT_Values {
     // TODO: Rename OrePrefixes Class to 'P'
     // TODO: Rename Materials Class to 'M'
 
+	//Re-add of Gregs T/F variable. Was removed by ShawnBuckley, for some unknown reason & I have code in MiscUtils that relies on it. (Silly, I know, but It's a STATIC VALUES class for a fucking reason.)
+	/** Because "true" and "false" are too long. Some Programmers might wanna kill me for that, but this looks much better than true and false, and also it is better to have something that is not 4 and 5 Characters long, because of symmetry */
+	public static final boolean T = true, F = false;
+	
     /**
      * Empty String for an easier Call Hierarchy
      */
