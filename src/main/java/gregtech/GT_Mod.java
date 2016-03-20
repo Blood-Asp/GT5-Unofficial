@@ -3,9 +3,9 @@ package gregtech;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import forestry.factory.gadgets.MachineCentrifuge;
-import forestry.factory.gadgets.MachineCentrifuge.RecipeManager;
-import forestry.factory.gadgets.MachineSqueezer;
+import forestry.api.recipes.ICentrifugeRecipe;
+import forestry.api.recipes.ISqueezerRecipe;
+import forestry.api.recipes.RecipeManagers;
 import gregtech.api.GregTech_API;
 import gregtech.api.enchants.Enchantment_EnderDamage;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -472,10 +472,8 @@ public class GT_Mod
             }
         }
         try {
-            for (Object tRecipe : MachineCentrifuge.RecipeManager.recipes)
-            {
-                Map<ItemStack,Float> outputs = ((MachineCentrifuge.CentrifugeRecipe)tRecipe).getAllProducts();
-
+            for (ICentrifugeRecipe tRecipe : RecipeManagers.centrifugeManager.recipes()) {
+                Map<ItemStack, Float> outputs = tRecipe.getAllProducts();
                 ItemStack[] tOutputs = new ItemStack[outputs.size()];
                 int[] tChances = new int[outputs.size()];
                 int i =0;
@@ -488,7 +486,7 @@ public class GT_Mod
 //                        tOutputs[i] = outputs.entrySet().
 //          tChances[i] = (tOriginalChances[i].intValue() * 100);
 //        }
-                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[] { ((MachineCentrifuge.CentrifugeRecipe)tRecipe).getInput() }, tOutputs, null, tChances, null, null, 128, 5, 0);
+                GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true, new ItemStack[]{tRecipe.getInput()}, tOutputs, null, tChances, null, null, 128, 5, 0);
 
             }
         } catch (Throwable e) {
@@ -497,9 +495,9 @@ public class GT_Mod
             }
         }
         try {
-            for (Object tRecipe : MachineSqueezer.RecipeManager.recipes) {
-                if ((((MachineSqueezer.Recipe)tRecipe).resources.length == 1) && (GT_Utility.getFluidForFilledItem(((MachineSqueezer.Recipe)tRecipe).resources[0], true) == null)) {
-                    GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[] { ((MachineSqueezer.Recipe)tRecipe).resources[0] }, new ItemStack[] { ((MachineSqueezer.Recipe)tRecipe).remnants }, null, new int[] { ((MachineSqueezer.Recipe)tRecipe).chance * 100 }, null, new FluidStack[] { ((MachineSqueezer.Recipe)tRecipe).liquid }, 400, 2, 0);
+            for (ISqueezerRecipe tRecipe : RecipeManagers.squeezerManager.recipes()) {
+                if ((tRecipe.getResources().length == 1) && (tRecipe.getFluidOutput() != null)) {
+                    GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes.addRecipe(true, new ItemStack[]{tRecipe.getResources()[0]}, new ItemStack[]{tRecipe.getRemnants()}, null, new int[]{(int) (tRecipe.getRemnantsChance() * 10000)}, null, new FluidStack[]{tRecipe.getFluidOutput()}, 400, 2, 0);
                 }
             }
         } catch (Throwable e) {
