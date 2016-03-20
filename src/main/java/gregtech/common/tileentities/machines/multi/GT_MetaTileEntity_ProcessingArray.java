@@ -107,6 +107,42 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sWiremillRecipes;
         } else if (tmp.startsWith("arcfurnace")) {
             return GT_Recipe.GT_Recipe_Map.sArcFurnaceRecipes;
+        } else if (tmp.startsWith("plasmaarcfurnace")) {
+            return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
+        } else if (tmp.startsWith("printer")) {
+            return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
+        } else if (tmp.startsWith("press")) {
+            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
+        } else if (tmp.startsWith("polarizer")) {
+            return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
+        } else if (tmp.startsWith("fluidcanner")) {
+            return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
+        } else if (tmp.startsWith("brewer")) {
+            return GT_Recipe.GT_Recipe_Map.sBrewingRecipes;
+        } else if (tmp.startsWith("fluidheater")) {
+            return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
+        } else if (tmp.startsWith("distillery")) {
+            return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
+        } else if (tmp.startsWith("fermenter")) {
+            return GT_Recipe.GT_Recipe_Map.sFermentingRecipes;
+        } else if (tmp.startsWith("fluidsolidifier")) {
+            return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
+        } else if (tmp.startsWith("fluidextractor")) {
+            return GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes;
+        } else if (tmp.startsWith("packager")) {
+            return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
+        } else if (tmp.startsWith("unpackager")) {
+            return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
+        } else if (tmp.startsWith("canner")) {
+            return GT_Recipe.GT_Recipe_Map.sCannerRecipes;
+        } else if (tmp.startsWith("lathe")) {
+            return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
+        } else if (tmp.startsWith("cuttingsaw")) {
+            return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
+        } else if (tmp.startsWith("slicer")) {
+            return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
+        } else if (tmp.startsWith("uuamplifier")) {
+            return GT_Recipe.GT_Recipe_Map.sAmplifiers;
         }
         return null;
     }
