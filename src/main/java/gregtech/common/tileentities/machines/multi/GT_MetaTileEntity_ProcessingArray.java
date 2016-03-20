@@ -127,19 +127,19 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
         } else if (tmp.startsWith("fluidextractor")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes;
-        } else if (tmp.startsWith("boxinator")) {//changed name
+        } else if (tmp.startsWith("boxinator")) {//OK
             return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
-        } else if (tmp.startsWith("unboxinator")) {//changed name
+        } else if (tmp.startsWith("unboxinator")) {//OK
             return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
         } else if (tmp.startsWith("canner")) {//OK
             return GT_Recipe.GT_Recipe_Map.sCannerRecipes;
         } else if (tmp.startsWith("lathe")) {//OK
             return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
-        } else if (tmp.startsWith("cutter")) {//changed name
+        } else if (tmp.startsWith("cutter")) {//OK
             return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
         } else if (tmp.startsWith("slicer")) {//OK
             return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
-        } else if (tmp.startsWith("amplifab")) {//changed name
+        } else if (tmp.startsWith("amplifab")) {//OK
             return GT_Recipe.GT_Recipe_Map.sAmplifiers;
         }
         return null;
