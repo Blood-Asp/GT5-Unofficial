@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Energy Hatch (anywhere)",
                 "1x Maintenance Hatch (anywhere)",
                 "Robust Tungstensteel Casings for the rest (16 at least!)",
-                "Place up to 16 Single Block GT Machines into the GUI Inventory",
+                "Place up to 64 Single Block GT Machines into the GUI Inventory",// Updated String
                 "They will work the same way as placed directly in world"};
     }
 
@@ -107,41 +107,39 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sWiremillRecipes;
         } else if (tmp.startsWith("arcfurnace")) {
             return GT_Recipe.GT_Recipe_Map.sArcFurnaceRecipes;
-        } else if (tmp.startsWith("plasmaarcfurnace")) {
+        } else if (tmp.startsWith("plasmaarcfurnace")) {//OK
             return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
-        } else if (tmp.startsWith("printer")) {
-            return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
-        } else if (tmp.startsWith("press")) {
+        } else if (tmp.startsWith("press")) {//OK
             return GT_Recipe.GT_Recipe_Map.sPressRecipes;
-        } else if (tmp.startsWith("polarizer")) {
+        } else if (tmp.startsWith("polarizer")) {//OK
             return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
-        } else if (tmp.startsWith("fluidcanner")) {
+        } else if (tmp.startsWith("fluidcanner")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
-        } else if (tmp.startsWith("brewer")) {
+        } else if (tmp.startsWith("brewer")) {//OK
             return GT_Recipe.GT_Recipe_Map.sBrewingRecipes;
-        } else if (tmp.startsWith("fluidheater")) {
+        } else if (tmp.startsWith("fluidheater")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
-        } else if (tmp.startsWith("distillery")) {
+        } else if (tmp.startsWith("distillery")) {//OK
             return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
-        } else if (tmp.startsWith("fermenter")) {
+        } else if (tmp.startsWith("fermenter")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFermentingRecipes;
-        } else if (tmp.startsWith("fluidsolidifier")) {
+        } else if (tmp.startsWith("fluidsolidifier")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
-        } else if (tmp.startsWith("fluidextractor")) {
+        } else if (tmp.startsWith("fluidextractor")) {//OK
             return GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes;
-        } else if (tmp.startsWith("packager")) {
+        } else if (tmp.startsWith("boxinator")) {//changed name
             return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
-        } else if (tmp.startsWith("unpackager")) {
+        } else if (tmp.startsWith("unboxinator")) {//changed name
             return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
-        } else if (tmp.startsWith("canner")) {
+        } else if (tmp.startsWith("canner")) {//OK
             return GT_Recipe.GT_Recipe_Map.sCannerRecipes;
-        } else if (tmp.startsWith("lathe")) {
+        } else if (tmp.startsWith("lathe")) {//OK
             return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
-        } else if (tmp.startsWith("cuttingsaw")) {
+        } else if (tmp.startsWith("cutter")) {//changed name
             return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
-        } else if (tmp.startsWith("slicer")) {
+        } else if (tmp.startsWith("slicer")) {//OK
             return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
-        } else if (tmp.startsWith("uuamplifier")) {
+        } else if (tmp.startsWith("amplifab")) {//changed name
             return GT_Recipe.GT_Recipe_Map.sAmplifiers;
         }
         return null;
@@ -221,7 +219,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mEUt = 0;
                 this.mOutputItems = null;
                 this.mOutputFluids = null;
-                int machines = Math.min(16, mInventory[1].stackSize);
+                int machines = Math.min(64, mInventory[1].stackSize);//Upped max cap to 64
                 int i = 0;
                 for (; i < machines; i++) {
                     if (!tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
