@@ -61,9 +61,9 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
 //                int heat = sumUp(pulses) * 4;
 
                 int heat = triangularNumber(pulses) * 4;
-
+                
                 heat = getFinalHeat(reactor, yourStack, x, y, heat);
-
+                
                 ArrayList<ItemStackCoord> heatAcceptors = new ArrayList();
                 checkHeatAcceptor(reactor, x - 1, y, heatAcceptors);
                 checkHeatAcceptor(reactor, x + 1, y, heatAcceptors);
@@ -84,22 +84,22 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
             }
         }
         if (getDamageOfStack(yourStack) >= getMaxDamageEx() - 1) {
-            reactor.setItemAt(x, y, sDepleted.copy());
+        	reactor.setItemAt(x, y, sDepleted.copy());
         } else if (heatrun) {
             damageItemStack(yourStack, 1);
         }
     }
-
+    
     protected int getFinalHeat(IReactor reactor, ItemStack stack, int x, int y, int heat)
     {
-        if (sMox&&reactor.isFluidCooled())
-        {
-            float breedereffectiveness = reactor.getHeat() / reactor.getMaxHeat();
-            if (breedereffectiveness > 0.5D) {
-                heat *= 2;
-            }
+      if (sMox&&reactor.isFluidCooled())
+      {
+        float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
+        if (breedereffectiveness > 0.5D) {
+          heat *= 2;
         }
-        return heat;
+      }
+      return heat;
     }
 
     private void checkHeatAcceptor(IReactor reactor, int x, int y, ArrayList<ItemStackCoord> heatAcceptors) {
@@ -111,13 +111,13 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     }
 
     public boolean acceptUraniumPulse(IReactor reactor, ItemStack yourStack, ItemStack pulsingStack, int youX, int youY, int pulseX, int pulseY, boolean heatrun) {
-        if (!heatrun) {
-            if(sMox){
-                float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
-                float ReaktorOutput = 1.5F * breedereffectiveness + 1.0F;
-                reactor.addOutput(ReaktorOutput * this.sEnergy);
-            }else{
-                reactor.addOutput((float) (1.0F * this.sEnergy));}
+    	if (!heatrun) {
+        	if(sMox){
+        	      float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
+        	      float ReaktorOutput = 1.5F * breedereffectiveness + 1.0F;
+        	      reactor.addOutput(ReaktorOutput * this.sEnergy);
+        	}else{
+            reactor.addOutput((float) (1.0F * this.sEnergy));}
         }
         return true;
     }
