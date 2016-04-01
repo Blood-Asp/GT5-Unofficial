@@ -50,9 +50,9 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Cerium				(  65, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Cerium"						,    0,       0,       1068, 1068, true, false,    4,   1,   1, Dyes._NULL			, Element.Ce		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
     Chlorine			(  23, TextureSet.SET_FLUID				,   1.0F,      0,  2,         16|32                         , 255, 255, 255,   0,	"Chlorine"						,    0,       0,        171,    0, false, false,   2,   1,   1, Dyes.dyeCyan		, Element.Cl		, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.PANNUS, 1))),
     Chrome				(  30, TextureSet.SET_SHINY				,  11.0F,    256,  3, 1|2  |8   |32|64|128                  , 255, 230, 230,   0,	"Chrome"						,    0,       0,       2180, 1700, true, false,    5,   1,   1, Dyes.dyePink	    , Element.Cr		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    Cobalt				(  33, TextureSet.SET_METALLIC			,   8.0F,    512,  5, 1|2  |8   |32|64                      ,  80,  80, 250,   0,	"Cobalt"						,    0,       0,       1768, 1700, true, false,    3,   1,   1, Dyes.dyeBlue		, Element.Co		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
+    Cobalt				(  33, TextureSet.SET_METALLIC			,   8.0F,    512,  3, 1|2  |8   |32|64                      ,  80,  80, 250,   0,	"Cobalt"						,    0,       0,       1768, 1700, true, false,    3,   1,   1, Dyes.dyeBlue		, Element.Co		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
     Copper				(  35, TextureSet.SET_SHINY				,   1.0F,      0,  1, 1|2  |8   |32   |128                  , 255, 100,   0,   0,	"Copper"						,    0,       0,       1357,    0, false, false,   3,   1,   1, Dyes.dyeOrange		, Element.Cu		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PERMUTATIO, 1))),
-    Deuterium			(   2, TextureSet.SET_FLUID				,   1.0F,      0,  2,         16|32                         , 255, 255,   0, 240,	"Deuterium"						,    0,       0,         14,    0, false, true,    10,   1,   1, Dyes.dyeYellow		, Element.D			, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 3))),
+    Deuterium			(   2, TextureSet.SET_FLUID				,   1.0F,      0,  2,         16|32                         , 255, 255,   0, 240,	"Deuterium"						,    0,       0,         14,    0, false, true,   10,   1,   1, Dyes.dyeYellow		, Element.D			, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 3))),
     Dysprosium			(  73, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Dysprosium"					,    0,       0,       1680, 1680, true, false,    4,   1,   1, Dyes._NULL			, Element.Dy		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3))),
     Empty				(   0, TextureSet.SET_NONE				,   1.0F,      0,  2, 256/*Only for Prefixes which need it*/, 255, 255, 255, 255,	"Empty"							,    0,       0,         -1,    0, false, true,    1,   1,   1, Dyes._NULL			, Element._NULL		, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 2))),
     Erbium				(  75, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Erbium"						,    0,       0,       1802, 1802, true, false,    4,   1,   1, Dyes._NULL			, Element.Er		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
@@ -192,8 +192,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Fairy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Fairy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Ludicrite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Ludicrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Pokefennium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Pokefennium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Draconium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Draconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    DraconiumAwakened(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Awakened Draconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
+    Draconium(975, TextureSet.SET_SHINY, 20.0F, 32768, 7,  1|2|          64|128, 122, 68, 176, 0, "Draconium", 0, 0,  5000, 3300, true, false, 3, 1, 1, Dyes.dyePink),
+    DraconiumAwakened(976, TextureSet.SET_SHINY, 40.0F, 65536, 8,  1|2|          64|128, 244, 78, 0, 0, "Awakened Draconium", 0, 0, 15000, 3600, true, false, 3, 1, 1, Dyes.dyeOrange),
     PurpleAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Purple Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     InfusedTeslatite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Infused Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
 
@@ -1673,5 +1673,5 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     public short[] getRGBA() {
         return mRGBa;
     }
-    
+
 }
