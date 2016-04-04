@@ -660,7 +660,7 @@ public enum ItemList implements IItemContainer {
     Teleporter,
     Cover_NeedsMaintainance,
     Casing_Turbine,
-    MobRep_LV, MobRep_MV, MobRep_HV, MobRep_EV, MobRep_IV, LargeGasTurbine, LargeHPSteamTurbine, LargePlasmaTurbine, Cover_PlayerDetector, Machine_Multi_HeatExchanger, AdvancedMiner2, Uraniumcell_1, Uraniumcell_2, Uraniumcell_4, Moxcell_1, Moxcell_2, Moxcell_4;
+    MobRep_LV, MobRep_MV, MobRep_HV, MobRep_EV, MobRep_IV, LargeGasTurbine, LargeHPSteamTurbine, LargePlasmaTurbine, Cover_PlayerDetector, Machine_Multi_HeatExchanger, OilDrill, AdvancedMiner2, Uraniumcell_1, Uraniumcell_2, Uraniumcell_4, Moxcell_1, Moxcell_2, Moxcell_4;
 
 
     public static final ItemList[]
