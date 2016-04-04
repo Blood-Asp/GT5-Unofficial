@@ -192,6 +192,7 @@ public class GT_Loader_Item_Block_And_Fluid
         ItemList.sOilMedium = GT_Mod.gregtechproxy.addFluid("liquid_medium_oil", "Raw Oil", null, 1, 295);
         ItemList.sOilLight = GT_Mod.gregtechproxy.addFluid("liquid_light_oil", "Light Oil", null, 1, 295);
         ItemList.sNaturalGas = GT_Mod.gregtechproxy.addFluid("gas_natural_gas", "Natural Gas", null, 2, 295);
+        ItemList.sDrillingFluid = GT_Mod.gregtechproxy.addFluid("liquid_drillingfluid", "Drilling Fluid", null, 1, 295);
 
         GT_Mod.gregtechproxy.addFluid("UUAmplifier", "UU Amplifier", Materials.UUAmplifier, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.UUAmplifier, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Chlorine", "Chlorine", Materials.Chlorine, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Chlorine, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
