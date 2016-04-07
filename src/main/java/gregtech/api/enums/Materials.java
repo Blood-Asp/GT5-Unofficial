@@ -202,7 +202,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     /**
      * Unknown Material Components. Dead End Section.
      * 
-     * Alkalus Range 780-800
+     * Alkalus Range 730-799 & 970-998
      * (aMetaItemSubID, TextureSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, R, G, B, Alpha, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor
         this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, true);
      * 

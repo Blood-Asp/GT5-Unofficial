@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/appliedenergistics2-rv2-stable-1.jar"/>
+	<classpathentry kind="lib" path="libs/EnderIO-1.7.10-2.2.8.381-dev.jar"/>
+	<classpathentry kind="lib" path="libs/forestry_1.7.10-4.1.1.46-deobf.jar"/>
+	<classpathentry kind="lib" path="libs/dev/industrialcraft-2-2.2.720-experimental-dev.jar"/>
+	<classpathentry kind="lib" path="libs/dev/NotEnoughItems-1.7.10-1.0.4.107-dev.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Forge"/>
+	<classpathentry kind="lib" path="libs/API.jar"/>
+	<classpathentry kind="lib" path="libs/dev/1.7.10/CodeChickenLib-1.7.10-1.1.3.136-dev.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

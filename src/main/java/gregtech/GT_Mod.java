@@ -14,6 +14,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
+import gregtech.api.util.EX_MaterialUtils;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_ItsNotMyFaultException;
 import gregtech.api.util.GT_LanguageManager;
@@ -143,6 +144,7 @@ implements IGT_Mod {
 
 	@Mod.EventHandler
 	public void onPreLoad(FMLPreInitializationEvent aEvent) {
+		EX_MaterialUtils.checkFreeIDs();
 		if (GregTech_API.sPreloadStarted) {
 			return;
 		}
