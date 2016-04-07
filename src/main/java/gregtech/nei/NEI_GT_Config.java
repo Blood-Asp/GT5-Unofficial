@@ -1,6 +1,7 @@
 package gregtech.nei;
 
 import gregtech.api.util.GT_Recipe;
+import gregtech.nei.GT_NEI_DefaultHandler;
 import codechicken.nei.api.IConfigureNEI;
 
 public class NEI_GT_Config
