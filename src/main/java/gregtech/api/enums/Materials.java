@@ -156,7 +156,6 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Legendary(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Legendary", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     MutatedIron(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Mutated Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Witheria(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Witheria", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    RedstoneAlloy(-1, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1, 178,34,34, 0, "Redstone Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
     OsmiumTetroxide(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Osmium Tetroxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     NitricAcid(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Nitric Acid", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     RubberTreeSap(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Rubber Tree Sap", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
@@ -208,14 +207,18 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
      * 
      */
     Staballoy(319, TextureSet.SET_ROUGH, 10.0F, 5120, 4, 1 | 2 | 8 | 16 | 32 | 64 | 128, 48, 55, 46, 0, "Staballoy", 0, 0, 1500, 2800, true, false, 1, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Uranium, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 3))),
-    Bedrockium(780, TextureSet.SET_ROUGH, 8.0F, 8196, 3, 1 | 2 | 16 | 32 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 8), new TC_AspectStack(TC_Aspects.TUTAMEN, 3))),
-    BloodSteel(781, TextureSet.SET_MAGNETIC, 12.0F, 1024, 3, 1 | 2 | 8 | 16 | 32 | 64 | 128, 142, 28, 0, 0, "Blood Steel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.VICTUS, 8), new TC_AspectStack(TC_Aspects.IGNIS, 3))),
-    VoidMetal(782, TextureSet.SET_DULL, 6.0F, 2560, 2, 1 | 2 | 16 | 32 | 64 | 128, 5, 8, 12, 0, "Void Metal", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack),
-    ConductiveIron(783, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 2, 164, 109, 100, 0, "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
-    ElectricalSteel(784, TextureSet.SET_MAGNETIC, 1.0F, 0, 2, 1 | 2 | 64 | 128, 194, 194, 194, 0, "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes.dyeLightGray),
-    EnergeticAlloy(785, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 64 | 128, 173, 76, 0, 0, "Energetic Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange),
-    VibrantAlloy(786, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 64 | 128, 158, 206, 0, 0, "Vibrant Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLime),
-    PulsatingIron(787, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 64 | 128, 50, 91, 21, 0, "Pulsating Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen),
+    Bedrockium(780, TextureSet.SET_FINE, 8.0F, 8196, 3, 1 | 2 | 16 | 32 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 8), new TC_AspectStack(TC_Aspects.TUTAMEN, 3))),
+    BloodSteel(781, TextureSet.SET_METALLIC, 11.0F, 1280, 4, 1 | 2 | 8 | 16 | 32 | 64 | 128, 142, 28, 0, 0, "Blood Steel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.VICTUS, 8), new TC_AspectStack(TC_Aspects.IGNIS, 3))),
+    VoidMetal(782, TextureSet.SET_METALLIC, 6.0F, 2560, 3, 1 | 2 | 16 | 32 | 64 | 128, 46, 17, 46, 0, "Void Metal", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 5), new TC_AspectStack(TC_Aspects.VACUOS, 7))),
+    ConductiveIron(783, TextureSet.SET_METALLIC, 5.0F, 1280, 2, 1 | 2, 164, 109, 100, 0, "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.METALLUM, 2))),
+    ElectricalSteel(784, TextureSet.SET_METALLIC, 7.0F, 3840, 3, 1 | 2 | 64 | 128, 194, 194, 194, 0, "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MAGNETO, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 5))),
+    EnergeticAlloy(785, TextureSet.SET_SHINY, 8.0F, 2560, 3, 1 | 2 | 64 | 128, 173, 76, 0, 0, "Energetic Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 4), new TC_AspectStack(TC_Aspects.LUX, 3))),
+    VibrantAlloy(786, TextureSet.SET_SHINY, 10.0F, 5120, 4, 1 | 2 | 64 | 128, 158, 206, 0, 0, "Vibrant Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 5), new TC_AspectStack(TC_Aspects.TELUM, 4))),
+    PulsatingIron(787, TextureSet.SET_SHINY, 5.0F, 640, 2, 1 | 2 | 64 | 128, 50, 91, 21, 0, "Pulsating Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.ALIENIS, 3), new TC_AspectStack(TC_Aspects.METALLUM, 3))),
+   /* TODO*/ RedstoneAlloy(788, TextureSet.SET_METALLIC, 1.0F, 320, 2, 1|2|16|32|64, 178,34,34, 0, "Redstone Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
+    
+    //Needs more Use, I think.
+    Graphene(819, TextureSet.SET_DULL, 6.0F, 32, 1, 1 | 2 | 8 | 16 | 32 | 64 | 128, 128, 128, 128, 0, "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
     
     //BlankMaterial(781, TextureSet.SET_METALLIC, 10.0F, 1024, 3, 1 | 8 | 16 | 64 | 128, 39, 39, 39, 0, "Bedrockium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 8), new TC_AspectStack(TC_Aspects.TUTAMEN, 3))),
     //Does this work?
@@ -284,7 +287,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Glowstone(811, TextureSet.SET_SHINY, 1.0F, 0, 1, 1 | 16, 255, 255, 0, 0, "Glowstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.LUX, 2), new TC_AspectStack(TC_Aspects.SENSUS, 1))),
     Gneiss(864, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Gneiss", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL),
     Graphite(865, TextureSet.SET_DULL, 5.0F, 32, 2, 1 | 8 | 16 | 64, 128, 128, 128, 0, "Graphite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Graphene(819, TextureSet.SET_DULL, 6.0F, 32, 1, 1 | 8 | 64, 128, 128, 128, 0, "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
+    //Graphene(819, TextureSet.SET_DULL, 6.0F, 32, 1, 1 | 8 | 64, 128, 128, 128, 0, "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
     Greenschist(866, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Green Schist", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen),
     Greenstone(867, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen),
     Greywacke(868, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Greywacke", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray),

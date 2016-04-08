@@ -32,7 +32,7 @@ public class EX_MaterialUtils {
 		
 		findFreeIDS(arraySortUp(convert(arr)));
 		
-		System.exit(1);
+		//System.exit(1);
 	}
 	
 	private static int[ ] arraySortUp( int[ ] intArray )
