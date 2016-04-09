@@ -352,7 +352,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
 			if (tNewDamage >= getToolMaxDamage(aStack)) {
 				IToolStats tStats = getToolStats(aStack);
 				if (tStats == null || GT_Utility.setStack(aStack, tStats.getBrokenItem(aStack)) == null) {
-					if (tStats != null) GT_Utility.doSoundAtClient(tStats.getBreakingSound(), 1, 1.0F);
+					if (tStats != null) /*GT_Utility.doSoundAtClient(tStats.getBreakingSound(), 1, 1.0F);*/
 					if (aStack.stackSize > 0) aStack.stackSize--;
 
 				}
@@ -366,7 +366,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
 				if (tNewDamage >= getToolMaxDamage(aStack)) {
 					IToolStats tStats = getToolStats(aStack);
 					if (tStats == null || GT_Utility.setStack(aStack, tStats.getBrokenItem(aStack)) == null) {
-						if (tStats != null) GT_Utility.doSoundAtClient(tStats.getBreakingSound(), 1, 1.0F);
+						if (tStats != null) /*GT_Utility.doSoundAtClient(tStats.getBreakingSound(), 1, 1.0F);*/
 						if (aStack.stackSize > 0) aStack.stackSize--;
 					}
 				}
@@ -423,7 +423,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
 		doDamage(aStack, tStats.getToolDamagePerContainerCraft());
 		aStack = aStack.stackSize > 0 ? aStack : null;
 		if (playSound) {
-			String sound = (aStack == null) ? tStats.getBreakingSound() : tStats.getCraftingSound();
+			//String sound = (aStack == null) ? tStats.getBreakingSound() : tStats.getCraftingSound();
 			//GT_Utility.doSoundAtClient(sound, 1, 1.0F);
 		}
 		return aStack;
