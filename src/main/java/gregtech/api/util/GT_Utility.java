@@ -5,9 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.SubTag;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
@@ -19,8 +17,6 @@ import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
-import gregtech.common.GT_Proxy;
-
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
@@ -54,7 +50,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -87,7 +82,7 @@ public class GT_Utility {
     private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<GT_ItemStack, FluidContainerData>();
     private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
     public static volatile int VERSION = 508;
-    public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
+    public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true;
     public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
 
@@ -337,11 +332,6 @@ public class GT_Utility {
                 Class tClass = buildcraft.api.transport.IPipeTile.class;
                 tClass.getCanonicalName();
                 BC_CHECK = true;
-            } catch (Throwable e) {/**/}
-            try {
-                Class tClass = cofh.api.energy.IEnergyReceiver.class;
-                tClass.getCanonicalName();
-                RF_CHECK = true;
             } catch (Throwable e) {/**/}
             CHECK_ALL = false;
         }
@@ -812,30 +802,25 @@ public class GT_Utility {
             return copyMetaData(Items.feather.getDamage(aStack) + 1, aStack);
         return null;
     }
-
     public static synchronized boolean removeIC2BottleRecipe(ItemStack aContainer, ItemStack aInput, Map<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> aRecipeList, ItemStack aOutput){
-        if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
-        boolean rReturn = false;
-        Iterator<Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput>> tIterator = aRecipeList.entrySet().iterator();
-        aOutput = GT_OreDictUnificator.get(aOutput);
-        while (tIterator.hasNext()) {
-            Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> tEntry = tIterator.next();
-            if (aInput == null || tEntry.getKey().matches(aContainer, aInput)) {
-                List<ItemStack> tList = tEntry.getValue().items;
-                if (tList != null) for (ItemStack tOutput : tList)
-                    if (aOutput == null || areStacksEqual(GT_OreDictUnificator.get(tOutput), aOutput)) {
-                        tIterator.remove();
-                        rReturn = true;
-                        break;
+                if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
+                boolean rReturn = false;
+                Iterator<Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput>> tIterator = aRecipeList.entrySet().iterator();
+                aOutput = GT_OreDictUnificator.get(aOutput);
+                while (tIterator.hasNext()) {
+                        Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> tEntry = tIterator.next();
+                        if (aInput == null || tEntry.getKey().matches(aContainer, aInput)) {
+                                List<ItemStack> tList = tEntry.getValue().items;
+                                if (tList != null) for (ItemStack tOutput : tList)
+                                        if (aOutput == null || areStacksEqual(GT_OreDictUnificator.get(tOutput), aOutput)) {
+                                            tIterator.remove();
+                                            rReturn = true;
+                                            break;
+                                        }
+                            }
                     }
+                return rReturn;
             }
-
-
-
-        }
-        return rReturn;
-    }
-
 
     public static synchronized boolean removeSimpleIC2MachineRecipe(ItemStack aInput, Map<IRecipeInput, RecipeOutput> aRecipeList, ItemStack aOutput) {
         if ((isStackInvalid(aInput) && isStackInvalid(aOutput)) || aRecipeList == null) return false;
@@ -1511,51 +1496,6 @@ public class GT_Utility {
         }
         return false;
     }
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
-
-
-
-
-        Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
-        int oil = tRandom.nextInt(3);
-        double amount = tRandom.nextInt(50) + tRandom.nextDouble();
-        oil = tRandom.nextInt(4);
-//		System.out.println("Oil: "+(aX/96)+" "+(aZ/96)+" "+oil+" "+amount);
-//		amount = 40;
-        Fluid tFluid = null;
-        switch (oil) {
-            case 0:
-                tFluid = Materials.NatruralGas.mGas;
-                break;
-            case 1:
-                tFluid = Materials.OilLight.mFluid;
-                break;
-            case 2:
-                tFluid = Materials.OilMedium.mFluid;
-                break;
-            case 3:
-                tFluid = Materials.OilHeavy.mFluid;
-                break;
-            default:
-                tFluid = Materials.Oil.mFluid;
-        }
-        int tAmount = (int) (Math.pow(amount, 5) / 100);
-        ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
-        if(GT_Proxy.chunkData.containsKey(tPos)){
-            int[] tInts = GT_Proxy.chunkData.get(tPos);
-            if(tInts.length>0){
-                if(tInts[0]>=0){tAmount = tInts[0];}
-            }
-
-            GT_Proxy.chunkData.remove(tPos);
-        }
-
-        tAmount = tAmount - 5;
-        GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
-
-
-        return new FluidStack(tFluid, tAmount);
-    }
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
         if (aList == null) return 0;
@@ -1579,192 +1519,187 @@ public class GT_Utility {
         } catch (Throwable e) {
             if (D1) e.printStackTrace(GT_Log.err);
         }
-
-    if (tTileEntity != null) {
-        try {
-            if (tTileEntity instanceof IFluidHandler) {
-                rEUAmount += 500;
-                FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
-                if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
-                    tList.add("Tank " + i + ": " + GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) + " / " + GT_Utility.formatNumbers(tTanks[i].capacity) + " " + getFluidName(tTanks[i].fluid, true));
-                }
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.reactor.IReactorChamber) {
-                rEUAmount += 500;
-                tTileEntity = (TileEntity) (((ic2.api.reactor.IReactorChamber) tTileEntity).getReactor());
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.reactor.IReactor) {
-                rEUAmount += 500;
-                tList.add("Heat: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeat() + "/" + ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()
-                        + "  HEM: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() + "  Base EU Output: "/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.tile.IWrenchable) {
-                rEUAmount += 100;
-                tList.add("Facing: " + ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() + " / Chance: " + (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) + "%");
-                tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? "You can remove this with a Wrench" : "You can NOT remove this with a Wrench");
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.energy.tile.IEnergyTile) {
-                rEUAmount += 200;
-                //aList.add(((ic2.api.energy.tile.IEnergyTile)tTileEntity).isAddedToEnergyNet()?"Added to E-net":"Not added to E-net! Bug?");
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.energy.tile.IEnergySink) {
-                rEUAmount += 400;
-                //aList.add("Demanded Energy: " + ((ic2.api.energy.tile.IEnergySink)tTileEntity).demandsEnergy());
-                //tList.add("Max Safe Input: " + getTier(((ic2.api.energy.tile.IEnergySink)tTileEntity).getSinkTier()));
-                //tList.add("Max Safe Input: " + ((ic2.api.energy.tile.IEnergySink)tTileEntity).getMaxSafeInput());
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.energy.tile.IEnergySource) {
-                rEUAmount += 400;
-                //aList.add("Max Energy Output: " + ((ic2.api.energy.tile.IEnergySource)tTileEntity).getMaxEnergyOutput());
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.energy.tile.IEnergyConductor) {
-                rEUAmount += 200;
-                tList.add("Conduction Loss: " + ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss());
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.tile.IEnergyStorage) {
-                rEUAmount += 200;
-                tList.add("Contained Energy: " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() + " of " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity());
-                //aList.add(((ic2.api.tile.IEnergyStorage)tTileEntity).isTeleporterCompatible(ic2.api.Direction.YP)?"Teleporter Compatible":"Not Teleporter Compatible");
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof IUpgradableMachine) {
-                rEUAmount += 500;
-                if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add("Has Muffler Upgrade");
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof IMachineProgress) {
-                rEUAmount += 400;
-                int tValue = 0;
-                if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                    tList.add("Progress: " + GT_Utility.formatNumbers(tValue) + " / " + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()));
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ICoverable) {
-                rEUAmount += 300;
-                String tString = ((ICoverable) tTileEntity).getCoverBehaviorAtSide((byte) aSide).getDescription((byte) aSide, ((ICoverable) tTileEntity).getCoverIDAtSide((byte) aSide), ((ICoverable) tTileEntity).getCoverDataAtSide((byte) aSide), (ICoverable) tTileEntity);
-                if (tString != null && !tString.equals(E)) tList.add(tString);
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
-                tList.add("Max IN: " + ((IBasicEnergyContainer) tTileEntity).getInputVoltage() + " EU");
-                tList.add("Max OUT: " + ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " EU at " + ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() + " Amperes");
-                tList.add("Energy: " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) + " / " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) + "EU");
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof IGregTechTileEntity) {
-                tList.add("Owned by: " + ((IGregTechTileEntity) tTileEntity).getOwnerName());
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof IGregTechDeviceInformation && ((IGregTechDeviceInformation) tTileEntity).isGivingInformation()) {
-                tList.addAll(Arrays.asList(((IGregTechDeviceInformation) tTileEntity).getInfoData()));
-            }
-        } catch (Throwable e) {
-            if (D1) e.printStackTrace(GT_Log.err);
-        }
-        try {
-            if (tTileEntity instanceof ic2.api.crops.ICropTile) {
-                if (((ic2.api.crops.ICropTile) tTileEntity).getScanLevel() < 4) {
-                    rEUAmount += 10000;
-                    ((ic2.api.crops.ICropTile) tTileEntity).setScanLevel((byte) 4);
-                }
-                if (((ic2.api.crops.ICropTile) tTileEntity).getID() >= 0 && ((ic2.api.crops.ICropTile) tTileEntity).getID() < ic2.api.crops.Crops.instance.getCropList().length && ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()] != null) {
-                    rEUAmount += 1000;
-                    tList.add("Type -- Crop-Name: " + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].name()
-                                    + "  Growth: " + ((ic2.api.crops.ICropTile) tTileEntity).getGrowth()
-                                    + "  Gain: " + ((ic2.api.crops.ICropTile) tTileEntity).getGain()
-                                    + "  Resistance: " + ((ic2.api.crops.ICropTile) tTileEntity).getResistance()
-                    );
-                    tList.add("Plant -- Fertilizer: " + ((ic2.api.crops.ICropTile) tTileEntity).getNutrientStorage()
-                                    + "  Water: " + ((ic2.api.crops.ICropTile) tTileEntity).getHydrationStorage()
-                                    + "  Weed-Ex: " + ((ic2.api.crops.ICropTile) tTileEntity).getWeedExStorage()
-                                    + "  Scan-Level: " + ((ic2.api.crops.ICropTile) tTileEntity).getScanLevel()
-                    );
-                    tList.add("Environment -- Nutrients: " + ((ic2.api.crops.ICropTile) tTileEntity).getNutrients()
-                                    + "  Humidity: " + ((ic2.api.crops.ICropTile) tTileEntity).getHumidity()
-                                    + "  Air-Quality: " + ((ic2.api.crops.ICropTile) tTileEntity).getAirQuality()
-                    );
-                    String tString = E;
-                    for (String tAttribute : ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].attributes()) {
-                        tString += ", " + tAttribute;
+        if (tTileEntity != null) {
+            try {
+                if (tTileEntity instanceof IFluidHandler) {
+                    rEUAmount += 500;
+                    FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
+                    if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
+                        tList.add("Tank " + i + ": " + GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) + " / " + GT_Utility.formatNumbers(tTanks[i].capacity) + " " + getFluidName(tTanks[i].fluid, true));
                     }
-                    tList.add("Attributes:" + tString.replaceFirst(",", E));
-                    tList.add("Discovered by: " + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].discoveredBy());
                 }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.reactor.IReactorChamber) {
+                    rEUAmount += 500;
+                    tTileEntity = (TileEntity) (((ic2.api.reactor.IReactorChamber) tTileEntity).getReactor());
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.reactor.IReactor) {
+                    rEUAmount += 500;
+                    tList.add("Heat: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeat() + "/" + ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()
+                            + "  HEM: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() + "  Base EU Output: "/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.tile.IWrenchable) {
+                    rEUAmount += 100;
+                    tList.add("Facing: " + ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() + " / Chance: " + (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) + "%");
+                    tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? "You can remove this with a Wrench" : "You can NOT remove this with a Wrench");
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.energy.tile.IEnergyTile) {
+                    rEUAmount += 200;
+                    //aList.add(((ic2.api.energy.tile.IEnergyTile)tTileEntity).isAddedToEnergyNet()?"Added to E-net":"Not added to E-net! Bug?");
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.energy.tile.IEnergySink) {
+                    rEUAmount += 400;
+                    //aList.add("Demanded Energy: " + ((ic2.api.energy.tile.IEnergySink)tTileEntity).demandsEnergy());
+                    //tList.add("Max Safe Input: " + getTier(((ic2.api.energy.tile.IEnergySink)tTileEntity).getSinkTier()));
+                    //tList.add("Max Safe Input: " + ((ic2.api.energy.tile.IEnergySink)tTileEntity).getMaxSafeInput());
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.energy.tile.IEnergySource) {
+                    rEUAmount += 400;
+                    //aList.add("Max Energy Output: " + ((ic2.api.energy.tile.IEnergySource)tTileEntity).getMaxEnergyOutput());
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.energy.tile.IEnergyConductor) {
+                    rEUAmount += 200;
+                    tList.add("Conduction Loss: " + ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss());
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.tile.IEnergyStorage) {
+                    rEUAmount += 200;
+                    tList.add("Contained Energy: " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() + " of " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity());
+                    //aList.add(((ic2.api.tile.IEnergyStorage)tTileEntity).isTeleporterCompatible(ic2.api.Direction.YP)?"Teleporter Compatible":"Not Teleporter Compatible");
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IUpgradableMachine) {
+                    rEUAmount += 500;
+                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add("Has Muffler Upgrade");
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IMachineProgress) {
+                    rEUAmount += 400;
+                    int tValue = 0;
+                    if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
+                        tList.add("Progress: " + GT_Utility.formatNumbers(tValue) + " / " + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()));
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ICoverable) {
+                    rEUAmount += 300;
+                    String tString = ((ICoverable) tTileEntity).getCoverBehaviorAtSide((byte) aSide).getDescription((byte) aSide, ((ICoverable) tTileEntity).getCoverIDAtSide((byte) aSide), ((ICoverable) tTileEntity).getCoverDataAtSide((byte) aSide), (ICoverable) tTileEntity);
+                    if (tString != null && !tString.equals(E)) tList.add(tString);
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
+                    tList.add("Max IN: " + ((IBasicEnergyContainer) tTileEntity).getInputVoltage() + " EU");
+                    tList.add("Max OUT: " + ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " EU at " + ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() + " Amperes");
+                    tList.add("Energy: " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) + " / " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) + "EU");
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IGregTechTileEntity) {
+                    tList.add("Owned by: " + ((IGregTechTileEntity) tTileEntity).getOwnerName());
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IGregTechDeviceInformation && ((IGregTechDeviceInformation) tTileEntity).isGivingInformation()) {
+                    tList.addAll(Arrays.asList(((IGregTechDeviceInformation) tTileEntity).getInfoData()));
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof ic2.api.crops.ICropTile) {
+                    if (((ic2.api.crops.ICropTile) tTileEntity).getScanLevel() < 4) {
+                        rEUAmount += 10000;
+                        ((ic2.api.crops.ICropTile) tTileEntity).setScanLevel((byte) 4);
+                    }
+                    if (((ic2.api.crops.ICropTile) tTileEntity).getID() >= 0 && ((ic2.api.crops.ICropTile) tTileEntity).getID() < ic2.api.crops.Crops.instance.getCropList().length && ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()] != null) {
+                        rEUAmount += 1000;
+                        tList.add("Type -- Crop-Name: " + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].name()
+                                        + "  Growth: " + ((ic2.api.crops.ICropTile) tTileEntity).getGrowth()
+                                        + "  Gain: " + ((ic2.api.crops.ICropTile) tTileEntity).getGain()
+                                        + "  Resistance: " + ((ic2.api.crops.ICropTile) tTileEntity).getResistance()
+                        );
+                        tList.add("Plant -- Fertilizer: " + ((ic2.api.crops.ICropTile) tTileEntity).getNutrientStorage()
+                                        + "  Water: " + ((ic2.api.crops.ICropTile) tTileEntity).getHydrationStorage()
+                                        + "  Weed-Ex: " + ((ic2.api.crops.ICropTile) tTileEntity).getWeedExStorage()
+                                        + "  Scan-Level: " + ((ic2.api.crops.ICropTile) tTileEntity).getScanLevel()
+                        );
+                        tList.add("Environment -- Nutrients: " + ((ic2.api.crops.ICropTile) tTileEntity).getNutrients()
+                                        + "  Humidity: " + ((ic2.api.crops.ICropTile) tTileEntity).getHumidity()
+                                        + "  Air-Quality: " + ((ic2.api.crops.ICropTile) tTileEntity).getAirQuality()
+                        );
+                        String tString = E;
+                        for (String tAttribute : ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].attributes()) {
+                            tString += ", " + tAttribute;
+                        }
+                        tList.add("Attributes:" + tString.replaceFirst(",", E));
+                        tList.add("Discovered by: " + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].discoveredBy());
+                    }
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+        }
+        try {
+            if (tBlock instanceof IDebugableBlock) {
+                rEUAmount += 500;
+                ArrayList<String> temp = ((IDebugableBlock) tBlock).getDebugInfo(aPlayer, aX, aY, aZ, 3);
+                if (temp != null) tList.addAll(temp);
             }
         } catch (Throwable e) {
             if (D1) e.printStackTrace(GT_Log.err);
         }
-    }
-    if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
-        FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
-        tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
-    }
-    try {
-        if (tBlock instanceof IDebugableBlock) {
-            rEUAmount += 500;
-            ArrayList<String> temp = ((IDebugableBlock) tBlock).getDebugInfo(aPlayer, aX, aY, aZ, 3);
-            if (temp != null) tList.addAll(temp);
-        }
-    } catch (Throwable e) {
-        if (D1) e.printStackTrace(GT_Log.err);
-    }
 
-    BlockScanningEvent tEvent = new BlockScanningEvent(aWorld, aPlayer, aX, aY, aZ, (byte) aSide, aScanLevel, tBlock, tTileEntity, tList, aClickX, aClickY, aClickZ);
-    tEvent.mEUCost = rEUAmount;
-    MinecraftForge.EVENT_BUS.post(tEvent);
-    if (!tEvent.isCanceled()) aList.addAll(tList);
-    return tEvent.mEUCost;
-}
+        BlockScanningEvent tEvent = new BlockScanningEvent(aWorld, aPlayer, aX, aY, aZ, (byte) aSide, aScanLevel, tBlock, tTileEntity, tList, aClickX, aClickY, aClickZ);
+        tEvent.mEUCost = rEUAmount;
+        MinecraftForge.EVENT_BUS.post(tEvent);
+        if (!tEvent.isCanceled()) aList.addAll(tList);
+        return tEvent.mEUCost;
+    }
 
     /**
      * @return an Array containing the X and the Y Coordinate of the clicked Point, with the top left Corner as Origin, like on the Texture Sheet. return values should always be between [0.0F and 0.99F].
@@ -1851,186 +1786,187 @@ public class GT_Utility {
         return formatter.format(aNumber);
     }
 
-public static class ItemNBT {
-    public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
-        if (aNBT == null) {
-            aStack.setTagCompound(null);
-            return;
+    public static class ItemNBT {
+        public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
+            if (aNBT == null) {
+                aStack.setTagCompound(null);
+                return;
+            }
+            ArrayList<String> tTagsToRemove = new ArrayList<String>();
+            for (Object tKey : aNBT.func_150296_c()) {
+                NBTBase tValue = aNBT.getTag((String) tKey);
+                if (tValue == null || (tValue instanceof NBTPrimitive && ((NBTPrimitive) tValue).func_150291_c() == 0) || (tValue instanceof NBTTagString && isStringInvalid(((NBTTagString) tValue).func_150285_a_())))
+                    tTagsToRemove.add((String) tKey);
+            }
+            for (Object tKey : tTagsToRemove) aNBT.removeTag((String) tKey);
+            aStack.setTagCompound(aNBT.hasNoTags() ? null : aNBT);
         }
-        ArrayList<String> tTagsToRemove = new ArrayList<String>();
-        for (Object tKey : aNBT.func_150296_c()) {
-            NBTBase tValue = aNBT.getTag((String) tKey);
-            if (tValue == null || (tValue instanceof NBTPrimitive && ((NBTPrimitive) tValue).func_150291_c() == 0) || (tValue instanceof NBTTagString && isStringInvalid(((NBTTagString) tValue).func_150285_a_())))
-                tTagsToRemove.add((String) tKey);
+
+        public static NBTTagCompound getNBT(ItemStack aStack) {
+            NBTTagCompound rNBT = aStack.getTagCompound();
+            return rNBT == null ? new NBTTagCompound() : rNBT;
         }
-        for (Object tKey : tTagsToRemove) aNBT.removeTag((String) tKey);
-        aStack.setTagCompound(aNBT.hasNoTags() ? null : aNBT);
-    }
 
-    public static NBTTagCompound getNBT(ItemStack aStack) {
-        NBTTagCompound rNBT = aStack.getTagCompound();
-        return rNBT == null ? new NBTTagCompound() : rNBT;
-    }
+        public static void setPunchCardData(ItemStack aStack, String aPunchCardData) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            tNBT.setString("GT.PunchCardData", aPunchCardData);
+            setNBT(aStack, tNBT);
+        }
 
-    public static void setPunchCardData(ItemStack aStack, String aPunchCardData) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        tNBT.setString("GT.PunchCardData", aPunchCardData);
-        setNBT(aStack, tNBT);
-    }
+        public static String getPunchCardData(ItemStack aStack) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            return tNBT.getString("GT.PunchCardData");
+        }
 
-    public static String getPunchCardData(ItemStack aStack) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        return tNBT.getString("GT.PunchCardData");
-    }
+        public static void setLighterFuel(ItemStack aStack, long aFuel) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            tNBT.setLong("GT.LighterFuel", aFuel);
+            setNBT(aStack, tNBT);
+        }
 
-    public static void setLighterFuel(ItemStack aStack, long aFuel) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        tNBT.setLong("GT.LighterFuel", aFuel);
-        setNBT(aStack, tNBT);
-    }
+        public static long getLighterFuel(ItemStack aStack) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            return tNBT.getLong("GT.LighterFuel");
+        }
 
-    public static long getLighterFuel(ItemStack aStack) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        return tNBT.getLong("GT.LighterFuel");
-    }
+        public static void setMapID(ItemStack aStack, short aMapID) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            tNBT.setShort("map_id", aMapID);
+            setNBT(aStack, tNBT);
+        }
 
-    public static void setMapID(ItemStack aStack, short aMapID) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        tNBT.setShort("map_id", aMapID);
-        setNBT(aStack, tNBT);
-    }
+        public static short getMapID(ItemStack aStack) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            if (!tNBT.hasKey("map_id")) return -1;
+            return tNBT.getShort("map_id");
+        }
 
-    public static short getMapID(ItemStack aStack) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        if (!tNBT.hasKey("map_id")) return -1;
-        return tNBT.getShort("map_id");
-    }
+        public static void setBookTitle(ItemStack aStack, String aTitle) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            tNBT.setString("title", aTitle);
+            setNBT(aStack, tNBT);
+        }
 
-    public static void setBookTitle(ItemStack aStack, String aTitle) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        tNBT.setString("title", aTitle);
-        setNBT(aStack, tNBT);
-    }
+        public static String getBookTitle(ItemStack aStack) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            return tNBT.getString("title");
+        }
 
-    public static String getBookTitle(ItemStack aStack) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        return tNBT.getString("title");
-    }
+        public static void setBookAuthor(ItemStack aStack, String aAuthor) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            tNBT.setString("author", aAuthor);
+            setNBT(aStack, tNBT);
+        }
 
-    public static void setBookAuthor(ItemStack aStack, String aAuthor) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        tNBT.setString("author", aAuthor);
-        setNBT(aStack, tNBT);
-    }
+        public static String getBookAuthor(ItemStack aStack) {
+            NBTTagCompound tNBT = getNBT(aStack);
+            return tNBT.getString("author");
+        }
 
-    public static String getBookAuthor(ItemStack aStack) {
-        NBTTagCompound tNBT = getNBT(aStack);
-        return tNBT.getString("author");
-    }
-    public static void addEnchantment(ItemStack aStack, Enchantment aEnchantment, int aLevel) {
-        NBTTagCompound tNBT = getNBT(aStack), tEnchantmentTag;
-        if (!tNBT.hasKey("ench", 9)) tNBT.setTag("ench", new NBTTagList());
-        NBTTagList tList = tNBT.getTagList("ench", 10);
+        public static void addEnchantment(ItemStack aStack, Enchantment aEnchantment, int aLevel) {
+            NBTTagCompound tNBT = getNBT(aStack), tEnchantmentTag;
+            if (!tNBT.hasKey("ench", 9)) tNBT.setTag("ench", new NBTTagList());
+            NBTTagList tList = tNBT.getTagList("ench", 10);
 
-        boolean temp = true;
+            boolean temp = true;
 
-        for (int i = 0; i < tList.tagCount(); i++) {
-            tEnchantmentTag = tList.getCompoundTagAt(i);
-            if (tEnchantmentTag.getShort("id") == aEnchantment.effectId) {
+            for (int i = 0; i < tList.tagCount(); i++) {
+                tEnchantmentTag = tList.getCompoundTagAt(i);
+                if (tEnchantmentTag.getShort("id") == aEnchantment.effectId) {
+                    tEnchantmentTag.setShort("id", (short) aEnchantment.effectId);
+                    tEnchantmentTag.setShort("lvl", (byte) aLevel);
+                    temp = false;
+                    break;
+                }
+            }
+
+            if (temp) {
+                tEnchantmentTag = new NBTTagCompound();
                 tEnchantmentTag.setShort("id", (short) aEnchantment.effectId);
                 tEnchantmentTag.setShort("lvl", (byte) aLevel);
-                temp = false;
-                break;
+                tList.appendTag(tEnchantmentTag);
             }
+            aStack.setTagCompound(tNBT);
         }
-
-        if (temp) {
-            tEnchantmentTag = new NBTTagCompound();
-            tEnchantmentTag.setShort("id", (short) aEnchantment.effectId);
-            tEnchantmentTag.setShort("lvl", (byte) aLevel);
-            tList.appendTag(tEnchantmentTag);
-        }
-        aStack.setTagCompound(tNBT);
     }
-}
 
-/**
- * THIS IS BULLSHIT!!! WHY DO I HAVE TO DO THIS SHIT JUST TO HAVE ENCHANTS PROPERLY!?!
- */
-public static class GT_EnchantmentHelper {
-    private static final BullshitIteratorA mBullshitIteratorA = new BullshitIteratorA();
-    private static final BullshitIteratorB mBullshitIteratorB = new BullshitIteratorB();
+    /**
+     * THIS IS BULLSHIT!!! WHY DO I HAVE TO DO THIS SHIT JUST TO HAVE ENCHANTS PROPERLY!?!
+     */
+    public static class GT_EnchantmentHelper {
+        private static final BullshitIteratorA mBullshitIteratorA = new BullshitIteratorA();
+        private static final BullshitIteratorB mBullshitIteratorB = new BullshitIteratorB();
 
-    private static void applyBullshit(IBullshit aBullshitModifier, ItemStack aStack) {
-        if (aStack != null) {
-            NBTTagList nbttaglist = aStack.getEnchantmentTagList();
-            if (nbttaglist != null) {
-                for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                    try {
-                        short short1 = nbttaglist.getCompoundTagAt(i).getShort("id");
-                        short short2 = nbttaglist.getCompoundTagAt(i).getShort("lvl");
-                        if (Enchantment.enchantmentsList[short1] != null)
-                            aBullshitModifier.calculateModifier(Enchantment.enchantmentsList[short1], short2);
-                    } catch (Throwable e) {
-                        //
+        private static void applyBullshit(IBullshit aBullshitModifier, ItemStack aStack) {
+            if (aStack != null) {
+                NBTTagList nbttaglist = aStack.getEnchantmentTagList();
+                if (nbttaglist != null) {
+                    for (int i = 0; i < nbttaglist.tagCount(); ++i) {
+                        try {
+                            short short1 = nbttaglist.getCompoundTagAt(i).getShort("id");
+                            short short2 = nbttaglist.getCompoundTagAt(i).getShort("lvl");
+                            if (Enchantment.enchantmentsList[short1] != null)
+                                aBullshitModifier.calculateModifier(Enchantment.enchantmentsList[short1], short2);
+                        } catch (Throwable e) {
+                            //
+                        }
                     }
                 }
             }
         }
-    }
 
-    private static void applyArrayOfBullshit(IBullshit aBullshitModifier, ItemStack[] aStacks) {
-        ItemStack[] aitemstack1 = aStacks;
-        int i = aStacks.length;
-        for (int j = 0; j < i; ++j) {
-            ItemStack itemstack = aitemstack1[j];
-            applyBullshit(aBullshitModifier, itemstack);
+        private static void applyArrayOfBullshit(IBullshit aBullshitModifier, ItemStack[] aStacks) {
+            ItemStack[] aitemstack1 = aStacks;
+            int i = aStacks.length;
+            for (int j = 0; j < i; ++j) {
+                ItemStack itemstack = aitemstack1[j];
+                applyBullshit(aBullshitModifier, itemstack);
+            }
+        }
+
+        public static void applyBullshitA(EntityLivingBase aPlayer, Entity aEntity, ItemStack aStack) {
+            mBullshitIteratorA.mPlayer = aPlayer;
+            mBullshitIteratorA.mEntity = aEntity;
+            if (aPlayer != null) applyArrayOfBullshit(mBullshitIteratorA, aPlayer.getLastActiveItems());
+            if (aStack != null) applyBullshit(mBullshitIteratorA, aStack);
+        }
+
+        public static void applyBullshitB(EntityLivingBase aPlayer, Entity aEntity, ItemStack aStack) {
+            mBullshitIteratorB.mPlayer = aPlayer;
+            mBullshitIteratorB.mEntity = aEntity;
+            if (aPlayer != null) applyArrayOfBullshit(mBullshitIteratorB, aPlayer.getLastActiveItems());
+            if (aStack != null) applyBullshit(mBullshitIteratorB, aStack);
+        }
+
+        interface IBullshit {
+            void calculateModifier(Enchantment aEnchantment, int aLevel);
+        }
+
+        static final class BullshitIteratorA implements IBullshit {
+            public EntityLivingBase mPlayer;
+            public Entity mEntity;
+
+            BullshitIteratorA() {
+            }
+
+            @Override
+            public void calculateModifier(Enchantment aEnchantment, int aLevel) {
+                aEnchantment.func_151367_b(mPlayer, mEntity, aLevel);
+            }
+        }
+
+        static final class BullshitIteratorB implements IBullshit {
+            public EntityLivingBase mPlayer;
+            public Entity mEntity;
+
+            BullshitIteratorB() {
+            }
+
+            @Override
+            public void calculateModifier(Enchantment aEnchantment, int aLevel) {
+                aEnchantment.func_151368_a(mPlayer, mEntity, aLevel);
+            }
         }
     }
 
-    public static void applyBullshitA(EntityLivingBase aPlayer, Entity aEntity, ItemStack aStack) {
-        mBullshitIteratorA.mPlayer = aPlayer;
-        mBullshitIteratorA.mEntity = aEntity;
-        if (aPlayer != null) applyArrayOfBullshit(mBullshitIteratorA, aPlayer.getLastActiveItems());
-        if (aStack != null) applyBullshit(mBullshitIteratorA, aStack);
-    }
-
-    public static void applyBullshitB(EntityLivingBase aPlayer, Entity aEntity, ItemStack aStack) {
-        mBullshitIteratorB.mPlayer = aPlayer;
-        mBullshitIteratorB.mEntity = aEntity;
-        if (aPlayer != null) applyArrayOfBullshit(mBullshitIteratorB, aPlayer.getLastActiveItems());
-        if (aStack != null) applyBullshit(mBullshitIteratorB, aStack);
-    }
-
-    interface IBullshit {
-        void calculateModifier(Enchantment aEnchantment, int aLevel);
-    }
-
-    static final class BullshitIteratorA implements IBullshit {
-        public EntityLivingBase mPlayer;
-        public Entity mEntity;
-
-        BullshitIteratorA() {
-        }
-
-        @Override
-        public void calculateModifier(Enchantment aEnchantment, int aLevel) {
-            aEnchantment.func_151367_b(mPlayer, mEntity, aLevel);
-        }
-    }
-
-    static final class BullshitIteratorB implements IBullshit {
-        public EntityLivingBase mPlayer;
-        public Entity mEntity;
-
-        BullshitIteratorB() {
-        }
-
-        @Override
-        public void calculateModifier(Enchantment aEnchantment, int aLevel) {
-            aEnchantment.func_151368_a(mPlayer, mEntity, aLevel);
-        }
-    }
- }
 }
-
