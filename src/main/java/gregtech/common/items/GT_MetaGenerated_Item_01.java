@@ -276,7 +276,7 @@ public class GT_MetaGenerated_Item_01
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Steel, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.AnyBronze, 4L), ItemList.Large_Fluid_Cell_Steel.get(1L, new Object[0]), 200, 30);
 
         ItemList.Large_Fluid_Cell_TungstenSteel.set(addItem(tLastID = 406, "Large Tungstensteel Fluid Cell", "", new Object[]{new ItemData(Materials.TungstenSteel, OrePrefixes.plateDouble.mMaterialAmount * 4L + 4L * OrePrefixes.ring.mMaterialAmount, new MaterialStack[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 9L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 7L)}));
-            setFluidContainerStats(32000 + tLastID, 512000L, 32L);
+        setFluidContainerStats(32000 + tLastID, 512000L, 32L);
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.TungstenSteel, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Platinum, 4L), ItemList.Large_Fluid_Cell_TungstenSteel.get(1L, new Object[0]), 200, 480);
 
