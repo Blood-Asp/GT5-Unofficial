@@ -1035,15 +1035,33 @@ public class GT_Utility {
     }
 
     public static boolean isOpaqueBlock(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).isOpaqueCube();
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).isOpaqueCube();
+        } catch (Throwable e) {
+            result=true;
+        }
+        return result;
     }
 
     public static boolean isBlockAir(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).isAir(aWorld, aX, aY, aZ);
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).isAir(aWorld, aX, aY, aZ);
+        } catch (Throwable e) {
+            result=false;
+        }
+        return result;
     }
 
     public static boolean hasBlockHitBox(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null;
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null;
+        } catch (Throwable e) {
+            result=false;
+        }
+        return result;
     }
 
     public static void setCoordsOnFire(World aWorld, int aX, int aY, int aZ, boolean aReplaceCenter) {
