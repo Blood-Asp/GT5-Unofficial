@@ -41,6 +41,7 @@ import gregtech.loaders.load.GT_ItemIterator;
 import gregtech.loaders.load.GT_SonictronLoader;
 import gregtech.loaders.misc.GT_Achievements;
 import gregtech.loaders.misc.GT_CoverLoader;
+import gregtech.loaders.postload.EX_MachineRecipeLoader;
 import gregtech.loaders.postload.GT_BlockResistanceLoader;
 import gregtech.loaders.postload.GT_BookAndLootLoader;
 import gregtech.loaders.postload.GT_CraftingRecipeLoader;
@@ -460,6 +461,7 @@ implements IGT_Mod {
 		new GT_RecyclerBlacklistLoader().run();
 		new GT_MinableRegistrator().run();
 		new GT_MachineRecipeLoader().run();
+		new EX_MachineRecipeLoader().LOAD_RECIPES();
 		new GT_ScrapboxDropLoader().run();
 		new GT_CropLoader().run();
 		new GT_Worldgenloader().run();
