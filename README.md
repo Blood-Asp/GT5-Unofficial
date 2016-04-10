@@ -12,14 +12,14 @@ Builds can be found in the build/libs folder.
 ## Installation
 
 GT5U-EX requires IndustrialCraft2-experimental. Version 2.2.780-experimental or newer is recommended.
-Forge versions 1558 required.
+Forge version 1558 required, unless you want to change the Build.Properties and build against an older version. (I don't see any reason to do this though.)
 Place the downloaded jar file into your mods/ folder.
 
 ## Issues
 
 Please report any issues you to find the issue tracker on this repository. Include as much information as possible including as version and steps to reproduce.
 DO NOT bother Blood-asp or GregoriousT about any issue you have with my edition of the mod.
-I can emphasize the above point enough, don't bother them!
+I cannot emphasize the above point enough, don't bother them!
 
 ## Contribution
 
