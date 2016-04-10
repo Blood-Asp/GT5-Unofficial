@@ -308,8 +308,11 @@ public enum OrePrefixes {
     ganys("Ganys Stuff", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
     liquid("Liquids", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
     bars("Bars", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
-    bar("Bars", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1);
-
+    bar("Bars", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1), 
+    
+    toolHeadMallet("Mallet Heads", "", " Mallet Head", true, true, false, false, false, false, true, true, false, false, B[6], M * 6, 16, 127), // consisting out of 6 Ingots.
+    handleMallet("Mallet Handle", "", " Handle", true, true, false, false, false, false, true, true, false, false, B[1] | B[2], M / 2, 64, 126); // Stick made of half an Ingot. Introduced by Eloraam
+  
     public static volatile int VERSION = 508;
 
     static {
