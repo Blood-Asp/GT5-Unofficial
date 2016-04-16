@@ -34,7 +34,7 @@ public class GT_MetaTileEntity_MultiFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{"Smelts up to 6-18 Items at once", "Controller Block for the Multi Smelter", "Size: 3x3x3 (Hollow)", "Controller (front middle at bottom)", "8x Heating Coils (middle Layer, hollow)", "1x Input (one of bottom)", "1x Output (one of bottom)", "1x Energy Hatch (one of bottom)", "1x Maintenance Hatch (one of bottom)", "1x Muffler Hatch (top middle)", "Heat Proof Machine Casings for the rest"};
+        return new String[]{"Smelts up to 8-64 Items at once", "Controller Block for the Multi Smelter", "Size: 3x3x3 (Hollow)", "Controller (front middle at bottom)", "8x Heating Coils (middle Layer, hollow)", "1x Input (one of bottom)", "1x Output (one of bottom)", "1x Energy Hatch (one of bottom)", "1x Maintenance Hatch (one of bottom)", "1x Muffler Hatch (top middle)", "Heat Proof Machine Casings for the rest"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -66,7 +66,7 @@ public class GT_MetaTileEntity_MultiFurnace
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
 
             int j = 0;
-            this.mOutputItems = new ItemStack[6 * this.mLevel];
+            this.mOutputItems = new ItemStack[8 * this.mLevel];
             for (int i = 0; (i < 100) && (j < this.mOutputItems.length); i++) {
                 if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
                     j++;
@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
 
-                this.mEUt = (-4 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel);
+                this.mEUt = (-5 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel);
                 this.mMaxProgresstime = Math.max(1, 512 / (1 << tTier - 1));
             }
             updateSlots();
@@ -104,7 +104,10 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mLevel = 2;
                 break;
             case 14:
-                this.mLevel = 3;
+                this.mLevel = 4;
+                break;
+            case 15://Superconductor Coil Block Support
+                this.mLevel = 8;
                 break;
             default:
                 return false;
