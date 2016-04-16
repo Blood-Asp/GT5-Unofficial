@@ -98,16 +98,16 @@ public class GT_MetaTileEntity_MultiFurnace
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 1, zDir);
         switch (tUsedMeta) {
             case 12:
-                this.mLevel = 1;
+                this.mLevel = 1;//8 at once
                 break;
             case 13:
-                this.mLevel = 2;
+                this.mLevel = 2;//16 at once
                 break;
             case 14:
-                this.mLevel = 4;
+                this.mLevel = 4;//32 at once
                 break;
             case 15://Superconductor Coil Block Support
-                this.mLevel = 8;
+                this.mLevel = 32;//4 stacks at once
                 break;
             default:
                 return false;
