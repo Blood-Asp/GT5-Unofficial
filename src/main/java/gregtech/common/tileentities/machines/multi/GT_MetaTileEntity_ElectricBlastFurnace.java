@@ -213,4 +213,6 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
+    
+    @Override
 }
