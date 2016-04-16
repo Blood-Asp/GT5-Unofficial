@@ -192,8 +192,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Fairy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Fairy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Ludicrite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Ludicrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     Pokefennium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Pokefennium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Draconium(975, TextureSet.SET_SHINY, 20.0F, 32768, 7,  1|2|  8|16|32|64|128, 122, 68, 176, 0, "Draconium", 0, 0,  5000, 3300, true, false, 3, 1, 1, Dyes.dyePink),
-    DraconiumAwakened(976, TextureSet.SET_SHINY, 40.0F, 65536, 8,  1|2|  8|16|32|64|128, 244, 78, 0, 0, "Awakened Draconium", 0, 0, 15000, 3600, true, false, 3, 1, 1, Dyes.dyeOrange),
+    Draconium(975, TextureSet.SET_SHINY, 20.0F, 32768, 7,  1|2|  8|16|32|64|128, 122, 68, 176, 0, "Draconium", 0, 0,  5000, 5000, true, false, 3, 1, 1, Dyes.dyePink),
+    DraconiumAwakened(976, TextureSet.SET_SHINY, 40.0F, 65536, 8,  1|2|  8|16|32|64|128, 244, 78, 0, 0, "Awakened Draconium", 0, 0, 9000, 9000, true, false, 3, 1, 1, Dyes.dyeOrange),
     PurpleAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Purple Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
     InfusedTeslatite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Infused Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
 
