@@ -121,7 +121,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return false;
     }
 
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -194,6 +194,12 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return true;
     }
 
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
+        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
+        if (!result) this.mHeatingCapacity=0;
+        return result;
+    }
+
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
@@ -212,5 +218,11 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{"Heating Capacity: " + (this.mHeatingCapacity) + "K", "Progress:", (mProgresstime / 20) + " secs", (mMaxProgresstime / 20) + " secs", "Efficiency: " + (mEfficiency / 100.0F) + "%", "Problems: " + (getIdealStatus() - getRepairStatus())};
     }
 }
