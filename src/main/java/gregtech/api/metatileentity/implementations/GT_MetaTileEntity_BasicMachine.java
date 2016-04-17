@@ -660,7 +660,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public String[] getInfoData() {
         return new String[]{
                 mNEIName,
-                "Progress:", (mProgresstime / 20) + " secs",
+                "Progress:",
+                (mProgresstime / 20) + " secs",
                 (mMaxProgresstime / 20) + " secs",
                 "Stored Energy:",
                 getBaseMetaTileEntity().getStoredEU() + "EU",
