@@ -16,38 +16,37 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeTurbine {
+public class GT_MetaTileEntity_LargeTurbine_Diesel extends GT_MetaTileEntity_LargeTurbine {
 
-    public GT_MetaTileEntity_LargeTurbine_Gas(int aID, String aName, String aNameRegional) {
+    public GT_MetaTileEntity_LargeTurbine_Diesel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_LargeTurbine_Gas(String aName) {
+    public GT_MetaTileEntity_LargeTurbine_Diesel(String aName) {
         super(aName);
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS5) : Textures.BlockIcons.CASING_BLOCKS[58]};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TI_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TI5) : Textures.BlockIcons.CASING_BLOCKS[59]};
     }
 
 
     public String[] getDescription() {
         return new String[]{
-                "Controller Block for the Large Gas Turbine",
+                "Controller Block for the Large Diesel Generator",
                 "Size: 3x4x3 (Hollow)", "Controller (front centered)",
                 "1x Input Hatch (side centered)",
                 "1x Dynamo Hatch (back centered)",
                 "1x Maintenance Hatch (side centered)",
-                "1x Muffler Hatch (side centered)",
-                "Stainless Steel Turbine Casings for the rest (24 at least!)",
+                "Titanium Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (inside controller GUI)"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {
         if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
         FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sTurbineFuels.mRecipeList;
+        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sDieselFuels.mRecipeList;
         if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
             if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
                 if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
@@ -56,7 +55,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_LargeTurbine_Gas(mName);
+        return new GT_MetaTileEntity_LargeTurbine_Diesel(mName);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public byte getCasingMeta() {
-        return 10;
+        return 11;
     }
 
     @Override
@@ -76,11 +75,13 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 10;
+        return 0;
     }
 
     @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
+
+        aOptFlow *= 5;
         int tEU = 0;
 
         int actualOptimalFlow = 0;
@@ -88,7 +89,8 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         if (aFluids.size() >= 1) {
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
-            actualOptimalFlow = (int) (aOptFlow / fuelValue);
+            System.out.println(fuelValue);
+            actualOptimalFlow = (int) ((aOptFlow + fuelValue - 1) / fuelValue);
 
             int remainingFlow = (int) (actualOptimalFlow * 1.25f); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
             int flow = 0;
