@@ -58,13 +58,13 @@ public class GT_CapeRenderer
             if (aPlayer.getDisplayName().equalsIgnoreCase("GregoriusT")) {
                 tResource = this.mCapes[3];
             }
-            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase()+":capeDonor")) {
+            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase() + ":capedonor")) {
                 tResource = this.mCapes[4];
             }
-            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase()+":capeDev")) {
+            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase() + ":capedev")) {
                 tResource = this.mCapes[5];
             }
-            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase()+":capeTec")) {
+            if (this.mCapeList.contains(aPlayer.getDisplayName().toLowerCase() + ":capetec")) {
                 tResource = this.mCapes[6];
             }
             if ((tResource != null) && (!aPlayer.getHideCape())) {

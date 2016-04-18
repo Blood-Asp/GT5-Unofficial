@@ -232,6 +232,19 @@ public class GT_Client extends GT_Proxy
 
     public void run() {
         try {
+            GT_Log.out.println("GT_Mod: Downloading Cape List.");
+            @SuppressWarnings("resource")
+            Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/capelist.txt").openStream());
+            while (tScanner.hasNextLine()) {
+                String tName = tScanner.nextLine();
+                if (!this.mCapeList.contains(tName.toLowerCase())) {
+                    this.mCapeList.add(tName.toLowerCase());
+                }
+            }
+        } catch (Throwable e) {
+        }
+
+        try {
             GT_Log.out.println("GT New Horizons: Downloading Cape List.");
             @SuppressWarnings("resource")
             Scanner tScanner = new Scanner(new URL("https://raw.githubusercontent.com/GTNewHorizons/CustomGTCapeHook-Cape-List/master/capes.txt").openStream());
@@ -253,18 +266,7 @@ public class GT_Client extends GT_Proxy
         } catch (Throwable e) {
         }
 
-        try {
-            GT_Log.out.println("GT_Mod: Downloading Cape List.");
-            @SuppressWarnings("resource")
-            Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/capelist.txt").openStream());
-            while (tScanner.hasNextLine()) {
-                String tName = tScanner.nextLine();
-                if (!this.mCapeList.contains(tName.toLowerCase())) {
-                    this.mCapeList.add(tName.toLowerCase());
-                }
-            }
-        } catch (Throwable e) {
-        }
+
         try {
             GT_Log.out.println("GT_Mod: Downloading News.");
             @SuppressWarnings("resource")
