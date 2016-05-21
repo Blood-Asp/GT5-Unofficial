@@ -220,12 +220,10 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return false;
     }
 
-<<<<<<< HEAD
 
     @Override
     public String[] getInfoData() {
         return new String[]{"Heating Capacity: " + (this.mHeatingCapacity) + "K", "Progress:", (mProgresstime / 20) + " secs", (mMaxProgresstime / 20) + " secs", "Efficiency: " + (mEfficiency / 100.0F) + "%", "Problems: " + (getIdealStatus() - getRepairStatus())};
     }
-=======
->>>>>>> Scan-termals-of-EBF
+
 }
