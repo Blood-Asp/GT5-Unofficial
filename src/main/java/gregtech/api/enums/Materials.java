@@ -389,7 +389,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     Coffee(888, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 150, 75, 0, 0, "Coffee", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
     Creosote(712, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 128, 64, 0, 0, "Creosote", 3, 8, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
     EnhancedGalgadorian(385, TextureSet.SET_METALLIC,        32.0F,   7200,  5, 1|2|          64|128,                  152 , 93, 133,    0,    "Enhanced Galgadorian",          0,       0,       3500, 3500, true, false,   1,   1,   1, Dyes.dyePink         ),
-    Ethanol(706, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 128, 0, 0, "Ethanol", 0, 128, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
+    Ethanol(706, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 192, 0, 0, "Ethanol", 0, 128, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
     FishOil(711, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 196, 0, 0, "Fish Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.CORPUS, 2))),
     Fuel(708, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 255, 0, 0, "Diesel", 0, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
     Galgadorian        ( 384, TextureSet.SET_METALLIC,       16.0F,   3600,  3, 1|2|          64|128,                   154, 105, 119,   0,    "Galgadorian",                  0,       0,       2200, 2200, true, false,   1,   1,   1, Dyes.dyePink         ),
