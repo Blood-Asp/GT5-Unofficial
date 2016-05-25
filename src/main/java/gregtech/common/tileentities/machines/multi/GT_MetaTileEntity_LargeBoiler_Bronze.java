@@ -58,4 +58,9 @@ public class GT_MetaTileEntity_LargeBoiler_Bronze
     public int getEfficiencyIncrease() {
         return 16;
     }
+
+    @Override
+    int runtimeBoost(int mTime) {
+        return mTime * 2;
+    }
 }

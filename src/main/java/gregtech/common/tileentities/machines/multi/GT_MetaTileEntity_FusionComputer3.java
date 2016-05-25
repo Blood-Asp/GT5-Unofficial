@@ -65,6 +65,5 @@ public class GT_MetaTileEntity_FusionComputer3 extends GT_MetaTileEntity_FusionC
     public IIconContainer getIconOverlay() {
         return Textures.BlockIcons.OVERLAY_FUSION3;
     }
-
 }
 

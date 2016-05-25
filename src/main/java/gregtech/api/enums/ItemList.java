@@ -659,7 +659,7 @@ public enum ItemList implements IItemContainer {
     Pump_LV, Pump_MV, Pump_HV, Pump_EV, Pump_IV,
     Teleporter,
     Cover_NeedsMaintainance,
-    Casing_Turbine,
+    Casing_Turbine, Casing_Turbine1, Casing_Turbine2, Casing_Turbine3,
     MobRep_LV, MobRep_MV, MobRep_HV, MobRep_EV, MobRep_IV, LargeGasTurbine, LargeHPSteamTurbine, LargePlasmaTurbine, Cover_PlayerDetector, Machine_Multi_HeatExchanger, Uraniumcell_1, Uraniumcell_2, Uraniumcell_4, Moxcell_1, Moxcell_2, Moxcell_4;
 
 

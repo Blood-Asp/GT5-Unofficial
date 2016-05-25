@@ -30,13 +30,13 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE5) : Textures.BlockIcons.CASING_BLOCKS[57]};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ST_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ST5) : Textures.BlockIcons.CASING_BLOCKS[57]};
     }
 
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Large Steam Turbine",
-                "Size: 3x3x4 (Hollow)", "Controller (front centered)",
+                "Size: 3x4x3 (Hollow)", "Controller (front centered)",
                 "1x Input Hatch (side centered)", "1x Output Hatch(side centered)",
                 "1x Dynamo Hatch (back centered)",
                 "1x Maintenance Hatch (side centered)",
@@ -106,6 +106,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         addOutput(GT_ModHandler.getDistilledWater(waterToOutput));
         if (totalFlow > 0 && totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs(((totalFlow - (float) aOptFlow) / aOptFlow));
+            if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;
             tEU = Math.max(1, tEU * aBaseEff / 20000);
         } else {

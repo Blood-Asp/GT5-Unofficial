@@ -28,17 +28,17 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE5) : Textures.BlockIcons.CASING_BLOCKS[57]};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS5) : Textures.BlockIcons.CASING_BLOCKS[58]};
     }
 
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Large High Pressure Steam Turbine",
-                "Size: 3x3x4 (Hollow)", "Controller (front centered)",
+                "Size: 3x4x3 (Hollow)", "Controller (front centered)",
                 "1x Input Hatch (side centered)", "1x Output Hatch(side centered)",
                 "1x Dynamo Hatch (back centered)",
                 "1x Maintenance Hatch (side centered)",
-                "Turbine Casings for the rest (24 at least!)",
+                "Stainless Steel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (inside controller GUI)"};
     }
 
@@ -54,12 +54,12 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
     @Override
     public byte getCasingMeta() {
-        return 9;
+        return 10;
     }
 
     @Override
     public byte getCasingTextureIndex() {
-        return 46;
+        return 58;
     }
 
     @Override
@@ -75,7 +75,8 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         int remainingFlow = (int) (aOptFlow * 1.25f); // Allowed to use up to 125% of optimal flow
 
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) {
-            if (aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i)).equals("ic2.fluidSuperheatedSteam")) {
+            String fluidName = aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i));
+            if (fluidName.equals("ic2.fluidSuperheatedSteam")) {
                 flow = aFluids.get(i).amount; // Get all (steam) in hatch
                 flow = Math.min(flow, Math.min(remainingFlow, (int) (aOptFlow * 1.25f))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
                 depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
@@ -88,6 +89,8 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                     }
                     achievement = true;
                 }
+            }else if(fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name")){
+                depleteInput(new FluidStack(aFluids.get(i), aFluids.get(i).amount));
             }
         }
 
@@ -95,6 +98,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         addOutput(GT_ModHandler.getSteam(totalFlow));
         if (totalFlow > 0 && totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs(((totalFlow - (float) aOptFlow) / aOptFlow));
+            if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;
             tEU = Math.max(1, tEU * aBaseEff / 10000);
         } else {

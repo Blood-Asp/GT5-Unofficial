@@ -32,7 +32,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public String[] getDescription() {
-        return new String[]{"Controller Block for the Large Boiler", "Size: 3x3x5", "Controller (front middle in Fireboxes)", "3x3 of Fire Boxes (bottom Layer, Min 3!)", "3x3x4 of Casing (above Fireboxes, hollow, Min 24!)", "3 Pipe Casing Blocks inside the Hollow Casing", "1x Input (one of Fireboxes)", "1x Maintenance Hatch (one of Fireboxes)", "1x Muffler Hatch (one of Fireboxes)", "1x Fluid Output (one of Main Casing)"};
+        return new String[]{"Controller Block for the Large Boiler", "Size: 3x3x5", "Controller (front middle in Fireboxes)", "3x3 of Fire Boxes (bottom Layer, Min 3!)", "3x3x4 of Casing (above Fireboxes, hollow, Min 24!)", "3 Pipe Casing Blocks inside the Hollow Casing", "1x Input (one of Fireboxes)", "1x Maintenance Hatch (one of Fireboxes)", "1x Muffler Hatch (one of Fireboxes)", "1x Fluid Output (one of Main Casing)","Produces "+getEUt()*40+"L/sec steam","Runs "+(runtimeBoost(20)/20f)+" sec per coal of fuel","Refined liquid fuels have 1/4 efficiency"};
     }
 
     public abstract Block getCasingBlock();
@@ -80,7 +80,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
             if ((tFluid != null) && (tRecipe.mSpecialValue > 1)) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {
-                    this.mMaxProgresstime = (tRecipe.mSpecialValue / 2);
+                    this.mMaxProgresstime = (runtimeBoost(tRecipe.mSpecialValue / 2));
                     this.mEUt = getEUt();
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease() * 4);
                     return true;
@@ -92,7 +92,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
             if (tFluid != null) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {
-                    this.mMaxProgresstime = Math.max(1, tRecipe.mSpecialValue * 2);
+                    this.mMaxProgresstime = Math.max(1, runtimeBoost(tRecipe.mSpecialValue * 2));
                     this.mEUt = getEUt();
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
                     return true;
@@ -102,7 +102,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (!tInputList.isEmpty()) {
             for (ItemStack tInput : tInputList) {
-                if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = GT_ModHandler.getFuelValue(tInput) / 80) > 0)) {
+                if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = runtimeBoost(GT_ModHandler.getFuelValue(tInput) / 80)) > 0)) {
                     this.mEUt = getEUt();
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
                     this.mOutputItems = new ItemStack[]{GT_Utility.getContainerItem(tInput, true)};
@@ -116,6 +116,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         this.mEUt = 0;
         return false;
     }
+
+    abstract int runtimeBoost(int mTime);
 
     public boolean onRunningTick(ItemStack aStack) {
         if (this.mEUt > 0) {

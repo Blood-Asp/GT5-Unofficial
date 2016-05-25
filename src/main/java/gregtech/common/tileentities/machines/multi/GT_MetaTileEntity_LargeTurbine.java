@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
@@ -8,6 +9,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
@@ -30,6 +32,10 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return getMaxEfficiency(aStack) > 0;
+    }
+
+    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeTurbine.png");
     }
 
     @Override
@@ -184,4 +190,29 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
     }
+
+    @Override
+    public String[] getInfoData() {
+        String tRunning = mMaxProgresstime>0 ? "Turbine running":"Turbine stopped";
+        String tMaintainance = getIdealStatus() == getRepairStatus() ? "No Maintainance issues" : "Needs Maintainance" ;
+        int tDura = 0;
+
+        if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
+            tDura = (int) ((100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
+        }
+
+        return new String[]{
+                "Large Turbine",
+                tRunning,
+                "Current output: "+mEUt+" EU/t",
+                "Current speed: "+(mEfficiency/100)+"%",
+                tMaintainance,
+                "Turbine Damage: "+tDura+"%"};
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+
 }
