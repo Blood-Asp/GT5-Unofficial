@@ -951,6 +951,10 @@ public class GT_Loader_MetaTileEntities
 
         ItemList.Machine_Multi_HeatExchanger.set(new GT_MetaTileEntity_HeatExchanger(1154, "multimachine.heatexchanger", "Large Heat Exchanger").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_HeatExchanger.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"WCW", "CMC", "WCW", Character.valueOf('M'), ItemList.Casing_Pipe_Titanium, Character.valueOf('C'), OrePrefixes.pipeMedium.get(Materials.Titanium), Character.valueOf('W'), ItemList.Electric_Pump_EV});
+
+        ItemList.Machine_Multi_Assemblyline.set(new GT_MetaTileEntity_AssemblyLine(1170, "multimachine.assemblyline", "Assemblyline").getStackForm(1L));
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_Assemblyline.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"WCW", "EME", "WCW", 'M', ItemList.Hull_IV, 'W', ItemList.Casing_Assembler, 'E', OrePrefixes.circuit.get(Materials.Ultimate), 'C', ItemList.Robot_Arm_IV});
+
     }
 
     private static void run4() {

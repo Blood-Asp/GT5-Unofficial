@@ -619,6 +619,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_Hammer, Machine_MV_Hammer, Machine_HV_Hammer, Machine_EV_Hammer, Machine_IV_Hammer,
     Machine_LV_FluidHeater, Machine_MV_FluidHeater, Machine_HV_FluidHeater, Machine_EV_FluidHeater, Machine_IV_FluidHeater,
 
+
     Neutron_Reflector,
     Reactor_Coolant_He_1,
     Reactor_Coolant_He_3,
@@ -660,7 +661,8 @@ public enum ItemList implements IItemContainer {
     Teleporter,
     Cover_NeedsMaintainance,
     Casing_Turbine, Casing_Turbine1, Casing_Turbine2, Casing_Turbine3,
-    MobRep_LV, MobRep_MV, MobRep_HV, MobRep_EV, MobRep_IV, LargeGasTurbine, LargeHPSteamTurbine, LargePlasmaTurbine, Cover_PlayerDetector, Machine_Multi_HeatExchanger, Uraniumcell_1, Uraniumcell_2, Uraniumcell_4, Moxcell_1, Moxcell_2, Moxcell_4;
+    MobRep_LV, MobRep_MV, MobRep_HV, MobRep_EV, MobRep_IV, LargeGasTurbine, LargeHPSteamTurbine, LargePlasmaTurbine, Cover_PlayerDetector, Machine_Multi_HeatExchanger, Uraniumcell_1, Uraniumcell_2, Uraniumcell_4, Moxcell_1, Moxcell_2, Moxcell_4,
+    Machine_Multi_Assemblyline;
 
 
     public static final ItemList[]
