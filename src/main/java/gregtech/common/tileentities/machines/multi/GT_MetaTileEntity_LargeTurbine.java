@@ -20,6 +20,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     protected int baseEff = 0;
     protected int optFlow = 0;
+    protected int realOptFlow = 0;
+    protected int storedFluid = 0;
     protected int counter = 0;
 
     public GT_MetaTileEntity_LargeTurbine(int aID, String aName, String aNameRegional) {
@@ -204,10 +206,12 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         return new String[]{
                 "Large Turbine",
                 tRunning,
-                "Current output: "+mEUt+" EU/t",
-                "Current speed: "+(mEfficiency/100)+"%",
-                tMaintainance,
-                "Turbine Damage: "+tDura+"%"};
+                "Current Output: "+mEUt+" EU/t",
+                "Optimal Flow: "+realOptFlow+" L/t",
+                "Fuel Remaining: "+storedFluid+"L",
+                "Current Speed: "+(mEfficiency/100)+"%",
+                "Turbine Damage: "+tDura+"%",
+                tMaintainance};
     }
 
     @Override

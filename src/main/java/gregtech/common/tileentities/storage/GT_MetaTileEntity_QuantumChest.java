@@ -109,6 +109,9 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
 
         if (getBaseMetaTileEntity().isServerSide() && getBaseMetaTileEntity().isAllowedToWork()) {
+//            	if(mInventory[0]!=null)System.out.println("input: "+mInventory[0].stackSize);
+//            	System.out.println("store: "+mItemCount);
+//            	if(mInventory[0]!=null)System.out.println("output: "+mInventory[2].stackSize);
             if ((getItemCount() <= 0)) {
                 this.mItemStack = null;
                 this.mItemCount = 0;

@@ -244,7 +244,8 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                     name.equals("gt.metaitem.01.32521") ||
                     name.equals("gt.metaitem.01.32530") ||
                     name.equals("gt.metaitem.01.32531")) {
-                return true;
+            	if(ic2.api.item.ElectricItem.manager.getCharge(aStack)==0){
+                return true;}
             }
         }
         return false;
@@ -262,8 +263,8 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
     }
 
     public long[] getStoredEnergy() {
-        boolean scaleOverflow =false;
-        boolean storedOverflow = false;
+    	boolean scaleOverflow =false;
+    	boolean storedOverflow = false;
         long tScale = getBaseMetaTileEntity().getEUCapacity();
         long tStored = getBaseMetaTileEntity().getStoredEU();
         long tStep = 0;
@@ -274,7 +275,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                     if (aStack.getItem() instanceof GT_MetaBase_Item) {
                         Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
                         if (stats != null) {
-                            if(stats[0]>Long.MAX_VALUE/2){scaleOverflow=true;}
+                        	if(stats[0]>Long.MAX_VALUE/2){scaleOverflow=true;}
                             tScale = tScale + stats[0];
                             tStep = ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
                             if(tStep > Long.MAX_VALUE/2){storedOverflow=true;}

@@ -25,9 +25,19 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public final float mThickNess;
     public final Materials mMaterial;
     public final int mStepSize;
+    public final int mTickTime;
     public int mTransferredItems = 0;
     public byte mLastReceivedFrom = 0, oLastReceivedFrom = 0;
     public boolean mIsRestrictive = false;
+
+    public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
+        super(aID, aName, aNameRegional, aInvSlotCount);
+        mIsRestrictive = aIsRestrictive;
+        mThickNess = aThickNess;
+        mMaterial = aMaterial;
+        mStepSize = aStepSize;
+        mTickTime = aTickTime;
+    }
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
         super(aID, aName, aNameRegional, aInvSlotCount);
@@ -35,6 +45,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
+        mTickTime = 20;
     }
 
     public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
@@ -43,6 +54,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
+        mTickTime = 20;
     }
 
     @Override
@@ -131,7 +143,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
             mConnections = 0;
-            if (aTick % 20 == 0) mTransferredItems = 0;
+            if (aTick % mTickTime == 0) mTransferredItems = 0;
 
             for (byte i = 0; i < 6; i++) {
                 TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(i);

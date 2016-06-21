@@ -34,7 +34,17 @@ public class GT_MetaTileEntity_MultiFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{"Smelts up to 8-256 Items at once", "Controller Block for the Multi Smelter", "Size: 3x3x3 (Hollow)", "Controller (front middle at bottom)", "8x Coil Blocks (middle Layer, hollow)", "1x Input (one of bottom)", "1x Output (one of bottom)", "1x Energy Hatch (one of bottom)", "1x Maintenance Hatch (one of bottom)", "1x Muffler Hatch (top middle)", "Heat Proof Machine Casings for the rest"};
+        return new String[]{
+                "Controller Block for the Multi Smelter",
+                "Smelts up to 6-18 Items at once",
+                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front middle at bottom)",
+                "8x Heating Coils (Middle layer, hollow)",
+                "1x Input Bus (One of bottom)",
+                "1x Output Bus (One of bottom)",
+                "1x Maintenance Hatch (One of bottom)",
+                "1x Muffler Hatch (Top middle)",
+                "1x Energy Hatch (One of bottom)",
+                "Heat Proof Machine Casings for the rest",};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -66,8 +76,8 @@ public class GT_MetaTileEntity_MultiFurnace
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
 
             int j = 0;
-            this.mOutputItems = new ItemStack[8 * this.mLevel];
-            for (int i = 0; (i < 256) && (j < this.mOutputItems.length); i++) {
+            this.mOutputItems = new ItemStack[6 * this.mLevel];
+            for (int i = 0; (i < 100) && (j < this.mOutputItems.length); i++) {
                 if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
                     j++;
                 }
@@ -76,7 +86,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
 
-                this.mEUt = (-5 * (1 << tTier - 1) * (1 << tTier - 1) * Math.min(this.mLevel,8));
+                this.mEUt = (-4 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel);
                 this.mMaxProgresstime = Math.max(1, 512 / (1 << tTier - 1));
             }
             updateSlots();
@@ -85,7 +95,7 @@ public class GT_MetaTileEntity_MultiFurnace
         return false;
     }
 
-    private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -98,16 +108,13 @@ public class GT_MetaTileEntity_MultiFurnace
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 1, zDir);
         switch (tUsedMeta) {
             case 12:
-                this.mLevel = 1;//8 at once
+                this.mLevel = 1;
                 break;
             case 13:
-                this.mLevel = 2;//16 at once
+                this.mLevel = 2;
                 break;
             case 14:
-                this.mLevel = 4;//32 at once
-                break;
-            case 15://Superconductor Coil Block Support
-                this.mLevel = 32;//4 stacks at once
+                this.mLevel = 3;
                 break;
             default:
                 return false;
@@ -148,12 +155,6 @@ public class GT_MetaTileEntity_MultiFurnace
         return true;
     }
 
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
-        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
-        if (!result) this.mLevel=0;
-        return result;
-    }
-
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
@@ -172,11 +173,5 @@ public class GT_MetaTileEntity_MultiFurnace
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
-    }
-
-    @Override
-    public String[] getInfoData() {
-
-        return new String[]{"Parallel smelting: " + this.mLevel*8, "Progress:", (mProgresstime / 20) + " secs", (mMaxProgresstime / 20) + " secs", "Efficiency: " + (mEfficiency / 100.0F) + "%", "Problems: " + (getIdealStatus() - getRepairStatus())};
     }
 }

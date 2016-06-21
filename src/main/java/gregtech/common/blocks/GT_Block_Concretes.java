@@ -77,8 +77,10 @@ public class GT_Block_Concretes
                 aEntity.motionX *= 0.8999999761581421D;
                 aEntity.motionZ *= 0.8999999761581421D;
             } else {
-                aEntity.motionX *= 1.100000023841858D;
-                aEntity.motionZ *= 1.100000023841858D;
+                if (aEntity.motionX < 6.0 && aEntity.motionZ < 6.0) {
+                    aEntity.motionX *= 1.100000023841858D;
+                    aEntity.motionZ *= 1.100000023841858D;
+                }
             }
         }
     }

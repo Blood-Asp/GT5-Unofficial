@@ -90,6 +90,10 @@ public class GT_Tool_Wrench
         return false;
     }
 
+    public boolean isWrench() {
+        return true;
+    }
+    
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
         String tTool = aBlock.getHarvestTool(aMetaData);
         return ((tTool != null) && (tTool.equals("wrench"))) || (aBlock.getMaterial() == Material.piston) || (aBlock == Blocks.hopper) || (aBlock == Blocks.dispenser) || (aBlock == Blocks.dropper);
@@ -115,3 +119,13 @@ public class GT_Tool_Wrench
         return new ChatComponentText(EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE + " threw a Monkey Wrench into the Plans of " + EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE);
     }
 }
+
+
+
+/* Location:           F:\Torrent\minecraft\jd-gui-0.3.6.windows\gregtech_1.7.10-5.07.07-dev.jar
+
+ * Qualified Name:     gregtech.common.tools.GT_Tool_Wrench
+
+ * JD-Core Version:    0.7.0.1
+
+ */

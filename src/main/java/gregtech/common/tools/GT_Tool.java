@@ -84,6 +84,14 @@ public abstract class GT_Tool
     public boolean isGrafter() {
         return false;
     }
+    
+    public boolean isChainsaw(){
+    	return false;
+    }
+    
+    public boolean isWrench() {
+        return false;
+    }
 
     public boolean isWeapon() {
         return false;

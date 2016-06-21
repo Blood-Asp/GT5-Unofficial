@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -132,6 +133,41 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
     @Override
     public ItemStack getStackForm(long aAmount) {
         return new ItemStack(GregTech_API.sBlockMachines, (int) aAmount, getBaseMetaTileEntity().getMetaTileID());
+    }
+
+    public boolean isCoverOnSide(BaseMetaPipeEntity aPipe, EntityLivingBase aEntity) {
+        byte aSide = 6;
+        double difference = aEntity.posY - (double) aPipe.yCoord;
+        if (difference > 0.6 && difference < 0.99) {
+            aSide = 1;
+        }
+        if (difference < -1.5 && difference > -1.99) {
+            aSide = 0;
+        }
+        difference = aEntity.posZ - (double) aPipe.zCoord;
+        if (difference < -0.05 && difference > -0.4) {
+            aSide = 2;
+        }
+        if (difference > 1.05 && difference < 1.4) {
+            aSide = 3;
+        }
+        difference = aEntity.posX - (double) aPipe.xCoord;
+        if (difference < -0.05 && difference > -0.4) {
+            aSide = 4;
+        }
+        if (difference > 1.05 && difference < 1.4) {
+            aSide = 5;
+        }
+        boolean tCovered = false;
+        if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
+            tCovered = true;
+        }
+        if((mConnections & (byte)(Math.pow(2, aSide))) != 0){
+        	tCovered = true;
+        }
+        //System.out.println("Cover: "+mBaseMetaTileEntity.getCoverIDAtSide(aSide));
+        //toDo: filter cover ids that actually protect against temperature (rubber/plastic maybe?)
+        return tCovered;
     }
 
     @Override

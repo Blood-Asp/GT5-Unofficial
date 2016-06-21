@@ -203,7 +203,6 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(),
                     GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 1L)));
             getBaseMetaTileEntity().decrStackSize(0, 1);
-
         }
         return y;
     }

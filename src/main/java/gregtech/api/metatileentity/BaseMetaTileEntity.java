@@ -448,6 +448,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 for (int i = mMetaTileEntity.dechargerSlotStartIndex(), k = mMetaTileEntity.dechargerSlotCount() + i; i < k; i++) {
                                     if (mMetaTileEntity.mInventory[i] != null && getStoredEU() < getEUCapacity()) {
                                         dischargeItem(mMetaTileEntity.mInventory[i]);
+                                        if(ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i])>0){
+                                        	if((getStoredEU() + ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]))<getEUCapacity()){
+                                        	increaseStoredEnergyUnits((long)ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]),false);
+                                        	mMetaTileEntity.mInventory[i].stackSize--;
+                                        	}
+                                        }
                                         if (mMetaTileEntity.mInventory[i].stackSize <= 0)
                                             mMetaTileEntity.mInventory[i] = null;
                                         mInventoryChanged = true;
@@ -589,7 +595,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     mFacing = (byte) (aValue & 7);
                     mActive = ((aValue & 8) != 0);
                     mRedstone = ((aValue & 16) != 0);
-                    //mLockUpgrade	= ((aValue&32) != 0);
+//				mLockUpgrade	= ((aValue&32) != 0);
                     break;
                 case 1:
                     if (hasValidMetaTileEntity()) mMetaTileEntity.onValueUpdate((byte) aValue);
@@ -1353,7 +1359,6 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public byte getOutputRedstoneSignal(byte aSide) {
         return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : 0;
-//		return (byte)(getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) || (mRedstone && getCoverBehaviorAtSide(aSide).letsRedstoneGoOut(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this))?mSidedRedstone[aSide]&15:0);
     }
 
     @Override

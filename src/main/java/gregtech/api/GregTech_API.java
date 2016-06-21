@@ -81,7 +81,8 @@ public class GregTech_API {
      * 9216 -  9727 are used for GregTech Automation Machines.
      * 9728 - 10239 are reserved for 28Smiles.
      * 10240 - 10751 are reserved for VirMan.
-     * 10752 - 11263 are reserved for the next one who asks me.
+     * 10752 - 11263 are reserved for Briareos81.
+     * 11264 - 12000 are reserved for the next one who asks me.
      * 9728 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
@@ -149,7 +150,7 @@ public class GregTech_API {
     /**
      * For the API Version check
      */
-    public static volatile int VERSION = 508;
+    public static volatile int VERSION = 509;
     @Deprecated
     public static IGT_RecipeAdder sRecipeAdder;
     /**
@@ -174,7 +175,7 @@ public class GregTech_API {
      * Initialized by the Block creation.
      */
     public static Block sBlockMachines;
-    public static Block sBlockOres1;
+    public static Block sBlockOres1, sBlockGem, sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
     public static Block sBlockGranites, sBlockConcretes;
     public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4;
     /**

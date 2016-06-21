@@ -63,7 +63,6 @@ public class GT_MetaTileEntity_TypeFilter
                                     i = OrePrefixes.values().length - 1;
                                 }
                             } while (OrePrefixes.values()[i].mPrefixedItems.isEmpty());
-
                         } else {
                             do {
                                 i++;
