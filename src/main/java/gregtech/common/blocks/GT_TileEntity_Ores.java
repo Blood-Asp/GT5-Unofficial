@@ -35,16 +35,21 @@ public class GT_TileEntity_Ores
         Materials aMaterial = GregTech_API.sGeneratedMaterials[(aMetaData % 1000)];
         byte tByte = aMaterial == null ? 0 : (byte) Math.max((aMetaData % 16000 / 1000 == 3) || (aMetaData % 16000 / 1000 == 4) ? 3 : 0, Math.min(7, aMaterial.mToolQuality - (aMetaData < 16000 ? 0 : 1)));
         if(GT_Mod.gregtechproxy.mChangeHarvestLevels ){
-            tByte = aMaterial == null ? 0 : (byte) Math.max((aMetaData % 16000 / 1000 == 3) || (aMetaData % 16000 / 1000 == 4) ? GT_Mod.gregtechproxy.mGraniteHavestLevel : 0, Math.min(GT_Mod.gregtechproxy.mMaxHarvestLevel, GT_Mod.gregtechproxy.mHarvestLevel[aMaterial.mMetaItemSubID] - (aMetaData < 16000 ? 0 : 1)));
+        	tByte = aMaterial == null ? 0 : (byte) Math.max((aMetaData % 16000 / 1000 == 3) || (aMetaData % 16000 / 1000 == 4) ? GT_Mod.gregtechproxy.mGraniteHavestLevel : 0, Math.min(GT_Mod.gregtechproxy.mMaxHarvestLevel, GT_Mod.gregtechproxy.mHarvestLevel[aMaterial.mMetaItemSubID] - (aMetaData < 16000 ? 0 : 1)));
         }
         return tByte;
-
     }
 
     public static boolean setOreBlock(World aWorld, int aX, int aY, int aZ, int aMetaData) {
-        aY = Math.min(aWorld.getActualHeight(), Math.max(aY, 1));
+        return setOreBlock(aWorld, aX, aY, aZ, aMetaData, false);
+    }
+
+    public static boolean setOreBlock(World aWorld, int aX, int aY, int aZ, int aMetaData, boolean air) {
+        if (!air) {
+            aY = Math.min(aWorld.getActualHeight(), Math.max(aY, 1));
+        }
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
-        if ((aMetaData > 0) && (tBlock != Blocks.air)) {
+        if ((aMetaData > 0) && ((tBlock != Blocks.air) || air)) {
             if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack)) {
                 aMetaData += 1000;
             } else if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone)) {

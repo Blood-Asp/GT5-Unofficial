@@ -53,7 +53,7 @@ public class GT_ModHandler {
     public static final List<IRecipe> sSingleNonBlockDamagableRecipeList = new ArrayList<IRecipe>(1000);
     private static final Map<String, ItemStack> sIC2ItemMap = new HashMap<String, ItemStack>();
     private static final List<IRecipe> sAllRecipeList = Collections.synchronizedList(new ArrayList<IRecipe>(5000)), sBufferRecipeList = new ArrayList<IRecipe>(1000);
-    public static volatile int VERSION = 508;
+    public static volatile int VERSION = 509;
     public static Collection<String> sNativeRecipeClasses = new HashSet<String>(), sSpecialRecipeClasses = new HashSet<String>();
     public static GT_HashSet<GT_ItemStack> sNonReplaceableItems = new GT_HashSet<GT_ItemStack>();
     public static Object sBoxableWrapper = GT_Utility.callConstructor("gregtechmod.api.util.GT_IBoxableWrapper", 0, null, false);
@@ -381,11 +381,11 @@ public class GT_ModHandler {
     /**
      * Adds to Furnace AND Alloysmelter AND Induction Smelter
      */
-    public static boolean addSmeltingAndAlloySmeltingRecipe(ItemStack aInput, ItemStack aOutput) {
+    public static boolean addSmeltingAndAlloySmeltingRecipe(ItemStack aInput, ItemStack aOutput, boolean hidden) {
         if (aInput == null || aOutput == null) return false;
         boolean temp = false;
         if (aInput.stackSize == 1 && addSmeltingRecipe(aInput, aOutput)) temp = true;
-        if (RA.addAlloySmelterRecipe(aInput, OrePrefixes.ingot.contains(aOutput) ? ItemList.Shape_Mold_Ingot.get(0) : OrePrefixes.block.contains(aOutput) ? ItemList.Shape_Mold_Block.get(0) : OrePrefixes.nugget.contains(aOutput) ? ItemList.Shape_Mold_Nugget.get(0) : null, aOutput, 130, 3))
+        if (RA.addAlloySmelterRecipe(aInput, OrePrefixes.ingot.contains(aOutput) ? ItemList.Shape_Mold_Ingot.get(0) : OrePrefixes.block.contains(aOutput) ? ItemList.Shape_Mold_Block.get(0) : OrePrefixes.nugget.contains(aOutput) ? ItemList.Shape_Mold_Nugget.get(0) : null, aOutput, 130, 3,hidden))
             temp = true;
         if (addInductionSmelterRecipe(aInput, null, aOutput, null, aOutput.stackSize * 1600, 0)) temp = true;
         return temp;
@@ -1591,7 +1591,6 @@ public class GT_ModHandler {
                             } else {
                                 tPlayer.inventory.mainInventory[i].stackSize--;
                             }
-
                             if (tPlayer.inventoryContainer != null) tPlayer.inventoryContainer.detectAndSendChanges();
                             if (canUseElectricItem(aStack, 10000)) {
                                 return GT_ModHandler.useElectricItem(aStack, 10000, (EntityPlayer) aPlayer);

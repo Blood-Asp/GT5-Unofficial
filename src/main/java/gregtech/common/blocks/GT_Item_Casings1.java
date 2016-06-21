@@ -23,9 +23,6 @@ public class GT_Item_Casings1
                 break;
             case 14:
                 aList.add(this.mCoil03Tooltip);
-                break;
-            case 15:
-                aList.add(this.mCoil04Tooltip);
         }
     }
 }

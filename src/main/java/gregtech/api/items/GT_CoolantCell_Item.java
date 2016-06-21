@@ -67,5 +67,4 @@ public class GT_CoolantCell_Item
         NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(stack);
         nbtData.setInteger("tag", tag);
     }
-
 }
