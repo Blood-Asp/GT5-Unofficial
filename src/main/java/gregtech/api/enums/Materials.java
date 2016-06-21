@@ -763,7 +763,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		
 		Rubber					.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
 		Plastic					.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
-		Silicone				.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
+		Silicone				.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY, SubTag.NO_RECYCLING);
 		
 		TNT						.add(SubTag.FLAMMABLE, SubTag.EXPLOSIVE, SubTag.NO_SMELTING, SubTag.NO_SMASHING);
 		Gunpowder				.add(SubTag.FLAMMABLE, SubTag.EXPLOSIVE, SubTag.NO_SMELTING, SubTag.NO_SMASHING);
