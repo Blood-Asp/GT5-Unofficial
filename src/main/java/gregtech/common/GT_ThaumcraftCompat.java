@@ -38,7 +38,7 @@ public class GT_ThaumcraftCompat
         TC_Aspects.BESTIA.mAspect = Aspect.BEAST;
         TC_Aspects.COGNITIO.mAspect = Aspect.MIND;
         TC_Aspects.CORPUS.mAspect = Aspect.FLESH;
-        TC_Aspects.EXANIMIS.mAspect = Aspect.UNDEAD;
+        TC_Aspects.EXAMINIS.mAspect = Aspect.UNDEAD;
         TC_Aspects.FABRICO.mAspect = Aspect.CRAFT;
         TC_Aspects.FAMES.mAspect = Aspect.HUNGER;
         TC_Aspects.GELUM.mAspect = Aspect.COLD;

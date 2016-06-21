@@ -160,7 +160,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     public boolean isGivingInformation() {
         return true;
     }
-    
+
 
     public String[] getInfoData() {
         return new String[]{"Coordinates:", "X: " + this.mTargetX, "Y: " + this.mTargetY, "Z: " + this.mTargetZ, "Dimension: " + this.mTargetD};

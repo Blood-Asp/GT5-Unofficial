@@ -48,25 +48,24 @@ public class GT_Achievements {
         for (int i = 0; i < oreList.size(); i++) {
             if (GT_Values.D1 && this.achievementList.get(oreList.get(i).name()) == null) {
                 GT_Log.out.println("achievement." + oreList.get(i).name() + "=Find " + oreList.get(i).name() + " Ore");
-
                 StringBuilder dimensions = new StringBuilder();
-                boolean isFirst = true;
-                if(oreStats.get(i)[3] == 1) {
-                    dimensions.append("Overworld");
-                    isFirst = false;
-                }
-                if(oreStats.get(i)[4] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("Nether");
-                    isFirst = false;
-                }
-                if(oreStats.get(i)[5] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("End");
-                    isFirst = false;
-                }
-                GT_Log.out.println("achievement." + oreList.get(i).name() + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
-            }
+                                boolean isFirst = true;
+                                if(oreStats.get(i)[3] == 1) {
+                                        dimensions.append("Overworld");
+                                        isFirst = false;
+                                    }
+                                if(oreStats.get(i)[4] == 1) {
+                                        if(!isFirst) dimensions.append("/");
+                                        dimensions.append("Nether");
+                                        isFirst = false;
+                                    }
+                                if(oreStats.get(i)[5] == 1) {
+                                        if(!isFirst) dimensions.append("/");
+                                        dimensions.append("End");
+                                        isFirst = false;
+                                    }
+                                GT_Log.out.println("achievement." + oreList.get(i).name() + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
+                     }
             registerOreAchievement(oreList.get(i));
         }
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(2, 1, Materials.Flint, Materials.Wood, null), "", false);
@@ -172,19 +171,10 @@ public class GT_Achievements {
         registerAchievement("higherefficency", 14, 10, ItemList.Generator_Plasma_IV.get(1, new Object[]{}), "fusion", false);
         registerAchievement("advancing", 12, 8, ItemList.FusionComputer_ZPMV.get(1, new Object[]{}), "fusion", false);
         registerAchievement("tothelimit", 12, 10, ItemList.Generator_Plasma_LuV.get(1, new Object[]{}), "advancing", false);
-        registerAchievement("fullefficiency", 10, 10, ItemList.Generator_Plasma_ZPMV.get(1, new Object[]{}), "tothelimit", false);
-        registerAchievement("denseaspossible", 8, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "fullefficiency", false);
-        registerAchievement("whatnow", 6, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
-        
-        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
-        for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
-            if (GregTech_API.sGeneratedMaterials[i] != null) {
-            	if(!oreList.contains(GregTech_API.sGeneratedMaterials[i])){
-            		codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
-            	}
-            }
-        }
-        }
+        registerAchievement("denseaspossible", 10, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "tothelimit", false);
+        registerAchievement("fullefficiency", 10, 12, ItemList.Generator_Plasma_ZPMV.get(1, new Object[]{}), "denseaspossible", false);
+        registerAchievement("whatnow", 8, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
+
         if (GT_Mod.gregtechproxy.mAchievements) {
             AchievementPage.registerAchievementPage(new AchievementPage("GregTech 5", (Achievement[]) this.achievementList.values().toArray(
                     new Achievement[this.achievementList.size()])));
@@ -363,10 +353,14 @@ public class GT_Achievements {
                 issueAchievement(player, "alloysmelter");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.extractor")) {
                 issueAchievement(player, "extract");
+            } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.disassembler.tier.")) {
+                issueAchievement(player, "repair");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.superbuffer.tier.")) {
                 issueAchievement(player, "superbuffer");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.quantum.tank.tier.")) {
                 issueAchievement(player, "whereistheocean");
+            } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.disassembler.tier.")) {
+                issueAchievement(player, "repair");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.quantum.chest.tier.")) {
                 issueAchievement(player, "newstorage");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.hammer.tier.")) {
@@ -375,7 +369,7 @@ public class GT_Achievements {
                 issueAchievement(player, "buffer");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicgenerator.steamturbine.tier.")) {
                 issueAchievement(player, "steampower");
-            } else if (stack.getUnlocalizedName().equals("gt.blockmachines.basicmachine.pump.tier.03")) {
+            } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.pump.tier.")) {
                 issueAchievement(player, "slurp");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.assembler.tier.")) {
                 issueAchievement(player, "avengers");
@@ -410,6 +404,8 @@ public class GT_Achievements {
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.multimachine.largehpturbine")) {
                 issueAchievement(player, "efficientsteam");
             }
+        } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
+            issueAchievement(player, "newfuel");
         } else if (stack.getUnlocalizedName().equals("gt.neutronreflector")) {
             issueAchievement(player, "reflect");
         } else if (stack.getUnlocalizedName().equals("gt.blockcasings.13")) {
@@ -440,15 +436,14 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
+//		System.out.println("Pickup: "+stack.getUnlocalizedName());
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust) {
                 if (data.mMaterial.mMaterial == Materials.Lutetium) {
                     issueAchievement(player, "newmetal");
                 }
-                if(data.mMaterial.mMaterial != Materials.Gunpowder){
                 issueAchievement(player, "cleandust");
-                }
             } else if (data.mPrefix == OrePrefixes.ore || data.mPrefix == OrePrefixes.oreBlackgranite || data.mPrefix == OrePrefixes.oreEndstone
                     || data.mPrefix == OrePrefixes.oreNetherrack || data.mPrefix == OrePrefixes.oreRedgranite) {
                 for (int i = 0; i < data.getAllMaterialStacks().size(); i++) {
@@ -512,9 +507,9 @@ public class GT_Achievements {
                 issueAchievement(player, "filterregulate");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32605")) {
                 issueAchievement(player, "whatnow");
-            }
-        } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
+            } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
                 issueAchievement(player, "newfuel");
             }
+        }
     }
 }

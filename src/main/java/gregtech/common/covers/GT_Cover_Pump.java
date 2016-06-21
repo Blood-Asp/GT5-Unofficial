@@ -27,7 +27,7 @@ public class GT_Cover_Pump
         if ((aTileEntity instanceof IFluidHandler)) {
             IFluidHandler tTank2 = aTileEntity.getITankContainerAtSide(aSide);
             if (tTank2 != null) {
-                //aTileEntity.decreaseStoredEnergyUnits(GT_Utility.getTier(this.mTransferRate), true);
+                aTileEntity.decreaseStoredEnergyUnits(GT_Utility.getTier(this.mTransferRate), true);
                 IFluidHandler tTank1 = (IFluidHandler) aTileEntity;
                 if (aCoverVariable % 2 == 0) {
                     FluidStack tLiquid = tTank1.drain(ForgeDirection.getOrientation(aSide), this.mTransferRate, false);
@@ -68,8 +68,7 @@ public class GT_Cover_Pump
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
-        if(aCoverVariable <0){aCoverVariable = 11;}
+        aCoverVariable = (aCoverVariable + 1) % 12;
         switch(aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, "Export"); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, "Import"); break;

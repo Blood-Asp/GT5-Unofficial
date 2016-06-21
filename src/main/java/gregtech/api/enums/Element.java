@@ -263,7 +263,7 @@ public enum Element {
     $Ma(0, 0, -100, -1, null, "Anti-Magic", false),
     $Nt(0, -10000, 0, -1, null, "Anti-Neutronium", false);
 
-    public static volatile int VERSION = 509;
+    public static volatile int VERSION = 508;
     public final long mProtons, mNeutrons, mAdditionalMass, mHalfLifeSeconds;
     public final String mName, mDecayTo;
     public final boolean mIsIsotope;

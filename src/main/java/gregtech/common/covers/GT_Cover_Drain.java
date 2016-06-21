@@ -58,8 +58,7 @@ public class GT_Cover_Drain
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 6;
-        if(aCoverVariable <0){aCoverVariable = 5;}
+        aCoverVariable = (aCoverVariable + 1) % 6;
         switch(aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, "Import"); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, "Import (conditional)"); break;

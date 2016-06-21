@@ -53,8 +53,7 @@ public class GT_Cover_ControlsWork
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 3;
-        if(aCoverVariable <0){aCoverVariable = 2;}
+        aCoverVariable = (aCoverVariable + 1) % 3;
         if (aCoverVariable == 0) {
             GT_Utility.sendChatToPlayer(aPlayer, "Normal");
         }

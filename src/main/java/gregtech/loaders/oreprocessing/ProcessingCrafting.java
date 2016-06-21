@@ -1,5 +1,6 @@
 package gregtech.loaders.oreprocessing;
 
+import cpw.mods.fml.common.Loader;
 import gregtech.api.enums.*;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;

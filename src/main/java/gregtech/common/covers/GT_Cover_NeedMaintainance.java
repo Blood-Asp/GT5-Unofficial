@@ -44,8 +44,7 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 10;
-        if(aCoverVariable <0){aCoverVariable = 9;}
+        aCoverVariable = (aCoverVariable + 1) % 10;
         switch(aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 1 Maintenance Needed"); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 1 Maintenance Needed(inverted)"); break;

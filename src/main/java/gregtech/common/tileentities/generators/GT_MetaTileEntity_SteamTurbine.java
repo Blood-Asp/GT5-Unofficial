@@ -12,7 +12,8 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
 
-public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGenerator {
+public class GT_MetaTileEntity_SteamTurbine
+        extends GT_MetaTileEntity_BasicGenerator {
 
     public int mEfficiency;
 
@@ -38,17 +39,12 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         return null;
     }
 
-    @Override
-    public String[] getDescription() {
-        return new String[]{mDescription, "Fuel Efficiency: " + (600 / getEfficiency()) + "%"};
-    }
-
     public int getCapacity() {
         return 24000 * this.mTier;
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SteamTurbine.efficiency.tier." + this.mTier, 6 + this.mTier);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SteamTurbine.efficiency.tier." + this.mTier, (200 / consumedFluidPerOperation(GT_ModHandler.getSteam(1L))));
     }
 
     public int getEfficiency() {
@@ -56,16 +52,15 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        return GT_ModHandler.isSteam(aLiquid) ? 3 : 0;
+        return GT_ModHandler.isSteam(aLiquid) ? 1 : 0;
     }
 
     public int consumedFluidPerOperation(FluidStack aLiquid) {
-        return this.mEfficiency;
+        return 2 + this.mTier;
     }
 
     public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.STEAM_TURBINE_FRONT),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+        return new ITexture[]{super.getFront(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.STEAM_TURBINE_FRONT), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
     public ITexture[] getBack(byte aColor) {
@@ -85,8 +80,7 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public ITexture[] getFrontActive(byte aColor) {
-        return new ITexture[]{super.getFrontActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.STEAM_TURBINE_FRONT_ACTIVE),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+        return new ITexture[]{super.getFrontActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.STEAM_TURBINE_FRONT_ACTIVE), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
     public ITexture[] getBackActive(byte aColor) {

@@ -23,4 +23,5 @@ public class GT_Tool_Turbine_Small extends GT_Tool_Turbine {
     public IIconContainer getTurbineIcon() {
         return Textures.ItemIcons.TURBINE_SMALL;
     }
+
 }

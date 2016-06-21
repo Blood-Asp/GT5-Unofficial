@@ -5,26 +5,24 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.SubTag;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.tileentity.*;
+import gregtech.api.interfaces.metatileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
-import gregtech.common.GT_Proxy;
-import ic2.api.recipe.ICannerBottleRecipeManager;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
 import ic2.api.recipe.RecipeOutput;
+import ic2.api.recipe.ICannerBottleRecipeManager;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -53,7 +51,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -85,8 +82,8 @@ public class GT_Utility {
     private static final List<FluidContainerData> sFluidContainerList = new ArrayList<FluidContainerData>();
     private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<GT_ItemStack, FluidContainerData>();
     private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
-    public static volatile int VERSION = 509;
-    public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
+    public static volatile int VERSION = 508;
+    public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true;
     public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
 
@@ -336,11 +333,6 @@ public class GT_Utility {
                 Class tClass = buildcraft.api.transport.IPipeTile.class;
                 tClass.getCanonicalName();
                 BC_CHECK = true;
-            } catch (Throwable e) {/**/}
-            try {
-                Class tClass = cofh.api.energy.IEnergyReceiver.class;
-                tClass.getCanonicalName();
-                RF_CHECK = true;
             } catch (Throwable e) {/**/}
             CHECK_ALL = false;
         }
@@ -811,26 +803,25 @@ public class GT_Utility {
             return copyMetaData(Items.feather.getDamage(aStack) + 1, aStack);
         return null;
     }
-    
     public static synchronized boolean removeIC2BottleRecipe(ItemStack aContainer, ItemStack aInput, Map<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> aRecipeList, ItemStack aOutput){
-        if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
-        boolean rReturn = false;
-        Iterator<Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput>> tIterator = aRecipeList.entrySet().iterator();
-        aOutput = GT_OreDictUnificator.get(aOutput);
-        while (tIterator.hasNext()) {
-            Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> tEntry = tIterator.next();
-            if (aInput == null || tEntry.getKey().matches(aContainer, aInput)) {
-                List<ItemStack> tList = tEntry.getValue().items;
-                if (tList != null) for (ItemStack tOutput : tList)
-                    if (aOutput == null || areStacksEqual(GT_OreDictUnificator.get(tOutput), aOutput)) {
-                        tIterator.remove();
-                        rReturn = true;
-                        break;
+                if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
+                boolean rReturn = false;
+                Iterator<Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput>> tIterator = aRecipeList.entrySet().iterator();
+                aOutput = GT_OreDictUnificator.get(aOutput);
+                while (tIterator.hasNext()) {
+                        Map.Entry<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> tEntry = tIterator.next();
+                        if (aInput == null || tEntry.getKey().matches(aContainer, aInput)) {
+                                List<ItemStack> tList = tEntry.getValue().items;
+                                if (tList != null) for (ItemStack tOutput : tList)
+                                        if (aOutput == null || areStacksEqual(GT_OreDictUnificator.get(tOutput), aOutput)) {
+                                            tIterator.remove();
+                                            rReturn = true;
+                                            break;
+                                        }
+                            }
                     }
+                return rReturn;
             }
-        }
-        return rReturn;
-    }
 
     public static synchronized boolean removeSimpleIC2MachineRecipe(ItemStack aInput, Map<IRecipeInput, RecipeOutput> aRecipeList, ItemStack aOutput) {
         if ((isStackInvalid(aInput) && isStackInvalid(aOutput)) || aRecipeList == null) return false;
@@ -1045,15 +1036,33 @@ public class GT_Utility {
     }
 
     public static boolean isOpaqueBlock(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).isOpaqueCube();
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).isOpaqueCube();
+        } catch (Throwable e) {
+            result=true;
+        }
+        return result;
     }
 
     public static boolean isBlockAir(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).isAir(aWorld, aX, aY, aZ);
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).isAir(aWorld, aX, aY, aZ);
+        } catch (Throwable e) {
+            result=false;
+        }
+        return result;
     }
 
     public static boolean hasBlockHitBox(World aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlock(aX, aY, aZ).getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null;
+        boolean result;
+        try{
+            result=aWorld.getBlock(aX, aY, aZ).getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ) != null;
+        } catch (Throwable e) {
+            result=false;
+        }
+        return result;
     }
 
     public static void setCoordsOnFire(World aWorld, int aX, int aY, int aZ, boolean aReplaceCenter) {
@@ -1322,6 +1331,9 @@ public class GT_Utility {
         return loadItem(aNBT.getCompoundTag(aTagName));
     }
 
+    /**
+     * Loads an ItemStack properly.
+     */
     public static FluidStack loadFluid(NBTTagCompound aNBT, String aTagName) {
         return loadFluid(aNBT.getCompoundTag(aTagName));
     }
@@ -1343,7 +1355,7 @@ public class GT_Utility {
     }
 
     /**
-     * Loads an FluidStack properly.
+     * Loads an ItemStack properly.
      */
     public static FluidStack loadFluid(NBTTagCompound aNBT) {
         if (aNBT == null) return null;
@@ -1502,47 +1514,6 @@ public class GT_Utility {
             return true;
         }
         return false;
-    }
-
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
-
-    	
-        Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
-        int oil = tRandom.nextInt(3);
-        double amount = tRandom.nextInt(50) + tRandom.nextDouble();
-        oil = tRandom.nextInt(4);
-//		System.out.println("Oil: "+(aX/96)+" "+(aZ/96)+" "+oil+" "+amount);
-//		amount = 40;
-        Fluid tFluid = null;
-        switch (oil) {
-            case 0:
-                tFluid = Materials.NatruralGas.mGas;
-                break;
-            case 1:
-                tFluid = Materials.OilLight.mFluid;
-                break;
-            case 2:
-                tFluid = Materials.OilMedium.mFluid;
-                break;
-            case 3:
-                tFluid = Materials.OilHeavy.mFluid;
-                break;
-            default:
-                tFluid = Materials.Oil.mFluid;
-        }
-        int tAmount = (int) (Math.pow(amount, 5) / 100);
-        ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
-    	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		int[] tInts = GT_Proxy.chunkData.get(tPos);
-    		if(tInts.length>0){
-    			if(tInts[0]>=0){tAmount = tInts[0];}
-    		}
-    		GT_Proxy.chunkData.remove(tPos);
-    	}
-    	tAmount = tAmount - 5;
-    	GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
-    	
-        return new FluidStack(tFluid, tAmount);
     }
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
@@ -1732,11 +1703,6 @@ public class GT_Utility {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
         }
-        if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
-            FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
-            tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
-        }
-
         try {
             if (tBlock instanceof IDebugableBlock) {
                 rEUAmount += 500;
@@ -1914,33 +1880,6 @@ public class GT_Utility {
         public static String getBookAuthor(ItemStack aStack) {
             NBTTagCompound tNBT = getNBT(aStack);
             return tNBT.getString("author");
-        }
-
-        public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String[] aOres) {
-            NBTTagCompound tNBT = getNBT(aStack);
-            String tData = aX + "," + aY + "," + aZ + "," + aDim + "," + (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
-            for (String tString : aOres) {
-                tData += tString + ",";
-            }
-            tNBT.setString("prospection", tData);
-            setNBT(aStack, tNBT);
-        }
-
-        public static void convertProspectionData(ItemStack aStack) {
-            NBTTagCompound tNBT = getNBT(aStack);
-            String tData = tNBT.getString("prospection");
-            String[] tDataArray = tData.split(",");
-            if (tDataArray.length > 6) {
-                tNBT.setString("author", "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2] + " Dim: " + tDataArray[3]);
-                NBTTagList tNBTList = new NBTTagList();
-                String tOres = " Prospected Ores: ";
-                for (int i = 6; tDataArray.length > i; i++) {
-                    tOres += (tDataArray[i] + " ");
-                }
-                tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
-                tNBT.setTag("pages", tNBTList);
-            }
-            setNBT(aStack, tNBT);
         }
 
         public static void addEnchantment(ItemStack aStack, Enchantment aEnchantment, int aLevel) {

@@ -18,8 +18,7 @@ public class GT_Cover_RedstoneConductor
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 7;
-        if(aCoverVariable <0){aCoverVariable = 6;}
+        aCoverVariable = (aCoverVariable + 1) % 7;
         switch (aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, "Conducts strongest Input"); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from bottom Input"); break;

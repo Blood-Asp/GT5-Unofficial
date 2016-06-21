@@ -1,10 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -41,12 +36,11 @@ public class GT_MetaTileEntity_DistillationTower
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Distillation Tower",
-                "Size(WxHxD): 3x6x3 (Hollow), Controller (Front bottom)",
-                "1x Input Hatch (Any bottom layer casing)",
-                "5x Output Hatch (Any casing besides bottom layer)",
-                "1x Output Bus (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
+                "Size: 3x3x6 (Hollow)", "Controller (front bottom)",
+                "1x Input Hatch (bottom)",
+                "5x Output Hatch (one each height level besides botton)",
+                "1x Output Bus (Botton)", "1x Energy Hatch (anywhere)",
+                "1x Maintenance Hatch (anywhere)",
                 "Clean Stainless Steel Casings for the rest (26 at least!)"};
     }
 
@@ -75,28 +69,12 @@ public class GT_MetaTileEntity_DistillationTower
 
     public boolean checkRecipe(ItemStack aStack) {
 
-        ArrayList<FluidStack> tFluidList = getStoredFluids();
-        for (int i = 0; i < tFluidList.size() - 1; i++) {
-            for (int j = i + 1; j < tFluidList.size(); j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
-                        tFluidList.remove(j--);
-                    } else {
-                        tFluidList.remove(i--);
-                        break;
-                    }
-                }
-            }
-        }
-
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
-        if (tFluids.length > 0) {
-        	for(int i = 0;i<tFluids.length;i++){
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
+        if (this.mInputHatches.size() > 0 && this.mInputHatches.get(0) != null && this.mInputHatches.get(0).mFluid != null && this.mInputHatches.get(0).mFluid.amount > 0) {
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{this.mInputHatches.get(0).mFluid}, new ItemStack[]{});
             if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
+                if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{this.mInputHatches.get(0).mFluid}, new ItemStack[]{})) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
                     if (tRecipe.mEUt <= 16) {
@@ -115,11 +93,9 @@ public class GT_MetaTileEntity_DistillationTower
                     }
                     this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
-                    this.mOutputFluids = tRecipe.mFluidOutputs.clone();
-                    ArrayUtils.reverse(mOutputFluids);
+                    this.mOutputFluids = tRecipe.mFluidOutputs;
                     updateSlots();
                     return true;
-                	}
                 }
             }
         }
@@ -154,7 +130,7 @@ public class GT_MetaTileEntity_DistillationTower
                 }
             }
         }
-        if (this.mOutputBusses.size() != 1 || this.mInputBusses.size() != 0 || this.mOutputHatches.size() != 5) {
+        if (this.mInputHatches.size() != 1 || this.mOutputBusses.size() != 1 || this.mInputBusses.size() != 0 || this.mOutputHatches.size() != 5) {
             return false;
         }
         int height = this.getBaseMetaTileEntity().getYCoord();

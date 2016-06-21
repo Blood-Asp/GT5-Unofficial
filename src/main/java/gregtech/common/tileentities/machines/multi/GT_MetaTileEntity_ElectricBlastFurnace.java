@@ -35,16 +35,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Blast Furnace",
-                "Size(WxHxD): 3x4x3 (Hollow), Controller (Front middle bottom)",
-                "16x Heating Coils (Two middle Layers, hollow)",
-                "1x Input (Any bottom layer casing)",
-                "1x Output (Any bottom layer casing)",
-                "1x Energy Hatch (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any bottom layer casing)",
-                "1x Muffler Hatch (Top middle)",
-                "Heat Proof Machine Casings for the rest"};
+        return new String[]{"Controller Block for the Blast Furnace", "Size: 3x3x4 (Hollow)", "Controller (front middle at bottom)", "16x Heating Coils (two middle Layers, hollow)", "1x Input (one of bottom)", "1x Output (one of bottom)", "1x Energy Hatch (one of bottom)", "1x Maintenance Hatch (one of bottom)", "1x Muffler Hatch (top middle)", "Heat Proof Machine Casings for the rest"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -130,7 +121,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return false;
     }
 
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -153,6 +144,9 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 break;
             case 14:
                 this.mHeatingCapacity = 3600;
+                break;
+            case 15:
+                this.mHeatingCapacity = 9000;
                 break;
             default:
                 return false;
@@ -200,6 +194,12 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return true;
     }
 
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
+        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
+        if (!result) this.mHeatingCapacity=0;
+        return result;
+    }
+
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
@@ -219,4 +219,11 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
+
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{"Heating Capacity: " + (this.mHeatingCapacity) + "K", "Progress:", (mProgresstime / 20) + " secs", (mMaxProgresstime / 20) + " secs", "Efficiency: " + (mEfficiency / 100.0F) + "%", "Problems: " + (getIdealStatus() - getRepairStatus())};
+    }
+
 }
