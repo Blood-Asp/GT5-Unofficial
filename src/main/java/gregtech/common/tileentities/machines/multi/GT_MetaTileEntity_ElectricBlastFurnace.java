@@ -130,7 +130,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return false;
     }
 
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -203,6 +203,12 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         this.mHeatingCapacity += 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 2);
         return true;
     }
+        public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
+        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
+            if (!result) this.mHeatingCapacity=0;
+            return result;
+        }
+
 
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
