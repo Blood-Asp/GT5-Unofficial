@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
                 "Robust Tungstensteel Casings for the rest (16 at least!)",
-                "Place up to 16 Single Block GT Machines into the GUI Inventory"};
+                "Place up to 64 Single Block GT Machines into the GUI Inventory"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -121,12 +121,28 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
         } else if (tmp.startsWith("lathe")) {
             return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
-        } else if (tmp.startsWith("boxinator")) {
+        } else if (tmp.startsWith("packer")) {
             return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
-        } else if (tmp.startsWith("unboxinator")) {
+        } else if (tmp.startsWith("unpacker")) {
             return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
         } else if (tmp.startsWith("polarizer")) {
             return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
+        } else if (tmp.startsWith("plasmaarcfurnace")) {
+             return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
+        } else if (tmp.startsWith("printer")) {
+             return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
+        } else if (tmp.startsWith("press")) {
+              return GT_Recipe.GT_Recipe_Map.sPressRecipes;
+        } else if (tmp.startsWith("fluidcanner")) {
+              return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
+        } else if (tmp.startsWith("fluidheater")) {
+              return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
+        } else if (tmp.startsWith("distillery")) {
+              return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
+        } else if (tmp.startsWith("slicer")) {
+              return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
+        } else if (tmp.startsWith("amplifier")) {
+              return GT_Recipe.GT_Recipe_Map.sAmplifiers;
         }
 
         return null;
@@ -181,7 +197,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mEUt = 0;
                 this.mOutputItems = null;
                 this.mOutputFluids = null;
-                int machines = Math.min(16, mInventory[1].stackSize);
+                int machines = Math.min(64, mInventory[1].stackSize); //Upped max Cap to 64
                 int i = 0;
                 for (; i < machines; i++) {
                     if (!tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
