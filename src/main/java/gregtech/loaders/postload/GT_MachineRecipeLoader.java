@@ -154,6 +154,9 @@ public class GT_MachineRecipeLoader
         GT_Values.RA.addFluidCannerRecipe(ItemList.Battery_Hull_MV.get(1L, new Object[0]), ItemList.Battery_SU_MV_SulfuricAcid.getWithCharge(1L, Integer.MAX_VALUE, new Object[0]), Materials.SulfuricAcid.getFluid(4000L), GT_Values.NF);
         GT_Values.RA.addFluidCannerRecipe(ItemList.Battery_Hull_HV.get(1L, new Object[0]), ItemList.Battery_SU_HV_SulfuricAcid.getWithCharge(1L, Integer.MAX_VALUE, new Object[0]), Materials.SulfuricAcid.getFluid(16000L), GT_Values.NF);
         GT_Values.RA.addFluidCannerRecipe(ItemList.TF_Vial_FieryTears.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0]), GT_Values.NF, Materials.FierySteel.getFluid(250L));
+        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L),ItemList.Cell_Empty.get(1L, new Object [0]), GT_Values.NF, Materials.Concrete.getMolten(144L));
+        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L, new Object [0]), (GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L)), Materials.Concrete.getMolten(144L), GT_Values.NF);
+
 
         Materials tMaterial = Materials.Iron;
         if (tMaterial.mStandardMoltenFluid != null) {
