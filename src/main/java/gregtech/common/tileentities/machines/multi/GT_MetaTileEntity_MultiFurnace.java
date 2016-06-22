@@ -36,9 +36,9 @@ public class GT_MetaTileEntity_MultiFurnace
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Multi Smelter",
-                "Smelts up to 6-18 Items at once",
+                "Smelts up to 8-256 Items at once",
                 "Size(WxHxD): 3x3x3 (Hollow), Controller (Front middle at bottom)",
-                "8x Heating Coils (Middle layer, hollow)",
+                "8x Coils (Middle layer, hollow)",
                 "1x Input Bus (One of bottom)",
                 "1x Output Bus (One of bottom)",
                 "1x Maintenance Hatch (One of bottom)",
@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_MultiFurnace
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
 
             int j = 0;
-            this.mOutputItems = new ItemStack[6 * this.mLevel];
+            this.mOutputItems = new ItemStack[8 * this.mLevel];
             for (int i = 0; (i < 100) && (j < this.mOutputItems.length); i++) {
                 if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
                     j++;
@@ -86,7 +86,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
 
-                this.mEUt = (-4 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel);
+                this.mEUt = (-5 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel);
                 this.mMaxProgresstime = Math.max(1, 512 / (1 << tTier - 1));
             }
             updateSlots();
@@ -109,15 +109,23 @@ public class GT_MetaTileEntity_MultiFurnace
         switch (tUsedMeta) {
             case 12:
                 this.mLevel = 1;
+                this.mLevel = 1;//8 at once
                 break;
             case 13:
                 this.mLevel = 2;
+                this.mLevel = 2;//16 at once
                 break;
             case 14:
-                this.mLevel = 3;
+                this.mLevel = 4;
+                this.mLevel = 4;//32 at once
+                break;
+            case 15://Superconductor Coil Block Support
+                this.mLevel = 8;
+                this.mLevel = 32;//4 stacks at once
                 break;
             default:
                 return false;
+
         }
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
