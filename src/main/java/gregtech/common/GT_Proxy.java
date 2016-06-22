@@ -655,8 +655,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 1L), tBits, new Object[]{"XXX", "XXX", "XXX",
                             Character.valueOf('X'), OrePrefixes.nugget.get(aMaterial)});
                 } else {
-                    GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L), tBits, new Object[]{"XXX", "XXX", "XXX",
-                            Character.valueOf('X'), OrePrefixes.nugget.get(aMaterial)});
+                   // GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L), tBits, new Object[]{"XXX", "XXX", "XXX",
+                   //       Character.valueOf('X'), OrePrefixes.nugget.get(aMaterial)});
                 }
                 GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial.mMacerateInto, 1L), tBits, new Object[]{"h", "X",
                         Character.valueOf('X'), OrePrefixes.crushedCentrifuged.get(aMaterial)});
