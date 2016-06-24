@@ -244,11 +244,11 @@ public abstract class GT_MetaTileEntity_Boiler
     }
 
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return false;
+        return (aIndex == 1) || (aIndex == 3);
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return false;
+        return aIndex == 2;
     }
 
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
