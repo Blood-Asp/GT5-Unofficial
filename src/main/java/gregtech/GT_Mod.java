@@ -32,7 +32,6 @@ import gregtech.loaders.load.GT_FuelLoader;
 import gregtech.loaders.load.GT_ItemIterator;
 import gregtech.loaders.load.GT_SonictronLoader;
 import gregtech.loaders.misc.GT_Achievements;
-import gregtech.loaders.misc.GT_Bees;
 import gregtech.loaders.misc.GT_CoverLoader;
 import gregtech.loaders.misc.OreProcessingConfiguration;
 import gregtech.loaders.postload.*;
@@ -389,8 +388,6 @@ public class GT_Mod
                 e.printStackTrace(GT_Log.err);
             }
         }
-        
-        new GT_Bees();
         
         gregtechproxy.onLoad();
         if (gregtechproxy.mSortToTheEnd) {
