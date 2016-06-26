@@ -62,7 +62,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "DrillingRig.png");
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "Advanced_Miner2.png");
     }
 
     @Override
