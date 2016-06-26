@@ -1015,7 +1015,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 GT_OreDictUnificator.registerOre(OreDictNames.craftingWireCopper, aEvent.Ore);
             }
             if (aEvent.Name.equals("oreHeeEndrium")) {
-                GT_OreDictUnificator.registerOre(OrePrefixes.ore, Materials.Endium, aEvent.Ore);
+                GT_OreDictUnificator.registerOre(OrePrefixes.ore, Materials.HeeEndium, aEvent.Ore);
             }
             if (aEvent.Name.equals("sheetPlastic")) {
                 GT_OreDictUnificator.registerOre(OrePrefixes.plate, Materials.Plastic, aEvent.Ore);
