@@ -132,12 +132,14 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                 }
             }
             ArrayList<ItemStack> tDrops = new ArrayList();
-            if (!mMineList.isEmpty()) {
-                ChunkPosition mle = mMineList.get(0);
-                Block tMineBlock = null;
-                while ((tMineBlock==null || tMineBlock == Blocks.air)) {
-                    mMineList.remove(0);
-                    tMineBlock = getBaseMetaTileEntity().getBlockOffset(mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ);
+            Block tMineBlock = null;
+            ChunkPosition mle = null;
+            while ((tMineBlock==null || tMineBlock == Blocks.air) && !mMineList.isEmpty()) {
+                mle = mMineList.get(0);
+                mMineList.remove(0);
+                tMineBlock = getBaseMetaTileEntity().getBlockOffset(mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ);
+            }
+            if (tMineBlock!=null && tMineBlock!=Blocks.air) {
                 }
                 int metadata = getBaseMetaTileEntity().getMetaIDOffset(mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ);
                 boolean silkTouch = tMineBlock.canSilkHarvest(getBaseMetaTileEntity().getWorld(), null, mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ, metadata);
@@ -183,7 +185,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                 }
 
             }
-        }
+
 
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
