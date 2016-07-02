@@ -207,6 +207,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Blueschist			( 852, TextureSet.SET_DULL				,   1.0F,      0,  2, 1                                     , 255, 255, 255,   0,	"Blueschist"					,    0,       0,         -1,    0, false, false,   0,   1,   1, Dyes.dyeLightBlue	),
 	Bluestone			( 813, TextureSet.SET_DULL				,   1.0F,      0,  2, 1                                     , 255, 255, 255,   0,	"Bluestone"						,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeBlue		),
 	Bloodstone			(  -1, TextureSet.SET_NONE				,   1.0F,      0,  2, 1                                     , 255, 255, 255,   0,	"Bloodstone"					,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes.dyeRed			),
+	BloodInfusedIron	( 977, TextureSet.SET_METALLIC			,  10.0F,    384,  2, 1|2          |64|128                  ,  69,   9,  10,   0,	"Blood Infused Iron"			,    0,       0,       2400,    0, false, false,   3,   1,   1, Dyes.dyeRed	        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3),  new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1))),
 	Blutonium			(  -1, TextureSet.SET_SHINY				,   1.0F,      0,  2, 1|2  |8                               ,   0,   0, 255,   0,	"Blutonium"						,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes.dyeBlue		),
 	Carmot				( 962, TextureSet.SET_METALLIC			,  16.0F,    128,  1, 1|2  |8      |64                      , 217, 205, 140,   0,	"Carmot"						,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes._NULL			),
 	Celenegil			( 964, TextureSet.SET_METALLIC			,  10.0F,   4096,  2, 1|2  |8|16      |64                   , 148, 204,  72,   0,	"Celenegil"						,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes._NULL			),
@@ -735,7 +736,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 				Tartarite, Thyrium, Tritanium, Vulcanite, Vyroxeres, Yellorium, Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron, 
 				Electrum, Invar/**IronCompressed**/, Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
 				YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel, 
-				TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, Galgadorian, EnhancedGalgadorian, Reinforced. Draconium, DraconiumAwakened);
+				TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, Galgadorian, EnhancedGalgadorian, Reinforced. Draconium, DraconiumAwakened, BloodInfusedIron);
 		
 		SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 		
