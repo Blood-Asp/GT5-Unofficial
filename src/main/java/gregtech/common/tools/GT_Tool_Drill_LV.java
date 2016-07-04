@@ -98,7 +98,7 @@ public class GT_Tool_Drill_LV
         aPlayer.triggerAchievement(AchievementList.buildPickaxe);
         aPlayer.triggerAchievement(AchievementList.buildBetterPickaxe);
         try {
-            GT_Mod.instance.achievements.issueAchievement(aPlayer, "driltime");
+            GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildDrill");
         } catch (Exception e) {
         }
     }
