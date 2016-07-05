@@ -528,7 +528,7 @@ public class GT_MetaGenerated_Item_01
         GregTech_API.registerCover(ItemList.FluidRegulator_EV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[4][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_FluidRegulator(2048));
         GregTech_API.registerCover(ItemList.FluidRegulator_IV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[5][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_FluidRegulator(8192));
 
-        ItemList.FluidFilter.set(addItem(tLastID = 635, "Fluid Filter", "Set with Fluid Container to only accept one Fluid Type", new Object[]{}));
+        ItemList.FluidFilter.set(addItem(tLastID = 669, "Fluid Filter", "Set with Fluid Container to only accept one Fluid Type", new Object[]{}));
         GregTech_API.registerCover(ItemList.FluidFilter.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SHUTTER)}), new GT_Cover_Fluidfilter());
 
         /**ItemList.Rotor_LV.set(addItem(tLastID = 620, "Tin Rotor", "", new Object[] { OrePrefixes.rotor.get(Materials.Tin), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MOTUS, 1L) }));
