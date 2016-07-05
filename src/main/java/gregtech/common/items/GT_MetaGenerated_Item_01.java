@@ -516,11 +516,11 @@ public class GT_MetaGenerated_Item_01
         GregTech_API.registerCover(ItemList.Electric_Pump_EV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[4][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_Pump(2048));
         GregTech_API.registerCover(ItemList.Electric_Pump_IV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[5][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_Pump(8192));
 
-        ItemList.FluidRegulator_LV.set(addItem(tLastID = 615, "Fluid Regulator (LV)", "Configuable up to 640 L/sec (as Cover)", new Object[]{}));
-        ItemList.FluidRegulator_MV.set(addItem(tLastID = 616, "Fluid Regulator (MV)", "Configuable up to 2560 L/sec (as Cover)", new Object[]{}));
-        ItemList.FluidRegulator_HV.set(addItem(tLastID = 617, "Fluid Regulator (HV)", "Configuable up to 10240 L/sec (as Cover)", new Object[]{}));
-        ItemList.FluidRegulator_EV.set(addItem(tLastID = 618, "Fluid Regulator (EV)", "Configuable up to 40960 L/sec (as Cover)", new Object[]{}));
-        ItemList.FluidRegulator_IV.set(addItem(tLastID = 619, "Fluid Regulator (IV)", "Configuable up to 163840 L/sec (as Cover)", new Object[]{}));
+        ItemList.FluidRegulator_LV.set(addItem(tLastID = 620, "Fluid Regulator (LV)", "Configuable up to 640 L/sec (as Cover)", new Object[]{}));
+        ItemList.FluidRegulator_MV.set(addItem(tLastID = 621, "Fluid Regulator (MV)", "Configuable up to 2560 L/sec (as Cover)", new Object[]{}));
+        ItemList.FluidRegulator_HV.set(addItem(tLastID = 622, "Fluid Regulator (HV)", "Configuable up to 10240 L/sec (as Cover)", new Object[]{}));
+        ItemList.FluidRegulator_EV.set(addItem(tLastID = 623, "Fluid Regulator (EV)", "Configuable up to 40960 L/sec (as Cover)", new Object[]{}));
+        ItemList.FluidRegulator_IV.set(addItem(tLastID = 624, "Fluid Regulator (IV)", "Configuable up to 163840 L/sec (as Cover)", new Object[]{}));
 
         GregTech_API.registerCover(ItemList.FluidRegulator_LV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_FluidRegulator(32));
         GregTech_API.registerCover(ItemList.FluidRegulator_MV.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[2][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PUMP)}), new GT_Cover_FluidRegulator(128));
