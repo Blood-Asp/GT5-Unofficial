@@ -29,7 +29,7 @@ public class ProcessingWire01 implements gregtech.api.interfaces.IOreRecipeRegis
         if (!aMaterial.contains(gregtech.api.enums.SubTag.NO_SMASHING)) {
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.springSmall, aMaterial, 2L), 100, 8);
             GT_Values.RA.addWiremillRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.wireFine, aMaterial, 4L), 200, 8);
-            GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.springSmall, aMaterial, 1L), new Object[]{" s ", "hPx", Character.valueOf('P'), OrePrefixes.wireGt01.get(aMaterial)});
+            GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.springSmall, aMaterial, 1L), new Object[]{" s ", "fPx", Character.valueOf('P'), OrePrefixes.wireGt01.get(aMaterial)});
         }
         GT_Values.RA.addAssemblerRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Circuit_Integrated.getWithDamage(0L, 2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.wireGt02, aMaterial, 1L), 150, 8);
         GT_Values.RA.addAssemblerRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), ItemList.Circuit_Integrated.getWithDamage(0L, 4L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.wireGt04, aMaterial, 1L), 200, 8);
