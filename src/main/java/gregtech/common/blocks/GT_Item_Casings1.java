@@ -1,10 +1,10 @@
 package gregtech.common.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
 
 public class GT_Item_Casings1
         extends GT_Item_Casings_Abstract {
@@ -23,6 +23,10 @@ public class GT_Item_Casings1
                 break;
             case 14:
                 aList.add(this.mCoil03Tooltip);
+                break;
+            case 15:
+                aList.add(this.mCoil04Tooltip);
+                break;
         }
     }
 }

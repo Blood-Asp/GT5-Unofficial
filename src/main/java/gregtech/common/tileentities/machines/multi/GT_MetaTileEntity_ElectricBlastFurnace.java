@@ -1,5 +1,8 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -14,9 +17,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_ElectricBlastFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -153,6 +153,9 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 break;
             case 14:
                 this.mHeatingCapacity = 3600;
+                break;
+            case 15:
+                this.mHeatingCapacity = 9000;
                 break;
             default:
                 return false;
