@@ -73,6 +73,8 @@ public class GT_Loader_MetaTileEntities
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_Cupronickel.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.Cupronickel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_Kanthal.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.Kanthal)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_Nichrome.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.Nichrome)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_TungstenSteel.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.TungstenSteel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_NaquadahAlloy.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.NaquadahAlloy)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Coil_Superconductor.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PPP", "PwP", "PPP", Character.valueOf('P'), OrePrefixes.wireGt02.get(Materials.Superconductor)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Stripes_A.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"Y  ", " M ", "  B", Character.valueOf('M'), ItemList.Casing_SolidSteel, Character.valueOf('Y'), Dyes.dyeYellow, Character.valueOf('B'), Dyes.dyeBlack});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Stripes_B.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"  Y", " M ", "B  ", Character.valueOf('M'), ItemList.Casing_SolidSteel, Character.valueOf('Y'), Dyes.dyeYellow, Character.valueOf('B'), Dyes.dyeBlack});
@@ -1049,7 +1051,7 @@ public class GT_Loader_MetaTileEntities
         ItemList.Machine_Multi_DieselEngine.set(new GT_MetaTileEntity_DieselEngine(1171, "multimachine.dieselengine", "Diesel Engine").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_DieselEngine.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PCP", "EME", "GWG", Character.valueOf('M'), ItemList.Hull_EV, Character.valueOf('P'), ItemList.Electric_Piston_EV, Character.valueOf('E'), ItemList.Electric_Motor_EV, Character.valueOf('C'), OrePrefixes.circuit.get(Materials.Ultimate), Character.valueOf('W'), OrePrefixes.cableGt01.get(Materials.TungstenSteel), Character.valueOf('G'), OrePrefixes.gearGt.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_EngineIntake.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PhP", "RFR", "PwP", Character.valueOf('R'), OrePrefixes.pipeMedium.get(Materials.Titanium), Character.valueOf('F'), ItemList.Casing_StableTitanium, Character.valueOf('P'), OrePrefixes.rotor.get(Materials.Titanium)});
-    }
+}
 
     private static void run4() {
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
@@ -1058,6 +1060,8 @@ public class GT_Loader_MetaTileEntities
             }
         }
         boolean bEC = !GT_Mod.gregtechproxy.mHardcoreCables;
+
+        makeWires(Materials.RedAlloy, 2000, 0L, 1L, 1L, gregtech.api.enums.GT_Values.V[0], true, false);
 
         makeWires(Materials.Cobalt, 1200, bEC ? 2L : 2L, bEC ? 4L : 4L, 2L, gregtech.api.enums.GT_Values.V[1], true, false);
         makeWires(Materials.Lead, 1220, bEC ? 2L : 2L, bEC ? 4L : 4L, 2L, gregtech.api.enums.GT_Values.V[1], true, false);
@@ -1092,10 +1096,9 @@ public class GT_Loader_MetaTileEntities
         makeWires(Materials.VanadiumGallium, 1740, bEC ? 2L : 128L, bEC ? 4L : 256L, 4L, gregtech.api.enums.GT_Values.V[6], true, false);
         makeWires(Materials.YttriumBariumCuprate, 1760, bEC ? 4L : 256L, bEC ? 8L : 512L, 4L, gregtech.api.enums.GT_Values.V[6], true, false);
 
-        makeWires(Materials.RedAlloy, 2000, 0L, 1L, 1L, gregtech.api.enums.GT_Values.V[0], true, false);
         //makeWires(Materials.NaquadahAlloy, 1780, bEC ? 4L : 64L, bEC ? 8L : 128L, 2L, gregtech.api.enums.GT_Values.V[7], true, false);
 
-        makeWires(Materials.Duranium, 2100, bEC ? 8L : 64L, bEC ? 16L : 128L, 1L, gregtech.api.enums.GT_Values.V[8], true, false);
+        makeWires(Materials.Duranium, 1800, bEC ? 8L : 64L, bEC ? 16L : 128L, 1L, gregtech.api.enums.GT_Values.V[8], true, false);
 
         makeWires(Materials.Superconductor, 2020, 1L, 1L, 4L, gregtech.api.enums.GT_Values.V[9], false, true);
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {

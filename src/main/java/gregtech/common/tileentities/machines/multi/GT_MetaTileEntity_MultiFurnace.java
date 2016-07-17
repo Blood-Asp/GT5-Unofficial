@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -14,8 +16,6 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
 
 public class GT_MetaTileEntity_MultiFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 "Controller Block for the Multi Smelter",
                 "Smelts up to 8-256 Items at once",
                 "Size(WxHxD): 3x3x3 (Hollow), Controller (Front middle at bottom)",
-                "8x Coils (Middle layer, hollow)",
+                "8x Heating Coils (Middle layer, hollow)",
                 "1x Input Bus (One of bottom)",
                 "1x Output Bus (One of bottom)",
                 "1x Maintenance Hatch (One of bottom)",
@@ -86,7 +86,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
 
-                this.mEUt = (-5 * (1 << tTier - 1) * (1 << tTier - 1) * Math.min(this.mLevel,8));
+                this.mEUt = (-4 * (1 << tTier - 1) * (1 << tTier - 1) * Math.min(this.mLevel, 8));
                 this.mMaxProgresstime = Math.max(1, 512 / (1 << tTier - 1));
             }
             updateSlots();
@@ -106,27 +106,32 @@ public class GT_MetaTileEntity_MultiFurnace
         addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 2, zDir), 11);
 
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 1, zDir);
+        boolean tUseAdvancedCoils = aBaseMetaTileEntity.getBlockOffset(xDir + 1, 1, zDir) == GregTech_API.sBlockCasings4;
         switch (tUsedMeta) {
             case 12:
-                this.mLevel = 1;//8 at once
+                this.mLevel = tUseAdvancedCoils ? 0 : 1;
                 break;
             case 13:
-                this.mLevel = 2;//16 at once
+                this.mLevel = tUseAdvancedCoils ? 0 : 2;
                 break;
             case 14:
-                this.mLevel = 4;//32 at once
+                this.mLevel = tUseAdvancedCoils ? 8 : 4;
                 break;
-            case 15://Superconductor Coil Block Support
-                this.mLevel = 32;//4 stacks at once
+            case 15:
+                this.mLevel = tUseAdvancedCoils ? 16 : 0;
                 break;
             default:
                 return false;
 
         }
+        if (this.mLevel == 0) {
+            return false;
+        }
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if ((i != 0) || (j != 0)) {
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings1) {
+                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings1 && !tUseAdvancedCoils ||
+                        aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings4 && tUseAdvancedCoils) {
                         return false;
                     }
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j) != tUsedMeta) {
