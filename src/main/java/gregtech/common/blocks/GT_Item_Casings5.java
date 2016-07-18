@@ -18,19 +18,10 @@ public class GT_Item_Casings5
     public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
         super.addInformation(aStack, aPlayer, aList, aF3_H);
         switch (getDamage(aStack)) {
-            case 0:
-                aList.add(this.mCoil01Tooltip);
-                break;
-            case 1:
-                aList.add(this.mCoil02Tooltip);
-                break;
-            case 2:
-                aList.add(this.mCoil03Tooltip);
-                break;
-            case 3:
+            case 4:
                 aList.add(this.mCoil04Tooltip);
                 break;
-            case 4:
+            case 5:
                 aList.add(this.mCoil05Tooltip);
                 break;
         }
