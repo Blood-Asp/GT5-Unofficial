@@ -28,10 +28,7 @@ public class GT_Block_Casings1
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "MAX Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".10.name", "Bronze Plated Bricks");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".11.name", "Heat Proof Machine Casing");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Cupronickel Coil Block (Overheated)");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".13.name", "Kanthal Coil Block (Overheated)");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".14.name", "Nichrome Coil Block (Overheated)");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".15.name", "Superconducting Coil Block");
+
         ItemList.Casing_ULV.set(new ItemStack(this, 1, 0));
         ItemList.Casing_LV.set(new ItemStack(this, 1, 1));
         ItemList.Casing_MV.set(new ItemStack(this, 1, 2));
@@ -44,10 +41,6 @@ public class GT_Block_Casings1
         ItemList.Casing_MAX.set(new ItemStack(this, 1, 9));
         ItemList.Casing_BronzePlatedBricks.set(new ItemStack(this, 1, 10));
         ItemList.Casing_HeatProof.set(new ItemStack(this, 1, 11));
-        ItemList.Casing_Coil_Cupronickel_Overheated.set(new ItemStack(this, 1, 12));
-        ItemList.Casing_Coil_Kanthal_Overheated.set(new ItemStack(this, 1, 13));
-        ItemList.Casing_Coil_Nichrome_Overheated.set(new ItemStack(this, 1, 14));
-        ItemList.Casing_Coil_Superconductor.set(new ItemStack(this, 1, 15));
     }
 
     public IIcon getIcon(int aSide, int aMeta) {
@@ -57,14 +50,6 @@ public class GT_Block_Casings1
                     return Textures.BlockIcons.MACHINE_BRONZEPLATEDBRICKS.getIcon();
                 case 11:
                     return Textures.BlockIcons.MACHINE_HEATPROOFCASING.getIcon();
-                case 12:
-                    return Textures.BlockIcons.MACHINE_COIL_CUPRONICKEL_OVERHEATED.getIcon();
-                case 13:
-                    return Textures.BlockIcons.MACHINE_COIL_KANTHAL_OVERHEATED.getIcon();
-                case 14:
-                    return Textures.BlockIcons.MACHINE_COIL_NICHROME_OVERHEATED.getIcon();
-                case 15:
-                    return Textures.BlockIcons.MACHINE_COIL_SUPERCONDUCTOR.getIcon();
             }
             if (aSide == 0) {
                 return Textures.BlockIcons.MACHINECASINGS_BOTTOM[aMeta].getIcon();
@@ -80,5 +65,4 @@ public class GT_Block_Casings1
     public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }
-
 }
