@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -15,11 +17,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.ArrayList;
-
 public class GT_MetaTileEntity_MultiFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
     private int mLevel = 0;
+    private int mCostDiscount = 1;
 
     public GT_MetaTileEntity_MultiFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -36,9 +37,9 @@ public class GT_MetaTileEntity_MultiFurnace
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Multi Smelter",
-                "Smelts up to 8-256 Items at once",
+                "Smelts up to 8-128 Items at once",
                 "Size(WxHxD): 3x3x3 (Hollow), Controller (Front middle at bottom)",
-                "8x Coils (Middle layer, hollow)",
+                "8x Heating Coils (Middle layer, hollow)",
                 "1x Input Bus (One of bottom)",
                 "1x Output Bus (One of bottom)",
                 "1x Maintenance Hatch (One of bottom)",
@@ -86,7 +87,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
 
-                this.mEUt = (-5 * (1 << tTier - 1) * (1 << tTier - 1) * Math.min(this.mLevel,8));
+                this.mEUt = (-4 * (1 << tTier - 1) * (1 << tTier - 1) * this.mLevel / this.mCostDiscount);
                 this.mMaxProgresstime = Math.max(1, 512 / (1 << tTier - 1));
             }
             updateSlots();
@@ -100,6 +101,7 @@ public class GT_MetaTileEntity_MultiFurnace
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
         this.mLevel = 0;
+        this.mCostDiscount = 1;
         if (!aBaseMetaTileEntity.getAirOffset(xDir, 1, zDir)) {
             return false;
         }
@@ -107,26 +109,41 @@ public class GT_MetaTileEntity_MultiFurnace
 
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 1, zDir);
         switch (tUsedMeta) {
-            case 12:
-                this.mLevel = 1;//8 at once
+            case 0:
+                this.mLevel = 1;
+                this.mCostDiscount = 1;
                 break;
-            case 13:
-                this.mLevel = 2;//16 at once
+            case 1:
+                this.mLevel = 2;
+                this.mCostDiscount = 1;
                 break;
-            case 14:
-                this.mLevel = 4;//32 at once
+            case 2:
+                this.mLevel = 4;
+                this.mCostDiscount = 1;
                 break;
-            case 15://Superconductor Coil Block Support
-                this.mLevel = 32;//4 stacks at once
+            case 3:
+                this.mLevel = 8;
+                this.mCostDiscount = 1;
+                break;
+            case 4:
+                this.mLevel = 16;
+                this.mCostDiscount = 2;
+                break;
+            case 5:
+                this.mLevel = 16;
+                this.mCostDiscount = 4;
+                break;
+            case 6:
+                this.mLevel = 16;
+                this.mCostDiscount = 8;
                 break;
             default:
                 return false;
-
         }
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if ((i != 0) || (j != 0)) {
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings1) {
+                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings5) {
                         return false;
                     }
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j) != tUsedMeta) {
@@ -177,7 +194,7 @@ public class GT_MetaTileEntity_MultiFurnace
     }
 
     public int getAmountOfOutputs() {
-        return 18;
+        return 128;
     }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {

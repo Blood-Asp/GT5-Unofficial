@@ -1539,7 +1539,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
 	public Object getRightItem(EntityPlayer player, int ID){
-		ItemStack mStack = player.getEquipmentInSlot(ID / 100);
+		ItemStack mStack = player.getEquipmentInSlot(ID/100);
 		if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
 
 		switch(ID % 100){
@@ -1748,12 +1748,13 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.wooden_door, 1))) {
             rFuelValue = (short) Math.max(rFuelValue, 600);
         }
-        if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1, new Object[0]))) {
-            rFuelValue = Math.max(rFuelValue, 100000);
-        }
         if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1, new Object[0]))) {
-            rFuelValue = Math.max(rFuelValue, 150000);
+            rFuelValue = (short) Math.max(rFuelValue, 150000);
         }
+        if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1, new Object[0]))) {
+            rFuelValue = (short) Math.max(rFuelValue, 100000);
+        }
+
         return rFuelValue;
     }
 

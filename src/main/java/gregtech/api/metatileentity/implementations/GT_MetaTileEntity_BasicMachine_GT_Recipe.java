@@ -1,5 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
+import java.util.Random;
+
 import gregtech.api.enums.*;
 import gregtech.api.gui.GT_Container_BasicMachine;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
@@ -16,8 +18,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.W;
@@ -73,8 +73,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 6:
                         case 7:
                         case 8:
-                            aRecipe[i] = Ic2Items.reinforcedGlass;
-                            break;
+                        	aRecipe[i] = Ic2Items.reinforcedGlass;
+                        	break;
                         default:
                             aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
                             break;
@@ -101,10 +101,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.plate.get(Materials.TungstenSteel);
                             break;
                         case 6:
-                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSE);
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSG);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSG);
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSE);
                             break;
                         case 8:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
@@ -166,16 +166,16 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Nichrome);
                             break;
                         case 5:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Nichrome);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.TungstenSteel);
                             break;
                         case 6:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.NiobiumTitanium);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.HSSG);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Naquadah);
                             break;
                         case 8:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.NaquadahAlloy);
                             break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Nichrome);
@@ -200,16 +200,16 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Nichrome);
                             break;
                         case 5:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Nichrome);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.TungstenSteel);
                             break;
                         case 6:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.NiobiumTitanium);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.HSSG);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Naquadah);
                             break;
                         case 8:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.NaquadahAlloy);
                             break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Nichrome);
@@ -621,17 +621,17 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
         return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), mGUIName, GT_Utility.isStringValid(mNEIName) ? mNEIName : getRecipeList() != null ? getRecipeList().mUnlocalizedName : "", mGUIParameterA, mGUIParameterB);
     }
 
-    @Override
-    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) return false;
-        if (mInventory[aIndex] != null) return true;
-        switch (mInputSlotCount) {
-            case  0: return false;
-            case  1: return getFillableStack() == null ? !mRequiresFluidForFiltering && getRecipeList().containsInput(aStack) : null!=getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[] {getFillableStack()}, getSpecialSlot(), new ItemStack[] {aStack});
-            case  2: return (!mRequiresFluidForFiltering || getFillableStack() != null) && (((getInputAt(0)!=null&&getInputAt(1)!=null) || (getInputAt(0)==null&&getInputAt(1)==null?getRecipeList().containsInput(aStack):(getRecipeList().containsInput(aStack)&&null!=getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[] {getFillableStack()}, getSpecialSlot(), aIndex == getInputSlot() ? new ItemStack[] {aStack, getInputAt(1)} : new ItemStack[] {getInputAt(0), aStack})))));
-            default: return getRecipeList().containsInput(aStack);
-        }
-    }
+	@Override
+	public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+		if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) return false;
+		if (mInventory[aIndex] != null) return true;
+		switch (mInputSlotCount) {
+		case  0: return false;
+		case  1: return getFillableStack() == null ? !mRequiresFluidForFiltering && getRecipeList().containsInput(aStack) : null!=getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[] {getFillableStack()}, getSpecialSlot(), new ItemStack[] {aStack});
+		case  2: return (!mRequiresFluidForFiltering || getFillableStack() != null) && (((getInputAt(0)!=null&&getInputAt(1)!=null) || (getInputAt(0)==null&&getInputAt(1)==null?getRecipeList().containsInput(aStack):(getRecipeList().containsInput(aStack)&&null!=getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[] {getFillableStack()}, getSpecialSlot(), aIndex == getInputSlot() ? new ItemStack[] {aStack, getInputAt(1)} : new ItemStack[] {getInputAt(0), aStack})))));
+		default: return getRecipeList().containsInput(aStack);
+		}
+	}
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {

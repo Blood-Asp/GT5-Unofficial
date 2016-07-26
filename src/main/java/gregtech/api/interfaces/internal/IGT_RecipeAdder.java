@@ -161,7 +161,7 @@ public interface IGT_RecipeAdder {
 
     public boolean addAlloySmelterRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt, boolean hidden);
 
-
+    
     /**
      * Adds a CNC-Machine Recipe
      *
@@ -387,7 +387,7 @@ public interface IGT_RecipeAdder {
      * Adds a Recipe for Fluid Smelting
      */
     public boolean addFluidSmelterRecipe(ItemStack aInput, ItemStack aRemains, FluidStack aOutput, int aChance, int aDuration, int aEUt);
-
+   
     /**
      * Adds a Recipe for Fluid Smelting
      */
@@ -453,7 +453,7 @@ public interface IGT_RecipeAdder {
      */
     public boolean addArcFurnaceRecipe(ItemStack aInput, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt, boolean hidden);
 
-
+    
     /**
      * Adds a Recipe for the GT Pulveriser. (up to 4 Outputs)
      */

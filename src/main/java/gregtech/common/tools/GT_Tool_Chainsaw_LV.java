@@ -88,6 +88,7 @@ public class GT_Tool_Chainsaw_LV
     public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
         super.onToolCrafted(aStack, aPlayer);
         try {
+            GT_Mod.instance.achievements.issueAchievement(aPlayer, "brrrr");
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildChainsaw");
         } catch (Exception e) {
         }

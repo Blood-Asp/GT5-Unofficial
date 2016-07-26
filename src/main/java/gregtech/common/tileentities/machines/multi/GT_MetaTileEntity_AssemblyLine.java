@@ -11,15 +11,11 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -38,7 +34,8 @@ public class GT_MetaTileEntity_AssemblyLine
     public String[] getDescription() {
         return new String[]{"Assembly Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Steel Casing(or Maintenance or Input Hatch), Input Bus(Last Output Bus), Steel Casing",
+                "Bottom: Steel Casing(or Maintenance or Input Hatch),",
+                "Input Bus(Last Output Bus), Steel Casing",
                 "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
                 "UpMiddle: Grate Casing, Assembling Casing,",
                 "Grate Casing(or Controller)",
@@ -48,13 +45,13 @@ public class GT_MetaTileEntity_AssemblyLine
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR)};
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16]};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "ImplosionCompressor.png");
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "AssemblyLine.png");
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
@@ -70,58 +67,58 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-        if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
-        NBTTagCompound tTag = mInventory[1].getTagCompound();
-        if(tTag==null)return false;
-        ItemStack tStack[] = new ItemStack[15];
-        for(int i = 0;i<15;i++){
-            if(tTag.hasKey(""+i)){
-                tStack[i] = GT_Utility.loadItem(tTag, ""+i);
-                if(tStack[i]!=null){
-                    if(mInputBusses.get(i)==null)return false;
-                    if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
-                    }else{return false;}
-                }}
-        }
-        FluidStack[] tFluids = new FluidStack[4];
-        for(int i = 0;i<4;i++){
-            if(tTag.hasKey("f"+i)){
-                tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
-                if(tFluids[i]!=null){
-                    if(mInputHatches.get(i)==null)return false;
-                    if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
-                    }else{return false;}
-                }
-            }
-        }
-        if(tTag.hasKey("output")){
-            mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-            if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
-        }else{return false;}
-        if(tTag.hasKey("time")){
-            mMaxProgresstime = tTag.getInteger("time");
-            if(mMaxProgresstime<=0)return false;
-        }else{return false;}
-        if(tTag.hasKey("eu")){
-            mEUt = tTag.getInteger("eu");
-        }else{return false;}
-        for(int i = 0;i<15;i++){
-            if(tStack[i]!=null){
-                mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
-                if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
-                }
-            }
-        }
-
-        for(int i = 0;i<4;i++){
-            if(tFluids[i]!=null){
-                mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
-                if(mInputHatches.get(i).mFluid.amount<=0){
-                    mInputHatches.get(i).mFluid = null;
-                }
-            }
-        }
-        byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+    	 if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
+    	NBTTagCompound tTag = mInventory[1].getTagCompound();
+    	if(tTag==null)return false;
+    	ItemStack tStack[] = new ItemStack[15];
+    	for(int i = 0;i<15;i++){
+    		if(tTag.hasKey(""+i)){
+    		tStack[i] = GT_Utility.loadItem(tTag, ""+i);
+    		if(tStack[i]!=null){
+    			if(mInputBusses.get(i)==null)return false;
+    			if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
+    			}else{return false;}
+    		}}
+    	}
+    	FluidStack[] tFluids = new FluidStack[4];
+    	for(int i = 0;i<4;i++){
+    		if(tTag.hasKey("f"+i)){
+    			tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
+    			if(tFluids[i]!=null){
+    				if(mInputHatches.get(i)==null)return false;
+    				if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
+    				}else{return false;}
+    			}
+    		}
+    	}
+    	if(tTag.hasKey("output")){
+    		mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+    		if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
+    	}else{return false;}
+    	if(tTag.hasKey("time")){
+    		mMaxProgresstime = tTag.getInteger("time");
+    		if(mMaxProgresstime<=0)return false;
+    	}else{return false;}
+    	if(tTag.hasKey("eu")){
+    		mEUt = tTag.getInteger("eu");
+    	}else{return false;}
+    	for(int i = 0;i<15;i++){
+    		if(tStack[i]!=null){
+    			mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
+    			if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
+    			}
+    		}
+    	}
+    	
+    	for(int i = 0;i<4;i++){
+    		if(tFluids[i]!=null){
+    			mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
+    			if(mInputHatches.get(i).mFluid.amount<=0){
+    				mInputHatches.get(i).mFluid = null;
+    			}
+    		}
+    	}
+    	byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
         if (mEUt <= 16) {
