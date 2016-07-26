@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
             return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0],
-                    new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER)};
+                    new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0]};
     }
@@ -69,7 +69,17 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
 
                     this.mEUt = tRecipe.mEUt;
                     this.mMaxProgresstime = tRecipe.mDuration;
-
+                    if (tRecipe.mEUt <= 16) {
+                        this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
+                        this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
+                    } else {
+                        this.mEUt = tRecipe.mEUt;
+                        this.mMaxProgresstime = tRecipe.mDuration;
+                        while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
+                            this.mEUt *= 4;
+                            this.mMaxProgresstime /= 2;
+                        }
+                    }
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }

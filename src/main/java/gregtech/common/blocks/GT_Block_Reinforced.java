@@ -94,9 +94,9 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
                 case 5:
                 	return Textures.BlockIcons.COVER_WOOD_PLATE.getIcon();
                 case 6:
-                   	return Blocks.coal_block.getIcon(0, 0);
+                	return Blocks.coal_block.getIcon(0, 0);
                 case 7:
-                   	return Blocks.coal_block.getIcon(0, 0);
+                	return Blocks.coal_block.getIcon(0, 0);
             }
         }
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
