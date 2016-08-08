@@ -666,7 +666,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Quantium			( 391, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8      |64|128                  ,   0, 209,  11,   0,   "Quantium"                      ,     0,       0,     4000,  4000,  true, false,  4,   1,   1, Dyes.dyeLime),
 	Mytryl				( 387, TextureSet.SET_SHINY				,   8.0F,    512,  4, 1|2  |8      |64|128                  , 242, 100,   4,   0,   "Mytryl"                        ,     0,       0,     3600,  3600,  true, false,  4,   1,   1, Dyes.dyeOrange),
 	BlackPlutonium		( 388, TextureSet.SET_DULL				,  36.0F,   8192,  6, 1|2  |8      |64|128                  ,  50,  50,  50,   0,   "Black Plutonium"               ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
-	CallistoIce	    	( 389, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8      |64|128                  ,  30, 177, 255,   0,   "Callisto Ice"             ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
+	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8      |64|128                  ,  30, 177, 255,   0,   "Callisto Ice"             ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
 
 
 	/**
