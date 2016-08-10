@@ -28,5 +28,6 @@ public class ProcessingPlate3 implements gregtech.api.interfaces.IOreRecipeRegis
         } else {
             GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 3L), gregtech.api.enums.ItemList.Circuit_Integrated.getWithDamage(0L, 3L, new Object[0]), Materials.Glue.getFluid(20L), GT_Utility.copyAmount(1L, new Object[]{aStack}), 96, 8);
         }
+        GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), 1, GT_OreDictUnificator.get(OrePrefixes.compressed, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
     }
 }

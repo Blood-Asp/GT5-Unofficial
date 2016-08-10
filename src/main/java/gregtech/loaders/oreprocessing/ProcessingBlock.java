@@ -58,7 +58,7 @@ public class ProcessingBlock implements gregtech.api.interfaces.IOreRecipeRegist
         }
         switch (aMaterial) {
             case Mercury:
-                System.err.println("'blockQuickSilver'?, In which Ice Desert can you actually place this as a solid Block?");
+                System.err.println("'blockQuickSilver'?, In which Ice Desert can you actually place this as a solid Block? On Pluto maybe Greg :)");
                 break;
             case Iron:
             case WroughtIron:
