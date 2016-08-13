@@ -328,7 +328,7 @@ public class GT_Utility {
     }
 
     public static void sendChatToPlayer(EntityPlayer aPlayer, String aChatMessage) {
-        if (aPlayer != null && aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
+        if (aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
             aPlayer.addChatComponentMessage(new ChatComponentText(aChatMessage));
         }
     }
@@ -509,7 +509,7 @@ public class GT_Utility {
      * @return the Amount of moved Items
      */
     public static byte moveOneItemStack(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce) {
-        if (aTileEntity1 != null && aTileEntity1 instanceof IInventory)
+        if (aTileEntity1 instanceof IInventory)
             return moveOneItemStack((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
         return 0;
     }
@@ -606,7 +606,7 @@ public class GT_Utility {
             for (int i = 0; i < tGrabSlots.length; i++) tGrabSlots[i] = i;
         }
 
-        if (aTileEntity2 != null && aTileEntity2 instanceof IInventory) {
+        if (aTileEntity2 instanceof IInventory) {
             for (int i = 0; i < tGrabSlots.length; i++) {
                 if (listContainsItem(aFilter, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
                     if (isAllowedToTakeFromSlot((IInventory) aTileEntity1, tGrabSlots[i], aGrabFrom, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]))) {
@@ -1019,7 +1019,7 @@ public class GT_Utility {
     }
 
     public static boolean isBlockValid(Object aBlock) {
-        return aBlock != null && (aBlock instanceof Block);
+        return (aBlock instanceof Block);
     }
 
     public static boolean isBlockInvalid(Object aBlock) {
@@ -1035,7 +1035,7 @@ public class GT_Utility {
     }
 
     public static boolean isStackValid(Object aStack) {
-        return aStack != null && (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
+        return (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
     }
 
     public static boolean isStackInvalid(Object aStack) {
@@ -1560,15 +1560,17 @@ public class GT_Utility {
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
         ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		int[] tInts = GT_Proxy.chunkData.get(tPos);
+    		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
     			if(tInts[0]>=0){tAmount = tInts[0];}
     		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
     	tAmount = tAmount - 5;
-    	GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
+    	tInts[0] = tAmount;
+    	GT_Proxy.chunkData.put(tPos, tInts);
     	
         return new FluidStack(tFluid, tAmount);
     }
@@ -1583,7 +1585,7 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX+EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
+        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
         try {
             if (tTileEntity != null && tTileEntity instanceof IInventory)
                 tList.add("Name: " + EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName()+EnumChatFormatting.RESET + "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
@@ -1689,7 +1691,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add("Progress: " +EnumChatFormatting.GREEN+GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " ticks / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET+" ticks");
+                        tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()/20)  +EnumChatFormatting.RESET+ " s / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue/20) +EnumChatFormatting.RESET+" s");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
