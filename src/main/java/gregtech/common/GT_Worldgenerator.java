@@ -44,7 +44,8 @@ public class GT_Worldgenerator
         this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
-            for (int i = 0; i < this.mList.size(); i++) {
+            int mList_sS=this.mList.size();
+            for (int i = 0; i < mList_sS; i++) {
                 ((Runnable) this.mList.get(i)).run();
             }
             this.mList.clear();
@@ -120,7 +121,7 @@ public class GT_Worldgenerator
             int tDimensionType = this.mWorld.provider.dimensionId;
             Random aRandom = new Random();
             if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
-            	short primaryMeta = 0;
+                short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
                 short sporadicMeta = 0;
