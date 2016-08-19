@@ -200,5 +200,15 @@ public class GT_Loader_OreDictionary
 
         GT_OreDictUnificator.registerOre(OrePrefixes.circuit, Materials.Basic, GT_ModHandler.getIC2Item("electronicCircuit", 1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.circuit, Materials.Advanced, GT_ModHandler.getIC2Item("advancedCircuit", 1L));
+
+        //Custom Stuff GT New Horizons 1.0.9.2
+        GT_OreDictUnificator.registerOre(OrePrefixes.ingot, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.block, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron_block", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.ingot, Materials.Mytryl, com.dreammaster.item.ItemList.MytrylIngot.getIS());
+        GT_OreDictUnificator.registerOre(OrePrefixes.ingot, Materials.CallistoIce, com.dreammaster.item.ItemList.CallistoIceIngot.getIS());
+        GT_OreDictUnificator.registerOre(OrePrefixes.ingot, Materials.Ledox, com.dreammaster.item.ItemList.LedoxIngot.getIS());
+        GT_OreDictUnificator.registerOre(OrePrefixes.ore,  Materials.Adamantium, GT_ModHandler.getModItem("GalaxySpace", "oberonblocks", 1L, 3));
+        GT_OreDictUnificator.registerOre(OrePrefixes.ore,  Materials.Cobalt, GT_ModHandler.getModItem("GalaxySpace", "phobosblocks", 1L, 4));
+
     }
 }
