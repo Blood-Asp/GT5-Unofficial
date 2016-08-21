@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -209,7 +210,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
         for (byte i = -5; i <= 5; i = (byte) (i + 1)) {
             for (byte j = -5; j <= 5; j = (byte) (j + 1)) {
                 for (byte k = -5; k <= 5; k = (byte) (k + 1)) {
-                    if (getBaseMetaTileEntity().getBlock(i, j, k).getUnlocalizedName() == "gt.blockmetal5.2.name") {
+                    if (getBaseMetaTileEntity().getBlockOffset(i, j, k) ==  GregTech_API.sBlockMetal5 && getBaseMetaTileEntity().getMetaIDOffset(i, j, k) == 2){
                         return true;
                     }
                 }
