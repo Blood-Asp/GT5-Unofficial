@@ -67,58 +67,58 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-    	 if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
-    	NBTTagCompound tTag = mInventory[1].getTagCompound();
-    	if(tTag==null)return false;
-    	ItemStack tStack[] = new ItemStack[15];
-    	for(int i = 0;i<15;i++){
-    		if(tTag.hasKey(""+i)){
-    		tStack[i] = GT_Utility.loadItem(tTag, ""+i);
-    		if(tStack[i]!=null){
-    			if(mInputBusses.get(i)==null)return false;
-    			if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
-    			}else{return false;}
-    		}}
-    	}
-    	FluidStack[] tFluids = new FluidStack[4];
-    	for(int i = 0;i<4;i++){
-    		if(tTag.hasKey("f"+i)){
-    			tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
-    			if(tFluids[i]!=null){
-    				if(mInputHatches.get(i)==null)return false;
-    				if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
-    				}else{return false;}
-    			}
-    		}
-    	}
-    	if(tTag.hasKey("output")){
-    		mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-    		if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
-    	}else{return false;}
-    	if(tTag.hasKey("time")){
-    		mMaxProgresstime = tTag.getInteger("time");
-    		if(mMaxProgresstime<=0)return false;
-    	}else{return false;}
-    	if(tTag.hasKey("eu")){
-    		mEUt = tTag.getInteger("eu");
-    	}else{return false;}
-    	for(int i = 0;i<15;i++){
-    		if(tStack[i]!=null){
-    			mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
-    			if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
-    			}
-    		}
-    	}
-    	
-    	for(int i = 0;i<4;i++){
-    		if(tFluids[i]!=null){
-    			mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
-    			if(mInputHatches.get(i).mFluid.amount<=0){
-    				mInputHatches.get(i).mFluid = null;
-    			}
-    		}
-    	}
-    	byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+        if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
+        NBTTagCompound tTag = mInventory[1].getTagCompound();
+        if(tTag==null)return false;
+        ItemStack tStack[] = new ItemStack[15];
+        for(int i = 0;i<15;i++){
+            if(tTag.hasKey(""+i)){
+                tStack[i] = GT_Utility.loadItem(tTag, ""+i);
+                if(tStack[i]!=null){
+                    if(mInputBusses.get(i)==null)return false;
+                    if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
+                    }else{return false;}
+                }}
+        }
+        FluidStack[] tFluids = new FluidStack[4];
+        for(int i = 0;i<4;i++){
+            if(tTag.hasKey("f"+i)){
+                tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
+                if(tFluids[i]!=null){
+                    if(mInputHatches.get(i)==null)return false;
+                    if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
+                    }else{return false;}
+                }
+            }
+        }
+        if(tTag.hasKey("output")){
+            mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+            if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
+        }else{return false;}
+        if(tTag.hasKey("time")){
+            mMaxProgresstime = tTag.getInteger("time");
+            if(mMaxProgresstime<=0)return false;
+        }else{return false;}
+        if(tTag.hasKey("eu")){
+            mEUt = tTag.getInteger("eu");
+        }else{return false;}
+        for(int i = 0;i<15;i++){
+            if(tStack[i]!=null){
+                mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
+                if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
+                }
+            }
+        }
+
+        for(int i = 0;i<4;i++){
+            if(tFluids[i]!=null){
+                mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
+                if(mInputHatches.get(i).mFluid.amount<=0){
+                    mInputHatches.get(i).mFluid = null;
+                }
+            }
+        }
+        byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
         if (mEUt <= 16) {
@@ -159,6 +159,7 @@ public class GT_MetaTileEntity_AssemblyLine
 
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 1, i);
                 if (!addEnergyInputToMachineList(tTileEntity, 16)){
+                    if (i==0) return false;
                     if (aBaseMetaTileEntity.getBlockOffset(xDir, 1, i) != GregTech_API.sBlockCasings2) {return false;}
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir, 1, i) != 0) {return false;}
                 }
@@ -174,7 +175,7 @@ public class GT_MetaTileEntity_AssemblyLine
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir*2, -2, i) != 0) {return false;}
                 }
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, -2, i);
-                if (!addInputToMachineList(tTileEntity, 16)){
+                if (!addOutputToMachineList(tTileEntity, 16)){
                     if (!addOutputToMachineList(tTileEntity, 16)){;return false;
                     }else{if(r>0){return true;}else{return false;}}
                 }
@@ -193,6 +194,7 @@ public class GT_MetaTileEntity_AssemblyLine
 
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, 1, zDir);
                 if (!addEnergyInputToMachineList(tTileEntity, 16)){
+                    if (i==0) return false;
                     if (aBaseMetaTileEntity.getBlockOffset(i, 1, zDir) != GregTech_API.sBlockCasings2) {return false;}
                     if (aBaseMetaTileEntity.getMetaIDOffset(i, 1, zDir) != 0) {return false;}
                 }
