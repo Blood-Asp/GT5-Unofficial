@@ -11,6 +11,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -151,53 +152,53 @@ public class GT_MetaTileEntity_Scanner
                 }
             }
             if(ItemList.Tool_DataStick.isStackEqual(getSpecialSlot(), false, true)&& aStack !=null){
-                for(GT_Recipe.GT_Recipe_AssemblyLine tRecipe:GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes){
-                    if(GT_Utility.areStacksEqual(tRecipe.mResearchItem, aStack, true)){
+            	for(GT_Recipe.GT_Recipe_AssemblyLine tRecipe:GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes){
+            	if(GT_Utility.areStacksEqual(tRecipe.mResearchItem, aStack, true)){
+            	
+            	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
+            	getSpecialSlot().stackSize -= 1;
+                GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+" Construction Data");
 
-                        this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                        getSpecialSlot().stackSize -= 1;
-                        GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], tRecipe.mOutput.getDisplayName()+" Construction Data");
-
-                        NBTTagCompound tNBT = this.mOutputItems[0].getTagCompound();
-                        if (tNBT == null) {
-                            tNBT = new NBTTagCompound();
-                        }
-                        tNBT.setTag("output", tRecipe.mOutput.writeToNBT(new NBTTagCompound()));
-                        tNBT.setInteger("time", tRecipe.mDuration);
-                        tNBT.setInteger("eu", tRecipe.mEUt);
-                        for(int i = 0 ; i < tRecipe.mInputs.length ; i++){
-
-                            tNBT.setTag(""+i, tRecipe.mInputs[i].writeToNBT(new NBTTagCompound()));
-                        }
-                        for(int i = 0 ; i < tRecipe.mFluidInputs.length ; i++){
-
-                            tNBT.setTag("f"+i, tRecipe.mFluidInputs[i].writeToNBT(new NBTTagCompound()));
-                        }
-
-                        tNBT.setString("author", "Assembly Line Recipe Generator");
-                        NBTTagList tNBTList = new NBTTagList();
-                        tNBTList.appendTag(new NBTTagString("Constructionplan for "+tRecipe.mOutput.stackSize+" "+tRecipe.mOutput.getDisplayName()+". Needed EU/t: "+tRecipe.mEUt+" Productiontime: "+(tRecipe.mDuration/20)));
-                        for(int i=0;i<tRecipe.mInputs.length;i++){
-                            if(tRecipe.mInputs[i]!=null){
-                                tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+tRecipe.mInputs[i].getDisplayName()));
-                            }
-                        }
-                        for(int i=0;i<tRecipe.mFluidInputs.length;i++){
-                            if(tRecipe.mFluidInputs[i]!=null){
-                                tNBTList.appendTag(new NBTTagString("Input Hatch "+(i+1)+": "+tRecipe.mFluidInputs[i].amount+"L "+tRecipe.mFluidInputs[i].getLocalizedName()));
-                            }
-                        }
-                        tNBT.setTag("pages", tNBTList);
-
-                        this.mOutputItems[0].setTagCompound(tNBT);
-
-                        aStack.stackSize -= 1;
-                        this.mMaxProgresstime = (tRecipe.mResearchTime / (1 << this.mTier - 1));
-                        this.mEUt = (30 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
-                        getSpecialSlot().stackSize -= 1;
-                        return 2;
-                    }
+                NBTTagCompound tNBT = this.mOutputItems[0].getTagCompound();
+                if (tNBT == null) {
+                    tNBT = new NBTTagCompound();
+                }     
+                tNBT.setTag("output", tRecipe.mOutput.writeToNBT(new NBTTagCompound()));
+                tNBT.setInteger("time", tRecipe.mDuration);
+                tNBT.setInteger("eu", tRecipe.mEUt);
+                for(int i = 0 ; i < tRecipe.mInputs.length ; i++){
+                	
+                	tNBT.setTag(""+i, tRecipe.mInputs[i].writeToNBT(new NBTTagCompound()));
                 }
+                for(int i = 0 ; i < tRecipe.mFluidInputs.length ; i++){
+                	
+                	tNBT.setTag("f"+i, tRecipe.mFluidInputs[i].writeToNBT(new NBTTagCompound()));
+                }
+                
+                tNBT.setString("author", "Assembly Line Recipe Generator");
+                NBTTagList tNBTList = new NBTTagList();
+                tNBTList.appendTag(new NBTTagString("Constructionplan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Productiontime: "+(tRecipe.mDuration/20)));
+                for(int i=0;i<tRecipe.mInputs.length;i++){
+                	if(tRecipe.mInputs[i]!=null){
+                		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mInputs[i].getDisplayName())));
+                	}
+                }
+                for(int i=0;i<tRecipe.mFluidInputs.length;i++){
+                	if(tRecipe.mFluidInputs[i]!=null){
+                		tNBTList.appendTag(new NBTTagString("Input Hatch "+(i+1)+": "+tRecipe.mFluidInputs[i].amount+"L "+GT_LanguageManager.getTranslation(tRecipe.mFluidInputs[i].getLocalizedName())));
+                	}
+                }
+                tNBT.setTag("pages", tNBTList);
+                
+                this.mOutputItems[0].setTagCompound(tNBT);
+                
+                aStack.stackSize -= 1;
+                this.mMaxProgresstime = (tRecipe.mResearchTime / (1 << this.mTier - 1));
+                this.mEUt = (30 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+            	getSpecialSlot().stackSize -= 1;
+            	return 2;
+            	}
+            	}
             }
 
         }
