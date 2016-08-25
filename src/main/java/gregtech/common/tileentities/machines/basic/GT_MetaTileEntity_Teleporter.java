@@ -219,7 +219,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     }
 
     public boolean hasDimensionalTeleportCapability() {
-        return (this.mDebug) || (this.hasBlock) || (mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 1000);
+        return (this.mDebug) || (this.hasBlock) || (mFluid.isFluidEqual(Materials.Iron.getPlasma(1)) && mFluid.amount >= 1000);
     }
 
     public boolean isDimensionalTeleportAvailable() {
@@ -229,7 +229,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (mFluid == null) {
-            mFluid = Materials.Nitrogen.getPlasma(0);
+            mFluid = Materials.Iron.getPlasma(0);
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (getBaseMetaTileEntity().isServerSide()) {
@@ -238,7 +238,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
             }
             if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().getRedstone())) {
                 if (getBaseMetaTileEntity().decreaseStoredEnergyUnits(2048, false)) {
-                    if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)))) {
+                    if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Iron.getPlasma(1)))) {
                         mFluid.amount--;
                         if (mFluid.amount < 1) {
                             mFluid = null;
@@ -268,7 +268,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                         if (((tObject instanceof Entity)) && (!((Entity) tObject).isDead)) {
                             Entity tEntity = (Entity) tObject;
                             if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((int) (tDistance * tDistance * weightCalculation(tEntity)), false)) {
-                                if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)))) {
+                                if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Iron.getPlasma(1)))) {
                                     mFluid.amount = mFluid.amount - ((int) Math.min(1000, (tDistance * tDistance * weightCalculation(tEntity) / 8192)));
                                     if (mFluid.amount < 1) {
                                         mFluid = null;
