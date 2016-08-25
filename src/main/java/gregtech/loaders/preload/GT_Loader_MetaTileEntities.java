@@ -1,5 +1,6 @@
 package gregtech.loaders.preload;
 
+import com.dreammaster.gthandler.CustomItemList;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -988,7 +989,7 @@ public class GT_Loader_MetaTileEntities
         GT_ModHandler.addCraftingRecipe(ItemList.Pump_IV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"CPC", "PMP", "BPB", 'M', ItemList.Hull_IV, 'B', OrePrefixes.pipeLarge.get(Materials.TungstenSteel), 'C', OrePrefixes.circuit.get(Materials.Ultimate), 'P', ItemList.Electric_Pump_IV});
 
         ItemList.Teleporter.set(new GT_MetaTileEntity_Teleporter(1145, "basicmachine.teleporter", "Teleporter", 6).getStackForm(1L));
-        GT_ModHandler.addCraftingRecipe(ItemList.Teleporter.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"CPC", "PMP", "BCB", 'M', ItemList.Hull_LuV, 'B', ItemList.Tool_DataOrb, 'C', OrePrefixes.circuit.get(Materials.Master), 'P', ItemList.Field_Generator_EV});
+        GT_ModHandler.addCraftingRecipe(ItemList.Teleporter.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"CPC", "PMP", "BCB", 'M', ItemList.Hull_LuV, 'B', ItemList.Tool_DataOrb, 'C', CustomItemList.NanoCircuit.get(1, new Object[0]), 'P', ItemList.Field_Generator_LuV});
 
         ItemList.MobRep_LV.set(new GT_MetaTileEntity_MonsterRepellent(1146, "basicmachine.mobrep.tier.01", "Basic Monster Repellator", 1).getStackForm(1L));
         ItemList.MobRep_MV.set(new GT_MetaTileEntity_MonsterRepellent(1147, "basicmachine.mobrep.tier.02", "Advanced Monster Repellator", 2).getStackForm(1L));
