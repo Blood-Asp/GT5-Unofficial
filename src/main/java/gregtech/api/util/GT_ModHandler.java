@@ -486,6 +486,10 @@ public class GT_ModHandler {
         return addPulverisationRecipe(aInput, aOutput1, aOutput2, aChance, null, 0, aOverwrite);
     }
 
+    public static boolean addPulverisationRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, int aChance){
+        return addPulverisationRecipe(aInput, aOutput1, aOutput2, aOutput3, aOutput4, aChance);
+    }
+
     /**
      * Adds Several Pulverizer-Type Recipes.
      */
