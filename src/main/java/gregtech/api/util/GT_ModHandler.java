@@ -486,8 +486,8 @@ public class GT_ModHandler {
         return addPulverisationRecipe(aInput, aOutput1, aOutput2, aChance, null, 0, aOverwrite);
     }
 
-    public static boolean addPulverisationRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, int aChance){
-        return addPulverisationRecipe(aInput, aOutput1, aOutput2, aOutput3, aOutput4, aChance);
+    public static boolean addPulverisationRecipe(ItemStack aInput, ItemStack aOutput1, int aChance1, ItemStack aOutput2,  int aChance2, ItemStack aOutput3, int aChance3, ItemStack aOutput4,  int aChance4){
+        return addPulverisationRecipe(aInput, aOutput1, aChance1, aOutput2, aChance2, aOutput3, aChance3, aOutput4, aChance4);
     }
 
     /**
