@@ -405,7 +405,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	SeedOilLin			( 723, TextureSet.SET_FLUID				,   1.0F,      0,  0,         16                            , 196, 255,   0,   0,	"Lin Seed Oil"					,    3,       2,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLime		, Arrays.asList(new TC_AspectStack(TC_Aspects.GRANUM, 2))),
 	Stone				( 299, TextureSet.SET_ROUGH				,   4.0F,     32,  1, 1            |64|128                  , 205, 205, 205,   0,	"Stone"							,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray	, Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1))),
 	TNT					(  -1, TextureSet.SET_NONE				,   1.0F,      0,  0, 0                                     , 255, 255, 255,   0,	"TNT"							,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeRed			, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 7), new TC_AspectStack(TC_Aspects.IGNIS, 4))),
-	Unstable			(  -1, TextureSet.SET_NONE				,   1.0F,      0,  4, 0                                     , 255, 255, 255, 127,	"Unstable"						,    0,       0,         -1,    0, false, true,    1,   1,   1, Dyes.dyeWhite		, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 4))),
+	Unstable			( 396, TextureSet.SET_SHINY				,   1.0F,      0,  4, 1                                     , 220, 220, 220, 127,	"Unstable"						,    0,       0,         -1,    0, false, true,    1,   1,   1, Dyes.dyeWhite		, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 4))),
 	Unstableingot		(  -1, TextureSet.SET_NONE				,   1.0F,      0,  4, 0                                     , 255, 255, 255, 127,	"Unstable"						,    0,       0,         -1,    0, false, true,    1,   1,   1, Dyes.dyeWhite		, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 4))),
 	Wheat				( 881, TextureSet.SET_POWDER			,   1.0F,      0,  0, 1                                     , 255, 255, 196,   0,	"Wheat"							,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeYellow		, Arrays.asList(new TC_AspectStack(TC_Aspects.MESSIS, 2))),
 
@@ -670,6 +670,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8      |64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
 	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8      |64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
 	Infinity	    	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1                                     , 255, 255, 255,   0,   "Infinity"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
+	Bedrockium	 		( 395, TextureSet.SET_SHINY				,  54.0F, 327680,  6, 1                                     ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
 
 
 	/**
