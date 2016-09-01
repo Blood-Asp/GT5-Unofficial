@@ -932,7 +932,7 @@ public class GT_MachineRecipeLoader
             GT_Values.RA.addFusionReactorRecipe(Materials.Vanadium.getMolten(16), Materials.Hydrogen.getGas(125), Materials.Chrome.getMolten(16), 64, 24576, 140000000); //FT1 - utility
 
         //NEW RECIPES FOR FUSION
-        GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(125), Materials.Carbon.getMolten(125), Materials.Argon.getPlasma(125), 16, 49152, 180000000);//FT2 - utility
+        GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(125), Materials.Carbon.getMolten(125), Materials.Argon.getPlasma(125), 16, 24576, 180000000);//FT1+ - utility
 
         GT_Values.RA.addFusionReactorRecipe(Materials.Copper.getMolten(125), Materials.Hydrogen.getGas(375), Materials.Zinc.getPlasma(125), 16,49152, 180000000);//FT2 - farmable
         GT_Values.RA.addFusionReactorRecipe(Materials.Cobalt.getMolten(125), Materials.Silicon.getMolten(125), Materials.Niobium.getPlasma(125), 16,49152, 200000000);//FT2 - utility
