@@ -15,7 +15,7 @@ public class GT_MetaTileEntity_FluidNaquadahReactor2
     public int mEfficiency;
 
     public GT_MetaTileEntity_FluidNaquadahReactor2(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Naquadria Long Rods", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, "Requires Naquadria Cells", new ITexture[0]);
         onConfigLoad();
     }
 
@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_FluidNaquadahReactor2
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 150);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "FluidNaquadah.efficiency.tier." + this.mTier, 200);
     }
 
     public ITexture[] getFront(byte aColor) {
