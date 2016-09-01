@@ -33,7 +33,7 @@ public class GT_MetaTileEntity_SolidNaquadahReactor2
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
-        return GT_Recipe.GT_Recipe_Map.sHugeNaquadahReactorFuels;
+        return GT_Recipe.GT_Recipe_Map.sLargeNaquadahReactorFuels;
     }
 
     public int getCapacity() {

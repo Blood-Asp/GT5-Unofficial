@@ -916,7 +916,7 @@ public class GT_Loader_MetaTileEntities
         ItemList.Generator_Naquadah_Mark_II.set(new GT_MetaTileEntity_SolidNaquadahReactor2(1191, "basicgenerator.naquadah.tier.05", "Naquadah Reactor Mark II", 5).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_III.set(new GT_MetaTileEntity_FluidNaquadahReactor(1192, "basicgenerator.naquadah.tier.06", "Naquadah Reactor Mark III", 6).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_IV.set(new GT_MetaTileEntity_SolidNaquadahReactor3(1180, "basicgenerator.naquadah.tier.07", "Naquadah Reactor Mark IV", 7).getStackForm(1L));
-        ItemList.Generator_Naquadah_Mark_V.set(new GT_MetaTileEntity_FluidNaquadahReactor2(1181, "basicgenerator.naquadah.tier.08", "Naquadah Reactor Mark V", 8).getStackForm(1L));
+        ItemList.Generator_Naquadah_Mark_V.set(new GT_MetaTileEntity_SolidNaquadahReactor4(1181, "basicgenerator.naquadah.tier.08", "Naquadah Reactor Mark V", 8).getStackForm(1L));
 
         ItemList.MagicEnergyConverter_LV.set(new GT_MetaTileEntity_MagicEnergyConverter(1123, "basicgenerator.magicenergyconverter.tier.01", "Novice Magic Energy Converter", 1).getStackForm(1L));
         ItemList.MagicEnergyConverter_MV.set(new GT_MetaTileEntity_MagicEnergyConverter(1124, "basicgenerator.magicenergyconverter.tier.02", "Adept Magic Energy Converter", 2).getStackForm(1L));

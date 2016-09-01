@@ -10,16 +10,16 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenera
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 
-public class GT_MetaTileEntity_SolidNaquadahReactor3
+public class GT_MetaTileEntity_SolidNaquadahReactor4
         extends GT_MetaTileEntity_BasicGenerator {
     public int mEfficiency;
 
-    public GT_MetaTileEntity_SolidNaquadahReactor3(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Naquadria Long Rods", new ITexture[0]);
+    public GT_MetaTileEntity_SolidNaquadahReactor4(int aID, String aName, String aNameRegional, int aTier) {
+        super(aID, aName, aNameRegional, aTier, "Requires Hot Naquadria Ingots", new ITexture[0]);
         onConfigLoad();
     }
 
-    public GT_MetaTileEntity_SolidNaquadahReactor3(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+    public GT_MetaTileEntity_SolidNaquadahReactor4(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
@@ -29,11 +29,11 @@ public class GT_MetaTileEntity_SolidNaquadahReactor3
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SolidNaquadahReactor3(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_SolidNaquadahReactor4(this.mName, this.mTier, this.mDescription, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
-        return GT_Recipe.GT_Recipe_Map.sHugeNaquadahReactorFuels;
+        return GT_Recipe.GT_Recipe_Map.sExtraHugeNaquadahReactorFuels;
     }
 
     public int getCapacity() {
@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_SolidNaquadahReactor3
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 150);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 200);
     }
 
     public ITexture[] getFront(byte aColor) {
