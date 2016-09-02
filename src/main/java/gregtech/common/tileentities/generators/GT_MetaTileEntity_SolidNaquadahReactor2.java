@@ -87,9 +87,4 @@ public class GT_MetaTileEntity_SolidNaquadahReactor2
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_SIDE_ACTIVE)};
     }
-
-	@Override
-	public int getPollution() {
-		return 0;
-	}
 }
