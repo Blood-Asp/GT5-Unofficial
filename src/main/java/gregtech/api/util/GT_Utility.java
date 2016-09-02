@@ -1552,17 +1552,15 @@ public class GT_Utility {
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
         ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
-        int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		tInts = GT_Proxy.chunkData.get(tPos);
+    		int[] tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
     			if(tInts[0]>=0){tAmount = tInts[0];}
     		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
     	tAmount = tAmount - 5;
-    	tInts[0] = tAmount;
-    	GT_Proxy.chunkData.put(tPos, tInts);
+    	GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
     	
         return new FluidStack(tFluid, tAmount);
     }
@@ -1757,17 +1755,6 @@ public class GT_Utility {
         if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
             FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
             tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
-        }
-        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(aX, aY, aZ);
-        	if(GT_Proxy.chunkData.containsKey(tPos)){
-        		int[] tPollution = GT_Proxy.chunkData.get(tPos);
-        		if(tPollution.length>1){
-        		tList.add("Pollution in Chunk: "+tPollution[1]);
-        		}else{
-        			tList.add("No Pollution in Chunk");
-        		}
-        	}
         }
 
         try {
