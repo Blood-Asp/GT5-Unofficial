@@ -516,10 +516,7 @@ public class GT_RecipeAdder
         return true;
     }
 
-    //Non tierable AF
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput) {
-        int aDuration= aFluidOutput == null ? aFluidInput.amount / 62 : aFluidOutput.amount / 62;
-
         if ((aInput != null) && (aOutput != null)) {
             if ((aFluidInput == null ? 1 : 0) != (aFluidOutput == null ? 1 : 0)) {
             }
@@ -529,28 +526,7 @@ public class GT_RecipeAdder
         if (!GregTech_API.sRecipeFile.get("fluidcanner", aOutput, true)) {
             return false;
         }
-        if ((aDuration = GregTech_API.sRecipeFile.get("fluidcanner", aInput, aDuration)) <= 0) {
-            return false;
-        }
-        GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput == null ? null : aFluidInput}, new FluidStack[]{aFluidOutput == null ? null : aFluidOutput}, aDuration, 1, 0);
-        return true;
-    }
-
-    //Tierable AF
-    public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput, int aDuration, int aEUt) {
-        if ((aInput != null) && (aOutput != null)) {
-            if ((aFluidInput == null ? 1 : 0) != (aFluidOutput == null ? 1 : 0)) {
-            }
-        } else {
-            return false;
-        }
-        if (!GregTech_API.sRecipeFile.get("fluidcanner", aOutput, true)) {
-            return false;
-        }
-        if ((aDuration = GregTech_API.sRecipeFile.get("fluidcanner", aInput, aDuration)) <= 0) {
-            return false;
-        }
-        GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput == null ? null : aFluidInput}, new FluidStack[]{aFluidOutput == null ? null : aFluidOutput}, aDuration, aEUt, 0);
+        GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput == null ? null : aFluidInput}, new FluidStack[]{aFluidOutput == null ? null : aFluidOutput}, aFluidOutput == null ? aFluidInput.amount / 62 : aFluidOutput.amount / 62, 1, 0);
         return true;
     }
 
