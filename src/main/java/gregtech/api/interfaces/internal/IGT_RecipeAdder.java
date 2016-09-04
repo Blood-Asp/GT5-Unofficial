@@ -402,7 +402,7 @@ public interface IGT_RecipeAdder {
      * Adds a Recipe for the Fluid Canner
      */
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput);
-
+    public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput, int aDuration,int aEUt);
     /**
      * Adds a Recipe for the Chemical Bath
      */
