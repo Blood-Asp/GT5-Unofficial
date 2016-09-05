@@ -662,15 +662,16 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	/**
 	 * Galaxy Space 1.10 compat from Version 2.6
  	 */
-	Ledox				( 390, TextureSet.SET_SHINY				,  15.0F,	1024,  4, 1|2  |8      |64|128                  ,   0, 116, 255,   0,   "Ledox"                         ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeBlue),
-	Quantium			( 391, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8      |64|128                  ,   0, 209,  11,   0,   "Quantium"                      ,     0,       0,     4000,  4000,  true, false,  4,   1,   1, Dyes.dyeLime),
-	Mytryl				( 387, TextureSet.SET_SHINY				,   8.0F,    512,  4, 1|2  |8      |64|128                  , 242, 100,   4,   0,   "Mytryl"                        ,     0,       0,     3600,  3600,  true, false,  4,   1,   1, Dyes.dyeOrange),
-	BlackPlutonium		( 388, TextureSet.SET_DULL				,  36.0F,   8192,  6, 1|2  |8      |64|128                  ,  50,  50,  50,   0,   "Black Plutonium"               ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
-	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8      |64|128                  ,  30, 177, 255,   0,   "Callisto Ice"     	            ,     0,       0,       -1,     0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
-	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8      |64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
-	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8      |64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
-	InfinityCatalyst   	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1                                     , 255, 255, 255,   0,   "Infinity Catalyst" 		    ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
-	Bedrockium	 		( 395, TextureSet.SET_SHINY				,  54.0F, 327680,  6, 1                                     ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
+	Ledox				( 390, TextureSet.SET_SHINY				,  15.0F,	1024,  4, 1|2  |8|16|32|64|128                  ,   0, 116, 255,   0,   "Ledox"                         ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeBlue),
+	Quantium			( 391, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8|16|32|64|128                  ,   0, 209,  11,   0,   "Quantium"                      ,     0,       0,     4000,  4000,  true, false,  4,   1,   1, Dyes.dyeLime),
+	Mytryl				( 387, TextureSet.SET_SHINY				,   8.0F,    512,  4, 1|2  |8|16|32|64|128                  , 242, 100,   4,   0,   "Mytryl"                        ,     0,       0,     3600,  3600,  true, false,  4,   1,   1, Dyes.dyeOrange),
+	BlackPlutonium		( 388, TextureSet.SET_DULL				,  36.0F,   8192,  6, 1|2  |8|16|32|64|128                  ,  50,  50,  50,   0,   "Black Plutonium"               ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
+	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8|16|32|64|128                  ,  30, 177, 255,   0,   "Callisto Ice"     	            ,     0,       0,       -1,     0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
+	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8|16|32|64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
+	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8|16|32|64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
+	InfinityCatalyst   	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1      |16|32                         , 200, 200, 200,   0,   "Infinity Catalyst" 		    ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeLightGray),
+	Infinity		   	( 395, TextureSet.SET_SHINY				,  128.0F,2621440, 8, 1      |16|32                         , 255, 255, 255,   0,   "Infinity"          		    ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
+	Bedrockium	 		( 397, TextureSet.SET_SHINY				,  54.0F, 327680,  6, 1      |16|32                         ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
 
 
 	/**
