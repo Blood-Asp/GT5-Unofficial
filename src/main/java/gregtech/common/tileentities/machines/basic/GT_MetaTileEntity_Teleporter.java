@@ -266,7 +266,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                             int tStacksize = mInventory[0].stackSize;
                             GT_Utility.moveOneItemStack(this, tTile, (byte) 0, (byte) 0, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
                             if (mInventory[0] == null || mInventory[0].stackSize < tStacksize) {
-                                getBaseMetaTileEntity().decreaseStoredEnergyUnits((int) (tDistance * tDistance * (tStacksize - (mInventory[0] == null ? 0 : mInventory[0].stackSize))), false);
+                                getBaseMetaTileEntity().decreaseStoredEnergyUnits((long)tDistance * tDistance * ((long)tStacksize - (mInventory[0] == null ? 0 : mInventory[0].stackSize)), false);
                             }
                         }
 
@@ -274,9 +274,9 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                     for (Object tObject : getBaseMetaTileEntity().getWorld().getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(getBaseMetaTileEntity().getOffsetX(getBaseMetaTileEntity().getFrontFacing(), 2) - 1, getBaseMetaTileEntity().getOffsetY(getBaseMetaTileEntity().getFrontFacing(), 2) - 1, getBaseMetaTileEntity().getOffsetZ(getBaseMetaTileEntity().getFrontFacing(), 2) - 1, getBaseMetaTileEntity().getOffsetX(getBaseMetaTileEntity().getFrontFacing(), 2) + 2, getBaseMetaTileEntity().getOffsetY(getBaseMetaTileEntity().getFrontFacing(), 2) + 2, getBaseMetaTileEntity().getOffsetZ(getBaseMetaTileEntity().getFrontFacing(), 2) + 2))) {
                         if (((tObject instanceof Entity)) && (!((Entity) tObject).isDead)) {
                             Entity tEntity = (Entity) tObject;
-                            if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((int) (tDistance * tDistance * weightCalculation(tEntity)), false)) {
+                            if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((long)(tDistance * tDistance * weightCalculation(tEntity)), false)) {
                                 if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Iron.getPlasma(1)))) {
-                                    mFluid.amount = mFluid.amount - ((int) Math.min(1000, (tDistance * tDistance * weightCalculation(tEntity) / 8192)));
+                                    mFluid.amount = mFluid.amount - (GT_Utility.safeInt(Math.min(1000L, (long)(tDistance * tDistance * weightCalculation(tEntity) / 8192))));
                                     if (mFluid.amount < 1) {
                                         mFluid = null;
                                     }
