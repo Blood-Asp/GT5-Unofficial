@@ -112,7 +112,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxEUStore() {
-        return 512 + V[mTier + 1] * 2;
+        return 512L + V[mTier + 1] * 2L;
     }
 
     @Override
@@ -127,12 +127,12 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxAmperesOut() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? V[mTier + 1] / V[mTier] : 1;
+        return getBaseMetaTileEntity().isAllowedToWork() ? (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]) : 1;
     }
 
     @Override
     public long maxAmperesIn() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? 1 : V[mTier + 1] / V[mTier];
+        return getBaseMetaTileEntity().isAllowedToWork() ? 1 : (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]);
     }
 
     @Override
@@ -156,7 +156,8 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
                         aBaseMetaTileEntity.injectEnergyUnits((byte) 6, Math.min(tEU, maxEUInput()), 1);
                     } else if (GregTech_API.mInputRF && GregTech_API.meIOLoaded && tTileEntity instanceof IPowerContainer && ((IPowerContainer) tTileEntity).getEnergyStored() > 0) {
                         int storedRF = ((IPowerContainer) tTileEntity).getEnergyStored();
-                        int extractRF = (int) maxEUInput() * 100 / GregTech_API.mRFtoEU;
+                        long EXTRACTRF = maxEUInput() * 100 / GregTech_API.mRFtoEU;
+                        int  extractRF = EXTRACTRF>Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)EXTRACTRF;
                         long tEU = 0;
                         if (tTileEntity instanceof TileCapBank) {
                             ICapBankNetwork network = ((TileCapBank) tTileEntity).getNetwork();

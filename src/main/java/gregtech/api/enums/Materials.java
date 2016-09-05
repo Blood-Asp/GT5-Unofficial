@@ -680,15 +680,14 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 
 	//Infinity
 	//Others, new ones?...
-
 	/**
 	 * Materials which are renamed automatically
 	 */
 	//@Deprecated Duralium			(Duralumin,false),
 	//@Deprecated Dural				(Duralumin,false),
-	//@Deprecated Duralum			(Duralumin,false),
+	//@Deprecated Duralum				(Duralumin,false),
 	//@Deprecated Duraluminium		(Duralumin,false),
-	//@Deprecated Duraluminum		(Duralumin,false),
+	//@Deprecated Duraluminum			(Duralumin,false),
 	@Deprecated IridiumAndSodiumOxide(IridiumSodiumOxide, false),
 	@Deprecated Palygorskite		(FullersEarth, false),
 	@Deprecated Adamantine			(Adamantium, true),

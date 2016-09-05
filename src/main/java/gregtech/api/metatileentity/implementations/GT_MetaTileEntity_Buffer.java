@@ -137,12 +137,12 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
     @Override
     public long getMinimumStoredEU() {
-        return 512;
+        return 512L;
     }
 
     @Override
     public long maxEUStore() {
-        return 512 + V[mTier] * 50;
+        return 512L + V[mTier] * 50L;
     }
 
     @Override
@@ -152,7 +152,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
     @Override
     public long maxEUOutput() {
-        return bOutput ? V[mTier] : 0;
+        return bOutput ? V[mTier] : 0L;
     }
 
     @Override

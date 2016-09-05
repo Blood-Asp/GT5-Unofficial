@@ -176,7 +176,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                         }
                     } else if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
                         ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        int rfOut = (int) (aVoltage * GregTech_API.mEUtoRF / 100);
+                        long rfOUT = aVoltage * GregTech_API.mEUtoRF / 100;
+                        int  rfOut = rfOUT>Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)rfOUT;
                         if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
                             ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, false);
                             rUsedAmperes++;

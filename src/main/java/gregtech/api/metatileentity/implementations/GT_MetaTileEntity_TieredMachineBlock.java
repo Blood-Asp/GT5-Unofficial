@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.MetaTileEntity;
 
@@ -8,6 +9,7 @@ import static gregtech.api.enums.GT_Values.GT;
 public abstract class GT_MetaTileEntity_TieredMachineBlock extends MetaTileEntity {
     /**
      * Value between [0 - 9] to describe the Tier of this Machine.
+     * PLZ [0-15] works - READ! GT_Values class.
      */
     public final byte mTier;
 
@@ -23,7 +25,7 @@ public abstract class GT_MetaTileEntity_TieredMachineBlock extends MetaTileEntit
 
     public GT_MetaTileEntity_TieredMachineBlock(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, aInvSlotCount);
-        mTier = (byte) Math.max(0, Math.min(aTier, 9));
+        mTier = (byte) Math.max(0, Math.min(aTier, 15));
         mDescription = aDescription;
 
         // must always be the last call!

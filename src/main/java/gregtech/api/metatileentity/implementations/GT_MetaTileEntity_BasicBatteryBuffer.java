@@ -110,12 +110,12 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public long getMinimumStoredEU() {
-        return V[mTier] * 16 * mInventory.length;
+        return V[mTier] * 16L * mInventory.length;
     }
 
     @Override
     public long maxEUStore() {
-        return V[mTier] * 64 * mInventory.length;
+        return V[mTier] * 64L * mInventory.length;
     }
 
     @Override
@@ -130,7 +130,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public long maxAmperesIn() {
-        return mChargeableCount * 2;
+        return mChargeableCount * 2L;
     }
 
     @Override

@@ -131,12 +131,12 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public long maxEUOutput() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? V[mTier] : 0;
+        return getBaseMetaTileEntity().isAllowedToWork() ? V[mTier] : 0L;
     }
 
     @Override
     public long maxEUStore() {
-        return Math.max(getEUVar(), V[mTier] * 40 + getMinimumStoredEU());
+        return Math.max(getEUVar(), V[mTier] * 40L + getMinimumStoredEU());
     }
 
     @Override
