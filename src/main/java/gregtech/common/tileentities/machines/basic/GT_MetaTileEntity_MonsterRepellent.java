@@ -87,12 +87,12 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
 
     @Override
     public long getMinimumStoredEU() {
-        return 512;
+        return 512L;
     }
 
     @Override
     public long maxEUStore() {
-        return 512 + V[mTier] * 50;
+        return 512L + V[mTier] * 50;
     }
 
     @Override

@@ -7,6 +7,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_Utility;
 import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.enums.GT_Values.V;
@@ -76,22 +77,22 @@ public class GT_MetaTileEntity_Massfabricator
                 mEUt=Integer.MAX_VALUE-1;
                 mMaxProgresstime=Integer.MAX_VALUE-1;
             }else{
-                mEUt=((int)GT_Values.V[1] * (1<<(mTier+3)))/2;
+                mEUt= (int)(GT_Values.V[1] * 4);
                 mMaxProgresstime=(int)xMaxProgresstime;
             }
         }else{
+            //TODO: CHECK IF THAT WORKS
             //Long EUt calculation
-            long xEUt=(GT_Values.V[1] * (1L<<(mTier+3)))/2;
+            long xEUt=GT_Values.V[1] * (long)Math.pow(2,mTier+2);
 
-            long tempEUt = GT_Values.V[1];
+            long tempEUt = GT_Values.V[mTier];
 
             mMaxProgresstime = sDurationMultiplier;
 
-            while (tempEUt <= V[mTier -1] * (long)mAmperage) {
-                tempEUt *= 2;//this actually controls overclocking
-                xEUt *= 2;//this is effect of everclocking
+            while (tempEUt <= V[mTier -1]) {
+                tempEUt *= 4;//this actually controls overclocking
                 mMaxProgresstime /= 2;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? (int)(xEUt/1.5F) : xEUt;//U know, if the time is less than 1 tick make the machine use 2x less power
+                xEUt = mMaxProgresstime==0 ? (int)(xEUt/1.1F) : xEUt;//U know, if the time is less than 1 tick make the machine use less power
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;

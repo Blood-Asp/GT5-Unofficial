@@ -121,7 +121,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 ((GT_MetaTileEntity_Pump) tTileEntity.getMetaTileEntity()).mPumpTimer -= 1;
             }
             if (this.mPumpCountBelow <= 0) {
-                if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().isUniversalEnergyStored(16 * ((int) Math.pow(4, this.mTier))))
+                if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().isUniversalEnergyStored(16 * ((long) Math.pow(4, this.mTier))))
                         && ((this.mFluid == null) || (this.mFluid.amount + 1000 <= getCapacity()))) {
                     boolean tMovedOneDown = false;
                     if ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 100L == 0L)) {
@@ -146,7 +146,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                             this.mPumpList.clear();
                             int y = getBaseMetaTileEntity().getYCoord() - 1;
                             for (int yHead = getYOfPumpHead(); (this.mPumpList.isEmpty()) && (y >= yHead); y--) {
-                                scanForFluid(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(), this.mPumpList, getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), 10 * ((int) Math.pow(1.6, this.mTier)));
+                                scanForFluid(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(), this.mPumpList, getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), 10 * ((int) Math.pow(1.6D, this.mTier)));
                             }
                         }
                         if ((!tMovedOneDown) && (this.mPumpTimer <= 0)) {
@@ -155,7 +155,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                                     ((ChunkPosition) this.mPumpList.get(this.mPumpList.size() - 1)).chunkPosY,
                                     ((ChunkPosition) this.mPumpList.remove(this.mPumpList.size() - 1)).chunkPosZ))) {
                             }
-                            this.mPumpTimer = 160 / ((int) Math.pow(2, this.mTier));
+                            this.mPumpTimer = GT_Utility.safeInt(160L / (long)Math.pow(2, this.mTier) );
                         }
                     }
                 }
@@ -282,31 +282,31 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             if ((aBlock == Blocks.water) || (aBlock == Blocks.flowing_water)) {
                 if (aMeta == 0) {
                     if (this.mFluid == null) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid = GT_ModHandler.getWater(1000L);
                     } else if (GT_ModHandler.isWater(this.mFluid)) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid.amount += 1000;
                     } else {
                         return false;
                     }
                 } else {
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((long) Math.pow(4, this.mTier)), true);
                 }
             }
             if ((aBlock == Blocks.lava) || (aBlock == Blocks.flowing_lava)) {
                 if (aMeta == 0) {
                     if (this.mFluid == null) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid = GT_ModHandler.getLava(1000L);
                     } else if (GT_ModHandler.isLava(this.mFluid)) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid.amount += 1000;
                     } else {
                         return false;
                     }
                 } else {
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((long) Math.pow(4, this.mTier)), true);
                 }
             }
             if ((aBlock instanceof IFluidBlock)) {
@@ -316,7 +316,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 } else if (this.mFluid.isFluidEqual(((IFluidBlock) aBlock).drain(getBaseMetaTileEntity().getWorld(), aX, aY, aZ, false))) {
                     this.getBaseMetaTileEntity().getWorld().setBlockToAir(aX, aY, aZ);
                     this.mFluid.amount += 1000;
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                 } else {
                     return false;
                 }

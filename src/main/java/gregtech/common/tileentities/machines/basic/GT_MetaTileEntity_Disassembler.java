@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -31,8 +32,8 @@ public class GT_MetaTileEntity_Disassembler
                 tNBT = tNBT.getCompoundTag("GT.CraftingComponents");
                 if (tNBT != null) {
                     boolean isAnyOutput=false;
-                    calculateOverclockedNess(16,80);
-                    this.mMaxProgresstime = 80;//Override speed overclocking
+                    calculateOverclockedNessDisassembler(16);
+                    this.mMaxProgresstime = 80;
                     //In case recipe is too OP for that machine
                     if (mEUt == Integer.MAX_VALUE - 1)//&& mMaxProgresstime==Integer.MAX_VALUE-1
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -40,7 +41,7 @@ public class GT_MetaTileEntity_Disassembler
                         if (getBaseMetaTileEntity().getRandomNumber(100) < 50 + 10 * this.mTier) {
                             this.mOutputItems[i] = GT_Utility.loadItem(tNBT, "Ingredient." + i);
                             if (this.mOutputItems[i] != null) {
-                                this.mMaxProgresstime *= (mTier>5 ? 1.7F-(mTier/8.0F) : 1.7F);
+                                this.mMaxProgresstime *= (mTier>5 ? 1.7F-(mTier/10.0F) : 1.7F);
                                 isAnyOutput=true;
                             }
                         }
@@ -54,6 +55,28 @@ public class GT_MetaTileEntity_Disassembler
             }
         }
         return 0;
+    }
+
+    private void calculateOverclockedNessDisassembler(int aEUt) {
+        if(mTier==0){
+            mEUt=aEUt/4;
+        }else{
+            //Long EUt calculation
+            long xEUt=aEUt;
+            //Isnt too low EUt check?
+            long tempEUt = xEUt<GT_Values.V[1] ? GT_Values.V[1] : xEUt;
+
+            while (tempEUt <= GT_Values.V[mTier -1] * (long)mAmperage) {
+                tempEUt *= 4;//this actually controls overclocking
+                xEUt *= 4;//this is effect of overclocking
+            }
+            if(xEUt>Integer.MAX_VALUE-1){
+                mEUt = Integer.MAX_VALUE-1;
+            }else{
+                mEUt = (int)xEUt;
+                mEUt = mEUt == 0 ? 1 : mEUt;
+            }
+        }
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
