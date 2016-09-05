@@ -71,14 +71,13 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                         }
                     } else if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
                         ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        long rfOUT = aVoltage * GregTech_API.mEUtoRF / 100;
-                        int rfOut = rfOUT>Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)rfOUT;
+                        int rfOut = GT_Utility.safeInt(aVoltage * GregTech_API.mEUtoRF / 100);
                         if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
                             ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, false);
                             rUsedAmperes++;
                         }
-                        if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions && ((IEnergyReceiver) tTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600) {
-                            if (rfOut > 32 * GregTech_API.mEUtoRF / 100) {
+                        if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions && ((IEnergyReceiver) tTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600L) {
+                            if (rfOut > 32L * GregTech_API.mEUtoRF / 100L) {
                                 int aExplosionPower = rfOut;
                                 float tStrength =
                                     aExplosionPower < V[0] ? 1.0F :

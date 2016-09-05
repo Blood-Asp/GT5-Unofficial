@@ -1,9 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
-import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -49,15 +46,17 @@ public class GT_MetaTileEntity_Massfabricator
 
     @Override
     public long maxEUStore() {
-        return V[mTier] * 512;
+        return V[mTier] * 512L;
     }
 
     public int checkRecipe() {
         FluidStack tFluid = getDrainableStack();
         if ((tFluid == null) || (tFluid.amount < getCapacity())) {
             this.mOutputFluid = Materials.UUMatter.getFluid(1L);
-            this.mEUt =  (((int) gregtech.api.enums.GT_Values.V[1]) * (int)Math.pow(2, this.mTier + 2));
-            this.mMaxProgresstime = (sDurationMultiplier / (1 << this.mTier - 1));
+            calculateOverclockedNessMassFabricator();
+            //In case recipe is too OP for that machine
+            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
             if (((tFluid = getFillableStack()) != null) && (tFluid.amount >= sUUAperUUM) && (tFluid.isFluidEqual(Materials.UUAmplifier.getFluid(1L)))) {
                 tFluid.amount -= sUUAperUUM;
                 this.mMaxProgresstime /= sUUASpeedBonus;
@@ -66,6 +65,43 @@ public class GT_MetaTileEntity_Massfabricator
             return (sRequiresUUA) || (ItemList.Circuit_Integrated.isStackEqual(getInputAt(0), true, true)) ? 1 : 2;
         }
         return 0;
+    }
+
+    private void calculateOverclockedNessMassFabricator() {
+        if(mTier==0){
+            //Long time calculation
+            long xMaxProgresstime = (long)sDurationMultiplier*2L;
+            if(xMaxProgresstime>Integer.MAX_VALUE-1){
+                //make impossible if too long
+                mEUt=Integer.MAX_VALUE-1;
+                mMaxProgresstime=Integer.MAX_VALUE-1;
+            }else{
+                mEUt=((int)GT_Values.V[1] * (1<<(mTier+3)))/2;
+                mMaxProgresstime=(int)xMaxProgresstime;
+            }
+        }else{
+            //Long EUt calculation
+            long xEUt=(GT_Values.V[1] * (1L<<(mTier+3)))/2;
+
+            long tempEUt = GT_Values.V[1];
+
+            mMaxProgresstime = sDurationMultiplier;
+
+            while (tempEUt <= V[mTier -1] * (long)mAmperage) {
+                tempEUt *= 2;//this actually controls overclocking
+                xEUt *= 2;//this is effect of everclocking
+                mMaxProgresstime /= 2;//this is effect of overclocking
+                xEUt = mMaxProgresstime==0 ? (int)(xEUt/1.5F) : xEUt;//U know, if the time is less than 1 tick make the machine use 2x less power
+            }
+            if(xEUt>Integer.MAX_VALUE-1){
+                mEUt = Integer.MAX_VALUE-1;
+                mMaxProgresstime = Integer.MAX_VALUE-1;
+            }else{
+                mEUt = (int)xEUt;
+                mEUt = mEUt == 0 ? 1 : mEUt;
+                mMaxProgresstime = mMaxProgresstime<1 ? 1 : mMaxProgresstime;//set time to 1 tick
+            }
+        }
     }
 
     public boolean isFluidInputAllowed(FluidStack aFluid) {

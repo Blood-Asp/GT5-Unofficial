@@ -96,6 +96,14 @@ public class GT_Utility {
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
     }
 
+    public static int safeInt(long number, int margin){
+        return number>Integer.MAX_VALUE-margin ? Integer.MAX_VALUE-margin :(int)number;
+    }
+
+    public static int safeInt(long number){
+        return number>GT_Values.V[GT_Values.V.length-1] ? safeInt(GT_Values.V[GT_Values.V.length-1],1) : number<Integer.MIN_VALUE ? Integer.MIN_VALUE : (int)number;
+    }
+
     public static Field getPublicField(Object aObject, String aField) {
         Field rField = null;
         try {

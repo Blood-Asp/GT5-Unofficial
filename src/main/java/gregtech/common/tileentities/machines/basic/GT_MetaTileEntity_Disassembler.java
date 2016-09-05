@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class GT_MetaTileEntity_Disassembler
         extends GT_MetaTileEntity_BasicMachine {
     public GT_MetaTileEntity_Disassembler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "Disassembles Machines at " + (50 + 10 * aTier) + "% Efficiency", 1, 9, "Disassembler.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER)});
+        super(aID, aName, aNameRegional, aTier, 1, "Disassembles Machines at " + Math.max(50 + 10 * aTier,100) + "% Efficiency", 1, 9, "Disassembler.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER)});
     }
 
     public GT_MetaTileEntity_Disassembler(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -30,17 +30,22 @@ public class GT_MetaTileEntity_Disassembler
             if (tNBT != null) {
                 tNBT = tNBT.getCompoundTag("GT.CraftingComponents");
                 if (tNBT != null) {
-                    this.mEUt = (16 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
-                    this.mMaxProgresstime = 80;
+                    boolean isAnyOutput=false;
+                    calculateOverclockedNess(16,80);
+                    this.mMaxProgresstime = 80;//Override speed overclocking
+                    //In case recipe is too OP for that machine
+                    if (mEUt == Integer.MAX_VALUE - 1)//&& mMaxProgresstime==Integer.MAX_VALUE-1
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     for (int i = 0; i < this.mOutputItems.length; i++) {
                         if (getBaseMetaTileEntity().getRandomNumber(100) < 50 + 10 * this.mTier) {
                             this.mOutputItems[i] = GT_Utility.loadItem(tNBT, "Ingredient." + i);
                             if (this.mOutputItems[i] != null) {
-                                this.mMaxProgresstime *= 1.7;
+                                this.mMaxProgresstime *= (mTier>5 ? 1.7F-(mTier/8.0F) : 1.7F);
+                                isAnyOutput=true;
                             }
                         }
                     }
-                    if(mMaxProgresstime==80){
+                    if(!isAnyOutput){
                     	return 0;
                     }
                     getInputAt(0).stackSize -= 1;

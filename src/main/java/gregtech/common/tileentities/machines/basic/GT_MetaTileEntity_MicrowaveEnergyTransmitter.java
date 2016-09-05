@@ -160,7 +160,7 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
             if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().getRedstone())) {
                 if (getBaseMetaTileEntity().getStoredEU() > (V[mTier] * 16)) {
                     if (mPassiveEnergyUse) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) Math.pow(2, mTier), false);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(2L<<mTier, false);
                     }
                     if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1))) {
                         mFluid.amount--;
@@ -185,12 +185,14 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
                     int tDistance = distanceCalculation();
                     long tEnergyTrans = Math.min(V[mTier], getBaseMetaTileEntity().getStoredEU());
                     if (tTile != null && tTile instanceof IEnergyConnected) {
-                        if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, V[mTier], 1) > 0) {
-                            int tLoss = 1;
-                            if (mMaxLossDistance != 0) {
-                                tLoss = 10 + tDistance * (mMaxLoss - 10) / mMaxLossDistance;
+                        int tLoss = 1;
+                        if (mMaxLossDistance != 0) {
+                            tLoss = GT_Utility.safeInt(10 + tDistance * (mMaxLoss - 10) / mMaxLossDistance);
+                        }
+                        if(getBaseMetaTileEntity().getStoredEU()>=V[mTier] + ((V[mTier] * tLoss) / 100)){
+                            if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, tEnergyTrans, 1) > 0) {
+                                getBaseMetaTileEntity().decreaseStoredEnergyUnits(V[mTier] + ((V[mTier] * tLoss) / 100), false);
                             }
-                            getBaseMetaTileEntity().decreaseStoredEnergyUnits(V[mTier] + ((V[mTier] * tLoss) / 100), false);
                         }
                     }
                 }
