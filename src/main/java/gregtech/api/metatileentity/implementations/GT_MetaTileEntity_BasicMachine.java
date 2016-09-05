@@ -186,12 +186,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     @Override
     public long getMinimumStoredEU() {
-        return V[mTier] * 16;
+        return V[mTier] * 16L;
     }
 
     @Override
     public long maxEUStore() {
-        return V[mTier] * 64;
+        return V[mTier] * 64L;
     }
 
     @Override
@@ -206,7 +206,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     @Override
     public long maxAmperesIn() {
-        return (mEUt * 2) / V[mTier] + 1;
+        return ((long)mEUt * 2L) / V[mTier] + 1L;
     }
 
     @Override
@@ -452,7 +452,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
             if (allowToCheckRecipe()) {
                 if (mMaxProgresstime <= 0 && aBaseMetaTileEntity.isAllowedToWork() && (tRemovedOutputFluid || tSucceeded || aBaseMetaTileEntity.hasInventoryBeenModified() || aTick % 600 == 0 || aBaseMetaTileEntity.hasWorkJustBeenEnabled()) && hasEnoughEnergyToCheckRecipe()) {
-                    if (checkRecipe() == 2) {
+                    if (checkRecipe() == FOUND_AND_SUCCESSFULLY_USED_RECIPE) {
                         if (mInventory[3] != null && mInventory[3].stackSize <= 0) mInventory[3] = null;
                         for (int i = getInputSlot(), j = i + mInputSlotCount; i < j; i++)
                             if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
@@ -516,15 +516,38 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     protected void calculateOverclockedNess(int aEUt, int aDuration) {
-        if (aEUt <= 16) {
-            mEUt = aEUt * (1 << (mTier - 1)) * (1 << (mTier - 1));
-            mMaxProgresstime = aDuration / (1 << (mTier - 1));
-        } else {
-            mEUt = aEUt;
+        if(mTier==0){
+            //Long time calculation
+            long xMaxProgresstime = (long)aDuration*2L;
+            if(xMaxProgresstime>Integer.MAX_VALUE-1){
+                //make impossible if too long
+                mEUt=Integer.MAX_VALUE-1;
+                mMaxProgresstime=Integer.MAX_VALUE-1;
+            }else{
+                mEUt=aEUt/2;
+                mMaxProgresstime=(int)xMaxProgresstime;
+            }
+        }else{
+            //Long EUt calculation
+            long xEUt=(long)aEUt;
+            //Isnt too low EUt check?
+            long tempEUt = xEUt<V[1] ? V[1] : xEUt;
+
             mMaxProgresstime = aDuration;
-            while (mEUt <= V[mTier - 1] * mAmperage) {
-                mEUt *= 4;
-                mMaxProgresstime /= 2;
+
+            while (tempEUt <= V[mTier -1] * (long)mAmperage) {
+                tempEUt *= 4;//this actually controls overclocking
+                xEUt *= 4;//this is effect of everclocking
+                mMaxProgresstime /= 2;//this is effect of overclocking
+                xEUt= mMaxProgresstime==0 ? xEUt/2 : xEUt;//U know if the time is 1 tick make the machine use 2x less power
+            }
+            if(xEUt>Integer.MAX_VALUE-1){
+                mEUt=Integer.MAX_VALUE-1;
+                mMaxProgresstime=Integer.MAX_VALUE-1;
+            }else{
+                mEUt=(int)xEUt;
+                mEUt=mEUt==0 ? 1 : mEUt;
+                //mMaxProgresstime is set already
             }
         }
     }
@@ -739,6 +762,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 mOutputItems[i] = tRecipe.getOutput(i);
         mOutputFluid = tRecipe.getFluidOutput(0);
         calculateOverclockedNess(tRecipe);
+        //In case recipe is too OP for that machine
+        if(mMaxProgresstime==Integer.MAX_VALUE-1 && mEUt==Integer.MAX_VALUE-1) return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
 

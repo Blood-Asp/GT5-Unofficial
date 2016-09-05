@@ -104,13 +104,13 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Tantalum			(  80, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Tantalum"						,    0,       0,       3290,    0, false, false,   4,   1,   1, Dyes._NULL			, Element.Ta		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VINCULUM, 1))),
 	Tellurium			(  59, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Tellurium"						,    0,       0,        722,    0, false, false,   4,   1,   1, Dyes.dyeGray		, Element.Te		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
 	Terbium				(  72, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Terbium"						,    0,       0,       1629, 1629, true, false,    4,   1,   1, Dyes._NULL			, Element.Tb		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-	Thaumium			( 330, TextureSet.SET_METALLIC			,  12.0F,    256,  3, 1|2          |64|128                  , 150, 100, 200,   0,	"Thaumium"						,    0,       0,         -1,    0, false, false,   5,   2,   1, Dyes.dyePurple		, 0					, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1))),
+	Thaumium			( 330, TextureSet.SET_METALLIC			,  12.0F,    256,  3, 1|2          |64|128                  , 150, 100, 200,   0,	"Thaumium"						,    0,       0,         -1,    0, false, false,   5,   2,   1, Dyes.dyePurple		, 0, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1))),
 	Thorium				(  96, TextureSet.SET_SHINY				,   6.0F,    512,  2, 1|2  |8   |32|64                      ,   0,  30,   0,   0,	"Thorium"						,    0,       0,       2115,    0, false, false,   4,   1,   1, Dyes.dyeBlack		, Element.Th		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
 	Thulium				(  76, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         , 255, 255, 255,   0,	"Thulium"						,    0,       0,       1818, 1818, true, false,    4,   1,   1, Dyes._NULL			, Element.Tm		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
 	Tin					(  57, TextureSet.SET_DULL				,   1.0F,      0,  1, 1|2  |8   |32   |128                  , 220, 220, 220,   0,	"Tin"							,    0,       0,        505,  505, false, false,   3,   1,   1, Dyes.dyeWhite		, Element.Sn		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-	Titanium			(  28, TextureSet.SET_METALLIC			,   7.0F,   1600,  3, 1|2  |8   |32|64|128                  , 220, 160, 240,   0,	"Titanium"						,    0,       0,       1941, 1940, true, false,    5,   1,   1, Dyes.dyePurple		, Element.Ti		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-	Tritium				(   3, TextureSet.SET_METALLIC			,   1.0F,      0,  2,         16|32                         , 255,   0,   0, 240,	"Tritium"						,    0,       0,         14,    0, false, true,   10,   1,   1, Dyes.dyeRed			, Element.T			, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 4))),
-	Tungsten			(  81, TextureSet.SET_METALLIC			,   7.0F,   2560,  3, 1|2  |8   |32|64|128                  ,  50,  50,  50,   0,	"Tungsten"						,    0,       0,       3695, 3000, true, false,    4,   1,   1, Dyes.dyeBlack		, Element.W			, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
+	Titanium			(  28, TextureSet.SET_METALLIC			,   7.0F,   1600,  3, 1|2  |8   |32|64|128                  , 220, 160, 240,   0,	"Titanium"						,    0,       0,       1941, 1940, true, false,   5,   1,   1, Dyes.dyePurple		, Element.Ti		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
+	Tritium				(   3, TextureSet.SET_METALLIC			,   1.0F,      0,  2,         16|32                         , 255,   0,   0, 240,	"Tritium"						,    0,       0,         14,    0, false, true,  10,   1,   1, Dyes.dyeRed			, Element.T			, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 4))),
+	Tungsten			(  81, TextureSet.SET_METALLIC			,   7.0F,   2560,  3, 1|2  |8   |32|64|128                  ,  50,  50,  50,   0,	"Tungsten"						,    0,       0,       3695, 3000, true, false,   4,   1,   1, Dyes.dyeBlack		, Element.W			, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
 	Uranium				(  98, TextureSet.SET_METALLIC			,   6.0F,    512,  3, 1|2  |8   |32|64                      ,  50, 240,  50,   0,	"Uranium 238"					,    0,       0,       1405,    0, false, false,   4,   1,   1, Dyes.dyeGreen		, Element.U			, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
 	Uranium235			(  97, TextureSet.SET_SHINY				,   6.0F,    512,  3, 1|2  |8   |32|64                      ,  70, 250,  70,   0,	"Uranium 235"					,    0,       0,       1405,    0, false, false,   4,   1,   1, Dyes.dyeGreen		, Element.U_235		, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2))),
 	Vanadium			(  29, TextureSet.SET_METALLIC			,   1.0F,      0,  2, 1|2  |8   |32                         ,  50,  50,  50,   0,	"Vanadium"						,    0,       0,       2183, 2183, true, false,    2,   1,   1, Dyes.dyeBlack		, Element.V			, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
@@ -662,21 +662,31 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	/**
 	 * Galaxy Space 1.10 compat from Version 2.6
  	 */
-	Ledox				( 390, TextureSet.SET_SHINY				,  15.0F,	1024,  4, 1|2  |8|16|32|64|128                  ,   0, 116, 255,   0,   "Ledox"                         ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeBlue),
-	Quantium			( 391, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8|16|32|64|128                  ,   0, 209,  11,   0,   "Quantium"                      ,     0,       0,     4000,  4000,  true, false,  4,   1,   1, Dyes.dyeLime),
-	Mytryl				( 387, TextureSet.SET_SHINY				,   8.0F,    512,  4, 1|2  |8|16|32|64|128                  , 242, 100,   4,   0,   "Mytryl"                        ,     0,       0,     3600,  3600,  true, false,  4,   1,   1, Dyes.dyeOrange),
-	BlackPlutonium		( 388, TextureSet.SET_DULL				,  36.0F,   8192,  6, 1|2  |8|16|32|64|128                  ,  50,  50,  50,   0,   "Black Plutonium"               ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
-	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8|16|32|64|128                  ,  30, 177, 255,   0,   "Callisto Ice"     	            ,     0,       0,       -1,     0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
-	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8|16|32|64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
-	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8|16|32|64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
-	InfinityCatalyst   	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1      |16|32                         , 200, 200, 200,   0,   "Infinity Catalyst" 		    ,     5,  500000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeLightGray),
-	Infinity		   	( 395, TextureSet.SET_SHINY				,  128.0F,2621440, 8, 1      |16|32                         , 255, 255, 255,   0,   "Infinity"          		    ,     5, 5000000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
-	Bedrockium	 		( 397, TextureSet.SET_SHINY				,  54.0F, 327680,  6, 1      |16|32                         ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
-
+	Ledox				( 390, TextureSet.SET_SHINY				,  15.0F,	1024,  4, 1|2  |8      |64|128                  ,   0, 116, 255,   0,   "Ledox"                         ,     0,       0,        -1,    0, false, false,  4,   1,   1, Dyes.dyeBlue),
+	Quantium			( 391, TextureSet.SET_SHINY				,  18.0F,   2048,  4, 1|2  |8      |64|128                  ,   0, 209,  11,   0,   "Quantium"                      ,     0,       0,     4000,  4000,  true, false,  4,   1,   1, Dyes.dyeLime),
+	Mytryl				( 387, TextureSet.SET_SHINY				,   8.0F,    512,  4, 1|2  |8      |64|128                  , 242, 100,   4,   0,   "Mytryl"                        ,     0,       0,     3600,  3600,  true, false,  4,   1,   1, Dyes.dyeOrange),
+	BlackPlutonium		( 388, TextureSet.SET_DULL				,  36.0F,   8192,  6, 1|2  |8      |64|128                  ,  50,  50,  50,   0,   "Black Plutonium"               ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
+	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8      |64|128                  ,  30, 177, 255,   0,   "Callisto Ice"     	            ,     0,       0,       -1,     0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
+	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8      |64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
+	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8      |64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
+	/**
+	 * Op materials (draconic evolution above)
+	 */
+	//TODO: ADD, INFINITY (metal) with all things, and things add stuff to bedrockium (draconium and awoken draconium)
+	//TODO: add other op materials? maybe some new ores or new only fusion made op materials from op materials??? like neutronium bedrockium alloy etc.
+	InfinityCatalyst   	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1                                     , 255, 255, 255,   0,   "Infinity Catalyst" 		    ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
+	Bedrockium	 		( 395, TextureSet.SET_SHINY				,  54.0F, 327680,  6, 1                                     ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
+	//Infinity
+	//Others, new ones?...
 
 	/**
 	 * Materials which are renamed automatically
 	 */
+	//@Deprecated Duralium			(Duralumin,false),
+	//@Deprecated Dural				(Duralumin,false),
+	//@Deprecated Duralum				(Duralumin,false),
+	//@Deprecated Duraluminium		(Duralumin,false),
+	//@Deprecated Duraluminum			(Duralumin,false),
 	@Deprecated IridiumAndSodiumOxide(IridiumSodiumOxide, false),
 	@Deprecated Palygorskite		(FullersEarth, false),
 	@Deprecated Adamantine			(Adamantium, true),
