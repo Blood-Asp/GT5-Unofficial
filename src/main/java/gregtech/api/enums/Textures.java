@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import static gregtech.api.enums.GT_Values.RES_PATH_BLOCK;
 import static gregtech.api.enums.GT_Values.RES_PATH_ITEM;
 
+//TODO IMPLEMENT TEXTURES for new tiers
+
 public class Textures {
     public enum BlockIcons implements IIconContainer, Runnable {
         VOID // The Empty Texture
@@ -244,7 +246,7 @@ public class Textures {
                 LARGETURBINE_TU_ACTIVE6,
                 LARGETURBINE_TU_ACTIVE7,
                 LARGETURBINE_TU_ACTIVE8,
-                LARGETURBINE_TU_ACTIVE9
+                LARGETURBINE_TU_ACTIVE9,
             },
             CONNECTED_HULLS = new IIconContainer[]{
                 CONCRETE_DARK_STONE,
@@ -471,6 +473,12 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
                 },
                 OVERLAYS_ENERGY_OUT = new ITexture[]{
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{220, 220, 220, 0}),
@@ -478,6 +486,12 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 100, 0, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 255, 30, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{128, 128, 128, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
@@ -495,6 +509,12 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
                 },
                 OVERLAYS_ENERGY_OUT_MULTI = new ITexture[]{
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 220, 0}),
@@ -502,6 +522,12 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 100, 0, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 255, 30, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{128, 128, 128, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                        new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
                         new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
@@ -522,6 +548,8 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_LOCKER_010),
                         new GT_RenderedTexture(OVERLAY_LOCKER_011),
                         new GT_RenderedTexture(OVERLAY_LOCKER_012),
+                        new GT_RenderedTexture(OVERLAY_LOCKER_013),
+                        new GT_RenderedTexture(OVERLAY_LOCKER_013),
                         new GT_RenderedTexture(OVERLAY_LOCKER_013),
                 },
                 CASING_BLOCKS = new ITexture[128],
