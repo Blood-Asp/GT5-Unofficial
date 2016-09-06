@@ -525,7 +525,7 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_LOCKER_013),
                 },
                 CASING_BLOCKS = new ITexture[128],
-                MACHINE_CASINGS[] = new ITexture[10][17];
+                MACHINE_CASINGS[] = new ITexture[16][17];
 
         static {
             for (byte i = 0; i < MACHINE_CASINGS.length; i++)
