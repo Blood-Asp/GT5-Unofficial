@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -73,14 +74,14 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         int tEU = 0;
         int totalFlow = 0; // Byproducts are based on actual flow
         int flow = 0;
-        int remainingFlow = (int) (aOptFlow * 1.25f); // Allowed to use up to 125% of optimal flow
+        int remainingFlow = GT_Utility.safeInt((long)(aOptFlow * 1.25f)); // Allowed to use up to 125% of optimal flow
         this.realOptFlow = aOptFlow;
 
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) {
             String fluidName = aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i));
             if (fluidName.equals("ic2.fluidSuperheatedSteam")) {
                 flow = aFluids.get(i).amount; // Get all (steam) in hatch
-                flow = Math.min(flow, Math.min(remainingFlow, (int) (aOptFlow * 1.25f))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
+                flow = Math.min(flow, Math.min(remainingFlow, GT_Utility.safeInt((long)(aOptFlow * 1.25f)))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
                 depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
                 this.storedFluid = aFluids.get(i).amount;
                 remainingFlow -= flow; // track amount we're allowed to keep depleting from hatches
@@ -97,15 +98,15 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
             }
         }
 
-        tEU = (int) (Math.min((float) aOptFlow, totalFlow));
+        tEU = GT_Utility.safeInt((long)Math.min((float) aOptFlow, totalFlow));
         addOutput(GT_ModHandler.getSteam(totalFlow));
         if (totalFlow > 0 && totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs(((totalFlow - (float) aOptFlow) / aOptFlow));
             if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;
-            tEU = Math.max(1, (int)((long)tEU * (long)aBaseEff / 10000L));
+            tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L));
         } else {
-            tEU = (int)((long)tEU * (long)aBaseEff / 10000L);
+            tEU = GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L);
         }
 
         return tEU;

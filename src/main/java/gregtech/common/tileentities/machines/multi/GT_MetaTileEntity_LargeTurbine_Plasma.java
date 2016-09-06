@@ -92,17 +92,17 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         if (aFluids.size() >= 1) {
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
-            actualOptimalFlow = (int) ((aOptFlow + fuelValue - 1) / fuelValue);
+            actualOptimalFlow = GT_Utility.safeInt(((long)aOptFlow + (long)fuelValue - 1) / (long)fuelValue);
             this.realOptFlow = actualOptimalFlow; // For scanner info
 
-            int remainingFlow = (int) (actualOptimalFlow * 1.25f); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
+            int remainingFlow = GT_Utility.safeInt((long)(actualOptimalFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
             int flow = 0;
             int totalFlow = 0;
 
             for (int i = 0; i < aFluids.size(); i++) {
                 if (aFluids.get(i).isFluidEqual(firstFuelType)) {
                     flow = aFluids.get(i).amount; // Get all (steam) in hatch
-                    flow = Math.min(flow, Math.min(remainingFlow, (int) (actualOptimalFlow * 1.25f))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
+                    flow = Math.min(flow, Math.min(remainingFlow, GT_Utility.safeInt((long)(actualOptimalFlow * 1.25f)))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
                     depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
                     this.storedFluid = aFluids.get(i).amount;
                     remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
@@ -122,7 +122,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 }
             }
 
-            tEU = (int) (Math.min((float) actualOptimalFlow, totalFlow) * fuelValue);
+            tEU = GT_Utility.safeInt((long)Math.min((float) actualOptimalFlow, totalFlow) * fuelValue);
 
             if (totalFlow != actualOptimalFlow) {
                 float efficiency = 1.0f - Math.abs(((totalFlow - (float) actualOptimalFlow) / actualOptimalFlow));
@@ -130,9 +130,9 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 if (efficiency < 0)
                     efficiency = 0; // Can happen with really ludicrously poor inefficiency.
                 tEU *= efficiency;
-                tEU = Math.max(1, (int)((long)tEU * (long)aBaseEff / 10000L));
+                tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L));
             } else {
-                tEU = (int)((long)tEU * (long)aBaseEff / 10000L);
+                tEU = GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L);
             }
 
             return tEU;

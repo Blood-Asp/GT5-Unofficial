@@ -118,19 +118,12 @@ public class GT_MetaTileEntity_AssemblyLine
                 }
             }
         }
-        byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        if (mEUt <= 16) {
-            this.mEUt = (mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-            this.mMaxProgresstime = (mMaxProgresstime / (1 << tTier - 1));
-        } else {
-            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                this.mEUt *= 4;
-                this.mMaxProgresstime /= 2;
-            }
-        }
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, getMaxInputVoltage());
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
         updateSlots();
         return true;
     }

@@ -83,22 +83,14 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
 
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
-                    if (tRecipe.mEUt <= 16) {
-                        this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-                        this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
-                    } else {
-                        this.mEUt = tRecipe.mEUt;
-                        this.mMaxProgresstime = tRecipe.mDuration;
-                        while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                            this.mEUt *= 4;
-                            this.mMaxProgresstime /= 2;
-                        }
-                    }
+                    calculateOverclockedNessMulti(mEUt, tRecipe.mDuration, 1, getMaxInputVoltage());
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return false;
                     if (steam) this.mEUt = this.mEUt / 2;
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }
-                    this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
                     if (hydrogen) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
                     return true;

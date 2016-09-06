@@ -88,10 +88,10 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         if (aFluids.size() >= 1) {
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
-            actualOptimalFlow = (int) (aOptFlow / fuelValue);
+            actualOptimalFlow = GT_Utility.safeInt((long)aOptFlow / fuelValue);
             this.realOptFlow = actualOptimalFlow;
 
-            int remainingFlow = (int) (actualOptimalFlow * 1.25f); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
+            int remainingFlow = GT_Utility.safeInt((long)(actualOptimalFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
             int flow = 0;
             int totalFlow = 0;
 
@@ -106,7 +106,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 }
             }
 
-            tEU = (int) (Math.min((float) actualOptimalFlow, totalFlow) * fuelValue);
+            tEU = GT_Utility.safeInt((long)Math.min((float) actualOptimalFlow, totalFlow) * fuelValue);
 
             if (totalFlow != actualOptimalFlow) {
                 float efficiency = 1.0f - Math.abs(((totalFlow - (float) actualOptimalFlow) / actualOptimalFlow));
@@ -114,9 +114,9 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 if (efficiency < 0)
                     efficiency = 0; // Can happen with really ludicrously poor inefficiency.
                 tEU *= efficiency;
-                tEU = Math.max(1, (int)((long)tEU * (long)aBaseEff / 10000L));
+                tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L));
             } else {
-                tEU = (int)((long)tEU * (long)aBaseEff / 10000L);
+                tEU = GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L);
             }
 
             return tEU;

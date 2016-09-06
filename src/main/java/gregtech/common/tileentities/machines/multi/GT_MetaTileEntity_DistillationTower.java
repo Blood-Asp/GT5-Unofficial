@@ -94,7 +94,7 @@ public class GT_MetaTileEntity_DistillationTower
         }
 
         long tVoltage = getMaxInputVoltage();
-        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        byte tTier = (byte) Math.max(0, GT_Utility.getTier(tVoltage));
         FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
         if (tFluids.length > 0) {
         	for(int i = 0;i<tFluids.length;i++){
@@ -103,17 +103,10 @@ public class GT_MetaTileEntity_DistillationTower
                 if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
-                    if (tRecipe.mEUt <= 16) {
-                        this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-                        this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
-                    } else {
-                        this.mEUt = tRecipe.mEUt;
-                        this.mMaxProgresstime = tRecipe.mDuration;
-                        while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                            this.mEUt *= 4;
-                            this.mMaxProgresstime /= 2;
-                        }
-                    }
+                    calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, tVoltage);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return false;
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }

@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
@@ -170,6 +171,24 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }
         ArrayList<ItemStack> tInputList = getStoredInputs();
         int tTier = 0;
+        if (mInventory[1].getUnlocalizedName().endsWith("10")) {
+            tTier = 10;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("11")) {
+            tTier = 11;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("12")) {
+            tTier = 12;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("13")) {
+            tTier = 13;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("14")) {
+            tTier = 14;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("15")) {
+            tTier = 15;
+        }
         if (mInventory[1].getUnlocalizedName().endsWith("1")) {
             tTier = 1;
         }
@@ -193,6 +212,9 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }
         if (mInventory[1].getUnlocalizedName().endsWith("8")) {
             tTier = 8;
+        }
+        if (mInventory[1].getUnlocalizedName().endsWith("9")) {
+            tTier = 9;
         }
 
         if(!mMachine.equals(mInventory[1].getUnlocalizedName()))mLastRecipe=null;
@@ -222,18 +244,14 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mMaxProgresstime = tRecipe.mDuration;
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
-                if (tRecipe.mEUt <= 16) {
-                    this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-                    this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
-                } else {
-                    this.mEUt = tRecipe.mEUt;
-                    this.mMaxProgresstime = tRecipe.mDuration;
-                    while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                        this.mEUt *= 4;
-                        this.mMaxProgresstime /= 2;
-                    }
-                }
-                this.mEUt *= i;
+                calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, GT_Values.V[tTier]);
+                //In case recipe is too OP for that machine
+                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                    return false;
+                this.mEUt = GT_Utility.safeInt(this.mEUt*i,1);
+                if (mEUt == Integer.MAX_VALUE - 1)
+                    return false;
+
                 if (this.mEUt > 0) {
                     this.mEUt = (-this.mEUt);
                 }

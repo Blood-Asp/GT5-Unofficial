@@ -14,7 +14,6 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -519,8 +518,8 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
      * @param aDuration     - recipe Duration
      * @param mAmperage     - should be 1 ?
      */
-    protected void calculateOverclockedNessMulti(int aEUt, int aDuration, int mAmperage) {
-        byte mTier=GT_Utility.getTier(getMaxInputVoltage());
+    protected void calculateOverclockedNessMulti(int aEUt, int aDuration, int mAmperage, long maxInputVoltage) {
+        byte mTier=(byte)Math.max(0,GT_Utility.getTier(maxInputVoltage));
         if(mTier==0){
             //Long time calculation
             long xMaxProgresstime = (long)aDuration*2L;
@@ -540,7 +539,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
             mMaxProgresstime = aDuration;
 
-            while (tempEUt <= V[mTier -1] * (long)mAmperage) {
+            while (tempEUt <= V[mTier -1] * mAmperage) {
                 tempEUt *= 4;//this actually controls overclocking
                 xEUt *= 4;//this is effect of everclocking
                 mMaxProgresstime /= 2;//this is effect of overclocking

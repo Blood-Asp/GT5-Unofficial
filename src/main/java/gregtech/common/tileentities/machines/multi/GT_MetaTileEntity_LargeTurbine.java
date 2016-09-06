@@ -130,12 +130,12 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             if (baseEff == 0 || optFlow == 0 || counter >= 1000 || this.getBaseMetaTileEntity().hasWorkJustBeenEnabled()
                     || this.getBaseMetaTileEntity().hasInventoryBeenModified()) {
                 counter = 0;
-                baseEff = (int) ((50.0F
-                        + (10.0F * ((GT_MetaGenerated_Tool) aStack.getItem()).getToolCombatDamage(aStack))) * 100);
-                optFlow = (int) Math.max(Float.MIN_NORMAL,
+                baseEff = GT_Utility.safeInt((long)((50.0F
+                        + (10.0F * ((GT_MetaGenerated_Tool) aStack.getItem()).getToolCombatDamage(aStack))) * 100));
+                optFlow = GT_Utility.safeInt((long)Math.max(Float.MIN_NORMAL,
                         ((GT_MetaGenerated_Tool) aStack.getItem()).getToolStats(aStack).getSpeedMultiplier()
                                 * ((GT_MetaGenerated_Tool) aStack.getItem()).getPrimaryMaterial(aStack).mToolSpeed
-                                * 50);
+                                * 50));
             } else {
                 counter++;
             }
@@ -146,7 +146,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
         // Magic numbers: can always change by at least 10 eu/t, but otherwise by at most 1 percent of the difference in power level (per tick)
         // This is how much the turbine can actually change during this tick
-        int maxChangeAllowed = Math.max(10, (int) Math.ceil(Math.abs(difference) * 0.01));
+        int maxChangeAllowed = Math.max(10, GT_Utility.safeInt((long)Math.ceil(Math.abs(difference) * 0.01)));
 
         if (Math.abs(difference) > maxChangeAllowed) { // If this difference is too big, use the maximum allowed change
             int change = maxChangeAllowed * (difference > 0 ? 1 : -1); // Make the change positive or negative.
@@ -164,7 +164,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             this.mMaxProgresstime = 1;
             this.mEfficiencyIncrease = (10);
             if(this.mDynamoHatches.size()>0){
-            	if(this.mDynamoHatches.get(0).getBaseMetaTileEntity().getOutputVoltage() < (int)((long)mEUt * (long)mEfficiency / 10000L)){
+            	if(this.mDynamoHatches.get(0).getBaseMetaTileEntity().getOutputVoltage() < GT_Utility.safeInt((long)mEUt * (long)mEfficiency / 10000L)){
             	explodeMultiblock();}
             }
             return true;
@@ -209,7 +209,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         int tDura = 0;
 
         if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
-            tDura = (int) ((100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
+            tDura = GT_Utility.safeInt((long)(100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
         }
 
         return new String[]{

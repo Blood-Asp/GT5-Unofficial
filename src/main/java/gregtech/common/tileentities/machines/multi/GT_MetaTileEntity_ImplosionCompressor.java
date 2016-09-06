@@ -87,9 +87,12 @@ public class GT_MetaTileEntity_ImplosionCompressor
             if ((tRecipe != null) && (tRecipe.isRecipeInputEqual(true, null, tInputs))) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
-
+                //OC THAT EXPLOSIVE SHIT!!!
+                calculateOverclockedNessMulti(mEUt, tRecipe.mDuration, 1, getMaxInputVoltage());
+                //In case recipe is too OP for that machine
+                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                    return false;
                 this.mEUt = (-tRecipe.mEUt);
-                this.mMaxProgresstime = Math.max(1, tRecipe.mDuration);
                 this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0), tRecipe.getOutput(1)};
                 sendLoopStart((byte) 20);
                 updateSlots();

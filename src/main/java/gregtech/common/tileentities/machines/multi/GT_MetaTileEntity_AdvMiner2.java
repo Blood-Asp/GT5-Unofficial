@@ -107,7 +107,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                         int tMetaID = getBaseMetaTileEntity().getMetaIDOffset(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
                         if (tBlock instanceof GT_Block_Ores_Abstract) {
                             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
-                            if ((tTileEntity!=null) && (tTileEntity instanceof GT_TileEntity_Ores) && ((GT_TileEntity_Ores) tTileEntity).mNatural == true && !mMineList.contains(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f))) {
+                            if ((tTileEntity!=null) && (tTileEntity instanceof GT_TileEntity_Ores) && ((GT_TileEntity_Ores) tTileEntity).mNatural && !mMineList.contains(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f))) {
                                 mMineList.add(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f));
                             }
                         }
@@ -125,7 +125,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
             }
             if (mMineList.isEmpty()) {
                 if(getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock){
-                    if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4)) {
+                    if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512L + getMaxInputVoltage() * 4L)) {
                         moveOneDown();
                     }
                 }else{
@@ -187,27 +187,15 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
 
             }
         }
-
-        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        calculateOverclockedNessMulti(48, 24, 1, tVoltage);
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        int tEU = 48;
-        int tDuration = 24;
-        if (tEU <= 16) {
-            this.mEUt = (tEU * (1 << tTier - 1) * (1 << tTier - 1));
-            this.mMaxProgresstime = (tDuration / (1 << tTier - 1));
-        } else {
-            this.mEUt = tEU;
-            this.mMaxProgresstime = tDuration;
-            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                this.mEUt *= 4;
-                this.mMaxProgresstime /= 2;
-            }
-        }
         if (this.mEUt > 0) {
             this.mEUt = (-this.mEUt);
         }
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
         return true;
     }
 
