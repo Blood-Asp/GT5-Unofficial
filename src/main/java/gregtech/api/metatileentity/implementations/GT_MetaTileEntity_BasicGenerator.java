@@ -26,7 +26,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
-        ITexture[][][] rTextures = new ITexture[10][17][];
+        ITexture[][][] rTextures = new ITexture[16][17][];
         for (byte i = -1; i < 16; i++) {
             rTextures[0][i + 1] = getFront(i);
             rTextures[1][i + 1] = getBack(i);

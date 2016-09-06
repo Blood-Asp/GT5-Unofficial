@@ -64,7 +64,7 @@ public class GT_Values {
     public static final long[] V = new long[]{8L, 32L, 128L, 512L, 2048L, 8192L, 32768L, 131072L, 524288L, 2097152L, 8388608L, 33554432L, 134217728L, 536870912L, 1073741824L, Integer.MAX_VALUE-7};
     //TODO:Adding that in coremod!!!
     //TODO:tier 14,15 wires and transformers only (not even cables !!!)
-    //TODO:tier 12,13 the above + batteries, battery buffers, (maybe cables)
+    //TODO:tier 12,13 the above + batteries, battery buffers, (maybe cables,12 also works for machines)
     //TODO:tier 10,11 the above + chargers and other machines, (cables would be nice)
     //TODO:tier 9     machines and batteries
 
