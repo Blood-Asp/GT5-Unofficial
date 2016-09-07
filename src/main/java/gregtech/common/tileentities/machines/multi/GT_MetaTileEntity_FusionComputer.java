@@ -457,8 +457,8 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         return new String[]{
                 EnumChatFormatting.BLUE+"Fusion Reactor MK "+EnumChatFormatting.RESET+tier,
                 "EU Required: "+EnumChatFormatting.RED+powerRequired+EnumChatFormatting.RESET+"EU/t",
-                "Stored EU: "+EnumChatFormatting.YELLOW+mEUStore+EnumChatFormatting.RESET+" / "+maxEUStore(),
-                "Plasma Output: "+EnumChatFormatting.GREEN+plasmaOut+EnumChatFormatting.RESET+"L/t"};
+                "Stored EU: "+EnumChatFormatting.GREEN+mEUStore+EnumChatFormatting.RESET+" EU / "+EnumChatFormatting.YELLOW+maxEUStore()+EnumChatFormatting.RESET+" EU",
+                "Plasma Output: "+EnumChatFormatting.YELLOW+plasmaOut+EnumChatFormatting.RESET+"L/t"};
     }
 
     @Override

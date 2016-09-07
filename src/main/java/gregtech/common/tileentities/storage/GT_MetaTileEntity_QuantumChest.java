@@ -184,17 +184,17 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
             return new String[]{
                     EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                     "Stored Items:",
-                    EnumChatFormatting.YELLOW + "No Items"+ EnumChatFormatting.RESET,
-                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET,
-                    EnumChatFormatting.RED + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+                    EnumChatFormatting.GOLD+ "No Items"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET+" "+
+                    EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
             };
         }
         return new String[]{
                 EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                 "Stored Items:",
-                EnumChatFormatting.YELLOW + mItemStack.getDisplayName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(mItemCount) + EnumChatFormatting.RESET,
-                EnumChatFormatting.RED + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+                EnumChatFormatting.GOLD + mItemStack.getDisplayName() + EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mItemCount) + EnumChatFormatting.RESET+" "+
+                EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
         };
     }
 

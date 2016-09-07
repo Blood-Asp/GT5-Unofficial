@@ -690,13 +690,13 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return new String[]{
                 EnumChatFormatting.BLUE + mNEIName + EnumChatFormatting.RESET,
                 "Progress:",
-                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks / "+
                 EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime) + EnumChatFormatting.RESET +" ticks",
                 "Stored Energy:",
-                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
                 EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
                 "Probably uses:",
-                EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t",
+                EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t at "+
                 EnumChatFormatting.RED + Integer.toString(mEUt==0?0:mAmperage) + EnumChatFormatting.RESET +" A"
         };
     }
