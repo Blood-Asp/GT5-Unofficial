@@ -47,7 +47,8 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
                 "Robust Tungstensteel Casings for the rest (16 at least!)",
-                "Place up to 64 Single Block GT Machines into the GUI Inventory"};
+                "Place up to 64 Single Block GT Machines into the GUI Inventory",
+                "Maximal tier of machines inside: 9"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -171,6 +172,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }
         ArrayList<ItemStack> tInputList = getStoredInputs();
         int tTier = 0;
+        /* Better dont
         if (mInventory[1].getUnlocalizedName().endsWith("10")) {
             tTier = 10;
         }
@@ -189,31 +191,32 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         if (mInventory[1].getUnlocalizedName().endsWith("15")) {
             tTier = 15;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("1")) {
+        */
+        if (mInventory[1].getUnlocalizedName().endsWith("01")) {
             tTier = 1;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("2")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("02")) {
             tTier = 2;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("3")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("03")) {
             tTier = 3;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("4")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("04")) {
             tTier = 4;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("5")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("05")) {
             tTier = 5;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("6")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("06")) {
             tTier = 6;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("7")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("07")) {
             tTier = 7;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("8")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("08")) {
             tTier = 8;
         }
-        if (mInventory[1].getUnlocalizedName().endsWith("9")) {
+        if (mInventory[1].getUnlocalizedName().endsWith("09")) {
             tTier = 9;
         }
 
