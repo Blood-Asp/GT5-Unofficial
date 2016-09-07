@@ -636,7 +636,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public ArrayList<String> getDebugInfo(EntityPlayer aPlayer, int aLogLevel) {
         ArrayList<String> tList = new ArrayList<String>();
         if (aLogLevel > 2) {
-            tList.add("Meta-ID: " + mID + (canAccessData() ? " valid" : " invalid") + (mMetaTileEntity == null ? " MetaTileEntity == null!" : " "));
+            tList.add("Meta-ID: " +EnumChatFormatting.BLUE+mID+EnumChatFormatting.RESET + (canAccessData() ? EnumChatFormatting.GREEN+" valid"+EnumChatFormatting.RESET : EnumChatFormatting.RED+" invalid"+EnumChatFormatting.RESET) + (mMetaTileEntity == null ? EnumChatFormatting.RED+" MetaTileEntity == null!"+EnumChatFormatting.RESET : " "));
         }
         if (aLogLevel > 1) {
             if (mTimeStatistics.length > 0) {
