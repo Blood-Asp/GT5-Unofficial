@@ -307,8 +307,8 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         return new String[]{
                 EnumChatFormatting.BLUE+getLocalName()+EnumChatFormatting.RESET,
                 "Stored Items:",
-                EnumChatFormatting.GREEN+GT_Utility.formatNumbers(mStored) +EnumChatFormatting.RESET+ " EU / "+
-                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU"
+                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mStored) +EnumChatFormatting.RESET+ " EU /",
+                EnumChatFormatting.RED+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU"
         };
     }
 

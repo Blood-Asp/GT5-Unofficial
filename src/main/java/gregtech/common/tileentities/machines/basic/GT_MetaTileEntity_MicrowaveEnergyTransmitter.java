@@ -190,9 +190,12 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
                             tLoss = GT_Utility.safeInt(10L + (tDistance * Math.max(mMaxLoss - 10L,0) / mMaxLossDistance));
                         }
                         if(getBaseMetaTileEntity().isUniversalEnergyStored(V[mTier] + ((V[mTier] * tLoss) / 100))){
-                            if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, V[mTier], 1) > 0) {
-                                getBaseMetaTileEntity().decreaseStoredEnergyUnits(V[mTier] + ((V[mTier] * tLoss) / 100), false);
-                            }
+                            //TODO:check tier before sending to disable remote detonation
+                            //if(((IEnergyConnected) tTile).)
+                                if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, V[mTier], 1) > 0) {
+                                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(V[mTier] + ((V[mTier] * tLoss) / 100), false);
+                                }
+                            //}
                         }
                     }
                 }

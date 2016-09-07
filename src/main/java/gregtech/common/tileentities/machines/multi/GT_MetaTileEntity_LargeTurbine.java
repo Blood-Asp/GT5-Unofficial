@@ -216,8 +216,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                 EnumChatFormatting.BLUE+"Large Turbine"+EnumChatFormatting.RESET,
                 tRunning,
                 "Current Output: "+EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t",
-                "Optimal Flow: "+EnumChatFormatting.YELLOW+(int)realOptFlow+EnumChatFormatting.RESET+" L/t",
-                "Fuel Remaining: "+EnumChatFormatting.GOLD+storedFluid+EnumChatFormatting.RESET+"L",
+                "Optimal Flow: "+EnumChatFormatting.YELLOW+GT_Utility.safeInt((long)realOptFlow)+EnumChatFormatting.RESET+" L/t",
+                "Fuel Remaining: "+EnumChatFormatting.YELLOW+storedFluid+EnumChatFormatting.RESET+"L",
                 "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%",
                 "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%",
                 tMaintainance
