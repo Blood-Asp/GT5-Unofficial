@@ -18,6 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fluids.FluidStack;
@@ -74,7 +75,13 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
     }
 
     public String[] getInfoData() {
-        return new String[]{"Coordinates:", "X: " + this.mTargetX, "Y: " + this.mTargetY, "Z: " + this.mTargetZ, "Dimension: " + this.mTargetD};
+        return new String[]{
+                "Coordinates:",
+                "X: "+EnumChatFormatting.GREEN+ this.mTargetX+EnumChatFormatting.RESET,
+                "Y: "+EnumChatFormatting.GREEN+ this.mTargetY+EnumChatFormatting.RESET,
+                "Z: "+EnumChatFormatting.GREEN+ this.mTargetZ+EnumChatFormatting.RESET,
+                "Dimension: " + EnumChatFormatting.YELLOW+this.mTargetD+EnumChatFormatting.RESET
+        };
     }
 
     @Override

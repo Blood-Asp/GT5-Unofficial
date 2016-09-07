@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -229,12 +230,12 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     @Override
     public String[] getInfoData() {
         return new String[]{
-            "Diesel Engine",
-            "Current Output: "+mEUt+" EU/t",
-            "Fuel Consumption: "+fuelConsumption+"L/t",
-            "Fuel Value: "+fuelValue+" EU/L",
-            "Fuel Remaining: "+fuelRemaining+" Litres",
-            "Current Efficiency: "+(mEfficiency/100)+"%"};
+                EnumChatFormatting.BLUE+"Diesel Engine"+EnumChatFormatting.RESET,
+            "Current Output: "+EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t",
+            "Fuel Consumption: "+EnumChatFormatting.YELLOW+fuelConsumption+EnumChatFormatting.RESET+"L/t",
+            "Fuel Value: "+EnumChatFormatting.YELLOW+fuelValue+EnumChatFormatting.RESET+" EU/L",
+            "Fuel Remaining: "+EnumChatFormatting.YELLOW+fuelRemaining+EnumChatFormatting.RESET+" Litres",
+            "Current Efficiency: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.YELLOW+"%"};
     }
 
     @Override

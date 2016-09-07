@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 import static gregtech.api.enums.GT_Values.V;
 
@@ -304,10 +305,11 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         }
 
         return new String[]{
-                getLocalName(),
+                EnumChatFormatting.BLUE+getLocalName()+EnumChatFormatting.RESET,
                 "Stored Items:",
-                GT_Utility.formatNumbers(mStored) + " EU /",
-                GT_Utility.formatNumbers(mMax) + " EU"};
+                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mStored) +EnumChatFormatting.RESET+ " EU /",
+                EnumChatFormatting.RED+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU"
+        };
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -199,8 +200,12 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     @Override
     public String[] getInfoData() {
-        String tRunning = mMaxProgresstime>0 ? "Turbine running":"Turbine stopped";
-        String tMaintainance = getIdealStatus() == getRepairStatus() ? "No Maintainance issues" : "Needs Maintainance" ;
+        String tRunning = mMaxProgresstime>0 ?
+                EnumChatFormatting.GREEN+"Turbine running"+EnumChatFormatting.RESET :
+                EnumChatFormatting.RED+"Turbine stopped"+EnumChatFormatting.RESET;
+        String tMaintainance = getIdealStatus() == getRepairStatus() ?
+                EnumChatFormatting.GREEN+"No Maintainance issues"+EnumChatFormatting.RESET :
+                EnumChatFormatting.RED+"Needs Maintainance"+EnumChatFormatting.RESET ;
         int tDura = 0;
 
         if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
@@ -208,14 +213,15 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         }
 
         return new String[]{
-                "Large Turbine",
+                EnumChatFormatting.BLUE+"Large Turbine"+EnumChatFormatting.RESET,
                 tRunning,
-                "Current Output: "+mEUt+" EU/t",
-                "Optimal Flow: "+(int)realOptFlow+" L/t",
-                "Fuel Remaining: "+storedFluid+"L",
-                "Current Speed: "+(mEfficiency/100)+"%",
-                "Turbine Damage: "+tDura+"%",
-                tMaintainance};
+                "Current Output: "+EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t",
+                "Optimal Flow: "+EnumChatFormatting.YELLOW+(int)realOptFlow+EnumChatFormatting.RESET+" L/t",
+                "Fuel Remaining: "+EnumChatFormatting.YELLOW+storedFluid+EnumChatFormatting.RESET+"L",
+                "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%",
+                "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%",
+                tMaintainance
+        };
     }
 
     @Override

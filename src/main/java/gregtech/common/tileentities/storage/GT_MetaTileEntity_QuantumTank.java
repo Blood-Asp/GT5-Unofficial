@@ -8,6 +8,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_RenderedTexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GT_MetaTileEntity_QuantumTank
         extends GT_MetaTileEntity_BasicTank {
@@ -101,18 +102,20 @@ public class GT_MetaTileEntity_QuantumTank
 
         if (mFluid == null) {
             return new String[]{
-                    "Quantum Tank",
+                    EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
                     "Stored Fluid:",
-                    "No Fluid",
-                    Integer.toString(0) + "L",
-                    Integer.toString(getCapacity()) + "L"};
+                    EnumChatFormatting.YELLOW + "No Fluid"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + Integer.toString(0) + " L"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.RED + Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
+            };
         }
         return new String[]{
-                "Quantum Tank",
+                EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
                 "Stored Fluid:",
-                mFluid.getLocalizedName(),
-                Integer.toString(mFluid.amount) + "L",
-                Integer.toString(getCapacity()) + "L"};
+                EnumChatFormatting.YELLOW + mFluid.getLocalizedName()+ EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L"+ EnumChatFormatting.RESET,
+                EnumChatFormatting.RED + Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
+        };
     }
 
     @Override

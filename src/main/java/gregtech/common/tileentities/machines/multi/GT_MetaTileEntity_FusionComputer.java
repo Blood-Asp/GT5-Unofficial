@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -443,7 +444,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     @Override
     public String[] getInfoData() {
-        String tier = tier() == 6 ? "I" : tier() == 7 ? "II" : "III";
+        String tier = tier() == 6 ? EnumChatFormatting.RED+"I"+EnumChatFormatting.RESET : tier() == 7 ? EnumChatFormatting.YELLOW+"II"+EnumChatFormatting.RESET : EnumChatFormatting.GRAY+"III"+EnumChatFormatting.RESET;
         float plasmaOut = 0;
         int powerRequired = 0;
         if (this.mLastRecipe != null) {
@@ -454,10 +455,10 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         }
 
         return new String[]{
-                "Fusion Reactor MK "+tier,
-                "EU Required: "+powerRequired+"EU/t",
-                "Stored EU: "+mEUStore+" / "+maxEUStore(),
-                "Plasma Output: "+plasmaOut+"L/t"};
+                EnumChatFormatting.BLUE+"Fusion Reactor MK "+EnumChatFormatting.RESET+tier,
+                "EU Required: "+EnumChatFormatting.RED+powerRequired+EnumChatFormatting.RESET+"EU/t",
+                "Stored EU: "+EnumChatFormatting.YELLOW+mEUStore+EnumChatFormatting.RESET+" / "+maxEUStore(),
+                "Plasma Output: "+EnumChatFormatting.GREEN+plasmaOut+EnumChatFormatting.RESET+"L/t"};
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMachineBlock {
     public int mItemCount = 0;
@@ -181,18 +182,20 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
         if (mItemStack == null) {
             return new String[]{
-                    "Quantum Chest",
+                    EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                     "Stored Items:",
-                    "No Items",
-                    Integer.toString(0),
-                    Integer.toString(getMaxItemCount())};
+                    EnumChatFormatting.YELLOW + "No Items"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET,
+                    EnumChatFormatting.RED + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+            };
         }
         return new String[]{
-                "Quantum Chest",
+                EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                 "Stored Items:",
-                mItemStack.getDisplayName(),
-                Integer.toString(mItemCount),
-                Integer.toString(getMaxItemCount())};
+                EnumChatFormatting.YELLOW + mItemStack.getDisplayName() + EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mItemCount) + EnumChatFormatting.RESET,
+                EnumChatFormatting.RED + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+        };
     }
 
     @Override

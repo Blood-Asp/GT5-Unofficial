@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -793,7 +794,21 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     @Override
     public String[] getInfoData() {
-        return new String[]{"Progress:", (mProgresstime / 20) + "secs", (mMaxProgresstime / 20) + "secs", "Efficiency:", (mEfficiency / 100.0F) + "%", "Problems:", "" + (getIdealStatus() - getRepairStatus())};
+        return new String[]{
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks",
+                EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime) + EnumChatFormatting.RESET +" ticks",
+                "Stored Energy:",
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
+                "Probably uses:",
+                EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t",
+                "Maximum total EU/t (to all Energy Hatches, not single ones)",
+                EnumChatFormatting.RESET+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET,
+                "Efficiency:",
+                EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + "%",
+                "Problems:",
+                ""+EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET};
     }
 
     @Override

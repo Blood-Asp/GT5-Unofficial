@@ -18,6 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -659,13 +660,17 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public String[] getInfoData() {
         return new String[]{
-                mNEIName,
+                EnumChatFormatting.BLUE + mNEIName + EnumChatFormatting.RESET,
                 "Progress:",
-                (mProgresstime / 20) + " secs",
-                (mMaxProgresstime / 20) + " secs",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks",
+                EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime) + EnumChatFormatting.RESET +" ticks",
                 "Stored Energy:",
-                getBaseMetaTileEntity().getStoredEU() + "EU",
-                getBaseMetaTileEntity().getEUCapacity() + "EU"};
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
+                "Probably uses:",
+                EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t",
+                EnumChatFormatting.RED + Integer.toString(mEUt==0?0:mAmperage) + EnumChatFormatting.RESET +" A"
+        };
     }
 
     @Override
