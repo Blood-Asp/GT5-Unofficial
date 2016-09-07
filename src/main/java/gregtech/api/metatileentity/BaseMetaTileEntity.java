@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -641,19 +642,19 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             if (mTimeStatistics.length > 0) {
                 double tAverageTime = 0;
                 for (int tTime : mTimeStatistics) tAverageTime += tTime;
-                tList.add("This particular TileEntity has caused an average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ms over the last " + mTimeStatistics.length + " ticks.");
+                tList.add("Average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ms since " + mTimeStatistics.length + " ticks.");
             }
             if (mLagWarningCount > 0) {
-                tList.add("This TileEntity has also caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
+                tList.add("Caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
             }
             tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : " not ") + "accessible for you");
         }
         if (aLogLevel > 0) {
             if (getSteamCapacity() > 0 && hasSteamEngineUpgrade())
                 tList.add(getStoredSteam() + " of " + getSteamCapacity() + " Steam");
-            tList.add("Machine is " + (mActive ? "active" : "inactive"));
+            tList.add("Machine is " + (mActive ? EnumChatFormatting.GREEN+"active"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"inactive"+EnumChatFormatting.RESET));
             if (!mHasEnoughEnergy)
-                tList.add("ATTENTION: This Device consumes Energy at a higher Rate than you input. You could insert more to speed up the process.");
+                tList.add(EnumChatFormatting.RED+"ATTENTION: This Device needs more power."+EnumChatFormatting.RESET);
         }
         return mMetaTileEntity.getSpecialDebugInfo(this, aPlayer, aLogLevel, tList);
     }
