@@ -632,7 +632,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             if (mLagWarningCount > 0) {
                 tList.add("Caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
             }
-            tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : " not ") + "accessible for you");
+            tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : EnumChatFormatting.RED+" not "+EnumChatFormatting.RESET) + "accessible for you");
         }
         if (aLogLevel > 0) {
             if (getSteamCapacity() > 0 && hasSteamEngineUpgrade())

@@ -1677,7 +1677,11 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
+<<<<<<< HEAD
                         tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET);
+=======
+                        tList.add("Progress: " +EnumChatFormatting.GREEN+GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " ticks / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET+" ticks");
+>>>>>>> 00c69b5... Scanner done.
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);

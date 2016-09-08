@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -383,18 +384,18 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     public ArrayList<String> getDebugInfo(EntityPlayer aPlayer, int aLogLevel) {
         ArrayList<String> tList = new ArrayList<String>();
         if (aLogLevel > 2) {
-            tList.add("Meta-ID: " + mID + (hasValidMetaTileEntity() ? " valid" : " invalid") + (mMetaTileEntity == null ? " MetaTileEntity == null!" : " "));
+            tList.add("Meta-ID: " + EnumChatFormatting.BLUE+ mID +EnumChatFormatting.RESET + (canAccessData() ? EnumChatFormatting.GREEN+" valid"+EnumChatFormatting.RESET : EnumChatFormatting.RED+" invalid"+EnumChatFormatting.RESET) + (mMetaTileEntity == null ? EnumChatFormatting.RED+" MetaTileEntity == null!"+EnumChatFormatting.RESET : " "));
         }
         if (aLogLevel > 1) {
             if (mTimeStatistics.length > 0) {
                 double tAverageTime = 0;
                 for (int tTime : mTimeStatistics) tAverageTime += tTime;
-                tList.add("This particular TileEntity has caused an average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ms over the last " + mTimeStatistics.length + " ticks.");
+                tList.add("Average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ms since " + mTimeStatistics.length + " ticks.");
             }
             if (mLagWarningCount > 0) {
-                tList.add("This TileEntity has also caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
+                tList.add("Caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
             }
-            tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : " not ") + "accessible for you");
+            tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : EnumChatFormatting.RED+" not "+EnumChatFormatting.RESET) + "accessible for you");
         }
         return mMetaTileEntity.getSpecialDebugInfo(this, aPlayer, aLogLevel, tList);
     }
