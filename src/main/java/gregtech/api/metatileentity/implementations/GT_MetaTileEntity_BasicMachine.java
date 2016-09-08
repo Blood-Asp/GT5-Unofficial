@@ -542,9 +542,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
             while (tempEUt <= V[mTier -1] * (long)mAmperage) {
                 tempEUt *= 4;//this actually controls overclocking
-                xEUt *= 4;//this is effect of everclocking
+                //xEUt *= 4;//this is effect of everclocking
                 mMaxProgresstime /= 2;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? xEUt/2 : xEUt;//U know, if the time is less than 1 tick make the machine use 2x less power
+                xEUt = mMaxProgresstime==0 ? (long)(xEUt/1.1D) : xEUt*4;//U know, if the time is less than 1 tick make the machine use 2x less power
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;

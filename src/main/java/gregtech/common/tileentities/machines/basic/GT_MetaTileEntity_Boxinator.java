@@ -31,7 +31,7 @@ public class GT_MetaTileEntity_Boxinator
     }
 
     public int checkRecipe() {
-        int tCheck = super.checkRecipe(true);
+        int tCheck = super.checkRecipe();
         if (tCheck != DID_NOT_FIND_RECIPE) {
             return tCheck;
         }

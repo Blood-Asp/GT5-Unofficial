@@ -85,14 +85,14 @@ public class GT_MetaTileEntity_Massfabricator
             //Long EUt calculation
             long xEUt=GT_Values.V[1] * (long)Math.pow(2,mTier+2);
 
-            long tempEUt = GT_Values.V[mTier];
+            long tempEUt = GT_Values.V[1];
 
             mMaxProgresstime = sDurationMultiplier;
 
             while (tempEUt <= V[mTier -1]) {
                 tempEUt *= 4;//this actually controls overclocking
                 mMaxProgresstime /= 2;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? (int)(xEUt/1.1F) : xEUt;//U know, if the time is less than 1 tick make the machine use less power
+                xEUt = mMaxProgresstime==0 ? (long)(xEUt/1.1D) : xEUt;//U know, if the time is less than 1 tick make the machine use less power
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;
