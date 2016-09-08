@@ -237,7 +237,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 "Maximum total EU/t (to all Energy Hatches, not single ones)",
                 EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET,
                 "Efficiency:",
-                EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + "%",
+                EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Problems:",
                 ""+EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET,
                 "Multi smelting: "+EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: "+EnumChatFormatting.GREEN+"(EU/t) / "+mCostDiscount+EnumChatFormatting.RESET
