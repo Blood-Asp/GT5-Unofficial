@@ -276,10 +276,10 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 "Maximum total EU/t (to all Energy Hatches, not single ones)",
                 EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET,
                 "Efficiency:",
-                EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + "%",
+                EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Problems:",
                 ""+EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET,
-                "Heat capacity:"+EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K"
+                "Heat capacity: "+EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K"
         };
     }
 }
