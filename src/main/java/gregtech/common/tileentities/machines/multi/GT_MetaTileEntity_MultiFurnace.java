@@ -92,7 +92,12 @@ public class GT_MetaTileEntity_MultiFurnace
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
 
-                this.mEUt = -GT_Utility.safeInt(((long)mEUt) * this.mLevel / (long)this.mCostDiscount);
+                this.mEUt = GT_Utility.safeInt(((long)mEUt) * this.mLevel / (long)this.mCostDiscount,1);
+                if (mEUt == Integer.MAX_VALUE - 1)
+                    return false;
+                if (this.mEUt > 0) {
+                    this.mEUt = (-this.mEUt);
+                }
             }
             updateSlots();
             return true;

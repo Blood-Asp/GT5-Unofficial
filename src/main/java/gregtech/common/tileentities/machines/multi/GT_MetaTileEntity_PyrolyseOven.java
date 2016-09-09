@@ -74,7 +74,6 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }
-                    this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
                     if (tRecipe.mFluidOutputs.length > 0)
                         this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};

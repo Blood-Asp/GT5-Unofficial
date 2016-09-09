@@ -92,7 +92,9 @@ public class GT_MetaTileEntity_ImplosionCompressor
                 //In case recipe is too OP for that machine
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
-                this.mEUt = (-tRecipe.mEUt);
+                if (this.mEUt > 0) {
+                    this.mEUt = (-this.mEUt);
+                }
                 this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0), tRecipe.getOutput(1)};
                 sendLoopStart((byte) 20);
                 updateSlots();

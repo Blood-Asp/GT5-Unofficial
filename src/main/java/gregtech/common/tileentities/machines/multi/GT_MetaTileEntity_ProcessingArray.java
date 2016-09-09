@@ -48,7 +48,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Energy Hatch (Any casing)",
                 "Robust Tungstensteel Casings for the rest (16 at least!)",
                 "Place up to 64 Single Block GT Machines into the GUI Inventory",
-                "Maximal tier of machines inside: 9"};
+                "Maximal overclockedness of machines inside: Tier 9"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -61,6 +61,29 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "ProcessingArray.png");
     }
+
+    //TODO: Expand so it also does the non recipe map recipes
+    /*
+    public void remoteRecipeCheck() {
+        if (mInventory[1] == null) return;
+        String tmp = mInventory[1].getUnlocalizedName().replaceAll("gt.blockmachines.basicmachine.", "");
+        if (tmp.startsWith("replicator")) {
+
+        } else if (tmp.startsWith("brewery")) {
+
+        } else if (tmp.startsWith("packer")) {
+
+        } else if (tmp.startsWith("printer")) {
+
+        } else if (tmp.startsWith("disassembler")) {
+
+        } else if (tmp.startsWith("massfab")) {
+
+        } else if (tmp.startsWith("scanner")) {
+
+        }
+    }
+    */
 
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         if (mInventory[1] == null) return null;
@@ -172,51 +195,36 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }
         ArrayList<ItemStack> tInputList = getStoredInputs();
         int tTier = 0;
-        /* Better dont
-        if (mInventory[1].getUnlocalizedName().endsWith("10")) {
-            tTier = 10;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("11")) {
-            tTier = 11;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("12")) {
-            tTier = 12;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("13")) {
-            tTier = 13;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("14")) {
-            tTier = 14;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("15")) {
-            tTier = 15;
-        }
-        */
-        if (mInventory[1].getUnlocalizedName().endsWith("01")) {
+
+        if       (mInventory[1].getUnlocalizedName().endsWith("10")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("11")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("12")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("13")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("14")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("15")) {
+            tTier = 9;
+        }else if (mInventory[1].getUnlocalizedName().endsWith("1")) {
             tTier = 1;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("02")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("2")) {
             tTier = 2;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("03")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("3")) {
             tTier = 3;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("04")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("4")) {
             tTier = 4;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("05")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("5")) {
             tTier = 5;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("06")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("6")) {
             tTier = 6;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("07")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("7")) {
             tTier = 7;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("08")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("8")) {
             tTier = 8;
-        }
-        if (mInventory[1].getUnlocalizedName().endsWith("09")) {
+        }else if (mInventory[1].getUnlocalizedName().endsWith("9")) {
             tTier = 9;
         }
 
@@ -303,7 +311,10 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mOutputFluids = new FluidStack[]{tFOut};
                 updateSlots();
                 return true;
+            }/* else{
+                ...remoteRecipeCheck()
             }
+            */
         }
         return false;
     }
