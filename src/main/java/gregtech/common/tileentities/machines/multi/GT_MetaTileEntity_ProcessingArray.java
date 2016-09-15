@@ -259,7 +259,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 //In case recipe is too OP for that machine
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
-                this.mEUt = GT_Utility.safeInt(this.mEUt*i,1);
+                this.mEUt = GT_Utility.safeInt((long)this.mEUt*i,1);
                 if (mEUt == Integer.MAX_VALUE - 1)
                     return false;
 
@@ -313,7 +313,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 return true;
             }/* else{
                 ...remoteRecipeCheck()
-            }
+            }*/
         }
         return false;
     }
