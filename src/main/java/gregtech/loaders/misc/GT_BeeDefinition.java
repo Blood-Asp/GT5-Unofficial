@@ -682,7 +682,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         String name = "for.bees.species." + lowercaseName;
 
         this.branch = branch;
-        this.species = BeeManager.beeFactory.createSpecies(uid, dominant, "Sengir", name, description, branch.getBranch(), binomial, primary, secondary);
+        this.species = BeeManager.beeFactory.createSpecies(uid, dominant, "GREGTECH", name, description, branch.getBranch(), binomial, primary, secondary);
     }
 
     public static void initBees() {
