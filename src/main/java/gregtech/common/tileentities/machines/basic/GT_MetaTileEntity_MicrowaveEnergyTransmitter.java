@@ -117,12 +117,12 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (getBaseMetaTileEntity().isServerSide()) {
+        if (aBaseMetaTileEntity.isServerSide()) {
             if ((this.mTargetX == 0) && (this.mTargetY == 0) && (this.mTargetZ == 0) && (this.mTargetD == 0)) {
-                this.mTargetX = getBaseMetaTileEntity().getXCoord();
-                this.mTargetY = getBaseMetaTileEntity().getYCoord();
-                this.mTargetZ = getBaseMetaTileEntity().getZCoord();
-                this.mTargetD = getBaseMetaTileEntity().getWorld().provider.dimensionId;
+                this.mTargetX = aBaseMetaTileEntity.getXCoord();
+                this.mTargetY = aBaseMetaTileEntity.getYCoord();
+                this.mTargetZ = aBaseMetaTileEntity.getZCoord();
+                this.mTargetD = aBaseMetaTileEntity.getWorld().provider.dimensionId;
             }
             this.hasBlock = checkForBlock();
         }
