@@ -669,6 +669,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	CallistoIce	    	( 389, TextureSet.SET_SHINY				,   9.0F,   1024,  4, 1|2  |8      |64|128                  ,  30, 177, 255,   0,   "Callisto Ice"     	            ,     0,       0,       -1,     0, false, false,  4,   1,   1, Dyes.dyeLightBlue),
 	Duralumin	    	( 392, TextureSet.SET_SHINY				,  16.0F,    512,  3, 1|2  |8      |64|128                  , 235, 209, 160,   0,   "Duralumin"     		        ,     0,       0,     1600,  1600,  true, false,  4,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Aluminium, 1), new MaterialStack(Bronze, 1))),
 	Oriharukon	    	( 393, TextureSet.SET_SHINY				,  32.0F,  10240,  5, 1|2  |8      |64|128                  , 103, 125, 104,   0,   "Oriharukon"   		            ,     0,       0,     5400,  5400,  true, false,  4,   1,   1, Dyes.dyeLime),
+	MysteriousCrystal  	( 398, TextureSet.SET_SHINY				,   8.0F,    256,  6, 1                                     ,  22, 133, 108,   0,   "Mysterious Crystal"   		    ,     0,       0,     7200,  7200,  true, false,  4,   1,   1, Dyes.dyeCyan),
+
 	/**
 	 * Op materials (draconic evolution above)
 	 */
