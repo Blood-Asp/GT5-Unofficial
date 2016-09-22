@@ -20,7 +20,6 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
-import ic2.api.recipe.ICannerBottleRecipeManager;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
@@ -84,11 +83,11 @@ public class GT_Utility {
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
     private static final List<FluidContainerData> sFluidContainerList = new ArrayList<FluidContainerData>();
-    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<GT_ItemStack, FluidContainerData>();
-    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
+    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new /*Concurrent*/HashMap<GT_ItemStack, FluidContainerData>();
+    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new /*Concurrent*/HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
-    public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new HashMap<GT_PlayedSound, Integer>();
+    public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new /*Concurrent*/HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
 
     static {
@@ -329,7 +328,7 @@ public class GT_Utility {
     }
 
     public static void sendChatToPlayer(EntityPlayer aPlayer, String aChatMessage) {
-        if (aPlayer != null && aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
+        if (aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
             aPlayer.addChatComponentMessage(new ChatComponentText(aChatMessage));
         }
     }
@@ -510,7 +509,7 @@ public class GT_Utility {
      * @return the Amount of moved Items
      */
     public static byte moveOneItemStack(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce) {
-        if (aTileEntity1 != null && aTileEntity1 instanceof IInventory)
+        if (aTileEntity1 instanceof IInventory)
             return moveOneItemStack((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
         return 0;
     }
@@ -607,7 +606,7 @@ public class GT_Utility {
             for (int i = 0; i < tGrabSlots.length; i++) tGrabSlots[i] = i;
         }
 
-        if (aTileEntity2 != null && aTileEntity2 instanceof IInventory) {
+        if (aTileEntity2 instanceof IInventory) {
             for (int i = 0; i < tGrabSlots.length; i++) {
                 if (listContainsItem(aFilter, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
                     if (isAllowedToTakeFromSlot((IInventory) aTileEntity1, tGrabSlots[i], aGrabFrom, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]))) {
@@ -707,7 +706,7 @@ public class GT_Utility {
             sFilledContainerToData.put(new GT_ItemStack(tData.filledContainer), tData);
             Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(tData.emptyContainer));
             if (tFluidToContainer == null) {
-                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new /*Concurrent*/HashMap<Fluid, FluidContainerData>());
                 GregTech_API.sFluidMappings.add(tFluidToContainer);
             }
             tFluidToContainer.put(tData.fluid.getFluid(), tData);
@@ -719,7 +718,7 @@ public class GT_Utility {
         sFilledContainerToData.put(new GT_ItemStack(aData.filledContainer), aData);
         Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(aData.emptyContainer));
         if (tFluidToContainer == null) {
-            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new /*Concurrent*/HashMap<Fluid, FluidContainerData>());
             GregTech_API.sFluidMappings.add(tFluidToContainer);
         }
         tFluidToContainer.put(aData.fluid.getFluid(), aData);
@@ -1020,7 +1019,7 @@ public class GT_Utility {
     }
 
     public static boolean isBlockValid(Object aBlock) {
-        return aBlock != null && (aBlock instanceof Block);
+        return (aBlock instanceof Block);
     }
 
     public static boolean isBlockInvalid(Object aBlock) {
@@ -1036,7 +1035,7 @@ public class GT_Utility {
     }
 
     public static boolean isStackValid(Object aStack) {
-        return aStack != null && (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
+        return (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
     }
 
     public static boolean isStackInvalid(Object aStack) {
@@ -1408,7 +1407,7 @@ public class GT_Utility {
      * re-maps all Keys of a Map after the Keys were weakened.
      */
     public static <X, Y> Map<X, Y> reMap(Map<X, Y> aMap) {
-        Map<X, Y> tMap = new HashMap<X, Y>();
+        Map<X, Y> tMap = new /*Concurrent*/HashMap<X, Y>();
         tMap.putAll(aMap);
         aMap.clear();
         aMap.putAll(tMap);
@@ -1561,15 +1560,17 @@ public class GT_Utility {
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
         ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		int[] tInts = GT_Proxy.chunkData.get(tPos);
+    		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
     			if(tInts[0]>=0){tAmount = tInts[0];}
     		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
     	tAmount = tAmount - 5;
-    	GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
+    	tInts[0] = tAmount;
+    	GT_Proxy.chunkData.put(tPos, tInts);
     	
         return new FluidStack(tFluid, tAmount);
     }
@@ -1584,7 +1585,7 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX+EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
+        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
         try {
             if (tTileEntity != null && tTileEntity instanceof IInventory)
                 tList.add("Name: " + EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName()+EnumChatFormatting.RESET + "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
@@ -1690,7 +1691,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add("Progress: " +EnumChatFormatting.GREEN+GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " ticks / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET+" ticks");
+                        tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()/20)  +EnumChatFormatting.RESET+ " s / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue/20) +EnumChatFormatting.RESET+" s");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2010,16 +2011,14 @@ public class GT_Utility {
             if (aStack != null) {
                 NBTTagList nbttaglist = aStack.getEnchantmentTagList();
                 if (nbttaglist != null) {
-                    for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                        try {
+                    try {
+                        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                             short short1 = nbttaglist.getCompoundTagAt(i).getShort("id");
                             short short2 = nbttaglist.getCompoundTagAt(i).getShort("lvl");
                             if (Enchantment.enchantmentsList[short1] != null)
                                 aBullshitModifier.calculateModifier(Enchantment.enchantmentsList[short1], short2);
-                        } catch (Throwable e) {
-                            //
                         }
-                    }
+                    } catch (Throwable e) {/**/}
                 }
             }
         }

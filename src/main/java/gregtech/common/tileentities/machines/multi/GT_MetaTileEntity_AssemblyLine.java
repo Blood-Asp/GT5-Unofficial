@@ -67,58 +67,58 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-        if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
-        NBTTagCompound tTag = mInventory[1].getTagCompound();
-        if(tTag==null)return false;
-        ItemStack tStack[] = new ItemStack[15];
-        for(int i = 0;i<15;i++){
-            if(tTag.hasKey(""+i)){
-                tStack[i] = GT_Utility.loadItem(tTag, ""+i);
-                if(tStack[i]!=null){
-                    if(mInputBusses.get(i)==null)return false;
-                    if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
-                    }else{return false;}
-                }}
-        }
-        FluidStack[] tFluids = new FluidStack[4];
-        for(int i = 0;i<4;i++){
-            if(tTag.hasKey("f"+i)){
-                tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
-                if(tFluids[i]!=null){
-                    if(mInputHatches.get(i)==null)return false;
-                    if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
-                    }else{return false;}
-                }
-            }
-        }
-        if(tTag.hasKey("output")){
-            mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-            if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
-        }else{return false;}
-        if(tTag.hasKey("time")){
-            mMaxProgresstime = tTag.getInteger("time");
-            if(mMaxProgresstime<=0)return false;
-        }else{return false;}
-        if(tTag.hasKey("eu")){
-            mEUt = tTag.getInteger("eu");
-        }else{return false;}
-        for(int i = 0;i<15;i++){
-            if(tStack[i]!=null){
-                mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
-                if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
-                }
-            }
-        }
-
-        for(int i = 0;i<4;i++){
-            if(tFluids[i]!=null){
-                mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
-                if(mInputHatches.get(i).mFluid.amount<=0){
-                    mInputHatches.get(i).mFluid = null;
-                }
-            }
-        }
-        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+    	 if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
+    	NBTTagCompound tTag = mInventory[1].getTagCompound();
+    	if(tTag==null)return false;
+    	ItemStack tStack[] = new ItemStack[15];
+    	for(int i = 0;i<15;i++){
+    		if(tTag.hasKey(""+i)){
+    		tStack[i] = GT_Utility.loadItem(tTag, ""+i);
+    		if(tStack[i]!=null){
+    			if(mInputBusses.get(i)==null)return false;
+    			if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
+    			}else{return false;}
+    		}}
+    	}
+    	FluidStack[] tFluids = new FluidStack[4];
+    	for(int i = 0;i<4;i++){
+    		if(tTag.hasKey("f"+i)){
+    			tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
+    			if(tFluids[i]!=null){
+    				if(mInputHatches.get(i)==null)return false;
+    				if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
+    				}else{return false;}
+    			}
+    		}
+    	}
+    	if(tTag.hasKey("output")){
+    		mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+    		if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
+    	}else{return false;}
+    	if(tTag.hasKey("time")){
+    		mMaxProgresstime = tTag.getInteger("time");
+    		if(mMaxProgresstime<=0)return false;
+    	}else{return false;}
+    	if(tTag.hasKey("eu")){
+    		mEUt = tTag.getInteger("eu");
+    	}else{return false;}
+    	for(int i = 0;i<15;i++){
+    		if(tStack[i]!=null){
+    			mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
+    			if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
+    			}
+    		}
+    	}
+    	
+    	for(int i = 0;i<4;i++){
+    		if(tFluids[i]!=null){
+    			mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
+    			if(mInputHatches.get(i).mFluid.amount<=0){
+    				mInputHatches.get(i).mFluid = null;
+    			}
+    		}
+    	}
+    	this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
         calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, getMaxInputVoltage());
         //In case recipe is too OP for that machine
@@ -168,8 +168,8 @@ public class GT_MetaTileEntity_AssemblyLine
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir*2, -2, i) != 0) {return false;}
                 }
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, -2, i);
-                if (!addOutputToMachineList(tTileEntity, 16)){
-                    if (!addOutputToMachineList(tTileEntity, 16)){;return false;
+                if (!addInputToMachineList(tTileEntity, 16)){
+                    if (!addOutputToMachineList(tTileEntity, 16)){
                     }else{if(r>0){return true;}else{return false;}}
                 }
             }

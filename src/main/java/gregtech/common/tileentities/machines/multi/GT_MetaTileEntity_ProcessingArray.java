@@ -146,9 +146,9 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
         } else if (tmp.startsWith("lathe")) {
             return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
-        } else if (tmp.startsWith("packer")) {
+        } else if (tmp.startsWith("boxinator")) {
             return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
-        } else if (tmp.startsWith("unpacker")) {
+        } else if (tmp.startsWith("unboxinator")) {
             return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
         } else if (tmp.startsWith("polarizer")) {
             return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
@@ -227,14 +227,14 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }else if (mInventory[1].getUnlocalizedName().endsWith("9")) {
             tTier = 9;
         }
-
+        
         if(!mMachine.equals(mInventory[1].getUnlocalizedName()))mLastRecipe=null;
         mMachine = mInventory[1].getUnlocalizedName();
         ItemStack[] tInputs = (ItemStack[]) tInputList.toArray(new ItemStack[tInputList.size()]);
 
         ArrayList<FluidStack> tFluidList = getStoredFluids();
-
-        FluidStack[] tFluids = (FluidStack[]) tFluidList.toArray(new FluidStack[tFluidList.size()]);
+        
+        FluidStack[] tFluids = (FluidStack[]) tFluidList.toArray(new FluidStack[tFluidList.size()]); 
         if (tInputList.size() > 0 || tFluids.length > 0) {
             GT_Recipe tRecipe = map.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
             if (tRecipe != null) {
@@ -259,7 +259,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 //In case recipe is too OP for that machine
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
-                this.mEUt = GT_Utility.safeInt(this.mEUt*i,1);
+                this.mEUt = GT_Utility.safeInt((long)this.mEUt*i,1);
                 if (mEUt == Integer.MAX_VALUE - 1)
                     return false;
 
@@ -313,8 +313,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 return true;
             }/* else{
                 ...remoteRecipeCheck()
-            }
-            */
+            }*/
         }
         return false;
     }

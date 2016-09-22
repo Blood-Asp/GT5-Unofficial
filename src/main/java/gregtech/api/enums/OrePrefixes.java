@@ -639,7 +639,7 @@ public enum OrePrefixes {
 
     public static OrePrefixes getPrefix(String aPrefixName, OrePrefixes aReplacement) {
         Object tObject = GT_Utility.getFieldContent(OrePrefixes.class, aPrefixName, false, false);
-        if (tObject != null && tObject instanceof OrePrefixes) return (OrePrefixes) tObject;
+        if (tObject instanceof OrePrefixes) return (OrePrefixes) tObject;
         return aReplacement;
     }
 

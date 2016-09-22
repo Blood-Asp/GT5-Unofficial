@@ -3,6 +3,7 @@ package gregtech.common;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
@@ -40,10 +41,11 @@ public class GT_Worldgenerator
     }
 
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        this.mList.add(new WorldGenContainer(new Random(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
-            for (int i = 0; i < this.mList.size(); i++) {
+            int mList_sS=this.mList.size();
+            for (int i = 0; i < mList_sS; i++) {
                 ((Runnable) this.mList.get(i)).run();
             }
             this.mList.clear();
@@ -103,13 +105,11 @@ public class GT_Worldgenerator
                         if (tBiome == null) {
                             tBiome = BiomeGenBase.plains.biomeName;
                         }
-                        for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                            try {
+                        try {
+                            for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
                                 tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
-                            } catch (Throwable e) {
-                                e.printStackTrace(GT_Log.err);
                             }
-                        }
+                        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
                         j++;
                     }
                     i++;
@@ -119,7 +119,7 @@ public class GT_Worldgenerator
             int tDimensionType = this.mWorld.provider.dimensionId;
             Random aRandom = new Random();
             if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
-            	short primaryMeta = 0;
+                short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
                 short sporadicMeta = 0;

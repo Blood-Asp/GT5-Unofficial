@@ -36,6 +36,10 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal();
     public static boolean FUCKING_LOCK = false;
     public static boolean tHideOres;
+    private final String aTextName = ".name";
+    private final String aTextSmall = "Small ";
+    private final String aTextDot = ".";
+    private final String aTextNothing = "";
 
     protected GT_Block_Ores_Abstract(String aUnlocalizedName, boolean aHideFirstMeta, Material aMaterial) {
         super(GT_Item_Ores.class, aUnlocalizedName, aMaterial);
@@ -48,31 +52,31 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         }
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (GregTech_API.sGeneratedMaterials[i] != null) {
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + i + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 1000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 2000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 3000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 4000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 5000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 6000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 7000) + ".name", getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 16000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 17000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 18000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 19000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 20000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 21000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 22000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + 23000) + ".name", "Small " + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + i + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 1000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 2000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 3000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 4000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 5000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 6000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 7000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 16000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 17000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 18000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 19000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 20000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 21000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 22000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 23000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                 if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[0] != null ? this.getProcessingPrefix()[0].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[1] != null ? this.getProcessingPrefix()[1].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 1000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[2] != null ? this.getProcessingPrefix()[2].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 2000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[3] != null ? this.getProcessingPrefix()[3].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 3000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[4] != null ? this.getProcessingPrefix()[4].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 4000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[5] != null ? this.getProcessingPrefix()[5].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 5000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[6] != null ? this.getProcessingPrefix()[6].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 6000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[7] != null ? this.getProcessingPrefix()[7].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + 7000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[0] != null ? this.getProcessingPrefix()[0].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[1] != null ? this.getProcessingPrefix()[1].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 1000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[2] != null ? this.getProcessingPrefix()[2].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 2000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[3] != null ? this.getProcessingPrefix()[3].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 3000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[4] != null ? this.getProcessingPrefix()[4].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 4000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[5] != null ? this.getProcessingPrefix()[5].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 5000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[6] != null ? this.getProcessingPrefix()[6].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 6000));
+                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[7] != null ? this.getProcessingPrefix()[7].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 7000));
                     if (tHideOres) {
                         if (aHideFirstMeta) codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i));
                         codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 1000));
@@ -180,7 +184,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public abstract String getUnlocalizedName();
 
     public String getLocalizedName() {
-        return StatCollector.translateToLocal(getUnlocalizedName() + ".name");
+        return StatCollector.translateToLocal(getUnlocalizedName() + aTextName);
     }
 
     public int getRenderType() {
@@ -228,7 +232,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
 
     public int getDamageValue(World aWorld, int aX, int aY, int aZ) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
-        if ((tTileEntity != null) && ((tTileEntity instanceof GT_TileEntity_Ores))) {
+        if (((tTileEntity instanceof GT_TileEntity_Ores))) {
             return ((GT_TileEntity_Ores) tTileEntity).getMetaData();
         }
         return 0;
@@ -268,22 +272,22 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
             Materials tMaterial = GregTech_API.sGeneratedMaterials[i];
             if ((tMaterial != null) && ((tMaterial.mTypes & 0x8) != 0)) {
-                aList.add(new ItemStack(aItem, 1, i));
-                aList.add(new ItemStack(aItem, 1, i + 1000));
-                aList.add(new ItemStack(aItem, 1, i + 2000));
-                aList.add(new ItemStack(aItem, 1, i + 3000));
-                aList.add(new ItemStack(aItem, 1, i + 4000));
-                aList.add(new ItemStack(aItem, 1, i + 5000));
-                aList.add(new ItemStack(aItem, 1, i + 6000));
-                aList.add(new ItemStack(aItem, 1, i + 7000));
-                aList.add(new ItemStack(aItem, 1, i + 16000));
-                aList.add(new ItemStack(aItem, 1, i + 17000));
-                aList.add(new ItemStack(aItem, 1, i + 18000));
-                aList.add(new ItemStack(aItem, 1, i + 19000));
-                aList.add(new ItemStack(aItem, 1, i + 20000));
-                aList.add(new ItemStack(aItem, 1, i + 21000));
-                aList.add(new ItemStack(aItem, 1, i + 22000));
-                aList.add(new ItemStack(aItem, 1, i + 23000));
+                if (!(new ItemStack(aItem, 1, i).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i));
+                if (!(new ItemStack(aItem, 1, i + 1000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 1000));
+                if (!(new ItemStack(aItem, 1, i + 2000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 2000));
+                if (!(new ItemStack(aItem, 1, i + 3000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 3000));
+                if (!(new ItemStack(aItem, 1, i + 4000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 4000));
+                if (!(new ItemStack(aItem, 1, i + 5000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 5000));
+                if (!(new ItemStack(aItem, 1, i + 6000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 6000));
+                if (!(new ItemStack(aItem, 1, i + 7000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 7000));
+                if (!(new ItemStack(aItem, 1, i + 16000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 16000));
+                if (!(new ItemStack(aItem, 1, i + 17000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 17000));
+                if (!(new ItemStack(aItem, 1, i + 18000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 18000));
+                if (!(new ItemStack(aItem, 1, i + 19000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 19000));
+                if (!(new ItemStack(aItem, 1, i + 20000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 20000));
+                if (!(new ItemStack(aItem, 1, i + 21000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 21000));
+                if (!(new ItemStack(aItem, 1, i + 22000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 22000));
+                if (!(new ItemStack(aItem, 1, i + 23000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 23000));
             }
         }
     }
