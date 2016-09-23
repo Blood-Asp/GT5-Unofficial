@@ -1,7 +1,9 @@
 package gregtech.api.util;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.IDamagableItem;
@@ -37,6 +39,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -1157,7 +1160,7 @@ public class GT_ModHandler {
                         if (rReturn != null) tList.remove(i--); tList_sS=tList.size();
                     }
                 }
-        }} catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+            }} catch (Throwable e) {e.printStackTrace(GT_Log.err);}
         return rReturn;
     }
 
@@ -1292,21 +1295,21 @@ public class GT_ModHandler {
         ArrayList<IRecipe> tList = (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList();
         int tList_sS=tList.size();
         try {
-        for (int i = 0; i < tList_sS; i++) {
-            temp = false;
-            temp = tList.get(i).matches(aCrafting, DW);
-            if (temp) {
-                ItemStack tOutput = aUncopiedStack ? tList.get(i).getRecipeOutput() : tList.get(i).getCraftingResult(aCrafting);
-                if (tOutput == null || tOutput.stackSize <= 0) {
-                    // Seriously, who would ever do that shit?
-                    if (!GregTech_API.sPostloadFinished)
-                        throw new GT_ItsNotMyFaultException("Seems another Mod added a Crafting Recipe with null Output. Tell the Developer of said Mod to fix that.");
-                } else {
-                    if (aUncopiedStack) return tOutput;
-                    return GT_Utility.copy(tOutput);
+            for (int i = 0; i < tList_sS; i++) {
+                temp = false;
+                temp = tList.get(i).matches(aCrafting, DW);
+                if (temp) {
+                    ItemStack tOutput = aUncopiedStack ? tList.get(i).getRecipeOutput() : tList.get(i).getCraftingResult(aCrafting);
+                    if (tOutput == null || tOutput.stackSize <= 0) {
+                        // Seriously, who would ever do that shit?
+                        if (!GregTech_API.sPostloadFinished)
+                            throw new GT_ItsNotMyFaultException("Seems another Mod added a Crafting Recipe with null Output. Tell the Developer of said Mod to fix that.");
+                    } else {
+                        if (aUncopiedStack) return tOutput;
+                        return GT_Utility.copy(tOutput);
+                    }
                 }
-            }
-        }} catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+            }} catch (Throwable e) {e.printStackTrace(GT_Log.err);}
         return null;
     }
 
@@ -1324,6 +1327,7 @@ public class GT_ModHandler {
             for (IRecipe tRecipe : (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
                 ItemStack tStack = tRecipe.getRecipeOutput();
                 if (GT_Utility.isStackValid(tStack) && tStack.getMaxStackSize() == 1 && tStack.getMaxDamage() > 0 && !(tStack.getItem() instanceof ItemBlock) && !(tStack.getItem() instanceof IReactorComponent) && !isElectricItem(tStack) && !GT_Utility.isStackInList(tStack, sNonReplaceableItems)) {
+                    //if (!(tRecipe instanceof ShapelessRecipes) || tRecipe instanceof ShapelessOreRecipe) {
                     if (tRecipe instanceof ShapedOreRecipe) {
                         boolean temp = true;
                         for (Object tObject : ((ShapedOreRecipe) tRecipe).getInput()) {
@@ -1336,8 +1340,7 @@ public class GT_ModHandler {
                                     temp = false;
                                     break;
                                 }
-                            }
-                        }
+                            }}
                         if (temp) {sSingleNonBlockDamagableRecipeList.add(tRecipe);}
                     } else if (tRecipe instanceof ShapedRecipes) {
                         boolean temp = true;
@@ -1351,6 +1354,7 @@ public class GT_ModHandler {
                     } else {
                         sSingleNonBlockDamagableRecipeList.add(tRecipe);
                     }
+                    //}
                 }
             }
             GT_Log.out.println("GT_Mod: Created a List of Tool Recipes containing " + sSingleNonBlockDamagableRecipeList.size() + " Recipes for recycling." + (sSingleNonBlockDamagableRecipeList.size() > 1024 ? " Scanning all these Recipes is the reason for the startup Lag you receive right now." : E));
@@ -1372,6 +1376,7 @@ public class GT_ModHandler {
                     }
                 }
             }
+
         }
         /*ArrayList<ItemStack> */
         if (sSingleNonBlockDamagableRecipeList_verified.size() != 0) {rList = getRecipeOutputs(sSingleNonBlockDamagableRecipeList_verified, true, aRecipe);}
@@ -1434,11 +1439,11 @@ public class GT_ModHandler {
                 } else {
                     rList.add(GT_Utility.copy(tOutput));
                     if (aDeleteFromList) {tempaList_list.add(i);}
-                    }
                 }
             }
-            //boolean tempaList_list_b = tempaList_list.size() != 0 ? true : false;
-            if (aDeleteFromList && tempaList_list.size() != 0) {
+        }
+        //boolean tempaList_list_b = tempaList_list.size() != 0 ? true : false;
+        if (aDeleteFromList && tempaList_list.size() != 0) {
             List<IRecipe> tempaList_2 = new ArrayList<IRecipe>();
             for (int i = 0; i < aList_sS; i++) {
                 int k = 0, l = 0;
@@ -1496,7 +1501,7 @@ public class GT_ModHandler {
             for (Entry<IRecipeInput, RecipeOutput> tEntry : aRecipeList.entrySet()) {
                 if (tEntry.getKey().matches(aInput)) {
                     if (tEntry.getKey().getAmount() <= aInput.stackSize) {
-                        ItemStack[] tList = (ItemStack[]) tEntry.getValue().items.toArray();
+                        ItemStack[] tList = (ItemStack[]) tEntry.getValue().items.toArray(new ItemStack[tEntry.getValue().items.size()]);
                         if (tList.length == 0) break;
                         ItemStack[] rList = new ItemStack[aOutputSlots.length];
                         rRecipeMetaData.setTag("return", tEntry.getValue().metadata);
