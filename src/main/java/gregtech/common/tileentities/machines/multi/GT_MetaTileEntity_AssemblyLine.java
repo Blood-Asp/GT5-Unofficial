@@ -124,6 +124,7 @@ public class GT_MetaTileEntity_AssemblyLine
         //In case recipe is too OP for that machine
         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
             return false;
+        this.mEUt = this.mEUt > 0 ? -this.mEUt : this.mEUt;//makes it use power...
         updateSlots();
         return true;
     }
