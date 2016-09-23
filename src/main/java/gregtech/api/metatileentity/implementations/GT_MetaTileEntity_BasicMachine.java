@@ -695,9 +695,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 "Stored Energy:",
                 EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
                 EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
-                "Probably uses:",
-                EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t at "+
-                EnumChatFormatting.RED + Integer.toString(mEUt==0?0:mAmperage) + EnumChatFormatting.RESET +" A"
+                "Probably uses: " +
+                        EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t at " +
+                        EnumChatFormatting.RED + Integer.toString(mEUt==0?0:mAmperage) + EnumChatFormatting.RESET +" A"
         };
     }
 
