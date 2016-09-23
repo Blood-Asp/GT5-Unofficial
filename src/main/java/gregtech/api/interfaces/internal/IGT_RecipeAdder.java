@@ -38,6 +38,8 @@ public interface IGT_RecipeAdder {
      */
     public boolean addCentrifugeRecipe(ItemStack aInput1, int aInput2, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, ItemStack aOutput5, ItemStack aOutput6, int aDuration);
 
+    public boolean addCentrifugeRecipe(ItemStack aInput1, int aInput2, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, ItemStack aOutput5, ItemStack aOutput6, int aDuration, int aEUt);
+
     /**
      * Adds a Centrifuge Recipe
      *
@@ -88,6 +90,8 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration);
 
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, int aEUt);
+
     /**
      * Adds a Chemical Recipe
      *
@@ -98,16 +102,7 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration);
 
-    /**
-     * Adds a Chemical Recipe
-     *
-     * @param aInput1   must be != null
-     * @param aInput2   must be != null
-     * @param aOutput  must be != null
-     * @param aDuration must be > 0
-     * @param aEUtick   must be > 0
-     */
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUtick);
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt);
 
 
     /**
@@ -343,6 +338,8 @@ public interface IGT_RecipeAdder {
      */
     public boolean addVacuumFreezerRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration);
 
+    public boolean addVacuumFreezerRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt);
+
     /**
      * Adds a Fuel for My Generators
      *
@@ -363,10 +360,14 @@ public interface IGT_RecipeAdder {
      */
     public boolean addBrewingRecipe(ItemStack aIngredient, Fluid aInput, Fluid aOutput, boolean aHidden);
 
+    public boolean addBrewingRecipe(ItemStack aIngredient, Fluid aInput, Fluid aOutput, int aDuration, int aEUt, boolean aHidden);
+
     /**
      * Adds a Recipe for the Fermenter
      */
     public boolean addFermentingRecipe(FluidStack aInput, FluidStack aOutput, int aDuration, boolean aHidden);
+
+    public boolean addFermentingRecipe(FluidStack aInput, FluidStack aOutput, int aDuration, int aEUT, boolean aHidden);
 
     /**
      * Adds a Recipe for the Fluid Heater
@@ -402,6 +403,7 @@ public interface IGT_RecipeAdder {
      * Adds a Recipe for the Fluid Canner
      */
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput);
+
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput, int aDuration,int aEUt);
     /**
      * Adds a Recipe for the Chemical Bath

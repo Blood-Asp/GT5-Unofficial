@@ -254,6 +254,13 @@ public class GT_Recipe {
         }
     }
 
+    public GT_Recipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt, int VACUUM) {
+        this(true, new ItemStack[]{aInput1}, new ItemStack[]{aOutput1}, null, null, null, null, Math.max(aDuration, 1), aEUt, 0);
+        if (mInputs.length > 0 && mOutputs[0] != null) {
+            GT_Recipe_Map.sVacuumRecipes.addRecipe(this);
+        }
+    }
+
     public static void reInit() {
         GT_Log.out.println("GT_Mod: Re-Unificating Recipes.");
         for (GT_Recipe_Map tMapEntry : GT_Recipe_Map.sMappings) tMapEntry.reInit();
