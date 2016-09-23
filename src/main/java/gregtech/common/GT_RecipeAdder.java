@@ -368,6 +368,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
+    @Deprecated
     public boolean addGrinderRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4) {
         return false;
     }
@@ -547,7 +548,6 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-    //Non tierable AF
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput) {
         int aDuration= aFluidOutput == null ? aFluidInput.amount / 62 : aFluidOutput.amount / 62;
 
@@ -567,7 +567,6 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-    //Tierable AF
     public boolean addFluidCannerRecipe(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput, int aDuration, int aEUt) {
         if ((aInput != null) && (aOutput != null)) {
             if ((aFluidInput == null ? 1 : 0) != (aFluidOutput == null ? 1 : 0)) {
