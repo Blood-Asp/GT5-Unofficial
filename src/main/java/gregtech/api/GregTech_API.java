@@ -216,29 +216,29 @@ public class GregTech_API {
         sSoundList.put(5, "random.explode");
         sSoundList.put(6, "fire.ignite");
 
-        sSoundList.put(100, MOD_ID_IC2.toLowerCase() + ":" + "tools.Wrench");
-        sSoundList.put(101, MOD_ID_IC2.toLowerCase() + ":" + "tools.RubberTrampoline");
-        sSoundList.put(102, MOD_ID_IC2.toLowerCase() + ":" + "tools.Painter");
-        sSoundList.put(103, MOD_ID_IC2.toLowerCase() + ":" + "tools.BatteryUse");
-        sSoundList.put(104, MOD_ID_IC2.toLowerCase() + ":" + "tools.chainsaw.ChainsawUseOne");
-        sSoundList.put(105, MOD_ID_IC2.toLowerCase() + ":" + "tools.chainsaw.ChainsawUseTwo");
-        sSoundList.put(106, MOD_ID_IC2.toLowerCase() + ":" + "tools.drill.DrillSoft");
-        sSoundList.put(107, MOD_ID_IC2.toLowerCase() + ":" + "tools.drill.DrillHard");
-        sSoundList.put(108, MOD_ID_IC2.toLowerCase() + ":" + "tools.ODScanner");
+        sSoundList.put(100, MOD_ID_IC2_low + ":" + "tools.Wrench");
+        sSoundList.put(101, MOD_ID_IC2_low + ":" + "tools.RubberTrampoline");
+        sSoundList.put(102, MOD_ID_IC2_low + ":" + "tools.Painter");
+        sSoundList.put(103, MOD_ID_IC2_low + ":" + "tools.BatteryUse");
+        sSoundList.put(104, MOD_ID_IC2_low + ":" + "tools.chainsaw.ChainsawUseOne");
+        sSoundList.put(105, MOD_ID_IC2_low + ":" + "tools.chainsaw.ChainsawUseTwo");
+        sSoundList.put(106, MOD_ID_IC2_low + ":" + "tools.drill.DrillSoft");
+        sSoundList.put(107, MOD_ID_IC2_low + ":" + "tools.drill.DrillHard");
+        sSoundList.put(108, MOD_ID_IC2_low + ":" + "tools.ODScanner");
 
-        sSoundList.put(200, MOD_ID_IC2.toLowerCase() + ":" + "machines.ExtractorOp");
-        sSoundList.put(201, MOD_ID_IC2.toLowerCase() + ":" + "machines.MaceratorOp");
-        sSoundList.put(202, MOD_ID_IC2.toLowerCase() + ":" + "machines.InductionLoop");
-        sSoundList.put(203, MOD_ID_IC2.toLowerCase() + ":" + "machines.CompressorOp");
-        sSoundList.put(204, MOD_ID_IC2.toLowerCase() + ":" + "machines.RecyclerOp");
-        sSoundList.put(205, MOD_ID_IC2.toLowerCase() + ":" + "machines.MinerOp");
-        sSoundList.put(206, MOD_ID_IC2.toLowerCase() + ":" + "machines.PumpOp");
-        sSoundList.put(207, MOD_ID_IC2.toLowerCase() + ":" + "machines.ElectroFurnaceLoop");
-        sSoundList.put(208, MOD_ID_IC2.toLowerCase() + ":" + "machines.InductionLoop");
-        sSoundList.put(209, MOD_ID_IC2.toLowerCase() + ":" + "machines.MachineOverload");
-        sSoundList.put(210, MOD_ID_IC2.toLowerCase() + ":" + "machines.InterruptOne");
-        sSoundList.put(211, MOD_ID_IC2.toLowerCase() + ":" + "machines.KaChing");
-        sSoundList.put(212, MOD_ID_IC2.toLowerCase() + ":" + "machines.MagnetizerLoop");
+        sSoundList.put(200, MOD_ID_IC2_low + ":" + "machines.ExtractorOp");
+        sSoundList.put(201, MOD_ID_IC2_low + ":" + "machines.MaceratorOp");
+        sSoundList.put(202, MOD_ID_IC2_low + ":" + "machines.InductionLoop");
+        sSoundList.put(203, MOD_ID_IC2_low + ":" + "machines.CompressorOp");
+        sSoundList.put(204, MOD_ID_IC2_low + ":" + "machines.RecyclerOp");
+        sSoundList.put(205, MOD_ID_IC2_low + ":" + "machines.MinerOp");
+        sSoundList.put(206, MOD_ID_IC2_low + ":" + "machines.PumpOp");
+        sSoundList.put(207, MOD_ID_IC2_low + ":" + "machines.ElectroFurnaceLoop");
+        sSoundList.put(208, MOD_ID_IC2_low + ":" + "machines.InductionLoop");
+        sSoundList.put(209, MOD_ID_IC2_low + ":" + "machines.MachineOverload");
+        sSoundList.put(210, MOD_ID_IC2_low + ":" + "machines.InterruptOne");
+        sSoundList.put(211, MOD_ID_IC2_low + ":" + "machines.KaChing");
+        sSoundList.put(212, MOD_ID_IC2_low + ":" + "machines.MagnetizerLoop");
     }
 
     /**
