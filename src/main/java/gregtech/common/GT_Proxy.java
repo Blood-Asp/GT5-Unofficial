@@ -1,9 +1,5 @@
 package gregtech.common;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.util.*;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Loader;
@@ -74,6 +70,10 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import java.io.File;
+import java.text.DateFormat;
+import java.util.*;
 
 public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private static final EnumSet<OreGenEvent.GenerateMinable.EventType> PREVENTED_ORES = EnumSet.of(OreGenEvent.GenerateMinable.EventType.COAL,
@@ -147,23 +147,31 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mDisableIC2Cables = false;
     public boolean mAchievements = true;
     public boolean mAE2Integration = true;
+    //public boolean mArcSmeltIntoAnnealed = true;
+    //public boolean mMagneticraftRecipes = true;
+    private boolean isFirstServerWorldTick = true;
+    private boolean mOreDictActivated = false;
+    public boolean mChangeHarvestLevels=false;
+    public boolean mNerfedCombs = true;
+    public boolean mGTBees = true;
+    public boolean mHideUnusedOres = true;
+    public boolean mHideRecyclingRecipes = true;
+    public boolean mPollution = true;
     public int mSkeletonsShootGTArrows = 16;
     public int mMaxEqualEntitiesAtOneSpot = 3;
     public int mFlintChance = 30;
     public int mItemDespawnTime = 6000;
     public int mUpgradeCount = 4;
-    public boolean mGTBees = true;
-    private World mUniverse = null;
-    private boolean isFirstServerWorldTick = true;
-    private boolean mOreDictActivated = false;
     public int[] mHarvestLevel= new int[1000];
     public int mGraniteHavestLevel=3;
     public int mMaxHarvestLevel=7;
-    public boolean mChangeHarvestLevels=false;
-    public boolean mNerfedCombs = true;
     public int mWireHeatingTicks = 4;
-    public boolean mHideUnusedOres = true;
-    public boolean mHideRecyclingRecipes = true;
+    public int mPollutionSmogLimit = 500000;
+    public int mPollutionPoisonLimit = 750000;
+    public int mPollutionVegetationLimit = 1000000;
+    public int mPollutionSourRainLimit = 2000000;
+    //public double mMagneticraftBonusOutputPercent = 100.0d;
+    private World mUniverse = null;
     private final String aTextThermalExpansion = "ThermalExpansion";
     private final String aTextRailcraft = "Railcraft";
     private final String aTextTwilightForest = "TwilightForest";
@@ -1124,12 +1132,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                 }
                                 aMaterial.add(GT_Utility.copyAmount(1L, new Object[]{aEvent.Ore}));
 
-                    			if (GregTech_API.sThaumcraftCompat != null && aPrefix.doGenerateItem(aMaterial) && !aPrefix.isIgnored(aMaterial)) {
-                    	    	    List<TC_AspectStack> tAspects = new ArrayList<TC_AspectStack>();
-                    	    	    for (TC_AspectStack tAspect : aPrefix.mAspects) tAspect.addToAspectList(tAspects);
-                    	    	    if (aPrefix.mMaterialAmount >= 3628800 || aPrefix.mMaterialAmount < 0) for (TC_AspectStack tAspect : aMaterial.mAspects) tAspect.addToAspectList(tAspects);
-                    	    	    GregTech_API.sThaumcraftCompat.registerThaumcraftAspectsToItem(GT_Utility.copyAmount(1, aEvent.Ore), tAspects, aEvent.Name);
-                        	    }
+                                if (GregTech_API.sThaumcraftCompat != null && aPrefix.doGenerateItem(aMaterial) && !aPrefix.isIgnored(aMaterial)) {
+                                    List<TC_AspectStack> tAspects = new ArrayList<TC_AspectStack>();
+                                    for (TC_AspectStack tAspect : aPrefix.mAspects) tAspect.addToAspectList(tAspects);
+                                    if (aPrefix.mMaterialAmount >= 3628800 || aPrefix.mMaterialAmount < 0) for (TC_AspectStack tAspect : aMaterial.mAspects) tAspect.addToAspectList(tAspects);
+                                    GregTech_API.sThaumcraftCompat.registerThaumcraftAspectsToItem(GT_Utility.copyAmount(1, aEvent.Ore), tAspects, aEvent.Name);
+                                }
 
                                 switch (aPrefix) {
                                     case crystal:
@@ -1443,7 +1451,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     }
                 }
             }
-            GT_Pollution.onWorldTick((int) (aEvent.world.getTotalWorldTime() % 1200));            
+            if(aEvent.world.provider.dimensionId==0)
+            GT_Pollution.onWorldTick((int) (aEvent.world.getTotalWorldTime() % 1200));
         }
     }
 
@@ -1512,19 +1521,19 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
     public Object getServerGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
-    	if(aID>=1000){
-    		int ID = aID-1000;
-    		switch(ID){
-    		case 0:
-    			return new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-    		case 1:
-    			return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-    		case 2:
-    			return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-    		default:
-    			return getRightItem(aPlayer, ID);
-    		}
-    	}
+        if(aID>=1000){
+            int ID = aID-1000;
+            switch(ID){
+                case 0:
+                    return new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
+                case 1:
+                    return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
+                case 2:
+                    return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
+                default:
+                    return getRightItem(aPlayer, ID);
+            }
+        }
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
             IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
@@ -1535,9 +1544,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         return null;
     }
 
-	public Object getRightItem(EntityPlayer player, int ID){
-		ItemStack mStack = player.getEquipmentInSlot(ID/100);
-		if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
+    public Object getRightItem(EntityPlayer player, int ID){
+        ItemStack mStack = player.getEquipmentInSlot(ID/100);
+        if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
 
 		switch(ID % 100){
 		case 0:
@@ -1549,22 +1558,22 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 		}
 		return null;
 
-	}
+    }
 
     public Object getClientGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
-    	if(aID>=1000){
-    		int ID = aID-1000;
-    		switch(ID){
-    		case 0:
-    			return new GuiModularArmor(new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-    		case 1:
-    			return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-    		case 2:
-    			return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-    		default:
-    			return getRightItemGui(aPlayer, ID);
-    		}
-    	}
+        if(aID>=1000){
+            int ID = aID-1000;
+            switch(ID){
+                case 0:
+                    return new GuiModularArmor(new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
+                case 1:
+                    return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
+                case 2:
+                    return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
+                default:
+                    return getRightItemGui(aPlayer, ID);
+            }
+        }
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
             IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
@@ -1575,9 +1584,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         return null;
     }
 
-	public Object getRightItemGui(EntityPlayer player, int ID){
-		ItemStack mStack = player.getEquipmentInSlot(ID/100);
-		if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
+    public Object getRightItemGui(EntityPlayer player, int ID){
+        ItemStack mStack = player.getEquipmentInSlot(ID/100);
+        if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
 
 		switch(ID % 100){
 		case 0:
@@ -1589,7 +1598,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 		}
 		return null;
 
-	}
+    }
 
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
@@ -1747,8 +1756,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
         if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1, new Object[0]))) {
             rFuelValue = Math.max(rFuelValue, 150000);
-        }
-        if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1, new Object[0]))) {
+        }if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1, new Object[0]))) {
             rFuelValue = Math.max(rFuelValue, 100000);
         }
 
@@ -1922,12 +1930,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event)
-    {    	
-    	ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,1,event.getChunk().zPosition);
-    	if(chunkData.containsKey(tPos)){
-    		int[] tInts = chunkData.get(tPos);
-    		if(tInts.length>0){event.getData().setInteger("GTOIL", tInts[0]);}
-			if(tInts.length>1){event.getData().setInteger("GTPOLLUTION", tInts[1]);}}
+    {
+        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,1,event.getChunk().zPosition);
+        if(chunkData.containsKey(tPos)){
+            int[] tInts = chunkData.get(tPos);
+            if(tInts.length>0){event.getData().setInteger("GTOIL", tInts[0]);}
+            if(tInts.length>1){event.getData().setInteger("GTPOLLUTION", tInts[1]);}}
     }
 
     @SubscribeEvent
