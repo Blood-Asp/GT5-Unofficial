@@ -819,7 +819,7 @@ public class GT_Utility {
             return copyMetaData(Items.feather.getDamage(aStack) + 1, aStack);
         return null;
     }
-
+    
     public static synchronized boolean removeIC2BottleRecipe(ItemStack aContainer, ItemStack aInput, Map<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> aRecipeList, ItemStack aOutput){
         if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
         boolean rReturn = false;
@@ -1464,6 +1464,7 @@ public class GT_Utility {
         if (tTargetWorld != null && tOriginalWorld != null && tTargetWorld != tOriginalWorld) {
             if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
             if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
+
             if (aEntity instanceof EntityPlayerMP) {
                 EntityPlayerMP aPlayer = (EntityPlayerMP) aEntity;
 //                aPlayer.dimension = aDimension;
@@ -1482,9 +1483,9 @@ public class GT_Utility {
 //                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
 //                }
 //                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
-                aPlayer.travelToDimension(aDimension);
+            	aPlayer.travelToDimension(aDimension);
                 aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-
+            	
             } else {
                 aEntity.setPosition(aX + 0.5, aY + 0.5, aZ + 0.5);
                 aEntity.worldObj.removeEntity(aEntity);
@@ -1519,7 +1520,7 @@ public class GT_Utility {
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
 
-
+    	
         Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
         int oil = tRandom.nextInt(3);
         double amount = tRandom.nextInt(50) + tRandom.nextDouble();
@@ -1546,17 +1547,17 @@ public class GT_Utility {
         int tAmount = (int) (Math.pow(amount, 5) / 100);
         ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
         int[] tInts = new int[2];
-        if(GT_Proxy.chunkData.containsKey(tPos)){
-            tInts = GT_Proxy.chunkData.get(tPos);
-            if(tInts.length>0){
-                if(tInts[0]>=0){tAmount = tInts[0];}
-            }
-            GT_Proxy.chunkData.remove(tPos);
-        }
-        tAmount = tAmount - 5;
-        tInts[0] = tAmount;
-        GT_Proxy.chunkData.put(tPos, tInts);
-
+    	if(GT_Proxy.chunkData.containsKey(tPos)){
+    		tInts = GT_Proxy.chunkData.get(tPos);
+    		if(tInts.length>0){
+    			if(tInts[0]>=0){tAmount = tInts[0];}
+    		}
+    		GT_Proxy.chunkData.remove(tPos);
+    	}
+    	tAmount = tAmount - 5;
+    	tInts[0] = tAmount;
+    	GT_Proxy.chunkData.put(tPos, tInts);
+    	
         return new FluidStack(tFluid, tAmount);
     }
 
@@ -1753,15 +1754,15 @@ public class GT_Utility {
             tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
         }
 //        if(aPlayer.capabilities.isCreativeMode){
-        ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
-        if(GT_Proxy.chunkData.containsKey(tPos)){
-            int[] tPollution = GT_Proxy.chunkData.get(tPos);
-            if(tPollution.length>1){
-                tList.add("Pollution in Chunk: "+tPollution[1]);
-            }else{
-                tList.add("No Pollution in Chunk");
-            }
-        }
+        	ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        	if(GT_Proxy.chunkData.containsKey(tPos)){
+        		int[] tPollution = GT_Proxy.chunkData.get(tPos);
+        		if(tPollution.length>1){
+        		tList.add("Pollution in Chunk: "+tPollution[1]);
+        		}else{
+        			tList.add("No Pollution in Chunk");
+        		}
+        	}
 //        }
 
         try {
