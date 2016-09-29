@@ -33,6 +33,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fluids.FluidStack;
@@ -46,7 +47,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     public int mTargetZ = 0;
     public int mTargetD = 0;
     public boolean mDebug = false;
-    public boolean hasEgg = false;
+    public boolean hasBlock = false;
 
     public GT_MetaTileEntity_Teleporter(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, "Teleport long distances with this little device.");
@@ -138,7 +139,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
-        this.hasEgg = checkForEgg();
+        this.hasBlock = checkForBlock();
         aBaseMetaTileEntity.openGUI(aPlayer);
         return true;
     }
