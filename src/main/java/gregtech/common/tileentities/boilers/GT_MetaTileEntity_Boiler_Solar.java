@@ -58,7 +58,6 @@ public class GT_MetaTileEntity_Boiler_Solar
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescription, this.mTextures);
     }
-    
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if ((aBaseMetaTileEntity.isServerSide()) && (aTick > 20L)) {
@@ -92,8 +91,7 @@ public class GT_MetaTileEntity_Boiler_Solar
                             aBaseMetaTileEntity.doExplosion(2048L);
                             return;
                         }
-
-                        }
+                        this.mFluid.amount -= 1;
                         if (this.mSteam == null) {
                             this.mSteam = GT_ModHandler.getSteam(150L);
                         } else if (GT_ModHandler.isSteam(this.mSteam)) {
@@ -122,4 +120,6 @@ public class GT_MetaTileEntity_Boiler_Solar
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
         }
     }
+}
+
 
