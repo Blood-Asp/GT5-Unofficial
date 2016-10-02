@@ -1754,7 +1754,7 @@ public class GT_Utility {
             tList.add(EnumChatFormatting.GOLD+"Oil"+EnumChatFormatting.RESET+" in Chunk: " +EnumChatFormatting.YELLOW+ tFluid.amount + " " + tFluid.getLocalizedName()+EnumChatFormatting.RESET);
         }
 //        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        	ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
         		if(tPollution.length>1 && tPollution[1]>0){

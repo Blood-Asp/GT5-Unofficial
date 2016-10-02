@@ -5,7 +5,8 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+//import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -72,20 +73,20 @@ public class GT_Pollution {
 //				Smog filter TODO
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
 				AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
-				List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
-				for(EntityLiving tEnt : tEntitys){
+				List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
+				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 10){
-						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, tPollution/25000, 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, (int)Math.max((long)tPollution/500,1000), 1));
 					}
 				}
 //				Poison effects
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit){
 				//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 				//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
-				for(EntityLiving tEnt : tEntitys){
-				if(tRan.nextInt(tPollution/25000) > 20){
-					tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, tPollution/25000, 1));
-				}
+				for(EntityLivingBase tEnt : tEntitys){
+					if(tRan.nextInt(tPollution/25000) > 20){
+						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, (int)Math.max((long)tPollution/250,1000), 1));
+					}
 				}
 //				killing plants
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit){
@@ -156,17 +157,20 @@ public class GT_Pollution {
 	public static void addPollution(ChunkPosition aPos, int aPollution){
 		if(!GT_Mod.gregtechproxy.mPollution)return;
 		try{
-		ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX/16, 1, aPos.chunkPosZ/16);
-//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
-		int[] tData = new int[2];
-		if(GT_Proxy.chunkData.containsKey(tPos)){
-			tData = GT_Proxy.chunkData.get(tPos);
-			if(tData.length>1){
+			ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX>>4, 1, aPos.chunkPosZ>>4);
+	//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
+			int[] tData = new int[2];
+			if(GT_Proxy.chunkData.containsKey(tPos)){
+				tData = GT_Proxy.chunkData.get(tPos);
+				if(tData.length>1){
+					tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
+				}
+			}else{
 				tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
+				GT_Proxy.chunkData.put(tPos, tData);
 			}
-		}else{
-			tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
-			GT_Proxy.chunkData.put(tPos, tData);
+		}catch(Exception e){}
+	}
 		}
 		}catch(Exception e){
 			
