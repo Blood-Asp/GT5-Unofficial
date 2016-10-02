@@ -1677,7 +1677,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()/20)  +EnumChatFormatting.RESET+ " s / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue/20) +EnumChatFormatting.RESET+" s");
+                        tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue/20) +EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1757,10 +1757,10 @@ public class GT_Utility {
         	ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
-        		if(tPollution.length>1){
-        		tList.add("Pollution in Chunk: "+tPollution[1]);
+        		if(tPollution.length>1 && tPollution[1]>0){
+        		    tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET);
         		}else{
-        			tList.add("No Pollution in Chunk");
+        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk"+EnumChatFormatting.RESET);
         		}
         	}
 //        }
