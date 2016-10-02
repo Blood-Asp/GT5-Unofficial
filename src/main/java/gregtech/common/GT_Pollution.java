@@ -40,7 +40,7 @@ public class GT_Pollution {
 				int tPollution = GT_Proxy.chunkData.get(tPos)[1];
 //				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
 				//Reduce pollution in chunk
-				tPollution = (int)(0.99f*tPollution);
+				//tPollution = (int)(0.99f*tPollution);
 				tPollution -= 1000;
 				if(tPollution<=0){tPollution = 0;}else{
 				//Spread Pollution
@@ -53,7 +53,7 @@ public class GT_Pollution {
 				for(ChunkPosition tNPos : tNeighbor){
 					if(GT_Proxy.chunkData.containsKey(tNPos)){
 						int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
-						if(tNPol<tPollution && tNPol*120 < tPollution*100){
+						if(tNPol*12 < tPollution*10){
 							int tDiff = tPollution - tNPol;
 							tDiff = tDiff/10;
 							tNPol += tDiff;
@@ -71,11 +71,17 @@ public class GT_Pollution {
 				//Create Pollution effects
 //				Smog filter TODO
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-				
-//				Poison effects
-				if(tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit){
 				AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 				List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
+				for(EntityLiving tEnt : tEntitys){
+					if(tRan.nextInt(tPollution/25000) > 20){
+						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, tPollution/25000, 1));
+					}
+				}
+//				Poison effects
+				if(tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit){
+				//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
+				//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 				for(EntityLiving tEnt : tEntitys){
 				if(tRan.nextInt(tPollution/25000) > 20){
 					tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, tPollution/25000, 1));
