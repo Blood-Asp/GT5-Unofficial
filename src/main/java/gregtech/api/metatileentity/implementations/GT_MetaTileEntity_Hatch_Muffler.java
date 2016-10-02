@@ -78,7 +78,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     @Override
     public String[] getInfoData() {
         return new String[]{
-                "Reduces pollution by: "+ EnumChatFormatting.RED + (6*(mTier-1))+ EnumChatFormatting.RESET+" %"
+                "Reduces pollution by: "+ EnumChatFormatting.GREEN + (6*(mTier-1))+ EnumChatFormatting.RESET+" %"
         };
     }
 }
