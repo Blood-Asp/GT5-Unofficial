@@ -12,7 +12,7 @@ import net.minecraft.world.ChunkPosition;
 
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Muffler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Pollution might come later)");
+        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Might cause acidic rains and poisoning.)");
     }
 
     public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {

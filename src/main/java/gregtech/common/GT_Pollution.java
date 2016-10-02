@@ -41,7 +41,7 @@ public class GT_Pollution {
 //				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
 				//Reduce pollution in chunk
 				tPollution = (int)(0.99f*tPollution);
-				tPollution -= 2000;
+				tPollution -= 1000;
 				if(tPollution<=0){tPollution = 0;}else{
 				//Spread Pollution
 				if(tPollution>50000){
@@ -85,7 +85,7 @@ public class GT_Pollution {
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit){
 				int f = 20;
 				for(;f<(tPollution/25000);f++){
-					int x =tPos.chunkPosX*16+(tRan.nextInt(16));;
+					int x =tPos.chunkPosX*16+(tRan.nextInt(16));
 					int y =60 +(-f+tRan.nextInt(f*2+1));
 					int z =tPos.chunkPosZ*16+(tRan.nextInt(16));
 					damageBlock(x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
