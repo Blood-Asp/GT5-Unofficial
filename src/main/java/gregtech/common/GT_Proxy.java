@@ -166,10 +166,10 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mGraniteHavestLevel=3;
     public int mMaxHarvestLevel=7;
     public int mWireHeatingTicks = 4;
-    public int mPollutionSmogLimit = 500000;
-    public int mPollutionPoisonLimit = 750000;
-    public int mPollutionVegetationLimit = 1000000;
-    public int mPollutionSourRainLimit = 2000000;
+    public int mPollutionSmogLimit = 40000;
+    public int mPollutionPoisonLimit = 75000;
+    public int mPollutionVegetationLimit = 100000;
+    public int mPollutionSourRainLimit = 200000;
     //public double mMagneticraftBonusOutputPercent = 100.0d;
     private World mUniverse = null;
     private final String aTextThermalExpansion = "ThermalExpansion";
