@@ -260,14 +260,12 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     @Override
     public String[] getInfoData() {
-        String mMufflerInfo="";
         int mPollutionReduction=0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
             if (isValidMetaTileEntity(tHatch)) {
                 mPollutionReduction+=tHatch.getPollutionReduction();
             }
         }
-        mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
 
         return new String[]{
                 "Progress:",
@@ -286,7 +284,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Heat capacity: "+
                         EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K",
-                mMufflerInfo
+                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 }
