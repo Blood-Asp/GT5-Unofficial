@@ -14,9 +14,7 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.round, aMaterial, 9L), null, (int) Math.max(aMaterial.getMass() / 4L, 1L), 8);
-
         Object[] Ogem1 = new Object[]{aStack};
-
         if (aMaterial.mFuelPower > 0) {
             GT_Values.RA.addFuel(GT_Utility.copyAmount(1L, Ogem1), null, aMaterial.mFuelPower, aMaterial.mFuelType);
         }
@@ -42,31 +40,28 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(4L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, aMaterial, 1L), (int) Math.max(matgM1 * 4L, 1L), 96);
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(5L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, aMaterial, 1L), (int) Math.max(matgM1 * 5L, 1L), 96);
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateDense, aMaterial, 1L), (int) Math.max(matgM1 * 9L, 1L), 96);
-            GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial.mMacerateInto, 2L), (int) Math.max(matgM1 * 5L, 1L), 16);
-
         }
 
         if (!OrePrefixes.block.isIgnored(aMaterial)) {
-            GT_ModHandler.addCompressionRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L));
-        }
+            GT_ModHandler.addCompressionRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L));}
         if (!aMaterial.contains(SubTag.NO_WORKING)) {
-            if (!aMaterial.contains(SubTag.NO_SMELTING)) {
-                GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(1L, Ogem1), ItemList.Shape_Mold_Nugget.get(0L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial, 9L), 100, 1);
-                if ((GT_ModHandler.getSmeltingOutput(aStack, false, null) == null) && (GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 1L) != null) && (!GT_ModHandler.addSmeltingRecipe(aStack, GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 9L)))) {
-                    GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 9L), new Object[]{aOreDictName});
-                }
-            }
-            ItemStack tStack;
-            if ((null != (tStack = GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial.mMacerateInto, 1L))) && (
-                    (aMaterial.mBlastFurnaceRequired) || (aMaterial.contains(SubTag.NO_SMELTING)))) {
-                GT_ModHandler.removeFurnaceSmelting(tStack);
-            }
+            long matgM1 = aMaterial.getMass();
+            GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial.mMacerateInto, 2L), (int) Math.max(matgM1 * 5L, 1L), 16);}
+        if (!aMaterial.contains(SubTag.NO_SMELTING)) {
+            GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(1L, Ogem1), ItemList.Shape_Mold_Nugget.get(0L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial, 9L), 100, 1);
+            if ((GT_ModHandler.getSmeltingOutput(aStack, false, null) == null) && (GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 1L) != null) && (!GT_ModHandler.addSmeltingRecipe(aStack, GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 9L)))) {
+                GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mSmeltInto, 9L), new Object[]{aOreDictName});}
+        }
+        ItemStack tStack;
+        if ((null != (tStack = GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial.mMacerateInto, 1L))) && (
+                (aMaterial.mBlastFurnaceRequired) || (aMaterial.contains(SubTag.NO_SMELTING)))) {
+            GT_ModHandler.removeFurnaceSmelting(tStack);
+        }
 
-            GT_RecipeRegistrator.registerUsagesForMaterials(GT_Utility.copyAmount(1L, Ogem1), OrePrefixes.plate.get(aMaterial).toString(), !BmatNSs1);
+        GT_RecipeRegistrator.registerUsagesForMaterials(GT_Utility.copyAmount(1L, Ogem1), OrePrefixes.plate.get(aMaterial).toString(), !BmatNSs1);
 
-            if (aMaterial == Materials.Mercury) {
-                System.err.println("Quicksilver Ingots?, Don't tell me there is an Armor made of that highly toxic and very likely to be melting Material!");
-            }
+        if (aMaterial == Materials.Mercury) {
+            System.err.println("Quicksilver Ingots?, Don't tell me there is an Armor made of that highly toxic and very likely to be melting Material!");
         }
     }
 }
