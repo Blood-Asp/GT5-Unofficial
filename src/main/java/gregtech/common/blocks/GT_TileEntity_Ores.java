@@ -96,7 +96,7 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
             } else if (!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone)) {
                 return false;
             }
-            System.out.println(tOreBlock);
+            //System.out.println(tOreBlock);
             aWorld.setBlock(aX, aY, aZ, tOreBlock, getHarvestData((short) aMetaData), 0);
             TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
             if ((tTileEntity instanceof GT_TileEntity_Ores)) {
