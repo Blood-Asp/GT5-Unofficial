@@ -81,4 +81,9 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
                 "Reduces pollution by: "+ EnumChatFormatting.GREEN + (6*(mTier-1))+ EnumChatFormatting.RESET+" %"
         };
     }
+
+    public int getPollutionReduction() {
+        return 6*(mTier-1);
+    }
+
 }

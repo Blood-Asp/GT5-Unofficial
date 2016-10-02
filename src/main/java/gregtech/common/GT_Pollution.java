@@ -28,7 +28,7 @@ public class GT_Pollution {
 		if(!GT_Mod.gregtechproxy.mPollution)return;
 		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
 			tList = new ArrayList<ChunkPosition>(GT_Proxy.chunkData.keySet());
-			loops = (tList.size()/1200) + 1;
+			loops = (tList.size()/1000) + 1;
 //			System.out.println("new Pollution loop"+aTick);
 		}
 		if(tList!=null && tList.size() > 0){
