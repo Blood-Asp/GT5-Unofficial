@@ -12,6 +12,7 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
         OrePrefixes.ingot.add(this);
     }
 
+
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.round, aMaterial, 9L), null, (int) Math.max(aMaterial.getMass() / 4L, 1L), 8);
 
@@ -42,7 +43,6 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(4L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, aMaterial, 1L), (int) Math.max(matgM1 * 4L, 1L), 96);
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(5L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, aMaterial, 1L), (int) Math.max(matgM1 * 5L, 1L), 96);
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateDense, aMaterial, 1L), (int) Math.max(matgM1 * 9L, 1L), 96);
-            GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial.mMacerateInto, 2L), (int) Math.max(matgM1 * 5L, 1L), 16);
 
         }
 
