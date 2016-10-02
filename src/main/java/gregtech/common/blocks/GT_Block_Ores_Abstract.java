@@ -36,64 +36,34 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal();
     public static boolean FUCKING_LOCK = false;
     public static boolean tHideOres;
+    public static int tOreMetaCount;
     private final String aTextName = ".name";
     private final String aTextSmall = "Small ";
-    private final String aTextDot = ".";
-    private final String aTextNothing = "";
 
-    protected GT_Block_Ores_Abstract(String aUnlocalizedName, boolean aHideFirstMeta, Material aMaterial) {
+    protected GT_Block_Ores_Abstract(String aUnlocalizedName, int aOreMetaCount, boolean aHideFirstMeta, Material aMaterial) {
         super(GT_Item_Ores.class, aUnlocalizedName, aMaterial);
         this.isBlockContainer = true;
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH_ORES);
         tHideOres = Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres;
+        tOreMetaCount = aOreMetaCount;
+        if(aOreMetaCount > 8 || aOreMetaCount < 0) aOreMetaCount = 8;
+
         for (int i = 0; i < 16; i++) {
             GT_ModHandler.addValuableOre(this, i, 1);
         }
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (GregTech_API.sGeneratedMaterials[i] != null) {
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + i + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 1000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 2000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 3000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 4000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 5000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 6000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 7000) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 16000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 17000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 18000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 19000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 20000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 21000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 22000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName() + aTextDot + (i + 23000) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[0] != null ? this.getProcessingPrefix()[0].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[1] != null ? this.getProcessingPrefix()[1].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 1000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[2] != null ? this.getProcessingPrefix()[2].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 2000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[3] != null ? this.getProcessingPrefix()[3].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 3000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[4] != null ? this.getProcessingPrefix()[4].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 4000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[5] != null ? this.getProcessingPrefix()[5].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 5000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[6] != null ? this.getProcessingPrefix()[6].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 6000));
-                    GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[7] != null ? this.getProcessingPrefix()[7].get(GregTech_API.sGeneratedMaterials[i]) : aTextNothing, new ItemStack(this, 1, i + 7000));
-                    if (tHideOres) {
-                        if (aHideFirstMeta) codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 1000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 2000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 3000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 4000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 5000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 6000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 7000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 16000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 17000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 18000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 19000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 20000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 21000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 22000));
-                        codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + 23000));
+                for (int j = 0; j < aOreMetaCount; j++) {
+                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                    if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
+                        GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
+                        if (tHideOres) {
+                            if(!(j == 0 && !aHideFirstMeta)){
+                                codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));}
+                            codechicken.nei.api.API.hideItem(new ItemStack(this, 1, (i + 16000) + (j * 1000)));
+                        }
                     }
                 }
             }
@@ -166,7 +136,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     }
 
     public int getHarvestLevel(int aMeta) {
-        return 2;
+        return aMeta == 5 || aMeta == 6 ? 2 : aMeta % 8;
     }
 
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {

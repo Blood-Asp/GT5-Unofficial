@@ -13,7 +13,6 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
     }
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
-        GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.round, aMaterial, 9L), null, (int) Math.max(aMaterial.getMass() / 4L, 1L), 8);
         Object[] Ogem1 = new Object[]{aStack};
         if (aMaterial.mFuelPower > 0) {
             GT_Values.RA.addFuel(GT_Utility.copyAmount(1L, Ogem1), null, aMaterial.mFuelPower, aMaterial.mFuelType);
