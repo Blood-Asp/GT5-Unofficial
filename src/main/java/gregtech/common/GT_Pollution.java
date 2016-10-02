@@ -76,7 +76,7 @@ public class GT_Pollution {
 				List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 10){
-						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, (int)Math.max((long)tPollution/500,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, (int)Math.max((long)tPollution/1000,1000), 1));
 					}
 				}
 //				Poison effects
@@ -85,7 +85,7 @@ public class GT_Pollution {
 				//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 20){
-						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, (int)Math.max((long)tPollution/250,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, (int)Math.max((long)tPollution/4000,1000), 1));
 					}
 				}
 //				killing plants
