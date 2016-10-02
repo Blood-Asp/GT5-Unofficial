@@ -60,7 +60,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     }
 
     public boolean polluteEnvironment() {
-    	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 1000 - (60*mTier));
+    	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 10000 - (600*mTier));
         return (mTier > 1 && getBaseMetaTileEntity().getRandomNumber(mTier) != 0) || getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing());
     }
 

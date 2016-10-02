@@ -41,10 +41,10 @@ public class GT_Pollution {
 //				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
 				//Reduce pollution in chunk
 				//tPollution = (int)(0.99f*tPollution);
-				tPollution -= 1000;
+				tPollution -= 3000;
 				if(tPollution<=0){tPollution = 0;}else{
 				//Spread Pollution
-				if(tPollution>50000){
+				if(tPollution>500000){
 				List<ChunkPosition> tNeighbor = new ArrayList();
 				tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, 1, tPos.chunkPosZ));
 				tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, 1, tPos.chunkPosZ));
@@ -55,8 +55,8 @@ public class GT_Pollution {
 						int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
 						if(tNPol*12 < tPollution*10){
 							int tDiff = tPollution - tNPol;
-							tDiff = tDiff/10;
-							tNPol += tDiff;
+							tDiff = tDiff/20;
+							tNPol = GT_Utility.safeInt((long)tNPol+tDiff);//tNPol += tDiff;
 							tPollution -= tDiff;
 							GT_Proxy.chunkData.get(tNPos)[1] = tNPol;
 						}
@@ -74,7 +74,7 @@ public class GT_Pollution {
 				AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 				List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 				for(EntityLiving tEnt : tEntitys){
-					if(tRan.nextInt(tPollution/25000) > 20){
+					if(tRan.nextInt(tPollution/25000) > 10){
 						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, tPollution/25000, 1));
 					}
 				}
@@ -162,10 +162,10 @@ public class GT_Pollution {
 		if(GT_Proxy.chunkData.containsKey(tPos)){
 			tData = GT_Proxy.chunkData.get(tPos);
 			if(tData.length>1){
-				tData[1] += aPollution;
+				tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
 			}
 		}else{
-			tData[1] += aPollution;
+			tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
 			GT_Proxy.chunkData.put(tPos, tData);
 		}
 		}catch(Exception e){
