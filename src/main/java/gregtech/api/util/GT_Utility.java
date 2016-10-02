@@ -1571,15 +1571,15 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " + aX + " Y: " + aY + " Z: " + aZ + " -----");
+        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
         try {
-            if (tTileEntity instanceof IInventory)
-                tList.add("Name: " + ((IInventory) tTileEntity).getInventoryName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
+            if (tTileEntity != null && tTileEntity instanceof IInventory)
+                tList.add("Name: " + EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName()+EnumChatFormatting.RESET + "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
             else
-                tList.add("Name: " + tBlock.getUnlocalizedName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
+                tList.add("Name: " +EnumChatFormatting.BLUE+ tBlock.getUnlocalizedName() +EnumChatFormatting.RESET+ "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
 
-            tList.add("Hardness: " + tBlock.getBlockHardness(aWorld, aX, aY, aZ) + "  Blast Resistance: " + tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ));
-            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add("Is valid Beacon Pyramid Material");
+            tList.add("Hardness: " +EnumChatFormatting.YELLOW+ tBlock.getBlockHardness(aWorld, aX, aY, aZ) +EnumChatFormatting.RESET+ "  Blast Resistance: " +EnumChatFormatting.YELLOW+ tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ)+EnumChatFormatting.RESET);
+            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add(EnumChatFormatting.GOLD+"Is valid Beacon Pyramid Material"+EnumChatFormatting.RESET                                                          );
         } catch (Throwable e) {
             if (D1) e.printStackTrace(GT_Log.err);
         }
@@ -1589,7 +1589,7 @@ public class GT_Utility {
                     rEUAmount += 500;
                     FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
                     if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
-                        tList.add("Tank " + i + ": " + GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) + " / " + GT_Utility.formatNumbers(tTanks[i].capacity) + " " + getFluidName(tTanks[i].fluid, true));
+                    tList.add("Tank " + i + ": " +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) +EnumChatFormatting.RESET+ " L / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(tTanks[i].capacity) +EnumChatFormatting.RESET+ " L of " +EnumChatFormatting.GOLD+ getFluidName(tTanks[i].fluid, true)+EnumChatFormatting.RESET);
                     }
                 }
             } catch (Throwable e) {
@@ -1606,8 +1606,8 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.reactor.IReactor) {
                     rEUAmount += 500;
-                    tList.add("Heat: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeat() + "/" + ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()
-                            + "  HEM: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() + "  Base EU Output: "/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
+                    tList.add("Heat: " +EnumChatFormatting.GREEN+ ((ic2.api.reactor.IReactor) tTileEntity).getHeat() +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()+EnumChatFormatting.RESET);
+                    tList.add("HEM: " +EnumChatFormatting.YELLOW+((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() +EnumChatFormatting.RESET/*+ "  Base EU Output: " + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);//TODO WHAT?
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1615,8 +1615,8 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.tile.IWrenchable) {
                     rEUAmount += 100;
-                    tList.add("Facing: " + ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() + " / Chance: " + (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) + "%");
-                    tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? "You can remove this with a Wrench" : "You can NOT remove this with a Wrench");
+                    tList.add("Facing: " +EnumChatFormatting.GREEN+ ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() +EnumChatFormatting.RESET+ " / Chance: " +EnumChatFormatting.YELLOW+ (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) +EnumChatFormatting.RESET+ "%");
+                    tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? EnumChatFormatting.GREEN+"You can remove this with a Wrench"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"You can NOT remove this with a Wrench"+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1650,7 +1650,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.energy.tile.IEnergyConductor) {
                     rEUAmount += 200;
-                    tList.add("Conduction Loss: " + ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss());
+                    tList.add("Conduction Loss: " +EnumChatFormatting.YELLOW+ ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss()+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1658,7 +1658,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.tile.IEnergyStorage) {
                     rEUAmount += 200;
-                    tList.add("Contained Energy: " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() + " of " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity());
+                    tList.add("Contained Energy: " +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity()+EnumChatFormatting.RESET+" EU");
                     //aList.add(((ic2.api.tile.IEnergyStorage)tTileEntity).isTeleporterCompatible(ic2.api.Direction.YP)?"Teleporter Compatible":"Not Teleporter Compatible");
                 }
             } catch (Throwable e) {
@@ -1667,7 +1667,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof IUpgradableMachine) {
                     rEUAmount += 500;
-                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add("Has Muffler Upgrade");
+                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add(EnumChatFormatting.GREEN+"Has Muffler Upgrade"+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1677,7 +1677,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add("Progress: " + GT_Utility.formatNumbers(tValue) + " / " + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()));
+                        tList.add("Progress: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()/20)  +EnumChatFormatting.RESET+ " s / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue/20) +EnumChatFormatting.RESET+" s");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1693,16 +1693,16 @@ public class GT_Utility {
             }
             try {
                 if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
-                    tList.add("Max IN: " + ((IBasicEnergyContainer) tTileEntity).getInputVoltage() + " EU");
-                    tList.add("Max OUT: " + ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " EU at " + ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() + " Amperes");
-                    tList.add("Energy: " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) + " / " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) + "EU");
+                    tList.add("Max IN: " +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getInputVoltage() +EnumChatFormatting.RESET+ " EU at "+EnumChatFormatting.RED+((IBasicEnergyContainer)tTileEntity).getInputAmperage()+EnumChatFormatting.RESET+" A");
+                    tList.add("Max OUT: " +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() +EnumChatFormatting.RESET+ " EU at " +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() +EnumChatFormatting.RESET+ " A");
+                    tList.add("Energy: " +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) +EnumChatFormatting.RESET+ " EU");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
             try {
                 if (tTileEntity instanceof IGregTechTileEntity) {
-                    tList.add("Owned by: " + ((IGregTechTileEntity) tTileEntity).getOwnerName());
+                    tList.add("Owned by: " +EnumChatFormatting.BLUE+ ((IGregTechTileEntity) tTileEntity).getOwnerName()+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1751,7 +1751,7 @@ public class GT_Utility {
         }
         if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
             FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
-            tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
+            tList.add(EnumChatFormatting.GOLD+"Oil"+EnumChatFormatting.RESET+" in Chunk: " +EnumChatFormatting.YELLOW+ tFluid.amount + " " + tFluid.getLocalizedName()+EnumChatFormatting.RESET);
         }
 //        if(aPlayer.capabilities.isCreativeMode){
         	ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
