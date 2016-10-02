@@ -343,7 +343,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public abstract int getMaxEfficiency(ItemStack aStack);
 
     /**
-     * Gets the pollution this Device outputs to a Muffler per tick (10000 = one Pullution Block)
+     * Gets the pollution this Device outputs to a Muffler per tick (10000 = one Pollution Block)
      */
     public abstract int getPollutionPerTick(ItemStack aStack);
 
