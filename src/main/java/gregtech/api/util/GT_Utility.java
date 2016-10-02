@@ -1758,9 +1758,9 @@ public class GT_Utility {
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
         		if(tPollution.length>1 && tPollution[1]>0){
-        		    tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET);
+        		    tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET+" gibbl");
         		}else{
-        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk"+EnumChatFormatting.RESET);
+        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
         		}
         	}
 //        }
