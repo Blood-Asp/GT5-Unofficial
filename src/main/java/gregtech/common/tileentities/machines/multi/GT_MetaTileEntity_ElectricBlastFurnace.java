@@ -267,7 +267,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 mPollutionReduction+=tHatch.getPollutionReduction();
             }
         }
-        if(mPollutionReduction>0)mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
+        mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
 
         return new String[]{
                 "Progress:",

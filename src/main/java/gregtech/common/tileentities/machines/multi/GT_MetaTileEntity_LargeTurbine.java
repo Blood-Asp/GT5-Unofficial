@@ -208,7 +208,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                 mPollutionReduction+=tHatch.getPollutionReduction();
             }
         }
-        if(mPollutionReduction>0)mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
+        mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
 
         String tRunning = mMaxProgresstime>0 ?
                 EnumChatFormatting.GREEN+"Turbine running"+EnumChatFormatting.RESET :

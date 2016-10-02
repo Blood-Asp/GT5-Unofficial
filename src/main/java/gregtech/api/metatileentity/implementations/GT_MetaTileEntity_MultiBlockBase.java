@@ -842,7 +842,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 mPollutionReduction+=tHatch.getPollutionReduction();
             }
         }
-        if(mPollutionReduction>0)mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
+        mMufflerInfo="Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %";
 
         return new String[]{
                 "Progress:",
