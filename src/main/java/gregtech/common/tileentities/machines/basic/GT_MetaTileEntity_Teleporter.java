@@ -23,13 +23,13 @@ import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.effect.EntityWeatherEffect;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
+//import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.init.Blocks;
+//import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -270,7 +270,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                             int tStacksize = mInventory[0].stackSize;
                             GT_Utility.moveOneItemStack(this, tTile, (byte) 0, (byte) 0, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
                             if (mInventory[0] == null || mInventory[0].stackSize < tStacksize) {
-                                getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) Math.pow(tDistance, 1.5) * (tStacksize - (mInventory[0] == null ? 0 : mInventory[0].stackSize)), false);
+                                getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) (Math.pow(tDistance, 1.5)) * (tStacksize - (mInventory[0] == null ? 0 : mInventory[0].stackSize)), false);
                             }
                         }
 
@@ -279,9 +279,9 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                         if (((tObject instanceof Entity)) && (!((Entity) tObject).isDead)) {
                             Entity tEntity = (Entity) tObject;
                       //System.out.println("teleport"+(Math.pow(tDistance, 1.5)));
-                            if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) Math.pow(tDistance, 1.5) * weightCalculation(tEntity), false)) {
+                            if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) Math.pow(tDistance, 1.5) * (long)weightCalculation(tEntity), false)) {
                                 if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasBlock || mFluid.isFluidEqual(Materials.Iron.getPlasma(1)))) {
-                                    mFluid.amount = mFluid.amount - GT_Utility.safeInt(Math.min(1000L, (long)Math.pow(tDistance, 1.5) * weightCalculation(tEntity) / 8192));
+                                    mFluid.amount = mFluid.amount - GT_Utility.safeInt((long)Math.min(1000L, (long)Math.pow(tDistance, 1.5) * weightCalculation(tEntity) / 8192));
                                     if (mFluid.amount < 1) {
                                         mFluid = null;
                                     }
