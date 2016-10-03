@@ -171,9 +171,4 @@ public class GT_Pollution {
 			}
 		}catch(Exception e){}
 	}
-		}
-		}catch(Exception e){
-			
-		}
-	}
 }
