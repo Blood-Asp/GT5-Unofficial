@@ -1762,7 +1762,9 @@ public class GT_Utility {
         		}else{
         			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
         		}
-        	}
+        	}else{
+                tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
+            }
 //        }
 
         try {
