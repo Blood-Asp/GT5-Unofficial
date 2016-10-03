@@ -10,12 +10,15 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -191,6 +194,9 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        //if (this.mMachine && aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
+        //    pollutionParticles(aBaseMetaTileEntity);
+        //}
         if (aBaseMetaTileEntity.isServerSide()) {
             if (mEfficiency < 0) mEfficiency = 0;
             if (--mUpdate == 0 || --mStartUpCheck == 0) {
@@ -303,6 +309,24 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             }
         }
         return mPollution < 10000;
+    }
+
+    //MAKE THE POLLUTION ROLL!!!
+    public void pollutionParticles(IGregTechTileEntity aBaseMetaTileEntity){
+        for (MetaTileEntity tTileEntity : mMufflerHatches) {
+            IGregTechTileEntity muffler = tTileEntity.getBaseMetaTileEntity();
+            byte mufflerFront = muffler.getFrontFacing();
+            aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", muffler.getOffsetX(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetY(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetZ(mufflerFront, 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
+        }
+        if(!GT_Mod.gregtechproxy.mPollution)return;
+        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
+            for (MetaTileEntity tTileEntity : mMufflerHatches) {
+                IGregTechTileEntity muffler = tTileEntity.getBaseMetaTileEntity();
+                byte mufflerFront = muffler.getFrontFacing();
+                aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", muffler.getOffsetX(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetY(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetZ(mufflerFront, 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
+                aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", muffler.getOffsetX(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetY(mufflerFront, 1) + (new XSTR()).nextFloat(), muffler.getOffsetZ(mufflerFront, 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
+            }
+        }
     }
 
     /**
