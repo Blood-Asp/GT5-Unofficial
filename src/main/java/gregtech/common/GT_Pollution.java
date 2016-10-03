@@ -171,9 +171,48 @@ public class GT_Pollution {
 			}
 		}catch(Exception e){}
 	}
+
+	public static void onWorldTickClient(World aWorld, int aTick){
+		if(!GT_Mod.gregtechproxy.mPollution)return;
+		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
+			tList = new ArrayList<ChunkPosition>(GT_Proxy.chunkData.keySet());
+			loops = (tList.size()/1000) + 1;
+//			System.out.println("new Pollution loop"+aTick);
 		}
-		}catch(Exception e){
-			
+		if(tList!=null && tList.size() > 0){
+			int i = 0;
+			for(; i < loops ; i++){
+				ChunkPosition tPos = tList.get(0);
+				tList.remove(0);
+				if(tPos!=null && GT_Proxy.chunkData.containsKey(tPos)){
+					int tPollution = GT_Proxy.chunkData.get(tPos)[1];
+
+					if(tPollution<=0){tPollution = 0;}else{
+
+						int[] tArray = GT_Proxy.chunkData.get(tPos);
+						tArray[1] = tPollution;
+						GT_Proxy.chunkData.remove(tPos);
+						GT_Proxy.chunkData.put(tPos, tArray);
+						//Create Pollution effects
+//				Smog filter TODO
+						if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+							doSmog(tPos,aWorld,tPollution);
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+	private static void doSmog(ChunkPosition tPos, World aWorld, int tPollution) {
+		if(aWorld.isRemote) {
+			int i = Math.max(tPollution/5000,300);
+			for (; i > 0; i -= 1)
+				aWorld.spawnParticle("largesmoke", tPos.chunkPosX * 16 + (new XSTR()).nextFloat() * 16, (new XSTR()).nextFloat() * 250, tPos.chunkPosZ * 16 + (new XSTR()).nextFloat() * 16, 0.0D, 0.3D, 0.0D);
+		}
+	}
+
 	public static int getPollutionAtCoords(int aX, int aZ){
 		ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
 		if(GT_Proxy.chunkData.containsKey(tPos)){
