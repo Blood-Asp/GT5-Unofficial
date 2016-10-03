@@ -76,7 +76,7 @@ public class GT_Pollution {
 				List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 10){
-						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, (int)Math.max((long)tPollution/1000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution/1000,1000), 1));
 					}
 				}
 //				Poison effects
@@ -85,7 +85,7 @@ public class GT_Pollution {
 				//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 20){
-						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, (int)Math.max((long)tPollution/4000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution/4000,1000), 1));
 					}
 				}
 //				killing plants
@@ -174,6 +174,16 @@ public class GT_Pollution {
 		}
 		}catch(Exception e){
 			
+	public static int getPollutionAtCoords(int aX, int aZ){
+		ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
+		if(GT_Proxy.chunkData.containsKey(tPos)){
+			int[] tPollution = GT_Proxy.chunkData.get(tPos);
+			if(tPollution.length>1 && tPollution[1]>0){
+				return tPollution[1];
+			}else{
+				return 0;
+			}
 		}
+		return 0;
 	}
 }
