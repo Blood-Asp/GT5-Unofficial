@@ -194,6 +194,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        //TODO
         //if (this.mMachine && aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
         //    pollutionParticles(aBaseMetaTileEntity);
         //}
@@ -311,7 +312,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return mPollution < 10000;
     }
 
-    //MAKE THE POLLUTION ROLL!!!
+    //MAKE THE POLLUTION ROLL!!! TODO
     public void pollutionParticles(IGregTechTileEntity aBaseMetaTileEntity){
         for (MetaTileEntity tTileEntity : mMufflerHatches) {
             IGregTechTileEntity muffler = tTileEntity.getBaseMetaTileEntity();

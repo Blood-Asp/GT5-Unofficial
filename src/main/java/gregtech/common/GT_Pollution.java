@@ -172,7 +172,7 @@ public class GT_Pollution {
 		}catch(Exception e){}
 	}
 	
-	//PLACE HOLDER
+	//PLACE HOLDER TODO
 	public static void onWorldTickClient(World aWorld, int aTick){
 		if(!GT_Mod.gregtechproxy.mPollution)return;
 		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
