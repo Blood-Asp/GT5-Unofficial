@@ -186,8 +186,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (this.mMachine && (aBaseMetaTileEntity.isClientSide()) &&
-                (aBaseMetaTileEntity.isActive())) {
+        if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
             aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
             //Pollution particles intensify
             if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
