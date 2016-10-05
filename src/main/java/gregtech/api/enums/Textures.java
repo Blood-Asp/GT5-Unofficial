@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import static gregtech.api.enums.GT_Values.RES_PATH_BLOCK;
 import static gregtech.api.enums.GT_Values.RES_PATH_ITEM;
 
-//TODO IMPLEMENT TEXTURES for new tiers
 
 public class Textures {
     public enum BlockIcons implements IIconContainer, Runnable {
