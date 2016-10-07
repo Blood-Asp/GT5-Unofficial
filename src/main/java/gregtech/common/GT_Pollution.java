@@ -1,4 +1,4 @@
-	package gregtech.common;
+package gregtech.common;
 
 import gregtech.GT_Mod;
 import gregtech.api.objects.XSTR;

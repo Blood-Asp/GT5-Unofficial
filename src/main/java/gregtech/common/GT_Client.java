@@ -214,7 +214,9 @@ public class GT_Client extends GT_Proxy
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
                     i++;
                 } while (true);
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+            } catch (Throwable e) {
+                e.printStackTrace(GT_Log.err);
+            }
 
 
 //        super.onPostLoad();
@@ -271,16 +273,21 @@ public class GT_Client extends GT_Proxy
         } catch (Throwable e) {
         }
     }
+    
+    @SubscribeEvent
+    public void receiveRenderSpecialsEvent(net.minecraftforge.client.event.RenderPlayerEvent.Specials.Pre aEvent) {
+        mCapeRenderer.receiveRenderSpecialsEvent(aEvent);
+    }
 
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
-        if ((!aEvent.player.isDead) && (aEvent.phase == TickEvent.Phase.END) && (aEvent.side.isClient())) {
+        if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
-                if (((Integer) tEntry.getValue()).intValue() < 0) {
+                if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix
                     tList.add(tEntry.getKey());
                 } else {
-                    tEntry.setValue(Integer.valueOf(((Integer) tEntry.getValue()).intValue() - 1));
+                    tEntry.setValue(Integer.valueOf(tEntry.getValue().intValue() - 1));
                 }
             }
             GT_PlayedSound tKey;
@@ -347,16 +354,11 @@ public class GT_Client extends GT_Proxy
     }
 
     @SubscribeEvent
-    public void receiveRenderSpecialsEvent(net.minecraftforge.client.event.RenderPlayerEvent.Specials.Pre aEvent) {
-        mCapeRenderer.receiveRenderSpecialsEvent(aEvent);
-    }
-
-    @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
             mAnimationTick++;
             if (mAnimationTick % 50L == 0L)
-                mAnimationDirection = !mAnimationDirection;
+                {mAnimationDirection = !mAnimationDirection;}
             int tDirection = mAnimationDirection ? 1 : -1;
             for (Iterator i$ = mPosR.iterator(); i$.hasNext(); ) {
                 Materials tMaterial = (Materials) i$.next();
