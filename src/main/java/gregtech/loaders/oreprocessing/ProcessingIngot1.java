@@ -41,6 +41,7 @@ public class ProcessingIngot1 implements gregtech.api.interfaces.IOreRecipeRegis
             GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.plateDense, aMaterial, 1L), (int) Math.max(matgM1 * 9L, 1L), 96);
         }
 
+
         if (!OrePrefixes.block.isIgnored(aMaterial)) {
             GT_ModHandler.addCompressionRecipe(GT_Utility.copyAmount(9L, Ogem1), GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L));}
         if (!aMaterial.contains(SubTag.NO_WORKING)) {
