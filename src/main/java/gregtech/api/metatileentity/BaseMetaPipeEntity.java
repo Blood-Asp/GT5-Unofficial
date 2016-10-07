@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity;
 
+import cpw.mods.fml.common.FMLLog;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
