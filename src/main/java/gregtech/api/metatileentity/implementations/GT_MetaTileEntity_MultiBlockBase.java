@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -194,7 +195,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         //TODO FIX
-        // (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
+        //if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
         //    pollutionParticles(aBaseMetaTileEntity);
         //}
         if (aBaseMetaTileEntity.isServerSide()) {
@@ -313,14 +314,16 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     //MAKE THE POLLUTION ROLL!!! TODO Fix?
     public void pollutionParticles(IGregTechTileEntity aBaseMetaTileEntity){
+        World aWorld =DimensionManager.getWorld(aBaseMetaTileEntity.getWorld().provider.dimensionId);
+        //World aWorld=aBaseMetaTileEntity.getWorld();
+        if(!aWorld.isRemote)return;
         int xPos;
         int yPos;
         int zPos;
         IGregTechTileEntity muffler;
-        World aWorld =aBaseMetaTileEntity.getWorld();
         for (MetaTileEntity tTileEntity : mMufflerHatches) {
             muffler = tTileEntity.getBaseMetaTileEntity();
-            xPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetX+muffler.getXCoord();
+            xPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetX+muffler.getXCoord();//TODO optimize?
             yPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetY+muffler.getYCoord();
             zPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetZ+muffler.getZCoord();
             System.out.print("x:"+xPos);
