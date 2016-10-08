@@ -1516,13 +1516,10 @@ public class GT_Utility {
     }
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
-
-    	
-        Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
-        int oil = tRandom.nextInt(3);
+        Random tRandom = new Random((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6))));
+        int oil = tRandom.nextInt(4);
         double amount = tRandom.nextInt(50) + tRandom.nextDouble();
-        oil = tRandom.nextInt(4);
-//		System.out.println("Oil: "+(aX/96)+" "+(aZ/96)+" "+oil+" "+amount);
+//		System.out.println("Oil: "+(aX/6)+" "+(aZ/6)+" "+oil+" "+amount);
 //		amount = 40;
         Fluid tFluid = null;
         switch (oil) {
@@ -1542,16 +1539,16 @@ public class GT_Utility {
                 tFluid = Materials.Oil.mFluid;
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
-        ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
-        int[] tInts = new int[2];
+        ChunkPosition tPos = new ChunkPosition(aX, 1, aZ);
+        int[] tInts = {0,0};
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
-    		if(tInts.length>0){
-    			if(tInts[0]>=0){tAmount = tInts[0];}
-    		}
+            if(tInts.length>0){
+                if(tInts[0]>=0) tAmount = tInts[0];
+            }
     		GT_Proxy.chunkData.remove(tPos);
     	}
-    	tAmount = tAmount - 5;
+    	tAmount = tAmount - 5>=0?tAmount-5:0;
     	tInts[0] = tAmount;
     	GT_Proxy.chunkData.put(tPos, tInts);
     	
@@ -1747,7 +1744,7 @@ public class GT_Utility {
             }
         }
         if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
-            FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
+            FluidStack tFluid = getUndergroundOil(aWorld, aX>>4, aZ>>4);
             tList.add(EnumChatFormatting.GOLD+"Oil"+EnumChatFormatting.RESET+" in Chunk: " +EnumChatFormatting.YELLOW+ tFluid.amount + " " + tFluid.getLocalizedName()+EnumChatFormatting.RESET);
         }
 //        if(aPlayer.capabilities.isCreativeMode){

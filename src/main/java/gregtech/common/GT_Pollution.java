@@ -47,13 +47,15 @@ public class GT_Pollution {
 				if(tPollution<=0){tPollution = 0;}else{
 				//Spread Pollution
 				if(tPollution>500000){
-				List<ChunkPosition> tNeighbor = new ArrayList();
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, 1, tPos.chunkPosZ));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, 1, tPos.chunkPosZ));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ+1));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ-1));
-				for(ChunkPosition tNPos : tNeighbor){
-					if(GT_Proxy.chunkData.containsKey(tNPos)){
+					List<ChunkPosition> tNeighbor = new ArrayList();
+					tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, 1, tPos.chunkPosZ));
+					tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, 1, tPos.chunkPosZ));
+					tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ+1));
+					tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ-1));
+					for(ChunkPosition tNPos : tNeighbor){
+						if(!GT_Proxy.chunkData.containsKey(tNPos)){
+							GT_Utility.getUndergroundOil(aWorld,tPos.chunkPosX,tPos.chunkPosZ);
+						}
 						int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
 						if(tNPol*12 < tPollution*10){
 							int tDiff = tPollution - tNPol;
@@ -62,10 +64,8 @@ public class GT_Pollution {
 							tPollution -= tDiff;
 							GT_Proxy.chunkData.get(tNPos)[1] = tNPol;
 						}
-					}else{
-						GT_Utility.getUndergroundOil(aWorld,tPos.chunkPosX*16,tPos.chunkPosZ*16);
 					}
-				}}
+				}
 				int[] tArray = GT_Proxy.chunkData.get(tPos);
 				tArray[1] = tPollution;
 				GT_Proxy.chunkData.remove(tPos);
@@ -77,7 +77,9 @@ public class GT_Pollution {
 				List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 10){
-						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution/1000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution/1000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution/1000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution/1000,1000), 1));
 					}
 				}
 //				Poison effects
@@ -87,6 +89,7 @@ public class GT_Pollution {
 				for(EntityLivingBase tEnt : tEntitys){
 					if(tRan.nextInt(tPollution/25000) > 20){
 						tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution/4000,1000), 1));
+						tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution/2000,1000), 1));
 					}
 				}
 //				killing plants
