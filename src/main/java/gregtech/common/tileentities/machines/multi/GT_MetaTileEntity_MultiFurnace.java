@@ -1,7 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -18,6 +16,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
 
 public class GT_MetaTileEntity_MultiFurnace
         extends GT_MetaTileEntity_MultiBlockBase {

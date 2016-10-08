@@ -3,12 +3,13 @@ package gregtech.loaders.oreprocessing;
 import appeng.api.config.TunnelType;
 import appeng.core.Api;
 import gregtech.GT_Mod;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class ProcessingWire01 implements gregtech.api.interfaces.IOreRecipeRegistrator {

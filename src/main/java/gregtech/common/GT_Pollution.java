@@ -5,7 +5,6 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-//import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
@@ -17,6 +16,8 @@ import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import net.minecraft.entity.EntityLiving;
 
 public class GT_Pollution {
 	

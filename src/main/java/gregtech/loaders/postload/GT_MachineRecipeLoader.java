@@ -1,13 +1,10 @@
 package gregtech.loaders.postload;
 
 import com.dreammaster.gthandler.CustomItemList;
-import com.dreammaster.gthandler.GT_CustomLoader;
-import com.dreammaster.item.*;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
-import gregtech.api.enums.ItemList;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;

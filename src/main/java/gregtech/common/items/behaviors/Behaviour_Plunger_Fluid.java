@@ -5,7 +5,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicBatteryBuffer;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;

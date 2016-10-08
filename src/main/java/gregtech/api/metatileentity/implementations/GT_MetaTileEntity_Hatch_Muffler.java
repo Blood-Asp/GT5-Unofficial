@@ -8,7 +8,6 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.ChunkPosition;
 
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {

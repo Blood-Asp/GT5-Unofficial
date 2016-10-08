@@ -1,10 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;

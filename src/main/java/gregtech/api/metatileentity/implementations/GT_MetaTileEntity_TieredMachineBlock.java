@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.MetaTileEntity;
 

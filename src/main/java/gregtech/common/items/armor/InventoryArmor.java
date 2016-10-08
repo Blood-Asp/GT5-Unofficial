@@ -1,17 +1,13 @@
 package gregtech.common.items.armor;
 
-import gregtech.api.util.GT_Utility;
-
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Random;
 
 public class InventoryArmor implements IInventory {
 
