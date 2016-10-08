@@ -88,6 +88,7 @@ public class GT_Pollution {
 								//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 								for(EntityLivingBase tEnt : tEntitys){
 									if(tRan.nextInt(tPollution/25000) > 20){
+										tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution/2000,1000), 1));
 										tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution/4000,1000), 1));
 										tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution/2000,1000), 1));
 									}
