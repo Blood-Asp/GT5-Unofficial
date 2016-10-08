@@ -73,7 +73,7 @@ public class GT_Pollution {
 						//Create Pollution effects
 		//				Smog filter TODO
 							if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-							AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
+							AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX<<4, 0, tPos.chunkPosZ<<4, (tPos.chunkPosX<<4)+16, 256, (tPos.chunkPosZ<<4)+16);
 							List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 							for(EntityLivingBase tEnt : tEntitys){
 								if(tRan.nextInt(tPollution/25000) > 10){
@@ -96,10 +96,10 @@ public class GT_Pollution {
 								if(tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit){
 								int f = 20;
 									for(;f<(tPollution/25000);f++){
-										int x =tPos.chunkPosX*16+(tRan.nextInt(16));
+										int x =(tPos.chunkPosX<<4)+tRan.nextInt(16);
 										int y =60 +(-f+tRan.nextInt(f*2+1));
-										int z =tPos.chunkPosZ*16+(tRan.nextInt(16));
-										damageBlock(x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
+										int z =(tPos.chunkPosZ<<4)+tRan.nextInt(16);
+										damageBlock(aWorld,x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
 									}
 								}
 							}
@@ -110,7 +110,9 @@ public class GT_Pollution {
 		}
 	}
 	
-	public static void damageBlock(int x, int y, int z, boolean sourRain){
+	public static void damageBlock(World aWorld, int x, int y, int z, boolean sourRain){
+		//Teporary overriden
+		//World world = DimensionManager.getWorld(aWorld.provider.dimensionId);
 		World world = DimensionManager.getWorld(0);
 		if (world.isRemote)	return;
 		Block tBlock = world.getBlock(x, y, z);
