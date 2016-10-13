@@ -1,18 +1,22 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.objects.XSTR;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Muffler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Might cause acidic rains and poisoning)");
+        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Might cause ... things)");
     }
 
     public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -83,6 +87,21 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     public int getPollutionReduction() {
         return 6*(mTier-1);
+    }
+
+    public void pollutionParticles(){
+        IGregTechTileEntity aMuffler=this.getBaseMetaTileEntity();
+        World aWorld=aMuffler.getWorld();
+        ForgeDirection aDir=ForgeDirection.getOrientation(aMuffler.getFrontFacing());
+        int xPos=aDir.offsetX+aMuffler.getXCoord();
+        int yPos=aDir.offsetX+aMuffler.getYCoord();
+        int zPos=aDir.offsetX+aMuffler.getZCoord();
+
+        aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
+        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit) {
+            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
+            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
+        }
     }
 
 }

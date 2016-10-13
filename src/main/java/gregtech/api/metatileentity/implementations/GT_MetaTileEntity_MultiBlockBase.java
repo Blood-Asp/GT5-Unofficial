@@ -196,7 +196,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         //TODO FIX
         //if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
-        //    pollutionParticles(aBaseMetaTileEntity);
+            pollutionParticles(aBaseMetaTileEntity);
         //}
         if (aBaseMetaTileEntity.isServerSide()) {
             if (mEfficiency < 0) mEfficiency = 0;
@@ -314,33 +314,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     //MAKE THE POLLUTION ROLL!!! TODO Fix?
     public void pollutionParticles(IGregTechTileEntity aBaseMetaTileEntity){
-        World aWorld =DimensionManager.getWorld(aBaseMetaTileEntity.getWorld().provider.dimensionId);
-        //World aWorld=aBaseMetaTileEntity.getWorld();
+        //World aWorld =DimensionManager.getWorld(aBaseMetaTileEntity.getWorld().provider.dimensionId);
+        World aWorld=aBaseMetaTileEntity.getWorld();
         if(!aWorld.isRemote)return;
-        int xPos;
-        int yPos;
-        int zPos;
-        IGregTechTileEntity muffler;
-        for (MetaTileEntity tTileEntity : mMufflerHatches) {
-            muffler = tTileEntity.getBaseMetaTileEntity();
-            xPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetX+muffler.getXCoord();//TODO optimize?
-            yPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetY+muffler.getYCoord();
-            zPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetZ+muffler.getZCoord();
-            System.out.print("x:"+xPos);
-            System.out.print("y:"+yPos);
-            System.out.print("z:"+zPos);
-            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
-        }
-        if(!GT_Mod.gregtechproxy.mPollution)return;
-        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
-            for (MetaTileEntity tTileEntity : mMufflerHatches) {
-                muffler = tTileEntity.getBaseMetaTileEntity();
-                xPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetX+muffler.getXCoord();
-                yPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetY+muffler.getYCoord();
-                zPos = ForgeDirection.getOrientation(muffler.getFrontFacing()).offsetZ+muffler.getZCoord();
-                aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
-                aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
-            }
+        for (GT_MetaTileEntity_Hatch_Muffler tTileEntity : mMufflerHatches) {
+            tTileEntity.pollutionParticles();
         }
     }
 
