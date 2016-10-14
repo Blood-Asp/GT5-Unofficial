@@ -196,7 +196,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         //TODO FIX
         //if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
-            pollutionParticles(aBaseMetaTileEntity);
+        //    pollutionParticles(aBaseMetaTileEntity);
         //}
         if (aBaseMetaTileEntity.isServerSide()) {
             if (mEfficiency < 0) mEfficiency = 0;
