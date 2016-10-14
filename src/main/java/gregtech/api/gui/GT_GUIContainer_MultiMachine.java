@@ -25,7 +25,7 @@ public class GT_GUIContainer_MultiMachine extends GT_GUIContainerMetaTile_Machin
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRendererObj.drawString(mName, 10, 8, 16448255);
 
-        if (mContainer != null) {
+        if (mContainer != null) {//(mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 1) != 0)
                 fontRendererObj.drawString("Pipe is loose.", 10, 16, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 2) != 0)
