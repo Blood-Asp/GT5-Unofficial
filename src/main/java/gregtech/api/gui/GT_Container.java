@@ -124,7 +124,7 @@ public class GT_Container extends Container {
 
         if ((aShifthold == 0 || aShifthold == 1) && (aMouseclick == 0 || aMouseclick == 1)) {
             if (aSlotIndex == -999) {
-                if (aPlayerInventory.getItemStack() != null && aSlotIndex == -999) {
+                if (aPlayerInventory.getItemStack() != null) {
                     if (aMouseclick == 0) {
                         aPlayer.dropPlayerItemWithRandomChoice(aPlayerInventory.getItemStack(), true);
                         aPlayerInventory.setItemStack(null);
@@ -228,11 +228,11 @@ public class GT_Container extends Container {
                     var9 |= tTempStackSize > -1;
                 }
 
-                if (aSlot.getHasStack() && var9) {
+                if (var9 && aSlot.getHasStack()) {
                     aHoldStack = aSlot.getStack();
                     aPlayerInventory.setInventorySlotContents(aMouseclick, aHoldStack);
 
-                    if ((aSlot.inventory != aPlayerInventory || !aSlot.isItemValid(tTempStack)) && tTempStack != null) {
+                    if (tTempStack != null && (aSlot.inventory != aPlayerInventory || !aSlot.isItemValid(tTempStack))) {
                         if (tTempStackSize > -1) {
                             aPlayerInventory.addItemStackToInventory(tTempStack);
                             aSlot.decrStackSize(aHoldStack.stackSize);
@@ -244,7 +244,7 @@ public class GT_Container extends Container {
                         aSlot.putStack(tTempStack);
                         aSlot.onPickupFromSlot(aPlayer, aHoldStack);
                     }
-                } else if (!aSlot.getHasStack() && tTempStack != null && aSlot.isItemValid(tTempStack)) {
+                } else if (tTempStack != null && !aSlot.getHasStack() && aSlot.isItemValid(tTempStack)) {
                     aPlayerInventory.setInventorySlotContents(aMouseclick, (ItemStack) null);
                     aSlot.putStack(tTempStack);
                 }

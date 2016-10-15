@@ -36,12 +36,12 @@ public class GT_MetaTileEntity_Charger extends GT_MetaTileEntity_BasicBatteryBuf
 
     @Override
     public long maxAmperesIn() {
-        return mChargeableCount * 8L;
+        return Math.max(mChargeableCount * 8L,4L);
     }
 
     @Override
     public long maxAmperesOut() {
-        return mBatteryCount * 4L;
+        return Math.max(mBatteryCount * 4L,2L);
     }
 
     @Override

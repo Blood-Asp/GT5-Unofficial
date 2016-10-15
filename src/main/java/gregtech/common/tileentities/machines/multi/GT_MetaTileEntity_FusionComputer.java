@@ -104,26 +104,20 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                 && (addIfInjector(xCenter - 6, yCenter - 1, zCenter + 1, aBaseMetaTileEntity)) && (addIfInjector(xCenter + 6, yCenter - 1, zCenter + 1, aBaseMetaTileEntity))
                 && (addIfInjector(xCenter - 6, yCenter - 1, zCenter - 1, aBaseMetaTileEntity)) && (addIfInjector(xCenter + 6, yCenter - 1, zCenter - 1, aBaseMetaTileEntity))
                 && (this.mEnergyHatches.size() >= 1) && (this.mOutputHatches.size() >= 1) && (this.mInputHatches.size() >= 2)) {
-            if (this.mEnergyHatches != null) {
-                int mEnergyHatches_sS=this.mEnergyHatches.size();
-                for (int i = 0; i < mEnergyHatches_sS; i++) {
-                    if (this.mEnergyHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mEnergyHatches_sS = this.mEnergyHatches.size();
+            for (int i = 0; i < mEnergyHatches_sS; i++) {
+                if (this.mEnergyHatches.get(i).mTier < tier())
+                    return false;
             }
-            if (this.mOutputHatches != null) {
-                int mOutputHatches_sS=this.mOutputHatches.size();
-                for (int i = 0; i < mOutputHatches_sS; i++) {
-                    if (this.mOutputHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mOutputHatches_sS = this.mOutputHatches.size();
+            for (int i = 0; i < mOutputHatches_sS; i++) {
+                if (this.mOutputHatches.get(i).mTier < tier())
+                    return false;
             }
-            if (this.mInputHatches != null) {
-                int mInputHatches_sS=this.mInputHatches.size();
-                for (int i = 0; i < mInputHatches_sS; i++) {
-                    if (this.mInputHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mInputHatches_sS = this.mInputHatches.size();
+            for (int i = 0; i < mInputHatches_sS; i++) {
+                if (this.mInputHatches.get(i).mTier < tier())
+                    return false;
             }
             mWrench = true;
             mScrewdriver = true;

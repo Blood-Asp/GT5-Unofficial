@@ -1,13 +1,12 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
@@ -17,6 +16,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
 
 public class GT_MetaTileEntity_MultiFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -233,10 +234,17 @@ public class GT_MetaTileEntity_MultiFurnace
 
     @Override
     public String[] getInfoData() {
+        int mPollutionReduction=0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction+=tHatch.getPollutionReduction();
+            }
+        }
+
         return new String[]{
                 "Progress:",
-                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks / "+
-                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime) + EnumChatFormatting.RESET +" ticks",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
                 "Stored Energy:",
                 EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
                         EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
@@ -249,7 +257,8 @@ public class GT_MetaTileEntity_MultiFurnace
                         " Efficiency: "+
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Multi smelting: "+
-                        EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: "+EnumChatFormatting.GREEN+"(EU/t) / "+mCostDiscount+EnumChatFormatting.RESET
+                        EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: "+EnumChatFormatting.GREEN+"(EU/t) / "+mCostDiscount+EnumChatFormatting.RESET,
+                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 

@@ -1,12 +1,6 @@
 package gregtech.loaders.misc;
 
 import cpw.mods.fml.common.Loader;
-import forestry.api.apiculture.BeeManager;
-import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IClassification;
-import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.EnumAllele;
 import gregtech.GT_Mod;
 import gregtech.common.items.ItemComb;
 

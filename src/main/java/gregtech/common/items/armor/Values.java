@@ -1,9 +1,9 @@
 package gregtech.common.items.armor;
 
+import gregtech.api.enums.Materials;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import gregtech.api.enums.Materials;
 
 public class Values {
 	public static Values INSTANCE;

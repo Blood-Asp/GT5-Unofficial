@@ -18,6 +18,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -190,13 +191,11 @@ public class GT_Achievements {
         registerAchievement("whatnow", 4, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
 
         if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
-        for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
-            if (GregTech_API.sGeneratedMaterials[i] != null) {
-            	if(!oreList.contains(GregTech_API.sGeneratedMaterials[i])){
-            		codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
-            	}
+            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
+                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
+                    codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
+                }
             }
-        }
         }
         if (GT_Mod.gregtechproxy.mAchievements) {
             AchievementPage.registerAchievementPage(new AchievementPage("GregTech 5", (Achievement[]) this.achievementList.values().toArray(
@@ -285,29 +284,27 @@ public class GT_Achievements {
         }
         ItemData data = GT_OreDictUnificator.getItemData(stack);
 
-        if (data != null) {
-            if (data.mPrefix == OrePrefixes.ingot) {
-                if (data.mMaterial.mMaterial == Materials.Aluminium) {
-                    issueAchievement(player, "gtaluminium");
-                } else if (data.mMaterial.mMaterial == Materials.Titanium) {
-                    issueAchievement(player, "titan");
-                } else if (data.mMaterial.mMaterial == Materials.BlueSteel) {
-                    issueAchievement(player, "complexalloys");
-                } else if (data.mMaterial.mMaterial == Materials.Tungsten) {
-                    issueAchievement(player, "tungsten");
-                } else if (data.mMaterial.mMaterial == Materials.Osmium) {
-                    issueAchievement(player, "osmium");
-                } else if (data.mMaterial.mMaterial == Materials.TungstenSteel) {
-                    issueAchievement(player, "tungstensteel");
-                } else if (data.mMaterial.mMaterial == Materials.HSSG) {
-                    issueAchievement(player, "hssg");
-                } else if (data.mMaterial.mMaterial == Materials.Naquadah) {
-                    issueAchievement(player, "stargatematerial");
-                } else if (data.mMaterial.mMaterial == Materials.NaquadahAlloy) {
-                    issueAchievement(player, "alienmetallurgy");
-                } else if (data.mMaterial.mMaterial == Materials.Naquadria) {
-                    issueAchievement(player, "finalpreparations");
-                }
+        if ((data != null) && (data.mPrefix == OrePrefixes.ingot)) {
+            if (data.mMaterial.mMaterial == Materials.Aluminium) {
+                issueAchievement(player, "gtaluminium");
+            } else if (data.mMaterial.mMaterial == Materials.Titanium) {
+                issueAchievement(player, "titan");
+            } else if (data.mMaterial.mMaterial == Materials.BlueSteel) {
+                issueAchievement(player, "complexalloys");
+            } else if (data.mMaterial.mMaterial == Materials.Tungsten) {
+                issueAchievement(player, "tungsten");
+            } else if (data.mMaterial.mMaterial == Materials.Osmium) {
+                issueAchievement(player, "osmium");
+            } else if (data.mMaterial.mMaterial == Materials.TungstenSteel) {
+                issueAchievement(player, "tungstensteel");
+            } else if (data.mMaterial.mMaterial == Materials.HSSG) {
+                issueAchievement(player, "hssg");
+            } else if (data.mMaterial.mMaterial == Materials.Naquadah) {
+                issueAchievement(player, "stargatematerial");
+            } else if (data.mMaterial.mMaterial == Materials.NaquadahAlloy) {
+                issueAchievement(player, "alienmetallurgy");
+            } else if (data.mMaterial.mMaterial == Materials.Naquadria) {
+                issueAchievement(player, "finalpreparations");
             }
         }
         if (stack.getUnlocalizedName().equals("ic2.itemPartIndustrialDiamond")) {
@@ -343,6 +340,7 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
+        if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
@@ -390,7 +388,7 @@ public class GT_Achievements {
                 issueAchievement(player, "alloysmelter");
                 issueAchievement(player, "buildElecFurnace");
                 if(stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter.tier.3")){
-                	issueAchievement(player, "buildIndFurnace");
+                    issueAchievement(player, "buildIndFurnace");
                 }
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.extractor")) {
                 issueAchievement(player, "extract");
@@ -408,7 +406,7 @@ public class GT_Achievements {
                 issueAchievement(player, "buffer");
                 issueAchievement(player, "buildBatBox");
                 if(stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.3")){
-                	issueAchievement(player, "buildMFE");
+                    issueAchievement(player, "buildMFE");
                 }
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicgenerator.steamturbine.tier.")) {
                 issueAchievement(player, "steampower");
@@ -494,7 +492,7 @@ public class GT_Achievements {
                     issueAchievement(player, "newmetal");
                 }
                 if(data.mMaterial.mMaterial != Materials.Gunpowder){
-                issueAchievement(player, "cleandust");
+                    issueAchievement(player, "cleandust");
                 }
             } else if (data.mPrefix == OrePrefixes.ore || data.mPrefix == OrePrefixes.oreBlackgranite || data.mPrefix == OrePrefixes.oreEndstone
                     || data.mPrefix == OrePrefixes.oreNetherrack || data.mPrefix == OrePrefixes.oreRedgranite) {
@@ -504,9 +502,9 @@ public class GT_Achievements {
                     if (data.getAllMaterialStacks().get(i).mMaterial == Materials.AnyIron) {
                         issueAchievement(player, "iron");
                     }
-                if(data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper||data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin){
-                	issueAchievement(event.entityPlayer, "mineOre");
-                }
+                    if(data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper||data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin){
+                        issueAchievement(event.entityPlayer, "mineOre");
+                    }
 
                 }
             } else if (data.mPrefix == OrePrefixes.crushed) {
@@ -518,10 +516,8 @@ public class GT_Achievements {
             } else if (data.mMaterial.mMaterial == Materials.Steel) {
                 if (data.mPrefix == OrePrefixes.ingot && stack.stackSize == stack.getMaxStackSize()) {
                     issueAchievement(player, "steel");
-                } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft")) {
-                    if (ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
-                        issueAchievement(player, "steel");
-                    }
+                } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft") && ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
+                    issueAchievement(player, "steel");
                 }
             } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
                 issueAchievement(player, "stepforward");
@@ -566,9 +562,9 @@ public class GT_Achievements {
                 issueAchievement(player, "whatnow");
             }
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
-                issueAchievement(player, "newfuel");
-            }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
-            		(stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
-                issueAchievement(player, "buildQArmor");}
+            issueAchievement(player, "newfuel");
+        }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
+                (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
+            issueAchievement(player, "buildQArmor");}
     }
 }

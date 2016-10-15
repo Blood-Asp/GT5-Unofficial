@@ -6,6 +6,7 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
@@ -126,7 +127,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         return false;
     }
 
-        private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -204,15 +205,15 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
             }
         }
-        this.mHeatingCapacity += 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 3);
+        this.mHeatingCapacity += 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 1);
         return true;
     }
-        public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
-        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
-            if (!result) this.mHeatingCapacity=0;
-            return result;
-        }
 
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
+        boolean result= this.checkMachineFunction(aBaseMetaTileEntity,aStack);
+        if (!result) this.mHeatingCapacity=0;
+        return result;
+    }
 
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
@@ -259,10 +260,17 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     @Override
     public String[] getInfoData() {
+        int mPollutionReduction=0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction+=tHatch.getPollutionReduction();
+            }
+        }
+
         return new String[]{
                 "Progress:",
-                EnumChatFormatting.GREEN + Integer.toString(mProgresstime) + EnumChatFormatting.RESET +" ticks / "+
-                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime) + EnumChatFormatting.RESET +" ticks",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
                 "Stored Energy:",
                 EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
                         EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
@@ -275,7 +283,8 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                         " Efficiency: "+
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Heat capacity: "+
-                        EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K"
+                        EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K",
+                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 }
