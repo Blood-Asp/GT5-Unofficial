@@ -261,6 +261,11 @@ public class GT_Recipe {
         }
     }
 
+    //Dummy GT_Recipe maker...
+    public GT_Recipe(ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue){
+        this(true, aInputs, aOutputs, aSpecialItems, aChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
+    }
+
     public static void reInit() {
         GT_Log.out.println("GT_Mod: Re-Unificating Recipes.");
         for (GT_Recipe_Map tMapEntry : GT_Recipe_Map.sMappings) tMapEntry.reInit();
