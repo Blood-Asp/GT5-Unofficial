@@ -2153,7 +2153,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_IV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSG, 1L),
         		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.HSSG, 6L),
-        		ItemList.Gravistar.get(1, new Object(){}),
+        		CustomItemList.MysteriousCrystal.get(1, new Object(){}),
         		ItemList.Emitter_LuV.get(4, new Object(){}),
                 CustomItemList.NanoCircuit.get(8L, new Object[]{}),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.YttriumBariumCuprate, 64L),
@@ -2167,7 +2167,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_LuV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSE, 1L),
         		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.HSSE, 6L),
-                CustomItemList.MysteriousCrystal.get(4L, new Object[]{}),
+                CustomItemList.ManyullynCrystal.get(4L, new Object[]{}),
         		ItemList.Emitter_ZPM.get(4, new Object(){}),
                 CustomItemList.PikoCircuit.get(16L, new Object[]{}),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
@@ -2185,7 +2185,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_ZPM.get(1, new Object(){}),288000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1L),
         		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 6L),
-                CustomItemList.ManyullynCrystal.get(8L, new Object[]{}),
+                ItemList.Gravistar.get(8L, new Object[]{}),
         		ItemList.Emitter_UV.get(4, new Object(){}),
                 CustomItemList.QuantumCircuit.get(24L, new Object[]{}),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NaquadahAlloy, 64L),
