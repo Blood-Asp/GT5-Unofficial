@@ -212,7 +212,7 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.Manganese,
                 Materials.MeteoricIron,
                 Materials.MeteoricSteel,
-                Materials.Midasium,
+                Materials.Trinium,
                 Materials.Mithril,
                 Materials.Molybdenum,
                 Materials.Naquadah,
