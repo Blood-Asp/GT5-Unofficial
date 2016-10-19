@@ -13,6 +13,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.ArrayUtils;
@@ -22,7 +23,9 @@ import java.util.List;
 
 public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBlockBase {
 
-    GT_Recipe mLastRecipe;
+    private GT_Recipe mLastRecipe;
+    private int tTier = 0;
+    private int mMult = 0;
 
     public GT_MetaTileEntity_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -45,7 +48,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Output Hatch/Bus (Any casing)",
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Robust Tungstensteel Casings for the rest (16 at least!)",
+                "Robust Tungstensteel Casings for the rest (14 at least!)",
                 "Place up to 64 Single Block GT Machines into the GUI Inventory",
                 "Maximal overclockedness of machines inside: Tier 9"};
     }
@@ -183,7 +186,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         return aFacing > 1;
     }
 
-    public String mMachine = "";
+    private String mMachine = "";
     public boolean checkRecipe(ItemStack aStack) {
         if (!isCorrectMachinePart(mInventory[1])) {
             return false;
@@ -193,38 +196,49 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return false;
         }
         ArrayList<ItemStack> tInputList = getStoredInputs();
-        int tTier = 0;
 
         if       (mInventory[1].getUnlocalizedName().endsWith("10")) {
             tTier = 9;
+            mMult=2;//u need 4x less machines and they will use 4x less power
         }else if (mInventory[1].getUnlocalizedName().endsWith("11")) {
             tTier = 9;
-        }else if (mInventory[1].getUnlocalizedName().endsWith("12")) {
+            mMult=4;//u need 16x less machines and they will use 16x less power
+        }else if (mInventory[1].getUnlocalizedName().endsWith("12") ||
+                mInventory[1].getUnlocalizedName().endsWith("13") ||
+                mInventory[1].getUnlocalizedName().endsWith("14") ||
+                mInventory[1].getUnlocalizedName().endsWith("15")) {
             tTier = 9;
-        }else if (mInventory[1].getUnlocalizedName().endsWith("13")) {
-            tTier = 9;
-        }else if (mInventory[1].getUnlocalizedName().endsWith("14")) {
-            tTier = 9;
-        }else if (mInventory[1].getUnlocalizedName().endsWith("15")) {
-            tTier = 9;
+            mMult=6;//u need 64x less machines and they will use 64x less power
         }else if (mInventory[1].getUnlocalizedName().endsWith("1")) {
             tTier = 1;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("2")) {
             tTier = 2;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("3")) {
             tTier = 3;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("4")) {
             tTier = 4;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("5")) {
             tTier = 5;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("6")) {
             tTier = 6;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("7")) {
             tTier = 7;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("8")) {
             tTier = 8;
+            mMult=0;//*1
         }else if (mInventory[1].getUnlocalizedName().endsWith("9")) {
             tTier = 9;
+            mMult=0;//*1
+        }else{
+            tTier = 0;
+            mMult=0;//*1
         }
         
         if(!mMachine.equals(mInventory[1].getUnlocalizedName()))mLastRecipe=null;
@@ -241,7 +255,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mEUt = 0;
                 this.mOutputItems = null;
                 this.mOutputFluids = null;
-                int machines = Math.min(64, mInventory[1].stackSize); //Upped max Cap to 64
+                int machines = Math.min(64, mInventory[1].stackSize<<mMult); //Upped max Cap to 64
                 int i = 0;
                 for (; i < machines; i++) {
                     if (!tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
@@ -258,7 +272,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 //In case recipe is too OP for that machine
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
-                this.mEUt = GT_Utility.safeInt((long)this.mEUt*i,1);
+                this.mEUt = GT_Utility.safeInt(((long)this.mEUt*i)>>mMult,1);
                 if (mEUt == Integer.MAX_VALUE - 1)
                     return false;
 
@@ -340,7 +354,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 }
             }
         }
-        return tAmount >= 16;
+        return tAmount >= 14;
     }
 
     public int getMaxEfficiency(ItemStack aStack) {
@@ -362,4 +376,31 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
+
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
+                "Stored Energy:",
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
+                "Probably uses: "+
+                        EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t",
+                "Maximum total power (to all Energy Hatches, not single ones): ",
+                EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t",
+                "Problems: "+
+                        EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
+                        " Efficiency: "+
+                        EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
+                "Machine tier installed: "+
+                        EnumChatFormatting.GREEN+tTier+EnumChatFormatting.RESET+
+                        " Discount: "+
+                        EnumChatFormatting.GREEN+(1<<mMult)+EnumChatFormatting.RESET + " x",
+                "Parallel processing: "+EnumChatFormatting.GREEN+(mInventory[1].stackSize<<mMult)+EnumChatFormatting.RESET
+        };
+    }
+
 }
