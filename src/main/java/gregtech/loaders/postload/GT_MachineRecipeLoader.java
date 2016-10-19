@@ -930,6 +930,9 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addFusionReactorRecipe(Materials.Uranium.getMolten(16), Materials.Helium.getGas(16), Materials.Plutonium.getMolten(16), 128, 49152, 480000000); //FT2+ - utility
             GT_Values.RA.addFusionReactorRecipe(Materials.Vanadium.getMolten(16), Materials.Hydrogen.getGas(125), Materials.Chrome.getMolten(16), 64, 24576, 140000000); //FT1 - utility
 
+        GT_Values.RA.addFusionReactorRecipe(Materials.Gallium.getMolten(16),Materials.Radon.getGas(125),Materials.Duranium.getMolten(16),64,16384,140000000);
+        GT_Values.RA.addFusionReactorRecipe(Materials.Titanium.getMolten(16),Materials.Duranium.getMolten(16),Materials.Tritanium.getMolten(16),64,32768,200000000);
+
         //NEW RECIPES FOR FUSION
         GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(125), Materials.Carbon.getMolten(125), Materials.Argon.getPlasma(125), 16, 24576, 180000000);//FT1+ - utility
 
