@@ -162,15 +162,15 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Hull_UV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PHP", aTextCableHull, Character.valueOf('M'), ItemList.Casing_UV, Character.valueOf('C'), OrePrefixes.cableGt04.get(Materials.NaquadahAlloy), 'H', OrePrefixes.plate.get(Materials.Osmium), 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene)});
         GT_ModHandler.addCraftingRecipe(ItemList.Hull_MAX.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"PHP", aTextCableHull, Character.valueOf('M'), ItemList.Casing_MAX, Character.valueOf('C'), OrePrefixes.wireGt01.get(Materials.Superconductor), 'H', OrePrefixes.plate.get(Materials.Neutronium), 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene)});
 
-        ItemList.Transformer_LV_ULV.set(new GT_MetaTileEntity_Transformer(20, "transformer.tier.00", "Ultra Low Voltage Transformer", 0, "LV -> ULV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_MV_LV.set(new GT_MetaTileEntity_Transformer(21, "transformer.tier.01", "Low Voltage Transformer", 1, "MV -> LV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_HV_MV.set(new GT_MetaTileEntity_Transformer(22, "transformer.tier.02", "Medium Voltage Transformer", 2, "HV -> MV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_EV_HV.set(new GT_MetaTileEntity_Transformer(23, "transformer.tier.03", "High Voltage Transformer", 3, "EV -> HV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_IV_EV.set(new GT_MetaTileEntity_Transformer(24, "transformer.tier.04", "Extreme Transformer", 4, "IV -> EV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_LuV_IV.set(new GT_MetaTileEntity_Transformer(25, "transformer.tier.05", "Insane Transformer", 5, "LuV -> IV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_ZPM_LuV.set(new GT_MetaTileEntity_Transformer(26, "transformer.tier.06", "Ludicrous Transformer", 6, "ZPM -> LuV (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_UV_ZPM.set(new GT_MetaTileEntity_Transformer(27, "transformer.tier.07", "ZPM Voltage Transformer", 7, "UV -> ZPM (Use Soft Hammer to invert)").getStackForm(1L));
-        ItemList.Transformer_MAX_UV.set(new GT_MetaTileEntity_Transformer(28, "transformer.tier.08", "Ultimate Transformer", 8, "UHV -> UV (Use Soft Hammer to invert)").getStackForm(1L));
+        ItemList.Transformer_LV_ULV.set(new GT_MetaTileEntity_Transformer(20, "transformer.tier.00", "Ultra Low Voltage Transformer", 0, "LV -> ULV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_MV_LV.set(new GT_MetaTileEntity_Transformer(21, "transformer.tier.01", "Low Voltage Transformer", 1, "MV -> LV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_HV_MV.set(new GT_MetaTileEntity_Transformer(22, "transformer.tier.02", "Medium Voltage Transformer", 2, "HV -> MV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_EV_HV.set(new GT_MetaTileEntity_Transformer(23, "transformer.tier.03", "High Voltage Transformer", 3, "EV -> HV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_IV_EV.set(new GT_MetaTileEntity_Transformer(24, "transformer.tier.04", "Extreme Transformer", 4, "IV -> EV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_LuV_IV.set(new GT_MetaTileEntity_Transformer(25, "transformer.tier.05", "Insane Transformer", 5, "LuV -> IV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_ZPM_LuV.set(new GT_MetaTileEntity_Transformer(26, "transformer.tier.06", "Ludicrous Transformer", 6, "ZPM -> LuV (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_UV_ZPM.set(new GT_MetaTileEntity_Transformer(27, "transformer.tier.07", "ZPM Voltage Transformer", 7, "UV -> ZPM (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Transformer_MAX_UV.set(new GT_MetaTileEntity_Transformer(28, "transformer.tier.08", "Ultimate Transformer", 8, "UHV -> UV (Use Soft Mallet to invert)").getStackForm(1L));
 
 
         GT_ModHandler.addCraftingRecipe(ItemList.Transformer_LV_ULV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{" BB", "CM ", " BB", Character.valueOf('M'), ItemList.Hull_ULV, Character.valueOf('C'), OrePrefixes.cableGt01.get(Materials.Tin), Character.valueOf('B'), OrePrefixes.cableGt01.get(Materials.Lead)});

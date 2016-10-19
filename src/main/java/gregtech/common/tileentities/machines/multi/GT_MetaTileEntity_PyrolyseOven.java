@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -57,29 +58,57 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
-        ArrayList<FluidStack> tFluidInputs = getStoredFluids();
-        for (ItemStack tInput : tInputList) {
+        int tInputList_sS=tInputList.size();
+        for (int i = 0; i < tInputList_sS - 1; i++) {
+            for (int j = i + 1; j < tInputList_sS; j++) {
+                if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
+                    if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
+                        tInputList.remove(j--); tInputList_sS=tInputList.size();
+                    } else {
+                        tInputList.remove(i--); tInputList_sS=tInputList.size();
+                        break;
+                    }
+                }
+            }
+        }
+        ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
+
+        ArrayList<FluidStack> tFluidList = getStoredFluids();
+        int tFluidList_sS=tFluidList.size();
+        for (int i = 0; i < tFluidList_sS - 1; i++) {
+            for (int j = i + 1; j < tFluidList_sS; j++) {
+                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
+                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
+                        tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
+                    } else {
+                        tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
+                        break;
+                    }
+                }
+            }
+        }
+        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
+
+        if (tInputList.size() > 0) {
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluidInputs.isEmpty() ? null : new FluidStack[]{tFluidInputs.get(0)}, new ItemStack[]{mInventory[1], tInput});
-            if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, tFluidInputs.isEmpty() ? null : new FluidStack[]{tFluidInputs.get(0)}, new ItemStack[]{tInput, mInventory[1]})) {
-                    this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                    this.mEfficiencyIncrease = 10000;
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+            if (tRecipe != null && tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
+                this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+                this.mEfficiencyIncrease = 10000;
 
-                    calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
-                    //In case recipe is too OP for that machine
-                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                        return false;
-                    if (this.mEUt > 0) {
-                        this.mEUt = (-this.mEUt);
-                    }
-                    if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
-                    if (tRecipe.mFluidOutputs.length > 0)
-                        this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
-                    updateSlots();
-                    return true;
+                calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+                //In case recipe is too OP for that machine
+                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                    return false;
+                if (this.mEUt > 0) {
+                    this.mEUt = (-this.mEUt);
                 }
+                if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
+                if (tRecipe.mFluidOutputs.length > 0)
+                    this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
+                updateSlots();
+                return true;
             }
         }
         return false;
