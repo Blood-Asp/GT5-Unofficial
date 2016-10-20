@@ -194,10 +194,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        //TODO FIX
-        //if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
-        //    pollutionParticles(aBaseMetaTileEntity);
-        //}
         if (aBaseMetaTileEntity.isServerSide()) {
             if (mEfficiency < 0) mEfficiency = 0;
             if (--mUpdate == 0 || --mStartUpCheck == 0) {
@@ -293,6 +289,9 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             }
             aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             aBaseMetaTileEntity.setActive(mMaxProgresstime > 0);
+            boolean active=aBaseMetaTileEntity.isActive();
+            for(GT_MetaTileEntity_Hatch_Muffler aMuffler:mMufflerHatches)
+                aMuffler.getBaseMetaTileEntity().setActive(active && mPollution>0);
         }
     }
 
@@ -310,16 +309,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             }
         }
         return mPollution < 10000;
-    }
-
-    //MAKE THE POLLUTION ROLL!!! TODO Fix?
-    public void pollutionParticles(IGregTechTileEntity aBaseMetaTileEntity){
-        //World aWorld =DimensionManager.getWorld(aBaseMetaTileEntity.getWorld().provider.dimensionId);
-        World aWorld=aBaseMetaTileEntity.getWorld();
-        if(!aWorld.isRemote)return;
-        for (GT_MetaTileEntity_Hatch_Muffler tTileEntity : mMufflerHatches) {
-            tTileEntity.pollutionParticles();
-        }
     }
 
     /**

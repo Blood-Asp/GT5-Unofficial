@@ -89,9 +89,15 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return 6*(mTier-1);
     }
 
-    public void pollutionParticles(){
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if(this.getBaseMetaTileEntity().isActive())
+            pollutionParticles(this.getBaseMetaTileEntity().getWorld());
+    }
+
+    public void pollutionParticles(World aWorld){
         IGregTechTileEntity aMuffler=this.getBaseMetaTileEntity();
-        World aWorld=aMuffler.getWorld();
         ForgeDirection aDir=ForgeDirection.getOrientation(aMuffler.getFrontFacing());
         int xPos=aDir.offsetX+aMuffler.getXCoord();
         int yPos=aDir.offsetX+aMuffler.getYCoord();
@@ -99,9 +105,8 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
         aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
         if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit) {
-            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
-            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D + (new XSTR()).nextFloat(), 0.0D);
+            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.45D, 0.0D);
+            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos + (new XSTR()).nextFloat(), zPos + (new XSTR()).nextFloat(), 0.0D, 0.6D, 0.0D);
         }
     }
-
 }
