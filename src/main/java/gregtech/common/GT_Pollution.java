@@ -76,7 +76,7 @@ public class GT_Pollution {
 							AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX<<4, 0, tPos.chunkPosZ<<4, (tPos.chunkPosX<<4)+16, 256, (tPos.chunkPosZ<<4)+16);
 							List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 							for(EntityLivingBase tEnt : tEntitys){
-								if(tRan.nextInt(tPollution/25000) > 10){
+								if(!GT_Utility.isWearingFullGasHazmat(tEnt) && tRan.nextInt(tPollution/25000) > 10){
 									tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution/1000,1000), 1));
 									tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution/1000,1000), 1));
 									tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution/1000,1000), 1));
@@ -87,7 +87,7 @@ public class GT_Pollution {
 								//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 								//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 								for(EntityLivingBase tEnt : tEntitys){
-									if(tRan.nextInt(tPollution/25000) > 20){
+									if(!GT_Utility.isWearingFullGasHazmat(tEnt) && tRan.nextInt(tPollution/25000) > 20){
 										tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution/2000,1000), 1));
 										tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution/4000,1000), 1));
 										tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution/2000,1000), 1));
