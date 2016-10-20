@@ -289,9 +289,9 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             }
             aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             aBaseMetaTileEntity.setActive(mMaxProgresstime > 0);
-            boolean active=aBaseMetaTileEntity.isActive();
+            boolean active=aBaseMetaTileEntity.isActive() && mPollution>0;
             for(GT_MetaTileEntity_Hatch_Muffler aMuffler:mMufflerHatches)
-                aMuffler.getBaseMetaTileEntity().setActive(active && mPollution>0);
+                aMuffler.getBaseMetaTileEntity().setActive(active);
         }
     }
 
