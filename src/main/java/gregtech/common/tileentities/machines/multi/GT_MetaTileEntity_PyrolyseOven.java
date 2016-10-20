@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.dreammaster.gthandler.casings.GT_Container_CasingsNH;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -40,15 +41,15 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
-                "ULV Machine Casings for the rest (60 at least!)"};
+                "Pyrolyze Oven Casings for the rest (60 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0],
+            return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.MACHINE_8V_SIDE),
                     new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN)};
         }
-        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0]};
+        return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.MACHINE_8V_SIDE)};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -133,10 +134,10 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
                             if ((!addInputToMachineList(tTileEntity, 120)) && (!addMufflerToMachineList(tTileEntity, 120))) {
-                                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
+                                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
                                     return false;
                                 }
-                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0) {
+                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
                                     return false;
                                 }
                             }
@@ -149,19 +150,19 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                         if (h == 0) {// au�en boden (controller, output, energy, maintainance, rest ulv casings)
                             if ((!addMaintenanceToMachineList(tTileEntity, 120)) && (!addOutputToMachineList(tTileEntity, 120)) && (!addEnergyInputToMachineList(tTileEntity, 120))) {
                                 if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
-                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
+                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
                                         return false;
                                     }
-                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0) {
+                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
                                         return false;
                                     }
                                 }
                             }
                         } else {// au�en �ber boden (ulv casings)
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
+                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0) {
+                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
                                 return false;
                             }
                         }
