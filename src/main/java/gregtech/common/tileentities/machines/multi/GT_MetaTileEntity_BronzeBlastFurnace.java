@@ -190,7 +190,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
         if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
             World aWorld=aBaseMetaTileEntity.getWorld();
             double xPos=aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1);
-            double yPos=aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1);
+            double yPos=aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1)+0.05F;
             double zPos=aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1);
             aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos, zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
             //Pollution particles intensify
