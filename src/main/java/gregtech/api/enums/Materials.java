@@ -675,8 +675,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	//TODO: add other op materials? maybe some new ores or new only fusion made op materials from op materials??? like neutronium bedrockium alloy etc.
 	InfinityCatalyst   	( 394, TextureSet.SET_SHINY				,  64.0F,1310720,  7, 1      |8                             , 255, 255, 255,   0,   "Infinity Catalyst" 		    ,     5,  500000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeLightGray),
 	Infinity		   	( 397, TextureSet.SET_SHINY				, 128.0F,2621440,  8, 1      |8                             , 255, 255, 255,   0,   "Infinity"          		    ,     5, 5000000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
-	Bedrockium	 		( 395, TextureSet.SET_DULL				,  54.0F, 327680,  6, 1      |8                             ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
-	Trinium				( 868, TextureSet.SET_SHINY				, 128.0F,  32760,  8, 1|2          |64|128                  , 200, 200, 210,   0,	"Trinium"						,     0,       0,     7200,  7200,  true, false,  4,   1,   1, Dyes.dyeLightGray),
+	Bedrockium	 		( 395, TextureSet.SET_DULL				,   8.0F, 327680,  6, 1      |8                             ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
+	Trinium				( 868, TextureSet.SET_SHINY				, 128.0F,    128,  8, 1|2          |64|128                  , 200, 200, 210,   0,	"Trinium"						,     0,       0,     7200,  7200,  true, false,  4,   1,   1, Dyes.dyeLightGray),
 
 	/**
 	 * Materials which are renamed automatically
