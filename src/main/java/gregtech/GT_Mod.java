@@ -69,7 +69,7 @@ public class GT_Mod implements IGT_Mod {
     public static GT_Achievements achievements;
     private final String aTextGeneral = "general";
     private final String aTextIC2 = "ic2_";
-
+   
     static {
         if ((509 != GregTech_API.VERSION) || (509 != GT_ModHandler.VERSION) || (509 != GT_OreDictUnificator.VERSION) || (509 != GT_Recipe.VERSION) || (509 != GT_Utility.VERSION) || (509 != GT_RecipeRegistrator.VERSION) || (509 != Element.VERSION) || (509 != Materials.VERSION) || (509 != OrePrefixes.VERSION)) {
             throw new GT_ItsNotMyFaultException("One of your Mods included GregTech-API Files inside it's download, mention this to the Mod Author, who does this bad thing, and tell him/her to use reflection. I have added a Version check, to prevent Authors from breaking my Mod that way.");
@@ -195,7 +195,7 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.sConstantEnergy = tMainConfig.get("machines", "constant_need_of_energy", true).getBoolean(false);
         GregTech_API.sColoredGUI = tMainConfig.get("machines", "colored_guis_when_painted", true).getBoolean(false);
 
-        GregTech_API.sTimber = tMainConfig.get(aTextGeneral, "timber_axe", false).getBoolean(false);
+        GregTech_API.sTimber = tMainConfig.get(aTextGeneral, "timber_axe", true).getBoolean(true);
         GregTech_API.sDrinksAlwaysDrinkable = tMainConfig.get(aTextGeneral, "drinks_always_drinkable", false).getBoolean(false);
         GregTech_API.sDoShowAllItemsInCreative = tMainConfig.get(aTextGeneral, "show_all_metaitems_in_creative_and_NEI", false).getBoolean(false);
         GregTech_API.sMultiThreadedSounds = tMainConfig.get(aTextGeneral, "sound_multi_threading", false).getBoolean(false);
@@ -692,7 +692,6 @@ public class GT_Mod implements IGT_Mod {
                 GregTech_API.mInputRF = false;
             }
         }
-
         achievements = new GT_Achievements();
         GT_Log.out.println("GT_Mod: Loading finished, deallocating temporary Init Variables.");
         GregTech_API.sBeforeGTPreload = null;
