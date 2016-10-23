@@ -54,7 +54,7 @@ public class GT_Pollution {
 							tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ-1));
 							for(ChunkPosition tNPos : tNeighbor){
 								if(!GT_Proxy.chunkData.containsKey(tNPos)){
-									GT_Utility.getUndergroundOil(aWorld,tPos.chunkPosX,tPos.chunkPosZ);
+									GT_Utility.getUndergroundOil(aWorld,tNPos.chunkPosX,tNPos.chunkPosZ);
 								}
 								int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
 								if(tNPol*12 < tPollution*10){
