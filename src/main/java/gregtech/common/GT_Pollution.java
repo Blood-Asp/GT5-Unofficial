@@ -56,13 +56,7 @@ public class GT_Pollution {
 								if(!GT_Proxy.chunkData.containsKey(tNPos)){
 									GT_Utility.getUndergroundOil(aWorld,tPos.chunkPosX,tPos.chunkPosZ);
 								}
-								int tNPol;
-								try {
-									tNPol = GT_Proxy.chunkData.get(tNPos)[1];
-								}catch(Exception e){
-									GT_Utility.getUndergroundOil(aWorld,tPos.chunkPosX,tPos.chunkPosZ);
-									tNPol = GT_Proxy.chunkData.get(tNPos)[1];
-								}
+								int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
 								if(tNPol*12 < tPollution*10){
 									int tDiff = tPollution - tNPol;
 									tDiff = tDiff/20;
