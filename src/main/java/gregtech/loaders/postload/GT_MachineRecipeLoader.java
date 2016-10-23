@@ -1335,6 +1335,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Bronze, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), ItemList.Tool_Hoe_Bronze.getUndamaged(1L, new Object[0]), 100, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Steel, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), ItemList.Tool_Hoe_Steel.getUndamaged(1L, new Object[0]), 100, 16);
 
+        GT_Values.RA.addAssemblerRecipe(ItemList.NaquadahCell_1.get(2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Titanium, 4L), ItemList.NaquadahCell_2.get(1L, new Object[0]), 200, 90);
+        GT_Values.RA.addAssemblerRecipe(ItemList.NaquadahCell_2.get(2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Titanium, 4L), ItemList.NaquadahCell_4.get(1L, new Object[0]), 200, 90);
+
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Items.lava_bucket), ItemList.Cell_Empty.get(1L, new Object[0])});
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Items.water_bucket), ItemList.Cell_Empty.get(1L, new Object[0])});
 
