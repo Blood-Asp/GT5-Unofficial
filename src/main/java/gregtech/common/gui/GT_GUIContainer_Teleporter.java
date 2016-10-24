@@ -4,6 +4,7 @@ import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraftforge.common.DimensionManager;
 
 import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 
@@ -21,6 +22,7 @@ public class GT_GUIContainer_Teleporter
             this.fontRendererObj.drawString("Z: " + GT_Utility.parseNumberToString(((GT_Container_Teleporter) this.mContainer).mTargetZ), 46, 32, 16448255);
             if (((GT_Container_Teleporter) this.mContainer).mEgg > 0) {
                 this.fontRendererObj.drawString("Dim: " + GT_Utility.parseNumberToString(((GT_Container_Teleporter) this.mContainer).mTargetD), 46, 40, 16448255);
+                this.fontRendererObj.drawString("Dim Valid: " + (DimensionManager.isDimensionRegistered(((GT_Container_Teleporter) this.mContainer).mTargetD) ? "Yes":"No"), 46, 48, 16448255);
             }
         }
     }

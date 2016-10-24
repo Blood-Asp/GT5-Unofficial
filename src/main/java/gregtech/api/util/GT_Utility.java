@@ -1452,7 +1452,7 @@ public class GT_Utility {
 
     /**
      * This checks if the Dimension is really a Dimension and not another Planet or something.
-     * Used for my Teleporter.
+     * Used for my Teleporter.    //I have a different opinion... Planets are fine :P
      */
     public static boolean isRealDimension(int aDimensionID) {
         try {
@@ -1462,7 +1462,7 @@ public class GT_Utility {
         try {
             if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
         } catch (Throwable e) {/*Do nothing*/}
-        return GregTech_API.sDimensionalList.contains(aDimensionID);
+        return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
 
     public static boolean moveEntityToDimensionAtCoords(Entity aEntity, int aDimension, double aX, double aY, double aZ) {
