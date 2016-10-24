@@ -80,8 +80,9 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
                 "X: "+EnumChatFormatting.GREEN+ this.mTargetX+EnumChatFormatting.RESET,
                 "Y: "+EnumChatFormatting.GREEN+ this.mTargetY+EnumChatFormatting.RESET,
                 "Z: "+EnumChatFormatting.GREEN+ this.mTargetZ+EnumChatFormatting.RESET,
-                "Dimension: " + EnumChatFormatting.YELLOW+this.mTargetD+EnumChatFormatting.RESET,
-                "Dimension Valid: " + (DimensionManager.isDimensionRegistered(this.mTargetD) ? EnumChatFormatting.GREEN+"Yes"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"No"+EnumChatFormatting.RESET)
+                "Dimension: " + EnumChatFormatting.GREEN+this.mTargetD+EnumChatFormatting.RESET,
+                "Dimension Valid: " + (GT_Utility.isRealDimension(this.mTargetD) ? EnumChatFormatting.GREEN+"Yes"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"No"+EnumChatFormatting.RESET),
+                "Dimension Registered: " + (DimensionManager.isDimensionRegistered(this.mTargetD) ? EnumChatFormatting.GREEN+"Yes"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"No"+EnumChatFormatting.RESET)
         };
     }
 
