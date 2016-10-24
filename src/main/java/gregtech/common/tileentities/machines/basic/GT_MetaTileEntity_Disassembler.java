@@ -41,25 +41,30 @@ public class GT_MetaTileEntity_Disassembler
                         if (getBaseMetaTileEntity().getRandomNumber(100) < 50 + 10 * this.mTier) {
                             this.mOutputItems[i] = GT_Utility.loadItem(tNBT, "Ingredient." + i);
                             if (this.mOutputItems[i] != null) {
-                                this.mMaxProgresstime *= (mTier>5 ? 1.7F-(mTier/10.0F) : 1.7F);
+                                this.mMaxProgresstime *= 1.7F;
                                 isAnyOutput=true;
                             }
                         }
                     }
-                    if(!isAnyOutput){
-                    	return 0;
+                    if(!isAnyOutput)
+                    	return DID_NOT_FIND_RECIPE;
+                    for(int i=mTier-5;i>0;i--){
+                        this.mMaxProgresstime>>=1;
+                        if(this.mMaxProgresstime==0)
+                            this.mEUt = this.mEUt>>1;
                     }
+                    this.mMaxProgresstime = this.mMaxProgresstime==0 ? 1 : this.mMaxProgresstime;
                     getInputAt(0).stackSize -= 1;
-                    return 2;
+                    return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                 }
             }
         }
-        return 0;
+        return DID_NOT_FIND_RECIPE;
     }
 
     private void calculateOverclockedNessDisassembler(int aEUt) {
         if(mTier==0){
-            mEUt=aEUt/4;
+            mEUt=aEUt>>2;
         }else{
             //Long EUt calculation
             long xEUt=aEUt;
@@ -67,14 +72,15 @@ public class GT_MetaTileEntity_Disassembler
             long tempEUt = xEUt<GT_Values.V[1] ? GT_Values.V[1] : xEUt;
 
             while (tempEUt <= GT_Values.V[mTier -1] * (long)mAmperage) {
-                tempEUt *= 4;//this actually controls overclocking
-                xEUt *= 4;//this is effect of overclocking
+                tempEUt<<=2;//this actually controls overclocking
+                xEUt<<=2;//this is effect of overclocking
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;
             }else{
                 mEUt = (int)xEUt;
-                mEUt = mEUt == 0 ? 1 : mEUt;
+                if(mEUt==0)
+                    mEUt = 1;
             }
         }
     }

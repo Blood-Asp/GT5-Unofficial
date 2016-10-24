@@ -70,17 +70,16 @@ public class GT_MetaTileEntity_Massfabricator
     private void calculateOverclockedNessMassFabricator() {
         if(mTier==0){
             //Long time calculation
-            long xMaxProgresstime = (long)sDurationMultiplier*2L;
+            long xMaxProgresstime = ((long)sDurationMultiplier)<<1;
             if(xMaxProgresstime>Integer.MAX_VALUE-1){
                 //make impossible if too long
                 mEUt=Integer.MAX_VALUE-1;
                 mMaxProgresstime=Integer.MAX_VALUE-1;
             }else{
-                mEUt= (int)(GT_Values.V[1] * 4);
+                mEUt= (int)(GT_Values.V[1]<<2);//2^2=4  so shift <<2
                 mMaxProgresstime=(int)xMaxProgresstime;
             }
         }else{
-            //TODO: CHECK IF THAT WORKS
             //Long EUt calculation
             long xEUt=GT_Values.V[1] * (long)Math.pow(2,mTier+2);
 
@@ -89,17 +88,20 @@ public class GT_MetaTileEntity_Massfabricator
             mMaxProgresstime = sDurationMultiplier;
 
             while (tempEUt <= V[mTier -1]) {
-                tempEUt *= 4;//this actually controls overclocking
-                mMaxProgresstime /= 2;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? (long)(xEUt/1.1D) : xEUt;//U know, if the time is less than 1 tick make the machine use less power
+                tempEUt<<=2;//this actually controls overclocking
+                mMaxProgresstime>>=1;//this is effect of overclocking
+                if(mMaxProgresstime==0)
+                    xEUt = (long)(xEUt/1.1D);//U know, if the time is less than 1 tick make the machine use less power
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;
                 mMaxProgresstime = Integer.MAX_VALUE-1;
             }else{
                 mEUt = (int)xEUt;
-                mEUt = mEUt == 0 ? 1 : mEUt;
-                mMaxProgresstime = mMaxProgresstime<1 ? 1 : mMaxProgresstime;//set time to 1 tick
+                if(mEUt==0)
+                    mEUt = 1;
+                if(mMaxProgresstime==0)
+                    mMaxProgresstime = 1;//set time to 1 tick
             }
         }
     }

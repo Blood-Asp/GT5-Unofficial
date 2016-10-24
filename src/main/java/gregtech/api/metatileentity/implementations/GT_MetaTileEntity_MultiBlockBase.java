@@ -524,13 +524,13 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         byte mTier=(byte)Math.max(0,GT_Utility.getTier(maxInputVoltage));
         if(mTier==0){
             //Long time calculation
-            long xMaxProgresstime = (long)aDuration*2L;
+            long xMaxProgresstime = ((long)aDuration)<<1;
             if(xMaxProgresstime>Integer.MAX_VALUE-1){
                 //make impossible if too long
                 mEUt=Integer.MAX_VALUE-1;
                 mMaxProgresstime=Integer.MAX_VALUE-1;
             }else{
-                mEUt=aEUt/4;
+                mEUt=aEUt>>2;
                 mMaxProgresstime=(int)xMaxProgresstime;
             }
         }else{
@@ -542,18 +542,20 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             mMaxProgresstime = aDuration;
 
             while (tempEUt <= V[mTier -1] * mAmperage) {
-                tempEUt *= 4;//this actually controls overclocking
+                tempEUt<<=2;//this actually controls overclocking
                 //xEUt *= 4;//this is effect of everclocking
-                mMaxProgresstime /= 2;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? (long)(xEUt/1.1D) : xEUt*4;//U know, if the time is less than 1 tick make the machine use less power
+                mMaxProgresstime>>=1;//this is effect of overclocking
+                xEUt = mMaxProgresstime==0 ? xEUt>>1 : xEUt<<2;//U know, if the time is less than 1 tick make the machine use less power
             }
             if(xEUt>Integer.MAX_VALUE-1){
                 mEUt = Integer.MAX_VALUE-1;
                 mMaxProgresstime = Integer.MAX_VALUE-1;
             }else{
                 mEUt = (int)xEUt;
-                mEUt = mEUt == 0 ? 1 : mEUt;
-                mMaxProgresstime = mMaxProgresstime<1 ? 1 : mMaxProgresstime;//set time to 1 tick
+                if(mEUt==0)
+                    mEUt = 1;
+                if(mMaxProgresstime==0)
+                    mMaxProgresstime = 1;//set time to 1 tick
             }
         }
     }
