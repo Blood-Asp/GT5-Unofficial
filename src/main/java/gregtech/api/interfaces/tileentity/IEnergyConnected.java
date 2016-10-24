@@ -1,11 +1,14 @@
 package gregtech.api.interfaces.tileentity;
 
 import cofh.api.energy.IEnergyReceiver;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -104,6 +107,8 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                 GT_Utility.sendSoundToPlayers(tWorld, GregTech_API.sSoundList.get(209), 1.0F, -1, tX, tY, tZ);
                                 tWorld.setBlock(tX, tY, tZ, Blocks.air);
                                 if (GregTech_API.sMachineExplosions)
+                                    if(GT_Mod.gregtechproxy.mPollution)
+                                        GT_Pollution.addPollution(new ChunkPosition(tX, tY, tZ), 50000);
                                     tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
                             }
                         }
