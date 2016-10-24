@@ -53,7 +53,10 @@ public class GT_MetaTileEntity_Disassembler
                         if(this.mMaxProgresstime==0)
                             this.mEUt = this.mEUt>>1;
                     }
-                    this.mMaxProgresstime = this.mMaxProgresstime==0 ? 1 : this.mMaxProgresstime;
+                    if(this.mEUt==0)
+                        mEUt = 1;
+                    if(this.mMaxProgresstime==0)
+                        this.mMaxProgresstime = 1;
                     getInputAt(0).stackSize -= 1;
                     return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                 }
@@ -79,8 +82,6 @@ public class GT_MetaTileEntity_Disassembler
                 mEUt = Integer.MAX_VALUE-1;
             }else{
                 mEUt = (int)xEUt;
-                if(mEUt==0)
-                    mEUt = 1;
             }
         }
     }
