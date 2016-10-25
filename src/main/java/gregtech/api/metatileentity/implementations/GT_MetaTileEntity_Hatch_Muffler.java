@@ -25,7 +25,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "DO NOT OBSTRUCT THE OUTPUT!"};
+        return new String[]{mDescription, "DO NOT OBSTRUCT THE OUTPUT!","Reduces Pollution to "+calculatePollutionReduction(100)+"%"};
     }
 
     @Override
@@ -64,8 +64,12 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     }
 
     public boolean polluteEnvironment() {
-    	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 10000 - (600*(mTier-1)));
+    	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), calculatePollutionReduction(10000));
         return (mTier > 1 && getBaseMetaTileEntity().getRandomNumber(mTier) != 0) || getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing());
+    }
+    
+    public int calculatePollutionReduction(int aPollution){
+    	return (int) (aPollution *(Math.pow(0.5, mTier-1)));
     }
 
     @Override
@@ -76,17 +80,6 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
-    }
-
-    //@Override
-    //public String[] getInfoData() {
-    //    return new String[]{
-    //            "Reduces pollution by: "+ EnumChatFormatting.GREEN + (6*(mTier-1))+ EnumChatFormatting.RESET+" %"
-    //    };
-    //}
-
-    public int getPollutionReduction() {
-        return 6*(mTier-1);
     }
 
     @Override

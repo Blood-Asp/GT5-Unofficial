@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 10;
+        return 8;
     }
 
     @Override

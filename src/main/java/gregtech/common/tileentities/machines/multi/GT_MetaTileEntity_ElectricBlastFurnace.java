@@ -104,7 +104,6 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
             }
         }
         FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
-
         if (tInputList.size() > 0) {
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
@@ -221,7 +220,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 10;
+        return 5;
     }
 
     public int getDamageToComponent(ItemStack aStack) {

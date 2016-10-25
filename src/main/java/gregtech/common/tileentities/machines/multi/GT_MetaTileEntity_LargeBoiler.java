@@ -34,7 +34,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Large Boiler",
-                "Produces "+(getEUt()*40)*(runtimeBoost(20)/20f)+"L of Steam/sec for 1 Coal",
+                "Produces "+(getEUt()*40)*(runtimeBoost(20)/20f)+"L of Steam with 1 Coal in "+runtimeBoost(20)+" ticks",
                 "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
                 "3x1x3 of Fire Boxes (Bottom layer, Min 3)",
                 "3x4x3 of Casings (Above Fireboxes, hollow, Min 24!)",
@@ -151,10 +151,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (mProgresstime > 0 && firstRun) {
             firstRun = false;
-            try {
-                GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
-            } catch (Exception e) {
-            }
+            GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
     }
@@ -225,7 +222,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 10;
+        return 12;
     }
 
     public int getDamageToComponent(ItemStack aStack) {
