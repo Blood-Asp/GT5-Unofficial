@@ -234,7 +234,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         int mPollutionReduction=0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
             if (isValidMetaTileEntity(tHatch)) {
-                mPollutionReduction+=tHatch.getPollutionReduction();
+                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
             }
         }
 
@@ -245,7 +245,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "Fuel Value: "+EnumChatFormatting.YELLOW+fuelValue+EnumChatFormatting.RESET+" EU/L",
                 "Fuel Remaining: "+EnumChatFormatting.GOLD+fuelRemaining+EnumChatFormatting.RESET+" L",
                 "Current Efficiency: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.YELLOW+" %",
-                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 

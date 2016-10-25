@@ -263,7 +263,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         int mPollutionReduction=0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
             if (isValidMetaTileEntity(tHatch)) {
-                mPollutionReduction+=tHatch.getPollutionReduction();
+                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
             }
         }
 
@@ -284,7 +284,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Heat capacity: "+
                         EnumChatFormatting.GREEN+mHeatingCapacity+EnumChatFormatting.RESET+" K",
-                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 }

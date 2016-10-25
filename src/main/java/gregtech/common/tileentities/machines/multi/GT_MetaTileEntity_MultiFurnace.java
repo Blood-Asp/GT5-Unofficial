@@ -237,7 +237,7 @@ public class GT_MetaTileEntity_MultiFurnace
         int mPollutionReduction=0;
         for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
             if (isValidMetaTileEntity(tHatch)) {
-                mPollutionReduction+=tHatch.getPollutionReduction();
+                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
             }
         }
 
@@ -258,7 +258,7 @@ public class GT_MetaTileEntity_MultiFurnace
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Multi smelting: "+
                         EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: "+EnumChatFormatting.GREEN+"(EU/t) / "+mCostDiscount+EnumChatFormatting.RESET,
-                "Pollution reduced by: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
 
