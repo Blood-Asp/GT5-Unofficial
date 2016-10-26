@@ -149,6 +149,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mAE2Integration = true;
     //public boolean mArcSmeltIntoAnnealed = true;
     //public boolean mMagneticraftRecipes = true;
+    //public boolean mImmersiveEngineeringRecipes = true;
     private boolean isFirstServerWorldTick = true;
     private boolean mOreDictActivated = false;
     public boolean mChangeHarvestLevels=false;
@@ -172,6 +173,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionPoisonLimit = 750000;
     public int mPollutionVegetationLimit = 1000000;
     public int mPollutionSourRainLimit = 2000000;
+    public int mTicksUntilNextCraftSound = 0;
     //public double mMagneticraftBonusOutputPercent = 100.0d;
     private World mUniverse = null;
     private final String aTextThermalExpansion = "ThermalExpansion";
@@ -179,6 +181,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private final String aTextTwilightForest = "TwilightForest";
     private final String aTextForestry = "Forestry";
     private final String aTextArsmagica2 = "arsmagica2";
+    //public boolean mTEMachineRecipes = false;
+    //public boolean mEnableAllMaterials = false;
+    //public boolean mEnableAllComponents = false;
 
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
@@ -695,7 +700,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                         'X', OrePrefixes.crushed.get(aMaterial)});
                 GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dustImpure, aMaterial.mMacerateInto, 1L), tBits, new Object[]{"h", "X",
                         'X', OrePrefixes.dirtyGravel.get(aMaterial)});
-
                 GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial, 4L), tBits,
                         new Object[]{" X", "  ", 'X', OrePrefixes.dust.get(aMaterial)});
                 GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 9L), tBits,
@@ -1391,6 +1395,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     @SubscribeEvent
     public void onWorldTickEvent(TickEvent.WorldTickEvent aEvent) {
+    	if(aEvent.world.provider.dimensionId == 0)
+            mTicksUntilNextCraftSound--;   
         if (aEvent.side.isServer()) {
             if (this.mUniverse == null) {
                 this.mUniverse = aEvent.world;
@@ -1435,7 +1441,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
             if(aEvent.world.provider.dimensionId==0)
-                GT_Pollution.onWorldTick(aEvent.world, (int) (aEvent.world.getTotalWorldTime() % 1000));
+                GT_Pollution.onWorldTick(aEvent.world, (int) (aEvent.world.getTotalWorldTime() % 1200));
         }
     }
 
