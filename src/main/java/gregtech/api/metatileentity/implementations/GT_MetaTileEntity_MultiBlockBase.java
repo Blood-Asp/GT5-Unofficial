@@ -218,7 +218,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                             } else {
                                 if(tHatch.mAuto){
                                     //if not (fullyRepaired or autoMaintenanceIdle) == if notFullyRepaired and autoMaintenanceReady
-                                    if(!((mWrench&&mScrewdriver&&mSoftHammer&&mHardHammer&&mSolderingTool&&mCrowbar) || tHatch.getBaseMetaTileEntity().isActive())) {
+                                    if(!(mWrench&&mScrewdriver&&mSoftHammer&&mHardHammer&&mSolderingTool&&mCrowbar || tHatch.getBaseMetaTileEntity().isActive())) {
                                         mWrench = mScrewdriver = mSoftHammer = mHardHammer = mSolderingTool = mCrowbar = true;
                                         tHatch.getBaseMetaTileEntity().setActive(true);
                                     }
