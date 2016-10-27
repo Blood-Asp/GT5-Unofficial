@@ -29,7 +29,6 @@ import java.util.List;
 
 public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch {
     public boolean mWrench = false, mScrewdriver = false, mSoftHammer = false, mHardHammer = false, mSolderingTool = false, mCrowbar = false, mAuto;
-    public GT_MetaTileEntity_MultiBlockBase mController = null;
 
     public GT_MetaTileEntity_Hatch_Maintenance(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "For maintaining Multiblocks");
@@ -48,18 +47,18 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public String[] getDescription() {
-    	if(mAuto)return new String[]{mDescription, "Cannot be shared between Multiblocks!","4 Duct tape, 2 Lubricant Cells","4 Steel Screws, 2 Adv. Circuits","For each auto-repair"};
+    	if(mAuto)return new String[]{mDescription, "4 Duct tape, 2 Lubricant Cells","4 Steel Screws, 2 Adv. Circuits","For each auto-repair"};
         return new String[]{mDescription, "Cannot be shared between Multiblocks!"};
     }
 
     @Override
-    public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE)};
+    public ITexture[] getTexturesActive(ITexture aBaseTexture) {//which is actually inactive
+        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_IDLE)};
         return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE)};
     }
 
     @Override
-    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+    public ITexture[] getTexturesInactive(ITexture aBaseTexture) {//which is actually active
         if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE)};
         return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DUCTTAPE)};
     }
@@ -116,30 +115,29 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (aBaseMetaTileEntity.isServerSide() && aTimer % 100 == 0 && mController != null) {
-        	if(!mController.mCrowbar || !mController.mHardHammer || !mController.mScrewdriver || !mController.mSoftHammer || !mController.mSolderingTool || !mController.mWrench){
-        		boolean tSuccess = true;
-        		ItemStack[] mInputs = new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
-        		List<ItemStack> aInputs = Arrays.asList(mInventory);
-                if (mInputs.length > 0 && aInputs == null) tSuccess = false;
-                int amt = 0;
-                for (ItemStack tStack : mInputs) {
-                    if (tStack != null) {
-                        amt = tStack.stackSize;
-                        boolean temp = true;
-                        for (ItemStack aStack : aInputs) {
-                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
-                                amt -= aStack.stackSize;
-                                if (amt < 1) {
-                                    temp = false;
-                                    break;
-                                }
+        if (mAuto && aBaseMetaTileEntity.isServerSide() && aTimer % 100 == 0) {
+            boolean tSuccess = true;
+            ItemStack[] mInputs = new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
+            List<ItemStack> aInputs = Arrays.asList(mInventory);
+            if (mInputs.length > 0 && aInputs == null) tSuccess = false;
+            int amt = 0;
+            for (ItemStack tStack : mInputs) {
+                if (tStack != null) {
+                    amt = tStack.stackSize;
+                    boolean temp = true;
+                    for (ItemStack aStack : aInputs) {
+                        if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                            amt -= aStack.stackSize;
+                            if (amt < 1) {
+                                temp = false;
+                                break;
                             }
                         }
-                        if (temp) tSuccess = false;
                     }
+                    if (temp) tSuccess = false;
                 }
-                if(tSuccess){
+            }
+            if(tSuccess){
                 for (ItemStack tStack : mInputs) {
                     if (tStack != null) {
                         amt = tStack.stackSize;
@@ -157,14 +155,14 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
                         }
                     }
                 }
-                this.mCrowbar = true;
-                this.mHardHammer = true;
-                this.mScrewdriver = true;
-                this.mSoftHammer = true;
-                this.mSolderingTool = true;
-                this.mWrench = true;                
-                }
-        	}
+                //this.mCrowbar = true;
+                //this.mHardHammer = true;
+                //this.mScrewdriver = true;
+                //this.mSoftHammer = true;
+                //this.mSolderingTool = true;
+                //this.mWrench = true;
+                getBaseMetaTileEntity().setActive(false);
+            }
         }
         super.onPostTick(aBaseMetaTileEntity, aTimer);
     }
@@ -201,9 +199,5 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
-    }
-    
-    public void setController(GT_MetaTileEntity_MultiBlockBase aController){
-    	mController = aController;
     }
 }
