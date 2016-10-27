@@ -208,29 +208,29 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 if (mMachine) {
                     for (GT_MetaTileEntity_Hatch_Maintenance tHatch : mMaintenanceHatches) {
                         if (isValidMetaTileEntity(tHatch)) {
-                            if (!this.disableMaintenance) {
-                            	tHatch.setController(this);
-                                if (tHatch.mWrench) mWrench = true;
-                                if (tHatch.mScrewdriver) mScrewdriver = true;
-                                if (tHatch.mSoftHammer) mSoftHammer = true;
-                                if (tHatch.mHardHammer) mHardHammer = true;
-                                if (tHatch.mSolderingTool) mSolderingTool = true;
-                                if (tHatch.mCrowbar) mCrowbar = true;
-                            } else {
+                            if (disableMaintenance){
                                 mWrench = true;
                                 mScrewdriver = true;
                                 mSoftHammer = true;
                                 mHardHammer = true;
                                 mSolderingTool = true;
                                 mCrowbar = true;
-                            }
+                            } else {
+                                if (tHatch.mAuto && (!mWrench||!mScrewdriver||!mSoftHammer||!mHardHammer||!mSolderingTool||!mCrowbar))tHatch.autoMaintainance();
+                                if (tHatch.mWrench) mWrench = true;
+                                if (tHatch.mScrewdriver) mScrewdriver = true;
+                                if (tHatch.mSoftHammer) mSoftHammer = true;
+                                if (tHatch.mHardHammer) mHardHammer = true;
+                                if (tHatch.mSolderingTool) mSolderingTool = true;
+                                if (tHatch.mCrowbar) mCrowbar = true;
 
-                            tHatch.mWrench = false;
-                            tHatch.mScrewdriver = false;
-                            tHatch.mSoftHammer = false;
-                            tHatch.mHardHammer = false;
-                            tHatch.mSolderingTool = false;
-                            tHatch.mCrowbar = false;
+                                tHatch.mWrench = false;
+                                tHatch.mScrewdriver = false;
+                                tHatch.mSoftHammer = false;
+                                tHatch.mHardHammer = false;
+                                tHatch.mSolderingTool = false;
+                                tHatch.mCrowbar = false;
+                            }
                         }
                     }
                     if (getRepairStatus() > 0) {
@@ -768,7 +768,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Maintenance) {
             ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
-            ((GT_MetaTileEntity_Hatch_Maintenance) aMetaTileEntity).setController(this);
             return mMaintenanceHatches.add((GT_MetaTileEntity_Hatch_Maintenance) aMetaTileEntity);
         }
         return false;
