@@ -115,7 +115,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (mAuto && aBaseMetaTileEntity.isServerSide() && aTimer % 100 == 0 && !getBaseMetaTileEntity().isActive()) {
+        if (mAuto && aBaseMetaTileEntity.isServerSide() && aTimer % 100 == 0 && getBaseMetaTileEntity().isActive()) {
             boolean tSuccess = true;
             ItemStack[] mInputs = new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
             List<ItemStack> aInputs = Arrays.asList(mInventory);
