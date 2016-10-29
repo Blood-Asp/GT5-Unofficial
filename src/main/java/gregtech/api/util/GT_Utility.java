@@ -51,6 +51,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -1455,19 +1456,13 @@ public class GT_Utility {
      * Used for my Teleporter.    //I have a different opinion... Planets are fine :P
      */
     public static boolean isRealDimension(int aDimensionID) {
-        try {
-            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("com.xcompwiz.mystcraft"))
-                return true;
-        } catch (Throwable e) {/*Do nothing*/}
-        try {
-            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
-        } catch (Throwable e) {/*Do nothing*/}
+        if(aDimensionID<=1 && aDimensionID>=-1 && !GregTech_API.sDimensionalList.contains(aDimensionID)) return true;
         return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
 
     public static boolean moveEntityToDimensionAtCoords(Entity aEntity, int aDimension, double aX, double aY, double aZ) {
         WorldServer tTargetWorld = DimensionManager.getWorld(aDimension), tOriginalWorld = DimensionManager.getWorld(aEntity.worldObj.provider.dimensionId);
-        if (tTargetWorld != null && tOriginalWorld != null && tTargetWorld != tOriginalWorld) {
+        if (tTargetWorld != null && tOriginalWorld != null && aEntity.worldObj.provider.dimensionId != aDimension) {
             if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
             if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
 
@@ -1489,9 +1484,14 @@ public class GT_Utility {
 //                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
 //                }
 //                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
-            	aPlayer.travelToDimension(aDimension);
+                System.out.println("GT teleporting: "+aPlayer.getDisplayName()+" to dimension: "+aDimension);
+                tTargetWorld.theChunkProviderServer.loadChunk((int)aX >> 4, (int)aY >> 4);
+            	aPlayer.mcServer.getConfigurationManager().transferPlayerToDimension(aPlayer,aDimension, new Teleporter(aPlayer.mcServer.worldServerForDimension(aDimension)));
+                aPlayer.mcServer.getConfigurationManager().func_72375_a(aPlayer,tTargetWorld);
                 aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-            	
+                //aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
+                //aPlayer.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
+                //aPlayer.mcServer.getConfigurationManager().syncPlayerInventory(aPlayer);
             } else {
                 aEntity.setPosition(aX + 0.5, aY + 0.5, aZ + 0.5);
                 aEntity.worldObj.removeEntity(aEntity);
