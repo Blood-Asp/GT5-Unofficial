@@ -92,7 +92,6 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             pollutionParticles(this.getBaseMetaTileEntity().getWorld());
     }
 
-    @SuppressWarnings("")
     public void pollutionParticles(World aWorld){
         XSTR floatGen=new XSTR();
         boolean chk1,chk2,chk3;
