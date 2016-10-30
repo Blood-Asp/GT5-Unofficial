@@ -216,7 +216,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                                 mSolderingTool = true;
                                 mCrowbar = true;
                             } else {
-                                if (tHatch.mAuto && (!mWrench||!mScrewdriver||!mSoftHammer||!mHardHammer||!mSolderingTool||!mCrowbar))tHatch.autoMaintainance();
+                                if (tHatch.mAuto && !(mWrench&&mScrewdriver&&mSoftHammer&&mHardHammer&&mSolderingTool&&mCrowbar))tHatch.isRecipeInputEqual(true);
                                 if (tHatch.mWrench) mWrench = true;
                                 if (tHatch.mScrewdriver) mScrewdriver = true;
                                 if (tHatch.mSoftHammer) mSoftHammer = true;
