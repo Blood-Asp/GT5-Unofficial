@@ -187,18 +187,6 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
-            World aWorld=aBaseMetaTileEntity.getWorld();
-            double xPos=aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1);
-            double yPos=aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1)+0.05F;
-            double zPos=aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1);
-            aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos, zPos + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
-            //Pollution particles intensify
-            if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
-                aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos, zPos + (new XSTR()).nextFloat(), 0.0D, 0.45D, 0.0D);
-                aWorld.spawnParticle("largesmoke", xPos + (new XSTR()).nextFloat(), yPos, zPos + (new XSTR()).nextFloat(), 0.0D, 0.6D, 0.0D);
-            }
-        }
         if (aBaseMetaTileEntity.isServerSide()) {
             if (this.mUpdate-- == 0) {
                 this.mMachine = checkMachine();
@@ -240,6 +228,18 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                     aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getYCoord() + 1, aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1), Blocks.air, 0, 2);
                     this.mUpdate = 1;
                 }
+            }
+        }else if(aBaseMetaTileEntity.isActive()){
+            World aWorld=aBaseMetaTileEntity.getWorld();
+            double xPos=aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1);
+            double yPos=aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1)+0.05F;
+            double zPos=aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1);
+            XSTR floatGen=new XSTR();
+            aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.3D, 0.0D);
+            //Pollution particles intensify
+            if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
+                aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.45D, 0.0D);
+                aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.6D, 0.0D);
             }
         }
     }

@@ -92,25 +92,49 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             pollutionParticles(this.getBaseMetaTileEntity().getWorld());
     }
 
+    @SuppressWarnings("")
     public void pollutionParticles(World aWorld){
-        IGregTechTileEntity aMuffler=this.getBaseMetaTileEntity();
-        ForgeDirection aDir=ForgeDirection.getOrientation(aMuffler.getFrontFacing());
-        double xPos=aDir.offsetX+aMuffler.getXCoord()+0.25F;
-        double yPos=aDir.offsetX+aMuffler.getYCoord()+0.05F;
-        double zPos=aDir.offsetX+aMuffler.getZCoord()+0.25F;
-
-        float temp=(new XSTR()).nextFloat();
-        if(temp*100<calculatePollutionReduction(100))
-            aWorld.spawnParticle("largesmoke", xPos + temp*0.5F, yPos, zPos + (new XSTR()).nextFloat()*0.5F, 0.0D, 0.3D, 0.0D);
-
-        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit) {
-            temp=(new XSTR()).nextFloat();
-            if(temp*100<calculatePollutionReduction(100))
-                aWorld.spawnParticle("largesmoke", xPos + temp*0.5F, yPos, zPos + (new XSTR()).nextFloat()*0.5F, 0.0D, 0.45D, 0.0D);
-            temp=(new XSTR()).nextFloat();
-            if(temp*100<calculatePollutionReduction(100))
-                aWorld.spawnParticle("largesmoke", xPos + temp*0.5F, yPos, zPos + (new XSTR()).nextFloat()*0.5F, 0.0D, 0.6D, 0.0D);
+        XSTR floatGen=new XSTR();
+        boolean chk1,chk2,chk3;
+        float ran1=floatGen.nextFloat(),ran2=0,ran3=0;
+        chk1=ran1*100<calculatePollutionReduction(100);
+        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit){
+            ran2=floatGen.nextFloat();
+            ran3=floatGen.nextFloat();
+            chk2=ran2*100<calculatePollutionReduction(100);
+            chk3=ran3*100<calculatePollutionReduction(100);
+            if(!(chk1||chk2||chk3))return;
+        }else{
+            if(!chk1)return;
+            chk2=chk3=false;
         }
 
+        IGregTechTileEntity aMuffler=this.getBaseMetaTileEntity();
+        ForgeDirection aDir=ForgeDirection.getOrientation(aMuffler.getFrontFacing());
+        float xPos=aDir.offsetX*0.76F+aMuffler.getXCoord()+0.25F;
+        float yPos=aDir.offsetY*0.76F+aMuffler.getYCoord()+0.25F;
+        float zPos=aDir.offsetZ*0.76F+aMuffler.getZCoord()+0.25F;
+
+        float ySpd=aDir.offsetY*0.1F+0.2F+0.1F*floatGen.nextFloat();
+        float xSpd;
+        float zSpd;
+
+        if(aDir.offsetY==-1){
+            float temp=floatGen.nextFloat()*2*(float)Math.PI;
+            xSpd=(float)Math.sin(temp)*0.1F;
+            zSpd=(float)Math.cos(temp)*0.1F;
+        }else{
+            xSpd=aDir.offsetX*(0.1F+0.2F*floatGen.nextFloat());
+            zSpd=aDir.offsetZ*(0.1F+0.2F*floatGen.nextFloat());
+        }
+
+        if(chk1)
+            aWorld.spawnParticle("largesmoke", xPos + ran1*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
+
+        if(chk2)
+            aWorld.spawnParticle("largesmoke", xPos + ran2*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
+
+        if(chk3)
+            aWorld.spawnParticle("largesmoke", xPos + ran3*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
     }
 }
