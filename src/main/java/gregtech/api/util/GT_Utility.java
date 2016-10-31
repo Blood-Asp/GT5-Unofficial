@@ -1541,7 +1541,7 @@ public class GT_Utility {
                 }
                 if(save){//obvious?
                     if(amnt<=0) tInts[0] = type << 24;
-                    else        tInts[0] = type << 24 + amnt;
+                    else        tInts[0] = (type << 24) + amnt;
                     GT_Proxy.chunkData.remove(tPos);
                     GT_Proxy.chunkData.put(tPos, tInts);
                 }
@@ -1592,7 +1592,7 @@ public class GT_Utility {
                 tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
         }
 
-        tInts[0]=type<<24+amnt;
+        tInts[0]=(type<<24)+amnt;
         GT_Proxy.chunkData.put(tPos, tInts);
         return tFluidStack;
     }
