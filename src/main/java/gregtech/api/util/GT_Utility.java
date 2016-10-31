@@ -1531,8 +1531,8 @@ public class GT_Utility {
         if(GT_Proxy.chunkData.containsKey(tPos)){
             tInts = GT_Proxy.chunkData.get(tPos);
             if(tInts.length>0){
-                int type=tInts[0]>>24;
-                int amnt=tInts[0]-(type<<24)-sub;
+                int type=tInts[0]>>27;
+                int amnt=tInts[0]-(type<<27)-sub;
                 if(type==0){//update old thing  //IGNORES SAVE - chunk must be updated
                     //here i don't care about type it will be added
                     if(amnt<=0) tInts[0] = 0;
@@ -1540,8 +1540,8 @@ public class GT_Utility {
                     return setUndergroundOilFromOld(aWorld,aX,aZ,tPos,tInts);//compatibility thing
                 }
                 if(save){//obvious?
-                    if(amnt<=0) tInts[0] = type << 24;
-                    else        tInts[0] = (type << 24) + amnt;
+                    if(amnt<=0) tInts[0] = type << 27;
+                    else        tInts[0] = (type << 27) + amnt;
                     GT_Proxy.chunkData.remove(tPos);
                     GT_Proxy.chunkData.put(tPos, tInts);
                 }
@@ -1569,10 +1569,8 @@ public class GT_Utility {
     private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
         XSTR tRandom = new XSTR((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6))));
         int type=tRandom.nextInt(5);//type slowly changes
-        int amnt=tRandom.nextInt(50);//Big value slowly changes
-        tRandom = new XSTR();//small value is rapid changing,hence regen the seed from time
-        amnt = (int) (Math.pow(amnt+tRandom.nextDouble(), 5) / 100);
-            //max is 51^5/100 roughly uses 22 bits
+        int amnt = (int) (Math.pow(2+tRandom.nextInt(48)+(new XSTR()).nextDouble(), 5))>>5;// /32 upped a bit
+            //max is 51^5/32 roughly uses 24 bits
         FluidStack tFluidStack;
         switch (type) {//0 is old system
             case 1:
@@ -1592,12 +1590,13 @@ public class GT_Utility {
                 tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
         }
 
-        tInts[0]=(type<<24)+amnt;
+        tInts[0]=(type<<27)+amnt;//here since the switch changes type
         GT_Proxy.chunkData.put(tPos, tInts);
         return tFluidStack;
     }
 
     private static FluidStack setUndergroundOilFromOld(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
+        //max was 51^5/100 roughly uses 22 bits
         FluidStack tFluidStack;
         int type=new Random((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6)))).nextInt(4);//Get old type of fluid
             //this gives value from 0 to 3 :D
@@ -1619,7 +1618,7 @@ public class GT_Utility {
                 type=4;
                 tFluidStack = new FluidStack(Materials.Oil.mFluid,tInts[0]);
         }
-        tInts[0]+=type<<24;
+        tInts[0]+=type<<27;
         GT_Proxy.chunkData.remove(tPos);
         GT_Proxy.chunkData.put(tPos, tInts);
         return tFluidStack;
