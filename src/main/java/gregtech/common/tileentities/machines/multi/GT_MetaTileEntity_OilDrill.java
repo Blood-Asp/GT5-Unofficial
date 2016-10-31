@@ -6,6 +6,7 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
@@ -73,10 +74,9 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
                 }
             }
         }
-        FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4);
-        if (tFluid == null) {
-            return false;
-        }
+        //Output fluid
+        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,5000);
+        if (tFluid == null) return false;//impossible
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
             if (completedCycle) {
                 moveOneDown();
@@ -84,10 +84,10 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             tFluid = null;
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
-        } else if (tFluid.amount < 5000) {
-            return false;
+        } else if (tFluid.amount <=-5000) {//no fluid remaining
+            return false;//stops processing??
         } else {
-            tFluid.amount = tFluid.amount / 5000;
+            tFluid.amount = 5000+Math.min(tFluid.amount,0);//give the fluid... adds negative values of lacking fluid, zero if there is MOOOORE
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;

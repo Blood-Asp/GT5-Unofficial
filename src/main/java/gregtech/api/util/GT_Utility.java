@@ -18,6 +18,7 @@ import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
+import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
 import ic2.api.recipe.IRecipeInput;
@@ -1524,44 +1525,104 @@ public class GT_Utility {
         return false;
     }
 
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
-        Random tRandom = new Random((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6))));
-        int oil = tRandom.nextInt(4);
-        double amount = tRandom.nextInt(50) + tRandom.nextDouble();
-//		System.out.println("Oil: "+(aX/6)+" "+(aZ/6)+" "+oil+" "+amount);
-//		amount = 40;
-        Fluid tFluid = null;
-        switch (oil) {
-            case 0:
-                tFluid = Materials.NatruralGas.mGas;
-                break;
-            case 1:
-                tFluid = Materials.OilLight.mFluid;
-                break;
-            case 2:
-                tFluid = Materials.OilMedium.mFluid;
-                break;
-            case 3:
-                tFluid = Materials.OilHeavy.mFluid;
-                break;
-            default:
-                tFluid = Materials.Oil.mFluid;
-        }
-        int tAmount = (int) (Math.pow(amount, 5) / 100);
+    public static FluidStack undergroundOil(World aWorld, int aX, int aZ,boolean save,int sub) {
         ChunkPosition tPos = new ChunkPosition(aX, 1, aZ);
         int[] tInts = {0,0};
-    	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		tInts = GT_Proxy.chunkData.get(tPos);
+        if(GT_Proxy.chunkData.containsKey(tPos)){
+            tInts = GT_Proxy.chunkData.get(tPos);
             if(tInts.length>0){
-                if(tInts[0]>=0) tAmount = tInts[0];
+                int type=tInts[0]>>24;
+                int amnt=tInts[0]-(type<<24)-sub;
+                if(type==0){//update old thing  //IGNORES SAVE - chunk must be updated
+                    //here i don't care about type it will be added
+                    if(amnt<=0) tInts[0] = 0;
+                    else        tInts[0] = amnt;
+                    return setUndergroundOilFromOld(aWorld,aX,aZ,tPos,tInts);//compatibility thing
+                }
+                if(save){//obvious?
+                    if(amnt<=0) tInts[0] = type << 24;
+                    else        tInts[0] = type << 24 + amnt;
+                    GT_Proxy.chunkData.remove(tPos);
+                    GT_Proxy.chunkData.put(tPos, tInts);
+                }
+                return getUndergroundOilFromInfo(type,amnt);//return negative amounts? if u extract too much
             }
-    		GT_Proxy.chunkData.remove(tPos);
-    	}
-    	tAmount = tAmount - 5>=0?tAmount-5:0;
-    	tInts[0] = tAmount;
-    	GT_Proxy.chunkData.put(tPos, tInts);
-    	
-        return new FluidStack(tFluid, tAmount);
+            GT_Proxy.chunkData.remove(tPos);//remove broken
+        }
+        return setUndergroundOil(aWorld,aX,aZ,tPos,tInts);//will save if empty
+    }
+
+    private static FluidStack getUndergroundOilFromInfo(int type,int amnt){
+        switch (type) {//0 is old system
+            case 1:
+                return new FluidStack(Materials.OilLight .mFluid,amnt);
+            case 2:
+                return new FluidStack(Materials.OilMedium.mFluid,amnt);
+            case 3:
+                return new FluidStack(Materials.OilHeavy .mFluid,amnt);
+            case 4:
+                return new FluidStack(Materials.Oil      .mFluid,amnt);
+        }
+        return new         FluidStack(Materials.NatruralGas.mGas,amnt);//5
+    }
+
+    private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
+        XSTR tRandom = new XSTR((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6))));
+        int type=tRandom.nextInt(5);//type slowly changes
+        int amnt=tRandom.nextInt(50);//Big value slowly changes
+        tRandom = new XSTR();//small value is rapid changing,hence regen the seed from time
+        amnt = (int) (Math.pow(amnt+tRandom.nextDouble(), 5) / 100);
+            //max is 51^5/100 roughly uses 22 bits
+        FluidStack tFluidStack;
+        switch (type) {//0 is old system
+            case 1:
+                tFluidStack=new FluidStack(Materials.OilLight .mFluid,amnt);
+                break;
+            case 2:
+                tFluidStack=new FluidStack(Materials.OilMedium.mFluid,amnt);
+                break;
+            case 3:
+                tFluidStack=new FluidStack(Materials.OilHeavy .mFluid,amnt);
+                break;
+            case 4:
+                tFluidStack=new FluidStack(Materials.Oil      .mFluid,amnt);
+                break;
+            default://case 0; -> 5
+                type=5;//important, 0 is invalid !
+                tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
+        }
+
+        tInts[0]=type<<24+amnt;
+        GT_Proxy.chunkData.put(tPos, tInts);
+        return tFluidStack;
+    }
+
+    private static FluidStack setUndergroundOilFromOld(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
+        FluidStack tFluidStack;
+        int type=new Random((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6)))).nextInt(4);//Get old type of fluid
+            //this gives value from 0 to 3 :D
+        switch (type) {
+            case 0:
+                type=5;//important, 0 is invalid !
+                tFluidStack = new FluidStack(Materials.NatruralGas.mGas,tInts[0]);
+                break;
+            case 1:
+                tFluidStack = new FluidStack(Materials.OilLight.mFluid,tInts[0]);
+                break;
+            case 2:
+                tFluidStack = new FluidStack(Materials.OilMedium.mFluid,tInts[0]);
+                break;
+            case 3:
+                tFluidStack = new FluidStack(Materials.OilHeavy.mFluid,tInts[0]);
+                break;
+            default://unreachable but still here XD
+                type=4;
+                tFluidStack = new FluidStack(Materials.Oil.mFluid,tInts[0]);
+        }
+        tInts[0]+=type<<24;
+        GT_Proxy.chunkData.remove(tPos);
+        GT_Proxy.chunkData.put(tPos, tInts);
+        return tFluidStack;
     }
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
@@ -1752,9 +1813,9 @@ public class GT_Utility {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
         }
-        if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
-            FluidStack tFluid = getUndergroundOil(aWorld, aX>>4, aZ>>4);
-            tList.add(EnumChatFormatting.GOLD+"Oil"+EnumChatFormatting.RESET+" in Chunk: " +EnumChatFormatting.YELLOW+ tFluid.amount + " " + tFluid.getLocalizedName()+EnumChatFormatting.RESET);
+        if (aPlayer.capabilities.isCreativeMode) {
+            FluidStack tFluid = undergroundOil(aWorld, aX>>4, aZ>>4,false,0);
+            tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
         }
 //        if(aPlayer.capabilities.isCreativeMode){
         	ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
@@ -1951,7 +2012,7 @@ public class GT_Utility {
 
         public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String[] aOres) {
             NBTTagCompound tNBT = getNBT(aStack);
-            String tData = aX + "," + aY + "," + aZ + "," + aDim + "," + (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
+            String tData = aX + "," + aY + "," + aZ + "," + aDim + "," + aFluid.amount + "," + aFluid.getLocalizedName() + ",";//fixed dividing 1L=1mB
             for (String tString : aOres) {
                 tData += tString + ",";
             }
@@ -1964,13 +2025,13 @@ public class GT_Utility {
             String tData = tNBT.getString("prospection");
             String[] tDataArray = tData.split(",");
             if (tDataArray.length > 6) {
-                tNBT.setString("author", "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2] + " Dim: " + tDataArray[3]);
+                tNBT.setString("author", "X:" + tDataArray[0] + " Y:" + tDataArray[1] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3]);
                 NBTTagList tNBTList = new NBTTagList();
                 String tOres = " Prospected Ores: ";
                 for (int i = 6; tDataArray.length > i; i++) {
                     tOres += (tDataArray[i] + " ");
                 }
-                tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
+                tNBTList.appendTag(new NBTTagString("Prospection Data From X:" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L of " + tDataArray[5] + " and:" + tOres));
                 tNBT.setTag("pages", tNBTList);
             }
             setNBT(aStack, tNBT);

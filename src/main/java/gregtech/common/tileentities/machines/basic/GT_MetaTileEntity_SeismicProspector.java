@@ -98,7 +98,7 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
                     }
                 }
                 if(tStringList.size()<1){tStringList.add("No Ores found.");}
-                FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4);
+                FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
                 String[] tStringArray = new String[tStringList.size()];
                 {
                     for (int i = 0; i < tStringArray.length; i++) {
