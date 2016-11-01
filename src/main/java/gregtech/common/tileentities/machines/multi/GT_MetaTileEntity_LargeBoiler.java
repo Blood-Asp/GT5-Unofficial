@@ -226,7 +226,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 12;
+        return 20;
     }
 
     public int getDamageToComponent(ItemStack aStack) {

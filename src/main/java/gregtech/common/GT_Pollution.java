@@ -73,8 +73,8 @@ public class GT_Pollution {
 						int tPollution = GT_Proxy.chunkData.get(tPos)[1];
 		//				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
 						//Reduce pollution in chunk
-						tPollution = (int)(0.995f*tPollution);
-						tPollution -= 2000;
+						tPollution = (int)(0.9945f*tPollution);
+						//tPollution -= 2000;
 						if(tPollution<=0){tPollution = 0;}else{
 							//Spread Pollution
 							if(tPollution>400000){
@@ -108,10 +108,15 @@ public class GT_Pollution {
 								AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX << 4, 0, tPos.chunkPosZ << 4, (tPos.chunkPosX << 4) + 16, 256, (tPos.chunkPosZ << 4) + 16);
 								List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 								for (EntityLivingBase tEnt : tEntitys) {
-									if (!GT_Utility.isWearingFullGasHazmat(tEnt) && tRan.nextInt(tPollution / 25000) > 10) {
-										tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
-										tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
-										tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+									if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
+										switch (tRan.nextInt(3)) {
+											default:
+												tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+											case 1:
+												tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+											case 2:
+												tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+										}
 									}
 								}
 								//				Poison effects
@@ -119,10 +124,17 @@ public class GT_Pollution {
 									//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 									//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 									for (EntityLivingBase tEnt : tEntitys) {
-										if (!GT_Utility.isWearingFullGasHazmat(tEnt) && tRan.nextInt(tPollution / 25000) > 20) {
-											tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution / 2000, 1000), tPollution / 500000));
-											tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution / 4000, 1000), 1));
-											tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution / 2000, 1000), 1));
+										if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
+											switch (tRan.nextInt(4)) {
+												default:
+													tEnt.addPotionEffect(new PotionEffect(Potion.hunger.id, tPollution / 500000));
+												case 1:
+													tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution / 2000, 1000), 1));
+												case 2:
+													tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution / 4000, 1000), tPollution / 500000));
+												case 3:
+													tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution / 2000, 1000), 1));
+											}
 										}
 									}
 									//				killing plants
