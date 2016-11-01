@@ -1014,6 +1014,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     }
                     return;
                 }
+            }else if(this.mIgnoredNames.contains(aEvent.Name)){
                 GT_Log.ore.println(tModToName + " is getting ignored via hardcode.");
                 return;
             }
