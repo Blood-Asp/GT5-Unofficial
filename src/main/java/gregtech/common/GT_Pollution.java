@@ -202,7 +202,7 @@ public class GT_Pollution {
 		try{
 			ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX>>4, 1, aPos.chunkPosZ>>4);
 	//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
-			int[] tData = new int[3];
+			int[] tData = new int[]{0,0,0};
 			if(GT_Proxy.chunkData.containsKey(tPos)){
 				tData = GT_Proxy.chunkData.get(tPos);
 				if(tData.length>1){
