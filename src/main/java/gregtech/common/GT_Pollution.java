@@ -100,6 +100,7 @@ public class GT_Pollution {
 							int[] tArray = GT_Proxy.chunkData.get(tPos);
 							tArray[1] = tPollution;
 							GT_Proxy.chunkData.remove(tPos);
+							//tArray[2]|=0x01;
 							GT_Proxy.chunkData.put(tPos, tArray);
 							//Create Pollution effects
 			//				Smog filter TODO
@@ -201,7 +202,7 @@ public class GT_Pollution {
 		try{
 			ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX>>4, 1, aPos.chunkPosZ>>4);
 	//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
-			int[] tData = new int[2];
+			int[] tData = new int[3];
 			if(GT_Proxy.chunkData.containsKey(tPos)){
 				tData = GT_Proxy.chunkData.get(tPos);
 				if(tData.length>1){
@@ -209,6 +210,7 @@ public class GT_Pollution {
 				}
 			}else{
 				tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
+				//tData[2]|=0x01;
 				GT_Proxy.chunkData.put(tPos, tData);
 			}
 		}catch(Exception e){}

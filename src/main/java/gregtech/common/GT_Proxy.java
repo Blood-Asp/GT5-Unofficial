@@ -1397,7 +1397,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     @SubscribeEvent
     public void onWorldTickEvent(TickEvent.WorldTickEvent aEvent) {
     	if(aEvent.world.provider.dimensionId == 0)
-            mTicksUntilNextCraftSound--;   
+            mTicksUntilNextCraftSound--;
         if (aEvent.side.isServer()) {
             if (this.mUniverse == null) {
                 this.mUniverse = aEvent.world;
@@ -1872,14 +1872,18 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     public static final HashMap<ChunkPosition, int[]>  chunkData = new HashMap<ChunkPosition, int[]>(5000);
 
+    private static final byte oilVer=(byte)0x01;
+
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event)
-    {    	
+    {//by the laws of logic cannot save an never-loaded chunk data... and if there is no data to save GREAT :D
     	ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,1,event.getChunk().zPosition);
     	if(chunkData.containsKey(tPos)){
     		int[] tInts = chunkData.get(tPos);
     		if(tInts.length>0){event.getData().setInteger("GTOIL", tInts[0]);}
-			if(tInts.length>1){event.getData().setInteger("GTPOLLUTION", tInts[1]);}}
+			if(tInts.length>1){event.getData().setInteger("GTPOLLUTION", tInts[1]);}
+    	}
+        event.getData().setByte("GTOILVER",oilVer);
     }
 
     @SubscribeEvent
@@ -1887,39 +1891,35 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     {
         int tOil = 0;
         int tPollution = 0;
-
+        //place
         ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,1,event.getChunk().zPosition);
-        int[] tData = new int[2];
-        if(chunkData.containsKey(tPos)){
-            tData = chunkData.get(tPos);
+        boolean notLoaded=true;//was it loaded?
+
+        int[] tData = new int[]{0,0,0};//initialize with defaults
+        if(chunkData.containsKey(tPos)){//i have the data loaded...
+            tData = chunkData.get(tPos);//if the array had 3 ints...
+            if(tData[2]>0x01)notLoaded=false;
             chunkData.remove(tPos);
-        }
+        }//if doesn't contain stuff the array will still be 2 long
 
-        if(event.getData().hasKey("GTOIL")){
-            if(tData.length>2){
-                tOil = tData[0];
-            }else{
-                tOil += event.getData().getInteger("GTOIL");
-            }
+        if(event.getData().hasKey("GTPOLLUTION") && notLoaded){
+            tPollution=GT_Utility.safeInt((long)tData[1]+(long)event.getData().getInteger("GTPOLLUTION"));
         }else{
-            if(tData[0]!=0){
-                tOil = tData[0];
-            }
+            tPollution=tData[1];
         }
 
-        if(event.getData().hasKey("GTPOLLUTION")){
-            if(tData.length>2){
-                tPollution = tData[1];
-            }else{
-                tPollution += event.getData().getInteger("GTPOLLUTION");
-            }
+        if(!event.getData().hasKey("GTOILVER") || event.getData().getByte("GTOILVER")!=oilVer) {
+            chunkData.put(tPos, new int[]{ 0,tPollution,0x02});//anything without type is ok, 0 doesn't have fluid type
+            return;
+        }
+
+        if(event.getData().hasKey("GTOIL") && notLoaded){
+            tOil=event.getData().getInteger("GTOIL");
         }else{
-            if(tData[1]!=0){
-                tPollution = tData[1];
-            }
+            tOil=tData[0];
         }
 
-        chunkData.put(tPos, new int[]{ tOil,tPollution,-1});
+        chunkData.put(tPos, new int[]{ tOil,tPollution,0x02});
     }
 
     public static class OreDictEventContainer {
