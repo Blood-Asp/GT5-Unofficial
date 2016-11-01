@@ -1531,8 +1531,8 @@ public class GT_Utility {
         if(GT_Proxy.chunkData.containsKey(tPos)){
             tInts = GT_Proxy.chunkData.get(tPos);
             if(tInts.length>0){
-                int type=tInts[0]>>27;
-                int amnt=tInts[0]-(type<<27)-sub;
+                int type=tInts[0]>>28;
+                int amnt=tInts[0]-(type<<28)-sub;
                 if(type==0){//update old thing  //IGNORES SAVE - chunk must be updated
                     //here i don't care about type it will be added
                     if(amnt<=0) tInts[0] = 0;
@@ -1540,8 +1540,8 @@ public class GT_Utility {
                     return setUndergroundOilFromOld(aWorld,aX,aZ,tPos,tInts);//compatibility thing
                 }
                 if(save){//obvious?
-                    if(amnt<=0) tInts[0] = type << 27;
-                    else        tInts[0] = (type << 27) + amnt;
+                    if(amnt<=0) tInts[0] = type << 28;
+                    else        tInts[0] = (type << 28) + amnt;
                     GT_Proxy.chunkData.remove(tPos);
                     GT_Proxy.chunkData.put(tPos, tInts);
                 }
@@ -1569,8 +1569,8 @@ public class GT_Utility {
     private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
         XSTR tRandom = new XSTR((aWorld.getSeed() + (aX / 6) + (7 * (aZ / 6))));
         int type=tRandom.nextInt(5);//type slowly changes
-        int amnt = (int) (Math.pow(2+tRandom.nextInt(48)+(new XSTR()).nextDouble(), 5))>>5;// /32 upped a bit
-            //max is 51^5/32 roughly uses 24 bits
+        int amnt = (int) ((float)Math.pow(2+tRandom.nextInt(48)+(new XSTR()).nextFloat(), 5)*0.7);
+            //roughly uses 28 bits
         FluidStack tFluidStack;
         switch (type) {//0 is old system
             case 1:
@@ -1590,7 +1590,7 @@ public class GT_Utility {
                 tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
         }
 
-        tInts[0]=(type<<27)+amnt;//here since the switch changes type
+        tInts[0]=(type<<28)+amnt;//here since the switch changes type
         GT_Proxy.chunkData.put(tPos, tInts);
         return tFluidStack;
     }
@@ -1618,7 +1618,7 @@ public class GT_Utility {
                 type=4;
                 tFluidStack = new FluidStack(Materials.Oil.mFluid,tInts[0]);
         }
-        tInts[0]+=type<<27;
+        tInts[0]+=type<<28;
         GT_Proxy.chunkData.remove(tPos);
         GT_Proxy.chunkData.put(tPos, tInts);
         return tFluidStack;
