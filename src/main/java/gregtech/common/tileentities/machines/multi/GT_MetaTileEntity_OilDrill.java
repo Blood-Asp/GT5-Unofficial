@@ -81,6 +81,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
         if (tFluid == null){
             extractionSpeed=0;
+            stopMachine();
             return false;//impossible
         }
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
@@ -92,6 +93,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
                 completedCycle = true;
         } else if (tFluid.amount == 0) {//no fluid remaining
             extractionSpeed=0;
+	        stopMachine();
             return false;//stops processing??
         } else {
             int minExtraction= (int)Math.pow((float)GT_Utility.getTier(getMaxInputVoltage()),3F);//tier^3
