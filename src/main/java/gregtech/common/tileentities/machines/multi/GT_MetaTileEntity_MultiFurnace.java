@@ -196,7 +196,7 @@ public class GT_MetaTileEntity_MultiFurnace
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 20;
+        return 30;
     }
 
     public int getDamageToComponent(ItemStack aStack) {
