@@ -7,6 +7,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
@@ -14,6 +15,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {
 
     private boolean completedCycle = false;
+    private int extractionSpeed=0;
 
     public GT_MetaTileEntity_OilDrill(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -76,7 +79,10 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         }
         //Output fluid
         FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
-        if (tFluid == null) return false;//impossible
+        if (tFluid == null){
+            extractionSpeed=0;
+            return false;//impossible
+        }
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
             if (completedCycle) {
                 moveOneDown();
@@ -85,9 +91,13 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
         } else if (tFluid.amount == 0) {//no fluid remaining
+            extractionSpeed=0;
             return false;//stops processing??
         } else {
-            tFluid.amount = Math.max(Math.min(tFluid.amount/50000,1000),1);//More like pressure :]
+            int minExtraction= (int)Math.pow((float)GT_Utility.getTier(getMaxInputVoltage()),3F);//tier^3
+            if(tFluid.amount>minExtraction)
+                tFluid.amount= Math.max(minExtraction,Math.min(tFluid.amount/50000,1000));
+            extractionSpeed=tFluid.amount;
             GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,tFluid.amount);
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
@@ -223,4 +233,32 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         return new GT_MetaTileEntity_OilDrill(this.mName);
     }
 
+    @Override
+    public String[] getInfoData() {
+        int mPollutionReduction=0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
+            }
+        }
+
+        return new String[]{
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
+                "Stored Energy:",
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
+                "Probably uses: "+
+                        EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t",
+                "Maximum total power (to all Energy Hatches, not single ones): ",
+                EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t",
+                "Problems: "+
+                        EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
+                        " Efficiency: "+
+                        EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %",
+                "Extraction this cycle: "+ EnumChatFormatting.GOLD + extractionSpeed + EnumChatFormatting.RESET+" L"
+        };
+    }
 }
