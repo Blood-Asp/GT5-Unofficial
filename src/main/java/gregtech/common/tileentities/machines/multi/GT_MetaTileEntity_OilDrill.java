@@ -75,7 +75,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             }
         }
         //Output fluid
-        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,5000);
+        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
         if (tFluid == null) return false;//impossible
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
             if (completedCycle) {
@@ -84,10 +84,11 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             tFluid = null;
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
-        } else if (tFluid.amount <=-5000) {//no fluid remaining
+        } else if (tFluid.amount == 0) {//no fluid remaining
             return false;//stops processing??
         } else {
-            tFluid.amount = 5000+Math.min(tFluid.amount,0);//give the fluid... adds negative values of lacking fluid, zero if there is MOOOORE
+            tFluid.amount = Math.max(Math.min(tFluid.amount/5000,5000),1);//give the fluid... adds negative values of lacking fluid, zero if there is MOOOORE
+            GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,tFluid.amount);
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
