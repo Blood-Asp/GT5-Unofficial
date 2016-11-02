@@ -87,7 +87,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         } else if (tFluid.amount == 0) {//no fluid remaining
             return false;//stops processing??
         } else {
-            tFluid.amount = Math.max(Math.min(tFluid.amount/5000,5000),1);//give the fluid... adds negative values of lacking fluid, zero if there is MOOOORE
+            tFluid.amount = Math.max(Math.min(tFluid.amount/50000,1000),1);//More like pressure :]
             GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,tFluid.amount);
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
