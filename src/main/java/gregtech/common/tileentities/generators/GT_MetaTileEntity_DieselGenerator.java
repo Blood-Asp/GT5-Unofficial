@@ -12,6 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenera
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_DieselGenerator
@@ -54,6 +55,7 @@ public class GT_MetaTileEntity_DieselGenerator
     }
 
     public int getFuelValue(ItemStack aStack) {
+        if (GT_Utility.isStackInvalid(aStack)) return 0;
         int rValue = Math.max(GT_ModHandler.getFuelCanValue(aStack) * 6 / 5, super.getFuelValue(aStack));
         if (ItemList.Fuel_Can_Plastic_Filled.isStackEqual(aStack, false, true)) {
             rValue = Math.max(rValue, GameRegistry.getFuelValue(aStack) * 3);
