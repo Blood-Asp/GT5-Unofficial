@@ -35,7 +35,6 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "Industrial Charcoal producer and Oil from Plants",
                 "Size(WxHxD): 5x4x5, Controller (Bottom center)",
                 "3x1x3 Kanthal Heating Coils (Inside bottom 5x1x5 layer)",
-                "9x Kanthal Heating Coils (Centered 3x1x3 area in Bottom layer)",
                 "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
                 "1x Output Hatch/Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
