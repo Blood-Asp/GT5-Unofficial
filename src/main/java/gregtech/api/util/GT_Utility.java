@@ -1568,12 +1568,9 @@ public class GT_Utility {
     private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
         XSTR tRandom = new XSTR(aWorld.getSeed() ^ ((long)(aX / 6) + (long)(7000 * (aZ / 6))));
         int type=tRandom.nextInt(5);//type slowly changes
-        int amnt = tRandom.nextInt(50);
-        if (amnt<12)amnt=0;
-        else {
-            double bloodAspAmnt=Math.pow((double)amnt+(new XSTR()).nextDouble(),5D)/100D;
-            amnt = (int)(Math.ceil(Math.pow(bloodAspAmnt, 2D)/50000D));
-        }
+        int amnt = tRandom.nextInt(48);
+        double bloodAspAmnt=Math.pow(2D+(double)amnt+(new XSTR()).nextDouble(),5D)/100D;
+        amnt = (int)(Math.ceil(Math.pow(bloodAspAmnt, 2D)/50000D));
             //roughly uses 28 bits
         FluidStack tFluidStack;
         switch (type) {//0 is old system
