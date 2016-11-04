@@ -17,8 +17,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +36,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     public Block mPumpedBlock2 = null;
 
     public GT_MetaTileEntity_Pump(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "The best way of emptying Oceans!");
+        super(aID, aName, aNameRegional, aTier, 3, "The best way of emptying Oceans! Outputs on top.");
     }
 
     public GT_MetaTileEntity_Pump(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -162,6 +164,19 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                     }
                 }
                 getBaseMetaTileEntity().setActive(!this.mPumpList.isEmpty());
+            }
+
+            //auto outputs on top
+            if (this.mFluid != null && (aTick % 20 == 0)) {
+                IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide((byte)1);//1 is up.
+                if (tTank != null) {
+                    FluidStack tDrained = drain(1000, false);
+                    if (tDrained != null) {
+                        int tFilledAmount = tTank.fill(ForgeDirection.UP, tDrained, false);
+                        if (tFilledAmount > 0)
+                            tTank.fill(ForgeDirection.UP, drain(tFilledAmount, true), true);
+                    }
+                }
             }
         }
     }
@@ -430,7 +445,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? null : new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT) : new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
     }
 
     @Override
