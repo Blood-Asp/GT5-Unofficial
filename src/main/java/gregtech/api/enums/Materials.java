@@ -1132,7 +1132,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 						   Tartarite, /**Thyrium,**/ Tritanium, Vulcanite, Vyroxeres, /**Yellorium,**/ Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron,
 						   Electrum, Invar, /**IronCompressed,**/ Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
 						   YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel,
-						   TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium, VanadiumSteel, Kalendrite, Ignatius, Trinium);
+						   TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, Void, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium, VanadiumSteel, Kalendrite, Ignatius, Trinium);
 
 		SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 
@@ -1287,6 +1287,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		//ElvenElementium			.add(SubTag.MAGICAL);
 		DarkThaumium			.add(SubTag.MAGICAL);
 		Thaumium				.add(SubTag.MAGICAL);
+		Void					.add(SubTag.MAGICAL);
 		Enderium				.add(SubTag.MAGICAL);
 		AstralSilver			.add(SubTag.MAGICAL);
 		//Midasium				.add(SubTag.MAGICAL);
