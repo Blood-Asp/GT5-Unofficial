@@ -85,8 +85,10 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
             }
 
             if (aMaterial.contains(SubTag.BLASTFURNACE_CALCITE_TRIPLE)) {
+                //This one will be different, just add/remove the tag to add/remove recipe
                 GT_Values.RA.addBlastRecipe(aOreStack, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Calcite, aMultiplier), null, null, GT_Utility.mul(aMultiplier * 3 * aMaterial.mSmeltingMultiplier, new Object[]{tSmeltInto}), ItemList.TE_Slag.get(1L, new Object[]{GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.DarkAsh, 1L)}), tSmeltInto.stackSize * 500, 120, 1500);
             } else if (aMaterial.contains(SubTag.BLASTFURNACE_CALCITE_DOUBLE)) {
+                //This one will be different, just add/remove the tag to add/remove recipe
                 GT_Values.RA.addBlastRecipe(aOreStack, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Calcite, aMultiplier), null, null, GT_Utility.mul(aMultiplier * 2 * aMaterial.mSmeltingMultiplier, new Object[]{tSmeltInto}), ItemList.TE_Slag.get(1L, new Object[]{GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.DarkAsh, 1L)}), tSmeltInto.stackSize * 500, 120, 1500);
             }
         }

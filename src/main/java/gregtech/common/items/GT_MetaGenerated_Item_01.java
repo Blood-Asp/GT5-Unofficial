@@ -889,6 +889,6 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
     }
 
     public boolean doesMaterialAllowGeneration(OrePrefixes aPrefix, Materials aMaterial) {
-        return (super.doesMaterialAllowGeneration(aPrefix, aMaterial)) && ((aPrefix != OrePrefixes.ingotHot) || (aMaterial.mBlastFurnaceTemp > 1750));
+        return (super.doesMaterialAllowGeneration(aPrefix, aMaterial)) && ((aPrefix != OrePrefixes.ingotHot) || ((aMaterial.mBlastFurnaceTemp<20000)?(aMaterial.mBlastFurnaceTemp > 1750):(aMaterial.mBlastFurnaceTemp >21750)));
     }
 }
