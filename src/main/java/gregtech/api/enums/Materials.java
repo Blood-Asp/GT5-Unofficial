@@ -1113,7 +1113,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		AnyCopper.mChemicalFormula="Cu";
 		ElectrumFlux.mChemicalFormula="The formula is too long...";
 		DeepIron.mChemicalFormula="Sp2Fe";
-		Duralumin.mChemicalFormula="Al6CuMnMg";
+		//Duralumin.mChemicalFormula="Al6CuMnMg";
 	}
 
 	private static void initSubTags() {
