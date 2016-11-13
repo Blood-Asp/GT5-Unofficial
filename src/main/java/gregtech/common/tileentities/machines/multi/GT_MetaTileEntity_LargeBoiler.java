@@ -32,7 +32,19 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public String[] getDescription() {
-        return new String[]{"Controller Block for the Large Boiler", "Size: 3x3x5", "Controller (front middle in Fireboxes)", "3x3 of Fire Boxes (bottom Layer, Min 3!)", "3x3x4 of Casing (above Fireboxes, hollow, Min 24!)", "3 Pipe Casing Blocks inside the Hollow Casing", "1x Input (one of Fireboxes)", "1x Maintenance Hatch (one of Fireboxes)", "1x Muffler Hatch (one of Fireboxes)", "1x Fluid Output (one of Main Casing)","Produces "+getEUt()*40+"L/sec steam","Runs "+(runtimeBoost(20)/20f)+" sec per coal of fuel","Refined liquid fuels have 1/4 efficiency"};
+        return new String[]{
+                "Controller Block for the Large Boiler",
+                "Produces "+(getEUt()*40)*(runtimeBoost(20)/20f)+"L of Steam with 1 Coal in "+runtimeBoost(20)+" ticks",
+                "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
+                "3x1x3 of Fire Boxes (Bottom layer, Min 3)",
+                "3x4x3 of Casings (Above Fireboxes, hollow, Min 24!)",
+                "3 Pipe Casing Blocks (Inside the Hollow Casing)",
+                "1x Input Fuel Hatch/Bus (Any Firebox)",
+                "1x Input Water Hatch (Any Firebox)",
+                "1x Output Hatch (Any Casing)",
+                "1x Maintenance Hatch (Any Firebox)",
+                "1x Muffler Hatch (Any Firebox)",
+                "Refined liquid fuels have 1/4 efficiency"};
     }
 
     public abstract Block getCasingBlock();
@@ -139,10 +151,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (mProgresstime > 0 && firstRun) {
             firstRun = false;
-            try {
-                GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
-            } catch (Exception e) {
-            }
+            GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
     }

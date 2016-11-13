@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -15,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 
     public GT_MetaTileEntity_PyrolyseOven(int aID, String aName, String aNameRegional) {
@@ -31,23 +31,25 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         return new String[]{
                 "Controller Block for the Pyrolyse Oven",
                 "Industrial Charcoal producer and Oil from Plants",
-                "Size: 5x5x4, Controller (bottom center)",
-                "Made from ULV Machine Casings (min 60)",
-                "Bottom 3x3 Kantal Heating Coils",
-                "4 high ULV Casings around the coils",
-                "bottom row of casings are Energy Hatch",
-                "Maintainance Hatch and Output Hatch/Bus",
-                "top 3x3 has Input Hatch/Bus and Muffler Hatch"};
+                "Size(WxHxD): 5x4x5, Controller (Bottom center)",
+                "3x1x3 Kanthal Heating Coils (Inside bottom 5x1x5 layer)",
+                "9x Kanthal Heating Coils (Centered 3x1x3 area in Bottom layer)",
+                "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
+                "1x Output Hatch/Bus (Any bottom layer casing)",
+                "1x Maintenance Hatch (Any bottom layer casing)",
+                "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
+                "1x Energy Hatch (Any bottom layer casing)",
+                "ULV Machine Casings for the rest (60 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
             return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0],
-                    new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER)};
+                    new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[0]};
     }
-    
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "PyrolyseOven.png");
     }
@@ -67,7 +69,17 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
 
                     this.mEUt = tRecipe.mEUt;
                     this.mMaxProgresstime = tRecipe.mDuration;
-
+                    if (tRecipe.mEUt <= 16) {
+                        this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
+                        this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
+                    } else {
+                        this.mEUt = tRecipe.mEUt;
+                        this.mMaxProgresstime = tRecipe.mDuration;
+                        while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
+                            this.mEUt *= 4;
+                            this.mMaxProgresstime /= 2;
+                        }
+                    }
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }
@@ -87,16 +99,17 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX * 2;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ * 2;
+        replaceDeprecatedCoils(aBaseMetaTileEntity);
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 for (int h = 0; h < 4; h++) {
                     IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, h, zDir + j);
                     if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne h�he
                         if (h == 0) {// innen boden (kantal coils)
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
+                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 13) {
+                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
                                 return false;
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
@@ -174,4 +187,20 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         return new GT_MetaTileEntity_PyrolyseOven(this.mName);
     }
 
+    private void replaceDeprecatedCoils(IGregTechTileEntity aBaseMetaTileEntity) {
+        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
+        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
+        int tX = aBaseMetaTileEntity.getXCoord() + xDir * 2;
+        int tY = (int) aBaseMetaTileEntity.getYCoord();
+        int tZ = aBaseMetaTileEntity.getZCoord() + zDir * 2;
+        for (int xPos = tX - 1; xPos <= tX + 1; xPos++) {
+            for (int zPos = tZ - 1; zPos <= tZ + 1; zPos++) {
+                if (aBaseMetaTileEntity.getBlock(xPos, tY, zPos) == GregTech_API.sBlockCasings1 &&
+                    aBaseMetaTileEntity.getMetaID(xPos, tY, zPos) == 13)
+                {
+                    aBaseMetaTileEntity.getWorld().setBlock(xPos, tY, zPos, GregTech_API.sBlockCasings5, 1, 3);
+                }
+            }
+        }
+    }
 }

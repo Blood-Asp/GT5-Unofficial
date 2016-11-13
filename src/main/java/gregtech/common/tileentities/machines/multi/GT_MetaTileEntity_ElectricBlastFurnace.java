@@ -35,7 +35,16 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{"Controller Block for the Blast Furnace", "Size: 3x3x4 (Hollow)", "Controller (front middle at bottom)", "16x Heating Coils (two middle Layers, hollow)", "1x Input (one of bottom)", "1x Output (one of bottom)", "1x Energy Hatch (one of bottom)", "1x Maintenance Hatch (one of bottom)", "1x Muffler Hatch (top middle)", "Heat Proof Machine Casings for the rest"};
+        return new String[]{
+                "Controller Block for the Blast Furnace",
+                "Size(WxHxD): 3x4x3 (Hollow), Controller (Front middle bottom)",
+                "16x Heating Coils (Two middle Layers, hollow)",
+                "1x Input Hatch/Bus (Any bottom layer casing)",
+                "1x Output Hatch/Bus (Any bottom layer casing)",
+                "1x Energy Hatch (Any bottom layer casing)",
+                "1x Maintenance Hatch (Any bottom layer casing)",
+                "1x Muffler Hatch (Top middle)",
+                "Heat Proof Machine Casings for the rest"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -63,13 +72,14 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
-        for (int i = 0; i < tInputList.size() - 1; i++) {
-            for (int j = i + 1; j < tInputList.size(); j++) {
+        int tInputList_sS=tInputList.size();
+        for (int i = 0; i < tInputList_sS - 1; i++) {
+            for (int j = i + 1; j < tInputList_sS; j++) {
                 if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
                     if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
-                        tInputList.remove(j--);
+                        tInputList.remove(j--); tInputList_sS=tInputList.size();
                     } else {
-                        tInputList.remove(i--);
+                        tInputList.remove(i--); tInputList_sS=tInputList.size();
                         break;
                     }
                 }
@@ -78,13 +88,14 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
 
         ArrayList<FluidStack> tFluidList = getStoredFluids();
-        for (int i = 0; i < tFluidList.size() - 1; i++) {
-            for (int j = i + 1; j < tFluidList.size(); j++) {
+        int tFluidList_sS=tFluidList.size();
+        for (int i = 0; i < tFluidList_sS - 1; i++) {
+            for (int j = i + 1; j < tFluidList_sS; j++) {
                 if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
                     if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
-                        tFluidList.remove(j--);
+                        tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
                     } else {
-                        tFluidList.remove(i--);
+                        tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
                         break;
                     }
                 }
@@ -133,17 +144,29 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
             return false;
         }
         addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), 11);
-
+        replaceDeprecatedCoils(aBaseMetaTileEntity);
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 2, zDir);
         switch (tUsedMeta) {
-            case 12:
+            case 0:
                 this.mHeatingCapacity = 1800;
                 break;
-            case 13:
+            case 1:
                 this.mHeatingCapacity = 2700;
                 break;
-            case 14:
+            case 2:
                 this.mHeatingCapacity = 3600;
+                break;
+            case 3:
+                this.mHeatingCapacity = 4500;
+                break;
+            case 4:
+                this.mHeatingCapacity = 5400;
+                break;
+            case 5:
+                this.mHeatingCapacity = 7200;
+                break;
+            case 6:
+                this.mHeatingCapacity = 9001;
                 break;
             default:
                 return false;
@@ -151,13 +174,13 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if ((i != 0) || (j != 0)) {
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != GregTech_API.sBlockCasings1) {
+                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != GregTech_API.sBlockCasings5) {
                         return false;
                     }
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) != tUsedMeta) {
                         return false;
                     }
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings1) {
+                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != GregTech_API.sBlockCasings5) {
                         return false;
                     }
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j) != tUsedMeta) {
@@ -187,7 +210,6 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
             }
         }
-        this.mHeatingCapacity += 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 2);
         return true;
     }
 
@@ -209,5 +231,27 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+    private void replaceDeprecatedCoils(IGregTechTileEntity aBaseMetaTileEntity) {
+        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
+        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
+        int tX = aBaseMetaTileEntity.getXCoord() + xDir;
+        int tY = (int) aBaseMetaTileEntity.getYCoord();
+        int tZ = aBaseMetaTileEntity.getZCoord() + zDir;
+        int tUsedMeta;
+        for (int xPos = tX - 1; xPos <= tX + 1; xPos++) {
+            for (int zPos = tZ - 1; zPos <= tZ + 1; zPos++) {
+                if ((xPos == tX) && (zPos == tZ)) {
+                    continue;
+                }
+                for (int yPos = tY + 1; yPos <= tY + 2; yPos++) {
+                    tUsedMeta = aBaseMetaTileEntity.getMetaID(xPos, yPos, zPos);
+                    if (tUsedMeta >= 12 && tUsedMeta <= 14 && aBaseMetaTileEntity.getBlock(xPos, yPos, zPos) == GregTech_API.sBlockCasings1) {
+                        aBaseMetaTileEntity.getWorld().setBlock(xPos, yPos, zPos, GregTech_API.sBlockCasings5, tUsedMeta - 12, 3);
+                    }
+                }
+            }
+        }
     }
 }

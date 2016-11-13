@@ -16,6 +16,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -30,8 +31,7 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBase {
 
-    public ArrayList<ChunkPosition> mMineList = new ArrayList();
-    private boolean completedCycle = false;
+    private final ArrayList<ChunkPosition> mMineList = new ArrayList();
 
     public GT_MetaTileEntity_AdvMiner2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -44,23 +44,25 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Advanced Miner II",
-                "Size: 3x3x7", "Controller (front middle at bottom)",
-                "3x3 Base of Solid Steel Casings",
-                "Also part of Base: MV+ Energy Input Hatch",
-                "Fluid Input Hatch, Output Bus and Maintainance Hatch",
-                "3x Solid Steel Casings on top the Center of the base",
-                "Steel Frame Boxes on each side and 3 more on top"};
+                "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
+                "3x1x3 Base of Solid Steel Casings",
+                "1x3x1 Solid Steel Casing pillar (Center of base)",
+                "1x3x1 Steel Frame Boxes (Each Steel pillar side and on top)",
+                "1x Input Hatch (Any bottom layer casing)",
+                "1x Output Bus (Any bottom layer casing)",
+                "1x Maintenance Hatch (Any bottom layer casing)",
+                "1x MV+ Energy Hatch (Any bottom layer casing)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER)};
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ADVMINER2_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ADVMINER2)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16]};
     }
-    
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "DrillingRig.png");
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "AdvMiner2.png");
     }
 
     @Override
@@ -69,18 +71,17 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
             ArrayList<ItemStack> tItems = getStoredInputs();
             for (ItemStack tStack : tItems) {
                 if (tStack.isItemEqual(GT_ModHandler.getIC2Item("miningPipe", 1L))) {
-                    if (tStack.stackSize < 2) {
+                    tStack.stackSize--;
+                    if (tStack.stackSize < 1) {
                         tStack = null;
-                    } else {
-                        tStack.stackSize--;
                     }
+                    if (mInventory[1] == null) {
+                        mInventory[1] = GT_ModHandler.getIC2Item("miningPipe", 1L);
+                    } else {
+                        mInventory[1].stackSize++;
+                    }
+                }
 
-                }
-                if (mInventory[1] == null) {
-                    mInventory[1] = GT_ModHandler.getIC2Item("miningPipe", 1L);
-                } else {
-                    mInventory[1].stackSize++;
-                }
             }
         }
         if (mInputHatches == null || mInputHatches.get(0).mFluid == null || mInputHatches.get(0).mFluid.getFluid().getID() != ItemList.sDrillingFluid.getID()) {
@@ -102,35 +103,74 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                 for (int i = -48; i < 49; i++) {
                     for (int f = -48; f < 49; f++) {
                         Block tBlock = getBaseMetaTileEntity().getBlockOffset(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
-                        if (tBlock == GregTech_API.sBlockOres1) {
+                        int tMetaID = getBaseMetaTileEntity().getMetaIDOffset(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
+                        if (tBlock instanceof GT_Block_Ores_Abstract) {
                             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
-                            if ((tTileEntity instanceof GT_TileEntity_Ores) && ((GT_TileEntity_Ores) tTileEntity).mNatural == true && !mMineList.contains(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f))) {
+                            if ((tTileEntity!=null) && (tTileEntity instanceof GT_TileEntity_Ores) && ((GT_TileEntity_Ores) tTileEntity).mNatural == true && !mMineList.contains(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f))) {
                                 mMineList.add(new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f));
+                            }
+                        }
+                        else {
+                            ItemData tAssotiation = GT_OreDictUnificator.getAssociation(new ItemStack(tBlock, 1, tMetaID));
+                            if ((tAssotiation != null) && (tAssotiation.mPrefix.toString().startsWith("ore"))) {
+                                ChunkPosition cp = new ChunkPosition(i, yLevel - getBaseMetaTileEntity().getYCoord(), f);
+                                if (!mMineList.contains(cp)) {
+                                    mMineList.add(cp);
+                                }
                             }
                         }
                     }
                 }
             }
             if (mMineList.isEmpty()) {
-              if(getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock){
-            	if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4)) {
-                    moveOneDown();
+                if(getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock){
+                    if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4)) {
+                        moveOneDown();
+                    }
+                }else{
+                    return false;
                 }
-              }else{return false;}
             }
             ArrayList<ItemStack> tDrops = new ArrayList();
-            if (!mMineList.isEmpty()) {
-                Block tMineBlock = getBaseMetaTileEntity().getBlockOffset(mMineList.get(0).chunkPosX, mMineList.get(0).chunkPosY, mMineList.get(0).chunkPosZ);
-                tDrops = tMineBlock.getDrops(getBaseMetaTileEntity().getWorld(), mMineList.get(0).chunkPosX, mMineList.get(0).chunkPosY, mMineList.get(0).chunkPosZ, getBaseMetaTileEntity().getMetaIDOffset(mMineList.get(0).chunkPosX, mMineList.get(0).chunkPosY, mMineList.get(0).chunkPosZ), 1);
+            Block tMineBlock = null;
+            ChunkPosition mle = null;;
+            while ((tMineBlock==null || tMineBlock == Blocks.air) && !mMineList.isEmpty()) {
+                mle = mMineList.get(0);
+                mMineList.remove(0);
+                tMineBlock = getBaseMetaTileEntity().getBlockOffset(mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ);
+            }
+            
+            if (tMineBlock!=null && tMineBlock!=Blocks.air) {
+                int metadata = getBaseMetaTileEntity().getMetaIDOffset(mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ);
+                boolean silkTouch = tMineBlock.canSilkHarvest(getBaseMetaTileEntity().getWorld(), null, mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ, metadata);
+                if (silkTouch){
+                    ItemStack IS = new ItemStack(tMineBlock);
+                    IS.setItemDamage(metadata);
+                    IS.stackSize=1;
+                    tDrops.add(IS);
+                }
+                else{
+                    tDrops = tMineBlock.getDrops(getBaseMetaTileEntity().getWorld(), mle.chunkPosX, mle.chunkPosY, mle.chunkPosZ, metadata, 1);
+                }
+
+                getBaseMetaTileEntity().getWorld().setBlockToAir(mle.chunkPosX + getBaseMetaTileEntity().getXCoord(), mle.chunkPosY + getBaseMetaTileEntity().getYCoord(), mle.chunkPosZ + getBaseMetaTileEntity().getZCoord());
                 if (!tDrops.isEmpty()) {
-                	ItemData tData = GT_OreDictUnificator.getItemData(tDrops.get(0).copy());
-                    if (tData.mPrefix != OrePrefixes.crushed&& tData.mMaterial.mMaterial != Materials.Oilsands) {
+                    ItemData tData = GT_OreDictUnificator.getItemData(tDrops.get(0).copy());
+                    if (tData.mPrefix != OrePrefixes.crushed && tData.mMaterial.mMaterial != Materials.Oilsands) {
+
                         GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.findRecipe(getBaseMetaTileEntity(), false, tVoltage, null, tDrops.get(0).copy());
                         if (tRecipe != null) {
                             this.mOutputItems = new ItemStack[tRecipe.mOutputs.length];
                             for (int g = 0; g < mOutputItems.length; g++) {
                                 mOutputItems[g] = tRecipe.mOutputs[g].copy();
-                                mOutputItems[g].stackSize = mOutputItems[g].stackSize * (getBaseMetaTileEntity().getRandomNumber(4) + 1);
+                                if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(g)) {
+                                    mOutputItems[g].stackSize *= getBaseMetaTileEntity().getRandomNumber(4) + 1;
+                                }
+                            }
+                        } else {
+                            this.mOutputItems = new ItemStack[tDrops.size()];
+                            for (int g = 0; g < mOutputItems.length; g++) {
+                                mOutputItems[g] = tDrops.get(g).copy();
                             }
                         }
                     } else {
@@ -143,8 +183,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                         mOutputItems = tStack;
                     }
                 }
-                getBaseMetaTileEntity().getWorld().setBlockToAir(mMineList.get(0).chunkPosX + getBaseMetaTileEntity().getXCoord(), mMineList.get(0).chunkPosY + getBaseMetaTileEntity().getYCoord(), mMineList.get(0).chunkPosZ + getBaseMetaTileEntity().getZCoord());
-                mMineList.remove(0);
+
             }
         }
 

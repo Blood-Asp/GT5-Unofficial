@@ -8,6 +8,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -15,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_RecipeAdder
         implements IGT_RecipeAdder {
+	@Deprecated
     public boolean addFusionReactorRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt, int aStartEU) {
         return false;
     }
@@ -22,6 +24,9 @@ public class GT_RecipeAdder
     @Override
     public boolean addFusionReactorRecipe(FluidStack aInput1, FluidStack aInput2, FluidStack aOutput1, int aDuration, int aEUt, int aStartEU) {
         if (aInput1 == null || aInput2 == null || aOutput1 == null || aDuration < 1 || aEUt < 1 || aStartEU < 1) {
+            return false;
+        }
+        if ((aOutput1 != null) && ((aDuration = GregTech_API.sRecipeFile.get("fusion", aOutput1.getFluid().getName(), aDuration)) <= 0)) {
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sFusionRecipes.addRecipe(null, new FluidStack[]{aInput1, aInput2}, new FluidStack[]{aOutput1}, aDuration, aEUt, aStartEU);
@@ -141,7 +146,7 @@ public class GT_RecipeAdder
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
         }
-        if ((aDuration = GregTech_API.sRecipeFile.get("cnc", aOutput1, aDuration)) <= 0) {
+        if ((GregTech_API.sRecipeFile.get("cnc", aOutput1, aDuration)) <= 0) {
             return false;
         }
         return true;
@@ -770,25 +775,16 @@ public class GT_RecipeAdder
     }
 
 	@Override
-	public boolean addAssemblylineRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput1, int aDuration, int aEUt) {
-        if ((aInputs == null) || (aOutput1 == null) || aInputs.length>15 || aInputs.length<4) {
+	public boolean addAssemblylineRecipe(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt) {
+        if ((aResearchItem==null)||(aResearchTime<=0)||(aInputs == null) || (aOutput == null) || aInputs.length>15 || aInputs.length<4) {
             return false;
         }
-        if ((aDuration = GregTech_API.sRecipeFile.get("assemblingline", aOutput1, aDuration)) <= 0) {
+        if ((aDuration = GregTech_API.sRecipeFile.get("assemblingline", aOutput, aDuration)) <= 0) {
             return false;
-        }
-        String tRecipe = "";
-        for(ItemStack sStack: aInputs){
-        	tRecipe += sStack.getItem().getItemStackDisplayName(sStack)+" x"+sStack.stackSize+"; ";
-        }
+        } 
+        GT_Recipe.GT_Recipe_Map.sScannerFakeRecipes.addFakeRecipe(false, new ItemStack[]{aResearchItem}, new ItemStack[]{aOutput}, new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Research result", new Object[0])}, null, null, aResearchTime, 30, 0);
         
-        for(FluidStack sStack: aFluidInputs){
-        	tRecipe += sStack.getLocalizedName()+" "+sStack.amount+"L; ";
-        }
-        
-        GT_Recipe.GT_Recipe_Map.sScannerFakeRecipes.addFakeRecipe(false, new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "tRecipe", new Object[0])}, new ItemStack[]{aOutput1}, null, null, null, aDuration, aEUt, 0);
-        
-        GT_Recipe.GT_Recipe_Map.sAssemblylineRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, aFluidInputs, null, aDuration, aEUt, 0);
+        GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes.add(new GT_Recipe_AssemblyLine( aResearchItem, aResearchTime, aInputs, aFluidInputs, aOutput, aDuration, aEUt));
         return true;
 	}
 

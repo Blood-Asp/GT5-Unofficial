@@ -28,6 +28,7 @@ import thaumcraft.api.aspects.IEssentiaContainerItem;
 import thaumcraft.api.visnet.VisNetHandler;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static gregtech.api.enums.GT_Values.V;
 
@@ -85,7 +86,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                 && aBaseMetaTileEntity.getUniversalEnergyStored() < maxEUOutput() + aBaseMetaTileEntity.getEUCapacity()) {
             // Dragon Egg
             if (hasEgg() && aTick % 10 == 0) {
-                getBaseMetaTileEntity().increaseStoredEnergyUnits(sDragonEggEnergyPerTick * getEfficiency() * 10, false);
+                getBaseMetaTileEntity().increaseStoredEnergyUnits(sDragonEggEnergyPerTick * getEfficiency() / 10, false);
                 if ((mActiveSiphon != this) && (!sAllowMultipleEggs)) {
                     if ((mActiveSiphon == null) || (mActiveSiphon.getBaseMetaTileEntity() == null)
                             || (mActiveSiphon.getBaseMetaTileEntity().isInvalidTileEntity()) || (!mActiveSiphon.hasEgg())) {
@@ -163,9 +164,9 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                 if ((this.mInventory[0] != null) && (this.mInventory[1] == null)) {
                     if (isThaumcraftLoaded && this.mInventory[0].getItem() instanceof IEssentiaContainerItem) {
                         AspectList tAspect = ((IEssentiaContainerItem) this.mInventory[0].getItem()).getAspects(this.mInventory[0]);
-                        TC_Aspects tValue = TC_Aspects.valueOf(tAspect.getAspects()[0].getTag().toUpperCase());
+                        TC_Aspects tValue = TC_Aspects.valueOf(tAspect.getAspects()[0].getTag().toUpperCase(Locale.ENGLISH));
                         int tEU = (tValue.mValue * tAspect.getAmount((Aspect) tValue.mAspect) * 100);
-                        getBaseMetaTileEntity().increaseStoredEnergyUnits(tEU, true);
+                        getBaseMetaTileEntity().increaseStoredEnergyUnits(tEU * getEfficiency() / 100, true);
                         ItemStack tStack = this.mInventory[0].copy();
                         tStack.setTagCompound(null);
                         tStack.setItemDamage(0);
@@ -187,7 +188,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                                         Enchantment tEnchantment = Enchantment.enchantmentsList[tID];
                                         if (tEnchantment != null) {
                                             getBaseMetaTileEntity().increaseStoredEnergyUnits(
-                                                    1000000 * tLevel / (tEnchantment.getMaxLevel() * tEnchantment.getWeight()), true);
+                                                    1000000 * getEfficiency() * tLevel / (tEnchantment.getMaxLevel() * tEnchantment.getWeight() * 100), true);
                                         }
                                     }
                                 }
@@ -199,8 +200,8 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                                 for (int i = 0; i < tEnchantments.tagCount(); i++) {
                                     short tID = ((NBTTagCompound) tEnchantments.getCompoundTagAt(i)).getShort("id");
                                     short tLevel = ((NBTTagCompound) tEnchantments.getCompoundTagAt(i)).getShort("lvl");
-                                    if ((tID > -1) && (tID < Enchantment.enchantmentsBookList.length)) {
-                                        Enchantment tEnchantment = Enchantment.enchantmentsBookList[tID];
+                                    if ((tID > -1) && (tID < Enchantment.enchantmentsList.length)) {
+                                        Enchantment tEnchantment = Enchantment.enchantmentsList[tID];
                                         if (tEnchantment != null) {
                                             getBaseMetaTileEntity().increaseStoredEnergyUnits(
                                                     1000000 * tLevel / (tEnchantment.getMaxLevel() * tEnchantment.getWeight()), true);
@@ -283,4 +284,9 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
     }
+
+	@Override
+	public int getPollution() {
+		return 0;
+	}
 }

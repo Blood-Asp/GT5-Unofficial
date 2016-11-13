@@ -10,8 +10,10 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import gregtech.common.gui.GT_Container_BronzeBlastFurnace;
 import gregtech.common.gui.GT_GUIContainer_BronzeBlastFurnace;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_MetaTileEntity_BronzeBlastFurnace
@@ -43,7 +46,11 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{"To get your first Steel", "Multiblock: 3x3x4 hollow with opening on top", "32 Bronze Plated Bricks required"};
+        return new String[]{
+                "Controller Block for the Bronze Blast Furnace",
+                "How to get your first Steel",
+                "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
+                "Bronze Plated Bricks for the rest (32 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -181,7 +188,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if ((aBaseMetaTileEntity.isClientSide()) &&
                 (aBaseMetaTileEntity.isActive())) {
-            aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + Math.random(), aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + Math.random(), 0.0D, 0.3D, 0.0D);
+            aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
         }
         if (aBaseMetaTileEntity.isServerSide()) {
             if (this.mUpdate-- == 0) {
@@ -195,15 +202,16 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                         this.mOutputItem2 = null;
                         this.mProgresstime = 0;
                         this.mMaxProgresstime = 0;
-                        try {
-                            GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "steel");
-                        } catch (Exception e) {
-                        }
+                        GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "steel");
                     }
                 } else if (aBaseMetaTileEntity.isAllowedToWork()) {
                     checkRecipe();
                 }
             }
+            if(this.mMaxProgresstime>0 && (aTimer % 20L == 0L)){
+            	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 200);
+            }
+            
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));
             if (aBaseMetaTileEntity.isActive()) {
                 if (aBaseMetaTileEntity.getAir(aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getYCoord(), aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1))) {
@@ -330,8 +338,6 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (aIndex < 2) {
-        }
         return !GT_Utility.areStacksEqual(aStack, this.mInventory[0]);
     }
 

@@ -33,21 +33,22 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Oil Drilling Rig",
-                "Size: 3x3x7", "Controller (front middle at bottom)",
-                "3x3 Base of Solid Steel Casings",
-                "Also part of Base: Energy Input Hatch",
-                "Fluid Output Hatch and Maintainance Hatch",
-                "3x Solid Steel Casings on top the Center of the base",
-                "Steel Frame Boxes on each side and 3 more on top"};
+                "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
+                "3x1x3 Base of Solid Steel Casings",
+                "1x3x1 Solid Steel Casing pillar (Center of base)",
+                "1x3x1 Steel Frame Boxes (Each Steel pillar side and on top)",
+                "1x Output Hatch (One of base casings)",
+                "1x Maintenance Hatch (One of base casings)",
+                "1x Energy Hatch (One of base casings)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER)};
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16]};
     }
-    
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "DrillingRig.png");
     }

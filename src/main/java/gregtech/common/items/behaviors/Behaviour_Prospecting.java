@@ -5,11 +5,12 @@ import gregtech.api.enums.Materials;
 import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.objects.ItemData;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Ores;
+import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -87,14 +88,14 @@ public class Behaviour_Prospecting
                         break;
                     }
                 }
-                Random tRandom = new Random(aX ^ aY ^ aZ ^ aSide);
+                Random tRandom = new XSTR(aX ^ aY ^ aZ ^ aSide);
                 i = 0;
                 for (int j = 9 + 2 * tQuality; i < j; i++) {
                     tX = aX - 4 - tQuality + tRandom.nextInt(j);
                     tY = aY - 4 - tQuality + tRandom.nextInt(j);
                     tZ = aZ - 4 - tQuality + tRandom.nextInt(j);
                     Block tBlock = aWorld.getBlock(tX, tY, tZ);
-                    if ((tBlock instanceof GT_Block_Ores)) {
+                    if ((tBlock instanceof GT_Block_Ores_Abstract)) {
                         TileEntity tTileEntity = aWorld.getTileEntity(tX, tY, tZ);
                         if ((tTileEntity instanceof GT_TileEntity_Ores)) {
                             Materials tMaterial = GregTech_API.sGeneratedMaterials[(((GT_TileEntity_Ores) tTileEntity).mMetaData % 1000)];

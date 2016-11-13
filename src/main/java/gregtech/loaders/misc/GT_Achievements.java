@@ -16,7 +16,9 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
+import ic2.core.Ic2Items;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -29,23 +31,24 @@ import net.minecraftforge.fluids.FluidStack;
 import thaumcraft.api.ThaumcraftApiHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_Achievements {
 
     public static List<Materials> oreList = new ArrayList<Materials>();
     public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
-    public HashMap<String, Achievement> achievementList;
-    public HashMap<String, Boolean> issuedAchievements;
+    public ConcurrentHashMap<String, Achievement> achievementList;
+    public ConcurrentHashMap<String, Boolean> issuedAchievements;
     public int adjX = 5;
     public int adjY = 9;
 
     public GT_Achievements() {
-        this.achievementList = new HashMap();
-        this.issuedAchievements = new HashMap();
-        for (int i = 0; i < oreList.size(); i++) {
+        this.achievementList = new ConcurrentHashMap();
+        this.issuedAchievements = new ConcurrentHashMap();
+        int oreList_sS=oreList.size();
+        for (int i = 0; i < oreList_sS; i++) {
             if (GT_Values.D1 && this.achievementList.get(oreList.get(i).name()) == null) {
                 GT_Log.out.println("achievement." + oreList.get(i).name() + "=Find " + oreList.get(i).name() + " Ore");
 
@@ -149,41 +152,50 @@ public class GT_Achievements {
         registerAchievement("upgradeebf", 8, -2, ItemList.Hatch_Energy_MV.get(1, new Object[]{}), "gtaluminium", false);
         registerAchievement("maintainance", 10, -2, ItemList.Hatch_Maintenance.get(1, new Object[]{}), "upgradeebf", false);
 
-        registerAchievement("titan", 10, 0, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Titanium, 1L), "gtaluminium", false);
-        registerAchievement("magic", 10, 4, ItemList.MagicEnergyConverter_LV.get(1, new Object[]{}), "titan", false);
-        registerAchievement("highmage", 10, 6, ItemList.MagicEnergyAbsorber_HV.get(1, new Object[]{}), "magic", false);
-        registerAchievement("artificaldia", 11, 2, ItemList.IC2_Industrial_Diamond.get(1, new Object[]{}), "titan", false);
-        registerAchievement("muchsteam", 12, 1, ItemList.LargeSteamTurbine.get(1, new Object[]{}), "titan", false);
-        registerAchievement("efficientsteam", 12, 3, ItemList.LargeSteamTurbine.get(1, new Object[]{}), "muchsteam", false);
+        registerAchievement("upgrade", 10, 0, ItemList.Casing_Coil_Kanthal.get(1, new Object[]{}), "gtaluminium", false);
+        registerAchievement("titan", 14, 0, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Titanium, 1L), "upgrade", false);
+        registerAchievement("magic", 14, 3, ItemList.MagicEnergyConverter_LV.get(1, new Object[]{}), "titan", false);
+        registerAchievement("highmage", 10, 3, ItemList.MagicEnergyAbsorber_HV.get(1, new Object[]{}), "magic", false);
+        registerAchievement("artificaldia", 12, 2, ItemList.IC2_Industrial_Diamond.get(1, new Object[]{}), "titan", false);
+        registerAchievement("muchsteam", 13, 1, ItemList.LargeSteamTurbine.get(1, new Object[]{}), "titan", false);
+        registerAchievement("efficientsteam", 11, 1, ItemList.LargeSteamTurbine.get(1, new Object[]{}), "muchsteam", false);
 
-        registerAchievement("upgrade", 14, 0, ItemList.Casing_Coil_Kanthal.get(1, new Object[]{}), "titan", false);
-        registerAchievement("tungsten", 16, 0, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Tungsten, 1L), "upgrade", false);
-        registerAchievement("hightech", 15, -1, ItemList.Field_Generator_LV.get(1, new Object[]{}), "tungsten", false);
-        registerAchievement("amplifier", 17, -3, ItemList.Machine_LV_Amplifab.get(1, new Object[]{}), "hightech", false);
-        registerAchievement("scanning", 13, -2, ItemList.Machine_HV_Scanner.get(1, new Object[]{}), "hightech", false);
-        registerAchievement("alienpower", 14, -4, ItemList.Generator_Naquadah_Mark_I.get(1, new Object[]{}), "hightech", false);
+        registerAchievement("upgrade2", 16, 0, ItemList.Casing_Coil_Nichrome.get(1, new Object[]{}), "titan", false);
+        registerAchievement("tungsten", 16, 2, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Tungsten, 1L), "upgrade2", false);
+        registerAchievement("osmium", 16, -2, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Osmium, 1L), "upgrade2", false);
+        registerAchievement("hightech", 15, -3, ItemList.Field_Generator_LV.get(1, new Object[]{}), "osmium", false);
+        registerAchievement("amplifier", 16, -5, ItemList.Machine_LV_Amplifab.get(1, new Object[]{}), "hightech", false);
+        registerAchievement("scanning", 13, -3, ItemList.Machine_HV_Scanner.get(1, new Object[]{}), "hightech", false);
+        registerAchievement("alienpower", 14, -5, ItemList.Generator_Naquadah_Mark_I.get(1, new Object[]{}), "hightech", false);
         registerAchievement("universal", 15, -6, ItemList.Machine_LV_Massfab.get(1, new Object[]{}), "hightech", false);
         registerAchievement("replication", 17, -6, ItemList.Machine_LV_Replicator.get(1, new Object[]{}), "universal", false);
 
-        registerAchievement("upgrade2", 16, 6, ItemList.Casing_Coil_Nichrome.get(1, new Object[]{}), "tungsten", false);
-        registerAchievement("tungstensteel", 14, 6, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.TungstenSteel, 1L), "upgrade2", false);
-        registerAchievement("conducting", 12, 6, ItemList.Casing_Coil_Superconductor.get(1, new Object[]{}), "tungstensteel", false);
-        registerAchievement("fusion", 14, 8, ItemList.FusionComputer_LuV.get(1, new Object[]{}), "tungstensteel", false);
-        registerAchievement("higherefficency", 14, 10, ItemList.Generator_Plasma_IV.get(1, new Object[]{}), "fusion", false);
-        registerAchievement("advancing", 12, 8, ItemList.FusionComputer_ZPMV.get(1, new Object[]{}), "fusion", false);
-        registerAchievement("tothelimit", 12, 10, ItemList.Generator_Plasma_LuV.get(1, new Object[]{}), "advancing", false);
-        registerAchievement("denseaspossible", 10, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "tothelimit", false);
-        registerAchievement("fullefficiency", 10, 12, ItemList.Generator_Plasma_ZPMV.get(1, new Object[]{}), "denseaspossible", false);
-        registerAchievement("whatnow", 8, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
-        
+        registerAchievement("tungstensteel", 16, 4, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.TungstenSteel, 1L), "tungsten", false);
+        registerAchievement("upgrade3", 15, 5, ItemList.Casing_Coil_TungstenSteel.get(1, new Object[]{}), "tungstensteel", false);
+        registerAchievement("hssg", 13, 5, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.HSSG, 1L), "upgrade3", false);
+        registerAchievement("upgrade4", 11, 5, ItemList.Casing_Coil_HSSG.get(1, new Object[]{}), "hssg", false);
+        registerAchievement("stargatematerial", 11, 7, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadah, 1L), "upgrade4", false);
+        registerAchievement("conducting", 14, 6, ItemList.Casing_Coil_Superconductor.get(1, new Object[]{}), "upgrade3", false);
+        registerAchievement("fusion", 15, 7, ItemList.FusionComputer_LuV.get(1, new Object[]{}), "tungstensteel", false);
+        registerAchievement("higherefficency", 15, 9, ItemList.Generator_Plasma_IV.get(1, new Object[]{}), "fusion", false);
+        registerAchievement("advancing", 13, 7, ItemList.FusionComputer_ZPMV.get(1, new Object[]{}), "fusion", false);
+
+        registerAchievement("stargateliquid", 11, 9, ItemList.Generator_Plasma_LuV.get(1, new Object[]{}), "advancing", false);
+        registerAchievement("tothelimit", 13, 9, ItemList.Generator_Plasma_LuV.get(1, new Object[]{}), "advancing", false);
+        registerAchievement("fullefficiency", 12, 10, ItemList.Generator_Plasma_ZPMV.get(1, new Object[]{}), "tothelimit", false);
+        registerAchievement("upgrade5", 9, 9, ItemList.Casing_Coil_Naquadah.get(1, new Object[]{}), "stargateliquid", false);
+        registerAchievement("alienmetallurgy", 9, 7, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.NaquadahAlloy, 1L), "upgrade5", false);
+        registerAchievement("over9000", 7, 7, ItemList.Casing_Coil_NaquadahAlloy.get(1, new Object[]{}), "alienmetallurgy", false);
+        registerAchievement("finalpreparations", 7, 9, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadria, 1L), "over9000", false);
+        registerAchievement("denseaspossible", 6, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "finalpreparations", false);
+        registerAchievement("whatnow", 4, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
+
         if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
-        for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
-            if (GregTech_API.sGeneratedMaterials[i] != null) {
-            	if(!oreList.contains(GregTech_API.sGeneratedMaterials[i])){
-            		codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
-            	}
+            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
+                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
+                    codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
+                }
             }
-        }
         }
         if (GT_Mod.gregtechproxy.mAchievements) {
             AchievementPage.registerAchievementPage(new AchievementPage("GregTech 5", (Achievement[]) this.achievementList.values().toArray(
@@ -251,9 +263,9 @@ public class GT_Achievements {
         }
 //		if (this.achievementList.containsKey(textId)) {
 //			if(this.issuedAchievements.containsKey((entityplayer.getDisplayName()+textId))){
-//			return;	
+//			return;
 //			}else{
-//			this.issuedAchievements.put((entityplayer.getDisplayName()+textId), true);	
+//			this.issuedAchievements.put((entityplayer.getDisplayName()+textId), true);
         entityplayer.triggerAchievement((StatBase) this.achievementList.get(textId));
 //			}
 //		}
@@ -272,25 +284,33 @@ public class GT_Achievements {
         }
         ItemData data = GT_OreDictUnificator.getItemData(stack);
 
-        if (data != null) {
-            if (data.mPrefix == OrePrefixes.ingot) {
-                if (data.mMaterial.mMaterial == Materials.Aluminium) {
-                    issueAchievement(player, "gtaluminium");
-                } else if (data.mMaterial.mMaterial == Materials.Titanium) {
-                    issueAchievement(player, "titan");
-                } else if (data.mMaterial.mMaterial == Materials.BlueSteel) {
-                    issueAchievement(player, "complexalloys");
-                } else if (data.mMaterial.mMaterial == Materials.Tungsten) {
-                    issueAchievement(player, "tungsten");
-                } else if (data.mMaterial.mMaterial == Materials.TungstenSteel) {
-                    issueAchievement(player, "tungstensteel");
-                }
-
-
+        if ((data != null) && (data.mPrefix == OrePrefixes.ingot)) {
+            if (data.mMaterial.mMaterial == Materials.Aluminium) {
+                issueAchievement(player, "gtaluminium");
+            } else if (data.mMaterial.mMaterial == Materials.Titanium) {
+                issueAchievement(player, "titan");
+            } else if (data.mMaterial.mMaterial == Materials.BlueSteel) {
+                issueAchievement(player, "complexalloys");
+            } else if (data.mMaterial.mMaterial == Materials.Tungsten) {
+                issueAchievement(player, "tungsten");
+            } else if (data.mMaterial.mMaterial == Materials.Osmium) {
+                issueAchievement(player, "osmium");
+            } else if (data.mMaterial.mMaterial == Materials.TungstenSteel) {
+                issueAchievement(player, "tungstensteel");
+            } else if (data.mMaterial.mMaterial == Materials.HSSG) {
+                issueAchievement(player, "hssg");
+            } else if (data.mMaterial.mMaterial == Materials.Naquadah) {
+                issueAchievement(player, "stargatematerial");
+            } else if (data.mMaterial.mMaterial == Materials.NaquadahAlloy) {
+                issueAchievement(player, "alienmetallurgy");
+            } else if (data.mMaterial.mMaterial == Materials.Naquadria) {
+                issueAchievement(player, "finalpreparations");
             }
         }
         if (stack.getUnlocalizedName().equals("ic2.itemPartIndustrialDiamond")) {
             issueAchievement(player, "artificaldia");
+            issueAchievement(player, "buildCoalDiamond");
+
         }
     }
 
@@ -302,6 +322,8 @@ public class GT_Achievements {
             issueAchievement(player, "fusion");
         } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.europium")) {
             issueAchievement(player, "advancing");
+        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.naquadah")) {
+            issueAchievement(player, "stargateliquid");
         } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.americium")) {
             issueAchievement(player, "tothelimit");
         } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.neutronium")) {
@@ -318,6 +340,7 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
+        if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
@@ -335,6 +358,7 @@ public class GT_Achievements {
                 issueAchievement(player, "magneticiron");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32600")) {
                 issueAchievement(player, "lvmotor");
+                issueAchievement(player, "buildCable");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32610")) {
                 issueAchievement(player, "pumpcover");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32630")) {
@@ -359,10 +383,17 @@ public class GT_Achievements {
                 issueAchievement(player, "highpressure");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.macerator")) {
                 issueAchievement(player, "macerator");
+                issueAchievement(player, "buildMacerator");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter")) {
                 issueAchievement(player, "alloysmelter");
+                issueAchievement(player, "buildElecFurnace");
+                if(stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter.tier.3")){
+                    issueAchievement(player, "buildIndFurnace");
+                }
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.extractor")) {
                 issueAchievement(player, "extract");
+                issueAchievement(player, "buildCompressor");
+                issueAchievement(player, "buildExtractor");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.superbuffer.tier.")) {
                 issueAchievement(player, "superbuffer");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.quantum.tank.tier.")) {
@@ -373,8 +404,13 @@ public class GT_Achievements {
                 issueAchievement(player, "cheapermac");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.")) {
                 issueAchievement(player, "buffer");
+                issueAchievement(player, "buildBatBox");
+                if(stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.3")){
+                    issueAchievement(player, "buildMFE");
+                }
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicgenerator.steamturbine.tier.")) {
                 issueAchievement(player, "steampower");
+                issueAchievement(player, "buildGenerator");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.basicmachine.pump.tier.03")) {
                 issueAchievement(player, "slurp");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.assembler.tier.")) {
@@ -399,6 +435,7 @@ public class GT_Achievements {
                 issueAchievement(player, "amplifier");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.massfab.tier.")) {
                 issueAchievement(player, "universal");
+                issueAchievement(player, "buildMassFab");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicgenerator.naquadah.tier.")) {
                 issueAchievement(player, "alienpower");
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.replicator.tier.")) {
@@ -412,10 +449,18 @@ public class GT_Achievements {
             }
         } else if (stack.getUnlocalizedName().equals("gt.neutronreflector")) {
             issueAchievement(player, "reflect");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.13")) {
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.1")) {
             issueAchievement(player, "upgrade");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.14")) {
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.2")) {
             issueAchievement(player, "upgrade2");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.3")) {
+            issueAchievement(player, "upgrade3");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.4")) {
+            issueAchievement(player, "upgrade4");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.5")) {
+            issueAchievement(player, "upgrade5");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.6")) {
+            issueAchievement(player, "over9000");
         } else if (stack.getUnlocalizedName().equals("gt.blockcasings.15")) {
             issueAchievement(player, "conducting");
         }
@@ -447,15 +492,20 @@ public class GT_Achievements {
                     issueAchievement(player, "newmetal");
                 }
                 if(data.mMaterial.mMaterial != Materials.Gunpowder){
-                issueAchievement(player, "cleandust");
+                    issueAchievement(player, "cleandust");
                 }
             } else if (data.mPrefix == OrePrefixes.ore || data.mPrefix == OrePrefixes.oreBlackgranite || data.mPrefix == OrePrefixes.oreEndstone
                     || data.mPrefix == OrePrefixes.oreNetherrack || data.mPrefix == OrePrefixes.oreRedgranite) {
-                for (int i = 0; i < data.getAllMaterialStacks().size(); i++) {
+                int data_getAllMaterialStacks_sS=data.getAllMaterialStacks().size();
+                for (int i = 0; i < data_getAllMaterialStacks_sS; i++) {
                     issueAchievement(player, data.getAllMaterialStacks().get(i).mMaterial.name());
                     if (data.getAllMaterialStacks().get(i).mMaterial == Materials.AnyIron) {
                         issueAchievement(player, "iron");
                     }
+                    if(data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper||data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin){
+                        issueAchievement(event.entityPlayer, "mineOre");
+                    }
+
                 }
             } else if (data.mPrefix == OrePrefixes.crushed) {
                 issueAchievement(player, "crushed");
@@ -466,10 +516,8 @@ public class GT_Achievements {
             } else if (data.mMaterial.mMaterial == Materials.Steel) {
                 if (data.mPrefix == OrePrefixes.ingot && stack.stackSize == stack.getMaxStackSize()) {
                     issueAchievement(player, "steel");
-                } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft")) {
-                    if (ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
-                        issueAchievement(player, "steel");
-                    }
+                } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft") && ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
+                    issueAchievement(player, "steel");
                 }
             } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
                 issueAchievement(player, "stepforward");
@@ -514,7 +562,9 @@ public class GT_Achievements {
                 issueAchievement(player, "whatnow");
             }
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
-                issueAchievement(player, "newfuel");
-            }
+            issueAchievement(player, "newfuel");
+        }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
+                (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
+            issueAchievement(player, "buildQArmor");}
     }
 }

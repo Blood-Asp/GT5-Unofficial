@@ -317,55 +317,123 @@ public class GT_Recipe {
 
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
+        int amt;
         for (FluidStack tFluid : mFluidInputs)
             if (tFluid != null) {
                 boolean temp = true;
+                amt = tFluid.amount;
                 for (FluidStack aFluid : aFluidInputs)
-                    if (aFluid != null && aFluid.isFluidEqual(tFluid) && (aDontCheckStackSizes || aFluid.amount >= tFluid.amount)) {
-                        temp = false;
-                        break;
+                    if (aFluid != null && aFluid.isFluidEqual(tFluid)){
+                        if (aDontCheckStackSizes ){
+                            temp = false;
+                            break;
+                        }
+                        amt -= aFluid.amount;
+                        if (amt<1){
+                            temp = false;
+                            break;
+                        }
                     }
                 if (temp) return false;
             }
 
         if (mInputs.length > 0 && aInputs == null) return false;
 
-        for (ItemStack tStack : mInputs)
+        for (ItemStack tStack : mInputs) {
             if (tStack != null) {
+                amt = tStack.stackSize;
                 boolean temp = true;
-                for (ItemStack aStack : aInputs)
-                    if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true)) && (aDontCheckStackSizes || aStack.stackSize >= tStack.stackSize)) {
-                        temp = false;
-                        break;
+                for (ItemStack aStack : aInputs) {
+                    if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                        if (aDontCheckStackSizes) {
+                            temp = false;
+                            break;
+                        }
+                        amt -= aStack.stackSize;
+                        if (amt < 1) {
+                            temp = false;
+                            break;
+                        }
                     }
+                }
                 if (temp) return false;
             }
-
+        }
         if (aDecreaseStacksizeBySuccess) {
             if (aFluidInputs != null) {
-                for (FluidStack tFluid : mFluidInputs)
+                for (FluidStack tFluid : mFluidInputs) {
                     if (tFluid != null) {
-                        for (FluidStack aFluid : aFluidInputs)
-                            if (aFluid != null && aFluid.isFluidEqual(tFluid) && (aDontCheckStackSizes || aFluid.amount >= tFluid.amount)) {
-                                aFluid.amount -= tFluid.amount;
-                                break;
+                        amt = tFluid.amount;
+                        for (FluidStack aFluid : aFluidInputs) {
+                            if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
+                                if (aDontCheckStackSizes) {
+                                    aFluid.amount -= amt;
+                                    break;
+                                }
+                                if (aFluid.amount < amt) {
+                                    amt -= aFluid.amount;
+                                    aFluid.amount = 0;
+                                } else {
+                                    aFluid.amount -= amt;
+                                    amt = 0;
+                                    break;
+                                }
                             }
+                        }
                     }
+                }
             }
 
             if (aInputs != null) {
-                for (ItemStack tStack : mInputs)
+                for (ItemStack tStack : mInputs) {
                     if (tStack != null) {
-                        for (ItemStack aStack : aInputs)
-                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true)) && (aDontCheckStackSizes || aStack.stackSize >= tStack.stackSize)) {
-                                aStack.stackSize -= tStack.stackSize;
-                                break;
+                        amt = tStack.stackSize;
+                        for (ItemStack aStack : aInputs) {
+                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                                if (aDontCheckStackSizes){
+                                    aStack.stackSize -= amt;
+                                    break;
+                                }
+                                if (aStack.stackSize < amt){
+                                    amt -= aStack.stackSize;
+                                    aStack.stackSize = 0;
+                                }else{
+                                    aStack.stackSize -= amt;
+                                    amt = 0;
+                                    break;
+                                }
                             }
+                        }
                     }
+                }
             }
         }
 
         return true;
+    }
+
+    
+    public static class GT_Recipe_AssemblyLine{
+        public static final ArrayList<GT_Recipe_AssemblyLine> sAssemblylineRecipes = new ArrayList<GT_Recipe_AssemblyLine>();
+        
+        public ItemStack mResearchItem;
+        public int mResearchTime;
+        public ItemStack[] mInputs;
+        public FluidStack[] mFluidInputs;
+        public ItemStack mOutput;
+        public int mDuration;
+        public int mEUt;
+        
+        public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt) {
+        	mResearchItem = aResearchItem;
+        	mResearchTime = aResearchTime;
+        	mInputs = aInputs;
+        	mFluidInputs = aFluidInputs;
+        	mOutput = aOutput;
+        	mDuration = aDuration;
+        	mEUt = aEUt;
+        }
+        
     }
 
     public static class GT_Recipe_Map {
@@ -440,16 +508,15 @@ public class GT_Recipe {
         public static final GT_Recipe_Map_Fuel sSmallNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.smallnaquadahreactor", "Small Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sLargeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.largenaquadahreactor", "Large Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.fluidnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
-        public static final GT_Recipe_Map sAssemblylineRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(100), "gt.recipe.assemblyline", "Assemblyline", null, RES_PATH_GUI + "basicmachines/Default", 15, 1, 4, 0, 1, E, 1, E, false, false);
         
         /**
          * HashMap of Recipes based on their Items
          */
-        public final Map<GT_ItemStack, Collection<GT_Recipe>> mRecipeItemMap = new HashMap<GT_ItemStack, Collection<GT_Recipe>>();
+        public final Map<GT_ItemStack, Collection<GT_Recipe>> mRecipeItemMap = new /*Concurrent*/HashMap<GT_ItemStack, Collection<GT_Recipe>>();
         /**
          * HashMap of Recipes based on their Fluids
          */
-        public final Map<Fluid, Collection<GT_Recipe>> mRecipeFluidMap = new HashMap<Fluid, Collection<GT_Recipe>>();
+        public final Map<Fluid, Collection<GT_Recipe>> mRecipeFluidMap = new /*Concurrent*/HashMap<Fluid, Collection<GT_Recipe>>();
         /**
          * The List of all Recipes
          */

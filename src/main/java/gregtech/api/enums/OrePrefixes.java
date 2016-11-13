@@ -24,6 +24,8 @@ public enum OrePrefixes {
     @Deprecated itemDust("Dusts", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),
     oreBlackgranite("Black Granite Ores", "Granite ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // In case of an End-Ores Mod. Ore -> Material is a Oneway Operation!
     oreRedgranite("Red Granite Ores", "Granite ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // In case of an End-Ores Mod. Ore -> Material is a Oneway Operation!
+    oreMarble("Marble Ores", "Marble ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // In case of an End-Ores Mod. Ore -> Material is a Oneway Operation!
+    oreBasalt("Basalt Ores", "Basalt ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // In case of an End-Ores Mod. Ore -> Material is a Oneway Operation!
     oreNetherrack("Netherrack Ores", "Nether ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // Prefix of the Nether-Ores Mod. Causes Ores to double. Ore -> Material is a Oneway Operation!
     oreNether("Nether Ores", "Nether ", " Ore", true, true, false, false, false, true, false, false, false, true, B[3], -1, 64, -1), // Prefix of the Nether-Ores Mod. Causes Ores to double. Ore -> Material is a Oneway Operation!
     @Deprecated denseore("Dense Ores", "", "", false, false, false, false, false, true, false, false, false, true, B[3], -1, 64, -1),
@@ -595,9 +597,9 @@ public enum OrePrefixes {
         } else if (name().startsWith("crate")) {
             new TC_AspectStack(TC_Aspects.ITER, 2).addToAspectList(mAspects);
         } else if (name().startsWith("circuit")) {
-            new TC_AspectStack(TC_Aspects.COGNITO, 1).addToAspectList(mAspects);
+            new TC_AspectStack(TC_Aspects.COGNITIO, 1).addToAspectList(mAspects);
         } else if (name().startsWith("computer")) {
-            new TC_AspectStack(TC_Aspects.COGNITO, 4).addToAspectList(mAspects);
+            new TC_AspectStack(TC_Aspects.COGNITIO, 4).addToAspectList(mAspects);
         } else if (name().startsWith("battery")) {
             new TC_AspectStack(TC_Aspects.ELECTRUM, 1).addToAspectList(mAspects);
         }
@@ -636,7 +638,7 @@ public enum OrePrefixes {
 
     public static OrePrefixes getPrefix(String aPrefixName, OrePrefixes aReplacement) {
         Object tObject = GT_Utility.getFieldContent(OrePrefixes.class, aPrefixName, false, false);
-        if (tObject != null && tObject instanceof OrePrefixes) return (OrePrefixes) tObject;
+        if (tObject instanceof OrePrefixes) return (OrePrefixes) tObject;
         return aReplacement;
     }
 

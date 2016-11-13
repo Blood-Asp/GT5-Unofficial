@@ -20,7 +20,6 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
-import ic2.api.recipe.ICannerBottleRecipeManager;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
 import ic2.api.recipe.RecipeInputOreDict;
@@ -83,11 +82,11 @@ public class GT_Utility {
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
     private static final List<FluidContainerData> sFluidContainerList = new ArrayList<FluidContainerData>();
-    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<GT_ItemStack, FluidContainerData>();
-    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
+    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new /*Concurrent*/HashMap<GT_ItemStack, FluidContainerData>();
+    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new /*Concurrent*/HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
-    public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new HashMap<GT_PlayedSound, Integer>();
+    public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new /*Concurrent*/HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
 
     static {
@@ -320,7 +319,7 @@ public class GT_Utility {
     }
 
     public static void sendChatToPlayer(EntityPlayer aPlayer, String aChatMessage) {
-        if (aPlayer != null && aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
+        if (aPlayer instanceof EntityPlayerMP && aChatMessage != null) {
             aPlayer.addChatComponentMessage(new ChatComponentText(aChatMessage));
         }
     }
@@ -501,7 +500,7 @@ public class GT_Utility {
      * @return the Amount of moved Items
      */
     public static byte moveOneItemStack(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce) {
-        if (aTileEntity1 != null && aTileEntity1 instanceof IInventory)
+        if (aTileEntity1 instanceof IInventory)
             return moveOneItemStack((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
         return 0;
     }
@@ -598,7 +597,7 @@ public class GT_Utility {
             for (int i = 0; i < tGrabSlots.length; i++) tGrabSlots[i] = i;
         }
 
-        if (aTileEntity2 != null && aTileEntity2 instanceof IInventory) {
+        if (aTileEntity2 instanceof IInventory) {
             for (int i = 0; i < tGrabSlots.length; i++) {
                 if (listContainsItem(aFilter, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
                     if (isAllowedToTakeFromSlot((IInventory) aTileEntity1, tGrabSlots[i], aGrabFrom, ((IInventory) aTileEntity1).getStackInSlot(tGrabSlots[i]))) {
@@ -698,7 +697,7 @@ public class GT_Utility {
             sFilledContainerToData.put(new GT_ItemStack(tData.filledContainer), tData);
             Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(tData.emptyContainer));
             if (tFluidToContainer == null) {
-                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new /*Concurrent*/HashMap<Fluid, FluidContainerData>());
                 GregTech_API.sFluidMappings.add(tFluidToContainer);
             }
             tFluidToContainer.put(tData.fluid.getFluid(), tData);
@@ -710,7 +709,7 @@ public class GT_Utility {
         sFilledContainerToData.put(new GT_ItemStack(aData.filledContainer), aData);
         Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(aData.emptyContainer));
         if (tFluidToContainer == null) {
-            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new /*Concurrent*/HashMap<Fluid, FluidContainerData>());
             GregTech_API.sFluidMappings.add(tFluidToContainer);
         }
         tFluidToContainer.put(aData.fluid.getFluid(), aData);
@@ -861,10 +860,12 @@ public class GT_Utility {
                 return false;
             }
         }
+        ItemStack[] tStack = GT_OreDictUnificator.getStackArray(true, aOutput);
+        if(tStack==null||(tStack.length>0&&GT_Utility.areStacksEqual(aInput, tStack[0])))return false;
         if (tOreName != null) {
-            aRecipeList.put(new RecipeInputOreDict(tOreName.toString(), aInput.stackSize), new RecipeOutput(aNBT, GT_OreDictUnificator.getStackArray(true, aOutput)));
+            aRecipeList.put(new RecipeInputOreDict(tOreName.toString(), aInput.stackSize), new RecipeOutput(aNBT, tStack));
         } else {
-            aRecipeList.put(new RecipeInputItemStack(copy(aInput), aInput.stackSize), new RecipeOutput(aNBT, GT_OreDictUnificator.getStackArray(true, aOutput)));
+            aRecipeList.put(new RecipeInputItemStack(copy(aInput), aInput.stackSize), new RecipeOutput(aNBT, tStack));
         }
         return true;
     }
@@ -921,7 +922,7 @@ public class GT_Utility {
     }
 
     public static boolean doSoundAtClient(String aSoundName, int aTimeUntilNextSound, float aSoundStrength, double aX, double aY, double aZ) {
-        return doSoundAtClient(aSoundName, aTimeUntilNextSound, aSoundStrength, 0.9F + new Random().nextFloat() * 0.2F, aX, aY, aZ);
+        return doSoundAtClient(aSoundName, aTimeUntilNextSound, aSoundStrength, 1.01818028F, aX, aY, aZ);
     }
 
     public static boolean doSoundAtClient(String aSoundName, int aTimeUntilNextSound, float aSoundStrength, float aSoundModulation, double aX, double aY, double aZ) {
@@ -1011,7 +1012,7 @@ public class GT_Utility {
     }
 
     public static boolean isBlockValid(Object aBlock) {
-        return aBlock != null && (aBlock instanceof Block);
+        return (aBlock instanceof Block);
     }
 
     public static boolean isBlockInvalid(Object aBlock) {
@@ -1027,7 +1028,7 @@ public class GT_Utility {
     }
 
     public static boolean isStackValid(Object aStack) {
-        return aStack != null && (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
+        return (aStack instanceof ItemStack) && ((ItemStack) aStack).getItem() != null && ((ItemStack) aStack).stackSize >= 0;
     }
 
     public static boolean isStackInvalid(Object aStack) {
@@ -1095,7 +1096,6 @@ public class GT_Utility {
      * Converts a Number to a String
      */
     public static String parseNumberToString(int aNumber) {
-        String tString = E;
         boolean temp = true, negative = false;
 
         if (aNumber < 0) {
@@ -1103,14 +1103,17 @@ public class GT_Utility {
             negative = true;
         }
 
+        StringBuilder tStringB = new StringBuilder();
         for (int i = 1000000000; i > 0; i /= 10) {
             int tDigit = (aNumber / i) % 10;
             if (temp && tDigit != 0) temp = false;
             if (!temp) {
-                tString += tDigit;
-                if (i != 1) for (int j = i; j > 0; j /= 1000) if (j == 1) tString += ",";
+                tStringB.append(tDigit);
+                if (i != 1) for (int j = i; j > 0; j /= 1000) if (j == 1) tStringB.append(",");
             }
         }
+
+        String tString = tStringB.toString();
 
         if (tString.equals(E)) tString = "0";
 
@@ -1379,7 +1382,7 @@ public class GT_Utility {
      * re-maps all Keys of a Map after the Keys were weakened.
      */
     public static <X, Y> Map<X, Y> reMap(Map<X, Y> aMap) {
-        Map<X, Y> tMap = new HashMap<X, Y>();
+        Map<X, Y> tMap = new /*Concurrent*/HashMap<X, Y>();
         tMap.putAll(aMap);
         aMap.clear();
         aMap.putAll(tMap);
@@ -1410,7 +1413,7 @@ public class GT_Utility {
         Collections.sort(tEntrySet, new Comparator<Map.Entry<X, Y>>() {
             @Override
             public int compare(Entry<X, Y> aValue1, Entry<X, Y> aValue2) {
-                return -aValue1.getValue().compareTo(aValue2.getValue());
+                return aValue2.getValue().compareTo(aValue1.getValue());//FB: RV - RV_NEGATING_RESULT_OF_COMPARETO
             }
         });
         LinkedHashMap<X, Y> rMap = new LinkedHashMap<X, Y>();
@@ -1452,26 +1455,27 @@ public class GT_Utility {
         if (tTargetWorld != null && tOriginalWorld != null && tTargetWorld != tOriginalWorld) {
             if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
             if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
-
             if (aEntity instanceof EntityPlayerMP) {
                 EntityPlayerMP aPlayer = (EntityPlayerMP) aEntity;
-                aPlayer.dimension = aDimension;
-                aPlayer.playerNetServerHandler.sendPacket(new S07PacketRespawn(aPlayer.dimension, aPlayer.worldObj.difficultySetting, aPlayer.worldObj.getWorldInfo().getTerrainType(), aPlayer.theItemInWorldManager.getGameType()));
-                tOriginalWorld.removePlayerEntityDangerously(aPlayer);
-                aPlayer.isDead = false;
-                aPlayer.setWorld(tTargetWorld);
-                MinecraftServer.getServer().getConfigurationManager().func_72375_a(aPlayer, tOriginalWorld);
+//                aPlayer.dimension = aDimension;
+//                aPlayer.playerNetServerHandler.sendPacket(new S07PacketRespawn(aPlayer.dimension, aPlayer.worldObj.difficultySetting, aPlayer.worldObj.getWorldInfo().getTerrainType(), aPlayer.theItemInWorldManager.getGameType()));
+//                tOriginalWorld.removePlayerEntityDangerously(aPlayer);
+//                aPlayer.isDead = false;
+//                aPlayer.setWorld(tTargetWorld);
+//                MinecraftServer.getServer().getConfigurationManager().func_72375_a(aPlayer, tOriginalWorld);
+//                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
+//                aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
+//                MinecraftServer.getServer().getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
+//                MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(aPlayer);
+//                Iterator tIterator = aPlayer.getActivePotionEffects().iterator();
+//                while (tIterator.hasNext()) {
+//                    PotionEffect potioneffect = (PotionEffect) tIterator.next();
+//                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
+//                }
+//                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
+            	aPlayer.travelToDimension(aDimension);
                 aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-                aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
-                MinecraftServer.getServer().getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
-                MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(aPlayer);
-                Iterator tIterator = aPlayer.getActivePotionEffects().iterator();
-                while (tIterator.hasNext()) {
-                    PotionEffect potioneffect = (PotionEffect) tIterator.next();
-                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
-                }
-                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
+            	
             } else {
                 aEntity.setPosition(aX + 0.5, aY + 0.5, aZ + 0.5);
                 aEntity.worldObj.removeEntity(aEntity);
@@ -1532,15 +1536,17 @@ public class GT_Utility {
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
         ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		int[] tInts = GT_Proxy.chunkData.get(tPos);
+    		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
     			if(tInts[0]>=0){tAmount = tInts[0];}
     		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
     	tAmount = tAmount - 5;
-    	GT_Proxy.chunkData.put(tPos, new int[]{tAmount});
+    	tInts[0] = tAmount;
+    	GT_Proxy.chunkData.put(tPos, tInts);
     	
         return new FluidStack(tFluid, tAmount);
     }
@@ -1557,7 +1563,7 @@ public class GT_Utility {
 
         tList.add("----- X: " + aX + " Y: " + aY + " Z: " + aZ + " -----");
         try {
-            if (tTileEntity != null && tTileEntity instanceof IInventory)
+            if (tTileEntity instanceof IInventory)
                 tList.add("Name: " + ((IInventory) tTileEntity).getInventoryName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
             else
                 tList.add("Name: " + tBlock.getUnlocalizedName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
@@ -1720,10 +1726,11 @@ public class GT_Utility {
                                         + "  Humidity: " + ((ic2.api.crops.ICropTile) tTileEntity).getHumidity()
                                         + "  Air-Quality: " + ((ic2.api.crops.ICropTile) tTileEntity).getAirQuality()
                         );
-                        String tString = E;
+                        StringBuilder tStringB = new StringBuilder();
                         for (String tAttribute : ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].attributes()) {
-                            tString += ", " + tAttribute;
+                            tStringB.append(", ").append(tAttribute);
                         }
+                        String tString = tStringB.toString();
                         tList.add("Attributes:" + tString.replaceFirst(",", E));
                         tList.add("Discovered by: " + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].discoveredBy());
                     }
@@ -1736,6 +1743,17 @@ public class GT_Utility {
             FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
             tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
         }
+//        if(aPlayer.capabilities.isCreativeMode){
+        	ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        	if(GT_Proxy.chunkData.containsKey(tPos)){
+        		int[] tPollution = GT_Proxy.chunkData.get(tPos);
+        		if(tPollution.length>1){
+        		tList.add("Pollution in Chunk: "+tPollution[1]);
+        		}else{
+        			tList.add("No Pollution in Chunk");
+        		}
+        	}
+//        }
 
         try {
             if (tBlock instanceof IDebugableBlock) {
@@ -1981,16 +1999,14 @@ public class GT_Utility {
             if (aStack != null) {
                 NBTTagList nbttaglist = aStack.getEnchantmentTagList();
                 if (nbttaglist != null) {
-                    for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                        try {
+                    try {
+                        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
                             short short1 = nbttaglist.getCompoundTagAt(i).getShort("id");
                             short short2 = nbttaglist.getCompoundTagAt(i).getShort("lvl");
                             if (Enchantment.enchantmentsList[short1] != null)
                                 aBullshitModifier.calculateModifier(Enchantment.enchantmentsList[short1], short2);
-                        } catch (Throwable e) {
-                            //
                         }
-                    }
+                    } catch (Throwable e) {/**/}
                 }
             }
         }

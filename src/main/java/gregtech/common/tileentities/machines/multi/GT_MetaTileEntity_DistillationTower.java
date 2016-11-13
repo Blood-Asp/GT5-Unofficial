@@ -1,10 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -21,6 +16,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GT_MetaTileEntity_DistillationTower
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -41,17 +40,18 @@ public class GT_MetaTileEntity_DistillationTower
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Distillation Tower",
-                "Size: 3x3x6 (Hollow)", "Controller (front bottom)",
-                "1x Input Hatch (bottom)",
-                "5x Output Hatch (one each height level besides botton)",
-                "1x Output Bus (Botton)", "1x Energy Hatch (anywhere)",
-                "1x Maintenance Hatch (anywhere)",
-                "Clean Stainless Steel Casings for the rest (26 at least!)"};
+                "Size(WxHxD): 3x6x3 (Hollow), Controller (Front bottom)",
+                "1x Input Hatch (Any bottom layer casing)",
+                "5x Output Hatch (Any casing besides bottom layer)",
+                "1x Output Bus (Any bottom layer casing)",
+                "1x Maintenance Hatch (Any casing)",
+                "1x Energy Hatch (Any casing)",
+                "Clean Stainless Steel Casings for the rest (36 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[49], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER)};
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[49], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[49]};
     }
@@ -87,12 +87,13 @@ public class GT_MetaTileEntity_DistillationTower
                 }
             }
         }
-    	
+
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, 1);
+        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
         if (tFluids.length > 0) {
-        	GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, new ItemStack[]{});
+        	for(int i = 0;i<tFluids.length;i++){
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
             if (tRecipe != null) {
                 if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
@@ -114,9 +115,10 @@ public class GT_MetaTileEntity_DistillationTower
                     this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
                     this.mOutputFluids = tRecipe.mFluidOutputs.clone();
-                	ArrayUtils.reverse(mOutputFluids);
+                    ArrayUtils.reverse(mOutputFluids);
                     updateSlots();
                     return true;
+                	}
                 }
             }
         }
@@ -159,7 +161,8 @@ public class GT_MetaTileEntity_DistillationTower
             return false;
         }
         GT_MetaTileEntity_Hatch_Output[] tmpHatches = new GT_MetaTileEntity_Hatch_Output[5];
-        for (int i = 0; i < this.mOutputHatches.size(); i++) {
+        int mOutputHatches_sS=this.mOutputHatches.size();
+        for (int i = 0; i < mOutputHatches_sS; i++) {
             int hatchNumber = this.mOutputHatches.get(i).getBaseMetaTileEntity().getYCoord() - 1 - height;
             if (tmpHatches[hatchNumber] == null) {
                 tmpHatches[hatchNumber] = this.mOutputHatches.get(i);
@@ -171,7 +174,8 @@ public class GT_MetaTileEntity_DistillationTower
         for (int i = 0; i < tmpHatches.length; i++) {
             this.mOutputHatches.add(tmpHatches[i]);
         }
-        return tAmount >= 26;
+        if(this.mMaintenanceHatches.size()!=1)return false;
+        return tAmount >= 36;
     }
 
     public boolean ignoreController(Block tTileEntity) {

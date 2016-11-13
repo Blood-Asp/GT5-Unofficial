@@ -76,11 +76,9 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                                 tList.add(GT_Utility.copyAmount(64L, new Object[]{tStack}));
                                 tStack.stackSize -= 64;
                             }
-                            if ((tStack.stackSize > 0) && (tList.size() < 6)) {
-                                if (tCapsuleCount + GT_ModHandler.getCapsuleCellContainerCountMultipliedWithStackSize(new ItemStack[]{tStack}) <= 64L) {
-                                    tCapsuleCount += GT_ModHandler.getCapsuleCellContainerCountMultipliedWithStackSize(new ItemStack[]{tStack});
-                                    tList.add(tStack);
-                                }
+                            if ((tStack.stackSize > 0) && (tList.size() < 6) && (tCapsuleCount + GT_ModHandler.getCapsuleCellContainerCountMultipliedWithStackSize(new ItemStack[]{tStack}) <= 64L)) {
+                                tCapsuleCount += GT_ModHandler.getCapsuleCellContainerCountMultipliedWithStackSize(new ItemStack[]{tStack});
+                                tList.add(tStack);
                             }
                         }
                     }
@@ -88,7 +86,8 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
             tItemAmount = (tItemAmount * tDensityMultiplier % aMaterial.getDensity() > 0L ? 1 : 0) + tItemAmount * tDensityMultiplier / aMaterial.getDensity();
             if (tList.size() > 0) {
                 FluidStack tFluid = null;
-                for (int i = 0; i < tList.size(); i++) {
+                int tList_sS=tList.size();
+                for (int i = 0; i < tList_sS; i++) {
                     if ((!ItemList.Cell_Air.isStackEqual(tList.get(i))) && ((tFluid = GT_Utility.getFluidForFilledItem((ItemStack) tList.get(i), true)) != null)) {
                         tFluid.amount *= ((ItemStack) tList.get(i)).stackSize;
                         tCapsuleCount -= GT_ModHandler.getCapsuleCellContainerCountMultipliedWithStackSize(new ItemStack[]{(ItemStack) tList.get(i)});

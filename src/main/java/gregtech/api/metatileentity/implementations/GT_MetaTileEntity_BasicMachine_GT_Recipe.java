@@ -11,11 +11,13 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_ModHandler.RecipeBits;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import ic2.core.Ic2Items;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Locale;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.V;
@@ -34,7 +36,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
     private final boolean mSharedTank, mRequiresFluidForFiltering;
     private final byte mGUIParameterA, mGUIParameterB;
     public GT_MetaTileEntity_BasicMachine_GT_Recipe(int aID, String aName, String aNameRegional, int aTier, String aDescription, GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aGUIParameterA, int aGUIParameterB, String aGUIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect, String aOverlays, Object[] aRecipe) {
-        super(aID, aName, aNameRegional, aTier, aRecipes.mAmperage, aDescription, aInputSlots, aOutputSlots, aGUIName, aRecipes.mNEIName, new ITexture[]{new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase() + "/OVERLAY_BOTTOM"))});
+        super(aID, aName, aNameRegional, aTier, aRecipes.mAmperage, aDescription, aInputSlots, aOutputSlots, aGUIName, aRecipes.mNEIName, new ITexture[]{new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM"))});
         mSharedTank = aSharedTank;
         mTankCapacity = aTankCapacity;
         mSpecialEffect = aSpecialEffect;
@@ -69,6 +71,11 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
 
                 if (aRecipe[i] == X.GLASS) {
                     switch (mTier) {
+                        case 6:
+                        case 7:
+                        case 8:
+                        	aRecipe[i] = Ic2Items.reinforcedGlass;
+                        	break;
                         default:
                             aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
                             break;
@@ -90,6 +97,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             break;
                         case 4:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.Titanium);
+                            break;
+                        case 5:
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.TungstenSteel);
+                            break;
+                        case 6:
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSG);
+                            break;
+                        case 7:
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.HSSE);
+                            break;
+                        case 8:
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
                             break;
                         default:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.TungstenSteel);
@@ -113,6 +132,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 4:
                             aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.Titanium);
                             break;
+                        case 5:
+                            aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.TungstenSteel);
+                            break;
+                        case 6:
+                            aRecipe[i] = OrePrefixes.pipeSmall.get(Materials.Ultimate);
+                            break;
+                        case 7:
+                            aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.Ultimate);
+                            break;
+                        case 8:
+                            aRecipe[i] = OrePrefixes.pipeLarge.get(Materials.Ultimate);
+                            break;
                         default:
                             aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.TungstenSteel);
                             break;
@@ -135,6 +166,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 4:
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Nichrome);
                             break;
+                        case 5:
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.TungstenSteel);
+                            break;
+                        case 6:
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.HSSG);
+                            break;
+                        case 7:
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Naquadah);
+                            break;
+                        case 8:
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.NaquadahAlloy);
+                            break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Nichrome);
                             break;
@@ -156,6 +199,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             break;
                         case 4:
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Nichrome);
+                            break;
+                        case 5:
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.TungstenSteel);
+                            break;
+                        case 6:
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.HSSG);
+                            break;
+                        case 7:
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Naquadah);
+                            break;
+                        case 8:
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.NaquadahAlloy);
                             break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Nichrome);
@@ -183,8 +238,16 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 3:
                             aRecipe[i] = OrePrefixes.stick.get(Materials.SteelMagnetic);
                             break;
-                        default:
+                        case 4:
+                        case 5:
                             aRecipe[i] = OrePrefixes.stick.get(Materials.NeodymiumMagnetic);
+                            break;
+                        case 6:
+                        case 7:
+                            aRecipe[i] = OrePrefixes.stickLong.get(Materials.NeodymiumMagnetic);
+                            break;
+                        default:
+                            aRecipe[i] = OrePrefixes.block.get(Materials.NeodymiumMagnetic);
                             break;
                     }
                     continue;
@@ -227,8 +290,17 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 4:
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.AnnealedCopper);
                             break;
+                        case 5:
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.AnnealedCopper);
+                            break;
+                        case 6:
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.YttriumBariumCuprate);
+                            break;
+                        case 7:
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Superconductor);
+                            break;
                         default:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.AnnealedCopper);
+                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Superconductor);
                             break;
                     }
                     continue;
@@ -315,13 +387,13 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.rotor.get(Materials.TungstenSteel);
                             break;
                         case 6:
-                            aRecipe[i] = OrePrefixes.rotor.get(Materials.TungstenSteel);
+                            aRecipe[i] = OrePrefixes.rotor.get(Materials.Chrome);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.rotor.get(Materials.TungstenSteel);
+                            aRecipe[i] = OrePrefixes.rotor.get(Materials.Iridium);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.rotor.get(Materials.TungstenSteel);
+                            aRecipe[i] = OrePrefixes.rotor.get(Materials.Osmium);
                             break;
                     }
                     continue;
