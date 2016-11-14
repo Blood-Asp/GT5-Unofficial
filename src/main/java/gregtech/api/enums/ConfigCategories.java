@@ -61,6 +61,6 @@ public enum ConfigCategories {
         hammertripleplate,
         hammerquadrupleplate,
         hammerquintupleplate,
-		scoop;
+        scoop;
     }
 }
