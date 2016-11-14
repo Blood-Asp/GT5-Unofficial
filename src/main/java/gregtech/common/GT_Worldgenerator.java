@@ -83,7 +83,7 @@ public class GT_Worldgenerator
         }
 
         public void run() {
-            if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
+            if (((this.mX / 16 - 1) % 3 == 0) && ((this.mZ / 16 - 1) % 3 == 0)) {
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
