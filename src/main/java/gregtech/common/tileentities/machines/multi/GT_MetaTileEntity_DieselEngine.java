@@ -238,9 +238,21 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
             }
         }
 
+        long storedEnergy=0;
+        long maxEnergy=0;
+        for(GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                storedEnergy+=tHatch.getBaseMetaTileEntity().getStoredEU();
+                maxEnergy+=tHatch.getBaseMetaTileEntity().getEUCapacity();
+            }
+        }
+
         return new String[]{
                 EnumChatFormatting.BLUE+"Diesel Engine"+EnumChatFormatting.RESET,
-                "Current Output: "+EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t",
+                "Stored Energy:",
+                EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
+                "Current Output: "+EnumChatFormatting.RED+(-mEUt)+EnumChatFormatting.RESET+" EU/t",
                 "Fuel Consumption: "+EnumChatFormatting.YELLOW+fuelConsumption+EnumChatFormatting.RESET+" L/t",
                 "Fuel Value: "+EnumChatFormatting.YELLOW+fuelValue+EnumChatFormatting.RESET+" EU/L",
                 "Fuel Remaining: "+EnumChatFormatting.GOLD+fuelRemaining+EnumChatFormatting.RESET+" L",
