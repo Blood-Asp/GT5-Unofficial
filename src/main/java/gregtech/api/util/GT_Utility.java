@@ -1464,6 +1464,8 @@ public class GT_Utility {
     }
 
     public static boolean moveEntityToDimensionAtCoords(Entity entity, int aDimension, double aX, double aY, double aZ) {
+        //Credit goes to BrandonCore Author :!:
+
         if (entity == null || entity.worldObj.isRemote) return false;
         if (entity.ridingEntity != null) entity.mountEntity(null);
         if (entity.riddenByEntity != null) entity.riddenByEntity.mountEntity(null);
