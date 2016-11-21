@@ -1189,7 +1189,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
 
 
         ItemList.Charcoal_Pile.set(new GT_MetaTileEntity_Charcoal_Pit(1155, "multimachine.charcoalpile", "Charcoal Pile Igniter").getStackForm(1));
-        GT_ModHandler.addCraftingRecipe(ItemList.Charcoal_Pile.get(1L, new Object[0]), bitsd, new Object[]{"EXE", "EME", " C ", 'M', ItemList.Hull_Steel_Bricks, 'E', OrePrefixes.plate.get(Materials.AnyBronze), 'C', new ItemStack(Items.flint_and_steel, 1), 'X', OrePrefixes.rotor.get(Materials.Iron),});
+        GT_ModHandler.addCraftingRecipe(ItemList.Charcoal_Pile.get(1L, new Object[0]), bitsd, new Object[]{"EXE", "EME", " C ", 'M', ItemList.Hull_Steel_Bricks, 'E', OrePrefixes.plate.get(Materials.AnyBronze), 'C', new ItemStack(Items.flint_and_steel, 1), 'X', OrePrefixes.rotor.get(Materials.Steel),});
 
         ItemList.Seismic_Prospector.set(new GT_MetaTileEntity_SeismicProspector(1156, "basicmachine.seismicprospector", "Seismic Prospector", 1).getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CCC", 'M', ItemList.Hull_Steel, 'W', OrePrefixes.plateDouble.get(Materials.Steel), 'E', OrePrefixes.circuit.get(Materials.Basic), 'C', ItemList.Sensor_LV});
