@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 public class GT_Container_Teleporter
         extends GT_ContainerMetaTile_Machine {
-    public int mEgg = 0;
+    //public int mEgg = 0;
     public int mTargetD = 0;
     public int mTargetZ = 0;
     public int mTargetY = 0;
@@ -119,7 +119,7 @@ public class GT_Container_Teleporter
         this.mTargetY = ((GT_MetaTileEntity_Teleporter) this.mTileEntity.getMetaTileEntity()).mTargetY;
         this.mTargetZ = ((GT_MetaTileEntity_Teleporter) this.mTileEntity.getMetaTileEntity()).mTargetZ;
         this.mTargetD = ((GT_MetaTileEntity_Teleporter) this.mTileEntity.getMetaTileEntity()).mTargetD;
-        this.mEgg = (((GT_MetaTileEntity_Teleporter) this.mTileEntity.getMetaTileEntity()).hasDimensionalTeleportCapability() ? 1 : 0);
+        //this.mEgg = (((GT_MetaTileEntity_Teleporter) this.mTileEntity.getMetaTileEntity()).hasDimensionalTeleportCapability() ? 1 : 0);
 
         Iterator var2 = this.crafters.iterator();
         while (var2.hasNext()) {
@@ -132,7 +132,7 @@ public class GT_Container_Teleporter
             var1.sendProgressBarUpdate(this, 105, this.mTargetZ >>> 16);
             var1.sendProgressBarUpdate(this, 106, this.mTargetD & 0xFFFF);
             var1.sendProgressBarUpdate(this, 107, this.mTargetD >>> 16);
-            var1.sendProgressBarUpdate(this, 108, this.mEgg);
+            var1.sendProgressBarUpdate(this, 108, 1);
         }
     }
 
@@ -164,8 +164,8 @@ public class GT_Container_Teleporter
             case 107:
                 this.mTargetD = (this.mTargetD & 0xFFFF | par2 << 16);
                 break;
-            case 108:
-                this.mEgg = par2;
+            //case 108:
+            //    this.mEgg = par2;
         }
     }
 }
