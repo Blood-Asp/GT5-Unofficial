@@ -215,6 +215,8 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
             }
         }
     }
+    
+    public boolean hasDimensionalTeleportCapability() {return true;}
 
     public boolean isDimensionalTeleportAvailable() {
         return (this.mDebug) || ((GT_Utility.isRealDimension(this.mTargetD)) && (GT_Utility.isRealDimension(getBaseMetaTileEntity().getWorld().provider.dimensionId)));
