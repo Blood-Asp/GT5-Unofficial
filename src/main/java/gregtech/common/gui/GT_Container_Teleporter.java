@@ -132,7 +132,7 @@ public class GT_Container_Teleporter
             var1.sendProgressBarUpdate(this, 105, this.mTargetZ >>> 16);
             var1.sendProgressBarUpdate(this, 106, this.mTargetD & 0xFFFF);
             var1.sendProgressBarUpdate(this, 107, this.mTargetD >>> 16);
-            var1.sendProgressBarUpdate(this, 108, 1);
+            //var1.sendProgressBarUpdate(this, 108, 1);
         }
     }
 
