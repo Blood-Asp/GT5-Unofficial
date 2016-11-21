@@ -43,6 +43,9 @@ import net.minecraft.nbt.NBTBase.NBTPrimitive;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.network.play.server.S07PacketRespawn;
+import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
@@ -52,7 +55,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -1461,68 +1463,93 @@ public class GT_Utility {
         return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
 
-    public static boolean moveEntityToDimensionAtCoords(Entity aEntity, int aDimension, double aX, double aY, double aZ) {
-        WorldServer tTargetWorld = DimensionManager.getWorld(aDimension), tOriginalWorld = DimensionManager.getWorld(aEntity.worldObj.provider.dimensionId);
-        if (tTargetWorld != null && tOriginalWorld != null && aEntity.worldObj.provider.dimensionId != aDimension) {
-            if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
-            if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
+    public static boolean moveEntityToDimensionAtCoords(Entity entity, int aDimension, double aX, double aY, double aZ) {
+        if (entity == null || entity.worldObj.isRemote) return false;
+        if (entity.ridingEntity != null) entity.mountEntity(null);
+        if (entity.riddenByEntity != null) entity.riddenByEntity.mountEntity(null);
 
-            if (aEntity instanceof EntityPlayerMP) {
-                EntityPlayerMP aPlayer = (EntityPlayerMP) aEntity;
-//                aPlayer.dimension = aDimension;
-//                aPlayer.playerNetServerHandler.sendPacket(new S07PacketRespawn(aPlayer.dimension, aPlayer.worldObj.difficultySetting, aPlayer.worldObj.getWorldInfo().getTerrainType(), aPlayer.theItemInWorldManager.getGameType()));
-//                tOriginalWorld.removePlayerEntityDangerously(aPlayer);
-//                aPlayer.isDead = false;
-//                aPlayer.setWorld(tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().func_72375_a(aPlayer, tOriginalWorld);
-//                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-//                aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(aPlayer);
-//                Iterator tIterator = aPlayer.getActivePotionEffects().iterator();
-//                while (tIterator.hasNext()) {
-//                    PotionEffect potioneffect = (PotionEffect) tIterator.next();
-//                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
-//                }
-//                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
-                System.out.println("GT teleporting: "+aPlayer.getDisplayName()+" to dimension: "+aDimension);
-                tTargetWorld.theChunkProviderServer.loadChunk((int)aX >> 4, (int)aY >> 4);
-            	aPlayer.mcServer.getConfigurationManager().transferPlayerToDimension(aPlayer,aDimension, new Teleporter(aPlayer.mcServer.worldServerForDimension(aDimension)));
-                aPlayer.mcServer.getConfigurationManager().func_72375_a(aPlayer,tTargetWorld);
-                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-                //aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
-                //aPlayer.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
-                //aPlayer.mcServer.getConfigurationManager().syncPlayerInventory(aPlayer);
-            } else {
-                aEntity.setPosition(aX + 0.5, aY + 0.5, aZ + 0.5);
-                aEntity.worldObj.removeEntity(aEntity);
-                aEntity.dimension = aDimension;
-                aEntity.isDead = false;
-                Entity tNewEntity = EntityList.createEntityByName(EntityList.getEntityString(aEntity), tTargetWorld);
-                if (tNewEntity != null) {
-                    tNewEntity.copyDataFrom(aEntity, true);
-                    aEntity.setDead();
-                    tNewEntity.isDead = false;
-                    boolean temp = tNewEntity.forceSpawn;
-                    tNewEntity.forceSpawn = true;
-                    tTargetWorld.spawnEntityInWorld(tNewEntity);
-                    tNewEntity.forceSpawn = temp;
-                    tNewEntity.isDead = false;
-                    aEntity = tNewEntity;
-                }
+        World startWorld = entity.worldObj;
+        World destinationWorld = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(aDimension);
+
+        if (destinationWorld == null) {return false;}
+
+        boolean interDimensional = startWorld.provider.dimensionId != destinationWorld.provider.dimensionId;
+        if(!interDimensional)return false;
+        startWorld.updateEntityWithOptionalForce(entity, false);//added
+
+        if ((entity instanceof EntityPlayerMP) && interDimensional) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            player.closeScreen();//added
+            player.dimension = aDimension;
+            player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, destinationWorld.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType()));
+            ((WorldServer) startWorld).getPlayerManager().removePlayer(player);
+
+            startWorld.playerEntities.remove(player);
+            startWorld.updateAllPlayersSleepingFlag();
+            int i = entity.chunkCoordX;
+            int j = entity.chunkCoordZ;
+            if ((entity.addedToChunk) && (startWorld.getChunkProvider().chunkExists(i, j))) {
+                startWorld.getChunkFromChunkCoords(i, j).removeEntity(entity);
+                startWorld.getChunkFromChunkCoords(i, j).isModified = true;
             }
-
-            if (aEntity instanceof EntityLivingBase) {
-                ((EntityLivingBase) aEntity).setPositionAndUpdate(aX, aY, aZ);
-            } else {
-                aEntity.setPosition(aX, aY, aZ);
-            }
-
-            tOriginalWorld.resetUpdateEntityTick();
-            tTargetWorld.resetUpdateEntityTick();
-            return true;
+            startWorld.loadedEntityList.remove(entity);
+            startWorld.onEntityRemoved(entity);
         }
-        return false;
+
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        ((WorldServer) destinationWorld).theChunkProviderServer.loadChunk((int) aX >> 4, (int) aZ >> 4);
+
+        destinationWorld.theProfiler.startSection("placing");
+        if (interDimensional) {
+            if (!(entity instanceof EntityPlayer)) {
+                NBTTagCompound entityNBT = new NBTTagCompound();
+                entity.isDead = false;
+                entityNBT.setString("id", EntityList.getEntityString(entity));
+                entity.writeToNBT(entityNBT);
+                entity.isDead = true;
+                entity = EntityList.createEntityFromNBT(entityNBT, destinationWorld);
+                if (entity == null) {
+                    return false;
+                }
+                entity.dimension = destinationWorld.provider.dimensionId;
+            }
+            destinationWorld.spawnEntityInWorld(entity);
+            entity.setWorld(destinationWorld);
+        }
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        destinationWorld.updateEntityWithOptionalForce(entity, false);
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        if ((entity instanceof EntityPlayerMP)) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            if (interDimensional) {
+                player.mcServer.getConfigurationManager().func_72375_a(player, (WorldServer) destinationWorld);
+            }
+            player.playerNetServerHandler.setPlayerLocation(aX, aY, aY, player.rotationYaw, player.rotationPitch);
+        }
+
+        destinationWorld.updateEntityWithOptionalForce(entity, false);
+
+        if (((entity instanceof EntityPlayerMP)) && interDimensional) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            player.theItemInWorldManager.setWorld((WorldServer) destinationWorld);
+            player.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, (WorldServer) destinationWorld);
+            player.mcServer.getConfigurationManager().syncPlayerInventory(player);
+
+            for (PotionEffect potionEffect : (Iterable<PotionEffect>) player.getActivePotionEffects()) {
+                player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potionEffect));
+            }
+
+            player.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
+            FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, startWorld.provider.dimensionId, destinationWorld.provider.dimensionId);
+        }
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        destinationWorld.theProfiler.endSection();
+        entity.fallDistance = 0;
+        return true;
     }
 
     public static FluidStack undergroundOil(World aWorld, int aX, int aZ,boolean save,int sub) {
