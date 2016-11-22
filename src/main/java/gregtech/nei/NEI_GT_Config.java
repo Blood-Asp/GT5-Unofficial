@@ -8,6 +8,7 @@ import gregtech.api.util.GT_Utility;
 public class NEI_GT_Config
         implements IConfigureNEI {
     public static boolean sIsAdded = true;
+    public static GT_NEI_AssLineHandler ALH;
 
     public void loadConfig() {
         sIsAdded = false;
@@ -17,7 +18,7 @@ public class NEI_GT_Config
             }
         }
         if(FMLCommonHandler.instance().getEffectiveSide().isClient())
-            new GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes);
+            ALH=new GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes);
         sIsAdded = true;
     }
 

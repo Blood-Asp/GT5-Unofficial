@@ -58,7 +58,8 @@ public class GT_NEI_AssLineHandler
     }
 
     public TemplateRecipeHandler newInstance() {
-        return new GT_NEI_AssLineHandler(this.mRecipeMap);
+        NEI_GT_Config.ALH=new GT_NEI_AssLineHandler(this.mRecipeMap);
+        return NEI_GT_Config.ALH;
     }
 
     public void loadCraftingRecipes(String outputId, Object... results) {
@@ -71,6 +72,10 @@ public class GT_NEI_AssLineHandler
         } else {
             super.loadCraftingRecipes(outputId, results);
         }
+    }
+
+    public void clearRecipes(){
+        this.arecipes.clear();
     }
 
     public void loadCraftingRecipes(ItemStack aResult) {
@@ -215,14 +220,14 @@ public class GT_NEI_AssLineHandler
     public static class GT_RectHandler
             implements IContainerInputHandler, IContainerTooltipHandler {
         public boolean mouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
-            if (canHandle(gui)) {
-                if (button == 0) {
-                    return transferRect(gui, false);
-                }
-                if (button == 1) {
-                    return transferRect(gui, true);
-                }
-            }
+            //if (canHandle(gui)) {
+            //    if (button == 0) {
+            //        return transferRect(gui, false);
+            //    }
+            //    if (button == 1) {
+            //        return transferRect(gui, true);
+            //    }
+            //}
             return false;
         }
 
@@ -236,11 +241,11 @@ public class GT_NEI_AssLineHandler
         }
 
         public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
-            if ((canHandle(gui)) && (currenttip.isEmpty())) {
-                if (new Rectangle(138, 18, 18, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) {
-                    currenttip.add("Recipes");
-                }
-            }
+            //if ((canHandle(gui)) && (currenttip.isEmpty())) {
+            //    if (new Rectangle(138, 18, 18, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) {
+            //        currenttip.add("Recipes");
+            //    }
+            //}
             return currenttip;
         }
 
