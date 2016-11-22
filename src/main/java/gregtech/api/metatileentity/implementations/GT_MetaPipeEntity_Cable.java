@@ -38,9 +38,11 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public final Materials mMaterial;
     public final long mCableLossPerMeter, mAmperage, mVoltage;
     public final boolean mInsulated, mCanShock;
-    public long mTransferredAmperage = 0, mTransferredAmperageLast20 = 0, mTransferredVoltageLast20 = 0;
+    public int mTransferredAmperage = 0, mTransferredAmperageLast20 = 0,mTransferredAmperageLast20OK=0,mTransferredAmperageOK=0;
+    public long mTransferredVoltageLast20 = 0, mTransferredVoltage = 0,mTransferredVoltageLast20OK=0,mTransferredVoltageOK=0;
     public long mRestRF;
-    public short mOverheat,mLastOverheat;
+    public short mOverheat,mLastOverheat=10;
+    public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -198,37 +200,45 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
+        mTransferredVoltage=(Math.max(mTransferredVoltage,aVoltage));
         mTransferredAmperage += rUsedAmperes;
-        mTransferredVoltageLast20 = Math.max(mTransferredVoltageLast20, aVoltage);
+        mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
         boolean didOverheat=false;
         if (aVoltage > mVoltage) {
-            mOverheat+=Math.max(100,100*(GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage)));
+            if(mLastOverheat<=5)
+                mOverheat+=(Math.max(100,100*(GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage))));
             didOverheat=true;
         }
         if (mTransferredAmperage > mAmperage) {
-            mOverheat+=100*(mTransferredAmperage-mAmperage);
+            if(mLastOverheat<=5)
+                mOverheat+=(100*(mTransferredAmperage-mAmperage));
             didOverheat=true;
         }
+        if(mOverheat>mMaxOverheat && mLastOverheat<=0)
+            this.getBaseMetaTileEntity().setToFire();
         if (didOverheat) {
-            if(mLastOverheat==0)
+            if(mLastOverheat<=0)
                 mLastOverheat=5;
             return aAmperage;
         }
-        if(mOverheat>GT_Mod.gregtechproxy.mWireHeatingTicks * 100 && mLastOverheat==0)
-            getBaseMetaTileEntity().setToFire();
         return rUsedAmperes;
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
+            mTransferredVoltageOK=mTransferredVoltage;
+            mTransferredVoltage=0;
+            mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
             if(mOverheat>0)mOverheat--;
             if(mLastOverheat>0)mLastOverheat--;
             if (aTick % 20 == 0) {
-                mTransferredVoltageLast20 = 0;
+                mTransferredAmperageLast20OK=mTransferredAmperageLast20;
                 mTransferredAmperageLast20 = 0;
+                mTransferredVoltageLast20OK=mTransferredVoltageLast20;
+                mTransferredVoltageLast20 = 0;
                 mConnections = 0;
                 for (byte i = 0, j = 0; i < 6; i++) {
                     j = GT_Utility.getOppositeSide(i);
@@ -301,5 +311,29 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         //
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
+                "Max Load (1t):",
+                EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
+                        EnumChatFormatting.YELLOW + Long.toString(mAmperage) + EnumChatFormatting.RESET +" A",
+                "Max EU/p (1t):",
+                EnumChatFormatting.GREEN + Long.toString(mTransferredVoltageOK) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(mVoltage) + EnumChatFormatting.RESET +" EU",
+                "Max Load (20t): "+
+                    EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageLast20OK) + EnumChatFormatting.RESET +" A",
+                "Max EU/p (20t): "+
+                    EnumChatFormatting.GREEN + Long.toString(mTransferredVoltageLast20OK) + EnumChatFormatting.RESET +" EU",
+                "Overheat: "+
+                    EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET
+        };
     }
 }
