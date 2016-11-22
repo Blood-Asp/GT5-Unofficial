@@ -40,7 +40,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public final boolean mInsulated, mCanShock;
     public long mTransferredAmperage = 0, mTransferredAmperageLast20 = 0, mTransferredVoltageLast20 = 0;
     public long mRestRF;
-    public short mOverheat;
+    public short mOverheat,mLastOverheat;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -201,11 +201,22 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredAmperage += rUsedAmperes;
         mTransferredVoltageLast20 = Math.max(mTransferredVoltageLast20, aVoltage);
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
-        if (aVoltage > mVoltage || mTransferredAmperage > mAmperage) {
-        	if(mOverheat>GT_Mod.gregtechproxy.mWireHeatingTicks * 100){
-            getBaseMetaTileEntity().setToFire();}else{mOverheat +=100;}
+        boolean didOverheat=false;
+        if (aVoltage > mVoltage) {
+            mOverheat+=Math.max(100,100*(GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage)));
+            didOverheat=true;
+        }
+        if (mTransferredAmperage > mAmperage) {
+            mOverheat+=100*(mTransferredAmperage-mAmperage);
+            didOverheat=true;
+        }
+        if (didOverheat) {
+            if(mLastOverheat==0)
+                mLastOverheat=5;
             return aAmperage;
         }
+        if(mOverheat>GT_Mod.gregtechproxy.mWireHeatingTicks * 100 && mLastOverheat==0)
+            getBaseMetaTileEntity().setToFire();
         return rUsedAmperes;
     }
 
@@ -214,6 +225,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         if (aBaseMetaTileEntity.isServerSide()) {
             mTransferredAmperage = 0;
             if(mOverheat>0)mOverheat--;
+            if(mLastOverheat>0)mLastOverheat--;
             if (aTick % 20 == 0) {
                 mTransferredVoltageLast20 = 0;
                 mTransferredAmperageLast20 = 0;
