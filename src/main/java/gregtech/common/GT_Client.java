@@ -76,6 +76,8 @@ public class GT_Client extends GT_Proxy
     private final List mMoltenNegB;
     private final List mMoltenNegA = Arrays.asList(new Object[0]);
     private long mAnimationTick;
+    /**This is the place to def the value used below**/
+    //private long afterSomeTime;
     private boolean mAnimationDirection;
     private boolean isFirstClientPlayerTick;
     private String mMessage;
@@ -360,6 +362,17 @@ public class GT_Client extends GT_Proxy
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
             mAnimationTick++;
+            /**Something on the lines of this works for recipe visibility toggling**/
+            /**yes just change the mHidden thing, rest is done by custom NEI configurer GT_NEI_AssLineHandler**/
+            //if(!isFirstClientPlayerTick)afterSomeTime++;
+            //if(afterSomeTime>=600L){
+            //    afterSomeTime=0;
+            //    try {
+            //        for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList) {
+            //            recipe.mHidden ^= true;
+            //        }
+            //    }catch (Exception e){}
+            //}
             if (mAnimationTick % 50L == 0L)
                 {mAnimationDirection = !mAnimationDirection;}
             int tDirection = mAnimationDirection ? 1 : -1;
