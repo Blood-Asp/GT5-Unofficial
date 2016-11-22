@@ -321,7 +321,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public String[] getInfoData() {
         return new String[]{
-                EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
+                //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
                 "Max Load (1t):",
                 EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
                         EnumChatFormatting.YELLOW + Long.toString(mAmperage) + EnumChatFormatting.RESET +" A",
