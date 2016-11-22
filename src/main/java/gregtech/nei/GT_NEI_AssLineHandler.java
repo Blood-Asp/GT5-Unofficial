@@ -74,10 +74,6 @@ public class GT_NEI_AssLineHandler
         }
     }
 
-    public void clearRecipes(){
-        this.arecipes.clear();
-    }
-
     public void loadCraftingRecipes(ItemStack aResult) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aResult);
 
