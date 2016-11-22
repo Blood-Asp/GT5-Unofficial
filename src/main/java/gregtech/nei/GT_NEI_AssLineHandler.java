@@ -67,6 +67,8 @@ public class GT_NEI_AssLineHandler
             for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
                 if (!tRecipe.mHidden) {
                     this.arecipes.add(new CachedDefaultRecipe(tRecipe));
+                }else{
+                    this.arecipes.remove(new CachedDefaultRecipe(tRecipe));
                 }
             }
         } else {
@@ -103,6 +105,14 @@ public class GT_NEI_AssLineHandler
                         break;
                     }
                 }
+            }else{
+                CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
+                for (ItemStack tStack : tResults) {
+                    if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
+                        this.arecipes.remove(tNEIRecipe);
+                        break;
+                    }
+                }
             }
         }
         CachedDefaultRecipe tNEIRecipe;
@@ -134,6 +144,14 @@ public class GT_NEI_AssLineHandler
                 for (ItemStack tStack : tInputs) {
                     if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {
                         this.arecipes.add(tNEIRecipe);
+                        break;
+                    }
+                }
+            }else{
+                CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
+                for (ItemStack tStack : tInputs) {
+                    if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {
+                        this.arecipes.remove(tNEIRecipe);
                         break;
                     }
                 }
