@@ -6,6 +6,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ProcessingGemFlawless implements gregtech.api.interfaces.IOreRecipeRegistrator {
     public ProcessingGemFlawless() {
@@ -18,5 +19,7 @@ public class ProcessingGemFlawless implements gregtech.api.interfaces.IOreRecipe
         if (!aMaterial.contains(gregtech.api.enums.SubTag.NO_WORKING))
             GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.stickLong, aMaterial, 1L), GT_OreDictUnificator.getDust(aMaterial, aPrefix.mMaterialAmount - OrePrefixes.stickLong.mMaterialAmount), (int) Math.max(aMaterial.getMass() * 5L, 1L), 16);
         GT_Values.RA.addForgeHammerRecipe(aStack, GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 2L), 64, 16);
+        for(ItemStack is:OreDictionary.getOres("craftingLens"+aMaterial.mColor.mName.replace(" ","")))
+            GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.gem,aMaterial,3L), is,GT_Utility.copyAmount(1L, new Object[]{aStack}),1200,480);
     }
 }
