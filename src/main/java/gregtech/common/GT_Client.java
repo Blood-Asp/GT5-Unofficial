@@ -7,6 +7,7 @@ package gregtech.common;
 
 import codechicken.lib.vec.Rotation;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.GT_Mod;
@@ -20,16 +21,21 @@ import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
 import gregtech.common.render.*;
+import gregtech.loaders.misc.GT_Achievements;
+import gregtech.nei.NEI_GT_Config;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
@@ -73,6 +79,8 @@ public class GT_Client extends GT_Proxy
     private final List mMoltenNegB;
     private final List mMoltenNegA = Arrays.asList(new Object[0]);
     private long mAnimationTick;
+    /**This is the place to def the value used below**/
+    private long afterSomeTime;
     private boolean mAnimationDirection;
     private boolean isFirstClientPlayerTick;
     private String mMessage;
@@ -282,6 +290,18 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
         if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
+            /**Something on the lines of this works for recipe visibility toggling**/
+            /**yes just change the mHidden thing, rest is done by custom NEI configurer GT_NEI_AssLineHandler**/
+            afterSomeTime++;
+            if(afterSomeTime>=100L){
+                afterSomeTime=0;
+                StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
+                try {
+                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    }
+                }catch (Exception e){}
+            }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
                 if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix

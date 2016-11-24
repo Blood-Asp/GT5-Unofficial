@@ -44,7 +44,7 @@ public class GT_NEI_DefaultHandler
 
     protected final GT_Recipe.GT_Recipe_Map mRecipeMap;
 
-    public GT_NEI_DefaultHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {
+    public GT_NEI_DefaultHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {//this is called when recipes should be shown
         this.mRecipeMap = aRecipeMap;
         this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 13, 36, 18), getOverlayIdentifier(), new Object[0]));
         if (!NEI_GT_Config.sIsAdded) {

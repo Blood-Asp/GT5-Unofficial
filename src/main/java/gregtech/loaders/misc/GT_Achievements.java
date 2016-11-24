@@ -15,6 +15,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +39,7 @@ public class GT_Achievements {
     public static List<Materials> oreList = new ArrayList<Materials>();
     public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
+    public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
     public ConcurrentHashMap<String, Boolean> issuedAchievements;
     public int adjX = 5;
@@ -71,6 +73,10 @@ public class GT_Achievements {
             }
             registerOreAchievement(oreList.get(i));
         }
+
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList)
+            registerAssAchievement(recipe);
+
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(2, 1, Materials.Flint, Materials.Wood, null), "", false);
         registerAchievement("crops", -4, 0, GT_ModHandler.getIC2Item("crop", 1L), "flintpick", false);
         registerAchievement("havestlead", -4, 2, ItemList.Crop_Drop_Plumbilia.get(1, new Object[]{}), "crops", false);
@@ -215,7 +221,6 @@ public class GT_Achievements {
         if (!GT_Mod.gregtechproxy.mAchievements) {
             return null;
         }
-        ;
         Achievement achievement = new Achievement(textId, textId, this.adjX + x, this.adjY + y, icon, requirement);
         if (special) {
             achievement.setSpecial();
@@ -252,6 +257,15 @@ public class GT_Achievements {
             oreReg++;
             return registerAchievement(aMaterial.name(), -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
                     aMaterial.mMetaItemSubID), AchievementList.openInventory, false);
+        }
+        return null;
+    }
+
+    public Achievement registerAssAchievement(GT_Recipe recipe) {
+        if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
+            assReg++;
+            return registerAchievement(recipe.getOutput(0).getUnlocalizedName(), -(11 + assReg % 5), ((assReg) / 5) - 8, recipe.getOutput(0)
+                    , AchievementList.openInventory, false);
         }
         return null;
     }
@@ -561,8 +575,15 @@ public class GT_Achievements {
             }
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");
-        }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
+        } else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
-            issueAchievement(player, "buildQArmor");}
+            issueAchievement(player, "buildQArmor");
+        }
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+            if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
+                issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
+                recipe.mHidden=false;
+            }
+        }
     }
 }
