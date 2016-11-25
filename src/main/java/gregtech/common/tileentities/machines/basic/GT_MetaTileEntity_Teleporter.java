@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.machines.basic;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -9,7 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Teleporter;

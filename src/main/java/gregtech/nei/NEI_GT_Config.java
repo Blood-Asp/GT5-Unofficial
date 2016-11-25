@@ -3,7 +3,6 @@ package gregtech.nei;
 import codechicken.nei.api.IConfigureNEI;
 import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 
 public class NEI_GT_Config
         implements IConfigureNEI {

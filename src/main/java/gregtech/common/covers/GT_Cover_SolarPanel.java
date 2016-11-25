@@ -1,20 +1,12 @@
 package gregtech.common.covers;
 
-import forestry.core.items.ItemRegistry;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OreDictNames;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_CoverBehavior;
-import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import ic2.api.item.ElectricItem;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 
 public class GT_Cover_SolarPanel
         extends GT_CoverBehavior {
