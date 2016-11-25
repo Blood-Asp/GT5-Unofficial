@@ -16,22 +16,22 @@ public class GT_Cover_ItemMeter
         } else {
             tSlots = new int[]{aCoverVariable - 2};
         }
-        int tAll = 0;
-        int tFull = 0;
+        int tMax = 0;
+        int tUsed = 0;
         for (int i : tSlots) {
-            if ((i > 0) && (i < aTileEntity.getSizeInventory())) {
-                tAll += 64;
+            if (i >= 0 && i < aTileEntity.getSizeInventory()) {
+                tMax+=64;
                 ItemStack tStack = aTileEntity.getStackInSlot(i);
-                if (tStack != null) {
-                    tFull += tStack.stackSize * 64 / tStack.getMaxStackSize();
-                }
+                if (tStack != null)
+                    tUsed += (tStack.stackSize<<6)/tStack.getMaxStackSize();
             }
         }
-        tAll /= 14;
-        if(tAll > 0)
-            aTileEntity.setOutputRedstoneSignal(aSide, aCoverVariable == 1 ? (byte)(15 - (tFull <= 0 ? 0 : tFull / tAll + 1)) : tFull <= 0 ? 0 : (byte)(tFull / tAll + 1));
-        else
-            aTileEntity.setOutputRedstoneSignal(aSide, ((byte)(aCoverVariable == 1 ? 15 : 0)));
+        if(tUsed==0)//nothing
+            aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 15 : 0));
+        else if(tUsed == tMax)//full
+            aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 0 : 15));
+        else//1-14 range
+            aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 14-((14*tUsed)/tMax) : 1+((14*tUsed)/tMax)) );
         return aCoverVariable;
     }
 
