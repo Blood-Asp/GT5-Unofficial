@@ -284,7 +284,7 @@ public class GregTech_API {
      * You should call @causeMachineUpdate in @Block.breakBlock and in @Block.onBlockAdded of your registered Block.
      * You don't need to register TileEntities which implement @IMachineBlockUpdateable
      *
-     * @param aID   the ID of your Block
+     * @param aBlock   the Block
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {

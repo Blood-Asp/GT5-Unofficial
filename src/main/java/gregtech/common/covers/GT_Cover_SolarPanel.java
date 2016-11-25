@@ -67,7 +67,7 @@ public class GT_Cover_SolarPanel
                 return true;
             }
         }
-        GT_Utility.sendChatToPlayer(aPlayer,"You need water bucket in inventory to clean the panel with hand.");
+        GT_Utility.sendChatToPlayer(aPlayer,"You need water bucket in inventory to clean the panel.");
         return false;
     }
 
