@@ -28,7 +28,7 @@ public class GT_Cover_ItemMeter
         }
         if(tUsed==0)//nothing
             aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 15 : 0));
-        else if(tUsed == tMax)//full
+        else if(tUsed >= tMax)//full
             aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 0 : 15));
         else//1-14 range
             aTileEntity.setOutputRedstoneSignal(aSide, (byte)(aCoverVariable == 1 ? 14-((14*tUsed)/tMax) : 1+((14*tUsed)/tMax)) );

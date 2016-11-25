@@ -5,6 +5,7 @@ import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.world.IBlockAccess;
 
 import static gregtech.api.enums.GT_Values.W;
 
