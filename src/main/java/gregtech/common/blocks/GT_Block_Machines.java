@@ -211,7 +211,7 @@ public class GT_Block_Machines
     public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int aX, int aY, int aZ) {
         TileEntity tTileEntity = blockAccess.getTileEntity(aX,aY,aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
-            AxisAlignedBB bbb=((IGregTechTileEntity)tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity)tTileEntity).getWorld(), aX, aY, aZ).getOffsetBoundingBox(-aX, -aY, -aZ);
+            AxisAlignedBB bbb=((IGregTechTileEntity)tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity)tTileEntity).getWorld(), 0, 0, 0);
             setBlockBounds((float)bbb.minX,(float)bbb.minY,(float)bbb.minZ,(float)bbb.maxX,(float)bbb.maxY,(float)bbb.maxZ);
             return;
         }
