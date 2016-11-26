@@ -207,7 +207,7 @@ public class GT_Block_Machines
         return super.getSelectedBoundingBoxFromPool(aWorld, aX, aY, aZ);
     }
 
-    @Override
+    @Override  //THIS
     public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int aX, int aY, int aZ) {
         TileEntity tTileEntity = blockAccess.getTileEntity(aX,aY,aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
@@ -216,6 +216,11 @@ public class GT_Block_Machines
             return;
         }
         super.setBlockBoundsBasedOnState(blockAccess,aX,aY,aZ);
+    }
+
+    @Override
+    public void setBlockBoundsForItemRender() {
+        super.setBlockBounds(0,0,0,1,1,1);
     }
 
     public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity collider) {

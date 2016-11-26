@@ -71,10 +71,7 @@ public class GT_Cover_SolarPanel
         return false;
     }
 
-
-
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }
-
 }
