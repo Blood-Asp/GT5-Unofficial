@@ -212,7 +212,12 @@ public class GT_Block_Machines
         TileEntity tTileEntity = blockAccess.getTileEntity(aX,aY,aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
             AxisAlignedBB bbb=((IGregTechTileEntity)tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity)tTileEntity).getWorld(), 0, 0, 0);
-            setBlockBounds((float)bbb.minX,(float)bbb.minY,(float)bbb.minZ,(float)bbb.maxX,(float)bbb.maxY,(float)bbb.maxZ);
+            minX=bbb.minX;
+            minY=bbb.minY;
+            minZ=bbb.minZ;
+            maxX=bbb.maxX;
+            maxY=bbb.maxY;
+            maxZ=bbb.maxZ;
             return;
         }
         super.setBlockBoundsBasedOnState(blockAccess,aX,aY,aZ);
