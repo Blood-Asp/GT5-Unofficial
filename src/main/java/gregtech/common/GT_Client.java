@@ -36,6 +36,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URL;
@@ -370,7 +371,7 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
-            //hideValue=shouldHeldItemHideThings();
+            hideValue=shouldHeldItemHideThings();
             mAnimationTick++;
             if (mAnimationTick % 50L == 0L)
                 {mAnimationDirection = !mAnimationDirection;}
@@ -538,33 +539,25 @@ public class GT_Client extends GT_Proxy
             aWorld.playSound(aX, aY, aZ, tString, 3F, tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F, false);
     }
 
-    //public static int hideValue=0;
+    public static int hideValue=0;
 
-    //private static int shouldHeldItemHideThings() {
-    //    try {
-    //        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-    //        if (player == null) return 0;
-    //        ItemStack held = player.getCurrentEquippedItem();
-    //        if (held == null) return 0;
-    //        int[] ids = OreDictionary.getOreIDs(held);
-    //        int hide = 0;
-    //        for (int i : ids) {
-    //            if (OreDictionary.getOreName(i).equals("craftingToolWrench")) {
-    //                hide |= 0x1;
-    //                continue;
-    //            }
-    //            if (OreDictionary.getOreName(i).equals("craftingToolWireCutter")) {
-    //                hide |= 0x2;
-    //                continue;
-    //            }
-    //            if (OreDictionary.getOreName(i).equals("craftingToolSolderingIron")) {
-    //                hide |= 0x3;
-    //                continue;
-    //            }
-    //        }
-    //        return hide;
-    //    }catch(Exception e){
-    //        return 0;
-    //    }
-    //}
+    private static int shouldHeldItemHideThings() {
+        try {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            if (player == null) return 0;
+            ItemStack held = player.getCurrentEquippedItem();
+            if (held == null) return 0;
+            int[] ids = OreDictionary.getOreIDs(held);
+            int hide = 0;
+            for (int i : ids) {
+                if (OreDictionary.getOreName(i).equals("craftingToolSolderingIron")) {
+                    hide |= 0x1;
+                    break;
+                }
+            }
+            return hide;
+        }catch(Exception e){
+            return 0;
+        }
+    }
 }
