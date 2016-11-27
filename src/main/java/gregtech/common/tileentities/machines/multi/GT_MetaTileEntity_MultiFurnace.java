@@ -267,7 +267,7 @@ public class GT_MetaTileEntity_MultiFurnace
                         " Efficiency: "+
                         EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
                 "Multi smelting: "+
-                        EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: "+EnumChatFormatting.GREEN+"(EU/t) / "+mCostDiscount+EnumChatFormatting.RESET,
+                        EnumChatFormatting.GREEN+mLevel*8+EnumChatFormatting.RESET+" Discount: (EU/t) / "+EnumChatFormatting.GREEN+mCostDiscount+EnumChatFormatting.RESET,
                 "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
         };
     }
