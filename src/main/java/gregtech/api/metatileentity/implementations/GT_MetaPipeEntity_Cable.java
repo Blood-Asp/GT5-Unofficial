@@ -277,7 +277,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
-        }
+        }else if(GT_Client.changeDetected==4 && aBaseMetaTileEntity.isClientSide()) aBaseMetaTileEntity.issueTextureUpdate();
     }
 
     @Override
@@ -301,7 +301,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public float getThickNess() {
-        if(GT_Client.hideValue==1) return 0.125F;
+        if(GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
     }
 

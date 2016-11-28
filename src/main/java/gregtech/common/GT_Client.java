@@ -371,7 +371,12 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
-            hideValue=shouldHeldItemHideThings();
+            if(changeDetected>0)changeDetected--;
+            int newHideValue=shouldHeldItemHideThings();
+            if(newHideValue!=hideValue){
+                hideValue=newHideValue;
+                changeDetected=5;
+            }
             mAnimationTick++;
             if (mAnimationTick % 50L == 0L)
                 {mAnimationDirection = !mAnimationDirection;}
@@ -540,6 +545,7 @@ public class GT_Client extends GT_Proxy
     }
 
     public static int hideValue=0;
+    public static int changeDetected=0;
 
     private static int shouldHeldItemHideThings() {
         try {
