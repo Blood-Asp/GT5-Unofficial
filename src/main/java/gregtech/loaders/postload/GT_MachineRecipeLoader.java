@@ -1146,6 +1146,18 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addBenderRecipe(ItemList.IC2_Item_Casing_Tin.get(1L, new Object[0]), ItemList.IC2_Food_Can_Empty.get(1L, new Object[0]), 100, 8);
         GT_Values.RA.addPulveriserRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Marble, 1L), new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Marble, 1L)}, null, 160, 4);
 
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorHeatSwitch", 1L, 32767), GT_ModHandler.getIC2Item("reactorHeatSwitch", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorHeatSwitchCore", 1L, 32767), GT_ModHandler.getIC2Item("reactorHeatSwitchCore", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorHeatSwitchSpread", 1L, 32767), GT_ModHandler.getIC2Item("reactorHeatSwitchSpread", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorHeatSwitchDiamond", 1L, 32767), GT_ModHandler.getIC2Item("reactorHeatSwitchDiamond", 1L, 1), 100);
+
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorVent", 1L, 32767), GT_ModHandler.getIC2Item("reactorVent", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorVentCore", 1L, 32767), GT_ModHandler.getIC2Item("reactorVentCore", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorVentGold", 1L, 32767), GT_ModHandler.getIC2Item("reactorVentGold", 1L, 1), 100);
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorVentDiamond", 1L, 32767), GT_ModHandler.getIC2Item("reactorVentDiamond", 1L, 1), 100);
+
+        GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorVentSpread", 1L, 32767), GT_ModHandler.getIC2Item("reactorVentSpread", 1L, 0), 100);
+
         GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorCoolantSimple", 1L, 32767), GT_ModHandler.getIC2Item("reactorCoolantSimple", 1L, 1), 100);
         GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorCoolantTriple", 1L, 32767), GT_ModHandler.getIC2Item("reactorCoolantTriple", 1L, 1), 300);
         GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("reactorCoolantSix", 1L, 32767), GT_ModHandler.getIC2Item("reactorCoolantSix", 1L, 1), 600);
@@ -1155,6 +1167,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_NaK_1.getWildcard(1L, new Object[0]), ItemList.Reactor_Coolant_NaK_1.get(1L, new Object[0]), 600);
         GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_NaK_3.getWildcard(1L, new Object[0]), ItemList.Reactor_Coolant_NaK_3.get(1L, new Object[0]), 1800);
         GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_NaK_6.getWildcard(1L, new Object[0]), ItemList.Reactor_Coolant_NaK_6.get(1L, new Object[0]), 3600);
+        GT_Values.RA.addVacuumFreezerRecipe(ItemList.neutroniumHeatCapacitor.getWildcard(1L, new Object[0]), ItemList.neutroniumHeatCapacitor.get(1L, new Object[0]), 10000000);
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Water, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Ice, 1L), 50);
         GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("airCell", 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidAir, 1L), 25);
 
@@ -1423,6 +1436,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_1.get(2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.MNqCell_2.get(1L, new Object[0]), 100, 400);
         GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_1.get(4L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenSteel, 6L), ItemList.MNqCell_4.get(1L, new Object[0]), 150, 400);
         GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_2.get(2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.MNqCell_4.get(1L, new Object[0]), 100, 400);
+
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 8L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Iridium, 4L), ItemList.neutroniumHeatCapacitor.get(1L, new Object[0]), 100, 120000);
 
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Items.lava_bucket), ItemList.Cell_Empty.get(1L, new Object[0])});
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Items.water_bucket), ItemList.Cell_Empty.get(1L, new Object[0])});

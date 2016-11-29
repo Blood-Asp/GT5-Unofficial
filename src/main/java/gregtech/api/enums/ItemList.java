@@ -622,7 +622,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_FluidHeater, Machine_MV_FluidHeater, Machine_HV_FluidHeater, Machine_EV_FluidHeater, Machine_IV_FluidHeater,
 
     Neutron_Reflector,
-    Reactor_Coolant_He_1, Reactor_Coolant_He_3, Reactor_Coolant_He_6, Reactor_Coolant_NaK_1, Reactor_Coolant_NaK_3, Reactor_Coolant_NaK_6,
+    Reactor_Coolant_He_1, Reactor_Coolant_He_3, Reactor_Coolant_He_6, Reactor_Coolant_NaK_1, Reactor_Coolant_NaK_3, Reactor_Coolant_NaK_6,neutroniumHeatCapacitor,
     ThoriumCell_1, ThoriumCell_2, ThoriumCell_4,
     FusionComputer_LuV, FusionComputer_ZPMV, FusionComputer_UV,
     Casing_Fusion_Coil, Casing_Fusion, Casing_Fusion2,
