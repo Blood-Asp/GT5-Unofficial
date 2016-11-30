@@ -83,6 +83,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], Dyes.getModulation(aColorIndex, mMaterial.mRGBa) )};
         if (aConnected) {
             float tThickNess = getThickNess();
+            if (tThickNess < 0.124F)
+                return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.374F)//0.375 x1
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_TINY, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.499F)//0.500 x2

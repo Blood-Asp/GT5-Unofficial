@@ -71,6 +71,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections, byte aColorIndex, boolean aConnected, boolean aRedstone) {
         if (aConnected) {
             float tThickNess = getThickNess();
+            if (tThickNess < 0.124F)
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.374F)//0.375
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.499F)//0.500
