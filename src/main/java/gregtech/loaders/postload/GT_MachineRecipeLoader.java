@@ -617,7 +617,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         if(Loader.isModLoaded("TConstruct")) {
             GT_Values.RA.addDistilleryRecipe(ItemList.Circuit_Integrated.getWithDamage(0L, 1L, new Object[0]), Materials.Glue.getFluid(8L), FluidRegistry.getFluidStack("glue", 8), 1, 24, false);
-            GT_Values.RA.addDistilleryRecipe(ItemList.Circuit_Integrated.getWithDamage(0L, 1L, new Object[0]), FluidRegistry.getFluidStack("glue", 4), Materials.Glue.getFluid(8L), 1, 24, false);
+            GT_Values.RA.addDistilleryRecipe(ItemList.Circuit_Integrated.getWithDamage(0L, 1L, new Object[0]), FluidRegistry.getFluidStack("glue", 8), Materials.Glue.getFluid(4L), 1, 24, false);
         }
 
         GT_Values.RA.addFluidHeaterRecipe(ItemList.Circuit_Integrated.getWithDamage(0L, 1L, new Object[0]), Materials.Water.getFluid(6L), Materials.Water.getGas(960L), 30, 32);
