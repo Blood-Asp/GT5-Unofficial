@@ -284,7 +284,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
-        }else if(GT_Client.changeDetected==4 && aBaseMetaTileEntity.isClientSide()) aBaseMetaTileEntity.issueTextureUpdate();
+        }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
 
     @Override

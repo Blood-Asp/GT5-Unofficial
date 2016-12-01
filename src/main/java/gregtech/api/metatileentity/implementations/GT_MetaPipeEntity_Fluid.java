@@ -268,7 +268,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             }
 
             oLastReceivedFrom = mLastReceivedFrom;
-        }else if(GT_Client.changeDetected==4 && aBaseMetaTileEntity.isClientSide()) aBaseMetaTileEntity.issueTextureUpdate();
+        }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
 
     @Override
