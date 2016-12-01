@@ -44,6 +44,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long mRestRF;
     public short mOverheat,mLastOverheat=10;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
+    public long lastTick=0,tickDiff;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -213,9 +214,11 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 mOverheat+=(Math.max(100,100*(GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage))));
             didOverheat=true;
         }
-        if (mTransferredAmperage > mAmperage) {
-            if(mLastOverheat<=5)
-                mOverheat+=(100*(mTransferredAmperage-mAmperage));
+        if (mTransferredAmperage > (mAmperage*tickDiff)) {
+            if(mLastOverheat<=5) {
+
+                mOverheat += (100 * (mTransferredAmperage - mAmperage));
+            }
             didOverheat=true;
         }
         if(mOverheat>mMaxOverheat && mLastOverheat<=0)
@@ -235,6 +238,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredVoltage=0;
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
+            tickDiff=aTick-lastTick;
+            lastTick=aTick;
             if(mOverheat>0)mOverheat--;
             if(mLastOverheat>0)mLastOverheat--;
             if (aTick % 20 == 0) {
