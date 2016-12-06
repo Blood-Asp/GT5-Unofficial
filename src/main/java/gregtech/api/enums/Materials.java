@@ -655,7 +655,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	TungstenCarbide		( 370, TextureSet.SET_METALLIC			,  14.0F,   1280,  4, 1|2          |64|128                  ,  51,   0, 102,   0,	"Tungstencarbide"				,    0,       0,       2460,22460,  true, false,   4,   1,   1, Dyes.dyeBlack		, 2, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Carbon, 1))),
 	VanadiumSteel		( 371, TextureSet.SET_METALLIC			,   3.0F,   1920,  3, 1|2          |64|128                  , 192, 192, 192,   0,	"Vanadiumsteel"					,    0,       0,       1453, 1453,  true, false,   4,   1,   1, Dyes.dyeWhite		, 2, Arrays.asList(new MaterialStack(Vanadium, 1), new MaterialStack(Chrome, 1), new MaterialStack(Steel, 7))),
 	HSSG				( 372, TextureSet.SET_METALLIC			,  10.0F,   4000,  3, 1|2          |64|128                  , 153, 153,   0,   0,	"HSS-G"							,    0,       0,       4500,24500,  true, false,   4,   1,   1, Dyes.dyeYellow		, 2, Arrays.asList(new MaterialStack(TungstenSteel, 5), new MaterialStack(Chrome, 1), new MaterialStack(Molybdenum, 2), new MaterialStack(Vanadium, 1))),
-	HSSE				( 373, TextureSet.SET_METALLIC			,  10.0F,   5120,  4, 1|2          |64|128                  ,  51, 102,   0,   0,	"HSS-E"							,    0,       0,       5400,25400,  true, false,   4,   1,   1, Dyes.dyeBlue		, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Cobalt, 1),new MaterialStack(Manganese, 1), new MaterialStack(Silicon, 1))),
+	HSSE				( 373, TextureSet.SET_METALLIC			,  10.0F,   5120,  4, 1|2          |64|128                  ,  51, 102,   0,   0,	"HSS-E"							,    0,       0,       5400,25400,  true, false,   4,   1,   1, Dyes.dyeGreen		, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Cobalt, 1),new MaterialStack(Manganese, 1), new MaterialStack(Silicon, 1))),
 	HSSS				( 374, TextureSet.SET_METALLIC			,  14.0F,   3000,  4, 1|2          |64|128                  , 102,   0,  51,   0,	"HSS-S"							,    0,       0,       5400,25400,  true, false,   4,   1,   1, Dyes.dyeRed			, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Iridium, 2), new MaterialStack(Osmium, 1))),
 
 	/**
@@ -1102,6 +1102,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Duranium.mChemicalFormula="Du";
 		Tritanium.mChemicalFormula="Tt";
 		Ardite.mChemicalFormula="Ai";
+		Manyullyn.mChemicalFormula="AiCo";
 		Mytryl.mChemicalFormula="SpPt2FeMa";
 		BlackPlutonium.mChemicalFormula="SpPu";
 		Ledox.mChemicalFormula="SpPb";
@@ -1137,7 +1138,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 						   Tartarite, /**Thyrium,**/ Tritanium, Vulcanite, Vyroxeres, /**Yellorium,**/ Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron,
 						   Electrum, Invar, /**IronCompressed,**/ Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
 						   YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, Shadow, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel,
-						   TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, Void, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium, VanadiumSteel, Kalendrite, Ignatius, Trinium, Realgar, Chrysotile, BlackPlutonium, Alduorite, Adluorite,Vinteum, Rubracium);
+						   TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, Void, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium,
+				           VanadiumSteel, Kalendrite, Ignatius, Trinium, Realgar, Chrysotile, BlackPlutonium, Alduorite, Adluorite, Vinteum, Rubracium, Draconium, DraconiumAwakened);
 
 		SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 
