@@ -1010,10 +1010,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFusionReactorRecipe(Materials.Deuterium.getGas(125), Materials.Tritium.getGas(125), Materials.Helium.getPlasma(125), 16, 4096, 40000000);  //FT1 Cheap - farmable
         GT_Values.RA.addFusionReactorRecipe(Materials.Deuterium.getGas(125), Materials.Helium_3.getGas(125), Materials.Helium.getPlasma(125), 16, 2048, 60000000); //FT1 Expensive //
         GT_Values.RA.addFusionReactorRecipe(Materials.Carbon.getMolten(125), Materials.Helium_3.getGas(125), Materials.Oxygen.getPlasma(125), 32, 4096, 80000000); //FT1 Expensive //
-        GT_Values.RA.addFusionReactorRecipe(Materials.Aluminium.getMolten(16), Materials.Lithium.getMolten(16), Materials.Sulfur.getPlasma(125), 32, 10240, 240000000); //FT1+ Cheap
+        GT_Values.RA.addFusionReactorRecipe(Materials.Aluminium.getMolten(16), Materials.Lithium.getMolten(16), Materials.Sulfur.getPlasma(144), 32, 10240, 240000000); //FT1+ Cheap
         GT_Values.RA.addFusionReactorRecipe(Materials.Beryllium.getMolten(16), Materials.Deuterium.getGas(375), Materials.Nitrogen.getPlasma(125), 16, 16384, 180000000); //FT1+ Expensive //
-        GT_Values.RA.addFusionReactorRecipe(Materials.Silicon.getMolten(16), Materials.Magnesium.getMolten(16), Materials.Iron.getPlasma(125), 32, 8192, 360000000); //FT1++ Cheap //
-        GT_Values.RA.addFusionReactorRecipe(Materials.Potassium.getMolten(16), Materials.Fluorine.getGas(125), Materials.Nickel.getPlasma(125), 16, 32700, 480000000); //FT1++ Expensive //
+        GT_Values.RA.addFusionReactorRecipe(Materials.Silicon.getMolten(16), Materials.Magnesium.getMolten(16), Materials.Iron.getPlasma(144), 32, 8192, 360000000); //FT1++ Cheap //
+        GT_Values.RA.addFusionReactorRecipe(Materials.Potassium.getMolten(16), Materials.Fluorine.getGas(144), Materials.Nickel.getPlasma(144), 16, 32700, 480000000); //FT1++ Expensive //
             GT_Values.RA.addFusionReactorRecipe(Materials.Beryllium.getMolten(16), Materials.Tungsten.getMolten(16), Materials.Platinum.getMolten(16), 32, 32700, 150000000); //FT1 - utility
             GT_Values.RA.addFusionReactorRecipe(Materials.Neodymium.getMolten(16), Materials.Hydrogen.getGas(48), Materials.Europium.getMolten(16), 64, 24576, 150000000); //FT1 - utility
             GT_Values.RA.addFusionReactorRecipe(Materials.Lutetium.getMolten(16), Materials.Chrome.getMolten(16), Materials.Americium.getMolten(16), 96, 49152, 200000000); //FT2 - utility
@@ -1031,18 +1031,18 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFusionReactorRecipe(Materials.Titanium.getMolten(16),Materials.Duranium.getMolten(16),Materials.Tritanium.getMolten(16),64,32700,200000000);
 
         //NEW RECIPES FOR FUSION
-        GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(125), Materials.Carbon.getMolten(125), Materials.Argon.getPlasma(125), 16, 24576, 180000000);//FT1+ - utility
+        GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(144), Materials.Carbon.getMolten(144), Materials.Argon.getPlasma(125), 32, 24576, 180000000);//FT1+ - utility
 
-        GT_Values.RA.addFusionReactorRecipe(Materials.Copper.getMolten(125), Materials.Hydrogen.getGas(375), Materials.Zinc.getPlasma(125), 16,49152, 180000000);//FT2 - farmable
-        GT_Values.RA.addFusionReactorRecipe(Materials.Cobalt.getMolten(125), Materials.Silicon.getMolten(125), Materials.Niobium.getPlasma(125), 16,49152, 200000000);//FT2 - utility
-        GT_Values.RA.addFusionReactorRecipe(Materials.Gold.getMolten(125), Materials.Arsenic.getMolten(125), Materials.Silver.getPlasma(125), 16,49152, 350000000);//FT2+
-        GT_Values.RA.addFusionReactorRecipe(Materials.Silver.getMolten(125), Materials.Helium_3.getGas(375), Materials.Tin.getPlasma(125), 16,49152, 280000000);//FT2
-        GT_Values.RA.addFusionReactorRecipe(Materials.Tungsten.getMolten(125), Materials.Carbon.getMolten(125), Materials.Mercury.getPlasma(125), 16,49152, 300000000);//FT2
+        GT_Values.RA.addFusionReactorRecipe(Materials.Copper.getMolten(144), Materials.Tritium.getGas(500), Materials.Zinc.getPlasma(144), 32,49152, 180000000);//FT2 - farmable
+        GT_Values.RA.addFusionReactorRecipe(Materials.Cobalt.getMolten(144), Materials.Silicon.getMolten(144), Materials.Niobium.getPlasma(144), 16,49152, 200000000);//FT2 - utility
+        GT_Values.RA.addFusionReactorRecipe(Materials.Gold.getMolten(144), Materials.Arsenic.getMolten(144), Materials.Silver.getPlasma(144), 16,49152, 350000000);//FT2+
+        GT_Values.RA.addFusionReactorRecipe(Materials.Silver.getMolten(144), Materials.Helium_3.getGas(375), Materials.Tin.getPlasma(144), 16,49152, 280000000);//FT2
+        GT_Values.RA.addFusionReactorRecipe(Materials.Tungsten.getMolten(144), Materials.Carbon.getMolten(144), Materials.Mercury.getPlasma(144), 16,49152, 300000000);//FT2
 
-        GT_Values.RA.addFusionReactorRecipe(Materials.Tantalum.getMolten(125), Materials.Oxygen.getGas(500), Materials.Bismuth.getPlasma(125), 32, 98304, 350000000);//FT3 - farmable
-        GT_Values.RA.addFusionReactorRecipe(Materials.Iridium.getMolten(125), Materials.Fluorine.getGas(500), Materials.Radon.getPlasma(125), 32, 98304, 450000000);//FT3 - utility
-        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(125), Materials.Hydrogen.getGas(2000), Materials.Americium.getPlasma(125), 64, 98304, 500000000);//FT3
-        GT_Values.RA.addFusionReactorRecipe(Materials.Neutronium.getMolten(125), Materials.Neutronium.getMolten(125), Materials.Neutronium.getPlasma(50), 64, 130000, 640000000);//FT3+
+        GT_Values.RA.addFusionReactorRecipe(Materials.Tantalum.getMolten(144), Materials.Tritium.getGas(750), Materials.Bismuth.getPlasma(144), 16, 98304, 350000000);//FT3 - farmable
+        GT_Values.RA.addFusionReactorRecipe(Materials.Iridium.getMolten(144), Materials.Fluorine.getGas(500), Materials.Radon.getPlasma(144), 32, 98304, 450000000);//FT3 - utility
+        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Hydrogen.getGas(2000), Materials.Americium.getPlasma(144), 64, 98304, 500000000);//FT3
+        GT_Values.RA.addFusionReactorRecipe(Materials.Neutronium.getMolten(144), Materials.Neutronium.getMolten(144), Materials.Neutronium.getPlasma(72), 64, 130000, 640000000);//FT3+ - yes it is a bit troll XD
 
         GT_ModHandler.removeRecipeByOutput(ItemList.IC2_Fertilizer.get(1L, new Object[0]));
         GT_Values.RA.addImplosionRecipe(ItemList.IC2_Compressed_Coal_Chunk.get(1L, new Object[0]), 8, ItemList.IC2_Industrial_Diamond.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 4L));
