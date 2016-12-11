@@ -91,7 +91,6 @@ public abstract class GT_MetaGenerated_Item extends GT_MetaBase_Item implements 
 
         sInstances.put(getUnlocalizedName(), this);
     }
-
     /**
      * This adds a Custom Item to the ending Range.
      *
