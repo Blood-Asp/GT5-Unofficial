@@ -88,7 +88,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if(this.getBaseMetaTileEntity().isActive())
+        if(aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive())
             pollutionParticles(this.getBaseMetaTileEntity().getWorld());
     }
 
