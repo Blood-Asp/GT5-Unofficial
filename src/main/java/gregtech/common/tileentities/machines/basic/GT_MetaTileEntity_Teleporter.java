@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     public int mTargetX = 0;
     public int mTargetY = 0;
     public int mTargetZ = 0;
-    public int mTargetD = 0;
+    public int mTargetD = Integer.MIN_VALUE;
     public boolean mDebug = false;
 
     public GT_MetaTileEntity_Teleporter(int aID, String aName, String aNameRegional, int aTier) {
@@ -204,13 +204,11 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (aBaseMetaTileEntity.isServerSide()) {
-            if ((this.mTargetX == 0) && (this.mTargetY == 0) && (this.mTargetZ == 0) && (this.mTargetD == 0)) {
-                this.mTargetX = aBaseMetaTileEntity.getXCoord();
-                this.mTargetY = aBaseMetaTileEntity.getYCoord();
-                this.mTargetZ = aBaseMetaTileEntity.getZCoord();
-                this.mTargetD = aBaseMetaTileEntity.getWorld().provider.dimensionId;
-            }
+        if (aBaseMetaTileEntity.isServerSide() && (this.mTargetX == 0) && (this.mTargetY == 0) && (this.mTargetZ == 0) && (this.mTargetD == Integer.MIN_VALUE)) {
+            this.mTargetX = aBaseMetaTileEntity.getXCoord();
+            this.mTargetY = aBaseMetaTileEntity.getYCoord();
+            this.mTargetZ = aBaseMetaTileEntity.getZCoord();
+            this.mTargetD = aBaseMetaTileEntity.getWorld().provider.dimensionId;
         }
     }
     
