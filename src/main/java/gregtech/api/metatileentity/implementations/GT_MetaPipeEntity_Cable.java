@@ -42,9 +42,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public int mTransferredAmperage = 0, mTransferredAmperageLast20 = 0,mTransferredAmperageLast20OK=0,mTransferredAmperageOK=0;
     public long mTransferredVoltageLast20 = 0, mTransferredVoltage = 0,mTransferredVoltageLast20OK=0,mTransferredVoltageOK=0;
     public long mRestRF;
-    public short mOverheat,mLastOverheat=10;
+    public short mOverheat;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
-    public long lastTick=0,tickDiff;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -208,27 +207,15 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredAmperage += rUsedAmperes;
         mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
-        boolean didOverheat=false;
-        if (aVoltage > mVoltage) {
-            if(mLastOverheat<=5)
-                mOverheat+=(Math.max(100,100*(GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage))));
-            didOverheat=true;
-        }
-        if (mTransferredAmperage > (mAmperage*tickDiff)) {
-            if(mLastOverheat<=5) {
-
-                mOverheat += (100 * (mTransferredAmperage - mAmperage));
-            }
-            didOverheat=true;
-        }
-        if(mOverheat>mMaxOverheat && mLastOverheat<=0)
-            this.getBaseMetaTileEntity().setToFire();
-        if (didOverheat) {
-            if(mLastOverheat<=0)
-                mLastOverheat=5;
+        if (aVoltage > mVoltage || mTransferredAmperage > mAmperage) {
+            if(mOverheat>mMaxOverheat)
+                getBaseMetaTileEntity().setToFire();
+            else
+                mOverheat +=100;
             return aAmperage;
         }
         return rUsedAmperes;
+        //Always return amount of used amperes, used all on overheat
     }
 
     @Override
@@ -238,15 +225,12 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredVoltage=0;
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
-            tickDiff=aTick-lastTick;
-            lastTick=aTick;
             if(mOverheat>0)mOverheat--;
-            if(mLastOverheat>0)mLastOverheat--;
             if (aTick % 20 == 0) {
-                mTransferredAmperageLast20OK=mTransferredAmperageLast20;
-                mTransferredAmperageLast20 = 0;
                 mTransferredVoltageLast20OK=mTransferredVoltageLast20;
                 mTransferredVoltageLast20 = 0;
+                mTransferredAmperageLast20OK=mTransferredAmperageLast20;
+                mTransferredAmperageLast20 = 0;
                 mConnections = 0;
                 for (byte i = 0, j = 0; i < 6; i++) {
                     j = GT_Utility.getOppositeSide(i);
