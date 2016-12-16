@@ -101,6 +101,8 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                     }
                     achievement = true;
                 }
+            }else if(fluidName.equals("ic2.fluidSuperheatedSteam")){
+                depleteInput(new FluidStack(aFluids.get(i), aFluids.get(i).amount));            	
             }
         }
 
