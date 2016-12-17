@@ -24,7 +24,7 @@ public enum Dyes implements IColorModulationContainer {
     dyePink(9, 255, 192, 192, "Pink"),
     dyeLime(10, 128, 255, 128, "Lime"),
     dyeYellow(11, 255, 255, 0, "Yellow"),
-    dyeLightBlue(12, 128, 128, 255, "Light Blue"),
+    dyeLightBlue(12, 96, 128, 255, "Light Blue"),
     dyeMagenta(13, 255, 0, 255, "Magenta"),
     dyeOrange(14, 255, 128, 0, "Orange"),
     dyeWhite(15, 255, 255, 255, "White"),
