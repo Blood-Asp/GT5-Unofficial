@@ -16,7 +16,7 @@ public enum Dyes implements IColorModulationContainer {
     dyeRed(1, 255, 0, 0, "Red"),
     dyeGreen(2, 0, 255, 0, "Green"),
     dyeBrown(3, 96, 64, 0, "Brown"),
-    dyeBlue(4, 0, 0, 255, "Blue"),
+    dyeBlue(4, 0, 32, 255, "Blue"),
     dyePurple(5, 128, 0, 128, "Purple"),
     dyeCyan(6, 0, 255, 255, "Cyan"),
     dyeLightGray(7, 192, 192, 192, "Light Gray"),
@@ -37,7 +37,7 @@ public enum Dyes implements IColorModulationContainer {
      */
     CABLE_INSULATION(-1, 64, 64, 64, "Cable Insulation"),
     CONSTRUCTION_FOAM(-1, 64, 64, 64, "Construction Foam"),
-    MACHINE_METAL(-1, 220, 220, 255, "Machine Metal");
+    MACHINE_METAL(-1, 210, 220, 255, "Machine Metal");
 
     public static final Dyes VALUES[] = {dyeBlack, dyeRed, dyeGreen, dyeBrown, dyeBlue, dyePurple, dyeCyan, dyeLightGray, dyeGray, dyePink, dyeLime, dyeYellow, dyeLightBlue, dyeMagenta, dyeOrange, dyeWhite};
 
