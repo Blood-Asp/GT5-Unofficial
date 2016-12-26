@@ -9,6 +9,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 public class GT_Block_Metal extends GT_Block_Storage {
     public Materials[] mMats;
@@ -36,4 +37,8 @@ public class GT_Block_Metal extends GT_Block_Storage {
         return null;
     }
 
+    @Override
+    public boolean isBeaconBase(IBlockAccess worldObj, int x, int y, int z, int beaconX, int beaconY, int beaconZ) {
+        return true;
+    }
 }
