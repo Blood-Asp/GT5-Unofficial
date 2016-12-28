@@ -146,10 +146,6 @@ public class GT_MetaTileEntity_ImplosionCompressor
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 2;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
