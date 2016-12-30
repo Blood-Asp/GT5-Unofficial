@@ -122,7 +122,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
                 if(tHeatCapacityDivTiers>0){
                     this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
-                    this.mMaxProgresstime >>=tHeatCapacityDivTiers/2;//TODO CHECK
+                    this.mMaxProgresstime >>=tHeatCapacityDivTiers/2;
                 }
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                 this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0), tRecipe.getOutput(1)};
