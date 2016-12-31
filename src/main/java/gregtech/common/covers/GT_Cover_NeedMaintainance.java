@@ -44,7 +44,8 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
                 		ItemStack tTurbine = multi.getRealInventory()[1];
                 		long tMax = GT_MetaGenerated_Tool.getToolMaxDamage(tTurbine);
                 		long tCur = GT_MetaGenerated_Tool.getToolDamage(tTurbine);
-                		if(tCur > tMax*8/10);
+                		if(tCur < tMax*2/10)
+                			needsRepair = true;
                 	}
                 	
                 }
