@@ -22,7 +22,7 @@ public class GT_LanguageManager {
         return addStringLocalization(aKey, aEnglish, true);
     }
 
-    public static String addStringLocalization(String aKey, String aEnglish, boolean aWriteIntoLangFile) {
+    public static synchronized String addStringLocalization(String aKey, String aEnglish, boolean aWriteIntoLangFile) {
         if (aKey == null) return E;
         if (aWriteIntoLangFile){ aEnglish = writeToLangFile(aKey, aEnglish);
         if(!LANGMAP.containsKey(aKey)){
