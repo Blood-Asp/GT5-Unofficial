@@ -1867,6 +1867,58 @@ public class GT_Utility {
         return formatter.format(aNumber);
     }
 
+    /*
+     * Check if stack has enough items of given type and subtract from stack, if there's no creative or 111 stack.
+     */
+    public static boolean consumeItems(EntityPlayer player, ItemStack stack, Item item, int count) {
+        if (stack != null && stack.getItem() == item && stack.stackSize >= count) {
+            if ((!player.capabilities.isCreativeMode) && (stack.stackSize != 111))
+                stack.stackSize -= count;
+            return true;
+        }
+        return false;
+        }
+
+    /*
+     * Check if stack has enough items of given gregtech material (will be oredicted)
+     * and subtract from stack, if there's no creative or 111 stack.
+     */
+    public static boolean consumeItems(EntityPlayer player, ItemStack stack, gregtech.api.enums.Materials mat, int count) {
+        if (stack != null
+            && GT_OreDictUnificator.getItemData(stack).mMaterial.mMaterial == mat
+            && stack.stackSize >= count) {
+            if ((!player.capabilities.isCreativeMode) && (stack.stackSize != 111))
+                stack.stackSize -= count;
+            return true;
+            }
+        return false;
+    }
+
+    public static ArrayList<String> sortByValueToList( Map<String, Integer> map )
+    {
+        List<Map.Entry<String, Integer>> list =
+            new LinkedList<Map.Entry<String, Integer>>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
+        {
+            public int compare( Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2 )
+            {
+                return o2.getValue() - o1.getValue();
+            }
+        } );
+
+        ArrayList<String> result = new ArrayList<String>();
+        for (Map.Entry<String, Integer> e : list)
+            result.add(e.getKey());
+        return result;
+    }
+
+    public static String joinListToString(List<String> list) {
+        String result = "";
+        for (String s : list)
+            result += (result.isEmpty() ? "" : "|") + s;
+        return result;
+    }
+
     public static class ItemNBT {
         public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
             if (aNBT == null) {
@@ -1954,21 +2006,124 @@ public class GT_Utility {
             setNBT(aStack, tNBT);
         }
 
+        public static void setAdvancedProspectionData(
+                byte aTier,
+                ItemStack aStack,
+                int aX, short aY, int aZ, int aDim,
+                ArrayList<String> aOils,
+                ArrayList<String> aNearOres,
+                ArrayList<String> aMiddleOres,
+                ArrayList<String> aFarOres,
+                int aNear, int aMiddle, int aRadius) {
+
+            setBookTitle(aStack, "Raw Prospection Data");
+
+            NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
+
+            tNBT.setByte("prospection_tier", aTier);
+            tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
+
+            // ores
+            tNBT.setString("prospection_near", joinListToString(aNearOres));
+            tNBT.setString("prospection_middle", joinListToString(aMiddleOres));
+            tNBT.setString("prospection_far", joinListToString(aFarOres));
+
+            // oils
+            ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
+            for (String aStr : aOils) {
+            	String[] aStats = aStr.split(",");
+            	tOilsTransformed.add(aStats[3] + " " + aStats[2] + "L");
+            }
+            tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
+
+            tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
+
+            setNBT(aStack, tNBT);
+        }
+
         public static void convertProspectionData(ItemStack aStack) {
             NBTTagCompound tNBT = getNBT(aStack);
-            String tData = tNBT.getString("prospection");
-            String[] tDataArray = tData.split(",");
-            if (tDataArray.length > 6) {
-                tNBT.setString("author", "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2] + " Dim: " + tDataArray[3]);
-                NBTTagList tNBTList = new NBTTagList();
-                String tOres = " Prospected Ores: ";
-                for (int i = 6; tDataArray.length > i; i++) {
-                    tOres += (tDataArray[i] + " ");
+            byte tTier = tNBT.getByte("prospection_tier");
+
+            if (tTier == 0) { // basic prospection data
+                String tData = tNBT.getString("prospection");
+                String[] tDataArray = tData.split(",");
+                if (tDataArray.length > 6) {
+                    tNBT.setString("author", "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2] + " Dim: " + tDataArray[3]);
+                    NBTTagList tNBTList = new NBTTagList();
+                    String tOres = " Prospected Ores: ";
+                    for (int i = 6; tDataArray.length > i; i++) {
+                        tOres += (tDataArray[i] + " ");
+                    }
+                    tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
+                    tNBT.setTag("pages", tNBTList);
                 }
-                tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
+                setNBT(aStack, tNBT);
+            } else { // advanced prospection data
+                String tPos = tNBT.getString("prospection_pos");
+                String[] tBounds = tNBT.getString("prospection_bounds").split("\\|");
+
+                String tNearOresStr = tNBT.getString("prospection_near");
+                String tMiddleOresStr = tNBT.getString("prospection_middle");
+                String tFarOresStr = tNBT.getString("prospection_far");
+                String tOilsStr = tNBT.getString("prospection_oils");
+
+                String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
+                String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
+                String[] tFarOres = tFarOresStr.isEmpty() ? null : tFarOresStr.split("\\|");
+                String[] tOils = tOilsStr.isEmpty() ? null : tOilsStr.split("\\|");
+
+                NBTTagList tNBTList = new NBTTagList();
+
+                String tPageText = "Advanced prospection\n"
+                    + tPos + "\n"
+                    + "Results:\n"
+                    + "- Close Range Ores: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
+                    + "- Mid Range Ores: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
+                    + "- Far Range Ores: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
+                    + "- Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
+                    + "Lists was sorted by volume";
+                tNBTList.appendTag(new NBTTagString(tPageText));
+
+                if (tNearOres != null)
+                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", 20, tNearOres);
+                if (tMiddleOres != null)
+                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", 20, tMiddleOres);
+                if (tFarOres != null)
+                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", 20, tFarOres);
+                if (tOils != null)
+                    fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
+
+                tPageText = "Notes\n\n"
+                    + "Close range:\nR <= " + tBounds[0] + "\n"
+                    + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
+                    + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2];
+                tNBTList.appendTag(new NBTTagString(tPageText));
+
+                tNBT.setString("author", tPos);
                 tNBT.setTag("pages", tNBTList);
+                setNBT(aStack, tNBT);
             }
-            setNBT(aStack, tNBT);
+        }
+
+        public static void fillBookWithList(NBTTagList aBook, String aPageHeader, String aListDelimiter, int aItemsPerPage, String[] list) {
+            String aPageFormatter = " %d/%d";
+            int tTotalPages = list.length / aItemsPerPage + (list.length % aItemsPerPage > 0 ? 1 : 0);
+            int tPage = 0;
+            String tPageText;
+            do {
+                tPageText = "";
+                for (int i = tPage*aItemsPerPage; i < (tPage+1)*aItemsPerPage && i < list.length; i += 1)
+                    tPageText += (tPageText.isEmpty() ? "" : aListDelimiter) + list[i];
+
+                if (!tPageText.isEmpty()) {
+                    String tPageCounter = tTotalPages > 1 ? String.format(aPageFormatter, tPage + 1, tTotalPages) : "";
+                    NBTTagString tPageTag = new NBTTagString(String.format(aPageHeader, tPageCounter) + tPageText);
+                    aBook.appendTag(tPageTag);
+                }
+
+                ++tPage;
+            } while (!tPageText.isEmpty());
         }
 
         public static void addEnchantment(ItemStack aStack, Enchantment aEnchantment, int aLevel) {
