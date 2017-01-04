@@ -190,6 +190,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mTEMachineRecipes = false;
     public boolean mEnableAllMaterials = false;
     public boolean mEnableAllComponents = false;
+    public boolean mAddGTRecipesToIC2Machines = true;
 
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);

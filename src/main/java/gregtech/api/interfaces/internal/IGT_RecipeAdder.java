@@ -51,6 +51,15 @@ public interface IGT_RecipeAdder {
     public boolean addCentrifugeRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, ItemStack aOutput5, ItemStack aOutput6, int[] aChances, int aDuration, int aEUt);
 
     /**
+     *
+     * @param aInput1   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @return
+     */
+    public boolean addCompressorRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt);
+
+    /**
      * Adds a Electrolyzer Recipe
      *
      * @param aInput1    must be != null
@@ -266,6 +275,17 @@ public interface IGT_RecipeAdder {
     public boolean addSlicerRecipe(ItemStack aInput, ItemStack aShape, ItemStack aOutput, int aDuration, int aEUt);
 
     /**
+     *
+     * @param aInput   must be != null
+     * @param aFluidInput   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     * @return
+     */
+    public boolean addOreWasherRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, FluidStack aFluidInput, int aDuration, int aEUt);
+
+    /**
      * Adds an Implosion Compressor Recipe
      *
      * @param aInput1  must be != null
@@ -328,6 +348,16 @@ public interface IGT_RecipeAdder {
      * Adds a Boxing Recipe
      */
     public boolean addBoxingRecipe(ItemStack aContainedItem, ItemStack aEmptyBox, ItemStack aFullBox, int aDuration, int aEUt);
+
+    /**
+     *
+     * @param aInput   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     * @return
+     */
+    public boolean addThermalCentrifugeRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int aDuration, int aEUt);
 
     /**
      * Adds an Unboxing Recipe
@@ -412,6 +442,11 @@ public interface IGT_RecipeAdder {
      * Adds a Recipe for the Electromagnetic Separator
      */
     public boolean addElectromagneticSeparatorRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt);
+
+    /**
+     * Adds a Recipe for the Extractor
+     */
+    public boolean addExtractorRecipe(ItemStack aInput, ItemStack aOutput, int aDuration, int aEUt);
 
     /**
      * Adds a Recipe for the Printer

@@ -1,6 +1,5 @@
 package gregtech.api.util;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
@@ -39,7 +38,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -501,9 +499,10 @@ public class GT_ModHandler {
     public static boolean addExtractionRecipe(ItemStack aInput, ItemStack aOutput) {
         aOutput = GT_OreDictUnificator.get(true, aOutput);
         if (aInput == null || aOutput == null) return false;
-        GT_Utility.removeSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.extractor, aInput, true)) return false;
-        GT_Utility.addSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null, aOutput);
+        RA.addExtractorRecipe(aInput, aOutput, 100, 32);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.addSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null, aOutput);
         return true;
     }
 
@@ -555,10 +554,10 @@ public class GT_ModHandler {
         aOutput1 = GT_OreDictUnificator.get(true, aOutput1);
         aOutput2 = GT_OreDictUnificator.get(true, aOutput2);
         if (GT_Utility.isStackInvalid(aInput) || GT_Utility.isStackInvalid(aOutput1)) return false;
-        GT_Utility.removeSimpleIC2MachineRecipe(aInput, getMaceratorRecipeList(), null);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getMaceratorRecipeList(), null);
 
         if (GT_Utility.getContainerItem(aInput, false) == null) {
-            if (GregTech_API.sRecipeFile.get(ConfigCategories.Machines.maceration, aInput, true)) {
+            if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines && GregTech_API.sRecipeFile.get(ConfigCategories.Machines.maceration, aInput, true)) {
                 GT_Utility.addSimpleIC2MachineRecipe(aInput, getMaceratorRecipeList(), null, aOutput1);
             }
             addMagneticraftRecipe(aInput, aOutput1, aOutput2, aChance2, aOutput3, aChance3);
@@ -719,11 +718,14 @@ public class GT_ModHandler {
      */
     public static boolean addThermalCentrifugeRecipe(ItemStack aInput, int aHeat, Object... aOutput) {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
-        GT_Utility.removeSimpleIC2MachineRecipe(aInput, getThermalCentrifugeRecipeList(), null);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getThermalCentrifugeRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.thermalcentrifuge, aInput, true)) return false;
-        NBTTagCompound tNBT = new NBTTagCompound();
-        tNBT.setInteger("minHeat", aHeat);
-        GT_Utility.addSimpleIC2MachineRecipe(aInput, getThermalCentrifugeRecipeList(), tNBT, aOutput);
+        RA.addThermalCentrifugeRecipe(aInput, aOutput.length >= 1 ? (ItemStack)aOutput[0] : null, aOutput.length >= 2 ? (ItemStack)aOutput[1] : null, aOutput.length >= 3 ? (ItemStack)aOutput[2] : null, 400, 48);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) {
+            NBTTagCompound tNBT = new NBTTagCompound();
+            tNBT.setInteger("minHeat", aHeat);
+            GT_Utility.addSimpleIC2MachineRecipe(aInput, getThermalCentrifugeRecipeList(), tNBT, aOutput);
+        }
         return true;
     }
 
@@ -732,11 +734,14 @@ public class GT_ModHandler {
      */
     public static boolean addOreWasherRecipe(ItemStack aInput, int aWaterAmount, Object... aOutput) {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
-        GT_Utility.removeSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), null);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.orewashing, aInput, true)) return false;
-        NBTTagCompound tNBT = new NBTTagCompound();
-        tNBT.setInteger("amount", aWaterAmount);
-        GT_Utility.addSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), tNBT, aOutput);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(1000L), 400, 16);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) {
+            NBTTagCompound tNBT = new NBTTagCompound();
+            tNBT.setInteger("amount", aWaterAmount);
+            GT_Utility.addSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), tNBT, aOutput);
+        }
         return true;
     }
 
@@ -746,9 +751,10 @@ public class GT_ModHandler {
     public static boolean addCompressionRecipe(ItemStack aInput, ItemStack aOutput) {
         aOutput = GT_OreDictUnificator.get(true, aOutput);
         if (aInput == null || aOutput == null || GT_Utility.areStacksEqual(aInput, aOutput, true)) return false;
-        GT_Utility.removeSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.compression, aInput, true)) return false;
-        GT_Utility.addSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null, aOutput);
+        RA.addCompressorRecipe(aInput, aOutput, 400, 2);
+        if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.addSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null, aOutput);
         return true;
     }
 
