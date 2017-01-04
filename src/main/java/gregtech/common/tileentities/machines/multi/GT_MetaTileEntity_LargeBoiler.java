@@ -233,10 +233,6 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 1;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

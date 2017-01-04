@@ -218,10 +218,6 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 1;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
