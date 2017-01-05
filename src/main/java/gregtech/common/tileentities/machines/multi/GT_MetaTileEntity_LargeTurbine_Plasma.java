@@ -43,7 +43,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 "1x Dynamo Hatch (Back centered)",
                 "Tungstensteel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)",
-                "Output depending on Rotor: 4200-67200EU/t"};
+                "Output depending on Rotor: 6553-332595EU/t"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {

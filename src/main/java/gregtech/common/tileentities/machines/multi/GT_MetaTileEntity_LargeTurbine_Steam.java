@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 "1x Dynamo Hatch (Back centered)",
                 "Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)",
-                "Output depending on Rotor: 105-1680EU/t"};
+                "Output depending on Rotor: 60-3360EU/t"};
     }
 
     @Override
