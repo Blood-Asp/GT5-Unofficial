@@ -115,6 +115,6 @@ public class GT_MetaTileEntity_DieselGenerator
 
 	@Override
 	public int getPollution() {
-		return 10;
+		return 5;
 	}
 }
