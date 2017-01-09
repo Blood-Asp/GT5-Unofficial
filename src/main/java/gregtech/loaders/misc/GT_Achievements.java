@@ -462,21 +462,7 @@ public class GT_Achievements {
             }
         } else if (stack.getUnlocalizedName().equals("gt.neutronreflector")) {
             issueAchievement(player, "reflect");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.1")) {
-            issueAchievement(player, "upgrade");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.2")) {
-            issueAchievement(player, "upgrade2");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.3")) {
-            issueAchievement(player, "upgrade3");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.4")) {
-            issueAchievement(player, "upgrade4");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.5")) {
-            issueAchievement(player, "upgrade5");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.6")) {
-            issueAchievement(player, "over9000");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.15")) {
-            issueAchievement(player, "conducting");
-        }
+        }//moved to on item pickup
     }
 
     @SubscribeEvent
@@ -578,6 +564,20 @@ public class GT_Achievements {
         } else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
             issueAchievement(player, "buildQArmor");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.1")) {
+            issueAchievement(player, "upgrade");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.2")) {
+            issueAchievement(player, "upgrade2");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.3")) {
+            issueAchievement(player, "upgrade3");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.4")) {
+            issueAchievement(player, "upgrade4");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.5")) {
+            issueAchievement(player, "upgrade5");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.6")) {
+            issueAchievement(player, "over9000");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.15")) {
+            issueAchievement(player, "conducting");
         }
         for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
             if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
