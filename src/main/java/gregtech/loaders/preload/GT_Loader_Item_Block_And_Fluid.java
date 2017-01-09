@@ -669,6 +669,7 @@ public class GT_Loader_Item_Block_And_Fluid
         GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Mercury, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 3));
         GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Amber, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 6));
         GT_OreDictUnificator.set(OrePrefixes.gem, Materials.Firestone, GT_ModHandler.getModItem("Railcraft", "firestone.raw", 1L));
+        GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron", 1L, 0));
 
 
         new Values();
