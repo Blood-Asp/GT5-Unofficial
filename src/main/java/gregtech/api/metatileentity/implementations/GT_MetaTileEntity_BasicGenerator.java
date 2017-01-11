@@ -143,6 +143,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean doesFillContainers() {
+        //return getBaseMetaTileEntity().isAllowedToWork();
         return false;
     }
 
@@ -177,6 +178,12 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     }
 
     @Override
+    public boolean isLiquidOutput(byte aSide) {
+        //return super.isLiquidOutput(aSide);
+        return false;
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && aTick % 10 == 0) {
         	long tProducedEU = 0;
@@ -192,9 +199,10 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                 int tFuelValue = getFuelValue(mFluid), tConsumed = consumedFluidPerOperation(mFluid);
                 if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount > tConsumed) {
                     long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
-                    if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true))
-                    	tProducedEU = tFluidAmountToUse * tFuelValue;
+                    if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
+                        tProducedEU = tFluidAmountToUse * tFuelValue;
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
+                    }
                 }
             }
             if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) == null) {

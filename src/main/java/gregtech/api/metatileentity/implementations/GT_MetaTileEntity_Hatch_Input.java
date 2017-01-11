@@ -61,7 +61,8 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
 
     @Override
     public boolean doesFillContainers() {
-        return true;
+        //return true;
+        return false;
     }
 
     @Override
@@ -111,7 +112,8 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
 
     @Override
     public int getCapacity() {
-        return 8000 * (mTier + 1);
+        if (mTier<1) return 8000;
+        return 16000 * (mTier*(mTier>>2));
     }
 
     @Override
