@@ -671,6 +671,44 @@ public class GT_ModHandler {
         return true;
     }
 
+    /**
+     * Adds GT versions of the IC2 recipes from the supplied IC2RecipeList.
+     */
+    public static void addIC2RecipesToGT(Map<IRecipeInput, RecipeOutput> aIC2RecipeList, GT_Recipe.GT_Recipe_Map aGTRecipeMap, boolean aAddGTRecipe, boolean aRemoveIC2Recipe, boolean aExcludeGTIC2Items) {
+        Map<ItemStack, ItemStack> aRecipesToRemove = new HashMap<>();
+        for (Iterator i$ = aIC2RecipeList.entrySet().iterator(); i$.hasNext(); ) {
+            Entry tRecipe = (Map.Entry) i$.next();
+            if (((RecipeOutput) tRecipe.getValue()).items.size() > 0) {
+                for (ItemStack tStack : ((IRecipeInput) tRecipe.getKey()).getInputs()) {
+                    if (GT_Utility.isStackValid(tStack)) {
+                        if (aAddGTRecipe && (aGTRecipeMap.findRecipe(null, false, Long.MAX_VALUE, null, tStack) == null)) {
+                            if (aExcludeGTIC2Items && ((tStack.getUnlocalizedName().contains("gt.metaitem.01") || tStack.getUnlocalizedName().contains("gt.blockores") || tStack.getUnlocalizedName().contains("ic2.itemCrushed") || tStack.getUnlocalizedName().contains("ic2.itemPurifiedCrushed")))) continue;
+                            switch (aGTRecipeMap.mUnlocalizedName) {
+                                case "gt.recipe.macerator":
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 2, 0);
+                                    break;
+                                case "gt.recipe.compressor":
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 2, 0);
+                                    break;
+                                case "gt.recipe.extractor":
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 100, 32, 0);
+                                    break;
+                                case "gt.recipe.thermalcentrifuge":
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 48, 0);
+                                    break;
+                            }
+                            //System.out.println("#####Processed IC2 " + aGTRecipeMap.mUnlocalizedName + " Recipe: In(" + tStack.getUnlocalizedName() + ") - Out(" + ((RecipeOutput) tRecipe.getValue()).items.get(0).getUnlocalizedName() + ")");
+                        }
+                        if (aRemoveIC2Recipe) aRecipesToRemove.put(tStack, ((RecipeOutput) tRecipe.getValue()).items.get(0));
+                    }
+                }
+            }
+        }
+        for (Entry<ItemStack, ItemStack> aEntry : aRecipesToRemove.entrySet()) {
+            GT_Utility.removeSimpleIC2MachineRecipe(aEntry.getKey(), aIC2RecipeList, aEntry.getValue());
+        }
+    }
+
     public static Map<IRecipeInput, RecipeOutput> getExtractorRecipeList() {
         try {
             return ic2.api.recipe.Recipes.extractor.getRecipes();
