@@ -8,6 +8,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import net.minecraft.item.ItemStack;
@@ -72,6 +73,11 @@ public class GT_MetaTileEntity_Replicator
             }
         }
         return 0;
+    }
+
+    @Override
+    public GT_Recipe.GT_Recipe_Map getRecipeList() {
+        return GT_Recipe.GT_Recipe_Map.sReplicatorFakeRecipes;
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {

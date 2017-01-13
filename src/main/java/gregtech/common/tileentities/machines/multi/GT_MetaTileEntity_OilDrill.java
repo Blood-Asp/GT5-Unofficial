@@ -222,11 +222,6 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
     }
 
     @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
-    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

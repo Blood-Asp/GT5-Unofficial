@@ -87,6 +87,7 @@ public class GT_Loader_Item_Block_And_Fluid
         
         ItemList.Neutron_Reflector.set(new GT_NeutronReflector_Item("neutronreflector", "Iridium Neutron Reflector", 0));
         GT_ModHandler.addCraftingRecipe(ItemList.Neutron_Reflector.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RRR", "RPR", "RRR", 'R', GT_ModHandler.getIC2Item("reactorReflectorThick", 1L, 1), 'P', OrePrefixes.plateAlloy.get(Materials.Iridium)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Neutron_Reflector.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RBR", "RPR", "RBR", 'R', GT_ModHandler.getIC2Item("reactorReflectorThick", 1L, 1), 'P', OrePrefixes.plateAlloy.get(Materials.Iridium),'B', OrePrefixes.plate.get(Materials.TungstenCarbide)});
 
         ItemList.Reactor_Coolant_He_1.set(GregTech_API.constructCoolantCellItem("60k_Helium_Coolantcell", "60k He Coolant Cell", 60000));
         GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_He_1.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{" P ", "PCP", " P ", 'C', OrePrefixes.cell.get(Materials.Helium), 'P', OrePrefixes.plate.get(Materials.Tin)});
@@ -122,12 +123,12 @@ public class GT_Loader_Item_Block_And_Fluid
         ItemList.Depleted_Naquadah_2.set(new GT_DepletetCell_Item("Double_NaquadahcellDep", "Dual Fuel Rod (Depleted Naquadah)", 1));
         ItemList.Depleted_Naquadah_4.set(new GT_DepletetCell_Item("Quad_NaquadahcellDep", "Quad Fuel Rod (Depleted Naquadah)", 1));
 
-        ItemList.NaquadahCell_1.set(new GT_RadioactiveCellIC_Item("Naquadahcell", "Fuel Rod (Naquadah)", 1, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_1.get(1, new Object[0]),false));
+        ItemList.NaquadahCell_1.set(new GT_RadioactiveCellIC_Item("Naquadahcell", "Fuel Rod (Naquadah)", 1, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_1.get(1, new Object[0]),true));
 
-        ItemList.NaquadahCell_2.set(new GT_RadioactiveCellIC_Item("Double_Naquadahcell", "Double Fuel Rod (Naquadah)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_2.get(1, new Object[0]),false));
+        ItemList.NaquadahCell_2.set(new GT_RadioactiveCellIC_Item("Double_Naquadahcell", "Double Fuel Rod (Naquadah)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_2.get(1, new Object[0]),true));
         GT_ModHandler.addCraftingRecipe(ItemList.NaquadahCell_2.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "   ", "   ", 'R', ItemList.NaquadahCell_1, 'P', OrePrefixes.plate.get(Materials.Iron)});
 
-        ItemList.NaquadahCell_4.set(new GT_RadioactiveCellIC_Item("Quad_Naquadahcell", "Quad Fuel Rod (Naquadah)", 4, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_4.get(1, new Object[0]),false));
+        ItemList.NaquadahCell_4.set(new GT_RadioactiveCellIC_Item("Quad_Naquadahcell", "Quad Fuel Rod (Naquadah)", 4, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_4.get(1, new Object[0]),true));
         GT_ModHandler.addCraftingRecipe(ItemList.NaquadahCell_4.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "CPC", "RPR", 'R', ItemList.NaquadahCell_1, 'P', OrePrefixes.plate.get(Materials.Iron), 'C', OrePrefixes.plate.get(Materials.Copper)});
 
         GT_ModHandler.addThermalCentrifugeRecipe(ItemList.Depleted_Naquadah_1.get(1, new Object[0]), 5000, new Object[]{GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Naquadria, 2L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Iron, 1L)});
@@ -415,7 +416,7 @@ public class GT_Loader_Item_Block_And_Fluid
         GT_Mod.gregtechproxy.addFluid("liquid_medium_oil", "Raw Oil", Materials.OilMedium, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.OilMedium, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("liquid_light_oil", "Light Oil", Materials.OilLight, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.OilLight, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("gas_natural_gas", "Natural Gas", Materials.NatruralGas, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NatruralGas, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
-        GT_Mod.gregtechproxy.addFluid("liquid_hydricsulfur", "Hydric Sulfide", Materials.HydricSulfide, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+        ItemList.sHydricSulfur = GT_Mod.gregtechproxy.addFluid("liquid_hydricsulfur", "Hydric Sulfide", Materials.HydricSulfide, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("gas_sulfuricgas", "Sulfuric Gas", Materials.SulfuricGas, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricGas, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("gas_gas", "Refinery Gas", Materials.Gas, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Gas, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("liquid_sulfuricnaphtha", "Sulfuric Naphtha", Materials.SulfuricNaphtha, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricNaphtha, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
@@ -429,7 +430,7 @@ public class GT_Loader_Item_Block_And_Fluid
         GT_Mod.gregtechproxy.addFluid("liquid_cracked_heavy_fuel", "Cracked Heavy Fuel", Materials.CrackedHeavyFuel, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.CrackedHeavyFuel, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
 
         GT_Mod.gregtechproxy.addFluid("UUAmplifier", "UU Amplifier", Materials.UUAmplifier, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.UUAmplifier, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
-        GT_Mod.gregtechproxy.addFluid("Chlorine", "Chlorine", Materials.Chlorine, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Chlorine, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+        GT_Mod.gregtechproxy.addFluid("Chlorine", "Chlorine", Materials.Chlorine, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Chlorine, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Mercury", "Mercury", Materials.Mercury, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Mercury, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("NitroFuel", "Nitro Diesel", Materials.NitroFuel, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NitroFuel, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("SodiumPersulfate", "Sodium Persulfate", Materials.SodiumPersulfate, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SodiumPersulfate, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
@@ -455,6 +456,7 @@ public class GT_Loader_Item_Block_And_Fluid
         if (ItemList.TF_Vial_FieryBlood.get(1L, new Object[0]) != null) {
             FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.FierySteel.getFluid(250L), ItemList.TF_Vial_FieryBlood.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0])));
         }
+        
         FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Milk.getFluid(1000L), GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Milk, 1L), GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Empty, 1L)));
         FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Milk.getFluid(250L), ItemList.Bottle_Milk.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0])));
         FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.HolyWater.getFluid(250L), ItemList.Bottle_Holy_Water.get(1L, new Object[0]), ItemList.Bottle_Empty.get(1L, new Object[0])));
@@ -702,5 +704,10 @@ public class GT_Loader_Item_Block_And_Fluid
 
         GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Cocoa, GT_ModHandler.getModItem("harvestcraft", "cocoapowderItem", 1L, 0));
         GT_OreDictUnificator.set(OrePrefixes.dust, Materials.Coffee, ItemList.IC2_CoffeePowder.get(1L, new Object[0]));
+
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadah.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.NaquadahEnriched.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NaquadahEnriched, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Naquadria.getMolten(1000L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naquadria, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L)));
+        
     }
 }

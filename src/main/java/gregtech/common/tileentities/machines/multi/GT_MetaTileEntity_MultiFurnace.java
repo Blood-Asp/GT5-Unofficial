@@ -188,10 +188,6 @@ public class GT_MetaTileEntity_MultiFurnace
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 128;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

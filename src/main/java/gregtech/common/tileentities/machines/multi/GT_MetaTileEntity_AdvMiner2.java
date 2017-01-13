@@ -330,11 +330,6 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
     }
 
     @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
-    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

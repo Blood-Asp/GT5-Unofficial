@@ -197,9 +197,6 @@ public class GT_MetaTileEntity_DistillationTower
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 1;
-    }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;

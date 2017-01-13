@@ -228,11 +228,6 @@ public class GT_MetaTileEntity_AssemblyLine
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
-
-    public int getAmountOfOutputs() {
-        return 2;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

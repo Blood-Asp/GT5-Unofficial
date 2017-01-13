@@ -94,6 +94,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                 } else {
                     return false;
                 }
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -186,12 +188,6 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         }
         return 0;
     }
-
-    @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
