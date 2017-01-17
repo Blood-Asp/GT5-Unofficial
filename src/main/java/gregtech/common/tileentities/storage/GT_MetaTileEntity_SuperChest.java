@@ -166,13 +166,15 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachin
     private static int CommonSizeCompute(int tier){
         switch(tier){
             case 1:
-                return 0;
+                return  4000000;
             case 2:
-                return 0;
+                return  8000000;
             case 3:
-                return 0;
+                return 16000000;
             case 4:
-                return 0;
+                return 32000000;
+            case 5:
+                return 64000000;
             default:
                 return 0;
         }

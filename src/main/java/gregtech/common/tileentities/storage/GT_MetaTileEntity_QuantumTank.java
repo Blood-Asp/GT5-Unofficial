@@ -130,16 +130,16 @@ public class GT_MetaTileEntity_QuantumTank
 
     private static int CommonSizeCompute(int tier){
         switch(tier){
-            case 5:
-                return 0;
             case 6:
-                return 0;
+                return  128000000;
             case 7:
-                return 0;
+                return  256000000;
             case 8:
-                return 0;
+                return  512000000;
             case 9:
-                return 0;
+                return 1024000000;
+            case 10:
+                return 2147483640;
             default:
                 return 0;
         }
