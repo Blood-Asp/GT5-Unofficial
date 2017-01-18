@@ -15,14 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
-public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMachineBlock {
+public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachineBlock {
     public int mItemCount = 0;
     public ItemStack mItemStack = null;
-    public GT_MetaTileEntity_QuantumChest(int aID, String aName, String aNameRegional, int aTier) {
+    public GT_MetaTileEntity_SuperChest(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks");
     }
 
-    public GT_MetaTileEntity_QuantumChest(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+    public GT_MetaTileEntity_SuperChest(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
@@ -48,7 +48,7 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumChest(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_SuperChest(mName, mTier, mDescription, mTextures);
     }
 
     @Override
@@ -162,19 +162,19 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
     public int maxProgresstime() {
         return getMaxItemCount();
     }
-
+    
     private static int CommonSizeCompute(int tier){
         switch(tier){
-            case 6:
-                return  128000000;
-            case 7:
-                return  256000000;
-            case 8:
-                return  512000000;
-            case 9:
-                return 1024000000;
-            case 10:
-                return 2147483640;
+            case 1:
+                return  4000000;
+            case 2:
+                return  8000000;
+            case 3:
+                return 16000000;
+            case 4:
+                return 32000000;
+            case 5:
+                return 64000000;
             default:
                 return 0;
         }
@@ -199,7 +199,7 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
         if (mItemStack == null) {
             return new String[]{
-                    EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.BLUE + "Super Chest"+ EnumChatFormatting.RESET,
                     "Stored Items:",
                     EnumChatFormatting.GOLD+ "No Items"+ EnumChatFormatting.RESET,
                     EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET+" "+
@@ -207,7 +207,7 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
             };
         }
         return new String[]{
-                EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
+                EnumChatFormatting.BLUE + "Super Chest"+ EnumChatFormatting.RESET,
                 "Stored Items:",
                 EnumChatFormatting.GOLD + mItemStack.getDisplayName() + EnumChatFormatting.RESET,
                 EnumChatFormatting.GREEN + Integer.toString(mItemCount) + EnumChatFormatting.RESET+" "+
@@ -238,9 +238,9 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aBaseMetaTileEntity.getFrontFacing() == 0 && aSide == 4) {
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_QCHEST)};
+            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SCHEST)};
         }
-        return aSide == aBaseMetaTileEntity.getFrontFacing() ? new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_QCHEST)} : new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]};//aSide != aFacing ? mMachineBlock != 0 ? new ITexture[] {Textures.BlockIcons.CASING_BLOCKS[mMachineBlock]} : new ITexture[] {Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex+1]} : mMachineBlock != 0 ? aActive ? getTexturesActive(Textures.BlockIcons.CASING_BLOCKS[mMachineBlock]) : getTexturesInactive(Textures.BlockIcons.CASING_BLOCKS[mMachineBlock]) : aActive ? getTexturesActive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex+1]) : getTexturesInactive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex+1]);
+        return aSide == aBaseMetaTileEntity.getFrontFacing() ? new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SCHEST)} : new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]};
     }
 
     @Override
