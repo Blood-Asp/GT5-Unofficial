@@ -338,7 +338,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				if (stepup > 1) {
 					aPlayer.stepHeight = 1.0f;
 				}
-				if (GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump)) {
+				if (aWorld.isRemote && GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump)) {
 					if (stepup > 0 && jumpticks > 0) {
 						if (data.maxWeight > 2000) {
 							stepup *= 2000.0D / data.maxWeight;
