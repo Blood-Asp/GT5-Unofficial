@@ -14,16 +14,16 @@ public class GT_Block_Casings6
     public GT_Block_Casings6() {
         super(GT_Item_Casings6.class, "gt.blockcasings6", GT_Material_Casings.INSTANCE);
         
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Tank Casing I");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Tank Casing II");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Tank Casing III");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Tank Casing IV");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".4.name", "Tank Casing V");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".5.name", "Tank Casing VI");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Tank Casing VII");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Tank Casing VIII");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Tank Casing IX");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "Tank Casing X");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Hermetic Casing I");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Hermetic Casing II");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Hermetic Casing III");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Hermetic Casing IV");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".4.name", "Hermetic Casing V");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".5.name", "Hermetic Casing VI");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Hermetic Casing VII");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Hermetic Casing VIII");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Hermetic Casing IX");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "Hermetic Casing X");
 
         ItemList.Casing_Tank_1.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Tank_2.set(new ItemStack(this, 1, 1));
