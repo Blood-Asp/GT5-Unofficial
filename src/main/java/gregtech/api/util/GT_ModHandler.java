@@ -501,7 +501,7 @@ public class GT_ModHandler {
         if (aInput == null || aOutput == null) return false;
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.extractor, aInput, true)) return false;
-        RA.addExtractorRecipe(aInput, aOutput, 100, 32);
+        RA.addExtractorRecipe(aInput, aOutput, 300, 2);
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.addSimpleIC2MachineRecipe(aInput, getExtractorRecipeList(), null, aOutput);
         return true;
     }
@@ -685,16 +685,16 @@ public class GT_ModHandler {
                             if (aExcludeGTIC2Items && ((tStack.getUnlocalizedName().contains("gt.metaitem.01") || tStack.getUnlocalizedName().contains("gt.blockores") || tStack.getUnlocalizedName().contains("ic2.itemCrushed") || tStack.getUnlocalizedName().contains("ic2.itemPurifiedCrushed")))) continue;
                             switch (aGTRecipeMap.mUnlocalizedName) {
                                 case "gt.recipe.macerator":
-                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 2, 0);
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 300, 2, 0);
                                     break;
                                 case "gt.recipe.compressor":
-                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 2, 0);
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 300, 2, 0);
                                     break;
                                 case "gt.recipe.extractor":
-                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 100, 32, 0);
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 300, 2, 0);
                                     break;
                                 case "gt.recipe.thermalcentrifuge":
-                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 400, 48, 0);
+                                    aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 500, 48, 0);
                                     break;
                             }
                             //System.out.println("#####Processed IC2 " + aGTRecipeMap.mUnlocalizedName + " Recipe: In(" + tStack.getUnlocalizedName() + ") - Out(" + ((RecipeOutput) tRecipe.getValue()).items.get(0).getUnlocalizedName() + ")");
@@ -758,7 +758,7 @@ public class GT_ModHandler {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getThermalCentrifugeRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.thermalcentrifuge, aInput, true)) return false;
-        RA.addThermalCentrifugeRecipe(aInput, aOutput.length >= 1 ? (ItemStack)aOutput[0] : null, aOutput.length >= 2 ? (ItemStack)aOutput[1] : null, aOutput.length >= 3 ? (ItemStack)aOutput[2] : null, 400, 48);
+        RA.addThermalCentrifugeRecipe(aInput, aOutput.length >= 1 ? (ItemStack)aOutput[0] : null, aOutput.length >= 2 ? (ItemStack)aOutput[1] : null, aOutput.length >= 3 ? (ItemStack)aOutput[2] : null, 500, 48);
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) {
             NBTTagCompound tNBT = new NBTTagCompound();
             tNBT.setInteger("minHeat", aHeat);
@@ -774,7 +774,7 @@ public class GT_ModHandler {
         if (aInput == null || aOutput == null || aOutput.length <= 0 || aOutput[0] == null) return false;
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.orewashing, aInput, true)) return false;
-        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(1000L), 400, 16);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(1000L), 500, 16);
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) {
             NBTTagCompound tNBT = new NBTTagCompound();
             tNBT.setInteger("amount", aWaterAmount);
@@ -791,7 +791,7 @@ public class GT_ModHandler {
         if (aInput == null || aOutput == null || GT_Utility.areStacksEqual(aInput, aOutput, true)) return false;
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.compression, aInput, true)) return false;
-        RA.addCompressorRecipe(aInput, aOutput, 400, 2);
+        RA.addCompressorRecipe(aInput, aOutput, 300, 2);
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.addSimpleIC2MachineRecipe(aInput, getCompressorRecipeList(), null, aOutput);
         return true;
     }

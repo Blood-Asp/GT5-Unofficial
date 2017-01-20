@@ -30,7 +30,7 @@ public class GT_MetaTileEntity_Macerator_Bronze
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeMacerator.png", "ic2.macerator");
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeMacerator.png", GT_Recipe_Map.sMaceratorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
