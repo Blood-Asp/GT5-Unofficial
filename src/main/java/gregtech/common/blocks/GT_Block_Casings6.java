@@ -13,9 +13,7 @@ public class GT_Block_Casings6
         extends GT_Block_Casings_Abstract {
     public GT_Block_Casings6() {
         super(GT_Item_Casings6.class, "gt.blockcasings6", GT_Material_Casings.INSTANCE);
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.CASING_BLOCKS[(i + 64)] = new GT_CopiedBlockTexture(this, 9, i);
-        }
+        
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Tank Casing I");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Tank Casing II");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Tank Casing III");
