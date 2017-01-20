@@ -161,6 +161,7 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockCasings3 = new GT_Block_Casings3();
         GregTech_API.sBlockCasings4 = new GT_Block_Casings4();
         GregTech_API.sBlockCasings5 = new GT_Block_Casings5();
+        GregTech_API.sBlockCasings6 = new GT_Block_Casings6();
         GregTech_API.sBlockGranites = new GT_Block_Granites();
         GregTech_API.sBlockConcretes = new GT_Block_Concretes();
         GregTech_API.sBlockStones = new GT_Block_Stones();
