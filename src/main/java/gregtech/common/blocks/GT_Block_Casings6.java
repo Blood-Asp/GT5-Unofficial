@@ -51,6 +51,12 @@ public class GT_Block_Casings6
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int aSide, int aMeta) {
+        if (aSide == 0) {
+            return Textures.BlockIcons.MACHINECASINGS_BOTTOM[aMeta].getIcon();
+        }
+        if (aSide == 1) {
+            return Textures.BlockIcons.MACHINECASINGS_TOP[aMeta].getIcon();
+        }
         switch (aMeta) {
             case 1:
                 return Textures.BlockIcons.MACHINE_CASING_TANK_1.getIcon();
