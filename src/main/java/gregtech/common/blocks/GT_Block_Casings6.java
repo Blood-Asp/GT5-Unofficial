@@ -24,6 +24,12 @@ public class GT_Block_Casings6
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Hermetic Casing VIII");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Hermetic Casing IX");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "Hermetic Casing X");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".10.name", "Hermetic Casing XI");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".11.name", "Hermetic Casing XII");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Hermetic Casing XIII");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".13.name", "Hermetic Casing XIV");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".14.name", "Hermetic Casing XV");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".15.name", "Hermetic Casing");
 
         ItemList.Casing_Tank_1.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Tank_2.set(new ItemStack(this, 1, 1));
@@ -35,6 +41,12 @@ public class GT_Block_Casings6
         ItemList.Casing_Tank_8.set(new ItemStack(this, 1, 7));
         ItemList.Casing_Tank_9.set(new ItemStack(this, 1, 8));
         ItemList.Casing_Tank_10.set(new ItemStack(this, 1, 9));
+        ItemList.Casing_Tank_11.set(new ItemStack(this, 1, 10));
+        ItemList.Casing_Tank_12.set(new ItemStack(this, 1, 11));
+        ItemList.Casing_Tank_13.set(new ItemStack(this, 1, 12));
+        ItemList.Casing_Tank_14.set(new ItemStack(this, 1, 13));
+        ItemList.Casing_Tank_15.set(new ItemStack(this, 1, 14));
+        ItemList.Casing_Tank_0.set(new ItemStack(this, 1, 15));
     }
     @Override
     @SideOnly(Side.CLIENT)
@@ -60,7 +72,17 @@ public class GT_Block_Casings6
                 return Textures.BlockIcons.MACHINE_CASING_TANK_9.getIcon();
             case 9:
                 return Textures.BlockIcons.MACHINE_CASING_TANK_10.getIcon();
+            case 10:
+                return Textures.BlockIcons.MACHINE_CASING_TANK_11.getIcon();
+            case 11:
+                return Textures.BlockIcons.MACHINE_CASING_TANK_12.getIcon();
+            case 12:
+                return Textures.BlockIcons.MACHINE_CASING_TANK_13.getIcon();
+            case 13:
+                return Textures.BlockIcons.MACHINE_CASING_TANK_14.getIcon();
+            case 14:
+                return Textures.BlockIcons.MACHINE_CASING_TANK_15.getIcon();
         }
-        return Textures.BlockIcons.MACHINE_CASING_TANK_1.getIcon();
+        return Textures.BlockIcons.MACHINE_CASING_TANK_0.getIcon();
     }
 }
