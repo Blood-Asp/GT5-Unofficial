@@ -8,6 +8,7 @@ import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 
 public class GT_Block_Casings6
         extends GT_Block_Casings_Abstract {
@@ -91,5 +92,9 @@ public class GT_Block_Casings6
             default:
                 return Textures.BlockIcons.MACHINE_CASING_TANK_0.getIcon();
         }
+    }
+
+    public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
+        return gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }
 }
