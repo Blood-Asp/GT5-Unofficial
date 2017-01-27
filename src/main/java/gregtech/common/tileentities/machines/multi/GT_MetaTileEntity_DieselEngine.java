@@ -91,7 +91,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
 
                                 fuelValue = aFuel.mSpecialValue;
                                 fuelRemaining = hatchFluid1.amount; //Record available fuel
-                                this.mEUt = mEfficiency < 2000 ? 0 : (int) ((boostEu?3:1) * 2048 * (((float) Math.min(mEfficiency,10000)) / 10000)); //Output 0 if startup is less than 20%
+                                this.mEUt = mEfficiency < 2000 ? 0 : (int) ((boostEu?6144:2048) * (((float) Math.min(mEfficiency,10000)) / 10000)); //Output 0 if startup is less than 20%
                                 this.mProgresstime = 1;
                                 this.mMaxProgresstime = 1;
                                 this.mEfficiencyIncrease = 15;
