@@ -18,6 +18,8 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import ic2.core.Ic2Items;
+import net.minecraft.client.Minecraft;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -213,7 +215,7 @@ public class GT_Achievements {
     public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
         if (aMaterial != Materials._NULL) {
             //oreList.add(aMaterial);
-            if(!oreList.add(aMaterial)) GT_Log.err.println("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.");
+            if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
         }
         oreStats.add(new Integer[]{min, max, chance, overworld ? 1 : 0, nether ? 1 : 0, end ? 1 : 0});
     }
