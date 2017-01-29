@@ -73,7 +73,12 @@ public class GT_Achievements {
                 }
                 GT_Log.out.println("achievement." + oreList.get(i).name() + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
             }
-            registerOreAchievement(oreList.get(i));
+            if(oreList.get(i)==null)
+                GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
+            if(oreList.get(i).name()==null)
+                GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
+            else
+                registerOreAchievement(oreList.get(i));
         }
 
         for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList)
