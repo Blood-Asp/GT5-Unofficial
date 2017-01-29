@@ -214,8 +214,8 @@ public class GT_Achievements {
 
     public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
         if (aMaterial != Materials._NULL) {
-            //oreList.add(aMaterial);
-            if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
+            oreList.add(aMaterial);
+            //if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
         }
         oreStats.add(new Integer[]{min, max, chance, overworld ? 1 : 0, nether ? 1 : 0, end ? 1 : 0});
     }
