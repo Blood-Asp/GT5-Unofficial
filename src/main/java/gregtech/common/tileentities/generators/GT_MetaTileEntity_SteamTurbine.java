@@ -56,6 +56,7 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public int getFuelValue(FluidStack aLiquid) {
+    	if(aLiquid==null)return 0;
     	String fluidName = aLiquid.getFluid().getUnlocalizedName(aLiquid);
         return GT_ModHandler.isSteam(aLiquid) || fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name") ? 3 : 0;
     }
