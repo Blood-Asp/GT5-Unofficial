@@ -33,19 +33,14 @@ public class GT_MetaTileEntity_Extractor_Steel
     }
 
     public int checkRecipe() {
-        if (null != (this.mOutputItems[0] = GT_ModHandler.getExtractorOutput(getInputAt(0), true, getOutputAt(0)))) {
-            this.mEUt = 6;
-            this.mMaxProgresstime = 400;
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sExtractorRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[2], null, getAllInputs());
+        if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
+            this.mOutputItems[0] = tRecipe.getOutput(0);
+            this.mEUt = (tRecipe.mEUt * 3);
+            this.mMaxProgresstime = tRecipe.mDuration;
             return 2;
         }
         return 0;
-    }
-
-    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-            return false;
-        }
-        return GT_ModHandler.getExtractorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
