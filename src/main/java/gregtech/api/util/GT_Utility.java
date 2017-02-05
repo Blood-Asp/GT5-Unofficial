@@ -1519,6 +1519,10 @@ public class GT_Utility {
     }
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
+    	return getUndergroundOil(aWorld, aX, aZ, false);
+    }
+
+    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
 
     	
         Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
@@ -1554,7 +1558,8 @@ public class GT_Utility {
     		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
-    	tAmount = tAmount - 5;
+    	if (needConsumeOil && tAmount >= 5000)
+    		tAmount = tAmount - 5;
     	tInts[0] = tAmount;
     	GT_Proxy.chunkData.put(tPos, tInts);
     	
