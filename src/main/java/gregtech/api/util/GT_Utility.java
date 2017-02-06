@@ -1524,7 +1524,11 @@ public class GT_Utility {
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
 
-    	
+    	if (aWorld.provider.dimensionId!=0)
+    	{
+    		return null;
+    	}
+
         Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
         int oil = tRandom.nextInt(3);
         double amount = tRandom.nextInt(50) + tRandom.nextDouble();
@@ -1756,7 +1760,8 @@ public class GT_Utility {
         }
         if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
             FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
-            tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
+            if (tFluid!=null)
+            	tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
         }
 //        if(aPlayer.capabilities.isCreativeMode){
         	ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
@@ -2003,7 +2008,9 @@ public class GT_Utility {
 
         public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String[] aOres) {
             NBTTagCompound tNBT = getNBT(aStack);
-            String tData = aX + "," + aY + "," + aZ + "," + aDim + "," + (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
+            String tData = aX + "," + aY + "," + aZ + "," + aDim + ",";
+            if (aFluid!=null)
+            	tData += (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
             for (String tString : aOres) {
                 tData += tString + ",";
             }
