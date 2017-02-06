@@ -1529,11 +1529,11 @@ public class GT_Utility {
     		return null;
     	}
 
-        Random tRandom = new Random((aWorld.getSeed() + (aX / 96) + (7 * (aZ / 96))));
+        Random tRandom = new Random((aWorld.getSeed() + ((int)Math.floor(aX / 96.d)) + (7 * ((int)Math.floor(aZ / 96.d)))));
         int oil = tRandom.nextInt(3);
         double amount = tRandom.nextInt(50) + tRandom.nextDouble();
         oil = tRandom.nextInt(4);
-//		System.out.println("Oil: "+(aX/96)+" "+(aZ/96)+" "+oil+" "+amount);
+//		System.out.println("Oil: "+((int)Math.floor(aX/96.d))+" "+((int)Math.floor(aZ/96.d))+" "+oil+" "+amount+"dd");
 //		amount = 40;
         Fluid tFluid = null;
         switch (oil) {
