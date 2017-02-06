@@ -165,6 +165,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mHideUnusedOres = true;
     public boolean mHideRecyclingRecipes = true;
     public boolean mPollution = true;
+    public boolean mUndergroundOilOverworld = true;
+    public boolean mUndergroundOilInRealDimension = true;
     public boolean mExplosionItemDrop = false;
     public int mSkeletonsShootGTArrows = 16;
     public int mMaxEqualEntitiesAtOneSpot = 3;
@@ -179,6 +181,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionPoisonLimit = 750000;
     public int mPollutionVegetationLimit = 1000000;
     public int mPollutionSourRainLimit = 2000000;
+    public int mUndergroundOilMaxAmount = 50;
     public int mTicksUntilNextCraftSound = 0;
     public double mMagneticraftBonusOutputPercent = 100.0d;
     private World mUniverse = null;

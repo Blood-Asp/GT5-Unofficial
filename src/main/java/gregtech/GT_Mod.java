@@ -251,6 +251,9 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionPoisonLimit = tMainConfig.get("Pollution", "PoisonLimit", 750000).getInt(750000);
         gregtechproxy.mPollutionVegetationLimit = tMainConfig.get("Pollution", "VegetationLimit", 1000000).getInt(1000000);
         gregtechproxy.mPollutionSourRainLimit = tMainConfig.get("Pollution", "SourRainLimit", 2000000).getInt(2000000);
+        gregtechproxy.mUndergroundOilOverworld = tMainConfig.get("UndergroundOil", "EnableOverworld", true).getBoolean(true);
+        gregtechproxy.mUndergroundOilInRealDimension = tMainConfig.get("UndergroundOil", "EnableInRealDimension", true).getBoolean(true);
+        gregtechproxy.mUndergroundOilMaxAmount = tMainConfig.get("UndergroundOil", "MaxAmount", 50).getInt(50);
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", false).getBoolean(false);
         gregtechproxy.mAddGTRecipesToIC2Machines = tMainConfig.get("general", "AddGTRecipesToIC2Machines", true).getBoolean(true);
 
