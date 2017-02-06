@@ -2,6 +2,7 @@ package gregtech.api.util;
 
 import cofh.api.transport.IItemDuct;
 import cpw.mods.fml.common.FMLCommonHandler;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -1518,22 +1519,35 @@ public class GT_Utility {
         return false;
     }
 
+    public static int getScaleСoordinates(double aValue, int aScale) {
+    	return (int)Math.floor(aValue / aScale);
+    }
+
+    public static boolean getUndergroundOilSpawns(int aDimensionId) {
+
+    	if (Math.abs(aDimensionId)==1) return false;  //If Nether or End... 
+    	
+    	if (GT_Mod.gregtechproxy.mUndergroundOilOverworld && aDimensionId==0) return true;  //Overworld
+    	if (GT_Mod.gregtechproxy.mUndergroundOilInRealDimension && isRealDimension(aDimensionId)) return true;  //Other real world
+    	    	
+    	return false;  //If other planets...
+    	    	
+    }
+    
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
     	return getUndergroundOil(aWorld, aX, aZ, false);
     }
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
 
-    	if (aWorld.provider.dimensionId!=0)
-    	{
+    	if (!getUndergroundOilSpawns(aWorld.provider.dimensionId))
     		return null;
-    	}
 
-        Random tRandom = new Random((aWorld.getSeed() + ((int)Math.floor(aX / 96.d)) + (7 * ((int)Math.floor(aZ / 96.d)))));
+        Random tRandom = new Random((aWorld.getSeed() + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
         int oil = tRandom.nextInt(3);
-        double amount = tRandom.nextInt(50) + tRandom.nextDouble();
+        double amount = tRandom.nextInt(GT_Mod.gregtechproxy.mUndergroundOilMaxAmount) + tRandom.nextDouble();
         oil = tRandom.nextInt(4);
-//		System.out.println("Oil: "+((int)Math.floor(aX/96.d))+" "+((int)Math.floor(aZ/96.d))+" "+oil+" "+amount+"dd");
+//		System.out.println("Oil: "+(getScaleСoordinates(aX,96))+" "+(getScaleСoordinates(aX,96))+" "+oil+" "+amount);
 //		amount = 40;
         Fluid tFluid = null;
         switch (oil) {
@@ -1553,7 +1567,7 @@ public class GT_Utility {
                 tFluid = Materials.Oil.mFluid;
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
-        ChunkPosition tPos = new ChunkPosition(aX/16, 1, aZ/16);
+        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), 1, getScaleСoordinates(aZ,16));
         int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
