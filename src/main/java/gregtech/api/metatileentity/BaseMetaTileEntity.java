@@ -1146,7 +1146,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     }
                 }
             }
-            GT_Pollution.addPollution(new ChunkPosition(getXCoord(), getYCoord(), getZCoord()), 100000);
+            GT_Pollution.addPollution(getWorld(), new ChunkPosition(getXCoord(), getYCoord(), getZCoord()), 100000);
             mMetaTileEntity.doExplosion(aAmount);
         }
     }

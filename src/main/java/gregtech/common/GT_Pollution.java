@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -187,12 +188,18 @@ public class GT_Pollution {
 				else if(tBlock == Blocks.gravel){world.setBlock(x, y, z, Blocks.sand);	}
 			}
 	}
-	
+
+	//Backward compatibility (NOT USE)
 	public static void addPollution(ChunkPosition aPos, int aPollution){
+		addPollution(MinecraftServer.getServer().worldServerForDimension(0), aPos, aPollution);  
+	}
+
+	//Add aWorld to Save Pollution
+	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
 		if(!GT_Mod.gregtechproxy.mPollution)return;
 		try{
-		ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX>>4, 1, aPos.chunkPosZ>>4);
-//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
+		ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleСoordinates(aPos.chunkPosX,16), aWorld.provider.dimensionId + 1, GT_Utility.getScaleСoordinates(aPos.chunkPosZ,16)); // OLD in coordinate -1 -1 chunk 0 0
+//		System.out.println("add pollution dim: "+aWorld.provider.dimensionId+" x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
 		int[] tData = new int[2];
 		if(GT_Proxy.chunkData.containsKey(tPos)){
 			tData = GT_Proxy.chunkData.get(tPos);
