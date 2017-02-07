@@ -1525,11 +1525,14 @@ public class GT_Utility {
 
     public static boolean getUndergroundOilSpawns(int aDimensionId) {
 
-    	if (Math.abs(aDimensionId)==1) return false;  //If Nether or End... 
+    	//Black list
+    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("net.minecraft.world.WorldProviderHell")) return false;
+    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("net.minecraft.world.WorldProviderEnd")) return false;
     	
+    	//Use settings
     	if (GT_Mod.gregtechproxy.mUndergroundOilOverworld && aDimensionId==0) return true;  //Overworld
     	if (GT_Mod.gregtechproxy.mUndergroundOilInRealDimension && isRealDimension(aDimensionId)) return true;  //Other real world
-    	    	
+    	
     	return false;  //If other planets...
     	    	
     }
@@ -1543,7 +1546,7 @@ public class GT_Utility {
     	if (!getUndergroundOilSpawns(aWorld.provider.dimensionId))
     		return null;
 
-        Random tRandom = new Random((aWorld.getSeed() + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
+        Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
         int oil = tRandom.nextInt(3);
         double amount = tRandom.nextInt(GT_Mod.gregtechproxy.mUndergroundOilMaxAmount) + tRandom.nextDouble();
         oil = tRandom.nextInt(4);
@@ -1567,7 +1570,7 @@ public class GT_Utility {
                 tFluid = Materials.Oil.mFluid;
         }
         int tAmount = (int) (Math.pow(amount, 5) / 100);
-        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), 1, getScaleСoordinates(aZ,16));
+        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId+1, getScaleСoordinates(aZ,16));
         int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
