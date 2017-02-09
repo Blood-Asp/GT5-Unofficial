@@ -1523,19 +1523,36 @@ public class GT_Utility {
     	return (int)Math.floor(aValue / aScale);
     }
 
-    public static boolean getUndergroundOilSpawns(int aDimensionId) {
+    public static boolean getUndergroundOilGenerating(int aDimensionId) {
 
-    	//Black list
-    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("net.minecraft.world.WorldProviderHell")) return false;
-    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("net.minecraft.world.WorldProviderEnd")) return false;
-    	
     	//Use settings
-    	if (GT_Mod.gregtechproxy.mUndergroundOilOverworld && aDimensionId==0) return true;  //Overworld
-    	if (GT_Mod.gregtechproxy.mUndergroundOilInRealDimension && isRealDimension(aDimensionId)) return true;  //Other real world
+    	if (java.util.Arrays.binarySearch(GT_Mod.gregtechproxy.mUndergroundOilBlackList, aDimensionId) >= 0) return false;	//Use BlackList Settings
+    	if (java.util.Arrays.binarySearch(GT_Mod.gregtechproxy.mUndergroundOilWhiteList, aDimensionId) >= 0) return true;	//Use WhiteList Settings
+    	if (aDimensionId == 1) return false;	//No bedrock, no oil. End.
+    	if (aDimensionId==0) return GT_Mod.gregtechproxy.mUndergroundOilOverworld;	//Overworld
+    	if (aDimensionId == -1) return GT_Mod.gregtechproxy.mUndergroundOilNether;	//Nether
+
+    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("Moon")) return GT_Mod.gregtechproxy.mUndergroundOilMoon;	//Moon
+    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("Mars")) return GT_Mod.gregtechproxy.mUndergroundOilMars;	//Mars
     	
-    	return false;  //If other planets...
+    	if (isRealDimension(aDimensionId)) return GT_Mod.gregtechproxy.mUndergroundOilInRealDimension;	//Other real world
+    	
+    	return false;  //If other planets or worlds...
     	    	
     }
+
+    public static int getUndergroundOilType(int aType, int aOil) {
+    	switch (aType) {
+    	case 1:
+    		aOil = 10;
+    		break;
+    	case 2:
+    		aOil = 11;
+    		break;
+    	}
+    	return aOil;
+    }
+
     
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
     	return getUndergroundOil(aWorld, aX, aZ, false);
@@ -1543,15 +1560,25 @@ public class GT_Utility {
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
 
-    	if (!getUndergroundOilSpawns(aWorld.provider.dimensionId))
+    	if (!getUndergroundOilGenerating(aWorld.provider.dimensionId))
     		return null;
 
         Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
         int oil = tRandom.nextInt(3);
-        double amount = tRandom.nextInt(GT_Mod.gregtechproxy.mUndergroundOilMaxAmount) + tRandom.nextDouble();
         oil = tRandom.nextInt(4);
+        int maxAmount;
+        if (aWorld.provider.dimensionId == -1){
+        	maxAmount = GT_Mod.gregtechproxy.mUndergroundOilNetherMaxAmount;
+        	oil=getUndergroundOilType(GT_Mod.gregtechproxy.mUndergroundOilNetherResType,oil);
+        } else if (DimensionManager.getProvider(aWorld.provider.dimensionId).getClass().getName().contains("Moon")){
+        	maxAmount = GT_Mod.gregtechproxy.mUndergroundOilMoonMaxAmount;
+        	oil=getUndergroundOilType(GT_Mod.gregtechproxy.mUndergroundOilMoonResType,oil);
+        }
+        else maxAmount = GT_Mod.gregtechproxy.mUndergroundOilMaxAmount;
+        
+        maxAmount = (int)Math.round(Math.pow(maxAmount*500000.d, 0.2));
+        double amount = tRandom.nextInt(maxAmount) + tRandom.nextDouble();
 //		System.out.println("Oil: "+(getScaleСoordinates(aX,96))+" "+(getScaleСoordinates(aX,96))+" "+oil+" "+amount);
-//		amount = 40;
         Fluid tFluid = null;
         switch (oil) {
             case 0:
@@ -1566,6 +1593,12 @@ public class GT_Utility {
             case 3:
                 tFluid = Materials.OilHeavy.mFluid;
                 break;
+            case 10:
+            	tFluid = FluidRegistry.getFluid("ic2pahoehoelava");
+            	break;
+            case 11:
+            	tFluid = Materials.Helium_3.mGas;
+            	break;
             default:
                 tFluid = Materials.Oil.mFluid;
         }

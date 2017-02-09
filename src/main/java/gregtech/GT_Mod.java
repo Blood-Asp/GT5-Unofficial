@@ -251,9 +251,20 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mPollutionPoisonLimit = tMainConfig.get("Pollution", "PoisonLimit", 750000).getInt(750000);
         gregtechproxy.mPollutionVegetationLimit = tMainConfig.get("Pollution", "VegetationLimit", 1000000).getInt(1000000);
         gregtechproxy.mPollutionSourRainLimit = tMainConfig.get("Pollution", "SourRainLimit", 2000000).getInt(2000000);
-        gregtechproxy.mUndergroundOilOverworld = tMainConfig.get("UndergroundOil", "EnableOverworld", true).getBoolean(true);
-        gregtechproxy.mUndergroundOilInRealDimension = tMainConfig.get("UndergroundOil", "EnableInRealDimension", true).getBoolean(true);
-        gregtechproxy.mUndergroundOilMaxAmount = tMainConfig.get("UndergroundOil", "MaxAmount", 50).getInt(50);
+        gregtechproxy.mUndergroundOilOverworld = tMainConfig.get("UndergroundOil", "OverworldEnable", true, "Generate Underground Oil on Overworld").getBoolean(true);
+        gregtechproxy.mUndergroundOilInRealDimension = tMainConfig.get("UndergroundOil", "RealDimensionEnable", true, "Generate Underground Oil on other world (not another Planet)").getBoolean(true);
+        gregtechproxy.mUndergroundOilNether = tMainConfig.get("UndergroundOil", "NetherEnable", true, "Generate Underground Oil on Nether").getBoolean(true);
+        gregtechproxy.mUndergroundOilMoon = tMainConfig.get("UndergroundOil", "MoonEnable", true, "Generate Underground Oil on Moon").getBoolean(true);
+        gregtechproxy.mUndergroundOilMars = tMainConfig.get("UndergroundOil", "MarsEnable", false, "Generate Underground Oil on Mars").getBoolean(false);
+        gregtechproxy.mUndergroundOilMaxAmount = tMainConfig.get("UndergroundOil", "OverworldMaxAmount", 625, "Max amount on Overworld").getInt(625);
+        gregtechproxy.mUndergroundOilNetherMaxAmount = tMainConfig.get("UndergroundOil", "NetherMaxAmount", 625, "Max amount on Nether").getInt(625);
+        gregtechproxy.mUndergroundOilMoonMaxAmount = tMainConfig.get("UndergroundOil", "MoonMaxAmount", 625, "Max amount on Moon").getInt(625);
+        gregtechproxy.mUndergroundOilNetherResType = tMainConfig.get("UndergroundOil", "NetherResType", 1, "Type of the generated resource on Nether (0 - Oil, 1 - Basalt Lava, 2- He3)", 0, 2).getInt(1);
+        gregtechproxy.mUndergroundOilMoonResType = tMainConfig.get("UndergroundOil", "MoonResType", 2, "Type of the generated resource on Moon (0 - Oil, 1 - Basalt Lava, 2- He3)", 0, 2).getInt(2);
+        gregtechproxy.mUndergroundOilBlackList = tMainConfig.get("UndergroundOil", "DimBlackList", new int[0], "Dimension IDs Black List").getIntList();
+        java.util.Arrays.sort(gregtechproxy.mUndergroundOilBlackList);
+        gregtechproxy.mUndergroundOilWhiteList = tMainConfig.get("UndergroundOil", "DimWhiteList", new int[0], "Dimension IDs White List").getIntList();
+        java.util.Arrays.sort(gregtechproxy.mUndergroundOilWhiteList);
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", false).getBoolean(false);
         gregtechproxy.mAddGTRecipesToIC2Machines = tMainConfig.get("general", "AddGTRecipesToIC2Machines", true).getBoolean(true);
 

@@ -165,8 +165,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mHideUnusedOres = true;
     public boolean mHideRecyclingRecipes = true;
     public boolean mPollution = true;
-    public boolean mUndergroundOilOverworld = true;
-    public boolean mUndergroundOilInRealDimension = true;
+    public boolean mUndergroundOilOverworld = true;			//in DIM 0
+    public boolean mUndergroundOilInRealDimension = true;	//in other 
+    public boolean mUndergroundOilNether = true;			//in DIM -1
+    public boolean mUndergroundOilMoon = true;				//in Galacticraft Moon
+    public boolean mUndergroundOilMars = false;				//in Galacticraft Mars
     public boolean mExplosionItemDrop = false;
     public int mSkeletonsShootGTArrows = 16;
     public int mMaxEqualEntitiesAtOneSpot = 3;
@@ -181,8 +184,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public int mPollutionPoisonLimit = 750000;
     public int mPollutionVegetationLimit = 1000000;
     public int mPollutionSourRainLimit = 2000000;
-    public int mUndergroundOilMaxAmount = 50;
+    public int mUndergroundOilMaxAmount = 625;				//mb in step
+    public int mUndergroundOilNetherMaxAmount = 625;		//mb in step
+    public int mUndergroundOilNetherResType = 1;			//0 - Oil; 1 - basalt lava; 3 - He3
+    public int mUndergroundOilMoonMaxAmount = 625;			//mb in step
+    public int mUndergroundOilMoonResType = 2;				//0 - Oil; 1 - basalt lava; 3 - He3
     public int mTicksUntilNextCraftSound = 0;
+    public int[] mUndergroundOilBlackList;
+    public int[] mUndergroundOilWhiteList;
     public double mMagneticraftBonusOutputPercent = 100.0d;
     private World mUniverse = null;
     private final String aTextThermalExpansion = "ThermalExpansion";
