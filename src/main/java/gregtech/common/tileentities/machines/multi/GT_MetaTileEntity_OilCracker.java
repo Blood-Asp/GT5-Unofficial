@@ -20,6 +20,9 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
+    private static final FluidStack fluidToDecreaseEu = GT_ModHandler.getSteam(128);
+    private static final FluidStack fluidToIncreaseOutput = Materials.Hydrogen.getGas(64);
+
 
     public GT_MetaTileEntity_OilCracker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -66,33 +69,16 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tInput}, new ItemStack[]{});
             if (tRecipe != null) {
                 if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{tInput}, new ItemStack[]{})) {
-                    boolean steam = false;
-                    boolean hydrogen = false;
-                    for (FluidStack tInput2 : tInputList) {
-                        if (tInput2.getFluid() == GT_ModHandler.getSteam(1).getFluid()) {
-                            steam = true;
-                            tInput2.amount -= 128;
-                        }
-                        if (tInput2.getFluid() == Materials.Hydrogen.mGas) {
-                            hydrogen = true;
-                            steam = false;
-                            tInput2.amount -= 64;
-                        }
-
-                    }
-
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
                     calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, getMaxInputVoltage());
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return false;
-                    if (steam) this.mEUt = this.mEUt / 2;
-                    if (this.mEUt > 0) {
-                        this.mEUt = (-this.mEUt);
-                    }
+                    if (depleteInput(fluidToDecreaseEu)) this.mEUt = this.mEUt / 2;
+                    if (this.mEUt > 0) this.mEUt = (-this.mEUt);
                     this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
-                    if (hydrogen) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
+                    if (depleteInput(fluidToIncreaseOutput)) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
                     return true;
                 }
             }
