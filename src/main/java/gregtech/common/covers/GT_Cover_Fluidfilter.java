@@ -18,11 +18,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
-import java.util.logging.Logger;
-import gregtech.api.util.GT_Log;
+
 
 public class GT_Cover_Fluidfilter
         extends GT_CoverBehavior {
+			
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         return aCoverVariable;
     }
