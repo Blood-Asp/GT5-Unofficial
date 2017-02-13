@@ -18,6 +18,7 @@ import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.objects.GT_UO_Fluid;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
@@ -1523,24 +1524,6 @@ public class GT_Utility {
     	return (int)Math.floor(aValue / aScale);
     }
 
-    public static boolean getUndergroundOilGenerating(int aDimensionId) {
-
-    	//Use settings
-    	if (java.util.Arrays.binarySearch(GT_Mod.gregtechproxy.mUndergroundOilBlackList, aDimensionId) >= 0) return false;	//Use BlackList Settings
-    	if (java.util.Arrays.binarySearch(GT_Mod.gregtechproxy.mUndergroundOilWhiteList, aDimensionId) >= 0) return true;	//Use WhiteList Settings
-    	if (aDimensionId == 1) return false;	//No bedrock, no oil. End.
-    	if (aDimensionId==0) return GT_Mod.gregtechproxy.mUndergroundOilOverworld;	//Overworld
-    	if (aDimensionId == -1) return GT_Mod.gregtechproxy.mUndergroundOilNether;	//Nether
-
-    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("Moon")) return GT_Mod.gregtechproxy.mUndergroundOilMoon;	//Moon
-    	if (DimensionManager.getProvider(aDimensionId).getClass().getName().contains("Mars")) return GT_Mod.gregtechproxy.mUndergroundOilMars;	//Mars
-    	
-    	if (isRealDimension(aDimensionId)) return GT_Mod.gregtechproxy.mUndergroundOilInRealDimension;	//Other real world
-    	
-    	return false;  //If other planets or worlds...
-    	    	
-    }
-
     public static int getUndergroundOilType(int aType, int aOil) {
     	switch (aType) {
     	case 1:
@@ -1560,64 +1543,56 @@ public class GT_Utility {
 
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
 
-    	if (!getUndergroundOilGenerating(aWorld.provider.dimensionId))
+    	if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(aWorld.provider.dimensionId))
     		return null;
 
         Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
-        int oil = tRandom.nextInt(3);
-        oil = tRandom.nextInt(4);
-        int maxAmount;
-        if (aWorld.provider.dimensionId == -1){
-        	maxAmount = GT_Mod.gregtechproxy.mUndergroundOilNetherMaxAmount;
-        	oil=getUndergroundOilType(GT_Mod.gregtechproxy.mUndergroundOilNetherResType,oil);
-        } else if (DimensionManager.getProvider(aWorld.provider.dimensionId).getClass().getName().contains("Moon")){
-        	maxAmount = GT_Mod.gregtechproxy.mUndergroundOilMoonMaxAmount;
-        	oil=getUndergroundOilType(GT_Mod.gregtechproxy.mUndergroundOilMoonResType,oil);
-        }
-        else maxAmount = GT_Mod.gregtechproxy.mUndergroundOilMaxAmount;
-        
-        maxAmount = (int)Math.round(Math.pow(maxAmount*500000.d, 0.2));
-        double amount = tRandom.nextInt(maxAmount) + tRandom.nextDouble();
-//		System.out.println("Oil: "+(getScaleСoordinates(aX,96))+" "+(getScaleСoordinates(aX,96))+" "+oil+" "+amount);
+        int tAmount = 0;
+        int tFluidId = 0;
         Fluid tFluid = null;
-        switch (oil) {
-            case 0:
-                tFluid = Materials.NatruralGas.mGas;
-                break;
-            case 1:
-                tFluid = Materials.OilLight.mFluid;
-                break;
-            case 2:
-                tFluid = Materials.OilMedium.mFluid;
-                break;
-            case 3:
-                tFluid = Materials.OilHeavy.mFluid;
-                break;
-            case 10:
-            	tFluid = FluidRegistry.getFluid("ic2pahoehoelava");
-            	break;
-            case 11:
-            	tFluid = Materials.Helium_3.mGas;
-            	break;
-            default:
-                tFluid = Materials.Oil.mFluid;
-        }
-        int tAmount = (int) (Math.pow(amount, 5) / 100);
+//        System.out.println("Dimension: "+GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).Dimension);
+        try {
+            GT_UO_Fluid uoFluid = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).getRandomFluid(tRandom);
+            if (uoFluid != null)
+            {
+            	tFluid = uoFluid.getFluid();
+            	tAmount = uoFluid.getRandomAmount(tRandom);
+            	if (tFluid != null)
+            		tFluidId = tFluid.getID();
+                //System.out.println("Fluid: ("+tFluidId+")"+tFluid.getName()+" Amount:"+tAmount);
+            }
+			
+		} catch (Exception e) {
+	        tAmount = 0;
+	        tFluidId = 0;
+		}
+
         ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId+1, getScaleСoordinates(aZ,16));
-        int[] tInts = new int[2];
+        int[] tInts = new int[0];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
     			if(tInts[0]>0){tAmount = tInts[0];}
     		}
+    		if(tInts.length>2){
+    			if(tInts[2]>0&&tInts[2]!=tFluidId)
+    			{
+    				tFluidId = tInts[2];
+    				tFluid = FluidRegistry.getFluid(tFluidId);
+    			}
+    		}
     		GT_Proxy.chunkData.remove(tPos);
     	}
+
     	if (needConsumeOil && tAmount >= 5000)
     		tAmount = tAmount - 5;
+
     	tInts[0] = tAmount;
+    	tInts[2] = tFluidId;
     	GT_Proxy.chunkData.put(tPos, tInts);
-    	
-        return new FluidStack(tFluid, tAmount);
+    	if (tFluid!=null)
+    		return new FluidStack(tFluid, tAmount);
+    	return null;
     }
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
@@ -2081,7 +2056,6 @@ public class GT_Utility {
             setBookTitle(aStack, "Raw Prospection Data");
 
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
-
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
 
