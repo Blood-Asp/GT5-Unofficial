@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 "1x Dynamo Hatch (Back centered)",
                 "Stainless Steel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)",
-                "Output depending on Rotor: 210-3360EU/t"};
+                "Output depending on Rotor: 102-6720EU/t"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {
@@ -112,7 +112,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
             if (totalFlow != actualOptimalFlow) {
                 float efficiency = 1.0f - Math.abs(((totalFlow - (float) actualOptimalFlow) / actualOptimalFlow));
-                if(totalFlow>aOptFlow){efficiency = 1.0f;}
+                if(totalFlow>actualOptimalFlow){efficiency = 1.0f;}
                 if (efficiency < 0)
                     efficiency = 0; // Can happen with really ludicrously poor inefficiency.
                 tEU *= efficiency;

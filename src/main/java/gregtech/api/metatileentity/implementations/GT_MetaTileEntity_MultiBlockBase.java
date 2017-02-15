@@ -116,18 +116,24 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         aNBT.setInteger("mPollution", mPollution);
         aNBT.setInteger("mRuntime", mRuntime);
 
-        if (mOutputItems != null) for (int i = 0; i < mOutputItems.length; i++)
-            if (mOutputItems[i] != null) {
-                NBTTagCompound tNBT = new NBTTagCompound();
-                mOutputItems[i].writeToNBT(tNBT);
-                aNBT.setTag("mOutputItem" + i, tNBT);
-            }
-        if (mOutputFluids != null) for (int i = 0; i < mOutputFluids.length; i++)
-            if (mOutputFluids[i] != null) {
-                NBTTagCompound tNBT = new NBTTagCompound();
-                mOutputFluids[i].writeToNBT(tNBT);
-                aNBT.setTag("mOutputFluids" + i, tNBT);
-            }
+        if (mOutputItems != null) {
+        	aNBT.setInteger("mOutputItemsLength", mOutputItems.length);
+        	for (int i = 0; i < mOutputItems.length; i++)
+                if (mOutputItems[i] != null) {
+                    NBTTagCompound tNBT = new NBTTagCompound();
+                    mOutputItems[i].writeToNBT(tNBT);
+                    aNBT.setTag("mOutputItem" + i, tNBT);
+                }
+        }
+        if (mOutputFluids != null) {
+        	aNBT.setInteger("mOutputFluidsLength", mOutputFluids.length);
+        	for (int i = 0; i < mOutputFluids.length; i++)
+                if (mOutputFluids[i] != null) {
+                    NBTTagCompound tNBT = new NBTTagCompound();
+                    mOutputFluids[i].writeToNBT(tNBT);
+                    aNBT.setTag("mOutputFluids" + i, tNBT);
+                }
+        }
         aNBT.setBoolean("mWrench", mWrench);
         aNBT.setBoolean("mScrewdriver", mScrewdriver);
         aNBT.setBoolean("mSoftHammer", mSoftHammer);
@@ -146,11 +152,21 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         mEfficiency = aNBT.getInteger("mEfficiency");
         mPollution = aNBT.getInteger("mPollution");
         mRuntime = aNBT.getInteger("mRuntime");
-        mOutputItems = new ItemStack[getAmountOfOutputs()];
-        for (int i = 0; i < mOutputItems.length; i++) mOutputItems[i] = GT_Utility.loadItem(aNBT, "mOutputItem" + i);
-        mOutputFluids = new FluidStack[getAmountOfOutputs()];
-        for (int i = 0; i < mOutputFluids.length; i++)
-            mOutputFluids[i] = GT_Utility.loadFluid(aNBT, "mOutputFluids" + i);
+        
+        int aOutputItemsLength = aNBT.getInteger("mOutputItemsLength");
+        if (aOutputItemsLength > 0) {
+            mOutputItems = new ItemStack[aOutputItemsLength];
+            for (int i = 0; i < mOutputItems.length; i++)
+            	mOutputItems[i] = GT_Utility.loadItem(aNBT, "mOutputItem" + i);
+        }
+
+        int aOutputFluidsLength = aNBT.getInteger("mOutputFluidsLength");
+        if (aOutputFluidsLength > 0) {
+            mOutputFluids = new FluidStack[aOutputFluidsLength];
+            for (int i = 0; i < mOutputFluids.length; i++)
+                mOutputFluids[i] = GT_Utility.loadFluid(aNBT, "mOutputFluids" + i);
+        }
+        
         mWrench = aNBT.getBoolean("mWrench");
         mScrewdriver = aNBT.getBoolean("mScrewdriver");
         mSoftHammer = aNBT.getBoolean("mSoftHammer");
@@ -351,12 +367,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public abstract int getDamageToComponent(ItemStack aStack);
 
     /**
-     * Gets the Amount of possibly outputted Items for loading the Output Stack Array from NBT.
-     * This should be the largest Amount that can ever happen legitimately.
-     */
-    public abstract int getAmountOfOutputs();
-
-    /**
      * If it explodes when the Component has to be replaced.
      */
     public abstract boolean explodesOnComponentBreak(ItemStack aStack);
@@ -492,7 +502,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         if (aEU <= 0) return true;
         for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
             if (isValidMetaTileEntity(tHatch)) {
-                if (tHatch.getBaseMetaTileEntity().increaseStoredEnergyUnits(aEU, true)) {
+                if (tHatch.getBaseMetaTileEntity().increaseStoredEnergyUnits(aEU, false)) {
                     return true;
                 }
             }
