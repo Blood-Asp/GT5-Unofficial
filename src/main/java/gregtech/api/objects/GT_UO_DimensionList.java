@@ -39,37 +39,24 @@ public class GT_UO_DimensionList {
 		}
 	}
 	
-	public void SetConfigValues(String aDimensionName, String aDimension, String aName, String aRegistry, int aMinAmount, int aMaxAmount, int aChance) {
+	public void SetConfigValues(String aDimensionName, String aDimension, String aName, String aRegistry, int aMinAmount, int aMaxAmount, int aChance, int aDecreasePerOperationAmount) {
 		String Category = fCategory+"."+aDimensionName;
-		fConfig.get(Category, "Dimension", aDimension, "Dimension ID or Class Name").getString();
+		fConfig.get(Category, "Dimension", aDimension).getString();
 		Category+="."+aName;
-		fConfig.get(Category, "Registry", aRegistry, "Fluid registry").getString();
-		fConfig.get(Category, "MinAmount", aMinAmount, "Min amount (Amount in step)").getInt(aMinAmount);
-		fConfig.get(Category, "MaxAmount", aMaxAmount, "Max amount (Amount in step)").getInt(aMaxAmount);
-		fConfig.get(Category, "Chance", aChance, "Chance generating").getInt(aChance);
+		fConfig.get(Category, "Registry", aRegistry).getString();
+		fConfig.get(Category, "MinAmount", aMinAmount).getInt(aMinAmount);
+		fConfig.get(Category, "MaxAmount", aMaxAmount).getInt(aMaxAmount);
+		fConfig.get(Category, "Chance", aChance).getInt(aChance);
+		fConfig.get(Category, "DecreasePerOperationAmount", aDecreasePerOperationAmount).getInt(aDecreasePerOperationAmount);
 	}
 	
 	public void SetDafultValues() {
-		fConfig.setCategoryComment(fCategory+".Default", "Set Default Generating");
-		SetConfigValues("Default", "Default", "gas_natural_gas", "gas_natural_gas", 0, 625, 20);
-		SetConfigValues("Default", "Default", "liquid_light_oil", "liquid_light_oil", 0, 625, 20);
-		SetConfigValues("Default", "Default", "liquid_medium_oil", "liquid_medium_oil", 0, 625, 20);
-		SetConfigValues("Default", "Default", "liquid_heavy_oil", "liquid_heavy_oil", 0, 625, 20);
-		SetConfigValues("Default", "Default", "oil", "oil", 0, 625, 20);
-
-		fConfig.setCategoryComment(fCategory+".Overworld", "Set Overworld Generating");
-		SetConfigValues("Overworld", "0", "gas_natural_gas", "gas_natural_gas", 0, 625, 20);
-		SetConfigValues("Overworld", "0", "liquid_light_oil", "liquid_light_oil", 0, 625, 20);
-		SetConfigValues("Overworld", "0", "liquid_medium_oil", "liquid_medium_oil", 0, 625, 20);
-		SetConfigValues("Overworld", "0", "liquid_heavy_oil", "liquid_heavy_oil", 0, 625, 20);
-		SetConfigValues("Overworld", "0", "oil", "oil", 0, 625, 20);
-
-		fConfig.setCategoryComment(fCategory+".Nether", "Set Nether Generating");
-		SetConfigValues("Nether", "-1", "ic2pahoehoelava", "ic2pahoehoelava", 0, 250, 100);
-
-		fConfig.setCategoryComment(fCategory+".Moon", "Set Moon Generating");
-		SetConfigValues("Moon", "Moon", "molten-cheese", "molten.cheese", 0, 125, 5);
-		SetConfigValues("Moon", "Moon", "helium-3", "helium-3", 0, 375, 95);
+		SetConfigValues("Overworld", "0", "gas_natural_gas", "gas_natural_gas", 0, 625, 20, 5);
+		SetConfigValues("Overworld", "0", "liquid_light_oil", "liquid_light_oil", 0, 625, 20, 5);
+		SetConfigValues("Overworld", "0", "liquid_medium_oil", "liquid_medium_oil", 0, 625, 20, 5);
+		SetConfigValues("Overworld", "0", "liquid_heavy_oil", "liquid_heavy_oil", 0, 625, 20, 5);
+		SetConfigValues("Overworld", "0", "oil", "oil", 0, 625, 20, 5);
+		SetConfigValues("Moon", "Moon", "helium-3", "helium-3", 0, 375, 100, 5);
 	}
 	
 	public void getConfig(Configuration aConfig, String aCategory) {
@@ -79,7 +66,11 @@ public class GT_UO_DimensionList {
 			SetDafultValues();
 
 		fConfig.setCategoryComment(fCategory, "Config Undeground Fluids (Delete this Category for regenerate)");
-		int[] BlackList = {1};
+		fConfig.setCategoryComment(fCategory+".Default", "Set Default Generating (Use this Category for Default settings)");
+		fConfig.setCategoryComment(fCategory+".Overworld", "Set Overworld Generating");
+		fConfig.setCategoryComment(fCategory+".Moon", "Set Moon Generating");
+		
+		int[] BlackList = {-1,1};
 		BlackList = aConfig.get(fCategory, "DimBlackList", BlackList, "Dimension IDs Black List").getIntList();
 		java.util.Arrays.sort(BlackList);
 		

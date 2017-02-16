@@ -1524,19 +1524,6 @@ public class GT_Utility {
     	return (int)Math.floor(aValue / aScale);
     }
 
-    public static int getUndergroundOilType(int aType, int aOil) {
-    	switch (aType) {
-    	case 1:
-    		aOil = 10;
-    		break;
-    	case 2:
-    		aOil = 11;
-    		break;
-    	}
-    	return aOil;
-    }
-
-    
     public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
     	return getUndergroundOil(aWorld, aX, aZ, false);
     }
@@ -1549,6 +1536,7 @@ public class GT_Utility {
         Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
         int tAmount = 0;
         int tFluidId = 0;
+        int tDecreasePerOperationAmount = 5;
         Fluid tFluid = null;
 //        System.out.println("Dimension: "+GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).Dimension);
         try {
@@ -1557,6 +1545,7 @@ public class GT_Utility {
             {
             	tFluid = uoFluid.getFluid();
             	tAmount = uoFluid.getRandomAmount(tRandom);
+            	tDecreasePerOperationAmount = uoFluid.DecreasePerOperationAmount;
             	if (tFluid != null)
             		tFluidId = tFluid.getID();
                 //System.out.println("Fluid: ("+tFluidId+")"+tFluid.getName()+" Amount:"+tAmount);
@@ -1567,7 +1556,7 @@ public class GT_Utility {
 	        tFluidId = 0;
 		}
 
-        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId+1, getScaleСoordinates(aZ,16));
+        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId, getScaleСoordinates(aZ,16));
         int[] tInts = new int[0];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
@@ -1585,7 +1574,7 @@ public class GT_Utility {
     	}
 
     	if (needConsumeOil && tAmount >= 5000)
-    		tAmount = tAmount - 5;
+    		tAmount = tAmount - tDecreasePerOperationAmount;
 
     	tInts[0] = tAmount;
     	tInts[2] = tFluidId;
@@ -1789,7 +1778,7 @@ public class GT_Utility {
             	tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
         }
 //        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId+1, getScaleСoordinates(aZ,16));
+        	ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId, getScaleСoordinates(aZ,16));
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
         		if(tPollution.length>1){
@@ -2056,6 +2045,7 @@ public class GT_Utility {
             setBookTitle(aStack, "Raw Prospection Data");
 
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
+            
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
 

@@ -16,11 +16,15 @@ public class GT_UO_Dimension {
 
 	private BiMap<String, GT_UO_Fluid> fFluids;
 	private int maxChance;
-	public String Dimension;
+	public String Dimension = "null";
 
 	public GT_UO_Dimension(ConfigCategory aConfigCategory) {
 		fFluids = HashBiMap.create();
-		Dimension = aConfigCategory.get("Dimension").getString();
+		if (aConfigCategory.containsKey("Dimension"))
+		{
+			aConfigCategory.get("Dimension").comment = "Dimension ID or Class Name";
+			Dimension = aConfigCategory.get("Dimension").getString();
+		}
 		maxChance = 0;
 		//System.out.println("GT UO "+aConfigCategory.getName()+" Dimension:"+Dimension);
 		for (int i = 0 ; i < aConfigCategory.getChildren().size(); i++) {

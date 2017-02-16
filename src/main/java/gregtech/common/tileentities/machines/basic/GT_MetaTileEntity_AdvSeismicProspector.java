@@ -31,6 +31,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
 import sun.text.resources.es.CollationData_es;
 
@@ -104,7 +105,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 prospectOres(tNearOres, tMiddleOres, tFarOres);
 
                 // prospecting oils
-                HashMap<String, Integer> tOils = new HashMap<String, Integer>(9);
+                HashMap<String, Integer> tOils = new HashMap<String, Integer>();
                 prospectOils(tOils);
 
                 GT_Utility.ItemNBT.setAdvancedProspectionData(mTier,
@@ -126,32 +127,35 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
     private void prospectOils(HashMap<String, Integer> aOils) {
 
-        int tLeftXBound = this.getBaseMetaTileEntity().getXCoord() - radius;
-        int tRightXBound = tLeftXBound + 2*radius;
+        int tLeftXBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getXCoord() - radius, 16);
+        int tRightXBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getXCoord() + radius, 16);
 
-        int tLeftZBound = this.getBaseMetaTileEntity().getZCoord() - radius;
-        int tRightZBound = tLeftZBound + 2*radius;
+        int tLeftZBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getZCoord() - radius, 16);
+        int tRightZBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getZCoord() + radius, 16);
 
-        ArrayList<String> filterList = new ArrayList<String>(9);
-        String filter;
+        HashMap<ChunkPosition, FluidStack> tFluids = new HashMap<ChunkPosition, FluidStack>();
 
-        for (int x = tLeftXBound; x <= tRightXBound; ++x)
-            for (int z = tLeftZBound; z <= tRightZBound; ++z) {
-                filter = x/96 + "," + z/96;
-
-                if (!filterList.contains(filter)) {
-                    filterList.add(filter);
-
-                    putOil((x/96)*96, (z/96)*96, aOils);
+        try {
+            for (int x = tLeftXBound; x <= tRightXBound; ++x)
+                for (int z = tLeftZBound; z <= tRightZBound; ++z) 
+                {
+                	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleСoordinates(x*16,96), 0, GT_Utility.getScaleСoordinates(z*16,96));
+                	FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x*16, z*16);
+            		if (tFluid != null)
+	                	if (tFluids.containsKey(tPos))
+	                	{
+	                		if (tFluids.get(tPos).amount<tFluid.amount)
+	                			tFluids.get(tPos).amount = tFluid.amount;
+	                	} else if (tFluid.amount / 5000 > 0)
+	                        tFluids.put(tPos, tFluid);
                 }
-            }
-    }
-
-    private void putOil(int x, int z, HashMap<String, Integer> aOils) {
-        FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x, z);
-        if (tFluid != null)
-        	if (tFluid.amount / 5000 > 0)
-        		aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
+			
+    		for (HashMap.Entry<ChunkPosition, FluidStack> fl : tFluids.entrySet()) {
+    			aOils.put(fl.getKey().chunkPosX + "," + fl.getKey().chunkPosZ + "," + (fl.getValue().amount / 5000) + "," + fl.getValue().getLocalizedName(), fl.getValue().amount / 5000);
+    		}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}        
     }
 
     private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {        

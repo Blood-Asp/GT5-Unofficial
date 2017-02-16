@@ -1701,7 +1701,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event)
     {  
-        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId+1,event.getChunk().zPosition);
+        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId,event.getChunk().zPosition);
         if(chunkData.containsKey(tPos)){
             int[] tInts = chunkData.get(tPos);
             if(tInts.length>0){event.getData().setInteger("GTOIL", tInts[0]);}
@@ -1717,7 +1717,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         int tOilFluid = 0;
         int tPollution = 0;
 
-        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId+1,event.getChunk().zPosition);
+        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId,event.getChunk().zPosition);
         int[] tData = new int[0];
         if(chunkData.containsKey(tPos)){
             tData = chunkData.get(tPos);

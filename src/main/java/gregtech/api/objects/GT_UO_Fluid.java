@@ -10,16 +10,38 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class GT_UO_Fluid {
-	public String Registry;
-	public int MaxAmount;
-	public int MinAmount;
-	public int Chance;
+	public String Registry = "null";
+	public int MaxAmount = 0;
+	public int MinAmount = 0;
+	public int Chance = 0;
+	public int DecreasePerOperationAmount = 5;
 
-	public GT_UO_Fluid(ConfigCategory aConfigCategory) { 
-		Registry = aConfigCategory.get("Registry").getString();;
-		MaxAmount = aConfigCategory.get("MaxAmount").getInt();
-		MinAmount = aConfigCategory.get("MinAmount").getInt();
-		Chance = aConfigCategory.get("Chance").getInt();
+	public GT_UO_Fluid(ConfigCategory aConfigCategory) {
+		if (aConfigCategory.containsKey("Registry"))
+		{
+			aConfigCategory.get("Registry").comment = "Fluid registry";
+			Registry = aConfigCategory.get("Registry").getString();
+		}
+		if (aConfigCategory.containsKey("MaxAmount"))
+		{
+			aConfigCategory.get("MaxAmount").comment = "Max amount generation (per operation Amount)";
+			MaxAmount = aConfigCategory.get("MaxAmount").getInt(0);
+		}
+		if (aConfigCategory.containsKey("MinAmount"))
+		{
+			aConfigCategory.get("MinAmount").comment = "Max amount generation (per operation Amount)";
+			MinAmount = aConfigCategory.get("MinAmount").getInt(0);
+		}
+		if (aConfigCategory.containsKey("Chance"))
+		{
+			aConfigCategory.get("Chance").comment = "Chance generating";
+			Chance = aConfigCategory.get("Chance").getInt(0);
+		}
+		if (aConfigCategory.containsKey("DecreasePerOperationAmount"))
+		{
+			aConfigCategory.get("DecreasePerOperationAmount").comment = "Decrease per operation Amount (X/5000L per operation)";
+			DecreasePerOperationAmount = aConfigCategory.get("DecreasePerOperationAmount").getInt(5);
+		}
 		//System.out.println("GT UO "+aConfigCategory.getName()+" Fluid:"+Registry+" Max:"+MaxAmount+" Min:"+MinAmount+" Chance:"+Chance);
 	}
 	
