@@ -667,7 +667,7 @@ public enum OrePrefixes {
                         aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.CertusQuartz || aMaterial == Materials.NetherQuartz || aMaterial == Materials.Lazurite || aMaterial == Materials.Lapis ||
                         aMaterial == Materials.Paper || aMaterial == Materials.Jasper || aMaterial == Materials.Dilithium || aMaterial == Materials.Forcicium || aMaterial == Materials.Forcillium ||
                         aMaterial == Materials.EnderPearl || aMaterial == Materials.EnderEye || aMaterial == Materials.Glass || aMaterial == Materials.Copper || aMaterial == Materials.Tin || aMaterial == Materials.Redstone ||
-                        aMaterial == Materials.Sodalite || aMaterial == Materials.Gallium))
+                        aMaterial == Materials.Sodalite || aMaterial == Materials.Gallium || aMaterial == Materials.GalliumArsenide || aMaterial == Materials.IndiumGalliumPhosphide))
                     plate.mDisabledItems.add(aMaterial);
                 //Ingot/Plate Storage
                 if (!enableUnusedDoubleIngots) ingotDouble.mDisabledItems.add(aMaterial);
