@@ -56,6 +56,8 @@ public class GT_Loader_OreProcessing
         new ProcessingPipeSmall();
         new ProcessingPipeMedium();
         new ProcessingPipeLarge();
+        new ProcessingPipeHuge();
+        new ProcessingPipeTiny();
         new ProcessingPipeRestrictive();
         new ProcessingPlank();
         new ProcessingPlate1();

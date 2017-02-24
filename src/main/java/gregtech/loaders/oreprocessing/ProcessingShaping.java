@@ -18,7 +18,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
         if (((aMaterial == Materials.Glass) || (GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L) != null)) && (!aMaterial.contains(SubTag.NO_SMELTING))) {
             int tAmount = (int) (aPrefix.mMaterialAmount / 3628800L);
             if ((tAmount > 0) && (tAmount <= 64) && (aPrefix.mMaterialAmount % 3628800L == 0L)) {
-                int tVoltageMultiplier = ((aMaterial.mBlastFurnaceTemp<20000)?(aMaterial.mBlastFurnaceTemp >= 2800):(aMaterial.mBlastFurnaceTemp >=22800)) ? 64 : 16;
+                int tVoltageMultiplier = ((aMaterial.mBlastFurnaceTemp<20000)?(aMaterial.mBlastFurnaceTemp >= 2800):(aMaterial.mBlastFurnaceTemp >=22800)) ? 60 : 15;
 
                 if (aMaterial.contains(SubTag.NO_SMASHING)) {
                     tVoltageMultiplier /= 4;
