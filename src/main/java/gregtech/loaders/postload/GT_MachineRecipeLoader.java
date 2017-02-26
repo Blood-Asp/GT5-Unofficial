@@ -2091,10 +2091,10 @@ public class GT_MachineRecipeLoader implements Runnable {
 //        Field Generator
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_IV.get(1, new Object(){}),72000,new ItemStack[]{
-        		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmium, 1L),
-        		GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, Materials.Osmiridium, 2L),
+        		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 1L),
+        		GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.HSSS, 4L),
         		CustomItemList.MysteriousCrystal.get(4L, new Object(){}),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Ceruclase, 2L),
+                //GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Ceruclase, 2L),
                 //ItemList.Emitter_LuV.get(1, new Object(){}),
                 ItemList.Robot_Arm_LuV.get(1L, new Object(){}),
                 GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Vinteum, 16L),
@@ -2110,10 +2110,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         		ItemList.Field_Generator_LuV.get(1, new Object[]{}), 600, 64000);
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_LuV.get(1, new Object(){}),144000,new ItemStack[]{
-        		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 1L),
-        		GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, Materials.NaquadahAlloy, 2L),
+        		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 1L),
+        		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 4L),
                 CustomItemList.ManyullynCrystal.get(8L, new Object[]{}),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Ceruclase, 2L),
+                //GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Ceruclase, 2L),
                 //ItemList.Emitter_LuV.get(1, new Object(){}),
                 ItemList.Robot_Arm_ZPM.get(1L, new Object(){}),
                 GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Vinteum, 16L),
@@ -2131,9 +2131,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_ZPM.get(1, new Object(){}),288000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1L),
-        		GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, Materials.BlackPlutonium, 2L),
+        		GT_OreDictUnificator.get(OrePrefixes.plateQuintuple, Materials.BlackPlutonium, 4L),
                 ItemList.Gravistar.get(16L, new Object[]{}),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 4L),
+                //GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Adamantium, 4L),
                 //ItemList.Emitter_ZPM.get(1, new Object(){}),
                 ItemList.Robot_Arm_UV.get(1L, new Object(){}),
                 GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Europium, 32L),
@@ -2143,7 +2143,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 CustomItemList.QuantumCircuit.get(8L, new Object[]{}),
                 GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Realgar, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Chrysotile, 64L),
-                GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Neutronium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Adamantium, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Plutonium, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.ElectrumFlux, 12L)}, new FluidStack[]{
         		Materials.SolderingAlloy.getMolten(2304)},
