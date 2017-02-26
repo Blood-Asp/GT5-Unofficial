@@ -519,7 +519,7 @@ achievement.tungsten.desc=Cool down a Hot Tungsten Ingot
 achievement.osmium=Osmium
 achievement.osmium.desc=Cool down a Hot Osmium Ingot
 achievement.hightech=Hightech
-achievement.hightech.desc=Craft a LV Field Generator
+achievement.hightech.desc=Craft a Field Generator Tier 1
 achievement.amplifier=Amplifier
 achievement.amplifier.desc=Craft an Amp Fab
 achievement.scanning=Scanning
@@ -602,11 +602,11 @@ achievement.gt.metaitem.01.32656.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32657=Robot Arm UV tier
 achievement.gt.metaitem.01.32657.desc=Pickup this item to see the recipe in NEI
 
-achievement.gt.metaitem.01.32675=Field Generator LuV tier
+achievement.gt.metaitem.01.32675=Field Generator tier VI
 achievement.gt.metaitem.01.32675.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32676=Field Generator ZPM tier
+achievement.gt.metaitem.01.32676=Field Generator tier VII
 achievement.gt.metaitem.01.32676.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32677=Field Generator UV tier
+achievement.gt.metaitem.01.32677=Field Generator tier VIII
 achievement.gt.metaitem.01.32677.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32685=Emitter LuV tier
