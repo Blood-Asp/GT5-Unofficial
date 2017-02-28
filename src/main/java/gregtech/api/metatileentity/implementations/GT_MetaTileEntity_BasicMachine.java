@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
@@ -47,6 +48,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public int mMainFacing = -1, mProgresstime = 0, mMaxProgresstime = 0, mEUt = 0, mOutputBlocked = 0;
     public FluidStack mOutputFluid;
     public String mGUIName = "", mNEIName = "";
+    public GT_MetaTileEntity_MultiBlockBase mCleanroom;
     /**
      * Contains the Recipe which has been previously used, or null if there was no previous Recipe, which could have been buffered
      */
@@ -730,6 +732,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         if (tMap == null) return DID_NOT_FIND_RECIPE;
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
+        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 && getBaseMetaTileEntity().getWorld().provider.dimensionId == -27)return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.mCanBeBuffered) mLastRecipe = tRecipe;
         if (!canOutput(tRecipe)) {
             mOutputBlocked++;
@@ -741,6 +744,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         for (int i = 0; i < mOutputItems.length; i++)
             if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                 mOutputItems[i] = tRecipe.getOutput(i);
+        if(tRecipe.mSpecialValue == -200){
+        	if(mCleanroom==null)return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+        	if (mOutputItems[0]==null || getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
+                mOutputItems[0] = null;
+        }
         mOutputFluid = tRecipe.getFluidOutput(0);
         calculateOverclockedNess(tRecipe);
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;

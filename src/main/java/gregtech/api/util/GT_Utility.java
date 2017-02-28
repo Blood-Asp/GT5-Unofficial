@@ -1520,7 +1520,7 @@ public class GT_Utility {
         return false;
     }
 
-    public static int getScaleСoordinates(double aValue, int aScale) {
+    public static int getScaleCoordinates(double aValue, int aScale) {
     	return (int)Math.floor(aValue / aScale);
     }
 
@@ -1533,7 +1533,7 @@ public class GT_Utility {
     	if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(aWorld.provider.dimensionId))
     		return null;
 
-        Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleСoordinates(aX,96)) + (7 * (getScaleСoordinates(aZ,96)))));
+        Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleCoordinates(aX,96)) + (7 * (getScaleCoordinates(aZ,96)))));
         int tAmount = 0;
         int tFluidId = 0;
         int tDecreasePerOperationAmount = 5;
@@ -1556,7 +1556,7 @@ public class GT_Utility {
 	        tFluidId = 0;
 		}
 
-        ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId, getScaleСoordinates(aZ,16));
+        ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
         int[] tInts = new int[0];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
@@ -1778,7 +1778,7 @@ public class GT_Utility {
             	tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
         }
 //        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(getScaleСoordinates(aX,16), aWorld.provider.dimensionId, getScaleСoordinates(aZ,16));
+        	ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
         		if(tPollution.length>1){

@@ -126,11 +126,11 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
     private void prospectOils(HashMap<String, Integer> aOils) {
 
-        int tLeftXBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getXCoord() - radius, 16);
-        int tRightXBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getXCoord() + radius, 16);
+        int tLeftXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() - radius, 16);
+        int tRightXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() + radius, 16);
 
-        int tLeftZBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getZCoord() - radius, 16);
-        int tRightZBound = GT_Utility.getScaleСoordinates(this.getBaseMetaTileEntity().getZCoord() + radius, 16);
+        int tLeftZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() - radius, 16);
+        int tRightZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() + radius, 16);
 
         HashMap<ChunkPosition, FluidStack> tFluids = new HashMap<ChunkPosition, FluidStack>();
 
@@ -138,7 +138,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
             for (int x = tLeftXBound; x <= tRightXBound; ++x)
                 for (int z = tLeftZBound; z <= tRightZBound; ++z) 
                 {
-                	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleСoordinates(x*16,96), 0, GT_Utility.getScaleСoordinates(z*16,96));
+                	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(x*16,96), 0, GT_Utility.getScaleCoordinates(z*16,96));
                 	FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x*16, z*16);
             		if (tFluid != null)
 	                	if (tFluids.containsKey(tPos))
