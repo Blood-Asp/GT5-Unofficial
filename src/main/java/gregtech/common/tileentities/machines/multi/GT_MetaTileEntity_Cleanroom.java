@@ -1,9 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -12,17 +8,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_Cleanroom
 extends GT_MetaTileEntity_MultiBlockBase {
@@ -86,8 +77,8 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 		}
 	}
 	if(y>-2){return false;}
-	for(int dX=-x;dX<x;dX++){
-		for(int dZ=-z;dZ<z;dZ++){			
+	for(int dX=-x;dX<=x;dX++){
+		for(int dZ=-z;dZ<=z;dZ++){
 			for(int dY=0;dY>=y;dY--){
 			if(dX==-x||dX==x||dY==-y||dY==y||dZ==-z||dZ==z){
 				Block tBlock = aBaseMetaTileEntity.getBlockOffset(dX, dY, dZ);
@@ -124,8 +115,8 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 		}
 	}
 	if(mMaintenanceHatches.size()!=1||mEnergyHatches.size()!=1||mDoorCount!=2||mHullCount>10){return false;}
-	for(int dX=-x+1;dX<x-1;dX++){
-		for(int dZ=z+1;dZ<z-1;dZ++){			
+	for(int dX=-x+1;dX<=x-1;dX++){
+		for(int dZ=z+1;dZ<=z-1;dZ++){
 			for(int dY=-1;dY>=y+1;dY--){
 				IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 				if(tTileEntity!=null){
