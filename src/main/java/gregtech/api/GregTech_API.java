@@ -68,8 +68,9 @@ public class GregTech_API {
     /**
      * A List of all registered MetaTileEntities
      * <p/>
-     * 0 -  1199 are used by GregTech.
-     * 1200 -  2047 are used for GregTech Cables.
+     * 0 	-  749  are used by GregTech.
+     * 750	-  999  are reserved for Alkalus.
+     * 1000 -  2047 are used by GregTech.
      * 2048 -  2559 are reserved for OvermindDL.
      * 2560 -  3071 are reserved for Immibis.
      * 3072 -  3583 are reserved for LinusPhoenix.

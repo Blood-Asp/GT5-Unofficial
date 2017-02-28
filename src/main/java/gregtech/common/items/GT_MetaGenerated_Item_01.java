@@ -616,31 +616,32 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_ModHandler.addCraftingRecipe(ItemList.Sensor_EV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"P Q", "PS ", "CPP", 'Q', OrePrefixes.gem.get(Materials.EnderPearl), 'S', OrePrefixes.stick.get(Materials.Platinum), 'P', OrePrefixes.plate.get(Materials.Titanium), 'C', OrePrefixes.circuit.get(Materials.Elite)});
         GT_ModHandler.addCraftingRecipe(ItemList.Sensor_IV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"P Q", "PS ", "CPP", 'Q', OrePrefixes.gem.get(Materials.EnderEye), 'S', OrePrefixes.stick.get(Materials.Osmium), 'P', OrePrefixes.plate.get(Materials.TungstenSteel), 'C', OrePrefixes.circuit.get(Materials.Master)});
 
-        ItemList.Circuit_Primitive.set(addItem(tLastID = 700, "NAND Chip", "A very simple Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Primitive)}));
-        ItemList.Circuit_Basic.set(addItem(tLastID = 701, "Basic Electronic Circuit", "A basic Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Basic)}));
-        ItemList.Circuit_Good.set(addItem(tLastID = 702, "Good Electronic Circuit", "A good Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Good)}));
-        ItemList.Circuit_Advanced.set(addItem(tLastID = 703, "Advanced Circuit", "An advanced Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Advanced)}));
-        ItemList.Circuit_Data.set(addItem(tLastID = 704, "Data Storage Circuit", "A Data Storage Chip", new Object[]{OrePrefixes.circuit.get(Materials.Data)}));
-        ItemList.Circuit_Elite.set(addItem(tLastID = 705, "Data Control Circuit", "A Processor", new Object[]{OrePrefixes.circuit.get(Materials.Elite)}));
-        ItemList.Circuit_Master.set(addItem(tLastID = 706, "Energy Flow Circuit", "A High Voltage Processor", new Object[]{OrePrefixes.circuit.get(Materials.Master)}));
+        ItemList.Circuit_Primitive.set(addItem(tLastID = 700, "Vacuum Tube", "A very simple Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Primitive), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Parts_Vacuum_Tube.set(ItemList.Circuit_Primitive.get(1,new Object[0]));
+        ItemList.Circuit_Basic.set(addItem(tLastID = 701, "Integrated Logic Circuit", "A basic Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Basic), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Good.set(addItem(tLastID = 702, "Good Electronic Circuit", "A good Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Good), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Advanced.set(addItem(tLastID = 703, "Processor Assembly", "An advanced Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Computer.set(ItemList.Circuit_Advanced.get(1,new Object[0]));
+        ItemList.Circuit_Data.set(addItem(tLastID = 704, "Workstation", "A extreme Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Elite.set(addItem(tLastID = 705, "Mainframe", "A elite Processor", new Object[]{OrePrefixes.circuit.get(Materials.Elite), SubTag.NO_UNIFICATION}));
+        ItemList.Circuit_Master.set(addItem(tLastID = 706, "Nanoprocessor Mainframe", "A master Processor", new Object[]{OrePrefixes.circuit.get(Materials.Master), SubTag.NO_UNIFICATION}));
         ItemList.Tool_DataOrb.set(addItem(tLastID = 707, "Data Orb", "A High Capacity Data Storage", new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION, new Behaviour_DataOrb()}));
         ItemList.Circuit_Ultimate.set(ItemList.Tool_DataOrb.get(1L, new Object[0]));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataOrb.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataOrb.get(1L, new Object[0])});
         ItemList.Tool_DataStick.set(addItem(tLastID = 708, "Data Stick", "A Low Capacity Data Storage", new Object[]{OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION, new Behaviour_DataStick()}));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataStick.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataStick.get(1L, new Object[0])});
-
-
-        ItemList.Circuit_Board_Basic.set(addItem(tLastID = 710, "Basic Circuit Board", "A basic Board", new Object[0]));
-        ItemList.Circuit_Board_Advanced.set(addItem(tLastID = 711, "Advanced Circuit Board", "An advanced Board", new Object[0]));
-        ItemList.Circuit_Board_Elite.set(addItem(tLastID = 712, "Processor Board", "A Processor Board", new Object[0]));
+        
+        ItemList.Circuit_Board_Basic.set(addItem(tLastID = 710, "Coated Circuit Board", "A basic Board", new Object[0])); ItemList.Circuit_Board_Coated.set(ItemList.Circuit_Board_Basic.get(1,new Object[0]));
+        ItemList.Circuit_Board_Advanced.set(addItem(tLastID = 711, "Epoxy Circuit Board", "An advanced Board", new Object[0])); ItemList.Circuit_Board_Epoxy.set(ItemList.Circuit_Board_Advanced.get(1,new Object[0]));
+        ItemList.Circuit_Board_Elite.set(addItem(tLastID = 712, "Multilayer Fiberglass Circuit Board", "A elite Board", new Object[0])); ItemList.Circuit_Board_Multifiberglass.set(ItemList.Circuit_Board_Elite.get(1,new Object[0]));
         ItemList.Circuit_Parts_Crystal_Chip_Elite.set(addItem(tLastID = 713, "Engraved Crystal Chip", "Needed for Circuits", new Object[0]));
         ItemList.Circuit_Parts_Crystal_Chip_Master.set(addItem(tLastID = 714, "Engraved Lapotron Chip", "Needed for Circuits", new Object[0]));
-        ItemList.Circuit_Parts_Advanced.set(addItem(tLastID = 715, "Advanced Circuit Parts", "Advanced Circuit Parts", new Object[0]));
-        ItemList.Circuit_Parts_Wiring_Basic.set(addItem(tLastID = 716, "Etched Medium Voltage Wiring", "Part of Circuit Boards", new Object[0]));
-        ItemList.Circuit_Parts_Wiring_Advanced.set(addItem(tLastID = 717, "Etched High Voltage Wiring", "Part of Circuit Boards", new Object[0]));
-        ItemList.Circuit_Parts_Wiring_Elite.set(addItem(tLastID = 718, "Etched Extreme Voltage Wiring", "Part of Circuit Boards", new Object[0]));
-        ItemList.Empty_Board_Basic.set(addItem(tLastID = 719, "Empty Circuit Board", "A Board Part", new Object[0]));
-        ItemList.Empty_Board_Elite.set(addItem(tLastID = 720, "Empty Processor Board", "A Processor Board Part", new Object[0]));
+        ItemList.Circuit_Parts_Advanced.set(addItem(tLastID = 715, "Diode", "Basic Electronic Component", new Object[0])); ItemList.Circuit_Parts_Diode.set(ItemList.Circuit_Parts_Advanced.get(1,new Object[0]));
+        ItemList.Circuit_Parts_Wiring_Basic.set(addItem(tLastID = 716, "Resistor", "Basic Electronic Component", new Object[0])); ItemList.Circuit_Parts_Resistor.set(ItemList.Circuit_Parts_Wiring_Basic.get(1,new Object[0]));
+        ItemList.Circuit_Parts_Wiring_Advanced.set(addItem(tLastID = 717, "Transistor", "Basic Electronic Component", new Object[0])); ItemList.Circuit_Parts_Transistor.set(ItemList.Circuit_Parts_Wiring_Advanced.get(1,new Object[0]));
+        ItemList.Circuit_Parts_Wiring_Elite.set(addItem(tLastID = 718, "Capacitor", "Electronic Component", new Object[0])); ItemList.Circuit_Parts_Capacitor.set(ItemList.Circuit_Parts_Wiring_Elite.get(1,new Object[0]));
+        ItemList.Empty_Board_Basic.set(addItem(tLastID = 719, "Phenolic Circuit Board", "A good Board", new Object[0])); ItemList.Circuit_Board_Phenolic.set(ItemList.Empty_Board_Basic.get(1,new Object[0]));
+        ItemList.Empty_Board_Elite.set(addItem(tLastID = 720, "Fiberglass Circuit Board", "An advanced Board", new Object[0])); ItemList.Circuit_Board_Fiberglass.set(ItemList.Empty_Board_Elite.get(1,new Object[0]));
 
 
         ItemList.Component_Sawblade_Diamond.set(addItem(tLastID = 721, "Diamond Sawblade", "", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 4L), OreDictNames.craftingDiamondBlade}));

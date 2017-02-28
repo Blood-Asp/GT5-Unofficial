@@ -11,6 +11,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
@@ -52,7 +53,7 @@ return new String[]{
 }
 
 public boolean checkRecipe(ItemStack aStack) {
-	this.mEfficiencyIncrease = 1;
+	this.mEfficiencyIncrease = 100;
 	this.mMaxProgresstime = 100;
 	this.mEUt = 4;
 return true;
@@ -122,7 +123,20 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 			}
 		}
 	}
-	if(mMaintenanceHatches.size()!=1||mEnergyHatches.size()!=1||mDoorCount!=2&&mHullCount<=10){return false;}
+	if(mMaintenanceHatches.size()!=1||mEnergyHatches.size()!=1||mDoorCount!=2||mHullCount>10){return false;}
+	for(int dX=-x+1;dX<x-1;dX++){
+		for(int dZ=z+1;dZ<z-1;dZ++){			
+			for(int dY=-1;dY>=y+1;dY--){
+				IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
+				if(tTileEntity!=null){
+					IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
+					if (aMetaTileEntity != null && aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe){
+						((GT_MetaTileEntity_BasicMachine_GT_Recipe)aMetaTileEntity).mCleanroom = this;
+					}
+				}
+			}	
+		}
+	}
 return true;
 }
 

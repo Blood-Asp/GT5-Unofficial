@@ -103,7 +103,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Rubidium = new Materials(43, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 240, 30, 30, 0, "Rubidium", "Rubidium", 0, 0, 312, 0, false, false, 4, 1, 1, Dyes.dyeRed, Element.Rb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
     public static Materials Samarium = new Materials(69, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Samarium", "Samarium", 0, 0, 1345, 1345, true, false, 4, 1, 1, Dyes._NULL, Element.Sm, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
     public static Materials Scandium = new Materials(27, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Scandium", "Scandium", 0, 0, 1814, 1814, true, false, 2, 1, 1, Dyes.dyeYellow, Element.Sc, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
-    public static Materials Silicon = new Materials(20, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 60, 60, 80, 0, "Silicon", "Silicon", 0, 0, 1687, 1687, true, false, 1, 1, 1, Dyes.dyeBlack, Element.Si, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TENEBRAE, 1)));
+    public static Materials Silicon = new Materials(20, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 60, 60, 80, 0, "Silicon", "Silicon", 0, 0, 1687, 1687, false, false, 1, 1, 1, Dyes.dyeBlack, Element.Si, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TENEBRAE, 1)));
     public static Materials Silver = new Materials(54, TextureSet.SET_SHINY, 		10.0F, 64, 2, 1|2|8|32|64|128, 220, 220, 255, 0, "Silver", "Silver", 0, 0, 1234, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Ag, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 1)));
     public static Materials Sodium = new Materials(17, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |32, 0, 0, 150, 0, "Sodium", "Sodium", 0, 0, 370, 0, false, false, 1, 1, 1, Dyes.dyeBlue, Element.Na, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.LUX, 1)));
     public static Materials Strontium = new Materials(44, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|32, 200, 200, 200, 0, "Strontium", "Strontium", 0, 0, 1050, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Element.Sr, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.STRONTIO, 1)));
@@ -948,14 +948,16 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Tungstate				.addOreByProducts(Manganese				, Silver				, Lithium				);
         Bauxite					.addOreByProducts(Grossular				, Rutile				, Gallium				);
         QuartzSand				.addOreByProducts(CertusQuartz			, Quartzite				, Barite				);
-        Quartzite				.addOreByProducts(CertusQuartz			, Barite				);
-        CertusQuartz			.addOreByProducts(Quartzite				, Barite				);
         Redstone				.addOreByProducts(Cinnabar				, RareEarth				, Glowstone				);
         Monazite				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
         Forcicium				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
         Forcillium				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
         Malachite				.addOreByProducts(Copper				, BrownLimonite			, Calcite				);
         YellowLimonite			.addOreByProducts(Nickel				, BrownLimonite			, Cobalt				);
+        Lepidolite				.addOreByProducts(Lithium				, Caesium				, Boron					);
+        Andradite				.addOreByProducts(GarnetYellow			, Iron					, Boron					);
+        Quartzite				.addOreByProducts(CertusQuartz			, Barite				);
+        CertusQuartz			.addOreByProducts(Quartzite				, Barite				);
         BrownLimonite			.addOreByProducts(Malachite				, YellowLimonite		);
         Neodymium				.addOreByProducts(Monazite				, RareEarth				);
         Bastnasite				.addOreByProducts(Neodymium				, RareEarth				);
@@ -964,7 +966,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Tungsten				.addOreByProducts(Manganese				, Molybdenum			);
         Diatomite				.addOreByProducts(BandedIron			, Sapphire				);
         Iron					.addOreByProducts(Nickel				, Tin					);
-        Lepidolite				.addOreByProducts(Lithium				, Caesium				);
         Gold					.addOreByProducts(Copper				, Nickel				);
         Tin						.addOreByProducts(Iron					, Zinc					);
         Antimony				.addOreByProducts(Zinc					, Iron					);
@@ -1001,7 +1002,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Pyrope					.addOreByProducts(GarnetRed				, Magnesium				);
         Almandine				.addOreByProducts(GarnetRed				, Aluminium				);
         Spessartine				.addOreByProducts(GarnetRed				, Manganese				);
-        Andradite				.addOreByProducts(GarnetYellow			, Iron					);
         Grossular				.addOreByProducts(GarnetYellow			, Calcium				);
         Uvarovite				.addOreByProducts(GarnetYellow			, Chrome				);
         Calcite					.addOreByProducts(Andradite				, Malachite				);
