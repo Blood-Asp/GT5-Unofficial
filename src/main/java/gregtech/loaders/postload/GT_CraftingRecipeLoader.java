@@ -406,6 +406,7 @@ public class GT_CraftingRecipeLoader implements Runnable {
         GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 3L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"NPT", "CCC", "NPT", 'N', OrePrefixes.cell.get(Materials.Nitrogen), 'T', OrePrefixes.pipeTiny.get(Materials.TungstenSteel), 'P', ItemList.Electric_Pump_LV, 'C', OrePrefixes.wireGt01.get(Materials.Naquadah)});
 
         GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.IronMagnetic, 1L), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{OrePrefixes.stick.get(Materials.AnyIron), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone)});
+        GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Paper, 1L), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PPk",'P',OrePrefixes.plate.get(Materials.Paper)});
 
         GT_ModHandler.addCraftingRecipe(ItemList.IC2_Item_Casing_Gold.get(1L, new Object[0]), new Object[]{"h P", 'P', OrePrefixes.plate.get(Materials.Gold)});
         GT_ModHandler.addCraftingRecipe(ItemList.IC2_Item_Casing_Iron.get(1L, new Object[0]), new Object[]{"h P", 'P', OrePrefixes.plate.get(Materials.AnyIron)});
