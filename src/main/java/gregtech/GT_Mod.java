@@ -403,6 +403,10 @@ public class GT_Mod implements IGT_Mod {
         	OrePrefixes.stick.mDisabledItems.remove(tName);
         	OrePrefixes.stick.mGeneratedItems.add(tName);
         }
+        if(tPrefix == OrePrefixes.rotor){
+        	OrePrefixes.ring.mDisabledItems.remove(tName);
+        	OrePrefixes.ring.mGeneratedItems.add(tName);
+        }
         }else{System.out.println("noMaterial "+reEnable);}
         }else{System.out.println("noPrefix "+reEnable);}}
         
