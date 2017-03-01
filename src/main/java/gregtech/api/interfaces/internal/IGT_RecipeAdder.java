@@ -182,7 +182,7 @@ public interface IGT_RecipeAdder {
     public boolean addCNCRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * Adds a Circuit Assembler Recipe
+     * Adds a Assembler Recipe
      *
      * @param aInput1   must be != null
      * @param aOutput1  must be != null
@@ -192,7 +192,7 @@ public interface IGT_RecipeAdder {
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * Adds a Circuit Assembler Recipe
+     * Adds a Assembler Recipe
      *
      * @param aInput1   must be != null
      * @param aOutput1  must be != null
@@ -201,6 +201,18 @@ public interface IGT_RecipeAdder {
      */
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
+
+    /**
+     * Adds a Assembler Recipe
+     *
+     * @param aInputs   must be 1-6 ItemStacks
+     * @param aFluidInput 0-1 fluids
+     * @param aOutput  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     */
+    public boolean addCircuitAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput, int aDuration, int aEUt);
+    
     /**
      * Adds a Assemblyline Recipe
      *
@@ -459,6 +471,11 @@ public interface IGT_RecipeAdder {
     public boolean addAutoclaveRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt);
 
     /**
+     * Adds a Recipe for the Autoclave
+     */
+    public boolean addAutoclaveRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
+
+    /**
      * Adds a Recipe for the Mixer
      */
     public boolean addMixerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aInput3, ItemStack aInput4, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt);
@@ -467,6 +484,10 @@ public interface IGT_RecipeAdder {
      * Adds a Recipe for the Laser Engraver
      */
     public boolean addLaserEngraverRecipe(ItemStack aItemToEngrave, ItemStack aLens, ItemStack aEngravedItem, int aDuration, int aEUt);
+    /**
+     * Adds a Recipe for the Laser Engraver
+     */
+    public boolean addLaserEngraverRecipe(ItemStack aItemToEngrave, ItemStack aLens, ItemStack aEngravedItem, int aDuration, int aEUt, boolean aCleanroom);
 
     /**
      * Adds a Recipe for the Forming Press

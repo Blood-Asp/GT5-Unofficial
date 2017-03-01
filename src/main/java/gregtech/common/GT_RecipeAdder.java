@@ -610,15 +610,18 @@ public class GT_RecipeAdder
         GT_Recipe.GT_Recipe_Map.sPrinterRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, aSpecialSlot, null, new FluidStack[]{aFluid}, null, aDuration, aEUt, 0);
         return true;
     }
-
     public boolean addAutoclaveRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt) {
+    	return addAutoclaveRecipe(aInput, aFluid, aOutput, aChance, aDuration, aEUt, false);
+    }
+
+    public boolean addAutoclaveRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
         if ((aInput == null) || (aFluid == null) || (aOutput == null)) {
             return false;
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("autoclave", aInput, aDuration)) <= 0) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluid}, null, aDuration, aEUt, 0);
+        GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluid}, null, aDuration, aEUt, aCleanroom ? -100 : 0);
         return true;
     }
 
@@ -635,15 +638,18 @@ public class GT_RecipeAdder
         GT_Recipe.GT_Recipe_Map.sMixerRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, aInput3, aInput4}, new ItemStack[]{aOutput}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, 0);
         return true;
     }
-
     public boolean addLaserEngraverRecipe(ItemStack aItemToEngrave, ItemStack aLens, ItemStack aEngravedItem, int aDuration, int aEUt) {
+    	return addLaserEngraverRecipe( aItemToEngrave, aLens, aEngravedItem, aDuration, aEUt, false);
+    }
+
+    public boolean addLaserEngraverRecipe(ItemStack aItemToEngrave, ItemStack aLens, ItemStack aEngravedItem, int aDuration, int aEUt, boolean aCleanroom) {
         if ((aItemToEngrave == null) || (aLens == null) || (aEngravedItem == null)) {
             return false;
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("laserengraving", aEngravedItem, aDuration)) <= 0) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes.addRecipe(true, new ItemStack[]{aItemToEngrave, aLens}, new ItemStack[]{aEngravedItem}, null, null, null, aDuration, aEUt, 0);
+        GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes.addRecipe(true, new ItemStack[]{aItemToEngrave, aLens}, new ItemStack[]{aEngravedItem}, null, null, null, aDuration, aEUt, aCleanroom ? -200 : 0);
         return true;
     }
 
@@ -833,6 +839,18 @@ public class GT_RecipeAdder
         
         GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes.add(new GT_Recipe_AssemblyLine( aResearchItem, aResearchTime, aInputs, aFluidInputs, aOutput, aDuration, aEUt));
         return true;
+	}
+
+	@Override
+	public boolean addCircuitAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput, int aDuration, int aEUt) {
+        if ((aInputs == null) || (aOutput == null) || aInputs.length>6 || aInputs.length<1) {
+            return false;
+        }
+        if ((aDuration = GregTech_API.sRecipeFile.get("circuitassembler", aOutput, aDuration)) <= 0) {
+            return false;
+        } 
+        GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, 0);
+		return true;    
 	}
 
 

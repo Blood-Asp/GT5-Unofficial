@@ -88,7 +88,7 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
                 if (aFuelPower)
                     GT_Values.RA.addFuel(GT_Utility.copyAmount(1L, new Object[]{aStack}), null, aMaterial.mFuelPower * 8, aMaterial.mFuelType);
                 if (!aNoWorking) {
-                    GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.stickLong, aMaterial, 3L), GT_OreDictUnificator.getDust(aMaterial, aPrefix.mMaterialAmount - OrePrefixes.stickLong.mMaterialAmount * 3L), (int) Math.max(aMaterialMass * 10L, 1L), 16);
+//                    GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.stickLong, aMaterial, 3L), GT_OreDictUnificator.getDust(aMaterial, aPrefix.mMaterialAmount - OrePrefixes.stickLong.mMaterialAmount * 3L), (int) Math.max(aMaterialMass * 10L, 1L), 16);
                     if (aMaterial.mUnificatable && (aMaterial.mMaterialInto == aMaterial))
                         if (aSpecialRecipeReq) GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, 4L), GT_Proxy.tBits, new Object[]{"X", "m", Character.valueOf('X'), OrePrefixes.gemExquisite.get(aMaterial)});
                 }

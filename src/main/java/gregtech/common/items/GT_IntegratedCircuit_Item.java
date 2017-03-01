@@ -21,7 +21,7 @@ import java.util.List;
 public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
     private final static String aTextEmptyRow = "   ";
     public GT_IntegratedCircuit_Item() {
-        super("integrated_circuit", "Integrated Circuit", "");
+        super("integrated_circuit", "Programmed Circuit", "");
         setHasSubtypes(true);
         setMaxDamage(0);
 
