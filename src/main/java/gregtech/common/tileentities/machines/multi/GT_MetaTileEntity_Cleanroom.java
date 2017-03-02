@@ -116,7 +116,7 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 	}
 	if(mMaintenanceHatches.size()!=1||mEnergyHatches.size()!=1||mDoorCount!=2||mHullCount>10){return false;}
 	for(int dX=-x+1;dX<=x-1;dX++){
-		for(int dZ=z+1;dZ<=z-1;dZ++){
+		for(int dZ=-z+1;dZ<=z-1;dZ++){
 			for(int dY=-1;dY>=y+1;dY--){
 				IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 				if(tTileEntity!=null){
