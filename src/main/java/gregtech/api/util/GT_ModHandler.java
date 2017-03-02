@@ -1490,6 +1490,7 @@ public class GT_ModHandler {
     /**
      * Used in my own Macerator. Decreases StackSize of the Input if wanted.
      */
+    @Deprecated
     public static ItemStack getMaceratorOutput(ItemStack aInput, boolean aRemoveInput, ItemStack aOutputSlot) {
         return GT_Utility.copy(getMachineOutput(aInput, getMaceratorRecipeList(), aRemoveInput, new NBTTagCompound(), aOutputSlot)[0]);
     }
@@ -1497,6 +1498,7 @@ public class GT_ModHandler {
     /**
      * Used in my own Extractor. Decreases StackSize of the Input if wanted.
      */
+    @Deprecated
     public static ItemStack getExtractorOutput(ItemStack aInput, boolean aRemoveInput, ItemStack aOutputSlot) {
         return GT_Utility.copy(getMachineOutput(aInput, getExtractorRecipeList(), aRemoveInput, new NBTTagCompound(), aOutputSlot)[0]);
     }
@@ -1504,6 +1506,7 @@ public class GT_ModHandler {
     /**
      * Used in my own Compressor. Decreases StackSize of the Input if wanted.
      */
+    @Deprecated
     public static ItemStack getCompressorOutput(ItemStack aInput, boolean aRemoveInput, ItemStack aOutputSlot) {
         return GT_Utility.copy(getMachineOutput(aInput, getCompressorRecipeList(), aRemoveInput, new NBTTagCompound(), aOutputSlot)[0]);
     }
