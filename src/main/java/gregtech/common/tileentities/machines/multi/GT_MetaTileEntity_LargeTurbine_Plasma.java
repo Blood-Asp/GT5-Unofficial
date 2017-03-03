@@ -130,7 +130,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
             tEU = GT_Utility.safeInt((long)((fuelValue / 20D) * (double)totalFlow));
 
-            System.out.println(totalFlow+" : "+fuelValue+" : "+aOptFlow+" : "+actualOptimalFlow+" : "+tEU);
+            //System.out.println(totalFlow+" : "+fuelValue+" : "+aOptFlow+" : "+actualOptimalFlow+" : "+tEU);
 
             if (totalFlow != actualOptimalFlow) {
                 double efficiency = 1.0D - Math.abs((totalFlow - actualOptimalFlow) / (float)actualOptimalFlow);
