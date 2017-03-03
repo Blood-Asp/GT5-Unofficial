@@ -128,14 +128,16 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
-    	if(aStack==null || !(aStack.getItem() instanceof GT_MetaGenerated_Tool)  || aStack.getItemDamage() < 170 || aStack.getItemDamage() >179)return false;
+    	if((counter&7)==0 && (aStack==null || !(aStack.getItem() instanceof GT_MetaGenerated_Tool)  || aStack.getItemDamage() < 170 || aStack.getItemDamage() >179)) {
+    	    stopMachine();
+    	    return false;
+        }
         ArrayList<FluidStack> tFluids = getStoredFluids();
         if (tFluids.size() > 0) {
-            if (baseEff == 0 || optFlow == 0 || counter >= 1000 || this.getBaseMetaTileEntity().hasWorkJustBeenEnabled()
+            if (baseEff == 0 || optFlow == 0 || counter >= 512 || this.getBaseMetaTileEntity().hasWorkJustBeenEnabled()
                     || this.getBaseMetaTileEntity().hasInventoryBeenModified()) {
                 counter = 0;
-                baseEff = GT_Utility.safeInt((long)((50.0F
-                        + (10.0F * ((GT_MetaGenerated_Tool) aStack.getItem()).getToolCombatDamage(aStack))) * 100));
+                baseEff = GT_Utility.safeInt((long)((5F + ((GT_MetaGenerated_Tool) aStack.getItem()).getToolCombatDamage(aStack)) * 1000F));
                 optFlow = GT_Utility.safeInt((long)Math.max(Float.MIN_NORMAL,
                         ((GT_MetaGenerated_Tool) aStack.getItem()).getToolStats(aStack).getSpeedMultiplier()
                                 * ((GT_MetaGenerated_Tool) aStack.getItem()).getPrimaryMaterial(aStack).mToolSpeed
@@ -145,7 +147,13 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             }
         }
 
+        if(optFlow<=0 || baseEff<=0){
+            stopMachine();//in case the turbine got removed
+            return false;
+        }
+
         int newPower = fluidIntoPower(tFluids, optFlow, baseEff);  // How much the turbine should be producing with this flow
+
         int difference = newPower - this.mEUt; // difference between current output and new output
 
         // Magic numbers: can always change by at least 10 eu/t, but otherwise by at most 1 percent of the difference in power level (per tick)
@@ -159,17 +167,15 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             this.mEUt = newPower;
 
         if (mEUt <= 0) {
-
-//	            this.mEfficiencyIncrease = (-10);
-            this.mEfficiency = 0;
-            //stopMachine();
+            stopMachine();
             return false;
         } else {
             this.mMaxProgresstime = 1;
-            this.mEfficiencyIncrease = (10);
+            this.mEfficiencyIncrease = 10;
             if(this.mDynamoHatches.size()>0){
-            	if(this.mDynamoHatches.get(0).getBaseMetaTileEntity().getOutputVoltage() < GT_Utility.safeInt((long)mEUt * (long)mEfficiency / 10000L)){
-            	explodeMultiblock();}
+                for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
+            	    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt)
+            	        explodeMultiblock();
             }
             return true;
         }

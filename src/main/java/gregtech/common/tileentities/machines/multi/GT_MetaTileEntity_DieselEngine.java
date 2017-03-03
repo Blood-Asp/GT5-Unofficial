@@ -75,10 +75,10 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         Collection<GT_Recipe> tRecipeList = GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList;
 
         if(tFluids.size() > 0 && tRecipeList != null) { //Does input hatch have a diesel fuel?
-            for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
+            for (FluidStack hatchFluid1 : tFluids) { //Loops through fluids in hatches
                 for(GT_Recipe aFuel : tRecipeList) { //Loops through diesel fuel recipes
-                    FluidStack tLiquid;
-                    if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
+                    FluidStack tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true); //Create fluidstack from current recipe
+                    if (tLiquid  != null) {
                         if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
                             fuelConsumption = tLiquid.amount = boostEu ? (4096 / aFuel.mSpecialValue) : (2048 / aFuel.mSpecialValue); //Calc fuel consumption
                             if(depleteInput(tLiquid)) { //Deplete that amount
