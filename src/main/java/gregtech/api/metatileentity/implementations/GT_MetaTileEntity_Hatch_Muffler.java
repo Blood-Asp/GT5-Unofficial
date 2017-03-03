@@ -88,12 +88,13 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if(this.getBaseMetaTileEntity().isActive())
-            pollutionParticles(this.getBaseMetaTileEntity().getWorld());
+        if(aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive())
+            pollutionParticles(this.getBaseMetaTileEntity().getWorld(),"largesmoke");
     }
 
-    public void pollutionParticles(World aWorld){
-        XSTR floatGen=new XSTR();
+    private static XSTR floatGen=new XSTR();
+
+    public void pollutionParticles(World aWorld,String name){
         boolean chk1,chk2,chk3;
         float ran1=floatGen.nextFloat(),ran2=0,ran3=0;
         chk1=ran1*100<calculatePollutionReduction(100);
@@ -128,12 +129,12 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         }
 
         if(chk1)
-            aWorld.spawnParticle("largesmoke", xPos + ran1*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
+            aWorld.spawnParticle(name, xPos + ran1*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
 
         if(chk2)
-            aWorld.spawnParticle("largesmoke", xPos + ran2*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
+            aWorld.spawnParticle(name, xPos + ran2*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
 
         if(chk3)
-            aWorld.spawnParticle("largesmoke", xPos + ran3*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
+            aWorld.spawnParticle(name, xPos + ran3*0.5F, yPos + floatGen.nextFloat()*0.5F, zPos + floatGen.nextFloat()*0.5F, xSpd, ySpd, zSpd);
     }
 }
