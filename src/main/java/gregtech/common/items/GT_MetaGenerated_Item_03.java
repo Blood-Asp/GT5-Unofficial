@@ -168,23 +168,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Wetwarecomputer.set(addItem(tLastID = 93, "Wetwareprocessor Assembly", "Ultimate Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Wetwaresupercomputer.set(addItem(tLastID = 94, "Wetware Supercomputer", "Super Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Wetwaremainframe.set(addItem(tLastID = 95, "Wetware Mainframe", "Infinite Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Infinite), SubTag.NO_UNIFICATION}));
-        
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Processor.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Computer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Nanoprocessor.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Nanocomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Elitenanocomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Quantumprocessor.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Quantumcomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Masterquantumcomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Quantummainframe.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Crystalprocessor.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Crystalcomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Crystalmainframe.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Neuroprocessor.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Wetwarecomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Wetwaresupercomputer.get(1, o));
-//        GT_OreDictUnificator.addToBlacklist(ItemList.Circuit_Wetwaremainframe.get(1, o));
+        ItemList.Circuit_Ultimate.set(ItemList.Circuit_Crystalcomputer.get(1L, new Object[0]));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
