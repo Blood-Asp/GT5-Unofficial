@@ -1556,8 +1556,9 @@ public class GT_Utility {
 	        tFluidId = 0;
 		}
 
+        try {
         ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
-        int[] tInts = new int[0];
+        int[] tInts = new int[2];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
@@ -1579,6 +1580,9 @@ public class GT_Utility {
     	tInts[0] = tAmount;
     	tInts[2] = tFluidId;
     	GT_Proxy.chunkData.put(tPos, tInts);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
     	if (tFluid!=null)
     		return new FluidStack(tFluid, tAmount);
     	return null;
