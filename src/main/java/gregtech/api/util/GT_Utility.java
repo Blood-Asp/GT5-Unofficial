@@ -1558,7 +1558,7 @@ public class GT_Utility {
 
         try {
         ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
-        int[] tInts = new int[2];
+        int[] tInts = new int[3];
     	if(GT_Proxy.chunkData.containsKey(tPos)){
     		tInts = GT_Proxy.chunkData.get(tPos);
     		if(tInts.length>0){
@@ -1581,7 +1581,7 @@ public class GT_Utility {
     	tInts[2] = tFluidId;
     	GT_Proxy.chunkData.put(tPos, tInts);
 		} catch (Exception e) {
-			System.out.println("[GT] getUndergroundOil() - Error put data");
+			System.out.println("getUndergroundOil() - Error put data");
 		}
     	if (tFluid!=null)
     		return new FluidStack(tFluid, tAmount);
