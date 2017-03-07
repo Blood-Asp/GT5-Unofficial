@@ -69,7 +69,7 @@ public class GT_Pollution {
 				tList.remove(0);
 				if(tPos!=null && GT_Proxy.chunkData.containsKey(tPos)){
 				int tPollution = GT_Proxy.chunkData.get(tPos)[1];
-//				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
+//				System.out.println("process: "+tPos.chunkPosY+" "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
 				//Reduce pollution in chunk
 				tPollution = (int)(0.99f*tPollution);
 				tPollution -= 2000;
@@ -77,10 +77,10 @@ public class GT_Pollution {
 				//Spread Pollution
 				if(tPollution>50000){
 				List<ChunkPosition> tNeighbor = new ArrayList();
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, 1, tPos.chunkPosZ));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, 1, tPos.chunkPosZ));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ+1));
-				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ-1));
+				tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, tPos.chunkPosY, tPos.chunkPosZ));
+				tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, tPos.chunkPosY, tPos.chunkPosZ));
+				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ+1));
+				tNeighbor.add(new ChunkPosition(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ-1));
 				for(ChunkPosition tNPos : tNeighbor){
 					if(GT_Proxy.chunkData.containsKey(tNPos)){
 						int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
@@ -194,7 +194,7 @@ public class GT_Pollution {
 		try{
 		ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(aPos.chunkPosX,16), aWorld.provider.dimensionId, GT_Utility.getScaleCoordinates(aPos.chunkPosZ,16)); // OLD in coordinate -1 -1 chunk 0 0
 //		System.out.println("add pollution dim: "+aWorld.provider.dimensionId+" x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
-		int[] tData = new int[2];
+		int[] tData = new int[3];
 		if(GT_Proxy.chunkData.containsKey(tPos)){
 			tData = GT_Proxy.chunkData.get(tPos);
 			if(tData.length>1){
