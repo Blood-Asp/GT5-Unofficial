@@ -106,7 +106,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                     totalFlow += flow; // track total input used
                 }
             }
-
+            if(totalFlow<=0)return 0;
             tEU = GT_Utility.safeInt((long)totalFlow * fuelValue);
 
             if (totalFlow != actualOptimalFlow) {

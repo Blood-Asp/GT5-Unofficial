@@ -106,11 +106,11 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 depleteInput(new FluidStack(aFluids.get(i), aFluids.get(i).amount));
             }
         }
-
+        if(totalFlow<=0)return 0;
         tEU = totalFlow;
         int waterToOutput = useWater(totalFlow / 160.0f);
         addOutput(GT_ModHandler.getDistilledWater(waterToOutput));
-        if (totalFlow > 0 && totalFlow != aOptFlow) {
+        if (totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float)aOptFlow);
             //if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;

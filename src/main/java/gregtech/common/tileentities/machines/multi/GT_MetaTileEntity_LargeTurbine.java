@@ -142,14 +142,13 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                         ((GT_MetaGenerated_Tool) aStack.getItem()).getToolStats(aStack).getSpeedMultiplier()
                                 * ((GT_MetaGenerated_Tool) aStack.getItem()).getPrimaryMaterial(aStack).mToolSpeed
                                 * 50));
+                if(optFlow<=0 || baseEff<=0){
+                    stopMachine();//in case the turbine got removed
+                    return false;
+                }
             } else {
                 counter++;
             }
-        }
-
-        if(optFlow<=0 || baseEff<=0){
-            stopMachine();//in case the turbine got removed
-            return false;
         }
 
         int newPower = fluidIntoPower(tFluids, optFlow, baseEff);  // How much the turbine should be producing with this flow
@@ -158,7 +157,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
         // Magic numbers: can always change by at least 10 eu/t, but otherwise by at most 1 percent of the difference in power level (per tick)
         // This is how much the turbine can actually change during this tick
-        int maxChangeAllowed = Math.max(10, GT_Utility.safeInt((long)Math.ceil(Math.abs(difference) * 0.01)));
+        int maxChangeAllowed = Math.max(10, GT_Utility.safeInt((long)Math.abs(difference)/100));
 
         if (Math.abs(difference) > maxChangeAllowed) { // If this difference is too big, use the maximum allowed change
             int change = maxChangeAllowed * (difference > 0 ? 1 : -1); // Make the change positive or negative.
@@ -166,8 +165,10 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         } else
             this.mEUt = newPower;
 
-        if (mEUt <= 0) {
-            stopMachine();
+        if (this.mEUt <= 0) {
+            //stopMachine();
+            this.mEUt=0;
+            this.mEfficiency=0;
             return false;
         } else {
             this.mMaxProgresstime = 1;

@@ -127,7 +127,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                     addOutput(output);
                 }
             }
-
+            if(totalFlow<=0)return 0;
             tEU = GT_Utility.safeInt((long)((fuelValue / 20D) * (double)totalFlow));
 
             //System.out.println(totalFlow+" : "+fuelValue+" : "+aOptFlow+" : "+actualOptimalFlow+" : "+tEU);
@@ -181,7 +181,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
         // Magic numbers: can always change by at least 10 eu/t, but otherwise by at most 1 percent of the difference in power level (per tick)
         // This is how much the turbine can actually change during this tick
-        int maxChangeAllowed = Math.max(200, GT_Utility.safeInt((long)Math.ceil(Math.abs(difference) * 0.2)));
+        int maxChangeAllowed = Math.max(200, GT_Utility.safeInt((long)Math.abs(difference)/5));
 
         if (Math.abs(difference) > maxChangeAllowed) { // If this difference is too big, use the maximum allowed change
             int change = maxChangeAllowed * (difference > 0 ? 1 : -1); // Make the change positive or negative.
@@ -189,8 +189,10 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         } else
             this.mEUt = newPower;
 
-        if (mEUt <= 0) {
-            stopMachine();
+        if (this.mEUt <= 0) {
+            //stopMachine();
+            this.mEUt=0;
+            this.mEfficiency=0;
             return false;
         } else {
             this.mMaxProgresstime = 20;
