@@ -15,8 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GT_MetaTileEntity_Cleanroom
-extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
 private int mHeatingCapacity = 0;
 
 public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
@@ -46,7 +45,7 @@ return new String[]{
 public boolean checkRecipe(ItemStack aStack) {
 	this.mEfficiencyIncrease = 100;
 	this.mMaxProgresstime = 100;
-	this.mEUt = 4;
+	this.mEUt = -4;
 return true;
 }
 
@@ -128,6 +127,7 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 			}	
 		}
 	}
+    mUpdate = 100;
 return true;
 }
 
