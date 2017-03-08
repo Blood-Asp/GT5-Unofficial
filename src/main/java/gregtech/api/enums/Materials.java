@@ -460,7 +460,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	DeepIron			( 829, TextureSet.SET_METALLIC			,   6.0F,    384,  2, 1|2  |8      |64                      , 150, 140, 140,   0,	"Deep Iron"						,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes.dyePink		, 2, Arrays.asList(new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
 	Diamond				( 500, TextureSet.SET_DIAMOND			,   8.0F,   1280,  3, 1  |4|8      |64|128                  , 200, 255, 255, 127,	"Diamond"						,    0,       0,         -1,    0, false,  true,   5,  64,   1, Dyes.dyeWhite		, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 4))),
 	Electrum			( 303, TextureSet.SET_SHINY				,  12.0F,     64,  2, 1|2  |8      |64|128                  , 255, 255, 100,   0,	"Electrum"						,    0,       0,         -1,    0, false, false,   4,   1,   1, Dyes.dyeYellow		, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Gold, 1))),
-	Nikolite			( 812, TextureSet.SET_SHINY				,   1.0F,      0,  1, 1    |8                               ,  60, 180, 200,   0,	"Nikolite"						,    0,       0,         -1,	0, false, false,   3,   1,   1, Dyes.dyeCyan		, 0, Arrays.asList(new MaterialStack(Redstone, 1), new MaterialStack(Electrum, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 2))),
+	Electrotine			( 812, TextureSet.SET_SHINY				,   1.0F,      0,  1, 1    |8                               ,  60, 180, 200,   0,	"Electrotine"					,    0,       0,         -1,	0, false, false,   3,   1,   1, Dyes.dyeCyan		, 0, Arrays.asList(new MaterialStack(Redstone, 1), new MaterialStack(Electrum, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 2))),
 	Emerald				( 501, TextureSet.SET_EMERALD			,   7.0F,    256,  2, 1  |4|8      |64                      ,  80, 255,  80, 127,	"Emerald"						,    0,       0,         -1,    0, false,  true,   5,   1,   1, Dyes.dyeGreen		, 1, Arrays.asList(new MaterialStack(Beryllium, 3), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 6), new MaterialStack(Oxygen, 18)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 5))),
     EnhancedGalgadorian (385, TextureSet.SET_METALLIC           ,  32.0F,   7200,  5, 1|2|          64|128                  , 152, 93, 133,    0,   "Enhanced Galgadorian"          ,    0,       0,       4500,24500,  true, false,   1,   1,   1, Dyes.dyePink        ),
 	FreshWater			(  -1, TextureSet.SET_FLUID				,   1.0F,      0,  0,         16                            ,   0,   0, 255,   0,	"Fresh Water"					,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeBlue		, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2))),
@@ -598,7 +598,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	NitroFuel			( 709, TextureSet.SET_FLUID				,   1.0F,      0,  2,         16                            , 200, 255,   0,   0,	"Nitro-Diesel"					,    0,     720,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLime		, 0, Arrays.asList(new MaterialStack(Glyceryl, 1), new MaterialStack(Fuel, 4))),
 	AstralSilver		( 333, TextureSet.SET_SHINY				,  10.0F,     64,  2, 1|2          |64                      , 230, 230, 255,   0,	"Astral Silver"					,    0,       0,         -1,    0, false, false,   4,   3,   2, Dyes.dyeWhite		, 2, Arrays.asList(new MaterialStack(Silver, 2), new MaterialStack(Thaumium, 1))),
 	//Midasium			( 332, TextureSet.SET_SHINY				,  12.0F,     64,  2, 1|2  |8      |64                      , 255, 200,  40,   0,	"Midasium"						,    0,       0,         -1,    0, false, false,   4,   3,   2, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Gold, 2), new MaterialStack(Thaumium, 1))),
-	BlueAlloy			( 309, TextureSet.SET_DULL				,   1.0F,      0,  0, 1|2                                   , 100, 180, 255,   0,	"Blue Alloy"					,    0,       0,         -1,    0, false, false,   3,   5,   1, Dyes.dyeLightBlue	, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Nikolite, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 3))),
+	BlueAlloy			( 309, TextureSet.SET_DULL				,   1.0F,      0,  0, 1|2                                   , 100, 180, 255,   0,	"Blue Alloy"					,    0,       0,         -1,    0, false, false,   3,   5,   1, Dyes.dyeLightBlue	, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Electrotine, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 3))),
 	RedAlloy			( 308, TextureSet.SET_DULL				,   1.0F,      0,  0, 1|2                                   , 200,   0,   0,   0,	"Red Alloy"						,    0,       0,         -1,    0, false, false,   3,   5,   1, Dyes.dyeRed			, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Redstone, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 3))),
 	CobaltBrass			( 343, TextureSet.SET_METALLIC			,   8.0F,    256,  2, 1|2          |64|128                  , 180, 180, 160,   0,	"Cobalt Brass"					,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes.dyeOrange		, 2, Arrays.asList(new MaterialStack(Brass, 7), new MaterialStack(Aluminium, 1), new MaterialStack(Cobalt, 1))),
 	Phosphorus			( 534, TextureSet.SET_FLINT				,   1.0F,      0,  2, 1  |4|8|16                            , 255, 255,   0,   0,	"Phosphorus"					,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes.dyeYellow		, 2, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Phosphate, 2))),
@@ -745,7 +745,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 
 	static {
 		initSubTags();
-		Iron					.mOreReRegistrations.add(AnyIron	);
+		Iron					.mOreReRegistrations.add(AnyIron);
 		PigIron					.mOreReRegistrations.add(AnyIron	);
 		WroughtIron				.mOreReRegistrations.add(AnyIron	);
 
@@ -818,7 +818,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Phosphorus				.setOreMultiplier( 3).setSmeltingMultiplier( 3);
 		Saltpeter				.setOreMultiplier( 4).setSmeltingMultiplier( 4);
 		Apatite					.setOreMultiplier( 4).setSmeltingMultiplier( 4).setByProductMultiplier(2);
-		Nikolite				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
+		Electrotine				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
 		Teslatite				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
 		Redstone				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
 		Glowstone				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
@@ -970,7 +970,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Thorium					.addOreByProducts(Uranium				, Lead					);
 		Plutonium				.addOreByProducts(Uranium				, Lead					);
 		Electrum				.addOreByProducts(Gold					, Silver				);
-		Nikolite				.addOreByProducts(Redstone				, Electrum				);
+		Electrotine				.addOreByProducts(Redstone				, Electrum				);
 		Bronze					.addOreByProducts(Copper				, Tin					);
 		Brass					.addOreByProducts(Copper				, Zinc					);
 		Coal					.addOreByProducts(Lignite				, Thorium				);
@@ -1013,7 +1013,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Diamond					.addOreByProducts(Graphite				);
 		Beryllium				.addOreByProducts(Emerald				);
 		Apatite					.addOreByProducts(Phosphorus			);
-		Nikolite				.addOreByProducts(Diamond				);
+		Electrotine				.addOreByProducts(Diamond				);
 		Teslatite				.addOreByProducts(Diamond				);
 		Magnesite				.addOreByProducts(Magnesium				);
 		NetherQuartz			.addOreByProducts(Netherrack			);
@@ -1089,7 +1089,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Naquadria.mMoltenRGBa[2] = 128;
 		Naquadria.mMoltenRGBa[3] = 0;
 
-		Nikolite.mChemicalFormula = "Rp";
+		Electrotine.mChemicalFormula = "Rp";
 		Trinium.mChemicalFormula = "Ke";
 		Naquadah.mChemicalFormula = "Nq";
 		NaquadahEnriched.mChemicalFormula = "Nq+";
@@ -1188,7 +1188,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		ConstructionFoam		.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.EXPLOSIVE, SubTag.NO_SMELTING);
 		Redstone				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID, SubTag.PULVERIZING_CINNABAR);
 		Glowstone				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
-		Nikolite				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
+		Electrotine				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
 		Teslatite				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
 		Netherrack				.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.FLAMMABLE);
 		Stone					.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.NO_RECYCLING);
