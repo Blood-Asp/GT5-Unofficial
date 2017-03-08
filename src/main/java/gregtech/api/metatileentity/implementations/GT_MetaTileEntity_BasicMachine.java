@@ -732,7 +732,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         if (tMap == null) return DID_NOT_FIND_RECIPE;
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
-        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 && getBaseMetaTileEntity().getWorld().provider.dimensionId == -27) return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 && getBaseMetaTileEntity().getWorld().provider.dimensionId != -27) return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.mCanBeBuffered) mLastRecipe = tRecipe;
         if (!canOutput(tRecipe)) {
             mOutputBlocked++;
