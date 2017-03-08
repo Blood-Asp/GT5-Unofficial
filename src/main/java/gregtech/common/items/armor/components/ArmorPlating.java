@@ -78,7 +78,7 @@ public class ArmorPlating extends ArmorComponent{
 
 	@Override
 	public void calculateArmor(ArmorData aArmorData) {
-		calDef(StatType.FALLDEFENCE, aArmorData);
+		calDefAdd(StatType.FALLDEFENCE, aArmorData);
 		calDef(StatType.PHYSICALDEFENCE, aArmorData);
 		calDef(StatType.PROJECTILEDEFENCE, aArmorData);
 		calDef(StatType.FIREDEFENCE, aArmorData);
@@ -98,6 +98,15 @@ public class ArmorPlating extends ArmorComponent{
 		aArmorData.mStat.remove(aType);}
 		float tComponentDef = mStat.get(aType);
 		aArmorData.mStat.put(aType, tArmorDef + ((1.0f -tArmorDef) * tComponentDef));
+	}
+	
+	public void calDefAdd(StatType aType, ArmorData aArmorData){
+		float tArmorDef = 0.0f;
+		if(aArmorData.mStat.containsKey(aType)){
+		tArmorDef = aArmorData.mStat.get(aType);
+		aArmorData.mStat.remove(aType);}
+		float tComponentDef = mStat.get(aType);
+		aArmorData.mStat.put(aType, tArmorDef + tComponentDef);
 	}
 
 }
