@@ -73,7 +73,7 @@ public class GT_Pollution {
 				//Reduce pollution in chunk
 				tPollution = (int)(0.99f*tPollution);
 				tPollution -= 2000;
-				if(tPollution<=0){tPollution = 0;}else{
+				if(tPollution<=0){tPollution = 0;}
 				//Spread Pollution
 				if(tPollution>50000){
 				List<ChunkPosition> tNeighbor = new ArrayList();
@@ -131,7 +131,6 @@ public class GT_Pollution {
 					int z =tPos.chunkPosZ<<4+(tRan.nextInt(16));
 					damageBlock(x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
 				}}}}
-					}
 				}
 			}
 			}}
