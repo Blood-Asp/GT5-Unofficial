@@ -134,7 +134,7 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 	}
 
 	if(doorState){
-		mEfficiency=0;
+		mEfficiency=Math.max(0,mEfficiency-200);
 	}
 
 return true;
