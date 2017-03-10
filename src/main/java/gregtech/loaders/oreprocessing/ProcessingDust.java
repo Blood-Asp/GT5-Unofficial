@@ -171,6 +171,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
             case Topaz:
             case BlueTopaz:
             case Tanzanite:
+            case Amethyst:
                 GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), 24, GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 3L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 12L));
                 break;
             case FoolsRuby:
