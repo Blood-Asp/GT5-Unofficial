@@ -15,8 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GT_MetaTileEntity_Cleanroom
-extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
 private int mHeatingCapacity = 0;
 
 public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
@@ -46,7 +45,7 @@ return new String[]{
 public boolean checkRecipe(ItemStack aStack) {
 	this.mEfficiencyIncrease = 100;
 	this.mMaxProgresstime = 100;
-	this.mEUt = 4;
+	this.mEUt = -4;
 return true;
 }
 
@@ -57,6 +56,8 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 	int mDoorCount=0;
 	int mHullCount=0;
 	int mPlascreteCount=0;
+	boolean doorState=false;
+	mUpdate = 100;
 	for(int i = 1;i<8;i++){
 		Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, 0);
 		int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0);
@@ -86,19 +87,22 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 				if(y==0){
 					if(dX==-x||dX==x||dZ==-z||dZ==z){
 						if(tBlock!=GregTech_API.sBlockReinforced||tMeta!=2){return false;}
-					}else if(dX==0&&dZ==0){						
+					}else if(dX==0&&dZ==0){
 					}else {
 						if(tBlock!=GregTech_API.sBlockCasings3||tMeta!=11){return false;}
-					}				
+					}
 				}else if(tBlock==GregTech_API.sBlockReinforced&&tMeta==2){
 					mPlascreteCount++;
 				}else{
 					IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 					if((!addMaintenanceToMachineList(tTileEntity, 82)) && (!addEnergyInputToMachineList(tTileEntity, 82))){
 						if(tBlock instanceof ic2.core.block.BlockIC2Door){
-							mDoorCount++;
+							if((tMeta&8)==0){
+								doorState=(Math.abs(dX)>Math.abs(dZ)==((tMeta&1)!=0))!=((tMeta&4)!=0);
+							}
+                            mDoorCount++;
 						}else{
-					        if (tTileEntity == null) {					        	
+					        if (tTileEntity == null) {
 					        	{return false;}
 					        }
 					        IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
@@ -109,8 +113,8 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 					}
 				}
 			}else{
-				
-			}			
+
+			}
 			}
 		}
 	}
@@ -125,16 +129,21 @@ public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack a
 						((GT_MetaTileEntity_BasicMachine_GT_Recipe)aMetaTileEntity).mCleanroom = this;
 					}
 				}
-			}	
+			}
 		}
 	}
+
+	if(doorState){
+		mEfficiency=Math.max(0,mEfficiency-200);
+	}
+
 return true;
 }
 
 public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
 if (aSide == 0 || aSide == 1) {
     return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.BLOCK_PLASCRETE), new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE : Textures.BlockIcons.OVERLAY_TOP_CLEANROOM)};
-    
+
 }
 return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.BLOCK_PLASCRETE)};
 }
