@@ -197,6 +197,9 @@ public class GregTech_API {
     public static boolean mMagneticraft = false;
     public static boolean mImmersiveEngineering = false;
     public static boolean mGTPlusPlus = false;
+
+    public static boolean mUseOnlyGoodSolderingMaterials = false;
+
     private static final String aTextIC2Lower = MOD_ID_IC2.toLowerCase(Locale.ENGLISH);
     /**
      * Getting assigned by the Mod loading
