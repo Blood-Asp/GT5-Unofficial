@@ -36,6 +36,8 @@ public class GT_Container_Regulator
         addSlotToContainer(new Slot(this.mTileEntity, 7, 26, 42));
         addSlotToContainer(new Slot(this.mTileEntity, 8, 44, 42));
 
+        addSlotToContainer(new Slot(this.mTileEntity, 19, 44, 63));
+
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 9, 64, 7, false, true, 1));
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 10, 81, 7, false, true, 1));
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 11, 98, 7, false, true, 1));
@@ -60,7 +62,7 @@ public class GT_Container_Regulator
     }
 
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
-        if (aSlotIndex < 9) {
+        if (aSlotIndex < 10) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
         }
         Slot tSlot = (Slot) this.inventorySlots.get(aSlotIndex);
@@ -68,7 +70,7 @@ public class GT_Container_Regulator
             if (this.mTileEntity.getMetaTileEntity() == null) {
                 return null;
             }
-            if (aSlotIndex == 27) {
+            if (aSlotIndex == 28) {
                 ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).bOutput = (!((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).bOutput);
                 if (((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).bOutput) {
                     GT_Utility.sendChatToPlayer(aPlayer, "Emit Energy to Outputside");
@@ -77,7 +79,7 @@ public class GT_Container_Regulator
                 }
                 return null;
             }
-            if ((aSlotIndex < 18)) {
+            if ((aSlotIndex < 19)) {
                 ItemStack tStack = aPlayer.inventory.getItemStack();
                 if (tStack != null) {
                     tSlot.putStack(GT_Utility.copy(new Object[]{tStack}));
@@ -96,8 +98,8 @@ public class GT_Container_Regulator
                 }
                 return null;
             }
-            if ((aSlotIndex < 27)) {
-                ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).mTargetSlots[(aSlotIndex - 18)] = Math.min(99, Math.max(0, ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).mTargetSlots[(aSlotIndex - 18)] + (aMouseclick == 0 ? -1 : 1) * (aShifthold == 0 ? 1 : 16)));
+            if ((aSlotIndex < 28)) {
+                ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).mTargetSlots[(aSlotIndex - 19)] = Math.min(99, Math.max(0, ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).mTargetSlots[(aSlotIndex - 19)] + (aMouseclick == 0 ? -1 : 1) * (aShifthold == 0 ? 1 : 16)));
                 return null;
             }
         }
@@ -156,10 +158,10 @@ public class GT_Container_Regulator
     }
 
     public int getSlotCount() {
-        return 9;
+        return 10;
     }
 
     public int getShiftClickSlotCount() {
-        return 9;
+        return 10;
     }
 }
