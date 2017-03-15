@@ -70,6 +70,8 @@ public class GT_Worldgen_GT_Ore_Layer
 
         int cX = aChunkX - aRandom.nextInt(this.mSize);
         int eX = aChunkX + 16 + aRandom.nextInt(this.mSize);
+
+        int[] execCount=new int[4];
         for (int tX = cX; tX <= eX; tX++) {
             int cZ = aChunkZ - aRandom.nextInt(this.mSize);
             int eZ = aChunkZ + 16 + aRandom.nextInt(this.mSize);
@@ -78,21 +80,25 @@ public class GT_Worldgen_GT_Ore_Layer
                     for (int i = tMinY - 1; i < tMinY + 2; i++) {
                         if ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0)) {
                             GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, this.mSecondaryMeta, false);
+                            execCount[1]++;
                         }
                     }
                 }
                 if ((this.mBetweenMeta > 0) && ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0))) {
                     GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY + 2 + aRandom.nextInt(2), tZ, this.mBetweenMeta, false);
+                    execCount[2]++;
                 }
                 if (this.mPrimaryMeta > 0) {
                     for (int i = tMinY + 3; i < tMinY + 6; i++) {
                         if ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0)) {
                             GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, this.mPrimaryMeta, false);
+                            execCount[0]++;
                         }
                     }
                 }
                 if ((this.mSporadicMeta > 0) && ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0))) {
                     GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, this.mSporadicMeta, false);
+                    execCount[3]++;
                 }
             }
         }
@@ -102,10 +108,10 @@ public class GT_Worldgen_GT_Ore_Layer
                             " @ dim="+aDimensionType+
                             " chunkX="+aChunkX+
                             " chunkZ="+aChunkZ+
-                            " 1st="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
-                            " 2nd="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
-                            " 3rd="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
-                            " 4th="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()
+                            " Secondary="+execCount[1]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " Between="+execCount[2]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " Primary="+execCount[0]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " Sporadic="+execCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()
             );
         }
         return true;
