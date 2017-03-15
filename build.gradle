@@ -87,7 +87,8 @@ repositories {
 }
 
 dependencies {
-    provided ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
+	compile "eu.usrv:YAMCore:${config.minecraft.version}-${config.yamcore.version}:deobf"
+	provided ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
         exclude module: '*'
     }
     provided "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
