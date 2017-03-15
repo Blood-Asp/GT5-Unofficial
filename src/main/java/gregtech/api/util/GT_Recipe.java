@@ -33,7 +33,7 @@ import static gregtech.api.enums.GT_Values.*;
  * <p/>
  * I know this File causes some Errors, because of missing Main Functions, but if you just need to compile Stuff, then remove said erroreous Functions.
  */
-public class GT_Recipe {
+public class GT_Recipe implements Comparable<GT_Recipe> {
     public static volatile int VERSION = 509;
     /**
      * If you want to change the Output, feel free to modify or even replace the whole ItemStack Array, for Inputs, please add a new Recipe, because of the HashMaps.
@@ -412,7 +412,27 @@ public class GT_Recipe {
         return true;
     }
 
-    
+    @Override
+    public int compareTo(GT_Recipe recipe) {
+        // first lowest tier recipes
+        // then fastest
+        // then with lowest special value
+        // then dry recipes
+        // then with fewer inputs
+        if (this.mEUt != recipe.mEUt) {
+            return this.mEUt - recipe.mEUt;
+        } else if (this.mDuration != recipe.mDuration) {
+            return this.mDuration - recipe.mDuration;
+        } else if (this.mSpecialValue != recipe.mSpecialValue) {
+            return this.mSpecialValue - recipe.mSpecialValue;
+        } else if (this.mFluidInputs.length != recipe.mFluidInputs.length) {
+            return this.mFluidInputs.length - recipe.mFluidInputs.length;
+        } else if (this.mInputs.length != recipe.mInputs.length) {
+            return this.mInputs.length - recipe.mInputs.length;
+        }
+        return 0;
+    }
+
     public static class GT_Recipe_AssemblyLine{
         public static final ArrayList<GT_Recipe_AssemblyLine> sAssemblylineRecipes = new ArrayList<GT_Recipe_AssemblyLine>();
         
