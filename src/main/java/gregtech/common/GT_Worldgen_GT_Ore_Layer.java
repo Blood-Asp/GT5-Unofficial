@@ -6,6 +6,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -96,7 +97,16 @@ public class GT_Worldgen_GT_Ore_Layer
             }
         }
         if (GT_Values.D1) {
-            System.out.println("Generated Orevein: " + this.mWorldGenName);
+            System.out.println(
+                            "Generated Orevein:" + this.mWorldGenName +
+                            " @ dim="+aDimensionType+
+                            " chunkX="+aChunkX+
+                            " chunkZ="+aChunkZ+
+                            " 1st="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " 2nd="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " 3rd="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " 4th="+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()
+            );
         }
         return true;
     }

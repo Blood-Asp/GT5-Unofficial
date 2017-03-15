@@ -1,9 +1,11 @@
 package gregtech.common;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -45,6 +47,15 @@ public class GT_Worldgen_GT_Ore_SmallPieces
             int i = 0;
             for (int j = Math.max(1, this.mAmount / 2 + aRandom.nextInt(this.mAmount) / 2); i < j; i++) {
                 GT_TileEntity_Ores.setOreBlock(aWorld, aChunkX + aRandom.nextInt(16), this.mMinY + aRandom.nextInt(Math.max(1, this.mMaxY - this.mMinY)), aChunkZ + aRandom.nextInt(16), this.mMeta, true);
+                if(GT_Values.D1){
+                    System.out.println(
+                            "Small Ore:" + this.mWorldGenName +
+                            " @ dim="+aDimensionType+
+                            " chunkX="+aChunkX+
+                            " chunkZ="+aChunkZ+
+                            " ore="+new ItemStack(GregTech_API.sBlockOres1,1,mMeta).getDisplayName()
+                    );
+                }
             }
         }
         return true;
