@@ -1,6 +1,5 @@
 package gregtech.common.items;
 
-import com.dreammaster.gthandler.CustomItemList;
 import cpw.mods.fml.common.Loader;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;

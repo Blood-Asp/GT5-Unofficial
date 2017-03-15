@@ -12,7 +12,6 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.Collection;
