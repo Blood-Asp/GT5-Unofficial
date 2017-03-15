@@ -1,8 +1,8 @@
 package gregtech.common;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
@@ -13,6 +13,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -102,8 +104,8 @@ public class GT_Worldgen_GT_Ore_Layer
                 }
             }
         }
-        if (GT_Values.D1) {
-            System.out.println(
+        if (D1) {
+            GT_Log.out.println(
                             "Generated Orevein:" + this.mWorldGenName +
                             " @ dim="+aDimensionType+
                             " chunkX="+aChunkX+
