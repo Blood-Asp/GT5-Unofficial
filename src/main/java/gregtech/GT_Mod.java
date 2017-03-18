@@ -3,6 +3,8 @@ package gregtech;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.recipes.ICentrifugeRecipe;
 import forestry.api.recipes.ISqueezerRecipe;
 import forestry.api.recipes.RecipeManagers;
@@ -21,6 +23,7 @@ import gregtech.common.GT_Proxy;
 import gregtech.common.GT_RecipeAdder;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
+import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import gregtech.loaders.load.GT_CoverBehaviorLoader;
 import gregtech.loaders.load.GT_FuelLoader;
@@ -34,9 +37,11 @@ import gregtech.loaders.postload.*;
 import gregtech.loaders.preload.*;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeOutput;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -700,6 +705,39 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.sAfterGTLoad = null;
         GregTech_API.sBeforeGTPostload = null;
         GregTech_API.sAfterGTPostload = null;
+
+
+
+        CreativeTabs mainTab = new CreativeTabs("GTtools") {
+            @SideOnly(Side.CLIENT)
+            @Override
+            public ItemStack getIconItemStack() {
+                return ItemList.Tool_Cheat.get(1, new ItemStack(Blocks.iron_block, 1));
+            }
+
+            @SideOnly(Side.CLIENT)
+            @Override
+            public Item getTabIconItem() {
+                return ItemList.Circuit_Integrated.getItem();
+            }
+
+            @Override
+            public void displayAllReleventItems(List aList) {
+                for (int i = 0; i < 32766; i += 2) {
+                    if (GT_MetaGenerated_Tool_01.INSTANCE.getToolStats(new ItemStack(GT_MetaGenerated_Tool_01.INSTANCE, 1, i)) != null) {
+                        ItemStack tStack = new ItemStack(GT_MetaGenerated_Tool_01.INSTANCE, 1, i);
+                        GT_MetaGenerated_Tool_01.INSTANCE.isItemStackUsable(tStack);
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1,Materials.Lead,Materials.Lead,null));
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1,Materials.Nickel,Materials.Nickel,null));
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1,Materials.Cobalt,Materials.Cobalt,null));
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1,Materials.Osmium,Materials.Osmium,null));
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1,Materials.Adamantium,Materials.Adamantium,null));
+                        aList.add(GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(i,1, Materials.Neutronium,Materials.Neutronium,null));
+                    }
+                }
+                super.displayAllReleventItems(aList);
+            }
+        };
     }
 
     @Mod.EventHandler
