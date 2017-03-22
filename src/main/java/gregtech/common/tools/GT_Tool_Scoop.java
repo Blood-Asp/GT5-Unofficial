@@ -27,7 +27,7 @@ public class GT_Tool_Scoop
     }
 
     public int getToolDamagePerContainerCraft() {
-        return 800;
+        return 200;
     }
 
     public int getToolDamagePerEntityAttack() {

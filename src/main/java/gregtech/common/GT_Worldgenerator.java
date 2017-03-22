@@ -16,8 +16,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GT_Worldgenerator
@@ -31,8 +29,6 @@ public class GT_Worldgenerator
     private static int gcMaxSize = 400;
     private static boolean endAsteroids = true;
     private static boolean gcAsteroids = true;
-    public List<Runnable> mList = new ArrayList();
-    public boolean mIsGenerating = false;
 
 
     public GT_Worldgenerator() {
@@ -47,17 +43,8 @@ public class GT_Worldgenerator
         GameRegistry.registerWorldGenerator(this, 1073741823);
     }
 
-    public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-        if (!this.mIsGenerating) {
-            this.mIsGenerating = true;
-            int mList_sS=this.mList.size();
-            for (int i = 0; i < mList_sS; i++) {
-                ((Runnable) this.mList.get(i)).run();
-            }
-            this.mList.clear();
-            this.mIsGenerating = false;
-        }
+    public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+        new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
     }
 
     public static class WorldGenContainer
@@ -83,7 +70,7 @@ public class GT_Worldgenerator
         }
 
         public void run() {
-            if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
+            if (((this.mX / 16 - 1) % 3 == 0) && ((this.mZ / 16 - 1) % 3 == 0)) {
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
@@ -113,7 +100,9 @@ public class GT_Worldgenerator
                             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
                                 tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
                             }
-                        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+                        } catch (Throwable e) {
+                            e.printStackTrace(GT_Log.err);
+                        }
                         j++;
                     }
                     i++;
