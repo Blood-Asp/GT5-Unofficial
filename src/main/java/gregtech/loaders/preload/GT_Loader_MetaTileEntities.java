@@ -1501,6 +1501,17 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"DMV", 'M', ItemList.Hull_ZPM, 'V', ItemList.Conveyor_Module_ZPM, 'D', ItemList.Tool_DataOrb});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_UV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", 'M', ItemList.Hull_UV, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataOrb});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_MAX.get(1L, new Object[0]), bitsd, new Object[]{"DMV", 'M', ItemList.Hull_MAX, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataOrb});
+
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_ULV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_ULV, 'V', ItemList.Conveyor_Module_LV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_LV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_LV, 'V', ItemList.Conveyor_Module_LV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_MV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_MV, 'V', ItemList.Conveyor_Module_MV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_HV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_HV, 'V', ItemList.Conveyor_Module_HV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_EV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_EV, 'V', ItemList.Conveyor_Module_EV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_IV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_IV, 'V', ItemList.Conveyor_Module_IV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_LuV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_LuV, 'V', ItemList.Conveyor_Module_LuV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_ZPM, 'V', ItemList.Conveyor_Module_ZPM, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_UV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_UV, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_MAX.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_MAX, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
     }
 
     private static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage, long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
