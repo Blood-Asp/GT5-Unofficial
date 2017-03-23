@@ -24,7 +24,7 @@ public class GT_MetaTileEntity_FusionComputer1 extends GT_MetaTileEntity_FusionC
 
     @Override
     public long maxEUStore() {
-        return 160000000L * (Math.min(16, this.mEnergyHatches.size())) / 16L;
+        return 160003000L * (Math.min(16, this.mEnergyHatches.size())) / 16L;
     }
 
     @Override
