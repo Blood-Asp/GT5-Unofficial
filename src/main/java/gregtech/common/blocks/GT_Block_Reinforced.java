@@ -215,10 +215,10 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
     
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
-      if(world.getBlockMetadata(x, y, z)==5){
-    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x, y, z, player == null ? null : player);
+      if(!world.isRemote && world.getBlockMetadata(x, y, z)==5){
+    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, player == null ? null : player);
         world.spawnEntityInWorld(entitytntprimed);
-        world.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
+        world.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
         
       world.setBlockToAir(x, y, z);
       return false;
@@ -241,12 +241,13 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       }
     }
     
-    public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion)
-    {
-    	if(!world.isRemote && world.getBlockMetadata(x, y, z)==5){
-    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x, y, z, explosion.getExplosivePlacedBy());
-      entitytntprimed.fuse = (world.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8);
-      world.spawnEntityInWorld(entitytntprimed);}
+    public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+      if (!world.isRemote && world.getBlockMetadata(x, y, z)==5){
+    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, explosion.getExplosivePlacedBy());
+    	entitytntprimed.fuse = (world.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8);
+    	world.spawnEntityInWorld(entitytntprimed);
+      }
+      super.onBlockExploded(world, x, y, z, explosion);
     }
     
     public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
