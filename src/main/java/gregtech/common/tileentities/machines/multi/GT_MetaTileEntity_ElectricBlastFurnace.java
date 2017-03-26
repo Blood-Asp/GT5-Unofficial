@@ -72,36 +72,40 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
-        int tInputList_sS=tInputList.size();
+        int tInputList_sS = tInputList.size();
         for (int i = 0; i < tInputList_sS - 1; i++) {
             for (int j = i + 1; j < tInputList_sS; j++) {
-                if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
-                    if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
-                        tInputList.remove(j--); tInputList_sS=tInputList.size();
+                if (GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j))) {
+                    if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
+                        tInputList.remove(j--);
+                        tInputList_sS = tInputList.size();
                     } else {
-                        tInputList.remove(i--); tInputList_sS=tInputList.size();
+                        tInputList.remove(i--);
+                        tInputList_sS = tInputList.size();
                         break;
                     }
                 }
             }
         }
-        ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
+        ItemStack[] tInputs = Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
 
         ArrayList<FluidStack> tFluidList = getStoredFluids();
-        int tFluidList_sS=tFluidList.size();
+        int tFluidList_sS = tFluidList.size();
         for (int i = 0; i < tFluidList_sS - 1; i++) {
             for (int j = i + 1; j < tFluidList_sS; j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
-                        tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
+                        tFluidList.remove(j--);
+                        tFluidList_sS = tFluidList.size();
                     } else {
-                        tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
+                        tFluidList.remove(i--);
+                        tFluidList_sS = tFluidList.size();
                         break;
                     }
                 }
             }
         }
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
+        FluidStack[] tFluids = Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
         if (tInputList.size() > 0) {
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
@@ -109,7 +113,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
             if ((tRecipe != null) && (this.mHeatingCapacity >= tRecipe.mSpecialValue) && (tRecipe.isRecipeInputEqual(true, tFluids, tInputs))) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
-                int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue)/900;
+                int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue) / 900;
                 if (tRecipe.mEUt <= 16) {
                     this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
                     this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
@@ -119,11 +123,11 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                     int i = 2;
                     while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
                         this.mEUt *= 4;
-                        this.mMaxProgresstime /= (tHeatCapacityDivTiers>=i ? 4 : 2);
-                        i+=2;
+                        this.mMaxProgresstime /= (tHeatCapacityDivTiers >= i ? 4 : 2);
+                        i += 2;
                     }
                 }
-                if(tHeatCapacityDivTiers>0)this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
+                if (tHeatCapacityDivTiers > 0) this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
                 if (this.mEUt > 0) {
                     this.mEUt = (-this.mEUt);
                 }
@@ -147,7 +151,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         if (!aBaseMetaTileEntity.getAirOffset(xDir, 2, zDir)) {
             return false;
         }
-        if(!addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), 11)){
+        if (!addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), 11)) {
             return false;
         }
         replaceDeprecatedCoils(aBaseMetaTileEntity);
