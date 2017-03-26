@@ -678,6 +678,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Infinity		   	( 397, TextureSet.SET_SHINY				, 128.0F,2621440,  8, 1      |8                             , 255, 255, 255,   0,   "Infinity"          		    ,     5, 5000000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
 	Bedrockium	 		( 395, TextureSet.SET_DULL				,   8.0F, 327680,  6, 1      |8                             ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
 	Trinium				( 868, TextureSet.SET_SHINY				, 128.0F,    128,  8, 1|2          |64|128                  , 200, 200, 210,   0,	"Trinium"						,     0,       0,     7200, 27200,  true, false,  4,   1,   1, Dyes.dyeLightGray),
+    Ichorium 			( 978, TextureSet.SET_SHINY				, 256.0F,   2048,  6, 1|2          |64|128         			, 211, 120,   6,   0,	"Ichorium"						,     5,  250000,     7200,  7200,  true, false,  4,   1,   1, Dyes.dyeOrange),
 
 	/**
 	 * Materials which are renamed automatically
@@ -1027,47 +1028,47 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		Mithril					.addOreByProducts(Platinum				);
 		//Midasium				.addOreByProducts(Gold					);
 		AstralSilver			.addOreByProducts(Silver				);
-		Graphite				.addOreByProducts(Carbon				);
+		Graphite				.addOreByProducts(Carbon);
 		Netherrack				.addOreByProducts(Sulfur				);
-		Flint					.addOreByProducts(Obsidian				);
-		Cobaltite				.addOreByProducts(Cobalt				);
-		Cobalt					.addOreByProducts(Cobaltite				);
+		Flint					.addOreByProducts(Obsidian);
+		Cobaltite				.addOreByProducts(Cobalt);
+		Cobalt					.addOreByProducts(Cobaltite);
 		Sulfur					.addOreByProducts(Sulfur				);
-		Saltpeter				.addOreByProducts(Saltpeter				);
+		Saltpeter				.addOreByProducts(Saltpeter);
 		Endstone				.addOreByProducts(Helium_3				);
-		Osmium					.addOreByProducts(Iridium				);
-		Magnesium				.addOreByProducts(Olivine				);
+		Osmium					.addOreByProducts(Iridium);
+		Magnesium				.addOreByProducts(Olivine);
 		Aluminium				.addOreByProducts(Bauxite				);
 		Titanium				.addOreByProducts(Almandine				);
 		Obsidian				.addOreByProducts(Olivine				);
-		Ash						.addOreByProducts(Carbon				);
-		DarkAsh					.addOreByProducts(Carbon				);
+		Ash						.addOreByProducts(Carbon);
+		DarkAsh					.addOreByProducts(Carbon);
 		Redrock					.addOreByProducts(Clay					);
 		Marble					.addOreByProducts(Calcite				);
 		Clay					.addOreByProducts(Clay					);
-		Cassiterite				.addOreByProducts(Tin					);
-		CassiteriteSand			.addOreByProducts(Tin					);
+		Cassiterite				.addOreByProducts(Tin);
+		CassiteriteSand			.addOreByProducts(Tin);
 		GraniteBlack			.addOreByProducts(Biotite				);
-		GraniteRed				.addOreByProducts(PotassiumFeldspar		);
+		GraniteRed				.addOreByProducts(PotassiumFeldspar);
 		Phosphate				.addOreByProducts(Phosphor				);
 		Phosphor				.addOreByProducts(Phosphate				);
 		Tanzanite				.addOreByProducts(Opal					);
-		Opal					.addOreByProducts(Tanzanite				);
-		Amethyst				.addOreByProducts(Amethyst				);
+		Opal					.addOreByProducts(Tanzanite);
+		Amethyst				.addOreByProducts(Amethyst);
 		FoolsRuby				.addOreByProducts(Jasper				);
-		Amber					.addOreByProducts(Amber					);
+		Amber					.addOreByProducts(Amber);
 		Topaz					.addOreByProducts(BlueTopaz				);
-		BlueTopaz				.addOreByProducts(Topaz					);
-		Niter					.addOreByProducts(Saltpeter				);
+		BlueTopaz				.addOreByProducts(Topaz);
+		Niter					.addOreByProducts(Saltpeter);
 		Vinteum					.addOreByProducts(Vinteum				);
 		Force					.addOreByProducts(Force					);
-		Dilithium				.addOreByProducts(Dilithium				);
+		Dilithium				.addOreByProducts(Dilithium);
 		Neutronium				.addOreByProducts(Neutronium			);
-		Lithium					.addOreByProducts(Lithium				);
+		Lithium					.addOreByProducts(Lithium);
 		Silicon					.addOreByProducts(SiliconDioxide		);
 		Salt					.addOreByProducts(RockSalt				);
-		RockSalt				.addOreByProducts(Salt					);
-		InfusedGold				.addOreByProduct(Gold					);
+		RockSalt				.addOreByProducts(Salt);
+		InfusedGold				.addOreByProduct(Gold);
 
 		Glue.mChemicalFormula = "No Horses were harmed for the Production";
 		UUAmplifier.mChemicalFormula = "Accelerates the Mass Fabricator";
@@ -1118,6 +1119,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 		AnyCopper.mChemicalFormula="Cu";
 		ElectrumFlux.mChemicalFormula="The formula is too long...";
 		DeepIron.mChemicalFormula="Sp2Fe";
+		Ichorium.mChemicalFormula="IcMa";
 		//Duralumin.mChemicalFormula="Al6CuMnMg";
 	}
 
@@ -1136,7 +1138,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 						   PulsatingIron, Manasteel, DarkThaumium, /**ElvenElementium**/ EnrichedCopper, DiamondCopper, Adamantium, Amordrine, Angmallen, Ardite, Aredrite, Atlarus, /**Blutonium,**/ Carmot, Celenegil, Ceruclase, DarkIron,
 						   Desh, Desichalkos, Duranium, ElectrumFlux, Enderium, EnderiumBase, Eximite, FierySteel, Force, Haderoth, Hematite, Hepatizon, HSLA, Infuscolium, InfusedGold, Inolashite, Mercassium, MeteoricIron,
 						   MeteoricSteel, Naquadah, NaquadahAlloy, NaquadahEnriched, Naquadria, ObsidianFlux, Orichalcum, Osmonium, Oureclase, Phoenixite, Prometheum, Sanguinite, /**Starconium,**/
-						   Tartarite, /**Thyrium,**/ Tritanium, Vulcanite, Vyroxeres, /**Yellorium,**/ Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron,
+						   Tartarite, Ichorium,/**Thyrium,**/ Tritanium, Vulcanite, Vyroxeres, /**Yellorium,**/ Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron,
 						   Electrum, Invar, /**IronCompressed,**/ Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
 						   YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, Shadow, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel,
 						   TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, Void, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium,

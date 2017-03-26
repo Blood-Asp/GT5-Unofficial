@@ -316,7 +316,8 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.HSSG,
                 Materials.HSSE,
                 Materials.HSSS,
-                Materials.Steeleaf
+                Materials.Steeleaf,
+                Materials.Ichorium
         }, OrePrefixes.block, gregtech.api.enums.Textures.BlockIcons.STORAGE_BLOCKS8);
 
         GregTech_API.sBlockGem1 = new GT_Block_Metal("gt.blockgem1", new Materials[]{
