@@ -147,7 +147,9 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         if (!aBaseMetaTileEntity.getAirOffset(xDir, 2, zDir)) {
             return false;
         }
-        addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), 11);
+        if(!addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), 11)){
+            return false;
+        }
         replaceDeprecatedCoils(aBaseMetaTileEntity);
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 2, zDir);
         switch (tUsedMeta) {
