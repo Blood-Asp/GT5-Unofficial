@@ -678,7 +678,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
 	Infinity		   	( 397, TextureSet.SET_SHINY				, 128.0F,2621440,  8, 1      |8                             , 255, 255, 255,   0,   "Infinity"          		    ,     5, 5000000,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeWhite),
 	Bedrockium	 		( 395, TextureSet.SET_DULL				,   8.0F, 327680,  6, 1      |8                             ,  50,  50,  50,   0,   "Bedrockium"   		            ,     0,       0,     9000,  9000,  true, false,  4,   1,   1, Dyes.dyeBlack),
 	Trinium				( 868, TextureSet.SET_SHINY				, 128.0F,    128,  8, 1|2          |64|128                  , 200, 200, 210,   0,	"Trinium"						,     0,       0,     7200, 27200,  true, false,  4,   1,   1, Dyes.dyeLightGray),
-    Ichorium 			( 978, TextureSet.SET_SHINY				, 256.0F,   2048,  6, 1|2          |64|128         			, 211, 120,   6,   0,	"Ichorium"						,     5,  250000,     7200,  7200,  true, false,  4,   1,   1, Dyes.dyeOrange),
+    Ichorium 			( -1, TextureSet.SET_SHINY				,   1.0F,      0,  0, 0                          			, 211, 120,   6,   0,	"Ichorium"						,     5,  250000,       -1,     0, false, false,  4,   1,   1, Dyes.dyeOrange),
 
 	/**
 	 * Materials which are renamed automatically
