@@ -13,27 +13,27 @@ public interface IGT_Mod {
     /**
      * This means that Server specific Basefiles are definitely existing! Not if the World is actually server side or not!
      */
-    public boolean isServerSide();
+	boolean isServerSide();
 
     /**
      * This means that Client specific Basefiles are definitely existing! Not if the World is actually client side or not!
      */
-    public boolean isClientSide();
+	boolean isClientSide();
 
     /**
      * This means that Bukkit specific Basefiles are definitely existing! Not if the World is actually bukkit server or not!
      */
-    public boolean isBukkitSide();
+	boolean isBukkitSide();
 
     /**
      * works only ClientSide otherwise returns null
      */
-    public EntityPlayer getThePlayer();
+	EntityPlayer getThePlayer();
 
     //---------- Internal Usage Only ----------
     /**
      * Plays the Sonictron Sound for the ItemStack on the Client Side
      */
-    public void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ);
+	void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ);
 
 }

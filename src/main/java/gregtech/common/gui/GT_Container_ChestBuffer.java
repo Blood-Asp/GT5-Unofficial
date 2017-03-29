@@ -34,7 +34,7 @@ public class GT_Container_ChestBuffer
         if (aSlotIndex < 27) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
         }
-        Slot tSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+        Slot tSlot = this.inventorySlots.get(aSlotIndex);
         if (tSlot != null) {
             if (this.mTileEntity.getMetaTileEntity() == null) {
                 return null;

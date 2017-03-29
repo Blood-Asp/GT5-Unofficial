@@ -11,30 +11,30 @@ public interface IEnergyConductor extends IEnergyConnected {
     /**
      * @return if this is actually a Cable. (you must check this)
      */
-    public boolean isConductor();
+	boolean isConductor();
 
     /**
      * @return the maximum Voltage of the Cable.
      */
-    public long getMaxVoltage();
+	long getMaxVoltage();
 
     /**
      * @return the maximum Amperage of the Cable, per Wire.
      */
-    public long getMaxAmperage();
+	long getMaxAmperage();
 
     /**
      * @return the Loss of the Cable, per Meter.
      */
-    public long getLossPerMeter();
+	long getLossPerMeter();
 
     /**
      * @return the Material the Cable consists of. (may return Materials._NULL)
      */
-    public Materials getCableMaterial();
+	Materials getCableMaterial();
 
     /**
      * @return the Material the Cable Insulation consists of. (may return Materials._NULL)
      */
-    public Materials getInsulationMaterial();
+	Materials getInsulationMaterial();
 }

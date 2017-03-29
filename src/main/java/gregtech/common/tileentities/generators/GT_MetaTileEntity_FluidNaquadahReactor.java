@@ -16,7 +16,7 @@ public class GT_MetaTileEntity_FluidNaquadahReactor
     public int mEfficiency;
 
     public GT_MetaTileEntity_FluidNaquadahReactor(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Enriched Naquadah Cells", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, "Requires Enriched Naquadah Cells");
         onConfigLoad();
     }
 

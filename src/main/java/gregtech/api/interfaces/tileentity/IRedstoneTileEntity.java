@@ -13,5 +13,5 @@ public interface IRedstoneTileEntity extends IRedstoneEmitter, IRedstoneReceiver
      * Causes a general Block update.
      * Sends nothing to Client, just causes a Block Update.
      */
-    public void issueBlockUpdate();
+	void issueBlockUpdate();
 }

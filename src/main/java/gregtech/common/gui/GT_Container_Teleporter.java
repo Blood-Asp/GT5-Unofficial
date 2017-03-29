@@ -52,7 +52,7 @@ public class GT_Container_Teleporter
         if (aSlotIndex < 0) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
         }
-        Slot tSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+        Slot tSlot = this.inventorySlots.get(aSlotIndex);
         if ((tSlot != null) && (this.mTileEntity.getMetaTileEntity() != null)) {
             switch (aSlotIndex) {
                 case 0:

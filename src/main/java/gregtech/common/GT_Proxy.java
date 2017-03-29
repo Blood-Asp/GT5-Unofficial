@@ -12,7 +12,6 @@ import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.objects.GT_Fluid;
 import gregtech.api.objects.ItemData;
-import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -62,7 +61,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -481,13 +479,13 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             new Thread(new GT_PlayerActivityLogger()).start();
         }
         GregTech_API.sPostloadStarted = true;
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.IRON_DOOR, 1), new ItemData(Materials.Iron, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.ACACIA_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.BIRCH_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.JUNGLE_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.OAK_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.SPRUCE_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Items.DARK_OAK_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L, new MaterialStack[0]));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.IRON_DOOR, 1), new ItemData(Materials.Iron, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.ACACIA_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.BIRCH_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.JUNGLE_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.OAK_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.SPRUCE_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
+        GT_OreDictUnificator.addItemData(new ItemStack(Items.DARK_OAK_DOOR, 1, 32767), new ItemData(Materials.Wood, 21772800L));
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if ((tData.filledContainer.getItem() == Items.POTIONITEM) && (tData.filledContainer.getItemDamage() == 0)) {
                 tData.fluid.amount = 0;

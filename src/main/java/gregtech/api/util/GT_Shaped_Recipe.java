@@ -51,7 +51,7 @@ public class GT_Shaped_Recipe extends ShapedOreRecipe implements IGT_CraftingRec
             // Keeping NBT
             if (mKeepingNBT) for (int i = 0; i < aGrid.getSizeInventory(); i++) {
                 if (aGrid.getStackInSlot(i) != null && aGrid.getStackInSlot(i).hasTagCompound()) {
-                    rStack.setTagCompound((NBTTagCompound) aGrid.getStackInSlot(i).getTagCompound().copy());
+                    rStack.setTagCompound(aGrid.getStackInSlot(i).getTagCompound().copy());
                     break;
                 }
             }

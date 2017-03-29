@@ -11,7 +11,7 @@ public enum TC_Aspects {
     public Object mAspect;
     public int mValue;
 
-    private TC_Aspects(int aValue) {
+    TC_Aspects(int aValue) {
         mValue = aValue;
     }
 

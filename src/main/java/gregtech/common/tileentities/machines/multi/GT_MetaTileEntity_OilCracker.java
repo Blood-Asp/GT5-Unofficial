@@ -64,9 +64,9 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tInput}, new ItemStack[]{});
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tInput});
             if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{tInput}, new ItemStack[]{})) {
+                if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{tInput})) {
                     boolean steam = false;
                     boolean hydrogen = false;
                     for (FluidStack tInput2 : tInputList) {
@@ -208,9 +208,8 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                 }
             }
         }
-        if (amount < 18) return false;
-        return true;
-    }
+		return amount >= 18;
+	}
 
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {

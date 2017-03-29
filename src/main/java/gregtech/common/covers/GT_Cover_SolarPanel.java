@@ -17,7 +17,7 @@ public class GT_Cover_SolarPanel
                 aCoverVariable = 0;
             } else {
                 boolean bRain = (aTileEntity.getWorldObj().isRaining()) && (aTileEntity.getBiome().getRainfall() > 0.0F);
-                aCoverVariable = bRain && aTileEntity.getWorldObj().getSkylightSubtracted() >= 4 || !aTileEntity.getSkyAtSide(aSide) ? 0 : ((int) (!bRain && aTileEntity.getWorldObj().isDaytime() ? 1 : 2));
+                aCoverVariable = bRain && aTileEntity.getWorldObj().getSkylightSubtracted() >= 4 || !aTileEntity.getSkyAtSide(aSide) ? 0 : !bRain && aTileEntity.getWorldObj().isDaytime() ? 1 : 2;
             }
         }
         if ((aCoverVariable == 1) || ((aCoverVariable == 2) && (aTimer % 8L == 0L))) {

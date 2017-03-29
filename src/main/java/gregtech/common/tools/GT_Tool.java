@@ -34,10 +34,8 @@ public abstract class GT_Tool
     protected static boolean isStateEqual(IBlockState state1, IBlockState state2) {
         if(state1.getBlock() != state2.getBlock())
             return false;
-        if(!state1.getProperties().equals(state2.getProperties()))
-            return false;
-        return true;
-    }
+		return state1.getProperties().equals(state2.getProperties());
+	}
 
     public int getToolDamagePerBlockBreak() {
         return 100;

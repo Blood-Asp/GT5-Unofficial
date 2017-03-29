@@ -54,21 +54,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         int color = ITexture.color(mRGBa, mAllowAlpha);
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.EAST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.EAST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }
@@ -84,21 +84,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
 
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.WEST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.WEST, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }
@@ -113,21 +113,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         int color = ITexture.color(mRGBa, mAllowAlpha);
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.SOUTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.SOUTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }
@@ -142,21 +142,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         int color = ITexture.color(mRGBa, mAllowAlpha);
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.NORTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.NORTH, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }
@@ -171,21 +171,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         int color = ITexture.color(mRGBa, mAllowAlpha);
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.UP, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.UP, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }
@@ -200,21 +200,21 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         int color = ITexture.color(mRGBa, mAllowAlpha);
         if(!item) {
             if (aFullBlock) {
-                aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
+                    RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()), ccrs.lightMatrix);
                 }
             } else {
                 ccrs.setBrightness(aWorld, aPos);
-                aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 if (mIconContainer.getOverlayIcon() != null) {
-                    aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                    RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(aPos.getX(), aPos.getY(), aPos.getZ()), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
                 }
             }
         } else {
-            aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
+            RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(mIconContainer.getIcon()));
             if (mIconContainer.getOverlayIcon() != null) {
-                aRenderer.renderFace(ccrs, EnumFacing.DOWN, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
+                RenderBlocks.renderFace(ccrs, EnumFacing.DOWN, new Translation(0.0D, 0.0D, 0.0D), new ColourMultiplier(new ColourRGBA(153, 153, 153, 255).rgba()), new IconTransformation(mIconContainer.getIcon()));
             }
         }
     }

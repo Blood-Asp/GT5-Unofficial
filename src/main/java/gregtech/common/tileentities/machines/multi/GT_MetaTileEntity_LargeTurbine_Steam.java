@@ -73,7 +73,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
     private int useWater(float input) {
         water = water + input;
         int usage = (int) water;
-        water = water - (int) usage;
+        water = water - usage;
         return usage;
     }
 
@@ -95,7 +95,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                 totalFlow += flow; // track total input used
                 if (!achievement) {
-                    GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorldObj().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
+                    GT_Mod.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorldObj().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
                     achievement = true;
                 }
             }else if(fluidName.equals("ic2.fluidSuperheatedSteam")){

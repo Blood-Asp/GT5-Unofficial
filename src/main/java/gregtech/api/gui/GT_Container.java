@@ -134,7 +134,7 @@ public class GT_Container extends Container {
                     }
                 }
             } else if (aShifthold == ClickType.PICKUP_ALL) {
-                aSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+                aSlot = this.inventorySlots.get(aSlotIndex);
                 if (aSlot != null && aSlot.canTakeStack(aPlayer)) {
                     tTempStack = this.transferStackInSlot(aPlayer, aSlotIndex);
                     if (tTempStack != null) {
@@ -148,7 +148,7 @@ public class GT_Container extends Container {
                 if (aSlotIndex < 0) {
                     return null;
                 }
-                aSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+                aSlot = this.inventorySlots.get(aSlotIndex);
                 if (aSlot != null) {
                     tTempStack = aSlot.getStack();
                     ItemStack var13 = aPlayerInventory.getItemStack();
@@ -164,7 +164,7 @@ public class GT_Container extends Container {
                             aSlot.putStack(var13.splitStack(tTempStackSize));
 
                             if (var13.stackSize == 0) {
-                                aPlayerInventory.setItemStack((ItemStack) null);
+                                aPlayerInventory.setItemStack(null);
                             }
                         }
                     } else if (aSlot.canTakeStack(aPlayer)) {
@@ -173,7 +173,7 @@ public class GT_Container extends Container {
                             aHoldStack = aSlot.decrStackSize(tTempStackSize);
                             aPlayerInventory.setItemStack(aHoldStack);
                             if (tTempStack.stackSize == 0) {
-                                aSlot.putStack((ItemStack) null);
+                                aSlot.putStack(null);
                             }
                             aSlot.onPickupFromSlot(aPlayer, aPlayerInventory.getItemStack());
                         } else if (aSlot.isItemValid(var13)) {
@@ -187,7 +187,7 @@ public class GT_Container extends Container {
                                 }
                                 var13.splitStack(tTempStackSize);
                                 if (var13.stackSize == 0) {
-                                    aPlayerInventory.setItemStack((ItemStack) null);
+                                    aPlayerInventory.setItemStack(null);
                                 }
                                 tTempStack.stackSize += tTempStackSize;
                             } else if (var13.stackSize <= aSlot.getSlotStackLimit()) {
@@ -202,7 +202,7 @@ public class GT_Container extends Container {
                                 tTempStack = aSlot.decrStackSize(tTempStackSize);
 
                                 if (tTempStack.stackSize == 0) {
-                                    aSlot.putStack((ItemStack) null);
+                                    aSlot.putStack(null);
                                 }
 
                                 aSlot.onPickupFromSlot(aPlayer, aPlayerInventory.getItemStack());
@@ -213,7 +213,7 @@ public class GT_Container extends Container {
                 }
             }
         } else if (aShifthold == ClickType.QUICK_MOVE && aMouseclick >= 0 && aMouseclick < 9) {
-            aSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+            aSlot = this.inventorySlots.get(aSlotIndex);
 
             if (aSlot.canTakeStack(aPlayer)) {
                 tTempStack = aPlayerInventory.getStackInSlot(aMouseclick);
@@ -233,7 +233,7 @@ public class GT_Container extends Container {
                         if (tTempStackSize > -1) {
                             aPlayerInventory.addItemStackToInventory(tTempStack);
                             aSlot.decrStackSize(aHoldStack.stackSize);
-                            aSlot.putStack((ItemStack) null);
+                            aSlot.putStack(null);
                             aSlot.onPickupFromSlot(aPlayer, aHoldStack);
                         }
                     } else {
@@ -242,12 +242,12 @@ public class GT_Container extends Container {
                         aSlot.onPickupFromSlot(aPlayer, aHoldStack);
                     }
                 } else if (tTempStack != null && !aSlot.getHasStack() && aSlot.isItemValid(tTempStack)) {
-                    aPlayerInventory.setInventorySlotContents(aMouseclick, (ItemStack) null);
+                    aPlayerInventory.setInventorySlotContents(aMouseclick, null);
                     aSlot.putStack(tTempStack);
                 }
             }
         } else if (aShifthold == ClickType.CLONE && aPlayer.capabilities.isCreativeMode && aPlayerInventory.getItemStack() == null && aSlotIndex >= 0) {
-            aSlot = (Slot) this.inventorySlots.get(aSlotIndex);
+            aSlot = this.inventorySlots.get(aSlotIndex);
             if (aSlot != null && aSlot.getHasStack()) {
                 tTempStack = GT_Utility.copy(aSlot.getStack());
                 tTempStack.stackSize = tTempStack.getMaxStackSize();
@@ -260,7 +260,7 @@ public class GT_Container extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer aPlayer, int aSlotIndex) {
         ItemStack stack = null;
-        Slot slotObject = (Slot) inventorySlots.get(aSlotIndex);
+        Slot slotObject = inventorySlots.get(aSlotIndex);
 
         mTileEntity.markDirty();
 
@@ -307,7 +307,7 @@ public class GT_Container extends Container {
 
         if (aStack.isStackable()) {
             while (aStack.stackSize > 0 && (!par4 && var6 < aSlotCount || par4 && var6 >= aStartIndex)) {
-                var7 = (Slot) this.inventorySlots.get(var6);
+                var7 = this.inventorySlots.get(var6);
                 var8 = var7.getStack();
 
                 if (!(var7 instanceof GT_Slot_Holo) && !(var7 instanceof GT_Slot_Output) && var8 != null && var8.getItem() == aStack.getItem() && (!aStack.getHasSubtypes() || aStack.getItemDamage() == var8.getItemDamage()) && ItemStack.areItemStackTagsEqual(aStack, var8)) {
@@ -342,7 +342,7 @@ public class GT_Container extends Container {
             }
 
             while (!par4 && var6 < aSlotCount || par4 && var6 >= aStartIndex) {
-                var7 = (Slot) this.inventorySlots.get(var6);
+                var7 = this.inventorySlots.get(var6);
                 var8 = var7.getStack();
 
                 if (var8 == null) {

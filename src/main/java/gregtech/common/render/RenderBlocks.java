@@ -73,7 +73,7 @@ public class RenderBlocks implements ICCBlockRenderer {
                     int r = (color >> 16) & 0xFF;
                     int g = (color >> 8) & 0xFF;
                     int b = color & 0xFF;
-                    renderFace(ccrs, side, new Translation(new Vector3().fromBlockPos(pos)), new ColourMultiplier(new ColourRGBA(r, g, b, 255).rgba()), new IconTransformation(sprite), ccrs.lightMatrix);
+                    renderFace(ccrs, side, new Translation(Vector3.fromBlockPos(pos)), new ColourMultiplier(new ColourRGBA(r, g, b, 255).rgba()), new IconTransformation(sprite), ccrs.lightMatrix);
                 }
             }
         }
@@ -83,7 +83,7 @@ public class RenderBlocks implements ICCBlockRenderer {
 
     public void setBlockBounds(Cuboid6 bounds)
     {
-        this.bounds = bounds;
+        RenderBlocks.bounds = bounds;
     }
 
     public void setBlockBounds(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)
@@ -125,8 +125,8 @@ public class RenderBlocks implements ICCBlockRenderer {
 
         for (EnumFacing side : EnumFacing.VALUES) {
             if (state.shouldSideBeRendered(world, pos, side)) {
-                renderFace(ccrs, side, new Translation(new Vector3().fromBlockPos(pos)), new ColourMultiplier(-1), new IconTransformation(sprite1), ccrs.lightMatrix);
-                renderFace(ccrs, side, new Translation(new Vector3().fromBlockPos(pos)), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(sprite2), ccrs.lightMatrix);
+                renderFace(ccrs, side, new Translation(Vector3.fromBlockPos(pos)), new ColourMultiplier(-1), new IconTransformation(sprite1), ccrs.lightMatrix);
+                renderFace(ccrs, side, new Translation(Vector3.fromBlockPos(pos)), new ColourMultiplier(new ColourARGB(color).rgba()), new IconTransformation(sprite2), ccrs.lightMatrix);
             }
         }
     }

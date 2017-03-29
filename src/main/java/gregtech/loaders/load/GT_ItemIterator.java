@@ -45,9 +45,9 @@ public class GT_ItemIterator
         GregTech_API.registerScrewdriver(GT_ModHandler.getRecipeOutput(new ItemStack(Items.IRON_INGOT, 1), null, null, null, new ItemStack(Items.STICK, 1)));
 
         GT_Log.out.println("GT_Mod: Adding Food Recipes to the Automatic Canning Machine. (also during the following Item Iteration)");
-        GT_Values.RA.addCannerRecipe(new ItemStack(Items.ROTTEN_FLESH, 2, 32767), ItemList.IC2_Food_Can_Empty.get(1L, new Object[0]), ItemList.IC2_Food_Can_Spoiled.get(1L, new Object[0]), null, 200, 1);
-        GT_Values.RA.addCannerRecipe(new ItemStack(Items.SPIDER_EYE, 2, 32767), ItemList.IC2_Food_Can_Empty.get(1L, new Object[0]), ItemList.IC2_Food_Can_Spoiled.get(1L, new Object[0]), null, 100, 1);
-        GT_Values.RA.addCannerRecipe(ItemList.Food_Poisonous_Potato.get(2L, new Object[0]), ItemList.IC2_Food_Can_Empty.get(1L, new Object[0]), ItemList.IC2_Food_Can_Spoiled.get(1L, new Object[0]), null, 100, 1);
+        GT_Values.RA.addCannerRecipe(new ItemStack(Items.ROTTEN_FLESH, 2, 32767), ItemList.IC2_Food_Can_Empty.get(1L), ItemList.IC2_Food_Can_Spoiled.get(1L), null, 200, 1);
+        GT_Values.RA.addCannerRecipe(new ItemStack(Items.SPIDER_EYE, 2, 32767), ItemList.IC2_Food_Can_Empty.get(1L), ItemList.IC2_Food_Can_Spoiled.get(1L), null, 100, 1);
+        GT_Values.RA.addCannerRecipe(ItemList.Food_Poisonous_Potato.get(2L), ItemList.IC2_Food_Can_Empty.get(1L), ItemList.IC2_Food_Can_Spoiled.get(1L), null, 100, 1);
         GT_Values.RA.addCannerRecipe(new ItemStack(Items.CAKE, 1, 32767), ItemList.IC2_Food_Can_Empty.get(12L), ItemList.IC2_Food_Can_Filled.get(12L), null, 600, 1);
         GT_Values.RA.addCannerRecipe(new ItemStack(Items.MUSHROOM_STEW, 1, 32767), ItemList.IC2_Food_Can_Empty.get(6L), ItemList.IC2_Food_Can_Filled.get(6L), new ItemStack(Items.BOWL, 1), 300, 1);
 
@@ -96,17 +96,17 @@ public class GT_ItemIterator
                     if (((tItem instanceof ItemFood)) && (tItem != ItemList.IC2_Food_Can_Filled.getItem()) && (tItem != ItemList.IC2_Food_Can_Spoiled.getItem())) {
                         int tFoodValue = ((ItemFood) tItem).getHealAmount(new ItemStack(tItem, 1, 0));
                         if (tFoodValue > 0) {
-                            GT_Values.RA.addCannerRecipe(new ItemStack(tItem, 1, 32767), ItemList.IC2_Food_Can_Empty.get(tFoodValue, new Object[0]), ItemList.IC2_Food_Can_Filled.get(tFoodValue, new Object[0]), GT_Utility.getContainerItem(new ItemStack(tItem, 1, 0), true), tFoodValue * 100, 1);
+                            GT_Values.RA.addCannerRecipe(new ItemStack(tItem, 1, 32767), ItemList.IC2_Food_Can_Empty.get(tFoodValue), ItemList.IC2_Food_Can_Filled.get(tFoodValue), GT_Utility.getContainerItem(new ItemStack(tItem, 1, 0), true), tFoodValue * 100, 1);
                         }
                     }
                     if (tItem instanceof IFluidContainerItem) {
                         GT_OreDictUnificator.addToBlacklist(new ItemStack(tItem, 1, 32767));
                     }
                     if ((tName.equals("item.ItemSensorLocationCard")) || (tName.equals("item.ItemEnergySensorLocationCard")) || (tName.equals("item.ItemEnergyArrayLocationCard")) || (tName.equals("item.ItemTextCard"))) {
-                        GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, ItemList.Circuit_Basic.get(2L, new Object[0]), 200, 32);
+                        GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, ItemList.Circuit_Basic.get(2L), 200, 32);
                     }
                     if (tName.equals("item.ItemTimeCard")) {
-                        GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, ItemList.Circuit_Basic.get(1L, new Object[0]), 100, 32);
+                        GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, ItemList.Circuit_Basic.get(1L), 100, 32);
                     }
                     if (tName.equals("tile.ArsMagica:ore_vinteum")) {
                         GT_OreDictUnificator.set(OrePrefixes.ore, Materials.Vinteum, new ItemStack(tItem, 1, 0));

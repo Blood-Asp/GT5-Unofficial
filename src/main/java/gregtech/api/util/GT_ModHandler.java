@@ -1314,7 +1314,7 @@ public class GT_ModHandler {
         if (!GregTech_API.sPostloadStarted || GregTech_API.sPostloadFinished)
             sSingleNonBlockDamagableRecipeList.clear();
         if (sSingleNonBlockDamagableRecipeList.isEmpty()) {
-            for (IRecipe tRecipe : (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList()) {
+            for (IRecipe tRecipe : CraftingManager.getInstance().getRecipeList()) {
                 ItemStack tStack = tRecipe.getRecipeOutput();
                 if (GT_Utility.isStackValid(tStack) && tStack.getMaxStackSize() == 1 && tStack.getMaxDamage() > 0 && !(tStack.getItem() instanceof ItemBlock) && !(tStack.getItem() instanceof IReactorComponent) && !isElectricItem(tStack) && !GT_Utility.isStackInList(tStack, sNonReplaceableItems)) {
                     if (!(tRecipe instanceof ShapelessRecipes || tRecipe instanceof ShapelessOreRecipe)) {
@@ -1453,7 +1453,7 @@ public class GT_ModHandler {
             for (IMachineRecipeManager.RecipeIoContainer tEntry : aRecipeList) {
                 if (tEntry.input.matches(aInput)) {
                     if (tEntry.input.getAmount() <= aInput.stackSize) {
-                        ItemStack[] tList = (ItemStack[]) tEntry.output.items.toArray(new ItemStack[tEntry.output.items.size()]);
+                        ItemStack[] tList = tEntry.output.items.toArray(new ItemStack[tEntry.output.items.size()]);
                         if (tList.length == 0) break;
                         ItemStack[] rList = new ItemStack[aOutputSlots.length];
                         if(tEntry.output.metadata != null) {

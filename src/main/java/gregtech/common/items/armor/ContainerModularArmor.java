@@ -55,7 +55,7 @@ public abstract class ContainerModularArmor extends Container {
 		}
 
 		ItemStack originalStack = null;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		Slot slot = inventorySlots.get(slotIndex);
 		int numSlots = inventorySlots.size();
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
@@ -88,7 +88,7 @@ public abstract class ContainerModularArmor extends Container {
 
 	private boolean tryShiftItem(ItemStack stackToShift, int numSlots) {
 		for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
-			Slot slot = (Slot) inventorySlots.get(machineIndex);
+			Slot slot = inventorySlots.get(machineIndex);
 			if (slot.getHasStack()) {
 				continue;
 			}
@@ -113,7 +113,7 @@ public abstract class ContainerModularArmor extends Container {
 		boolean changed = false;
 		if (stackToShift.isStackable()) {
 			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-				Slot slot = (Slot) inventorySlots.get(slotIndex);
+				Slot slot = inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
 				if (stackInSlot != null && isIdenticalItem(stackInSlot, stackToShift)) {
 					int resultingStackSize = stackInSlot.stackSize + stackToShift.stackSize;
@@ -134,7 +134,7 @@ public abstract class ContainerModularArmor extends Container {
 		}
 		if (stackToShift.stackSize > 0) {
 			for (int slotIndex = start; stackToShift.stackSize > 0 && slotIndex < end; slotIndex++) {
-				Slot slot = (Slot) inventorySlots.get(slotIndex);
+				Slot slot = inventorySlots.get(slotIndex);
 				ItemStack stackInSlot = slot.getStack();
 				if (stackInSlot == null) {
 					int max = Math.min(stackToShift.getMaxStackSize(), slot.getSlotStackLimit());

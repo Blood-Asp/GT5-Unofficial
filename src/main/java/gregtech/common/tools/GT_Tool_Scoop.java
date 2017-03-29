@@ -112,7 +112,7 @@ public class GT_Tool_Scoop extends GT_Tool {
 
     @Override
     public void onStatsAddedToTool(GT_MetaGenerated_Tool aItem, int aID) {
-        Object tObject = GT_Utility.callConstructor("gregtech.common.items.behaviors.Behaviour_Scoop", 0, null, false, new Object[]{Integer.valueOf(200)});
+        Object tObject = GT_Utility.callConstructor("gregtech.common.items.behaviors.Behaviour_Scoop", 0, null, false, Integer.valueOf(200));
         if ((tObject instanceof IItemBehaviour)) {
             aItem.addItemBehavior(aID, (IItemBehaviour) tObject);
         }

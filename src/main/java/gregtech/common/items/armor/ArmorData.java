@@ -87,7 +87,7 @@ public class ArmorData {
 	public ArmorData(EntityPlayer player, ItemStack stack, int type, int tier) {
 		this.type = type;
 		this.armorTier = tier;
-		ContainerModularArmor tmp = new ContainerBasicArmor((EntityPlayer) player, new InventoryArmor(ModularArmor_Item.class, stack));
+		ContainerModularArmor tmp = new ContainerBasicArmor(player, new InventoryArmor(ModularArmor_Item.class, stack));
 		calculateArmor(tmp.mInvArmor.parts);
 		switch (tier) {
 		case 0:
@@ -270,11 +270,7 @@ public class ArmorData {
 				writeToNBT(stack.getTagCompound());
 			}
 		}
-		if (helmet != null && chestplate != null && leggings != null && boots != null) {
-			fullArmor = true;
-		} else {
-			fullArmor = false;
-		}
+		fullArmor = helmet != null && chestplate != null && leggings != null && boots != null;
 		fullRadiationDef = fullArmor && helmet.radiationDef > 0.9f && chestplate.radiationDef > 0.9f && leggings.radiationDef > 0.9f && boots.radiationDef > 0.9f;
 		fullElectricDef = fullArmor && helmet.electricDef > 0.9f && chestplate.electricDef > 0.9f && leggings.electricDef > 0.9f && boots.electricDef > 0.9f;
 		magnet = 0;

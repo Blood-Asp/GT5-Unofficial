@@ -56,8 +56,8 @@ public class GuiModularArmor extends GuiContainer {
 			}
 		} else if (x >= 59 && x <= 66) {
 			if (y >= 20 && y <= 27) {
-				list.add(GT_LanguageManager.getTranslation("thorns") + ": " + (int) Math.round(cont.mInvArmor.data.thornsSingle) + " Dmg");
-				list.add("Total "+GT_LanguageManager.getTranslation("thorns") + ": " + (int) Math.round(cont.mInvArmor.data.thorns) + " Dmg");
+				list.add(GT_LanguageManager.getTranslation("thorns") + ": " + Math.round(cont.mInvArmor.data.thornsSingle) + " Dmg");
+				list.add("Total "+GT_LanguageManager.getTranslation("thorns") + ": " + Math.round(cont.mInvArmor.data.thorns) + " Dmg");
 			} else if (y >= 29 && y <= 36) {
 				list.add(GT_LanguageManager.getTranslation("magnet") + ": " + cont.mInvArmor.data.magnetSingle + " m");
 				list.add("Total "+GT_LanguageManager.getTranslation("magnet") + ": " + cont.mInvArmor.data.magnet + " m");
@@ -76,7 +76,7 @@ public class GuiModularArmor extends GuiContainer {
 					list.add("Fall Damage absorbtion");
 					list.add("Only for Boots");
 				}else{
-				list.add(GT_LanguageManager.getTranslation("abs1") + " " + (int) Math.round(cont.mInvArmor.data.fallDef) + GT_LanguageManager.getTranslation("abs2"));}
+				list.add(GT_LanguageManager.getTranslation("abs1") + " " + Math.round(cont.mInvArmor.data.fallDef) + GT_LanguageManager.getTranslation("abs2"));}
 			}
 		}
 		if (!list.isEmpty())

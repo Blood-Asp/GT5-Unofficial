@@ -18,11 +18,8 @@ public class GT_CoolantCellIC_Item extends GT_CoolantCell_Item implements IReact
     }
 
     public boolean canStoreHeat(IReactor aReactor, ItemStack aStack, int x, int y) {
-        if (aReactor.isFluidCooled() && (getControlTagOfStack(aStack)) != 0) {
-            return false;
-        }
-        return true;
-    }
+		return !(aReactor.isFluidCooled() && (getControlTagOfStack(aStack)) != 0);
+	}
 
     public int getMaxHeat(IReactor aReactor, ItemStack aStack, int x, int y) {
         return this.heatStorage;
@@ -43,7 +40,7 @@ public class GT_CoolantCellIC_Item extends GT_CoolantCell_Item implements IReact
         }
         tHeat += aHeat;
         if (tHeat > this.heatStorage) {
-            aReactor.setItemAt(x, y, (ItemStack) null);
+            aReactor.setItemAt(x, y, null);
             aHeat = this.heatStorage - tHeat + 1;
         } else {
             if (tHeat < 0) {

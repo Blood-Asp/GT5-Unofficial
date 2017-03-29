@@ -103,7 +103,7 @@ public class Behaviour_Arrow
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;
         }
-        GT_Entity_Arrow rArrow = (GT_Entity_Arrow) GT_Utility.callConstructor(this.mArrow.getName(), -1, null, true, new Object[]{aWorld, Double.valueOf(aX), Double.valueOf(aY), Double.valueOf(aZ)});
+        GT_Entity_Arrow rArrow = (GT_Entity_Arrow) GT_Utility.callConstructor(this.mArrow.getName(), -1, null, true, aWorld, Double.valueOf(aX), Double.valueOf(aY), Double.valueOf(aZ));
         rArrow.setArrowStack(aStack);
         return rArrow;
     }
@@ -113,7 +113,7 @@ public class Behaviour_Arrow
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;
         }
-        GT_Entity_Arrow rArrow = (GT_Entity_Arrow) GT_Utility.callConstructor(this.mArrow.getName(), -1, null, true, new Object[]{aWorld, aEntity, Float.valueOf(this.mSpeedMultiplier * aSpeed)});
+        GT_Entity_Arrow rArrow = (GT_Entity_Arrow) GT_Utility.callConstructor(this.mArrow.getName(), -1, null, true, aWorld, aEntity, Float.valueOf(this.mSpeedMultiplier * aSpeed));
         rArrow.setArrowStack(aStack);
         return rArrow;
     }
