@@ -833,7 +833,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         } 
         for(ItemStack tItem : aInputs){
-        	if(tItem==null)System.out.println("addAssemblylineRecipe"+aResearchItem.getDisplayName());
+        	if(tItem==null)System.out.println("addAssemblinglineRecipe"+aResearchItem.getDisplayName());
         }
         GT_Recipe.GT_Recipe_Map.sScannerFakeRecipes.addFakeRecipe(false, new ItemStack[]{aResearchItem}, new ItemStack[]{aOutput}, new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Writes Research result", new Object[0])}, null, null, aResearchTime, 30, 0);
         GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.addFakeRecipe(false, aInputs, new ItemStack[]{aOutput}, new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Reads Research result", new Object[0])}, aFluidInputs, null, aDuration, aEUt, 0,true);
