@@ -163,7 +163,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             mToolStats.put((short) (aID + 1), aToolStats);
             aToolStats.onStatsAddedToTool(this, aID);
             ItemStack rStack = new ItemStack(this, 1, aID);
-            List<TC_AspectStack> tAspects = new ArrayList<TC_AspectStack>();
+            List<TC_AspectStack> tAspects = new ArrayList<>();
             for (Object tOreDictNameOrAspect : aOreDictNamesAndAspects) {
                 if (tOreDictNameOrAspect instanceof TC_AspectStack)
                     ((TC_AspectStack) tOreDictNameOrAspect).addToAspectList(tAspects);

@@ -24,7 +24,7 @@ import static gregtech.api.enums.GT_Values.E;
 
 public class GT_BaseCrop extends CropCard {
 
-    public static ArrayList<GT_BaseCrop> sCropList = new ArrayList<GT_BaseCrop>();
+    public static ArrayList<GT_BaseCrop> sCropList = new ArrayList<>();
     private String mName = E, mDiscoveredBy = "Gregorius Techneticies";
     private int mTier = 0, mMaxSize = 0, mAfterHarvestSize = 0, mHarvestSize = 0, mStats[] = new int[5], mGrowthSpeed = 0;
     private String[] mAttributes = new String[0];

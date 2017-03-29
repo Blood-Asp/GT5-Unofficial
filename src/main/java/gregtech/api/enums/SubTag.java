@@ -21,7 +21,7 @@ import java.util.HashSet;
  * Some SubTags are used for other things than Materials too. It is useful when I need an easy way to declare Stuff in Items.
  */
 public final class SubTag implements ICondition<ISubTagContainer> {
-    public static final HashMap<String, SubTag> sSubTags = new HashMap<String, SubTag>();
+    public static final HashMap<String, SubTag> sSubTags = new HashMap<>();
     private static long sSubtagID = 0;
     public final long mSubtagID;
     public final String mName;
@@ -226,7 +226,7 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      * Projectile Tag for Arrows
      */
     public static final SubTag PROJECTILE_ARROW = getNewSubTag("PROJECTILE_ARROW");
-    public final Collection<ISubTagContainer> mRelevantTaggedItems = new HashSet<ISubTagContainer>(1);
+    public final Collection<ISubTagContainer> mRelevantTaggedItems = new HashSet<>(1);
 
     private SubTag(String aName) {
         mSubtagID = sSubtagID++;

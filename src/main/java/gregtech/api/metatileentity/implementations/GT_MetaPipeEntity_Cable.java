@@ -170,7 +170,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
         if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return 0;
-        return transferElectricity(aSide, aVoltage, aAmperage, new ArrayList<TileEntity>(Arrays.asList((TileEntity) getBaseMetaTileEntity())));
+        return transferElectricity(aSide, aVoltage, aAmperage, new ArrayList<>(Arrays.asList((TileEntity) getBaseMetaTileEntity())));
     }
 
     @Override

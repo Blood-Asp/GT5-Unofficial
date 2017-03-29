@@ -57,21 +57,21 @@ import static gregtech.api.enums.GT_Values.*;
  * Due to the many imports, this File can cause compile Problems if not all the APIs are installed
  */
 public class GT_ModHandler {
-    public static final List<IRecipe> sSingleNonBlockDamagableRecipeList = new ArrayList<IRecipe>(1000);
-    private static final Map<String, ItemStack> sIC2ItemMap = new HashMap<String, ItemStack>();
-    private static final List<IRecipe> sAllRecipeList = /*Collections.synchronizedList(*/new ArrayList<IRecipe>(5000)/*)*/, sBufferRecipeList = new ArrayList<IRecipe>(1000);
+    public static final List<IRecipe> sSingleNonBlockDamagableRecipeList = new ArrayList<>(1000);
+    private static final Map<String, ItemStack> sIC2ItemMap = new HashMap<>();
+    private static final List<IRecipe> sAllRecipeList = /*Collections.synchronizedList(*/new ArrayList<>(5000)/*)*/, sBufferRecipeList = new ArrayList<>(1000);
     public static volatile int VERSION = 509;
-    public static Collection<String> sNativeRecipeClasses = new HashSet<String>(), sSpecialRecipeClasses = new HashSet<String>();
+    public static Collection<String> sNativeRecipeClasses = new HashSet<>(), sSpecialRecipeClasses = new HashSet<>();
     public static GT_HashSet<GT_ItemStack> sNonReplaceableItems = new GT_HashSet<>();
     public static Object sBoxableWrapper = GT_Utility.callConstructor("gregtechmod.api.util.GT_IBoxableWrapper", 0, null, false);
-    private static Map<IRecipeInput, RecipeOutput> sExtractorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
-    private static Map<IRecipeInput, RecipeOutput> sMaceratorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
-    private static Map<IRecipeInput, RecipeOutput> sCompressorRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
-    private static Map<IRecipeInput, RecipeOutput> sOreWashingRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
-    private static Map<IRecipeInput, RecipeOutput> sThermalCentrifugeRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
-    private static Map<IRecipeInput, RecipeOutput> sMassfabRecipes = new /*Concurrent*/HashMap<IRecipeInput, RecipeOutput>();
+    private static Map<IRecipeInput, RecipeOutput> sExtractorRecipes = new /*Concurrent*/HashMap<>();
+    private static Map<IRecipeInput, RecipeOutput> sMaceratorRecipes = new /*Concurrent*/HashMap<>();
+    private static Map<IRecipeInput, RecipeOutput> sCompressorRecipes = new /*Concurrent*/HashMap<>();
+    private static Map<IRecipeInput, RecipeOutput> sOreWashingRecipes = new /*Concurrent*/HashMap<>();
+    private static Map<IRecipeInput, RecipeOutput> sThermalCentrifugeRecipes = new /*Concurrent*/HashMap<>();
+    private static Map<IRecipeInput, RecipeOutput> sMassfabRecipes = new /*Concurrent*/HashMap<>();
     private static boolean sBufferCraftingRecipes = true;
-    public static List<Integer> sSingleNonBlockDamagableRecipeList_list = new ArrayList<Integer>(100);
+    public static List<Integer> sSingleNonBlockDamagableRecipeList_list = new ArrayList<>(100);
     private static boolean sSingleNonBlockDamagableRecipeList_create = true;
     private static final ItemStack sMt1 = new ItemStack(Blocks.DIRT, 1, 0), sMt2 = new ItemStack(Blocks.DIRT, 1, 0);
     private static final String s_H = "h", s_F = "f", s_I = "I", s_P = "P", s_R = "R";
@@ -122,11 +122,11 @@ public class GT_ModHandler {
             {sMt1, sMt1, null, sMt2, null, sMt1, sMt2, null, null},
             {null, sMt1, sMt1, sMt1, null, sMt2, null, null, sMt2}
     };
-    public static List<Integer> sSingleNonBlockDamagableRecipeList_validsShapes1 = new ArrayList<Integer>(44);
+    public static List<Integer> sSingleNonBlockDamagableRecipeList_validsShapes1 = new ArrayList<>(44);
     public static boolean sSingleNonBlockDamagableRecipeList_validsShapes1_update = false;
-    public static List<Integer> sSingleNonBlockDamagableRecipeList_warntOutput = new ArrayList<Integer>(50);
-    public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<Integer>(50);
-    public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<IRecipe>(1000);
+    public static List<Integer> sSingleNonBlockDamagableRecipeList_warntOutput = new ArrayList<>(50);
+    public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<>(50);
+    public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<>(1000);
 
     static {
         sNativeRecipeClasses.add(ShapedRecipes.class.getName());
@@ -840,7 +840,7 @@ public class GT_ModHandler {
                 throw new IllegalArgumentException();
             }
 
-            ArrayList<Object> tRecipeList = new ArrayList<Object>(Arrays.asList(aRecipe));
+            ArrayList<Object> tRecipeList = new ArrayList<>(Arrays.asList(aRecipe));
 
             while (aRecipe[idx] instanceof String) {
                 String s = (String) aRecipe[idx++];
@@ -915,8 +915,8 @@ public class GT_ModHandler {
             if (aRecipe[idx] instanceof Boolean) {
                 idx++;
             }
-            /*ConcurrentHash*/Map<Character, ItemStack> tItemStackMap = new /*ConcurrentHash*/HashMap<Character, ItemStack>();
-            /*ConcurrentHash*/Map<Character, ItemData> tItemDataMap = new /*ConcurrentHash*/HashMap<Character, ItemData>();
+            /*ConcurrentHash*/Map<Character, ItemStack> tItemStackMap = new /*ConcurrentHash*/HashMap<>();
+            /*ConcurrentHash*/Map<Character, ItemData> tItemDataMap = new /*ConcurrentHash*/HashMap<>();
             tItemStackMap.put(' ', null);
 
             boolean tRemoveRecipe = true;
@@ -1368,7 +1368,7 @@ public class GT_ModHandler {
      * If you have multiple Mods, which add Bronze Armor for example
      */
     public static ArrayList<ItemStack> getRecipeOutputs(List<IRecipe> aList, boolean aDeleteFromList, ItemStack... aRecipe) {
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
         if (aRecipe == null) return rList;
         boolean temp = false;
         for (byte i = 0; i < aRecipe.length; i++) {

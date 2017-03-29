@@ -235,7 +235,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 }
                 tOut = clean(tOut);
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-                List<ItemStack> overStacks = new ArrayList<ItemStack>();
+                List<ItemStack> overStacks = new ArrayList<>();
                 for (int f = 0; f < tOut.length; f++) {
                     while (tOut[f].getMaxStackSize() < tOut[f].stackSize) {
                     	if(tOut[f]!=null){
@@ -250,7 +250,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                     tmp = overStacks.toArray(tmp);
                     tOut = ArrayUtils.addAll(tOut, tmp);
                 }
-                List<ItemStack> tSList = new ArrayList<ItemStack>();
+                List<ItemStack> tSList = new ArrayList<>();
                 for (ItemStack tS : tOut) {
                     if (tS.stackSize > 0) tSList.add(tS);
                 }
@@ -265,7 +265,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     }
     
     public static ItemStack[] clean(final ItemStack[] v) {
-        List<ItemStack> list = new ArrayList<ItemStack>(Arrays.asList(v));
+        List<ItemStack> list = new ArrayList<>(Arrays.asList(v));
         list.removeAll(Collections.singleton(null));
         return list.toArray(new ItemStack[list.size()]);
     }

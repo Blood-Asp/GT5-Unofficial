@@ -207,7 +207,7 @@ public class GuiElectricArmor1 extends GuiContainer {
 	}
 	
 	protected void drawTooltip(int x, int y) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		//General tooltips
 		if(x>=7&&y>=11&&x<=33&&y<=17){
 				list.add(GT_LanguageManager.getTranslation("weight") + ": " + cont.mInvArmor.data.weight);

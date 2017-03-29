@@ -43,7 +43,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
         int yStart = (height - ySize) / 2;
         int x = x2 - xStart;
         int y = y2 - yStart + 5;
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         if (y >= 67 && y <= 84) {
             if (x >= 7 && x <= 24) {
                 list.add("Fluid Auto-Output");

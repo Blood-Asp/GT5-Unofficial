@@ -201,12 +201,12 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             if (oLastReceivedFrom == mLastReceivedFrom) {
                 doTickProfilingInThisTick = false;
 
-                ArrayList<IMetaTileEntityItemPipe> tPipeList = new ArrayList<IMetaTileEntityItemPipe>();
+                ArrayList<IMetaTileEntityItemPipe> tPipeList = new ArrayList<>();
 
                 for (boolean temp = true; temp && !isInventoryEmpty() && pipeCapacityCheck(); ) {
                     temp = false;
                     tPipeList.clear();
-                    for (IMetaTileEntityItemPipe tTileEntity : GT_Utility.sortMapByValuesAcending(IMetaTileEntityItemPipe.Util.scanPipes(this, new ConcurrentHashMap<IMetaTileEntityItemPipe, Long>(), 0, false, false)).keySet()) {
+                    for (IMetaTileEntityItemPipe tTileEntity : GT_Utility.sortMapByValuesAcending(IMetaTileEntityItemPipe.Util.scanPipes(this, new ConcurrentHashMap<>(), 0, false, false)).keySet()) {
                         if (temp) break;
                         tPipeList.add(tTileEntity);
                         while (!temp && !isInventoryEmpty() && tTileEntity.sendItemStack(aBaseMetaTileEntity))

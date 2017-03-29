@@ -70,7 +70,7 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
             } else if (ready && mMaxProgresstime == 0 && aStack != null && aStack.stackSize == 1 && aStack.getItem() == ItemList.Tool_DataStick.getItem()) {
                 this.ready = false;
                 GT_Utility.ItemNBT.setBookTitle(aPlayer.getHeldItem(hand), "Raw Prospection Data");
-                List<String> tStringList = new ArrayList<String>();
+                List<String> tStringList = new ArrayList<>();
                 for (int i = this.getBaseMetaTileEntity().getYCoord(); i > 0; i--) {
                     for (int f = -2; f < 3; f++) {
                         for (int g = -2; g < 3; g++) {
