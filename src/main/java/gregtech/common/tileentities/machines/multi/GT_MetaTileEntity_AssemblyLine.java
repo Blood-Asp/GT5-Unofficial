@@ -36,7 +36,7 @@ public class GT_MetaTileEntity_AssemblyLine
                 "Size: 3x(5-16)x4, variable length",
                 "Bottom: Solid Steel Casing(or Maintenance or Input Hatch),",
                 "Input Bus(Last Output Bus), Steel Casing",
-                "Middle: Reinforced Glass, Assembler Machine Casing, Reinforced Glass",
+                "Middle: Reinforced Glass, Assembling Line Casing, Reinforced Glass",
                 "UpMiddle: Grate Casing, Assembler Machine Casing ,",
                 "Grate Casing(or Controller)",
                 "Top: Solid Steel Casing(or Energy Hatch)",
