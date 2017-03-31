@@ -111,12 +111,22 @@ public class GT_Achievements {
         registerAchievement("macerator", 0, -2, ItemList.Machine_Bronze_Macerator.get(1, new Object[]{}), "firststeam", false);
         registerAchievement("extract", 0, -4, ItemList.Machine_Bronze_Extractor.get(1, new Object[]{}), "alloysmelter", false);
 
-        registerAchievement("smallparts", 0, -8, ItemList.Circuit_Primitive.get(1, new Object[]{}), "extract", false);
-        registerAchievement("bettercircuits", 0, -10, ItemList.Circuit_Good.get(1, new Object[]{}), "smallparts", false);
-        registerAchievement("stepforward", -2, -10, ItemList.Circuit_Advanced.get(1, new Object[]{}), "bettercircuits", false);
-        registerAchievement("energyflow", -4, -10, ItemList.Circuit_Master.get(1, new Object[]{}), "stepforward", false);
-        registerAchievement("orbs", -6, -10, ItemList.Energy_LapotronicOrb.get(1, new Object[]{}), "energyflow", false);
-        registerAchievement("thatspower", -8, -10, ItemList.Energy_LapotronicOrb2.get(1, new Object[]{}), "orbs", false);
+        registerAchievement("smallparts", 0, -5, ItemList.Circuit_Primitive.get(1, new Object[]{}), "alloysmelter", false);        
+        registerAchievement("gtbasiccircuit", 0, -8, Ic2Items.electronicCircuit.copy(), "smallparts", false);
+        registerAchievement("bettercircuits", 0, -9, ItemList.Circuit_Good.get(1, new Object[]{}), "gtbasiccircuit", false);
+        registerAchievement("stepforward", -2, -9, Ic2Items.advancedCircuit.copy(), "bettercircuits", false);
+        registerAchievement("gtmonosilicon", -5, -10, ItemList.Circuit_Silicon_Ingot.get(1, new Object[]{}), "stepforward", false);
+        registerAchievement("gtlogicwafer", -7, -10, ItemList.Circuit_Wafer_ILC.get(1, new Object[]{}), "gtmonosilicon", false);
+        registerAchievement("gtlogiccircuit", -9, -10, ItemList.Circuit_Basic.get(1, new Object[]{}), "gtlogicwafer", false);
+        registerAchievement("gtcleanroom", -11, -10, ItemList.Machine_Multi_Cleanroom.get(1, new Object[]{}), "gtlogiccircuit", false);
+        registerAchievement("energyflow", -13, -10, ItemList.Circuit_Nanoprocessor.get(1, new Object[]{}), "gtcleanroom", false);
+        registerAchievement("gtquantumprocessor", -13, -12, ItemList.Circuit_Quantumprocessor.get(1, new Object[]{}), "energyflow", false);
+        registerAchievement("gtcrystalprocessor", -11, -12, ItemList.Circuit_Crystalprocessor.get(1, new Object[]{}), "gtquantumprocessor", false);
+        registerAchievement("gtwetware", -9, -12, ItemList.Circuit_Neuroprocessor.get(1, new Object[]{}), "gtcrystalprocessor", false);
+        registerAchievement("gtwetmain", -7, -12, ItemList.Circuit_Wetwaremainframe.get(1, new Object[]{}), "gtwetware", false);
+        
+        registerAchievement("orbs", -10, -14, ItemList.Energy_LapotronicOrb.get(1, new Object[]{}), "energyflow", false);
+        registerAchievement("thatspower", -8, -14, ItemList.Energy_LapotronicOrb2.get(1, new Object[]{}), "orbs", false);
         registerAchievement("datasaving", -2, -12, ItemList.Tool_DataOrb.get(1, new Object[]{}), "stepforward", false);
         registerAchievement("superbuffer", 0, -12, ItemList.Automation_SuperBuffer_LV.get(1, new Object[]{}), "datasaving", false);
         registerAchievement("newstorage", -2, -14, ItemList.Quantum_Chest_HV.get(1, new Object[]{}), "superbuffer", false);
@@ -347,8 +357,8 @@ public class GT_Achievements {
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
                 issueAchievement(player, "bronze");
-            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
-                issueAchievement(player, "stepforward");
+//            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
+//                issueAchievement(player, "stepforward");
             }
         }
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
@@ -356,6 +366,8 @@ public class GT_Achievements {
                 issueAchievement(player, "bronze");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32700")) {
                 issueAchievement(player, "smallparts");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
+                issueAchievement(player, "bettercircuits");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.23354")) {
                 issueAchievement(player, "magneticiron");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32600")) {
@@ -372,6 +384,10 @@ public class GT_Achievements {
             }
         } else if (stack.getUnlocalizedName().equals("ic2.blockCrop")) {
             issueAchievement(player, "crops");
+        } else if (stack.getUnlocalizedName().equals("ic2.itemPartCircuit")) {
+            issueAchievement(player, "gtbasiccircuit");
+        } else if (stack.getUnlocalizedName().equals("ic2.itemPartCircuitAdv")) {
+            issueAchievement(player, "stepforward");
         } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.")) {
             if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.arcfurnace.tier.")) {
                 issueAchievement(player, "recycling");
@@ -448,6 +464,8 @@ public class GT_Achievements {
                 issueAchievement(player, "muchsteam");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.multimachine.largehpturbine")) {
                 issueAchievement(player, "efficientsteam");
+            } else if (stack.getUnlocalizedName().equals("gt.blockmachines.multimachine.cleanroom")) {
+                issueAchievement(player, "gtcleanroom");
             }
         } else if (stack.getUnlocalizedName().equals("gt.neutronreflector")) {
             issueAchievement(player, "reflect");
@@ -520,10 +538,11 @@ public class GT_Achievements {
                 } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft") && ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
                     issueAchievement(player, "steel");
                 }
-            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
-                issueAchievement(player, "stepforward");
+//            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
+//                issueAchievement(player, "stepforward");
             }
         }
+//        System.out.println(stack.getUnlocalizedName());
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
             if (stack.getUnlocalizedName().equals("gt.metaitem.02.32500")) {
                 issueAchievement(player, "havestlead");
@@ -541,7 +560,7 @@ public class GT_Achievements {
                 issueAchievement(player, "havestoil");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32511")) {
                 issueAchievement(player, "havestemeralds");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32706")) {
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32082")) {
                 issueAchievement(player, "energyflow");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
                 issueAchievement(player, "bettercircuits");
@@ -561,7 +580,21 @@ public class GT_Achievements {
                 issueAchievement(player, "filterregulate");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32605")) {
                 issueAchievement(player, "whatnow");
-            }
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32030")) {
+                issueAchievement(player, "gtmonosilicon");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32036")) {
+                issueAchievement(player, "gtlogicwafer");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32701")) {
+                issueAchievement(player, "gtlogiccircuit");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32085")) {
+                issueAchievement(player, "gtquantumprocessor");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32089")) {
+                issueAchievement(player, "gtcrystalprocessor");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32092")) {
+                issueAchievement(player, "gtwetware");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
+                issueAchievement(player, "gtwetmain");
+            } 
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");
         }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
