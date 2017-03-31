@@ -202,6 +202,7 @@ public class GT_RecipeAdder
     
     public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict,int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
     	for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+    		if(GT_Utility.isStackValid(tStack))
     		addAssemblerRecipe(aInput1, GT_Utility.copyAmount(aAmount, tStack), aFluidInput, aOutput1, aDuration, aEUt);
     	}
     	return true;
