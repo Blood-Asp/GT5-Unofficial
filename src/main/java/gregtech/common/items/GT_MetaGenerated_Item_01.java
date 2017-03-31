@@ -706,8 +706,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), new ItemStack(Blocks.crafting_table, 1), ItemList.Cover_Crafting.get(1L, new Object[0]), 800, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iron, 1L), new ItemStack(Blocks.crafting_table, 1), ItemList.Cover_Crafting.get(1L, new Object[0]), 800, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.WroughtIron, 1L), new ItemStack(Blocks.crafting_table, 1), ItemList.Cover_Crafting.get(1L, new Object[0]), 800, 16);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Cover_Shutter.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2), ItemList.FluidFilter.get(1L, new Object[0]), 800, 4);
-        
+          
         GregTech_API.registerCover(ItemList.Cover_Screen.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[2][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SCREEN)}), new GT_Cover_Screen());
         GregTech_API.registerCover(ItemList.Cover_Crafting.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_CRAFTING)}), new GT_Cover_Crafting());
         GregTech_API.registerCover(ItemList.Cover_Drain.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[0][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DRAIN)}), new GT_Cover_Drain());
@@ -745,8 +744,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Duct_Tape.set(addItem(tLastID = 764, "BrainTech Aerospace Advanced Reinforced Duct Tape FAL-84", "If you can't fix it with this, use more of it!", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), OreDictNames.craftingDuctTape}));
         ItemList.McGuffium_239.set(addItem(tLastID = 765, "Mc Guffium 239", "42% better than Phlebotnium", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ALIENIS, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERMUTATIO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.SPIRITUS, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.AURAM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITIUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.RADIO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.MAGNETO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.NEBRISUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.STRONTIO, 8L)}));
 
-        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 4L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 2L), ItemList.Schematic.get(1L, new Object[0]), 3200, 4);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Sensor_LV.get(1L, new Object[0]), ItemList.Emitter_LV.get(1L, new Object[0]), ItemList.NC_SensorKit.get(1L, new Object[0]), 1600, 2);
+       GT_Values.RA.addAssemblerRecipe(ItemList.Sensor_LV.get(1L, new Object[0]), ItemList.Emitter_LV.get(1L, new Object[0]), ItemList.NC_SensorKit.get(1L, new Object[0]), 1600, 2);
 
         ItemList.Cover_RedstoneTransmitterExternal.set(addItem(tLastID = 741, "Redstone Transmitter (Out)", "Transfers Redstonesignals wireless", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1L)}));
         ItemList.Cover_RedstoneTransmitterInternal.set(addItem(tLastID = 742, "Redstone Transmitter (In)", "Transfers Redstonesignals wireless", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1L)}));
@@ -769,11 +767,6 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GregTech_API.registerCover(ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[2][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ACTIVITYDETECTOR)}), new GT_Cover_NeedMaintainance());
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), 600, 24);
     
-        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_LV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 2), 	ItemList.FluidRegulator_LV.get(1L, new Object[0]), 800, 4);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 2), 	ItemList.FluidRegulator_MV.get(1L, new Object[0]), 800, 8);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_HV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2), ItemList.FluidRegulator_HV.get(1L, new Object[0]), 800, 16);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_EV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 2), 	ItemList.FluidRegulator_EV.get(1L, new Object[0]), 800, 32);
-        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_IV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 2), 	ItemList.FluidRegulator_IV.get(1L, new Object[0]), 800, 64);
 
     }
 

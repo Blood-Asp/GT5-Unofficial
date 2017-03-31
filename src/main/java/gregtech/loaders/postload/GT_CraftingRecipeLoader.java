@@ -677,7 +677,7 @@ public class GT_CraftingRecipeLoader implements Runnable {
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), ItemList.Electric_Pump_EV.get(1), GT_ModHandler.getIC2Item("reactorFluidPort", 1L), 200, 80);
 
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorRedstonePort", 1L));
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1), GT_ModHandler.getIC2Item("reactorRedstonePort", 1L), 200, 80);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), OrePrefixes.circuit.get(Materials.Elite), 1,GT_Values.NF, GT_ModHandler.getIC2Item("reactorRedstonePort", 1L), 200, 80);
         }
         if ((GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "rtg", true)) &&
                 (GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("RTGenerator", 1L)))) {
