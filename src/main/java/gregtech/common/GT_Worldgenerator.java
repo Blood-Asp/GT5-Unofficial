@@ -3,6 +3,7 @@ package gregtech.common;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
@@ -116,9 +117,7 @@ public class GT_Worldgenerator
             int tDimensionType = this.mWorld.provider.dimensionId;
             String tDimensionName = this.mWorld.provider.getDimensionName();
             Random aRandom = new Random();
-            System.out.println("try asteroid gen");
             if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.equals("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
-                System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
             	short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
@@ -147,6 +146,7 @@ public class GT_Worldgenerator
                         }
                     }
                 }
+                if(GT_Values.D1)System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
                 int tX = mX + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
                 int tZ = mZ + aRandom.nextInt(16);

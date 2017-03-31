@@ -113,7 +113,7 @@ public class GT_Worldgen_GT_Ore_Layer
             }
         }
         if (GT_Values.D1) {
-            System.out.println("Generated Orevein: " + this.mWorldGenName);
+            System.out.println("Generated Orevein: " + this.mWorldGenName+" "+aChunkX +" "+ aChunkZ);
         }
         return true;
     }
