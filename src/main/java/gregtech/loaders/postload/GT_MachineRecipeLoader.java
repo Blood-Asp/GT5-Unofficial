@@ -1912,7 +1912,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Osmium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.ElectrumFlux, 8L)}, new FluidStack[]{
                 Materials.Water.getFluid(10000),
-                Materials.Mercury.getMolten(576),
+                Materials.Mercury.getFluid(576),
         		Materials.SolderingAlloy.getMolten(1296),
         		Materials.Lubricant.getFluid(2000)}, ItemList.Electric_Piston_UV.get(1), 1800, 500000);
 

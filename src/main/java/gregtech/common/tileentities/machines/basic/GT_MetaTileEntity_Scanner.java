@@ -184,7 +184,7 @@ public class GT_MetaTileEntity_Scanner
                 }
                 tNBT.setString("author", "Assembling Line Recipe Generator");
                 NBTTagList tNBTList = new NBTTagList();
-                tNBTList.appendTag(new NBTTagString("Constructionplan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Productiontime: "+(tRecipe.mDuration/20)));
+                tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
                 for(int i=0;i<tRecipe.mInputs.length;i++){
                 	if(tRecipe.mInputs[i]!=null){
                 		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mInputs[i].getDisplayName())));
