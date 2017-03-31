@@ -116,8 +116,10 @@ public class GT_Worldgenerator
             int tDimensionType = this.mWorld.provider.dimensionId;
             String tDimensionName = this.mWorld.provider.getDimensionName();
             Random aRandom = new Random();
+            System.out.println("try asteroid gen");
             if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.equals("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
-                short primaryMeta = 0;
+                System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
+            	short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
                 short sporadicMeta = 0;
