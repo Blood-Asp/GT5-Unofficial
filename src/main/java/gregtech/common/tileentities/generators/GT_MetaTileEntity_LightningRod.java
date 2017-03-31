@@ -1,5 +1,6 @@
-package gregtech.common.tileentities.machines.basic;
+package gregtech.common.tileentities.generators;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -41,6 +42,8 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
         World aWorld = aBaseMetaTileEntity.getWorld();
         XSTR aXSTR = new XSTR();
         if (!aWorld.isRemote) {
+        	if(aBaseMetaTileEntity.getStoredEU()>0)aBaseMetaTileEntity.decreaseStoredEnergyUnits(aBaseMetaTileEntity.getStoredEU()/100+1, false);
+        	
             if (aTick % 256 == 0 && (aWorld.isThundering() || (aWorld.isRaining() && aXSTR.nextInt(10) == 0))) {
                 int aRodValue = 0;
                 boolean isRodValid = true;
@@ -107,17 +110,17 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
 
     @Override
     public long maxEUStore() {
-        return 25000000;
+        return 50000000;
     }
 
     @Override
     public long maxEUOutput() {
-        return 8192;
+        return GT_Values.V[mTier];
     }
 
     @Override
     public long maxAmperesOut() {
-        return 1;
+        return 512;
     }
 
     @Override
