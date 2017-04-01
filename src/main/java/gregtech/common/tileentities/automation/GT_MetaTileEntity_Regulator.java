@@ -37,7 +37,7 @@ public class GT_MetaTileEntity_Regulator
     }
 
     public boolean isValidSlot(int aIndex) {
-        return aIndex < 9 || aIndex == 19;
+        return aIndex < 9 ;
     }
 
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
