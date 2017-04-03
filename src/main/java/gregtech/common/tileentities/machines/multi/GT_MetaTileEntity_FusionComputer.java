@@ -368,7 +368,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                                 if (aBaseMetaTileEntity.isAllowedToWork()) {
                                     this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
                                     if (checkRecipe(mInventory[1])) {
-                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue) {
+                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue - this.mEUt) {
                                             mMaxProgresstime = 0;
                                             turnCasingActive(false);
                                         }
