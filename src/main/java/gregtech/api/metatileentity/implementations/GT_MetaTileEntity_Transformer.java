@@ -118,22 +118,22 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxEUInput() {
-        return V[getBaseMetaTileEntity().isAllowedToWork() ? mTier + 1 : mTier];
+        return V[getBaseMetaTileEntity().isActive() ? mTier + 1 : mTier];
     }
 
     @Override
     public long maxEUOutput() {
-        return V[getBaseMetaTileEntity().isAllowedToWork() ? mTier : mTier + 1];
+        return V[getBaseMetaTileEntity().isActive() ? mTier : mTier + 1];
     }
 
     @Override
     public long maxAmperesOut() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]) : 1;
+        return getBaseMetaTileEntity().isActive() ? (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]) : 1;
     }
 
     @Override
     public long maxAmperesIn() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? 1 : (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]);
+        return getBaseMetaTileEntity().isActive() ? 1 : (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]);
     }
 
     @Override
