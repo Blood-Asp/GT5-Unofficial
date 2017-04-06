@@ -637,22 +637,33 @@ public class JEIGregtechRecipe implements IRecipeWrapper {
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         int tEUt = mRecipe.mEUt;
         int tDuration = mRecipe.mDuration;
+
+        int currentY = 73;
+
         if (tEUt != 0) {
-            drawText(10, 73, "Total: " + tDuration * tEUt + " EU", -16777216);
-            drawText(10, 83, "Usage: " + tEUt + " EU/t", -16777216);
+            drawText(10, currentY, "Total: " + tDuration * tEUt + " EU", -16777216);
+            currentY += 10;
+            drawText(10, currentY, "Usage: " + tEUt + " EU/t", -16777216);
+            currentY += 10;
             if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-                drawText(10, 93, "Voltage: " + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
-                drawText(10, 103, "Amperage: " + this.mRecipeMap.mAmperage, -16777216);
+                drawText(10, currentY, "Voltage: " + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
+                currentY += 10;
+                drawText(10, currentY, "Amperage: " + this.mRecipeMap.mAmperage, -16777216);
+                currentY += 10;
             } else {
-                drawText(10, 93, "Voltage: unspecified", -16777216);
-                drawText(10, 103, "Amperage: unspecified", -16777216);
+                drawText(10, currentY, "Voltage: unspecified", -16777216);
+                currentY += 10;
+                drawText(10, currentY, "Amperage: unspecified", -16777216);
+                currentY += 10;
             }
         }
         if (tDuration > 0) {
-            drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+            drawText(10, currentY, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+            currentY += 10;
         }
         if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
-            drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + mRecipe.mSpecialValue * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
+            drawText(10, currentY, this.mRecipeMap.mNEISpecialValuePre + mRecipe.mSpecialValue * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
+            currentY += 10;
         }
 
     }
