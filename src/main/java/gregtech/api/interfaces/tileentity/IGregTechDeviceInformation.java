@@ -9,7 +9,7 @@ public interface IGregTechDeviceInformation {
      * I need things like this Function for MetaTileEntities, you MUST check this!!!
      * Do not assume that it's a Information returning Device, when it just implements this Interface.
      */
-    public boolean isGivingInformation();
+	boolean isGivingInformation();
 
     /**
      * Up to 8 Strings can be returned.
@@ -17,5 +17,5 @@ public interface IGregTechDeviceInformation {
      *
      * @return an Array of Information Strings. Don't return null!
      */
-    public String[] getInfoData();
+	String[] getInfoData();
 }

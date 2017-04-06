@@ -7,7 +7,7 @@ import gregtech.api.enums.Materials;
 
 public class Values {
 	public static Values INSTANCE;
-	public static final Map<Materials, Values> MATERIAL_MAP = new HashMap<Materials, Values>();
+	public static final Map<Materials, Values> MATERIAL_MAP = new HashMap<>();
 
 	public int weight;
 	public float physicalDef;

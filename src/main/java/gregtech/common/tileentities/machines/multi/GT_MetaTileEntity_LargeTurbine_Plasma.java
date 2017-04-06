@@ -92,7 +92,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         if (aFluids.size() >= 1) {
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
-            actualOptimalFlow = (int) ((aOptFlow + fuelValue - 1) / fuelValue);
+            actualOptimalFlow = (aOptFlow + fuelValue - 1) / fuelValue;
             this.realOptFlow = actualOptimalFlow; // For scanner info
 
             int remainingFlow = (int) (actualOptimalFlow * 1.25f); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.

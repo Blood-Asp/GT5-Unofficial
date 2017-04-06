@@ -31,9 +31,9 @@ import static gregtech.api.enums.GT_Values.*;
  * P.S. It is intended to be named "Unificator" and not "Unifier", because that sounds more awesome.
  */
 public class GT_OreDictUnificator {
-    private static final Map<String, ItemStack> sName2StackMap = new HashMap<String, ItemStack>();
-    private static final Map<GT_ItemStack, ItemData> sItemStack2DataMap = new HashMap<GT_ItemStack, ItemData>();
-    private static final GT_HashSet<GT_ItemStack> sNoUnificationList = new GT_HashSet<GT_ItemStack>();
+    private static final Map<String, ItemStack> sName2StackMap = new HashMap<>();
+    private static final Map<GT_ItemStack, ItemData> sItemStack2DataMap = new HashMap<>();
+    private static final GT_HashSet<GT_ItemStack> sNoUnificationList = new GT_HashSet<>();
     public static volatile int VERSION = 509;
     private static int isRegisteringOre = 0, isAddingOre = 0;
     private static boolean mRunThroughTheList = true;
@@ -360,7 +360,7 @@ public class GT_OreDictUnificator {
      */
     public static ArrayList<ItemStack> getOres(Object aOreName) {
         String aName = aOreName == null ? E : aOreName.toString();
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
         if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
         return rList;
     }

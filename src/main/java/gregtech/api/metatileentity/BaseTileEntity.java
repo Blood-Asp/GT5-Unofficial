@@ -473,14 +473,15 @@ public abstract class BaseTileEntity extends TileEntity implements IHasWorldObje
 
     @Override
     public final void sendBlockEvent(byte aID, byte aValue) {
-        NW.sendToAllAround(worldObj, new GT_Packet_Block_Event(getXCoord(),
-                                                               (short) getYCoord(),
-                                                               getZCoord(),
-                                                               aID,
-                                                               aValue),
-                           getXCoord(),
-                           getYCoord(),
-                           getZCoord());
+        NW.sendToAllAround(worldObj,
+                                new GT_Packet_Block_Event(getXCoord(),
+                                            getYCoord(),
+                                            getZCoord(),
+                                            aID,
+                                            aValue),
+                                getXCoord(),
+                                getYCoord(),
+                                getZCoord());
     }
 
     private boolean crossedChunkBorder(int aX, int aZ) {

@@ -65,7 +65,7 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
                     case "Coal":
                     case "Charcoal":
                         if (gregtech.api.GregTech_API.sRecipeFile.get(gregtech.api.enums.ConfigCategories.Recipes.disabledrecipes, "torchesFromCoal", false)) {
-                            GT_ModHandler.removeRecipe(new ItemStack[]{GT_Utility.copyAmount(1L, aStack), null, null, new ItemStack(net.minecraft.init.Items.STICK, 1, 0)});}
+                            GT_ModHandler.removeRecipe(GT_Utility.copyAmount(1L, aStack), null, null, new ItemStack(net.minecraft.init.Items.STICK, 1, 0));}
                         break;
                     case "CertusQuartz":
                         GT_Values.RA.addElectrolyzerRecipe(aStack, 0, GT_ModHandler.getModItem("appliedenergistics2", "item.ItemMultiMaterial", 1L, 1), null, null, null, null, null, 2000, 30);

@@ -16,7 +16,7 @@ public class GT_MetaTileEntity_PlasmaGenerator
     public int mEfficiency;
 
     public GT_MetaTileEntity_PlasmaGenerator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Plasma into energy", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, "Plasma into energy");
         onConfigLoad();
     }
 

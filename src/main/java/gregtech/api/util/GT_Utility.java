@@ -86,9 +86,9 @@ public class GT_Utility {
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
-    private static final List<FluidContainerData> sFluidContainerList = new ArrayList<FluidContainerData>();
-    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<GT_ItemStack, FluidContainerData>();
-    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<GT_ItemStack, Map<Fluid, FluidContainerData>>();
+    private static final List<FluidContainerData> sFluidContainerList = new ArrayList<>();
+    private static final Map<GT_ItemStack, FluidContainerData> sFilledContainerToData = new HashMap<>();
+    private static final Map<GT_ItemStack, Map<Fluid, FluidContainerData>> sEmptyContainerToFluidToData = new HashMap<>();
     public static volatile int VERSION = 509;
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
     private static int sBookCount = 0;
@@ -693,7 +693,7 @@ public class GT_Utility {
             sFilledContainerToData.put(new GT_ItemStack(tData.filledContainer), tData);
             Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(tData.emptyContainer));
             if (tFluidToContainer == null) {
-                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+                sEmptyContainerToFluidToData.put(new GT_ItemStack(tData.emptyContainer), tFluidToContainer = new HashMap<>());
                 GregTech_API.sFluidMappings.add(tFluidToContainer);
             }
             tFluidToContainer.put(tData.fluid.getFluid(), tData);
@@ -705,7 +705,7 @@ public class GT_Utility {
         sFilledContainerToData.put(new GT_ItemStack(aData.filledContainer), aData);
         Map<Fluid, FluidContainerData> tFluidToContainer = sEmptyContainerToFluidToData.get(new GT_ItemStack(aData.emptyContainer));
         if (tFluidToContainer == null) {
-            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new HashMap<Fluid, FluidContainerData>());
+            sEmptyContainerToFluidToData.put(new GT_ItemStack(aData.emptyContainer), tFluidToContainer = new HashMap<>());
             GregTech_API.sFluidMappings.add(tFluidToContainer);
         }
         tFluidToContainer.put(aData.fluid.getFluid(), aData);
@@ -970,15 +970,15 @@ public class GT_Utility {
     }
 
     public static <T> ArrayList<T> getArrayListWithoutNulls(T... aArray) {
-        if (aArray == null) return new ArrayList<T>();
-        ArrayList<T> rList = new ArrayList<T>(Arrays.asList(aArray));
+        if (aArray == null) return new ArrayList<>();
+        ArrayList<T> rList = new ArrayList<>(Arrays.asList(aArray));
         for (int i = 0; i < rList.size(); i++) if (rList.get(i) == null) rList.remove(i--);
         return rList;
     }
 
     public static <T> ArrayList<T> getArrayListWithoutTrailingNulls(T... aArray) {
-        if (aArray == null) return new ArrayList<T>();
-        ArrayList<T> rList = new ArrayList<T>(Arrays.asList(aArray));
+        if (aArray == null) return new ArrayList<>();
+        ArrayList<T> rList = new ArrayList<>(Arrays.asList(aArray));
         for (int i = rList.size() - 1; i >= 0 && rList.get(i) == null; ) rList.remove(i--);
         return rList;
     }
@@ -1367,7 +1367,7 @@ public class GT_Utility {
      * re-maps all Keys of a Map after the Keys were weakened.
      */
     public static <X, Y> Map<X, Y> reMap(Map<X, Y> aMap) {
-        Map<X, Y> tMap = new HashMap<X, Y>();
+        Map<X, Y> tMap = new HashMap<>();
         tMap.putAll(aMap);
         aMap.clear();
         aMap.putAll(tMap);
@@ -1378,14 +1378,14 @@ public class GT_Utility {
      * Why the fuck do neither Java nor Guava have a Function to do this?
      */
     public static <X, Y extends Comparable> LinkedHashMap<X, Y> sortMapByValuesAcending(Map<X, Y> aMap) {
-        List<Map.Entry<X, Y>> tEntrySet = new LinkedList<Map.Entry<X, Y>>(aMap.entrySet());
+        List<Map.Entry<X, Y>> tEntrySet = new LinkedList<>(aMap.entrySet());
         Collections.sort(tEntrySet, new Comparator<Map.Entry<X, Y>>() {
             @Override
             public int compare(Entry<X, Y> aValue1, Entry<X, Y> aValue2) {
                 return aValue1.getValue().compareTo(aValue2.getValue());
             }
         });
-        LinkedHashMap<X, Y> rMap = new LinkedHashMap<X, Y>();
+        LinkedHashMap<X, Y> rMap = new LinkedHashMap<>();
         for (Map.Entry<X, Y> tEntry : tEntrySet) rMap.put(tEntry.getKey(), tEntry.getValue());
         return rMap;
     }
@@ -1394,14 +1394,14 @@ public class GT_Utility {
      * Why the fuck do neither Java nor Guava have a Function to do this?
      */
     public static <X, Y extends Comparable> LinkedHashMap<X, Y> sortMapByValuesDescending(Map<X, Y> aMap) {
-        List<Map.Entry<X, Y>> tEntrySet = new LinkedList<Map.Entry<X, Y>>(aMap.entrySet());
+        List<Map.Entry<X, Y>> tEntrySet = new LinkedList<>(aMap.entrySet());
         Collections.sort(tEntrySet, new Comparator<Map.Entry<X, Y>>() {
             @Override
             public int compare(Entry<X, Y> aValue1, Entry<X, Y> aValue2) {
                 return aValue2.getValue().compareTo(aValue1.getValue());//FB: RV - RV_NEGATING_RESULT_OF_COMPARETO
             }
         });
-        LinkedHashMap<X, Y> rMap = new LinkedHashMap<X, Y>();
+        LinkedHashMap<X, Y> rMap = new LinkedHashMap<>();
         for (Map.Entry<X, Y> tEntry : tEntrySet) rMap.put(tEntry.getKey(), tEntry.getValue());
         return rMap;
     }
@@ -1845,7 +1845,7 @@ public class GT_Utility {
                 aStack.setTagCompound(null);
                 return;
             }
-            ArrayList<String> tTagsToRemove = new ArrayList<String>();
+            ArrayList<String> tTagsToRemove = new ArrayList<>();
             for (Object tKey : aNBT.getKeySet()) {
                 NBTBase tValue = aNBT.getTag((String) tKey);
                 if (tValue == null || (tValue instanceof NBTPrimitive && ((NBTPrimitive) tValue).getInt() == 0) || (tValue instanceof NBTTagString && isStringInvalid(((NBTTagString) tValue).getString())))

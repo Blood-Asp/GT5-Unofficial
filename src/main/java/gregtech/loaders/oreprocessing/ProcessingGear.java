@@ -19,7 +19,7 @@ public class ProcessingGear implements gregtech.api.interfaces.IOreRecipeRegistr
             case gearGt:
                 GT_ModHandler.removeRecipeByOutput(aStack);
                 if (aMaterial.mStandardMoltenFluid != null)
-                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Gear.get(0L, new Object[0]), aMaterial.getMolten(576L), GT_OreDictUnificator.get(aPrefix, aMaterial, 1L), 128, 8);
+                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Gear.get(0L), aMaterial.getMolten(576L), GT_OreDictUnificator.get(aPrefix, aMaterial, 1L), 128, 8);
                 if (aMaterial.mUnificatable && (aMaterial.mMaterialInto == aMaterial) && !aMaterial.contains(SubTag.NO_WORKING)) {
                     switch (aMaterial.mName) {
                         case "Wood":
@@ -35,7 +35,7 @@ public class ProcessingGear implements gregtech.api.interfaces.IOreRecipeRegistr
                 break;
             case gearGtSmall:
                 if (aMaterial.mStandardMoltenFluid != null)
-                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Gear_Small.get(0L, new Object[0]), aMaterial.getMolten(144L), GT_Utility.copyAmount(1L, new Object[]{aStack}), 16, 8);
+                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Gear_Small.get(0L), aMaterial.getMolten(144L), GT_Utility.copyAmount(1L, aStack), 16, 8);
                 if (aMaterial.mUnificatable && (aMaterial.mMaterialInto == aMaterial) && !aMaterial.contains(SubTag.NO_WORKING)) {
                     switch (aMaterial.mName) {
                         case "Wood":

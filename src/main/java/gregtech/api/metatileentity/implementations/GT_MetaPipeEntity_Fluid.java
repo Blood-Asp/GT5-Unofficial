@@ -194,7 +194,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             }
 
             if (mLastReceivedFrom == oLastReceivedFrom) {
-                ConcurrentHashMap<IFluidHandler, EnumFacing> tTanks = new ConcurrentHashMap<IFluidHandler, EnumFacing>();
+                ConcurrentHashMap<IFluidHandler, EnumFacing> tTanks = new ConcurrentHashMap<>();
 
                 mConnections = 0;
 

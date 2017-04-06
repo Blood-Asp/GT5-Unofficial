@@ -86,7 +86,7 @@ public enum CombType {
     public Materials material;
     public int chance;
     private String name;
-    private CombType(String pName, boolean show, Materials material, int chance) {
+    CombType(String pName, boolean show, Materials material, int chance) {
         this.name = pName;
         this.material = material;
         this.chance = chance;

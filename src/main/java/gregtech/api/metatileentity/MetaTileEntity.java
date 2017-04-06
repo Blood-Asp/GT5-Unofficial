@@ -93,7 +93,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
         if (GT.isClientSide()) {
             ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
+            tStack.getItem().addInformation(tStack, null, new ArrayList<>(), true);
         }
     }
 
@@ -656,7 +656,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
     @Override
     public int[] getSlotsForFace(EnumFacing aSide) {
-        ArrayList<Integer> tList = new ArrayList<Integer>();
+        ArrayList<Integer> tList = new ArrayList<>();
         IGregTechTileEntity tTileEntity = getBaseMetaTileEntity();
         boolean tSkip = tTileEntity.getCoverBehaviorAtSide((byte) aSide.getIndex()).letsItemsIn((byte) aSide.getIndex(), tTileEntity.getCoverIDAtSide((byte) aSide.getIndex()), tTileEntity.getCoverDataAtSide((byte) aSide.getIndex()), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSide((byte) aSide.getIndex()).letsItemsOut((byte) aSide.getIndex(), tTileEntity.getCoverIDAtSide((byte) aSide.getIndex()), tTileEntity.getCoverDataAtSide((byte) aSide.getIndex()), -2, tTileEntity);
         for (int i = 0; i < getSizeInventory(); i++)

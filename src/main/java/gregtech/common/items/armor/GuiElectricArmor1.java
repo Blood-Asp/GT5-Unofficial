@@ -207,7 +207,7 @@ public class GuiElectricArmor1 extends GuiContainer {
 	}
 	
 	protected void drawTooltip(int x, int y) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		//General tooltips
 		if(x>=7&&y>=11&&x<=33&&y<=17){
 				list.add(GT_LanguageManager.getTranslation("weight") + ": " + cont.mInvArmor.data.weight);
@@ -270,11 +270,11 @@ public class GuiElectricArmor1 extends GuiContainer {
 					list.add("Fall Damage absorbtion");
 					list.add("Only for Boots");
 				}else{
-				list.add(GT_LanguageManager.getTranslation("abs1") + " " + (int) Math.round(cont.mInvArmor.data.fallDef) + GT_LanguageManager.getTranslation("abs2"));}
+				list.add(GT_LanguageManager.getTranslation("abs1") + " " + Math.round(cont.mInvArmor.data.fallDef) + GT_LanguageManager.getTranslation("abs2"));}
 			} else if (y >= 60 && y <= 68) {
 				if(x<69){
-				list.add(GT_LanguageManager.getTranslation("thorns") + ": " + (int) Math.round(cont.mInvArmor.data.thornsSingle) + " Dmg");
-				list.add("Total "+GT_LanguageManager.getTranslation("thorns") + ": " + (int) Math.round(cont.mInvArmor.data.thorns) + " Dmg");
+				list.add(GT_LanguageManager.getTranslation("thorns") + ": " + Math.round(cont.mInvArmor.data.thornsSingle) + " Dmg");
+				list.add("Total "+GT_LanguageManager.getTranslation("thorns") + ": " + Math.round(cont.mInvArmor.data.thorns) + " Dmg");
 				}else{
 				list.add(GT_LanguageManager.getTranslation("magnet") + ": " + cont.mInvArmor.data.magnetSingle + " m");
 				list.add("Total "+GT_LanguageManager.getTranslation("magnet") + ": " + cont.mInvArmor.data.magnet + " m");}
@@ -298,7 +298,7 @@ public class GuiElectricArmor1 extends GuiContainer {
 
 	protected Slot getSlotAtPosition(int p_146975_1_, int p_146975_2_) {
 		for (int k = 0; k < cont.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) cont.inventorySlots.get(k);
+			Slot slot = cont.inventorySlots.get(k);
 			if (this.isMouseOverSlot(slot, p_146975_1_, p_146975_2_)) {
 				return slot;
 			}

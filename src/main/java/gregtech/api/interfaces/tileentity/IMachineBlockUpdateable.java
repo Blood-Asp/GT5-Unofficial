@@ -12,5 +12,5 @@ public interface IMachineBlockUpdateable {
      * I suggest to wait 1-5 seconds before actually checking the Machine Parts.
      * RP-Frames could for example cause Problems when you instacheck the Machine Parts.
      */
-    public void onMachineBlockUpdate();
+	void onMachineBlockUpdate();
 }

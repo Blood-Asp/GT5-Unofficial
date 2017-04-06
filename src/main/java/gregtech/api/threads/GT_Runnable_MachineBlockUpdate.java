@@ -40,7 +40,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     @Override
     public void run() {
         try {
-            stepToUpdateMachine(mWorld, mX, mY, mZ, new ArrayList<BlockPos>());
+            stepToUpdateMachine(mWorld, mX, mY, mZ, new ArrayList<>());
         } catch (Throwable e) {/**/}
     }
 }

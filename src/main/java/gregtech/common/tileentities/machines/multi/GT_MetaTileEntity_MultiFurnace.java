@@ -80,7 +80,7 @@ public class GT_MetaTileEntity_MultiFurnace
             int j = 0;
             this.mOutputItems = new ItemStack[8 * this.mLevel];
             for (int i = 0; (i < 256) && (j < this.mOutputItems.length); i++) {
-                if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
+                if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput(tInputList.get(i % tInputList.size()), true, null))) {
                     j++;
                 }
             }

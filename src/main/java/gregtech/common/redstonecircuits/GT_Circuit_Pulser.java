@@ -44,7 +44,7 @@ public class GT_Circuit_Pulser
                 aCircuitData[4] = 0;
             }
         }
-        aRedstoneCircuitBlock.setRedstone((byte) ((aCircuitData[4] > 0) && (aCircuitData[4] <= aCircuitData[0]) ? (byte) aCircuitData[1] : (aCircuitData[1] <= 0) || (aCircuitData[1] > 15) ? (byte) aCircuitData[5] : 0), aRedstoneCircuitBlock.getOutputFacing());
+        aRedstoneCircuitBlock.setRedstone((aCircuitData[4] > 0) && (aCircuitData[4] <= aCircuitData[0]) ? (byte) aCircuitData[1] : (aCircuitData[1] <= 0) || (aCircuitData[1] > 15) ? (byte) aCircuitData[5] : 0, aRedstoneCircuitBlock.getOutputFacing());
     }
 
     public String getName() {

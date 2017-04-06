@@ -9,7 +9,7 @@ import java.util.*;
 public class ItemData {
     private static final MaterialStack[] EMPTY_MATERIALSTACK_ARRAY = new MaterialStack[0];
 
-    public final List<Object> mExtraData = new GT_ArrayList<Object>(false, 1);
+    public final List<Object> mExtraData = new GT_ArrayList<>(false, 1);
     public final OrePrefixes mPrefix;
     public final MaterialStack mMaterial;
     public final MaterialStack[] mByProducts;
@@ -56,7 +56,7 @@ public class ItemData {
         mPrefix = null;
         mBlackListed = true;
 
-        ArrayList<MaterialStack> aList = new ArrayList<MaterialStack>(), rList = new ArrayList<MaterialStack>();
+        ArrayList<MaterialStack> aList = new ArrayList<>(), rList = new ArrayList<>();
 
         for (ItemData tData : aData)
             if (tData != null) {

@@ -221,14 +221,14 @@ public class GT_MetaTileEntity_BronzeBlastFurnace extends MetaTileEntity {
     private void addOutputProducts() {
         if (this.mOutputItem1 != null) {
             if (this.mInventory[2] == null) {
-                this.mInventory[2] = GT_Utility.copy(new Object[]{this.mOutputItem1});
+                this.mInventory[2] = GT_Utility.copy(this.mOutputItem1);
             } else if (GT_Utility.areStacksEqual(this.mInventory[2], this.mOutputItem1)) {
                 this.mInventory[2].stackSize = Math.min(this.mOutputItem1.getMaxStackSize(), this.mOutputItem1.stackSize + this.mInventory[2].stackSize);
             }
         }
         if (this.mOutputItem2 != null) {
             if (this.mInventory[3] == null) {
-                this.mInventory[3] = GT_Utility.copy(new Object[]{this.mOutputItem2});
+                this.mInventory[3] = GT_Utility.copy(this.mOutputItem2);
             } else if (GT_Utility.areStacksEqual(this.mInventory[3], this.mOutputItem2)) {
                 this.mInventory[3].stackSize = Math.min(this.mOutputItem2.getMaxStackSize(), this.mOutputItem2.stackSize + this.mInventory[3].stackSize);
             }
@@ -236,12 +236,9 @@ public class GT_MetaTileEntity_BronzeBlastFurnace extends MetaTileEntity {
     }
 
     private boolean spaceForOutput(ItemStack aStack1, ItemStack aStack2) {
-        if (((this.mInventory[2] == null) || (aStack1 == null) || ((this.mInventory[2].stackSize + aStack1.stackSize <= this.mInventory[2].getMaxStackSize()) && (GT_Utility.areStacksEqual(this.mInventory[2], aStack1)))) && (
-                (this.mInventory[3] == null) || (aStack2 == null) || ((this.mInventory[3].stackSize + aStack2.stackSize <= this.mInventory[3].getMaxStackSize()) && (GT_Utility.areStacksEqual(this.mInventory[3], aStack2))))) {
-            return true;
-        }
-        return false;
-    }
+		return ((this.mInventory[2] == null) || (aStack1 == null) || ((this.mInventory[2].stackSize + aStack1.stackSize <= this.mInventory[2].getMaxStackSize()) && (GT_Utility.areStacksEqual(this.mInventory[2], aStack1)))) && (
+				(this.mInventory[3] == null) || (aStack2 == null) || ((this.mInventory[3].stackSize + aStack2.stackSize <= this.mInventory[3].getMaxStackSize()) && (GT_Utility.areStacksEqual(this.mInventory[3], aStack2))));
+	}
 
     private boolean checkRecipe() {
         if (!this.mMachine) {

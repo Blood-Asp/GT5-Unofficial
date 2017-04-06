@@ -1,25 +1,18 @@
 package gregtech.common.items.armor;
 
+import gregtech.api.util.GT_LanguageManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
-
-import gregtech.api.damagesources.GT_DamageSources;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 public class ArmorData {
 
@@ -87,7 +80,7 @@ public class ArmorData {
 	public ArmorData(EntityPlayer player, ItemStack stack, int type, int tier) {
 		this.type = type;
 		this.armorTier = tier;
-		ContainerModularArmor tmp = new ContainerBasicArmor((EntityPlayer) player, new InventoryArmor(ModularArmor_Item.class, stack));
+		ContainerModularArmor tmp = new ContainerBasicArmor(player, new InventoryArmor(ModularArmor_Item.class, stack));
 		calculateArmor(tmp.mInvArmor.parts);
 		switch (tier) {
 		case 0:
@@ -163,7 +156,7 @@ public class ArmorData {
 	}
 
 	public void updateTooltip() {
-		List<String> tagList = new ArrayList<String>();
+		List<String> tagList = new ArrayList<>();
 		String tmp2 = "";
 		if (maxWeight > 4000) {
 			tmp2 = " " + GT_LanguageManager.getTranslation("hav");
@@ -270,11 +263,7 @@ public class ArmorData {
 				writeToNBT(stack.getTagCompound());
 			}
 		}
-		if (helmet != null && chestplate != null && leggings != null && boots != null) {
-			fullArmor = true;
-		} else {
-			fullArmor = false;
-		}
+		fullArmor = helmet != null && chestplate != null && leggings != null && boots != null;
 		fullRadiationDef = fullArmor && helmet.radiationDef > 0.9f && chestplate.radiationDef > 0.9f && leggings.radiationDef > 0.9f && boots.radiationDef > 0.9f;
 		fullElectricDef = fullArmor && helmet.electricDef > 0.9f && chestplate.electricDef > 0.9f && leggings.electricDef > 0.9f && boots.electricDef > 0.9f;
 		magnet = 0;

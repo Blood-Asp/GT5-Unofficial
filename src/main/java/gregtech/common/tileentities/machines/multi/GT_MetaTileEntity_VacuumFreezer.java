@@ -71,9 +71,9 @@ public class GT_MetaTileEntity_VacuumFreezer
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, new ItemStack[]{tInput});
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, tInput);
             if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, null, new ItemStack[]{tInput})) {
+                if (tRecipe.isRecipeInputEqual(true, null, tInput)) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
                     if (tRecipe.mEUt <= 16) {

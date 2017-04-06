@@ -61,22 +61,22 @@ public class GT_Tool_SoftHammer extends GT_Tool {
 
     @Override
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return GregTech_API.sSoundList.get(Integer.valueOf(101));
     }
 
     @Override
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return GregTech_API.sSoundList.get(Integer.valueOf(101));
     }
 
     @Override
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return GregTech_API.sSoundList.get(Integer.valueOf(0));
     }
 
     @Override
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return GregTech_API.sSoundList.get(Integer.valueOf(101));
     }
 
     @Override

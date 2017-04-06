@@ -65,7 +65,7 @@ public class GT_Tool_Shovel extends GT_Tool {
 
     @Override
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return GregTech_API.sSoundList.get(Integer.valueOf(0));
     }
 
     @Override

@@ -77,8 +77,8 @@ public class GT_MetaTileEntity_DistillationTower
         ArrayList<FluidStack> tFluidList = getStoredFluids();
         for (int i = 0; i < tFluidList.size() - 1; i++) {
             for (int j = i + 1; j < tFluidList.size(); j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
                         tFluidList.remove(j--);
                     } else {
                         tFluidList.remove(i--);
@@ -90,12 +90,12 @@ public class GT_MetaTileEntity_DistillationTower
 
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
+        FluidStack[] tFluids = Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
         if (tFluids.length > 0) {
         	for(int i = 0;i<tFluids.length;i++){
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]});
             if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
+                if (tRecipe.isRecipeInputEqual(true, tFluids)) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
                     if (tRecipe.mEUt <= 16) {
@@ -179,11 +179,8 @@ public class GT_MetaTileEntity_DistillationTower
     }
 
     public boolean ignoreController(Block tTileEntity) {
-        if (!controller && tTileEntity == GregTech_API.sBlockMachines) {
-            return true;
-        }
-        return false;
-    }
+		return !controller && tTileEntity == GregTech_API.sBlockMachines;
+	}
 
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;

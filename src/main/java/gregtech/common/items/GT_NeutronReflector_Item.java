@@ -26,7 +26,7 @@ public class GT_NeutronReflector_Item
             } else {
                 float tEnergy = 1.0f;
                 if (pulsingStack.getItem() instanceof GT_RadioactiveCellIC_Item) {
-                    tEnergy = (float) ((GT_RadioactiveCellIC_Item) pulsingStack.getItem()).sEnergy;
+                    tEnergy = ((GT_RadioactiveCellIC_Item) pulsingStack.getItem()).sEnergy;
                 }
                 reactor.addOutput(tEnergy);
             }

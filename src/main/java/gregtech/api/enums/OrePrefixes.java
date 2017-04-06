@@ -505,23 +505,23 @@ public enum OrePrefixes {
 
         //-----
 
-        toolHeadFile.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        toolHeadSaw.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        toolHeadDrill.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        toolHeadChainsaw.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        toolHeadWrench.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        toolHeadBuzzSaw.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
-        turbineBlade.mCondition = new ICondition.And<ISubTagContainer>(new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING), new ICondition.Not<ISubTagContainer>(SubTag.BOUNCY));
+        toolHeadFile.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        toolHeadSaw.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        toolHeadDrill.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        toolHeadChainsaw.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        toolHeadWrench.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        toolHeadBuzzSaw.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
+        turbineBlade.mCondition = new ICondition.And<>(new ICondition.Not<>(SubTag.NO_SMASHING), new ICondition.Not<>(SubTag.BOUNCY));
 
-        rotor.mCondition = new ICondition.Nor<ISubTagContainer>(SubTag.CRYSTAL, SubTag.STONE, SubTag.BOUNCY);
+        rotor.mCondition = new ICondition.Nor<>(SubTag.CRYSTAL, SubTag.STONE, SubTag.BOUNCY);
 
-        spring.mCondition = new ICondition.Or<ISubTagContainer>(SubTag.STRETCHY, SubTag.BOUNCY, new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING));
-        springSmall.mCondition = new ICondition.Or<ISubTagContainer>(SubTag.STRETCHY, SubTag.BOUNCY, new ICondition.Not<ISubTagContainer>(SubTag.NO_SMASHING));
+        spring.mCondition = new ICondition.Or<>(SubTag.STRETCHY, SubTag.BOUNCY, new ICondition.Not<>(SubTag.NO_SMASHING));
+        springSmall.mCondition = new ICondition.Or<>(SubTag.STRETCHY, SubTag.BOUNCY, new ICondition.Not<>(SubTag.NO_SMASHING));
 
-        gemChipped.mCondition = new ICondition.And<ISubTagContainer>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<ISubTagContainer>(SubTag.QUARTZ), new ICondition.Not<ISubTagContainer>(SubTag.PEARL), new ICondition.Not<ISubTagContainer>(SubTag.MAGICAL));
-        gemFlawed.mCondition = new ICondition.And<ISubTagContainer>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<ISubTagContainer>(SubTag.QUARTZ), new ICondition.Not<ISubTagContainer>(SubTag.PEARL), new ICondition.Not<ISubTagContainer>(SubTag.MAGICAL));
-        gemFlawless.mCondition = new ICondition.And<ISubTagContainer>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<ISubTagContainer>(SubTag.QUARTZ), new ICondition.Not<ISubTagContainer>(SubTag.PEARL), new ICondition.Not<ISubTagContainer>(SubTag.MAGICAL));
-        gemExquisite.mCondition = new ICondition.And<ISubTagContainer>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<ISubTagContainer>(SubTag.QUARTZ), new ICondition.Not<ISubTagContainer>(SubTag.PEARL), new ICondition.Not<ISubTagContainer>(SubTag.MAGICAL));
+        gemChipped.mCondition = new ICondition.And<>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<>(SubTag.QUARTZ), new ICondition.Not<>(SubTag.PEARL), new ICondition.Not<>(SubTag.MAGICAL));
+        gemFlawed.mCondition = new ICondition.And<>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<>(SubTag.QUARTZ), new ICondition.Not<>(SubTag.PEARL), new ICondition.Not<>(SubTag.MAGICAL));
+        gemFlawless.mCondition = new ICondition.And<>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<>(SubTag.QUARTZ), new ICondition.Not<>(SubTag.PEARL), new ICondition.Not<>(SubTag.MAGICAL));
+        gemExquisite.mCondition = new ICondition.And<>(SubTag.TRANSPARENT, SubTag.CRYSTAL, new ICondition.Not<>(SubTag.QUARTZ), new ICondition.Not<>(SubTag.PEARL), new ICondition.Not<>(SubTag.MAGICAL));
 
         lens.mCondition = new ICondition.Or<>(SubTag.MAGICAL, new ICondition.And<>(SubTag.TRANSPARENT, SubTag.HAS_COLOR));
 
@@ -596,12 +596,12 @@ public enum OrePrefixes {
         bulletGtLarge.mSecondaryMaterial = new MaterialStack(Materials.Brass, ingot.mMaterialAmount / 3);
     }
 
-    public final ArrayList<ItemStack> mPrefixedItems = new ArrayList<ItemStack>();
+    public final ArrayList<ItemStack> mPrefixedItems = new ArrayList<>();
     public final short mTextureIndex;
     public final String mRegularLocalName, mLocalizedMaterialPre, mLocalizedMaterialPost;
     public final boolean mIsUsedForOreProcessing, mIsEnchantable, mIsUnificatable, mIsMaterialBased, mIsSelfReferencing, mIsContainer, mDontUnificateActively, mIsUsedForBlocks, mAllowNormalRecycling, mGenerateDefaultItem;
-    public final List<TC_AspectStack> mAspects = new ArrayList<TC_AspectStack>();
-    public final Collection<OrePrefixes> mFamiliarPrefixes = new HashSet<OrePrefixes>();
+    public final List<TC_AspectStack> mAspects = new ArrayList<>();
+    public final Collection<OrePrefixes> mFamiliarPrefixes = new HashSet<>();
     /**
      * Used to determine the amount of Material this Prefix contains.
      * Multiply or Divide GregTech_API.MATERIAL_UNIT to get the Amounts in comparision to one Ingot.
@@ -609,8 +609,8 @@ public enum OrePrefixes {
      * Negative = Undefined Amount
      */
     public final long mMaterialAmount;
-    public final Collection<Materials> mDisabledItems = new HashSet<Materials>(), mNotGeneratedItems = new HashSet<Materials>(), mIgnoredMaterials = new HashSet<Materials>(), mGeneratedItems = new HashSet<Materials>();
-    private final ArrayList<IOreRecipeRegistrator> mOreProcessing = new ArrayList<IOreRecipeRegistrator>();
+    public final Collection<Materials> mDisabledItems = new HashSet<>(), mNotGeneratedItems = new HashSet<>(), mIgnoredMaterials = new HashSet<>(), mGeneratedItems = new HashSet<>();
+    private final ArrayList<IOreRecipeRegistrator> mOreProcessing = new ArrayList<>();
     public ItemStack mContainerItem = null;
     public ICondition<ISubTagContainer> mCondition = null;
     public byte mDefaultStackSize = 64;
@@ -622,7 +622,7 @@ public enum OrePrefixes {
      * Yes this Value can be changed to add Bits for the MetaGenerated-Item-Check.
      */
     public int mMaterialGenerationBits = 0;
-    private OrePrefixes(String aRegularLocalName, String aLocalizedMaterialPre, String aLocalizedMaterialPost, boolean aIsUnificatable, boolean aIsMaterialBased, boolean aIsSelfReferencing, boolean aIsContainer, boolean aDontUnificateActively, boolean aIsUsedForBlocks, boolean aAllowNormalRecycling, boolean aGenerateDefaultItem, boolean aIsEnchantable, boolean aIsUsedForOreProcessing, int aMaterialGenerationBits, long aMaterialAmount, int aDefaultStackSize, int aTextureindex) {
+    OrePrefixes(String aRegularLocalName, String aLocalizedMaterialPre, String aLocalizedMaterialPost, boolean aIsUnificatable, boolean aIsMaterialBased, boolean aIsSelfReferencing, boolean aIsContainer, boolean aDontUnificateActively, boolean aIsUsedForBlocks, boolean aAllowNormalRecycling, boolean aGenerateDefaultItem, boolean aIsEnchantable, boolean aIsUsedForOreProcessing, int aMaterialGenerationBits, long aMaterialAmount, int aDefaultStackSize, int aTextureindex) {
         mIsUnificatable = aIsUnificatable;
         mIsMaterialBased = aIsMaterialBased;
         mIsSelfReferencing = aIsSelfReferencing;
@@ -905,7 +905,7 @@ public enum OrePrefixes {
     }
 
     public static boolean isInstanceOf(String aName, OrePrefixes aPrefix) {
-        return aName == null ? false : aName.startsWith(aPrefix.toString());
+        return aName != null && aName.startsWith(aPrefix.toString());
     }
 
     public boolean add(ItemStack aStack) {

@@ -56,8 +56,8 @@ public class GregTech_API {
     /**
      * Fixes the HashMap Mappings for ItemStacks once the Server started
      */
-    public static final Collection<Map<GT_ItemStack, ?>> sItemStackMappings = new ArrayList<Map<GT_ItemStack, ?>>();
-    public static final Collection<Map<Fluid, ?>> sFluidMappings = new ArrayList<Map<Fluid, ?>>();
+    public static final Collection<Map<GT_ItemStack, ?>> sItemStackMappings = new ArrayList<>();
+    public static final Collection<Map<Fluid, ?>> sFluidMappings = new ArrayList<>();
     /**
      * The MetaTileEntity-ID-List-Length
      */
@@ -65,7 +65,10 @@ public class GregTech_API {
     /**
      * My Creative Tab
      */
-    public static final CreativeTabs TAB_GREGTECH = new GT_CreativeTab("Main", "Main"), TAB_GREGTECH_MATERIALS = new GT_CreativeTab("Materials", "Materials"), TAB_GREGTECH_ORES = new GT_CreativeTab("Ores", "Ores");
+    public static final CreativeTabs
+            TAB_GREGTECH = new GT_CreativeTab("Main", "Main"),
+            TAB_GREGTECH_MATERIALS = new GT_CreativeTab("Materials", "Materials"),
+            TAB_GREGTECH_ORES = new GT_CreativeTab("Ores", "Ores");
     /**
      * A List of all registered MetaTileEntities
      * <p/>
@@ -105,23 +108,23 @@ public class GregTech_API {
     /**
      * The List of Circuit Behaviors for the Redstone Circuit Block
      */
-    public static final Map<Integer, GT_CircuitryBehavior> sCircuitryBehaviors = new HashMap<Integer, GT_CircuitryBehavior>();
+    public static final Map<Integer, GT_CircuitryBehavior> sCircuitryBehaviors = new HashMap<>();
     /**
      * The List of Blocks, which can conduct Machine Block Updates
      */
-    public static final Map<Block, Integer> sMachineIDs = new HashMap<Block, Integer>();
+    public static final Map<Block, Integer> sMachineIDs = new HashMap<>();
     /**
      * The Redstone Frequencies
      */
-    public static final Map<Integer, Byte> sWirelessRedstone = new HashMap<Integer, Byte>();
+    public static final Map<Integer, Byte> sWirelessRedstone = new HashMap<>();
     /**
      * The IDSU Frequencies
      */
-    public static final Map<Integer, Integer> sIDSUList = new HashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> sIDSUList = new HashMap<>();
     /**
      * A List of all Books, which were created using @GT_Utility.getWrittenBook the original Title is the Key Value
      */
-    public static final Map<String, ItemStack> sBookList = new HashMap<String, ItemStack>();
+    public static final Map<String, ItemStack> sBookList = new HashMap<>();
     /**
      * The List of all Sounds used in GT, indices are in the static Block at the bottom
      */
@@ -129,21 +132,21 @@ public class GregTech_API {
     /**
      * The List of Tools, which can be used. Accepts regular damageable Items and Electric Items
      */
-    public static final GT_HashSet<GT_ItemStack> sToolList = new GT_HashSet<GT_ItemStack>(), sCrowbarList = new GT_HashSet<GT_ItemStack>(), sScrewdriverList = new GT_HashSet<GT_ItemStack>(), sWrenchList = new GT_HashSet<GT_ItemStack>(), sSoftHammerList = new GT_HashSet<GT_ItemStack>(), sHardHammerList = new GT_HashSet<GT_ItemStack>(), sSolderingToolList = new GT_HashSet<GT_ItemStack>(), sSolderingMetalList = new GT_HashSet<GT_ItemStack>();
+    public static final GT_HashSet<GT_ItemStack> sToolList = new GT_HashSet<>(), sCrowbarList = new GT_HashSet<>(), sScrewdriverList = new GT_HashSet<>(), sWrenchList = new GT_HashSet<>(), sSoftHammerList = new GT_HashSet<>(), sHardHammerList = new GT_HashSet<>(), sSolderingToolList = new GT_HashSet<>(), sSolderingMetalList = new GT_HashSet<>();
     /**
      * The List of Hazmat Armors
      */
-    public static final GT_HashSet<GT_ItemStack> sGasHazmatList = new GT_HashSet<GT_ItemStack>(), sBioHazmatList = new GT_HashSet<GT_ItemStack>(), sFrostHazmatList = new GT_HashSet<GT_ItemStack>(), sHeatHazmatList = new GT_HashSet<GT_ItemStack>(), sRadioHazmatList = new GT_HashSet<GT_ItemStack>(), sElectroHazmatList = new GT_HashSet<GT_ItemStack>();
+    public static final GT_HashSet<GT_ItemStack> sGasHazmatList = new GT_HashSet<>(), sBioHazmatList = new GT_HashSet<>(), sFrostHazmatList = new GT_HashSet<>(), sHeatHazmatList = new GT_HashSet<>(), sRadioHazmatList = new GT_HashSet<>(), sElectroHazmatList = new GT_HashSet<>();
     /**
      * The List of Dimensions, which are Whitelisted for the Teleporter. This list should not contain other Planets.
      * Mystcraft Dimensions and other Dimensional Things should be allowed.
      * Mystcraft and Twilight Forest are automatically considered a Dimension, without being in this List.
      */
-    public static final Collection<Integer> sDimensionalList = new HashSet<Integer>();
+    public static final Collection<Integer> sDimensionalList = new HashSet<>();
     /**
      * Lists of all the active World generation Features, these are getting Initialized in Postload!
      */
-    public static final List<GT_Worldgen> sWorldgenList = new ArrayList<GT_Worldgen>();
+    public static final List<GT_Worldgen> sWorldgenList = new ArrayList<>();
     /**
      * A List containing all the Materials, which are somehow in use by GT and therefor receive a specific Set of Items.
      */
@@ -165,7 +168,7 @@ public class GregTech_API {
     /**
      * These Lists are getting executed at their respective timings. Useful if you have to do things right before/after I do them, without having to control the load order. Add your "Commands" in the Constructor or in a static Code Block of your Mods Main Class. These are not Threaded, I just use a native Java Interface for their execution. Implement just the Method run() and everything should work
      */
-    public static List<Runnable> sBeforeGTPreload = new ArrayList<Runnable>(), sAfterGTPreload = new ArrayList<Runnable>(), sBeforeGTLoad = new ArrayList<Runnable>(), sAfterGTLoad = new ArrayList<Runnable>(), sBeforeGTPostload = new ArrayList<Runnable>(), sAfterGTPostload = new ArrayList<Runnable>(), sBeforeGTServerstart = new ArrayList<Runnable>(), sAfterGTServerstart = new ArrayList<Runnable>(), sBeforeGTServerstop = new ArrayList<Runnable>(), sAfterGTServerstop = new ArrayList<Runnable>(), sGTBlockIconload = new ArrayList<Runnable>(), sGTItemIconload = new ArrayList<Runnable>();
+    public static List<Runnable> sBeforeGTPreload = new ArrayList<>(), sAfterGTPreload = new ArrayList<>(), sBeforeGTLoad = new ArrayList<>(), sAfterGTLoad = new ArrayList<>(), sBeforeGTPostload = new ArrayList<>(), sAfterGTPostload = new ArrayList<>(), sBeforeGTServerstart = new ArrayList<>(), sAfterGTServerstart = new ArrayList<>(), sBeforeGTServerstop = new ArrayList<>(), sAfterGTServerstop = new ArrayList<>(), sGTBlockIconload = new ArrayList<>(), sGTItemIconload = new ArrayList<>();
     /**
      * The Icon Registers from Blocks and Items. They will get set right before the corresponding Icon Load Phase as executed in the Runnable List above.
      */

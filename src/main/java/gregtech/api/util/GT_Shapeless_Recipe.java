@@ -51,7 +51,7 @@ public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_Craft
             // Keeping NBT
             if (mKeepingNBT) for (int i = 0; i < aGrid.getSizeInventory(); i++) {
                 if (aGrid.getStackInSlot(i) != null && aGrid.getStackInSlot(i).hasTagCompound()) {
-                    rStack.setTagCompound((NBTTagCompound) aGrid.getStackInSlot(i).getTagCompound().copy());
+                    rStack.setTagCompound(aGrid.getStackInSlot(i).getTagCompound().copy());
                     break;
                 }
             }
