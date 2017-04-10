@@ -811,6 +811,9 @@ public class GT_Mod implements IGT_Mod {
                 GregTech_API.mInputRF = false;
             }
         }
+        
+        addSolidFakeLargeBoilerFuels();
+        
         achievements = new GT_Achievements();
         GT_Log.out.println("GT_Mod: Loading finished, deallocating temporary Init Variables.");
         GregTech_API.sBeforeGTPreload = null;
@@ -1104,5 +1107,30 @@ public class GT_Mod implements IGT_Mod {
 
     public void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         gregtechproxy.doSonictronSound(aStack, aWorld, aX, aY, aZ);
+    }
+    
+    private void addSolidFakeLargeBoilerFuels(){
+        GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipes(
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.item, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.item, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.plank, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lithium, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Caesium, 1),
+        		GT_OreDictUnificator.get(ItemList.Block_SSFUEL.get(1, new Object[0])),
+        		GT_OreDictUnificator.get(ItemList.Block_MSSFUEL.get(1, new Object[0])),
+        		new ItemStack(Items.lava_bucket),
+        		new ItemStack(Items.blaze_rod));
     }
 }

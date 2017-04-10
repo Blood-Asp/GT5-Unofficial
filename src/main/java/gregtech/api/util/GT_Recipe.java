@@ -1381,6 +1381,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     	
     	public GT_Recipe_Map_Large_Boiler_Fake_Fuels(){
     		super(new HashSet<GT_Recipe>(30), "gt.recipe.largeboilerfakefuels", "Large Boiler", null, RES_PATH_GUI + "basicmachines/Default", 1, 0, 1, 0, 1, E, 1, E, true , true);
+    		GT_Recipe explanatoryRecipe = new GT_Recipe(true, new ItemStack[]{}, new ItemStack[]{}, null, null, null, null, 1, 1, 1);
+    		explanatoryRecipe.setNeiDesc("Not all solid fuels are listed.", "Any item that burns in a", "vanilla furnace will burn in", "a Large Boiler.");
+    		addRecipe(explanatoryRecipe);
     	}
     	
     	public GT_Recipe addDenseLiquidRecipe(GT_Recipe recipe) {
@@ -1390,11 +1393,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     	public GT_Recipe addDieselRecipe(GT_Recipe recipe) {
     		return addRecipe(recipe,((double)recipe.mSpecialValue) / 40);
     	}
-    	
-    	public GT_Recipe addSolidRecipe(GT_Recipe recipe) {
-    		return addRecipe(recipe, ((double)recipe.mSpecialValue) / 80);
+
+    	public void addSolidRecipes(ItemStack ... itemStacks) {
+    		for(ItemStack itemStack : itemStacks){
+    			addSolidRecipe(itemStack);
+    		}
     	}
-    	
+    	    	
+    	public GT_Recipe addSolidRecipe(ItemStack fuelItemStack){
+    		return addRecipe(new GT_Recipe(true, new ItemStack[]{fuelItemStack}, new ItemStack[]{}, null, null, null, null, 1, 0, GT_ModHandler.getFuelValue(fuelItemStack) / 1600), ((double)GT_ModHandler.getFuelValue(fuelItemStack)) / 1600);
+    	}
     	
     	private GT_Recipe addRecipe(GT_Recipe recipe, double baseBurnTime){
 			recipe = new GT_Recipe(recipe);
@@ -1410,7 +1418,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     		double tungstensteelBurnTime = baseBurnTime * 1.2 + floatErrorCorrection;
     		tungstensteelBurnTime -= tungstensteelBurnTime % 0.05;
     		
-    		recipe.setNeiDesc("Burn times in seconds:", 
+    		recipe.setNeiDesc("Burn time in seconds:", 
     				String.format("Bronze Boiler: %.2f", bronzeBurnTime), 
     				String.format("Steel Boiler: %.2f", steelBurnTime), 
     				String.format("Titanium Boiler: %.2f", titaniumBurnTime), 
