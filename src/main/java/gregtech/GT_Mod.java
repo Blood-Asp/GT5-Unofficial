@@ -811,6 +811,9 @@ public class GT_Mod implements IGT_Mod {
                 GregTech_API.mInputRF = false;
             }
         }
+        
+        addSolidFakeLargeBoilerFuels();
+        
         achievements = new GT_Achievements();
         GT_Log.out.println("GT_Mod: Loading finished, deallocating temporary Init Variables.");
         GregTech_API.sBeforeGTPreload = null;
@@ -1105,4 +1108,36 @@ public class GT_Mod implements IGT_Mod {
     public void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         gregtechproxy.doSonictronSound(aStack, aWorld, aX, aY, aZ);
     }
+    
+    private void addSolidFakeLargeBoilerFuels(){
+        GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipes(
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Charcoal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Lignite, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.plank, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.slab, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Wood, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lithium, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Caesium, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sulfur, 1),
+        		GT_OreDictUnificator.get(ItemList.Block_SSFUEL.get(1, new Object[0])),
+        		GT_OreDictUnificator.get(ItemList.Block_MSSFUEL.get(1, new Object[0])),
+        		GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Lava, 1),
+        		GT_OreDictUnificator.get(OrePrefixes.rod, Materials.Blaze, 1));
+        if (Loader.isModLoaded("Thaumcraft")) {
+        	GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipe(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1));
+        }
+    }
+    
 }
