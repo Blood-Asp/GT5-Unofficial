@@ -25,6 +25,11 @@ public class GT_MetaTileEntity_MagicEnergyConverter
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_MagicEnergyConverter(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();
     }

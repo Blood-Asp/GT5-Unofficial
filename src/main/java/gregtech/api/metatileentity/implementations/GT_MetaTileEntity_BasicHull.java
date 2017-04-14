@@ -21,6 +21,10 @@ public class GT_MetaTileEntity_BasicHull extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_BasicHull(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
+    
+    public GT_MetaTileEntity_BasicHull(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

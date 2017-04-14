@@ -25,8 +25,15 @@ public class GT_MetaTileEntity_Locker
         super(aName, aTier, 4, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Locker(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 4, aDescription, aTextures);
+    }
+
     public String[] getDescription() {
-        return new String[]{this.mDescription, "Click with Screwdriver to change Style"};
+    	String[] desc = new String[mDescription.length + 1];
+    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+    	desc[mDescription.length] = "Click with Screwdriver to change Style";
+    	return desc;
     }
 
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {

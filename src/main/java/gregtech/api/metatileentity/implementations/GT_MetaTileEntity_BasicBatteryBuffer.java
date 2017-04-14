@@ -37,9 +37,16 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         super(aName, aTier, aSlotCount, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_BasicBatteryBuffer(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, int aSlotCount) {
+        super(aName, aTier, aSlotCount, aDescription, aTextures);
+    }
+
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, mInventory.length + " Slots"};
+    	String[] desc = new String[mDescription.length];
+    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+    	desc[mDescription.length] = mInventory.length + " Slots";
+    	return desc;
     }
 
     @Override

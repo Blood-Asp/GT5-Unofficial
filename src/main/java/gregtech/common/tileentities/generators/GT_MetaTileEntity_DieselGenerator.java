@@ -29,6 +29,11 @@ public class GT_MetaTileEntity_DieselGenerator
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
+    
+    public GT_MetaTileEntity_DieselGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
 
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();

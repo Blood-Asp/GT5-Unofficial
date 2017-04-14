@@ -26,6 +26,11 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_SteamTurbine(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();
     }
@@ -40,7 +45,10 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
 
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "Fuel Efficiency: " + (600 / getEfficiency()) + "%"};
+    	String[] desc = new String[mDescription.length + 1];
+    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+    	desc[mDescription.length] = "Fuel Efficiency: " + (600 / getEfficiency()) + "%";
+    	return desc;
     }
 
     public int getCapacity() {

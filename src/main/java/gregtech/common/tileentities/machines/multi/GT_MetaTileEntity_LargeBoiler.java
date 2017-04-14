@@ -95,10 +95,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler
             if (circuit_config >= 1 && circuit_config <= 25) {
                 // If so, overwrite the current config
             	this.integratedCircuitConfig = circuit_config;
-            } else {
-            	//If not, set the config to zero
-            	this.integratedCircuitConfig = 0;
-            }
+            } 
+        } else {
+        	//If not, set the config to zero
+        	this.integratedCircuitConfig = 0;
         }
     	
         this.mSuperEfficencyIncrease=0;

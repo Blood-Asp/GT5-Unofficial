@@ -25,6 +25,11 @@ public class GT_MetaTileEntity_FluidNaquadahReactor
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_FluidNaquadahReactor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return (aSide > 1) && (aSide != getBaseMetaTileEntity().getFrontFacing()) && (aSide != getBaseMetaTileEntity().getBackFacing());
     }

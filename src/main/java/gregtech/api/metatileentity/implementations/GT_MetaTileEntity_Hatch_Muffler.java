@@ -19,9 +19,17 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
+    }
+
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "DO NOT OBSTRUCT THE OUTPUT!","Reduces Pollution to "+calculatePollutionReduction(100)+"%"};
+		String[] desc = new String[mDescription.length + 2];
+		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+		desc[mDescription.length] = "DO NOT OBSTRUCT THE OUTPUT!";
+		desc[mDescription.length + 1] = "Reduces Pollution to "+calculatePollutionReduction(100)+"%";
+		return desc;
     }
 
     @Override

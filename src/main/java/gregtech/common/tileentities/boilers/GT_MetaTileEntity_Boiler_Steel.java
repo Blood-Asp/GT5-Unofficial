@@ -29,6 +29,10 @@ public class GT_MetaTileEntity_Boiler_Steel
         super(aName, aTier, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+    }
+
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
         for (byte i = -1; i < 16; i = (byte) (i + 1)) {

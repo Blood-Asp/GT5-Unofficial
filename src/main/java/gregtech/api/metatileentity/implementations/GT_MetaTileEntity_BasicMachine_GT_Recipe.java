@@ -607,6 +607,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
         mGUIParameterB = (byte) aGUIParameterB;
     }
 
+    public GT_MetaTileEntity_BasicMachine_GT_Recipe(String aName, int aTier, String[] aDescription, GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aAmperage, int aGUIParameterA, int aGUIParameterB, ITexture[][][] aTextures, String aGUIName, String aNEIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect) {
+        super(aName, aTier, aAmperage, aDescription, aTextures, aInputSlots, aOutputSlots, aGUIName, aNEIName);
+        mSharedTank = aSharedTank;
+        mTankCapacity = aTankCapacity;
+        mSpecialEffect = aSpecialEffect;
+        mRequiresFluidForFiltering = aRequiresFluidForFiltering;
+        mRecipes = aRecipes;
+        mSound = aSound;
+        mGUIParameterA = (byte) aGUIParameterA;
+        mGUIParameterB = (byte) aGUIParameterB;
+    }
+
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_BasicMachine_GT_Recipe(mName, mTier, mDescription, mRecipes, mInputSlotCount, mOutputItems == null ? 0 : mOutputItems.length, mTankCapacity, mAmperage, mGUIParameterA, mGUIParameterB, mTextures, mGUIName, mNEIName, mSound, mSharedTank, mRequiresFluidForFiltering, mSpecialEffect);

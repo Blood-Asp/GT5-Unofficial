@@ -18,6 +18,10 @@ public class GT_MetaTileEntity_BasicHull_SteelBricks
         super(aName, aTier, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_BasicHull_SteelBricks(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+    }
+
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_BasicHull_SteelBricks(this.mName, this.mTier, this.mDescription, this.mTextures);
     }

@@ -25,6 +25,10 @@ public class GT_MetaTileEntity_Filter
     public GT_MetaTileEntity_Filter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
+    
+    public GT_MetaTileEntity_Filter(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Filter(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);

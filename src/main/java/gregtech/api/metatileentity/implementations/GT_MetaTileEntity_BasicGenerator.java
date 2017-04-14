@@ -25,6 +25,10 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
+    
+    public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
@@ -51,7 +55,10 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "Fuel Efficiency: " + getEfficiency() + "%"};
+    	String[] desc = new String[mDescription.length + 1];
+    	System.arraycopy(mDescription, 0, desc, 0, desc.length);
+    	desc[mDescription.length] = "Fuel Efficiency: " + getEfficiency() + "%";
+        return desc;
     }
 
     @Override

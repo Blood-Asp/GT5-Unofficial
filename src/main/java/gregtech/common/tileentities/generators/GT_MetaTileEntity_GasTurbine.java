@@ -24,6 +24,11 @@ public class GT_MetaTileEntity_GasTurbine
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
+    
+    public GT_MetaTileEntity_GasTurbine(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
 
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();

@@ -29,6 +29,10 @@ public class GT_MetaTileEntity_Macerator_Steel
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_Macerator_Steel(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelMacerator.png", GT_Recipe_Map.sMaceratorRecipes.mUnlocalizedName);
     }
