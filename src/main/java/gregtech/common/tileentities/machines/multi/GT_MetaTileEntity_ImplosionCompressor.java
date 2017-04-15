@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_ImplosionCompressor
                 "1x Muffler Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
                 "Solid Steel Casings for the rest (16 at least!)",
-                "Causes 2000 Pollution per second"};
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

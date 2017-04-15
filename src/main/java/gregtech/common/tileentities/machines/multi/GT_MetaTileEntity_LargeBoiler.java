@@ -49,7 +49,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 "1x Muffler Hatch (Any Firebox)",
                 "Diesel fuels have 1/4 efficiency",
                 String.format("Takes %.2f seconds to heat up", 500.0 / getEfficiencyIncrease()),
-                "Causes up to 360 Pollution per second"};
+                "Causes up to " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public abstract Block getCasingBlock();

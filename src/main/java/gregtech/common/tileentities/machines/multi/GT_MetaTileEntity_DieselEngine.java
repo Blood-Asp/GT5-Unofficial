@@ -51,7 +51,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "Supply Diesel Fuel and Lubricant to run. Supply Oxygen to boost output (optional).",
                 "Default: Produces 2048EU/t at 100% efficiency",
                 "Boosted: Produces 6144EU/t at 150% efficiency",
-                "Causes 320 Pollution per second"};
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

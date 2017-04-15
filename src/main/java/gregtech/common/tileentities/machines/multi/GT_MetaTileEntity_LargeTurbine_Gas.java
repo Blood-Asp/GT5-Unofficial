@@ -43,7 +43,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 "Stainless Steel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)",
                 "Output depending on Rotor: 102-6720EU/t",
-                "Causes 160 Pollution per second"};
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {

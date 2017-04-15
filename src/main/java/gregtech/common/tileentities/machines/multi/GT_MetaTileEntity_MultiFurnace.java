@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 "1x Muffler Hatch (Top middle)",
                 "1x Energy Hatch (One of bottom)",
                 "Heat Proof Machine Casings for the rest",
-                "Causes 100 Pollution per second"};
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
