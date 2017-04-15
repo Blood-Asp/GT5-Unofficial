@@ -15,6 +15,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.ArrayUtils;
 
+import static gregtech.api.enums.GT_Values.V;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -207,7 +209,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 } else {
                     this.mEUt = tRecipe.mEUt;
                     this.mMaxProgresstime = tRecipe.mDuration;
-                    while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
+                    while (this.mEUt <= V[tTier - 1] * map.mAmperage) {
                         this.mEUt *= 4;
                         this.mMaxProgresstime /= 2;
                     }

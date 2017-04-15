@@ -82,12 +82,12 @@ public class GT_MetaGenerated_Item_03
          * quantum chips
          */
         ItemList.Circuit_Silicon_Ingot.set(addItem(tLastID = 30, "Monocrystalline Silicon Ingot", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot2.set(addItem(tLastID = 31, "Glowstone doted Monocrystalline Silicon Ingot", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Ingot3.set(addItem(tLastID = 32, "Naquadah doted Monocrystalline Silicon Ingot", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Ingot2.set(addItem(tLastID = 31, "Glowstone doped Monocrystalline Silicon Ingot", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Ingot3.set(addItem(tLastID = 32, "Naquadah doped Monocrystalline Silicon Ingot", "Raw Circuit", o));
 
         ItemList.Circuit_Silicon_Wafer.set(addItem(tLastID = 33, "Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer2.set(addItem(tLastID = 34, "Glowstone doted Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Silicon_Wafer3.set(addItem(tLastID = 35, "Naquadah doted Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Wafer2.set(addItem(tLastID = 34, "Glowstone doped Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Wafer3.set(addItem(tLastID = 35, "Naquadah doped Wafer", "Raw Circuit", o));
              
         ItemList.Circuit_Wafer_ILC.set(addItem(tLastID = 36, "Integrated Logic Circuit (Wafer)", "Raw Circuit", o));
         ItemList.Circuit_Chip_ILC.set(addItem(tLastID = 37, "Integrated Logic Circuit", "Integrated Circuit", o));

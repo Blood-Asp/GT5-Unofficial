@@ -683,6 +683,7 @@ public class GT_ModHandler {
                     if (GT_Utility.isStackValid(tStack)) {
                         if (aAddGTRecipe && (aGTRecipeMap.findRecipe(null, false, Long.MAX_VALUE, null, tStack) == null)) {
                             if (aExcludeGTIC2Items && ((tStack.getUnlocalizedName().contains("gt.metaitem.01") || tStack.getUnlocalizedName().contains("gt.blockores") || tStack.getUnlocalizedName().contains("ic2.itemCrushed") || tStack.getUnlocalizedName().contains("ic2.itemPurifiedCrushed")))) continue;
+                            try{
                             switch (aGTRecipeMap.mUnlocalizedName) {
                                 case "gt.recipe.macerator":
                                     aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 300, 2, 0);
@@ -697,6 +698,7 @@ public class GT_ModHandler {
                                     aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 500, 48, 0);
                                     break;
                             }
+                            }catch(Exception e){System.err.println(e);}
                             //System.out.println("#####Processed IC2 " + aGTRecipeMap.mUnlocalizedName + " Recipe: In(" + tStack.getUnlocalizedName() + ") - Out(" + ((RecipeOutput) tRecipe.getValue()).items.get(0).getUnlocalizedName() + ")");
                         }
                         if (aRemoveIC2Recipe) aRecipesToRemove.put(tStack, ((RecipeOutput) tRecipe.getValue()).items.get(0));

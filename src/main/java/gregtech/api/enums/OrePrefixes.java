@@ -930,6 +930,12 @@ public enum OrePrefixes {
                 break;
             case "Plastic":
             case "Rubber":
+            case "Polyethylene":
+            case "Epoxid":
+            case "Silicone":
+            case "Polysiloxane":
+            case "Polycaprolactam":
+            case "Polytetrafluoroethylene":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pulp";
                 if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Sheet";
                 if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Bar";

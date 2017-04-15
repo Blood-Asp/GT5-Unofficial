@@ -7,8 +7,10 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -196,6 +198,14 @@ public class GT_RecipeAdder
         GT_Recipe.GT_Recipe_Map.sCutterRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2}, null, new FluidStack[]{GT_ModHandler.getDistilledWater(Math.max(3, Math.min(750, aDuration * aEUt / 426)))}, null, aDuration * 2, aEUt, 0);
         GT_Recipe.GT_Recipe_Map.sCutterRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput1, aOutput2}, null, new FluidStack[]{Materials.Lubricant.getFluid(Math.max(1, Math.min(250, aDuration * aEUt / 1280)))}, null, aDuration, aEUt, 0);
         return true;
+    }
+    
+    public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict,int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
+    	for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+    		if(GT_Utility.isStackValid(tStack))
+    		addAssemblerRecipe(aInput1, GT_Utility.copyAmount(aAmount, tStack), aFluidInput, aOutput1, aDuration, aEUt);
+    	}
+    	return true;
     }
 
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt) {

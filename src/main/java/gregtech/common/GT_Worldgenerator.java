@@ -3,6 +3,7 @@ package gregtech.common;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
@@ -16,8 +17,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GT_Worldgenerator
@@ -31,8 +30,6 @@ public class GT_Worldgenerator
     private static int gcMaxSize = 400;
     private static boolean endAsteroids = true;
     private static boolean gcAsteroids = true;
-    public List<Runnable> mList = new ArrayList();
-    public boolean mIsGenerating = false;
 
 
     public GT_Worldgenerator() {
@@ -47,17 +44,12 @@ public class GT_Worldgenerator
         GameRegistry.registerWorldGenerator(this, 1073741823);
     }
 
-    public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-        if (!this.mIsGenerating) {
-            this.mIsGenerating = true;
-            int mList_sS=this.mList.size();
-            for (int i = 0; i < mList_sS; i++) {
-                ((Runnable) this.mList.get(i)).run();
-            }
-            this.mList.clear();
-            this.mIsGenerating = false;
+    public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+        int tempDimensionId = aWorld.provider.dimensionId;
+        if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
+            tempDimensionId = 0;
         }
+        new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
     }
 
     public static class WorldGenContainer
@@ -113,7 +105,9 @@ public class GT_Worldgenerator
                             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
                                 tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
                             }
-                        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+                        } catch (Throwable e) {
+                            e.printStackTrace(GT_Log.err);
+                        }
                         j++;
                     }
                     i++;
@@ -124,7 +118,7 @@ public class GT_Worldgenerator
             String tDimensionName = this.mWorld.provider.getDimensionName();
             Random aRandom = new Random();
             if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.equals("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
-                short primaryMeta = 0;
+            	short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
                 short sporadicMeta = 0;
@@ -152,6 +146,7 @@ public class GT_Worldgenerator
                         }
                     }
                 }
+                if(GT_Values.D1)System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
                 int tX = mX + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
                 int tZ = mZ + aRandom.nextInt(16);

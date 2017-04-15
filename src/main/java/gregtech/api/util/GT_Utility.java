@@ -1459,6 +1459,9 @@ public class GT_Utility {
         try {
             if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
         } catch (Throwable e) {/*Do nothing*/}
+        try {
+            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("galacticraft")) return true;
+        } catch (Throwable e) {/*Do nothing*/}
         return GregTech_API.sDimensionalList.contains(aDimensionID);
     }
 

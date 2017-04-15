@@ -55,6 +55,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 	public int openGuiNr;
 	public ArmorData data;
 	public int jumpticks;
+	public int fail = 0;
 
 	// public int maxEU;
 
@@ -193,6 +194,11 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 
 	@Override
 	public void onArmorTick(World aWorld, EntityPlayer aPlayer, ItemStack aStack) {
+		if(fail>0){
+			fail--;
+			return;
+		}
+		try{
 		if (data == null) {
 			data = fillArmorData(aPlayer, aStack);
 		}
@@ -358,6 +364,9 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 					aPlayer.removePotionEffect(id);
 				}
 			}
+		}
+		}catch(Exception e){System.err.print(e);
+			fail = 200;
 		}
 	}
 

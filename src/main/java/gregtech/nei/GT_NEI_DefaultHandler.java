@@ -198,32 +198,41 @@ public class GT_NEI_DefaultHandler
         return currenttip;
     }
 
-    public void drawExtras(int aRecipeIndex) {
-        int tEUt = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mEUt;
-        int tDuration = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mDuration;
-        if (tEUt != 0) {
-            drawText(10, 73, "Total: " + tDuration * tEUt + " EU", -16777216);
-            drawText(10, 83, "Usage: " + tEUt + " EU/t", -16777216);
-            if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-                drawText(10, 93, "Voltage: " + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
-                drawText(10, 103, "Amperage: " + this.mRecipeMap.mAmperage, -16777216);
-            } else {
-                drawText(10, 93, "Voltage: unspecified", -16777216);
-                drawText(10, 103, "Amperage: unspecified", -16777216);
-            }
-        }
-        if (tDuration > 0) {
-            drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
-        }
-        int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
-        if(tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing){
-        		drawText(10, 123, "Needs Low Gravity", -16777216);
-        	}else if(tSpecial == -200){
-        		drawText(10, 123, "Needs Cleanroom", -16777216);
-        	}else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {        	
-            drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
-        }
-    }
+	public void drawExtras(int aRecipeIndex) {
+		int tEUt = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mEUt;
+		int tDuration = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mDuration;
+		String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
+		if (recipeDesc == null) {
+			if (tEUt != 0) {
+				drawText(10, 73, "Total: " + tDuration * tEUt + " EU", -16777216);
+				drawText(10, 83, "Usage: " + tEUt + " EU/t", -16777216);
+				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
+					drawText(10, 93, "Voltage: " + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
+					drawText(10, 103, "Amperage: " + this.mRecipeMap.mAmperage, -16777216);
+				} else {
+					drawText(10, 93, "Voltage: unspecified", -16777216);
+					drawText(10, 103, "Amperage: unspecified", -16777216);
+				}
+			}
+			if (tDuration > 0) {
+				drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+			}
+			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
+			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
+				drawText(10, 123, "Needs Low Gravity", -16777216);
+			} else if (tSpecial == -200) {
+				drawText(10, 123, "Needs Cleanroom", -16777216);
+			} else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
+				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
+			}
+		} else {
+			int i = 0;
+			for (String descLine : recipeDesc) {
+				drawText(10, 73 + 10 * i, descLine, -16777216);
+				i++;
+			}
+		}
+	}
 
     public static class GT_RectHandler
             implements IContainerInputHandler, IContainerTooltipHandler {

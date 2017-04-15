@@ -261,6 +261,11 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         }
         return false;
     }
+    
+    @Override
+    public int getInventoryStackLimit() {
+        return 1;
+    }
 
     public long[] getStoredEnergy() {
     	boolean scaleOverflow =false;
