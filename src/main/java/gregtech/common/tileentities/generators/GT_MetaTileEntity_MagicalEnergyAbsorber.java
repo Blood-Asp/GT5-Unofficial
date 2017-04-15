@@ -34,7 +34,7 @@ import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_BasicGenerator {
 
-    public static final ArrayList<EntityEnderCrystal> sUsedDragonCrystalList = new ArrayList();
+    public static final ArrayList<EntityEnderCrystal> sUsedDragonCrystalList = new ArrayList<EntityEnderCrystal>();
     public static boolean sAllowMultipleEggs = true;
     public static GT_MetaTileEntity_MagicalEnergyAbsorber mActiveSiphon = null;
     public static int sEnergyPerEnderCrystal = 32;
@@ -50,6 +50,11 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     }
 
     public GT_MetaTileEntity_MagicalEnergyAbsorber(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+    
+    public GT_MetaTileEntity_MagicalEnergyAbsorber(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }

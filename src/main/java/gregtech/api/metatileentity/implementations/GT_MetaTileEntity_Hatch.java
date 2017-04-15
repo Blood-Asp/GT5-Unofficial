@@ -17,6 +17,10 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Hatch(String aName, int aTier, int aInvSlotCount, String []aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
+
     public static int getSlots(int aTier) {
         return aTier < 1 ? 1 : aTier == 1 ? 4 : aTier == 2 ? 9 : 16;
     }

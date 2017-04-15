@@ -31,6 +31,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public GT_MetaTileEntity_DieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
+    
     public GT_MetaTileEntity_DieselEngine(String aName) {
         super(aName);
     }
@@ -48,7 +49,9 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "1x Dynamo Hatch (back centered)",
                 "Engine Intake Casings not obstructed in front (only air blocks)",
                 "Supply Diesel Fuel and Lubricant to run. Supply Oxygen to boost output (optional).",
-                "2048EU/t default output, 6144EU/t boosted output"};
+                "Default: Produces 2048EU/t at 100% efficiency",
+                "Boosted: Produces 6144EU/t at 150% efficiency",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -216,8 +219,9 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 15;
+        return 16;
     }
+    
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;

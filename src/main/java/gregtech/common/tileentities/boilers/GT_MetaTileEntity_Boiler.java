@@ -31,7 +31,15 @@ public abstract class GT_MetaTileEntity_Boiler
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String[] aDescription, ITexture... aTextures) {
+        super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
+    }
+
     public GT_MetaTileEntity_Boiler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 4, aDescription, aTextures);
+    }
+    
+    public GT_MetaTileEntity_Boiler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 4, aDescription, aTextures);
     }
 

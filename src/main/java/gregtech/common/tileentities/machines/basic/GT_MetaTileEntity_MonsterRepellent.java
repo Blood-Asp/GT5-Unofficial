@@ -24,6 +24,10 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_MonsterRepellent(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
+
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_MonsterRepellent(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);
     }

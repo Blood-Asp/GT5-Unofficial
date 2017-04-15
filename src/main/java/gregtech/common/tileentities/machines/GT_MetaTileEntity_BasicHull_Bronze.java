@@ -18,6 +18,10 @@ public class GT_MetaTileEntity_BasicHull_Bronze
         super(aName, aTier, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_BasicHull_Bronze(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+    }
+
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_BasicHull_Bronze(this.mName, this.mTier, this.mDescription, this.mTextures);
     }

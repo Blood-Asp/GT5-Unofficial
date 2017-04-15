@@ -50,7 +50,8 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                 "Controller Block for the Bronze Blast Furnace",
                 "How to get your first Steel",
                 "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
-                "Bronze Plated Bricks for the rest (32 at least!)"};
+                "Bronze Plated Bricks for the rest (32 at least!)",
+                "Causes 50 Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
