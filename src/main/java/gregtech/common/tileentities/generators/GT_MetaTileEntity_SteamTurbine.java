@@ -17,7 +17,9 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     public int mEfficiency;
 
     public GT_MetaTileEntity_SteamTurbine(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Steam to run", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, new String[]{
+        		"Converts Steam into EU", 
+        		"Base rate: 2L of Steam -> 1 EU"}, new ITexture[0]);
         onConfigLoad();
     }
 
@@ -45,9 +47,11 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
 
     @Override
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length + 1];
+    	String[] desc = new String[mDescription.length + 2];
     	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
     	desc[mDescription.length] = "Fuel Efficiency: " + (600 / getEfficiency()) + "%";
+    	desc[mDescription.length + 1] = String.format("Consumes up to %sL of Steam per second", 
+    			(int) (4000 * (8 * Math.pow(4, mTier) + Math.pow(2, mTier)) / (600 / getEfficiency())));
     	return desc;
     }
 

@@ -22,7 +22,10 @@ import net.minecraftforge.fluids.IFluidHandler;
 public class GT_MetaTileEntity_Boiler_Bronze
         extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional, "An early way to get Steam Power", new ITexture[0]);
+        super(aID, aName, aNameRegional, new String[]{
+        		"An early way to get Steam Power", 
+        		"Produces 120L of Steam per second",
+        		"Causes 20 Pollution per second"}, new ITexture[0]);
     }
 
     public GT_MetaTileEntity_Boiler_Bronze(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {

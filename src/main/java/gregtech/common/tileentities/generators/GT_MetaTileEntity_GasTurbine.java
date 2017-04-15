@@ -13,10 +13,15 @@ import gregtech.api.util.GT_Recipe;
 public class GT_MetaTileEntity_GasTurbine
         extends GT_MetaTileEntity_BasicGenerator {
 
+	public static final int BASE_POLLUTION = 1;
+	
     public int mEfficiency;
 
+    
     public GT_MetaTileEntity_GasTurbine(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires flammable Gasses", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, new String[]{
+        		"Requires flammable Gasses", 
+        		"Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
         onConfigLoad();
     }
 
@@ -97,6 +102,6 @@ public class GT_MetaTileEntity_GasTurbine
 
 	@Override
 	public int getPollution() {
-		return 5;
+		return (int) (GT_MetaTileEntity_GasTurbine.BASE_POLLUTION * Math.pow(2, mTier - 1));
 	}
 }

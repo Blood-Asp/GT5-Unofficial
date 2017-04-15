@@ -39,7 +39,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
-                "ULV Machine Casings for the rest (60 at least!)"};
+                "ULV Machine Casings for the rest (60 at least!)",
+                "Causes 400 Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
