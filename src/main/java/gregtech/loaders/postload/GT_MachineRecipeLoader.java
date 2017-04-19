@@ -2544,6 +2544,8 @@ if(Loader.isModLoaded("Railcraft")){
     	
     	GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Acetone, 3), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.PolyvinylAcetate.getFluid(2000), Materials.Glue.getFluid(5000), ItemList.Cell_Empty.get(3, new Object[0]), 100, 8);
     	GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.PolyvinylAcetate, 2), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.Acetone.getFluid(3000), Materials.Glue.getFluid(5000), ItemList.Cell_Empty.get(2, new Object[0]), 100, 8);
+    	GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.MethylAcetate, 3), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.PolyvinylAcetate.getFluid(2000), Materials.Glue.getFluid(5000), ItemList.Cell_Empty.get(3, new Object[0]), 100, 8);
+    	GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.PolyvinylAcetate, 2), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.MethylAcetate.getFluid(3000), Materials.Glue.getFluid(5000), ItemList.Cell_Empty.get(2, new Object[0]), 100, 8);
 
     	GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1), GT_Values.NI, Materials.Oxygen.getGas(2000), Materials.CarbonDioxide.getGas(3000), GT_Values.NI, 40, 2);
     	GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1), GT_Values.NI, Materials.CarbonDioxide.getGas(1000), Materials.CarbonMonoxide.getGas(2000), GT_Values.NI, 1200);

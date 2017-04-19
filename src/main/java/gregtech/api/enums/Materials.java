@@ -545,7 +545,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Ethylene = new MaterialAdapter(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setFuelType(MaterialAdapter.GAS).setFuelPower(288).constructMaterial();
     public static Materials Propene = new MaterialAdapter(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setFuelType(MaterialAdapter.GAS).setFuelPower(144).constructMaterial();
     public static Materials VinylAcetate = new MaterialAdapter(679, TextureSet.SET_FLUID, "Vinyl Acetate").addCell().addFluid().setRGB(255, 179, 128).setColor(Dyes.dyeOrange).constructMaterial();
-    public static Materials PolyvinylAcetate = new MaterialAdapter(680, TextureSet.SET_FLUID, "Polyinyl Acetate").addCell().addFluid().setRGB(255, 153, 85).setColor(Dyes.dyeOrange).constructMaterial();
+    public static Materials PolyvinylAcetate = new MaterialAdapter(680, TextureSet.SET_FLUID, "Polyvinyl Acetate").addCell().addFluid().setRGB(255, 153, 85).setColor(Dyes.dyeOrange).constructMaterial();
     public static Materials MethylAcetate = new MaterialAdapter(681, TextureSet.SET_FLUID, "Methyl Acetate").addCell().addFluid().setRGB(238, 198, 175).setColor(Dyes.dyeOrange).constructMaterial();
     
     public static Materials SolderingAlloy = new Materials(314, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 220, 220, 230, 0, "SolderingAlloy", "Soldering Alloy", 0, 0, 400, 400, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 9), new MaterialStack(Antimony, 1)));
