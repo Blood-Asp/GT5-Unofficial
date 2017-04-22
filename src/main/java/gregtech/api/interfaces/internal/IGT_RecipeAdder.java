@@ -107,6 +107,14 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration);
 
+    
+    /**
+     * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
+     * @param aBasicMaterial The basic Material
+     * @param aPolymer The polymer
+     */
+    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer);
+    
     /**
      * Adds a Chemical Recipe
      *
