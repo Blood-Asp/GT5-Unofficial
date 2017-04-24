@@ -346,7 +346,6 @@ public class GT_RecipeAdder
         return false;
     }
 
-
     @Override
     public boolean addUniversalDistillationRecipe(FluidStack aInput, FluidStack[] aOutputs, ItemStack aOutput2, int aDuration, int aEUt) {
         if (aOutputs.length > 0) {
@@ -636,6 +635,7 @@ public class GT_RecipeAdder
         GT_Recipe.GT_Recipe_Map.sPrinterRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, aSpecialSlot, null, new FluidStack[]{aFluid}, null, aDuration, aEUt, 0);
         return true;
     }
+    
     public boolean addAutoclaveRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt) {
     	return addAutoclaveRecipe(aInput, aFluid, aOutput, aChance, aDuration, aEUt, false);
     }
@@ -664,6 +664,7 @@ public class GT_RecipeAdder
         GT_Recipe.GT_Recipe_Map.sMixerRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, aInput3, aInput4}, new ItemStack[]{aOutput}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, 0);
         return true;
     }
+    
     public boolean addLaserEngraverRecipe(ItemStack aItemToEngrave, ItemStack aLens, ItemStack aEngravedItem, int aDuration, int aEUt) {
     	return addLaserEngraverRecipe( aItemToEngrave, aLens, aEngravedItem, aDuration, aEUt, false);
     }
@@ -717,7 +718,6 @@ public class GT_RecipeAdder
         return false;
     }
     
-
 	@Override
 	public boolean addArcFurnaceRecipe(ItemStack aInput, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt) {
 		return addArcFurnaceRecipe(aInput, aOutputs, aChances, aDuration, aEUt,	false);
@@ -799,7 +799,6 @@ public class GT_RecipeAdder
         return false;
     }
     
-
 	@Override
 	public boolean addPulveriserRecipe(ItemStack aInput, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt) {
 		return addPulveriserRecipe(aInput, aOutputs, aChances, aDuration, aEUt, false);
