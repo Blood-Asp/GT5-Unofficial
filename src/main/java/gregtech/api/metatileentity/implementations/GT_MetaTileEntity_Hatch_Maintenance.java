@@ -57,7 +57,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     		String[] desc = new String[mDescription.length + 3];
     		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
     		desc[mDescription.length] = "4 Ducttape, 2 Lubricant Cells";
-    		desc[mDescription.length + 1] = "4 Ducttape, 2 Lubricant Cells";
+    		desc[mDescription.length + 1] = "4 Steel Screws, 2 Adv Circuits";
     		desc[mDescription.length + 2] = "For each autorepair";
     		return desc;
     	} else {
