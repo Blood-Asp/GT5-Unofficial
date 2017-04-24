@@ -43,7 +43,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length];
+    	String[] desc = new String[mDescription.length + 1];
     	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
     	desc[mDescription.length] = mInventory.length + " Slots";
     	return desc;

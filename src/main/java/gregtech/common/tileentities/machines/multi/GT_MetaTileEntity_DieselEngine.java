@@ -48,7 +48,8 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
                 "1x Dynamo Hatch (back centered)",
                 "Engine Intake Casings not obstructed in front (only air blocks)",
-                "Supply Diesel Fuel and Lubricant to run. Supply Oxygen to boost output (optional).",
+                "Supply Diesel Fuel and 1000L of Lubricant per hour to run.",
+                "Supply 40L of Oxygen per second to boost output (optional).",
                 "Default: Produces 2048EU/t at 100% efficiency",
                 "Boosted: Produces 6144EU/t at 150% efficiency",
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
