@@ -22,6 +22,10 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
     public GT_MetaTileEntity_LightningRod(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
+    
+    public GT_MetaTileEntity_LightningRod(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

@@ -23,6 +23,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         extends GT_MetaTileEntity_MultiBlockBase {
     private boolean firstRun = true;
     private int mSuperEfficencyIncrease = 0;
+    private int integratedCircuitConfig = 0; //Steam output is reduced by 1000L per config
 
     public GT_MetaTileEntity_LargeBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -35,7 +36,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Large Boiler",
-                "Produces "+(getEUt()*40)*(runtimeBoost(20)/20f)+"L of Steam with 1 Coal in "+runtimeBoost(20)+" ticks",
+                "Produces "+(getEUt()*40)*(runtimeBoost(20)/20f)+"L of Steam with 1 Coal at "+getEUt()* 40+"L/s",
+                "A programmed circuit in the main block throttles the boiler (-1000L/s per config)",
                 "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
                 "3x1x3 of Fire Boxes (Bottom layer, Min 3)",
                 "3x4x3 of Casings (Above Fireboxes, hollow, Min 24!)",
@@ -45,7 +47,9 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 "1x Output Hatch (Any Casing)",
                 "1x Maintenance Hatch (Any Firebox)",
                 "1x Muffler Hatch (Any Firebox)",
-                "Refined liquid fuels have 1/4 efficiency"};
+                "Diesel fuels have 1/4 efficiency",
+                String.format("Takes %.2f seconds to heat up", 500.0 / getEfficiencyIncrease()),
+                "Causes up to " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public abstract Block getCasingBlock();
@@ -88,14 +92,26 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public boolean checkRecipe(ItemStack aStack) {
+    	//Do we have an integrated circuit with a valid configuration?
+    	if (mInventory[1] != null && mInventory[1].getUnlocalizedName().startsWith("gt.integrated_circuit")) {
+            int circuit_config = mInventory[1].getItemDamage();
+            if (circuit_config >= 1 && circuit_config <= 25) {
+                // If so, overwrite the current config
+            	this.integratedCircuitConfig = circuit_config;
+            } 
+        } else {
+        	//If not, set the config to zero
+        	this.integratedCircuitConfig = 0;
+        }
+    	
         this.mSuperEfficencyIncrease=0;
         for (GT_Recipe tRecipe : GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList) {
             FluidStack tFluid = GT_Utility.getFluidForFilledItem(tRecipe.getRepresentativeInput(0), true);
             if ((tFluid != null) && (tRecipe.mSpecialValue > 1)) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {
-                    this.mMaxProgresstime = (runtimeBoost(tRecipe.mSpecialValue / 2));
-                    this.mEUt = getEUt();
+                    this.mMaxProgresstime = adjustBurnTimeForConfig(runtimeBoost(tRecipe.mSpecialValue / 2));
+                    this.mEUt = adjustEUtForConfig(getEUt());
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease() * 4);
                     return true;
                 }
@@ -106,8 +122,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
             if (tFluid != null) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {
-                    this.mMaxProgresstime = Math.max(1, runtimeBoost(tRecipe.mSpecialValue * 2));
-                    this.mEUt = getEUt();
+                    this.mMaxProgresstime = adjustBurnTimeForConfig(Math.max(1, runtimeBoost(tRecipe.mSpecialValue * 2)));
+                    this.mEUt = adjustEUtForConfig(getEUt());
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
                     return true;
                 }
@@ -117,7 +133,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         if (!tInputList.isEmpty()) {
             for (ItemStack tInput : tInputList) {
                 if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = runtimeBoost(GT_ModHandler.getFuelValue(tInput) / 80)) > 0)) {
-                    this.mEUt = getEUt();
+                	this.mMaxProgresstime = adjustBurnTimeForConfig(this.mMaxProgresstime);
+                	this.mEUt = adjustEUtForConfig(getEUt());
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
                     this.mOutputItems = new ItemStack[]{GT_Utility.getContainerItem(tInput, true)};
                     tInput.stackSize -= 1;
@@ -155,11 +172,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (mProgresstime > 0 && firstRun) {
             firstRun = false;
-            GT_Mod.instance.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
+            GT_Mod.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "extremepressure");
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
     }
-
 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
@@ -226,7 +242,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 12;
+    	int adjustedEUOutput = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
+        return Math.max(1, 12 * adjustedEUOutput / getEUt());
     }
 
     public int getDamageToComponent(ItemStack aStack) {
@@ -235,5 +252,18 @@ public abstract class GT_MetaTileEntity_LargeBoiler
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+    
+    private int adjustEUtForConfig(int rawEUt){
+    	int adjustedSteamOutput = rawEUt - 25 * integratedCircuitConfig;
+    	return Math.max(adjustedSteamOutput, 25);
+    }
+    
+    private int adjustBurnTimeForConfig(int rawBurnTime){
+    	if(mEfficiency < 10000){
+    		return rawBurnTime;
+    	}
+    	int adjustedEUt = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
+    	return rawBurnTime * getEUt() / adjustedEUt;
     }
 }

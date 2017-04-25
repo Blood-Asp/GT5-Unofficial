@@ -46,10 +46,26 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         mAuto = aAuto;
     }
 
+    public GT_MetaTileEntity_Hatch_Maintenance(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, boolean aAuto) {
+        super(aName, aTier, aAuto ? 4 : 1, aDescription, aTextures);
+        mAuto = aAuto;
+    }
+
     @Override
     public String[] getDescription() {
-    	if(mAuto)return new String[]{mDescription,"4 Ducttape, 2 Lubricant Cells","4 Steel Screws, 2 Adv Circuits","For each autorepair"};
-        return new String[]{mDescription, "Cannot be shared between Multiblocks!"};
+    	if (mAuto) {
+    		String[] desc = new String[mDescription.length + 3];
+    		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+    		desc[mDescription.length] = "4 Ducttape, 2 Lubricant Cells";
+    		desc[mDescription.length + 1] = "4 Steel Screws, 2 Adv Circuits";
+    		desc[mDescription.length + 2] = "For each autorepair";
+    		return desc;
+    	} else {
+    		String[] desc = new String[mDescription.length + 1];
+    		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
+    		desc[mDescription.length] = "Cannot be shared between Multiblocks!";
+    		return desc;
+    	}
     }
 
     @Override

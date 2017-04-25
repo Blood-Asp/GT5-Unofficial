@@ -22,6 +22,10 @@ public class GT_MetaTileEntity_AlloySmelter_Bronze
         super(aName, aDescription, aTextures, 2, 1, true);
     }
 
+    public GT_MetaTileEntity_AlloySmelter_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 2, 1, true);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_AlloySmelter_Bronze(this.mName, this.mDescription, this.mTextures);
     }

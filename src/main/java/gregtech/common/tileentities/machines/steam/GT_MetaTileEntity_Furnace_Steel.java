@@ -23,6 +23,10 @@ public class GT_MetaTileEntity_Furnace_Steel
         super(aName, aDescription, aTextures, 1, 1, true);
     }
 
+    public GT_MetaTileEntity_Furnace_Steel(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, true);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelFurnace.png", "smelting");
     }

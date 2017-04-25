@@ -24,6 +24,10 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Hatch_Output(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};

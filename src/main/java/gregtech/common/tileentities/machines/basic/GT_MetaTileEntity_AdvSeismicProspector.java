@@ -75,6 +75,15 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         step = aStep;
     }
 
+    protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
+            String aGUIName, String aNEIName, int aNear, int aMiddle, int aRadius, int aStep) {
+        super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
+        radius = aRadius;
+        near = aNear;
+        middle = aMiddle;
+        step = aStep;
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_AdvSeismicProspector(this.mName, this.mTier, this.mDescription, this.mTextures,
                 this.mGUIName, this.mNEIName, this.near, this.middle, this.radius, this.step);

@@ -18,6 +18,10 @@ public class GT_MetaTileEntity_Hatch_Dynamo extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Hatch_Dynamo(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
+    }
+
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[]{aBaseTexture, Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};

@@ -25,6 +25,10 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_QuantumChest(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     @Override
     public boolean isSimpleMachine() {
         return true;

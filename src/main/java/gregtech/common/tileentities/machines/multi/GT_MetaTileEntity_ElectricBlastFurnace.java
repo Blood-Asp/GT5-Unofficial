@@ -44,7 +44,11 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 "1x Energy Hatch (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Top middle)",
-                "Heat Proof Machine Casings for the rest"};
+                "Heat Proof Machine Casings for the rest",
+                "Each 900K over the min. Heat Capacity grants 5% speedup (multiplicatively)",
+                "Each 1800K over the min. Heat Capacity allows for one upgraded overclock",
+                "Upgraded overclocks reduce recipe time to 25% and increase EU/t to 400%",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
