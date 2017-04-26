@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SteamTurbine(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_SteamTurbine(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -47,10 +47,10 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
 
     @Override
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length + 2];
-    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    	desc[mDescription.length] = "Fuel Efficiency: " + (600 / getEfficiency()) + "%";
-    	desc[mDescription.length + 1] = String.format("Consumes up to %sL of Steam per second", 
+    	String[] desc = new String[mDescriptionArray.length + 2];
+    	System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    	desc[mDescriptionArray.length] = "Fuel Efficiency: " + (600 / getEfficiency()) + "%";
+    	desc[mDescriptionArray.length + 1] = String.format("Consumes up to %sL of Steam per second", 
     			(int) (4000 * (8 * Math.pow(4, mTier) + Math.pow(2, mTier)) / (600 / getEfficiency())));
     	return desc;
     }

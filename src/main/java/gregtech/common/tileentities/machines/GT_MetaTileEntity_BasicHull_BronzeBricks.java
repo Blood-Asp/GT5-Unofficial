@@ -23,7 +23,7 @@ public class GT_MetaTileEntity_BasicHull_BronzeBricks
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_BasicHull_BronzeBricks(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_BasicHull_BronzeBricks(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {

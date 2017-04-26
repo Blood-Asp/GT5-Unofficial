@@ -59,9 +59,9 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length + 1];
-    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    	desc[mDescription.length] = "Fuel Efficiency: " + getEfficiency() + "%";
+    	String[] desc = new String[mDescriptionArray.length + 1];
+    	System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    	desc[mDescriptionArray.length] = "Fuel Efficiency: " + getEfficiency() + "%";
         return desc;
     }
 

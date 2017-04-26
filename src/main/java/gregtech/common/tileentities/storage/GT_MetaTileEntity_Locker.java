@@ -30,9 +30,9 @@ public class GT_MetaTileEntity_Locker
     }
 
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length + 1];
-    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    	desc[mDescription.length] = "Click with Screwdriver to change Style";
+    	String[] desc = new String[mDescriptionArray.length + 1];
+    	System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    	desc[mDescriptionArray.length] = "Click with Screwdriver to change Style";
     	return desc;
     }
 
@@ -57,7 +57,7 @@ public class GT_MetaTileEntity_Locker
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Locker(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Locker(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public boolean isSimpleMachine() {

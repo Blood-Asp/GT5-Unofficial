@@ -60,7 +60,7 @@ public class GT_MetaTileEntity_Boiler_Bronze
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Bronze(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Bronze(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {

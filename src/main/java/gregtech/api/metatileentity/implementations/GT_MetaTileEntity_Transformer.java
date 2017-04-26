@@ -67,7 +67,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Transformer(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Transformer(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

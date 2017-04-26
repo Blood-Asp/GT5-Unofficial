@@ -28,7 +28,7 @@ public class GT_MetaTileEntity_BasicHull extends GT_MetaTileEntity_BasicTank {
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_BasicHull(mName, mTier, mInventory.length, mDescription, mTextures);
+        return new GT_MetaTileEntity_BasicHull(mName, mTier, mInventory.length, mDescriptionArray, mTextures);
     }
 
     @Override

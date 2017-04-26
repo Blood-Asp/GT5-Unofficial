@@ -26,7 +26,7 @@ public class GT_MetaTileEntity_Charger extends GT_MetaTileEntity_BasicBatteryBuf
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Charger(mName, mTier, mDescription, mTextures, mInventory.length);
+        return new GT_MetaTileEntity_Charger(mName, mTier, mDescriptionArray, mTextures, mInventory.length);
     }
 
     @Override
