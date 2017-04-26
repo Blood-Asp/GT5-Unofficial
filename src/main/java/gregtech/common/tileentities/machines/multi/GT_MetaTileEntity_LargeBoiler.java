@@ -24,6 +24,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     private boolean firstRun = true;
     private int mSuperEfficencyIncrease = 0;
     private int integratedCircuitConfig = 0; //Steam output is reduced by 1000L per config
+    private int excessFuel = 0; //Eliminate rounding errors for fuels that burn half items
+    private int excessProjectedEU = 0; //Eliminate rounding errors from throttling the boiler
 
     public GT_MetaTileEntity_LargeBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -133,6 +135,9 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         if (!tInputList.isEmpty()) {
             for (ItemStack tInput : tInputList) {
                 if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = runtimeBoost(GT_ModHandler.getFuelValue(tInput) / 80)) > 0)) {
+                	this.excessFuel += GT_ModHandler.getFuelValue(tInput) % 80;
+                	this.mMaxProgresstime += this.excessFuel / 80;
+                	this.excessFuel %= 80;
                 	this.mMaxProgresstime = adjustBurnTimeForConfig(this.mMaxProgresstime);
                 	this.mEUt = adjustEUtForConfig(getEUt());
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
@@ -264,6 +269,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     		return rawBurnTime;
     	}
     	int adjustedEUt = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
-    	return rawBurnTime * getEUt() / adjustedEUt;
+    	int adjustedBurnTime = rawBurnTime * getEUt() / adjustedEUt;
+    	this.excessProjectedEU += (getEUt() * rawBurnTime) - (adjustedEUt * adjustedBurnTime);
+    	adjustedBurnTime += this.excessProjectedEU / adjustedEUt;
+    	this.excessProjectedEU %= adjustedEUt;
+    	return adjustedBurnTime;
     }
 }

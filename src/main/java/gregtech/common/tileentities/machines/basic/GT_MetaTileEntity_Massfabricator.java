@@ -35,7 +35,7 @@ public class GT_MetaTileEntity_Massfabricator
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Massfabricator(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_Massfabricator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public void onConfigLoad(GT_Config aConfig) {

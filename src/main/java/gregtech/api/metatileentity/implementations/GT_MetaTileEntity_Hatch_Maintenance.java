@@ -54,16 +54,16 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     @Override
     public String[] getDescription() {
     	if (mAuto) {
-    		String[] desc = new String[mDescription.length + 3];
-    		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    		desc[mDescription.length] = "4 Ducttape, 2 Lubricant Cells";
-    		desc[mDescription.length + 1] = "4 Steel Screws, 2 Adv Circuits";
-    		desc[mDescription.length + 2] = "For each autorepair";
+    		String[] desc = new String[mDescriptionArray.length + 3];
+    		System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    		desc[mDescriptionArray.length] = "4 Ducttape, 2 Lubricant Cells";
+    		desc[mDescriptionArray.length + 1] = "4 Steel Screws, 2 Adv Circuits";
+    		desc[mDescriptionArray.length + 2] = "For each autorepair";
     		return desc;
     	} else {
-    		String[] desc = new String[mDescription.length + 1];
-    		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    		desc[mDescription.length] = "Cannot be shared between Multiblocks!";
+    		String[] desc = new String[mDescriptionArray.length + 1];
+    		System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    		desc[mDescriptionArray.length] = "Cannot be shared between Multiblocks!";
     		return desc;
     	}
     }
@@ -105,8 +105,8 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-    	if(aTileEntity.getMetaTileID()==111) return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescription, mTextures, true);
-        return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescription, mTextures, false);
+    	if(aTileEntity.getMetaTileID()==111) return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescriptionArray, mTextures, true);
+        return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescriptionArray, mTextures, false);
     }
 
     @Override

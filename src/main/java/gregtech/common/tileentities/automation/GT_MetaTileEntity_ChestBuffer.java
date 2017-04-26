@@ -30,7 +30,7 @@ public class GT_MetaTileEntity_ChestBuffer
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_ChestBuffer(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_ChestBuffer(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
     public ITexture getOverlayIcon() {

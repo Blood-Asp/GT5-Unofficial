@@ -25,10 +25,10 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public String[] getDescription() {
-		String[] desc = new String[mDescription.length + 2];
-		System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-		desc[mDescription.length] = "DO NOT OBSTRUCT THE OUTPUT!";
-		desc[mDescription.length + 1] = "Reduces Pollution to "+calculatePollutionReduction(100)+"%";
+		String[] desc = new String[mDescriptionArray.length + 2];
+		System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+		desc[mDescriptionArray.length] = "DO NOT OBSTRUCT THE OUTPUT!";
+		desc[mDescriptionArray.length + 1] = "Reduces Pollution to "+calculatePollutionReduction(100)+"%";
 		return desc;
     }
 
@@ -64,7 +64,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
     }
 
     public boolean polluteEnvironment() {

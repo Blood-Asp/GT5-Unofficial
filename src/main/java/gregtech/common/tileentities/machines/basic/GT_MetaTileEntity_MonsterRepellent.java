@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_MonsterRepellent(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_MonsterRepellent(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class GT_MetaTileEntity_AlloySmelter_Bronze
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_AlloySmelter_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_AlloySmelter_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {

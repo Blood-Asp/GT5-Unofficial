@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_E_Furnace extends GT_MetaTileEntity_BasicMachine 
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_E_Furnace(mName, mTier, mDescription, mTextures, mGUIName, mNEIName);
+        return new GT_MetaTileEntity_E_Furnace(mName, mTier, mDescriptionArray, mTextures, mGUIName, mNEIName);
     }
 
     @Override

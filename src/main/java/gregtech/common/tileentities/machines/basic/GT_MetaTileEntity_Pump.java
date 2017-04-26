@@ -47,7 +47,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public void saveNBTData(NBTTagCompound aNBT) {

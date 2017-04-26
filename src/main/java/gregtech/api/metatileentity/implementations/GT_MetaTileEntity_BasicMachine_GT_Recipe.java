@@ -621,7 +621,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_BasicMachine_GT_Recipe(mName, mTier, mDescription, mRecipes, mInputSlotCount, mOutputItems == null ? 0 : mOutputItems.length, mTankCapacity, mAmperage, mGUIParameterA, mGUIParameterB, mTextures, mGUIName, mNEIName, mSound, mSharedTank, mRequiresFluidForFiltering, mSpecialEffect);
+        return new GT_MetaTileEntity_BasicMachine_GT_Recipe(mName, mTier, mDescriptionArray, mRecipes, mInputSlotCount, mOutputItems == null ? 0 : mOutputItems.length, mTankCapacity, mAmperage, mGUIParameterA, mGUIParameterB, mTextures, mGUIName, mNEIName, mSound, mSharedTank, mRequiresFluidForFiltering, mSpecialEffect);
     }
 
     @Override
