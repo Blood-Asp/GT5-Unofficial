@@ -134,11 +134,11 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (!tInputList.isEmpty()) {
             for (ItemStack tInput : tInputList) {
-                if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = runtimeBoost(GT_ModHandler.getFuelValue(tInput) / 80)) > 0)) {
+                if ((GT_Utility.getFluidForFilledItem(tInput, true) == null) && ((this.mMaxProgresstime = GT_ModHandler.getFuelValue(tInput) / 80) > 0)) {
                 	this.excessFuel += GT_ModHandler.getFuelValue(tInput) % 80;
                 	this.mMaxProgresstime += this.excessFuel / 80;
                 	this.excessFuel %= 80;
-                	this.mMaxProgresstime = adjustBurnTimeForConfig(this.mMaxProgresstime);
+                	this.mMaxProgresstime = adjustBurnTimeForConfig(runtimeBoost(this.mMaxProgresstime));
                 	this.mEUt = adjustEUtForConfig(getEUt());
                     this.mEfficiencyIncrease = (this.mMaxProgresstime * getEfficiencyIncrease());
                     this.mOutputItems = new ItemStack[]{GT_Utility.getContainerItem(tInput, true)};

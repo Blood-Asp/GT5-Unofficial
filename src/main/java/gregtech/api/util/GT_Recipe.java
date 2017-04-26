@@ -1413,10 +1413,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     		double tungstensteelBurnTime = baseBurnTime * 1.2;
     		
     		recipe.setNeiDesc("Burn time in seconds:", 
-    				String.format("Bronze Boiler: %.2f", bronzeBurnTime), 
-    				String.format("Steel Boiler: %.2f", steelBurnTime), 
-    				String.format("Titanium Boiler: %.2f", titaniumBurnTime), 
-    				String.format("Tungstensteel Boiler: %.2f", tungstensteelBurnTime));
+    				String.format("Bronze Boiler: %.4f", bronzeBurnTime), 
+    				String.format("Steel Boiler: %.4f", steelBurnTime), 
+    				String.format("Titanium Boiler: %.4f", titaniumBurnTime), 
+    				String.format("Tungstensteel Boiler: %.4f", tungstensteelBurnTime));
     		return super.addRecipe(recipe);
     	}
     	
