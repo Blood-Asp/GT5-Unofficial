@@ -292,7 +292,7 @@ public class GT_Client extends GT_Proxy
                 afterSomeTime=0;
                 StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
                 try {
-                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
                         recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
                     }
                 }catch (Exception e){}

@@ -656,12 +656,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             'R', OrePrefixes.ring.get(Materials.Steel)});
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadDrill, aMaterial, 1L), tBits, new Object[]{"XSX", "XSX",
                             "ShS", 'X', OrePrefixes.plate.get(aMaterial), 'S', OrePrefixes.plate.get(Materials.Steel)});
-                    switch (aMaterial) {
-                        case Wood:
+                    switch (aMaterial.mName) {
+                        case "Wood":
                             GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, aMaterial, 1L), tBits, new Object[]{"P ", " s",
                                     'P', OrePrefixes.plank.get(aMaterial)});
                             break;
-                        case Stone:
+                        case "Stone":
                             GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, aMaterial, 1L), tBits, new Object[]{"P ", " f",
                                     'P', OrePrefixes.stoneSmooth});
                             break;
@@ -672,12 +672,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                     //TODO CHECK
 
                     }
-                    switch (aMaterial) {
-                        case Wood:
+                    switch (aMaterial.mName) {
+                        case "Wood":
                             GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gearGt, aMaterial, 1L), tBits, new Object[]{"SPS", "PsP", "SPS",
                                     'P', OrePrefixes.plank.get(aMaterial), 'S', OrePrefixes.stick.get(aMaterial)});
                             break;
-                        case Stone:
+                        case "Stone":
                             GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gearGt, aMaterial, 1L), tBits, new Object[]{"SPS", "PfP", "SPS",
                                     'P', OrePrefixes.stoneSmooth, 'S', new ItemStack(Blocks.stone_button, 1, 32767)});
                             break;
@@ -739,7 +739,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                         new Object[]{"h", "X", 'X', OrePrefixes.gemFlawless.get(aMaterial)});
                 GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.gemFlawless, aMaterial, 2L), tBits,
                         new Object[]{"h", "X", 'X', OrePrefixes.gemExquisite.get(aMaterial)});
-                if ((aMaterial.contains(SubTag.MORTAR_GRINDABLE)) && (GregTech_API.sRecipeFile.get(ConfigCategories.Tools.mortar, aMaterial.name(), true))) {
+                if ((aMaterial.contains(SubTag.MORTAR_GRINDABLE)) && (GregTech_API.sRecipeFile.get(ConfigCategories.Tools.mortar, aMaterial.mName, true))) {
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial, 1L), tBits,
                             new Object[]{"X", "m", 'X', OrePrefixes.gemChipped.get(aMaterial)});
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dustSmall, aMaterial, 2L), tBits,

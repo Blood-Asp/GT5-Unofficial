@@ -2,6 +2,7 @@ package gregtech.api.util;
 
 import cofh.api.transport.IItemDuct;
 import cpw.mods.fml.common.FMLCommonHandler;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -17,6 +18,7 @@ import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.objects.GT_UO_Fluid;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_Sound;

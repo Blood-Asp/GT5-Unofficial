@@ -1,6 +1,7 @@
 package gregtech.api.util;
 
 import cpw.mods.fml.common.Loader;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;

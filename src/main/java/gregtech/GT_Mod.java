@@ -34,7 +34,6 @@ import gregtech.loaders.load.GT_SonictronLoader;
 import gregtech.loaders.misc.GT_Achievements;
 import gregtech.loaders.misc.GT_Bees;
 import gregtech.loaders.misc.GT_CoverLoader;
-import gregtech.loaders.misc.OreProcessingConfiguration;
 import gregtech.loaders.postload.*;
 import gregtech.loaders.preload.*;
 import ic2.api.recipe.IRecipeInput;
@@ -59,9 +58,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -433,8 +430,6 @@ public class GT_Mod implements IGT_Mod {
         
         new Enchantment_EnderDamage();
         new Enchantment_Radioactivity();
-
-        new OreProcessingConfiguration(aEvent.getModConfigurationDirectory()).run();
 
         new GT_Loader_OreProcessing().run();
         new GT_Loader_OreDictionary().run();

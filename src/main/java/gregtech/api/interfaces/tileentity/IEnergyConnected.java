@@ -108,7 +108,7 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                 tWorld.setBlock(tX, tY, tZ, Blocks.air);
                                 if (GregTech_API.sMachineExplosions)
                                     if(GT_Mod.gregtechproxy.mPollution)
-                                        GT_Pollution.addPollution(new ChunkPosition(tX, tY, tZ), 100000);
+                                        GT_Pollution.addPollution(tWorld,new ChunkPosition(tX, tY, tZ), 100000);
                                     tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
                             }
                         }

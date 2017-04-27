@@ -16,6 +16,7 @@ import net.minecraftforge.common.DimensionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 //import net.minecraft.entity.EntityLiving;
 
@@ -52,7 +53,7 @@ public class GT_Pollution {//TODO REWORK
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
 
-	static TreeMap<Integer,List<ChunkPosition>> tList = null;
+	static List<ChunkPosition> tList = null;
 	static int loops = 1;
 	static XSTR tRan = new XSTR();
 
@@ -60,8 +61,8 @@ public class GT_Pollution {//TODO REWORK
 		if(!GT_Mod.gregtechproxy.mPollution) return;
 		int aWorldID=aWorld.provider.dimensionId;
 		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
-			tList = new TreeMap<>();
-			tList.put(aWorld,new ArrayList<ChunkPosition>(GT_Proxy.chunkData.keySet()));
+			//---tList = new TreeMap<>();
+			//---tList.put(aWorld,new ArrayList<ChunkPosition>(GT_Proxy.chunkData.keySet()));
 			loops = (tList.size()/1200) + 1;
 			//System.out.println("new Pollution loop"+aTick);
 		}
@@ -83,8 +84,8 @@ public class GT_Pollution {//TODO REWORK
 					tNeighbor.add(new ChunkPosition(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ+1));
 					tNeighbor.add(new ChunkPosition(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ-1));
 					for(ChunkPosition tNPos : tNeighbor){
-						if(!GT_Proxy.chunkData.containsKey(tNPos))
-							GT_Utility.undergroundOil(aWorld,tNPos.chunkPosX,tNPos.chunkPosZ,false,0);
+						//---if(!GT_Proxy.chunkData.containsKey(tNPos))
+						//---	GT_Utility.undergroundOil(aWorld,tNPos.chunkPosX,tNPos.chunkPosZ,false,0);
 						
 						//if(GT_Proxy.chunkData.containsKey(tNPos)){
 							int tNPol = GT_Proxy.chunkData.get(tNPos)[1];

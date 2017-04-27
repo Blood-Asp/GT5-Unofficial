@@ -47,41 +47,42 @@ public class GT_Achievements {
     public int adjY = 9;
 
     public GT_Achievements() {
-        this.achievementList = new ConcurrentHashMap();
-        this.issuedAchievements = new ConcurrentHashMap();
+        this.achievementList = new ConcurrentHashMap<>();
+        this.issuedAchievements = new ConcurrentHashMap<>();
         int oreList_sS=oreList.size();
         for (int i = 0; i < oreList_sS; i++) {
             if (oreList.get(i) != null) {
                 if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
                     GT_Log.out.println("achievement." + oreList.get(i).mName + "=Find " + oreList.get(i).mName + " Ore");
 
-                StringBuilder dimensions = new StringBuilder();
-                boolean isFirst = true;
-                if(oreStats.get(i)[3] == 1) {
-                    dimensions.append("Overworld");
-                    isFirst = false;
+                    StringBuilder dimensions = new StringBuilder();
+                    boolean isFirst = true;
+                    if (oreStats.get(i)[3] == 1) {
+                        dimensions.append("Overworld");
+                        isFirst = false;
+                    }
+                    if (oreStats.get(i)[4] == 1) {
+                        if (!isFirst) dimensions.append("/");
+                        dimensions.append("Nether");
+                        isFirst = false;
+                    }
+                    if (oreStats.get(i)[5] == 1) {
+                        if (!isFirst) dimensions.append("/");
+                        dimensions.append("End");
+                        isFirst = false;
+                    }
+                    GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
                 }
-                if(oreStats.get(i)[4] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("Nether");
-                    isFirst = false;
-                }
-                if(oreStats.get(i)[5] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("End");
-                    isFirst = false;
-                }
-                GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
-            }
-            //if(oreList.get(i)==null)
-            //    GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
-            //if(oreList.get(i).name()==null)
-            //    GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
-            //else
+                //if(oreList.get(i)==null)
+                //    GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
+                //if(oreList.get(i).name()==null)
+                //    GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
+                //else
                 registerOreAchievement(oreList.get(i));
+            }
         }
 
-        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList)
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
             registerAssAchievement(recipe);
 
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(2, 1, Materials.Flint, Materials.Wood, null), "", false);
@@ -621,7 +622,7 @@ public class GT_Achievements {
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
             issueAchievement(player, "buildQArmor");
 		}
-        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
             if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
                 issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
                 recipe.mHidden=false;

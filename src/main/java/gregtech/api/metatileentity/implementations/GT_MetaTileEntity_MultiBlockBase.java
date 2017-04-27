@@ -376,7 +376,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
      * Gets the Amount of possibly outputted Items for loading the Output Stack Array from NBT.
      * This should be the largest Amount that can ever happen legitimately.
      */
-	@Override
+    @Deprecated
     public int getAmountOfOutputs(){return -1;}
 
     /**
@@ -499,7 +499,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     public void explodeMultiblock() {
-        GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 300000);
+        GT_Pollution.addPollution(getBaseMetaTileEntity().getWorld(),new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 300000);
         mInventory[1] = null;
         for (MetaTileEntity tTileEntity : mInputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);
         for (MetaTileEntity tTileEntity : mOutputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);

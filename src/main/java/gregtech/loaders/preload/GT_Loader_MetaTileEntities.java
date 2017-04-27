@@ -23,9 +23,7 @@ import gregtech.common.tileentities.machines.GT_MetaTileEntity_BasicHull_SteelBr
 import gregtech.common.tileentities.machines.basic.*;
 import gregtech.common.tileentities.machines.multi.*;
 import gregtech.common.tileentities.machines.steam.*;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_Locker;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumTank;
+import gregtech.common.tileentities.storage.*;
 import ic2.core.Ic2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -299,7 +297,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //GT_ModHandler.addCraftingRecipe(ItemList.Quantum_Chest_EV.get(1L, new Object[0]), bitsd, new Object[]{"DPD", aTextPlateMotor, "DGD", 'M', ItemList.Hull_EV, 'G', ItemList.Field_Generator_EV, 'D', OrePrefixes.circuit.get(Materials.Master), 'P', OrePrefixes.plate.get(Materials.Europium)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Quantum_Chest_IV.get(1L, new Object[0]), bitsd, new Object[]{"DPD", aTextPlateMotor, "DGD", 'M', ItemList.Hull_IV, 'G', ItemList.Field_Generator_IV, 'D', OrePrefixes.circuit.get(Materials.Ultimate), 'P', OrePrefixes.plate.get(Materials.Americium)});
 	
-	ItemList.Super_Tank_LV.set(new GT_MetaTileEntity_SuperTank(130, "super.tank.tier.01", "Super Tank I", 1).getStackForm(1L));
+	    ItemList.Super_Tank_LV.set(new GT_MetaTileEntity_SuperTank(130, "super.tank.tier.01", "Super Tank I", 1).getStackForm(1L));
         ItemList.Super_Tank_MV.set(new GT_MetaTileEntity_SuperTank(131, "super.tank.tier.02", "Super Tank II", 2).getStackForm(1L));
         ItemList.Super_Tank_HV.set(new GT_MetaTileEntity_SuperTank(132, "super.tank.tier.03", "Super Tank III", 3).getStackForm(1L));
         ItemList.Super_Tank_EV.set(new GT_MetaTileEntity_SuperTank(133, "super.tank.tier.04", "Super Tank IV", 4).getStackForm(1L));
@@ -1104,10 +1102,10 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Generator_Naquadah_Mark_III.set(new GT_MetaTileEntity_FluidNaquadahReactor(1192, "basicgenerator.naquadah.tier.06", "Naquadah Reactor Mark III", 6).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_IV.set(new GT_MetaTileEntity_SolidNaquadahReactor3(1180, "basicgenerator.naquadah.tier.07", "Naquadah Reactor Mark IV", 7).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_V.set(new GT_MetaTileEntity_SolidNaquadahReactor4(1181, "basicgenerator.naquadah.tier.08", "Naquadah Reactor Mark V", 8).getStackForm(1L));
-		
+		//TODO CHECH RECIPES
         GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_I.get(1L, new Object[0]), bitsd, new Object[]{"UCU", "FMF", aTextWireCoil, 'M', ItemList.Hull_EV, 'F', ItemList.Field_Generator_EV, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt04.get(Materials.Aluminium), 'U', OrePrefixes.stick.get(Materials.Uranium235)});
         GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_II.get(1L, new Object[0]), bitsd, new Object[]{"PCP", "FMF", aTextWireCoil, 'M', ItemList.Hull_IV, 'F', ItemList.Field_Generator_IV, 'C', OrePrefixes.circuit.get(Materials.Master), 'W', OrePrefixes.cableGt04.get(Materials.Tungsten), 'P', OrePrefixes.stick.get(Materials.Plutonium241)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Fluid.get(1L, new Object[0]), bitsd, new Object[]{"NCN", "FMF", aTextWireCoil, 'M', ItemList.Hull_LuV, 'F', ItemList.Field_Generator_LuV, 'C', OrePrefixes.circuit.get(Materials.Ultimate), 'W', OrePrefixes.cableGt04.get(Materials.NiobiumTitanium), 'N', OrePrefixes.stick.get(Materials.NaquadahEnriched)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_III.get(1L, new Object[0]), bitsd, new Object[]{"NCN", "FMF", aTextWireCoil, 'M', ItemList.Hull_LuV, 'F', ItemList.Field_Generator_LuV, 'C', OrePrefixes.circuit.get(Materials.Ultimate), 'W', OrePrefixes.cableGt04.get(Materials.NiobiumTitanium), 'N', OrePrefixes.stick.get(Materials.NaquadahEnriched)});
 
         ItemList.MagicEnergyConverter_LV.set(new GT_MetaTileEntity_MagicEnergyConverter(1123, "basicgenerator.magicenergyconverter.tier.01", "Novice Magic Energy Converter", 1).getStackForm(1L));
         ItemList.MagicEnergyConverter_MV.set(new GT_MetaTileEntity_MagicEnergyConverter(1124, "basicgenerator.magicenergyconverter.tier.02", "Adept Magic Energy Converter", 2).getStackForm(1L));
@@ -1525,19 +1523,19 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     }
 
     private static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage, long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt01, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 0, aTextWire1 + aMaterial.name().toLowerCase() + ".01", "1x " + aMaterial.mDefaultLocalName + aTextWire2, 0.125F, aMaterial, aLoss, 1L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt02, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 1, aTextWire1 + aMaterial.name().toLowerCase() + ".02", "2x " + aMaterial.mDefaultLocalName + aTextWire2, 0.25F, aMaterial, aLoss, 2L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt04, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 2, aTextWire1 + aMaterial.name().toLowerCase() + ".04", "4x " + aMaterial.mDefaultLocalName + aTextWire2, 0.375F, aMaterial, aLoss, 4L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 3, aTextWire1 + aMaterial.name().toLowerCase() + ".08", "8x " + aMaterial.mDefaultLocalName + aTextWire2, 0.5F, aMaterial, aLoss, 8L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 4, aTextWire1 + aMaterial.name().toLowerCase() + ".12", "12x " + aMaterial.mDefaultLocalName + aTextWire2, 0.625F, aMaterial, aLoss, 12L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 5, aTextWire1 + aMaterial.name().toLowerCase() + ".16", "16x " + aMaterial.mDefaultLocalName + aTextWire2, 0.75F, aMaterial, aLoss, 16L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt01, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 0, aTextWire1 + aMaterial.mName.toLowerCase() + ".01", "1x " + aMaterial.mDefaultLocalName + aTextWire2, 0.125F, aMaterial, aLoss, 1L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt02, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 1, aTextWire1 + aMaterial.mName.toLowerCase() + ".02", "2x " + aMaterial.mDefaultLocalName + aTextWire2, 0.25F, aMaterial, aLoss, 2L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt04, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 2, aTextWire1 + aMaterial.mName.toLowerCase() + ".04", "4x " + aMaterial.mDefaultLocalName + aTextWire2, 0.375F, aMaterial, aLoss, 4L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 3, aTextWire1 + aMaterial.mName.toLowerCase() + ".08", "8x " + aMaterial.mDefaultLocalName + aTextWire2, 0.5F, aMaterial, aLoss, 8L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 4, aTextWire1 + aMaterial.mName.toLowerCase() + ".12", "12x " + aMaterial.mDefaultLocalName + aTextWire2, 0.625F, aMaterial, aLoss, 12L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 5, aTextWire1 + aMaterial.mName.toLowerCase() + ".16", "16x " + aMaterial.mDefaultLocalName + aTextWire2, 0.75F, aMaterial, aLoss, 16L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
         if (aInsulatable) {
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt01, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 6, aTextCable1 + aMaterial.name().toLowerCase() + ".01", "1x " + aMaterial.mDefaultLocalName + aTextCable2, 0.25F, aMaterial, aLossInsulated, 1L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt02, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 7, aTextCable1 + aMaterial.name().toLowerCase() + ".02", "2x " + aMaterial.mDefaultLocalName + aTextCable2, 0.375F, aMaterial, aLossInsulated, 2L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt04, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 8, aTextCable1 + aMaterial.name().toLowerCase() + ".04", "4x " + aMaterial.mDefaultLocalName + aTextCable2, 0.5F, aMaterial, aLossInsulated, 4L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 9, aTextCable1 + aMaterial.name().toLowerCase() + ".08", "8x " + aMaterial.mDefaultLocalName + aTextCable2, 0.625F, aMaterial, aLossInsulated, 8L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 10, aTextCable1 + aMaterial.name().toLowerCase() + ".12", "12x " + aMaterial.mDefaultLocalName + aTextCable2, 0.75F, aMaterial, aLossInsulated, 12L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
-            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 11, aTextCable1 + aMaterial.name().toLowerCase() + ".16", "16x " + aMaterial.mDefaultLocalName + aTextCable2, 0.875F, aMaterial, aLossInsulated, 16L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt01, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 6, aTextCable1 + aMaterial.mName.toLowerCase() + ".01", "1x " + aMaterial.mDefaultLocalName + aTextCable2, 0.25F, aMaterial, aLossInsulated, 1L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt02, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 7, aTextCable1 + aMaterial.mName.toLowerCase() + ".02", "2x " + aMaterial.mDefaultLocalName + aTextCable2, 0.375F, aMaterial, aLossInsulated, 2L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt04, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 8, aTextCable1 + aMaterial.mName.toLowerCase() + ".04", "4x " + aMaterial.mDefaultLocalName + aTextCable2, 0.5F, aMaterial, aLossInsulated, 4L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 9, aTextCable1 + aMaterial.mName.toLowerCase() + ".08", "8x " + aMaterial.mDefaultLocalName + aTextCable2, 0.625F, aMaterial, aLossInsulated, 8L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 10, aTextCable1 + aMaterial.mName.toLowerCase() + ".12", "12x " + aMaterial.mDefaultLocalName + aTextCable2, 0.75F, aMaterial, aLossInsulated, 12L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            GT_OreDictUnificator.registerOre(OrePrefixes.cableGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 11, aTextCable1 + aMaterial.mName.toLowerCase() + ".16", "16x " + aMaterial.mDefaultLocalName + aTextCable2, 0.875F, aMaterial, aLossInsulated, 16L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
         }
     }
 

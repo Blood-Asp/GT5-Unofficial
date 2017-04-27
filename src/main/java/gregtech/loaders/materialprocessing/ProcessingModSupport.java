@@ -41,7 +41,7 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.Terbium.mHasParentMod = false;
             Materials.Thulium.mHasParentMod = false;
             Materials.Ytterbium.mHasParentMod = false;
-            Materials.Endium.mHasParentMod = false;
+            Materials.HeeEndium.mHasParentMod = false;
             Materials.DarkIron.mHasParentMod = false;
             Materials.ElectrumFlux.mHasParentMod = false;
             Materials.Force.mHasParentMod = false;
@@ -78,7 +78,7 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.ShadowIron.mHasParentMod = false;
             Materials.ShadowSteel.mHasParentMod = false;
             Materials.AstralSilver.mHasParentMod = false;
-            Materials.Midasium.mHasParentMod = false;
+            Materials.Trinium.mHasParentMod = false;
         }
         if (!aEnableThaumcraftMats) {
             Materials.Amber.mHasParentMod = false;
@@ -101,7 +101,7 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.Gabbro.mHasParentMod = false;
             Materials.Gneiss.mHasParentMod = false;
             Materials.Greenschist.mHasParentMod = false;
-            Materials.Greywacke.mHasParentMod = false;
+            //Materials.Greywacke.mHasParentMod = false;
             Materials.Komatiite.mHasParentMod = false;
             Materials.Rhyolite.mHasParentMod = false;
         }

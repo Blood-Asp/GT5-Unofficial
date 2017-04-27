@@ -1,5 +1,6 @@
 package gregtech.loaders.postload;
 
+import com.dreammaster.gthandler.CustomItemList;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;

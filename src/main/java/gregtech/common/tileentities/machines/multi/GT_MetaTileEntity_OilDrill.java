@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {//TODO REWORK
 
     private boolean completedCycle = false;
+    private int extractionSpeed=0;
 
     public GT_MetaTileEntity_OilDrill(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -78,7 +79,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             }
         }
         //Output fluid
-        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
+        FluidStack tFluid = null;//GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);//TODO FIX
         if (tFluid == null){
             extractionSpeed=0;
             stopMachine();
@@ -100,7 +101,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             if(tFluid.amount>minExtraction)
                 tFluid.amount= Math.max(minExtraction,Math.min(tFluid.amount/50000,500));
             extractionSpeed=tFluid.amount;
-            GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,extractionSpeed);
+            //GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,extractionSpeed);//TODO FIX
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;

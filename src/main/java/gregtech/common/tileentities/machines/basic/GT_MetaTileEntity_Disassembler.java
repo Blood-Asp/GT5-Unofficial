@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.basic;
 
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -8,6 +9,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
