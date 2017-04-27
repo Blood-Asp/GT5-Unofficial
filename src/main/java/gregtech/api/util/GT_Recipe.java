@@ -342,13 +342,13 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 boolean temp = true;
                 amt = tFluid.amount;
                 for (FluidStack aFluid : aFluidInputs)
-                    if (aFluid != null && aFluid.isFluidEqual(tFluid)){
-                        if (aDontCheckStackSizes ){
+                    if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
+                        if (aDontCheckStackSizes) {
                             temp = false;
                             break;
                         }
                         amt -= aFluid.amount;
-                        if (amt<1){
+                        if (amt < 1) {
                             temp = false;
                             break;
                         }
@@ -453,11 +453,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     }
 
     public String[] getNeiDesc() {
-		return neiDesc;
-	}
-	protected void setNeiDesc(String... neiDesc) {
-		this.neiDesc = neiDesc;
-	}
+        return neiDesc;
+    }
+
+    protected void setNeiDesc(String... neiDesc) {
+        this.neiDesc = neiDesc;
+    }
 
 	public static class GT_Recipe_AssemblyLine{
         public static final ArrayList<GT_Recipe_AssemblyLine> sAssemblylineRecipes = new ArrayList<GT_Recipe_AssemblyLine>();
@@ -559,7 +560,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map_Fuel sHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.hugenaquadahreactor", "Naquadah Reactor MkIV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sExtraHugeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.extrahugenaquadahreactor", "Naquadah Reactor MkV", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Large_Boiler_Fake_Fuels sLargeBoilerFakeFuels = new GT_Recipe_Map_Large_Boiler_Fake_Fuels();
-
+        
         /**
          * HashMap of Recipes based on their Items
          */
@@ -1420,7 +1421,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     	}
 
     	public void addSolidRecipes(ItemStack ... itemStacks) {
-    		for(ItemStack itemStack : itemStacks){
+    		for (ItemStack itemStack : itemStacks){
     			addSolidRecipe(itemStack);
     		}
     	}
@@ -1444,10 +1445,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     		tungstensteelBurnTime -= tungstensteelBurnTime % 0.05;
     		
     		recipe.setNeiDesc("Burn time in seconds:", 
-    				String.format("Bronze Boiler: %.2f", bronzeBurnTime), 
-    				String.format("Steel Boiler: %.2f", steelBurnTime), 
-    				String.format("Titanium Boiler: %.2f", titaniumBurnTime), 
-    				String.format("Tungstensteel Boiler: %.2f", tungstensteelBurnTime));
+    				String.format("Bronze Boiler: %.4f", bronzeBurnTime), 
+    				String.format("Steel Boiler: %.4f", steelBurnTime), 
+    				String.format("Titanium Boiler: %.4f", titaniumBurnTime), 
+    				String.format("Tungstensteel Boiler: %.4f", tungstensteelBurnTime));
     		return super.addRecipe(recipe);
     	}
     	

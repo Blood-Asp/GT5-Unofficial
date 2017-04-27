@@ -1,8 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
@@ -28,6 +25,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import scala.actors.threadpool.Arrays;
 
+import java.util.List;
+
 public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch {
     public boolean mWrench = false, mScrewdriver = false, mSoftHammer = false, mHardHammer = false, mSolderingTool = false, mCrowbar = false, mAuto;
 
@@ -46,10 +45,26 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         mAuto = aAuto;
     }
 
+    public GT_MetaTileEntity_Hatch_Maintenance(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, boolean aAuto) {
+        super(aName, aTier, aAuto ? 4 : 1, aDescription, aTextures);
+        mAuto = aAuto;
+    }
+
     @Override
     public String[] getDescription() {
-    	if(mAuto)return new String[]{mDescription, "4 Duct tape, 2 Lubricant Cells","4 Steel Screws, 2 Adv. Circuits","For each auto-repair"};
-        return new String[]{mDescription, "Cannot be shared between Multiblocks!"};
+        if (mAuto) {
+            String[] desc = new String[mDescriptionArray.length + 3];
+            System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+            desc[mDescriptionArray.length] = "4 Ducttape, 2 Lubricant Cells";
+            desc[mDescriptionArray.length + 1] = "4 Steel Screws, 2 Adv Circuits";
+            desc[mDescriptionArray.length + 2] = "For each autorepair";
+            return desc;
+        } else {
+            String[] desc = new String[mDescriptionArray.length + 1];
+            System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+            desc[mDescriptionArray.length] = "Cannot be shared between Multiblocks!";
+            return desc;
+        }
     }
 
     @Override
@@ -91,8 +106,9 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-    	if(aTileEntity.getMetaTileID()==111) return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescription, mTextures, true);
-        return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescription, mTextures, false);
+        if (aTileEntity.getMetaTileID() == 111)//TODO CHECK
+            return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescriptionArray, mTextures, true);
+        return new GT_MetaTileEntity_Hatch_Maintenance(mName, mTier, mDescriptionArray, mTextures, false);
     }
 
     @Override
@@ -104,13 +120,13 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-    	if(mAuto) return new GT_Container_2by2(aPlayerInventory, aBaseMetaTileEntity);
+        if (mAuto) return new GT_Container_2by2(aPlayerInventory, aBaseMetaTileEntity);
         return new GT_Container_MaintenanceHatch(aPlayerInventory, aBaseMetaTileEntity);
     }
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-    	if(mAuto) return new GT_GUIContainer_2by2(aPlayerInventory, aBaseMetaTileEntity, getLocalName());
+        if (mAuto) return new GT_GUIContainer_2by2(aPlayerInventory, aBaseMetaTileEntity, getLocalName());
         return new GT_GUIContainer_MaintenanceHatch(aPlayerInventory, aBaseMetaTileEntity);
     }
 
@@ -195,7 +211,10 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         }
         if (mSolderingTool && aPlayer instanceof EntityPlayerMP) {
             EntityPlayerMP tPlayer = (EntityPlayerMP) aPlayer;
-            try{GT_Mod.instance.achievements.issueAchievement(tPlayer, "maintainance");}catch(Exception e){}
+            try {
+                GT_Mod.achievements.issueAchievement(tPlayer, "maintainance");
+            } catch (Exception ignored) {
+            }
         }
     }
 

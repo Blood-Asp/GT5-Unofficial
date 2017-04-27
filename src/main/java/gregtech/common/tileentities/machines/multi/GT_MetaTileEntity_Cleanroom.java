@@ -16,15 +16,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
-	private int mHeatingCapacity = 0;
+private int mHeatingCapacity = 0;
 
-	public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
-		super(aID, aName, aNameRegional);
-	}
+public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
+super(aID, aName, aNameRegional);
+}
 
-	public GT_MetaTileEntity_Cleanroom(String aName) {
-		super(aName);
-	}
+public GT_MetaTileEntity_Cleanroom(String aName) {
+super(aName);
+}
 
 	@Override
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -40,8 +40,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 				"Top besides contoller and corners filter casings",
 				"1 Reinforced Door",
 				"1x Energy Hatch, 1x Maintainance Hatch",
-				"up to 10 Machine Hull to transfer Items&Energy inside",
-				""};
+				"up to 10 Machine Hull to transfer Items & Energy inside"};
 	}
 
 	@Override
@@ -158,17 +157,17 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 			mEfficiency = Math.max(0, mEfficiency - 200);
 		}
 
-		return true;
-	}
+return true;
+}
 
 	@Override
 	public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
 		if (aSide == 0 || aSide == 1) {
 			return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.BLOCK_PLASCRETE), new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE : Textures.BlockIcons.OVERLAY_TOP_CLEANROOM)};
 
-		}
-		return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.BLOCK_PLASCRETE)};
-	}
+}
+return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.BLOCK_PLASCRETE)};
+}
 
 	@Override
 	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {

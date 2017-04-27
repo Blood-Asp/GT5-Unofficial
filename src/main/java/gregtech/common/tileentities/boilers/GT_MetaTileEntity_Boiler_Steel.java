@@ -20,12 +20,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_MetaTileEntity_Boiler_Steel
-        extends GT_MetaTileEntity_Boiler {
+        extends GT_MetaTileEntity_Boiler {//TODO CHECK POLLUTION VALUES AND DESCRIPTIONS FOR POLLUTION SPOILERS
     public GT_MetaTileEntity_Boiler_Steel(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional, "Faster than the Bronze Boiler", new ITexture[0]);
+        super(aID, aName, aNameRegional, new String[]{
+                "Faster than the Bronze Boiler",
+                "Produces 300L of Steam per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
 
@@ -59,7 +65,7 @@ public class GT_MetaTileEntity_Boiler_Steel
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Steel(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -145,8 +151,8 @@ public class GT_MetaTileEntity_Boiler_Steel
                 this.mProcessingEnergy -= 2;
                 this.mTemperature += 1;
             }
-            if(this.mProcessingEnergy>0 && (aTick % 20L == 0L)){
-            	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 40);
+            if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
+                GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 30);
             }
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
         }
