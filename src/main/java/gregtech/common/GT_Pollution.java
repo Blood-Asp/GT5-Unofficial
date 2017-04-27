@@ -58,6 +58,7 @@ public class GT_Pollution {//TODO REWORK
 	static XSTR tRan = new XSTR();
 
 	public static void onWorldTick(World aWorld, int aTick){
+        if(true)return; //TODO FIX
 		if(!GT_Mod.gregtechproxy.mPollution) return;
 		int aWorldID=aWorld.provider.dimensionId;
 		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
