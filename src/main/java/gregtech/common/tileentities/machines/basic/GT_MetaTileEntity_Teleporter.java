@@ -59,6 +59,10 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Teleporter(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     private static float weightCalculation(Entity aEntity) {
         try {
             if ((aEntity instanceof EntityFX)) {
@@ -158,7 +162,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Teleporter(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Teleporter(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     @Override
