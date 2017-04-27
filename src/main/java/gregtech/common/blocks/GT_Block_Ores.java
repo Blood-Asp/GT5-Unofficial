@@ -47,11 +47,27 @@ public class GT_Block_Ores extends GT_Block_Ores_Abstract {
 
     @Override
     public Materials[] getDroppedDusts() { //Must have 8 entries; can be null.
-        return new Materials[]{Materials.Stone, Materials.Netherrack, Materials.Endstone, Materials.GraniteBlack, Materials.GraniteRed, Materials.Marble, Materials.Basalt, Materials.Stone};
+        return new Materials[]{Materials.Stone, Materials.Netherrack, Materials.Endstone, Materials.GraniteBlack, Materials.GraniteRed, Materials.Marble, Materials.Basalt, null};
     }
 
     @Override
     public ITexture[] getTextureSet() { //Must have 16 entries.
-        return new ITexture[]{new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.netherrack, 0, 0), new GT_CopiedBlockTexture(Blocks.end_stone, 0, 0), new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE), new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE), new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE), new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0)};
+        return new ITexture[]{
+                new GT_CopiedBlockTexture(Blocks.stone, 0, 0),
+                new GT_CopiedBlockTexture(Blocks.netherrack, 0, 0),
+                new GT_CopiedBlockTexture(Blocks.end_stone, 0, 0),
+                new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE),
+                new GT_CopiedBlockTexture(Blocks.stone, 0, 0),
+                new GT_CopiedBlockTexture(Blocks.stone, 0, 0),
+                new GT_CopiedBlockTexture(Blocks.netherrack, 0, 0),
+                new GT_CopiedBlockTexture(Blocks.end_stone, 0, 0),
+                new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE),
+                new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE),
+                new GT_CopiedBlockTexture(Blocks.stone, 0, 0)};
     }
 }

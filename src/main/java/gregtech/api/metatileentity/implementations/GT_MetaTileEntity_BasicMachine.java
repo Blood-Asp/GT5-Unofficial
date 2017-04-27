@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -199,12 +200,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     @Override
     public long getMinimumStoredEU() {
-        return V[mTier] * 16;
+        return V[mTier] * 16L;
     }
 
     @Override
     public long maxEUStore() {
-        return V[mTier] * 64;
+        return V[mTier] * 64L;
     }
 
     @Override
@@ -219,7 +220,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     @Override
     public long maxAmperesIn() {
-        return (mEUt * 2) / V[mTier] + 1;
+        return ((long)mEUt * 2L) / V[mTier] + 1L;
     }
 
     @Override
@@ -426,8 +427,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                         endProcess();
                     }
                     if (mProgresstime > 5) mStuttering = false;
-                    XSTR aXSTR = new XSTR();
-                    if(GT_Mod.gregtechproxy.mAprilFool && aXSTR.nextInt(5000)==0)GT_Utility.sendSoundToPlayers(aBaseMetaTileEntity.getWorld(), GregTech_API.sSoundList.get(5), 10.0F, -1.0F, aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord(),aBaseMetaTileEntity.getZCoord());
+                    //XSTR aXSTR = new XSTR();
+                    //if(GT_Mod.gregtechproxy.mAprilFool && aXSTR.nextInt(5000)==0)GT_Utility.sendSoundToPlayers(aBaseMetaTileEntity.getWorld(), GregTech_API.sSoundList.get(5), 10.0F, -1.0F, aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord(),aBaseMetaTileEntity.getZCoord());
                 } else {
                     if (!mStuttering) {
                         stutterProcess();
@@ -467,7 +468,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
             if (allowToCheckRecipe()) {
                 if (mMaxProgresstime <= 0 && aBaseMetaTileEntity.isAllowedToWork() && (tRemovedOutputFluid || tSucceeded || aBaseMetaTileEntity.hasInventoryBeenModified() || aTick % 600 == 0 || aBaseMetaTileEntity.hasWorkJustBeenEnabled()) && hasEnoughEnergyToCheckRecipe()) {
-                    if (checkRecipe() == 2) {
+                    if (checkRecipe() == FOUND_AND_SUCCESSFULLY_USED_RECIPE) {
                         if (mInventory[3] != null && mInventory[3].stackSize <= 0) mInventory[3] = null;
                         for (int i = getInputSlot(), j = i + mInputSlotCount; i < j; i++)
                             if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
@@ -530,16 +531,46 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         calculateOverclockedNess(aRecipe.mEUt, aRecipe.mDuration);
     }
 
+    /**
+     * Calcualtes overclocked ness using long integers
+     * @param aEUt          - recipe EUt
+     * @param aDuration     - recipe Duration
+     */
     protected void calculateOverclockedNess(int aEUt, int aDuration) {
-        if (aEUt <= 16) {
-            mEUt = aEUt * (1 << (mTier - 1)) * (1 << (mTier - 1));
-            mMaxProgresstime = aDuration / (1 << (mTier - 1));
-        } else {
-            mEUt = aEUt;
+        if(mTier==0){
+            //Long time calculation
+            long xMaxProgresstime = ((long)aDuration)<<1;
+            if(xMaxProgresstime>Integer.MAX_VALUE-1){
+                //make impossible if too long
+                mEUt=Integer.MAX_VALUE-1;
+                mMaxProgresstime=Integer.MAX_VALUE-1;
+            }else{
+                mEUt=aEUt>>2;
+                mMaxProgresstime=(int)xMaxProgresstime;
+            }
+        }else{
+            //Long EUt calculation
+            long xEUt=aEUt;
+            //Isnt too low EUt check?
+            long tempEUt = xEUt<V[1] ? V[1] : xEUt;
+
             mMaxProgresstime = aDuration;
-            while (mEUt <= V[mTier - 1] * mAmperage) {
-                mEUt *= 4;
-                mMaxProgresstime /= 2;
+
+            while (tempEUt <= V[mTier -1] * (long)mAmperage) {
+                tempEUt<<=2;//this actually controls overclocking
+                //xEUt *= 4;//this is effect of everclocking
+                mMaxProgresstime>>=1;//this is effect of overclocking
+                xEUt = mMaxProgresstime==0 ? xEUt>>1 : xEUt<<2;//U know, if the time is less than 1 tick make the machine use 2x less power
+            }
+            if(xEUt>Integer.MAX_VALUE-1){
+                mEUt = Integer.MAX_VALUE-1;
+                mMaxProgresstime = Integer.MAX_VALUE-1;
+            }else{
+                mEUt = (int)xEUt;
+                if(mEUt==0)
+                    mEUt = 1;
+                if(mMaxProgresstime==0)
+                    mMaxProgresstime = 1;//set time to 1 tick
             }
         }
     }
@@ -675,12 +706,17 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public String[] getInfoData() {
         return new String[]{
-                mNEIName,
-                "Progress:", (mProgresstime / 20) + " secs",
-                (mMaxProgresstime / 20) + " secs",
+                EnumChatFormatting.BLUE + mNEIName + EnumChatFormatting.RESET,
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
                 "Stored Energy:",
-                getBaseMetaTileEntity().getStoredEU() + "EU",
-                getBaseMetaTileEntity().getEUCapacity() + "EU"};
+                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
+                EnumChatFormatting.YELLOW + Long.toString(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET +" EU",
+                "Probably uses: " +
+                        EnumChatFormatting.RED + Integer.toString(mEUt) + EnumChatFormatting.RESET + " EU/t at " +
+                        EnumChatFormatting.RED + Integer.toString(mEUt==0?0:mAmperage) + EnumChatFormatting.RESET +" A"
+        };
     }
 
     @Override
@@ -732,6 +768,15 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
      * @return see constants above
      */
     public int checkRecipe() {
+        return checkRecipe(false);
+    }
+
+    /**
+     *
+     * @param skipOC disables OverclockedNess calculation and check - if you do you must implement your own method...
+     * @return
+     */
+    public int checkRecipe(boolean skipOC){
         GT_Recipe_Map tMap = getRecipeList();
         if (tMap == null) return DID_NOT_FIND_RECIPE;
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
@@ -754,7 +799,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
                     mOutputItems[i] = null;
         mOutputFluid = tRecipe.getFluidOutput(0);
-        calculateOverclockedNess(tRecipe);
+        if(!skipOC){
+            calculateOverclockedNess(tRecipe);
+            //In case recipe is too OP for that machine
+            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+        }
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
 

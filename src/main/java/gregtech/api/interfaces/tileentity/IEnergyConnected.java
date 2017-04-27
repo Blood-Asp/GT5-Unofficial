@@ -1,11 +1,14 @@
 package gregtech.api.interfaces.tileentity;
 
 import cofh.api.energy.IEnergyReceiver;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -71,20 +74,41 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                         }
                     } else if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
                         ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        int rfOut = (int) (aVoltage * GregTech_API.mEUtoRF / 100);
+                        int rfOut = GT_Utility.safeInt(aVoltage * GregTech_API.mEUtoRF / 100);
                         if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
                             ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, false);
                             rUsedAmperes++;
                         }
-                        if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions && ((IEnergyReceiver) tTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600) {
-                            if (rfOut > 32 * GregTech_API.mEUtoRF / 100) {
+                        if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions && ((IEnergyReceiver) tTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600L) {
+                            if (rfOut > 32L * GregTech_API.mEUtoRF / 100L) {
                                 int aExplosionPower = rfOut;
-                                float tStrength = aExplosionPower < V[0] ? 1.0F : aExplosionPower < V[1] ? 2.0F : aExplosionPower < V[2] ? 3.0F : aExplosionPower < V[3] ? 4.0F : aExplosionPower < V[4] ? 5.0F : aExplosionPower < V[4] * 2 ? 6.0F : aExplosionPower < V[5] ? 7.0F : aExplosionPower < V[6] ? 8.0F : aExplosionPower < V[7] ? 9.0F : 10.0F;
+                                float tStrength =
+                                    aExplosionPower < V[0] ? 1.0F :
+                                    aExplosionPower < V[1] ? 2.0F :
+                                    aExplosionPower < V[2] ? 3.0F :
+                                    aExplosionPower < V[3] ? 4.0F :
+                                    aExplosionPower < V[4] ? 5.0F :
+                                    aExplosionPower < V[4] * 2 ? 6.0F :
+                                    aExplosionPower < V[5] ? 7.0F :
+                                    aExplosionPower < V[6] ? 8.0F :
+                                    aExplosionPower < V[7] ? 9.0F :
+                                    aExplosionPower < V[8] ? 10.0F :
+                                    aExplosionPower < V[8] * 2 ? 11.0F :
+                                    aExplosionPower < V[9] ? 12.0F :
+                                    aExplosionPower < V[10] ? 13.0F :
+                                    aExplosionPower < V[11] ? 14.0F :
+                                    aExplosionPower < V[12] ? 15.0F :
+                                    aExplosionPower < V[12] * 2 ? 16.0F :
+                                    aExplosionPower < V[13] ? 17.0F :
+                                    aExplosionPower < V[14] ? 18.0F :
+                                    aExplosionPower < V[15] ? 19.0F : 20.0F;
                                 int tX = tTileEntity.xCoord, tY = tTileEntity.yCoord, tZ = tTileEntity.zCoord;
                                 World tWorld = tTileEntity.getWorldObj();
                                 GT_Utility.sendSoundToPlayers(tWorld, GregTech_API.sSoundList.get(209), 1.0F, -1, tX, tY, tZ);
                                 tWorld.setBlock(tX, tY, tZ, Blocks.air);
                                 if (GregTech_API.sMachineExplosions)
+                                    if(GT_Mod.gregtechproxy.mPollution)
+                                        GT_Pollution.addPollution(new ChunkPosition(tX, tY, tZ), 100000);
                                     tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
                             }
                         }

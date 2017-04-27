@@ -17,6 +17,7 @@ import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Client;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -38,9 +39,11 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public final Materials mMaterial;
     public final long mCableLossPerMeter, mAmperage, mVoltage;
     public final boolean mInsulated, mCanShock;
-    public long mTransferredAmperage = 0, mTransferredAmperageLast20 = 0, mTransferredVoltageLast20 = 0;
+    public int mTransferredAmperage = 0, mTransferredAmperageLast20 = 0,mTransferredAmperageLast20OK=0,mTransferredAmperageOK=0;
+    public long mTransferredVoltageLast20 = 0, mTransferredVoltage = 0,mTransferredVoltageLast20OK=0,mTransferredVoltageOK=0;
     public long mRestRF;
     public short mOverheat;
+    public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -80,13 +83,17 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], Dyes.getModulation(aColorIndex, mMaterial.mRGBa) )};
         if (aConnected) {
             float tThickNess = getThickNess();
-            if (tThickNess < 0.37F)
+            if (tThickNess < 0.124F)
+                return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+            if (tThickNess < 0.374F)//0.375 x1
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_TINY, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
-            if (tThickNess < 0.49F)
+            if (tThickNess < 0.499F)//0.500 x2
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_SMALL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
-            if (tThickNess < 0.74F)
+            if (tThickNess < 0.624F)//0.625 x4
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
-            if (tThickNess < 0.99F)
+            if (tThickNess < 0.749F)//0.750 x8
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM_PLUS, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+            if (tThickNess < 0.874F)//0.825 x12
                 return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_LARGE, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
             return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_HUGE, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
         }
@@ -101,8 +108,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-        if (!mCanShock) return super.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
-        return AxisAlignedBB.getBoundingBox(aX + 0.125D, aY + 0.125D, aZ + 0.125D, aX + 0.875D, aY + 0.875D, aZ + 0.875D);
+        //if (!mCanShock) return super.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+        return AxisAlignedBB.getBoundingBox(aX + 0.0625D, aY + 0.0625D, aZ + 0.0625D, aX + 0.9375D, aY + 0.9375D, aZ + 0.9375D);
     }
 
     @Override
@@ -175,7 +182,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                         }
                     } else if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
                         ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        int rfOut = (int) (aVoltage * GregTech_API.mEUtoRF / 100);
+                        long rfOUT = aVoltage * GregTech_API.mEUtoRF / 100;
+                        int  rfOut = rfOUT>Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)rfOUT;
                         if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
                             ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, false);
                             rUsedAmperes++;
@@ -195,24 +203,33 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
+        mTransferredVoltage=(Math.max(mTransferredVoltage,aVoltage));
         mTransferredAmperage += rUsedAmperes;
-        mTransferredVoltageLast20 = Math.max(mTransferredVoltageLast20, aVoltage);
+        mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
         if (aVoltage > mVoltage || mTransferredAmperage > mAmperage) {
-        	if(mOverheat>GT_Mod.gregtechproxy.mWireHeatingTicks * 100){
-            getBaseMetaTileEntity().setToFire();}else{mOverheat +=100;}
+            if(mOverheat>mMaxOverheat)
+                getBaseMetaTileEntity().setToFire();
+            else
+                mOverheat +=100;
             return aAmperage;
         }
         return rUsedAmperes;
+        //Always return amount of used amperes, used all on overheat
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
+            mTransferredVoltageOK=mTransferredVoltage;
+            mTransferredVoltage=0;
+            mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
             if(mOverheat>0)mOverheat--;
             if (aTick % 20 == 0) {
+                mTransferredVoltageLast20OK=mTransferredVoltageLast20;
                 mTransferredVoltageLast20 = 0;
+                mTransferredAmperageLast20OK=mTransferredAmperageLast20;
                 mTransferredAmperageLast20 = 0;
                 mConnections = 0;
                 for (byte i = 0, j = 0; i < 6; i++) {
@@ -251,7 +268,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
-        }
+        }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
 
     @Override
@@ -275,6 +292,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public float getThickNess() {
+        if(GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
     }
 
@@ -286,5 +304,29 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         //
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
+                "Heat: "+
+                        EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET,
+                "Max Load (1t):",
+                EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
+                        EnumChatFormatting.YELLOW + Long.toString(mAmperage) + EnumChatFormatting.RESET +" A",
+                "Max EU/p (1t):",
+                EnumChatFormatting.GREEN + Long.toString(mTransferredVoltageOK) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(mVoltage) + EnumChatFormatting.RESET +" EU",
+                "Max Load (20t): "+
+                    EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageLast20OK) + EnumChatFormatting.RESET +" A",
+                "Max EU/p (20t): "+
+                    EnumChatFormatting.GREEN + Long.toString(mTransferredVoltageLast20OK) + EnumChatFormatting.RESET +" EU"
+        };
     }
 }

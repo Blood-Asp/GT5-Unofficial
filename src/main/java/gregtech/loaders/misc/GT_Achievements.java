@@ -15,6 +15,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,7 @@ public class GT_Achievements {
     public static List<Materials> oreList = new ArrayList<Materials>();
     public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
+    public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
     public ConcurrentHashMap<String, Boolean> issuedAchievements;
     public int adjX = 5;
@@ -53,28 +55,36 @@ public class GT_Achievements {
                 if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
                     GT_Log.out.println("achievement." + oreList.get(i).mName + "=Find " + oreList.get(i).mName + " Ore");
 
-                    StringBuilder dimensions = new StringBuilder();
-                    boolean isFirst = true;
-                    if (oreStats.get(i)[3] == 1) {
-                        dimensions.append("Overworld");
-                        isFirst = false;
-                    }
-                    if (oreStats.get(i)[4] == 1) {
-                        if (!isFirst) dimensions.append("/");
-                        dimensions.append("Nether");
-                        isFirst = false;
-                    }
-                    if (oreStats.get(i)[5] == 1) {
-                        if (!isFirst) dimensions.append("/");
-                        dimensions.append("End");
-                        isFirst = false;
-                    }
-                    GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
+                StringBuilder dimensions = new StringBuilder();
+                boolean isFirst = true;
+                if(oreStats.get(i)[3] == 1) {
+                    dimensions.append("Overworld");
+                    isFirst = false;
                 }
-                registerOreAchievement(oreList.get(i));
+                if(oreStats.get(i)[4] == 1) {
+                    if(!isFirst) dimensions.append("/");
+                    dimensions.append("Nether");
+                    isFirst = false;
+                }
+                if(oreStats.get(i)[5] == 1) {
+                    if(!isFirst) dimensions.append("/");
+                    dimensions.append("End");
+                    isFirst = false;
+                }
+                GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
             }
+            //if(oreList.get(i)==null)
+            //    GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
+            //if(oreList.get(i).name()==null)
+            //    GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
+            //else
+                registerOreAchievement(oreList.get(i));
         }
-        registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.PICKAXE, 1, Materials.Flint, Materials.Wood, null), "", false);
+
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList)
+            registerAssAchievement(recipe);
+
+        registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(2, 1, Materials.Flint, Materials.Wood, null), "", false);
         registerAchievement("crops", -4, 0, GT_ModHandler.getIC2Item("crop", 1L), "flintpick", false);
         registerAchievement("havestlead", -4, 2, ItemList.Crop_Drop_Plumbilia.get(1, new Object[]{}), "crops", false);
         registerAchievement("havestcopper", -2, 1, ItemList.Crop_Drop_Coppon.get(1, new Object[]{}), "crops", false);
@@ -100,9 +110,9 @@ public class GT_Achievements {
         registerAchievement("washing", -2, 6, GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Iron, 1L), "crushed", false);
         registerAchievement("spinit", -4, 6, GT_OreDictUnificator.get(OrePrefixes.crushedCentrifuged, Materials.Redstone, 1L), "crushed", false);
         if(!GregTech_API.mIC2Classic){
-        registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
-        registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
-        registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
+        	registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
+        	registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
+        	registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
         }
         registerAchievement("bronze", 2, 0, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bronze, 1L), "flintpick", false);
         registerAchievement("simplyeco", 2, 2, ItemList.Machine_Bronze_Boiler_Solar.get(1, new Object[]{}), "bronze", false);
@@ -221,6 +231,7 @@ public class GT_Achievements {
     public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
         if (aMaterial != Materials._NULL) {
             oreList.add(aMaterial);
+            //if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
         }
         oreStats.add(new Integer[]{min, max, chance, overworld ? 1 : 0, nether ? 1 : 0, end ? 1 : 0});
     }
@@ -265,6 +276,15 @@ public class GT_Achievements {
             oreReg++;
             return registerAchievement(aMaterial.mName, -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
                     aMaterial.mMetaItemSubID), AchievementList.openInventory, false);
+        }
+        return null;
+    }
+
+    public Achievement registerAssAchievement(GT_Recipe recipe) {
+        if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
+            assReg++;
+            return registerAchievement(recipe.getOutput(0).getUnlocalizedName(), -(11 + assReg % 5), ((assReg) / 5) - 8, recipe.getOutput(0)
+                    , AchievementList.openInventory, false);
         }
         return null;
     }
@@ -352,7 +372,7 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
-        if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}
+        //if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}//TODO REALLY BLOODASP, REALLY
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
@@ -599,6 +619,13 @@ public class GT_Achievements {
             issueAchievement(player, "newfuel");
         }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
-            issueAchievement(player, "buildQArmor");}
+            issueAchievement(player, "buildQArmor");
+		}
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+            if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
+                issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
+                recipe.mHidden=false;
+            }
+        }
     }
 }

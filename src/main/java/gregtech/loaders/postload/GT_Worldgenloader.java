@@ -1,6 +1,6 @@
 package gregtech.loaders.postload;
 
-import bloodasp.galacticgreg.GT_Worldgenerator_Space;
+//import bloodasp.galacticgreg.GT_Worldgenerator_Space;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -17,9 +17,9 @@ public class GT_Worldgenloader
         boolean tPFAA = (GregTech_API.sWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
 
         new GT_Worldgenerator();
-        if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
-            new GT_Worldgenerator_Space();
-        }
+        //if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
+        //    new GT_Worldgenerator_Space();
+        //}
 
         new GT_Worldgen_Stone("overworld.stone.blackgranite.tiny", true, GregTech_API.sBlockGranites, 0, 0, 1, 50, 48, 0, 120, null, false);
         new GT_Worldgen_Stone("overworld.stone.blackgranite.small", true, GregTech_API.sBlockGranites, 0, 0, 1, 100, 96, 0, 120, null, false);

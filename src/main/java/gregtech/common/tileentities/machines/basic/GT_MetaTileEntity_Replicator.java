@@ -41,8 +41,13 @@ public class GT_MetaTileEntity_Replicator
                 Materials tMaterial = (Materials) Element.get(Behaviour_DataOrb.getDataName(tDataOrb)).mLinkedMaterials.get(0);
                 long tMass = tMaterial.getMass();
                 if ((tFluid.amount >= tMass) && (tMass > 0L)) {
-                    this.mEUt = ((int) gregtech.api.enums.GT_Values.V[this.mTier]);
-                    this.mMaxProgresstime = ((int) (tMass * 512L / (1 << this.mTier - 1)));
+
+                    this.mEUt = GT_Utility.safeInt(gregtech.api.enums.GT_Values.V[this.mTier],1);
+                    this.mMaxProgresstime = GT_Utility.safeInt(tMass * 1024L / (1 << this.mTier),1);
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 || mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+
+
                     if ((this.mOutputItems[0] = GT_OreDictUnificator.get(OrePrefixes.dust, tMaterial, 1L)) == null) {
                         if ((this.mOutputItems[0] = GT_OreDictUnificator.get(OrePrefixes.cell, tMaterial, 1L)) != null) {
                             if ((this.mOutputFluid = GT_Utility.getFluidForFilledItem(this.mOutputItems[0], true)) == null) {

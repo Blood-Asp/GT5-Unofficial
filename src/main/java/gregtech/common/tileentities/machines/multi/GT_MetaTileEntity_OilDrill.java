@@ -6,6 +6,8 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
@@ -13,12 +15,13 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {//TODO REWORK
 
     private boolean completedCycle = false;
 
@@ -39,7 +42,8 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
                 "1x3x1 Steel Frame Boxes (Each Steel pillar side and on top)",
                 "1x Output Hatch (One of base casings)",
                 "1x Maintenance Hatch (One of base casings)",
-                "1x Energy Hatch (One of base casings)"};
+                "1x Energy Hatch (One of base casings)",
+                "Also check the seismic prospector..."};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -73,45 +77,40 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
                 }
             }
         }
-        FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), true);
-        if (tFluid == null) {
-        	stopMachine();
-            return false;
+        //Output fluid
+        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
+        if (tFluid == null){
+            extractionSpeed=0;
+            stopMachine();
+            return false;//impossible
         }
-        if (getYOfPumpHead() > 0 && getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
+        if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
             if (completedCycle) {
                 moveOneDown();
             }
             tFluid = null;
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
-        } else if (tFluid.amount < 5000) {
-        	stopMachine();
-            return false;
+        } else if (tFluid.amount == 0) {//no fluid remaining
+            extractionSpeed=0;
+	        stopMachine();
+            return false;//stops processing??
         } else {
-            tFluid.amount = tFluid.amount / 5000;
+            int minExtraction= (int)Math.pow((float)GT_Utility.getTier(getMaxInputVoltage()),3F);//tier^3
+            if(tFluid.amount>minExtraction)
+                tFluid.amount= Math.max(minExtraction,Math.min(tFluid.amount/50000,500));
+            extractionSpeed=tFluid.amount;
+            GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,extractionSpeed);
         }
-        long tVoltage = getMaxInputVoltage();
-        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        int tEU = 24;
-        int tDuration = 160;
-        if (tEU <= 16) {
-            this.mEUt = (tEU * (1 << tTier - 1) * (1 << tTier - 1));
-            this.mMaxProgresstime = (tDuration / (1 << tTier - 1));
-        } else {
-            this.mEUt = tEU;
-            this.mMaxProgresstime = tDuration;
-            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                this.mEUt *= 4;
-                this.mMaxProgresstime /= 2;
-            }
-        }
+        calculateOverclockedNessMulti(24, 160, 1, getMaxInputVoltage());
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
         if (this.mEUt > 0) {
             this.mEUt = (-this.mEUt);
         }
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
         this.mOutputFluids = new FluidStack[]{tFluid};
         return true;
     }
@@ -124,7 +123,7 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         int xDir = ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ;
         int yHead = getYOfPumpHead();
-        if (yHead < 1) {
+        if (yHead <= 0) {
             return false;
         }
         if (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord() + xDir, yHead - 1, getBaseMetaTileEntity().getZCoord() + zDir) == Blocks.bedrock) {
@@ -231,4 +230,41 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         return new GT_MetaTileEntity_OilDrill(this.mName);
     }
 
+    @Override
+    public String[] getInfoData() {
+        int mPollutionReduction=0;
+        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
+            }
+        }
+
+        long storedEnergy=0;
+        long maxEnergy=0;
+        for(GT_MetaTileEntity_Hatch_Energy tHatch : mEnergyHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                storedEnergy+=tHatch.getBaseMetaTileEntity().getStoredEU();
+                maxEnergy+=tHatch.getBaseMetaTileEntity().getEUCapacity();
+            }
+        }
+
+        return new String[]{
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
+                "Stored Energy:",
+                EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+
+                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
+                "Probably uses: "+
+                        EnumChatFormatting.RED + Integer.toString(-mEUt) + EnumChatFormatting.RESET + " EU/t",
+                "Maximum total power (to all Energy Hatches, not single ones): ",
+                EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t * 2A",
+                "Problems: "+
+                        EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
+                        " Efficiency: "+
+                        EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %",
+                "Extraction this cycle: "+ EnumChatFormatting.GOLD + extractionSpeed + EnumChatFormatting.RESET+" L"
+        };
+    }
 }

@@ -48,17 +48,19 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public String[] getDescription() {
-    	if(mAuto)return new String[]{mDescription,"4 Ducttape, 2 Lubricant Cells","4 Steel Screws, 2 Adv Circuits","For each autorepair"};
+    	if(mAuto)return new String[]{mDescription, "4 Duct tape, 2 Lubricant Cells","4 Steel Screws, 2 Adv. Circuits","For each auto-repair"};
         return new String[]{mDescription, "Cannot be shared between Multiblocks!"};
     }
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
+        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_IDLE)};
         return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
+        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE)};
         return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DUCTTAPE)};
     }
 
@@ -111,56 +113,66 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     	if(mAuto) return new GT_GUIContainer_2by2(aPlayerInventory, aBaseMetaTileEntity, getLocalName());
         return new GT_GUIContainer_MaintenanceHatch(aPlayerInventory, aBaseMetaTileEntity);
     }
-    
-    public boolean autoMaintainance() {
-        		boolean tSuccess = true;
-        		ItemStack[] mInputs = new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
-        		List<ItemStack> aInputs = Arrays.asList(mInventory);
-                if (mInputs.length > 0 && aInputs == null) tSuccess = false;
-                int amt = 0;
-                for (ItemStack tStack : mInputs) {
-                    if (tStack != null) {
-                        amt = tStack.stackSize;
-                        boolean temp = true;
-                        for (ItemStack aStack : aInputs) {
-                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if(aBaseMetaTileEntity.isServerSide() && mAuto && aTick % 100L ==0L){
+            aBaseMetaTileEntity.setActive(!isRecipeInputEqual(false));
+        }
+    }
+
+    public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess) {
+        ItemStack[] mInputs=new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),
+                GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),
+                GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),
+                GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
+
+        int amt;
+
+        for (ItemStack tStack : mInputs) {
+            if (tStack != null) {
+                amt = tStack.stackSize;
+                boolean temp = true;
+                for (ItemStack aStack : mInventory) {
+                    if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                        amt -= aStack.stackSize;
+                        if (amt < 1) {
+                            temp = false;
+                            break;
+                        }
+                    }
+                }
+                if (temp) return false;
+            }
+        }
+
+        if (aDecreaseStacksizeBySuccess) {
+            for (ItemStack tStack : mInputs) {
+                if (tStack != null) {
+                    amt = tStack.stackSize;
+                    for (ItemStack aStack : mInventory) {
+                        if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                            if (aStack.stackSize < amt){
                                 amt -= aStack.stackSize;
-                                if (amt < 1) {
-                                    temp = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if (temp) tSuccess = false;
-                    }
-                }
-                if(tSuccess){
-                for (ItemStack tStack : mInputs) {
-                    if (tStack != null) {
-                        amt = tStack.stackSize;
-                        for (ItemStack aStack : aInputs) {
-                            if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
-                                if (aStack.stackSize < amt){
-                                    amt -= aStack.stackSize;
-                                    aStack.stackSize = 0;
-                                }else{
-                                    aStack.stackSize -= amt;
-                                    amt = 0;
-                                    break;
-                                }
+                                aStack.stackSize = 0;
+                            }else{
+                                aStack.stackSize -= amt;
+                                amt = 0;
+                                break;
                             }
                         }
                     }
                 }
-                this.mCrowbar = true;
-                this.mHardHammer = true;
-                this.mScrewdriver = true;
-                this.mSoftHammer = true;
-                this.mSolderingTool = true;
-                this.mWrench = true;  
-                return true;
-                }
-                return false;
+            }
+            this.mCrowbar = true;
+            this.mHardHammer = true;
+            this.mScrewdriver = true;
+            this.mSoftHammer = true;
+            this.mSolderingTool = true;
+            this.mWrench = true;
+        }
+        return true;
     }
 
     public void onToolClick(ItemStack aStack, EntityLivingBase aPlayer) {

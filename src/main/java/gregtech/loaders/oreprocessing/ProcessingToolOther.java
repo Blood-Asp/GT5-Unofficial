@@ -6,7 +6,7 @@ import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingToolOther implements gregtech.api.interfaces.IOreRecipeRegistrator {
+public class ProcessingToolOther implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE???
     public ProcessingToolOther() {
         OrePrefixes.toolHeadHammer.add(this);
     }

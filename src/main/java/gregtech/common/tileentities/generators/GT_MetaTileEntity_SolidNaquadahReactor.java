@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_SolidNaquadahReactor
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 40 + mTier * 10);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 80);
     }
 
     public ITexture[] getFront(byte aColor) {

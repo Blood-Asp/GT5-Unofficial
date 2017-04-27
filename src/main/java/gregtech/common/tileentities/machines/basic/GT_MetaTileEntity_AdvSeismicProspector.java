@@ -34,6 +34,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_BasicMachine {    
     boolean ready = false;
     int radius;
@@ -156,6 +161,12 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 			// TODO: handle exception
 		}        
     }
+
+    //private void putOil(int x, int z, HashMap<String, Integer> aOils) {//TODO Old method??
+    //    FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(),x,z,false,0);
+    //    if (tFluid.amount / 5000 > 0)
+    //        aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
+    //}
 
     private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {        
         int tLeftXBound = this.getBaseMetaTileEntity().getXCoord() - radius;

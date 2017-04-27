@@ -13,6 +13,6 @@ public class GT_Material_Casings
     }
 
     public boolean isOpaque() {
-        return false;
+        return true;
     }
 }

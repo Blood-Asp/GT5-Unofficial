@@ -2,6 +2,7 @@ package gregtech.api.metatileentity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -9,6 +10,7 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -20,6 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -167,7 +170,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
         	tCovered = true;
         }
         //System.out.println("Cover: "+mBaseMetaTileEntity.getCoverIDAtSide(aSide));
-        //toDo: filter cover ids that actually protect against temperature (rubber/plastic maybe?)
+        //toDo: filter cover ids that actually protect against temperature (rubber/plastic maybe?, more like asbestos)
         return tCovered;
     }
 
@@ -640,11 +643,32 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
 
     @Override
     public void doExplosion(long aExplosionPower) {
-        float tStrength = aExplosionPower < V[0] ? 1.0F : aExplosionPower < V[1] ? 2.0F : aExplosionPower < V[2] ? 3.0F : aExplosionPower < V[3] ? 4.0F : aExplosionPower < V[4] ? 5.0F : aExplosionPower < V[4] * 2 ? 6.0F : aExplosionPower < V[5] ? 7.0F : aExplosionPower < V[6] ? 8.0F : aExplosionPower < V[7] ? 9.0F : 10.0F;
+        float tStrength =
+            aExplosionPower < V[0] ? 1.0F :
+            aExplosionPower < V[1] ? 2.0F :
+            aExplosionPower < V[2] ? 3.0F :
+            aExplosionPower < V[3] ? 4.0F :
+            aExplosionPower < V[4] ? 5.0F :
+            aExplosionPower < V[4] * 2 ? 6.0F :
+            aExplosionPower < V[5] ? 7.0F :
+            aExplosionPower < V[6] ? 8.0F :
+            aExplosionPower < V[7] ? 9.0F :
+            aExplosionPower < V[8] ? 10.0F :
+            aExplosionPower < V[8] * 2 ? 11.0F :
+            aExplosionPower < V[9] ? 12.0F :
+            aExplosionPower < V[10] ? 13.0F :
+            aExplosionPower < V[11] ? 14.0F :
+            aExplosionPower < V[12] ? 15.0F :
+            aExplosionPower < V[12] * 2 ? 16.0F :
+            aExplosionPower < V[13] ? 17.0F :
+            aExplosionPower < V[14] ? 18.0F :
+            aExplosionPower < V[15] ? 19.0F : 20.0F;
         int tX = getBaseMetaTileEntity().getXCoord(), tY = getBaseMetaTileEntity().getYCoord(), tZ = getBaseMetaTileEntity().getZCoord();
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
         if (GregTech_API.sMachineExplosions)
+            if(GT_Mod.gregtechproxy.mPollution)
+                GT_Pollution.addPollution(new ChunkPosition(tX, tY, tZ), 100000);
             tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
     }
 

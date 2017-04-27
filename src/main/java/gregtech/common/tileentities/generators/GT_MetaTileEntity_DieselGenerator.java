@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.generators;
 
+import com.dreammaster.main.MainRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
@@ -61,6 +62,15 @@ public class GT_MetaTileEntity_DieselGenerator
             rValue = Math.max(rValue, GameRegistry.getFuelValue(aStack) * 3);
         }
         return rValue;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if(aTick%100==0 && mFluid!=null && mFluid.amount>this.getCapacity()){
+            MainRegistry.Logger.error("Dupe Abuse: "+aBaseMetaTileEntity.getOwnerName()+" Coords: "+aBaseMetaTileEntity.getXCoord()+" "+aBaseMetaTileEntity.getYCoord()+" "+aBaseMetaTileEntity.getZCoord(),aBaseMetaTileEntity);
+            aBaseMetaTileEntity.setToFire();
+        }
+        super.onPostTick(aBaseMetaTileEntity, aTick);
     }
 
     public ITexture[] getFront(byte aColor) {

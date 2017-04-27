@@ -40,7 +40,7 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
             if ((aTimer % 600 == 0) && !GT_SpawnEventHandler.mobReps.contains(tCoords)) {
                 GT_SpawnEventHandler.mobReps.add(tCoords);
             }
-            if (aBaseMetaTileEntity.isUniversalEnergyStored(getMinimumStoredEU()) && aBaseMetaTileEntity.decreaseStoredEnergyUnits(1 << (this.mTier * 2), false)) {
+            if (aBaseMetaTileEntity.isUniversalEnergyStored(getMinimumStoredEU()) && aBaseMetaTileEntity.decreaseStoredEnergyUnits(1L << (this.mTier * 2), false)) {
                 mRange = 16 + (48 * mTier);
             } else {
                 mRange = 4 + (12 * mTier);
@@ -87,12 +87,12 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
 
     @Override
     public long getMinimumStoredEU() {
-        return 512;
+        return 512L;
     }
 
     @Override
     public long maxEUStore() {
-        return 512 + V[mTier] * 50;
+        return 512L + V[mTier] * 50;
     }
 
     @Override

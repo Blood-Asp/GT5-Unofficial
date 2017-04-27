@@ -9,14 +9,18 @@ import codechicken.lib.vec.Rotation;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
+import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
@@ -27,9 +31,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URL;
@@ -69,12 +76,17 @@ public class GT_Client extends GT_Proxy
     private final List mMoltenNegB;
     private final List mMoltenNegA = Arrays.asList(new Object[0]);
     private long mAnimationTick;
+    /**This is the place to def the value used below**/
+    private long afterSomeTime;
     private boolean mAnimationDirection;
-    
+    private boolean isFirstClientPlayerTick;
+    private String mMessage;
     public GT_Client() {
-    	mCapeRenderer = new GT_CapeRenderer(mCapeList);
+        mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
         mAnimationDirection = false;
+        isFirstClientPlayerTick = true;
+        mMessage = "";
         mPosR = Arrays.asList(new Materials[]{
                 /**Materials.ChargedCertusQuartz, **/Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
                 Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone
@@ -182,6 +194,7 @@ public class GT_Client extends GT_Proxy
             String tName = arr$[i$];
             mCapeList.add(tName.toLowerCase());
         }
+
         (new Thread(this)).start();
     }
 
@@ -206,7 +219,9 @@ public class GT_Client extends GT_Proxy
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
                     i++;
                 } while (true);
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+            } catch (Throwable e) {
+                e.printStackTrace(GT_Log.err);
+            }
 
 
 //        super.onPostLoad();
@@ -222,7 +237,7 @@ public class GT_Client extends GT_Proxy
 
     public void run() {
         try {
-            GT_Log.out.println("Skip: GT_Mod: Downloading Cape List.");
+            GT_Log.out.println("GT_Mod: Downloading Cape List.");
             @SuppressWarnings("resource")
             Scanner tScanner = new Scanner(new URL("http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt").openStream());
             while (tScanner.hasNextLine()) {
@@ -233,15 +248,35 @@ public class GT_Client extends GT_Proxy
             }
         } catch (Throwable e) {
         }
-        /**try {
-            GT_Log.out.println("Skip: GT_Mod: Downloading News.");
+        try {
+            GT_Log.out.println("GT New Horizons: Downloading Cape List.");
+                 @SuppressWarnings("resource")
+                 Scanner tScanner = new Scanner(new URL("https://raw.githubusercontent.com/GTNewHorizons/CustomGTCapeHook-Cape-List/master/capes.txt").openStream());
+                 while (tScanner.hasNextLine()) {
+                     String tName = tScanner.nextLine();
+                     if (tName.contains(":")) {
+                     int splitLocation = tName.indexOf(":");
+                     String username = tName.substring(0, splitLocation);
+                     if (!this.mCapeList.contains(username.toLowerCase()) && !this.mCapeList.contains(tName.toLowerCase())) {
+                     this.mCapeList.add(tName.toLowerCase());
+                 }
+                 } else {
+                     if (!this.mCapeList.contains(tName.toLowerCase())) {
+                     this.mCapeList.add(tName.toLowerCase());
+                     }
+                 }
+              }
+                 } catch (Throwable e) {
+            }
+        try {
+            GT_Log.out.println("GT_Mod: Downloading News.");
             @SuppressWarnings("resource")
             Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/message.txt").openStream());
             while (tScanner.hasNextLine()) {
                 this.mMessage = (this.mMessage + tScanner.nextLine() + " ");
             }
         } catch (Throwable e) {
-        }**/
+        }
     }
     
     @SubscribeEvent
@@ -252,6 +287,16 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
         if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
+            afterSomeTime++;
+            if(afterSomeTime>=100L){
+                afterSomeTime=0;
+                StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
+                try {
+                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    }
+                }catch (Exception e){}
+            }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
                 if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix
@@ -327,6 +372,12 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
+            if(changeDetected>0)changeDetected--;
+            int newHideValue=shouldHeldItemHideThings();
+            if(newHideValue!=hideValue){
+                hideValue=newHideValue;
+                changeDetected=5;
+            }
             mAnimationTick++;
             if (mAnimationTick % 50L == 0L)
                 {mAnimationDirection = !mAnimationDirection;}
@@ -492,5 +543,28 @@ public class GT_Client extends GT_Proxy
             aWorld.playRecord(tString.substring(10, tString.length()), (int) aX, (int) aY, (int) aZ);
         else
             aWorld.playSound(aX, aY, aZ, tString, 3F, tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F, false);
+    }
+
+    public static int hideValue=0;
+    public static int changeDetected=0;
+
+    private static int shouldHeldItemHideThings() {
+        try {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            if (player == null) return 0;
+            ItemStack held = player.getCurrentEquippedItem();
+            if (held == null) return 0;
+            int[] ids = OreDictionary.getOreIDs(held);
+            int hide = 0;
+            for (int i : ids) {
+                if (OreDictionary.getOreName(i).equals("craftingToolSolderingIron")) {
+                    hide |= 0x1;
+                    break;
+                }
+            }
+            return hide;
+        }catch(Exception e){
+            return 0;
+        }
     }
 }

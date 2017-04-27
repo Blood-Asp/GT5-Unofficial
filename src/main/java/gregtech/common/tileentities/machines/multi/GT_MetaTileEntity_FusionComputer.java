@@ -19,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -127,6 +128,18 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
             return true;
         }
         return false;
+    }
+
+    private boolean checkTier(byte tier, ArrayList<GT_MetaTileEntity_Hatch> list) {
+        if (list != null) {
+            int list_sS=list.size();
+            for (int i = 0; i < list_sS; i++) {
+                if (list.get(i).mTier < tier) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private boolean checkCoils(int aX, int aY, int aZ) {
@@ -258,14 +271,14 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                 return false;
             }
             if (mRunningOnLoad || tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
-            this.mLastRecipe = tRecipe;
-            this.mEUt = (this.mLastRecipe.mEUt * overclock(this.mLastRecipe.mSpecialValue));
-            this.mMaxProgresstime = this.mLastRecipe.mDuration / overclock(this.mLastRecipe.mSpecialValue);
-            this.mEfficiencyIncrease = 10000;
-            this.mOutputFluids = this.mLastRecipe.mFluidOutputs;
-            turnCasingActive(true);
-            mRunningOnLoad = false;
-            return true;
+                this.mLastRecipe = tRecipe;
+                this.mEUt = (this.mLastRecipe.mEUt * overclock(this.mLastRecipe.mSpecialValue));
+                this.mMaxProgresstime = this.mLastRecipe.mDuration / overclock(this.mLastRecipe.mSpecialValue);
+                this.mEfficiencyIncrease = 10000;
+                this.mOutputFluids = this.mLastRecipe.mFluidOutputs;
+                turnCasingActive(true);
+                mRunningOnLoad = false;
+                return true;
             }
         }
         return false;
@@ -355,11 +368,11 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                                 if (aBaseMetaTileEntity.isAllowedToWork()) {
                                     this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
                                     if (checkRecipe(mInventory[1])) {
-                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue) {
+                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue - this.mEUt) {
                                             mMaxProgresstime = 0;
                                             turnCasingActive(false);
                                         }
-                                        aBaseMetaTileEntity.decreaseStoredEnergyUnits(this.mLastRecipe.mSpecialValue, true);
+                                        aBaseMetaTileEntity.decreaseStoredEnergyUnits(this.mLastRecipe.mSpecialValue - this.mEUt, true);
                                     }
                                 }
                                 if (mMaxProgresstime <= 0)
@@ -424,7 +437,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     @Override
     public String[] getInfoData() {
-        String tier = tier() == 6 ? "I" : tier() == 7 ? "II" : "III";
+        String tier = tier() == 6 ? EnumChatFormatting.RED+"I"+EnumChatFormatting.RESET : tier() == 7 ? EnumChatFormatting.YELLOW+"II"+EnumChatFormatting.RESET : EnumChatFormatting.GRAY+"III"+EnumChatFormatting.RESET;
         float plasmaOut = 0;
         int powerRequired = 0;
         if (this.mLastRecipe != null) {
@@ -435,10 +448,10 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         }
 
         return new String[]{
-                "Fusion Reactor MK "+tier,
-                "EU Required: "+powerRequired+"EU/t",
-                "Stored EU: "+mEUStore+" / "+maxEUStore(),
-                "Plasma Output: "+plasmaOut+"L/t"};
+                EnumChatFormatting.BLUE+"Fusion Reactor MK "+EnumChatFormatting.RESET+tier,
+                "EU Required: "+EnumChatFormatting.RED+powerRequired+EnumChatFormatting.RESET+"EU/t",
+                "Stored EU: "+EnumChatFormatting.GREEN+mEUStore+EnumChatFormatting.RESET+" EU / "+EnumChatFormatting.YELLOW+maxEUStore()+EnumChatFormatting.RESET+" EU",
+                "Plasma Output: "+EnumChatFormatting.YELLOW+plasmaOut+EnumChatFormatting.RESET+"L/t"};
     }
 
     @Override

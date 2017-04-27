@@ -46,6 +46,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
         mGUIParameterA = (byte) aGUIParameterA;
         mGUIParameterB = (byte) aGUIParameterB;
 
+
+        //TODO: CHECK
         if (aRecipe != null) {
             for (int i = 3; i < aRecipe.length; i++) {
                 if (aRecipe[i] == X.CIRCUIT) {
@@ -74,6 +76,13 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 6:
                         case 7:
                         case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
                         	aRecipe[i] = Ic2Items.reinforcedGlass;
                         	break;
                         default:
@@ -111,7 +120,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.plate.get(Materials.TungstenSteel);
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
                             break;
                     }
                     continue;
@@ -145,7 +154,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.pipeLarge.get(Materials.Ultimate);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.TungstenSteel);
+                            aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.Ultimate);
                             break;
                     }
                     continue;
@@ -179,7 +188,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.NaquadahAlloy);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Nichrome);
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.NaquadahAlloy);
                             break;
                     }
                     continue;
@@ -213,7 +222,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.NaquadahAlloy);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Nichrome);
+                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.NaquadahAlloy);
                             break;
                     }
                     continue;
@@ -244,10 +253,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             break;
                         case 6:
                         case 7:
-                            aRecipe[i] = OrePrefixes.stickLong.get(Materials.NeodymiumMagnetic);
+                            aRecipe[i] = OrePrefixes.stickLong.get(Materials.Samarium);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.block.get(Materials.NeodymiumMagnetic);
+                            aRecipe[i] = OrePrefixes.block.get(Materials.Samarium);
                             break;
                     }
                     continue;
@@ -687,5 +696,5 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
         return !mSharedTank;
     }
 
-    public static enum X {PUMP, WIRE, WIRE4, HULL, PIPE, GLASS, PLATE, MOTOR, ROTOR, SENSOR, PISTON, CIRCUIT, EMITTER, CONVEYOR, ROBOT_ARM, COIL_HEATING, COIL_ELECTRIC, STICK_MAGNETIC, STICK_DISTILLATION, BETTER_CIRCUIT, FIELD_GENERATOR, COIL_HEATING_DOUBLE, STICK_ELECTROMAGNETIC;}
+    public static enum X {PUMP, WIRE, WIRE4, HULL, PIPE, GLASS, PLATE, MOTOR, ROTOR, SENSOR, PISTON, CIRCUIT, EMITTER, CONVEYOR, ROBOT_ARM, COIL_HEATING, COIL_ELECTRIC, STICK_MAGNETIC, STICK_DISTILLATION, BETTER_CIRCUIT, FIELD_GENERATOR, COIL_HEATING_DOUBLE, STICK_ELECTROMAGNETIC}
 }

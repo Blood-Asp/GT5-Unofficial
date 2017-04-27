@@ -84,9 +84,8 @@ public class GregTech_API {
      * 9728 - 10239 are reserved for 28Smiles.
      * 10240 - 10751 are reserved for VirMan.
      * 10752 - 11263 are reserved for Briareos81.
-     * 11264 - 12000 are reserved for Quantum64.
-     * 12001 - 12200 are reserved for the next one who asks me.
-     * 12001 - 32766 are currently free.
+     * 11264 - 12000 are reserved for the next one who asks me.
+     * 9728 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's
@@ -179,9 +178,9 @@ public class GregTech_API {
      */
     public static Block sBlockMachines;
 
-    public static Block sBlockOres1, sBlockOresUb1, sBlockOresUb2, sBlockOresUb3, sBlockOresGC, sBlockGem, sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
+    public static Block sBlockOres1, sBlockOresUb1, sBlockOresUb2, sBlockOresUb3, /*sBlockGem,*/ sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
     public static Block sBlockGranites, sBlockConcretes, sBlockStones;
-    public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5;
+    public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5, sBlockCasings6;
     /**
      * Getting assigned by the Config
      */
@@ -214,9 +213,8 @@ public class GregTech_API {
         sItemStackMappings.add(sCovers);
         sItemStackMappings.add(sCoverBehaviors);
 
-        sDimensionalList.add(-1);
-        sDimensionalList.add(0);
-        sDimensionalList.add(1);
+        //sDimensionalList.add(56);
+        //sDimensionalList.add(55);
 
         sSoundList.put(0, "random.break");
         sSoundList.put(1, "random.anvil_use");
@@ -294,7 +292,7 @@ public class GregTech_API {
      * You should call @causeMachineUpdate in @Block.breakBlock and in @Block.onBlockAdded of your registered Block.
      * You don't need to register TileEntities which implement @IMachineBlockUpdateable
      *
-     * @param aID   the ID of your Block
+     * @param aBlock   the Block
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {
@@ -313,7 +311,7 @@ public class GregTech_API {
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
         int rMeta = 0;
-        for (byte i = 0; i < 16 && i < aMeta.length; i++) if (aMeta[i]) rMeta |= B[i];
+        for (byte i = 0; i < aMeta.length && i < 16; i++) if (aMeta[i]) rMeta |= B[i];
         sMachineIDs.put(aBlock, rMeta);
         return true;
     }

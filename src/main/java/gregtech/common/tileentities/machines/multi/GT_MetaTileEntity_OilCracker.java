@@ -1,7 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -19,9 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
+
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
-    private final FluidStack fluidToDecreaseEu = GT_ModHandler.getSteam(128);
-    private final FluidStack fluidToIncreaseOutput = Materials.Hydrogen.getGas(64);
+    private static final FluidStack fluidToDecreaseEu = GT_ModHandler.getSteam(128);
+    private static final FluidStack fluidToIncreaseOutput = Materials.Hydrogen.getGas(64);
 
 
     public GT_MetaTileEntity_OilCracker(int aID, String aName, String aNameRegional) {
@@ -69,29 +69,16 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tInput}, new ItemStack[]{});
             if (tRecipe != null) {
                 if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{tInput}, new ItemStack[]{})) {
-                    boolean needDecreaseEu = depleteInput(fluidToDecreaseEu);
-                    boolean needIncreaseOutput = !needDecreaseEu && depleteInput(fluidToIncreaseOutput);
-
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
-                    if (tRecipe.mEUt <= 16) {
-                        this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-                        this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
-                    } else {
-                        this.mEUt = tRecipe.mEUt;
-                        this.mMaxProgresstime = tRecipe.mDuration;
-                        while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                            this.mEUt *= 4;
-                            this.mMaxProgresstime /= 2;
-                        }
-                    }
-                    if (needDecreaseEu) this.mEUt = this.mEUt / 2;
-                    if (this.mEUt > 0) {
-                        this.mEUt = (-this.mEUt);
-                    }
-                    this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+                    calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, getMaxInputVoltage());
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return false;
+                    if (depleteInput(fluidToDecreaseEu)) this.mEUt = this.mEUt / 2;
+                    if (this.mEUt > 0) this.mEUt = (-this.mEUt);
                     this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
-                    if (needIncreaseOutput) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
+                    if (depleteInput(fluidToIncreaseOutput)) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
                     return true;
                 }
             }

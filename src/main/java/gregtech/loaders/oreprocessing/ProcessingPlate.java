@@ -11,7 +11,7 @@ import gregtech.common.GT_Proxy;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegistrator {
+public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE WITH OLD PLATE## generator
     public ProcessingPlate() {
         OrePrefixes.plate.add(this);
         OrePrefixes.plateDouble.add(this);

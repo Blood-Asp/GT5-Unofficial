@@ -17,8 +17,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +36,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     public Block mPumpedBlock2 = null;
 
     public GT_MetaTileEntity_Pump(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "The best way of emptying Oceans!");
+        super(aID, aName, aNameRegional, aTier, 3, "The best way of emptying Oceans! Outputs on top.");
     }
 
     public GT_MetaTileEntity_Pump(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -121,7 +123,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 ((GT_MetaTileEntity_Pump) tTileEntity.getMetaTileEntity()).mPumpTimer -= 1;
             }
             if (this.mPumpCountBelow <= 0) {
-                if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().isUniversalEnergyStored(16 * ((int) Math.pow(4, this.mTier))))
+                if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().isUniversalEnergyStored(16 * ((long) Math.pow(4, this.mTier))))
                         && ((this.mFluid == null) || (this.mFluid.amount + 1000 <= getCapacity()))) {
                     boolean tMovedOneDown = false;
                     if ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 100L == 0L)) {
@@ -146,7 +148,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                             this.mPumpList.clear();
                             int y = getBaseMetaTileEntity().getYCoord() - 1;
                             for (int yHead = getYOfPumpHead(); (this.mPumpList.isEmpty()) && (y >= yHead); y--) {
-                                scanForFluid(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(), this.mPumpList, getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), 10 * ((int) Math.pow(1.6, this.mTier)));
+                                scanForFluid(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(), this.mPumpList, getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), 10 * ((int) Math.pow(1.6D, this.mTier)));
                             }
                         }
                         if ((!tMovedOneDown) && (this.mPumpTimer <= 0)) {
@@ -156,11 +158,25 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                                     ((ChunkPosition) this.mPumpList.remove(this.mPumpList.size() - 1)).chunkPosZ))) {
                                 //Should this be empty?
                             }
-                            this.mPumpTimer = 160 / ((int) Math.pow(2, this.mTier));
+                            this.mPumpTimer = GT_Utility.safeInt(160 / (long)Math.pow(2, this.mTier) );
+                            this.mPumpTimer = mPumpTimer==0 ? 1 : mPumpTimer;
                         }
                     }
                 }
                 getBaseMetaTileEntity().setActive(!this.mPumpList.isEmpty());
+            }
+
+            //auto outputs on top
+            if (this.mFluid != null && (aTick % 20 == 0)) {
+                IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide((byte)1);//1 is up.
+                if (tTank != null) {
+                    FluidStack tDrained = drain(1000, false);
+                    if (tDrained != null) {
+                        int tFilledAmount = tTank.fill(ForgeDirection.UP, tDrained, false);
+                        if (tFilledAmount > 0)
+                            tTank.fill(ForgeDirection.UP, drain(tFilledAmount, true), true);
+                    }
+                }
             }
         }
     }
@@ -283,31 +299,31 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             if ((aBlock == Blocks.water) || (aBlock == Blocks.flowing_water)) {
                 if (aMeta == 0) {
                     if (this.mFluid == null) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid = GT_ModHandler.getWater(1000L);
                     } else if (GT_ModHandler.isWater(this.mFluid)) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid.amount += 1000;
                     } else {
                         return false;
                     }
                 } else {
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((long) Math.pow(4, this.mTier)), true);
                 }
             }
             if ((aBlock == Blocks.lava) || (aBlock == Blocks.flowing_lava)) {
                 if (aMeta == 0) {
                     if (this.mFluid == null) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid = GT_ModHandler.getLava(1000L);
                     } else if (GT_ModHandler.isLava(this.mFluid)) {
-                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                        getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                         this.mFluid.amount += 1000;
                     } else {
                         return false;
                     }
                 } else {
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(4 * ((long) Math.pow(4, this.mTier)), true);
                 }
             }
             if ((aBlock instanceof IFluidBlock)) {
@@ -317,7 +333,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 } else if (this.mFluid.isFluidEqual(((IFluidBlock) aBlock).drain(getBaseMetaTileEntity().getWorld(), aX, aY, aZ, false))) {
                     this.getBaseMetaTileEntity().getWorld().setBlockToAir(aX, aY, aZ);
                     this.mFluid.amount += 1000;
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((int) Math.pow(4, this.mTier)), true);
+                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(16 * ((long) Math.pow(4, this.mTier)), true);
                 } else {
                     return false;
                 }
@@ -429,7 +445,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? null : new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT) : new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
     }
 
     @Override

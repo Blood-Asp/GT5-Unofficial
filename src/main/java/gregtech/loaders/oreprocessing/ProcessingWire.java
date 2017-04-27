@@ -12,7 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistrator {
+public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE WITH OLD WIRE## generator
     public ProcessingWire() {
         OrePrefixes.wireGt01.add(this);
         OrePrefixes.wireGt02.add(this);

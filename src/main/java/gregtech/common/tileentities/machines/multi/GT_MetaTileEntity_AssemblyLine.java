@@ -32,14 +32,14 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public String[] getDescription() {
-        return new String[]{"Assembly Line",
+        return new String[]{"Assembling Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Steel Casing(or Maintenance or Input Hatch),",
+                "Bottom: Solid Steel Casing(or Maintenance or Input Hatch),",
                 "Input Bus(Last Output Bus), Steel Casing",
-                "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
-                "UpMiddle: Grate Casing, Assembling Casing,",
+                "Middle: Reinforced Glass, Assembling Line Casing, Reinforced Glass",
+                "UpMiddle: Grate Casing, Assembler Machine Casing ,",
                 "Grate Casing(or Controller)",
-                "Top: Steel Casing(or Energy Hatch)",
+                "Top: Solid Steel Casing(or Energy Hatch)",
                 "Up to 16 repeating slices, last is Output Bus"};
     }
 
@@ -118,19 +118,13 @@ public class GT_MetaTileEntity_AssemblyLine
     			}
     		}
     	}
-    	byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
-        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+    	this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        if (mEUt <= 16) {
-            this.mEUt = (mEUt * (1 << tTier - 1) * (1 << tTier - 1));
-            this.mMaxProgresstime = (mMaxProgresstime / (1 << tTier - 1));
-        } else {
-            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                this.mEUt *= 4;
-                this.mMaxProgresstime /= 2;
-            }
-        }
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, getMaxInputVoltage());
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
+        this.mEUt = this.mEUt > 0 ? -this.mEUt : this.mEUt;//makes it use power...
         updateSlots();
         return true;
     }

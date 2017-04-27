@@ -2,7 +2,6 @@ package gregtech.api.util;
 
 import cofh.api.transport.IItemDuct;
 import cpw.mods.fml.common.FMLCommonHandler;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
@@ -18,8 +17,8 @@ import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.objects.GT_UO_Fluid;
 import gregtech.api.objects.ItemData;
+import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
 import ic2.api.recipe.IRecipeInput;
@@ -46,13 +45,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.server.S07PacketRespawn;
 import net.minecraft.network.play.server.S1DPacketEntityEffect;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -94,6 +94,14 @@ public class GT_Utility {
     static {
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
+    }
+
+    public static int safeInt(long number, int margin){
+        return number>Integer.MAX_VALUE-margin ? Integer.MAX_VALUE-margin :(int)number;
+    }
+
+    public static int safeInt(long number){
+        return number>GT_Values.V[GT_Values.V.length-1] ? safeInt(GT_Values.V[GT_Values.V.length-1],1) : number<Integer.MIN_VALUE ? Integer.MIN_VALUE : (int)number;
     }
 
     public static Field getPublicField(Object aObject, String aField) {
@@ -1449,80 +1457,118 @@ public class GT_Utility {
 
     /**
      * This checks if the Dimension is really a Dimension and not another Planet or something.
-     * Used for my Teleporter.
+     * Used for my Teleporter.    //I have a different opinion... Planets are fine :P
      */
     public static boolean isRealDimension(int aDimensionID) {
-        try {
-            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("com.xcompwiz.mystcraft"))
-                return true;
-        } catch (Throwable e) {/*Do nothing*/}
-        try {
-            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
-        } catch (Throwable e) {/*Do nothing*/}
-        try {
-            if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("galacticraft")) return true;
-        } catch (Throwable e) {/*Do nothing*/}
-        return GregTech_API.sDimensionalList.contains(aDimensionID);
+        if(aDimensionID<=1 && aDimensionID>=-1 && !GregTech_API.sDimensionalList.contains(aDimensionID)) return true;
+        return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
+	 
+    //public static boolean isRealDimension(int aDimensionID) {
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("com.xcompwiz.mystcraft"))
+    //            return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("galacticraft")) return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    return GregTech_API.sDimensionalList.contains(aDimensionID);
+    //}
+	
+    public static boolean moveEntityToDimensionAtCoords(Entity entity, int aDimension, double aX, double aY, double aZ) {
+        //Credit goes to BrandonCore Author :!:
 
-    public static boolean moveEntityToDimensionAtCoords(Entity aEntity, int aDimension, double aX, double aY, double aZ) {
-        WorldServer tTargetWorld = DimensionManager.getWorld(aDimension), tOriginalWorld = DimensionManager.getWorld(aEntity.worldObj.provider.dimensionId);
-        if (tTargetWorld != null && tOriginalWorld != null && tTargetWorld != tOriginalWorld) {
-            if (aEntity.ridingEntity != null) aEntity.mountEntity(null);
-            if (aEntity.riddenByEntity != null) aEntity.riddenByEntity.mountEntity(null);
-            if (aEntity instanceof EntityPlayerMP) {
-                EntityPlayerMP aPlayer = (EntityPlayerMP) aEntity;
-//                aPlayer.dimension = aDimension;
-//                aPlayer.playerNetServerHandler.sendPacket(new S07PacketRespawn(aPlayer.dimension, aPlayer.worldObj.difficultySetting, aPlayer.worldObj.getWorldInfo().getTerrainType(), aPlayer.theItemInWorldManager.getGameType()));
-//                tOriginalWorld.removePlayerEntityDangerously(aPlayer);
-//                aPlayer.isDead = false;
-//                aPlayer.setWorld(tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().func_72375_a(aPlayer, tOriginalWorld);
-//                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-//                aPlayer.theItemInWorldManager.setWorld(tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().updateTimeAndWeatherForPlayer(aPlayer, tTargetWorld);
-//                MinecraftServer.getServer().getConfigurationManager().syncPlayerInventory(aPlayer);
-//                Iterator tIterator = aPlayer.getActivePotionEffects().iterator();
-//                while (tIterator.hasNext()) {
-//                    PotionEffect potioneffect = (PotionEffect) tIterator.next();
-//                    aPlayer.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(aPlayer.getEntityId(), potioneffect));
-//                }
-//                FMLCommonHandler.instance().firePlayerChangedDimensionEvent(aPlayer, tOriginalWorld.provider.dimensionId, aDimension);
-            	aPlayer.travelToDimension(aDimension);
-                aPlayer.playerNetServerHandler.setPlayerLocation(aX + 0.5, aY + 0.5, aZ + 0.5, aPlayer.rotationYaw, aPlayer.rotationPitch);
-            	
-            } else {
-                aEntity.setPosition(aX + 0.5, aY + 0.5, aZ + 0.5);
-                aEntity.worldObj.removeEntity(aEntity);
-                aEntity.dimension = aDimension;
-                aEntity.isDead = false;
-                Entity tNewEntity = EntityList.createEntityByName(EntityList.getEntityString(aEntity), tTargetWorld);
-                if (tNewEntity != null) {
-                    tNewEntity.copyDataFrom(aEntity, true);
-                    aEntity.setDead();
-                    tNewEntity.isDead = false;
-                    boolean temp = tNewEntity.forceSpawn;
-                    tNewEntity.forceSpawn = true;
-                    tTargetWorld.spawnEntityInWorld(tNewEntity);
-                    tNewEntity.forceSpawn = temp;
-                    tNewEntity.isDead = false;
-                    aEntity = tNewEntity;
-                }
+        if (entity == null || entity.worldObj.isRemote) return false;
+        if (entity.ridingEntity != null) entity.mountEntity(null);
+        if (entity.riddenByEntity != null) entity.riddenByEntity.mountEntity(null);
+
+        World startWorld = entity.worldObj;
+        World destinationWorld = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(aDimension);
+
+        if (destinationWorld == null) {return false;}
+
+        boolean interDimensional = startWorld.provider.dimensionId != destinationWorld.provider.dimensionId;
+        if(!interDimensional)return false;
+        startWorld.updateEntityWithOptionalForce(entity, false);//added
+
+        if ((entity instanceof EntityPlayerMP) && interDimensional) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            player.closeScreen();//added
+            player.dimension = aDimension;
+            player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, destinationWorld.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType()));
+            ((WorldServer) startWorld).getPlayerManager().removePlayer(player);
+
+            startWorld.playerEntities.remove(player);
+            startWorld.updateAllPlayersSleepingFlag();
+            int i = entity.chunkCoordX;
+            int j = entity.chunkCoordZ;
+            if ((entity.addedToChunk) && (startWorld.getChunkProvider().chunkExists(i, j))) {
+                startWorld.getChunkFromChunkCoords(i, j).removeEntity(entity);
+                startWorld.getChunkFromChunkCoords(i, j).isModified = true;
             }
-
-            if (aEntity instanceof EntityLivingBase) {
-                ((EntityLivingBase) aEntity).setPositionAndUpdate(aX, aY, aZ);
-            } else {
-                aEntity.setPosition(aX, aY, aZ);
-            }
-
-            tOriginalWorld.resetUpdateEntityTick();
-            tTargetWorld.resetUpdateEntityTick();
-            return true;
+            startWorld.loadedEntityList.remove(entity);
+            startWorld.onEntityRemoved(entity);
         }
-        return false;
-    }
 
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        ((WorldServer) destinationWorld).theChunkProviderServer.loadChunk((int) aX >> 4, (int) aZ >> 4);
+
+        destinationWorld.theProfiler.startSection("placing");
+        if (interDimensional) {
+            if (!(entity instanceof EntityPlayer)) {
+                NBTTagCompound entityNBT = new NBTTagCompound();
+                entity.isDead = false;
+                entityNBT.setString("id", EntityList.getEntityString(entity));
+                entity.writeToNBT(entityNBT);
+                entity.isDead = true;
+                entity = EntityList.createEntityFromNBT(entityNBT, destinationWorld);
+                if (entity == null) {
+                    return false;
+                }
+                entity.dimension = destinationWorld.provider.dimensionId;
+            }
+            destinationWorld.spawnEntityInWorld(entity);
+            entity.setWorld(destinationWorld);
+        }
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        destinationWorld.updateEntityWithOptionalForce(entity, false);
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        if ((entity instanceof EntityPlayerMP)) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            if (interDimensional) {
+                player.mcServer.getConfigurationManager().func_72375_a(player, (WorldServer) destinationWorld);
+            }
+            player.playerNetServerHandler.setPlayerLocation(aX, aY, aY, player.rotationYaw, player.rotationPitch);
+        }
+
+        destinationWorld.updateEntityWithOptionalForce(entity, false);
+
+        if (((entity instanceof EntityPlayerMP)) && interDimensional) {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            player.theItemInWorldManager.setWorld((WorldServer) destinationWorld);
+            player.mcServer.getConfigurationManager().updateTimeAndWeatherForPlayer(player, (WorldServer) destinationWorld);
+            player.mcServer.getConfigurationManager().syncPlayerInventory(player);
+
+            for (PotionEffect potionEffect : (Iterable<PotionEffect>) player.getActivePotionEffects()) {
+                player.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(player.getEntityId(), potionEffect));
+            }
+
+            player.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
+            FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, startWorld.provider.dimensionId, destinationWorld.provider.dimensionId);
+        }
+        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+
+        destinationWorld.theProfiler.endSection();
+        entity.fallDistance = 0;
+        return true;
+    }
+	
     public static int getScaleCoordinates(double aValue, int aScale) {
     	return (int)Math.floor(aValue / aScale);
     }
@@ -1531,12 +1577,12 @@ public class GT_Utility {
     	return getUndergroundOil(aWorld, aX, aZ, false);
     }
 
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {
+    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {//TODO RETROGEN!, CHECK FLUIDS AVAILABLE, REWORK
 
     	if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(aWorld.provider.dimensionId))
     		return null;
 
-        Random tRandom = new Random((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleCoordinates(aX,96)) + (7 * (getScaleCoordinates(aZ,96)))));
+        XSTR tRandom = new XSTR((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleCoordinates(aX,96)) + (7 * (getScaleCoordinates(aZ,96)))));
         int tAmount = 0;
         int tFluidId = 0;
         int tDecreasePerOperationAmount = 5;
@@ -1590,6 +1636,50 @@ public class GT_Utility {
     		return new FluidStack(tFluid, tAmount);
     	return null;
     }
+	
+    //private static FluidStack getUndergroundOilFromInfo(int type,int amnt){
+    //    switch (type) {//0 is old system
+    //        case 1:
+    //            return new FluidStack(Materials.OilLight .mFluid,amnt);
+    //        case 2:
+    //            return new FluidStack(Materials.OilMedium.mFluid,amnt);
+    //        case 3:
+    //            return new FluidStack(Materials.OilHeavy .mFluid,amnt);
+    //        case 4:
+    //            return new FluidStack(Materials.Oil      .mFluid,amnt);
+    //    }
+    //    return new         FluidStack(Materials.NatruralGas.mGas,amnt);//5
+    //}
+    //
+    //private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
+    //    XSTR tRandom = new XSTR(aWorld.getSeed() ^ ((long)(aX / 6) + (long)(7000 * (aZ / 6))));
+    //    int type=tRandom.nextInt(5);//type slowly changes
+    //    int amnt = (int)(Math.ceil(Math.pow(2D+(double)(tRandom.nextInt(48))+(new XSTR()).nextDouble(),8D)/200000D));
+    //        //roughly uses 28 bits
+    //    FluidStack tFluidStack;
+    //    switch (type) {//0 is old system
+    //        case 1:
+    //            tFluidStack=new FluidStack(Materials.OilLight .mFluid,amnt);
+    //            break;
+    //        case 2:
+    //            tFluidStack=new FluidStack(Materials.OilMedium.mFluid,amnt);
+    //            break;
+    //        case 3:
+    //            tFluidStack=new FluidStack(Materials.OilHeavy .mFluid,amnt);
+    //            break;
+    //        case 4:
+    //            tFluidStack=new FluidStack(Materials.Oil      .mFluid,amnt);
+    //            break;
+    //        default://case 0; -> 5
+    //            type=5;//important, 0 is invalid !
+    //            tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
+    //    }
+    //
+    //    tInts[0]=(type<<28)+amnt;//here since the switch changes type
+    //    //tInts[2]|=0x01;
+    //    GT_Proxy.chunkData.put(tPos, tInts);
+    //    return tFluidStack;
+    //}
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
         if (aList == null) return 0;
@@ -1601,15 +1691,15 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " + aX + " Y: " + aY + " Z: " + aZ + " -----");
+        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET + " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
         try {
-            if (tTileEntity instanceof IInventory)
-                tList.add("Name: " + ((IInventory) tTileEntity).getInventoryName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
+            if (tTileEntity != null && tTileEntity instanceof IInventory)
+                tList.add("Name: " + EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName()+EnumChatFormatting.RESET + "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
             else
-                tList.add("Name: " + tBlock.getUnlocalizedName() + "  MetaData: " + aWorld.getBlockMetadata(aX, aY, aZ));
+                tList.add("Name: " +EnumChatFormatting.BLUE+ tBlock.getUnlocalizedName() +EnumChatFormatting.RESET+ "  MetaData: " +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ)+EnumChatFormatting.RESET);
 
-            tList.add("Hardness: " + tBlock.getBlockHardness(aWorld, aX, aY, aZ) + "  Blast Resistance: " + tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ));
-            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add("Is valid Beacon Pyramid Material");
+            tList.add("Hardness: " +EnumChatFormatting.YELLOW+ tBlock.getBlockHardness(aWorld, aX, aY, aZ) +EnumChatFormatting.RESET+ "  Blast Resistance: " +EnumChatFormatting.YELLOW+ tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ)+EnumChatFormatting.RESET);
+            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add(EnumChatFormatting.GOLD+"Is valid Beacon Pyramid Material"+EnumChatFormatting.RESET                                                          );
         } catch (Throwable e) {
             if (D1) e.printStackTrace(GT_Log.err);
         }
@@ -1619,7 +1709,7 @@ public class GT_Utility {
                     rEUAmount += 500;
                     FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
                     if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
-                        tList.add("Tank " + i + ": " + GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) + " / " + GT_Utility.formatNumbers(tTanks[i].capacity) + " " + getFluidName(tTanks[i].fluid, true));
+                    tList.add("Tank " + i + ": " +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) +EnumChatFormatting.RESET+ " L / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(tTanks[i].capacity) +EnumChatFormatting.RESET+ " L of " +EnumChatFormatting.GOLD+ getFluidName(tTanks[i].fluid, true)+EnumChatFormatting.RESET);
                     }
                 }
             } catch (Throwable e) {
@@ -1636,8 +1726,8 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.reactor.IReactor) {
                     rEUAmount += 500;
-                    tList.add("Heat: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeat() + "/" + ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()
-                            + "  HEM: " + ((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() + "  Base EU Output: "/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
+                    tList.add("Heat: " +EnumChatFormatting.GREEN+ ((ic2.api.reactor.IReactor) tTileEntity).getHeat() +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()+EnumChatFormatting.RESET);
+                    tList.add("HEM: " +EnumChatFormatting.YELLOW+((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() +EnumChatFormatting.RESET/*+ "  Base EU Output: " + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);//TODO WHAT?
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1645,8 +1735,8 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.tile.IWrenchable) {
                     rEUAmount += 100;
-                    tList.add("Facing: " + ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() + " / Chance: " + (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) + "%");
-                    tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? "You can remove this with a Wrench" : "You can NOT remove this with a Wrench");
+                    tList.add("Facing: " +EnumChatFormatting.GREEN+ ((ic2.api.tile.IWrenchable) tTileEntity).getFacing() +EnumChatFormatting.RESET+ " / Chance: " +EnumChatFormatting.YELLOW+ (((ic2.api.tile.IWrenchable) tTileEntity).getWrenchDropRate() * 100) +EnumChatFormatting.RESET+ "%");
+                    tList.add(((ic2.api.tile.IWrenchable) tTileEntity).wrenchCanRemove(aPlayer) ? EnumChatFormatting.GREEN+"You can remove this with a Wrench"+EnumChatFormatting.RESET : EnumChatFormatting.RED+"You can NOT remove this with a Wrench"+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1680,7 +1770,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.energy.tile.IEnergyConductor) {
                     rEUAmount += 200;
-                    tList.add("Conduction Loss: " + ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss());
+                    tList.add("Conduction Loss: " +EnumChatFormatting.YELLOW+ ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss()+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1688,7 +1778,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.tile.IEnergyStorage) {
                     rEUAmount += 200;
-                    tList.add("Contained Energy: " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() + " of " + ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity());
+                    tList.add("Contained Energy: " +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity()+EnumChatFormatting.RESET+" EU");
                     //aList.add(((ic2.api.tile.IEnergyStorage)tTileEntity).isTeleporterCompatible(ic2.api.Direction.YP)?"Teleporter Compatible":"Not Teleporter Compatible");
                 }
             } catch (Throwable e) {
@@ -1697,7 +1787,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof IUpgradableMachine) {
                     rEUAmount += 500;
-                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add("Has Muffler Upgrade");
+                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add(EnumChatFormatting.GREEN+"Has Muffler Upgrade"+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1707,7 +1797,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add("Progress: " + GT_Utility.formatNumbers(tValue) + " / " + GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress()));
+                        tList.add("Progress/Load: " +EnumChatFormatting.GREEN+GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1723,16 +1813,16 @@ public class GT_Utility {
             }
             try {
                 if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
-                    tList.add("Max IN: " + ((IBasicEnergyContainer) tTileEntity).getInputVoltage() + " EU");
-                    tList.add("Max OUT: " + ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " EU at " + ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() + " Amperes");
-                    tList.add("Energy: " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) + " / " + GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) + "EU");
+                    tList.add("Max IN: "  +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getInputVoltage()  + " (" + GT_Values.VN[GT_Utility.getTier(((IBasicEnergyContainer) tTileEntity).getInputVoltage())] + ") " +EnumChatFormatting.RESET+ " EU at "+EnumChatFormatting.RED+((IBasicEnergyContainer)tTileEntity).getInputAmperage()+EnumChatFormatting.RESET+" A");
+                    tList.add("Max OUT: " +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(((IBasicEnergyContainer) tTileEntity).getOutputVoltage())] + ") " +EnumChatFormatting.RESET+ " EU at " +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() +EnumChatFormatting.RESET+ " A");
+                    tList.add("Energy: "  +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) +EnumChatFormatting.RESET+ " EU");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
             try {
                 if (tTileEntity instanceof IGregTechTileEntity) {
-                    tList.add("Owned by: " + ((IGregTechTileEntity) tTileEntity).getOwnerName());
+                    tList.add("Owned by: " +EnumChatFormatting.BLUE+ ((IGregTechTileEntity) tTileEntity).getOwnerName()+EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1779,21 +1869,23 @@ public class GT_Utility {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
         }
-        if (aPlayer.capabilities.isCreativeMode&&GT_Values.D1) {
+        if (aPlayer.capabilities.isCreativeMode && GT_Values.D1) {
             FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
             if (tFluid!=null)
-            	tList.add("Oil in Chunk: " + tFluid.amount + " " + tFluid.getLocalizedName());
+            	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
         }
 //        if(aPlayer.capabilities.isCreativeMode){
         	ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
         	if(GT_Proxy.chunkData.containsKey(tPos)){
         		int[] tPollution = GT_Proxy.chunkData.get(tPos);
         		if(tPollution.length>1){
-        		tList.add("Pollution in Chunk: "+tPollution[1]);
+        		tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET+" gibbl");
         		}else{
-        			tList.add("No Pollution in Chunk");
+        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
         		}
-        	}
+        	}else{
+                tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
+            }
 //        }
 
         try {
@@ -2029,16 +2121,16 @@ public class GT_Utility {
 
         public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String[] aOres) {
             NBTTagCompound tNBT = getNBT(aStack);
-            String tData = aX + "," + aY + "," + aZ + "," + aDim + ",";
-            if (aFluid!=null)
-            	tData += (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
+            String tData = aX + "," + aY + "," + aZ + "," + aDim + "," + aFluid.amount + "," + aFluid.getLocalizedName() + ",";//fixed dividing 1L=1mB
             for (String tString : aOres) {
                 tData += tString + ",";
             }
             tNBT.setString("prospection", tData);
             setNBT(aStack, tNBT);
         }
-
+		
+		
+		
         public static void setAdvancedProspectionData(
                 byte aTier,
                 ItemStack aStack,
@@ -2052,7 +2144,7 @@ public class GT_Utility {
             setBookTitle(aStack, "Raw Prospection Data");
 
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
-            
+
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
 

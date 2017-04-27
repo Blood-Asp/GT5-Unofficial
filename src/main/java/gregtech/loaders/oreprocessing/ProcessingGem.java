@@ -8,7 +8,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Proxy;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistrator {
+public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE WITH GEM??? generators
     public ProcessingGem() {
         OrePrefixes.gem.add(this);
         OrePrefixes.gemChipped.add(this);

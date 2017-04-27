@@ -240,7 +240,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     @Override
     public long maxEUStore() {
-        return Math.max(getEUVar(), V[mTier] * 16000 + getMinimumStoredEU());
+        return Math.max(getEUVar(), V[mTier] * 16000L + getMinimumStoredEU());
     }
 
     public ITexture[] getFront(byte aColor) {

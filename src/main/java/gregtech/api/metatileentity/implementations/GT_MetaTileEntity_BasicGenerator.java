@@ -5,6 +5,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
@@ -133,17 +134,18 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public long maxEUOutput() {
-        return getBaseMetaTileEntity().isAllowedToWork() ? V[mTier] : 0;
+        return getBaseMetaTileEntity().isAllowedToWork() ? V[mTier] : 0L;
     }
 
     @Override
     public long maxEUStore() {
-        return Math.max(getEUVar(), V[mTier] * 40 + getMinimumStoredEU());
+        return Math.max(getEUVar(), V[mTier] * 40L + getMinimumStoredEU());
     }
 
     @Override
     public boolean doesFillContainers() {
-        return getBaseMetaTileEntity().isAllowedToWork();
+        //return getBaseMetaTileEntity().isAllowedToWork();
+        return false;
     }
 
     @Override
@@ -177,6 +179,12 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     }
 
     @Override
+    public boolean isLiquidOutput(byte aSide) {
+        //return super.isLiquidOutput(aSide);
+        return false;
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && aTick % 10 == 0) {
         	long tProducedEU = 0;
@@ -191,7 +199,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
             } else {
                 int tFuelValue = getFuelValue(mFluid), tConsumed = consumedFluidPerOperation(mFluid);
                 if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount > tConsumed) {
-                    long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
+                    //long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);//TODO CHECK?
+                    long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
                     if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
                         tProducedEU = tFluidAmountToUse * tFuelValue;
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
@@ -211,7 +220,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
             }
             if(tProducedEU>0&&getPollution()>0){            	
             	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 
-            			(int) ((tProducedEU * getPollution()/(500*mTier))+1));                
+            			(int) ((tProducedEU * getPollution()/(250*(mTier+1)))));               
             }
         }
 

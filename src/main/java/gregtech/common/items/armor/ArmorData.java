@@ -1,426 +1,344 @@
-package gregtech.common.items.armor;
+package gregtech.common.items.armor.gui;
+
+import gregtech.api.enums.GT_Values;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Network;
+import gregtech.common.items.armor.ArmorData;
+import gregtech.common.items.armor.components.StatType;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 
-import gregtech.api.damagesources.GT_DamageSources;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
-import gregtech.common.items.armor.components.ArmorComponent;
-import gregtech.common.items.armor.components.StatType;
-import gregtech.common.items.armor.gui.ContainerBasicArmor;
-import gregtech.common.items.armor.gui.ContainerModularArmor;
-import gregtech.common.items.armor.gui.InventoryArmor;
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
 
-public class ArmorData {
+@SideOnly(Side.CLIENT)
+public class GuiElectricArmor1 extends GuiContainer {
+	ContainerModularArmor cont;
+	EntityPlayer player;
+	private int tab;
+	
+	public GuiElectricArmor1(ContainerModularArmor containerModularArmor, EntityPlayer aPlayer) {
+		super(containerModularArmor);
+		player = aPlayer;
+		cont = containerModularArmor;
+		tab = 0;
+	}
+	@Override
+	public void onGuiClosed() 
+	{
+		cont.saveInventory(player);
+		super.onGuiClosed();
+	};
+	public String seperateNumber(long number){
+		DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+		DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+		symbols.setGroupingSeparator(' ');
+		return formatter.format(number);
+	}
 
-	public int type; // 0 = helmet; 1 = chestplate; 2 = leggings; 3 = boots;
-	public int armorTier; // 0 = Basic Modular Armor; 1 = Modular Exoskeleton; 2= Modular Nanosuit; 3 = Heavy Power Armor
-	public List info; // needs Localization
-	public boolean isTopItem;
-	public int tooltipUpdate;
-	public boolean openGui;
+	@Override
+	protected void drawGuiContainerForegroundLayer(int x, int y) {
+		int xStart = (width - xSize) / 2;
+		int yStart = (height - ySize) / 2;
+		int x2 = x - xStart;
+		int y2 = y - yStart;
+		drawTooltip(x2, y2 + 5);
+	}
 
-	public ArmorData helmet;
-	public ArmorData chestplate;
-	public ArmorData leggings;
-	public ArmorData boots;	
-
-	public Map<StatType,Float> mStat = new HashMap<StatType,Float>();
-	public Map<StatType,Boolean> mBStat = new HashMap<StatType,Boolean>();
-	static ArrayList<StatType> updateArmorStatTypeList;
-//	public boolean fullArmor;
-//	public boolean fullRadiationDef;
-//	public boolean fullElectricDef;
-//
-//	public float fallDef;
-//	public float physicalDef;
-//	public float projectileDef;
-//	public float fireDef;
-//	public float magicDef;
-//	public float explosionDef;
-//	public float radiationDef;
-//	public float electricDef;
-//	public float witherDef;
-//
-//	public float thorns;
-//	public float thornsSingle;
-//	public int magnet;
-//	public int magnetSingle;
-//
-//	public int partsCharge;
-	public int maxCharge;
-	public int charge;
-//	public boolean thaumicGoggles;
-//	public boolean nightVision;
-//	public boolean potionInjector;
-//	public boolean autoFeeder;
-
-	public FluidStack fluid;
-//	public int tankCap;
-//
-//	public int weight;
-	public float maxWeight;
-//	public int processingPower;
-//	public int processingPowerUsed;
-//	public int partProcessing;
-//	public int partProcessingUsed;
-//
-//	public int motorPower;
-//	public int motorEUusage;
-//	public int pistonJumpboost;
-//	public int pistonEUusage;
-//	public int electrolyzerProd;
-//	public int electrolyzerEUusage;
-//	public int fieldGenCap;
-//	public int fieldGenEUusage;
-//
-//	public int jetpackMaxWeight;
-//	public int antiGravMaxWeight;
-
-	public ArmorData(EntityPlayer player, ItemStack stack, int type, int tier) {
-		if(updateArmorStatTypeList == null)
-		{
-			updateArmorStatTypeList = new ArrayList<StatType>();
-			updateArmorStatTypeList.add(StatType.MAGNET);
-			updateArmorStatTypeList.add(StatType.THORNS);
-			updateArmorStatTypeList.add(StatType.PROCESSINGPOWER);
-			updateArmorStatTypeList.add(StatType.PROCESSINGPOWERUSED);
-		}
-		this.type = type;
-		this.armorTier = tier;
-		ContainerModularArmor tmp = new ContainerBasicArmor((EntityPlayer) player, new InventoryArmor(ModularArmor_Item.class, stack));
-		calculateArmor(tmp.mInvArmor.parts);
-		switch (tier) {
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		this.mc.getTextureManager().bindTexture(new ResourceLocation("gregtech", "textures/gui/armorgui3x4.png"));
+		int xStart = (width - xSize) / 2;
+		int yStart = (height - ySize) / 2;
+		//Draw background
+		drawTexturedModalRect(xStart, yStart, 0, 0, xSize, ySize);
+		//Draw active arrows
+		drawTexturedModalRect(xStart + 10, yStart + 70, 219, 11, 14, 5);
+		//Draw active armor symbol
+		switch (cont.mInvArmor.data.type) {
 		case 0:
-			maxCharge = 0;
+			drawTexturedModalRect(xStart + 73, yStart + 68, 177, 10, 10, 9);
 			break;
 		case 1:
-			maxCharge = 250000;
+			drawTexturedModalRect(xStart + 83, yStart + 68, 187, 10, 10, 9);
 			break;
 		case 2:
-			maxCharge = 1000000;
-		}
-		readNBT(stack.getTagCompound());
-	}
-
-	private void readNBT(NBTTagCompound nbt) {
-		if (nbt == null) {
-			return;
-		}
-		if (nbt.hasKey("Charge")) {
-			this.charge = nbt.getInteger("Charge");
-		}
-	}
-
-	public void writeToNBT(NBTTagCompound nbt) {
-		if (nbt == null) {
-			return;
-		}
-		nbt.setInteger("Charge", this.charge);
-	}
-
-	public ArmorData calculateArmor(ItemStack[] parts) {
-		mStat.clear();
-		mBStat.clear();
-		for(ItemStack tPart : parts){
-			if(tPart!=null && ArmorComponent.mStacks.containsKey(tPart.getUnlocalizedName()))
-				ArmorComponent.mStacks.get(tPart.getUnlocalizedName()).calculateArmor(this);
-		}
-		for(StatType tType : StatType.values())if(!mStat.containsKey(tType))mStat.put(tType, .0f);
-		for(StatType tType : StatType.values())if(!mBStat.containsKey(tType))mBStat.put(tType, false);
-		updateTooltip();
-		return this;
-	}
-
-	public void updateTooltip() {
-		List<String> tagList = new ArrayList<String>();
-		String tmp2 = "";
-		if (maxWeight > 4000) {
-			tmp2 = " " + GT_LanguageManager.getTranslation("Too Heavy");
-		}
-		if (maxCharge != 0) {
-			DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-			DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-			symbols.setGroupingSeparator(' ');
-			if (type == 0) {
-				if (mBStat.get(StatType.THAUMICGOGGLES)) {
-					tagList.add(GT_LanguageManager.getTranslation("Thaumic Goggles installed"));
-				}
-				if (mBStat.get(StatType.NIGHTVISION)) {
-					tagList.add(GT_LanguageManager.getTranslation("Nightvision installed"));
-				}
-			}
-			tagList.add("EU: " + formatter.format(charge + mStat.get(StatType.PARTSCHARGE)));
-			if (type == 2) {
-				tagList.add(GT_LanguageManager.getTranslation("Jumpboost") + ": " + mStat.get(StatType.PISTONJUMPBOOST) / 3 + "m");
-			}
-			if (type == 2 && mStat.get(StatType.PISTONJUMPBOOST) > 0) {
-				tagList.add(GT_LanguageManager.getTranslation("Uphill step assist active"));
-			}
-			if (type == 2 && mStat.get(StatType.MOTPRPOWER) > 0) {
-				tagList.add(GT_LanguageManager.getTranslation("Speedup") + ": " + mStat.get(StatType.MOTPRPOWER));
-				tagList.add(GT_LanguageManager.getTranslation("Motor energy usage") + ": " + mStat.get(StatType.MOTOREUUSAGE) + " EU");
-				if (maxWeight > 4000) {
-					tagList.add(GT_LanguageManager.getTranslation("Too Heavy!!!"));
-				}
-			}
-			tagList.add(GT_LanguageManager.getTranslation("Processing power ") + " " + mStat.get(StatType.PARTPROCESSING) + " " + GT_LanguageManager.getTranslation(""));
-			tagList.add(GT_LanguageManager.getTranslation("Processing power used") + ": " + mStat.get(StatType.PARTPROCESSINGUSED) + " " + GT_LanguageManager.getTranslation(""));
-			if (type == 0 && mStat.get(StatType.ELECTROLYZERPROD) > 0) {
-				tagList.add(GT_LanguageManager.getTranslation("Electrolyzer produces ") + " " + mStat.get(StatType.ELECTROLYZERPROD) / 2 + GT_LanguageManager.getTranslation("per second"));
-			}
-			if (mStat.get(StatType.TANKCAP) > 0) {
-				if (fluid != null) {
-					tagList.add(GT_LanguageManager.getTranslation("Tank Capacity") + ": " + fluid.getLocalizedName() + " " + fluid.amount + "L (" + mStat.get(StatType.TANKCAP) + ")");
-				} else {
-					tagList.add(GT_LanguageManager.getTranslation("tankcap") + ": " + mStat.get(StatType.TANKCAP));
-				}
-			}
-		}
-		tagList.add(GT_LanguageManager.getTranslation("Weight") + ": " + mStat.get(StatType.WEIGHT) + tmp2);
-		tagList.add(GT_LanguageManager.getTranslation("Physical Defence") + ": " + (Math.round(mStat.get(StatType.PHYSICALDEFENCE) * 1000) / 10.0) + "%");
-		tagList.add(GT_LanguageManager.getTranslation("Projectile Defence") + ": " + (Math.round(mStat.get(StatType.PROJECTILEDEFENCE) * 1000) / 10.0) + "%");
-		tagList.add(GT_LanguageManager.getTranslation("Fire Defence") + ": " + (Math.round(mStat.get(StatType.FIREDEFENCE) * 1000) / 10.0) + "%");
-		tagList.add(GT_LanguageManager.getTranslation("Magic Defence") + ": " + (Math.round(mStat.get(StatType.MAGICDEFENCE) * 1000) / 10.0) + "%");
-		tagList.add(GT_LanguageManager.getTranslation("Explosive Defence") + ": " + (Math.round(mStat.get(StatType.EXPLOSIONDEFENCE) * 1000) / 10.0) + "%");
-		if (mStat.get(StatType.FALLDEFENCE) > 0 && type == 3) {
-			tagList.add(GT_LanguageManager.getTranslation("Absorbs") + " " + mStat.get(StatType.FALLDEFENCE) + GT_LanguageManager.getTranslation(" m of Fall Defence"));
-		}
-		if (mStat.get(StatType.THORNS) > 0) {
-			tagList.add(GT_LanguageManager.getTranslation("Thorns") + ": " + mStat.get(StatType.THORNS));
-		}
-		if (mStat.get(StatType.MAGNET) > 0) {
-			tagList.add(GT_LanguageManager.getTranslation("Magnet") + ": " + mStat.get(StatType.MAGNET) + "m");
-		}
-		if (mBStat.get(StatType.FULLRADIATIONARMOR)) {
-			tagList.add(GT_LanguageManager.getTranslation("Is Full Radiation Defence"));
-		} else {
-			if (mStat.get(StatType.RADIATIONDEFENCE) > 0.01d) {
-				tagList.add(GT_LanguageManager.getTranslation("Radiation Defence") + ": " + (Math.round(mStat.get(StatType.RADIATIONDEFENCE) * 1000) / 10.0) + "%");
-			}
-		}
-		info = tagList;
-	}
-
-	public void armorPartsEquipped(EntityPlayer aPlayer) {
-		helmet = null;
-		chestplate = null;
-		leggings = null;
-		boots = null;
-		for (int i = 1; i < 5; i++) {
-			ItemStack stack = aPlayer.getEquipmentInSlot(i);
-			if (stack != null && stack.getItem() instanceof ModularArmor_Item) {
-				ModularArmor_Item tmp = (ModularArmor_Item) stack.getItem();
-				ContainerModularArmor tmp2 = new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, stack));
-				if ((this.type + i) == 4) {
-					fluid = ArmorCalculation.getFluid(tmp2.mInvArmor.parts, Math.round(mStat.get(StatType.TANKCAP)));
-				}
-				if (maxCharge > 0 && charge < maxCharge) {
-					int loaded = ArmorCalculation.deChargeBatterys(tmp2.mInvArmor.parts, maxCharge - charge);
-					charge = charge + loaded;
-					change(mStat, StatType.PARTSCHARGE, -loaded);
-
-				}
-				switch (tmp.armorType) {
-				case 0:
-					helmet = tmp.data;
-					break;
-				case 1:
-					chestplate = tmp.data;
-					break;
-				case 2:
-					leggings = tmp.data;
-					break;
-				case 3:
-					boots = tmp.data;
-					break;
-				default:
-					break;
-				}
-				writeToNBT(stack.getTagCompound());
-			}
-		}
-		if (helmet != null && chestplate != null && leggings != null && boots != null) {
-			set(mBStat, StatType.FULLARMOR, true);
-			boolean helmHasFullRadiationDefence=false;			
-			boolean chestplateHasFullRadiationDefence=false;
-			boolean leggingsHasFullRadiationDefence=false;
-			boolean bootsHasFullRadiationDefence=false;
-			
-			boolean helmHasFullElectricalDefenceDefence=false;
-			boolean chestplateHasFullElectricalDefenceDefence=false;
-			boolean leggingsHasFullElectricalDefenceDefence=false;
-			boolean bootsHasFullElectricalDefenceDefence=false;
-			//Check each armor pieces for valid mStat value and verify that the Hash contains the StatType key
-			if(helmet.mStat!= null)
-			{
-				if(helmet.mStat.containsKey(StatType.RADIATIONDEFENCE))
-				{
-					helmHasFullRadiationDefence = helmet.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-				if(helmet.mStat.containsKey(StatType.ELECTRICALDEFENCE))
-				{
-					helmHasFullElectricalDefenceDefence = helmet.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-			}
-			if(chestplate.mStat!= null)
-			{
-				if(chestplate.mStat.containsKey(StatType.RADIATIONDEFENCE))
-				{
-					chestplateHasFullRadiationDefence = chestplate.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-				if(chestplate.mStat.containsKey(StatType.ELECTRICALDEFENCE))
-				{
-					chestplateHasFullElectricalDefenceDefence = chestplate.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-			}
-			if(leggings.mStat!= null)
-			{
-				if(leggings.mStat.containsKey(StatType.RADIATIONDEFENCE))
-				{
-					leggingsHasFullRadiationDefence = leggings.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-				if(leggings.mStat.containsKey(StatType.ELECTRICALDEFENCE))
-				{
-					leggingsHasFullElectricalDefenceDefence = leggings.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-			}
-			if(boots.mStat!= null)
-			{
-				if(boots.mStat.containsKey(StatType.RADIATIONDEFENCE))
-				{
-					bootsHasFullRadiationDefence = boots.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-				if(boots.mStat.containsKey(StatType.ELECTRICALDEFENCE))
-				{
-					bootsHasFullElectricalDefenceDefence = boots.mStat.get(StatType.RADIATIONDEFENCE)> 0.9f;
-				}
-			}
-			//Set Status of Full Armor types
-			set(mBStat, StatType.FULLRADIATIONARMOR, helmHasFullRadiationDefence&&chestplateHasFullRadiationDefence&&leggingsHasFullRadiationDefence &&bootsHasFullRadiationDefence);
-			set(mBStat, StatType.FULLELECTRICARMOR, helmHasFullElectricalDefenceDefence&&chestplateHasFullElectricalDefenceDefence&&leggingsHasFullElectricalDefenceDefence &&bootsHasFullElectricalDefenceDefence);	
-		} else {
-			//Reset Full armor type status to false for all types if StatType.FULLARMOR is false
-			set(mBStat, StatType.FULLARMOR, false);
-			set(mBStat, StatType.FULLRADIATIONARMOR, false);
-			set(mBStat, StatType.FULLELECTRICARMOR, false);
-		}
-		
-		
-		set(mBStat, StatType.MAGNET, 0);
-		set(mBStat, StatType.THORNS, 0);
-		set(mBStat, StatType.PROCESSINGPOWER, 0);
-		set(mBStat, StatType.PROCESSINGPOWERUSED, 0);
-		
-		if (helmet != null) {			
-			updateArmorStats(helmet,updateArmorStatTypeList );
-		}
-		if (chestplate != null) {
-			updateArmorStats(chestplate,updateArmorStatTypeList );
-
-		}
-		if (leggings != null) {
-			updateArmorStats(leggings,updateArmorStatTypeList );
-
-		}
-		if (boots != null) {
-			updateArmorStats(boots,updateArmorStatTypeList );
-
-		}
-		isTopItem = false;
-		if (type == 0) {
-			isTopItem = true;
-		} else if (helmet == null && type == 1) {
-			isTopItem = true;
-		} else if (helmet == null && chestplate == null && type == 2) {
-			isTopItem = true;
-		} else if (helmet == null && chestplate == null && leggings == null && type == 3) {
-			isTopItem = true;
-		}
-		if (helmet != null) {
-			maxWeight = helmet.mStat.get(StatType.WEIGHT);
-		}
-		if (chestplate != null) {
-			maxWeight += chestplate.mStat.get(StatType.WEIGHT);
-		}
-		if (leggings != null) {
-			maxWeight += leggings.mStat.get(StatType.WEIGHT);
-		}
-		if (boots != null) {
-			maxWeight += boots.mStat.get(StatType.WEIGHT);
-		}
-	}
-
-	private void updateArmorStats(ArmorData armorData, ArrayList<StatType> statTypes) {
-		for (StatType statType : statTypes) {
-			if(armorData == null || armorData.mStat == null || !armorData.mStat.containsKey(statType))
-				continue;
-//			if(armorData != null && armorData.mStat != null && armorData.mStat.containsKey(statType))
-//			{
-				set(mStat, statType, armorData.mStat.get(statType));
-//			}
-			/*change(mStat, StatType.MAGNET, armorData.mStat.get(StatType.MAGNET));
-			change(mStat, StatType.THORNS, armorData.mStat.get(StatType.THORNS));
-			change(mStat, StatType.PROCESSINGPOWER, armorData.mStat.get(StatType.PROCESSINGPOWER));
-			change(mStat, StatType.PROCESSINGPOWERUSED, armorData.mStat.get(StatType.PROCESSINGPOWERUSED));*/			
-		}
-		
-		
-	}
-	
-	public void set(Map aMap, StatType aType, boolean aSet){
-		if(aMap.containsKey(aType))aMap.remove(aType);
-		aMap.put(aType, aSet);
-	}
-	
-	public void set(Map aMap, StatType aType, float aSet){
-		if(aMap.containsKey(aType))aMap.remove(aType);
-		aMap.put(aType, aSet);
-	}
-	
-	public void change(Map aMap, StatType aType, float aChange){
-		float tChange = 0;
-		if(aMap==null)System.out.println("changeMapnull");
-		if(aMap.containsKey(aType)){
-			Object value = aMap.get(aType);
-			tChange = value != null ? (float) aMap.get(aType) : 0.0f;
-		aMap.remove(aType);
-		}
-		aMap.put(aType, (tChange + aChange));		
-	}
-	
-	public void dechargeComponents(int aCharge){
-		
-	}
-
-	public double getBaseAbsorptionRatio() {
-		switch (this.type) {
-		case 0:
-			return 0.15;
-		case 1:
-			return 0.40;
-		case 2:
-			return 0.30;
+			drawTexturedModalRect(xStart + 93, yStart + 68, 197, 10, 10, 9);
+			break;
 		case 3:
-			return 0.15;
+			drawTexturedModalRect(xStart + 103, yStart + 68, 207, 10, 10, 9);
+			break;
 		default:
-			return 0.00;
+			break;
 		}
+		//Draw active tab
+		switch(tab){
+		case 0:
+			break;
+		case 1:
+			drawTexturedModalRect(xStart + 7, yStart + 14, 2, 167, 104, 54);
+			break;
+		case 2:
+			drawTexturedModalRect(xStart + 7, yStart + 14, 107, 167, 104, 54);
+			break;
+		default:
+			break;
+		}
+		float tankCap = cont.mInvArmor.data.mStat.containsKey(StatType.TANKCAP) ? cont.mInvArmor.data.mStat.get(StatType.TANKCAP) :0.0f;
+		if(tankCap>0){
+			drawTexturedModalRect(xStart + 94, yStart + 32, 231, 69, 16, 34);
+		}
+		float weight = cont.mInvArmor.data.mStat.containsKey(StatType.WEIGHT) ? cont.mInvArmor.data.mStat.get(StatType.WEIGHT) : 0.0f;
+		int bar = (int) Math.floor(18 * (weight)/(float)1000);
+		drawTexturedModalRect(xStart + 15, yStart + 7, 217, 26, bar, 5);
+		drawTexturedModalRect(xStart + bar + 15, yStart + 7, 197+bar, 26, 18-bar, 5);
+		
+		if(tab==0){
+			//processing power bar
+			bar = Math.min((int) Math.floor(52 * ((float)cont.mInvArmor.data.mStat.get(StatType.PROCESSINGPOWERUSED)/(float)cont.mInvArmor.data.mStat.get(StatType.PROCESSINGPOWER))),52);
+			drawTexturedModalRect(xStart + 17, yStart + 17, 177, 146, bar, 5);
+			drawTexturedModalRect(xStart + bar + 17, yStart + 17, 177+bar, 139, 52-bar, 5);
+		}else if(tab==1){
+			
+		}else{
+			//Def tab values
+			if(cont.mInvArmor.data.mStat.get(StatType.PHYSICALDEFENCE)>0)drawTexturedModalRect(xStart + 30, yStart + 20, 186, 33, 7, 7);
+			drawBars(31, 20, cont.mInvArmor.data.mStat.get(StatType.PHYSICALDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.PROJECTILEDEFENCE)>0)drawTexturedModalRect(xStart + 30, yStart + 29, 186, 42, 7, 7);
+			drawBars(31, 29, cont.mInvArmor.data.mStat.get(StatType.PROJECTILEDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.FIREDEFENCE)>0)drawTexturedModalRect(xStart + 30, yStart + 38, 186, 51, 7, 7);
+			drawBars(31, 38, cont.mInvArmor.data.mStat.get(StatType.FIREDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.MAGICDEFENCE)>0)drawTexturedModalRect(xStart + 30, yStart + 47, 186, 60, 7, 7);
+			drawBars(31, 47, cont.mInvArmor.data.mStat.get(StatType.MAGICDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.EXPLOSIONDEFENCE)>0)drawTexturedModalRect(xStart + 30, yStart + 56, 186, 69, 7, 7);
+			drawBars(31, 56, cont.mInvArmor.data.mStat.get(StatType.EXPLOSIONDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.RADIATIONDEFENCE)>0)drawTexturedModalRect(xStart + 61, yStart + 20, 186, 87, 7, 7);
+			drawBars(62, 20, cont.mInvArmor.data.mStat.get(StatType.RADIATIONDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.ELECTRICALDEFENCE)>0)drawTexturedModalRect(xStart + 61, yStart + 29, 186, 96, 7, 7);
+			drawBars(62, 29, cont.mInvArmor.data.mStat.get(StatType.ELECTRICALDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.WITHERDEFENCE)>0)drawTexturedModalRect(xStart + 61, yStart + 38, 186, 105, 7, 7);
+			drawBars(62, 38, cont.mInvArmor.data.mStat.get(StatType.WITHERDEFENCE));
+			if(cont.mInvArmor.data.mStat.get(StatType.FALLDEFENCE)>0)drawTexturedModalRect(xStart + 61, yStart + 47, 186, 114, 7, 7);
+			if(cont.mInvArmor.data.mStat.get(StatType.THORNS)>0)drawTexturedModalRect(xStart + 61, yStart + 56, 186, 123, 7, 7);
+			if(cont.mInvArmor.data.mStat.get(StatType.MAGNET)>0)drawTexturedModalRect(xStart + 70, yStart + 56, 186, 78, 7, 7);
+		}
+		
+		
+	}
+
+	protected void mouseClicked(int mouseX, int mouseY, int mouseBtn) {
+		int xStart = mouseX-((width - xSize) / 2);
+		int yStart = mouseY-((height - ySize) / 2);
+		if(yStart>68&&yStart<77){
+			if(xStart>18&&xStart<26){
+				tab++;
+			}else if(xStart>8&&xStart<17){
+				tab--;
+			}
+			if(tab>2){tab=0;}
+			if(tab<0){tab=2;}
+			if(xStart>72&&xStart<112){
+				if(xStart>72&&xStart<81&&cont.mInvArmor.data.helmet!=null){cont.mInvArmor.data.helmet.openGui=true;}
+				if(xStart>82&&xStart<91&&cont.mInvArmor.data.chestplate!=null){cont.mInvArmor.data.chestplate.openGui=true;}
+				if(xStart>92&&xStart<101&&cont.mInvArmor.data.leggings!=null){cont.mInvArmor.data.leggings.openGui=true;}
+				if(xStart>102&&xStart<112&&cont.mInvArmor.data.boots!=null){cont.mInvArmor.data.boots.openGui=true;}
+				
+//				if(xStart>72&&xStart<81&&cont.mInvArmor.data.helmet!=null){cont.mInvArmor.data.helmet.openGui=true;player.closeScreen();}
+//				if(xStart>82&&xStart<91&&cont.mInvArmor.data.chestplate!=null){cont.mInvArmor.data.chestplate.openGui=true;player.closeScreen();}
+//				if(xStart>92&&xStart<101&&cont.mInvArmor.data.leggings!=null){cont.mInvArmor.data.leggings.openGui=true;player.closeScreen();}
+//				if(xStart>102&&xStart<112&&cont.mInvArmor.data.boots!=null){cont.mInvArmor.data.boots.openGui=true;player.closeScreen();}
+			}
+		}
+//		Slot slot = getSlotAtPosition(mouseX, mouseY);
+//		if (slot != null && slot instanceof SlotFluid && player != null && cont.mInvArmor.data.helmet!=null) {
+//			ItemStack tmp = player.inventory.getItemStack();
+//			//GT_Network gtn = new GT_Network();
+//			if (tmp == null) {
+//				//GT_Values.NW.sendToServer(new FluidSync(player.getCommandSenderName(), 0, "null"));				
+//			}
+//			//ArmorData armorData = new ArmorData(player,);
+//			if (tmp != null && tmp.getItem() instanceof IFluidContainerItem) {
+//				FluidStack tmp2 = ((IFluidContainerItem) tmp.getItem()).getFluid(tmp);
+//				if (!slot.getHasStack() && tmp2 != null) {
+//					slot.putStack(GT_Utility.getFluidDisplayStack(tmp2, true));					
+//					
+//					if(cont.mInvArmor.data.helmet.fluid == null)
+//					{
+//						cont.mInvArmor.data.helmet.fluid = new FluidStack(tmp2.getFluid(), tmp2.amount);
+//					}
+//					else
+//					{
+//						cont.mInvArmor.data.helmet.fluid.amount += tmp2.amount;
+//					}
+//					
+//					//GT_Values.NW.sendToServer(new FluidSync(player.getCommandSenderName(), tmp2.amount, GT_Utility.getFluidName(tmp2, false)));
+//					ItemStack tmp4 = GT_Utility.getContainerForFilledItem(tmp, true);					
+//					tmp4.stackSize = 1;
+//					if (tmp.stackSize > 1) {
+//						player.inventory.addItemStackToInventory(tmp4);
+//						tmp.stackSize--;
+//						player.inventory.setItemStack(tmp);
+//						//GT_Values.NW.sendToServer(new FluidSync2(player.getCommandSenderName()));
+//					} else {
+//						player.inventory.setItemStack(null);
+//						player.inventory.addItemStackToInventory(tmp4);
+//						//GT_Values.NW.sendToServer(new FluidSync2(player.getCommandSenderName()));
+//					}
+//
+//				} else if (slot.getHasStack() && tmp2 != null) {
+//					Item fluidSlot = slot.getStack().getItem();
+//					if (fluidSlot.getDamage(slot.getStack()) == tmp2.getFluidID()) {
+//						NBTTagCompound nbt = slot.getStack().getTagCompound();
+//						if (nbt != null) {
+//							tmp2.amount += nbt.getLong("mFluidDisplayAmount");
+//							ItemStack tmp3 = player.inventory.getItemStack();
+//							if (tmp3.stackSize <= 1) {
+//								tmp3 = null;
+//							} else {
+//								tmp3.stackSize--;
+//							}
+//							player.inventory.setItemStack(tmp3);
+//							//GT_Values.NW.sendToServer(new FluidSync2(player.getCommandSenderName()));
+//							slot.putStack(GT_Utility.getFluidDisplayStack(tmp2, true));
+//							if(cont.mInvArmor.data.helmet.fluid == null)
+//							{
+//								cont.mInvArmor.data.helmet.fluid = new FluidStack(tmp2.getFluid(), tmp2.amount);
+//							}
+//							else
+//							{
+//								cont.mInvArmor.data.helmet.fluid.amount += tmp2.amount;
+//							}
+//							//GT_Values.NW.sendToServer(new FluidSync(player.getCommandSenderName(), tmp2.amount, GT_Utility.getFluidName(tmp2, false)));
+//						}
+//					}
+//				}
+//			}
+//		}
+		super.mouseClicked(mouseX, mouseY, mouseBtn);
+	}
+	
+	protected void drawTooltip(int x, int y) {
+		List<String> list = new ArrayList<String>();
+		//General tooltips
+		if(x>=7&&y>=11&&x<=33&&y<=17){
+				list.add(GT_LanguageManager.getTranslation("Weight") + ": " + cont.mInvArmor.data.mStat.get(StatType.WEIGHT));
+				list.add("Total Weight: "+cont.mInvArmor.data.maxWeight);
+				if (cont.mInvArmor.data.mStat.get(StatType.WEIGHT) > 1000)
+					list.add("Too Heavy!");
+		}
+		if(x>=56&&y>=11&&x<=112&&y<=17){
+			list.add("Stored Energy: "+seperateNumber(cont.mInvArmor.data.charge)+" EU");
+		}
+		if(y>74&&y<83){
+			if(x>8&&x<17){
+				list.add("Previous Page");
+			}else if(x>18&&x<27){
+				list.add("Next Page");
+			}else if(x>72&&x<80){
+				list.add("Helmet");
+			}else if(x>81&&x<90){
+				list.add("Chestplate");
+			}else if(x>91&&x<100){
+				list.add("Leggings");
+			}else if(x>101&&x<110){
+				list.add("Boots");
+			}
+		}
+		if(tab==0){
+			if(x>=93&&y>=36&&x<=110&&y<=71){list.add("Tank Capacity: "+cont.mInvArmor.data.mStat.get(StatType.TANKCAP)+"L");
+			}
+			if(x>=7&&y>=22&&x<=70&&y<=28){list.add("Processing Power Provided: "+cont.mInvArmor.data.mStat.get(StatType.PROCESSINGPOWER));
+										  list.add("Processing Power Used: "+cont.mInvArmor.data.mStat.get(StatType.PROCESSINGPOWERUSED));
+			}
+		}else if(tab==1){
+			
+		}else{
+					if (x >= 28 && x <= 58) {
+			if (y >= 25 && y <= 32) {
+				list.add(GT_LanguageManager.getTranslation("Physical Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.PHYSICALDEFENCE) * 1000) / 10.0) + "%");
+			} else if (y >= 33 && y <= 41) {
+				list.add(GT_LanguageManager.getTranslation("Projectile Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.PROJECTILEDEFENCE) * 1000) / 10.0) + "%");
+			} else if (y >= 42 && y <= 50) {
+				list.add(GT_LanguageManager.getTranslation("Fire Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.FIREDEFENCE) * 1000) / 10.0) + "%");
+			} else if (y >= 51 && y <= 59) {
+				list.add(GT_LanguageManager.getTranslation("Magical Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.MAGICDEFENCE) * 1000) / 10.0) + "%");
+			} else if (y >= 60 && y <= 68) {
+				list.add(GT_LanguageManager.getTranslation("Explosion Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.EXPLOSIONDEFENCE) * 1000) / 10.0) + "%");
+			}
+		} else if (x >= 59 && x <= 90) {
+			if (y >= 25 && y <= 32) {
+				list.add(GT_LanguageManager.getTranslation("Radiation Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.RADIATIONDEFENCE) * 1000) / 10.0) + "%");
+				if(cont.mInvArmor.data.mBStat.get(StatType.FULLRADIATIONARMOR)){
+				list.add(GT_LanguageManager.getTranslation("Radiation Immunity"));}
+			} else if (y >= 33 && y <= 41) {
+				list.add(GT_LanguageManager.getTranslation("Electrical Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.ELECTRICALDEFENCE) * 1000) / 10.0) + "%");
+				if(cont.mInvArmor.data.mBStat.get(StatType.FULLELECTRICARMOR)){
+					list.add(GT_LanguageManager.getTranslation("Electric Immunity"));}
+			} else if (y >= 42 && y <= 50) {
+				list.add(GT_LanguageManager.getTranslation("Wither Defence") + ": " + (Math.round(cont.mInvArmor.data.mStat.get(StatType.WITHERDEFENCE) * 1000) / 10.0) + "%");
+			} else if (y >= 51 && y <= 59) {
+				if(cont.mInvArmor.data.type!=3){
+					list.add(GT_LanguageManager.getTranslation("Fall Damage absorbtion"));
+					list.add(GT_LanguageManager.getTranslation("Only for Boots"));
+				}else{
+				list.add(GT_LanguageManager.getTranslation("Absorbs") + " " + (int) Math.round(cont.mInvArmor.data.mStat.get(StatType.FALLDEFENCE)) + GT_LanguageManager.getTranslation("m of Fall Damage"));}
+			} else if (y >= 60 && y <= 68) {
+				if(x<69){
+				list.add(GT_LanguageManager.getTranslation("Thorns") + ": " + (int) Math.round(cont.mInvArmor.data.mStat.get(StatType.THORNSSINGLE)) + " Dmg");
+				list.add(GT_LanguageManager.getTranslation("Total Thorns") + ": " + (int) Math.round(cont.mInvArmor.data.mStat.get(StatType.THORNS)) + " Dmg");
+				}else{
+				list.add(GT_LanguageManager.getTranslation("Magnet") + ": " + cont.mInvArmor.data.mStat.get(StatType.MAGNETSINGLE) + " m");
+				list.add(GT_LanguageManager.getTranslation("Total Magnet") + ": " + cont.mInvArmor.data.mStat.get(StatType.MAGNET) + " m");}
+			}
+		}
+		}
+		if (!list.isEmpty())
+			drawHoveringText(list, x, y, fontRendererObj);
+	}
+	
+	public void drawBars(int x, int y, float value) {
+
+		int bar = (int) Math.floor(18 * value);
+		int xStart = (width - xSize) / 2;
+		int yStart = (height - ySize) / 2;
+		xStart += 8;
+		yStart += 1;
+		drawTexturedModalRect(xStart + x, yStart + y, 217, 26, bar, 5);
+		drawTexturedModalRect(xStart+ bar + x, yStart + y, 197+bar, 26, 18-bar, 5);
+	}
+
+	protected Slot getSlotAtPosition(int p_146975_1_, int p_146975_2_) {
+		for (int k = 0; k < cont.inventorySlots.size(); ++k) {
+			Slot slot = (Slot) cont.inventorySlots.get(k);
+			if (this.isMouseOverSlot(slot, p_146975_1_, p_146975_2_)) {
+				return slot;
+			}
+		}
+		return null;
+	}
+
+	private boolean isMouseOverSlot(Slot p_146981_1_, int p_146981_2_, int p_146981_3_) {
+		return this.func_146978_c(p_146981_1_.xDisplayPosition, p_146981_1_.yDisplayPosition, 16, 16, p_146981_2_, p_146981_3_);
 	}
 }

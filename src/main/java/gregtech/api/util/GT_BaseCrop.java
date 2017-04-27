@@ -1,7 +1,6 @@
 package gregtech.api.util;
 
 import cpw.mods.fml.common.Loader;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
@@ -21,7 +20,6 @@ import speiger.src.crops.api.ICropCardInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.E;
 

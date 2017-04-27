@@ -13,12 +13,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMachineBlock {
     public int mItemCount = 0;
     public ItemStack mItemStack = null;
     public GT_MetaTileEntity_QuantumChest(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + ((int) ((Math.pow(6, aTier)) * 270000)) + " Blocks");
+        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks");
     }
 
     public GT_MetaTileEntity_QuantumChest(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -162,8 +163,25 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
         return getMaxItemCount();
     }
 
+    private static int CommonSizeCompute(int tier){
+        switch(tier){
+            case 6:
+                return  128000000;
+            case 7:
+                return  256000000;
+            case 8:
+                return  512000000;
+            case 9:
+                return 1024000000;
+            case 10:
+                return 2147483640;
+            default:
+                return 0;
+        }
+    }
+
     public int getMaxItemCount() {
-        return (int) (((Math.pow(6, mTier)) * 270000) - 128);
+        return CommonSizeCompute(mTier);
     }
 
     @Override
@@ -181,18 +199,20 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
         if (mItemStack == null) {
             return new String[]{
-                    "Quantum Chest",
+                    EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                     "Stored Items:",
-                    "No Items",
-                    Integer.toString(0),
-                    Integer.toString(getMaxItemCount())};
+                    EnumChatFormatting.GOLD+ "No Items"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET+" "+
+                    EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+            };
         }
         return new String[]{
-                "Quantum Chest",
+                EnumChatFormatting.BLUE + "Quantum Chest"+ EnumChatFormatting.RESET,
                 "Stored Items:",
-                mItemStack.getDisplayName(),
-                Integer.toString(mItemCount),
-                Integer.toString(getMaxItemCount())};
+                EnumChatFormatting.GOLD + mItemStack.getDisplayName() + EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mItemCount) + EnumChatFormatting.RESET+" "+
+                EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
+        };
     }
 
     @Override

@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 import static gregtech.api.enums.GT_Values.V;
 
@@ -47,7 +48,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         ITexture[][][] rTextures = new ITexture[2][17][];
         for (byte i = -1; i < 16; i++) {
             rTextures[0][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1]};
-            rTextures[1][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], mInventory.length > 4 ? Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier] : Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+            rTextures[1][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], mInventory.length==16 ? Textures.BlockIcons.OVERLAYS_ENERGY_OUT_POWER[mTier] : mInventory.length > 4 ? Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier] : Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
         }
         return rTextures;
     }
@@ -109,12 +110,12 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public long getMinimumStoredEU() {
-        return V[mTier] * 16 * mInventory.length;
+        return V[mTier] * 16L * mInventory.length;
     }
 
     @Override
     public long maxEUStore() {
-        return V[mTier] * 64 * mInventory.length;
+        return V[mTier] * 64L * mInventory.length;
     }
 
     @Override
@@ -129,7 +130,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public long maxAmperesIn() {
-        return mChargeableCount * 2;
+        return mChargeableCount * 2L;
     }
 
     @Override
@@ -309,10 +310,11 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         }
 
         return new String[]{
-                getLocalName(),
+                EnumChatFormatting.BLUE+getLocalName()+EnumChatFormatting.RESET,
                 "Stored Items:",
-                GT_Utility.formatNumbers(mStored) + " EU /",
-                GT_Utility.formatNumbers(mMax) + " EU"};
+                EnumChatFormatting.GREEN+GT_Utility.formatNumbers(mStored) +EnumChatFormatting.RESET+ " EU / "+
+                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU"
+        };
     }
 
     @Override

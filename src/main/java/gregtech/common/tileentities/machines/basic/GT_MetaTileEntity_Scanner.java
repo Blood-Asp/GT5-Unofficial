@@ -11,11 +11,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.*;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -54,8 +50,10 @@ public class GT_MetaTileEntity_Scanner
                             NBTTagCompound tNBT = new NBTTagCompound();
                             ((IIndividual) tIndividual).writeToNBT(tNBT);
                             this.mOutputItems[0].setTagCompound(tNBT);
-                            this.mMaxProgresstime = (500 / (1 << this.mTier - 1));
-                            this.mEUt = (2 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                            calculateOverclockedNess(2,500);
+                            //In case recipe is too OP for that machine
+                            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                                return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                             return 2;
                         }
                         this.mOutputItems[0] = GT_Utility.copy(new Object[]{aStack});
@@ -77,8 +75,10 @@ public class GT_MetaTileEntity_Scanner
                 }
                 if (tNBT.getByte("scan") < 4) {
                     tNBT.setByte("scan", (byte) 4);
-                    this.mMaxProgresstime = (160 / (1 << this.mTier - 1));
-                    this.mEUt = (8 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(8,160);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                 } else {
                     this.mMaxProgresstime = 1;
                     this.mEUt = 1;
@@ -92,8 +92,10 @@ public class GT_MetaTileEntity_Scanner
                 if (ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) {
                     aStack.stackSize -= 1;
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                    this.mMaxProgresstime = (512 / (1 << this.mTier - 1));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,512);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
                 ItemData tData = GT_OreDictUnificator.getAssociation(aStack);
@@ -104,8 +106,10 @@ public class GT_MetaTileEntity_Scanner
                     this.mOutputItems[0] = ItemList.Tool_DataOrb.get(1L, new Object[0]);
                     Behaviour_DataOrb.setDataTitle(this.mOutputItems[0], "Elemental-Scan");
                     Behaviour_DataOrb.setDataName(this.mOutputItems[0], tData.mMaterial.mMaterial.mElement.name());
-                    this.mMaxProgresstime = ((int) (tData.mMaterial.mMaterial.getMass() * 8192L / (1 << this.mTier - 1)));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,GT_Utility.safeInt(tData.mMaterial.mMaterial.getMass() * 8192L));
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
             }
@@ -113,8 +117,10 @@ public class GT_MetaTileEntity_Scanner
                 if (ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                     aStack.stackSize -= 1;
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                    this.mMaxProgresstime = (128 / (1 << this.mTier - 1));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,128);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
                 if (aStack.getItem() == Items.written_book) {
@@ -123,8 +129,10 @@ public class GT_MetaTileEntity_Scanner
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                     this.mOutputItems[0].setTagCompound(aStack.getTagCompound());
-                    this.mMaxProgresstime = (128 / (1 << this.mTier - 1));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,128);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
                 if (aStack.getItem() == Items.filled_map) {
@@ -133,8 +141,10 @@ public class GT_MetaTileEntity_Scanner
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                     this.mOutputItems[0].setTagCompound(GT_Utility.getNBTContainingShort(new NBTTagCompound(), "map_id", (short) aStack.getItemDamage()));
-                    this.mMaxProgresstime = (128 / (1 << this.mTier - 1));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,128);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
             }
@@ -145,8 +155,10 @@ public class GT_MetaTileEntity_Scanner
                     aStack.stackSize -= 1;
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{aStack});
-                    this.mMaxProgresstime = (1000 / (1 << this.mTier - 1));
-                    this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                    calculateOverclockedNess(32,1000);
+                    //In case recipe is too OP for that machine
+                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
 
                 }
@@ -154,12 +166,14 @@ public class GT_MetaTileEntity_Scanner
             if(ItemList.Tool_DataStick.isStackEqual(getSpecialSlot(), false, true)&& aStack !=null){
             	for(GT_Recipe.GT_Recipe_AssemblyLine tRecipe:GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes){
             	if(GT_Utility.areStacksEqual(tRecipe.mResearchItem, aStack, true)){
+            	
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                 GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+" Construction Data");
+
                 NBTTagCompound tNBT = this.mOutputItems[0].getTagCompound();
                 if (tNBT == null) {
                     tNBT = new NBTTagCompound();
-                }
+                }     
                 tNBT.setTag("output", tRecipe.mOutput.writeToNBT(new NBTTagCompound()));
                 tNBT.setInteger("time", tRecipe.mDuration);
                 tNBT.setInteger("eu", tRecipe.mEUt);
@@ -171,9 +185,9 @@ public class GT_MetaTileEntity_Scanner
                 	
                 	tNBT.setTag("f"+i, tRecipe.mFluidInputs[i].writeToNBT(new NBTTagCompound()));
                 }
-                tNBT.setString("author", "Assembly Line Recipe Generator");
+                tNBT.setString("author", "Assembling Line Recipe Generator");
                 NBTTagList tNBTList = new NBTTagList();
-                tNBTList.appendTag(new NBTTagString("Constructionplan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Productiontime: "+(tRecipe.mDuration/20)));
+                tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
                 for(int i=0;i<tRecipe.mInputs.length;i++){
                 	if(tRecipe.mInputs[i]!=null){
                 		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mInputs[i].getDisplayName())));
@@ -187,9 +201,12 @@ public class GT_MetaTileEntity_Scanner
                 tNBT.setTag("pages", tNBTList);
                 
                 this.mOutputItems[0].setTagCompound(tNBT);
+                
                 aStack.stackSize -= 1;
-                this.mMaxProgresstime = (tRecipe.mResearchTime / (1 << this.mTier - 1));
-                this.mEUt = (30 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                calculateOverclockedNess(30,tRecipe.mResearchTime);
+                //In case recipe is too OP for that machine
+                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                    return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
             	getSpecialSlot().stackSize -= 1;
             	return 2;
             	}

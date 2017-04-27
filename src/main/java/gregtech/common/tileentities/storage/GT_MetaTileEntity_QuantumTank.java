@@ -8,11 +8,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_RenderedTexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 public class GT_MetaTileEntity_QuantumTank
         extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_QuantumTank(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "Stores " + ((int) (Math.pow(6, aTier) * 267000)) + "L of fluid");
+        super(aID, aName, aNameRegional, aTier, 3, "Stores " + CommonSizeCompute(aTier) + "L of fluid");
     }
 
     public GT_MetaTileEntity_QuantumTank(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -101,18 +102,20 @@ public class GT_MetaTileEntity_QuantumTank
 
         if (mFluid == null) {
             return new String[]{
-                    "Quantum Tank",
+                    EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
                     "Stored Fluid:",
-                    "No Fluid",
-                    Integer.toString(0) + "L",
-                    Integer.toString(getCapacity()) + "L"};
+                    EnumChatFormatting.GOLD + "No Fluid"+ EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + Integer.toString(0) + " L"+ EnumChatFormatting.RESET+" "+
+                    EnumChatFormatting.YELLOW + Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
+            };
         }
         return new String[]{
-                "Quantum Tank",
+                EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
                 "Stored Fluid:",
-                mFluid.getLocalizedName(),
-                Integer.toString(mFluid.amount) + "L",
-                Integer.toString(getCapacity()) + "L"};
+                EnumChatFormatting.GOLD + mFluid.getLocalizedName()+ EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L"+ EnumChatFormatting.RESET+" "+
+                EnumChatFormatting.YELLOW+ Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
+        };
     }
 
     @Override
@@ -125,9 +128,26 @@ public class GT_MetaTileEntity_QuantumTank
         return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescription, mTextures);
     }
 
+    private static int CommonSizeCompute(int tier){
+        switch(tier){
+            case 6:
+                return  128000000;
+            case 7:
+                return  256000000;
+            case 8:
+                return  512000000;
+            case 9:
+                return 1024000000;
+            case 10:
+                return 2147483640;
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public int getCapacity() {
-        return (int) (Math.pow(6, mTier) * 267000);
+        return CommonSizeCompute(mTier);
     }
 
     @Override
