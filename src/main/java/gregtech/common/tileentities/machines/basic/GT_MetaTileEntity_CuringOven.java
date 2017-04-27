@@ -34,7 +34,7 @@ public class GT_MetaTileEntity_CuringOven
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_CuringOven(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_CuringOven(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {

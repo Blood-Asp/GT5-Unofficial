@@ -79,7 +79,7 @@ public class GT_MetaTileEntity_Hatch_Dynamo extends GT_MetaTileEntity_Hatch {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_Dynamo(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Hatch_Dynamo(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

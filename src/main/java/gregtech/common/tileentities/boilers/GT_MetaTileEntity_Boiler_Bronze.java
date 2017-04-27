@@ -23,14 +23,15 @@ public class GT_MetaTileEntity_Boiler_Bronze
         extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
-        		"An early way to get Steam Power", 
-        		"Produces 120L of Steam per second",
-        		"Causes 20 Pollution per second"}, new ITexture[0]);
+                "An early way to get Steam Power",
+                "Produces 120L of Steam per second",
+                "Causes 20 Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Bronze(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
+
     public GT_MetaTileEntity_Boiler_Bronze(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
@@ -60,7 +61,7 @@ public class GT_MetaTileEntity_Boiler_Bronze
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Bronze(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Bronze(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -146,8 +147,8 @@ public class GT_MetaTileEntity_Boiler_Bronze
                 this.mProcessingEnergy -= 1;
                 this.mTemperature += 1;
             }
-            if(this.mProcessingEnergy>0 && (aTick % 20L == 0L)){
-            	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 20);
+            if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
+                GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 20);
             }
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
         }

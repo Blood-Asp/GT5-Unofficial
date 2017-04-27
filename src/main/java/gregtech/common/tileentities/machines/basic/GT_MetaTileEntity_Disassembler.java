@@ -27,7 +27,7 @@ public class GT_MetaTileEntity_Disassembler
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Disassembler(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_Disassembler(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public int checkRecipe() {

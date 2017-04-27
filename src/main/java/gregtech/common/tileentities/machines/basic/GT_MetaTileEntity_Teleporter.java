@@ -162,7 +162,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Teleporter(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Teleporter(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     @Override

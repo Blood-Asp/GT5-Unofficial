@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_Macerator_Bronze
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Macerator_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Macerator_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {

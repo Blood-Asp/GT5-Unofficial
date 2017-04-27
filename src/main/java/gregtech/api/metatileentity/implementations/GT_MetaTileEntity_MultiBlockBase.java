@@ -117,8 +117,8 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         aNBT.setInteger("mRuntime", mRuntime);
 
         if (mOutputItems != null) {
-        	aNBT.setInteger("mOutputItemsLength", mOutputItems.length);
-        	for (int i = 0; i < mOutputItems.length; i++)
+            aNBT.setInteger("mOutputItemsLength", mOutputItems.length);
+            for (int i = 0; i < mOutputItems.length; i++)
                 if (mOutputItems[i] != null) {
                     NBTTagCompound tNBT = new NBTTagCompound();
                     mOutputItems[i].writeToNBT(tNBT);
@@ -126,8 +126,8 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 }
         }
         if (mOutputFluids != null) {
-        	aNBT.setInteger("mOutputFluidsLength", mOutputFluids.length);
-        	for (int i = 0; i < mOutputFluids.length; i++)
+            aNBT.setInteger("mOutputFluidsLength", mOutputFluids.length);
+            for (int i = 0; i < mOutputFluids.length; i++)
                 if (mOutputFluids[i] != null) {
                     NBTTagCompound tNBT = new NBTTagCompound();
                     mOutputFluids[i].writeToNBT(tNBT);
@@ -152,12 +152,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         mEfficiency = aNBT.getInteger("mEfficiency");
         mPollution = aNBT.getInteger("mPollution");
         mRuntime = aNBT.getInteger("mRuntime");
-        
+
         int aOutputItemsLength = aNBT.getInteger("mOutputItemsLength");
         if (aOutputItemsLength > 0) {
             mOutputItems = new ItemStack[aOutputItemsLength];
             for (int i = 0; i < mOutputItems.length; i++)
-            	mOutputItems[i] = GT_Utility.loadItem(aNBT, "mOutputItem" + i);
+                mOutputItems[i] = GT_Utility.loadItem(aNBT, "mOutputItem" + i);
         }
 
         int aOutputFluidsLength = aNBT.getInteger("mOutputFluidsLength");
@@ -166,7 +166,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             for (int i = 0; i < mOutputFluids.length; i++)
                 mOutputFluids[i] = GT_Utility.loadFluid(aNBT, "mOutputFluids" + i);
         }
-        
+
         mWrench = aNBT.getBoolean("mWrench");
         mScrewdriver = aNBT.getBoolean("mScrewdriver");
         mSoftHammer = aNBT.getBoolean("mSoftHammer");
@@ -222,7 +222,8 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                     for (GT_MetaTileEntity_Hatch_Maintenance tHatch : mMaintenanceHatches) {
                         if (isValidMetaTileEntity(tHatch)) {
                             if (!GT_MetaTileEntity_MultiBlockBase.disableMaintenance) {
-                            	if(tHatch.mAuto && (!mWrench||!mScrewdriver||!mSoftHammer||!mHardHammer||!mSolderingTool||!mCrowbar))tHatch.autoMaintainance();
+                                if (tHatch.mAuto && (!mWrench || !mScrewdriver || !mSoftHammer || !mHardHammer || !mSolderingTool || !mCrowbar))
+                                    tHatch.autoMaintainance();
                                 if (tHatch.mWrench) mWrench = true;
                                 if (tHatch.mScrewdriver) mScrewdriver = true;
                                 if (tHatch.mSoftHammer) mSoftHammer = true;
@@ -255,7 +256,10 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                                 if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
                                     if (mOutputItems != null) for (ItemStack tStack : mOutputItems)
                                         if (tStack != null) {
-                                            try{GT_Mod.achievements.issueAchivementHatch(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), tStack);}catch(Exception e){}
+                                            try {
+                                                GT_Mod.achievements.issueAchivementHatch(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), tStack);
+                                            } catch (Exception ignored) {
+                                            }
                                             addOutput(tStack);
                                         }
                                     if (mOutputFluids != null && mOutputFluids.length == 1) {
@@ -276,7 +280,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                                         if (mOutputFluids.length > 1) {
                                             try {
                                                 GT_Mod.achievements.issueAchievement(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), "oilplant");
-                                            } catch (Exception e) {
+                                            } catch (Exception ignored) {
                                             }
                                         }
                                     }
@@ -724,7 +728,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Maintenance) {
-        	((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
             return mMaintenanceHatches.add((GT_MetaTileEntity_Hatch_Maintenance) aMetaTileEntity);
         }
         return false;

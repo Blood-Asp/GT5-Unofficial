@@ -35,7 +35,7 @@ public class GT_MetaTileEntity_FluidNaquadahReactor
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_FluidNaquadahReactor(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_FluidNaquadahReactor(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {

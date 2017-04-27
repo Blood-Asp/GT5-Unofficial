@@ -85,7 +85,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_AdvSeismicProspector(this.mName, this.mTier, this.mDescription, this.mTextures,
+        return new GT_MetaTileEntity_AdvSeismicProspector(this.mName, this.mTier, this.mDescriptionArray, this.mTextures,
                 this.mGUIName, this.mNEIName, this.near, this.middle, this.radius, this.step);
     }
 

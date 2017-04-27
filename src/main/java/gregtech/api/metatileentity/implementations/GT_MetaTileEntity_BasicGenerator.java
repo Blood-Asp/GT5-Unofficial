@@ -29,7 +29,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
-    
+
     public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
@@ -59,9 +59,9 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public String[] getDescription() {
-    	String[] desc = new String[mDescription.length + 1];
-    	System.arraycopy(mDescription, 0, desc, 0, mDescription.length);
-    	desc[mDescription.length] = "Fuel Efficiency: " + getEfficiency() + "%";
+        String[] desc = new String[mDescriptionArray.length + 1];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        desc[mDescriptionArray.length] = "Fuel Efficiency: " + getEfficiency() + "%";
         return desc;
     }
 
@@ -203,8 +203,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                 if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount > tConsumed) {
                     long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
                     if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
-                    	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()),
-                    			10 * getPollution());
+                        GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()),
+                                10 * getPollution());
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
                     }
                 }
@@ -216,8 +216,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     if (aBaseMetaTileEntity.addStackToSlot(getOutputSlot(), tEmptyContainer)) {
                         aBaseMetaTileEntity.increaseStoredEnergyUnits(tFuelValue, true);
                         aBaseMetaTileEntity.decrStackSize(getInputSlot(), 1);
-                    	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()),
-                    			10 * getPollution());
+                        GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()),
+                                10 * getPollution());
                     }
                 }
             }
@@ -226,7 +226,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
         if (aBaseMetaTileEntity.isServerSide())
             aBaseMetaTileEntity.setActive(aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.getUniversalEnergyStored() >= maxEUOutput() + getMinimumStoredEU());
     }
-    
+
     public abstract int getPollution();
 
     public abstract GT_Recipe_Map getRecipes();

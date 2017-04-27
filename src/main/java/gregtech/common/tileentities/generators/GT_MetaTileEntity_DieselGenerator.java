@@ -18,15 +18,14 @@ import net.minecraft.item.ItemStack;
 public class GT_MetaTileEntity_DieselGenerator
         extends GT_MetaTileEntity_BasicGenerator {
 
-	public static final int BASE_POLLUTION = 2;
-	
+    public static final int BASE_POLLUTION = 2;
+
     public int mEfficiency;
 
     public GT_MetaTileEntity_DieselGenerator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, new String[]{
-        		"Requires liquid Fuel",
-        		"Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"},
-        		new ITexture[0]);
+                "Requires liquid Fuel",
+                "Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
         onConfigLoad();
     }
 
@@ -34,7 +33,7 @@ public class GT_MetaTileEntity_DieselGenerator
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
-    
+
     public GT_MetaTileEntity_DieselGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
@@ -45,7 +44,7 @@ public class GT_MetaTileEntity_DieselGenerator
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_DieselGenerator(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_DieselGenerator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -65,7 +64,7 @@ public class GT_MetaTileEntity_DieselGenerator
     }
 
     public int getFuelValue(ItemStack aStack) {
-    	 if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return 0;
+        if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return 0;
         int rValue = Math.max(GT_ModHandler.getFuelCanValue(aStack) * 6 / 5, super.getFuelValue(aStack));
         if (ItemList.Fuel_Can_Plastic_Filled.isStackEqual(aStack, false, true)) {
             rValue = Math.max(rValue, GameRegistry.getFuelValue(aStack) * 3);
@@ -113,8 +112,8 @@ public class GT_MetaTileEntity_DieselGenerator
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.DIESEL_GENERATOR_SIDE_ACTIVE)};
     }
 
-	@Override
-	public int getPollution() {
-		return (int) (GT_MetaTileEntity_DieselGenerator.BASE_POLLUTION * Math.pow(2, mTier - 1));
-	}
+    @Override
+    public int getPollution() {
+        return (int) (GT_MetaTileEntity_DieselGenerator.BASE_POLLUTION * Math.pow(2, mTier - 1));
+    }
 }

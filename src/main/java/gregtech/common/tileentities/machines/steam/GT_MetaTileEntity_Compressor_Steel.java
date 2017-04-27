@@ -33,7 +33,7 @@ public class GT_MetaTileEntity_Compressor_Steel
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Compressor_Steel(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Compressor_Steel(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public int checkRecipe() {

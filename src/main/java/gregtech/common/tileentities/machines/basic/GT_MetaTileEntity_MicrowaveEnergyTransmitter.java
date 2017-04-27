@@ -74,7 +74,7 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_MicrowaveEnergyTransmitter(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_MicrowaveEnergyTransmitter(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public String[] getInfoData() {

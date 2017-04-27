@@ -126,7 +126,7 @@ public class GT_MetaTileEntity_QuantumTank
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

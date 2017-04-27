@@ -51,7 +51,7 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumChest(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_QuantumChest(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

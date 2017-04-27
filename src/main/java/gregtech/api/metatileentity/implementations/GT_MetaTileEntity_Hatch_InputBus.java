@@ -59,7 +59,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_InputBus(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Hatch_InputBus(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

@@ -19,17 +19,16 @@ public class GT_MetaTileEntity_Boiler_Solar
         extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Solar(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
-        		"Steam Power by the Sun", 
-        		"Produces 120L of Steam per second", 
-        		"Calcifies over time, reducing Steam output to 40L/s", 
-        		"Break and replace to decalcify"}, 
-        		new ITexture[0]);
+                "Steam Power by the Sun",
+                "Produces 120L of Steam per second",
+                "Calcifies over time, reducing Steam output to 40L/s",
+                "Break and replace to decalcify"});
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
-    
+
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
@@ -66,11 +65,11 @@ public class GT_MetaTileEntity_Boiler_Solar
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
-    
+
     private int mRunTime = 0;
-    
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
@@ -118,8 +117,8 @@ public class GT_MetaTileEntity_Boiler_Solar
                         this.mFluid.amount -= 1;
                         mRunTime += 1;
                         int tOutput = 150;
-                        if(mRunTime > 10000){
-                        	tOutput = Math.max(50, 150 - ((mRunTime-10000)/100));
+                        if (mRunTime > 10000) {
+                            tOutput = Math.max(50, 150 - ((mRunTime - 10000) / 100));
                         }
                         if (this.mSteam == null) {
                             this.mSteam = GT_ModHandler.getSteam(tOutput);
