@@ -23,9 +23,9 @@ public class GT_MetaTileEntity_Boiler_Steel
         extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
-        		"Faster than the Bronze Boiler", 
-        		"Produces 300L of Steam per second",
-        		"Causes 20 Pollution per second"}, new ITexture[0]);
+                "Faster than the Bronze Boiler",
+                "Produces 300L of Steam per second",
+                "Causes 20 Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -152,8 +152,8 @@ public class GT_MetaTileEntity_Boiler_Steel
                 this.mProcessingEnergy -= 2;
                 this.mTemperature += 1;
             }
-            if(this.mProcessingEnergy>0 && (aTick % 20L == 0L)){
-            	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 20);
+            if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
+                GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 20);
             }
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
         }

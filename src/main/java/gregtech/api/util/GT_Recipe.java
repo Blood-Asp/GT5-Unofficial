@@ -76,7 +76,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
      * Used for describing recipes that do not fit the default recipe pattern (for example Large Boiler Fuels)
      */
     private String[] neiDesc = null;
-    
+
     private GT_Recipe(GT_Recipe aRecipe) {
         mInputs = GT_Utility.copyStackArray((Object[]) aRecipe.mInputs);
         mOutputs = GT_Utility.copyStackArray((Object[]) aRecipe.mOutputs);
@@ -93,6 +93,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mEnabled = aRecipe.mEnabled;
         mHidden = aRecipe.mHidden;
     }
+
     protected GT_Recipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
         if (aInputs == null) aInputs = new ItemStack[0];
         if (aOutputs == null) aOutputs = new ItemStack[0];
@@ -330,13 +331,13 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 boolean temp = true;
                 amt = tFluid.amount;
                 for (FluidStack aFluid : aFluidInputs)
-                    if (aFluid != null && aFluid.isFluidEqual(tFluid)){
-                        if (aDontCheckStackSizes ){
+                    if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
+                        if (aDontCheckStackSizes) {
                             temp = false;
                             break;
                         }
                         amt -= aFluid.amount;
-                        if (amt<1){
+                        if (amt < 1) {
                             temp = false;
                             break;
                         }
@@ -397,14 +398,14 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                         amt = tStack.stackSize;
                         for (ItemStack aStack : aInputs) {
                             if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
-                                if (aDontCheckStackSizes){
+                                if (aDontCheckStackSizes) {
                                     aStack.stackSize -= amt;
                                     break;
                                 }
-                                if (aStack.stackSize < amt){
+                                if (aStack.stackSize < amt) {
                                     amt -= aStack.stackSize;
                                     aStack.stackSize = 0;
-                                }else{
+                                } else {
                                     aStack.stackSize -= amt;
                                     amt = 0;
                                     break;
@@ -441,15 +442,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     }
 
     public String[] getNeiDesc() {
-		return neiDesc;
-	}
-	protected void setNeiDesc(String... neiDesc) {
-		this.neiDesc = neiDesc;
-	}
+        return neiDesc;
+    }
 
-	public static class GT_Recipe_AssemblyLine{
+    protected void setNeiDesc(String... neiDesc) {
+        this.neiDesc = neiDesc;
+    }
+
+    public static class GT_Recipe_AssemblyLine {
         public static final ArrayList<GT_Recipe_AssemblyLine> sAssemblylineRecipes = new ArrayList<GT_Recipe_AssemblyLine>();
-        
+
         public ItemStack mResearchItem;
         public int mResearchTime;
         public ItemStack[] mInputs;
@@ -457,17 +459,17 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public ItemStack mOutput;
         public int mDuration;
         public int mEUt;
-        
+
         public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt) {
-        	mResearchItem = aResearchItem;
-        	mResearchTime = aResearchTime;
-        	mInputs = aInputs;
-        	mFluidInputs = aFluidInputs;
-        	mOutput = aOutput;
-        	mDuration = aDuration;
-        	mEUt = aEUt;
+            mResearchItem = aResearchItem;
+            mResearchTime = aResearchTime;
+            mInputs = aInputs;
+            mFluidInputs = aFluidInputs;
+            mOutput = aOutput;
+            mDuration = aDuration;
+            mEUt = aEUt;
         }
-        
+
     }
 
     public static class GT_Recipe_Map {
@@ -489,7 +491,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map sByProductList = new GT_Recipe_Map(new HashSet<GT_Recipe>(1000), "gt.recipe.byproductlist", "Ore Byproduct List", null, RES_PATH_GUI + "basicmachines/Default", 1, 6, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sReplicatorFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(100), "gt.recipe.replicator", "Replicator", null, RES_PATH_GUI + "basicmachines/Replicator", 0, 1, 0, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sAssemblylineFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(30), "gt.recipe.scanner", "Scanner", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 1, 0, 1, E, 1, E, true, true);
-        
+
         public static final GT_Recipe_Map sPlasmaArcFurnaceRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(10000), "gt.recipe.plasmaarcfurnace", "Plasma Arc Furnace", null, RES_PATH_GUI + "basicmachines/PlasmaArcFurnace", 1, 4, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sArcFurnaceRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(10000), "gt.recipe.arcfurnace", "Arc Furnace", null, RES_PATH_GUI + "basicmachines/ArcFurnace", 1, 4, 1, 1, 3, E, 1, E, true, true);
         public static final GT_Recipe_Map sPrinterRecipes = new GT_Recipe_Map_Printer(new HashSet<GT_Recipe>(100), "gt.recipe.printer", "Printer", null, RES_PATH_GUI + "basicmachines/Printer", 1, 1, 1, 1, 1, E, 1, E, true, true);
@@ -545,7 +547,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map_Fuel sLargeNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.largenaquadahreactor", "Large Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Fuel sFluidNaquadahReactorFuels = new GT_Recipe_Map_Fuel(new HashSet<GT_Recipe>(10), "gt.recipe.fluidnaquadahreactor", "Fluid Naquadah Reactor", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 0, 0, 1, "Fuel Value: ", 1000, " EU", true, true);
         public static final GT_Recipe_Map_Large_Boiler_Fake_Fuels sLargeBoilerFakeFuels = new GT_Recipe_Map_Large_Boiler_Fake_Fuels();
-        
+
         /**
          * HashMap of Recipes based on their Items
          */
@@ -1378,47 +1380,46 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     }
 
     public static class GT_Recipe_Map_Large_Boiler_Fake_Fuels extends GT_Recipe_Map {
-    	
-    	public GT_Recipe_Map_Large_Boiler_Fake_Fuels(){
-    		super(new HashSet<GT_Recipe>(30), "gt.recipe.largeboilerfakefuels", "Large Boiler", null, RES_PATH_GUI + "basicmachines/Default", 1, 0, 1, 0, 1, E, 1, E, true , true);
-    		GT_Recipe explanatoryRecipe = new GT_Recipe(true, new ItemStack[]{}, new ItemStack[]{}, null, null, null, null, 1, 1, 1);
-    		explanatoryRecipe.setNeiDesc("Not all solid fuels are listed.", "Any item that burns in a", "vanilla furnace will burn in", "a Large Boiler.");
-    		addRecipe(explanatoryRecipe);
-    	}
-    	
-    	public GT_Recipe addDenseLiquidRecipe(GT_Recipe recipe) {
-    		return addRecipe(recipe, ((double)recipe.mSpecialValue) / 10);
-    	}
 
-    	public GT_Recipe addDieselRecipe(GT_Recipe recipe) {
-    		return addRecipe(recipe,((double)recipe.mSpecialValue) / 40);
-    	}
+        public GT_Recipe_Map_Large_Boiler_Fake_Fuels() {
+            super(new HashSet<GT_Recipe>(30), "gt.recipe.largeboilerfakefuels", "Large Boiler", null, RES_PATH_GUI + "basicmachines/Default", 1, 0, 1, 0, 1, E, 1, E, true, true);
+            GT_Recipe explanatoryRecipe = new GT_Recipe(true, new ItemStack[]{}, new ItemStack[]{}, null, null, null, null, 1, 1, 1);
+            explanatoryRecipe.setNeiDesc("Not all solid fuels are listed.", "Any item that burns in a", "vanilla furnace will burn in", "a Large Boiler.");
+            addRecipe(explanatoryRecipe);
+        }
 
-    	public void addSolidRecipes(ItemStack ... itemStacks) {
-    		for(ItemStack itemStack : itemStacks){
-    			addSolidRecipe(itemStack);
-    		}
-    	}
-    	    	
-    	public GT_Recipe addSolidRecipe(ItemStack fuelItemStack){
-    		return addRecipe(new GT_Recipe(true, new ItemStack[]{fuelItemStack}, new ItemStack[]{}, null, null, null, null, 1, 0, GT_ModHandler.getFuelValue(fuelItemStack) / 1600), ((double)GT_ModHandler.getFuelValue(fuelItemStack)) / 1600);
-    	}
-    	
-    	private GT_Recipe addRecipe(GT_Recipe recipe, double baseBurnTime){
-			recipe = new GT_Recipe(recipe);
-			
-    		double bronzeBurnTime = baseBurnTime * 2;
-    		double steelBurnTime = baseBurnTime * 1.5;
-    		double titaniumBurnTime = baseBurnTime * 1.3;
-    		double tungstensteelBurnTime = baseBurnTime * 1.2;
-    		
-    		recipe.setNeiDesc("Burn time in seconds:", 
-    				String.format("Bronze Boiler: %.4f", bronzeBurnTime), 
-    				String.format("Steel Boiler: %.4f", steelBurnTime), 
-    				String.format("Titanium Boiler: %.4f", titaniumBurnTime), 
-    				String.format("Tungstensteel Boiler: %.4f", tungstensteelBurnTime));
-    		return super.addRecipe(recipe);
-    	}
-    	
+        public GT_Recipe addDenseLiquidRecipe(GT_Recipe recipe) {
+            return addRecipe(recipe, ((double) recipe.mSpecialValue) / 10);
+        }
+
+        public GT_Recipe addDieselRecipe(GT_Recipe recipe) {
+            return addRecipe(recipe, ((double) recipe.mSpecialValue) / 40);
+        }
+
+        public void addSolidRecipes(ItemStack... itemStacks) {
+            for (ItemStack itemStack : itemStacks) {
+                addSolidRecipe(itemStack);
+            }
+        }
+
+        public GT_Recipe addSolidRecipe(ItemStack fuelItemStack) {
+            return addRecipe(new GT_Recipe(true, new ItemStack[]{fuelItemStack}, new ItemStack[]{}, null, null, null, null, 1, 0, GT_ModHandler.getFuelValue(fuelItemStack) / 1600), ((double) GT_ModHandler.getFuelValue(fuelItemStack)) / 1600);
+        }
+
+        private GT_Recipe addRecipe(GT_Recipe recipe, double baseBurnTime) {
+            recipe = new GT_Recipe(recipe);
+
+            double bronzeBurnTime = baseBurnTime * 2;
+            double steelBurnTime = baseBurnTime * 1.5;
+            double titaniumBurnTime = baseBurnTime * 1.3;
+            double tungstensteelBurnTime = baseBurnTime * 1.2;
+
+            recipe.setNeiDesc("Burn time in seconds:",
+                    String.format("Bronze Boiler: %.4f", bronzeBurnTime),
+                    String.format("Steel Boiler: %.4f", steelBurnTime),
+                    String.format("Titanium Boiler: %.4f", titaniumBurnTime),
+                    String.format("Tungstensteel Boiler: %.4f", tungstensteelBurnTime));
+            return super.addRecipe(recipe);
+        }
     }
 }
