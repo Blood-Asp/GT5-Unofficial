@@ -33,6 +33,8 @@ public class MaterialBuilder {
 	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<TC_Aspects.TC_AspectStack>();
 	private boolean hasCorrespondingFluid = false;
 	private boolean hasCorrespondingGas = false;
+	private int liquidTemperature = 300;
+	private int gasTemperature = 300;
 
 	public MaterialBuilder(int metaItemSubID, TextureSet iconSet, String defaultLocalName) {
 		this.metaItemSubID = metaItemSubID;
@@ -218,6 +220,24 @@ public class MaterialBuilder {
 
 	public MaterialBuilder setAspects(List<TC_Aspects.TC_AspectStack> aspects) {
 		this.aspects = aspects;
+		return this;
+	}
+
+	public int getLiquidTemperature() {
+		return liquidTemperature;
+	}
+
+	public MaterialBuilder setLiquidTemperature(int liquidTemperature) {
+		this.liquidTemperature = liquidTemperature;
+		return this;
+	}
+
+	public int getGasTemperature() {
+		return gasTemperature;
+	}
+
+	public MaterialBuilder setGasTemperature(int gasTemperature) {
+		this.gasTemperature = gasTemperature;
 		return this;
 	}
 }
