@@ -175,6 +175,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Good Circuit Board", "A good Circuit Board", o));
         ItemList.Circuit_Board_Phenolic_Electronic.set(addItem(tLastID = 102, "Electronic Circuit Board", "A electronic Circuit Board", o));
         ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 103, "Advanced Circuit Board", "A advanced Circuit Board", o));
+        ItemList.Circuit_Board_Fiberglass_Advanced.set(addItem(tLastID = 104, "More Advanced Circuit Board", "A more advanced Circuit Board", o));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
