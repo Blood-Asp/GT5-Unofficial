@@ -146,7 +146,7 @@ public class GT_MetaGenerated_Item_03
         //Advanced Circuit			IC2
         
         ItemList.Circuit_Processor.set(addItem(tLastID = 80, "Integrated Processor", "Good Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Good), SubTag.NO_UNIFICATION}));
-//        ItemList.Circuit_Computer.set(addItem(tLastID = 81, "Processor Assembly", "Advanced Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
+        //ItemList.Circuit_Computer.set(addItem(tLastID = 81, "Processor Assembly", "Advanced Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
         //Workstation/DataStick		Item01 Datacircuit
         //Mainframe					Item01 DataProcessor
         
