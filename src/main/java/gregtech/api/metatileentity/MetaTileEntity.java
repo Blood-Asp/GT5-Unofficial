@@ -857,8 +857,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         GT_Utility.sendSoundToPlayers(tWorld, GregTech_API.sSoundList.get(209), 1.0F, -1, tX, tY, tZ);
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
         if (GregTech_API.sMachineExplosions)
-            if(GT_Mod.gregtechproxy.mPollution)
-                GT_Pollution.addPollution(tWorld,new ChunkPosition(tX, tY, tZ), 100000);
             tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
     }
 

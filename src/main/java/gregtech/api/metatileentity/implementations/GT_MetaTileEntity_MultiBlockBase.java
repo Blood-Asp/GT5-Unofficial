@@ -502,7 +502,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     public void explodeMultiblock() {
-        GT_Pollution.addPollution(getBaseMetaTileEntity().getWorld(),new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 300000);
+        GT_Pollution.addPollution(getBaseMetaTileEntity(), 300000);
         mInventory[1] = null;
         for (MetaTileEntity tTileEntity : mInputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);
         for (MetaTileEntity tTileEntity : mOutputBusses) tTileEntity.getBaseMetaTileEntity().doExplosion(V[8]);

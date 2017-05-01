@@ -207,7 +207,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                 }
             }
             if(this.mMaxProgresstime>0 && (aTimer % 20L == 0L)){
-            	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 200);
+            	GT_Pollution.addPollution(getBaseMetaTileEntity(), 200);
             }
             
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));
@@ -238,7 +238,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
             XSTR floatGen=new XSTR();
             aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.3D, 0.0D);
             //Pollution particles intensify
-            if(GT_Pollution.getPollutionAtCoords(aWorld,this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
+            if(GT_Pollution.getPollution(getBaseMetaTileEntity())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
                 aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.45D, 0.0D);
                 aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.6D, 0.0D);
             }

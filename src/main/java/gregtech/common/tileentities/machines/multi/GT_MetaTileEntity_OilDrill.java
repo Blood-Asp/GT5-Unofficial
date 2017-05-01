@@ -21,7 +21,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {//TODO REWORK
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+
+public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {
 
     private boolean completedCycle = false;
     private int extractionSpeed=0;
@@ -79,29 +81,26 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             }
         }
         //Output fluid
-        FluidStack tFluid = null;//GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);//TODO FIX
+        FluidStack tFluid = undergroundOil(getBaseMetaTileEntity(),.5F+(getInputTier()*.25F));//consumes here...
         if (tFluid == null){
             extractionSpeed=0;
             stopMachine();
             return false;//impossible
         }
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
+            //Not at bedrock layer - i prefer to keep it like it is...
             if (completedCycle) {
                 moveOneDown();
             }
             tFluid = null;
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
-        } else if (tFluid.amount == 0) {//no fluid remaining
+        } else if (tFluid.amount == 0) {//no fluid remaining, for SANity
             extractionSpeed=0;
 	        stopMachine();
             return false;//stops processing??
         } else {
-            int minExtraction= (int)Math.pow((float)GT_Utility.getTier(getMaxInputVoltage()),3F);//tier^3
-            if(tFluid.amount>minExtraction)
-                tFluid.amount= Math.max(minExtraction,Math.min(tFluid.amount/50000,500));
             extractionSpeed=tFluid.amount;
-            //GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,extractionSpeed);//TODO FIX
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;

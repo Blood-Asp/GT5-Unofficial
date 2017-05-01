@@ -73,7 +73,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     public boolean polluteEnvironment() {
         if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
-            GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), calculatePollutionReduction(10000));
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
             return true;
         }
         return false;
@@ -106,7 +106,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         boolean chk1,chk2,chk3;
         float ran1=floatGen.nextFloat(),ran2=0,ran3=0;
         chk1=ran1*100<calculatePollutionReduction(100);
-        if(GT_Pollution.getPollutionAtCoords(aWorld,this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        if(GT_Pollution.getPollution(getBaseMetaTileEntity())>= GT_Mod.gregtechproxy.mPollutionSmogLimit){
             ran2=floatGen.nextFloat();
             ran3=floatGen.nextFloat();
             chk2=ran2*100<calculatePollutionReduction(100);

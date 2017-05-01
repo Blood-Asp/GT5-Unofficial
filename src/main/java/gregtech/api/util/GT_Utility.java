@@ -56,9 +56,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -75,6 +77,9 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import static gregtech.api.enums.GT_Values.*;
+import static gregtech.common.GT_Proxy.GTPOLLUTION;
+import static gregtech.common.GT_Proxy.dimensionWiseChunkData;
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1575,114 +1580,6 @@ public class GT_Utility {
     	return (int)Math.floor(aValue / aScale);
     }
 
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ) {
-    	return getUndergroundOil(aWorld, aX, aZ, false);
-    }
-
-    public static FluidStack getUndergroundOil(World aWorld, int aX, int aZ, boolean needConsumeOil) {//TODO RETROGEN!, CHECK FLUIDS AVAILABLE, REWORK
-
-    	if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(aWorld.provider.dimensionId))
-    		return null;
-
-        XSTR tRandom = new XSTR((aWorld.getSeed() + aWorld.provider.dimensionId * 2 + (getScaleCoordinates(aX,96)) + (7 * (getScaleCoordinates(aZ,96)))));
-        int tAmount = 0;
-        int tFluidId = 0;
-        int tDecreasePerOperationAmount = 5;
-        Fluid tFluid = null;
-//        System.out.println("Dimension: "+GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).Dimension);
-        try {
-            GT_UO_Fluid uoFluid = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).getRandomFluid(tRandom);
-            if (uoFluid != null)
-            {
-            	tFluid = uoFluid.getFluid();
-            	tAmount = uoFluid.getRandomAmount(tRandom);
-            	tDecreasePerOperationAmount = uoFluid.DecreasePerOperationAmount;
-            	if (tFluid != null)
-            		tFluidId = tFluid.getID();
-                //System.out.println("Fluid: ("+tFluidId+")"+tFluid.getName()+" Amount:"+tAmount);
-            }
-			
-		} catch (Exception e) {
-	        tAmount = 0;
-	        tFluidId = 0;
-		}
-
-        try {
-        ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
-        int[] tInts = new int[3];
-    	if(GT_Proxy.chunkData.containsKey(tPos)){
-    		tInts = GT_Proxy.chunkData.get(tPos);
-    		if(tInts.length>0){
-    			if(tInts[0]>0){tAmount = tInts[0];}
-    		}
-    		if(tInts.length>2){
-    			if(tInts[2]>0&&tInts[2]!=tFluidId)
-    			{
-    				tFluidId = tInts[2];
-    				tFluid = FluidRegistry.getFluid(tFluidId);
-    			}
-    		}
-    		GT_Proxy.chunkData.remove(tPos);
-    	}
-
-    	if (needConsumeOil && tAmount >= 5000)
-    		tAmount = tAmount - tDecreasePerOperationAmount;
-
-    	tInts[0] = tAmount;
-    	tInts[2] = tFluidId;
-    	GT_Proxy.chunkData.put(tPos, tInts);
-		} catch (Exception e) {
-			System.out.println("getUndergroundOil() - Error put data");
-		}
-    	if (tFluid!=null)
-    		return new FluidStack(tFluid, tAmount);
-    	return null;
-    }
-	
-    //private static FluidStack getUndergroundOilFromInfo(int type,int amnt){
-    //    switch (type) {//0 is old system
-    //        case 1:
-    //            return new FluidStack(Materials.OilLight .mFluid,amnt);
-    //        case 2:
-    //            return new FluidStack(Materials.OilMedium.mFluid,amnt);
-    //        case 3:
-    //            return new FluidStack(Materials.OilHeavy .mFluid,amnt);
-    //        case 4:
-    //            return new FluidStack(Materials.Oil      .mFluid,amnt);
-    //    }
-    //    return new         FluidStack(Materials.NatruralGas.mGas,amnt);//5
-    //}
-    //
-    //private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
-    //    XSTR tRandom = new XSTR(aWorld.getSeed() ^ ((long)(aX / 6) + (long)(7000 * (aZ / 6))));
-    //    int type=tRandom.nextInt(5);//type slowly changes
-    //    int amnt = (int)(Math.ceil(Math.pow(2D+(double)(tRandom.nextInt(48))+(new XSTR()).nextDouble(),8D)/200000D));
-    //        //roughly uses 28 bits
-    //    FluidStack tFluidStack;
-    //    switch (type) {//0 is old system
-    //        case 1:
-    //            tFluidStack=new FluidStack(Materials.OilLight .mFluid,amnt);
-    //            break;
-    //        case 2:
-    //            tFluidStack=new FluidStack(Materials.OilMedium.mFluid,amnt);
-    //            break;
-    //        case 3:
-    //            tFluidStack=new FluidStack(Materials.OilHeavy .mFluid,amnt);
-    //            break;
-    //        case 4:
-    //            tFluidStack=new FluidStack(Materials.Oil      .mFluid,amnt);
-    //            break;
-    //        default://case 0; -> 5
-    //            type=5;//important, 0 is invalid !
-    //            tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
-    //    }
-    //
-    //    tInts[0]=(type<<28)+amnt;//here since the switch changes type
-    //    //tInts[2]|=0x01;
-    //    GT_Proxy.chunkData.put(tPos, tInts);
-    //    return tFluidStack;
-    //}
-
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
         if (aList == null) return 0;
 
@@ -1872,23 +1769,23 @@ public class GT_Utility {
             }
         }
         if (aPlayer.capabilities.isCreativeMode && GT_Values.D1) {
-            FluidStack tFluid = getUndergroundOil(aWorld, aX, aZ);
+            FluidStack tFluid = undergroundOil(aWorld.getChunkFromBlockCoords(aX,aZ),-1);//-# to only read
             if (tFluid!=null)
             	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
+            else
+                tList.add(EnumChatFormatting.GOLD+"Nothing"+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ '0' +EnumChatFormatting.RESET+" L");
         }
-//        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(getScaleCoordinates(aX,16), aWorld.provider.dimensionId, getScaleCoordinates(aZ,16));
-        	if(GT_Proxy.chunkData.containsKey(tPos)){
-        		int[] tPollution = GT_Proxy.chunkData.get(tPos);
-        		if(tPollution.length>1){
-        		tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET+" gibbl");
-        		}else{
-        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
-        		}
-        	}else{
+//      if(aPlayer.capabilities.isCreativeMode){
+        int[] chunkData = GT_Proxy.dimensionWiseChunkData.get(aWorld.provider.dimensionId).get(aWorld.getChunkFromBlockCoords(aX,aZ).getChunkCoordIntPair());
+        if(chunkData !=null){
+            if(chunkData[GTPOLLUTION]>0){
+                tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+chunkData[GTPOLLUTION]+EnumChatFormatting.RESET+" gibbl");
+            }else{
                 tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
             }
-//        }
+        }else{
+            tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
+        }
 
         try {
             if (tBlock instanceof IDebugableBlock) {

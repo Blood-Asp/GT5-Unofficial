@@ -14,7 +14,7 @@ public class GT_UO_Fluid {
 	public int MaxAmount = 0;
 	public int MinAmount = 0;
 	public int Chance = 0;
-	public int DecreasePerOperationAmount = 5;
+	public int DecreasePerOperationAmountInBuckets = 5;
 
 	public GT_UO_Fluid(ConfigCategory aConfigCategory) {//TODO CONFIGURE
 		if (aConfigCategory.containsKey("Registry"))
@@ -40,7 +40,7 @@ public class GT_UO_Fluid {
 		if (aConfigCategory.containsKey("DecreasePerOperationAmount"))
 		{
 			aConfigCategory.get("DecreasePerOperationAmount").comment = "Decrease per operation Amount (X/5000L per operation)";
-			DecreasePerOperationAmount = aConfigCategory.get("DecreasePerOperationAmount").getInt(5);
+			DecreasePerOperationAmountInBuckets = aConfigCategory.get("DecreasePerOperationAmount").getInt(5);
 		}
 		//System.out.println("GT UO "+aConfigCategory.getName()+" Fluid:"+Registry+" Max:"+MaxAmount+" Min:"+MinAmount+" Chance:"+Chance);
 	}
@@ -53,7 +53,7 @@ public class GT_UO_Fluid {
 		}
 	}
 	
-	public int getRandomAmount(Random aRandom){
+	public int getRandomAmount(Random aRandom){//generates milliBuckets
 		int r1 = (int)Math.round(Math.pow((MaxAmount-MinAmount)*500000.d, 0.2));
 		int r2 = (int)Math.floor(Math.pow(MinAmount*500000.d, 0.2));
         double amount = aRandom.nextInt(r1)+r2+aRandom.nextDouble();
