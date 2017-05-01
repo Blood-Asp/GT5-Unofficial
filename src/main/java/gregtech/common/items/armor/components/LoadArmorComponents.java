@@ -6,7 +6,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import ic2.core.Ic2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 

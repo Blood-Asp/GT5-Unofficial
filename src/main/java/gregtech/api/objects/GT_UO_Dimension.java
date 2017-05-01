@@ -1,16 +1,10 @@
 package gregtech.api.objects;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Set;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
-import gregtech.api.enums.GT_Values;
 import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fluids.Fluid;
+
+import java.util.Random;
 
 public class GT_UO_Dimension {
 
