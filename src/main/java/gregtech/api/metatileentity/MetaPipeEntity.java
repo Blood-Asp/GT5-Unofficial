@@ -666,10 +666,9 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
         int tX = getBaseMetaTileEntity().getXCoord(), tY = getBaseMetaTileEntity().getYCoord(), tZ = getBaseMetaTileEntity().getZCoord();
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
-        if (GregTech_API.sMachineExplosions)
-            if(GT_Mod.gregtechproxy.mPollution)
-                GT_Pollution.addPollution(getBaseMetaTileEntity(), 100000);
+        if (GregTech_API.sMachineExplosions) {
             tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
+        }
     }
 
     @Override
