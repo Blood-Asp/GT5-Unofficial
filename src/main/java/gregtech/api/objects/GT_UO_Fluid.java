@@ -53,7 +53,7 @@ public class GT_UO_Fluid {
 		}
 	}
 	
-	public int getRandomAmount(Random aRandom){
+	public int getRandomAmount(Random aRandom){//generates milliBuckets
 		int r1 = (int)Math.round(Math.pow((MaxAmount-MinAmount)*500000.d, 0.2));
 		int r2 = (int)Math.floor(Math.pow(MinAmount*500000.d, 0.2));
         double amount = aRandom.nextInt(r1)+r2+aRandom.nextDouble();

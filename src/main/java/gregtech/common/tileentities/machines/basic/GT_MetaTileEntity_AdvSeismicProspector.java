@@ -22,6 +22,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_UndergroundOil;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import ic2.core.Ic2Items;
@@ -148,7 +149,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 for (int z = tLeftZBound; z <= tRightZBound; ++z) 
                 {
                 	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(x*16,96), 0, GT_Utility.getScaleCoordinates(z*16,96));
-                	FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), x*16, z*16);
+                	FluidStack tFluid = GT_UndergroundOil.undergroundOil(getBaseMetaTileEntity(),-1);
             		if (tFluid != null)
 	                	if (tFluids.containsKey(tPos))
 	                	{

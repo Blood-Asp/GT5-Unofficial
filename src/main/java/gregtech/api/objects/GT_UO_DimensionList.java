@@ -48,15 +48,16 @@ public class GT_UO_DimensionList {
 		fConfig.get(Category, "MaxAmount", aMaxAmount).getInt(aMaxAmount);
 		fConfig.get(Category, "Chance", aChance).getInt(aChance);
 		fConfig.get(Category, "DecreasePerOperationAmount", aDecreasePerOperationAmount).getInt(aDecreasePerOperationAmount);
+									//IT IS IN BUCKETS!!!
 	}
 	
 	public void SetDafultValues() {
-		SetConfigValues("Overworld", "0", "gas_natural_gas", "gas_natural_gas", 0, 625, 20, 5);
+		SetConfigValues("Overworld", "0", "gas_natural_gas", "gas_natural_gas", 0, 625, 20, 7);
 		SetConfigValues("Overworld", "0", "liquid_light_oil", "liquid_light_oil", 0, 625, 20, 5);
-		SetConfigValues("Overworld", "0", "liquid_medium_oil", "liquid_medium_oil", 0, 625, 20, 5);
-		SetConfigValues("Overworld", "0", "liquid_heavy_oil", "liquid_heavy_oil", 0, 625, 20, 5);
-		SetConfigValues("Overworld", "0", "oil", "oil", 0, 625, 20, 5);
-		SetConfigValues("Moon", "Moon", "helium-3", "helium-3", 0, 375, 100, 5);
+		SetConfigValues("Overworld", "0", "liquid_medium_oil", "liquid_medium_oil", 0, 625, 20, 3);
+		SetConfigValues("Overworld", "0", "liquid_heavy_oil", "liquid_heavy_oil", 0, 625, 20, 1);
+		SetConfigValues("Overworld", "0", "oil", "oil", 0, 625, 20, 3);
+		SetConfigValues("Moon", "Moon", "helium-3", "helium-3", 1, 375, 100, 1);
 	}
 	
 	public void getConfig(Configuration aConfig, String aCategory) {
