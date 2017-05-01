@@ -198,6 +198,8 @@ public interface IGT_RecipeAdder {
 
     public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
+    public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom);
+
 
     /**
      * Adds a Assembler Recipe
@@ -209,6 +211,8 @@ public interface IGT_RecipeAdder {
      * @param aEUt      should be > 0
      */
     public boolean addCircuitAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput, int aDuration, int aEUt);
+
+    public boolean addCircuitAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput, int aDuration, int aEUt, boolean aCleanroom);
     
     /**
      * Adds a Assemblyline Recipe

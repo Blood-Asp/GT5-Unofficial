@@ -40,6 +40,7 @@ public class GT_MetaGenerated_Item_03
 //        ItemList.Circuit_Board_Fiberglass.set(addItem(tLastID = 4, "Fiberglass Circuit Board", "An advanced Board", o));
 //        ItemList.Circuit_Board_Multifiberglass.set(addItem(tLastID = 5, "Multilayer Fiberglass Circuit Board", "A elite Board", o));
         ItemList.Circuit_Board_Wetware.set(addItem(tLastID = 6, "Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
+
         
         /**
          * electronic components:
@@ -145,7 +146,7 @@ public class GT_MetaGenerated_Item_03
         //Advanced Circuit			IC2
         
         ItemList.Circuit_Processor.set(addItem(tLastID = 80, "Integrated Processor", "Good Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Good), SubTag.NO_UNIFICATION}));
-//        ItemList.Circuit_Computer.set(addItem(tLastID = 81, "Processor Assembly", "Advanced Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
+        //ItemList.Circuit_Computer.set(addItem(tLastID = 81, "Processor Assembly", "Advanced Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Advanced), SubTag.NO_UNIFICATION}));
         //Workstation/DataStick		Item01 Datacircuit
         //Mainframe					Item01 DataProcessor
         
@@ -169,6 +170,12 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Wetwaresupercomputer.set(addItem(tLastID = 94, "Wetware Supercomputer", "Super Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Wetwaremainframe.set(addItem(tLastID = 95, "Wetware Mainframe", "Infinite Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Infinite), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Ultimate.set(ItemList.Circuit_Crystalcomputer.get(1L, new Object[0]));
+
+        ItemList.Circuit_Board_Coated_Basic.set(addItem(tLastID = 100, "Circuit Board", "A basic Circuit Board", o));
+        ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Good Circuit Board", "A good Circuit Board", o));
+        ItemList.Circuit_Board_Phenolic_Electronic.set(addItem(tLastID = 102, "Electronic Circuit Board", "A electronic Circuit Board", o));
+        ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 103, "Advanced Circuit Board", "A advanced Circuit Board", o));
+        ItemList.Circuit_Board_Fiberglass_Advanced.set(addItem(tLastID = 104, "More Advanced Circuit Board", "A more advanced Circuit Board", o));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
