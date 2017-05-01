@@ -113,6 +113,8 @@ public interface IGT_RecipeAdder {
 
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt);
 
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUt, boolean aCleanroom);
+
 
     /**
      * Adds a Blast Furnace Recipe
@@ -356,6 +358,8 @@ public interface IGT_RecipeAdder {
      * Adds Cutter Recipes with default Lubricants
      */
     public boolean addCutterRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt);
+
+    public boolean addCutterRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, boolean aCleanroom);
 
     /**
      * Adds a Boxing Recipe
