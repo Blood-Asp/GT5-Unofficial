@@ -33,9 +33,6 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer2.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_PIC.get(1, new Object[0]), 500, 480,true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer3.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_PIC.get(4, new Object[0]), 200, 1920,true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Chip_CrystalCPU.get(1L, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Chip_CrystalSoC.get(1, new Object[0]), 100, 40000,true);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.NiobiumTitanium, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_LuV_Voltage_Wirering.get(1, new Object[0]), 100, 7860, true);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Naquadah, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_Zpm_Voltage_Wirering.get(1, new Object[0]), 100, 31440, true);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Neutronium, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_UV_Voltage_Wirering.get(1, new Object[0]), 100, 125760, true);
                 break;
             case "craftingLensYellow":
                 GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Iron, 1L), GT_Utility.copyAmount(0L, new Object[]{aStack}), GT_ModHandler.getModItem("appliedenergistics2", "item.ItemMultiMaterial", 1L, 14), 2000, 1920);
@@ -59,11 +56,6 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_ILC.get(1, new Object[0]), 900, 120,false);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer2.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_ILC.get(4, new Object[0]), 500, 480,true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer3.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_ILC.get(8, new Object[0]), 200, 1920,true);
-
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Copper, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_Medium_Voltage_Wirering.get(1, new Object[0]), 100, 30);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Gold, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_High_Voltage_Wirering.get(1, new Object[0]), 100, 120);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Electrum, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_Extreme_Voltage_Wirering.get(1, new Object[0]), 100, 480, true);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_Insane_Voltage_Wirering.get(1, new Object[0]), 100, 1920, true);
                 break;
             case "craftingLensGreen":
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1L, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Chip_CrystalCPU.get(1, new Object[0]), 100, 10000,true);
@@ -79,8 +71,6 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_CPU.get(1, new Object[0]), 900, 120,true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer2.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_CPU.get(4, new Object[0]), 500, 480,true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer3.get(1, new Object[0]), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Circuit_Wafer_CPU.get(8, new Object[0]), 200, 1920,true);
-
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Tin, 1), GT_Utility.copyAmount(0L, new Object[]{aStack}), ItemList.Etched_Low_Voltage_Wirering.get(1, new Object[0]), 100, 8);
                 break;
         }
     }

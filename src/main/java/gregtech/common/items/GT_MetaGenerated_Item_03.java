@@ -163,20 +163,10 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Board_Coated_Basic.set(addItem(tLastID = 100, "Circuit Board", "A basic Circuit Board", o));
         ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Good Circuit Board", "A good Circuit Board", o));
-        ItemList.Circuit_Board_Phenolic_Electronic.set(addItem(tLastID = 102, "Electronic Circuit Board", "A electronic Circuit Board", o));
-        ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 103, "Advanced Circuit Board", "A advanced Circuit Board", o));
-        ItemList.Circuit_Board_Fiberglass_Advanced.set(addItem(tLastID = 104, "More Advanced Circuit Board", "A more advanced Circuit Board", o));
-        ItemList.Circuit_Board_Multifiberglass_Elite.set(addItem(tLastID = 105, "Elite Circuit Board", "A elite Circuit Board", o));
-        ItemList.Circuit_Board_Wetware_Extreme.set(addItem(tLastID = 106, "Extreme Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
-
-        ItemList.Etched_Low_Voltage_Wirering.set(addItem(tLastID = 110, "Etched Low Voltage Wirering", "For primitive Circuit", o));
-        ItemList.Etched_Medium_Voltage_Wirering.set(addItem(tLastID = 111, "Etched Medium Voltage Wirering", "For basic Circuit", o));
-        ItemList.Etched_High_Voltage_Wirering.set(addItem(tLastID = 112, "Etched High Voltage Wirering", "For good Circuit", o));
-        ItemList.Etched_Extreme_Voltage_Wirering.set(addItem(tLastID = 113, "Etched Extreme Voltage Wirering", "For advanced Circuit", o));
-        ItemList.Etched_Insane_Voltage_Wirering.set(addItem(tLastID = 114, "Etched Insane Voltage Wirering", "For elite Circuit", o));
-        ItemList.Etched_LuV_Voltage_Wirering.set(addItem(tLastID = 115, "Etched LuV Voltage Wirering", "For elite Circuit", o));
-        ItemList.Etched_Zpm_Voltage_Wirering.set(addItem(tLastID = 116, "Etched Zpm Voltage Wirering", "For master Circuit", o));
-        ItemList.Etched_UV_Voltage_Wirering.set(addItem(tLastID = 117, "Etched UV Voltage Wirering", "For ultimate Circuit", o));
+        ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 102, "Advanced Circuit Board", "A advanced Circuit Board", o));
+        ItemList.Circuit_Board_Fiberglass_Advanced.set(addItem(tLastID = 103, "More Advanced Circuit Board", "A more advanced Circuit Board", o));
+        ItemList.Circuit_Board_Multifiberglass_Elite.set(addItem(tLastID = 104, "Elite Circuit Board", "A elite Circuit Board", o));
+        ItemList.Circuit_Board_Wetware_Extreme.set(addItem(tLastID = 105, "Extreme Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
