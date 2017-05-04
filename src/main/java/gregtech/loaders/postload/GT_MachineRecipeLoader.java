@@ -523,7 +523,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addCutterRecipe(ItemList.Circuit_Wafer_NanoCPU.get(1, o), ItemList.Circuit_Chip_NanoCPU.get(7, o), null, 900, 480, true);
         GT_Values.RA.addCutterRecipe(ItemList.Circuit_Wafer_QuantumCPU.get(1, o), ItemList.Circuit_Chip_QuantumCPU.get(5, o), null, 900, 1920, true);
         GT_Values.RA.addChemicalRecipe(ItemList.Circuit_Wafer_PIC.get(1, o), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.IndiumGalliumPhosphide, 2), Materials.RedstoneAlloy.getMolten(288), null, ItemList.Circuit_Wafer_HPIC.get(1, o), 1200, 1920, true);
-        GT_Values.RA.addChemicalRecipe(ItemList.Circuit_Wafer_CPU.get(1, o), GT_Utility.copyAmount(16, ic2.core.Ic2Items.carbonFiber), Materials.Glowstone.getMolten(576), null, ItemList.Circuit_Wafer_NanoCPU.get(1, o), 400, 1920, true);
+        GT_Values.RA.addChemicalRecipe(ItemList.Circuit_Wafer_CPU.get(1, o), GT_Utility.copyAmount(16, ic2.core.Ic2Items.carbonFiber), Materials.Glowstone.getMolten(576), null, ItemList.Circuit_Wafer_NanoCPU.get(1, o), 1200, 1920, true);
         GT_Values.RA.addChemicalRecipe(ItemList.Circuit_Wafer_NanoCPU.get(1, o), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.IndiumGalliumPhosphide, 1), Materials.Radon.getGas(50), null, ItemList.Circuit_Wafer_QuantumCPU.get(1, o), 1200, 1920, true);
         GT_Values.RA.addChemicalRecipe(ItemList.Circuit_Wafer_NanoCPU.get(1, o), ItemList.QuantumEye.get(2, o), Materials.GalliumArsenide.getMolten(288), null, ItemList.Circuit_Wafer_QuantumCPU.get(1, o), 900, 1920, true);
 
@@ -2453,17 +2453,17 @@ public class GT_MachineRecipeLoader implements Runnable {
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
                 ItemList.ZPM2.get(8,o),
-                ItemList.Field_Generator_UV.get(2,o),
+                ItemList.Field_Generator_UV.get(4,o),
                 ItemList.Circuit_Wafer_HPIC.get(64,o),
                 ItemList.Circuit_Wafer_HPIC.get(64,o),
                 ItemList.Circuit_Wafer_SoC2.get(32,o),
                 ItemList.Circuit_Parts_DiodeSMD.get(64,o),
-                GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 64),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.Superconductor, 64),
         }, new FluidStack[]{
                 Materials.SolderingAlloy.getMolten(3760),
                 Materials.Naquadria.getMolten(9000),
                 new FluidStack(FluidRegistry.getFluid("ic2coolant"), 32000)
-        }, ItemList.ZPM3.get(1,o), 4000, 600000);
+        }, ItemList.ZPM3.get(1,o), 4000, 450000);
             
             GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 1), 144000, new ItemStack[]{
             		ItemList.Casing_Fusion_Coil.get(1,o),
