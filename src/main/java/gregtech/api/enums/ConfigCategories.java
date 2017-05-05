@@ -21,7 +21,6 @@ public enum ConfigCategories {
     public enum Recipes {
         researches,
         harderrecipes,
-        gregtechrecipes,
         disabledrecipes,
         recipereplacements,
         storageblockcrafting,
