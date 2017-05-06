@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
-import com.dreammaster.gthandler.casings.GT_Container_CasingsNH;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -11,6 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -118,6 +120,10 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX * 2;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ * 2;
+
+        Block CasingBlock= Loader.isModLoaded("dreamcraft")? GameRegistry.findBlock("dreamcraft","gt.blockcasingsNH"): GregTech_API.sBlockCasings1;
+        int CasingMeta= Loader.isModLoaded("dreamcraft")?2:0;
+
         replaceDeprecatedCoils(aBaseMetaTileEntity);
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
@@ -133,10 +139,10 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
                             if ((!addInputToMachineList(tTileEntity, 120)) && (!addMufflerToMachineList(tTileEntity, 120))) {
-                                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
+                                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
                                     return false;
                                 }
-                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
+                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
                                     return false;
                                 }
                             }
@@ -149,19 +155,19 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                         if (h == 0) {// au�en boden (controller, output, energy, maintainance, rest ulv casings)
                             if ((!addMaintenanceToMachineList(tTileEntity, 120)) && (!addOutputToMachineList(tTileEntity, 120)) && (!addEnergyInputToMachineList(tTileEntity, 120))) {
                                 if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
-                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
+                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
                                         return false;
                                     }
-                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
+                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
                                         return false;
                                     }
                                 }
                             }
                         } else {// au�en �ber boden (ulv casings)
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GT_Container_CasingsNH.sBlockCasingsNH) {
+                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
+                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
                                 return false;
                             }
                         }

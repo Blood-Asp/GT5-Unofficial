@@ -1,7 +1,6 @@
 package gregtech.loaders.postload;
 
 import codechicken.nei.api.API;
-import com.dreammaster.gthandler.CustomItemList;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -12,7 +11,6 @@ import gregtech.common.GT_DummyWorld;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
 import ic2.api.recipe.Recipes;
-import ic2.core.Ic2Items;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
@@ -438,7 +436,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.EnderEye, 1), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4), Materials.TungstenSteel.getMolten(576), ItemList.Field_Generator_MV.get(1), 1800, 120);
         GT_Values.RA.addAssemblerRecipe(ItemList.QuantumEye.get(1), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4), Materials.NiobiumTitanium.getMolten(1152), ItemList.Field_Generator_HV.get(1), 1800, 480);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.NetherStar, 1), ItemList.Tool_DataOrb.get(4L), Materials.HSSG.getMolten(1152), ItemList.Field_Generator_EV.get(1), 1800, 1920);
-        GT_Values.RA.addAssemblerRecipe(ItemList.QuantumStar.get(1), CustomItemList.HighEnergyFlowCircuit.get(4L), Materials.HSSS.getMolten(1728), ItemList.Field_Generator_IV.get(1), 1800, 7680);
+        //GT_Values.RA.addAssemblerRecipe(ItemList.QuantumStar.get(1), CustomItemList.HighEnergyFlowCircuit.get(4L), Materials.HSSS.getMolten(1728), ItemList.Field_Generator_IV.get(1), 1800, 7680);//TODO MOVE TO COREMOD
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Steel, 64), GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Zinc, 16), null, ItemList.Component_Filter.get(1), 1600, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Graphite, 8), GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicon, 1), Materials.Glue.getFluid(250L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Graphene, 1), 480, 240);
         GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_LV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Basic), 2, GT_Values.NF, ItemList.FluidRegulator_LV.get(1L, new Object[0]), 800, 4);//TODO Check
@@ -535,7 +533,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addBlastRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(1, o), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Emerald, 1), Materials.Helium.getGas(1000), null, ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1, o), null, 900, 480, 5000);
         GT_Values.RA.addBlastRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(1, o), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Olivine, 1), Materials.Helium.getGas(1000), null, ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1, o), null, 900, 480, 5000);
 
-        GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1, o), new Object[]{"PAP", "CBC", "DCD", 'D', ItemList.Circuit_Parts_Diode.get(1, o), 'C', Ic2Items.electronicCircuit, 'A', CustomItemList.AluminiumItemCasing.get(1, o), 'P', GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Plastic, 1), 'B', ItemList.Circuit_Board_Phenolic_Good.get(1, o),});
+        //GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1, o), new Object[]{"PAP", "CBC", "DCD", 'D', ItemList.Circuit_Parts_Diode.get(1, o), 'C', Ic2Items.electronicCircuit, 'A', CustomItemList.AluminiumItemCasing.get(1, o), 'P', GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Plastic, 1), 'B', ItemList.Circuit_Board_Phenolic_Good.get(1, o),});//TODO MOVE TO COREMOD
         //TODO END
         //OLD RECIPES???
         //GT_Values.RA.addFormingPressRecipe(ItemList.Empty_Board_Basic.get(1), ItemList.Circuit_Parts_Wiring_Basic.get(4L), ItemList.Circuit_Board_Basic.get(1L), 32, 16);

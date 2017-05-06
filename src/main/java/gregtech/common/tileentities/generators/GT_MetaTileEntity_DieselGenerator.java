@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.generators;
 
-import com.dreammaster.main.MainRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
@@ -11,6 +10,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_DieselGenerator
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if(aTick%100==0 && mFluid!=null && mFluid.amount>this.getCapacity()){
-            MainRegistry.Logger.error("Dupe Abuse: "+aBaseMetaTileEntity.getOwnerName()+" Coords: "+aBaseMetaTileEntity.getXCoord()+" "+aBaseMetaTileEntity.getYCoord()+" "+aBaseMetaTileEntity.getZCoord(),aBaseMetaTileEntity);
+            GT_Log.err.println("Dupe Abuse: "+aBaseMetaTileEntity.getOwnerName()+" Coords: "+aBaseMetaTileEntity.getXCoord()+" "+aBaseMetaTileEntity.getYCoord()+" "+aBaseMetaTileEntity.getZCoord());
             aBaseMetaTileEntity.setToFire();
         }
         super.onPostTick(aBaseMetaTileEntity, aTick);
