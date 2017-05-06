@@ -6,7 +6,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 
 public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHandler {
-    public static boolean aTGregSupport = Loader.isModLoaded("TGregworks");
+    public static boolean aTGregSupport = Loader.isModLoaded("TGregworks") || Loader.isModLoaded("dreamcraft");
     public static boolean aEnableUBCMats = Loader.isModLoaded("UndergroundBiomes") || aTGregSupport;
     public static boolean aEnableThaumcraftMats = Loader.isModLoaded("Thaumcraft") || aTGregSupport;
     public static boolean aEnableRotaryCraftMats = Loader.isModLoaded("RotaryCraft") || aTGregSupport;
@@ -150,6 +150,6 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
 
     @Override
     public void onComponentIteration(Materials aMaterial) {
-        //NOOP
+        //NOP
     }
 }
