@@ -32,6 +32,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -142,25 +143,24 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         int tLeftZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() - radius, 16);
         int tRightZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() + radius, 16);
 
-        HashMap<ChunkPosition, FluidStack> tFluids = new HashMap<ChunkPosition, FluidStack>();
+        HashMap<ChunkCoordIntPair, FluidStack> tFluids = new HashMap<>();
 
         try {
             for (int x = tLeftXBound; x <= tRightXBound; ++x)
                 for (int z = tLeftZBound; z <= tRightZBound; ++z) 
                 {
                 	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(x*16,96), 0, GT_Utility.getScaleCoordinates(z*16,96));
-                	FluidStack tFluid = GT_UndergroundOil.undergroundOil(getBaseMetaTileEntity(),-1);
+                	ChunkCoordIntPair cInts = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ).getChunkCoordIntPair();
+                	FluidStack tFluid = GT_UndergroundOil.undergroundOil(getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ),-1);
             		if (tFluid != null)
-	                	if (tFluids.containsKey(tPos))
-	                	{
-	                		if (tFluids.get(tPos).amount<tFluid.amount)
-	                			tFluids.get(tPos).amount = tFluid.amount;
-	                	} else if (tFluid.amount / 5000 > 0)
-	                        tFluids.put(tPos, tFluid);
+	                	if (tFluids.containsKey(cInts)) {
+	                		if (tFluids.get(cInts).amount<tFluid.amount)
+	                			tFluids.get(cInts).amount = tFluid.amount;
+	                	} else tFluids.put(cInts, tFluid);
                 }
 			
-    		for (HashMap.Entry<ChunkPosition, FluidStack> fl : tFluids.entrySet()) {
-    			aOils.put(fl.getKey().chunkPosX + "," + fl.getKey().chunkPosZ + "," + (fl.getValue().amount / 5000) + "," + fl.getValue().getLocalizedName(), fl.getValue().amount / 5000);
+    		for (Map.Entry<ChunkCoordIntPair, FluidStack> fl : tFluids.entrySet()) {
+    			aOils.put(fl.getKey().chunkXPos + "," + fl.getKey().chunkZPos + "," + fl.getValue().amount + "," + fl.getValue().getLocalizedName(), fl.getValue().amount);
     		}
 		} catch (Exception e) {
 			// TODO: handle exception

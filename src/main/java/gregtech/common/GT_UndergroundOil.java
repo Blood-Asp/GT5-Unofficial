@@ -22,8 +22,9 @@ import static gregtech.common.GT_Proxy.*;
  * Created by Tec on 29.04.2017.
  */
 public class GT_UndergroundOil {
+    public static final short DIVIDER=5000;
 
-    public static FluidStack undergroundOil(IGregTechTileEntity te,float drainSpeedCoefficient){
+    public static FluidStack undergroundOil(IGregTechTileEntity te, float drainSpeedCoefficient){
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),drainSpeedCoefficient);
     }
 
@@ -43,7 +44,7 @@ public class GT_UndergroundOil {
         int[] tInts = chunkData.get(chunk.getChunkCoordIntPair());
 
         if(tInts==null) tInts=getDefaultChunkDataOnCreation();//init if null
-        else if(tInts[GTOIL]==0){
+        else if(tInts[GTOIL]==0){//FAST stop
             //can return 0 amount stack for info :D
             return drainSpeedCoefficient>=0 ? null : new FluidStack(FluidRegistry.getFluid(tInts[GTOILFLUID]),0);
         }
@@ -76,17 +77,20 @@ public class GT_UndergroundOil {
         }
 
         //do stuff on it if needed
-        if(drainSpeedCoefficient>=0) {
-            int actualExtractionSpeed=(int)(uoFluid.DecreasePerOperationAmountInBuckets*1000*drainSpeedCoefficient);
-            if(fluidInChunk.amount>actualExtractionSpeed) {
-                fluidInChunk.amount=actualExtractionSpeed;//give appropriate amount
-                tInts[GTOIL]-=actualExtractionSpeed;//diminish amount
-            }else if(fluidInChunk.amount>0) {
-                //fluidInChunk.amount= the same amount... going to return this
-                tInts[GTOIL]=0;
-            }else{
+        if(drainSpeedCoefficient>=0){
+            if(fluidInChunk.amount<DIVIDER){
                 fluidInChunk=null;
-                tInts[GTOIL]=0;//just to be on safe side...
+                tInts[GTOIL]=0;//so in next access it will stop way above
+            }else{
+                fluidInChunk.amount = (int)(fluidInChunk.amount*(double)drainSpeedCoefficient/DIVIDER);//give appropriate amount
+                tInts[GTOIL]-=uoFluid.DecreasePerOperationAmount;//diminish amount
+            }
+        }else{//just get info
+            if(fluidInChunk.amount<DIVIDER){
+                fluidInChunk.amount=0;//return informative stack
+                tInts[GTOIL]=0;//so in next access it will stop way above
+            }else{
+                fluidInChunk.amount=fluidInChunk.amount/DIVIDER;//give moderate extraction speed
             }
         }
 
