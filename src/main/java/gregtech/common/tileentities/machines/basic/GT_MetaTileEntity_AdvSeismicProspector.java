@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
+import java.util.Iterator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -153,7 +154,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 	                        tFluids.put(tPos, tFluid);
                 }
 			
-    		for (HashMap.Entry<ChunkPosition, FluidStack> fl : tFluids.entrySet()) {
+    		for (Map.Entry<ChunkPosition, FluidStack> fl : tFluids.entrySet()) {
     			aOils.put(fl.getKey().chunkPosX + "," + fl.getKey().chunkPosZ + "," + (fl.getValue().amount / 5000) + "," + fl.getValue().getLocalizedName(), fl.getValue().amount / 5000);
     		}
 		} catch (Exception e) {
