@@ -128,7 +128,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         return true;
     }
 
-    private void prospectOils(HashMap<String, Integer> aOils) {
+    public void prospectOils(HashMap<String, Integer> aOils) {
 
         int tLeftXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() - radius, 16);
         int tRightXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() + radius, 16);
