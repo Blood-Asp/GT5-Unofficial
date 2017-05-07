@@ -21,6 +21,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
     }
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
+        GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.springSmall, aMaterial, 1L), new Object[]{" s ", "fPx", 'P', OrePrefixes.wireGt01.get(aMaterial)});
         switch (aPrefix) {
             case wireGt01:
                 switch (aMaterial.mName){
