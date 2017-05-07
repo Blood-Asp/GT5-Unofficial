@@ -82,12 +82,9 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 					Block block = aBaseMetaTileEntity.getBlockOffset(x, y, z);
 					if (x == xDir && z == zDir) {
 						if (y == 0 && block != GregTech_API.sBlockCasings5) {
-							GT_Log.err.println("EPIK no Heating Coil");
-							GT_Log.err.println("EPIK found " + block);
 							return false;
 						} else if (y == 1
 								&& (block != GregTech_API.sBlockCasings4 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 15)) {
-							GT_Log.err.println("EPIK no PTFE Pipe Casing");
 							return false;
 						}
 					} else if (x != 0 || y != 0 || z != 0) {
@@ -96,10 +93,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
 							if (block == GregTech_API.sBlockCasings2 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
 								casingAmount++;
-								GT_Log.err.println("EPIK correct casing at " + x + " " + y + " " + z);								
 							} else {
-								GT_Log.err.println("EPIK wrong casing at " + x + " " + y + " " + z);
-								GT_Log.err.println("Found " + tileEntity);
 								return false;
 							}
 						}
