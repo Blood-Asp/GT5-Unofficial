@@ -12,6 +12,7 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_UndergroundOil;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import ic2.core.Ic2Items;
@@ -102,7 +103,7 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
                     }
                 }
                 if(tStringList.size()<1){tStringList.add("No Ores found.");}
-                FluidStack tFluid = null;//<---GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);//TODO FIX
+                FluidStack tFluid = GT_UndergroundOil.undergroundOil(getBaseMetaTileEntity(),-1);
                 String[] tStringArray = new String[tStringList.size()];
                 {
                     for (int i = 0; i < tStringArray.length; i++) {
