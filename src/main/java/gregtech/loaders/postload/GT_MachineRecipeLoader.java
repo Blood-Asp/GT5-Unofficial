@@ -533,7 +533,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         //GT_Values.RA.addBlastRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(1, o), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Emerald, 1), Materials.Helium.getGas(1000), null, ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1, o), null, 900, 480, 5000);
         //GT_Values.RA.addBlastRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(1, o), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Olivine, 1), Materials.Helium.getGas(1000), null, ItemList.Circuit_Parts_Crystal_Chip_Elite.get(1, o), null, 900, 480, 5000);
 
-        //GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1, o), new Object[]{"PAP", "CBC", "DCD", 'D', ItemList.Circuit_Parts_Diode.get(1, o), 'C', Ic2Items.electronicCircuit, 'A', CustomItemList.AluminiumItemCasing.get(1, o), 'P', GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Plastic, 1), 'B', ItemList.Circuit_Board_Phenolic_Good.get(1, o),});//TODO MOVE TO COREMOD
+        //GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1, o), new Object[]{"PAP", "CBC", "DCD", 'D', ItemList.Circuit_Parts_Diode.get(1, o), 'C', Ic2Items.electronicCircuit, 'A', CustomItemList.AluminiumItemCasing.get(1, o), 'P', GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Plastic, 1), 'B', ItemList.Circuit_Board_Phenolic_Good.get(1, o),});
         //Core Mod End
         //OLD RECIPES
         //GT_Values.RA.addFormingPressRecipe(ItemList.Empty_Board_Basic.get(1), ItemList.Circuit_Parts_Wiring_Basic.get(4L), ItemList.Circuit_Board_Basic.get(1L), 32, 16);
