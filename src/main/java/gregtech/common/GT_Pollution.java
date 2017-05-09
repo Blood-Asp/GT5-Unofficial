@@ -261,4 +261,10 @@ public class GT_Pollution {
 		if(dataMap==null || dataMap.get(ch.getChunkCoordIntPair())==null) return 0;
 		return dataMap.get(ch.getChunkCoordIntPair())[GTPOLLUTION];
 	}
+	
+	//Add compatibility with old code
+	@Deprecated
+	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
+		addPollution(aWorld.getChunkFromChunkCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
+	}
 }
