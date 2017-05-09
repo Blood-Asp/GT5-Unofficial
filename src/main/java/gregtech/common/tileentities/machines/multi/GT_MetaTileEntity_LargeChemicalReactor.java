@@ -1,5 +1,8 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -8,9 +11,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -66,6 +72,63 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 
 	@Override
 	public boolean checkRecipe(ItemStack aStack) {
+        ArrayList<ItemStack> tInputList = getStoredInputs();
+        int tInputList_sS=tInputList.size();
+        for (int i = 0; i < tInputList_sS - 1; i++) {
+            for (int j = i + 1; j < tInputList_sS; j++) {
+                if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
+                    if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
+                        tInputList.remove(j--); tInputList_sS=tInputList.size();
+                    } else {
+                        tInputList.remove(i--); tInputList_sS=tInputList.size();
+                        break;
+                    }
+                }
+            }
+        }
+        ItemStack[] inputs = tInputList.toArray(new ItemStack[tInputList.size()]);
+        
+        ArrayList<FluidStack> tFluidList = getStoredFluids();
+        int tFluidList_sS = tFluidList.size();
+        for (int i = 0; i < tFluidList_sS - 1; i++) {
+            for (int j = i + 1; j < tFluidList_sS; j++) {
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
+                        tFluidList.remove(j--);
+                        tFluidList_sS = tFluidList.size();
+                    } else {
+                        tFluidList.remove(i--);
+                        tFluidList_sS = tFluidList.size();
+                        break;
+                    }
+                }
+            }
+        }
+        FluidStack[] fluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
+
+        if (inputs.length > 0 || fluids.length > 0) {
+            long voltage = getMaxInputVoltage();
+            byte tier = (byte) Math.max(1, GT_Utility.getTier(voltage));
+        	GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
+        	if (recipe != null && recipe.isRecipeInputEqual(true, fluids, inputs)) {
+                this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+                this.mEfficiencyIncrease = 10000;
+
+                int EUt = recipe.mEUt;
+                int maxProgresstime = recipe.mDuration;
+                
+                while (EUt <= gregtech.api.enums.GT_Values.V[tier - 1] && maxProgresstime > 1) {
+                	EUt *= 4;
+                	maxProgresstime /= 4;
+                }
+                
+                this.mEUt = -EUt;
+                this.mMaxProgresstime = maxProgresstime;
+                this.mOutputItems = recipe.mOutputs;
+                this.mOutputFluids = recipe.mFluidOutputs;
+                return true;
+        	}
+        }
 		return false;
 	}
 
@@ -74,7 +137,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
 		int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 		int casingAmount = 0;
-		// i=width, j=depth, k=height
+		// x=width, z=depth, y=height
 		for (int x = -1 + xDir; x <= xDir + 1; x++) {
 			for (int z = -1 + zDir; z <= zDir + 1; z++) {
 				for (int y = 0; y <= 1; y++) {
@@ -103,7 +166,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			}
 
 		}
-		return casingAmount >= 10;
+		return casingAmount >= 8;
 	}
 
 	@Override
