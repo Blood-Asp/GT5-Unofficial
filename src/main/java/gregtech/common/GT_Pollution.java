@@ -231,7 +231,6 @@ public class GT_Pollution {
 	}
 
 	public static void addPollution(IGregTechTileEntity te, int aPollution){
-		System.out.println(te.getWorld().provider.dimensionId+" "+te.getXCoord()+" "+te.getZCoord());
 		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()), aPollution);
 	}
 
@@ -263,8 +262,10 @@ public class GT_Pollution {
 	}
 	
 	//Add compatibility with old code
-	@Deprecated
+	@Deprecated /*Don't use it... too weird way of passing position*/
 	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
-		addPollution(aWorld.getChunkFromChunkCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
+		//The abuse of ChunkPosition to store block position and dim... 
+		//is just bad expacially when that is both used to store ChunkPos and BlockPos depeending on context
+		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
 	}
 }
