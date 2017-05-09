@@ -242,9 +242,13 @@ public class GT_Pollution {
 			dataMap=new HashMap<>(1024);
 			dimensionWiseChunkData.put(ch.worldObj.provider.dimensionId,dataMap);
 		}
-		if(dataMap.get(ch.getChunkCoordIntPair())==null)
-			dataMap.put(ch.getChunkCoordIntPair(),getDefaultChunkDataOnCreation());
-		dataMap.get(ch.getChunkCoordIntPair())[GTPOLLUTION]+=aPollution;
+		int[] dataArr=dataMap.get(ch.getChunkCoordIntPair());
+		if(dataArr==null){
+			dataArr=getDefaultChunkDataOnCreation();
+			dataMap.put(ch.getChunkCoordIntPair(),dataArr);
+		}
+		dataArr[GTPOLLUTION]+=aPollution;
+		if(dataArr[GTPOLLUTION]<0)dataArr[GTPOLLUTION]=0;
 	}
 
 	public static int getPollution(IGregTechTileEntity te){
