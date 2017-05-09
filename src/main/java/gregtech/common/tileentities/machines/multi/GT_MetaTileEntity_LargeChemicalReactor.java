@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 16;
+	private static final int CASING_INDEX = 62;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -50,7 +50,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				"1x Output Bus/Hatch (Any edge casing)",
 				"1x Maintenance Hatch (Any edge casing)",
 				"1x Energy Hatch (Any edge casing)",
-				"Chemically Inert Casings for the rest (10 at least!)" };
+				"Chemically Inert Casings for the rest (8 at least!)" };
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		if (aSide == aFacing) {
 			return new ITexture[] {
 					Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX],
-					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE
-							: Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR) };
+					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR
+							: Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE) };
 		}
 		return new ITexture[] { Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX] };
 	}

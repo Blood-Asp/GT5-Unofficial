@@ -37,7 +37,7 @@ public class GT_Block_Casings4
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".11.name", "Titanium Turbine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Tungstensteel Turbine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".13.name", "Engine Intake Casing");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".14.name", "Inert Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".14.name", "Chemically Inert Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".15.name", "PTFE Pipe Casing");
 
         ItemList.Casing_RobustTungstenSteel.set(new ItemStack(this, 1, 0));
@@ -52,7 +52,7 @@ public class GT_Block_Casings4
         ItemList.Casing_Turbine2.set(new ItemStack(this, 1, 11));
         ItemList.Casing_Turbine3.set(new ItemStack(this, 1, 12));
         ItemList.Casing_EngineIntake.set(new ItemStack(this, 1, 13));
-        ItemList.Casing_Inert.set(new ItemStack(this, 1, 14));
+        ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 14));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 15));
     }
 
@@ -87,7 +87,7 @@ public class GT_Block_Casings4
             case 13:
                 return Textures.BlockIcons.MACHINE_CASING_ENGINE_INTAKE.getIcon();
             case 14:
-                return Textures.BlockIcons.MACHINE_CASING_INERT.getIcon();
+                return Textures.BlockIcons.MACHINE_CASING_CHEMICALLY_INERT.getIcon();
             case 15:
                 return Textures.BlockIcons.MACHINE_CASING_PIPE_POLYTETRAFLUOROETHYLENE.getIcon();
         }
