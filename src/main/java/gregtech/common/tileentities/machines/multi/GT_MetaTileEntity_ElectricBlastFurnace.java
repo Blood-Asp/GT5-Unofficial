@@ -112,7 +112,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
             }
         }
-        FluidStack[] tFluids = Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
+        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
         if (tInputList.size() > 0) {
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
