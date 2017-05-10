@@ -90,7 +90,7 @@ public class GT_MetaTileEntity_DistillationTower
 
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(0, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
+        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
         if (tFluids.length > 0) {
         	for(int i = 0;i<tFluids.length;i++){
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
