@@ -744,25 +744,25 @@ public class GT_CraftingRecipeLoader implements Runnable {
                 (GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("crophavester", 1L)))) {
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("crophavester", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"ACA", "PMS", "WOW", 'M', ItemList.Hull_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced), 'A', ItemList.Robot_Arm_HV, 'P', ItemList.Electric_Piston_HV, 'S', ItemList.Sensor_HV, 'W', OrePrefixes.toolHeadSense.get(Materials.StainlessSteel), 'O', ItemList.Conveyor_Module_HV});
         }
-        if ((GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "nuclearReactor", true)) &&
-                (GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("nuclearReactor", 1L)))) {
-            GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("nuclearReactor", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PCP", "PMP", "PAP", 'P', OrePrefixes.plateDense.get(Materials.Lead), 'C', OrePrefixes.circuit.get(Materials.Elite), 'M', GT_ModHandler.getIC2Item("reactorChamber", 1), 'A', ItemList.Robot_Arm_EV});
+        //if ((GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "nuclearReactor", true)) &&
+                //(GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("nuclearReactor", 1L)))) {
+            //GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("nuclearReactor", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PCP", "PMP", "PAP", 'P', OrePrefixes.plateDense.get(Materials.Lead), 'C', OrePrefixes.circuit.get(Materials.Elite), 'M', GT_ModHandler.getIC2Item("reactorChamber", 1), 'A', ItemList.Robot_Arm_EV});
 
-            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorChamber", 1L));
-            GT_Values.RA.addAssemblerRecipe(ItemList.Hull_EV.get(1), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 4), GT_ModHandler.getIC2Item("reactorChamber", 1), 200, 256);
+            //GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorChamber", 1L));
+            //GT_Values.RA.addAssemblerRecipe(ItemList.Hull_EV.get(1), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 4), GT_ModHandler.getIC2Item("reactorChamber", 1), 200, 256);
 
-            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorvessel", 1L));
-            GT_Values.RA.addChemicalBathRecipe(GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Lead, 1), Materials.Concrete.getMolten(144), GT_ModHandler.getIC2Item("reactorvessel", 1), GT_Values.NI, GT_Values.NI, null, 400, 80);
+            //GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorvessel", 1L));
+            //GT_Values.RA.addChemicalBathRecipe(GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Lead, 1), Materials.Concrete.getMolten(144), GT_ModHandler.getIC2Item("reactorvessel", 1), GT_Values.NI, GT_Values.NI, null, 400, 80);
 
-            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorAccessHatch", 1L));
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), ItemList.Conveyor_Module_EV.get(1), GT_ModHandler.getIC2Item("reactorAccessHatch", 1L), 200, 80);
+            //GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorAccessHatch", 1L));
+            //GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), ItemList.Conveyor_Module_EV.get(1), GT_ModHandler.getIC2Item("reactorAccessHatch", 1L), 200, 80);
 
-            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorFluidPort", 1L));
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), ItemList.Electric_Pump_EV.get(1), GT_ModHandler.getIC2Item("reactorFluidPort", 1L), 200, 80);
+            //GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorFluidPort", 1L));
+            //GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), ItemList.Electric_Pump_EV.get(1), GT_ModHandler.getIC2Item("reactorFluidPort", 1L), 200, 80);
 
-            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorRedstonePort", 1L));
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), OrePrefixes.circuit.get(Materials.Elite), 1,GT_Values.NF, GT_ModHandler.getIC2Item("reactorRedstonePort", 1L), 200, 80);
-        }
+            //GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("reactorRedstonePort", 1L));
+            //GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("reactorvessel", 1L), OrePrefixes.circuit.get(Materials.Elite), 1,GT_Values.NF, GT_ModHandler.getIC2Item("reactorRedstonePort", 1L), 200, 80);
+        //}
         if ((GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "rtg", true)) &&
                 (GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("RTGenerator", 1L)))) {
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("RTGenerator", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"III", "IMI", "ICI", 'I', ItemList.IC2_Item_Casing_Steel, 'C', OrePrefixes.circuit.get(Materials.Master), 'M', ItemList.Hull_IV});
