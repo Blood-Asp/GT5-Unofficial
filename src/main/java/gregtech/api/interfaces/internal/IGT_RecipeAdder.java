@@ -113,10 +113,40 @@ public interface IGT_RecipeAdder {
      * @param aInput1   must be != null
      * @param aInput2   must be != null
      * @param aOutput1  must be != null
+     * @param aOutput2  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration);
+    
+    /**
+     * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
+     * @param aBasicMaterial The basic Material
+     * @param aPolymer The polymer
+     */
+    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer);
+    
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
      * @param aDuration must be > 0
      * @param aEUtick   must be > 0
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUtick);
+
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aOutput2  must be != null
+     * @param aDuration must be > 0
+     * @param aEUtick   must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick);
 
 
     /**
@@ -422,6 +452,8 @@ public interface IGT_RecipeAdder {
      */
     public boolean addDistilleryRecipe(ItemStack aCircuit, FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt, boolean aHidden);
 
+    public boolean addDistilleryRecipe(int aCircuit, FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt, boolean aHidden);
+    
     /**
      * Adds a Recipe for the Fluid Solidifier
      */

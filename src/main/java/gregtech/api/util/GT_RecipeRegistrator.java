@@ -195,12 +195,12 @@ public class GT_RecipeRegistrator {
             }
             if (tMaterial.mMaterial.contains(SubTag.EXPLOSIVE)) {
                 tMaterial.mMaterial = Materials.Ash;
-                tMaterial.mAmount /= 4;
+                tMaterial.mAmount /= 16;
                 continue;
             }
             if (tMaterial.mMaterial.contains(SubTag.FLAMMABLE)) {
                 tMaterial.mMaterial = Materials.Ash;
-                tMaterial.mAmount /= 2;
+                tMaterial.mAmount /= 8;
                 continue;
             }
             if (tMaterial.mMaterial.contains(SubTag.NO_SMELTING)) {
