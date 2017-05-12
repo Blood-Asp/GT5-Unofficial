@@ -38,7 +38,7 @@ public class GT_Block_Casings4
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Tungstensteel Turbine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".13.name", "Engine Intake Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".14.name", "Chemically Inert Machine Casing");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".15.name", "PTFE Pipe Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".15.name", "PTFE Pipe Machine Casing");
 
         ItemList.Casing_RobustTungstenSteel.set(new ItemStack(this, 1, 0));
         ItemList.Casing_CleanStainlessSteel.set(new ItemStack(this, 1, 1));

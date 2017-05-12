@@ -59,8 +59,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		if (aSide == aFacing) {
 			return new ITexture[] {
 					Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX],
-					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR
-							: Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE) };
+					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE
+							: Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR) };
 		}
 		return new ITexture[] { Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX] };
 	}

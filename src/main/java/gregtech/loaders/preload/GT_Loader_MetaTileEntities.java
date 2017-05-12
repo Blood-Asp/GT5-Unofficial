@@ -66,6 +66,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Steel.get(2L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'I', OrePrefixes.pipeMedium.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Titanium.get(2L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Titanium), 'F', OrePrefixes.frameGt.get(Materials.Titanium), 'I', OrePrefixes.pipeMedium.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_TungstenSteel.get(2L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.TungstenSteel), 'F', OrePrefixes.frameGt.get(Materials.TungstenSteel), 'I', OrePrefixes.pipeMedium.get(Materials.TungstenSteel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Polytetrafluoroethylene.get(2L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene), 'F', OrePrefixes.frameGt.get(Materials.Polytetrafluoroethylene), 'I', OrePrefixes.pipeMedium.get(Materials.Polytetrafluoroethylene)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Bronze.get(2L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Bronze), 'F', OrePrefixes.frameGt.get(Materials.Bronze), 'G', OrePrefixes.gearGt.get(Materials.Bronze)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Steel.get(2L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'G', OrePrefixes.gearGt.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Titanium.get(2L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Titanium), 'G', OrePrefixes.gearGt.get(Materials.Titanium)});
@@ -1260,6 +1261,12 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_IV_LightningRod.get(1L, new Object[0]), bitsd, new Object[]{"LTL", "TMT", "LTL", 'M', ItemList.Hull_UV, 'L', ItemList.ZPM2, 'T', ItemList.Transformer_MAX_UV});
 
         ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1177, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeChemicalReactor.get(1L, new Object[0]), bitsd, new Object[]{"CRC", "PMP", "CBC", 
+        		'C', OrePrefixes.circuit.get(Materials.Elite), 
+        		'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 
+        		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
+        		'M', ItemList.Electric_Motor_HV,
+        		'B', ItemList.Hull_HV});
     }
 
     private static void run4() {
