@@ -17,11 +17,18 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     public int mEfficiency;
 
     public GT_MetaTileEntity_SteamTurbine(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Steam to run", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, new String[]{
+                "Converts Steam into EU",
+                "Base rate: 2L of Steam -> 1 EU"});
         onConfigLoad();
     }
 
     public GT_MetaTileEntity_SteamTurbine(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
+    public GT_MetaTileEntity_SteamTurbine(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
@@ -31,7 +38,7 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SteamTurbine(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_SteamTurbine(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -40,7 +47,12 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
 
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "Fuel Efficiency: " + (600 / getEfficiency()) + "%"};
+        String[] desc = new String[mDescriptionArray.length + 2];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        desc[mDescriptionArray.length] = "Fuel Efficiency: " + (600 / getEfficiency()) + "%";
+        desc[mDescriptionArray.length + 1] = String.format("Consumes up to %sL of Steam per second",
+                (int) (4000 * (8 * Math.pow(4, mTier) + Math.pow(2, mTier)) / (600 / getEfficiency())));
+        return desc;
     }
 
     public int getCapacity() {
@@ -56,8 +68,8 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-    	if(aLiquid==null)return 0;
-    	String fluidName = aLiquid.getFluid().getUnlocalizedName(aLiquid);
+        if (aLiquid == null) return 0;
+        String fluidName = aLiquid.getFluid().getUnlocalizedName(aLiquid);
         return GT_ModHandler.isSteam(aLiquid) || fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name") ? 3 : 0;
     }
 
@@ -107,18 +119,18 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.STEAM_TURBINE_SIDE_ACTIVE)};
     }
 
-	@Override
-	public int getPollution() {
-		return 0;
-	}
-	
+    @Override
+    public int getPollution() {
+        return 0;
+    }
+
     @Override
     public boolean isFluidInputAllowed(FluidStack aFluid) {
-    		if(aFluid.getFluid().getUnlocalizedName(aFluid).equals("ic2.fluidSuperheatedSteam")){
-                aFluid.amount=0;
-                aFluid = null;
-                return false;
-            }
+        if (aFluid.getFluid().getUnlocalizedName(aFluid).equals("ic2.fluidSuperheatedSteam")) {
+            aFluid.amount = 0;
+            aFluid = null;
+            return false;
+        }
         return super.isFluidInputAllowed(aFluid);
     }
 }

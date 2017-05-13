@@ -24,8 +24,12 @@ public class GT_MetaTileEntity_RockBreaker
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
     }
 
+    public GT_MetaTileEntity_RockBreaker(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
+        super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_RockBreaker(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_RockBreaker(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipeList() {

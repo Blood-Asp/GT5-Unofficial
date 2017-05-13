@@ -22,8 +22,12 @@ public class GT_MetaTileEntity_ForgeHammer_Bronze
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_ForgeHammer_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_ForgeHammer_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_ForgeHammer_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {

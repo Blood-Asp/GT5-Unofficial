@@ -32,14 +32,14 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "Controller Block for the Pyrolyse Oven",
                 "Industrial Charcoal producer and Oil from Plants",
                 "Size(WxHxD): 5x4x5, Controller (Bottom center)",
-                "3x1x3 Kanthal Heating Coils (Inside bottom 5x1x5 layer)",
-                "9x Kanthal Heating Coils (Centered 3x1x3 area in Bottom layer)",
+                "3x1x3 of Kanthal Coil Blocks (At the center of the bottom layer)",
                 "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
                 "1x Output Hatch/Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
-                "ULV Machine Casings for the rest (60 at least!)"};
+                "ULV Machine Casings for the rest (60 at least!)",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
