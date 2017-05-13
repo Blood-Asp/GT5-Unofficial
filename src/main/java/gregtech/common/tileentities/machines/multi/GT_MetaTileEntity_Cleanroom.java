@@ -35,10 +35,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 "Controller Block for the Cleanroom",
                 "Min(WxHxD): 3x3x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
                 "Controller (Top center), Walls Plascrete",
-                "Top besides contoller and corners filter casings",
-                "1 Reinforced Door",
-                "1x Energy Hatch, 1x Maintainance Hatch",
-                "up to 10 Machine Hull to transfer Items & Energy inside"};
+                "Top besides contoller and edges Filter Machine Casings",
+                "1x Reinforced Door",
+                "1x MV+ Energy Hatch, 1x Maintainance Hatch",
+                "up to 10 Machine Hulls to transfer Items & Energy inside"};
     }
 
     public boolean checkRecipe(ItemStack aStack) {
