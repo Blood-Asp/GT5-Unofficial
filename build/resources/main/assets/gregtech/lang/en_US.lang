@@ -641,6 +641,9 @@ achievement.gt.metaitem.01.32696.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32697=Sensor UV tier
 achievement.gt.metaitem.01.32697.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.metaitem.03:32095=Wetware Mainframe
+achievement.gt.metaitem.03.32095.desc=Pickup this item to see the recipe in NEI
+
 for.bees.species.clay=Clay
 for.bees.species.slimeball=Slimeball
 for.bees.species.peat=Peat
