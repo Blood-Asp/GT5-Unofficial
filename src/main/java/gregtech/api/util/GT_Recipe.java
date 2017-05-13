@@ -20,6 +20,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.SubTag;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;
@@ -1482,7 +1483,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         			if (itemData != null && itemData.hasValidPrefixMaterialData() && itemData.mMaterial.mMaterial == Materials.Empty) {
         				continue;
         			} else {
-            			adjustedInputs.add(input);        				
+        				if (itemData != null && itemData.hasValidPrefixMaterialData() && itemData.mPrefix == OrePrefixes.cell) {
+        					ItemStack dustStack = itemData.mMaterial.mMaterial.getDust(input.stackSize);
+        					if (dustStack != null) {
+        						adjustedInputs.add(dustStack);
+        					} else {
+        						adjustedInputs.add(input);
+        					}
+        				} else {
+        					adjustedInputs.add(input);
+        				}
         			}
         		}
         	}
