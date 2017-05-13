@@ -109,7 +109,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
         if (inputs.length > 0 || fluids.length > 0) {
             long voltage = getMaxInputVoltage();
             byte tier = (byte) Math.max(1, GT_Utility.getTier(voltage));
-        	GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
+        	GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
         	if (recipe != null && recipe.isRecipeInputEqual(true, fluids, inputs)) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
@@ -154,7 +154,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 						if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
 								&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
 								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
-							if (block == GregTech_API.sBlockCasings2 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
+							if (block == GregTech_API.sBlockCasings4 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 14) {
 								casingAmount++;
 							} else {
 								return false;
