@@ -357,6 +357,24 @@ achievement.Neutronium=Find Neutronium Ore
 achievement.Neutronium.desc=Height: 5-30, Chance: 10, /IO/Venus/Mercury/Encheladus/Titan/Miranda/Triton/KuiperBelt/Tceti//
 achievement.Adamantium=Find Adamantium Ore
 achievement.Adamantium.desc=Height: 5-30, Chance: 10, Proteus/Triton/Pluto/KuiperBelt/Makemake/Haumea/VegaB/BarnardE/BarnardF/Tceti//
+achievement.MeteoricIron=Meteoric Iron Ore
+achievement.MeteoricIron.desc=Height: 50-61, Chance: 10, DeepDarkDim/
+achievement.InfinityCatalyst=Infinity Catalyst Ore
+achievement.InfinityCatalyst.desc=Height: 5-15, Chance: 10, DeepDarkDim/
+achievement.Naquadria=Naquadria Ore
+achievement.Naquadria.desc=Height: 5-15, Chance: 10, DeepDarkDim/
+achievement.DraconiumAwakened=Awakened Draconium
+achievement.DraconiumAwakened.desc=Height: 3-10, Chance: 10, DeepDarkDim/
+achievement.Bedrockium=Bedrokium Ore
+achievement.Bedrockium.desc=Height: 3-10, Chance: 10, DeepDarkDim/
+achievement.Cobalt=Cobalt Ore
+achievement.Cobalt.desc=Height: 22-32, Chance: 10, DeepDarkDim/
+achievement.Magnesium=Magnesium Ore
+achievement.Magnesium.desc=Height: 32-42, Chance: 10, DeepDarkDim/
+achievement.Manganese=Manganese Ore
+achievement.Manganese.desc=Height: 43-53, Chance: 10, DeepDarkDim/
+achievement.Antimony=Antimony Ore
+achievement.Antimony.desc=Height: 22-32, Chance: 10, DeepDarkDim/
 
 achievement.flintpick=First Tools
 achievement.flintpick.desc=Craft a flint pick
@@ -641,8 +659,41 @@ achievement.gt.metaitem.01.32696.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32697=Sensor UV tier
 achievement.gt.metaitem.01.32697.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.blockmachines.fusionscomputer.tier.06=Fusion Computer Mark I
+achievement.gt.blockmachines.fusionscomputer.tier.06.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.fusionscomputer.tier.07=Fusion Computer Mark II
+achievement.gt.blockmachines.fusionscomputer.tier.07.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.fusionscomputer.tier.08=Fusion Computer Mark III
+achievement.gt.blockmachines.fusionscomputer.tier.08.desc=Pickup this item to see the recipe in NEI
+
+achievement.gt.metaitem.03:32072=Neuro Processing Unit
+achievement.gt.metaitem.03:32072.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.03:32095=Wetware Mainframe
-achievement.gt.metaitem.03.32095.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.03:32095.desc=Pickup this item to see the recipe in NEI
+
+achievement.ic2.itemNanoCircuit=Nano Circuit
+achievement.ic2.itemNanoCircuit=.desc=Pickup this item to see the recipe in NEI
+achievement.ic2.itemPikoCircuit=Piko Circuit
+achievement.ic2.itemPikoCircuit=.desc=Pickup this item to see the recipe in NEI
+achievement.ic2.itemQuantumCircuit=Quantum Circuit
+achievement.ic2.itemQuantumCircuit=.desc=Pickup this item to see the recipe in NEI
+
+achievement.gt.metaitem.01:32605=Ultimate Battery
+achievement.gt.metaitem.01:32605.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01:32609=Really Ultimate Battery
+achievement.gt.metaitem.01:32609.desc=Pickup this item to see the recipe in NEI
+
+achievement.ic2.itemArmorQuantumHelmet=Quantum Helmet
+achievement.ic2.itemArmorQuantumHelmet=.desc=Pickup this item to see the recipe in NEI
+achievement.ic2.itemArmorQuantumChestplate=Quantum Chestplate
+achievement.ic2.itemArmorQuantumChestplate=.desc=Pickup this item to see the recipe in NEI
+achievement.ic2.itemArmorQuantumLegs=Quantum Leggings
+achievement.ic2.itemArmorQuantumLegs=.desc=Pickup this item to see the recipe in NEI
+achievement.ic2.itemArmorQuantumBoots=Quantum Boots
+achievement.ic2.itemArmorQuantumBoots=.desc=Pickup this item to see the recipe in NEI
+
+achievement.ic2.itemGraviChestPlate=Gravi Chestplate
+achievement.ic2.itemGraviChestPlate=.desc=Pickup this item to see the recipe in NEI
 
 for.bees.species.clay=Clay
 for.bees.species.slimeball=Slimeball
