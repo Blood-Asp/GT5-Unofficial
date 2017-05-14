@@ -830,7 +830,7 @@ public class GT_CraftingRecipeLoader implements Runnable {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("quantumBoots", 1L));
         }
 
-        if (Loader.isModLoaded("GraviSuite")) {//TODO CHECK GRAVI RECIPES
+        if (Loader.isModLoaded("GraviSuite")) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getModItem("GraviSuite", "advNanoChestPlate", 1, GT_Values.W));
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("GraviSuite", "advNanoChestPlate", 1, GT_Values.W), new Object[]{"CJC", "CNC", "WPW", 'C', OrePrefixes.plateAlloy.get(Materials.Carbon), 'J', GT_ModHandler.getModItem("GraviSuite", "advJetpack", 1, GT_Values.W), 'N', GT_ModHandler.getIC2Item("nanoBodyarmor", 1L), 'W', OrePrefixes.wireGt04.get(Materials.Platinum), 'P', OrePrefixes.circuit.get(Materials.Data)});
         }
