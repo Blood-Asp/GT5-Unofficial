@@ -692,8 +692,8 @@ achievement.ic2.itemArmorQuantumLegs.desc=Pickup this item to see the recipe in 
 achievement.ic2.itemArmorQuantumBoots=Quantum Boots
 achievement.ic2.itemArmorQuantumBoots.desc=Pickup this item to see the recipe in NEI
 
-achievement.item.GraviChestPlate=Gravi Chestplate
-achievement.item.GraviChestPlate.desc=Pickup this item to see the recipe in NEI
+achievement.item.graviChestPlate=Gravi Chestplate
+achievement.item.graviChestPlate.desc=Pickup this item to see the recipe in NEI
 
 for.bees.species.clay=Clay
 for.bees.species.slimeball=Slimeball
