@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine.isValidForLowGravity;
 
 public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -92,7 +95,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
 
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         if (mInventory[1] == null) return null;
-        String tmp = mInventory[1].getUnlocalizedName().replaceAll("gt.blockmachines.basicmachine.", "");
+        String tmp = mInventory[1].getUnlocalizedName().replaceAll("gt\\.blockmachines\\.basicmachine\\.", "");
         if (tmp.startsWith("centrifuge")) {
             return GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes;
         } else if (tmp.startsWith("electrolyzer")) {
@@ -158,23 +161,24 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         } else if (tmp.startsWith("polarizer")) {
             return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
         } else if (tmp.startsWith("plasmaarcfurnace")) {
-             return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
+            return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
         } else if (tmp.startsWith("printer")) {
-             return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
+            return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
         } else if (tmp.startsWith("press")) {
-              return GT_Recipe.GT_Recipe_Map.sPressRecipes;
+            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
         } else if (tmp.startsWith("fluidcanner")) {
-              return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
+            return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
         } else if (tmp.startsWith("fluidheater")) {
-              return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
+            return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
         } else if (tmp.startsWith("distillery")) {
-              return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
+            return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
         } else if (tmp.startsWith("slicer")) {
-              return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
+            return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
         } else if (tmp.startsWith("amplifier")) {
-              return GT_Recipe.GT_Recipe_Map.sAmplifiers;
+            return GT_Recipe.GT_Recipe_Map.sAmplifiers;
+        } else if (tmp.startsWith("circuitassembler")) {
+            return GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes;
         }
-
         return null;
     }
 
@@ -195,9 +199,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return false;
         }
         GT_Recipe.GT_Recipe_Map map = getRecipeMap();
-        if (map == null) {
-            return false;
-        }
+        if (map == null) return false;
         ArrayList<ItemStack> tInputList = getStoredInputs();
 
         if       (mInventory[1].getUnlocalizedName().endsWith("10")) {
@@ -254,6 +256,10 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         if (tInputList.size() > 0 || tFluids.length > 0) {
             GT_Recipe tRecipe = map.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
             if (tRecipe != null) {
+                if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
+                        !isValidForLowGravity(tRecipe,getBaseMetaTileEntity().getWorld().provider.dimensionId))
+                    return false;
+
                 mLastRecipe = tRecipe;
                 this.mEUt = 0;
                 this.mOutputItems = null;
