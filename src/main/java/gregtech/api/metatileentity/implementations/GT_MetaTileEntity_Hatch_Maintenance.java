@@ -99,7 +99,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public boolean isValidSlot(int aIndex) {
-        return mAuto;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 
     @Override
@@ -179,7 +179,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
             this.mSoftHammer = true;
             this.mSolderingTool = true;
             this.mWrench = true;
-            updateSlots()
+            updateSlots();
             return true;
         }
         return false;
@@ -214,11 +214,11 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return mAuto;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return mAuto;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 }
