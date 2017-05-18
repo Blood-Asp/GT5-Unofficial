@@ -34,6 +34,7 @@ public class MaterialStack implements Cloneable {
     @Override
     public String toString() {
          String temp1 = "", temp2 = mMaterial.getToolTip(true), temp3 = "", temp4 = "";
+         System.out.println("EPIK "+mMaterial.mDefaultLocalName+" "+mMaterial.mElement);
          if (mAmount > 1) {
              temp4 = String.valueOf(mAmount);
              if (mMaterial.mMaterialList.size() > 1 || (mMaterial.mMaterialList.size() == 1 && mMaterial.mElement == null)) {
