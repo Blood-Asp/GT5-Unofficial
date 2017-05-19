@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_DistillationTower
                 "1x Output Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Clean Stainless Steel Casings for the rest (36 at least!)"};
+                "Clean Stainless Steel Machine Casings for the rest (36 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
