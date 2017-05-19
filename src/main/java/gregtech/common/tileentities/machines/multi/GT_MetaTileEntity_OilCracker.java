@@ -43,7 +43,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                 "1x Output Hatch (Any right side casing)",
                 "1x Maintenance Hatch (Any middle ring casing)",
                 "1x Energy Hatch (Any middle ring casing)",
-                "Clean Stainless Steel Casings for the rest (18 at least!)",
+                "Clean Stainless Steel Machine Casings for the rest (18 at least!)",
                 "Optional Steam(50% less EU/t) or Hydrogen(30% more output)"};
     }
 

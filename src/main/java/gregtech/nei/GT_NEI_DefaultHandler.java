@@ -217,7 +217,8 @@ public class GT_NEI_DefaultHandler
 				}
 			}
 			if (tDuration > 0) {
-				drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+//				drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+				drawText(10, 113, String.format("Time: %.2f secs", 0.05 * tDuration), -16777216);
 			}
 			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
 			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {//IF mSpecialValue == -100 THEN needs Low Gravity
@@ -360,13 +361,22 @@ public class GT_NEI_DefaultHandler
     public class CachedDefaultRecipe
             extends TemplateRecipeHandler.CachedRecipe {
         public final GT_Recipe mRecipe;
-        public final List<PositionedStack> mOutputs = new ArrayList();
-        public final List<PositionedStack> mInputs = new ArrayList();
+        public final List<PositionedStack> mOutputs;
+        public final List<PositionedStack> mInputs;
 
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
 
+            if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
+            	mInputs = aRecipe.getInputPositionedStacks();
+            	mOutputs = aRecipe.getOutputPositionedStacks();
+            	return;
+            }
+            
+            mOutputs = new ArrayList<PositionedStack>();
+            mInputs = new ArrayList<PositionedStack>();
+            
             int tStartIndex = 0;
             switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualInputCount) {
                 case 0:
