@@ -450,7 +450,7 @@ public class GT_Mod implements IGT_Mod {
 			GT_Values.RA.addCentrifugeRecipe(Materials.MetalMixture.getDust(1), GT_Values.NI, GT_Values.NF, GT_Values.NF, 
 					Materials.BandedIron.getDustSmall(1), 	Materials.Bauxite.getDustSmall(1), Materials.Pyrolusite.getDustTiny(2),
 					Materials.Barite.getDustTiny(1), 		Materials.Chromite.getDustTiny(1), Materials.Ilmenite.getDustTiny(1), 
-					new int[]{10000, 10000, 10000, 10000, 10000, 6000}, 480, 30);
+					new int[]{10000, 10000, 10000, 10000, 10000, 6000}, 480, 900);
         }
         if (gregtechproxy.mSortToTheEnd) {
             try {
