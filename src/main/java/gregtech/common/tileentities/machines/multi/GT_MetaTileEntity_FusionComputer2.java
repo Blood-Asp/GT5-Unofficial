@@ -48,7 +48,14 @@ public class GT_MetaTileEntity_FusionComputer2 extends GT_MetaTileEntity_FusionC
     }
 
     public String[] getDescription() {
-        return new String[]{"It's over 9000!!!", "Fusion Casings around Fusion Coils", "2-16 Input Hatches", "1-16 Output Hatches", "1-16 Energy Hatches", "All Hatches must be ZPMV or better", "4096EU/t and 20mio EU Cap per Energy Hatch"};
+        return new String[]{
+        		"It's over 9000!!!", 
+        		"Fusion Machine Casings around Fusion Coil Blocks", 
+        		"2-16 Input Hatches", 
+        		"1-16 Output Hatches", 
+        		"1-16 Energy Hatches", 
+        		"All Hatches must be ZPMV or better", 
+        		"4096EU/t and 20mio EU Cap per Energy Hatch"};
     }
 
     @Override

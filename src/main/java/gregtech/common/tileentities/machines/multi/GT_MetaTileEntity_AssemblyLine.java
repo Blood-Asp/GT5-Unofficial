@@ -34,11 +34,11 @@ public class GT_MetaTileEntity_AssemblyLine
     public String[] getDescription() {
         return new String[]{"Assembling Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Solid Steel Casing(or Maintenance or Input Hatch),",
-                "Input Bus(Last Output Bus), Steel Casing",
+                "Bottom: Solid Steel Machine Casing(or Maintenance or Input Hatch),",
+                "Input Bus(Last Output Bus), Steel Machine Casing",
                 "Middle: Reinforced Glass, Assembling Line Casing, Reinforced Glass",
-                "UpMiddle: Grate Casing, Assembler Machine Casing ,",
-                "Grate Casing(or Controller)",
+                "UpMiddle: Grate Machine Casing, Assembler Machine Casing,",
+                "Grate Machine Casing(or Controller)",
                 "Top: Solid Steel Casing(or Energy Hatch)",
                 "Up to 16 repeating slices, last is Output Bus"};
     }

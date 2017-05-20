@@ -54,8 +54,8 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 "1x Output Hatch/Bus (Any casing)",
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Robust Tungstensteel Casings for the rest (14 at least!)",
-                "Place up to 64 Single Block GT Machines into the GUI Inventory",
+                "Robust Tungstensteel Machine Casings for the rest (14 at least!)",
+                "Place up to 64 Single Block GT Machines into the Controller Inventory",
                 "Maximal overclockedness of machines inside: Tier 9"};
     }
 
