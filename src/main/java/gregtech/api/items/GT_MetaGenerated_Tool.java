@@ -350,7 +350,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
                 aList.add(tOffset + 2, EnumChatFormatting.WHITE + "Turbine Efficency: " + EnumChatFormatting.BLUE + (50.0F + (10.0F * getToolCombatDamage(aStack))) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Steam flow: " + EnumChatFormatting.GOLD + aOptFlow + EnumChatFormatting.GRAY + " L/t");
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Gas flow (Burn energy per tick): " + EnumChatFormatting.GOLD + aOptFlow + EnumChatFormatting.GRAY + " EU/t");
-                aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Plasma flow (Plasma energy per tick): " + EnumChatFormatting.GOLD + aOptFlow*40 + EnumChatFormatting.GRAY + " EU/s");
+                aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Plasma flow (Plasma energy per tick): " + EnumChatFormatting.GOLD + aOptFlow*40 + EnumChatFormatting.GRAY + " EU/t");
 
             } else {
                 aList.add(tOffset + 0, EnumChatFormatting.WHITE + "Durability: " + EnumChatFormatting.GREEN + (tMaxDamage - getToolDamage(aStack)) + " / " + tMaxDamage + EnumChatFormatting.GRAY);
