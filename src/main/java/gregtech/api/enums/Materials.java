@@ -528,22 +528,20 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     public static Materials NatruralGas = new Materials(733, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "NatruralGas", "Natural Gas", 1, 15, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
     public static Materials SulfuricGas = new Materials(734, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "SulfuricGas", "Sulfuric Gas", 1, 20, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
-    public static Materials Gas = new Materials(735, TextureSet.SET_FLUID, 				1.0F, 0, 1, 16, 255, 255, 255, 0, "Gas", "Refinery Gas", 1, 128, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
+    public static Materials Gas = new Materials(735, TextureSet.SET_FLUID, 				1.0F, 0, 1, 16, 255, 255, 255, 0, "Gas", "Refinery Gas", 1, 128, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite).setCanBeCracked(true);
     public static Materials SulfuricNaphtha = new Materials(736, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricNaphtha", "Sulfuric Naphtha", 1, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
     public static Materials SulfuricLightFuel = new Materials(737, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricLightFuel", "Sulfuric Light Fuel", 0, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
     public static Materials SulfuricHeavyFuel = new Materials(738, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricHeavyFuel", "Sulfuric Heavy Fuel", 3, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
-    public static Materials Naphtha = new Materials(739, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 255, 255, 0, 0, "Naphtha", "Naphtha", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
-    public static Materials LightFuel = new Materials(740, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "LightFuel", "Light Fuel", 0, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
-    public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Naphtha = new Materials(739, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 255, 255, 0, 0, "Naphtha", "Naphtha", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow).setCanBeCracked(true);
+    public static Materials LightFuel = new Materials(740, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "LightFuel", "Light Fuel", 0, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow).setCanBeCracked(true);
+    public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
-    public static Materials CrackedLightFuel = new Materials(743, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 255, 0, 0, "CrackedLightFuel", "Cracked Light Fuel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
-    public static Materials CrackedHeavyFuel = new Materials(744, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 255, 0, 0, "CrackedHeavyFuel", "Cracked Heavy Fuel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
 
-    public static Materials Ethane = new MaterialBuilder(642, TextureSet.SET_FLUID, "Ethane").addCell().addGas().setRGB(210, 210, 240).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.GAS).setFuelPower(168).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Propane = new MaterialBuilder(643, TextureSet.SET_FLUID, "Propane").addCell().addGas().setRGB(240, 206, 100).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(232).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(197, 70, 15).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(256).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(212, 85, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(206).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ethane = new MaterialBuilder(642, TextureSet.SET_FLUID, "Ethane").addCell().addGas().setRGB(200, 200, 255).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.GAS).setFuelPower(168).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Propane = new MaterialBuilder(643, TextureSet.SET_FLUID, "Propane").addCell().addGas().setRGB(250, 226, 80).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(232).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(256).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(206).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Toluene = new MaterialBuilder(647, TextureSet.SET_FLUID, "Toluene").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 7), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Epichlorohydrin = new MaterialBuilder(648, TextureSet.SET_FLUID, "Epichlorohydrin").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials PolyvinylChloride = new MaterialBuilder(649, TextureSet.SET_DULL, "Polyvinyl Chloride").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(215, 230, 230).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).constructMaterial();
@@ -570,8 +568,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Methanol = new MaterialBuilder(673, TextureSet.SET_FLUID, "Methanol").addCell().addFluid().setRGB(170, 136, 0).setColor(Dyes.dyeBrown).setFuelPower(96).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials CarbonMonoxide = new MaterialBuilder(674, TextureSet.SET_FLUID, "Carbon Monoxide").addCell().addGas().setRGB(14, 72, 128).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(32).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials MetalMixture = new MaterialBuilder(676, TextureSet.SET_METALLIC, "Metal Mixture").addDustItems().setRGB(80, 45, 22).setColor(Dyes.dyeBrown).constructMaterial();
-    public static Materials Ethylene = new MaterialBuilder(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Propene = new MaterialBuilder(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(144).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ethylene = new MaterialBuilder(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Propene = new MaterialBuilder(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(144).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials VinylAcetate = new MaterialBuilder(679, TextureSet.SET_FLUID, "Vinyl Acetate").addCell().addFluid().setRGB(255, 179, 128).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
     public static Materials PolyvinylAcetate = new MaterialBuilder(680, TextureSet.SET_FLUID, "Polyvinyl Acetate").addCell().addFluid().setRGB(255, 153, 85).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).constructMaterial();
     public static Materials MethylAcetate = new MaterialBuilder(681, TextureSet.SET_FLUID, "Methyl Acetate").addCell().addFluid().setRGB(238, 198, 175).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
@@ -732,6 +730,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Beryl = new Materials(Emerald, false);
     @Deprecated public static Materials BlackGranite = new Materials(GraniteBlack, false);
     @Deprecated public static Materials CalciumCarbonate = new Materials(Calcite, false);
+    @Deprecated public static Materials CrackedLightFuel = new Materials(LightFuel, false);
+    @Deprecated public static Materials CrackedHeavyFuel = new Materials(HeavyFuel, false);
     @Deprecated public static Materials CreosoteOil = new Materials(Creosote, false);
     @Deprecated public static Materials Chromium = new Materials(Chrome, false);
     @Deprecated public static Materials Diesel = new Materials(Fuel, false);
@@ -796,7 +796,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public boolean mHasParentMod = true, mHasPlasma = false, mHasGas = false, mCustomOre = false;
     public Fluid mSolid = null, mFluid = null, mGas = null, mPlasma = null;
 
-    private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false;
+    private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false, canBeSteamCracked = false;
+    private Fluid[] hydroCrackedFluids = new Fluid[3], steamCrackedFluids = new Fluid[3];
     
     /**
      * This Fluid is used as standard Unit for Molten Materials. 1296 is a Molten Block, that means 144 is one Material Unit worth of fluid.
@@ -1950,11 +1951,9 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     	return MATERIALS_MAP.values();
     }
     
-
 	public boolean hasCorrespondingFluid() {
 		return hasCorrespondingFluid;
 	}
-	
 
 	public Materials setHasCorrespondingFluid(boolean hasCorrespondingFluid) {
 		this.hasCorrespondingFluid = hasCorrespondingFluid;
@@ -1970,6 +1969,15 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 		return this;
 	}
 
+	public boolean canBeCracked() {
+		return canBeCracked;
+	}
+	
+	public Materials setCanBeCracked(boolean canBeCracked) {
+		this.canBeCracked = canBeCracked;
+		return this;
+	}
+		
 	public int getLiquidTemperature() {
 		return mMeltingPoint == 0 ? 295 : mMeltingPoint;
 	}
@@ -1979,6 +1987,58 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 		return this;
 	}
 
+	public Materials setHydroCrackedFluids(Fluid[] hydroCrackedFluids) {
+		this.hydroCrackedFluids = hydroCrackedFluids;
+		return this;
+	}
+	
+	public FluidStack getLightlyHydroCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(hydroCrackedFluids[0], amount);
+	}
+	
+	public FluidStack getModeratelyHydroCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(hydroCrackedFluids[1], amount);
+	}
+	
+	public FluidStack getSeverelyHydroCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(hydroCrackedFluids[2], amount);
+	}
+	
+	public Materials setSteamCrackedFluids(Fluid[] steamCrackedFluids) {
+		this.steamCrackedFluids = steamCrackedFluids;
+		return this;
+	}
+	
+	public FluidStack getLightlySteamCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(steamCrackedFluids[0], amount);
+	}
+	
+	public FluidStack getModeratelySteamCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(steamCrackedFluids[1], amount);
+	}
+	
+	public FluidStack getSeverelySteamCracked(int amount) {
+		if (hydroCrackedFluids[0] == null) {
+			return null;
+		}
+		return new FluidStack(steamCrackedFluids[2], amount);
+	}
+	
 	public int getGasTemperature() {
 		return mGasTemp == 0 ? 295 : mMeltingPoint;
 	}

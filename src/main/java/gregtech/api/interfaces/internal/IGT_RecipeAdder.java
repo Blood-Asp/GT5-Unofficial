@@ -556,7 +556,7 @@ public interface IGT_RecipeAdder {
 
     /**
      * Adds a Distillation Tower Recipe
-     * Every Fluid also gets seperate distillation recipes
+     * Every Fluid also gets separate distillation recipes
      *
      * @param aInput1  must be != null
      * @param aOutputs must be != null 1-5 Fluids
@@ -584,7 +584,20 @@ public interface IGT_RecipeAdder {
      * @param aDuration
      * @param aEUt
      */
+    @Deprecated
     public boolean addCrackingRecipe(FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt);
+
+    /**
+     * Adds Oil Cracking Recipe
+     *
+     * @param circuitConfig The circuit configuration to control cracking severity
+     * @param aInput The fluid to be cracked
+     * @param aInput2 The fluid to catalyze the cracking (typically Hydrogen or Steam)
+     * @param aOutput The cracked fluid
+     * @param aDuration
+     * @param aEUt
+     */
+    public boolean addCrackingRecipe(int circuitConfig, FluidStack aInput, FluidStack aInput2, FluidStack aOutput, int aDuration, int aEUt);
 
     /**
      * Adds a Sound to the Sonictron9001
