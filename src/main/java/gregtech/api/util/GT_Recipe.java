@@ -1538,7 +1538,6 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 				ArrayList<PositionedStack> inputStacks = new ArrayList<PositionedStack>(itemLimit + fluidLimit);
 				
 				for (int i = 0; i < itemLimit; i++) {
-					System.out.println(Arrays.toString(mInputs) + " + " + Arrays.toString(mFluidInputs) + " -> " + Arrays.toString(mOutputs));
 					inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - i * 18, 5));
 				}
 				
