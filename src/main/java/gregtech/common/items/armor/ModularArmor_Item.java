@@ -21,6 +21,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.MinecraftForge;
@@ -284,7 +285,7 @@ public class ModularArmor_Item extends GT_Generic_Item implements ISpecialArmor 
                 for (EntityItem item : items) {
                     ItemStack stack = item.getEntityItem();
                     if (!item.isDead && stack != null) {
-                        setEntityMotionFromVector(item, new Vector3(x, y, z), 0.45F);
+                        setEntityMotionFromVector(item, new Vec3d(x, y, z), 0.45F);
                     }
                 }
             }
@@ -349,14 +350,13 @@ public class ModularArmor_Item extends GT_Generic_Item implements ISpecialArmor 
         }
     }
 
-    public void setEntityMotionFromVector(Entity entity, Vector3 originalPosVector, float modifier) {
-        Vector3 entityVector = Vector3.fromEntityCenter(entity);
-        Vector3 finalVector = originalPosVector.copy().subtract(entityVector);
-        if (finalVector.mag() > 1)
+    public void setEntityMotionFromVector(Entity entity, Vec3d originalPosVector, float modifier) {
+        Vec3d finalVector = originalPosVector.subtract(new Vec3d(entity.posX, entity.posY - entity.getYOffset() + entity.height / 2, entity.posZ));
+        if (finalVector.lengthVector() > 1)
             finalVector.normalize();
-        entity.motionX = finalVector.x * modifier;
-        entity.motionY = finalVector.y * modifier;
-        entity.motionZ = finalVector.z * modifier;
+        entity.motionX = finalVector.xCoord * modifier;
+        entity.motionY = finalVector.yCoord * modifier;
+        entity.motionZ = finalVector.zCoord * modifier;
     }
 
     @Override
