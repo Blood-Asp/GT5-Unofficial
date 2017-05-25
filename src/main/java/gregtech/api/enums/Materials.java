@@ -796,7 +796,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public boolean mHasParentMod = true, mHasPlasma = false, mHasGas = false, mCustomOre = false;
     public Fluid mSolid = null, mFluid = null, mGas = null, mPlasma = null;
 
-    private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false, canBeSteamCracked = false;
+    private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false;
     private Fluid[] hydroCrackedFluids = new Fluid[3], steamCrackedFluids = new Fluid[3];
     
     /**
