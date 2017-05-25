@@ -1477,6 +1477,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         		FluidStack inputFluidContent = FluidContainerRegistry.getFluidForFilledItem(input);
         		if (inputFluidContent != null) {
         			inputFluidContent.amount *= input.stackSize;
+        			if (inputFluidContent.getFluid().getName().equals("ic2steam")) {
+        				inputFluidContent = GT_ModHandler.getSteam(inputFluidContent.amount);
+        			}
         			adjustedFluidInputs.add(inputFluidContent);
         		} else {
         			ItemData itemData = GT_OreDictUnificator.getItemData(input);
@@ -1506,6 +1509,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         		FluidStack outputFluidContent = FluidContainerRegistry.getFluidForFilledItem(output);
         		if (outputFluidContent != null) {
         			outputFluidContent.amount *= output.stackSize;
+        			if (outputFluidContent.getFluid().getName().equals("ic2steam")) {
+        				outputFluidContent = GT_ModHandler.getSteam(outputFluidContent.amount);
+        			}
         			adjustedFluidOutputs.add(outputFluidContent);
         		} else {
         			ItemData itemData = GT_OreDictUnificator.getItemData(output);

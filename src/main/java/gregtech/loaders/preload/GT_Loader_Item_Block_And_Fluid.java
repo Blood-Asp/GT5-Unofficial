@@ -402,7 +402,8 @@ public class GT_Loader_Item_Block_And_Fluid
         GT_Mod.gregtechproxy.addFluid("Methane", "Methane", Materials.Methane, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Methane, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Nitrogen", "Nitrogen", Materials.Nitrogen, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Nitrogen, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("NitrogenDioxide", "Nitrogen Dioxide", Materials.NitrogenDioxide, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NitrogenDioxide, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
-        GT_Mod.gregtechproxy.addFluid("Steam", "Steam", Materials.Water, 2, 375);
+        GT_Mod.gregtechproxy.addFluid("Steam", "Steam", Materials.Water, 2, 375, GT_ModHandler.getIC2Item("steamCell", 1), Materials.Empty.getCells(1), 1000);
+        GT_Values.RA.addFluidCannerRecipe(Materials.Empty.getCells(1), GT_ModHandler.getIC2Item("steamCell", 1), GT_ModHandler.getSteam(1000), null);
         Materials.Ice.mGas = Materials.Water.mGas;
         Materials.Water.mGas.setTemperature(375).setGaseous(true);
 
