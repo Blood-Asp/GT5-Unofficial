@@ -34,7 +34,7 @@ public class GT_Cover_PlayerDetector extends GT_CoverBehavior {
                         playerDetected = true;
                         break;
                     }
-                    if (!tEntity.getDisplayName().equalsIgnoreCase(placer)) {
+                    if (tEntity.getDisplayName().equalsIgnoreCase(placer)) {
                         if (aCoverVariable == 1) {
                             playerDetected = true;
                             break;
@@ -57,8 +57,8 @@ public class GT_Cover_PlayerDetector extends GT_CoverBehavior {
         if(aCoverVariable <0){aCoverVariable = 2;}
         switch(aCoverVariable) {
             case 0: GT_Utility.sendChatToPlayer(aPlayer, "Emit if any Player is close"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Emit if you are close"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Emit if other player is close"); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Emit if other player is close"); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Emit if you are close"); break;
         }
         return aCoverVariable;
     }
