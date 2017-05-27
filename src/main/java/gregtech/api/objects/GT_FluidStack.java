@@ -69,4 +69,9 @@ public class GT_FluidStack extends FluidStack {
         }
         return new GT_FluidStack(this);
     }
+    
+    @Override
+    public String toString() {
+    	return String.format("GT_FluidStack: %s x %s, ID:%s", this.amount, this.getFluid().getName(), this.getFluidID());
+    }
 }
