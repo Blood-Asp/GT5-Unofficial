@@ -368,7 +368,8 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.Vinteum,
                 Materials.GarnetYellow,
                 Materials.NetherStar,
-                Materials.Charcoal
+                Materials.Charcoal,
+                Materials.Blaze
         }, OrePrefixes.block, gregtech.api.enums.Textures.BlockIcons.STORAGE_BLOCKS11);
 
         GregTech_API.sBlockReinforced = new GT_Block_Reinforced("gt.blockreinforced");
