@@ -180,7 +180,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Shape_Mold_Round.set(addItem(tLastID = 320, "Mold (Round)", "Mold for making Rounds", new Object[0]));
         ItemList.Shape_Mold_Screw.set(addItem(tLastID = 321, "Mold (Screw)", "Mold for making Screws", new Object[0]));
         ItemList.Shape_Mold_Ring.set(addItem(tLastID = 322, "Mold (Ring)", "Mold for making Rings", new Object[0]));
-        ItemList.Shape_Mold_Rod_Long.set(addItem(tLastID = 322, "Mold (Long Rod)", "Mold for making Long Rods", new Object[0]));
+        ItemList.Shape_Mold_Rod_Long.set(addItem(tLastID = 323, "Mold (Long Rod)", "Mold for making Long Rods", new Object[0]));
 
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass)});
 
