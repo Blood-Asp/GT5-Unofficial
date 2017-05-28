@@ -9,6 +9,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -24,7 +25,7 @@ import java.util.Arrays;
 public class GT_MetaTileEntity_DistillationTower
         extends GT_MetaTileEntity_MultiBlockBase {
 	private static final int CASING_INDEX = 49;
-    private static boolean controller;
+    private short controllerY;
 
     public GT_MetaTileEntity_DistillationTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -128,6 +129,7 @@ public class GT_MetaTileEntity_DistillationTower
     }
 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    	controllerY = aBaseMetaTileEntity.getYCoord();
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
         int y = 0; //height
@@ -197,8 +199,39 @@ public class GT_MetaTileEntity_DistillationTower
         return 0;
     }
 
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
+    
+    @Override
+    public boolean addOutput(FluidStack aLiquid) {
+        if (aLiquid == null) return false;
+        FluidStack tLiquid = aLiquid.copy();
+        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
+            if (isValidMetaTileEntity(tHatch) && GT_ModHandler.isSteam(aLiquid) ? tHatch.outputsSteam() : tHatch.outputsLiquids()) {
+            	if (tHatch.getBaseMetaTileEntity().getYCoord() == this.controllerY + 1) {
+            		int tAmount = tHatch.fill(tLiquid, false);
+                	if (tAmount >= tLiquid.amount) {
+                    	return tHatch.fill(tLiquid, true) >= tLiquid.amount;
+                	} else if (tAmount > 0) {
+                    	tLiquid.amount = tLiquid.amount - tHatch.fill(tLiquid, true);
+                	}
+            	}
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected void addFluidOutputs(FluidStack[] mOutputFluids2) {
+        for (int i = 0; i < mOutputFluids2.length; i++) {
+            if (mOutputHatches.size() > i && mOutputHatches.get(i) != null && mOutputFluids2[i] != null && isValidMetaTileEntity(mOutputHatches.get(i))) {
+            	if (mOutputHatches.get(i).getBaseMetaTileEntity().getYCoord() == this.controllerY + 1 + i) {
+            		mOutputHatches.get(i).fill(mOutputFluids2[i], true);
+            	}
+            }
+        }
+
+    }
+    
 }
