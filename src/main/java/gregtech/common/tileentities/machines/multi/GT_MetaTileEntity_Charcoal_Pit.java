@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Recipe;
 import gregtech.common.GT_Pollution;
 import net.minecraft.block.Block;
@@ -196,10 +197,11 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
     private boolean isWoodLog(Block log, int meta){
         String tTool = log.getHarvestTool(meta);
         //DEBUG TODO Check and remove
-        System.out.println("Info> "+log.getUnlocalizedName()+" "+meta+" "+tTool+" "+(log.getMaterial()==Material.wood));
-        int[] ids= OreDictionary.getOreIDs(new ItemStack(log, 1,meta));
-        for(int id:ids){
-            System.out.println("Ore>"+OreDictionary.getOreName(id));
+        if(!(OrePrefixes.log.contains(new ItemStack(log, 1,meta)) && ((tTool != null) && (tTool.equals("axe"))) && (log.getMaterial() == Material.wood))) {
+            GT_Log.out.println("Info> " + log.getUnlocalizedName() + " " + meta + " " + tTool + " " + (log.getMaterial() == Material.wood));
+            for (int id : OreDictionary.getOreIDs(new ItemStack(log, 1, meta))) {
+                GT_Log.out.println("Ore>" + OreDictionary.getOreName(id));
+            }
         }
         //DEBUG
         return  OrePrefixes.log.contains(new ItemStack(log, 1,meta)) && ((tTool != null) && (tTool.equals("axe"))) && (log.getMaterial() == Material.wood);
