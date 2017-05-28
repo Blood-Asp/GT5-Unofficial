@@ -22,7 +22,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 
 public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlockBase {
-
     private boolean running = false;
     private boolean p1, p2, p3, p4, p5, p6;
 
@@ -195,16 +194,12 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
     }
 
     private boolean isWoodLog(Block log, int meta){
-        String tTool = log.getHarvestTool(meta);
-        //DEBUG TODO Check and remove
-        if(!(OrePrefixes.log.contains(new ItemStack(log, 1,meta)) && ((tTool != null) && (tTool.equals("axe"))) && (log.getMaterial() == Material.wood))) {
-            GT_Log.out.println("Info> " + log.getUnlocalizedName() + " " + meta + " " + tTool + " " + (log.getMaterial() == Material.wood));
-            for (int id : OreDictionary.getOreIDs(new ItemStack(log, 1, meta))) {
-                GT_Log.out.println("Ore>" + OreDictionary.getOreName(id));
-            }
+        for (int id : OreDictionary.getOreIDs(new ItemStack(log, 1, meta))) {
+            if(OreDictionary.getOreName(id).equals("logWood"))
+                return true;
         }
-        //DEBUG
-        return  OrePrefixes.log.contains(new ItemStack(log, 1,meta)) && ((tTool != null) && (tTool.equals("axe"))) && (log.getMaterial() == Material.wood);
+        String tTool = log.getHarvestTool(meta);
+        return OrePrefixes.log.contains(new ItemStack(log, 1,meta)) && ((tTool != null) && (tTool.equals("axe"))) && (log.getMaterial() == Material.wood);
     }
 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
