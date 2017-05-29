@@ -62,7 +62,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
 
     @Override
     public byte getCasingTextureIndex() {
-        return 46;
+        return 16;
     }
 
     @Override
