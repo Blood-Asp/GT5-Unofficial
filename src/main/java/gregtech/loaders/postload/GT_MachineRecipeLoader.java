@@ -2360,7 +2360,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             }, ItemList.ZPM2.get(1,o), 2000, 300000);
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.ZPM2.get(1,o), 576000, new ItemStack[]{
-                GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Infinity, 16L),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt16, Materials.Infinity, 4L),
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
