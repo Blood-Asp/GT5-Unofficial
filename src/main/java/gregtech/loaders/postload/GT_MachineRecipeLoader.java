@@ -8,7 +8,6 @@ import gregtech.api.enums.*;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
-import gregtech.common.GT_Proxy;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
 import ic2.api.recipe.Recipes;
@@ -2676,6 +2675,15 @@ if(Loader.isModLoaded("Railcraft")){
 
         GT_Values.RA.addMixerRecipe(Materials.LightFuel.getCells(1), null, null, null, Materials.Tetranitromethane.getFluid(20), Materials.NitroFuel.getFluid(1000), Materials.Empty.getCells(1), 80, 8);
         GT_Values.RA.addMixerRecipe(Materials.Fuel.getCells(2),      null, null, null, Materials.Tetranitromethane.getFluid(20), Materials.NitroFuel.getFluid(1000), Materials.Empty.getCells(2), 80, 8);
+
+        GT_Values.RA.addChemicalRecipe(Materials.Propene.getCells(1), Materials.Empty.getCells(1), Materials.Ethylene.getGas(1000), Materials.Isoprene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
+        GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), Materials.Empty.getCells(1), Materials.Propene.getGas(1000), Materials.Isoprene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
+        GT_Values.RA.addChemicalRecipe(GT_Utility.getIntegratedCircuit(2), Materials.Empty.getCells(1), Materials.Propene.getGas(2000), Materials.Isoprene.getFluid(1000), Materials.Methane.getCells(1), 120);
+        
+        GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(2, new Object[0]), GT_Utility.getIntegratedCircuit(1), Materials.Isoprene.getFluid(144),  null, Materials.RawRubber.getDust(1),  Materials.Empty.getCells(2),  160);
+        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(4),  			GT_Utility.getIntegratedCircuit(1), Materials.Isoprene.getFluid(288),  null, Materials.RawRubber.getDust(3),  Materials.Empty.getCells(4),  320);
+        GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(12, new Object[0]),Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(18), Materials.Empty.getCells(12), 640);
+        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(12), 			Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(24), Materials.Empty.getCells(12), 640);
 	}
 	
 	private void addSimplifiedChemicalRecipes() {
