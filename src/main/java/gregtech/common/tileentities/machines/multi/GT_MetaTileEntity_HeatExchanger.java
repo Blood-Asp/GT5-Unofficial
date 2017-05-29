@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         return new String[]{
                 "Controller Block for the Heat Exchanger",
                 "Size(WxHxD): 3x4x3, Controller (Front middle at bottom)",
-                "3x3x4 of Stable Titanium Machine Casings (hollow, Min 24!)",
+                "3x3x4 of Stable Titanium Machine Casings (hollow, Min 20!)",
                 "2x Titanium Pipe Casing (Inside the Hollow Machine Casings)",
                 "1x Distillated Water Input (Any casing)",
                 "1x Steam Output (Any casing)",
@@ -216,7 +216,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
                 }
             }
         }
-        return (tCasingAmount >= 24);
+        return tCasingAmount >= 20;
     }
 
     public boolean ignoreController(Block tTileEntity) {
