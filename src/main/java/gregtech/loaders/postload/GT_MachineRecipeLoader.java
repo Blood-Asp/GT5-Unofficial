@@ -2676,7 +2676,7 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addMixerRecipe(Materials.LightFuel.getCells(1), null, null, null, Materials.Tetranitromethane.getFluid(20), Materials.NitroFuel.getFluid(1000), Materials.Empty.getCells(1), 80, 8);
         GT_Values.RA.addMixerRecipe(Materials.Fuel.getCells(2),      null, null, null, Materials.Tetranitromethane.getFluid(20), Materials.NitroFuel.getFluid(1000), Materials.Empty.getCells(2), 80, 8);
 
-        GT_Values.RA.addChemicalRecipe(Materials.Propene.getCells(1), Materials.Empty.getCells(1), Materials.Ethylene.getGas(1000), Materials.Isoprene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
+        GT_Values.RA.addChemicalRecipe(Materials.Propene.getCells(1), null, Materials.Ethylene.getGas(1000), Materials.Hydrogen.getGas(2000), Materials.Isoprene.getCells(1), 120);
         GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), Materials.Empty.getCells(1), Materials.Propene.getGas(1000), Materials.Isoprene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
         GT_Values.RA.addChemicalRecipe(GT_Utility.getIntegratedCircuit(2), Materials.Empty.getCells(1), Materials.Propene.getGas(2000), Materials.Isoprene.getFluid(1000), Materials.Methane.getCells(1), 120);
         
@@ -2684,6 +2684,12 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(4),  			GT_Utility.getIntegratedCircuit(1), Materials.Isoprene.getFluid(288),  null, Materials.RawRubber.getDust(3),  Materials.Empty.getCells(4),  320);
         GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(12, new Object[0]),Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(18), Materials.Empty.getCells(12), 640);
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(12), 			Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(24), Materials.Empty.getCells(12), 640);
+
+        GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1), null, Materials.Ethylene.getGas(1000), Materials.Hydrogen.getGas(2000), Materials.Styrene.getCells(1), 120);
+        GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), Materials.Empty.getCells(1), Materials.Benzene.getGas(1000), Materials.Styrene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
+
+        GT_Values.RA.addDefaultPolymerizationRecipes(Materials.Styrene.mFluid, Materials.Polystyrene.mStandardMoltenFluid);
+
 	}
 	
 	private void addSimplifiedChemicalRecipes() {

@@ -537,6 +537,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
 
+    public static Materials Polystyrene = new MaterialBuilder(636, TextureSet.SET_DULL, "Polystyrene").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(162, 150, 138).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 8)).constructMaterial();
+    public static Materials Styrene = new MaterialBuilder(637, TextureSet.SET_FLUID, "Styrene").addCell().addFluid().setRGB(180, 168, 154).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Isoprene = new MaterialBuilder(638, TextureSet.SET_FLUID, "Isoprene").addCell().addFluid().setRGB(20, 20, 20).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 5), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Tetranitromethane = new MaterialBuilder(639, TextureSet.SET_FLUID, "Tetranitromethane").addCell().addFluid().setRGB(20, 20, 70).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Ethenone = new MaterialBuilder(641, TextureSet.SET_FLUID, "Ethenone").addCell().addGas().setRGB(20, 20, 70).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
@@ -545,6 +547,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(256).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(206).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials StyreneButadieneRubber = new MaterialBuilder(635, TextureSet.SET_SHINY, "Styrene-Butadiene Rubber").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(33, 26, 24).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
     public static Materials Toluene = new MaterialBuilder(647, TextureSet.SET_FLUID, "Toluene").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(328).setMaterialList(new MaterialStack(Carbon, 7), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Epichlorohydrin = new MaterialBuilder(648, TextureSet.SET_FLUID, "Epichlorohydrin").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials PolyvinylChloride = new MaterialBuilder(649, TextureSet.SET_DULL, "Polyvinyl Chloride").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(215, 230, 230).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).constructMaterial();
@@ -894,7 +897,9 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
         Plastic					.setEnchantmentForTools(Enchantment.knockback, 1);
         PolyvinylChloride		.setEnchantmentForTools(Enchantment.knockback, 1);
+        Polystyrene				.setEnchantmentForTools(Enchantment.knockback, 1);
         Rubber					.setEnchantmentForTools(Enchantment.knockback, 2);
+        StyreneButadieneRubber	.setEnchantmentForTools(Enchantment.knockback, 2);
         InfusedAir				.setEnchantmentForTools(Enchantment.knockback, 2);
 
         IronWood				.setEnchantmentForTools(Enchantment.fortune, 1);
@@ -1201,8 +1206,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Lignite.add(SubTag.FLAMMABLE, SubTag.NO_SMELTING, SubTag.NO_SMASHING, SubTag.MORTAR_GRINDABLE);
 
         Rubber.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
+        StyreneButadieneRubber.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
         Plastic.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
         PolyvinylChloride.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
+        Polystyrene.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
         Silicone.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
 
         TNT.add(SubTag.FLAMMABLE, SubTag.EXPLOSIVE, SubTag.NO_SMELTING, SubTag.NO_SMASHING);

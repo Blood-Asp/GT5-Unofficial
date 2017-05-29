@@ -41,7 +41,7 @@ public class MaterialBuilder {
 	public MaterialBuilder(int metaItemSubID, TextureSet iconSet, String defaultLocalName) {
 		this.metaItemSubID = metaItemSubID;
 		this.iconSet = iconSet;
-		this.name = defaultLocalName.replace(" ", "");
+		this.name = defaultLocalName.replace(" ", "").replace("-", "");
 		this.defaultLocalName = defaultLocalName;
 	}
 
