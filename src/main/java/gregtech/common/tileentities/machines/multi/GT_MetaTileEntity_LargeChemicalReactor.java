@@ -124,7 +124,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 					EUt *= 4;
 					maxProgresstime /= 4;
 				}
-
+				maxProgresstime = Math.max(maxProgresstime, 1);
+				
 				this.mEUt = -EUt;
 				this.mMaxProgresstime = maxProgresstime;
 				this.mOutputItems = recipe.mOutputs;
