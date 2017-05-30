@@ -266,13 +266,15 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                                             }
                                             addOutput(tStack);
                                         }
-                                    if (mOutputFluids != null && mOutputFluids.length == 1) {
-                                        for (FluidStack tStack : mOutputFluids)
-                                            if (tStack != null) {
-                                                addOutput(tStack);
-                                            }
-                                    } else if (mOutputFluids != null && mOutputFluids.length > 1) {
-                                        addFluidOutputs(mOutputFluids);
+                                    if(mOutputFluids!=null) {
+                                        if (mOutputFluids.length == 1) {
+                                            for (FluidStack tStack : mOutputFluids)
+                                                if (tStack != null) {
+                                                    addOutput(tStack);
+                                                }
+                                        } else if (mOutputFluids.length > 1) {
+                                            addFluidOutputs(mOutputFluids);
+                                        }
                                     }
                                     mEfficiency = Math.max(0, Math.min(mEfficiency + mEfficiencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
                                     mOutputItems = null;
@@ -607,13 +609,13 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return false;
     }
 
-    private void addFluidOutputs(FluidStack[] mOutputFluids2) {
-        for (int i = 0; i < mOutputFluids2.length; i++) {
-            if (mOutputHatches.size() > i && mOutputHatches.get(i) != null && mOutputFluids2[i] != null && isValidMetaTileEntity(mOutputHatches.get(i))) {
-                mOutputHatches.get(i).fill(mOutputFluids2[i], true);
+    private void addFluidOutputs(FluidStack[] mOutputFluids) {
+        int min=mOutputFluids.length>mOutputHatches.size()?mOutputHatches.size():mOutputFluids.length;
+        for (int i = 0; i < min; ++i) {
+            if (this.mOutputHatches.get(i) != null && mOutputFluids[i] != null && isValidMetaTileEntity(this.mOutputHatches.get(i))) {
+                this.mOutputHatches.get(i).fill(mOutputFluids[i], true);
             }
         }
-
     }
 
     public boolean depleteInput(FluidStack aLiquid) {
