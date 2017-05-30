@@ -2638,7 +2638,7 @@ if(Loader.isModLoaded("Railcraft")){
         
         GT_Values.RA.addChemicalRecipe(Materials.Sulfur.getDust(1), GT_Values.NI, Materials.Hydrogen.getGas(2000), Materials.HydricSulfide.getGas(1000), GT_Values.NI, 60, 8);
         
-        GT_Values.RA.addChemicalRecipe(Materials.Sulfur.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(2000), Materials.SulfurDioxide.getGas(1000), GT_Values.NI, 60, 8);
+        GT_Values.RA.addChemicalRecipe(Materials.Sulfur.getDust(1), GT_Utility.getIntegratedCircuit(2), Materials.Oxygen.getGas(2000), Materials.SulfurDioxide.getGas(1000), GT_Values.NI, 60, 8);
         GT_Values.RA.addChemicalRecipe(Materials.HydricSulfide.getCells(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.Water.getCells(1), 120);
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(3), GT_Values.NI, Materials.HydricSulfide.getGas(1000), Materials.Water.getFluid(1000), Materials.SulfurDioxide.getCells(1), 120);
 
@@ -2682,14 +2682,18 @@ if(Loader.isModLoaded("Railcraft")){
         
         GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(2, new Object[0]), GT_Utility.getIntegratedCircuit(1), Materials.Isoprene.getFluid(144),  null, Materials.RawRubber.getDust(1),  Materials.Empty.getCells(2),  160);
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(4),  			GT_Utility.getIntegratedCircuit(1), Materials.Isoprene.getFluid(288),  null, Materials.RawRubber.getDust(3),  Materials.Empty.getCells(4),  320);
-        GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(12, new Object[0]),Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(18), Materials.Empty.getCells(12), 640);
-        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(12), 			Materials.Titanium.getDustTiny(1),  Materials.Isoprene.getFluid(1728), null, Materials.RawRubber.getDust(24), Materials.Empty.getCells(12), 640);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, new FluidStack[]{Materials.Isoprene.getFluid(1728), Materials.Air.getGas(12000), Materials.Titaniumtetrachloride.getFluid(80)}, null, new ItemStack[]{Materials.RawRubber.getDust(18)}, 640, 30);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, new FluidStack[]{Materials.Isoprene.getFluid(1728), Materials.Oxygen.getGas(12000), Materials.Titaniumtetrachloride.getFluid(80)}, null, new ItemStack[]{Materials.RawRubber.getDust(24)}, 640, 30);
 
         GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1), null, Materials.Ethylene.getGas(1000), Materials.Hydrogen.getGas(2000), Materials.Styrene.getCells(1), 120);
-        GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), Materials.Empty.getCells(1), Materials.Benzene.getGas(1000), Materials.Styrene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
+        GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), Materials.Empty.getCells(1), Materials.Benzene.getFluid(1000), Materials.Styrene.getFluid(1000), Materials.Hydrogen.getCells(2), 120);
 
         GT_Values.RA.addDefaultPolymerizationRecipes(Materials.Styrene.mFluid, Materials.Polystyrene.mStandardMoltenFluid);
 
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(3), Materials.Sulfur.getDust(1)}, new FluidStack[]{Materials.Styrene.getFluid(324), Materials.Butadiene.getGas(972), Materials.Air.getGas(18000)},               new FluidStack[]{Materials.StyreneButadieneRubber.getMolten(1296)}, null, 160, 240);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(3), Materials.Sulfur.getDust(1)}, new FluidStack[]{Materials.Styrene.getFluid(324), Materials.Butadiene.getGas(972), Materials.Oxygen.getGas(18000)},            new FluidStack[]{Materials.StyreneButadieneRubber.getMolten(1944)}, null, 160, 240);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(4),Materials.Sulfur.getDust(3)}, new FluidStack[]{Materials.Styrene.getFluid(540), Materials.Butadiene.getGas(1620), Materials.Titaniumtetrachloride.getFluid(100), Materials.Air.getGas(15000)},    new FluidStack[]{Materials.StyreneButadieneRubber.getMolten(3240)}, null, 640, 240);
+        GT_Values.RA.addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(4),Materials.Sulfur.getDust(3)}, new FluidStack[]{Materials.Styrene.getFluid(540), Materials.Butadiene.getGas(1620), Materials.Titaniumtetrachloride.getFluid(100), Materials.Oxygen.getGas(15000)}, new FluidStack[]{Materials.StyreneButadieneRubber.getMolten(4320)}, null, 640, 240);
 	}
 	
 	private void addSimplifiedChemicalRecipes() {

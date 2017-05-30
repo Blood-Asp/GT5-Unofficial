@@ -1458,8 +1458,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     public static class GT_Recipe_Map_LargeChemicalReactor extends GT_Recipe_Map{
     	private static int INPUT_COUNT = 2;
     	private static int OUTPUT_COUNT = 2;
-    	private static int FLUID_INPUT_COUNT = 3;
-    	private static int FLUID_OUTPUT_COUNT = 3;
+    	private static int FLUID_INPUT_COUNT = 4;
+    	private static int FLUID_OUTPUT_COUNT = 4;
     	
         public GT_Recipe_Map_LargeChemicalReactor() {
             super(new HashSet<GT_Recipe>(200), "gt.recipe.largechemicalreactor", "Large Chemical Reactor", null, RES_PATH_GUI + "basicmachines/Default", INPUT_COUNT, OUTPUT_COUNT, 0, 0, 1, E, 1, E, true, true);
@@ -1467,12 +1467,14 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         @Override
         public GT_Recipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
-        	aOptimize = false;
         	ArrayList<ItemStack> adjustedInputs = new ArrayList<ItemStack>();
         	ArrayList<ItemStack> adjustedOutputs = new ArrayList<ItemStack>();
         	ArrayList<FluidStack> adjustedFluidInputs = new ArrayList<FluidStack>();
         	ArrayList<FluidStack> adjustedFluidOutputs = new ArrayList<FluidStack>();
         	
+        	if (aInputs == null) {
+        		aInputs = new ItemStack[0];
+        	}
         	for (ItemStack input : aInputs) {
         		FluidStack inputFluidContent = FluidContainerRegistry.getFluidForFilledItem(input);
         		if (inputFluidContent != null) {
@@ -1499,12 +1501,18 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         			}
         		}
         	}
+        	if (aFluidInputs == null) {
+        		aFluidInputs = new FluidStack[0];
+        	}
         	for (FluidStack fluidInput : aFluidInputs) {
         		adjustedFluidInputs.add(fluidInput);
         	}
         	aInputs = adjustedInputs.toArray(new ItemStack[adjustedInputs.size()]);
         	aFluidInputs = adjustedFluidInputs.toArray(new FluidStack[adjustedFluidInputs.size()]);
         	
+        	if (aOutputs == null) {
+        		aOutputs = new ItemStack[0];
+        	}
         	for (ItemStack output : aOutputs) {
         		FluidStack outputFluidContent = FluidContainerRegistry.getFluidForFilledItem(output);
         		if (outputFluidContent != null) {
@@ -1521,6 +1529,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         				adjustedOutputs.add(output);
         			}
         		}
+        	}
+        	
+        	if (aFluidOutputs == null) {
+        		aFluidOutputs = new FluidStack[0];
         	}
         	for (FluidStack fluidOutput : aFluidOutputs) {
         		adjustedFluidOutputs.add(fluidOutput);
@@ -1548,7 +1560,11 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 				}
 				
 				for (int i = 0; i < fluidLimit; i++) {
-					inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - i * 18, 23));
+					if (i < 3) {
+						inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - i * 18, 23));
+					} else {
+						inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 12, 5));
+					}
 				}
 				
 				return inputStacks;

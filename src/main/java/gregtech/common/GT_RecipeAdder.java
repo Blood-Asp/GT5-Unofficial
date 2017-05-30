@@ -114,18 +114,32 @@ public class GT_RecipeAdder
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
-        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
         return true;
+    }
+
+    public boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick){
+    	if (areItemsAndFluidsBothNull(aInputs, aFluidInputs) || areItemsAndFluidsBothNull(aOutputs, aFluidOutputs)) {
+    		return false;
+    	}
+    	if (aEUtick <= 0) {
+    		return false;
+    	}
+        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, aInputs, aOutputs, null, null, aFluidInputs, aFluidOutputs, aDuration, aEUtick, 0);
+    	return true;
     }
     
     @Override
     public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer){
-    	//Oxygen/Titanium -> +50% Output each
-        GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(2, new Object[0]), GT_Utility.getIntegratedCircuit(1), new GT_FluidStack(aBasicMaterial, 144),  new GT_FluidStack(aPolymer, 144),  Materials.Empty.getCells(2), 160);
-        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(2),  			GT_Utility.getIntegratedCircuit(1), new GT_FluidStack(aBasicMaterial, 144),  new GT_FluidStack(aPolymer, 216),  Materials.Empty.getCells(2), 160);
-        GT_Values.RA.addChemicalRecipe(ItemList.Cell_Air.get(12, new Object[0]),Materials.Titanium.getDustTiny(1),  new GT_FluidStack(aBasicMaterial, 1728), new GT_FluidStack(aPolymer, 2592), Materials.Empty.getCells(12), 640);
-        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(12), 			Materials.Titanium.getDustTiny(1),  new GT_FluidStack(aBasicMaterial, 1728), new GT_FluidStack(aPolymer, 3456), Materials.Empty.getCells(12), 640);
-
+    	//Oxygen/Titaniumtetrafluoride -> +50% Output each
+        addChemicalRecipe(ItemList.Cell_Air.get(2, new Object[0]), GT_Utility.getIntegratedCircuit(1), new GT_FluidStack(aBasicMaterial, 144),  new GT_FluidStack(aPolymer, 144),  Materials.Empty.getCells(2), 160);
+        addChemicalRecipe(Materials.Oxygen.getCells(2),  		   GT_Utility.getIntegratedCircuit(1), new GT_FluidStack(aBasicMaterial, 144),  new GT_FluidStack(aPolymer, 216),  Materials.Empty.getCells(2), 160);
+        addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, 
+        		new FluidStack[]{new GT_FluidStack(aBasicMaterial, 2160), Materials.Air.getGas(15000), Materials.Titaniumtetrachloride.getFluid(100)}, 
+        		new FluidStack[]{new GT_FluidStack(aPolymer, 3240)}, null, 800, 30);
+        addMultiblockChemicalRecipe(new ItemStack[]{GT_Utility.getIntegratedCircuit(2)}, 
+        		new FluidStack[]{new GT_FluidStack(aBasicMaterial, 2160), Materials.Oxygen.getGas(15000), Materials.Titaniumtetrachloride.getFluid(100)}, 
+        		new FluidStack[]{new GT_FluidStack(aPolymer, 4320)}, null, 800, 30);
     }
 
 	public boolean addBlastRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, int aLevel) {
@@ -886,7 +900,27 @@ public class GT_RecipeAdder
 		return true;    
 	}
 
+	private boolean areItemsAndFluidsBothNull(ItemStack[] items, FluidStack[] fluids){
+    	boolean itemsNull = true;
+    	if (items != null) {
+    		for (ItemStack itemStack : items) {
+    			if (itemStack != null) {
+    				itemsNull = false;
+    				break;
+    			}
+    		}
+    	}
+    	boolean fluidsNull = true;
+    	if (fluids != null) {
+    		for (FluidStack fluidStack : fluids) {
+    			if (fluidStack != null) {
+    				fluidsNull = false;
+    				break;
+    			}
+    		}
+    	}
+    	return itemsNull && fluidsNull;
 
-
+	}
 
 }
