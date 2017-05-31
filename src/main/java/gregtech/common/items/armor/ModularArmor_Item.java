@@ -270,10 +270,10 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				}
 					aPlayer.openGui(GT_Values.GT, openGuiNr+(typeMod), aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);
 			}
-			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
 			// Night Vision
 			if (timer >= 200) {
 				timer = 0;
