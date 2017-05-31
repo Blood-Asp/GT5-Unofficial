@@ -187,15 +187,15 @@ public class ItemComb extends Item {
 		if (ProcessingModSupport.aEnableGCMarsMats)
 			addProcess(tComb, Materials.MeteoricIron, 100);
 		tComb = getStackForType(CombType.STEEL);
-		addProcess(tComb, Materials.Iron, Materials.Steel, 100);
-		addProcess(tComb, Materials.Magnetite, Materials.Steel, 100);
-		addProcess(tComb, Materials.BrownLimonite, Materials.Steel, 100);
-		addProcess(tComb, Materials.YellowLimonite, Materials.Steel, 100);
-		addProcess(tComb, Materials.VanadiumMagnetite, Materials.VanadiumSteel, 100);
-		addProcess(tComb, Materials.BandedIron, Materials.Steel, 100);
-		addProcess(tComb, Materials.Pyrite, Materials.Steel, 100);
+		addProcess(tComb, Materials.Iron, Materials.Iron, 100);
+		addProcess(tComb, Materials.Magnetite, Materials.Magnetite, 100);
+		addProcess(tComb, Materials.BrownLimonite, Materials.BrownLimonite, 100);
+		addProcess(tComb, Materials.YellowLimonite, Materials.YellowLimonite, 100);
+		addProcess(tComb, Materials.VanadiumMagnetite, Materials.VanadiumMagnetite, 100);
+		addProcess(tComb, Materials.BandedIron, Materials.BandedIron, 100);
+		addProcess(tComb, Materials.Pyrite, Materials.Pyrite, 100);
 		if (ProcessingModSupport.aEnableGCMarsMats)
-			addProcess(tComb, Materials.MeteoricIron, Materials.MeteoricSteel, 100);
+			addProcess(tComb, Materials.MeteoricIron, Materials.MeteoricIron, 100);
 		addProcess(tComb, Materials.Molybdenite, 100);
 		addProcess(tComb, Materials.Molybdenum, 100);
 		tComb = getStackForType(CombType.NICKEL);
