@@ -35,7 +35,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public ItemStack[] mOutputItems = null;
     public FluidStack[] mOutputFluids = null;
     public String mNEI;
-    public int damageFactorLow = 5;
+        public int damageFactorLow = 5;
     public float damageFactorHigh = 0.6f;
 
     public ArrayList<GT_MetaTileEntity_Hatch_Input> mInputHatches = new ArrayList<GT_MetaTileEntity_Hatch_Input>();
@@ -391,6 +391,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public int getIdealStatus() {
         return 6;
+    }
+
+    public int getCurrentEfficiency(ItemStack itemStack) {
+        int maxEff = getMaxEfficiency(itemStack);
+        return maxEff - (getIdealStatus() - getRepairStatus()) * maxEff / 10;
     }
 
     public boolean doRandomMaintenanceDamage() {
