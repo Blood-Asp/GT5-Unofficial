@@ -89,6 +89,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			data = fillArmorData((EntityPlayer) player, armor);
 		}
 		if (player != null && armor != null && source != null) {
+			try{
 			double tmp = 0.0d;
 			if (source.isMagicDamage()) {
 				tmp = data.mStat.get(StatType.MAGICDEFENCE);
@@ -127,6 +128,9 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				tmp = 1.0f - ((1.0f - tmp) / 2.0f);
 			}
 			return new ISpecialArmor.ArmorProperties(0, data.getBaseAbsorptionRatio() * tmp, 1000);
+			}catch(Exception e){System.err.println(e);
+			return new ISpecialArmor.ArmorProperties(0, 0, 0);
+			}
 
 		} else {
 			return new ISpecialArmor.ArmorProperties(0, 0, 0);
@@ -266,10 +270,10 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				}
 					aPlayer.openGui(GT_Values.GT, openGuiNr+(typeMod), aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);
 			}
-			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
 			// Night Vision
 			if (timer >= 200) {
 				timer = 0;
