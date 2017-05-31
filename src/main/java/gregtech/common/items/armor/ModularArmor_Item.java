@@ -89,6 +89,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			data = fillArmorData((EntityPlayer) player, armor);
 		}
 		if (player != null && armor != null && source != null) {
+			try{
 			double tmp = 0.0d;
 			if (source.isMagicDamage()) {
 				tmp = data.mStat.get(StatType.MAGICDEFENCE);
@@ -127,6 +128,9 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				tmp = 1.0f - ((1.0f - tmp) / 2.0f);
 			}
 			return new ISpecialArmor.ArmorProperties(0, data.getBaseAbsorptionRatio() * tmp, 1000);
+			}catch(Exception e){System.err.println(e);
+			return new ISpecialArmor.ArmorProperties(0, 0, 0);
+			}
 
 		} else {
 			return new ISpecialArmor.ArmorProperties(0, 0, 0);
