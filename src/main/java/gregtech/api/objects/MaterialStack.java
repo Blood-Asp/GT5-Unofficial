@@ -35,7 +35,7 @@ public class MaterialStack implements Cloneable {
          String temp1 = "", temp2 = mMaterial.getToolTip(true), temp3 = "", temp4 = "";
          if (mAmount > 1) {
              temp4 = String.valueOf(mAmount);
-             if (mMaterial.mMaterialList.size() > 1) {
+             if (mMaterial.mMaterialList.size() > 1 || (mMaterial.mMaterialList.size() == 1 && mMaterial.mElement == null)) {
                 temp1 = "(";
                 temp3 = ")";
              }
