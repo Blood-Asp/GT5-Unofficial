@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{aActive ? new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW) : new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],aSide==1?(aActive ? new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW) : new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)):Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
     }
 
     @Override
@@ -46,7 +46,12 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
         World aWorld = aBaseMetaTileEntity.getWorld();
         XSTR aXSTR = new XSTR();
         if (!aWorld.isRemote) {
-        	if(aBaseMetaTileEntity.getStoredEU()>0)aBaseMetaTileEntity.decreaseStoredEnergyUnits(aBaseMetaTileEntity.getStoredEU()/100+1, false);
+        	if(aBaseMetaTileEntity.getStoredEU()>0){
+                aBaseMetaTileEntity.setActive(true);
+        	    aBaseMetaTileEntity.decreaseStoredEnergyUnits(aBaseMetaTileEntity.getStoredEU()/100+1, false);
+            }else {
+                aBaseMetaTileEntity.setActive(false);
+            }
         	
             if (aTick % 256 == 0 && (aWorld.isThundering() || (aWorld.isRaining() && aXSTR.nextInt(10) == 0))) {
                 int aRodValue = 0;
@@ -68,10 +73,8 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
                 }
                 if (!aWorld.isThundering() && ((aY + aRodValue) < 128)) aRodValue = 0;
                 if (aXSTR.nextInt(4 * aWorld.getHeight()) < (aRodValue * (aY + aRodValue))) {
-                    aBaseMetaTileEntity.setActive(true);
                     aBaseMetaTileEntity.increaseStoredEnergyUnits(maxEUStore() - aBaseMetaTileEntity.getStoredEU(), false);
                     aWorld.addWeatherEffect(new EntityLightningBolt(aWorld, aX, aY + aRodValue, aZ));
-                    aBaseMetaTileEntity.setActive(false);
                 }
             }
         }
@@ -94,7 +97,7 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
 
     @Override
     public boolean isFacingValid(byte aFacing) {
-        return true;
+        return aFacing==1;
     }
 
     @Override

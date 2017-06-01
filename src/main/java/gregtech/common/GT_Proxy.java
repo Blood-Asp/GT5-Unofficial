@@ -6,6 +6,8 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ProgressManager;
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.EventBus;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
@@ -55,10 +57,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -69,6 +73,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -581,6 +586,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+
+        dimensionWiseChunkData.clear();//!!! IMPORTANT for map switching...
+        dimensionWisePollution.clear();//!!! IMPORTANT for map switching...
     }
 
     public void onServerStarted() {
@@ -1246,8 +1254,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     }
                 }
             }
-            if(aEvent.world.provider.dimensionId==0)
-                GT_Pollution.onWorldTick(aEvent.world, (int) (aEvent.world.getTotalWorldTime() % 1200));
+
+            GT_Pollution.onWorldTick(aEvent);
         }
     }
 
@@ -1700,48 +1708,91 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ProgressManager.pop(progressBar);
     }
 
-    public static final HashMap<ChunkPosition, int[]>  chunkData = new HashMap<ChunkPosition, int[]>(5000);
+    public static final HashMap<Integer,HashMap<ChunkCoordIntPair,int []>> dimensionWiseChunkData = new HashMap<>(16);//stores chunk data that is loaded/saved
+    public static final HashMap<Integer,GT_Pollution> dimensionWisePollution = new HashMap<>(16);//stores GT_Polluttors objects
+	public static final byte GTOIL=3,GTOILFLUID=2,GTPOLLUTION=1,GTMETADATA=0,NOT_LOADED=0,LOADED=1;//consts
+    //@Deprecated
+	//public static final HashMap<ChunkPosition, int[]>  chunkData = new HashMap<>(0);
 
-    @SubscribeEvent
-    public void handleChunkSaveEvent(ChunkDataEvent.Save event)
-    {  
-        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId,event.getChunk().zPosition);
-        if(chunkData.containsKey(tPos)){
-            int[] tInts = chunkData.get(tPos);
-            if(tInts.length>0){event.getData().setInteger("GTOIL", tInts[0]);}
-            if(tInts.length>1){event.getData().setInteger("GTPOLLUTION", tInts[1]);}
-            if(tInts.length>2){event.getData().setInteger("GTOILFLUID", tInts[2]);}
-        }
+    private static final byte oilVer=(byte)20;//non zero plz
+
+    //TO get default's fast
+    public static int[] getDefaultChunkDataOnCreation(){
+        return new int[]{NOT_LOADED,0,-1,-1};
+    }
+    public static int[] getDefaultChunkDataOnLoad(){
+        return new int[]{LOADED,0,-1,-1};
     }
 
     @SubscribeEvent
-    public void handleChunkLoadEvent(ChunkDataEvent.Load event)
-    {
-        int tOil = 0;
-        int tOilFluid = 0;
-        int tPollution = 0;
+    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {//ALWAYS SAVE FROM THE HASH MAP DATA
+        HashMap<ChunkCoordIntPair,int []> chunkData=dimensionWiseChunkData.get(event.world.provider.dimensionId);
+        if(chunkData==null) return;//no dim info stored
 
-        ChunkPosition tPos = new ChunkPosition(event.getChunk().xPosition,event.getChunk().worldObj.provider.dimensionId,event.getChunk().zPosition);
-        int[] tData = new int[0];
-        if(chunkData.containsKey(tPos)){
-            tData = chunkData.get(tPos);
-            chunkData.remove(tPos);
-            if(tData.length>0)
-                tOil = tData[0];
-            if(tData.length>1)
-            	tPollution = tData[1];
-            if(tData.length>2)
-            	tOilFluid = tData[2];
+        int[] tInts = chunkData.get(event.getChunk().getChunkCoordIntPair());
+        if(tInts==null) return;//no chunk data stored
+        //assuming len of this array 4
+        if(tInts[3]>=0)event.getData().setInteger("GTOIL", tInts[GTOIL]);
+        else event.getData().removeTag("GTOIL");
+        if(tInts[2]>=0)event.getData().setInteger("GTOILFLUID", tInts[GTOILFLUID]);
+        else event.getData().removeTag("GTOILFLUID");
+        if(tInts[1]>0)event.getData().setInteger("GTPOLLUTION", tInts[GTPOLLUTION]);
+        else event.getData().removeTag("GTPOLLUTION");
+        event.getData().setByte("GTOILVER", oilVer);//version mark
+    }
+
+    @SubscribeEvent
+    public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
+        final int worldID=event.world.provider.dimensionId;
+        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(worldID);
+        if (chunkData == null){
+            chunkData=new HashMap<>(1024);
+            dimensionWiseChunkData.put(worldID, chunkData);
         }
+        if (dimensionWisePollution.get(worldID) == null)
+            dimensionWisePollution.put(worldID, new GT_Pollution(event.world));
 
-        if(tOil==0&&event.getData().hasKey("GTOIL"))
-            tOil = event.getData().getInteger("GTOIL");
-        if(tPollution==0&&event.getData().hasKey("GTPOLLUTION"))
-        	tPollution = event.getData().getInteger("GTPOLLUTION");
-        if(tOilFluid==0&&event.getData().hasKey("GTOILFLUID"))
-        	tOilFluid = event.getData().getInteger("GTOILFLUID");
+        int[] tInts = chunkData.get(event.getChunk().getChunkCoordIntPair());
+        if (tInts == null) {
+            //NOT LOADED and NOT PROCESSED by pollution algorithms
+            //regular load
+            tInts = getDefaultChunkDataOnLoad();
 
-        chunkData.put(tPos, new int[]{tOil,tPollution,tOilFluid});
+            if (event.getData().getByte("GTOILVER") == oilVer) {
+                if (event.getData().hasKey("GTOIL"))
+                    tInts[GTOIL] = event.getData().getInteger("GTOIL");
+                if (event.getData().hasKey("GTOILFLUID"))
+                    tInts[GTOILFLUID] = event.getData().getInteger("GTOILFLUID");
+            }
+
+            tInts[GTPOLLUTION] = event.getData().getInteger("GTPOLLUTION");//Defaults to 0
+
+            //store in HASH MAP if has useful data
+            if (tInts[GTPOLLUTION] > 0 || tInts[GTOIL] >= 0 || tInts[GTOILFLUID] >= 0)
+                chunkData.put(event.getChunk().getChunkCoordIntPair(), tInts);
+        } else if (tInts[GTMETADATA] == NOT_LOADED) {//was NOT loaded from chunk save game data
+            //NOT LOADED but generated
+            //append load
+            if (event.getData().getByte("GTOILVER") == oilVer) {
+                if (tInts[GTOIL] < 0 && event.getData().hasKey("GTOIL"))//if was not yet initialized
+                    tInts[GTOIL] = event.getData().getInteger("GTOIL");
+
+                if (tInts[GTOILFLUID] < 0 && event.getData().hasKey("GTOILFLUID"))//if was not yet initialized
+                    tInts[GTOILFLUID] = event.getData().getInteger("GTOILFLUID");
+            } else {
+                tInts[GTOIL] = -1;
+                tInts[GTOILFLUID] = -1;
+            }
+
+            tInts[GTPOLLUTION] += event.getData().getInteger("GTPOLLUTION");//Defaults to 0, add stored pollution to data
+            tInts[GTMETADATA] = LOADED;//mark as = loaded
+            //store in HASHMAP
+
+            chunkData.put(event.getChunk().getChunkCoordIntPair(), tInts);
+        }//else if(tInts[0]==1){
+        ////Already loaded chunk data
+        ////DO NOTHING - this chunk data was already loaded and stored in hash map
+        //}
     }
 
     public static class OreDictEventContainer {
