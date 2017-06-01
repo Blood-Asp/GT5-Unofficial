@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,14 +34,15 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private static final Block miningPipeTipBlock = GT_Utility.getBlockFromStack(miningPipeTip);
 
     private final ArrayList<ChunkPosition> oreBlockPositions = new ArrayList<>();
-    private Block casingBlock;
 
+    private Block casingBlock;
     private int casingMeta;
     private int frameMeta;
     private int casingTextureIndex;
 
     private ForgeDirection back;
     private int xDrill, yDrill, zDrill, xCenter, zCenter, yHead;
+
     private boolean isPickingPipes;
 
     public GT_MetaTileEntity_OreDrillingPlantBase(int aID, String aName, String aNameRegional) {
@@ -70,6 +72,18 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "OreDrillingPlant.png");
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("isPickingPipe", isPickingPipes);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        isPickingPipes = aNBT.getBoolean("isPickingPipes");
     }
 
     @Override
