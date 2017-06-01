@@ -36,7 +36,7 @@ public class GT_MetaTileEntity_OreDrillingPlant4 extends GT_MetaTileEntity_OreDr
 
     @Override
     protected int getCasingTextureIndex() {
-        return 50;
+        return 62;
     }
 
     @Override

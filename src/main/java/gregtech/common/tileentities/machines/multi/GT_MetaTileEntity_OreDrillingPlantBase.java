@@ -45,7 +45,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     public GT_MetaTileEntity_OreDrillingPlantBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        //initFields();
+        initFields();
     }
 
     public GT_MetaTileEntity_OreDrillingPlantBase(String aName) {
@@ -54,24 +54,18 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     }
 
     private void initFields() {
-        xDrill = getBaseMetaTileEntity().getXCoord();
-        yDrill = getBaseMetaTileEntity().getYCoord();
-        zDrill = getBaseMetaTileEntity().getZCoord();
-        back = ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing());
-        xCenter = xDrill + back.offsetX;
-        zCenter = zDrill + back.offsetZ;
-        isPickingPipes = false;
         casingBlock = getCasingBlockItem().getBlock();
         casingMeta = getCasingBlockItem().get(0).getItemDamage();
-        frameMeta = 4096 + getFrameMaterial().mMetaItemSubID;
+        int frameId = 4096 + getFrameMaterial().mMetaItemSubID;
+        frameMeta = GregTech_API.METATILEENTITIES[frameId] != null ? GregTech_API.METATILEENTITIES[frameId].getTileEntityBaseType() : W;
         casingTextureIndex = getCasingTextureIndex();
+        isPickingPipes = false;
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ADVMINER2_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ADVMINER2)};
-        }
-        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16]};
+        if (aSide == aFacing)
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[casingTextureIndex],new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL)};
+        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[casingTextureIndex]};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -194,9 +188,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             return new ArrayList<ItemStack>() {{
                 add(new ItemStack(oreBlock, 1, blockMeta));
             }};
-        } else {
-            return oreBlock.getDrops(getBaseMetaTileEntity().getWorld(), posX, posY, posZ, blockMeta, 1);
-        }
+        } else return oreBlock.getDrops(getBaseMetaTileEntity().getWorld(), posX, posY, posZ, blockMeta, 1);
     }
 
     private boolean tryConsumeDrillingFluid() {
@@ -234,11 +226,9 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (yHead == yDrill) return; //skip controller block layer
 
         int radius = getRadiusInChunks() << 4;
-        for (int xOff = -radius; xOff <= radius; xOff++) {
-            for (int zOff = -radius; zOff <= radius; zOff++) {
+        for (int xOff = -radius; xOff <= radius; xOff++)
+            for (int zOff = -radius; zOff <= radius; zOff++)
                 tryAddOreBlockToMineList(xDrill + xOff, yHead, zDrill + zOff);
-            }
-        }
     }
 
     private void tryAddOreBlockToMineList(int x, int y, int z) {
@@ -247,14 +237,12 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         ChunkPosition blockPos = new ChunkPosition(x, y, z);
         if (block instanceof GT_Block_Ores_Abstract) {
             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
-            if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural && !oreBlockPositions.contains(blockPos)) {
+            if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural && !oreBlockPositions.contains(blockPos))
                 oreBlockPositions.add(blockPos);
-            }
         } else {
             ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(block, 1, blockMeta));
-            if (association != null && association.mPrefix.toString().startsWith("ore") && !oreBlockPositions.contains(blockPos)) {
+            if (association != null && association.mPrefix.toString().startsWith("ore") && !oreBlockPositions.contains(blockPos))
                 oreBlockPositions.add(blockPos);
-            }
         }
     }
 
@@ -282,21 +270,23 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        updateCoordinates();
         //check base layer
         for (int xOff = -1 + back.offsetX; xOff <= 1 + back.offsetX; xOff++) {
             for (int zOff = -1 + back.offsetZ; zOff <= 1 + back.offsetZ; zOff++) {
                 if (xOff == 0 && zOff == 0) continue;
 
                 IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xOff, 0, zOff);
-                if (addMaintenanceToMachineList(tTileEntity, casingTextureIndex)
-                        || addInputToMachineList(tTileEntity, casingTextureIndex)
-                        || addOutputToMachineList(tTileEntity, casingTextureIndex)
-                        || addEnergyInputToMachineList(tTileEntity, casingTextureIndex))
-                    continue;
-
-                if (!checkCasingBlock(xOff, 0, zOff)) return false;
+                if (!checkCasingBlock(xOff, 0, zOff)
+                        && !addMaintenanceToMachineList(tTileEntity, casingTextureIndex)
+                        && !addInputToMachineList(tTileEntity, casingTextureIndex)
+                        && !addOutputToMachineList(tTileEntity, casingTextureIndex)
+                        && !addEnergyInputToMachineList(tTileEntity, casingTextureIndex))
+                    return false;
             }
         }
+        if (mMaintenanceHatches.isEmpty() || mInputHatches.isEmpty() || mOutputBusses.isEmpty() || mEnergyHatches.isEmpty()) return false;
+        if (GT_Utility.getTier(getMaxInputVoltage()) < getMinTier()) return false;
         //check tower
         for (int yOff = 1; yOff < 4; yOff++) {
             if (!checkCasingBlock(back.offsetX, yOff, back.offsetZ)
@@ -310,6 +300,15 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         return checkPipesAndSetYHead();
     }
 
+    private void updateCoordinates() {
+        xDrill = getBaseMetaTileEntity().getXCoord();
+        yDrill = getBaseMetaTileEntity().getYCoord();
+        zDrill = getBaseMetaTileEntity().getZCoord();
+        back = ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing());
+        xCenter = xDrill + back.offsetX;
+        zCenter = zDrill + back.offsetZ;
+    }
+
     private boolean checkPipesAndSetYHead() {
         yHead = yDrill - 1;
         while (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeBlock, W)) yHead--;
@@ -321,7 +320,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private boolean checkCasingBlock(int xOff, int yOff, int zOff) {
         return checkBlockAndMetaOffset(xOff, yOff, zOff, casingBlock, casingMeta);
     }
-
+    //meta of frame is getTileEntityBaseType; frame should be checked using its drops (possible a high weight operation)
     private boolean checkFrameBlock(int xOff, int yOff, int zOff) {
         return checkBlockAndMetaOffset(xOff, yOff, zOff, GregTech_API.sBlockMachines, frameMeta);
     }
@@ -378,7 +377,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "3x1x3 Base of " + casings,
                 "1x3x1 " + casings + " pillar (Center of base)",
                 "1x3x1 " + getFrameMaterial().mName + " Frame Boxes (Each pillar side and on top)",
-                "1x Input Hatch (Any bottom layer casing)",
+                "1x Input Hatch for drilling fluid (Any bottom layer casing)",
+                "1x Input Bus for mining pipes (Any bottom layer casing; not necessary)",
                 "1x Output Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)"};
