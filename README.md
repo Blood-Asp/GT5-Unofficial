@@ -36,4 +36,4 @@ Please do! However, please take a note of current issues and what is currently b
 [Beyond Reality](https://www.atlauncher.com/pack/BeyondReality)<br />
 [Infitech 2](https://forum.feed-the-beast.com/threads/1-7-10-listed-infitech-2-modpack-v3-2-21-hqm-gregtech-balanced-hard-mode-modpack.50185/)<br />
 [GT New Horizons](https://www.technicpack.net/modpack/mcnewhorizons.677387)<br />
-[Идеальная Индустраяльная Сборка / Ideal Industrial Assembly](http://sapientmail.wixsite.com/minecraft)<br />
+[Идеальная Индустриальная Сборка / Ideal Industrial Assembly](http://sapientmail.wixsite.com/minecraft)<br />
