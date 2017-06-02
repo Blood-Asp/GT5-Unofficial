@@ -1971,11 +1971,6 @@ public class GT_Utility {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T[] listToArray(List<T> list) {
-        return (T[]) list.toArray();
-    }
-
     public static class ItemNBT {
         public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
             if (aNBT == null) {

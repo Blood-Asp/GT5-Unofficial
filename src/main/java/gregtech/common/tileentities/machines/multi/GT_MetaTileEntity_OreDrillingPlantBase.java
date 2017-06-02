@@ -1,14 +1,21 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
@@ -23,9 +30,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.GT_Values.*;
 
 public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_MultiBlockBase {
     private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);
@@ -88,27 +93,33 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
+        setElectricityStats();
+        if (!checkPipesAndSetYHead() || !isEnergyEnough()) {
+            stopMachine();
+            return false;
+        }
         if (isPickingPipes) {
             if (tryPickPipe()) {
                 mOutputItems = new ItemStack[] {GT_Utility.copyAmount(1, miningPipe)};
-                setElectricityStats();
                 return true;
             } else {
+                isPickingPipes = false;
                 stopMachine();
                 return false;
             }
         }
+
         putMiningPipesFromInputsInController();
         if (!tryConsumeDrillingFluid()) return false;
 
         fillMineListIfEmpty();
         if (oreBlockPositions.isEmpty()) {
-            boolean isMoved = moveOneDown();
-            if (!isMoved) {
+            if (!tryLowerPipe()) {
                 isPickingPipes = true;
-                setElectricityStats();
                 return true;
             }
+            //new layer - fill again
+            fillMineListIfEmpty();
         }
 
         ChunkPosition oreBlockPos = null;
@@ -125,8 +136,16 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             mOutputItems = getOutputByDrops(oreBlockDrops);
         }
 
-        setElectricityStats();
         return true;
+    }
+
+    private boolean isEnergyEnough() {
+        long requiredEnergy = 512 + getMaxInputVoltage() * 4;
+        for (GT_MetaTileEntity_Hatch_Energy energyHatch : mEnergyHatches) {
+            requiredEnergy -= energyHatch.getEUVar();
+            if (requiredEnergy <= 0) return true;
+        }
+        return false;
     }
 
     private boolean tryPickPipe() {
@@ -143,7 +162,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         //T1 = 12; T2 = 48; T3 = 192; T4 = 768
         this.mEUt = 3 * (1 << (getMinTier() << 1));
         //T1 = 960; T2 = 480; T3 = 240; T4 = 120
-        this.mMaxProgresstime = 1920 / (1 << getMinTier());
+        this.mMaxProgresstime = (isPickingPipes ? 80 : 1920) / (1 << getMinTier());
 
         long voltage = getMaxInputVoltage();
         long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
@@ -180,7 +199,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 outputItems.add(recipeOutput);
             }
         }
-        return GT_Utility.listToArray(outputItems);
+        return outputItems.toArray(new ItemStack[0]);
     }
 
     private boolean doUseMaceratorRecipe(ItemStack currentItem) {
@@ -249,22 +268,23 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         Block block = getBaseMetaTileEntity().getBlock(x, y, z);
         int blockMeta = getBaseMetaTileEntity().getMetaID(x, y, z);
         ChunkPosition blockPos = new ChunkPosition(x, y, z);
+        if (oreBlockPositions.contains(blockPos)) return;
         if (block instanceof GT_Block_Ores_Abstract) {
             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
-            if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural && !oreBlockPositions.contains(blockPos))
+            if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                 oreBlockPositions.add(blockPos);
         } else {
             ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(block, 1, blockMeta));
-            if (association != null && association.mPrefix.toString().startsWith("ore") && !oreBlockPositions.contains(blockPos))
+            if (association != null && association.mPrefix.toString().startsWith("ore"))
                 oreBlockPositions.add(blockPos);
         }
     }
 
-    private boolean moveOneDown() {
+    private boolean tryLowerPipe() {
         if (!isHasMiningPipes()) return false;
 
         if (yHead <= 0) return false;
-        if (checkBlockAndMeta(xCenter, yHead - 1, zCenter, Blocks.bedrock, 0)) return false;
+        if (checkBlockAndMeta(xCenter, yHead - 1, zCenter, Blocks.bedrock, W)) return false;
 
         if (!getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead - 1, zCenter, miningPipeTipBlock)) return false;
         if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead, zCenter, miningPipeBlock);
@@ -311,7 +331,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                     || !checkFrameBlock(back.offsetX, yOff + 3, back.offsetZ))
                 return false;
         }
-        return checkPipesAndSetYHead();
+        return true;
     }
 
     private void updateCoordinates() {
@@ -325,10 +345,13 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     private boolean checkPipesAndSetYHead() {
         yHead = yDrill - 1;
-        while (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeBlock, W)) yHead--;
-        if (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeTipBlock, W)) return true;
-        yHead++;
-        return yHead == yDrill || getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead, zCenter, miningPipeTipBlock);
+        while (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeBlock, W)) yHead--; //skip pipes
+        //is pipe tip OR is controller layer
+        if (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeTipBlock, W) || ++yHead == yDrill) return true;
+        //pipe column is broken - try fix
+        getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead, zCenter, miningPipeTipBlock);
+        oreBlockPositions.clear();
+        return true;
     }
 
     private boolean checkCasingBlock(int xOff, int yOff, int zOff) {
@@ -395,6 +418,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x Input Bus for mining pipes (Any bottom layer casing; not necessary)",
                 "1x Output Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
-                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)"};
+                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
+                "Radius is " + (getRadiusInChunks() << 4) + " blocks"};
     }
 }
