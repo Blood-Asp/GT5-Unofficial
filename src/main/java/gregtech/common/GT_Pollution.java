@@ -111,7 +111,7 @@ public class GT_Pollution {
 				tNeighbors[2]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos+1));
 				tNeighbors[3]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos-1));
 				for(ChunkCoordIntPair neighborPosition : tNeighbors){
-					if(!chunkData.containsKey(neighborPosition)) chunkData.put(actualPos,getDefaultChunkDataOnCreation());
+					if(!chunkData.containsKey(neighborPosition)) chunkData.put(neighborPosition,getDefaultChunkDataOnCreation());
 
 					int neighborPollution = chunkData.get(neighborPosition)[GTPOLLUTION];
 					if(neighborPollution*6 < tPollution*5){//METHEMATICS...
