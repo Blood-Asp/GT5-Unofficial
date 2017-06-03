@@ -130,9 +130,12 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
      * The "Random Material" ones.
      */
     public static Materials Organic = new Materials(-1, TextureSet.SET_LEAF, 	1.0F, 0, 1, false, "Organic", "Organic");
-    public static Materials AnyCopper = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyCopper", "AnyCopper");
     public static Materials AnyBronze = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyBronze", "AnyBronze");
+    public static Materials AnyCopper = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyCopper", "AnyCopper");
+    public static Materials AnyDielectric = new Materials(-1, TextureSet.SET_DULL, 1.0F, 0, 3, false, "AnyDielectric", "AnyDielectric");
     public static Materials AnyIron = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 3, false, "AnyIron", "AnyIron");
+    public static Materials AnyRubber = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyRubber", "AnyRubber");
+    public static Materials AnySyntheticRubber = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnySyntheticRubber", "AnySyntheticRubber");
     public static Materials Crystal = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 3, false, "Crystal", "Crystal");
     public static Materials Quartz = new Materials(-1, TextureSet.SET_QUARTZ, 	1.0F, 0, 2, false, "Quartz", "Quartz");
     public static Materials Metal = new Materials(-1, TextureSet.SET_METALLIC, 	1.0F, 0, 2, false, "Metal", "Metal");
@@ -498,7 +501,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials PigIron = new Materials(307, TextureSet.SET_METALLIC, 		6.0F, 384, 2, 1|2|64, 200, 180, 180, 0, "PigIron", "Pig Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Iron, 1)));
     public static Materials Plastic = new Materials(874, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 200, 200, 0, "Plastic", "Polyethylene", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Epoxid = new Materials(470, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 140, 20, 0, "Epoxid", "Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
-    public static Materials Silicone = new Materials(471, TextureSet.SET_DULL, 			3.0F, 128, 1, 1|2|64|128, 220, 220, 220, 0, "Silicone", "Polydimethylsiloxane", 0, 0, 900, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Polydimethylsiloxane = new MaterialBuilder(633, TextureSet.SET_FLUID, "Polydimethylsiloxane").addDustItems().setRGB(245, 245, 245).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Silicone = new Materials(471, TextureSet.SET_DULL, 			3.0F, 128, 1, 1|2|64|128, 220, 220, 220, 0, "Silicone", "Silicone Rubber", 0, 0, 900, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Polycaprolactam = new Materials(472, TextureSet.SET_DULL, 	3.0F, 32, 1, 1|2|64|128, 50, 50, 50, 0, "Polycaprolactam", "Polycaprolactam", 0, 0, 500, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 11), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Polytetrafluoroethylene  = new Materials(473, TextureSet.SET_DULL, 3.0F, 32, 1, 1|2|64|128, 100, 100, 100, 0, "Polytetrafluoroethylene", "Polytetrafluoroethylene", 0, 0, 1400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Powellite = new Materials(883, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 255, 255, 0, 0, "Powellite", "Powellite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4)));
@@ -547,6 +551,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(256).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(206).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials RawStyreneButadieneRubber = new MaterialBuilder(634, TextureSet.SET_SHINY, "Raw Styrene-Butadiene Rubber").addDustItems().setRGB(84, 64, 61).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
     public static Materials StyreneButadieneRubber = new MaterialBuilder(635, TextureSet.SET_SHINY, "Styrene-Butadiene Rubber").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(33, 26, 24).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
     public static Materials Toluene = new MaterialBuilder(647, TextureSet.SET_FLUID, "Toluene").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(328).setMaterialList(new MaterialStack(Carbon, 7), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Epichlorohydrin = new MaterialBuilder(648, TextureSet.SET_FLUID, "Epichlorohydrin").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
@@ -822,6 +827,16 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
         Bronze					.mOreReRegistrations.add(AnyBronze	);
 
+        PolyvinylChloride		.mOreReRegistrations.add(AnyDielectric);
+        Polydimethylsiloxane	.mOreReRegistrations.add(AnyDielectric);
+        
+        Rubber					.mOreReRegistrations.add(AnyRubber);
+        StyreneButadieneRubber	.mOreReRegistrations.add(AnyRubber);
+        Silicone				.mOreReRegistrations.add(AnyRubber);
+        
+        StyreneButadieneRubber	.mOreReRegistrations.add(AnySyntheticRubber);
+        Silicone				.mOreReRegistrations.add(AnySyntheticRubber);
+        
         Peanutwood				.setMaceratingInto(Wood				);
         WoodSealed				.setMaceratingInto(Wood				);
         NetherBrick				.setMaceratingInto(Netherrack		);
