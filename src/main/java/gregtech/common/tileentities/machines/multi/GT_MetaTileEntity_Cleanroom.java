@@ -148,8 +148,17 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         if (doorState) {
             mEfficiency = Math.max(0, mEfficiency - 200);
         }
-
+        for(byte i = 0 ; i<6 ; i++){
+        	byte t = (byte) Math.max(1, (byte)(15/(10000f / mEfficiency)));
+        aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
+        }
+        
         return true;
+    }
+    
+    @Override
+    public boolean allowGeneralRedstoneOutput(){
+    	return true;
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
