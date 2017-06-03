@@ -226,7 +226,7 @@ public interface IGT_RecipeAdder {
     public boolean addCNCRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * Adds a Assembler Recipe
+     * Adds an Assembler Recipe
      *
      * @param aInput1   must be != null
      * @param aOutput1  must be != null
@@ -236,20 +236,31 @@ public interface IGT_RecipeAdder {
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * Adds a Assembler Recipe
+     * Adds an Assembler Recipe
      *
      * @param aInput1   must be != null
+     * @param aInput2 	must be != null
      * @param aOutput1  must be != null
      * @param aDuration must be > 0
      * @param aEUt      should be > 0
      */
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
+    /**
+     * Adds an Assembler Recipe
+     *
+     * @param aInputs   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     */
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
+
     public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
 
     /**
-     * Adds a Assembler Recipe
+     * Adds a Circuit Assembler Recipe
      *
      * @param aInputs   must be 1-6 ItemStacks
      * @param aFluidInput 0-1 fluids
