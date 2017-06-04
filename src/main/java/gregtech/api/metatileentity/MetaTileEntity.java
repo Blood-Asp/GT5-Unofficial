@@ -863,4 +863,9 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
         //
     }
+    
+    @Override
+    public boolean allowGeneralRedstoneOutput(){
+    	return false;
+    }
 }

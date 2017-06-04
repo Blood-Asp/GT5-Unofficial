@@ -682,8 +682,8 @@ public class GT_ModHandler {
                 for (ItemStack tStack : ((IRecipeInput) tRecipe.getKey()).getInputs()) {
                     if (GT_Utility.isStackValid(tStack)) {
                         if (aAddGTRecipe && (aGTRecipeMap.findRecipe(null, false, Long.MAX_VALUE, null, tStack) == null)) {
+                        	try{
                             if (aExcludeGTIC2Items && ((tStack.getUnlocalizedName().contains("gt.metaitem.01") || tStack.getUnlocalizedName().contains("gt.blockores") || tStack.getUnlocalizedName().contains("ic2.itemCrushed") || tStack.getUnlocalizedName().contains("ic2.itemPurifiedCrushed")))) continue;
-                            try{
                             switch (aGTRecipeMap.mUnlocalizedName) {
                                 case "gt.recipe.macerator":
                                     aGTRecipeMap.addRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), tStack)}, (ItemStack[]) ((RecipeOutput) tRecipe.getValue()).items.toArray(), null, null, null, null, 300, 2, 0);

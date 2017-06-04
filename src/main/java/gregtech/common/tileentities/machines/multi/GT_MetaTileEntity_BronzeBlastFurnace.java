@@ -23,6 +23,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_MetaTileEntity_BronzeBlastFurnace
@@ -187,10 +188,6 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if ((aBaseMetaTileEntity.isClientSide()) &&
-                (aBaseMetaTileEntity.isActive())) {
-            aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke", aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1), aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
-        }
         if (aBaseMetaTileEntity.isServerSide()) {
             if (this.mUpdate-- == 0) {
                 this.mMachine = checkMachine();
@@ -210,7 +207,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                 }
             }
             if(this.mMaxProgresstime>0 && (aTimer % 20L == 0L)){
-            	GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 50);
+            	GT_Pollution.addPollution(getBaseMetaTileEntity(), 50);
             }
             
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));
@@ -233,8 +230,20 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                     this.mUpdate = 1;
                 }
             }
+        }else if(aBaseMetaTileEntity.isActive()){
+            World aWorld=aBaseMetaTileEntity.getWorld();
+            double xPos=aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1);
+            double yPos=aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1)+0.05F;
+            double zPos=aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1);
+            XSTR floatGen=new XSTR();
+            aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.3D, 0.0D);
+            //Pollution particles intensify
+            if(GT_Pollution.getPollution(getBaseMetaTileEntity())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
+                aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.45D, 0.0D);
+                aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.6D, 0.0D);
+            }
         }
-    }
+}
 
     private void addOutputProducts() {
         if (this.mOutputItem1 != null) {

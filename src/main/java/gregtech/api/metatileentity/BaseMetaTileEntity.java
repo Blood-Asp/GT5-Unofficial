@@ -65,7 +65,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private long mTickTimer = 0, oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
     private String mOwnerName = "";
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
-
+    
     private static final Field ENTITY_ITEM_HEALTH_FIELD;
     static
     {
@@ -1146,7 +1146,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     }
                 }
             }
-            GT_Pollution.addPollution(getWorld(), new ChunkPosition(getXCoord(), getYCoord(), getZCoord()), 100000);
+
+            GT_Pollution.addPollution(this, 100000);
             mMetaTileEntity.doExplosion(aAmount);
         }
     }
@@ -1413,7 +1414,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public byte getOutputRedstoneSignal(byte aSide) {
-        return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : 0;
+        return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : mMetaTileEntity.allowGeneralRedstoneOutput() ? mSidedRedstone[aSide] : 0;
     }
 
     @Override
