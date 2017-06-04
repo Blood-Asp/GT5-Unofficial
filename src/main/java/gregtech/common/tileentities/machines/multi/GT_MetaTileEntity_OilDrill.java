@@ -21,6 +21,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+
 public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {
 
     private boolean completedCycle = false;
@@ -38,8 +40,8 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
         return new String[]{
                 "Controller Block for the Oil Drilling Rig",
                 "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
-                "3x1x3 Base of Solid Steel Casings",
-                "1x3x1 Solid Steel Casing pillar (Center of base)",
+                "3x1x3 Base of Solid Steel Machine Casings",
+                "1x3x1 Solid Steel Machine Casing pillar (Center of base)",
                 "1x3x1 Steel Frame Boxes (Each Steel pillar side and on top)",
                 "1x Output Hatch (One of base casings)",
                 "1x Maintenance Hatch (One of base casings)",
@@ -79,29 +81,26 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
             }
         }
         //Output fluid
-        FluidStack tFluid = GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,false,0);
+        FluidStack tFluid = undergroundOil(getBaseMetaTileEntity(),.5F+(getInputTier()*.25F));//consumes here...
         if (tFluid == null){
             extractionSpeed=0;
             stopMachine();
             return false;//impossible
         }
         if (getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
+            //Not at bedrock layer - i prefer to keep it like it is...
             if (completedCycle) {
                 moveOneDown();
             }
             tFluid = null;
             if (mEnergyHatches.size() > 0 && mEnergyHatches.get(0).getEUVar() > (512 + getMaxInputVoltage() * 4))
                 completedCycle = true;
-        } else if (tFluid.amount == 0) {//no fluid remaining
+        } else if (tFluid.amount == 0) {//no fluid remaining, for SANity
             extractionSpeed=0;
 	        stopMachine();
             return false;//stops processing??
         } else {
-            int minExtraction= (int)Math.pow((float)GT_Utility.getTier(getMaxInputVoltage()),3F);//tier^3
-            if(tFluid.amount>minExtraction)
-                tFluid.amount= Math.max(minExtraction,Math.min(tFluid.amount/50000,500));
             extractionSpeed=tFluid.amount;
-            GT_Utility.undergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord()>>4, getBaseMetaTileEntity().getZCoord()>>4,true,extractionSpeed);
         }
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
@@ -219,11 +218,6 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
 
     @Override
     public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public int getAmountOfOutputs() {
         return 0;
     }
 

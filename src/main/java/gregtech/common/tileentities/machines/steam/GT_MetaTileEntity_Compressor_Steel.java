@@ -8,10 +8,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Steel;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Compressor_Steel
         extends GT_MetaTileEntity_BasicMachine_Steel {
@@ -23,29 +22,35 @@ public class GT_MetaTileEntity_Compressor_Steel
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_Compressor_Steel(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelCompressor.png", "ic2.compressor");
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelCompressor.png", GT_Recipe.GT_Recipe_Map.sCompressorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Compressor_Steel(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Compressor_Steel(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public int checkRecipe() {
-        if (null != (this.mOutputItems[0] = GT_ModHandler.getCompressorOutput(getInputAt(0), true, getOutputAt(0)))) {
-            this.mEUt = 6;
-            this.mMaxProgresstime = 400;
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCompressorRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[2], null, getAllInputs());
+        if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
+            this.mOutputItems[0] = tRecipe.getOutput(0);
+            this.mEUt = (tRecipe.mEUt * 3);
+            this.mMaxProgresstime = tRecipe.mDuration;
             return 2;
         }
         return 0;
     }
-
-    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-            return false;
-        }
-        return GT_ModHandler.getCompressorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
-    }
+	//TODO CHECK IF CAN BE RE ENABLED
+    //public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+    //    if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
+    //        return false;
+    //    }
+    //    return GT_ModHandler.getCompressorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
+    //}
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);

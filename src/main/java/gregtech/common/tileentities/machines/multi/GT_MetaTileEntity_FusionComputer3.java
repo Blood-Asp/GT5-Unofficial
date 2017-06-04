@@ -24,7 +24,7 @@ public class GT_MetaTileEntity_FusionComputer3 extends GT_MetaTileEntity_FusionC
 
     @Override
     public long maxEUStore() {
-        return 640000000L * (Math.min(16, this.mEnergyHatches.size())) / 16L;
+        return 640010000L * (Math.min(16, this.mEnergyHatches.size())) / 16L;
     }
 
     @Override
@@ -48,7 +48,14 @@ public class GT_MetaTileEntity_FusionComputer3 extends GT_MetaTileEntity_FusionC
     }
 
     public String[] getDescription() {
-        return new String[]{"A SUN DOWN ON EARTH", "Fusion Casings MK II around Fusion Coils", "2-16 Input Hatches", "1-16 Output Hatches", "1-16 Energy Hatches", "All Hatches must be UV or better", "8192EU/t and 40mio EU Cap per Energy Hatch"};
+        return new String[]{
+        		"A SUN DOWN ON EARTH", 
+        		"Fusion Machine Casings MK II around Fusion Coil Blocks", 
+        		"2-16 Input Hatches", 
+        		"1-16 Output Hatches", 
+        		"1-16 Energy Hatches", 
+        		"All Hatches must be UV or better", 
+        		"8192EU/t and 40mio EU Cap per Energy Hatch"};
     }
 
     @Override

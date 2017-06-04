@@ -33,6 +33,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public GT_MetaTileEntity_DieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
+    
     public GT_MetaTileEntity_DieselEngine(String aName) {
         super(aName);
     }
@@ -41,16 +42,19 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return new String[]{
                 "Controller Block for the Large Diesel Engine",
                 "Size(WxHxD): 3x3x4, Controller (front centered)",
-                "3x3x4 of Stable Titanium Casing (hollow, Min 16!)",
-                "2x Titanium Gear Box Casing inside the Hollow Casing",
-                "8x Engine Intake Casings (around controller)",
-                "2x Input Hatch (one of the Casings next to a Gear Box)",
+                "3x3x4 of Stable Titanium Machine Casing (hollow, Min 16!)",
+                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
+                "8x Engine Intake Machine Casing (around controller)",
+                "2x Input Hatch (Fuel/Lubricant) (one of the Casings next to a Gear Box)",
                 "1x Maintenance Hatch (one of the Casings next to a Gear Box)",
                 "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
                 "1x Dynamo Hatch (back centered)",
-                "Engine Intake Casings not obstructed in front (only air blocks)",
-                "Supply Diesel Fuel and Lubricant to run. Supply Oxygen to boost output (optional).",
-                "2048EU/t default output, 6144EU/t boosted output"};
+                "Engine Intake Casings must not be obstructed in front (only air blocks)",
+                "Supply Diesel Fuel and 1000L of Lubricant per hour to run.",
+                "Supply 40L of Oxygen per second to boost output (optional).",
+                "Default: Produces 2048EU/t at 100% efficiency",
+                "Boosted: Produces 6144EU/t at 150% efficiency",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -75,10 +79,10 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         Collection<GT_Recipe> tRecipeList = GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList;
 
         if(tFluids.size() > 0 && tRecipeList != null) { //Does input hatch have a diesel fuel?
-            for (FluidStack hatchFluid1 : tFluids) { //Loops through fluids in hatches
+            for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
                 for(GT_Recipe aFuel : tRecipeList) { //Loops through diesel fuel recipes
-                    FluidStack tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true); //Create fluidstack from current recipe
-                    if (tLiquid  != null) {
+                    FluidStack tLiquid;
+                    if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
                         if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
                             fuelConsumption = tLiquid.amount = boostEu ? (4096 / aFuel.mSpecialValue) : (2048 / aFuel.mSpecialValue); //Calc fuel consumption
                             if(depleteInput(tLiquid)) { //Deplete that amount
@@ -218,14 +222,9 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 15;
+        return 16;
     }
-
-    @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
+    
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;

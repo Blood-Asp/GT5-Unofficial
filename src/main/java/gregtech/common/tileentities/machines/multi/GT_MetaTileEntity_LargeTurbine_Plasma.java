@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         return new String[]{
                 "Controller Block for the Large Plasma Generator",
                 "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Input Hatch (Side centered)",
+                "1x Plasma Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
                 "1x Dynamo Hatch (Back centered)",
                 "Tungstensteel Turbine Casings for the rest (24 at least!)",
@@ -53,11 +53,9 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
         FluidStack tLiquid;
         Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sPlasmaFuels.mRecipeList;
-        if (tRecipeList != null)
-            for (GT_Recipe tFuel : tRecipeList)
-                if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                    if (aLiquid.isFluidEqual(tLiquid))
-                        return tFuel.mSpecialValue;
+        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
+            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
+                if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
         return 0;
     }
 
@@ -92,7 +90,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
             aOptFlow *= 800;//CHANGED THINGS HERE, check recipe runs once per 20 ticks
             int tEU = 0;
 
-            int actualOptimalFlow = 0;
+        int actualOptimalFlow = 0;
 
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);

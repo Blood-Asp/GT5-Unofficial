@@ -25,8 +25,8 @@ public class GT_Worldgen_GT_Ore_SmallPieces
 
     public final String mBiome;
     public final String aTextWorldgen = "worldgen.";
-
-    public GT_Worldgen_GT_Ore_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, boolean aOverworld, boolean aNether, boolean aEnd, Materials aPrimary) {
+    //TODO CHECk IF INSTANTIATION IS CORRECT
+    public GT_Worldgen_GT_Ore_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, boolean aOverworld, boolean aNether, boolean aEnd, boolean GC_UNUSED1, boolean GC_UNUSED2, boolean GC_UNUSED3, Materials aPrimary) {
         super(aName, GregTech_API.sWorldgenList, aDefault);
         this.mOverworld = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Overworld", aOverworld);
         this.mNether = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Nether", aNether);

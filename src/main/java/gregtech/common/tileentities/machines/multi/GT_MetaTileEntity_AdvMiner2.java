@@ -129,7 +129,7 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
                             return false;
                     }
                 }else{
-                	stopMachine();
+                    stopMachine();
                     return false;
                 }
             }
@@ -315,11 +315,6 @@ public class GT_MetaTileEntity_AdvMiner2 extends GT_MetaTileEntity_MultiBlockBas
 
     @Override
     public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public int getAmountOfOutputs() {
         return 0;
     }
 

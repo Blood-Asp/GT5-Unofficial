@@ -1,6 +1,8 @@
-	package gregtech.common;
+package gregtech.common;
 
+import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.GT_Mod;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -10,12 +12,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import static gregtech.common.GT_Proxy.*;
 
 //import net.minecraft.entity.EntityLiving;
 
@@ -34,11 +40,11 @@ public class GT_Pollution {
 	 * Lava Boiler(20)
 	 * High Pressure Boiler(20)
 	 * Bronze Blast Furnace(50)
-	 * Diesel Generator(14/28/75)
-	 * Gas Turbine(7/14/37)
+	 * Diesel Generator(40/80/160)
+	 * Gas Turbine(20/40/80)
 	 * Charcoal Pile(100)
 	 * 
-	 * Large Diesel Generator(300)
+	 * Large Diesel Engine(320)
 	 * Electric Blast Furnace(100)
 	 * Implosion Compressor(2000)
 	 * Large Boiler(240)
@@ -51,115 +57,131 @@ public class GT_Pollution {
 	 * Muffler Hatch Pollution reduction:
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
+	private static XSTR tRan = new XSTR();
+	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
+	private HashMap<ChunkCoordIntPair,int[]> chunkData;//link to chunk data that is saved/loaded
+	private int operationsPerTick=0;//how much chunks should be processed in each cycle
+	private static final short cycleLen=1200;
+	private final World aWorld;
 
-	static List<ChunkPosition> tList = null;
-	static int loops = 1;
-	static XSTR tRan = new XSTR();
-
-	public static void onWorldTick(World aWorld, int aTick){
-		if(!GT_Mod.gregtechproxy.mPollution)return;
-		if(aTick == 0 || (tList==null && GT_Proxy.chunkData!=null)){
-			tList = new ArrayList<ChunkPosition>(GT_Proxy.chunkData.keySet());
-			loops = (tList.size()/1200) + 1;
-//			System.out.println("new Pollution loop"+aTick);
+	public GT_Pollution(World world){
+		aWorld=world;
+		chunkData=dimensionWiseChunkData.get(aWorld.provider.dimensionId);
+		if(chunkData==null){
+			chunkData=new HashMap<>(1024);
+			dimensionWiseChunkData.put(world.provider.dimensionId,chunkData);
 		}
-		if(tList!=null && tList.size() > 0){
-			int i = 0;
-			for(; i < loops ; i++){
-				if(tList.size()>0){
-					ChunkPosition tPos = tList.get(0);
-					tList.remove(0);
-					if(tPos!=null && GT_Proxy.chunkData.containsKey(tPos)){
-						int tPollution = GT_Proxy.chunkData.get(tPos)[1];
-		//				System.out.println("process: "+tPos.chunkPosX+" "+tPos.chunkPosZ+" "+tPollution);
-						//Reduce pollution in chunk
-						tPollution = (int)(0.9945f*tPollution);
-						//tPollution -= 2000;
-						if(tPollution<=0){tPollution = 0;}else{
-							//Spread Pollution
-							if(tPollution>400000){
-								List<ChunkPosition> tNeighbor = new ArrayList();
-								tNeighbor.add(new ChunkPosition(tPos.chunkPosX+1, 1, tPos.chunkPosZ));
-								tNeighbor.add(new ChunkPosition(tPos.chunkPosX-1, 1, tPos.chunkPosZ));
-								tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ+1));
-								tNeighbor.add(new ChunkPosition(tPos.chunkPosX, 1, tPos.chunkPosZ-1));
-								for(ChunkPosition tNPos : tNeighbor){
-									if(!GT_Proxy.chunkData.containsKey(tNPos)){
-										GT_Utility.undergroundOil(aWorld,tNPos.chunkPosX,tNPos.chunkPosZ,false,0);
-									}
-									int tNPol = GT_Proxy.chunkData.get(tNPos)[1];
-									if(tNPol*6 < tPollution*5){
-										int tDiff = tPollution - tNPol;
-										tDiff = tDiff/20;
-										tNPol = GT_Utility.safeInt((long)tNPol+tDiff);//tNPol += tDiff;
-										tPollution -= tDiff;
-										GT_Proxy.chunkData.get(tNPos)[1] = tNPol;
-									}
+		dimensionWisePollution.put(aWorld.provider.dimensionId,this);
+	}
+
+	public static void onWorldTick(TickEvent.WorldTickEvent aEvent){//called from proxy
+		//return if pollution disabled
+		if(!GT_Mod.gregtechproxy.mPollution) return;
+		final GT_Pollution pollutionInstance = dimensionWisePollution.get(aEvent.world.provider.dimensionId);
+		if(pollutionInstance==null)return;
+		pollutionInstance.tickPollutionInWorld((int)(aEvent.world.getTotalWorldTime()%cycleLen));
+	}
+
+	private void tickPollutionInWorld(int aTickID){//called from method above
+		//gen data set
+		if(aTickID==0){
+			pollutionList = new ArrayList<>(chunkData.keySet());
+			//set operations per tick
+			if(pollutionList.size()>0) operationsPerTick =(pollutionList.size()/cycleLen);
+			else operationsPerTick=0;//SANity
+		}
+
+		for(int chunksProcessed=0;chunksProcessed<=operationsPerTick;chunksProcessed++){
+			if(pollutionList.size()==0)break;//no more stuff to do
+			ChunkCoordIntPair actualPos=pollutionList.remove(pollutionList.size()-1);//faster
+			//add default data if missing
+			if(!chunkData.containsKey(actualPos)) chunkData.put(actualPos,getDefaultChunkDataOnCreation());
+			//get pollution
+			int tPollution = chunkData.get(actualPos)[GTPOLLUTION];
+			//remove some
+			tPollution = (int)(0.9945f*tPollution);
+			//tPollution -= 2000;//This does not really matter...
+
+			if(tPollution<=0) tPollution = 0;//SANity check
+			else if(tPollution>400000){//Spread Pollution
+
+				ChunkCoordIntPair[] tNeighbors = new ChunkCoordIntPair[4];//array is faster
+				tNeighbors[0]=(new ChunkCoordIntPair(actualPos.chunkXPos+1,actualPos.chunkZPos));
+				tNeighbors[1]=(new ChunkCoordIntPair(actualPos.chunkXPos-1,actualPos.chunkZPos));
+				tNeighbors[2]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos+1));
+				tNeighbors[3]=(new ChunkCoordIntPair(actualPos.chunkXPos,actualPos.chunkZPos-1));
+				for(ChunkCoordIntPair neighborPosition : tNeighbors){
+					if(!chunkData.containsKey(neighborPosition)) chunkData.put(neighborPosition,getDefaultChunkDataOnCreation());
+
+					int neighborPollution = chunkData.get(neighborPosition)[GTPOLLUTION];
+					if(neighborPollution*6 < tPollution*5){//METHEMATICS...
+						int tDiff = tPollution - neighborPollution;
+						tDiff = tDiff/20;
+						neighborPollution = GT_Utility.safeInt((long)neighborPollution+tDiff);//tNPol += tDiff;
+						tPollution -= tDiff;
+						chunkData.get(neighborPosition)[GTPOLLUTION] = neighborPollution;
+					}
+				}
+
+
+				//Create Pollution effects
+				//Smog filter TODO
+				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
+					AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(actualPos.chunkXPos << 4, 0, actualPos.chunkZPos << 4, (actualPos.chunkXPos << 4) + 16, 256, (actualPos.chunkZPos << 4) + 16);
+					List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
+					for (EntityLivingBase tEnt : tEntitys) {
+						if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
+							switch (tRan.nextInt(3)) {
+								default:
+									tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+								case 1:
+									tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+								case 2:
+									tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
+							}
+						}
+					}
+
+
+					//				Poison effects
+					if (tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit) {
+						//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
+						//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
+						for (EntityLivingBase tEnt : tEntitys) {
+							if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
+								switch (tRan.nextInt(4)) {
+									default:
+										tEnt.addPotionEffect(new PotionEffect(Potion.hunger.id, tPollution / 500000));
+									case 1:
+										tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution / 2000, 1000), 1));
+									case 2:
+										tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution / 4000, 1000), tPollution / 500000));
+									case 3:
+										tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution / 2000, 1000), 1));
 								}
 							}
-							int[] tArray = GT_Proxy.chunkData.get(tPos);
-							tArray[1] = tPollution;
-							GT_Proxy.chunkData.remove(tPos);
-							//tArray[2]|=0x01;
-							GT_Proxy.chunkData.put(tPos, tArray);
-							//Create Pollution effects
-			//				Smog filter TODO
-							if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
-								AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX << 4, 0, tPos.chunkPosZ << 4, (tPos.chunkPosX << 4) + 16, 256, (tPos.chunkPosZ << 4) + 16);
-								List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
-								for (EntityLivingBase tEnt : tEntitys) {
-									if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
-										switch (tRan.nextInt(3)) {
-											default:
-												tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
-											case 1:
-												tEnt.addPotionEffect(new PotionEffect(Potion.weakness.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
-											case 2:
-												tEnt.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
-										}
-									}
-								}
-								//				Poison effects
-								if (tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit) {
-									//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
-									//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
-									for (EntityLivingBase tEnt : tEntitys) {
-										if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
-											switch (tRan.nextInt(4)) {
-												default:
-													tEnt.addPotionEffect(new PotionEffect(Potion.hunger.id, tPollution / 500000));
-												case 1:
-													tEnt.addPotionEffect(new PotionEffect(Potion.confusion.id, Math.min(tPollution / 2000, 1000), 1));
-												case 2:
-													tEnt.addPotionEffect(new PotionEffect(Potion.poison.id, Math.min(tPollution / 4000, 1000), tPollution / 500000));
-												case 3:
-													tEnt.addPotionEffect(new PotionEffect(Potion.blindness.id, Math.min(tPollution / 2000, 1000), 1));
-											}
-										}
-									}
-									//				killing plants
-									if (tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit) {
-										int f = 20;
-										for (; f < (tPollution / 25000); f++) {
-											int x = (tPos.chunkPosX << 4) + tRan.nextInt(16);
-											int y = 60 + (-f + tRan.nextInt(f * 2 + 1));
-											int z = (tPos.chunkPosZ << 4) + tRan.nextInt(16);
-											damageBlock(aWorld, x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
-										}
-									}
-								}
+						}
+
+
+						//				killing plants
+						if (tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit) {
+							int f = 20;
+							for (; f < (tPollution / 25000); f++) {
+								int x = (actualPos.chunkXPos << 4) + tRan.nextInt(16);
+								int y = 60 + (-f + tRan.nextInt(f * 2 + 1));
+								int z = (actualPos.chunkZPos << 4) + tRan.nextInt(16);
+								damageBlock(aWorld, x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
 							}
 						}
 					}
 				}
 			}
+			//Write new pollution to Hashmap !!!
+			chunkData.get(actualPos)[GTPOLLUTION] = tPollution;
 		}
 	}
 	
-	public static void damageBlock(World aWorld, int x, int y, int z, boolean sourRain){
-		//Teporary overriden
-		//World world = DimensionManager.getWorld(aWorld.provider.dimensionId);
-		World world = DimensionManager.getWorld(0);
+	private static void damageBlock(World world, int x, int y, int z, boolean sourRain){
 		if (world.isRemote)	return;
 		Block tBlock = world.getBlock(x, y, z);
 		int tMeta = world.getBlockMetadata(x, y, z);
@@ -208,36 +230,43 @@ public class GT_Pollution {
 				else if(tBlock == Blocks.gravel){world.setBlock(x, y, z, Blocks.sand);	}
 			}
 	}
-	
-	public static void addPollution(ChunkPosition aPos, int aPollution){
-		if(!GT_Mod.gregtechproxy.mPollution)return;
-		try{
-			ChunkPosition tPos = new ChunkPosition(aPos.chunkPosX>>4, 1, aPos.chunkPosZ>>4);
-	//		System.out.println("add pollution x: "+ tPos.chunkPosX +" z: " + tPos.chunkPosZ +" poll: "+aPollution);
-			int[] tData = new int[]{0,0,0};
-			if(GT_Proxy.chunkData.containsKey(tPos)){
-				tData = GT_Proxy.chunkData.get(tPos);
-				if(tData.length>1){
-					tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
-				}
-			}else{
-				tData[1]=GT_Utility.safeInt((long)tData[1]+aPollution);//tData[1] += aPollution;
-				//tData[2]|=0x01;
-				GT_Proxy.chunkData.put(tPos, tData);
-			}
-		}catch(Exception e){}
+
+	public static void addPollution(IGregTechTileEntity te, int aPollution){
+		addPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()), aPollution);
 	}
 
-	public static int getPollutionAtCoords(int aX, int aZ){
-		ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
-		if(GT_Proxy.chunkData.containsKey(tPos)){
-			int[] tPollution = GT_Proxy.chunkData.get(tPos);
-			if(tPollution.length>1 && tPollution[1]>0){
-				return tPollution[1];
-			}else{
-				return 0;
-			}
+	public static void addPollution(Chunk ch, int aPollution){
+		if(!GT_Mod.gregtechproxy.mPollution)return;
+		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(ch.worldObj.provider.dimensionId);
+		if(dataMap==null){
+			dataMap=new HashMap<>(1024);
+			dimensionWiseChunkData.put(ch.worldObj.provider.dimensionId,dataMap);
 		}
-		return 0;
+		int[] dataArr=dataMap.get(ch.getChunkCoordIntPair());
+		if(dataArr==null){
+			dataArr=getDefaultChunkDataOnCreation();
+			dataMap.put(ch.getChunkCoordIntPair(),dataArr);
+		}
+		dataArr[GTPOLLUTION]+=aPollution;
+		if(dataArr[GTPOLLUTION]<0)dataArr[GTPOLLUTION]=0;
+	}
+
+	public static int getPollution(IGregTechTileEntity te){
+		return getPollution(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()));
+	}
+
+	public static int getPollution(Chunk ch){
+		if(!GT_Mod.gregtechproxy.mPollution)return 0;
+		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(ch.worldObj.provider.dimensionId);
+		if(dataMap==null || dataMap.get(ch.getChunkCoordIntPair())==null) return 0;
+		return dataMap.get(ch.getChunkCoordIntPair())[GTPOLLUTION];
+	}
+	
+	//Add compatibility with old code
+	@Deprecated /*Don't use it... too weird way of passing position*/
+	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
+		//The abuse of ChunkPosition to store block position and dim... 
+		//is just bad especially when that is both used to store ChunkPos and BlockPos depending on context
+		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
 	}
 }

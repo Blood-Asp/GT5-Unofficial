@@ -22,7 +22,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -51,7 +50,8 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                 "Controller Block for the Bronze Blast Furnace",
                 "How to get your first Steel",
                 "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
-                "Bronze Plated Bricks for the rest (32 at least!)"};
+                "Bronze Plated Bricks for the rest (32 at least!)",
+                "Causes 50 Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -205,8 +205,8 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
                     checkRecipe();
                 }
             }
-            if(this.mMachine && this.mMaxProgresstime>0 && (aTimer % 20L == 0L)){
-            	GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 400);
+            if(this.mMaxProgresstime>0 && (aTimer % 20L == 0L)){
+            	GT_Pollution.addPollution(getBaseMetaTileEntity(), 200);
             }
             
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));
@@ -237,7 +237,7 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
             XSTR floatGen=new XSTR();
             aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.3D, 0.0D);
             //Pollution particles intensify
-            if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
+            if(GT_Pollution.getPollution(getBaseMetaTileEntity())>GT_Mod.gregtechproxy.mPollutionSmogLimit){
                 aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.45D, 0.0D);
                 aWorld.spawnParticle("largesmoke", xPos + floatGen.nextFloat(), yPos, zPos + floatGen.nextFloat(), 0.0D, 0.6D, 0.0D);
             }

@@ -199,12 +199,12 @@ public class GT_RecipeRegistrator {
             }
             if (tMaterial.mMaterial.contains(SubTag.EXPLOSIVE)) {
                 tMaterial.mMaterial = Materials.Ash;
-                tMaterial.mAmount /= 4;
+                tMaterial.mAmount /= 16;
                 continue;
             }
             if (tMaterial.mMaterial.contains(SubTag.FLAMMABLE)) {
                 tMaterial.mMaterial = Materials.Ash;
-                tMaterial.mAmount /= 2;
+                tMaterial.mAmount /= 8;
                 continue;
             }
             if (tMaterial.mMaterial.contains(SubTag.NO_SMELTING)) {
@@ -212,7 +212,11 @@ public class GT_RecipeRegistrator {
                 continue;
             }
             if (tMaterial.mMaterial.contains(SubTag.METAL)) {
+            	if(GT_Mod.gregtechproxy.mArcSmeltIntoAnnealed){
                 tMaterial.mMaterial = tMaterial.mMaterial.mSmeltInto.mArcSmeltInto;
+            	}else{
+            		tMaterial.mMaterial = tMaterial.mMaterial.mSmeltInto.mSmeltInto;	
+            	}
                 continue;
             }
             tMaterial.mAmount = 0;
@@ -232,7 +236,7 @@ public class GT_RecipeRegistrator {
             tAmount += tMaterial.mAmount * tMaterial.mMaterial.getMass();
 
         boolean tHide = !tIron && GT_Mod.gregtechproxy.mHideRecyclingRecipes;
-        RA.addArcFurnaceRecipe(aStack, new ItemStack[]{GT_OreDictUnificator.getIngotOrDust(aData.mMaterial), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(0)), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(1)), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(2))}, null, (int) Math.max(16, tAmount / M), 90, tHide);
+        RA.addArcFurnaceRecipe(aStack, new ItemStack[]{GT_OreDictUnificator.getIngotOrDust(aData.mMaterial), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(0)), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(1)), GT_OreDictUnificator.getIngotOrDust(aData.getByProduct(2))}, null, (int) Math.max(16, tAmount / M), 96, tHide);
     }
 
     public static void registerReverseMacerating(ItemStack aStack, Materials aMaterial, long aMaterialAmount, MaterialStack aByProduct01, MaterialStack aByProduct02, MaterialStack aByProduct03, boolean aAllowHammer) {

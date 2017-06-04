@@ -2,6 +2,7 @@ package gregtech.common.tileentities.generators;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -24,12 +25,17 @@ public class GT_MetaTileEntity_FluidNaquadahReactor
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_FluidNaquadahReactor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return (aSide > 1) && (aSide != getBaseMetaTileEntity().getFrontFacing()) && (aSide != getBaseMetaTileEntity().getBackFacing());
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_FluidNaquadahReactor(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_FluidNaquadahReactor(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -42,6 +48,11 @@ public class GT_MetaTileEntity_FluidNaquadahReactor
 
     public int getEfficiency() {
         return mEfficiency;
+    }
+    
+    @Override
+    public long maxEUStore() {
+        return Math.max(getEUVar(), GT_Values.V[mTier] * 120 + getMinimumStoredEU());
     }
 
     public void onConfigLoad() {

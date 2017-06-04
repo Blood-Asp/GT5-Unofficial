@@ -27,7 +27,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -66,6 +65,26 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private long mTickTimer = 0, oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
     private String mOwnerName = "";
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
+
+    private static final Field ENTITY_ITEM_HEALTH_FIELD;
+    static
+    {
+        Field f = null;
+
+        try {
+            f = EntityItem.class.getDeclaredField("field_70291_e");
+            f.setAccessible(true);
+        } catch (Exception e1) {
+            try {
+                f = EntityItem.class.getDeclaredField("health");
+                f.setAccessible(true);
+            } catch (Exception e2) {
+                e1.printStackTrace();
+                e2.printStackTrace();
+            }
+        }
+        ENTITY_ITEM_HEALTH_FIELD = f;
+    }
 
     public BaseMetaTileEntity() {
     }
@@ -446,6 +465,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             for (int i = mMetaTileEntity.dechargerSlotStartIndex(), k = mMetaTileEntity.dechargerSlotCount() + i; i < k; i++) {
                                 if (mMetaTileEntity.mInventory[i] != null && getStoredEU() < getEUCapacity()) {
                                     dischargeItem(mMetaTileEntity.mInventory[i]);
+				    if(ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i])>0){
+                                       if((getStoredEU() + ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]))<getEUCapacity()){
+                                           increaseStoredEnergyUnits((long)ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]),false);
+                                           mMetaTileEntity.mInventory[i].stackSize--;
+                                       }
+                                    }
                                     if (mMetaTileEntity.mInventory[i].stackSize <= 0)
                                         mMetaTileEntity.mInventory[i] = null;
                                     mInventoryChanged = true;
@@ -1121,7 +1146,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     }
                 }
             }
-            GT_Pollution.addPollution(new ChunkPosition(getXCoord(), getYCoord(), getZCoord()), 100000);
+
+            GT_Pollution.addPollution(this, 100000);
             mMetaTileEntity.doExplosion(aAmount);
         }
     }
@@ -1139,10 +1165,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         tItemEntity.hurtResistantTime = 999999;
         tItemEntity.lifespan = 60000;
         try {
-			Field tField = tItemEntity.getClass().getDeclaredField("health");
-			tField.setAccessible(true);
-			tField.setInt(tItemEntity, 99999999);
-		} catch (Exception e) {e.printStackTrace();}
+            if(ENTITY_ITEM_HEALTH_FIELD != null)
+                ENTITY_ITEM_HEALTH_FIELD.setInt(tItemEntity, 99999999);
+		} catch (Exception ignored) {}
         this.worldObj.spawnEntityInWorld(tItemEntity);
         tItem.stackSize = 0;                       	
     }

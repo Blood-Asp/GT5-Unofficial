@@ -36,7 +36,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         return new String[]{
                 "Controller Block for the Large Gas Turbine",
                 "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Input Hatch (Side centered)",
+                "1x Gas Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
                 "1x Muffler Hatch (Side centered)",
                 "1x Dynamo Hatch (Back centered)",
@@ -122,7 +122,6 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
             return tEU;
 
         }
-
         return 0;
     }
 

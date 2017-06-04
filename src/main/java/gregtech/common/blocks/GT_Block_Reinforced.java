@@ -8,19 +8,19 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.items.GT_Generic_Block;
+import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import ic2.core.block.EntityIC2Explosive;
-import ic2.core.block.EntityItnt;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -39,6 +39,9 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public GT_Block_Reinforced(String aName) {
         super(GT_Item_Storage.class, aName, new GT_Material_Reinforced());
+        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
+            Textures.BlockIcons.CASING_BLOCKS[(i + 80)] = new GT_CopiedBlockTexture(this, 6, i);
+        }
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH);
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Bronzeplate Reinforced Block");
@@ -51,7 +54,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Magic Solid Super Fuel");
         ItemList.Block_BronzePlate.set(new ItemStack(this.setHardness(60.0f).setResistance(150.0f), 1, 0));
         ItemList.Block_IridiumTungstensteel.set(new ItemStack(this.setHardness(200.0f).setResistance(600.0f), 1, 1));
-        ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(80.0f).setResistance(350.0f), 1, 2));
+        ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(40.0f).setResistance(100.0f), 1, 2));
         ItemList.Block_TungstenSteelReinforced.set(new ItemStack(this.setHardness(100.0f).setResistance(400.0f), 1, 3));
         ItemList.Block_BrittleCharcoal.set(new ItemStack(this.setHardness(0.5f).setResistance(8.0f), 1, 4));
         ItemList.Block_Powderbarrel.set(new ItemStack(this.setHardness(2.5f).setResistance(2.0f), 1, 5));
@@ -62,7 +65,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         GT_ModHandler.addCraftingRecipe(ItemList.Block_IridiumTungstensteel.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"hBP", 'P', OrePrefixes.plate.get(Materials.Iridium), 'B', ItemList.Block_TungstenSteelReinforced.get(1L, new Object[0])});
         GT_OreDictUnificator.setItemData(ItemList.Block_IridiumTungstensteel.get(1, new Object[0]), new ItemData(new MaterialStack(Materials.Iridium, OrePrefixes.plate.mMaterialAmount), new MaterialStack(Materials.TungstenSteel, 2*OrePrefixes.plate.mMaterialAmount),new MaterialStack(Materials.Concrete, OrePrefixes.dust.mMaterialAmount)));
         GT_ModHandler.addShapelessCraftingRecipe(new ItemStack(Items.coal, 1, 1), new Object[]{ItemList.Block_BrittleCharcoal.get(1, new Object[0])});
-        GT_ModHandler.addCraftingRecipe(ItemList.Block_Powderbarrel.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WSW","GGG","WGW", 'W', OrePrefixes.plank.get(Materials.Wood), 'G', new ItemStack(Items.gunpowder,1),'S',new ItemStack(Items.string,1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Block_Powderbarrel.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WSW","GGG","WGW", 'W', OrePrefixes.plate.get(Materials.Wood), 'G', new ItemStack(Items.gunpowder,1),'S',new ItemStack(Items.string,1)});
         
     }
 
@@ -73,6 +76,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public int getHarvestLevel(int aMeta) {
         if (aMeta == 4||aMeta == 5 || aMeta == 6 || aMeta == 7) return 1;
+        if (aMeta == 2) return 2;
         return 4;
     }
 
@@ -115,7 +119,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
             return 200.0F;
         }
         if (tMeta == 2) {
-            return 80.0F;
+            return 40.0F;
         }
         if (tMeta == 3) {
             return 100.0F;
@@ -138,7 +142,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
             return 600.0F;
         }
         if (tMeta == 2) {
-            return 350.0F;
+            return 100.0F;
         }
         if (tMeta == 3) {
             return 400.0F;
@@ -208,28 +212,15 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
     
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
-      if(world.getBlockMetadata(x, y, z)==5){
-        EntityIC2Explosive entitytntprimed = getExplosionEntity(world, x, y, z, player == null ? null : player);
-        if (entitytntprimed == null) {
-          return false;
-        }
-        
+      if(!world.isRemote && world.getBlockMetadata(x, y, z)==5){
+    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, player);
         world.spawnEntityInWorld(entitytntprimed);
-        world.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
+        world.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
         
       world.setBlockToAir(x, y, z);
       return false;
       }
       return super.removedByPlayer(world, player, x, y, z);
-    }
-    
-    public EntityIC2Explosive getExplosionEntity(World world, int x, int y, int z, EntityLivingBase igniter)
-    {
-      EntityIC2Explosive ret;
-      ret = new EntityItnt(world, x + 0.5D, y + 0.5D, z + 0.5D);
-      ret.setIgniter(igniter);
-      
-      return ret;
     }
     
     public void onBlockAdded(World world, int x, int y, int z)
@@ -247,21 +238,19 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       }
     }
     
-    public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion)
-    {
-      EntityIC2Explosive entitytntprimed = getExplosionEntity(world, x, y, z, explosion == null ? null : explosion.getExplosivePlacedBy());
-      if (entitytntprimed == null) {
-        return;
+    public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+      if (!world.isRemote && world.getBlockMetadata(x, y, z)==5){
+    	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, explosion.getExplosivePlacedBy());
+    	entitytntprimed.fuse = (world.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8);
+    	world.spawnEntityInWorld(entitytntprimed);
       }
-      entitytntprimed.fuse = (world.rand.nextInt(entitytntprimed.fuse / 4) + entitytntprimed.fuse / 8);
-      world.spawnEntityInWorld(entitytntprimed);
+      super.onBlockExploded(world, x, y, z, explosion);
     }
     
     public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
     {
       if ((player.getCurrentEquippedItem() != null) && (player.getCurrentEquippedItem().getItem() == Items.flint_and_steel)&&par1World.getBlockMetadata(x, y, z)==5)
       {
-//        par1World.setBlockMetadataWithNotify(x, y, z, 6, 7);
         removedByPlayer(par1World, player, x, y, z);
         
         return true;
@@ -276,7 +265,12 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs par2CreativeTabs, List aList) {
         for (int i = 0; i < 16; i++) {
-            aList.add(new ItemStack(aItem, 1, i));
+            ItemStack aStack = new ItemStack(aItem, 1, i);
+            if (!aStack.getDisplayName().contains(".name")) aList.add(aStack);
         }
+    }
+    
+    public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
+        return !(entity instanceof EntityWither);
     }
 }

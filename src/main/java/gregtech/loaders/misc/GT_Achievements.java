@@ -46,40 +46,42 @@ public class GT_Achievements {
     public int adjY = 9;
 
     public GT_Achievements() {
-        this.achievementList = new ConcurrentHashMap();
-        this.issuedAchievements = new ConcurrentHashMap();
+        this.achievementList = new ConcurrentHashMap<>();
+        this.issuedAchievements = new ConcurrentHashMap<>();
         int oreList_sS=oreList.size();
         for (int i = 0; i < oreList_sS; i++) {
-            if (GT_Values.D1 && this.achievementList.get(oreList.get(i).name()) == null) {
-                GT_Log.out.println("achievement." + oreList.get(i).name() + "=Find " + oreList.get(i).name() + " Ore");
+            if (oreList.get(i) != null) {
+                if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
+                    GT_Log.out.println("achievement." + oreList.get(i).mName + "=Find " + oreList.get(i).mName + " Ore");
 
-                StringBuilder dimensions = new StringBuilder();
-                boolean isFirst = true;
-                if(oreStats.get(i)[3] == 1) {
-                    dimensions.append("Overworld");
-                    isFirst = false;
+                    StringBuilder dimensions = new StringBuilder();
+                    boolean isFirst = true;
+                    if (oreStats.get(i)[3] == 1) {
+                        dimensions.append("Overworld");
+                        isFirst = false;
+                    }
+                    if (oreStats.get(i)[4] == 1) {
+                        if (!isFirst) dimensions.append("/");
+                        dimensions.append("Nether");
+                        isFirst = false;
+                    }
+                    if (oreStats.get(i)[5] == 1) {
+                        if (!isFirst) dimensions.append("/");
+                        dimensions.append("End");
+                        isFirst = false;
+                    }
+                    GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
                 }
-                if(oreStats.get(i)[4] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("Nether");
-                    isFirst = false;
-                }
-                if(oreStats.get(i)[5] == 1) {
-                    if(!isFirst) dimensions.append("/");
-                    dimensions.append("End");
-                    isFirst = false;
-                }
-                GT_Log.out.println("achievement." + oreList.get(i).name() + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
-            }
-            if(oreList.get(i)==null)
-                GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
-            if(oreList.get(i).name()==null)
-                GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
-            else
+                //if(oreList.get(i)==null)
+                //    GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
+                //if(oreList.get(i).name()==null)
+                //    GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
+                //else
                 registerOreAchievement(oreList.get(i));
+            }
         }
 
-        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList)
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
             registerAssAchievement(recipe);
 
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(2, 1, Materials.Flint, Materials.Wood, null), "", false);
@@ -93,24 +95,25 @@ public class GT_Achievements {
         registerAchievement("havestsilver", -4, -5, ItemList.Crop_Drop_Argentia.get(1, new Object[]{}), "havestiron", false);
         registerAchievement("havestemeralds", -2, -8, ItemList.Crop_Drop_BobsYerUncleRanks.get(1, new Object[]{}), "havestgold", false);
 
-        registerAchievement("tools", 0, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(12, 1, Materials.Iron, Materials.Wood, null), "flintpick", false);
-        registerAchievement("driltime", 2, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(100, 1, Materials.BlueSteel, Materials.StainlessSteel, null), "tools", false);
-        registerAchievement("brrrr", 2, 6, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(110, 1, Materials.BlueSteel, Materials.StainlessSteel, null), "driltime", false);
-        registerAchievement("highpowerdrill", 3, 5, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(104, 1, Materials.TungstenSteel, Materials.TungstenSteel, null), "driltime", false);
-        registerAchievement("hammertime", 3, 7, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(130, 1, Materials.TungstenSteel, Materials.TungstenSteel, null), "highpowerdrill", false);
+        registerAchievement("tools", 0, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.HARDHAMMER, 1, Materials.Iron, Materials.Wood, null), "flintpick", false);
+        registerAchievement("driltime", 2, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.DRILL_LV, 1, Materials.BlueSteel, Materials.StainlessSteel, null), "tools", false);
+        registerAchievement("brrrr", 2, 6, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.CHAINSAW_LV, 1, Materials.BlueSteel, Materials.StainlessSteel, null), "driltime", false);
+        registerAchievement("highpowerdrill", 3, 5, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.DRILL_HV, 1, Materials.TungstenSteel, Materials.TungstenSteel, null), "driltime", false);
+        registerAchievement("hammertime", 3, 7, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.JACKHAMMER, 1, Materials.TungstenSteel, Materials.TungstenSteel, null), "highpowerdrill", false);
         registerAchievement("repair", 4, 5, ItemList.Machine_HV_Disassembler.get(1, new Object[]{}), "highpowerdrill", false);
 
-        registerAchievement("unitool", -2, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(32, 1, Materials.Steel, Materials.Iron, null), "tools", false);
+        registerAchievement("unitool", -2, 4, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.UNIVERSALSPADE, 1, Materials.Steel, Materials.Iron, null), "tools", false);
         registerAchievement("recycling", -4, 4, ItemList.Machine_LV_ArcFurnace.get(1, new Object[]{}), "unitool", false);
 
         registerAchievement("crushed", 0, 6, GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Tin, 1L), "tools", false);
         registerAchievement("cleandust", 0, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1L), "crushed", false);
         registerAchievement("washing", -2, 6, GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Iron, 1L), "crushed", false);
         registerAchievement("spinit", -4, 6, GT_OreDictUnificator.get(OrePrefixes.crushedCentrifuged, Materials.Redstone, 1L), "crushed", false);
-        registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
-        registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
-        registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
-
+        if(!GregTech_API.mIC2Classic){
+        	registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
+        	registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
+        	registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
+        }
         registerAchievement("bronze", 2, 0, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bronze, 1L), "flintpick", false);
         registerAchievement("simplyeco", 2, 2, ItemList.Machine_Bronze_Boiler_Solar.get(1, new Object[]{}), "bronze", false);
         registerAchievement("firststeam", 2, -2, ItemList.Machine_Bronze_Boiler.get(1, new Object[]{}), "bronze", false);
@@ -118,12 +121,22 @@ public class GT_Achievements {
         registerAchievement("macerator", 0, -2, ItemList.Machine_Bronze_Macerator.get(1, new Object[]{}), "firststeam", false);
         registerAchievement("extract", 0, -4, ItemList.Machine_Bronze_Extractor.get(1, new Object[]{}), "alloysmelter", false);
 
-        registerAchievement("smallparts", 0, -8, ItemList.Circuit_Primitive.get(1, new Object[]{}), "extract", false);
-        registerAchievement("bettercircuits", 0, -10, ItemList.Circuit_Good.get(1, new Object[]{}), "smallparts", false);
-        registerAchievement("stepforward", -2, -10, ItemList.Circuit_Advanced.get(1, new Object[]{}), "bettercircuits", false);
-        registerAchievement("energyflow", -4, -10, ItemList.Circuit_Master.get(1, new Object[]{}), "stepforward", false);
-        registerAchievement("orbs", -6, -10, ItemList.Energy_LapotronicOrb.get(1, new Object[]{}), "energyflow", false);
-        registerAchievement("thatspower", -8, -10, ItemList.Energy_LapotronicOrb2.get(1, new Object[]{}), "orbs", false);
+        registerAchievement("smallparts", 0, -5, ItemList.Circuit_Primitive.get(1, new Object[]{}), "alloysmelter", false);        
+        registerAchievement("gtbasiccircuit", 0, -8, Ic2Items.electronicCircuit.copy(), "smallparts", false);
+        registerAchievement("bettercircuits", 0, -9, ItemList.Circuit_Good.get(1, new Object[]{}), "gtbasiccircuit", false);
+        registerAchievement("stepforward", -2, -9, Ic2Items.advancedCircuit.copy(), "bettercircuits", false);
+        registerAchievement("gtmonosilicon", -5, -10, ItemList.Circuit_Silicon_Ingot.get(1, new Object[]{}), "stepforward", false);
+        registerAchievement("gtlogicwafer", -7, -10, ItemList.Circuit_Wafer_ILC.get(1, new Object[]{}), "gtmonosilicon", false);
+        registerAchievement("gtlogiccircuit", -9, -10, ItemList.Circuit_Basic.get(1, new Object[]{}), "gtlogicwafer", false);
+        registerAchievement("gtcleanroom", -11, -10, ItemList.Machine_Multi_Cleanroom.get(1, new Object[]{}), "gtlogiccircuit", false);
+        registerAchievement("energyflow", -13, -10, ItemList.Circuit_Nanoprocessor.get(1, new Object[]{}), "gtcleanroom", false);
+        registerAchievement("gtquantumprocessor", -13, -12, ItemList.Circuit_Quantumprocessor.get(1, new Object[]{}), "energyflow", false);
+        registerAchievement("gtcrystalprocessor", -11, -12, ItemList.Circuit_Crystalprocessor.get(1, new Object[]{}), "gtquantumprocessor", false);
+        registerAchievement("gtwetware", -9, -12, ItemList.Circuit_Neuroprocessor.get(1, new Object[]{}), "gtcrystalprocessor", false);
+        registerAchievement("gtwetmain", -7, -12, ItemList.Circuit_Wetwaremainframe.get(1, new Object[]{}), "gtwetware", false);
+        
+        registerAchievement("orbs", -10, -14, ItemList.Energy_LapotronicOrb.get(1, new Object[]{}), "energyflow", false);
+        registerAchievement("thatspower", -8, -14, ItemList.Energy_LapotronicOrb2.get(1, new Object[]{}), "orbs", false);
         registerAchievement("datasaving", -2, -12, ItemList.Tool_DataOrb.get(1, new Object[]{}), "stepforward", false);
         registerAchievement("superbuffer", 0, -12, ItemList.Automation_SuperBuffer_LV.get(1, new Object[]{}), "datasaving", false);
         registerAchievement("newstorage", -2, -14, ItemList.Quantum_Chest_HV.get(1, new Object[]{}), "superbuffer", false);
@@ -259,9 +272,9 @@ public class GT_Achievements {
     }
 
     public Achievement registerOreAchievement(Materials aMaterial) {
-        if (this.achievementList.get(aMaterial.name()) == null) {
+        if (this.achievementList.get(aMaterial.mName) == null) {
             oreReg++;
-            return registerAchievement(aMaterial.name(), -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
+            return registerAchievement(aMaterial.mName, -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
                     aMaterial.mMetaItemSubID), AchievementList.openInventory, false);
         }
         return null;
@@ -359,13 +372,13 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
-        //if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}
+        //if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}//TODO REALLY BLOODASP, REALLY
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
                 issueAchievement(player, "bronze");
-            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
-                issueAchievement(player, "stepforward");
+//            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
+//                issueAchievement(player, "stepforward");
             }
         }
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
@@ -373,6 +386,8 @@ public class GT_Achievements {
                 issueAchievement(player, "bronze");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32700")) {
                 issueAchievement(player, "smallparts");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
+                issueAchievement(player, "bettercircuits");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.23354")) {
                 issueAchievement(player, "magneticiron");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32600")) {
@@ -389,6 +404,10 @@ public class GT_Achievements {
             }
         } else if (stack.getUnlocalizedName().equals("ic2.blockCrop")) {
             issueAchievement(player, "crops");
+        } else if (stack.getUnlocalizedName().equals("ic2.itemPartCircuit")) {
+            issueAchievement(player, "gtbasiccircuit");
+        } else if (stack.getUnlocalizedName().equals("ic2.itemPartCircuitAdv")) {
+            issueAchievement(player, "stepforward");
         } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.")) {
             if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.arcfurnace.tier.")) {
                 issueAchievement(player, "recycling");
@@ -465,10 +484,26 @@ public class GT_Achievements {
                 issueAchievement(player, "muchsteam");
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.multimachine.largehpturbine")) {
                 issueAchievement(player, "efficientsteam");
+            } else if (stack.getUnlocalizedName().equals("gt.blockmachines.multimachine.cleanroom")) {
+                issueAchievement(player, "gtcleanroom");
             }
         } else if (stack.getUnlocalizedName().equals("gt.neutronreflector")) {
             issueAchievement(player, "reflect");
-        }//moved to on item pickup
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.1")) {
+            issueAchievement(player, "upgrade");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.2")) {
+            issueAchievement(player, "upgrade2");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.3")) {
+            issueAchievement(player, "upgrade3");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.4")) {
+            issueAchievement(player, "upgrade4");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.5")) {
+            issueAchievement(player, "upgrade5");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.6")) {
+            issueAchievement(player, "over9000");
+        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.15")) {
+            issueAchievement(player, "conducting");
+        }
     }
 
     @SubscribeEvent
@@ -502,7 +537,7 @@ public class GT_Achievements {
             } else if (data.mPrefix.name().startsWith("ore")) {
                 int data_getAllMaterialStacks_sS=data.getAllMaterialStacks().size();
                 for (int i = 0; i < data_getAllMaterialStacks_sS; i++) {
-                    issueAchievement(player, data.getAllMaterialStacks().get(i).mMaterial.name());
+                    issueAchievement(player, data.getAllMaterialStacks().get(i).mMaterial.mName);
                     if (data.getAllMaterialStacks().get(i).mMaterial == Materials.AnyIron) {
                         issueAchievement(player, "iron");
                     }
@@ -523,10 +558,11 @@ public class GT_Achievements {
                 } else if (data.mPrefix == OrePrefixes.nugget && Loader.isModLoaded("Thaumcraft") && ThaumcraftApiHelper.isResearchComplete(player.getDisplayName(), "GT_IRON_TO_STEEL")) {
                     issueAchievement(player, "steel");
                 }
-            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
-                issueAchievement(player, "stepforward");
+//            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
+//                issueAchievement(player, "stepforward");
             }
         }
+//        System.out.println(stack.getUnlocalizedName());
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
             if (stack.getUnlocalizedName().equals("gt.metaitem.02.32500")) {
                 issueAchievement(player, "havestlead");
@@ -544,7 +580,7 @@ public class GT_Achievements {
                 issueAchievement(player, "havestoil");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32511")) {
                 issueAchievement(player, "havestemeralds");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32706")) {
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32082")) {
                 issueAchievement(player, "energyflow");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
                 issueAchievement(player, "bettercircuits");
@@ -564,28 +600,28 @@ public class GT_Achievements {
                 issueAchievement(player, "filterregulate");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32605")) {
                 issueAchievement(player, "whatnow");
-            }
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32030")) {
+                issueAchievement(player, "gtmonosilicon");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32036")) {
+                issueAchievement(player, "gtlogicwafer");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32701")) {
+                issueAchievement(player, "gtlogiccircuit");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32085")) {
+                issueAchievement(player, "gtquantumprocessor");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32089")) {
+                issueAchievement(player, "gtcrystalprocessor");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32092")) {
+                issueAchievement(player, "gtwetware");
+            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
+                issueAchievement(player, "gtwetmain");
+            } 
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");
-        } else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
+        }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
             issueAchievement(player, "buildQArmor");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.1")) {
-            issueAchievement(player, "upgrade");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.2")) {
-            issueAchievement(player, "upgrade2");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.3")) {
-            issueAchievement(player, "upgrade3");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.4")) {
-            issueAchievement(player, "upgrade4");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.5")) {
-            issueAchievement(player, "upgrade5");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings5.6")) {
-            issueAchievement(player, "over9000");
-        } else if (stack.getUnlocalizedName().equals("gt.blockcasings.15")) {
-            issueAchievement(player, "conducting");
-        }
-        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes.mRecipeList){
+		}
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
             if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
                 issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
                 recipe.mHidden=false;

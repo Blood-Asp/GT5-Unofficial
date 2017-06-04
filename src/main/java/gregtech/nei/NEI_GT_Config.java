@@ -17,7 +17,7 @@ public class NEI_GT_Config
             }
         }
         if(FMLCommonHandler.instance().getEffectiveSide().isClient())
-            ALH=new GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map.sAssemblylineFakeRecipes);
+            ALH=new GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes);
         sIsAdded = true;
     }
 

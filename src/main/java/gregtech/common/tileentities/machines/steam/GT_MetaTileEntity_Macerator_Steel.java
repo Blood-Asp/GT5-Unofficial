@@ -8,7 +8,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Steel;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -20,7 +19,7 @@ import java.util.Random;
 import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Macerator_Steel
-        extends GT_MetaTileEntity_BasicMachine_Steel {
+        extends GT_MetaTileEntity_BasicMachine_Steel {//TODO CHECK ALL STEAM POWERED MACHINES
     public GT_MetaTileEntity_Macerator_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, "Macerating your Ores", 1, 1, false);
     }
@@ -29,12 +28,16 @@ public class GT_MetaTileEntity_Macerator_Steel
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_Macerator_Steel(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelMacerator.png", "ic2.macerator");
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelMacerator.png", GT_Recipe_Map.sMaceratorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Macerator_Steel(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Macerator_Steel(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -61,12 +64,12 @@ public class GT_MetaTileEntity_Macerator_Steel
         getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
-
+	//TODO THIS MIGHT WORK???
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
             return false;
         }
-        return GT_ModHandler.getMaceratorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
+        return GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, new Object[]{aStack}));
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {

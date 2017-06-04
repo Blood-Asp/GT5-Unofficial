@@ -21,7 +21,6 @@ public enum ConfigCategories {
     public enum Recipes {
         researches,
         harderrecipes,
-        gregtechrecipes,
         disabledrecipes,
         recipereplacements,
         storageblockcrafting,
@@ -60,6 +59,7 @@ public enum ConfigCategories {
         hammerdoubleplate,
         hammertripleplate,
         hammerquadrupleplate,
-        hammerquintupleplate;
+        hammerquintupleplate,
+		scoop;
     }
 }

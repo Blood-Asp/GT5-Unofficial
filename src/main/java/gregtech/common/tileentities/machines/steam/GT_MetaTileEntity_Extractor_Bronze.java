@@ -8,10 +8,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Extractor_Bronze
         extends GT_MetaTileEntity_BasicMachine_Bronze {
@@ -23,29 +22,35 @@ public class GT_MetaTileEntity_Extractor_Bronze
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_Extractor_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeExtractor.png", "ic2.extractor");
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeExtractor.png", GT_Recipe.GT_Recipe_Map.sExtractorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Extractor_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Extractor_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public int checkRecipe() {
-        if (null != (this.mOutputItems[0] = GT_ModHandler.getExtractorOutput(getInputAt(0), true, getOutputAt(0)))) {
-            this.mEUt = 2;
-            this.mMaxProgresstime = 800;
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sExtractorRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[1], null, getAllInputs());
+        if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
+            this.mOutputItems[0] = tRecipe.getOutput(0);
+            this.mEUt = tRecipe.mEUt;
+            this.mMaxProgresstime = (tRecipe.mDuration * 2);
             return 2;
         }
         return 0;
     }
-
-    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-            return false;
-        }
-        return GT_ModHandler.getExtractorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
-    }
+	//TODO RE ENABLE?
+    //public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+    //    if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
+    //        return false;
+    //    }
+    //    return GT_ModHandler.getExtractorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
+    //}
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);

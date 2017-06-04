@@ -7,7 +7,6 @@ import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.SubTag;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
@@ -18,7 +17,6 @@ import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
-import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_Sound;
 import gregtech.common.GT_Proxy;
 import ic2.api.recipe.IRecipeInput;
@@ -54,7 +52,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -73,6 +70,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import static gregtech.api.enums.GT_Values.*;
+import static gregtech.common.GT_Proxy.GTPOLLUTION;
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1463,7 +1462,21 @@ public class GT_Utility {
         if(aDimensionID<=1 && aDimensionID>=-1 && !GregTech_API.sDimensionalList.contains(aDimensionID)) return true;
         return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
-
+	 
+    //public static boolean isRealDimension(int aDimensionID) {
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("com.xcompwiz.mystcraft"))
+    //            return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("TwilightForest")) return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    try {
+    //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("galacticraft")) return true;
+    //    } catch (Throwable e) {/*Do nothing*/}
+    //    return GregTech_API.sDimensionalList.contains(aDimensionID);
+    //}
+	
     public static boolean moveEntityToDimensionAtCoords(Entity entity, int aDimension, double aX, double aY, double aZ) {
         //Credit goes to BrandonCore Author :!:
 
@@ -1554,75 +1567,9 @@ public class GT_Utility {
         entity.fallDistance = 0;
         return true;
     }
-
-    public static FluidStack undergroundOil(World aWorld, int aX, int aZ,boolean save,int sub) {
-        ChunkPosition tPos = new ChunkPosition(aX, 1, aZ);
-        int[] tInts = {0,0,0};
-        if(GT_Proxy.chunkData.containsKey(tPos)){
-            tInts = GT_Proxy.chunkData.get(tPos);
-            if(tInts.length>0){
-                int type=tInts[0]>>28;
-                int amnt=tInts[0]-(type<<28)-sub;
-                if(type==0){//update old thing  //IGNORES SAVE - chunk must be updated
-                    GT_Proxy.chunkData.remove(tPos);
-                    return setUndergroundOil(aWorld,aX,aZ,tPos,tInts);
-                }
-                if(save){//obvious?
-                    //tInts[2]|=0x01;
-                    if(amnt<=0) tInts[0] = type << 28;
-                    else        tInts[0] = (type << 28) + amnt;
-                    GT_Proxy.chunkData.remove(tPos);
-                    GT_Proxy.chunkData.put(tPos, tInts);
-                }
-                return getUndergroundOilFromInfo(type,amnt);//return negative amounts? if u extract too much
-            }
-            GT_Proxy.chunkData.remove(tPos);//remove broken
-        }
-        return setUndergroundOil(aWorld,aX,aZ,tPos,tInts);//will save if empty
-    }
-
-    private static FluidStack getUndergroundOilFromInfo(int type,int amnt){
-        switch (type) {//0 is old system
-            case 1:
-                return new FluidStack(Materials.OilLight .mFluid,amnt);
-            case 2:
-                return new FluidStack(Materials.OilMedium.mFluid,amnt);
-            case 3:
-                return new FluidStack(Materials.OilHeavy .mFluid,amnt);
-            case 4:
-                return new FluidStack(Materials.Oil      .mFluid,amnt);
-        }
-        return new         FluidStack(Materials.NatruralGas.mGas,amnt);//5
-    }
-
-    private static FluidStack setUndergroundOil(World aWorld, int aX, int aZ,ChunkPosition tPos,int[] tInts) {
-        XSTR tRandom = new XSTR(aWorld.getSeed() ^ ((long)(aX / 6) + (long)(7000 * (aZ / 6))));
-        int type=tRandom.nextInt(5);//type slowly changes
-        int amnt = (int)(Math.ceil(Math.pow(2D+(double)(tRandom.nextInt(48))+(new XSTR()).nextDouble(),8D)/200000D));
-            //roughly uses 28 bits
-        FluidStack tFluidStack;
-        switch (type) {//0 is old system
-            case 1:
-                tFluidStack=new FluidStack(Materials.OilLight .mFluid,amnt);
-                break;
-            case 2:
-                tFluidStack=new FluidStack(Materials.OilMedium.mFluid,amnt);
-                break;
-            case 3:
-                tFluidStack=new FluidStack(Materials.OilHeavy .mFluid,amnt);
-                break;
-            case 4:
-                tFluidStack=new FluidStack(Materials.Oil      .mFluid,amnt);
-                break;
-            default://case 0; -> 5
-                type=5;//important, 0 is invalid !
-                tFluidStack=new FluidStack(Materials.NatruralGas.mGas,amnt);//5
-        }
-
-        tInts[0]=(type<<28)+amnt;//here since the switch changes type
-        //tInts[2]|=0x01;
-        GT_Proxy.chunkData.put(tPos, tInts);
-        return tFluidStack;
+	
+    public static int getScaleCoordinates(double aValue, int aScale) {
+    	return (int)Math.floor(aValue / aScale);
     }
 
     public static int getCoordinateScan(ArrayList<String> aList, EntityPlayer aPlayer, World aWorld, int aScanLevel, int aX, int aY, int aZ, int aSide, float aClickX, float aClickY, float aClickZ) {
@@ -1813,23 +1760,24 @@ public class GT_Utility {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
         }
-        if (aPlayer.capabilities.isCreativeMode) {
-            FluidStack tFluid = undergroundOil(aWorld, aX>>4, aZ>>4,false,0);
-            tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
+        if (aPlayer.capabilities.isCreativeMode && GT_Values.D1) {
+            FluidStack tFluid = undergroundOil(aWorld.getChunkFromBlockCoords(aX,aZ),-1);//-# to only read
+            if (tFluid!=null)
+            	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
+            else
+                tList.add(EnumChatFormatting.GOLD+"Nothing"+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ '0' +EnumChatFormatting.RESET+" L");
         }
-//        if(aPlayer.capabilities.isCreativeMode){
-        	ChunkPosition tPos = new ChunkPosition(aX>>4, 1, aZ>>4);
-        	if(GT_Proxy.chunkData.containsKey(tPos)){
-        		int[] tPollution = GT_Proxy.chunkData.get(tPos);
-        		if(tPollution.length>1 && tPollution[1]>0){
-        		    tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+tPollution[1]+EnumChatFormatting.RESET+" gibbl");
-        		}else{
-        			tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
-        		}
-        	}else{
+//      if(aPlayer.capabilities.isCreativeMode){
+        int[] chunkData = GT_Proxy.dimensionWiseChunkData.get(aWorld.provider.dimensionId).get(aWorld.getChunkFromBlockCoords(aX,aZ).getChunkCoordIntPair());
+        if(chunkData !=null){
+            if(chunkData[GTPOLLUTION]>0){
+                tList.add("Pollution in Chunk: "+EnumChatFormatting.RED+chunkData[GTPOLLUTION]+EnumChatFormatting.RESET+" gibbl");
+            }else{
                 tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
             }
-//        }
+        }else{
+            tList.add(EnumChatFormatting.GREEN+"No Pollution in Chunk! HAYO!"+EnumChatFormatting.RESET);
+        }
 
         try {
             if (tBlock instanceof IDebugableBlock) {
@@ -1985,6 +1933,10 @@ public class GT_Utility {
         return result;
     }
 
+    public static ItemStack getIntegratedCircuit(int config){
+    	return ItemList.Circuit_Integrated.getWithDamage(0, config, new Object[0]);
+    }
+    
     public static class ItemNBT {
         public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
             if (aNBT == null) {
@@ -2071,7 +2023,9 @@ public class GT_Utility {
             tNBT.setString("prospection", tData);
             setNBT(aStack, tNBT);
         }
-
+		
+		
+		
         public static void setAdvancedProspectionData(
                 byte aTier,
                 ItemStack aStack,

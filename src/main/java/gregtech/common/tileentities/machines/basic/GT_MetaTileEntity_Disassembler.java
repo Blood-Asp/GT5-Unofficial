@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.basic;
 
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -8,6 +9,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,12 +23,26 @@ public class GT_MetaTileEntity_Disassembler
         super(aName, aTier, 1, aDescription, aTextures, 1, 9, aGUIName, aNEIName);
     }
 
+    public GT_MetaTileEntity_Disassembler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
+        super(aName, aTier, 1, aDescription, aTextures, 1, 9, aGUIName, aNEIName);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Disassembler(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_Disassembler(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public int checkRecipe() {
         if ((getInputAt(0) != null) && (isOutputEmpty())) {
+        	if(GT_Utility.areStacksEqual(getInputAt(0), new ItemStack(Items.egg))){
+        		getInputAt(0).stackSize -= 1;
+                this.mEUt = (16 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+                this.mMaxProgresstime = 2400;
+                this.mMaxProgresstime = this.mMaxProgresstime >> (mTier);
+                if (getBaseMetaTileEntity().getRandomNumber(100) < (this.mTier+1)) {
+                    this.mOutputItems[0] = ItemList.Circuit_Chip_Stemcell.get(1, new Object[0]);
+                    }
+        		return 2;
+        	}
             NBTTagCompound tNBT = getInputAt(0).getTagCompound();
             if (tNBT != null) {
                 tNBT = tNBT.getCompoundTag("GT.CraftingComponents");
@@ -87,6 +103,6 @@ public class GT_MetaTileEntity_Disassembler
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getTagCompound() != null) && (aStack.getTagCompound().getCompoundTag("GT.CraftingComponents") != null);
+        return (aIndex == 4 && GT_Utility.areStacksEqual(aStack, new ItemStack(Items.egg))) || (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getTagCompound() != null) && (aStack.getTagCompound().getCompoundTag("GT.CraftingComponents") != null);
     }
 }

@@ -46,7 +46,7 @@ public class GT_MetaTileEntity_DistillationTower
                 "1x Output Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Clean Stainless Steel Casings for the rest (36 at least!)"};
+                "Clean Stainless Steel Machine Casings for the rest (36 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -90,7 +90,7 @@ public class GT_MetaTileEntity_DistillationTower
 
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(0, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tFluidList.size()]), 0, tFluidList.size());
+        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
         if (tFluids.length > 0) {
         	for(int i = 0;i<tFluids.length;i++){
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
@@ -190,9 +190,6 @@ public class GT_MetaTileEntity_DistillationTower
         return 0;
     }
 
-    public int getAmountOfOutputs() {
-        return 1;
-    }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;

@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         return new String[]{
                 "Controller Block for the Large Steam Turbine",
                 "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Input Hatch (Side centered)",
+                "1x Steam Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
                 "1x Dynamo Hatch (Back centered)",
                 "Turbine Casings for the rest (24 at least!)",
@@ -62,7 +62,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
 
     @Override
     public byte getCasingTextureIndex() {
-        return 46;
+        return 16;
     }
 
     @Override
@@ -88,7 +88,6 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         storedFluid=0;
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) { // loop through each hatch; extract inputs and track totals.
             String fluidName = aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i));
-
             if (fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name")) {
                 flow = Math.min(aFluids.get(i).amount, remainingFlow); // try to use up w/o exceeding remainingFlow
                 depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
@@ -96,10 +95,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                 totalFlow += flow; // track total input used
                 if (!achievement) {
-                    try {
-                        GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
-                    } catch (Exception e) {
-                    }
+                    GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
                     achievement = true;
                 }
             }else if(fluidName.equals("ic2.fluidSuperheatedSteam")){

@@ -1,6 +1,7 @@
 package gregtech.api.items;
 
 
+import gregtech.api.GregTech_API;
 import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import ic2.core.IC2Potion;
@@ -144,7 +145,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     public void onUpdate(ItemStack stack, World world, Entity entity, int slotIndex, boolean isCurrentItem) {
         if (this.sRadiation > 0 && (entity instanceof EntityLivingBase)) {
             EntityLivingBase entityLiving = (EntityLivingBase) entity;
-            if (!ItemArmorHazmat.hasCompleteHazmat(entityLiving)) {
+            if (!GregTech_API.mIC2Classic&&!ItemArmorHazmat.hasCompleteHazmat(entityLiving)) {
                 IC2Potion.radiation.applyTo(entityLiving, sRadiation * 20, sRadiation * 10);
             }
         }

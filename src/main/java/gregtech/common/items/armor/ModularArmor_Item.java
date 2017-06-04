@@ -8,6 +8,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enums.GT_Values;
+import gregtech.common.items.armor.components.StatType;
+import gregtech.common.items.armor.gui.ContainerBasicArmor;
+import gregtech.common.items.armor.gui.ContainerModularArmor;
+import gregtech.common.items.armor.gui.InventoryArmor;
 import ic2.core.IC2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -45,6 +49,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 	public int openGuiNr;
 	public ArmorData data;
 	public int jumpticks;
+	public int fail = 0;
 
 	// public int maxEU;
 
@@ -78,26 +83,27 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			data = fillArmorData((EntityPlayer) player, armor);
 		}
 		if (player != null && armor != null && source != null) {
+			try{
 			double tmp = 0.0d;
 			if (source.isMagicDamage()) {
-				tmp = data.magicDef;
+				tmp = data.mStat.get(StatType.MAGICDEFENCE);
 			} else if (source == GT_DamageSources.getRadioactiveDamage()) {
-				tmp = data.radiationDef;
+				tmp = data.mStat.get(StatType.RADIATIONDEFENCE);
 			} else if (source == GT_DamageSources.getElectricDamage()) {
-				tmp = data.electricDef;
+				tmp = data.mStat.get(StatType.ELECTRICALDEFENCE);
 			} else if (source == DamageSource.wither) {
-				tmp = data.witherDef;
+				tmp = data.mStat.get(StatType.WITHERDEFENCE);
 			} else if (source.isFireDamage() || source == GT_DamageSources.getHeatDamage()) {
-				tmp = data.fireDef;
+				tmp = data.mStat.get(StatType.FIREDEFENCE);
 			} else if (source.isExplosion()) {
-				tmp = data.explosionDef;
+				tmp = data.mStat.get(StatType.EXPLOSIONDEFENCE);
 			} else if (source.isProjectile()) {
-				tmp = data.projectileDef;
+				tmp = data.mStat.get(StatType.PROJECTILEDEFENCE);
 			} else {
-				tmp = data.physicalDef;
+				tmp = data.mStat.get(StatType.PHYSICALDEFENCE);
 			}
-			if (data.thorns > 0.1d && source != DamageSource.fall && source.getSourceOfDamage() != null) {
-				source.getSourceOfDamage().attackEntityFrom(new DamageSource("Thorns"), data.thorns);
+			if (data.mStat.get(StatType.THORNS) > 0.1d && source != DamageSource.fall && source.getSourceOfDamage() != null) {
+				source.getSourceOfDamage().attackEntityFrom(new DamageSource("Thorns"), data.mStat.get(StatType.THORNS));
 			}
 
 			// fallDamage
@@ -105,17 +111,20 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				int fallDef = 0;
 				ItemStack stack = player.getEquipmentInSlot(1);
 				if (stack != null && stack.getItem() instanceof ModularArmor_Item) {
-					fallDef = (int) data.boots.fallDef;
+					fallDef =  Math.round(data.boots.mStat.get(StatType.FALLDEFENCE));
 				}
 				tmp = 1.0d - (fallDef > damage ? 0.0d : (1.0d - tmp) * 0.5d);
 			}
 			if (tmp == 0.0d) {
-				tmp = data.physicalDef;
+				tmp = data.mStat.get(StatType.PHYSICALDEFENCE);
 			}
 			if (openGuiNr == 2) {
 				tmp = 1.0f - ((1.0f - tmp) / 2.0f);
 			}
 			return new ISpecialArmor.ArmorProperties(0, data.getBaseAbsorptionRatio() * tmp, 1000);
+			}catch(Exception e){System.err.println(e);
+			return new ISpecialArmor.ArmorProperties(0, 0, 0);
+			}
 
 		} else {
 			return new ISpecialArmor.ArmorProperties(0, 0, 0);
@@ -127,7 +136,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 		if (data == null) {
 			data = fillArmorData(player, armor);
 		}
-		int tmp = (int) -Math.floor(-(data.getBaseAbsorptionRatio() * 20 * data.physicalDef));
+		int tmp = (int) -Math.floor(-(data.getBaseAbsorptionRatio() * 20 * data.mStat.get(StatType.PHYSICALDEFENCE)));
 
 		return tmp;
 	}
@@ -173,16 +182,21 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer() && event.entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.entity;
 			ItemStack armor = player.inventory.armorInventory[0];
-			if (data != null && event != null && data.type == 3 && data.charge >= data.pistonEUusage && event.distance - 3 <= data.fallDef) {
+			if (data != null && event != null && data.type == 3 && data.charge >= data.mStat.get(StatType.PISTONEUUSAGE) && event.distance - 3 <= data.mStat.get(StatType.FALLDEFENCE)) {
 				event.setCanceled(true);
-			} else if (data != null && event != null && data.type == 3 && data.charge >= data.pistonEUusage) {
-				event.distance -= data.fallDef;
+			} else if (data != null && event != null && data.type == 3 && data.charge >= data.mStat.get(StatType.PISTONEUUSAGE)) {
+				event.distance -= data.mStat.get(StatType.FALLDEFENCE);
 			}
 		}
 	}
 
 	@Override
 	public void onArmorTick(World aWorld, EntityPlayer aPlayer, ItemStack aStack) {
+		if(fail>0){
+			fail--;
+			return;
+		}
+		try{
 		if (data == null) {
 			data = fillArmorData(aPlayer, aStack);
 		}
@@ -200,8 +214,8 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 		}
 
 		// Breathing
-		if (data.type == 0 && aPlayer.getAir() < 100) {
-			int air = 0;
+		if (data.type == 0 && aPlayer.getAir() < 100 && data.fluid != null) {
+			int air = 0;			
 			if (data.fluid.getUnlocalizedName().equals("fluid.oxygen") && data.fluid.amount >= 150) {
 				aPlayer.setAir(aPlayer.getAir() + 150);
 				air = 150;
@@ -220,14 +234,14 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			}
 		}
 		// Fill Air Tank
-		if (data.tooltipUpdate == 40 && data.processingPower > data.processingPowerUsed && data.type == 0 && data.fluid != null
-				&& data.fluid.getUnlocalizedName().equals("oxygen") && data.fluid.amount < data.tankCap && data.charge > data.electrolyzerEUusage) {
-			data.charge -= data.electrolyzerEUusage;
+		if (data.tooltipUpdate == 40 && data.mStat.get(StatType.PROCESSINGPOWER) > data.mStat.get(StatType.PROCESSINGPOWERUSED) && data.type == 0 && data.fluid != null
+				&& data.fluid.getUnlocalizedName().equals("oxygen") && data.fluid.amount < data.mStat.get(StatType.TANKCAP) && data.charge > data.mStat.get(StatType.ELECTROLYZEREUUSAGE)) {
+			data.charge -= data.mStat.get(StatType.ELECTROLYZEREUUSAGE);
 			ItemStack stack = aPlayer.getEquipmentInSlot(4);
 			if (stack != null && stack.getItem() instanceof ModularArmor_Item) {
 				ModularArmor_Item tmp = (ModularArmor_Item) stack.getItem();
 				ContainerModularArmor tmp2 = new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, stack));
-				ArmorCalculation.useFluid(tmp2.mInvArmor.parts, -data.electrolyzerProd);
+				ArmorCalculation.useFluid(tmp2.mInvArmor.parts, -Math.round(data.mStat.get(StatType.ELECTROLYZERPROD)));
 			}
 		}
 
@@ -250,14 +264,14 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 				}
 					aPlayer.openGui(GT_Values.GT, openGuiNr+(typeMod), aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);
 			}
-			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
-			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.helmet!=null&&data.helmet.openGui){data.helmet.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+400, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.chestplate!=null&&data.chestplate.openGui){data.chestplate.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+300, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.leggings!=null&&data.leggings.openGui){data.leggings.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+200, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
+//			if(data.boots!=null&&data.boots.openGui){data.boots.openGui=false;aPlayer.openGui(GT_Values.GT, openGuiNr+100, aWorld, (int) aPlayer.posX, (int) aPlayer.posY, (int) aPlayer.posZ);}
 			// Night Vision
 			if (timer >= 200) {
 				timer = 0;
-				if (data.processingPower > data.processingPowerUsed && data.helmet != null && data.helmet.nightVision && data.charge > 3) {
+				if (data.mStat.get(StatType.PROCESSINGPOWER) > data.mStat.get(StatType.PROCESSINGPOWERUSED) && data.helmet != null && data.helmet.mBStat.get(StatType.NIGHTVISION) && data.charge > 3) {
 					aPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), 500, -3));
 					data.charge -= 4;
 				} else {
@@ -275,12 +289,13 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			}
 
 			// Item Magnet
-			if (data.magnet > 1) {
+			if (data.mStat.get(StatType.MAGNET) > 1) {
 				double x = aPlayer.posX;
 				double y = aPlayer.posY - (aPlayer.worldObj.isRemote ? 1.62 : 0) + 0.75;
 				double z = aPlayer.posZ;
+				int tMagnet = Math.round(data.mStat.get(StatType.MAGNET));
 				List<EntityItem> items = aPlayer.worldObj.getEntitiesWithinAABB(EntityItem.class,
-						AxisAlignedBB.getBoundingBox(x - data.magnet, y - data.magnet, z - data.magnet, x + data.magnet, y + data.magnet, z + data.magnet));
+						AxisAlignedBB.getBoundingBox(x - tMagnet, y - tMagnet, z - tMagnet, x + tMagnet, y + tMagnet, z + tMagnet));
 				for (EntityItem item : items) {
 					ItemStack stack = item.getEntityItem();
 					if (!item.isDead && stack != null) {
@@ -291,21 +306,21 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			// Weight limit calcuation
 			double motorSpeed = 0;
 			if (data.leggings != null) {
-				motorSpeed = data.leggings.motorPower;
+				motorSpeed = data.leggings.mStat.get(StatType.MOTPRPOWER);
 			}
 			if (data.maxWeight > 4000) {
-				if (data.leggings != null && data.leggings.charge > data.leggings.motorEUusage) {
+				if (data.leggings != null && data.leggings.charge > data.leggings.mStat.get(StatType.MOTOREUUSAGE)) {
 					motorSpeed -= data.maxWeight - 4000;
-					data.leggings.charge -= (data.leggings.motorEUusage / 100);
+					data.leggings.charge -= (data.leggings.mStat.get(StatType.MOTOREUUSAGE) / 100);
 				} else {
 					aPlayer.motionX *= (4000.0d / data.maxWeight);
 					aPlayer.motionZ *= (4000.0d / data.maxWeight);
 				}
 			}
-			if (data.leggings != null && data.leggings.charge > data.leggings.motorEUusage && data.processingPower > data.processingPowerUsed && motorSpeed > 0
+			if (data.leggings != null && data.leggings.charge > data.leggings.mStat.get(StatType.MOTOREUUSAGE) && data.mStat.get(StatType.PROCESSINGPOWER) > data.mStat.get(StatType.PROCESSINGPOWERUSED) && motorSpeed > 0
 					&& aPlayer.isSprinting() && jumpticks > 0
 					&& (aPlayer.onGround && Math.abs(aPlayer.motionX) + Math.abs(aPlayer.motionZ) > 0.10000000149011612D)) {
-				data.leggings.charge -= data.leggings.motorEUusage;
+				data.leggings.charge -= data.leggings.mStat.get(StatType.MOTOREUUSAGE);
 				motorSpeed = Math.sqrt(motorSpeed) / 3;
 
 				float var7 = (float) (0.02f * motorSpeed);
@@ -322,12 +337,12 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			}
 
 			// jump+step up assist
-			if (data.processingPower > data.processingPowerUsed && data.leggings != null) {
-				double stepup = data.leggings.pistonJumpboost;
+			if (data.mStat.get(StatType.PROCESSINGPOWER) > data.mStat.get(StatType.PROCESSINGPOWERUSED) && data.leggings != null) {
+				double stepup = data.leggings.mStat.get(StatType.PISTONJUMPBOOST);
 				if (stepup > 1) {
 					aPlayer.stepHeight = 1.0f;
 				}
-				if (GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump)) {
+				if (aWorld.isRemote && GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindJump)) {
 					if (stepup > 0 && jumpticks > 0) {
 						if (data.maxWeight > 2000) {
 							stepup *= 2000.0D / data.maxWeight;
@@ -343,10 +358,13 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 			List<PotionEffect> effects = new LinkedList(aPlayer.getActivePotionEffects());
 			for (PotionEffect effect : effects) {
 				int id = effect.getPotionID();
-				if (id == 24 && data.fullRadiationDef) {
+				if (id == 24 && data.mBStat.get(StatType.FULLRADIATIONARMOR)) {
 					aPlayer.removePotionEffect(id);
 				}
 			}
+		}
+		}catch(Exception e){System.err.print(e);
+			fail = 200;
 		}
 	}
 
@@ -409,7 +427,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 		if (data == null) {
 			data = fillArmorData((EntityPlayer) aPlayer, aStack);
 		}
-		return data.thaumicGoggles && data.armorTier > 0 && data.charge > 0;
+		return data.mBStat.get(StatType.THAUMICGOGGLES) && data.armorTier > 0 && data.charge > 0;
 	}
 
 	@Override
@@ -417,7 +435,7 @@ public class ModularArmor_Item extends ItemArmor implements ISpecialArmor, IGogg
 		if (data == null) {
 			data = fillArmorData((EntityPlayer) aPlayer, aStack);
 		}
-		return data.thaumicGoggles && data.armorTier > 0 && data.charge > 0;
+		return data.mBStat.get(StatType.THAUMICGOGGLES) && data.armorTier > 0 && data.charge > 0;
 	}
 
 	public ArmorData fillArmorData(EntityPlayer player, ItemStack stack) {

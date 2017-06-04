@@ -10,7 +10,6 @@ import gregtech.api.objects.XSTR;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -23,9 +22,17 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
+    }
+
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "DO NOT OBSTRUCT THE OUTPUT!","Reduces Pollution to "+calculatePollutionReduction(100)+"%"};
+        String[] desc = new String[mDescriptionArray.length + 2];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        desc[mDescriptionArray.length] = "DO NOT OBSTRUCT THE OUTPUT!";
+        desc[mDescriptionArray.length + 1] = "Reduces Pollution to " + calculatePollutionReduction(100) + "%";
+        return desc;
     }
 
     @Override
@@ -60,19 +67,19 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
     }
 
     public boolean polluteEnvironment() {
-    	if(getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())){
-    		GT_Pollution.addPollution(new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), calculatePollutionReduction(10000));
-    		return true;
-    		}
+        if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
+            return true;
+        }
         return false;
     }
     
     public int calculatePollutionReduction(int aPollution){
-    	return (int) (aPollution *(Math.pow(0.85F, mTier-1)));
+    	return (int) (aPollution *(Math.pow(0.85F, mTier - 1)));
     }
 
     @Override
@@ -98,7 +105,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         boolean chk1,chk2,chk3;
         float ran1=floatGen.nextFloat(),ran2=0,ran3=0;
         chk1=ran1*100<calculatePollutionReduction(100);
-        if(GT_Pollution.getPollutionAtCoords(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getZCoord())>= GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        if(GT_Pollution.getPollution(getBaseMetaTileEntity())>= GT_Mod.gregtechproxy.mPollutionSmogLimit){
             ran2=floatGen.nextFloat();
             ran3=floatGen.nextFloat();
             chk2=ran2*100<calculatePollutionReduction(100);

@@ -29,7 +29,7 @@ import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
-    public ArrayList<ChunkPosition> mPumpList = new ArrayList();
+    public ArrayList<ChunkPosition> mPumpList = new ArrayList<ChunkPosition>();
     public int mPumpTimer = 0;
     public int mPumpCountBelow = 0;
     public Block mPumpedBlock1 = null;
@@ -43,9 +43,13 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Pump(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public void saveNBTData(NBTTagCompound aNBT) {

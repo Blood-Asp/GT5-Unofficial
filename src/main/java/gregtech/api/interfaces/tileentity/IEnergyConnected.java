@@ -8,7 +8,6 @@ import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -108,7 +107,7 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                 tWorld.setBlock(tX, tY, tZ, Blocks.air);
                                 if (GregTech_API.sMachineExplosions)
                                     if(GT_Mod.gregtechproxy.mPollution)
-                                        GT_Pollution.addPollution(new ChunkPosition(tX, tY, tZ), 100000);
+                                        GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX,tZ), 100000);
                                     tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
                             }
                         }

@@ -36,11 +36,12 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         return new String[]{
                 "Controller Block for the Large High Pressure Steam Turbine",
                 "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Input Hatch (Side centered)",
+                "1x Superheated Steam Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
                 "1x Dynamo Hatch (Back centered)",
                 "Titanium Turbine Casings for the rest (24 at least!)",
-                "Needs a Turbine Item (Inside controller GUI)"};
+                "Needs a Turbine Item (Inside controller GUI)",
+                "Output depending on Rotor: 120-6720EU/t"};
     }
 
     @Override

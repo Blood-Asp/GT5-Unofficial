@@ -10,6 +10,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -17,10 +18,18 @@ import net.minecraftforge.fluids.IFluidHandler;
 public class GT_MetaTileEntity_Boiler_Solar
         extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Solar(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional, "Steam Power by the Sun", new ITexture[0]);
+        super(aID, aName, aNameRegional, new String[]{
+                "Steam Power by the Sun",
+                "Produces 120L of Steam per second",
+                "Calcifies over time, reducing Steam output to 40L/s",
+                "Break and replace to decalcify"});
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
     }
 
@@ -56,7 +65,21 @@ public class GT_MetaTileEntity_Boiler_Solar
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
+    }
+    
+    private int mRunTime = 0;
+    
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("mRunTime", this.mRunTime);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        this.mRunTime = aNBT.getInteger("mRunTime");
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -92,12 +115,17 @@ public class GT_MetaTileEntity_Boiler_Solar
                             return;
                         }
                         this.mFluid.amount -= 1;
+                        mRunTime += 1;
+                        int tOutput = 150;
+                        if (mRunTime > 10000) {
+                            tOutput = Math.max(50, 150 - ((mRunTime - 10000) / 100));
+                        }
                         if (this.mSteam == null) {
-                            this.mSteam = GT_ModHandler.getSteam(150L);
+                            this.mSteam = GT_ModHandler.getSteam(tOutput);
                         } else if (GT_ModHandler.isSteam(this.mSteam)) {
-                            this.mSteam.amount += 150;
+                            this.mSteam.amount += tOutput;
                         } else {
-                            this.mSteam = GT_ModHandler.getSteam(150L);
+                            this.mSteam = GT_ModHandler.getSteam(tOutput);
                         }
                     }
                 } else {
@@ -121,5 +149,3 @@ public class GT_MetaTileEntity_Boiler_Solar
         }
     }
 }
-
-

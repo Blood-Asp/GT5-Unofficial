@@ -68,8 +68,9 @@ public class GregTech_API {
     /**
      * A List of all registered MetaTileEntities
      * <p/>
-     * 0 -  1199 are used by GregTech.
-     * 1200 -  2047 are used for GregTech Cables.
+     * 0 	-  749  are used by GregTech.
+     * 750	-  999  are reserved for Alkalus.
+     * 1000 -  2047 are used by GregTech.
      * 2048 -  2559 are reserved for OvermindDL.
      * 2560 -  3071 are reserved for Immibis.
      * 3072 -  3583 are reserved for LinusPhoenix.
@@ -170,7 +171,7 @@ public class GregTech_API {
     /**
      * The Configuration Objects
      */
-    public static GT_Config sRecipeFile = null, sMachineFile = null, sWorldgenFile = null, sMaterialProperties = null, sUnification = null, sSpecialFile = null, sClientDataFile, sOPStuff = null;
+    public static GT_Config sRecipeFile = null, sMachineFile = null, sWorldgenFile = null, sModularArmor = null, sMaterialProperties = null, sMaterialComponents = null, sUnification = null, sSpecialFile = null, sClientDataFile, sOPStuff = null;
     public static int TICKS_FOR_LAG_AVERAGING = 25, MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
     /**
      * Initialized by the Block creation.
@@ -191,6 +192,13 @@ public class GregTech_API {
     public static int mRFtoEU = 20;
     public static boolean mRFExplosions = true;
     public static boolean mServerStarted = false;
+    public static boolean mIC2Classic = false;
+    public static boolean mMagneticraft = false;
+    public static boolean mImmersiveEngineering = false;
+    public static boolean mGTPlusPlus = false;
+
+    public static boolean mUseOnlyGoodSolderingMaterials = false;
+
     private static final String aTextIC2Lower = MOD_ID_IC2.toLowerCase(Locale.ENGLISH);
     /**
      * Getting assigned by the Mod loading

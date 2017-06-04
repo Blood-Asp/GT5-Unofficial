@@ -41,7 +41,8 @@ public class GT_MetaTileEntity_ImplosionCompressor
                 "1x Maintenance Hatch (Any casing)",
                 "1x Muffler Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Solid Steel Casings for the rest (16 at least!)"};
+                "Solid Steel Machine Casings for the rest (16 at least!)",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -82,7 +83,7 @@ public class GT_MetaTileEntity_ImplosionCompressor
                 }
             }
         }
-        ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
+        ItemStack[] tInputs = tInputList.toArray(new ItemStack[tInputList.size()]);
         if (tInputList.size() > 0) {
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sImplosionRecipes.findRecipe(getBaseMetaTileEntity(), false, 9223372036854775807L, null, tInputs);
             if ((tRecipe != null) && (tRecipe.isRecipeInputEqual(true, null, tInputs))) {
@@ -144,15 +145,11 @@ public class GT_MetaTileEntity_ImplosionCompressor
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 1000;
+        return 500;
     }
 
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    public int getAmountOfOutputs() {
-        return 2;
     }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {

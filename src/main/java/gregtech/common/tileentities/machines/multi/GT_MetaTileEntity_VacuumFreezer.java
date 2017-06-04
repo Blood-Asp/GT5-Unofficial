@@ -39,7 +39,7 @@ public class GT_MetaTileEntity_VacuumFreezer
                 "1x Output Bus (Any casing)",
                 "1x Maintenance Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
-                "Frost Proof Casings for the rest (16 at least!)"};
+                "Frost Proof Machine Casings for the rest (16 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -132,10 +132,6 @@ public class GT_MetaTileEntity_VacuumFreezer
 
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    public int getAmountOfOutputs() {
-        return 1;
     }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {

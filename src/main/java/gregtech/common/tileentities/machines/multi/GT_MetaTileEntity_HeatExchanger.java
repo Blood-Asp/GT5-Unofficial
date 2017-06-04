@@ -16,16 +16,19 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBlockBase {
+    public static float penalty_per_config = 0.015f;  // penalize 1.5% efficiency per circuitry level (1-25)
 
     private static boolean controller;
-    public GT_MetaTileEntity_Hatch_Input mInputHotFluidHatch;
-    public GT_MetaTileEntity_Hatch_Output mOutputColdFluidHatch;
-    public boolean superheated = false;
+    private GT_MetaTileEntity_Hatch_Input mInputHotFluidHatch;
+    private GT_MetaTileEntity_Hatch_Output mOutputColdFluidHatch;
+    private boolean superheated = false;
+    private int superheated_threshold=0;
     private float water;
 
     public GT_MetaTileEntity_HeatExchanger(int aID, String aName, String aNameRegional) {
@@ -39,10 +42,10 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         return new String[]{
                 "Controller Block for the Heat Exchanger",
                 "Size(WxHxD): 3x4x3, Controller (Front middle at bottom)",
-                "3x3x4 of Stable Titanium Casing (hollow, Min 24!)",
-                "2 Titanium Pipe Casing Blocks (Inside the Hollow Casing)",
+                "3x3x4 of Stable Titanium Machine Casings (hollow, Min 20!)",
+                "2x Titanium Pipe Casing (Inside the Hollow Machine Casings)",
                 "1x Distillated Water Input (Any casing)",
-                "min 1 Steam Output (Any casing)",
+                "1x Steam Output (Any casing)",
                 "1x Hot Fluid Input (Bottom center)",
                 "1x Cold Fluid Output (Top Center)",
                 "1x Maintenance Hatch (Any casing)"};
@@ -85,11 +88,10 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
 
         int fluidAmountToConsume = mInputHotFluidHatch.getFluidAmount(); // how much fluid is in hatch
 
-        int superheated_threshold = 4000;   // default: must have 4000L per second to generate superheated steam
+        superheated_threshold = 4000;   // default: must have 4000L per second to generate superheated steam
         float efficiency = 1f;              // default: operate at 100% efficiency with no integrated circuitry
-        float penalty_per_config = 0.015f;  // penalize 1.5% efficiency per circuitry level (1-25)
         int shs_reduction_per_config = 150; // reduce threshold 150L/s per circuitry level (1-25)
-        float steam_output_multiplier = 4f; // default: multiply output by 4
+        float steam_output_multiplier = 20f; // default: multiply output by 4 * 10 (boosted x5)
         float penalty = 0.0f;               // penalty to apply to output based on circuitry level (1-25).
         boolean do_lava = false;
 
@@ -106,12 +108,15 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
 
         // If we're working with lava, adjust the threshold and multipliers accordingly.
         if (GT_ModHandler.isLava(mInputHotFluidHatch.getFluid())) {
-            superheated_threshold /= 4;
+            steam_output_multiplier /= 5f; // lava is not boosted
+            superheated_threshold /= 4f; // unchanged
             do_lava = true;
         } else if (mInputHotFluidHatch.getFluid().isFluidEqual(FluidRegistry.getFluidStack("ic2hotcoolant", 1))) {
-            steam_output_multiplier = 2f;
+            //steam_output_multiplier /= 2f; // boosted x2 on top of x5 -> total x10
+            superheated_threshold /=10f; // 10x smaller since the Hot Things production in reactor is the same.
         } else {
             // If we're working with neither, fail out
+            superheated_threshold=0;
             return false;
         }
 
@@ -133,7 +138,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     private int useWater(float input) {
         water = water + input;
         int usage = (int) water;
-        water = water - (int) usage;
+        water = water - usage;
         return usage;
     }
 
@@ -170,13 +175,15 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
         int tCasingAmount = 0;
-        int tFireboxAmount = 0;
         controller = false;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if ((i != 0) || (j != 0)) {
                     for (int k = 0; k <= 3; k++) {
-                        if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) && !addInputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) && !addMaintenanceToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) && !ignoreController(aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j))) {
+                        if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
+                                !addInputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
+                                !addMaintenanceToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
+                                !ignoreController(aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j))) {
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j) != getCasingBlock()) {
                                 return false;
                             }
@@ -209,7 +216,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
                 }
             }
         }
-        return (tCasingAmount >= 24);
+        return tCasingAmount >= 20;
     }
 
     public boolean ignoreController(Block tTileEntity) {
@@ -275,16 +282,33 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
-
-    public int getAmountOfOutputs() {
-        return 1;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_HeatExchanger(this.mName);
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return super.isGivingInformation();
+    }
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                "Progress:",
+                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
+                        EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
+                "Probably uses (in steam): "+
+                        EnumChatFormatting.RED + Integer.toString(-mEUt) + EnumChatFormatting.RESET + " EU/t",
+                "Problems: "+
+                        EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
+                        " Efficiency: "+
+                        EnumChatFormatting.YELLOW+Float.toString(mEfficiency / 100.0F)+EnumChatFormatting.RESET + " %",
+                "Super Heated: "+ (superheated?EnumChatFormatting.RED:EnumChatFormatting.BLUE) + superheated + EnumChatFormatting.RESET,
+                "Super Heated Threshold: "+ EnumChatFormatting.GREEN + superheated_threshold + EnumChatFormatting.RESET
+        };
     }
 }
