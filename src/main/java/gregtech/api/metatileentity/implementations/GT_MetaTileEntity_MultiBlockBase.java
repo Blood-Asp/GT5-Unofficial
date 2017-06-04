@@ -641,11 +641,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public ArrayList<ItemStack> getStoredOutputs() {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
-        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(1));
-            }
-        }
+//        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
+//            if (isValidMetaTileEntity(tHatch)) {
+//                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(1));
+//            }
+//        }
         for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
             if (isValidMetaTileEntity(tHatch)) {
                 for (int i = tHatch.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
@@ -669,12 +669,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public ArrayList<ItemStack> getStoredInputs() {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
-        for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
-            tHatch.mRecipeMap = getRecipeMap();
-            if (isValidMetaTileEntity(tHatch) && tHatch.getBaseMetaTileEntity().getStackInSlot(0) != null) {
-                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(0));
-            }
-        }
+//        for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
+//            tHatch.mRecipeMap = getRecipeMap();
+//            if (isValidMetaTileEntity(tHatch) && tHatch.getBaseMetaTileEntity().getStackInSlot(0) != null) {
+//                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(0));
+//            }
+//        }
         for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch)) {
