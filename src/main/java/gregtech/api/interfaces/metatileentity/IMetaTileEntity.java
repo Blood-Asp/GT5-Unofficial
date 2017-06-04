@@ -379,6 +379,8 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     public void onColorChangeClient(byte aColor);
 
     public int getLightOpacity();
+    
+    public boolean allowGeneralRedstoneOutput();
 
     public void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider);
 
