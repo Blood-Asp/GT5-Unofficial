@@ -224,7 +224,6 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isUniversalEnergyStored(getMinimumStoredEU()) && (aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified() || aTimer % 200 == 0 || mSuccess > 0)) {
             mSuccess--;
             moveItems(aBaseMetaTileEntity, aTimer);
-            System.out.println("inv "+bInvert+" full "+bRedstoneIfFull);
             aBaseMetaTileEntity.setGenericRedstoneOutput(bInvert);
             if (bRedstoneIfFull) {
                 aBaseMetaTileEntity.setGenericRedstoneOutput(!bInvert);
