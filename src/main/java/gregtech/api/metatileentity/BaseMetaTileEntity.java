@@ -167,8 +167,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         } else {
             if (aID <= 0) mID = (short) aNBT.getInteger("mID");
             else mID = aID;
-            mStoredSteam = aNBT.getInteger("mStoredSteam");
-            mStoredEnergy = aNBT.getInteger("mStoredEnergy");
+            mStoredSteam = aNBT.getLong("mStoredSteam");
+            mStoredEnergy = aNBT.getLong("mStoredEnergy");
             mColor = aNBT.getByte("mColor");
             mLightValue = aNBT.getByte("mLightValue");
             mWorkData = aNBT.getByte("mWorkData");
