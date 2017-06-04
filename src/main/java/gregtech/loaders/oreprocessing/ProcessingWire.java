@@ -95,7 +95,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
                 return;
         }
 
-        int costMultiplier = cableWidth / 2 + 1;
+        int costMultiplier = cableWidth / 4 + 1;
 
 
         switch (aMaterial.mName){
@@ -108,8 +108,8 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
                 GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), craftingListRubber.toArray());
                 GT_Values.RA.addBoxingRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.plate.get(Materials.Rubber), costMultiplier),  GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
                 GT_Values.RA.addAlloySmelterRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 2L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.cableGt01, aMaterial, 1L), 100, 8);
-                GT_Values.RA.addAlloySmelterRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 4L), GT_OreDictUnificator.get(OrePrefixes.wireGt02, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.cableGt02, aMaterial, 1L), 200, 16);
-                GT_Values.RA.addAlloySmelterRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 6L), GT_OreDictUnificator.get(OrePrefixes.wireGt04, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.cableGt04, aMaterial, 1L), 300, 30);
+                GT_Values.RA.addAlloySmelterRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 2L), GT_OreDictUnificator.get(OrePrefixes.wireGt02, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.cableGt02, aMaterial, 1L), 200, 16);
+                GT_Values.RA.addAlloySmelterRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 4L), GT_OreDictUnificator.get(OrePrefixes.wireGt04, aMaterial, 1L), GT_OreDictUnificator.get(OrePrefixes.cableGt04, aMaterial, 1L), 300, 30);
             case "Iron": case "Nickel": case "Cupronickel": case "Copper": case "AnnealedCopper":
             case "Kanthal": case "Gold": case "Electrum": case "Silver": case "Blue Alloy":
                 for (Materials rubber : rubbers) {
