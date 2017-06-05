@@ -31,7 +31,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         super(aID, aName, aNameRegional, aTier, 1, "For maintaining Multiblocks");
         mAuto = false;
     }
-    
+
     public GT_MetaTileEntity_Hatch_Maintenance(int aID, String aName, String aNameRegional, int aTier, boolean aAuto) {
         super(aID, aName, aNameRegional, aTier, 4, "For automatically maintaining Multiblocks");
         mAuto = aAuto;
@@ -98,7 +98,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public boolean isValidSlot(int aIndex) {
-        return false;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 
     @Override
@@ -126,6 +126,12 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         if (mAuto) return new GT_GUIContainer_2by2(aPlayerInventory, aBaseMetaTileEntity, getLocalName());
         return new GT_GUIContainer_MaintenanceHatch(aPlayerInventory, aBaseMetaTileEntity);
     }
+
+    public void updateSlots() {
+        for (int i = 0; i < mInventory.length; i++)
+            if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
+    }
+
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -184,6 +190,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
             this.mSoftHammer = true;
             this.mSolderingTool = true;
             this.mWrench = true;
+            updateSlots();
         }
         return true;
     }
@@ -217,11 +224,11 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return false;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return false;
+        return mAuto && GT_Mod.gregtechproxy.mAMHInteraction;
     }
 }
