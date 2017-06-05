@@ -48,7 +48,7 @@ public class Behaviour_Prospecting
 
         ItemData tAssotiation = GT_OreDictUnificator.getAssociation(new ItemStack(aBlock, 1, aMeta));
         if ((tAssotiation != null) && (tAssotiation.mPrefix.toString().startsWith("ore"))) {
-            GT_Utility.sendChatToPlayer(aPlayer, "This is " + tAssotiation.mMaterial.mMaterial.mDefaultLocalName + " Ore.");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("100","This is ") + tAssotiation.mMaterial.mMaterial.mDefaultLocalName + trans("101"," Ore."));
             GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(1)), 1.0F, -1.0F, aX, aY, aZ);
             return true;
         }
@@ -69,22 +69,22 @@ public class Behaviour_Prospecting
 
                     Block tBlock = aWorld.getBlock(tX, tY, tZ);
                     if ((tBlock == Blocks.lava) || (tBlock == Blocks.flowing_lava)) {
-                        GT_Utility.sendChatToPlayer(aPlayer, "There is Lava behind this Rock.");
+                        GT_Utility.sendChatToPlayer(aPlayer, trans("102","There is Lava behind this Rock."));
                         break;
                     }
                     if ((tBlock == Blocks.water) || (tBlock == Blocks.flowing_water) || ((tBlock instanceof IFluidBlock))) {
-                        GT_Utility.sendChatToPlayer(aPlayer, "There is a Liquid behind this Rock.");
+                        GT_Utility.sendChatToPlayer(aPlayer, trans("103","There is a Liquid behind this Rock."));
                         break;
                     }
                     if ((tBlock == Blocks.monster_egg) || (!GT_Utility.hasBlockHitBox(aWorld, tX, tY, tZ))) {
-                        GT_Utility.sendChatToPlayer(aPlayer, "There is an Air Pocket behind this Rock.");
+                        GT_Utility.sendChatToPlayer(aPlayer, trans("104","There is an Air Pocket behind this Rock."));
                         break;
                     }
                     if (tBlock != aBlock) {
                         if (i >= 4) {
                             break;
                         }
-                        GT_Utility.sendChatToPlayer(aPlayer, "Material is changing behind this Rock.");
+                        GT_Utility.sendChatToPlayer(aPlayer, trans("105","Material is changing behind this Rock."));
                         break;
                     }
                 }
@@ -100,7 +100,7 @@ public class Behaviour_Prospecting
                         if ((tTileEntity instanceof GT_TileEntity_Ores)) {
                             Materials tMaterial = GregTech_API.sGeneratedMaterials[(((GT_TileEntity_Ores) tTileEntity).mMetaData % 1000)];
                             if ((tMaterial != null) && (tMaterial != Materials._NULL)) {
-                                GT_Utility.sendChatToPlayer(aPlayer, "Found traces of " + tMaterial.mDefaultLocalName + " Ore.");
+                                GT_Utility.sendChatToPlayer(aPlayer, trans("106","Found traces of ") + tMaterial.mDefaultLocalName + trans("101"," Ore."));
                                 return true;
                             }
                         }
@@ -108,12 +108,12 @@ public class Behaviour_Prospecting
                         tMetaID = aWorld.getBlockMetadata(tX, tY, tZ);
                         tAssotiation = GT_OreDictUnificator.getAssociation(new ItemStack(tBlock, 1, tMetaID));
                         if ((tAssotiation != null) && (tAssotiation.mPrefix.toString().startsWith("ore"))) {
-                            GT_Utility.sendChatToPlayer(aPlayer, "Found traces of " + tAssotiation.mMaterial.mMaterial.mDefaultLocalName + " Ore.");
+                            GT_Utility.sendChatToPlayer(aPlayer, trans("106","Found traces of ") + tAssotiation.mMaterial.mMaterial.mDefaultLocalName + trans("101"," Ore."));
                             return true;
                         }
                     }
                 }
-                GT_Utility.sendChatToPlayer(aPlayer, "No Ores found.");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("107","No Ores found."));
             }
             return true;
         }

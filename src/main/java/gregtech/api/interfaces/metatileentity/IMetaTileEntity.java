@@ -392,4 +392,8 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * The onCreated Function of the Item Class redirects here
      */
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer);
+    
+    public boolean hasAlternativeModeText();
+    
+    public String getAlternativeModeText();
 }

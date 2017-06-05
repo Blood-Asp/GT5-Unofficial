@@ -868,4 +868,18 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public boolean allowGeneralRedstoneOutput(){
     	return false;
     }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+    
+    @Override
+    public boolean hasAlternativeModeText(){
+    	return false;
+    }
+    
+    @Override
+    public String getAlternativeModeText(){
+    	return "";
+    }
 }
