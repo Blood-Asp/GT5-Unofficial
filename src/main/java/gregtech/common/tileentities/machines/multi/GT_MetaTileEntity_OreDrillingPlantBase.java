@@ -94,10 +94,12 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         setElectricityStats();
+        int oldYHead = yHead;
         if (!checkPipesAndSetYHead() || !isEnergyEnough()) {
             stopMachine();
             return false;
         }
+        if (yHead != oldYHead) oreBlockPositions.clear();
         if (isPickingPipes) {
             if (tryPickPipe()) {
                 mOutputItems = new ItemStack[] {GT_Utility.copyAmount(1, miningPipe)};
@@ -286,7 +288,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (yHead <= 0) return false;
         if (checkBlockAndMeta(xCenter, yHead - 1, zCenter, Blocks.bedrock, W)) return false;
 
-        if (!getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead - 1, zCenter, miningPipeTipBlock)) return false;
+        getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead - 1, zCenter, miningPipeTipBlock);
         if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead, zCenter, miningPipeBlock);
 
         getBaseMetaTileEntity().decrStackSize(1, 1);
@@ -350,7 +352,6 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (checkBlockAndMeta(xCenter, yHead, zCenter, miningPipeTipBlock, W) || ++yHead == yDrill) return true;
         //pipe column is broken - try fix
         getBaseMetaTileEntity().getWorld().setBlock(xCenter, yHead, zCenter, miningPipeTipBlock);
-        oreBlockPositions.clear();
         return true;
     }
 
