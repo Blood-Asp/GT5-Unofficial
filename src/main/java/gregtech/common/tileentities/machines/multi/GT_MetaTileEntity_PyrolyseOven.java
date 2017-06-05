@@ -42,7 +42,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
-                "Pyrolyze Oven Casings for the rest (60 at least!)",
+                "Pyrolyse Oven Casings for the rest (60 at least!)",
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
