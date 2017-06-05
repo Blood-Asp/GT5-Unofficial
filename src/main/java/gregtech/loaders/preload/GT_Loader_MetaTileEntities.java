@@ -1263,7 +1263,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Machine_IV_LightningRod.set(new GT_MetaTileEntity_LightningRod(1176, "basicgenerator.lightningrod.05", "Lightning Rod III", 5).getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_IV_LightningRod.get(1L, new Object[0]), bitsd, new Object[]{"LTL", "TMT", "LTL", 'M', ItemList.Hull_UV, 'L', ItemList.ZPM2, 'T', ItemList.Transformer_MAX_UV});
 
-    ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1200, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
+    ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1199, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
     GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeChemicalReactor.get(1L, new Object[0]), bitsd, new Object[]{"CRC", "PMP", "CBC", 
     		'C', OrePrefixes.circuit.get(Materials.Elite), 
     		'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 
