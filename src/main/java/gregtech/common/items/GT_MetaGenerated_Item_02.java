@@ -289,6 +289,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         ItemList.Crop_Drop_Grapes.set(addItem(tLastID = 554, "Grapes", "Source of Wine", new Object[]{"cropGrape", new GT_FoodStat(2, 0.3F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Onion.set(addItem(tLastID = 555, "Onion", "Taking over the whole Taste", new Object[]{"cropOnion", new GT_FoodStat(2, 0.2F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Cucumber.set(addItem(tLastID = 556, "Cucumber", "Not a Sea Cucumber!", new Object[]{"cropCucumber", new GT_FoodStat(1, 0.2F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
+        ItemList.Crop_Drop_Rape.set(addItem(tLastID = 557, "Rape", "Time to oil up!", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)}));
 
         ItemList.Food_Cheese.set(addItem(tLastID = 558, "Cheese", "Click the Cheese", new Object[]{"foodCheese", new GT_FoodStat(3, 0.6F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 2L)}));
         ItemList.Food_Dough.set(addItem(tLastID = 559, "Dough", "For making Breads", new Object[]{"foodDough", new GT_FoodStat(1, 0.1F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
@@ -340,6 +341,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_OilBerry.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_BobsYerUncleRanks.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Tine.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Rape.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.red_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.yellow_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
 
