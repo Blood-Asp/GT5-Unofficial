@@ -18,6 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -313,5 +315,10 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public float getThickNess() {
         if(GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
+        return AxisAlignedBB.getBoundingBox(aX + 0.0625D, aY + 0.0625D, aZ + 0.0625D, aX + 0.9375D, aY + 0.9375D, aZ + 0.9375D);
     }
 }
