@@ -117,7 +117,6 @@ public class GT_MetaTileEntity_DistillationTower
                     this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
                     this.mOutputFluids = tRecipe.mFluidOutputs.clone();
-                    ArrayUtils.reverse(mOutputFluids);
                     updateSlots();
                     return true;
                 	}
