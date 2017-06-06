@@ -333,6 +333,7 @@ public enum ItemList implements IItemContainer {
     Crop_Drop_Grapes,
     Crop_Drop_TeaLeaf,
     Crop_Drop_Cucumber,
+    Crop_Drop_Rape,
     Schematic,
     Schematic_Crafting,
     Schematic_1by1,
