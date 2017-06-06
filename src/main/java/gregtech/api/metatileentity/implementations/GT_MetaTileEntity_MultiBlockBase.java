@@ -409,6 +409,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return 6;
     }
 
+
+    public int getCurrentEfficiency(ItemStack itemStack) {
+            int maxEff = getMaxEfficiency(itemStack);
+            return maxEff - (getIdealStatus() - getRepairStatus()) * maxEff / 10;
+        }
+
     public boolean doRandomMaintenanceDamage() {
         if (!isCorrectMachinePart(mInventory[1]) || getRepairStatus() == 0) {
             stopMachine();
