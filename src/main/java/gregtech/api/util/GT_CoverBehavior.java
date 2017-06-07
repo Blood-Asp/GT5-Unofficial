@@ -215,4 +215,8 @@ public abstract class GT_CoverBehavior {
     public void placeCover(byte aSide, ItemStack aCover, ICoverable aTileEntity) {
         aTileEntity.setCoverIDAtSide(aSide, GT_Utility.stackToInt(aCover));
     }
+    
+    public String trans(String aNr){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aNr, "", false);
+    }
 }

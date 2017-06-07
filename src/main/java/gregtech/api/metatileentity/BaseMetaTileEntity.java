@@ -167,8 +167,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         } else {
             if (aID <= 0) mID = (short) aNBT.getInteger("mID");
             else mID = aID;
-            mStoredSteam = aNBT.getInteger("mStoredSteam");
-            mStoredEnergy = aNBT.getInteger("mStoredEnergy");
+            mStoredSteam = aNBT.getLong("mStoredSteam");
+            mStoredEnergy = aNBT.getLong("mStoredEnergy");
             mColor = aNBT.getByte("mColor");
             mLightValue = aNBT.getByte("mLightValue");
             mWorkData = aNBT.getByte("mWorkData");
@@ -1239,7 +1239,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         if (GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer)) {
                             mInputDisabled = !mInputDisabled;
                             if (mInputDisabled) mOutputDisabled = !mOutputDisabled;
-                            GT_Utility.sendChatToPlayer(aPlayer, "Auto-Input: " + (mInputDisabled ? "Disabled" : "Enabled") + "  Auto-Output: " + (mOutputDisabled ? "Disabled" : "Enabled"));
+                            GT_Utility.sendChatToPlayer(aPlayer, trans("086","Auto-Input: ") + (mInputDisabled ? trans("087","Disabled") : trans("088","Enabled") + trans("089","  Auto-Output: ") + (mOutputDisabled ? trans("087","Disabled") : trans("088","Enabled"))));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(1), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         return true;
@@ -1248,8 +1248,11 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSoftHammerList)) {
                         if (GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer)) {
                             if (mWorks) disableWorking();
-                            else enableWorking();
-                            GT_Utility.sendChatToPlayer(aPlayer, "Machine Processing: " + (isAllowedToWork() ? "Enabled" : "Disabled"));
+                            else enableWorking();{
+                            	String tChat = trans("090","Machine Processing: ") + (isAllowedToWork() ? trans("088","Enabled") : trans("087","Disabled"));
+                            	if(getMetaTileEntity() !=null && getMetaTileEntity().hasAlternativeModeText())
+                            		tChat = getMetaTileEntity().getAlternativeModeText();
+                            GT_Utility.sendChatToPlayer(aPlayer, tChat);}
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(101), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         return true;
@@ -1259,7 +1262,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
                         if (GT_ModHandler.useSolderingIron(tCurrentItem, aPlayer)) {
                             mStrongRedstone ^= (1 << tSide);
-                            GT_Utility.sendChatToPlayer(aPlayer, "Redstone Output at Side " + tSide + " set to: " + ((mStrongRedstone & (1 << tSide)) != 0 ? "Strong" : "Weak"));
+                            GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
                         }
                         return true;
@@ -1414,7 +1417,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public byte getOutputRedstoneSignal(byte aSide) {
-        return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : mMetaTileEntity.allowGeneralRedstoneOutput() ? mSidedRedstone[aSide] : 0;
+        return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : getGeneralRS(aSide);
+    }
+    
+    public byte getGeneralRS(byte aSide){
+    	if(mMetaTileEntity==null)return 0;
+    	return mMetaTileEntity.allowGeneralRedstoneOutput() ? mSidedRedstone[aSide] : 0;
     }
 
     @Override

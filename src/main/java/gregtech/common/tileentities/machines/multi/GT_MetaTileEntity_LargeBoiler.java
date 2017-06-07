@@ -41,9 +41,9 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 "Produces " + (getEUt() * 40) * (runtimeBoost(20) / 20f) + "L of Steam with 1 Coal at " + getEUt() * 40 + "L/s",
                 "A programmed circuit in the main block throttles the boiler (-1000L/s per config)",
                 "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
-                "3x1x3 of Fire Boxes (Bottom layer, Min 3)",
-                "3x4x3 of Casings (Above Fireboxes, hollow, Min 24!)",
-                "3 Pipe Casing Blocks (Inside the Hollow Casing)",
+                "3x1x3 of "+getCasingMaterial()+" Fire Boxes (Bottom layer, Min 3)",
+                "3x4x3 of "+getCasingMaterial()+" Casings (Above Fireboxes, hollow, Min 24!)",
+                "3 "+getCasingMaterial()+" Pipe Casing Blocks (Inside the Hollow Casing)",
                 "1x Input Fuel Hatch/Bus (Any Firebox)",
                 "1x Input Water Hatch (Any Firebox)",
                 "1x Output Hatch (Any Casing)",
@@ -53,6 +53,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 String.format("Takes %.2f seconds to heat up", 500.0 / getEfficiencyIncrease()),
                 "Causes up to " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
+    
+    public abstract String getCasingMaterial();
 
     public abstract Block getCasingBlock();
 
