@@ -677,8 +677,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
         //
     }
 
-	@Override
-	public boolean allowGeneralRedstoneOutput() {
-		return false;
-	}
+    @Override
+    public boolean allowGeneralRedstoneOutput() {
+        return false;
+    }
 }
