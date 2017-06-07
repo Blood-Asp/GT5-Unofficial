@@ -5,6 +5,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -155,30 +156,34 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         mMode = (byte) ((mMode + 1) % 8);
         switch (mMode) {
             case 0:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs Liquids, Steam and Items");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs Liquids, Steam and Items"));
                 break;
             case 1:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs Steam and Items");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("109","Outputs Steam and Items"));
                 break;
             case 2:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs Steam and Liquids");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and Liquids"));
                 break;
             case 3:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs Steam");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("111","Outputs Steam"));
                 break;
             case 4:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs Liquids and Items");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs Liquids and Items"));
                 break;
             case 5:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs only Items");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("113","Outputs only Items"));
                 break;
             case 6:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs only Liquids");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only Liquids"));
                 break;
             case 7:
-                GT_Utility.sendChatToPlayer(aPlayer, "Outputs nothing");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("115","Outputs nothing"));
                 break;
         }
+    }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 
     public boolean outputsSteam() {

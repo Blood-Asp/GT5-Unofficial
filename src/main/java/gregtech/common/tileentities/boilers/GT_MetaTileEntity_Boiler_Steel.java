@@ -25,7 +25,7 @@ public class GT_MetaTileEntity_Boiler_Steel
         super(aID, aName, aNameRegional, new String[]{
                 "Faster than the Bronze Boiler",
                 "Produces 300L of Steam per second",
-                "Causes 20 Pollution per second"});
+                "Causes 30 Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {

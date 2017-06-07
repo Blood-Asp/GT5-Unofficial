@@ -10,6 +10,7 @@ import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -17,6 +18,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class GT_Worldgenerator
@@ -55,13 +57,14 @@ public class GT_Worldgenerator
     public static class WorldGenContainer
             implements Runnable {
         public final Random mRandom;
-        public final int mX;
-        public final int mZ;
+        public int mX;
+        public int mZ;
         public final int mDimensionType;
         public final World mWorld;
         public final IChunkProvider mChunkGenerator;
         public final IChunkProvider mChunkProvider;
         public final String mBiome;
+        public static HashSet<ChunkCoordIntPair> mGenerated = new HashSet<>(2000);
 
         public WorldGenContainer(Random aRandom, int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider, String aBiome) {
             this.mRandom = aRandom;
@@ -73,9 +76,30 @@ public class GT_Worldgenerator
             this.mChunkProvider = aChunkProvider;
             this.mBiome = aBiome;
         }
+        
+        public boolean surroundingChunksLoaded(){
+        	if(!mWorld.checkChunksExist(mX-16, 100, mZ-16, mX-16, 100, mZ-16)) return false;
+        	if(!mWorld.checkChunksExist(mX,    100, mZ-16, mX   , 100, mZ-16)) return false;
+        	if(!mWorld.checkChunksExist(mX+16, 100, mZ-16, mX+16, 100, mZ-16)) return false;
+        	if(!mWorld.checkChunksExist(mX+16, 100, mZ   , mX+16, 100, mZ   )) return false;
+        	if(!mWorld.checkChunksExist(mX+16, 100, mZ+16, mX+16, 100, mZ+16)) return false;
+        	if(!mWorld.checkChunksExist(mX   , 100, mZ+16, mX   , 100, mZ+16)) return false;
+        	if(!mWorld.checkChunksExist(mX-16, 100, mZ+16, mX-16, 100, mZ+16)) return false;
+        	if(!mWorld.checkChunksExist(mX-16, 100, mZ   , mX-16, 100, mZ   )) return false;
+        	return true;
+        }
 
         public void run() {
-            if (((this.mX / 16 - 1) % 3 == 0) && ((this.mZ / 16 - 1) % 3 == 0)) {
+        	int sX = mX;
+        	int sZ = mZ;
+        	if((this.mX / 16 - 1) % 3 == 1) sX = mX - 16;
+        	if((this.mX / 16 - 1) % 3 == 2) sX = mX + 16;
+        	if((this.mZ / 16 - 1) % 3 == 1) sZ = mZ - 16;
+        	if((this.mZ / 16 - 1) % 3 == 2) sZ = mZ + 16;
+            if (((sX / 16 - 1) % 3 == 0) && ((sZ / 16 - 1) % 3 == 0) && surroundingChunksLoaded()) {
+            	ChunkCoordIntPair tPair = new ChunkCoordIntPair(sX, sZ);
+            	if(!mGenerated.contains(tPair)){
+            		mGenerated.add(tPair);        		
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
@@ -85,7 +109,7 @@ public class GT_Worldgenerator
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if (tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX, this.mZ, this.mChunkGenerator, this.mChunkProvider)) {
+                                    if (tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, sX, sZ, this.mChunkGenerator, this.mChunkProvider)) {
                                         temp = false;
                                     }
                                     break;
@@ -97,9 +121,9 @@ public class GT_Worldgenerator
                     }
                 }
                 int i = 0;
-                for (int tX = this.mX - 16; i < 3; tX += 16) {
+                for (int tX = sX - 16; i < 3; tX += 16) {
                     int j = 0;
-                    for (int tZ = this.mZ - 16; j < 3; tZ += 16) {
+                    for (int tZ = sZ - 16; j < 3; tZ += 16) {
                         String tBiome = this.mWorld.getBiomeGenForCoords(tX + 8, tZ + 8).biomeName;
                         try {
                             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
@@ -112,6 +136,7 @@ public class GT_Worldgenerator
                     }
                     i++;
                 }
+              }
             }
             //Asteroid Worldgen
             int tDimensionType = this.mWorld.provider.dimensionId;
