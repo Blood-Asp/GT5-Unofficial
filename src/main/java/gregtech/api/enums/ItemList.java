@@ -520,6 +520,7 @@ public enum ItemList implements IItemContainer {
     Machine_Bronze_Compressor,
     Machine_Bronze_AlloySmelter,
     Machine_Bronze_BlastFurnace,
+    Machine_Bricked_BlastFurnace,
     Machine_Steel_Boiler_Lava,
     Machine_Steel_Boiler,
     Machine_Steel_Furnace,
@@ -538,7 +539,8 @@ public enum ItemList implements IItemContainer {
     Casing_Stripes_A, Casing_Stripes_B, Casing_RadioactiveHazard, Casing_BioHazard, Casing_ExplosionHazard, Casing_FireHazard, Casing_AcidHazard, Casing_MagicHazard, Casing_FrostHazard, Casing_NoiseHazard, Casing_Grate, Casing_Vent, Casing_RadiationProof, Casing_Firebox_Bronze, Casing_Firebox_Steel, Casing_Firebox_TungstenSteel,
     Casing_RobustTungstenSteel, Casing_CleanStainlessSteel, Casing_StableTitanium, Casing_Firebox_Titanium,
     Hull_ULV, Hull_LV, Hull_MV, Hull_HV, Hull_EV, Hull_IV, Hull_LuV, Hull_ZPM, Hull_UV, Hull_MAX,
-
+    Casing_DenseBricks, /*DenseBrick, UnfiredDenseBrick,*/
+    
     Automation_Filter_ULV, Automation_Filter_LV, Automation_Filter_MV, Automation_Filter_HV, Automation_Filter_EV, Automation_Filter_IV, Automation_Filter_LuV, Automation_Filter_ZPM, Automation_Filter_UV, Automation_Filter_MAX,
     Automation_TypeFilter_ULV, Automation_TypeFilter_LV, Automation_TypeFilter_MV, Automation_TypeFilter_HV, Automation_TypeFilter_EV, Automation_TypeFilter_IV, Automation_TypeFilter_LuV, Automation_TypeFilter_ZPM, Automation_TypeFilter_UV, Automation_TypeFilter_MAX,
     Automation_ChestBuffer_ULV, Automation_ChestBuffer_LV, Automation_ChestBuffer_MV, Automation_ChestBuffer_HV, Automation_ChestBuffer_EV, Automation_ChestBuffer_IV, Automation_ChestBuffer_LuV, Automation_ChestBuffer_ZPM, Automation_ChestBuffer_UV, Automation_ChestBuffer_MAX,
