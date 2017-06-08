@@ -77,15 +77,15 @@ public class GT_Worldgenerator
             this.mBiome = aBiome;
         }
         
-        public boolean surroundingChunksLoaded(){
-        	if(!mWorld.checkChunksExist(mX-16, 100, mZ-16, mX-16, 100, mZ-16)) return false;
-        	if(!mWorld.checkChunksExist(mX,    100, mZ-16, mX   , 100, mZ-16)) return false;
-        	if(!mWorld.checkChunksExist(mX+16, 100, mZ-16, mX+16, 100, mZ-16)) return false;
-        	if(!mWorld.checkChunksExist(mX+16, 100, mZ   , mX+16, 100, mZ   )) return false;
-        	if(!mWorld.checkChunksExist(mX+16, 100, mZ+16, mX+16, 100, mZ+16)) return false;
-        	if(!mWorld.checkChunksExist(mX   , 100, mZ+16, mX   , 100, mZ+16)) return false;
-        	if(!mWorld.checkChunksExist(mX-16, 100, mZ+16, mX-16, 100, mZ+16)) return false;
-        	if(!mWorld.checkChunksExist(mX-16, 100, mZ   , mX-16, 100, mZ   )) return false;
+        public boolean surroundingChunksLoaded(int aX, int aZ){
+        	if(!mWorld.checkChunksExist(aX-16, 100, aZ-16, aX-16, 100, aZ-16)) return false;
+        	if(!mWorld.checkChunksExist(aX,    100, aZ-16, aX   , 100, aZ-16)) return false;
+        	if(!mWorld.checkChunksExist(aX+16, 100, aZ-16, aX+16, 100, aZ-16)) return false;
+        	if(!mWorld.checkChunksExist(aX+16, 100, aZ   , aX+16, 100, aZ   )) return false;
+        	if(!mWorld.checkChunksExist(aX+16, 100, aZ+16, aX+16, 100, aZ+16)) return false;
+        	if(!mWorld.checkChunksExist(aX   , 100, aZ+16, aX   , 100, aZ+16)) return false;
+        	if(!mWorld.checkChunksExist(aX-16, 100, aZ+16, aX-16, 100, aZ+16)) return false;
+        	if(!mWorld.checkChunksExist(aX-16, 100, aZ   , aX-16, 100, aZ   )) return false;
         	return true;
         }
 
@@ -96,7 +96,7 @@ public class GT_Worldgenerator
         	if((this.mX / 16 - 1) % 3 == 2) sX = mX + 16;
         	if((this.mZ / 16 - 1) % 3 == 1) sZ = mZ - 16;
         	if((this.mZ / 16 - 1) % 3 == 2) sZ = mZ + 16;
-            if (((sX / 16 - 1) % 3 == 0) && ((sZ / 16 - 1) % 3 == 0) && surroundingChunksLoaded()) {
+            if (((sX / 16 - 1) % 3 == 0) && ((sZ / 16 - 1) % 3 == 0) && surroundingChunksLoaded(sX,sZ)) {
             	ChunkCoordIntPair tPair = new ChunkCoordIntPair(sX, sZ);
             	if(!mGenerated.contains(tPair)){
             		mGenerated.add(tPair);        		
