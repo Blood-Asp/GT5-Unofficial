@@ -1639,9 +1639,10 @@ if(Loader.isModLoaded("Railcraft")){
 		addProcess(tCrop, Materials.Emerald, 100, true);
 		addProcess(tCrop, Materials.Beryllium, 100, false);
 
+		addPrimitiveBlastFurnaceRecipes();
     }
 
-    public void addProcess(ItemStack tCrop, Materials aMaterial, int chance, boolean aMainOutput) {
+	public void addProcess(ItemStack tCrop, Materials aMaterial, int chance, boolean aMainOutput) {
     	if(tCrop==null||aMaterial==null||GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial,1)==null)return;
         if (GT_Mod.gregtechproxy.mNerfedCrops) {
             GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tCrop), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), Materials.Water.getFluid(1000), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 96, 24);
@@ -2532,4 +2533,12 @@ if(Loader.isModLoaded("Railcraft")){
 		 if(!(FluidRegistry.getFluid("potion."+aName+".long")==null||FluidRegistry.getFluid("potion."+aName+".long.splash")==null))
 		 GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gunpowder, 1L), null, null, null, new FluidStack(FluidRegistry.getFluid("potion."+aName+".long"),750), new FluidStack(FluidRegistry.getFluid("potion."+aName+".long.splash"),750), null, 200, 24);
 	}
+	
+    private void addPrimitiveBlastFurnaceRecipes() {
+    	GT_Values.RA.addPrimitiveBlastRecipe(Materials.Iron.getIngots(1), GT_Values.NI, 4, Materials.Steel.getIngots(1), GT_Values.NI, 7200);
+    	GT_Values.RA.addPrimitiveBlastRecipe(Materials.Iron.getDust(1), GT_Values.NI, 4, Materials.Steel.getIngots(1), GT_Values.NI, 7200);
+    	GT_Values.RA.addPrimitiveBlastRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Iron, 1), GT_Values.NI, 36, Materials.Steel.getIngots(9), GT_Values.NI, 7200);
+    	GT_Values.RA.addPrimitiveBlastRecipe(Materials.Steel.getDust(1), GT_Values.NI, 2, Materials.Steel.getIngots(1), GT_Values.NI, 7200);
+	}
+
 }

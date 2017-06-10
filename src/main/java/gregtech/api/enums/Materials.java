@@ -10,6 +10,7 @@ import gregtech.api.interfaces.ISubTagContainer;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.loaders.materialprocessing.ProcessingConfig;
 import gregtech.loaders.materialprocessing.ProcessingModSupport;
@@ -1888,4 +1889,29 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     }
 
     public static volatile int VERSION = 509;
+
+
+	public ItemStack getCells(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.cell, this, amount);
+	}
+	
+	public ItemStack getDust(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dust, this, amount);
+	}
+
+	public ItemStack getDustSmall(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dustSmall, this, amount);
+	}
+
+	public ItemStack getDustTiny(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dustTiny, this, amount);
+	}
+	
+	public ItemStack getGems(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.gem, this, amount);
+	}
+
+    public ItemStack getIngots(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.ingot, this, amount);
+    }
 }

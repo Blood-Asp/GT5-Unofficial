@@ -147,6 +147,18 @@ public interface IGT_RecipeAdder {
     public boolean addBlastRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, int aLevel);
 
     /**
+     * Adds a Blast Furnace Recipe
+     *
+     * @param aInput1   must be != null if aInput2 == null
+     * @param aInput2   must be != null if aInput1 == null
+     * @param aCoalAmount must be > 0
+     * @param aOutput1  must be != null if aOutput2 == null
+     * @param aOutput2  must be != null if aOutput1 == null
+     * @param aDuration must be > 0
+     */
+    public boolean addPrimitiveBlastRecipe(ItemStack aInput1, ItemStack aInput2, int aCoalAmount, ItemStack aOutput1, ItemStack aOutput2, int aDuration);
+
+    /**
      * Adds a Canning Machine Recipe
      *
      * @param aInput1   must be != null
