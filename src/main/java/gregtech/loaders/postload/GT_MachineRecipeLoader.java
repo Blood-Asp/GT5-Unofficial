@@ -2630,9 +2630,9 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addChemicalRecipe(Materials.HydrochloricAcid.getCells(1), 	Materials.Acetone.getCells(1), 			Materials.Phenol.getFluid(2000), 			Materials.BisphenolA.getFluid(1000), Materials.Water.getCells(1), Materials.Empty.getCells(1), 160);
         GT_Values.RA.addChemicalRecipe(Materials.Phenol.getCells(2), 			Materials.HydrochloricAcid.getCells(1), Materials.Acetone.getFluid(1000), 			Materials.BisphenolA.getFluid(1000), Materials.Water.getCells(1), Materials.Empty.getCells(2), 160);
 
-        GT_Values.RA.addChemicalRecipe(Materials.Chlorine.getCells(2), 	GT_Utility.getIntegratedCircuit(1), Materials.Methane.getGas(1000),  Materials.Chloromethane.getGas(1000), 	Materials.HydrochloricAcid.getCells(1), 80);
+        GT_Values.RA.addChemicalRecipe(Materials.Chlorine.getCells(2), 	GT_Utility.getIntegratedCircuit(1), Materials.Methane.getGas(1000),  Materials.Chloromethane.getGas(1000), 	Materials.HydrochloricAcid.getCells(1), Materials.Empty.getCells(1), 80);
         GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), 	GT_Utility.getIntegratedCircuit(1), Materials.Chlorine.getGas(2000), Materials.HydrochloricAcid.getFluid(1000), Materials.Chloromethane.getCells(1), 80);
-        GT_Values.RA.addChemicalRecipe(Materials.Chlorine.getCells(6), 	GT_Utility.getIntegratedCircuit(3), Materials.Methane.getGas(1000),  Materials.Chloroform.getFluid(1000), 		Materials.HydrochloricAcid.getCells(3), 240);
+        GT_Values.RA.addChemicalRecipe(Materials.Chlorine.getCells(6), 	GT_Utility.getIntegratedCircuit(3), Materials.Methane.getGas(1000),  Materials.Chloroform.getFluid(1000), 		Materials.HydrochloricAcid.getCells(3), Materials.Empty.getCells(3), 240);
         GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), 	GT_Utility.getIntegratedCircuit(3), Materials.Chlorine.getGas(6000), Materials.HydrochloricAcid.getFluid(3000), Materials.Chloroform.getCells(1), 240);
 
         GT_Values.RA.addChemicalRecipe(Materials.Fluorine.getCells(1), 	GT_Values.NI, Materials.Hydrogen.getGas(1000), Materials.HydrofluoricAcid.getFluid(1000), Materials.Empty.getCells(1), 60, 8);
