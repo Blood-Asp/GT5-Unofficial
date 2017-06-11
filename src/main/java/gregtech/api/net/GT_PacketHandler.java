@@ -15,7 +15,6 @@ public class GT_PacketHandler extends SimpleNetworkWrapper {
     public GT_PacketHandler() {
         super("gregtech_network");
         registerMessage(0, GT_Packet_TileEntity.class, Side.CLIENT);
-        registerMessage(2, GT_Packet_Sound.class, Side.CLIENT);
         registerMessage(3, GT_Packet_Block_Event.class, Side.CLIENT);
     }
 
