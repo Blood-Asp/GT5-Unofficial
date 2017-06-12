@@ -19,7 +19,7 @@ public class GT_CoverLoader
         GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVent", 1L, 1), new GT_RenderedTexture(Textures.BlockIcons.VENT_NORMAL), new GT_Cover_Vent(1));
         GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVentCore", 1L, 1), new GT_RenderedTexture(Textures.BlockIcons.VENT_NORMAL), new GT_Cover_Vent(1));
         GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVentGold", 1L, 1), new GT_RenderedTexture(Textures.BlockIcons.VENT_ADVANCED), new GT_Cover_Vent(2));
-        GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVentSpread", 1L, 1), new GT_RenderedTexture(Textures.BlockIcons.VENT_NORMAL), new GT_Cover_Vent(2));
+        GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVentSpread", 1L), new GT_RenderedTexture(Textures.BlockIcons.VENT_NORMAL), new GT_Cover_Vent(2));
         GregTech_API.registerCover(GT_ModHandler.getIC2Item("reactorVentDiamond", 1L, 1), new GT_RenderedTexture(Textures.BlockIcons.VENT_ADVANCED), new GT_Cover_Vent(3));
     }
 }
