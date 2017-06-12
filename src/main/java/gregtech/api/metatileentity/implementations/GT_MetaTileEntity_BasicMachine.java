@@ -346,7 +346,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
-        aBaseMetaTileEntity.openGUI(aPlayer);
+        if(aBaseMetaTileEntity.getAirAtSide((byte) mMainFacing)){
+        aBaseMetaTileEntity.openGUI(aPlayer);	
+        }else{
+        	GT_Utility.sendChatToPlayer(aPlayer,"Front blocked!");
+        }
         return true;
     }
 
