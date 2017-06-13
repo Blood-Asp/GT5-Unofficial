@@ -38,6 +38,7 @@ import gregtech.common.items.armor.gui.ContainerElectricArmor1;
 import gregtech.common.items.armor.gui.GuiElectricArmor1;
 import gregtech.common.items.armor.gui.GuiModularArmor;
 import gregtech.common.items.armor.gui.InventoryArmor;
+import gregtech.common.tools.GT_Tool;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -69,6 +70,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -1795,6 +1797,21 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ////Already loaded chunk data
         ////DO NOTHING - this chunk data was already loaded and stored in hash map
         //}
+    }
+    
+    @SubscribeEvent
+    public void onBlockBreakSpeedEvent(PlayerEvent.BreakSpeed aEvent)
+    {
+      if (aEvent.newSpeed > 0.0F)
+      {
+        if (aEvent.entityPlayer != null)
+        {
+          ItemStack aStack = aEvent.entityPlayer.getCurrentEquippedItem();
+          if ((aStack != null) && ((aStack.getItem() instanceof GT_MetaGenerated_Tool))) {
+            aEvent.newSpeed = ((GT_MetaGenerated_Tool)aStack.getItem()).onBlockBreakSpeedEvent(aEvent.newSpeed, aStack, aEvent.entityPlayer, aEvent.block, aEvent.x, aEvent.y, aEvent.z, (byte)aEvent.metadata, aEvent);
+          }
+        }
+      }
     }
 
     public static class OreDictEventContainer {
