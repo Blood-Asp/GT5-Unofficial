@@ -220,10 +220,8 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
     @Mod.EventHandler
     public float onBlockBreakSpeedEvent(float aDefault, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, PlayerEvent.BreakSpeed aEvent)
     {
-      IToolStats tStats = getToolStats(aStack);
-      float tTest = tStats == null ? aDefault : tStats.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aPlayer.worldObj, aX, aY, aZ);
-      System.out.println("test: "+tTest+" default: "+aDefault);
-      return tTest;
+      IToolStats tStats = getToolStats(aStack); 
+      return tStats == null ? aDefault : tStats.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aPlayer.worldObj, aX, aY, aZ);
     }
     
     @Override

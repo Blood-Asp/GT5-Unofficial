@@ -146,15 +146,9 @@ public abstract class GT_Tool
     public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
         return aOriginalDamage;
     }
-    
-    public float getMiningSpeed(Block aBlock, byte aMetaData)
-    {
-      return isMinableBlock(aBlock, aMetaData) ? 1.0F : 0.0F;
-    }
-
 
 	@Override
 	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World worldObj, int aX, int aY, int aZ) {
-		return getMiningSpeed(aBlock, aMetaData);
+		return aDefault;
 	}
 }
