@@ -33,10 +33,10 @@ public class GT_Cover_Fluidfilter
         aFilterMode = (aFilterMode + (aPlayer.isSneaking()? -1 : 1)) % 4;
         if(aFilterMode < 0){aFilterMode = 3;}
         switch(aFilterMode) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("043")); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("044")); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("045")); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("046")); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("043", "Allow input, no output")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("044", "Deny input, no output")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("045", "Allow input, permit any output")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("046", "Deny input, permit any output")); break;
         }
         aCoverVariable|=aFilterMode;
         return aCoverVariable;
@@ -54,7 +54,7 @@ public class GT_Cover_Fluidfilter
                 aCoverVariable = (aCoverVariable & 7) | (aFluid << 3);
                 aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
                 FluidStack sFluid = new FluidStack(FluidRegistry.getFluid(aFluid),1000);
-                GT_Utility.sendChatToPlayer(aPlayer, trans("047") + sFluid.getLocalizedName());
+                GT_Utility.sendChatToPlayer(aPlayer, trans("047", "Filter Fluid: ") + sFluid.getLocalizedName());
             }else if(tStack.getItem() instanceof IFluidContainerItem){
                 IFluidContainerItem tContainer = (IFluidContainerItem)tStack.getItem();
                 if(tContainer.getFluid(tStack) != null) {
@@ -62,7 +62,7 @@ public class GT_Cover_Fluidfilter
                     aCoverVariable = (aCoverVariable & 7) | (aFluid << 3);
                     aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
                     FluidStack sFluid = new FluidStack(FluidRegistry.getFluid(aFluid),1000);
-                    GT_Utility.sendChatToPlayer(aPlayer, trans("047") + sFluid.getLocalizedName());
+                    GT_Utility.sendChatToPlayer(aPlayer, trans("047", "Filter Fluid: ") + sFluid.getLocalizedName());
                 }
             }
             }
