@@ -346,6 +346,10 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
+        if(!GT_Mod.gregtechproxy.mForceFreeFace) {
+        	aBaseMetaTileEntity.openGUI(aPlayer);
+        	return true;
+        }
         for(byte i=0;i < 6; i++){
         	if(aBaseMetaTileEntity.getAirAtSide(i)){
         		aBaseMetaTileEntity.openGUI(aPlayer);
