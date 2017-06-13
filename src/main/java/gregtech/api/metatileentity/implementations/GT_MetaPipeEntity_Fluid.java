@@ -412,7 +412,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
     @Override
     public float getThickNess() {
-        if(GT_Client.hideValue==1) return 0.0625F;
+        if(getBaseMetaTileEntity().isClientSide() && GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
     }
 }
