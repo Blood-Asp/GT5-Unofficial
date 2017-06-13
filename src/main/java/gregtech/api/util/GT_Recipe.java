@@ -556,6 +556,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * HashMap of Recipes based on their Fluids
          */
         public final Map<Fluid, Collection<GT_Recipe>> mRecipeFluidMap = new /*Concurrent*/HashMap<Fluid, Collection<GT_Recipe>>();
+        public final HashSet<String> mRecipeFluidNameMap = new HashSet<String>();
         /**
          * The List of all Recipes
          */
@@ -664,6 +665,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     Collection<GT_Recipe> tList = mRecipeFluidMap.get(aFluid.getFluid());
                     if (tList == null) mRecipeFluidMap.put(aFluid.getFluid(), tList = new HashSet<GT_Recipe>(1));
                     tList.add(aRecipe);
+                    if(!mRecipeFluidNameMap.contains(aFluid.getFluid().getName()))
+                    	mRecipeFluidNameMap.add(aFluid.getFluid().getName());
                 }
             return addToItemMap(aRecipe);
         }
@@ -696,7 +699,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * @return if this Fluid is a valid Input for any for the Recipes
          */
         public boolean containsInput(Fluid aFluid) {
-            return aFluid != null && mRecipeFluidMap.containsKey(aFluid);
+        	return aFluid != null && mRecipeFluidNameMap.contains(aFluid.getName());
         }
 
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack... aInputs) {
