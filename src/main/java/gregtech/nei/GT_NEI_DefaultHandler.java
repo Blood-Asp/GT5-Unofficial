@@ -180,7 +180,7 @@ public class GT_NEI_DefaultHandler
                     if ((!(tStack instanceof FixedPositionedStack)) || (((FixedPositionedStack) tStack).mChance <= 0) || (((FixedPositionedStack) tStack).mChance == 10000)) {
                         break;
                     }
-                    currenttip.add("Chance: " + ((FixedPositionedStack) tStack).mChance / 100 + "." + (((FixedPositionedStack) tStack).mChance % 100 < 10 ? "0" + ((FixedPositionedStack) tStack).mChance % 100 : Integer.valueOf(((FixedPositionedStack) tStack).mChance % 100)) + "%");
+                    currenttip.add(trans("150","Chance: ") + ((FixedPositionedStack) tStack).mChance / 100 + "." + (((FixedPositionedStack) tStack).mChance % 100 < 10 ? "0" + ((FixedPositionedStack) tStack).mChance % 100 : Integer.valueOf(((FixedPositionedStack) tStack).mChance % 100)) + "%");
                     break;
                 }
             }
@@ -190,7 +190,7 @@ public class GT_NEI_DefaultHandler
                             (tStack.item.stackSize != 0)) {
                         break;
                     }
-                    currenttip.add("Does not get consumed in the process");
+                    currenttip.add(trans("151","Does not get consumed in the process"));
                     break;
                 }
             }
@@ -204,24 +204,24 @@ public class GT_NEI_DefaultHandler
 		String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
 		if (recipeDesc == null) {
 			if (tEUt != 0) {
-				drawText(10, 73, "Total: " + tDuration * tEUt + " EU", -16777216);
-				drawText(10, 83, "Usage: " + tEUt + " EU/t", -16777216);
+				drawText(10, 73, trans("152","Total: ") + tDuration * tEUt + " EU", -16777216);
+				drawText(10, 83, trans("153","Usage: ") + tEUt + " EU/t", -16777216);
 				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-					drawText(10, 93, "Voltage: " + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
-					drawText(10, 103, "Amperage: " + this.mRecipeMap.mAmperage, -16777216);
+					drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
+					drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
 				} else {
-					drawText(10, 93, "Voltage: unspecified", -16777216);
-					drawText(10, 103, "Amperage: unspecified", -16777216);
+					drawText(10, 93, trans("156","Voltage: unspecified"), -16777216);
+					drawText(10, 103, trans("157","Amperage: unspecified"), -16777216);
 				}
 			}
 			if (tDuration > 0) {
-				drawText(10, 113, "Time: " + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + " secs", -16777216);
+				drawText(10, 113, trans("158","Time: ") + (tDuration < 20 ? "< 1" : Integer.valueOf(tDuration / 20)) + trans("161"," secs"), -16777216);
 			}
 			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
 			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
-				drawText(10, 123, "Needs Low Gravity", -16777216);
+				drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
 			} else if (tSpecial == -200) {
-				drawText(10, 123, "Needs Cleanroom", -16777216);
+				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
 			} else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
 				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
 			}
@@ -810,5 +810,9 @@ public class GT_NEI_DefaultHandler
         public List<PositionedStack> getOtherStacks() {
             return this.mOutputs;
         }
+    } 
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 }

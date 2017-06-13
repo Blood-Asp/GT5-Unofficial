@@ -205,5 +205,15 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
+    } 
+    
+    @Override
+    public boolean hasAlternativeModeText(){
+    	return true;
+    }
+    
+    @Override
+    public String getAlternativeModeText(){
+    	return (getBaseMetaTileEntity().isAllowedToWork() ? trans("145","Step Down, In: ") : trans("146","Step Up, In"))+maxEUInput()+trans("148","V@")+maxAmperesIn()+trans("147","Amp, Out: ")+maxEUOutput()+"V@"+maxAmperesOut()+trans("149","Amp");
     }
 }
