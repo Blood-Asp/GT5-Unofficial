@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -314,7 +315,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public float getThickNess() {
-        if(getBaseMetaTileEntity().isClientSide() && GT_Client.hideValue==1) return 0.0625F;
+        if(GT_Mod.instance.isClientSide() && GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
     }
 
