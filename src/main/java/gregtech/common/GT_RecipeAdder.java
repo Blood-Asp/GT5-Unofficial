@@ -631,6 +631,9 @@ public class GT_RecipeAdder
         if ((aDuration = GregTech_API.sRecipeFile.get("autoclave", aInput, aDuration)) <= 0) {
             return false;
         }
+		if (!GT_Mod.gregtechproxy.mEnableCleanroom){
+			aCleanroom = false;
+		}
         GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluid}, null, aDuration, aEUt, aCleanroom ? -100 : 0);
         return true;
     }
@@ -659,6 +662,9 @@ public class GT_RecipeAdder
         if ((aDuration = GregTech_API.sRecipeFile.get("laserengraving", aEngravedItem, aDuration)) <= 0) {
             return false;
         }
+		if (!GT_Mod.gregtechproxy.mEnableCleanroom){
+			aCleanroom = false;
+		}
         GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes.addRecipe(true, new ItemStack[]{aItemToEngrave, aLens}, new ItemStack[]{aEngravedItem}, null, null, null, aDuration, aEUt, aCleanroom ? -200 : 0);
         return true;
     }
