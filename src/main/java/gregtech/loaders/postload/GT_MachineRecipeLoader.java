@@ -2144,9 +2144,9 @@ if(Loader.isModLoaded("Railcraft")){
             		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicone, 64),
             		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 4),
             }, new FluidStack[]{
-            		new FluidStack(FluidRegistry.getFluid("ic2biomass"), 250),
+            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(250) : new FluidStack(FluidRegistry.getFluid("ic2biomass"), 250),
             		Materials.UUMatter.getFluid(100),
-            		new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000)
+            		GregTech_API.mIC2Classic ? Materials.Lava.getFluid(1000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000)
             }, ItemList.Circuit_Chip_NeuroCPU.get(1,o), 200, 80000);
             
             GT_Values.RA.addAssemblylineRecipe(ItemList.Circuit_Wetwaresupercomputer.get(1,o), 288000, new ItemStack[]{
@@ -2161,7 +2161,7 @@ if(Loader.isModLoaded("Railcraft")){
             		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicone, 64)
             }, new FluidStack[]{
             		Materials.SolderingAlloy.getMolten(2880),
-            		new FluidStack(FluidRegistry.getFluid("ic2coolant"), 10000)
+            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(10000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 10000)
             }, ItemList.Circuit_Wetwaremainframe.get(1,o), 2000, 300000);
                
             GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
@@ -2178,7 +2178,7 @@ if(Loader.isModLoaded("Railcraft")){
             		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
             }, new FluidStack[]{
             		Materials.SolderingAlloy.getMolten(2880),
-            		new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
             }, ItemList.ZPM2.get(1,o), 2000, 300000);
             
             GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 1), 144000, new ItemStack[]{
