@@ -697,14 +697,4 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
     public boolean allowGeneralRedstoneOutput(){
         return false;
     }
-
-	@Override
-	public boolean hasAlternativeModeText() {
-		return false;
-	}
-
-	@Override
-	public String getAlternativeModeText() {
-		return "";
-	}
 }
