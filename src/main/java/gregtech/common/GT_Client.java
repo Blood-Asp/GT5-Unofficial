@@ -153,9 +153,8 @@ public class GT_Client extends GT_Proxy
     
     @SubscribeEvent
     public void manipulateDensity(EntityViewRenderEvent.FogDensity event) {
-    	System.out.println("test: "+GT_Pollution.mPlayerPollution);
-    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-        event.density = 0.25f/(GT_Pollution.mPlayerPollution/GT_Mod.gregtechproxy.mPollutionSourRainLimit);
+    	if(GT_Pollution.mPlayerPollution > (GT_Mod.gregtechproxy.mPollutionSmogLimit)){    	
+        event.density = (0.15f*(Math.min(GT_Pollution.mPlayerPollution/((float)GT_Mod.gregtechproxy.mPollutionSourRainLimit),1.0f)))+0.1f;
         event.setCanceled(true);
     	}
     }
