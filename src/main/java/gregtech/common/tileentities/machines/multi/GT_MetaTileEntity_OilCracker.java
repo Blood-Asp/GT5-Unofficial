@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -7,6 +9,7 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
@@ -17,12 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
-    private static final FluidStack fluidToDecreaseEu = GT_ModHandler.getSteam(128);
-    private static final FluidStack fluidToIncreaseOutput = Materials.Hydrogen.getGas(64);
-
+    private ForgeDirection orientation;
+    private int controllerX, controllerZ;
 
     public GT_MetaTileEntity_OilCracker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -35,16 +35,15 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Oil Cracking Unit",
-                "Cracks heavy oil into lighter parts",
+                "Thermally cracks heavy hydrocarbons into lighter fractions",
                 "Size(WxHxD): 5x3x3 (Hollow), Controller (Front center)",
                 "Ring of 8 Cupronickel Coils (Each side of Controller)",
-                "1x Input Hatch (Any left side casing)",
-                "1x Input Hatch (Any middle ring casing)",
-                "1x Output Hatch (Any right side casing)",
+                "1x Hydrocarbon Input Bus/Hatch (Any left side casing)",
+                "1x Steam/Hydrogen Input Hatch (Any middle ring casing)",
+                "1x Cracked Hydrocarbon Output Hatch (Any right side casing)",
                 "1x Maintenance Hatch (Any middle ring casing)",
                 "1x Energy Hatch (Any middle ring casing)",
-                "Clean Stainless Steel Machine Casings for the rest (18 at least!)",
-                "Optional Steam(50% less EU/t) or Hydrogen(30% more output)"};
+                "Clean Stainless Steel Machine Casings for the rest (18 at least!)"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -62,34 +61,38 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tInputList = getStoredFluids();
-        for (FluidStack tInput : tInputList) {
-            long tVoltage = getMaxInputVoltage();
-            byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        FluidStack[] tFluidInputs = tInputList.toArray(new FluidStack[tInputList.size()]);
+        long tVoltage = getMaxInputVoltage();
+        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tInput}, new ItemStack[]{});
-            if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, new FluidStack[]{tInput}, new ItemStack[]{})) {
-                    this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                    this.mEfficiencyIncrease = 10000;
-                    calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, getMaxInputVoltage());
-                    //In case recipe is too OP for that machine
-                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                        return false;
-                    if (depleteInput(fluidToDecreaseEu)) this.mEUt = this.mEUt / 2;
-                    if (this.mEUt > 0) this.mEUt = (-this.mEUt);
-                    this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
-                    if (depleteInput(fluidToIncreaseOutput)) this.mOutputFluids[0].amount = this.mOutputFluids[0].amount * 130 / 100;
-                    return true;
-                }
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(
+                getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluidInputs ,new ItemStack[]{mInventory[1]});
+        if (tRecipe != null && tRecipe.isRecipeInputEqual(true, tFluidInputs, new ItemStack[]{mInventory[1]})) {
+            this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+            this.mEfficiencyIncrease = 10000;
+            this.mEUt = tRecipe.mEUt;
+            this.mMaxProgresstime = tRecipe.mDuration;
+            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
+                this.mEUt *= 4;
+                this.mMaxProgresstime /= 2;
             }
+            if (this.mEUt > 0) {
+                this.mEUt = (-this.mEUt);
+            }
+            this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+            this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
-        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
+        this.orientation = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing());
+        this.controllerX = aBaseMetaTileEntity.getXCoord();
+        this.controllerZ = aBaseMetaTileEntity.getZCoord();
+        int xDir = this.orientation.offsetX;
+        int zDir = this.orientation.offsetZ;
         int amount = 0;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
         if (xDir != 0) {
@@ -231,12 +234,41 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                         continue;
                     }
                     if (aBaseMetaTileEntity.getBlock(xPos, yPos, zPos) == GregTech_API.sBlockCasings1 &&
-                        aBaseMetaTileEntity.getMetaID(xPos, yPos, zPos) == 12)
+                            aBaseMetaTileEntity.getMetaID(xPos, yPos, zPos) == 12)
                     {
                         aBaseMetaTileEntity.getWorld().setBlock(xPos, yPos, zPos, GregTech_API.sBlockCasings5, 0, 3);
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public ArrayList<FluidStack> getStoredFluids() {
+        ArrayList<FluidStack> rList = new ArrayList<FluidStack>();
+        for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
+            tHatch.mRecipeMap = getRecipeMap();
+            if (isValidMetaTileEntity(tHatch) && tHatch.getFillableStack() != null) {
+                FluidStack tStack = tHatch.getFillableStack();
+                if (tStack.isFluidEqual(GT_ModHandler.getSteam(1000)) || tStack.isFluidEqual(Materials.Hydrogen.getGas(1000))) {
+                    if (isHatchInMiddleRing(tHatch)) {
+                        rList.add(tStack);
+                    }
+                } else {
+                    if (!isHatchInMiddleRing(tHatch)) {
+                        rList.add(tStack);
+                    }
+                }
+            }
+        }
+        return rList;
+    }
+
+    private boolean isHatchInMiddleRing(GT_MetaTileEntity_Hatch_Input inputHatch){
+        if (orientation == ForgeDirection.NORTH || orientation == ForgeDirection.SOUTH) {
+            return inputHatch.getBaseMetaTileEntity().getXCoord() == this.controllerX;
+        } else {
+            return inputHatch.getBaseMetaTileEntity().getZCoord() == this.controllerZ;
         }
     }
 }

@@ -8,7 +8,7 @@ import gregtech.api.objects.MaterialStack;
 
 public class MaterialBuilder {
 	public static final int DIESEL = 0, GAS = 1, THERMAL = 2, SEMIFLUID = 3, PLASMA = 4, MAGIC = 5;
-	
+
 	private int metaItemSubID;
 	private TextureSet iconSet;
 	private float toolSpeed = 1.0f;
@@ -33,13 +33,15 @@ public class MaterialBuilder {
 	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<TC_Aspects.TC_AspectStack>();
 	private boolean hasCorrespondingFluid = false;
 	private boolean hasCorrespondingGas = false;
+	private boolean canBeCracked = false;
+	private boolean canBeSteamCracked = false;
 	private int liquidTemperature = 300;
 	private int gasTemperature = 300;
 
 	public MaterialBuilder(int metaItemSubID, TextureSet iconSet, String defaultLocalName) {
 		this.metaItemSubID = metaItemSubID;
 		this.iconSet = iconSet;
-		this.name = defaultLocalName.replace(" ", "");
+		this.name = defaultLocalName.replace(" ", "").replace("-", "");
 		this.defaultLocalName = defaultLocalName;
 	}
 
@@ -47,70 +49,71 @@ public class MaterialBuilder {
 		return new Materials(metaItemSubID, iconSet, toolSpeed, durability, toolQuality, types, r, g, b, a, name, defaultLocalName, fuelType, fuelPower, meltingPoint, blastFurnaceTemp,
 				blastFurnaceRequired, transparent, oreValue, densityMultiplier, densityDivider, color, extraData, materialList, aspects)
 				.setHasCorrespondingFluid(hasCorrespondingFluid)
-				.setHasCorrespondingGas(hasCorrespondingGas);
+				.setHasCorrespondingGas(hasCorrespondingGas)
+				.setCanBeCracked(canBeCracked);
 	}
-	
+
 	public MaterialBuilder setName(String name){
 		this.name = name;
 		return this;
 	}
-	
+
 	public MaterialBuilder setTypes(int types){
 		this.types = types;
 		return this;
 	}
-	
+
 	public MaterialBuilder addDustItems(){
 		types = types | 1;
 		return this;
 	}
-	
+
 	public MaterialBuilder addMetalItems(){
 		types = types | 2;
 		return this;
 	}
-	
+
 	public MaterialBuilder addGemItems(){
 		types = types | 4;
 		return this;
 	}
-	
+
 	public MaterialBuilder addOreItems(){
 		types = types | 8;
 		return this;
 	}
-	
+
 	public MaterialBuilder addCell(){
 		types = types | 16;
 		return this;
 	}
-	
+
 	public MaterialBuilder addPlasma(){
 		types = types | 32;
 		return this;
 	}
-	
+
 	public MaterialBuilder addToolHeadItems(){
 		types = types | 64;
 		return this;
 	}
-	
+
 	public MaterialBuilder addGearItems(){
 		types = types | 128;
 		return this;
 	}
-	
+
 	public MaterialBuilder addFluid(){
 		this.hasCorrespondingFluid = true;
 		return this;
 	}
-	
+
 	public MaterialBuilder addGas(){
 		this.hasCorrespondingGas = true;
 		return this;
 	}
-	
-	
+
+
 	public MaterialBuilder setRGBA(int r, int g, int b, int a){
 		this.r = r;
 		this.g = g;
@@ -118,19 +121,19 @@ public class MaterialBuilder {
 		this.a = a;
 		return this;
 	}
-	
+
 	public MaterialBuilder setRGB(int r, int g, int b){
 		this.r = r;
 		this.g = g;
 		this.b = b;
 		return this;
 	}
-	
+
 	public MaterialBuilder setTransparent(boolean transparent){
 		this.transparent = transparent;
 		return this;
 	}
-	
+
 	public MaterialBuilder setColor(Dyes color){
 		this.color = color;
 		return this;
@@ -202,17 +205,17 @@ public class MaterialBuilder {
 		extraData = extraData | 1;
 		return this;
 	}
-	
+
 	public MaterialBuilder addCentrifugeRecipe(){
 		extraData = extraData | 2;
 		return this;
 	}
-	
+
 	public MaterialBuilder setMaterialList(List<MaterialStack> materialList) {
 		this.materialList = materialList;
 		return this;
 	}
-	
+
 	public MaterialBuilder setMaterialList(MaterialStack ... materials) {
 		this.materialList = Arrays.asList(materials);
 		return this;
@@ -240,4 +243,14 @@ public class MaterialBuilder {
 		this.gasTemperature = gasTemperature;
 		return this;
 	}
+
+	public boolean canBeCracked() {
+		return canBeCracked;
+	}
+
+	public MaterialBuilder setCanBeCracked(boolean canBeCracked) {
+		this.canBeCracked = canBeCracked;
+		return this;
+	}
+
 }

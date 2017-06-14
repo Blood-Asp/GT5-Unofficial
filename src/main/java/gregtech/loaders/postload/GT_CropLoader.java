@@ -70,7 +70,8 @@ public class GT_CropLoader
             new GT_BaseCrop(175, "Onion", "unknown",	 			null,  4, 4,    0, 1, 4, 1, 1, 0, 2, 0, new String[]{"Food"}, 							 								ItemList.Crop_Drop_Onion.get(1, new Object[0]), null);
             new GT_BaseCrop(176, "Cucumber", "unknown",	 			null,  4, 4,    0, 1, 4, 1, 1, 0, 2, 0, new String[]{"Food"}, 							 								ItemList.Crop_Drop_Cucumber.get(1, new Object[0]), null);
             new GT_BaseCrop(177, "Tea", "unknown",	 				null,  4, 4,    0, 1, 4, 1, 1, 0, 2, 0, new String[]{"Food"}, 							 									ItemList.Crop_Drop_TeaLeaf.get(1, new Object[0]), null);
-            } catch (Throwable e) {
+            new GT_BaseCrop(178, "Rape", "unknown",	 				null,  4, 4,    0, 1, 4, 1, 1, 0, 2, 0, new String[]{"Food", "Oil"}, 							 						ItemList.Crop_Drop_Rape.get(1, new Object[0]), null);
+        } catch (Throwable e) {
             GT_Log.err.println("GT_Mod: Failed to register Crops to IC2.");
             e.printStackTrace(GT_Log.err);
         }
