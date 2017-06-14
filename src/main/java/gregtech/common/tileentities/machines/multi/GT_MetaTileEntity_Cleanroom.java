@@ -33,12 +33,13 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Cleanroom",
-                "Min(WxHxD): 3x3x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
-                "Controller (Top center), Walls Plascrete",
-                "Top besides contoller and corners filter casings",
-                "1 Reinforced Door",
+                "Min(WxHxD): 3x4x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
+                "Controller (Top center)",
+                "Top besides contoller and edges filter casings",
+                "1 Reinforced Door(keep closed for 100% efficency",
                 "1x Energy Hatch, 1x Maintainance Hatch",
-                "up to 10 Machine Hull to transfer Items & Energy inside"};
+                "up to 10 Machine Hull Item & Energy transfer through walls",
+                "Remaining Blocks Plascrete"};
     }
 
     public boolean checkRecipe(ItemStack aStack) {
