@@ -259,7 +259,10 @@ public class GT_RecipeAdder
     }
 
     public boolean addAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt) {
-    	if (areItemsAndFluidsBothNull(aInputs, null)) {
+    	if (areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
+    		return false;
+    	}
+    	if (aOutput1 == null) {
     		return false;
     	}
     	if ((aDuration = GregTech_API.sRecipeFile.get("assembling", aOutput1, aDuration)) <= 0) {
