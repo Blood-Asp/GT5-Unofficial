@@ -223,7 +223,7 @@ public class GT_NEI_DefaultHandler
 			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
 			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {//IF mSpecialValue == -100 THEN needs Low Gravity
 				drawText(10, 123, "Needs Low Gravity", -16777216);
-			} else if (tSpecial == -200) {//IF mSpecialValue == -200 THEN needs cleanroom
+            } else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {//IF mSpecialValue == -200 THEN needs cleanroom
 				drawText(10, 123, "Needs Cleanroom", -16777216);
 			} else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
 				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);

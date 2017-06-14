@@ -1,5 +1,6 @@
 package gregtech.loaders.preload;
 
+import codechicken.nei.api.API;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -40,6 +41,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     private final static long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
 
     private final static boolean aBoolConst_0 = false;
+    private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
     private static void run1() {
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_ULV.get(1L, new Object[0]), bits, new Object[]{aTextPlate, aTextPlateWrench, aTextPlate, 'P', OrePrefixes.plate.get(Materials.WroughtIron)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_LV.get(1L, new Object[0]), bits, new Object[]{aTextPlate, aTextPlateWrench, aTextPlate, 'P', OrePrefixes.plate.get(Materials.Steel)});
@@ -1255,8 +1257,16 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_EngineIntake.get(1L, new Object[0]), bitsd, new Object[]{"PhP", "RFR", aTextPlateWrench, 'R', OrePrefixes.pipeMedium.get(Materials.Titanium), 'F', ItemList.Casing_StableTitanium, 'P', OrePrefixes.rotor.get(Materials.Titanium)});
 
         ItemList.Machine_Multi_Cleanroom.set(new GT_MetaTileEntity_Cleanroom(1172, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1));
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]), bitsd, new Object[]{"FFF", "RHR", "MCM", 'H', ItemList.Hull_HV, 'F', ItemList.Component_Filter, 'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 'M', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced)});
-   
+        //If Cleanroom is enabled, add a recipe, else hide from NEI.
+        if (GT_Mod.gregtechproxy.mEnableCleanroom){
+            GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]), bitsd, new Object[]{"FFF", "RHR", "MCM", 'H', ItemList.Hull_HV, 'F', ItemList.Component_Filter, 'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 'M', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced)});
+        }
+        else {
+            if (isNEILoaded){
+                API.hideItem(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]));
+            }
+        }
+
         ItemList.Machine_LV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1180, "basicmachine.circuitassembler.tier.01", "Basic Circuit Assembling Machine", 1, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
         ItemList.Machine_MV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1181, "basicmachine.circuitassembler.tier.02", "Advanced Circuit Assembling Machine", 2, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
         ItemList.Machine_HV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1182, "basicmachine.circuitassembler.tier.03", "Advanced Circuit Assembling Machine II", 3, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
