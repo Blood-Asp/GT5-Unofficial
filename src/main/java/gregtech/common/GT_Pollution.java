@@ -63,6 +63,7 @@ public class GT_Pollution {
 	private int operationsPerTick=0;//how much chunks should be processed in each cycle
 	private static final short cycleLen=1200;
 	private final World aWorld;
+	public static int mPlayerPollution;
 
 	public GT_Pollution(World world){
 		aWorld=world;
@@ -260,6 +261,13 @@ public class GT_Pollution {
 		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(ch.worldObj.provider.dimensionId);
 		if(dataMap==null || dataMap.get(ch.getChunkCoordIntPair())==null) return 0;
 		return dataMap.get(ch.getChunkCoordIntPair())[GTPOLLUTION];
+	}
+
+	public static int getPollution(ChunkCoordIntPair aCh, int aDim){
+		if(!GT_Mod.gregtechproxy.mPollution)return 0;
+		HashMap<ChunkCoordIntPair,int[]> dataMap=dimensionWiseChunkData.get(aDim);
+		if(dataMap==null || dataMap.get(aCh)==null) return 0;
+		return dataMap.get(aCh)[GTPOLLUTION];
 	}
 	
 	//Add compatibility with old code

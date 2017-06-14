@@ -18,7 +18,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
-import gregtech.api.objects.*;
+import gregtech.api.net.GT_Packet_Pollution;
+import gregtech.api.objects.GT_Fluid;
+import gregtech.api.objects.GT_FluidStack;
+import gregtech.api.objects.GT_UO_DimensionList;
+import gregtech.api.objects.ItemData;
+import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -32,6 +37,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -1304,6 +1310,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 if (tHungerEffect) {
                     aEvent.player.addExhaustion(Math.max(1.0F, tCount / 666.6F));
                 }
+            }
+            if (aEvent.player.ticksExisted % 10 == 0) {
+        	int tPollution = 0;
+        	tPollution = GT_Pollution.getPollution(new ChunkCoordIntPair(aEvent.player.chunkCoordX,aEvent.player.chunkCoordZ), aEvent.player.dimension);
+        	if(aEvent.player instanceof EntityPlayerMP)GT_Values.NW.sendToPlayer(new GT_Packet_Pollution(tPollution), (EntityPlayerMP) aEvent.player);
             }
         }
     }
