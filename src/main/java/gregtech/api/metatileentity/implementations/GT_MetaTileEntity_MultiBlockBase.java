@@ -605,7 +605,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return false;
     }
 
-    private void addFluidOutputs(FluidStack[] mOutputFluids) {
+    protected void addFluidOutputs(FluidStack[] mOutputFluids) {
         int min=mOutputFluids.length>mOutputHatches.size()?mOutputHatches.size():mOutputFluids.length;
         for (int i = 0; i < min; ++i) {
             if (this.mOutputHatches.get(i) != null && mOutputFluids[i] != null && isValidMetaTileEntity(this.mOutputHatches.get(i))) {

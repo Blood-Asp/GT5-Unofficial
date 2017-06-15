@@ -370,7 +370,7 @@ public class GT_NEI_DefaultHandler
             //	mOutputs = aRecipe.getOutputPositionedStacks();
             //	return;
             //}
-            //TODO THE code above and below was replaced with constructor above
+            //TODO check THE code above and below was replaced with constructor above
             //mOutputs = new ArrayList<PositionedStack>();
             //mInputs = new ArrayList<PositionedStack>();
             

@@ -546,6 +546,11 @@ public class GT_Mod implements IGT_Mod {
 			gregtechproxy.mLowGravProcessing = false;
 		}
 
+        //Disable Low Grav regardless of config if Cleanroom is disabled.
+        if (!gregtechproxy.mEnableCleanroom){
+            gregtechproxy.mLowGravProcessing = false;
+        }
+
         gregtechproxy.onLoad();
         if (gregtechproxy.mSortToTheEnd) {
             new GT_ItemIterator().run();

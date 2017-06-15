@@ -40,6 +40,7 @@ public class GT_MetaGenerated_Item_03
 //        ItemList.Circuit_Board_Fiberglass.set(addItem(tLastID = 4, "Fiberglass Circuit Board", "An advanced Board", o));
 //        ItemList.Circuit_Board_Multifiberglass.set(addItem(tLastID = 5, "Multilayer Fiberglass Circuit Board", "A elite Board", o));
         ItemList.Circuit_Board_Wetware.set(addItem(tLastID = 6, "Wetware Lifesupport Circuit Board", "The Board that keeps life", o));
+
         
         /**
          * electronic components:
@@ -160,8 +161,9 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Quantummainframe.set(addItem(tLastID = 88, "Quantumprocessor Mainframe", "Ultimate Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION}));
         
         ItemList.Circuit_Crystalprocessor.set(addItem(tLastID = 89, "Crystalprocessor", "Elite Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Elite), SubTag.NO_UNIFICATION}));
-        //Dataorb 					Dataorb
-        ItemList.Circuit_Crystalcomputer.set(addItem(tLastID = 90, "Crystalprocessor Assembly", "Ultimate Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION}));
+        //TODO check - might be broken section starts here
+		//Dataorb 					Dataorb
+        ItemList.Circuit_Crystalcomputer.set(addItem(tLastID = 90, "Crystalprocessor Assembly", "Ultimate Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION}));//TODO check might be broken
         //TODO check this 2 recipes are from gt5u
         //ItemList.Circuit_Crystalcomputer.set(addItem(tLastID = 96, "Crystalprocessor Assembly", "Master Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Master), SubTag.NO_UNIFICATION}));
         //ItemList.Circuit_Ultimatecrystalcomputer.set(addItem(tLastID = 90, "Ultimate Crystalcomputer", "Ultimate Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), SubTag.NO_UNIFICATION}));
@@ -173,7 +175,11 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Wetwaremainframe.set(addItem(tLastID = 95, "Wetware Mainframe", "Infinite Circuit",  new Object[]{OrePrefixes.circuit.get(Materials.Infinite), SubTag.NO_UNIFICATION}));
         //ItemList.Circuit_Ultimate.set(ItemList.Circuit_Crystalcomputer.get(1L, new Object[0]));//TODO check replaced with line below?
 		ItemList.Circuit_Ultimate.set(ItemList.Circuit_Ultimatecrystalcomputer.get(1L, new Object[0]));//maybe should be removed
-		//TODO CHECK recipes below are removed in gt5u
+		
+		
+		//TODO check might be broken section ends here
+
+		//TODO CHECK recipes below are removed in gt5u??
         ItemList.Circuit_Board_Coated_Basic.set(addItem(tLastID = 100, "Circuit Board", "A basic Circuit Board", o));
         ItemList.Circuit_Board_Phenolic_Good.set(addItem(tLastID = 101, "Good Circuit Board", "A good Circuit Board", o));
         ItemList.Circuit_Board_Epoxy_Advanced.set(addItem(tLastID = 102, "Advanced Circuit Board", "A advanced Circuit Board", o));

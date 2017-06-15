@@ -395,7 +395,6 @@ public enum OrePrefixes {
         cell.mNotGeneratedItems.add(Materials.Lava);
         cell.mNotGeneratedItems.add(Materials.ConstructionFoam);
         cell.mNotGeneratedItems.add(Materials.UUMatter);
-        cell.mNotGeneratedItems.add(Materials.BioFuel);
         cell.mNotGeneratedItems.add(Materials.CoalFuel);
         bucket.mNotGeneratedItems.add(Materials.Empty);
         bucket.mNotGeneratedItems.add(Materials.Lava);
@@ -501,6 +500,7 @@ public enum OrePrefixes {
         pipeRestrictiveMedium.mSecondaryMaterial = new MaterialStack(Materials.Steel, ring.mMaterialAmount * 3);
         pipeRestrictiveLarge.mSecondaryMaterial = new MaterialStack(Materials.Steel, ring.mMaterialAmount * 4);
         pipeRestrictiveHuge.mSecondaryMaterial = new MaterialStack(Materials.Steel, ring.mMaterialAmount * 5);
+        cableGt12.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount * 5);
         cableGt12.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount * 4);
         cableGt08.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount * 3);
         cableGt04.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount * 2);
@@ -697,14 +697,16 @@ public enum OrePrefixes {
                         aMaterial == Materials.Osmium || aMaterial == Materials.Iridium || aMaterial == Materials.Bronze || aMaterial == Materials.WroughtIron ||
                         aMaterial == Materials.Steel || aMaterial == Materials.StainlessSteel || aMaterial == Materials.PigIron || aMaterial == Materials.TungstenSteel ||
                         aMaterial == Materials.Rubber || aMaterial == Materials.HSSE || aMaterial == Materials.Neutronium || aMaterial == Materials.HSSG || aMaterial == Materials.Aluminium || 
-                        aMaterial == Materials.Invar || aMaterial == Materials.Brass || aMaterial == Materials.Paper || aMaterial == Materials.Silicone))
+                        aMaterial == Materials.Invar || aMaterial == Materials.Brass || aMaterial == Materials.Paper || aMaterial == Materials.Silicone || aMaterial == Materials.StyreneButadieneRubber))
                     ring.mDisabledItems.add(aMaterial);
                 //Foil
                 if (!enableUnusedFoil && !(aMaterial == Materials.Zinc || aMaterial == Materials.Aluminium || aMaterial == Materials.Silicon || aMaterial == Materials.Gold ||
                         aMaterial == Materials.Electrum || aMaterial == Materials.Platinum || aMaterial == Materials.Osmiridium || aMaterial == Materials.Osmium ||
                         aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Steel || aMaterial == Materials.Copper || aMaterial == Materials.YttriumBariumCuprate
                         || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.Naquadah || aMaterial == Materials.Manganese ||
-                        aMaterial == Materials.Plastic || aMaterial == Materials.Silicone))
+                        aMaterial == Materials.Plastic || aMaterial == Materials.Silicone || aMaterial == Materials.PolyvinylChloride || aMaterial == Materials.PolyphenyleneSulfide ||
+                        aMaterial == Materials.Nichrome || aMaterial == Materials.BlackSteel || aMaterial == Materials.Titanium || aMaterial == Materials.TungstenSteel ||
+                       	aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium))
                     foil.mDisabledItems.add(aMaterial);
                 //Fine Wire
                 if (!enableUnusedFineWires && !(aMaterial == Materials.Steel || aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Platinum || aMaterial == Materials.Osmium ||
@@ -939,11 +941,14 @@ public enum OrePrefixes {
             case "Rubber":
             case "Polyethylene":
             case "Epoxid":
+            case "Polydimethylsiloxane":
             case "Silicone":
             case "Polysiloxane":
             case "Polycaprolactam":
             case "Polytetrafluoroethylene":
             case "PolyvinylChloride":
+            case "Polystyrene":
+            case "StyreneButadieneRubber":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pulp";
                 if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Sheet";
                 if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Bar";

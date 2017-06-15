@@ -54,24 +54,24 @@ public class GT_GUIContainer_MultiMachine extends GT_GUIContainerMetaTile_Machin
                 } else {
                     fontRendererObj.drawString(trans("142","Running perfectly."), 10, 16, 16448255);
                 }
-                	int id = mContainer.mTileEntity.getMetaTileID();
-                    if (id == 1157 || id == 1158 || id == 1177 || id == 1178 || id == 1179) {
-                    	ItemStack tItem = mContainer.mTileEntity.getMetaTileEntity().getStackInSlot(1);
-                    	if(tItem==null || !GT_Utility.areStacksEqual(tItem, GT_ModHandler.getIC2Item("miningPipe", 1L))){
-                    		fontRendererObj.drawString(trans("143","Missing Mining Pipe"), 10,((GT_Container_MultiMachine) mContainer).mActive == 0 ? 40 : 24, 16448255);
-                    	}
-                    }else if(id == 1131 || id == 1151 || id == 1152 || id == 1153){
-                    	ItemStack tItem = mContainer.mTileEntity.getMetaTileEntity().getStackInSlot(1);
-                    	if(tItem==null || !(tItem.getItem()==GT_MetaGenerated_Tool_01.INSTANCE&&tItem.getItemDamage()>=170&&tItem.getItemDamage()<=177)){
-                    		fontRendererObj.drawString(trans("144","Missing Turbine Rotor"), 10, ((GT_Container_MultiMachine) mContainer).mActive == 0 ? 40 : 24, 16448255);
-                    	}
-                    }                
+                int id = mContainer.mTileEntity.getMetaTileID();
+                if (id == 1157 || id == 1158 || id == 1177 || id == 1178 || id == 1179) {
+                    ItemStack tItem = mContainer.mTileEntity.getMetaTileEntity().getStackInSlot(1);
+                    if (tItem == null || !GT_Utility.areStacksEqual(tItem, GT_ModHandler.getIC2Item("miningPipe", 1L))) {
+                        fontRendererObj.drawString(trans("143", "Missing Mining Pipe"), 10, ((GT_Container_MultiMachine) mContainer).mActive == 0 ? 40 : 24, 16448255);
+                    }
+                } else if (id == 1131 || id == 1151 || id == 1152 || id == 1153) {
+                    ItemStack tItem = mContainer.mTileEntity.getMetaTileEntity().getStackInSlot(1);
+                    if (tItem == null || !(tItem.getItem() == GT_MetaGenerated_Tool_01.INSTANCE && tItem.getItemDamage() >= 170 && tItem.getItemDamage() <= 177)) {
+                        fontRendererObj.drawString(trans("144", "Missing Turbine Rotor"), 10, ((GT_Container_MultiMachine) mContainer).mActive == 0 ? 40 : 24, 16448255);
+                    }
+                }
             }
         }
-    }  
-    
-    public String trans(String aKey, String aEnglish){
-    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+
+    public String trans(String aKey, String aEnglish) {
+        return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_" + aKey, aEnglish, false);
     }
 
     @Override
