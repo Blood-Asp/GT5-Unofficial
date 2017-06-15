@@ -2563,18 +2563,10 @@ if(Loader.isModLoaded("Railcraft")){
     	GT_Values.RA.addDistilleryRecipe(4, Materials.FermentedBiomass.getFluid(100), Materials.AceticAcid.getFluid(3), 160, 8, false);
     	GT_Values.RA.addDistilleryRecipe(5, Materials.FermentedBiomass.getFluid(100), Materials.Water.getFluid(37), 	160, 8, false);
 
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					3, Materials.Charcoal.getGems(20), Materials.CharcoalByproducts.getGas(4000), 	640, 64);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), Materials.Nitrogen.getGas(1000), 	4, Materials.Charcoal.getGems(20), Materials.CharcoalByproducts.getGas(4000), 	320, 96);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					5, Materials.Charcoal.getGems(20), Materials.WoodGas.getGas(1500), 			  	640, 64);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), Materials.Nitrogen.getGas(1000), 	6, Materials.Charcoal.getGems(20), Materials.WoodGas.getGas(1500), 			  	320, 96);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					7, Materials.Charcoal.getGems(20), Materials.WoodVinegar.getFluid(3000), 		640, 64);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), Materials.Nitrogen.getGas(1000), 	8, Materials.Charcoal.getGems(20), Materials.WoodVinegar.getFluid(3000), 		320, 96);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					9, Materials.Charcoal.getGems(20), Materials.WoodTar.getFluid(1500), 			640, 64);
-    	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), Materials.Nitrogen.getGas(1000), 10, Materials.Charcoal.getGems(20), Materials.WoodTar.getFluid(1500), 			320, 96);
-    	GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23), 								  GT_Values.NF, 					1, Materials.Carbon.getDust(12),   Materials.Water.getFluid(1500), 				320, 64);
-    	GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23), 								  Materials.Nitrogen.getGas(500),   2, Materials.Carbon.getDust(12),   Materials.Water.getFluid(1500), 				160, 96);
+    	GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23), 								  GT_Values.NF, 					1, Materials.Charcoal.getDust(12),   Materials.Water.getFluid(1500), 				320, 64);
+    	GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23), 								  Materials.Nitrogen.getGas(500),   2, Materials.Charcoal.getDust(12),   Materials.Water.getFluid(1500), 				160, 96);
     	
-    	GT_Values.RA.addUniversalDistillationRecipe(Materials.CharcoalByproducts.getGas(800), 	new FluidStack[]{Materials.WoodGas.getGas(200), 	Materials.WoodVinegar.getFluid(400),  	Materials.WoodTar.getFluid(200)}, 	Materials.Carbon.getDustSmall(1), 64, 64);
+    	GT_Values.RA.addUniversalDistillationRecipe(Materials.CharcoalByproducts.getGas(800), 	new FluidStack[]{Materials.WoodGas.getGas(200), 	Materials.WoodVinegar.getFluid(400),  	Materials.WoodTar.getFluid(200)}, 	Materials.Charcoal.getDustSmall(1), 64, 64);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodGas.getGas(200), 				new FluidStack[]{Materials.CarbonDioxide.getGas(95),Materials.CarbonMonoxide.getGas(65),	Materials.Methane.getGas(30), 		Materials.Hydrogen.getGas(5), 			Materials.Ethylene.getGas(5)}, 			GT_Values.NI, 16, 64);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodVinegar.getFluid(200),		new FluidStack[]{Materials.Water.getFluid(100), 	Materials.Methanol.getFluid(60), 		Materials.AceticAcid.getFluid(15), 	Materials.Acetone.getFluid(15), 		Materials.MethylAcetate.getFluid(10)}, 	GT_Values.NI, 16, 64);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodTar.getFluid(200), 			new FluidStack[]{Materials.Creosote.getFluid(100), 	Materials.Benzene.getFluid(30), 		Materials.Phenol.getFluid(30), 		new FluidStack(ItemList.sToluene, 20), 	Materials.Glue.getFluid(20)}, 			GT_Values.NI, 16, 64);
