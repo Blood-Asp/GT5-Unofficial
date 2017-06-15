@@ -24,9 +24,7 @@ import gregtech.common.tileentities.machines.GT_MetaTileEntity_BasicHull_SteelBr
 import gregtech.common.tileentities.machines.basic.*;
 import gregtech.common.tileentities.machines.multi.*;
 import gregtech.common.tileentities.machines.steam.*;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_Locker;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumTank;
+import gregtech.common.tileentities.storage.*;
 import ic2.core.Ic2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
