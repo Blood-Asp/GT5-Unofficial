@@ -94,18 +94,18 @@ public class GT_Cover_EUMeter
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
         if(aCoverVariable <0){aCoverVariable = 11;}
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Normal Universal Storage"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Universal Storage"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Normal Electricity Storage"); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Electricity Storage"); break;
-            case 4: GT_Utility.sendChatToPlayer(aPlayer, "Normal Steam Storage"); break;
-            case 5: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Steam Storage"); break;
-            case 6: GT_Utility.sendChatToPlayer(aPlayer, "Normal Average Electric Input"); break;
-            case 7: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Average Electric Input"); break;
-            case 8: GT_Utility.sendChatToPlayer(aPlayer, "Normal Average Electric Output"); break;
-            case 9: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Average Electric Output"); break;
-            case 10: GT_Utility.sendChatToPlayer(aPlayer, "Normal Electricity Storage(Including Batteries)"); break;
-            case 11: GT_Utility.sendChatToPlayer(aPlayer, "Inverted Electricity Storage(Including Batteries)"); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("031")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("032")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("033")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("034")); break;
+            case 4: GT_Utility.sendChatToPlayer(aPlayer, trans("035")); break;
+            case 5: GT_Utility.sendChatToPlayer(aPlayer, trans("036")); break;
+            case 6: GT_Utility.sendChatToPlayer(aPlayer, trans("037")); break;
+            case 7: GT_Utility.sendChatToPlayer(aPlayer, trans("038")); break;
+            case 8: GT_Utility.sendChatToPlayer(aPlayer, trans("039")); break;
+            case 9: GT_Utility.sendChatToPlayer(aPlayer, trans("040")); break;
+            case 10: GT_Utility.sendChatToPlayer(aPlayer, trans("041")); break;
+            case 11: GT_Utility.sendChatToPlayer(aPlayer, trans("042")); break;
         }
         return aCoverVariable;
     }

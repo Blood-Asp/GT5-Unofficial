@@ -19,7 +19,7 @@ public abstract class GT_Cover_RedstoneWirelessBase
             GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
             aCoverVariable = GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem());
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
-            GT_Utility.sendChatToPlayer(aPlayer, "Frequency: " + aCoverVariable);
+            GT_Utility.sendChatToPlayer(aPlayer, trans("081") + aCoverVariable);//"Frequency: " //TODO ADD DEFAULT???
             return true;
         }
         return false;
@@ -43,7 +43,7 @@ public abstract class GT_Cover_RedstoneWirelessBase
                     aCoverVariable += 1024;
             }
         }
-        GT_Utility.sendChatToPlayer(aPlayer, "Frequency: " + aCoverVariable);
+        GT_Utility.sendChatToPlayer(aPlayer, trans("081") + aCoverVariable);//"Frequency: " //TODO ADD DEFAULT???
         return aCoverVariable;
     }
 

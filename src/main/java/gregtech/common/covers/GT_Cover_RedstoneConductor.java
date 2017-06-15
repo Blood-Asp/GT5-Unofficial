@@ -21,13 +21,13 @@ public class GT_Cover_RedstoneConductor
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 7;
         if(aCoverVariable <0){aCoverVariable = 6;}
         switch (aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Conducts strongest Input"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from bottom Input"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from top Input"); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from north Input"); break;
-            case 4: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from south Input"); break;
-            case 5: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from west Input"); break;
-            case 6: GT_Utility.sendChatToPlayer(aPlayer, "Conducts from east Input"); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("071")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("072")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("073")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("074")); break;
+            case 4: GT_Utility.sendChatToPlayer(aPlayer, trans("075")); break;
+            case 5: GT_Utility.sendChatToPlayer(aPlayer, trans("076")); break;
+            case 6: GT_Utility.sendChatToPlayer(aPlayer, trans("077")); break;
         }
         return aCoverVariable;
     }

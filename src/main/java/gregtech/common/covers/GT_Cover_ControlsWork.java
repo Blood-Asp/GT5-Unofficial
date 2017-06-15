@@ -56,13 +56,13 @@ public class GT_Cover_ControlsWork
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 3;
         if(aCoverVariable <0){aCoverVariable = 2;}
         if (aCoverVariable == 0) {
-            GT_Utility.sendChatToPlayer(aPlayer, "Normal");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("003"));
         }
         if (aCoverVariable == 1) {
-            GT_Utility.sendChatToPlayer(aPlayer, "Inverted");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("004"));
         }
         if (aCoverVariable == 2) {
-            GT_Utility.sendChatToPlayer(aPlayer, "No Work at all");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("005"));
         }
         return aCoverVariable;
     }

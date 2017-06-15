@@ -79,7 +79,7 @@ public class GT_Client extends GT_Proxy
     private boolean isFirstClientPlayerTick;
     private String mMessage;
     public GT_Client() {
-        mCapeRenderer = new GT_CapeRenderer(mCapeList);
+    	mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
         mAnimationDirection = false;
         isFirstClientPlayerTick = true;
@@ -191,7 +191,6 @@ public class GT_Client extends GT_Proxy
             String tName = arr$[i$];
             mCapeList.add(tName.toLowerCase());
         }
-
         (new Thread(this)).start();
     }
 
@@ -216,9 +215,7 @@ public class GT_Client extends GT_Proxy
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
                     i++;
                 } while (true);
-            } catch (Throwable e) {
-                e.printStackTrace(GT_Log.err);
-            }
+        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
 
 //        super.onPostLoad();
@@ -265,7 +262,7 @@ public class GT_Client extends GT_Proxy
               }
                  } catch (Throwable e) {
             }
-        try {
+        /**try {
             GT_Log.out.println("GT_Mod: Downloading News.");
             @SuppressWarnings("resource")
             Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/message.txt").openStream());
@@ -273,7 +270,7 @@ public class GT_Client extends GT_Proxy
                 this.mMessage = (this.mMessage + tScanner.nextLine() + " ");
             }
         } catch (Throwable e) {
-        }
+        }**/
     }
     
     @SubscribeEvent

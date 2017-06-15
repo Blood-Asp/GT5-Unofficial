@@ -16,10 +16,9 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.event.world.WorldEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static gregtech.common.GT_Proxy.*;
 
@@ -266,7 +265,7 @@ public class GT_Pollution {
 	@Deprecated /*Don't use it... too weird way of passing position*/
 	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
 		//The abuse of ChunkPosition to store block position and dim... 
-		//is just bad especially when that is both used to store ChunkPos and BlockPos depending on context
+		//is just bad expacially when that is both used to store ChunkPos and BlockPos depeending on context
 		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
 	}
 }

@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 
 public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlockBase {
+
     private boolean running = false;
     private boolean p1, p2, p3, p4, p5, p6;
 

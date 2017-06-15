@@ -20,6 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.ArrayUtils;
 
+import static gregtech.api.enums.GT_Values.V;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -160,12 +162,12 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
         } else if (tmp.startsWith("polarizer")) {
             return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
+        } else if(tmp.startsWith("press")){
+            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
         } else if (tmp.startsWith("plasmaarcfurnace")) {
             return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
         } else if (tmp.startsWith("printer")) {
             return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
-        } else if (tmp.startsWith("press")) {
-            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
         } else if (tmp.startsWith("fluidcanner")) {
             return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
         } else if (tmp.startsWith("fluidheater")) {
@@ -179,6 +181,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         } else if (tmp.startsWith("circuitassembler")) {
             return GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes;
         }
+
         return null;
     }
 
@@ -290,10 +293,9 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 }
                 ItemStack[] tOut = new ItemStack[tRecipe.mOutputs.length];
                 for (int h = 0; h < tRecipe.mOutputs.length; h++) {
-                    if(tRecipe.getOutput(h)!=null){
-                        tOut[h] = tRecipe.getOutput(h).copy();
-                        tOut[h].stackSize = 0;
-                    }
+                	if(tRecipe.getOutput(h)!=null){
+                    tOut[h] = tRecipe.getOutput(h).copy();
+                    tOut[h].stackSize = 0;}
                 }
                 FluidStack tFOut = null;
                 if (tRecipe.getFluidOutput(0) != null) tFOut = tRecipe.getFluidOutput(0).copy();
@@ -309,18 +311,16 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                     int tSize = tFOut.amount;
                     tFOut.amount = tSize * i;
                 }
-
-                tOut= clean(tOut);
+                tOut = clean(tOut);
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                 List<ItemStack> overStacks = new ArrayList<ItemStack>();
                 for (int f = 0; f < tOut.length; f++) {
                     while (tOut[f].getMaxStackSize() < tOut[f].stackSize) {
-                        if(tOut[f]!=null) {
-                            ItemStack tmp = tOut[f].copy();
-                            tmp.stackSize = tmp.getMaxStackSize();
-                            tOut[f].stackSize = tOut[f].stackSize - tOut[f].getMaxStackSize();
-                            overStacks.add(tmp);
-                        }
+                    	if(tOut[f]!=null){
+                        ItemStack tmp = tOut[f].copy();
+                        tmp.stackSize = tmp.getMaxStackSize();
+                        tOut[f].stackSize = tOut[f].stackSize - tOut[f].getMaxStackSize();
+                        overStacks.add(tmp);}
                     }
                 }
                 if (overStacks.size() > 0) {
@@ -343,8 +343,8 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         }
         return false;
     }
-
-    public static ItemStack[] clean(final ItemStack[] v){
+    
+    public static ItemStack[] clean(final ItemStack[] v) {
         List<ItemStack> list = new ArrayList<ItemStack>(Arrays.asList(v));
         list.removeAll(Collections.singleton(null));
         return list.toArray(new ItemStack[list.size()]);

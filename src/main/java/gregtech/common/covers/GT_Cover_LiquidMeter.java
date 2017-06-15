@@ -42,9 +42,9 @@ public class GT_Cover_LiquidMeter
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aCoverVariable == 0) {
-            GT_Utility.sendChatToPlayer(aPlayer, "Inverted");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("054"));
         } else {
-            GT_Utility.sendChatToPlayer(aPlayer, "Normal");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("055"));
         }
         return aCoverVariable == 0 ? 1 : 0;
     }

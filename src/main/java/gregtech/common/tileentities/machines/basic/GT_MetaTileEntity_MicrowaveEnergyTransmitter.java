@@ -16,6 +16,7 @@ import gregtech.common.gui.GT_Container_MicrowaveEnergyTransmitter;
 import gregtech.common.gui.GT_GUIContainer_MicrowaveEnergyTransmitter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;

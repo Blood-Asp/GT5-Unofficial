@@ -321,4 +321,9 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         if(GT_Client.hideValue==1) return 0.0625F;
         return mThickNess;
     }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
+        return AxisAlignedBB.getBoundingBox(aX + 0.0625D, aY + 0.0625D, aZ + 0.0625D, aX + 0.9375D, aY + 0.9375D, aZ + 0.9375D);
+    }
 }
