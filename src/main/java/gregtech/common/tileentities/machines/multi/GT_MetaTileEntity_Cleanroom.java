@@ -33,12 +33,13 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Cleanroom",
-                "Min(WxHxD): 3x3x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
-                "Controller (Top center), Walls Plascrete",
+                "Min(WxHxD): 3x4x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
+                "Controller (Top center)",
                 "Top besides contoller and edges Filter Machine Casings",
-                "1x Reinforced Door",
+                "1 Reinforced Door (keep closed for 100% efficency",
                 "1x MV+ Energy Hatch, 1x Maintainance Hatch",
-                "up to 10 Machine Hulls to transfer Items & Energy inside"};
+                "Up to 10 Machine Hulls to transfer Items & Energy through walls",
+                "Remaining Blocks Plascrete"};
     }
 
     public boolean checkRecipe(ItemStack aStack) {
@@ -148,8 +149,17 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         if (doorState) {
             mEfficiency = Math.max(0, mEfficiency - 200);
         }
-
+        for(byte i = 0 ; i<6 ; i++){
+        	byte t = (byte) Math.max(1, (byte)(15/(10000f / mEfficiency)));
+        aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
+        }
+        
         return true;
+    }
+    
+    @Override
+    public boolean allowGeneralRedstoneOutput(){
+    	return true;
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

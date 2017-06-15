@@ -25,7 +25,7 @@ public class GT_MetaTileEntity_Boiler_Steel
         super(aID, aName, aNameRegional, new String[]{
                 "Faster than the Bronze Boiler",
                 "Produces 300L of Steam per second",
-                "Causes 20 Pollution per second"});
+                "Causes 30 Pollution per second"});
     }
 
     public GT_MetaTileEntity_Boiler_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -153,7 +153,7 @@ public class GT_MetaTileEntity_Boiler_Steel
                 this.mTemperature += 1;
             }
             if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
-                GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(), new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(), this.getBaseMetaTileEntity().getZCoord()), 20);
+                GT_Pollution.addPollution(getBaseMetaTileEntity(), 30);
             }
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
         }

@@ -254,6 +254,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", false).getBoolean(false);
         gregtechproxy.mAddGTRecipesToIC2Machines = tMainConfig.get("general", "AddGTRecipesToIC2Machines", true).getBoolean(true);
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
+        gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);
         gregtechproxy.mLowGravProcessing = Loader.isModLoaded(GT_Values.MOD_ID_GC_CORE) && tMainConfig.get("general", "LowGravProcessing", true).getBoolean(true);
         Calendar now = Calendar.getInstance();
         gregtechproxy.mAprilFool = GregTech_API.sSpecialFile.get(ConfigCategories.general, "AprilFool", now.get(Calendar.MONTH) == Calendar.APRIL && now.get(Calendar.DAY_OF_MONTH) == 1);
@@ -266,6 +267,7 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.mRFtoEU = GregTech_API.sOPStuff.get(ConfigCategories.general, "100RFtoEU", 20);
         GregTech_API.mRFExplosions = GregTech_API.sOPStuff.get(ConfigCategories.general, "RFExplosions", false);
         GregTech_API.meIOLoaded = Loader.isModLoaded("EnderIO");
+        gregtechproxy.mForceFreeFace = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "forceFreeFace",false);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
 
@@ -519,6 +521,11 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
         new GT_Bees();
+		
+		//Disable Low Grav regardless of config if Cleanroom is disabled.
+		if (!gregtechproxy.mEnableCleanroom){
+			gregtechproxy.mLowGravProcessing = false;
+		}
 
         gregtechproxy.onLoad();
         if (gregtechproxy.mSortToTheEnd) {
