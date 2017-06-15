@@ -143,7 +143,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-    	float tSpace = (1f - getThickNess())/2;
+    	float tSpace = (1f - mThickNess)/2;
     	float tSide0 = tSpace;
     	float tSide1 = 1f - tSpace;
     	float tSide2 = tSpace;
