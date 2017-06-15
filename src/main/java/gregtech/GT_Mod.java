@@ -260,11 +260,12 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mExplosionItemDrop = tMainConfig.get("general", "ExplosionItemDrops", false).getBoolean(false);
         gregtechproxy.mAddGTRecipesToIC2Machines = tMainConfig.get("general", "AddGTRecipesToIC2Machines", true).getBoolean(true);
         gregtechproxy.mUndergroundOil.getConfig(tMainConfig, "undergroundfluid");
+        gregtechproxy.mEnableCleanroom = tMainConfig.get("general", "EnableCleanroom", true).getBoolean(true);
         gregtechproxy.mLowGravProcessing = Loader.isModLoaded(GT_Values.MOD_ID_GC_CORE) && tMainConfig.get("general", "LowGravProcessing", true).getBoolean(true);
         Calendar now = Calendar.getInstance();
         gregtechproxy.mAprilFool = GregTech_API.sSpecialFile.get(ConfigCategories.general, "AprilFool", now.get(Calendar.MONTH) == Calendar.APRIL && now.get(Calendar.DAY_OF_MONTH) == 1);
         gregtechproxy.mCropNeedBlock = tMainConfig.get("general", "CropNeedBlockBelow", true).getBoolean(true);
-        gregtechproxy.mReenableSimplifiedChemicalRecipes = tMainConfig.get("general", "ReenableSimplifiedChemicalRecipes", false).getBoolean(true);
+        gregtechproxy.mReenableSimplifiedChemicalRecipes = tMainConfig.get("general", "ReenableSimplifiedChemicalRecipes", false).getBoolean(false);//TODO CHECK
         gregtechproxy.mAMHInteraction = tMainConfig.get("general", "AllowAutoMaintenanceHatchInteraction", false).getBoolean(false);
         GregTech_API.mOutputRF = GregTech_API.sOPStuff.get(ConfigCategories.general, "OutputRF", true);
         GregTech_API.mInputRF = GregTech_API.sOPStuff.get(ConfigCategories.general, "InputRF", false);
@@ -272,17 +273,18 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.mRFtoEU = GregTech_API.sOPStuff.get(ConfigCategories.general, "100RFtoEU", 20);
         GregTech_API.mRFExplosions = GregTech_API.sOPStuff.get(ConfigCategories.general, "RFExplosions", false);
         GregTech_API.meIOLoaded = Loader.isModLoaded("EnderIO");
+        gregtechproxy.mForceFreeFace = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "forceFreeFace",false);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
-        gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);
-        if(gregtechproxy.mChangeHarvestLevels){
-            gregtechproxy.mGraniteHavestLevel = (int) GregTech_API.sMaterialProperties.get("havestLevel", "graniteHarvestLevel", 3);
-            gregtechproxy.mMaxHarvestLevel=(int) Math.min(15, GregTech_API.sMaterialProperties.get("havestLevel", "maxLevel",7));
-            for(Materials tMaterial : Materials.values()){
-                if(tMaterial!=null&&tMaterial.mToolQuality>0&&tMaterial.mMetaItemSubID<gregtechproxy.mHarvestLevel.length&&tMaterial.mMetaItemSubID>=0){
-                    gregtechproxy.mHarvestLevel[tMaterial.mMetaItemSubID] = GregTech_API.sMaterialProperties.get("materialHavestLevel", tMaterial.mDefaultLocalName,tMaterial.mToolQuality);
-                }
-            }}
+        //gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);//TODO CHECK
+        //if(gregtechproxy.mChangeHarvestLevels){
+        //    gregtechproxy.mGraniteHavestLevel = (int) GregTech_API.sMaterialProperties.get("havestLevel", "graniteHarvestLevel", 3);
+        //    gregtechproxy.mMaxHarvestLevel=(int) Math.min(15, GregTech_API.sMaterialProperties.get("havestLevel", "maxLevel",7));
+        //    for(Materials tMaterial : Materials.values()){
+        //        if(tMaterial!=null&&tMaterial.mToolQuality>0&&tMaterial.mMetaItemSubID<gregtechproxy.mHarvestLevel.length&&tMaterial.mMetaItemSubID>=0){
+        //            gregtechproxy.mHarvestLevel[tMaterial.mMetaItemSubID] = GregTech_API.sMaterialProperties.get("materialHavestLevel", tMaterial.mDefaultLocalName,tMaterial.mToolQuality);
+        //        }
+        //    }}
 
         if (tMainConfig.get("general", "hardermobspawners", true).getBoolean(true)) {
             Blocks.mob_spawner.setHardness(500.0F).setResistance(6000000.0F);
@@ -445,16 +447,16 @@ public class GT_Mod implements IGT_Mod {
         new GT_SonictronLoader().run();
         new GT_SpawnEventHandler();
 
-        if (true) {
-			GT_Values.RA.addCentrifugeRecipe(Materials.Stone.getDust(1), GT_Values.NI, GT_Values.NF, GT_Values.NF, 
-					Materials.Quartzite.getDustSmall(1),Materials.PotassiumFeldspar.getDustSmall(1),Materials.Marble.getDustTiny(2),
-					Materials.Biotite.getDustTiny(1), 	Materials.MetalMixture.getDustTiny(1), 		Materials.Sodalite.getDustTiny(1), 
-					new int[]{10000, 10000, 10000, 10000, 10000, 5500}, 480, 30);
-			GT_Values.RA.addCentrifugeRecipe(Materials.MetalMixture.getDust(1), GT_Values.NI, GT_Values.NF, GT_Values.NF, 
-					Materials.BandedIron.getDustSmall(1), 	Materials.Bauxite.getDustSmall(1), Materials.Pyrolusite.getDustTiny(2),
-					Materials.Barite.getDustTiny(1), 		Materials.Chromite.getDustTiny(1), Materials.Ilmenite.getDustTiny(1), 
-					new int[]{10000, 10000, 10000, 10000, 10000, 6000}, 480, 900);
-        }
+        //if (true) {//TODO check
+		//	GT_Values.RA.addCentrifugeRecipe(Materials.Stone.getDust(1), GT_Values.NI, GT_Values.NF, GT_Values.NF, 
+		//			Materials.Quartzite.getDustSmall(1),Materials.PotassiumFeldspar.getDustSmall(1),Materials.Marble.getDustTiny(2),
+		//			Materials.Biotite.getDustTiny(1), 	Materials.MetalMixture.getDustTiny(1), 		Materials.Sodalite.getDustTiny(1), 
+		//			new int[]{10000, 10000, 10000, 10000, 10000, 5500}, 480, 30);
+		//	GT_Values.RA.addCentrifugeRecipe(Materials.MetalMixture.getDust(1), GT_Values.NI, GT_Values.NF, GT_Values.NF, 
+		//			Materials.BandedIron.getDustSmall(1), 	Materials.Bauxite.getDustSmall(1), Materials.Pyrolusite.getDustTiny(2),
+		//			Materials.Barite.getDustTiny(1), 		Materials.Chromite.getDustTiny(1), Materials.Ilmenite.getDustTiny(1), 
+		//			new int[]{10000, 10000, 10000, 10000, 10000, 6000}, 480, 900);
+        //}
 		/*
 		if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.gregtechrecipes, "SolarPanel", true)) {
             GT_ModHandler.addCraftingRecipe(ItemList.Cover_SolarPanel.get(1L, new Object[0]),    GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"SGS", "CPC", 'C', OrePrefixes.circuit.get(Materials.Basic), 'G', new ItemStack(Blocks.glass_pane, 1), 'P', OrePrefixes.plateAlloy.get(Materials.Carbon), 'S', ItemList.Circuit_Silicon_Wafer});
@@ -538,6 +540,11 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
         new GT_Bees();
+		
+		//Disable Low Grav regardless of config if Cleanroom is disabled.
+		if (!gregtechproxy.mEnableCleanroom){
+			gregtechproxy.mLowGravProcessing = false;
+		}
 
         gregtechproxy.onLoad();
         if (gregtechproxy.mSortToTheEnd) {
@@ -834,16 +841,16 @@ public class GT_Mod implements IGT_Mod {
         GT_Recipe.GT_Recipe_Map.sRockBreakerFakeRecipes.addFakeRecipe(false, new ItemStack[]{ItemList.Display_ITS_FREE.getWithName(0L, "Place Lava on Side", new Object[0])}, new ItemStack[]{new ItemStack(Blocks.cobblestone, 1)}, null, null, null, 16, 32, 0);
         GT_Recipe.GT_Recipe_Map.sRockBreakerFakeRecipes.addFakeRecipe(false, new ItemStack[]{ItemList.Display_ITS_FREE.getWithName(0L, "Place Lava on Top", new Object[0])}, new ItemStack[]{new ItemStack(Blocks.stone, 1)}, null, null, null, 16, 32, 0);
         GT_Recipe.GT_Recipe_Map.sRockBreakerFakeRecipes.addFakeRecipe(false, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1L)}, new ItemStack[]{new ItemStack(Blocks.obsidian, 1)}, null, null, null, 128, 32, 0);
-        for (Iterator i$ = GT_ModHandler.getMaceratorRecipeList().entrySet().iterator(); i$.hasNext(); ) {
-            Entry tRecipe = (Map.Entry) i$.next();
-            if (((RecipeOutput) tRecipe.getValue()).items.size() > 0) {
-                for (ItemStack tStack : ((IRecipeInput) tRecipe.getKey()).getInputs()) {
-                    if (GT_Utility.isStackValid(tStack)) {
-                        GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.addFakeRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), new Object[]{tStack})}, new ItemStack[]{(ItemStack) ((RecipeOutput) tRecipe.getValue()).items.get(0)}, null, null, null, null, 400, 2, 0);
-                    }
-                }
-            }
-        }
+        //for (Iterator i$ = GT_ModHandler.getMaceratorRecipeList().entrySet().iterator(); i$.hasNext(); ) {//TODO CHECK
+        //    Entry tRecipe = (Map.Entry) i$.next();
+        //    if (((RecipeOutput) tRecipe.getValue()).items.size() > 0) {
+        //        for (ItemStack tStack : ((IRecipeInput) tRecipe.getKey()).getInputs()) {
+        //            if (GT_Utility.isStackValid(tStack)) {
+        //                GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.addFakeRecipe(true, new ItemStack[]{GT_Utility.copyAmount(((IRecipeInput) tRecipe.getKey()).getAmount(), new Object[]{tStack})}, new ItemStack[]{(ItemStack) ((RecipeOutput) tRecipe.getValue()).items.get(0)}, null, null, null, null, 400, 2, 0);
+        //            }
+        //        }
+        //    }
+        //}
 
         if(GregTech_API.mOutputRF||GregTech_API.mInputRF){
             GT_Utility.checkAvailabilities();

@@ -24,6 +24,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.net.GT_Packet_Pollution;
 import gregtech.api.objects.GT_Fluid;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.GT_UO_DimensionList;
@@ -38,6 +39,7 @@ import gregtech.common.items.armor.gui.ContainerElectricArmor1;
 import gregtech.common.items.armor.gui.GuiElectricArmor1;
 import gregtech.common.items.armor.gui.GuiModularArmor;
 import gregtech.common.items.armor.gui.InventoryArmor;
+import gregtech.common.tools.GT_Tool;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -46,6 +48,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -69,6 +72,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -198,12 +202,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mEnableAllMaterials = false;
     public boolean mEnableAllComponents = false;
     public boolean mAddGTRecipesToIC2Machines = true;
+	public boolean mEnableCleanroom = true;
     public boolean mLowGravProcessing = false;
     public boolean mAprilFool = false;
     public boolean mCropNeedBlock = true;
     public boolean mReenableSimplifiedChemicalRecipes = false;
     public boolean mAMHInteraction = true;
-
+    public boolean mForceFreeFace = false;
+    
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
         MinecraftForge.EVENT_BUS.register(this);
@@ -1322,6 +1328,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     aEvent.player.addExhaustion(Math.max(1.0F, tCount / 666.6F));
                 }
             }
+            if (aEvent.player.ticksExisted % 10 == 0) {
+        	int tPollution = 0;
+        	tPollution = GT_Pollution.getPollution(new ChunkCoordIntPair(aEvent.player.chunkCoordX,aEvent.player.chunkCoordZ), aEvent.player.dimension);
+        	if(aEvent.player instanceof EntityPlayerMP)GT_Values.NW.sendToPlayer(new GT_Packet_Pollution(tPollution), (EntityPlayerMP) aEvent.player);
+            }
         }
     }
 
@@ -1818,6 +1829,21 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ////Already loaded chunk data
         ////DO NOTHING - this chunk data was already loaded and stored in hash map
         //}
+    }
+    
+    @SubscribeEvent
+    public void onBlockBreakSpeedEvent(PlayerEvent.BreakSpeed aEvent)
+    {
+      if (aEvent.newSpeed > 0.0F)
+      {
+        if (aEvent.entityPlayer != null)
+        {
+          ItemStack aStack = aEvent.entityPlayer.getCurrentEquippedItem();
+          if ((aStack != null) && ((aStack.getItem() instanceof GT_MetaGenerated_Tool))) {
+            aEvent.newSpeed = ((GT_MetaGenerated_Tool)aStack.getItem()).onBlockBreakSpeedEvent(aEvent.newSpeed, aStack, aEvent.entityPlayer, aEvent.block, aEvent.x, aEvent.y, aEvent.z, (byte)aEvent.metadata, aEvent);
+          }
+        }
+      }
     }
 
     public static class OreDictEventContainer {

@@ -39,7 +39,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable -= 16;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001") : trans("002")) + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         return aCoverVariable;
     }
 
@@ -49,7 +49,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable--;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001") : trans("002")) + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
         return true;
     }

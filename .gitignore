@@ -70,6 +70,7 @@ local.properties
 
 .idea/
 .idea_modules/
+classes/
 
 /out/
 gradlew

@@ -215,12 +215,12 @@ public class GT_NEI_DefaultHandler
 				}
 			}
 			if (tDuration > 0) {
-				drawText(10, 113, trans("158","Time: ")+String.format("%.2f secs", 0.05F * tDuration), -16777216);
+				drawText(10, 113, trans("158","Time: ")+String.format("%.2f " + trans("161"," secs"), 0.05F * tDuration), -16777216);
 			}
 			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
-			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {//IF mSpecialValue == -100 THEN needs Low Gravity
+			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
 				drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
-			} else if (tSpecial == -200) {//IF mSpecialValue == -200 THEN needs cleanroom
+			} else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
 				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
 			} else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
 				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);

@@ -38,9 +38,9 @@ public class GT_Cover_ItemMeter
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % (2 + aTileEntity.getSizeInventory());
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("051")); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("052")); break;
-            default: GT_Utility.sendChatToPlayer(aPlayer, trans("053") + (aCoverVariable - 2)); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("051", "Normal")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("052", "Inverted")); break;
+            default: GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (aCoverVariable - 2)); break;
         }
         return aCoverVariable;
     }

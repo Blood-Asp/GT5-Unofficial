@@ -33,6 +33,8 @@ import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.event.terraingen.BiomeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
@@ -147,6 +149,44 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(-0.25D, 0.0D, 0.5D);
         GL11.glEnd();
         GL11.glPopMatrix();
+    }
+    
+    @SubscribeEvent
+    public void manipulateDensity(EntityViewRenderEvent.FogDensity event) {
+    	if(GT_Pollution.mPlayerPollution > (GT_Mod.gregtechproxy.mPollutionSmogLimit)){    	
+        event.density = (0.15f*(Math.min(GT_Pollution.mPlayerPollution/((float)GT_Mod.gregtechproxy.mPollutionSourRainLimit),1.0f)))+0.1f;
+        event.setCanceled(true);
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateColor(EntityViewRenderEvent.FogColors event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.red = 140f/255f;
+        event.green = 80f/255f;
+        event.blue = 40f/255f;
+    	}
+    }
+    
+    @SubscribeEvent
+    public void manipulateGrassColor(BiomeEvent.GetGrassColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0xD2691E;
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateWaterColor(BiomeEvent.GetWaterColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0x556B2F;
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateFoliageColor(BiomeEvent.GetFoliageColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0xCD853F;
+    	}
     }
 
     public boolean isServerSide() {

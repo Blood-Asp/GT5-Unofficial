@@ -72,7 +72,7 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 			aCoverVariable = (0 - mTransferRate);
 		}
 		GT_Utility.sendChatToPlayer(aPlayer,
-				trans("048") + aCoverVariable + trans("049") + aCoverVariable * 20 + trans("050"));
+				trans("048", "Pump speed: ") + aCoverVariable + trans("049", "L/tick ") + aCoverVariable * 20 + trans("050", "L/sec"));
 		return aCoverVariable;
 	}
 
@@ -90,7 +90,7 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 			aCoverVariable = (0 - mTransferRate);
 		}
 		GT_Utility.sendChatToPlayer(aPlayer,
-				trans("048") + aCoverVariable + trans("049") + aCoverVariable * 20 + trans("050"));
+				trans("048", "Pump speed: ") + aCoverVariable + trans("049", "L/tick ") + aCoverVariable * 20 + trans("050", "L/sec"));
 		aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
 		return true;
 	}
