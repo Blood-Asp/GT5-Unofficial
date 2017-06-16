@@ -49,4 +49,9 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
 	protected boolean isCorrectCasingMetaID(int metaID) {
 		return true;
 	}
+
+	@Override
+	public String getName() {
+		return "Bricked Blast Furnace";
+	}
 }

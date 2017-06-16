@@ -47,5 +47,10 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
 		return metaID == 10;
 	}
 
+	@Override
+	public String getName() {
+		return "Bronze Blast Furnace";
+	}
+
  
 }
