@@ -358,21 +358,21 @@ public class GT_NEI_DefaultHandler
     public class CachedDefaultRecipe
             extends TemplateRecipeHandler.CachedRecipe {
         public final GT_Recipe mRecipe;
-        public final List<PositionedStack> mOutputs = new ArrayList();//Constructor here!
-        public final List<PositionedStack> mInputs = new ArrayList();//Constructor here!
+        public final List<PositionedStack> mOutputs;
+        public final List<PositionedStack> mInputs;
 
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
 			
-            //if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
-            //	mInputs = aRecipe.getInputPositionedStacks();
-            //	mOutputs = aRecipe.getOutputPositionedStacks();
-            //	return;
-            //}
-            //TODO check THE code above and below was replaced with constructor above
-            //mOutputs = new ArrayList<PositionedStack>();
-            //mInputs = new ArrayList<PositionedStack>();
+            if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
+            	mInputs = aRecipe.getInputPositionedStacks();
+            	mOutputs = aRecipe.getOutputPositionedStacks();
+            	return;
+            }
+
+            mOutputs = new ArrayList<>();
+            mInputs = new ArrayList<>();
             
             int tStartIndex = 0;
             switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualInputCount) {
