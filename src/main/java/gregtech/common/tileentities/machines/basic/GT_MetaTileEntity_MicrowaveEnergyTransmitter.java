@@ -8,6 +8,9 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
+import gregtech.api.metatileentity.BaseTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Config;
@@ -191,18 +194,25 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
                         }
                     }
                     int tDistance = distanceCalculation();
-                    if (tTile != null && tTile instanceof IEnergyConnected) {
-                        int tLoss = 1;
-                        if (mMaxLossDistance != 0) {
-                            tLoss = GT_Utility.safeInt(10L + (tDistance * Math.max(mMaxLoss - 10L,0) / mMaxLossDistance));
-                        }
-                        if(getBaseMetaTileEntity().isUniversalEnergyStored(V[mTier] + ((V[mTier] * tLoss) / 100))){
-                            //TODO:check tier before sending to disable remote detonation
-                            //if(((IEnergyConnected) tTile).)
-                                if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, V[mTier], 1) > 0) {
-                                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(V[mTier] + ((V[mTier] * tLoss) / 100), false);
+                    if(tTile!=null) {
+                        if (tTile instanceof IEnergyConnected) {
+                            long packetSize=V[mTier];
+                            if(tTile instanceof IGregTechTileEntity){
+                                IMetaTileEntity mte=((IGregTechTileEntity) tTile).getMetaTileEntity();
+                                if(mte instanceof BaseMetaTileEntity) {
+                                    packetSize=((BaseMetaTileEntity) mte).getMaxSafeInput();
                                 }
-                            //}
+                            }
+                            long energyUse = 1;
+                            if (mMaxLossDistance != 0) {
+                                energyUse = GT_Utility.safeInt(10L + (tDistance * Math.max(mMaxLoss - 10L, 0) / mMaxLossDistance));
+                            }
+                            energyUse=packetSize + ((V[mTier] * energyUse) / 100);
+                            if (getBaseMetaTileEntity().isUniversalEnergyStored(energyUse)) {
+                                if (((IEnergyConnected) tTile).injectEnergyUnits((byte) 6, packetSize, 1) > 0) {
+                                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(energyUse, false);
+                                }
+                            }
                         }
                     }
                 }

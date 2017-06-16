@@ -1579,8 +1579,7 @@ public class GT_Utility {
         entity.fallDistance = 0;
         return true;
     }
-	
-	//TODO check if unused?
+
     public static int getScaleCoordinates(double aValue, int aScale) {
     	return (int)Math.floor(aValue / aScale);
     }
@@ -1631,7 +1630,7 @@ public class GT_Utility {
                 if (tTileEntity instanceof ic2.api.reactor.IReactor) {
                     rEUAmount += 500;
                     tList.add(trans("168","Heat: ") +EnumChatFormatting.GREEN+ ((ic2.api.reactor.IReactor) tTileEntity).getHeat() +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()+EnumChatFormatting.RESET);
-                    tList.add(trans("169","  HEM: ") +EnumChatFormatting.YELLOW+((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() +EnumChatFormatting.RESET/*+ trans("170"," Base EU Output: ")/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);//TODO WHAT?
+                    tList.add(trans("169","  HEM: ") +EnumChatFormatting.YELLOW+((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() +EnumChatFormatting.RESET/*+ trans("170"," Base EU Output: ")/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -1774,7 +1773,7 @@ public class GT_Utility {
             }
         }
         
-        if (aPlayer.capabilities.isCreativeMode && GT_Values.D1) {
+        if (aPlayer.capabilities.isCreativeMode) {
             FluidStack tFluid = undergroundOil(aWorld.getChunkFromBlockCoords(aX,aZ),-1);//-# to only read
             if (tFluid!=null)
             	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
@@ -2036,7 +2035,7 @@ public class GT_Utility {
             NBTTagCompound tNBT = getNBT(aStack);
             String tData = aX + "," + aY + "," + aZ + "," + aDim + ",";
             if (aFluid!=null)
-            	tData += (aFluid.amount /*/ 5000*/) + "," + aFluid.getLocalizedName() + ",";//TODO CHECK IF THAT /5000 is needed
+            	tData += (aFluid.amount) + "," + aFluid.getLocalizedName() + ",";//TODO CHECK IF THAT /5000 is needed
             for (String tString : aOres) {
                 tData += tString + ",";
             }

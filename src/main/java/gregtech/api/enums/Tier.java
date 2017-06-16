@@ -23,7 +23,6 @@ public class Tier {
             new Tier(SubTag.ENERGY_ELECTRICITY,14, 1073741824, 1, 1, 1, Materials.Neutronium, ItemList.Hull_MAX, OrePrefixes.wireGt01.get(Materials.Superconductor), OrePrefixes.wireGt04.get(Materials.Superconductor), OrePrefixes.circuit.get(Materials.Ultimate), OrePrefixes.circuit.get(Materials.Ultimate)),
             new Tier(SubTag.ENERGY_ELECTRICITY,15, Integer.MAX_VALUE-7, 1, 1, 1, Materials.Neutronium, ItemList.Hull_MAX, OrePrefixes.wireGt01.get(Materials.Superconductor), OrePrefixes.wireGt04.get(Materials.Superconductor), OrePrefixes.circuit.get(Materials.Ultimate), OrePrefixes.circuit.get(Materials.Ultimate)),
             //READ GT_VALUES CLASS BEFORE YOU START ADDING STUFF TO TIERS 8+ - and probably dont do it in GT but in GTNH core mod - that way we shouldnt need to set the tier class
-            //TODO:test if that above actually works as intended (tier class should be ignored) when adding stuff with coremod
     }, ROTATIONAL = new Tier[]{
             new Tier(SubTag.ENERGY_ROTATIONAL, 1, 32, 1, 1, 1, Materials.Wood, OrePrefixes.frameGt.get(Materials.Wood), OrePrefixes.stick.get(Materials.Wood), OrePrefixes.ingot.get(Materials.Wood), OrePrefixes.gearGt.get(Materials.Wood), OrePrefixes.gearGt.get(Materials.Stone)),
             new Tier(SubTag.ENERGY_ROTATIONAL, 1, 32, 1, 2, 2, Materials.WoodSealed, OrePrefixes.frameGt.get(Materials.WoodSealed), OrePrefixes.stick.get(Materials.WoodSealed), OrePrefixes.ingot.get(Materials.WoodSealed), OrePrefixes.gearGt.get(Materials.WoodSealed), OrePrefixes.gearGt.get(Materials.Stone)),

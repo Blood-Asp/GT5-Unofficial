@@ -1291,7 +1291,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
     		'M', ItemList.Electric_Motor_HV,
     		'B', ItemList.Hull_HV});
-}
+    }
 
     private static void run4() {
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {

@@ -19,7 +19,7 @@ import java.util.Random;
 import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Macerator_Steel
-        extends GT_MetaTileEntity_BasicMachine_Steel {//TODO CHECK ALL STEAM POWERED MACHINES
+        extends GT_MetaTileEntity_BasicMachine_Steel {
     public GT_MetaTileEntity_Macerator_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, "Macerating your Ores", 1, 1, false);
     }
@@ -64,7 +64,7 @@ public class GT_MetaTileEntity_Macerator_Steel
         getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
-	//TODO THIS MIGHT WORK???
+
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
             return false;

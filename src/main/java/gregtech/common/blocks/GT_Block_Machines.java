@@ -212,8 +212,7 @@ public class GT_Block_Machines
         TileEntity tTileEntity = blockAccess.getTileEntity(aX, aY, aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
             AxisAlignedBB bbb=((IGregTechTileEntity)tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity)tTileEntity).getWorld(), 0, 0, 0);
-            //setBlockBounds((float) bbb.minX, (float) bbb.minY, (float) bbb.minZ, (float) bbb.maxX, (float) bbb.maxY, (float) bbb.maxZ);//TODO what is this???
-			minX=bbb.minX;
+			minX=bbb.minX;//This essentially sets block bounds
             minY=bbb.minY;
             minZ=bbb.minZ;
             maxX=bbb.maxX;
@@ -224,7 +223,7 @@ public class GT_Block_Machines
         super.setBlockBoundsBasedOnState(blockAccess,aX,aY,aZ);
     }
 
-    @Override//TODO check?
+    @Override
     public void setBlockBoundsForItemRender() {
         super.setBlockBounds(0,0,0,1,1,1);
     }

@@ -45,13 +45,6 @@ public class GT_MetaTileEntity_Compressor_Bronze
         return 0;
     }
 
-    //public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {//GOT DISABLED?
-    //    if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-    //        return false;
-    //    }
-    //    return GT_ModHandler.getCompressorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
-    //}
-
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
         if (aIndex == 1) {
