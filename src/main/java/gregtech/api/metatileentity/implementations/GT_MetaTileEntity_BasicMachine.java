@@ -346,7 +346,17 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
-        aBaseMetaTileEntity.openGUI(aPlayer);
+        if(!GT_Mod.gregtechproxy.mForceFreeFace) {
+        	aBaseMetaTileEntity.openGUI(aPlayer);
+        	return true;
+        }
+        for(byte i=0;i < 6; i++){
+        	if(aBaseMetaTileEntity.getAirAtSide(i)){
+        		aBaseMetaTileEntity.openGUI(aPlayer);
+        		return true;
+        	}        	
+        }
+        GT_Utility.sendChatToPlayer(aPlayer,"No free Side!");        
         return true;
     }
 
@@ -701,7 +711,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getFrontFacing() || aSide == mMainFacing) {
             mAllowInputFromOutputSide = !mAllowInputFromOutputSide;
-            GT_Utility.sendChatToPlayer(aPlayer, mAllowInputFromOutputSide ? "Input from Output Side allowed" : "Input from Output Side forbidden");
+            GT_Utility.sendChatToPlayer(aPlayer, mAllowInputFromOutputSide ? trans("095","Input from Output Side allowed") : trans("096","Input from Output Side forbidden"));
         }
     }
 
@@ -741,11 +751,33 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
      * @return see constants above
      */
     public int checkRecipe() {
+        return checkRecipe(false);
+    }
+
+    public static boolean isValidForLowGravity(GT_Recipe tRecipe, int dimId){
+        return //TODO check or get a better solution
+                DimensionManager.getProvider(dimId).getClass().getName().contains("Orbit") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("Space") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("Asteroids") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("SS") ||
+                DimensionManager.getProvider(dimId).getClass().getName().contains("SpaceStation");
+    }
+
+
+    /**
+     *
+     * @param skipOC disables OverclockedNess calculation and check - if you do you must implement your own method...
+     * @return
+     */
+    public int checkRecipe(boolean skipOC){
         GT_Recipe_Map tMap = getRecipeList();
         if (tMap == null) return DID_NOT_FIND_RECIPE;
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
-        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 && !(DimensionManager.getProvider(getBaseMetaTileEntity().getWorld().provider.dimensionId).getClass().getName().endsWith("Orbit")||DimensionManager.getProvider(getBaseMetaTileEntity().getWorld().provider.dimensionId).getClass().getName().endsWith("Space"))) return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+
+        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
+                !isValidForLowGravity(tRecipe,getBaseMetaTileEntity().getWorld().provider.dimensionId))
+            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.mCanBeBuffered) mLastRecipe = tRecipe;
         if (!canOutput(tRecipe)) {
             mOutputBlocked++;

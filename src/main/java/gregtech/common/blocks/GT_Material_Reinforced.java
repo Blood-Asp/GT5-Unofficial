@@ -12,6 +12,6 @@ public class GT_Material_Reinforced
     }
 
     public boolean isOpaque() {
-        return false;
+        return true;
     }
 }

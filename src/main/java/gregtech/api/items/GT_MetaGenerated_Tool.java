@@ -1,6 +1,7 @@
 package gregtech.api.items;
 
 import buildcraft.api.tools.IToolWrench;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,6 +43,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.ArrayList;
@@ -208,10 +210,18 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
     /**
      * Called by the Block Harvesting Event within the GT_Proxy
      */
+    @Mod.EventHandler
     public void onHarvestBlockEvent(ArrayList<ItemStack> aDrops, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, int aFortune, boolean aSilkTouch, BlockEvent.HarvestDropsEvent aEvent) {
         IToolStats tStats = getToolStats(aStack);
         if (isItemStackUsable(aStack) && getDigSpeed(aStack, aBlock, aMetaData) > 0.0F)
             doDamage(aStack, tStats.convertBlockDrops(aDrops, aStack, aPlayer, aBlock, aX, aY, aZ, aMetaData, aFortune, aSilkTouch, aEvent) * tStats.getToolDamagePerDropConversion());
+    }
+    
+    @Mod.EventHandler
+    public float onBlockBreakSpeedEvent(float aDefault, ItemStack aStack, EntityPlayer aPlayer, Block aBlock, int aX, int aY, int aZ, byte aMetaData, PlayerEvent.BreakSpeed aEvent)
+    {
+      IToolStats tStats = getToolStats(aStack); 
+      return tStats == null ? aDefault : tStats.getMiningSpeed(aBlock, aMetaData, aDefault, aPlayer, aPlayer.worldObj, aX, aY, aZ);
     }
     
     @Override
@@ -339,7 +349,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             if (name.equals("gt.metatool.01.170") || name.equals("gt.metatool.01.172") || name.equals("gt.metatool.01.174") || name.equals("gt.metatool.01.176")) {
                 aList.add(tOffset + 0, EnumChatFormatting.WHITE + "Durability: " + EnumChatFormatting.GREEN + (tMaxDamage - getToolDamage(aStack)) + " / " + tMaxDamage + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 1, EnumChatFormatting.WHITE + tMaterial.mDefaultLocalName + EnumChatFormatting.YELLOW + " lvl " + getHarvestLevel(aStack, "") + EnumChatFormatting.GRAY);
-                aList.add(tOffset + 2, EnumChatFormatting.WHITE + "Turbine Efficency: " + EnumChatFormatting.BLUE + (50.0F + (10.0F * getToolCombatDamage(aStack))) + EnumChatFormatting.GRAY);
+                aList.add(tOffset + 2, EnumChatFormatting.WHITE + "Turbine Efficiency: " + EnumChatFormatting.BLUE + (50.0F + (10.0F * getToolCombatDamage(aStack))) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Steam flow: " + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 1000) + EnumChatFormatting.GRAY + "L/sec");
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Gas flow(EU burnvalue per tick): " + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 50) + EnumChatFormatting.GRAY + "EU/t");
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Plasma flow(Plasma energyvalue per tick): " + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 2000) + EnumChatFormatting.GRAY + "EU/t");

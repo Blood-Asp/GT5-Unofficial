@@ -42,7 +42,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
 
         setBurnValue(17000 + Materials.Wood.mMetaItemSubID, 1600);
         GT_OreDictUnificator.addToBlacklist(new ItemStack(this, 1, 17000 + Materials.Wood.mMetaItemSubID));
-        GT_ModHandler.addCompressionRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Wood, 8L), new ItemStack(this, 1, 17000 + Materials.Wood.mMetaItemSubID));
+        GT_ModHandler.addCompressionRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Wood, 1L), new ItemStack(this, 1, 17000 + Materials.Wood.mMetaItemSubID));
         GregTech_API.registerCover(new ItemStack(this, 1, 17000 + Materials.Wood.mMetaItemSubID), new GT_RenderedTexture(Textures.BlockIcons.COVER_WOOD_PLATE), null);
 
         ItemStack tStack = new ItemStack(this, 1, 17000 + Materials.Wood.mMetaItemSubID);
@@ -626,9 +626,9 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Circuit_Data.set(addItem(tLastID = 704, "Workstation", "A extreme Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Elite.set(addItem(tLastID = 705, "Mainframe", "A elite Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Elite), SubTag.NO_UNIFICATION}));
         ItemList.Circuit_Master.set(addItem(tLastID = 706, "Nanoprocessor Mainframe", "A master Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Master), SubTag.NO_UNIFICATION}));
-        ItemList.Tool_DataOrb.set(addItem(tLastID = 707, "Data Orb", "A High Capacity Data Storage and Master Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Master), SubTag.NO_UNIFICATION, new Behaviour_DataOrb()}));
+        ItemList.Tool_DataOrb.set(addItem(tLastID = 707, "Data Orb", "A High Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataOrb()}));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataOrb.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataOrb.get(1L, new Object[0])});
-        ItemList.Tool_DataStick.set(addItem(tLastID = 708, "Data Stick", "A Low Capacity Data Storage and Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Data), SubTag.NO_UNIFICATION, new Behaviour_DataStick()}));
+        ItemList.Tool_DataStick.set(addItem(tLastID = 708, "Data Stick", "A Low Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataStick()}));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataStick.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataStick.get(1L, new Object[0])});
         
         ItemList.Circuit_Board_Basic.set(addItem(tLastID = 710, "Coated Circuit Board", "A basic Board", new Object[0])); ItemList.Circuit_Board_Coated.set(ItemList.Circuit_Board_Basic.get(1,new Object[0]));

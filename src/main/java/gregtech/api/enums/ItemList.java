@@ -535,8 +535,8 @@ public enum ItemList implements IItemContainer {
     Transformer_LV_ULV, Transformer_MV_LV, Transformer_HV_MV, Transformer_EV_HV, Transformer_IV_EV, Transformer_LuV_IV, Transformer_ZPM_LuV, Transformer_UV_ZPM, Transformer_MAX_UV,
 
     Casing_ULV, Casing_LV, Casing_MV, Casing_HV, Casing_EV, Casing_IV, Casing_LuV, Casing_ZPM, Casing_UV, Casing_MAX, Casing_BronzePlatedBricks, Casing_HeatProof, Casing_Coil_Cupronickel_Deprecated, Casing_Coil_Kanthal_Deprecated, Casing_Coil_Nichrome_Deprecated, Casing_Coil_Superconductor,
-    Casing_SolidSteel, Casing_FrostProof, Casing_Gearbox_Bronze, Casing_Gearbox_Steel, Casing_Gearbox_Titanium, Casing_Gearbox_TungstenSteel, Casing_Processor, Casing_DataDrive, Casing_ContainmentField, Casing_Assembler, Casing_Pump, Casing_Motor, Casing_Pipe_Bronze, Casing_Pipe_Steel, Casing_Pipe_Titanium, Casing_Pipe_TungstenSteel,
-    Casing_Stripes_A, Casing_Stripes_B, Casing_RadioactiveHazard, Casing_BioHazard, Casing_ExplosionHazard, Casing_FireHazard, Casing_AcidHazard, Casing_MagicHazard, Casing_FrostHazard, Casing_NoiseHazard, Casing_Grate, Casing_Vent, Casing_RadiationProof, Casing_Firebox_Bronze, Casing_Firebox_Steel, Casing_Firebox_TungstenSteel,
+    Casing_SolidSteel, Casing_FrostProof, Casing_Gearbox_Bronze, Casing_Gearbox_Steel, Casing_Gearbox_Titanium, Casing_Gearbox_TungstenSteel, Casing_Processor, Casing_DataDrive, Casing_ContainmentField, Casing_Assembler, Casing_Pump, Casing_Motor, Casing_Pipe_Bronze, Casing_Pipe_Steel, Casing_Pipe_Titanium, Casing_Pipe_TungstenSteel, Casing_Pipe_Polytetrafluoroethylene,
+    Casing_Stripes_A, Casing_Stripes_B, Casing_RadioactiveHazard, Casing_BioHazard, Casing_ExplosionHazard, Casing_FireHazard, Casing_AcidHazard, Casing_MagicHazard, Casing_FrostHazard, Casing_NoiseHazard, Casing_Grate, Casing_Vent, Casing_RadiationProof, Casing_Firebox_Bronze, Casing_Firebox_Steel, Casing_Firebox_TungstenSteel, Casing_Chemically_Inert,
     Casing_RobustTungstenSteel, Casing_CleanStainlessSteel, Casing_StableTitanium, Casing_Firebox_Titanium,
     Hull_ULV, Hull_LV, Hull_MV, Hull_HV, Hull_EV, Hull_IV, Hull_LuV, Hull_ZPM, Hull_UV, Hull_MAX,
     Casing_DenseBricks, /*DenseBrick, UnfiredDenseBrick,*/
@@ -593,6 +593,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_Boxinator, Machine_MV_Boxinator, Machine_HV_Boxinator, Machine_EV_Boxinator, Machine_IV_Boxinator, Machine_LuV_Boxinator, Machine_ZPM_Boxinator, Machine_UV_Boxinator,
     Machine_LV_Unboxinator, Machine_MV_Unboxinator, Machine_HV_Unboxinator, Machine_EV_Unboxinator, Machine_IV_Unboxinator, Machine_LuV_Unboxinator, Machine_ZPM_Unboxinator, Machine_UV_Unboxinator,
     Machine_LV_ChemicalReactor, Machine_MV_ChemicalReactor, Machine_HV_ChemicalReactor, Machine_EV_ChemicalReactor, Machine_IV_ChemicalReactor, Machine_LuV_ChemicalReactor, Machine_ZPM_ChemicalReactor, Machine_UV_ChemicalReactor,
+    Machine_Multi_LargeChemicalReactor,
     Machine_LV_FluidCanner, Machine_MV_FluidCanner, Machine_HV_FluidCanner, Machine_EV_FluidCanner, Machine_IV_FluidCanner, Machine_LuV_FluidCanner, Machine_ZPM_FluidCanner, Machine_UV_FluidCanner,
     Machine_LV_Disassembler, Machine_MV_Disassembler, Machine_HV_Disassembler, Machine_EV_Disassembler, Machine_IV_Disassembler, Machine_LuV_Disassembler, Machine_ZPM_Disassembler, Machine_UV_Disassembler,
     Machine_LV_Bundler, Machine_MV_Bundler, Machine_HV_Bundler, Machine_EV_Bundler, Machine_IV_Bundler, Machine_LuV_Bundler, Machine_ZPM_Bundler, Machine_UV_Bundler,
@@ -649,7 +650,7 @@ public enum ItemList implements IItemContainer {
     Circuit_Wafer_HPIC, Circuit_Chip_HPIC, Circuit_Wafer_NanoCPU, Circuit_Chip_NanoCPU, Circuit_Wafer_QuantumCPU, Circuit_Chip_QuantumCPU, 
     Circuit_Chip_CrystalCPU, Circuit_Chip_CrystalSoC, Circuit_Chip_NeuroCPU, Circuit_Chip_Stemcell,
     Circuit_Processor, Circuit_Computer, Circuit_Nanoprocessor, Circuit_Nanocomputer, Circuit_Elitenanocomputer, Circuit_Quantumprocessor, Circuit_Quantumcomputer, Circuit_Masterquantumcomputer, 
-    Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip, 
+    Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Ultimatecrystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip,
     Machine_LV_CircuitAssembler, Machine_MV_CircuitAssembler, Machine_HV_CircuitAssembler, Machine_EV_CircuitAssembler, Machine_IV_CircuitAssembler, Machine_LuV_CircuitAssembler, Machine_ZPM_CircuitAssembler, Machine_UV_CircuitAssembler, Circuit_Integrated_Good, Machine_IV_LightningRod, Machine_HV_LightningRod, Machine_EV_LightningRod;
 
     public static final ItemList[]

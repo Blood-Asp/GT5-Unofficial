@@ -3,6 +3,7 @@ package gregtech.common.covers;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IMachineProgress;
 import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -38,7 +39,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable -= 16;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? "Puts out into adjacent Slot #" : "Grabs in for own Slot #") + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         return aCoverVariable;
     }
 
@@ -48,7 +49,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable--;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? "Puts out into adjacent Slot #" : "Grabs in for own Slot #") + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
         return true;
     }

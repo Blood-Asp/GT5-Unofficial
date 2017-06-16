@@ -14,6 +14,7 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
@@ -145,4 +146,9 @@ public abstract class GT_Tool
     public float getMagicDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
         return aOriginalDamage;
     }
+
+	@Override
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World worldObj, int aX, int aY, int aZ) {
+		return aDefault;
+	}
 }
