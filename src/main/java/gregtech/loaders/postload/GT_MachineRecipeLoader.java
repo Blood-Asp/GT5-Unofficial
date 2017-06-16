@@ -2515,6 +2515,9 @@ if(Loader.isModLoaded("Railcraft")){
     	GT_Values.RA.addDistilleryRecipe(6, Materials.FermentedBiomass.getFluid(1000), Materials.CarbonDioxide.getGas(400), ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
     	GT_Values.RA.addDistilleryRecipe(7, Materials.FermentedBiomass.getFluid(1000), Materials.Methane.getGas(600),       ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
 
+    	GT_Values.RA.addDistilleryRecipe(17, Materials.FermentedBiomass.getFluid(1000), new FluidStack(FluidRegistry.getFluid("ic2biogas"), 600), ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
+    	GT_Values.RA.addDistilleryRecipe(1, Materials.Methane.getGas(1000), new FluidStack(FluidRegistry.getFluid("ic2biogas"), 1000), GT_Values.NI, 160, 8, false);
+
     	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					3, Materials.Charcoal.getGems(20), Materials.CharcoalByproducts.getGas(4000), 	640, 64);
     	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), Materials.Nitrogen.getGas(1000), 	4, Materials.Charcoal.getGems(20), Materials.CharcoalByproducts.getGas(4000), 	320, 96);
     	GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.log, Materials.Wood, 16), GT_Values.NF, 					5, Materials.Charcoal.getGems(20), Materials.WoodGas.getGas(1500), 			  	640, 64);
