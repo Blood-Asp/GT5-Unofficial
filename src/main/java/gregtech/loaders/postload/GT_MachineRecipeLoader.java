@@ -2723,6 +2723,9 @@ public class GT_MachineRecipeLoader implements Runnable {
     	GT_Values.RA.addDistilleryRecipe(6, Materials.FermentedBiomass.getFluid(1000), Materials.CarbonDioxide.getGas(400), ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
     	GT_Values.RA.addDistilleryRecipe(7, Materials.FermentedBiomass.getFluid(1000), Materials.Methane.getGas(600),       ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
 
+        GT_Values.RA.addDistilleryRecipe(17, Materials.FermentedBiomass.getFluid(1000), new FluidStack(FluidRegistry.getFluid("ic2biogas"), 600), ItemList.IC2_Fertilizer.get(1, new Object[0]), 1600, 8, false);
+        GT_Values.RA.addDistilleryRecipe(1, Materials.Methane.getGas(1000), new FluidStack(FluidRegistry.getFluid("ic2biogas"), 1000), GT_Values.NI, 160, 8, false);
+        
         GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23),                                   GT_Values.NF,                     1, Materials.Charcoal.getDust(12),   Materials.Water.getFluid(1500),                 320, 64);
         GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23),                                   Materials.Nitrogen.getGas(500),   2, Materials.Charcoal.getDust(12),   Materials.Water.getFluid(1500),                 160, 96);
 
