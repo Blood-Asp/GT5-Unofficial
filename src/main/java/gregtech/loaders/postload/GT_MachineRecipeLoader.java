@@ -2475,7 +2475,7 @@ if(Loader.isModLoaded("Railcraft")){
 	 * Instrumental materials are not mentioned here.
 	 */
 	private void addRecipesApril2017ChemistryUpdate(){
-		GT_Values.RA.addElectrolyzerRecipe(GT_Values.NI, GT_Values.NI, Materials.SaltWater.getFluid(1000), Materials.Chlorine.getGas(1000), Materials.SodiumHydroxide.getDust(1), Materials.Hydrogen.getCells(1), GT_Values.NI, GT_Values.NI,GT_Values.NI, GT_Values.NI, null, 30, 600);
+		GT_Values.RA.addElectrolyzerRecipe(Materials.Empty.getCells(1), GT_Values.NI, Materials.SaltWater.getFluid(1000), Materials.Chlorine.getGas(1000), Materials.SodiumHydroxide.getDust(1), Materials.Hydrogen.getCells(1), GT_Values.NI, GT_Values.NI,GT_Values.NI, GT_Values.NI, null, 30, 600);
 		
 		GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), Materials.Oxygen.getCells(3), Materials.Nitrogen.getGas(1000), GT_Values.NF, Materials.Saltpeter.getDust(1), Materials.Empty.getCells(3), 180);
 		GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), Materials.Nitrogen.getCells(1), Materials.Oxygen.getGas(3000), GT_Values.NF, Materials.Saltpeter.getDust(1), Materials.Empty.getCells(1), 180);
@@ -2601,8 +2601,8 @@ if(Loader.isModLoaded("Railcraft")){
         
         GT_Values.RA.addChemicalRecipe(Materials.Silicon.getDust(1), GT_Values.NI, Materials.Chloromethane.getGas(2000), Materials.Dimethyldichlorosilane.getFluid(1000), GT_Values.NI, 240, 96);
 
-        GT_Values.RA.addChemicalRecipe(Materials.Dimethyldichlorosilane.getCells(1), Materials.Empty.getCells(1), Materials.Water.getFluid(1000), 	Materials.HydrochloricAcid.getFluid(2000), Materials.Polydimethylsiloxane.getDust(3), Materials.Empty.getCells(1), 240, 96);
-        GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(1), Materials.Empty.getCells(1), Materials.Dimethyldichlorosilane.getFluid(1000), 	Materials.HydrochloricAcid.getFluid(2000), Materials.Polydimethylsiloxane.getDust(3), Materials.Empty.getCells(1), 240, 96);
+        GT_Values.RA.addChemicalRecipe(Materials.Dimethyldichlorosilane.getCells(1), GT_Values.NI, Materials.Water.getFluid(1000), 	Materials.HydrochloricAcid.getFluid(2000), Materials.Polydimethylsiloxane.getDust(3), Materials.Empty.getCells(1), 240, 96);
+        GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(1), GT_Values.NI, Materials.Dimethyldichlorosilane.getFluid(1000), 	Materials.HydrochloricAcid.getFluid(2000), Materials.Polydimethylsiloxane.getDust(3), Materials.Empty.getCells(1), 240, 96);
         GT_Values.RA.addChemicalRecipe(Materials.Dimethyldichlorosilane.getCells(1), Materials.Water.getCells(1), GT_Values.NF, 					Materials.HydrochloricAcid.getFluid(2000), Materials.Polydimethylsiloxane.getDust(3), Materials.Empty.getCells(2), 240, 96);
 
         GT_Values.RA.addChemicalRecipe(Materials.Polydimethylsiloxane.getDust(9), Materials.Sulfur.getDust(1), GT_Values.NF, Materials.Silicone.getMolten(1296), GT_Values.NI, 600);
