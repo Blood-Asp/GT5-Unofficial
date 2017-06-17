@@ -1032,9 +1032,13 @@ public class GT_Utility {
         return (Block) aBlock;
     }
 
-    public static Block getBlockFromStack(Object aStack) {
-        if (isStackInvalid(aStack)) return Blocks.air;
-        return Block.getBlockFromItem(((ItemStack) aStack).getItem());
+    public static Block getBlockFromStack(ItemStack itemStack) {
+        if (isStackInvalid(itemStack)) return Blocks.air;
+        return getBlockFromItem(itemStack.getItem());
+    }
+
+    public static Block getBlockFromItem(Item item) {
+        return Block.getBlockFromItem(item);
     }
 
     public static boolean isBlockValid(Object aBlock) {

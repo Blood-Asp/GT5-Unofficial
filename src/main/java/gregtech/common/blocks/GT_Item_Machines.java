@@ -33,14 +33,9 @@ public class GT_Item_Machines
             if ((tDamage <= 0) || (tDamage >= GregTech_API.METATILEENTITIES.length)) {
                 return;
             }
-            TileEntity temp = GregTech_API.sBlockMachines.createTileEntity(aPlayer == null ? GT_Values.DW : aPlayer.worldObj, GregTech_API.METATILEENTITIES[tDamage] == null ? 0 : GregTech_API.METATILEENTITIES[tDamage].getTileEntityBaseType());
-            temp.setWorldObj(aPlayer == null ? GT_Values.DW : aPlayer.worldObj);
-            temp.xCoord = 0;
-            temp.yCoord = 0;
-            temp.zCoord = 0;
-            if ((temp instanceof IGregTechTileEntity)) {
-                IGregTechTileEntity tTileEntity = (IGregTechTileEntity) temp;
-                tTileEntity.setInitialValuesAsNBT(new NBTTagCompound(), (short) tDamage);
+
+            if (GregTech_API.METATILEENTITIES[tDamage] != null) {
+                IGregTechTileEntity tTileEntity = GregTech_API.METATILEENTITIES[tDamage].getBaseMetaTileEntity();
                 if (tTileEntity.getDescription() != null) {
                     int i = 0;
                     for (String tDescription : tTileEntity.getDescription()) {
