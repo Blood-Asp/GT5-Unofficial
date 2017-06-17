@@ -9,7 +9,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingPipe implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE WITH OLD PIPE??? generator
+public class ProcessingPipe implements gregtech.api.interfaces.IOreRecipeRegistrator {
     public ProcessingPipe() {
         OrePrefixes.pipeHuge.add(this);
         OrePrefixes.pipeLarge.add(this);
