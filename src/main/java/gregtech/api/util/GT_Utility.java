@@ -1975,6 +1975,10 @@ public class GT_Utility {
         return result;
     }
 
+    public static ItemStack getIntegratedCircuit(int config){
+    	return ItemList.Circuit_Integrated.getWithDamage(0, config, new Object[0]);
+    }
+    
     public static class ItemNBT {
         public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
             if (aNBT == null) {
