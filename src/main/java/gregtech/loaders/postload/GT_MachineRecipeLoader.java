@@ -2206,36 +2206,6 @@ public class GT_MachineRecipeLoader implements Runnable {
         
 
             Object o = new Object[0];
-            GT_Values.RA.addAssemblylineRecipe(ItemList.Circuit_Crystalmainframe.get(1,o), 72000, new ItemStack[]{
-            		ItemList.Circuit_Board_Wetware_Extreme.get(1,o),
-            		ItemList.Circuit_Chip_Stemcell.get(16,o),
-            		ItemList.Circuit_Parts_Glass_Tube.get(32,o),
-            		GT_OreDictUnificator.get(OrePrefixes.pipeTiny, Materials.Plastic, 16),
-            		ItemList.IC2_Item_Casing_Gold.get(16,o),
-            		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicone, 64),
-            		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 8),
-            }, new FluidStack[]{
-            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(250) : new FluidStack(FluidRegistry.getFluid("ic2biomass"), 500),
-            		Materials.UUMatter.getFluid(250),
-            		GregTech_API.mIC2Classic ? Materials.Lava.getFluid(1000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 1000)
-            }, ItemList.Circuit_Chip_NeuroCPU.get(1,o), 1200, 80000);
-            
-            GT_Values.RA.addAssemblylineRecipe(ItemList.Circuit_Wetwaresupercomputer.get(1,o), 288000, new ItemStack[]{
-            		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Tritanium, 8),
-            		ItemList.Circuit_Wetwaresupercomputer.get(8,o),
-            		ItemList.Circuit_Parts_Coil.get(48,o),
-            		ItemList.Circuit_Parts_CapacitorSMD.get(64,o),
-            		ItemList.Circuit_Parts_ResistorSMD.get(64,o),
-            		ItemList.Circuit_Parts_TransistorSMD.get(64,o),
-            		ItemList.Circuit_Parts_DiodeSMD.get(64,o),
-            		ItemList.Circuit_Chip_Ram.get(48,o),
-                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
-            		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Silicone, 64)
-            }, new FluidStack[]{
-            		Materials.SolderingAlloy.getMolten(2880),
-            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(10000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 10000)
-            }, ItemList.Circuit_Wetwaremainframe.get(1,o), 2000, 300000);
-               
             GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
             		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 64L),
             		ItemList.Circuit_Wetwaremainframe.get(1,o),
