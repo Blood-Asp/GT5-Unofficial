@@ -273,7 +273,7 @@ public class GT_Pollution {
 	@Deprecated /*Don't use it... too weird way of passing position*/
 	public static void addPollution(World aWorld, ChunkPosition aPos, int aPollution){
 		//The abuse of ChunkPosition to store block position and dim... 
-		//is just bad expacially when that is both used to store ChunkPos and BlockPos depeending on context
+		//is just bad especially when that is both used to store ChunkPos and BlockPos depending on context
 		addPollution(aWorld.getChunkFromBlockCoords(aPos.chunkPosX,aPos.chunkPosZ),aPollution);
 	}
 }

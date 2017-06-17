@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements ITileEntityProvider {
-    public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal();
+    public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal<>();
     public static boolean FUCKING_LOCK = false;
     public static boolean tHideOres;
     private final String aTextName = ".name";
@@ -45,7 +45,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH_ORES);
         tHideOres = Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres;
-        if(aOreMetaCount > 8 || aOreMetaCount < 0) aOreMetaCount = 8;
+        if (aOreMetaCount > 8 || aOreMetaCount < 0) aOreMetaCount = 8;
 
         for (int i = 0; i < 16; i++) {
             GT_ModHandler.addValuableOre(this, i, 1);
@@ -57,11 +57,13 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
                         GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
-                    if (tHideOres) {
-                        if(!(j == 0 && !aHideFirstMeta)){
-                            codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));}
+                        if (tHideOres) {
+                            if (!(j == 0 && !aHideFirstMeta)) {
+                                codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));
+                            }
                             codechicken.nei.api.API.hideItem(new ItemStack(this, 1, (i + 16000) + (j * 1000)));
-                    }}
+                        }
+                    }
                 }
             }
         }
