@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -67,58 +68,72 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-    	 if(!GT_Utility.isStackValid(mInventory[1]) && !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))return false;
-    	NBTTagCompound tTag = mInventory[1].getTagCompound();
-    	if(tTag==null)return false;
-    	ItemStack tStack[] = new ItemStack[15];
-    	for(int i = 0;i<15;i++){
-    		if(tTag.hasKey(""+i)){
-    		tStack[i] = GT_Utility.loadItem(tTag, ""+i);
-    		if(tStack[i]!=null){
-    			if(mInputBusses.get(i)==null)return false;
-    			if(GT_Utility.areStacksEqual(tStack[i],mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0),true) && tStack[i].stackSize <= mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize){
-    			}else{return false;}
-    		}}
-    	}
-    	FluidStack[] tFluids = new FluidStack[4];
-    	for(int i = 0;i<4;i++){
-    		if(tTag.hasKey("f"+i)){
-    			tFluids[i] = GT_Utility.loadFluid(tTag, "f"+i);
-    			if(tFluids[i]!=null){
-    				if(mInputHatches.get(i)==null)return false;
-    				if(mInputHatches.get(i).mFluid!=null && GT_Utility.areFluidsEqual(mInputHatches.get(i).mFluid, tFluids[i], true) && mInputHatches.get(i).mFluid.amount>=tFluids[i].amount){
-    				}else{return false;}
-    			}
-    		}
-    	}
-    	if(tTag.hasKey("output")){
-    		mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-    		if(mOutputItems==null||mOutputItems[0]==null||!GT_Utility.isStackValid(mOutputItems[0]))return false;
-    	}else{return false;}
-    	if(tTag.hasKey("time")){
-    		mMaxProgresstime = tTag.getInteger("time");
-    		if(mMaxProgresstime<=0)return false;
-    	}else{return false;}
-    	if(tTag.hasKey("eu")){
-    		mEUt = tTag.getInteger("eu");
-    	}else{return false;}
-    	for(int i = 0;i<15;i++){
-    		if(tStack[i]!=null){
-    			mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize -= tStack[i].stackSize;
-    			if(mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0).stackSize <= 0){
-    			}
-    		}
-    	}
-    	
-    	for(int i = 0;i<4;i++){
-    		if(tFluids[i]!=null){
-    			mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
-    			if(mInputHatches.get(i).mFluid.amount<=0){
-    				mInputHatches.get(i).mFluid = null;
-    			}
-    		}
-    	}
-    	this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+    	if(GT_Values.D1)System.out.println("Start ALine recipe check");
+        if (!GT_Utility.isStackValid(mInventory[1]) || !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))
+            return false;
+    	if(GT_Values.D1)System.out.println("Stick accepted");
+
+        NBTTagCompound tTag = mInventory[1].getTagCompound();
+        if (tTag == null) return false;
+        ItemStack tStack[] = new ItemStack[15];
+        for (int i = 0; i < 15; i++) {
+            if (!tTag.hasKey("" + i)) continue;
+            if (mInputBusses.get(i) == null) return false;
+            tStack[i] = GT_Utility.loadItem(tTag, "" + i);
+            if (tStack[i] == null) continue;
+        	if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
+            ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
+            if (!GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) || tStack[i].stackSize > stackInSlot.stackSize) {
+            	if(GT_Values.D1)System.out.println(i +" not accepted");
+                return false;
+            }
+        	if(GT_Values.D1)System.out.println(i+" accepted");
+        }
+    	if(GT_Values.D1)System.out.println("All Items done, start fluid check");
+        FluidStack[] tFluids = new FluidStack[4];
+        for (int i = 0; i < 4; i++) {
+            if (!tTag.hasKey("f" + i)) continue;
+            tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
+            if (tFluids[i] == null) continue;
+        	if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
+            if (mInputHatches.get(i) == null) return false;
+            FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
+            if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
+            	if(GT_Values.D1)System.out.println(i+" not accepted");
+                return false;
+            }
+        	if(GT_Values.D1)System.out.println(i+" accepted");
+        }
+    	if(GT_Values.D1)System.out.println("Input accepted, check other values");
+        if (!tTag.hasKey("output")) return false;
+        mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+        if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
+            return false;
+
+        if (!tTag.hasKey("time")) return false;
+        mMaxProgresstime = tTag.getInteger("time");
+        if (mMaxProgresstime <= 0) return false;
+
+        if (!tTag.hasKey("eu")) return false;
+        mEUt = tTag.getInteger("eu");
+    	if(GT_Values.D1)System.out.println("All checked start consuming inputs");
+        for (int i = 0; i < 15; i++) {
+            if (tStack[i] == null) continue;
+            ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
+            stackInSlot.stackSize -= tStack[i].stackSize;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            if (tFluids[i] == null) continue;
+            mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
+            if (mInputHatches.get(i).mFluid.amount <= 0) {
+                mInputHatches.get(i).mFluid = null;
+            }
+        }
+    	if(GT_Values.D1)System.out.println("Check overclock");
+
+        byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
         calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, getMaxInputVoltage());
         //In case recipe is too OP for that machine
@@ -126,13 +141,14 @@ public class GT_MetaTileEntity_AssemblyLine
             return false;
         this.mEUt = this.mEUt > 0 ? -this.mEUt : this.mEUt;//makes it use power...
         updateSlots();
+    	if(GT_Values.D1)System.out.println("Recipe sucessfull");
         return true;
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
         if (aIndex == 20) {
-            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(212), 10, 1.0F, aX, aY, aZ);
+            GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(212), 10, 1.0F, aX, aY, aZ);
         }
     }
 
@@ -150,9 +166,13 @@ public class GT_MetaTileEntity_AssemblyLine
                     return false;
                 }
                 IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, -2, i);
-                if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))){
-                    if (aBaseMetaTileEntity.getBlockOffset(0, -2, i) != GregTech_API.sBlockCasings2) {return false;}
-                    if (aBaseMetaTileEntity.getMetaIDOffset(0, -2, i) != 0) {return false;}
+                if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
+                    if (aBaseMetaTileEntity.getBlockOffset(0, -2, i) != GregTech_API.sBlockCasings2) {
+                        return false;
+                    }
+                    if (aBaseMetaTileEntity.getMetaIDOffset(0, -2, i) != 0) {
+                        return false;
+                    }
                 }
 
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 1, i);
@@ -203,9 +223,13 @@ public class GT_MetaTileEntity_AssemblyLine
                     return false;
                 }
                 IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, -2, 0);
-                if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))){
-                    if (aBaseMetaTileEntity.getBlockOffset(i, -2, 0) != GregTech_API.sBlockCasings2) {return false;}
-                    if (aBaseMetaTileEntity.getMetaIDOffset(i, -2, 0) != 0) {return false;}
+                if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
+                    if (aBaseMetaTileEntity.getBlockOffset(i, -2, 0) != GregTech_API.sBlockCasings2) {
+                        return false;
+                    }
+                    if (aBaseMetaTileEntity.getMetaIDOffset(i, -2, 0) != 0) {
+                        return false;
+                    }
                 }
 
                 tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, 1, zDir);
@@ -260,6 +284,7 @@ public class GT_MetaTileEntity_AssemblyLine
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
+
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
