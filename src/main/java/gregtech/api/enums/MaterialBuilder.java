@@ -1,10 +1,10 @@
 package gregtech.api.enums;
 
+import gregtech.api.objects.MaterialStack;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import gregtech.api.objects.MaterialStack;
 
 public class MaterialBuilder {
 	public static final int DIESEL = 0, GAS = 1, THERMAL = 2, SEMIFLUID = 3, PLASMA = 4, MAGIC = 5;

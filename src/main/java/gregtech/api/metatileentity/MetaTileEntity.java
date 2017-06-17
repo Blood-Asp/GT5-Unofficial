@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static gregtech.api.enums.GT_Values.GT;
 import static gregtech.api.enums.GT_Values.V;
 
 /**
