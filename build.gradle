@@ -37,6 +37,8 @@ minecraft {
     runDir = "eclipse"
 }
 
+idea { module { inheritOutputDirs = true } }
+
 configurations {
     provided
     embedded
