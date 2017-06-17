@@ -41,10 +41,10 @@ import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
 
-    public static boolean sInterDimensionalTeleportAllowed = true;
-    public static int sPassiveEnergyDrain = 2048;
-    public static int sPowerMultiplyer = 100;
-    public static double sFPowerMultiplyer = 1.0;
+    private static boolean sInterDimensionalTeleportAllowed = true;
+    private static int sPassiveEnergyDrain = 2048;
+    private static int sPowerMultiplyer = 100;
+    private static double sFPowerMultiplyer = 1.0;
     public int mTargetX = 0;
     public int mTargetY = 0;
     public int mTargetZ = 0;
@@ -240,13 +240,22 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     //    return false;
 	//}
 
+
+
     public boolean hasDimensionalTeleportCapability() {
-		//return (this.mDebug) || (this.hasEgg) || (mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 10);
-        return true;
+        return this.mDebug ||
+                //(
+                        sInterDimensionalTeleportAllowed //&&
+                //                (
+                //                        this.hasEgg ||
+                //                                mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 1000
+                //                )
+                //)
+        ;
     }
 
     public boolean isDimensionalTeleportAvailable() {
-        return (this.mDebug) || ((GT_Utility.isRealDimension(this.mTargetD)) && (GT_Utility.isRealDimension(getBaseMetaTileEntity().getWorld().provider.dimensionId)));
+        return this.mDebug || (hasDimensionalTeleportCapability() && GT_Utility.isRealDimension(this.mTargetD) && GT_Utility.isRealDimension(getBaseMetaTileEntity().getWorld().provider.dimensionId));
     }
 
     @Override

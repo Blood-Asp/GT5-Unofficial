@@ -13,8 +13,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GT_MetaTileEntity_Furnace_Steel
-        extends GT_MetaTileEntity_BasicMachine_Steel {
+public class GT_MetaTileEntity_Furnace_Steel extends GT_MetaTileEntity_BasicMachine_Steel {
     public GT_MetaTileEntity_Furnace_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, "Smelting things with compressed Steam", 1, 1, true);
     }

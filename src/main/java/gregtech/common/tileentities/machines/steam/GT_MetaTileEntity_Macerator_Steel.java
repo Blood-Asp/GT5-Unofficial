@@ -18,8 +18,7 @@ import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.V;
 
-public class GT_MetaTileEntity_Macerator_Steel
-        extends GT_MetaTileEntity_BasicMachine_Steel {
+public class GT_MetaTileEntity_Macerator_Steel extends GT_MetaTileEntity_BasicMachine_Steel {
     public GT_MetaTileEntity_Macerator_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, "Macerating your Ores", 1, 1, false);
     }
