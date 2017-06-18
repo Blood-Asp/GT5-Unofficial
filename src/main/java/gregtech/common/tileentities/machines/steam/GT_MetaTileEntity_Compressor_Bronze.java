@@ -12,8 +12,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_MetaTileEntity_Compressor_Bronze
-        extends GT_MetaTileEntity_BasicMachine_Bronze {
+public class GT_MetaTileEntity_Compressor_Bronze extends GT_MetaTileEntity_BasicMachine_Bronze {
     public GT_MetaTileEntity_Compressor_Bronze(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, "Compressing Items", 1, 1, false);
     }
@@ -44,13 +43,6 @@ public class GT_MetaTileEntity_Compressor_Bronze
         }
         return 0;
     }
-
-    //public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {//GOT DISABLED?
-    //    if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-    //        return false;
-    //    }
-    //    return GT_ModHandler.getCompressorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
-    //}
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);

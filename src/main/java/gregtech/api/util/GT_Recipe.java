@@ -1,27 +1,8 @@
 package gregtech.api.util;
 
-import static gregtech.api.enums.GT_Values.D1;
-import static gregtech.api.enums.GT_Values.D2;
-import static gregtech.api.enums.GT_Values.E;
-import static gregtech.api.enums.GT_Values.L;
-import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
-import static gregtech.api.enums.GT_Values.W;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
 import codechicken.nei.PositionedStack;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.SubTag;
+import gregtech.api.enums.*;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;
 import gregtech.api.objects.GT_FluidStack;
@@ -38,6 +19,10 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
+
+import java.util.*;
+
+import static gregtech.api.enums.GT_Values.*;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -601,6 +586,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * HashMap of Recipes based on their Fluids
          */
         public final Map<Fluid, Collection<GT_Recipe>> mRecipeFluidMap = new /*Concurrent*/HashMap<Fluid, Collection<GT_Recipe>>();
+        public final HashSet<String> mRecipeFluidNameMap = new HashSet<String>();
         /**
          * The List of all Recipes
          */
@@ -715,6 +701,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     Collection<GT_Recipe> tList = mRecipeFluidMap.get(aFluid.getFluid());
                     if (tList == null) mRecipeFluidMap.put(aFluid.getFluid(), tList = new HashSet<GT_Recipe>(1));
                     tList.add(aRecipe);
+                    if(!mRecipeFluidNameMap.contains(aFluid.getFluid().getName()))
+                    	mRecipeFluidNameMap.add(aFluid.getFluid().getName());
                 }
             return addToItemMap(aRecipe);
         }
@@ -747,7 +735,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
          * @return if this Fluid is a valid Input for any for the Recipes
          */
         public boolean containsInput(Fluid aFluid) {
-            return aFluid != null && mRecipeFluidMap.containsKey(aFluid);
+        	return aFluid != null && mRecipeFluidNameMap.contains(aFluid.getName());
         }
 
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack... aInputs) {

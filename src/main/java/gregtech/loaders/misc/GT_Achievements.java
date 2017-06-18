@@ -213,13 +213,13 @@ public class GT_Achievements {
         registerAchievement("denseaspossible", 6, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "finalpreparations", false);
         registerAchievement("whatnow", 4, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
 
-        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
-            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
-                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
-                    codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
-                }
-            }
-        }
+//        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
+//            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
+//                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
+//                    codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
+//                }
+//            }
+//        }
         if (GT_Mod.gregtechproxy.mAchievements) {
             AchievementPage.registerAchievementPage(new AchievementPage("GregTech 5", (Achievement[]) this.achievementList.values().toArray(
                     new Achievement[this.achievementList.size()])));
@@ -621,6 +621,12 @@ public class GT_Achievements {
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
             issueAchievement(player, "buildQArmor");
 		}
+		if(player.capabilities.isCreativeMode && stack.getUnlocalizedName().equals("gt.metaitem.01.32761")){//Debug Scanner pickup shows all assline recipes.
+            for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
+                issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
+                recipe.mHidden=false;
+            }
+        }
         for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
             if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
                 issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());

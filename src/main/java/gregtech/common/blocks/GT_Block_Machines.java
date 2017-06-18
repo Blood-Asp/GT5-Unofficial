@@ -209,10 +209,10 @@ public class GT_Block_Machines
 
     @Override  //THIS
     public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int aX, int aY, int aZ) {
-        TileEntity tTileEntity = blockAccess.getTileEntity(aX,aY,aZ);
+        TileEntity tTileEntity = blockAccess.getTileEntity(aX, aY, aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
             AxisAlignedBB bbb=((IGregTechTileEntity)tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity)tTileEntity).getWorld(), 0, 0, 0);
-            minX=bbb.minX;
+            minX=bbb.minX;//This essentially sets block bounds
             minY=bbb.minY;
             minZ=bbb.minZ;
             maxX=bbb.maxX;

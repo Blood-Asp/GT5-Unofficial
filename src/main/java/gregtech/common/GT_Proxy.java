@@ -19,11 +19,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Pollution;
-import gregtech.api.objects.GT_Fluid;
-import gregtech.api.objects.GT_FluidStack;
-import gregtech.api.objects.GT_UO_DimensionList;
-import gregtech.api.objects.ItemData;
-import gregtech.api.objects.MaterialStack;
+import gregtech.api.objects.*;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -59,6 +55,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -193,7 +190,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mCropNeedBlock = true;
     public boolean mReenableSimplifiedChemicalRecipes = false;
     public boolean mAMHInteraction = true;
+    public boolean mForceFreeFace = true;
 
+    
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
         MinecraftForge.EVENT_BUS.register(this);
@@ -493,6 +492,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 break;
             }
         }
+        GT_LanguageManager.writePlaceholderStrings();
     }
 
     public static long tBits = GT_ModHandler.RecipeBits.DO_NOT_CHECK_FOR_COLLISIONS | GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.ONLY_ADD_IF_RESULT_IS_NOT_NULL | GT_ModHandler.RecipeBits.NOT_REMOVABLE;
@@ -802,7 +802,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             aEvent.Ore.stackSize = 1;
             if (this.mIgnoreTcon || aEvent.Ore.getUnlocalizedName().startsWith("item.oreberry")) {
                 if ((aOriginalMod.toLowerCase(Locale.ENGLISH).contains("xycraft")) || (aOriginalMod.toLowerCase(Locale.ENGLISH).contains("tconstruct"))
-                        && (!aOriginalMod.toLowerCase(Locale.ENGLISH).contains("natural"))) {
+                        || ((aOriginalMod.toLowerCase(Locale.ENGLISH).contains("natura")) && (!aOriginalMod.toLowerCase(Locale.ENGLISH).contains("natural")))) {
                     if (GT_Values.D1) {
                         GT_Log.ore.println(aMod + " -> " + aEvent.Name + " is getting ignored, because of racism. :P");
                     }
@@ -1861,6 +1861,21 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ////Already loaded chunk data
         ////DO NOTHING - this chunk data was already loaded and stored in hash map
         //}
+    }
+    
+    @SubscribeEvent
+    public void onBlockBreakSpeedEvent(PlayerEvent.BreakSpeed aEvent)
+    {
+      if (aEvent.newSpeed > 0.0F)
+      {
+        if (aEvent.entityPlayer != null)
+        {
+          ItemStack aStack = aEvent.entityPlayer.getCurrentEquippedItem();
+          if ((aStack != null) && ((aStack.getItem() instanceof GT_MetaGenerated_Tool))) {
+            aEvent.newSpeed = ((GT_MetaGenerated_Tool)aStack.getItem()).onBlockBreakSpeedEvent(aEvent.newSpeed, aStack, aEvent.entityPlayer, aEvent.block, aEvent.x, aEvent.y, aEvent.z, (byte)aEvent.metadata, aEvent);
+          }
+        }
+      }
     }
 
     public static class OreDictEventContainer {

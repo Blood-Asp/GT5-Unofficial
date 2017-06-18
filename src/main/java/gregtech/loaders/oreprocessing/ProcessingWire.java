@@ -1,21 +1,17 @@
 package gregtech.loaders.oreprocessing;
 
-import java.util.ArrayList;
-
 import appeng.api.config.TunnelType;
 import appeng.core.Api;
 import gregtech.GT_Mod;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.SubTag;
+import gregtech.api.enums.*;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Proxy;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistrator {
 

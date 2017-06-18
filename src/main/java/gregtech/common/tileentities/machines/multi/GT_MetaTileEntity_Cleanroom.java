@@ -37,11 +37,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 "Controller Block for the Cleanroom",
                 "Min(WxHxD): 3x4x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
                 "Controller (Top center)",
-                "Top besides contoller and edges filter casings",
-                "1 Reinforced Door(keep closed for 100% efficency",
+                "Top besides contoller and edges: Filter Casings",
+                "1 Reinforced Door (keep closed for 100% efficency)",
                 "1x Energy Hatch, 1x Maintainance Hatch",
-                "up to 10 Machine Hull Item & Energy transfer through walls",
-                "Remaining Blocks Plascrete"};
+                "Up to 10 Machine Hull Item & Energy transfer through walls",
+                "Remaining Blocks: Plascrete, 20 min"};
     }
 
 	@Override
@@ -158,7 +158,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
         }
         
-        return true;
+        return mPlascreteCount>=20;
     }
     
     @Override

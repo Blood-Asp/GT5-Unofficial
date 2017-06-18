@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_ImplosionCompressor
         extends GT_MetaTileEntity_MultiBlockBase {

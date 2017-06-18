@@ -127,7 +127,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                     aNBT.setTag("mOutputItem" + i, tNBT);
                 }
         }
-
         if (mOutputFluids != null) {
             aNBT.setInteger("mOutputFluidsLength", mOutputFluids.length);
             for (int i = 0; i < mOutputFluids.length; i++)
@@ -137,7 +136,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                     aNBT.setTag("mOutputFluids" + i, tNBT);
                 }
         }
-
         aNBT.setBoolean("mWrench", mWrench);
         aNBT.setBoolean("mScrewdriver", mScrewdriver);
         aNBT.setBoolean("mSoftHammer", mSoftHammer);
@@ -170,7 +168,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             for (int i = 0; i < mOutputFluids.length; i++)
                 mOutputFluids[i] = GT_Utility.loadFluid(aNBT, "mOutputFluids" + i);
         }
-
 
         mWrench = aNBT.getBoolean("mWrench");
         mScrewdriver = aNBT.getBoolean("mScrewdriver");
@@ -378,13 +375,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
      * Gets the damage to the ItemStack, usually 0 or 1.
      */
     public abstract int getDamageToComponent(ItemStack aStack);
-
-    /**
-     * Gets the Amount of possibly outputted Items for loading the Output Stack Array from NBT.
-     * This should be the largest Amount that can ever happen legitimately.
-     */
-    @Deprecated
-    public int getAmountOfOutputs(){return -1;}
 
     /**
      * If it explodes when the Component has to be replaced.
@@ -622,6 +612,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 this.mOutputHatches.get(i).fill(mOutputFluids[i], true);
             }
         }
+
     }
 
     public boolean depleteInput(FluidStack aLiquid) {
@@ -710,11 +701,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public ArrayList<ItemStack> getStoredOutputs() {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
-        //for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
-        //    if (isValidMetaTileEntity(tHatch)) {
-        //        rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(1));
-        //    }
-        //}
+//        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
+//            if (isValidMetaTileEntity(tHatch)) {
+//                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(1));
+//            }
+//        }
         for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
             if (isValidMetaTileEntity(tHatch)) {
                 for (int i = tHatch.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
@@ -738,12 +729,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public ArrayList<ItemStack> getStoredInputs() {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
-        //for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
-        //    tHatch.mRecipeMap = getRecipeMap();
-        //    if (isValidMetaTileEntity(tHatch) && tHatch.getBaseMetaTileEntity().getStackInSlot(0) != null) {
-        //        rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(0));
-        //    }
-        //}
+//        for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
+//            tHatch.mRecipeMap = getRecipeMap();
+//            if (isValidMetaTileEntity(tHatch) && tHatch.getBaseMetaTileEntity().getStackInSlot(0) != null) {
+//                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(0));
+//            }
+//        }
         for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch)) {
@@ -797,7 +788,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Maintenance) {
-        	((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
             return mMaintenanceHatches.add((GT_MetaTileEntity_Hatch_Maintenance) aMetaTileEntity);
         }
         return false;

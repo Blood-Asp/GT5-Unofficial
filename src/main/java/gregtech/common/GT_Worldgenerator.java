@@ -138,7 +138,7 @@ public class GT_Worldgenerator
             //String tDimensionName = this.mWorld.provider.getDimensionName();
             Random aRandom = new Random();
             //if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.equals("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
-			if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
+            if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
                 short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
@@ -174,8 +174,8 @@ public class GT_Worldgenerator
                 int tZ = mZ + aRandom.nextInt(16);
                 if (tDimensionType == 1) {
                     mSize = aRandom.nextInt((int) (endMaxSize - endMinSize));
-                //} else if (tDimensionName.equals("Asteroids")) {
-                //    mSize = aRandom.nextInt((int) (gcMaxSize - gcMinSize));
+                    //} else if (tDimensionName.equals("Asteroids")) {
+                    //    mSize = aRandom.nextInt((int) (gcMaxSize - gcMinSize));
                 }
                 if ((mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ))) {
                     float var6 = aRandom.nextFloat() * 3.141593F;
@@ -218,14 +218,14 @@ public class GT_Worldgenerator
                                                     GT_TileEntity_Ores.setOreBlock(mWorld, eX, eY, eZ, sporadicMeta, false, true);
                                                 } else {
                                                     //if (tDimensionType == 1) {//TODO CHECK
-                                                        mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 0);
+                                                    mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 0);
                                                     //} else if (tDimensionName.equals("Asteroids")) {
-                                                        ////int asteroidType = aRandom.nextInt(20);
-                                                        ////if (asteroidType == 19) { //Rare Asteroid?
-                                                        ////mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
-                                                        ////} else {
-                                                        //mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
-                                                        ////}
+                                                    ////int asteroidType = aRandom.nextInt(20);
+                                                    ////if (asteroidType == 19) { //Rare Asteroid?
+                                                    ////mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
+                                                    ////} else {
+                                                    //mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
+                                                    ////}
                                                     //}
                                                 }
                                             }

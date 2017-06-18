@@ -128,15 +128,16 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
     }
 
     public boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick){
-          	if (areItemsAndFluidsBothNull(aInputs, aFluidInputs) || areItemsAndFluidsBothNull(aOutputs, aFluidOutputs)) {
-             		return false;
-             	}
-           	if (aEUtick <= 0) {
-              		return false;
-             	}
-             GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, aInputs, aOutputs, null, null, aFluidInputs, aFluidOutputs, aDuration, aEUtick, 0);
-         	return true;
-          }
+    	if (areItemsAndFluidsBothNull(aInputs, aFluidInputs) || areItemsAndFluidsBothNull(aOutputs, aFluidOutputs)) {
+    		return false;
+    	}
+    	if (aEUtick <= 0) {
+    		return false;
+    	}
+    	GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, aInputs, aOutputs, null, null, aFluidInputs, aFluidOutputs, aDuration, aEUtick, 0);
+    	return true;
+    }
+
     @Override
     public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer){
     	//Oxygen/Rutile -> +50% Output each
@@ -176,7 +177,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         new GT_Recipe(aInput1, aEUt, aInput2, aDuration, aOutput1, aOutput2);
         return true;
     }
-
+    
 	@Override
 	public boolean addAlloySmelterRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt) {
 		return addAlloySmelterRecipe(aInput1, aInput2, aOutput1, aDuration, aEUt, false);
@@ -295,8 +296,6 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-
-
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
@@ -382,10 +381,10 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         int tExplosives = aInput2 > 0 ? aInput2 < 64 ? aInput2 : 64 : 1;
-        int tGunpowder = tExplosives * 2;
-        int tDynamite = tExplosives /2;
-        int tTNT = Math.max(1, tExplosives/2);
-        int tITNT = Math.max(1, tExplosives/4);
+        int tGunpowder = tExplosives<<1;//Worst
+        int tDynamite = Math.max(1, tExplosives>>1);//good
+        int tTNT = tExplosives;//Slightly better
+        int tITNT = Math.max(1, tExplosives>>2);//the best
         //new GT_Recipe(aInput1, aInput2, aOutput1, aOutput2);
         if(tGunpowder<65){
         	GT_Recipe.GT_Recipe_Map.sImplosionRecipes.addRecipe(true, new ItemStack[]{aInput1, ItemList.Block_Powderbarrel.get(tGunpowder, new Object[0])}, new ItemStack[]{aOutput1, aOutput2}, null, null, null, null, 20, 30, 0);

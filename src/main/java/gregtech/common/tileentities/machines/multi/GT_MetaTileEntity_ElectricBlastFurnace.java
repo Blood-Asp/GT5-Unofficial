@@ -19,7 +19,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_ElectricBlastFurnace
         extends GT_MetaTileEntity_MultiBlockBase {

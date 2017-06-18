@@ -372,7 +372,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
             ItemList.Ingot_Heavy3.set(addItem(tLastID = 464, "Heavy Duty Alloy Ingot T3", "Used to make Heavy Duty Plates T3", new Object[0]));
 
             GT_ModHandler.addCraftingRecipe(ItemList.Ingot_Heavy1.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"BhB", "CAS", "B B", 'B', OrePrefixes.bolt.get(Materials.StainlessSteel), 'C', OrePrefixes.compressed.get(Materials.Bronze), 'A', OrePrefixes.compressed.get(Materials.Aluminium), 'S', OrePrefixes.compressed.get(Materials.Steel)});
-         }
+        }
         ItemList.Ingot_IridiumAlloy.set(addItem(tLastID = 480, "Iridium Alloy Ingot", "Used to make Iridium Plates", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.TUTAMEN, 4L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 4L)}));
 
         GT_ModHandler.addRollingMachineRecipe(ItemList.Ingot_IridiumAlloy.get(1L, new Object[0]), new Object[]{"IAI", "ADA", "IAI", 'D', GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "iridiumplate", true) ? OreDictNames.craftingIndustrialDiamond : OrePrefixes.dust.get(Materials.Diamond), 'A', OrePrefixes.plateAlloy.get("Advanced"), 'I', OrePrefixes.plate.get(Materials.Iridium)});
@@ -674,10 +674,10 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Circuit_Master.set(addItem(tLastID = 706, "Nanoprocessor Mainframe", "A master Circuit", new Object[]{OrePrefixes.circuit.get(Materials.Master), SubTag.NO_UNIFICATION}));
         ItemList.Tool_DataOrb.set(addItem(tLastID = 707, "Data Orb", "A High Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataOrb()}));
         //ItemList.Circuit_Ultimate.set(ItemList.Tool_DataOrb.get(1L, new Object[0]));
-		GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataOrb.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataOrb.get(1L, new Object[0])});
+        GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataOrb.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataOrb.get(1L, new Object[0])});
         ItemList.Tool_DataStick.set(addItem(tLastID = 708, "Data Stick", "A Low Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataStick()}));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataStick.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataStick.get(1L, new Object[0])});
-        
+
         ItemList.Circuit_Board_Basic.set(addItem(tLastID = 710, "Coated Circuit Board", "Wooden Board", new Object[0])); ItemList.Circuit_Board_Coated.set(ItemList.Circuit_Board_Basic.get(1,new Object[0]));
         ItemList.Circuit_Board_Advanced.set(addItem(tLastID = 711, "Epoxy Circuit Board", "An advanced Board", new Object[0])); ItemList.Circuit_Board_Epoxy.set(ItemList.Circuit_Board_Advanced.get(1,new Object[0]));
         ItemList.Circuit_Board_Elite.set(addItem(tLastID = 712, "Multilayer Fiberglass Circuit Board", "A elite Board", new Object[0])); ItemList.Circuit_Board_Multifiberglass.set(ItemList.Circuit_Board_Elite.get(1,new Object[0]));
@@ -693,13 +693,13 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Component_Sawblade_Diamond.set(addItem(tLastID = 721, "Diamond Sawblade", "", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 4L), OreDictNames.craftingDiamondBlade}));
         ItemList.Component_Grinder_Diamond.set(addItem(tLastID = 722, "Diamond Grinding Head", "", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 6L), OreDictNames.craftingGrinder}));
         ItemList.Component_Grinder_Tungsten.set(addItem(tLastID = 723, "Tungsten Grinding Head", "", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 6L), OreDictNames.craftingGrinder}));
-        
-	//GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_LV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', OrePrefixes.gem.get(Materials.EnderPearl), 'C', OrePrefixes.circuit.get(Materials.Basic), 'W', OrePrefixes.wireGt01.get(Materials.Osmium)});
+
+        //GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_LV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', OrePrefixes.gem.get(Materials.EnderPearl), 'C', OrePrefixes.circuit.get(Materials.Basic), 'W', OrePrefixes.wireGt01.get(Materials.Osmium)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_MV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', OrePrefixes.gem.get(Materials.EnderEye), 'C', OrePrefixes.circuit.get(Materials.Good), 'W', OrePrefixes.wireGt02.get(Materials.Osmium)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_HV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', ItemList.QuantumEye.get(1L, new Object[0]), 'C', OrePrefixes.circuit.get(Materials.Advanced), 'W', OrePrefixes.wireGt04.get(Materials.Osmium)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_EV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', OrePrefixes.gem.get(Materials.NetherStar), 'C', OrePrefixes.circuit.get(Materials.Data), 'W', OrePrefixes.wireGt08.get(Materials.Osmium)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Field_Generator_IV.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WCW", "CGC", "WCW", 'G', ItemList.QuantumStar.get(1L, new Object[0]), 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.wireGt16.get(Materials.Osmium)});
-        
+
         GT_ModHandler.addCraftingRecipe(ItemList.Component_Sawblade_Diamond.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{" D ", "DGD", " D ", 'D', OrePrefixes.dustSmall.get(Materials.Diamond), 'G', OrePrefixes.gearGt.get(Materials.CobaltBrass)});
         GT_ModHandler.addCraftingRecipe(ItemList.Component_Grinder_Diamond.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"DSD", "SIS", "DSD", 'I', OreDictNames.craftingIndustrialDiamond, 'D', OrePrefixes.dust.get(Materials.Diamond), 'S', OrePrefixes.plate.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Component_Grinder_Tungsten.get(1L, new Object[0]), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"TST", "SIS", "TST", 'I', OreDictNames.craftingIndustrialDiamond, 'T', OrePrefixes.plate.get(Materials.Tungsten), 'S', OrePrefixes.plate.get(Materials.Steel)});
@@ -754,7 +754,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iron, 1L), new ItemStack(Blocks.crafting_table, 1), ItemList.Cover_Crafting.get(1L, new Object[0]), 800, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.WroughtIron, 1L), new ItemStack(Blocks.crafting_table, 1), ItemList.Cover_Crafting.get(1L, new Object[0]), 800, 16);
         GT_Values.RA.addAssemblerRecipe(ItemList.Cover_Shutter.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2), ItemList.FluidFilter.get(1L, new Object[0]), 800, 4);
-          
+
         GregTech_API.registerCover(ItemList.Cover_Screen.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[2][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SCREEN)}), new GT_Cover_Screen());
         GregTech_API.registerCover(ItemList.Cover_Crafting.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_CRAFTING)}), new GT_Cover_Crafting());
         GregTech_API.registerCover(ItemList.Cover_Drain.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[0][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DRAIN)}), new GT_Cover_Drain());
@@ -791,8 +791,8 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.NC_SensorKit.set(addItem(tLastID = 763, "GregTech Sensor Kit", "", new Object[]{new Behaviour_SensorKit()}));
         ItemList.Duct_Tape.set(addItem(tLastID = 764, "BrainTech Aerospace Advanced Reinforced Duct Tape FAL-84", "If you can't fix it with this, use more of it!", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), OreDictNames.craftingDuctTape}));
         ItemList.McGuffium_239.set(addItem(tLastID = 765, "Mc Guffium 239", "42% better than Phlebotnium", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ALIENIS, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERMUTATIO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.SPIRITUS, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.AURAM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITIUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.RADIO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.MAGNETO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.NEBRISUM, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.STRONTIO, 8L)}));
-        
-		GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 4L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 2L), ItemList.Schematic.get(1L, new Object[0]), 3200, 4);
+
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 4L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 2L), ItemList.Schematic.get(1L, new Object[0]), 3200, 4);
         GT_Values.RA.addAssemblerRecipe(ItemList.Sensor_LV.get(1L, new Object[0]), ItemList.Emitter_LV.get(1L, new Object[0]), ItemList.NC_SensorKit.get(1L, new Object[0]), 1600, 2);
 
         ItemList.Cover_RedstoneTransmitterExternal.set(addItem(tLastID = 741, "Redstone Transmitter (Out)", "Transfers Redstonesignals wireless", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1L)}));
@@ -815,7 +815,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Cover_NeedsMaintainance.set(addItem(tLastID = 748, "Needs Maintainance Cover", "Attach to Multiblock Controller. Emits Redstone Signal if needs Maintainance", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1L)}));
         GregTech_API.registerCover(ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), new GT_MultiTexture(new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[2][0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ACTIVITYDETECTOR)}), new GT_Cover_NeedMaintainance());
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), 600, 24);
-    
+
         GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_LV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 2), 	ItemList.FluidRegulator_LV.get(1L, new Object[0]), 800, 4);
         GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 2), 	ItemList.FluidRegulator_MV.get(1L, new Object[0]), 800, 8);
         GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_HV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2), ItemList.FluidRegulator_HV.get(1L, new Object[0]), 800, 16);
@@ -850,13 +850,13 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                         return true;
                     }
                 }else if(aPrefix == OrePrefixes.dust && aMaterial == Materials.Wheat){
-                	 Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
-                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
-                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
-                         aItemEntity.setEntityItemStack(ItemList.Food_Dough.get(aItemEntity.getEntityItem().stackSize, new Object[]{}));
-                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
-                         return true;
-                     }
+                    Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
+                    byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
+                    if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
+                        aItemEntity.setEntityItemStack(ItemList.Food_Dough.get(aItemEntity.getEntityItem().stackSize, new Object[]{}));
+                        aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
+                        return true;
+                    }
                 }
             }
         }

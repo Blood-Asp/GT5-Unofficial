@@ -41,8 +41,10 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     private final static long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
 
     private final static boolean aBoolConst_0 = false;
-    private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
+	private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
+	
     private static void run1() {
+		GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Polytetrafluoroethylene.get(1L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene), 'F', OrePrefixes.frameGt.get(Materials.Polytetrafluoroethylene), 'I', OrePrefixes.pipeMedium.get(Materials.Polytetrafluoroethylene)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_ULV.get(1L, new Object[0]), bits, new Object[]{aTextPlate, aTextPlateWrench, aTextPlate, 'P', OrePrefixes.plate.get(Materials.WroughtIron)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_LV.get(1L, new Object[0]), bits, new Object[]{aTextPlate, aTextPlateWrench, aTextPlate, 'P', OrePrefixes.plate.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_MV.get(1L, new Object[0]), bits, new Object[]{aTextPlate, aTextPlateWrench, aTextPlate, 'P', OrePrefixes.plate.get(Materials.Aluminium)});
@@ -69,12 +71,12 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Steel.get(1L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'I', OrePrefixes.pipeMedium.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Titanium.get(1L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Titanium), 'F', OrePrefixes.frameGt.get(Materials.Titanium), 'I', OrePrefixes.pipeMedium.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_TungstenSteel.get(1L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.TungstenSteel), 'F', OrePrefixes.frameGt.get(Materials.TungstenSteel), 'I', OrePrefixes.pipeMedium.get(Materials.TungstenSteel)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Polytetrafluoroethylene.get(1L, new Object[0]), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene), 'F', OrePrefixes.frameGt.get(Materials.Polytetrafluoroethylene), 'I', OrePrefixes.pipeMedium.get(Materials.Polytetrafluoroethylene)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Bronze.get(1L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Bronze), 'F', OrePrefixes.frameGt.get(Materials.Bronze), 'G', OrePrefixes.gearGt.get(Materials.Bronze)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Steel.get(1L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'G', OrePrefixes.gearGt.get(Materials.Steel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_Titanium.get(1L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Titanium), 'G', OrePrefixes.gearGt.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Gearbox_TungstenSteel.get(1L, new Object[0]), bits, new Object[]{"PhP", "GFG", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.TungstenSteel), 'G', ItemList.Robot_Arm_IV});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Grate.get(1L, new Object[0]), bits, new Object[]{"PVP", "PFP", aTextPlateMotor, 'P', new ItemStack(Blocks.iron_bars,1), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'M', ItemList.Electric_Motor_MV, 'V', OrePrefixes.rotor.get(Materials.Steel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Vent.get(1L, new Object[0]), bits, new Object[]{"PPP", "SSS", "MFV", 'P', new ItemStack(Blocks.iron_bars,1), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'M', ItemList.Electric_Motor_MV, 'V', OrePrefixes.rotor.get(Materials.Steel),'S',ItemList.Component_Filter});//TODO dream - this is added recipe for vent casing
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Assembler.get(1L, new Object[0]), bits, new Object[]{"PVP", "PFP", aTextPlateMotor, 'P', OrePrefixes.circuit.get(Materials.Ultimate), 'F', OrePrefixes.frameGt.get(Materials.TungstenSteel), 'M', ItemList.Electric_Motor_IV, 'V', OrePrefixes.circuit.get(Materials.Master)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Firebox_Bronze.get(1L, new Object[0]), bits, new Object[]{"PSP", "SFS", "PSP", 'P', OrePrefixes.plate.get(Materials.Bronze), 'F', OrePrefixes.frameGt.get(Materials.Bronze), 'S', OrePrefixes.stick.get(Materials.Bronze)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Firebox_Steel.get(1L, new Object[0]), bits, new Object[]{"PSP", "SFS", "PSP", 'P', OrePrefixes.plate.get(Materials.Steel), 'F', OrePrefixes.frameGt.get(Materials.Steel), 'S', OrePrefixes.stick.get(Materials.Steel)});
@@ -573,9 +575,9 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Machine_HV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(213, "basicmachine.assembler.tier.03", "Advanced Assembling Machine II", 3, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
         ItemList.Machine_EV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(214, "basicmachine.assembler.tier.04", "Advanced Assembling Machine III", 4, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
         ItemList.Machine_IV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(215, "basicmachine.assembler.tier.05", "Advanced Assembling Machine IV", 5, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
-        //ItemList.Machine_LuV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(216, "basicmachine.assembler.tier.06", "Advanced Assembling Machine V", 6, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 2, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
-        //ItemList.Machine_ZPM_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(217, "basicmachine.assembler.tier.07", "Advanced Assembling Machine VI", 7, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 2, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
-        //ItemList.Machine_UV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(218, "basicmachine.assembler.tier.08", "Advanced Assembling Machine VII", 8, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 2, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
+        //ItemList.Machine_LuV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(216, "basicmachine.assembler.tier.06", "Advanced Assembling Machine V", 6, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
+        //ItemList.Machine_ZPM_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(217, "basicmachine.assembler.tier.07", "Advanced Assembling Machine VI", 7, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
+        //ItemList.Machine_UV_Assembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(218, "basicmachine.assembler.tier.08", "Advanced Assembling Machine VII", 8, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sAssemblerRecipes, 6, 1, 16000, 0, 1, "Assembler.png", "", aBoolConst_0, aBoolConst_0, 0, "ASSEMBLER", new Object[]{"ACA", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
 
         ItemList.Machine_LV_Bender.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(221, "basicmachine.bender.tier.01", "Basic Bending Machine", 1, "Boo, he's bad! We want BENDER!!!", GT_Recipe.GT_Recipe_Map.sBenderRecipes, 2, 1, 0, 0, 1, "Bender.png", (String) GregTech_API.sSoundList.get(Integer.valueOf(203)), aBoolConst_0, aBoolConst_0, 0, "BENDER", new Object[]{aTextPlateWrench, aTextCableHull, aTextMotorWire, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.MOTOR, 'P', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PISTON, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
         ItemList.Machine_MV_Bender.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(222, "basicmachine.bender.tier.02", "Advanced Bending Machine", 2, "Boo, he's bad! We want BENDER!!!", GT_Recipe.GT_Recipe_Map.sBenderRecipes, 2, 1, 0, 0, 1, "Bender.png", (String) GregTech_API.sSoundList.get(Integer.valueOf(203)), aBoolConst_0, aBoolConst_0, 0, "BENDER", new Object[]{aTextPlateWrench, aTextCableHull, aTextMotorWire, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.MOTOR, 'P', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PISTON, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE}).getStackForm(1L));
@@ -1076,6 +1078,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeBoiler_Titanium.get(1L, new Object[0]), bitsd, new Object[]{aTextWireCoil, aTextCableHull, aTextWireCoil, 'M', ItemList.Casing_Firebox_Titanium, 'C', OrePrefixes.circuit.get(Materials.Data), 'W', OrePrefixes.cableGt01.get(Materials.Gold)});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeBoiler_TungstenSteel.get(1L, new Object[0]), bitsd, new Object[]{aTextWireCoil, aTextCableHull, aTextWireCoil, 'M', ItemList.Casing_Firebox_TungstenSteel, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt01.get(Materials.Aluminium)});
 
+
         ItemList.Generator_Diesel_LV.set(new GT_MetaTileEntity_DieselGenerator(1110, "basicgenerator.diesel.tier.01", "Basic Diesel Generator", 1).getStackForm(1L));
         ItemList.Generator_Diesel_MV.set(new GT_MetaTileEntity_DieselGenerator(1111, "basicgenerator.diesel.tier.02", "Advanced Diesel Generator", 2).getStackForm(1L));
         ItemList.Generator_Diesel_HV.set(new GT_MetaTileEntity_DieselGenerator(1112, "basicgenerator.diesel.tier.03", "Turbo Diesel Generator", 3).getStackForm(1L));
@@ -1136,7 +1139,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //GT_ModHandler.addCraftingRecipe(ItemList.Casing_Fusion2.get(1L, new Object[0]), bitsd, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Americium), 'F', ItemList.Casing_Fusion});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Fusion_Coil.get(1L, new Object[0]), bitsd, new Object[]{"CTC", "FMF", "CTC", 'M', ItemList.Casing_Coil_Superconductor, 'C', OrePrefixes.circuit.get(Materials.Master), 'F', ItemList.Field_Generator_MV, 'T', ItemList.Neutron_Reflector});
 
-//        GT_ModHandler.addCraftingRecipe(ItemList.FusionComputer_LuV.get(1L, new Object[0]), bitsd, new Object[]{"CTC", "FMF", "CBC", 'M', ItemList.Casing_Fusion_Coil, 'B', OrePrefixes.plate.get(Materials.NetherStar), 'C', OrePrefixes.circuit.get(Materials.Master), 'F', ItemList.Field_Generator_IV, 'T', OrePrefixes.plate.get(Materials.Plutonium241)});//
+//        GT_ModHandler.addCraftingRecipe(ItemList.FusionComputer_LuV.get(1L, new Object[0]), bitsd, new Object[]{"CTC", "FMF", "CBC", 'M', ItemList.Casing_Fusion_Coil, 'B', OrePrefixes.plate.get(Materials.NetherStar), 'C', OrePrefixes.circuit.get(Materials.Master), 'F', ItemList.Field_Generator_IV, 'T', OrePrefixes.plate.get(Materials.Plutonium241)});
 //        GT_ModHandler.addCraftingRecipe(ItemList.FusionComputer_ZPMV.get(1L, new Object[0]), bitsd, new Object[]{"CBC", "FMF", "CBC", 'M', ItemList.FusionComputer_LuV, 'C', OrePrefixes.circuit.get(Materials.Master), 'F', ItemList.Field_Generator_IV, 'B', OrePrefixes.plate.get(Materials.Europium)});
 //        GT_ModHandler.addCraftingRecipe(ItemList.FusionComputer_UV.get(1L, new Object[0]), bitsd, new Object[]{"CBC", "FMF", "CBC", 'M', ItemList.FusionComputer_ZPMV, 'C', OrePrefixes.circuit.get(Materials.Master), 'F', ItemList.Field_Generator_IV, 'B', OrePrefixes.plate.get(Materials.Americium)});
 
@@ -1206,6 +1209,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Machine_Multi_HeatExchanger.set(new GT_MetaTileEntity_HeatExchanger(1154, "multimachine.heatexchanger", "Large Heat Exchanger").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_HeatExchanger.get(1L, new Object[0]), bitsd, new Object[]{aTextWireCoil, aTextCableHull, aTextWireCoil, 'M', ItemList.Casing_Pipe_Titanium, 'C', OrePrefixes.pipeMedium.get(Materials.Titanium), 'W', ItemList.Electric_Pump_EV});
 
+
         ItemList.Charcoal_Pile.set(new GT_MetaTileEntity_Charcoal_Pit(1155, "multimachine.charcoalpile", "Charcoal Pile Igniter").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.Charcoal_Pile.get(1L, new Object[0]), bitsd, new Object[]{"EXE", "EME", " C ", 'M', ItemList.Hull_Steel_Bricks, 'E', OrePrefixes.plate.get(Materials.AnyBronze), 'C', new ItemStack(Items.flint_and_steel, 1), 'X', OrePrefixes.rotor.get(Materials.Steel),});
 
@@ -1232,6 +1236,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.PyrolyseOven.set(new GT_MetaTileEntity_PyrolyseOven(1159, "multimachine.pyro", "Pyrolyse Oven").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.PyrolyseOven.get(1L, new Object[0]), bitsd, new Object[]{"WEP", "EME", "WCP", 'M', ItemList.Hull_MV, 'W', ItemList.Electric_Piston_MV, 'P', OrePrefixes.wireGt04.get(Materials.Cupronickel), 'E', OrePrefixes.circuit.get(Materials.Good), 'C', ItemList.Electric_Pump_MV});
 
+
         ItemList.OilCracker.set(new GT_MetaTileEntity_OilCracker(1160, "multimachine.cracker", "Oil Cracking Unit").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.OilCracker.get(1L, new Object[0]), bitsd, new Object[]{aTextWireCoil, "EME", aTextWireCoil, 'M', ItemList.Hull_HV, 'W', ItemList.Casing_Coil_Cupronickel, 'E', OrePrefixes.circuit.get(Materials.Advanced), 'C', ItemList.Electric_Pump_HV});
 
@@ -1256,17 +1261,17 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_DieselEngine.get(1L, new Object[0]), bitsd, new Object[]{"PCP", "EME", "GWG", 'M', ItemList.Hull_EV, 'P', ItemList.Electric_Piston_EV, 'E', ItemList.Electric_Motor_EV, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt01.get(Materials.TungstenSteel), 'G', OrePrefixes.gearGt.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_EngineIntake.get(1L, new Object[0]), bitsd, new Object[]{"PhP", "RFR", aTextPlateWrench, 'R', OrePrefixes.pipeMedium.get(Materials.Titanium), 'F', ItemList.Casing_StableTitanium, 'P', OrePrefixes.rotor.get(Materials.Titanium)});
 
-        ItemList.Machine_Multi_Cleanroom.set(new GT_MetaTileEntity_Cleanroom(1172, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1));
-        //If Cleanroom is enabled, add a recipe, else hide from NEI.
-        if (GT_Mod.gregtechproxy.mEnableCleanroom){
-            GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]), bitsd, new Object[]{"FFF", "RHR", "MCM", 'H', ItemList.Hull_HV, 'F', ItemList.Component_Filter, 'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 'M', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced)});
-        }
-        else {
-            if (isNEILoaded){
-                API.hideItem(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]));
-            }
-        }
-
+		ItemList.Machine_Multi_Cleanroom.set(new GT_MetaTileEntity_Cleanroom(1172, "multimachine.cleanroom", "Cleanroom Controller").getStackForm(1));
+		//If Cleanroom is enabled, add a recipe, else hide from NEI.
+		if (GT_Mod.gregtechproxy.mEnableCleanroom){
+			GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]), bitsd, new Object[]{"FFF", "RHR", "MCM", 'H', ItemList.Hull_HV, 'F', ItemList.Component_Filter, 'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 'M', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced)});
+		}
+		else {
+			if (isNEILoaded){
+				API.hideItem(ItemList.Machine_Multi_Cleanroom.get(1L, new Object[0]));
+			}
+		}
+		
         ItemList.Machine_LV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1180, "basicmachine.circuitassembler.tier.01", "Basic Circuit Assembling Machine", 1, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
         ItemList.Machine_MV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1181, "basicmachine.circuitassembler.tier.02", "Advanced Circuit Assembling Machine", 2, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
         ItemList.Machine_HV_CircuitAssembler.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe( 1182, "basicmachine.circuitassembler.tier.03", "Advanced Circuit Assembling Machine II", 3, "Avengers, Assemble!", GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes, 6, 1, 16000, 0, 1, "CircuitAssembler.png", "", aBoolConst_0, aBoolConst_0, 0, "CIRCUITASSEMBLER", new Object[]{"ACE", "VMV", aTextWireCoil, 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'V', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR, 'A', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER}).getStackForm(1L));
@@ -1290,7 +1295,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
     		'M', ItemList.Electric_Motor_HV,
     		'B', ItemList.Hull_HV});
-}
+    }
 
     private static void run4() {
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
@@ -1575,7 +1580,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         run3();
         run4();
     }
-    
+
     private static void generateItemPipes(Materials aMaterial, String name, String displayName, int startID, int baseInvSlots){
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(aMaterial), 			new GT_MetaPipeEntity_Item(startID, 	"GT_Pipe_" + displayName, 						displayName + " Item Pipe", 						0.50F, aMaterial, baseInvSlots, 	32768   / baseInvSlots, aBoolConst_0).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeLarge.get(aMaterial), 				new GT_MetaPipeEntity_Item(startID + 1, "GT_Pipe_" + displayName + "_Large", 			"Large " + displayName + " Item Pipe", 				0.75F, aMaterial, baseInvSlots * 2, 16384   / baseInvSlots, aBoolConst_0).getStackForm(1L));
@@ -1585,7 +1590,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeRestrictiveHuge.get(aMaterial), 	new GT_MetaPipeEntity_Item(startID + 5, "GT_Pipe_Restrictive_" + displayName + "_Huge", "Huge Restrictive " + displayName + " Item Pipe", 	0.875F, aMaterial, baseInvSlots * 2, 819200  / baseInvSlots, true).getStackForm(1L));
 
     }
-    
+
     private static void generateFluidPipes(Materials aMaterial, String name, String displayName, int startID, int baseCapacity, int heatCapacity, boolean gasProof){
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeTiny.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID, 		"GT_Pipe_" + name + "_Tiny", 	"Tiny " + displayName + " Fluid Pipe", 	0.25F, 	aMaterial, baseCapacity / 6, 	heatCapacity, gasProof).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeSmall.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID + 1, 	"GT_Pipe_" + name + "_Small", 	"Small " + displayName + " Fluid Pipe", 0.375F, aMaterial, baseCapacity / 3, 	heatCapacity, gasProof).getStackForm(1L));

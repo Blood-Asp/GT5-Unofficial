@@ -32,27 +32,27 @@ public class GT_GUIContainer_MultiMachine extends GT_GUIContainerMetaTile_Machin
 
         if (mContainer != null) {//(mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 1) != 0)
-                fontRendererObj.drawString(trans("132", "Pipe is loose."), 10, 16, 16448255);
+                fontRendererObj.drawString(trans("132","Pipe is loose."), 10, 16, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 2) != 0)
-                fontRendererObj.drawString(trans("133", "Screws are missing."), 10, 24, 16448255);
+                fontRendererObj.drawString(trans("133","Screws are missing."), 10, 24, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 4) != 0)
-                fontRendererObj.drawString(trans("134", "Something is stuck."), 10, 32, 16448255);
+                fontRendererObj.drawString(trans("134","Something is stuck."), 10, 32, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 8) != 0)
-                fontRendererObj.drawString(trans("135", "Platings are dented."), 10, 40, 16448255);
+                fontRendererObj.drawString(trans("135","Platings are dented."), 10, 40, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 16) != 0)
-                fontRendererObj.drawString(trans("136", "Circuitry burned out."), 10, 48, 16448255);
+                fontRendererObj.drawString(trans("136","Circuitry burned out."), 10, 48, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 32) != 0)
-                fontRendererObj.drawString(trans("137", "That doesn't belong there."), 10, 56, 16448255);
+                fontRendererObj.drawString(trans("137","That doesn't belong there."), 10, 56, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 64) != 0)
-                fontRendererObj.drawString(trans("138", "Incomplete Structure."), 10, 64, 16448255);
+                fontRendererObj.drawString(trans("138","Incomplete Structure."), 10, 64, 16448255);
 
             if (((GT_Container_MultiMachine) mContainer).mDisplayErrorCode == 0) {
                 if (((GT_Container_MultiMachine) mContainer).mActive == 0) {
-                    fontRendererObj.drawString(trans("139", "Hit with Soft Hammer"), 10, 16, 16448255);
-                    fontRendererObj.drawString(trans("140", "to (re-)start the Machine"), 10, 24, 16448255);
-                    fontRendererObj.drawString(trans("141", "if it doesn't start."), 10, 32, 16448255);
+                    fontRendererObj.drawString(trans("139","Hit with Soft Mallet"), 10, 16, 16448255);
+                    fontRendererObj.drawString(trans("140","to (re-)start the Machine"), 10, 24, 16448255);
+                    fontRendererObj.drawString(trans("141","if it doesn't start."), 10, 32, 16448255);
                 } else {
-                    fontRendererObj.drawString(trans("142", "Running perfectly."), 10, 16, 16448255);
+                    fontRendererObj.drawString(trans("142","Running perfectly."), 10, 16, 16448255);
                 }
                 int id = mContainer.mTileEntity.getMetaTileID();
                 if (id == 1157 || id == 1158 || id == 1177 || id == 1178 || id == 1179) {

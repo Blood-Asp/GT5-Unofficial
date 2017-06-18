@@ -172,10 +172,10 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
                     amt = tStack.stackSize;
                     for (ItemStack aStack : mInventory) {
                         if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
-                            if (aStack.stackSize < amt){
+                            if (aStack.stackSize < amt) {
                                 amt -= aStack.stackSize;
                                 aStack.stackSize = 0;
-                            }else{
+                            } else {
                                 aStack.stackSize -= amt;
                                 amt = 0;
                                 break;

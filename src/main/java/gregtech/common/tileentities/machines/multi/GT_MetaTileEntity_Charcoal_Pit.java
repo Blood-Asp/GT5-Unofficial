@@ -8,7 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Recipe;
 import gregtech.common.GT_Pollution;
 import net.minecraft.block.Block;
@@ -22,6 +21,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 
 public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlockBase {
+
     private boolean running = false;
     private boolean p1, p2, p3, p4, p5, p6;
 

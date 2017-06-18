@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static gregtech.api.enums.GT_Values.GT;
 import static gregtech.api.enums.GT_Values.V;
 
 /**
@@ -86,10 +85,10 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-        //if (GT.isClientSide()) {
-        //ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-        //tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
-        //}
+//        if (GT.isClientSide()) {
+//            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
+//            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
+//        }
     }
 
     /**
@@ -886,5 +885,19 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     @Override
     public boolean allowGeneralRedstoneOutput(){
     	return false;
+    }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+    
+    @Override
+    public boolean hasAlternativeModeText(){
+    	return false;
+    }
+    
+    @Override
+    public String getAlternativeModeText(){
+    	return "";
     }
 }

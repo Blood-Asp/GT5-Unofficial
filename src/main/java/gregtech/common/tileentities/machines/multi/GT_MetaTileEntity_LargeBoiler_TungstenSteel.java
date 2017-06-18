@@ -18,6 +18,10 @@ public class GT_MetaTileEntity_LargeBoiler_TungstenSteel
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_TungstenSteel(this.mName);
     }
+    
+    public String getCasingMaterial(){
+    	return "TungstenSteel";
+    }
 
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings4;

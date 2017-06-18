@@ -188,16 +188,12 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
             } 
     }
 
-    private void prospectHole(
-            int i, int k, Map<String, Integer> aOres) {
-
-        String tFoundOre = null;
+    private void prospectHole(int i, int k, Map<String, Integer> aOres) {
+        String tFoundOre;
         for (int j = this.getBaseMetaTileEntity().getYCoord(); j > 0; j--) {
             tFoundOre = checkForOre(i, j, k);                            
-            if (tFoundOre == null)
-                continue;
-
-            countOre(aOres, tFoundOre);
+            if (tFoundOre != null)
+                countOre(aOres, tFoundOre);
         }
     }
 

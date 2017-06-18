@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
@@ -156,4 +157,6 @@ public interface IToolStats {
     public IIconContainer getIcon(boolean aIsToolHead, ItemStack aStack);
 
     public short[] getRGBa(boolean aIsToolHead, ItemStack aStack);
+
+	public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World worldObj,	int aX, int aY, int aZ);
 }
