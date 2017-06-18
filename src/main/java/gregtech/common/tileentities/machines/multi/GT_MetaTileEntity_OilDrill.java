@@ -18,6 +18,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+
 public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase {
 
     private boolean completedCycle = false;
@@ -73,12 +75,13 @@ public class GT_MetaTileEntity_OilDrill extends GT_MetaTileEntity_MultiBlockBase
                 }
             }
         }
-        FluidStack tFluid = GT_Utility.getUndergroundOil(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord(), true);
+        FluidStack tFluid = undergroundOil(getBaseMetaTileEntity(),.5F+(getInputTier()*.25F));
         if (tFluid == null) {
         	stopMachine();
             return false;
         }
         if (getYOfPumpHead() > 0 && getBaseMetaTileEntity().getBlockOffset(ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetX, getYOfPumpHead() - 1 - getBaseMetaTileEntity().getYCoord(), ForgeDirection.getOrientation(getBaseMetaTileEntity().getBackFacing()).offsetZ) != Blocks.bedrock) {
+
             if (completedCycle) {
                 moveOneDown();
             }

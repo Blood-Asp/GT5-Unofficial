@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 62;
+	private static final int CASING_INDEX = 52;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -43,7 +43,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				"Does not lose efficiency when overclocked",
 				"Accepts fluids instead of fluid cells",
 				"Size(WxHxD): 3x3x3",
-				"3x3x3 of Chemically Inert Machine Casings (hollow, min 24!)",
+				"3x3x3 of Chemically Inert Machine Casings (hollow, min 8!)",
 				"Controller (Front centered)",
 				"1x Cupronickel Coil Block (Bottom centered)",
 				"1x PTFE Pipe Machine Casing (inside the hollow casings)",
@@ -120,11 +120,15 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				int EUt = recipe.mEUt;
 				int maxProgresstime = recipe.mDuration;
 
-				while (EUt <= gregtech.api.enums.GT_Values.V[tier - 1] && maxProgresstime > 1) {
+				while (EUt <= gregtech.api.enums.GT_Values.V[tier - 1] && maxProgresstime > 2) {
 					EUt *= 4;
 					maxProgresstime /= 4;
 				}
-
+				if (maxProgresstime < 2) {
+					maxProgresstime = 2;
+					EUt = recipe.mEUt * recipe.mDuration / 2;
+				}
+				
 				this.mEUt = -EUt;
 				this.mMaxProgresstime = maxProgresstime;
 				this.mOutputItems = recipe.mOutputs;
@@ -150,14 +154,14 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 						if ((y == -1)
 								&& (block != GregTech_API.sBlockCasings5 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 0)) {
 							return false;
-						} else if (y == 0 && (block != GregTech_API.sBlockCasings4 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 15)) {
+						} else if (y == 0 && (block != GregTech_API.sBlockCasings4 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 5)) {
 							return false;
 						}
 					} else if (x != 0 || y != 0 || z != 0) {
 						if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
 								&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
 								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
-							if (block == GregTech_API.sBlockCasings4 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 14) {
+							if (block == GregTech_API.sBlockCasings4 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 4) {
 								casingAmount++;
 							} else {
 								return false;

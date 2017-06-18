@@ -18,6 +18,10 @@ public class GT_MetaTileEntity_LargeBoiler_Titanium
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Titanium(this.mName);
     }
+    
+    public String getCasingMaterial(){
+    	return "Titanium";
+    }
 
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings4;

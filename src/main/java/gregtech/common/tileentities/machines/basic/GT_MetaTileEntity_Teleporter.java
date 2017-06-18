@@ -205,7 +205,8 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
         sFPowerMultiplyer = sPowerMultiplyer / 100.0;        
     }
 
-    public void onFirstTick() {
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if ((this.mTargetX == 0) && (this.mTargetY == 0) && (this.mTargetZ == 0) && (this.mTargetD == 0)) {
                 this.mTargetX = getBaseMetaTileEntity().getXCoord();

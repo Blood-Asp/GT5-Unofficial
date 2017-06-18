@@ -184,7 +184,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
     }
 
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
-        return true;
+        return false;
     }
 
     public int damageDropped(int par1) {

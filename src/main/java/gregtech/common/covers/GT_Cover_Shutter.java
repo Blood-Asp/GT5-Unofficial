@@ -17,10 +17,10 @@ public class GT_Cover_Shutter
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 4;
         if(aCoverVariable <0){aCoverVariable = 3;}
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Open if work enabled"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Open if work disabled"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Only Output allowed"); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, "Only Input allowed"); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("082", "Open if work enabled")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("083", "Open if work disabled")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("084", "Only Output allowed")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("085", "Only Intput allowed")); break;
         }
         return aCoverVariable;
     }

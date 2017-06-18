@@ -196,6 +196,27 @@ public class GT_Block_Machines
         return super.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
+        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+        if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
+            return ((IGregTechTileEntity) tTileEntity).getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+        }
+        return super.getSelectedBoundingBoxFromPool(aWorld, aX, aY, aZ);
+    }
+
+    @Override
+    public void setBlockBoundsBasedOnState(IBlockAccess blockAccess, int aX, int aY, int aZ) {
+        TileEntity tTileEntity = blockAccess.getTileEntity(aX, aY, aZ);
+        if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
+            AxisAlignedBB bbb = ((IGregTechTileEntity) tTileEntity).getCollisionBoundingBoxFromPool(((IGregTechTileEntity) tTileEntity).getWorld(), aX, aY, aZ).getOffsetBoundingBox(-aX, -aY, -aZ);
+            setBlockBounds((float) bbb.minX, (float) bbb.minY, (float) bbb.minZ, (float) bbb.maxX, (float) bbb.maxY, (float) bbb.maxZ);
+            return;
+        }
+        super.setBlockBoundsBasedOnState(blockAccess, aX, aY, aZ);
+    }
+
     public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity collider) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if (((tTileEntity instanceof IGregTechTileEntity)) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() != null)) {
