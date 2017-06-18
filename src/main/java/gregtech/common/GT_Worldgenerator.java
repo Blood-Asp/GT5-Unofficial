@@ -9,7 +9,6 @@ import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -18,11 +17,12 @@ import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
-public class GT_Worldgenerator implements IWorldGenerator {
+public class GT_Worldgenerator
+        implements IWorldGenerator {
+    //public static boolean sAsteroids = true;
     private static int mEndAsteroidProbability = 300;
     //private static int mGCAsteroidProbability = 50;
     private static int mSize = 100;
@@ -60,15 +60,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
             this.mIsGenerating = false;
         }
     }
-	/*//TODO CHECK
-    public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {//TODO CHECK???
-        int tempDimensionId = aWorld.provider.dimensionId;
-        if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
-            tempDimensionId = 0;
-        }
-        new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
-    }
-	*/
+
+    //public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {//TODO CHECK???
+    //    int tempDimensionId = aWorld.provider.dimensionId;
+    //    if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
+    //        tempDimensionId = 0;
+    //    }
+    //    new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
+    //}
 
     public static class WorldGenContainer
             implements Runnable {
@@ -80,7 +79,6 @@ public class GT_Worldgenerator implements IWorldGenerator {
         public final IChunkProvider mChunkGenerator;
         public final IChunkProvider mChunkProvider;
         public final String mBiome;
-        public static HashSet<ChunkCoordIntPair> mGenerated = new HashSet<>(2000);
 
         public WorldGenContainer(Random aRandom, int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider, String aBiome) {
             this.mRandom = aRandom;
@@ -93,22 +91,8 @@ public class GT_Worldgenerator implements IWorldGenerator {
             this.mBiome = aBiome;
         }
 
-        //returns a coordinate of a center chunk of 3x3 square; the argument belongs to this square
-        public int getVeinCenterCoordinate(int c) {
-            c += c < 0 ? 1 : 3;
-            return c - c % 3 - 2;
-        }
-
-        public boolean surroundingChunksLoaded(int xCenter, int zCenter) {
-            return mWorld.checkChunksExist(xCenter - 16, 0, zCenter - 16, xCenter + 16, 0, zCenter + 16);
-        }
-
         public void run() {
-            int xCenter = getVeinCenterCoordinate(mX >> 4) << 4;
-            int zCenter = getVeinCenterCoordinate(mZ >> 4) << 4;
-            ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
-            if (surroundingChunksLoaded(xCenter, zCenter) && !mGenerated.contains(centerChunk)) {
-                mGenerated.add(centerChunk);
+            if (((this.mX / 16 - 1) % 3 == 0) && ((this.mZ / 16 - 1) % 3 == 0)) {
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
@@ -118,7 +102,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if (tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, xCenter, zCenter, this.mChunkGenerator, this.mChunkProvider)) {
+                                    if (tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX, this.mZ, this.mChunkGenerator, this.mChunkProvider)) {
                                         temp = false;
                                     }
                                     break;
@@ -130,9 +114,13 @@ public class GT_Worldgenerator implements IWorldGenerator {
                     }
                 }
                 int i = 0;
-                for (int tX = xCenter - 16; i < 3; tX += 16) {
+                for (int tX = this.mX - 16; i < 3; tX += 16) {
                     int j = 0;
-                    for (int tZ = zCenter - 16; j < 3; tZ += 16) {
+                    for (int tZ = this.mZ - 16; j < 3; tZ += 16) {
+                        String tBiome = this.mWorld.getBiomeGenForCoords(tX + 8, tZ + 8).biomeName;
+                        //if (tBiome == null) {//TODO NEEDED?
+                        //    tBiome = BiomeGenBase.plains.biomeName;
+                        //}
                         try {
                             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
                                 tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
@@ -150,7 +138,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
             //String tDimensionName = this.mWorld.provider.getDimensionName();
             Random aRandom = new Random();
             //if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.equals("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
-			if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
+            if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0)))) {
                 short primaryMeta = 0;
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
@@ -180,14 +168,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
                         }
                     }
                 }
-                //if(GT_Values.D1)System.out.println("do asteroid gen: " + this.mX + " " + this.mZ);
+                //if(GT_Values.D1)System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
                 int tX = mX + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
                 int tZ = mZ + aRandom.nextInt(16);
                 if (tDimensionType == 1) {
                     mSize = aRandom.nextInt((int) (endMaxSize - endMinSize));
-                //} else if (tDimensionName.equals("Asteroids")) {
-                //    mSize = aRandom.nextInt((int) (gcMaxSize - gcMinSize));
+                    //} else if (tDimensionName.equals("Asteroids")) {
+                    //    mSize = aRandom.nextInt((int) (gcMaxSize - gcMinSize));
                 }
                 if ((mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ))) {
                     float var6 = aRandom.nextFloat() * 3.141593F;
@@ -229,11 +217,16 @@ public class GT_Worldgenerator implements IWorldGenerator {
                                                 } else if (ranOre < 10) {
                                                     GT_TileEntity_Ores.setOreBlock(mWorld, eX, eY, eZ, sporadicMeta, false, true);
                                                 } else {
-                                                    if (tDimensionType == 1) {
-                                                        mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 2);
-                                                    }/* else if (tDimensionName.equals("Asteroids")) {
-                                                        mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
-                                                    }*/
+                                                    //if (tDimensionType == 1) {//TODO CHECK
+                                                    mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 0);
+                                                    //} else if (tDimensionName.equals("Asteroids")) {
+                                                    ////int asteroidType = aRandom.nextInt(20);
+                                                    ////if (asteroidType == 19) { //Rare Asteroid?
+                                                    ////mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
+                                                    ////} else {
+                                                    //mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
+                                                    ////}
+                                                    //}
                                                 }
                                             }
                                         }
@@ -243,6 +236,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                         }
                     }
                 }
+
             }
 
 
