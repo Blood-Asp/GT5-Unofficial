@@ -1,5 +1,6 @@
 package gregtech.common;
 
+import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
@@ -13,6 +14,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
 import gregtech.api.util.GT_Utility;
+import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -164,6 +166,26 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         GT_Recipe.GT_Recipe_Map.sBlastRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput1, aOutput2}, null, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aLevel);
+        return true;
+    }
+
+    public boolean addPrimitiveBlastRecipe(ItemStack aInput1, ItemStack aInput2, int aCoalAmount, ItemStack aOutput1, ItemStack aOutput2, int aDuration) {
+        if ((aInput1 == null && aInput2 == null) || (aOutput1 == null && aOutput2 == null)) {
+            return false;
+        }
+        if (aCoalAmount <= 0) {
+        	return false;
+        }
+        if ((aDuration = GregTech_API.sRecipeFile.get("primitiveblastfurnace", aInput1, aDuration)) <= 0) {
+            return false;
+        }
+        ItemStack[] coalStacks = new ItemStack[]{Materials.Coal.getGems(aCoalAmount), Materials.Coal.getDust(aCoalAmount), Materials.Charcoal.getGems(aCoalAmount), Materials.Charcoal.getDust(aCoalAmount)};
+        for (ItemStack coalStack : coalStacks) {
+        	GT_Recipe.GT_Recipe_Map.sPrimitiveBlastRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, coalStack}, new ItemStack[]{aOutput1, aOutput2, Materials.Ash.getDustTiny(aCoalAmount)}, null, null, null, null, aDuration, 0, 0);
+        }
+        if (Loader.isModLoaded("Railcraft")) {
+        	GT_Recipe.GT_Recipe_Map.sPrimitiveBlastRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2, RailcraftToolItems.getCoalCoke(aCoalAmount / 2)}, new ItemStack[]{aOutput1, aOutput2, Materials.Ash.getDustTiny(aCoalAmount / 2)}, null, null, null, null, aDuration * 2 / 3, 0, 0);
+        }
         return true;
     }
 
