@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 52;
+	private static final int CASING_INDEX = 112;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -154,14 +154,14 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 						if ((y == -1)
 								&& (block != GregTech_API.sBlockCasings5 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 0)) {
 							return false;
-						} else if (y == 0 && (block != GregTech_API.sBlockCasings4 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 5)) {
+						} else if (y == 0 && (block != GregTech_API.sBlockCasings8 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 1)) {
 							return false;
 						}
 					} else if (x != 0 || y != 0 || z != 0) {
 						if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
 								&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
 								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
-							if (block == GregTech_API.sBlockCasings4 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 4) {
+							if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
 								casingAmount++;
 							} else {
 								return false;
