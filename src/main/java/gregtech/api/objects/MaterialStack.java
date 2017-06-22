@@ -1,5 +1,7 @@
 package gregtech.api.objects;
 
+import java.util.List;
+
 import gregtech.api.enums.Materials;
 
 public class MaterialStack implements Cloneable {
@@ -35,7 +37,8 @@ public class MaterialStack implements Cloneable {
          String temp1 = "", temp2 = mMaterial.getToolTip(true), temp3 = "", temp4 = "";
          if (mAmount > 1) {
              temp4 = String.valueOf(mAmount);
-             if (mMaterial.mMaterialList.size() > 1 || (mMaterial.mMaterialList.size() == 1 && mMaterial.mElement == null)) {
+             
+             if (mMaterial.mMaterialList.size() > 1 || isMaterialListComplex(this)) {
                 temp1 = "(";
                 temp3 = ")";
              }
@@ -43,6 +46,16 @@ public class MaterialStack implements Cloneable {
         return String.valueOf(new StringBuilder().append(temp1).append(temp2).append(temp3).append(temp4));
     }
 
+    private boolean isMaterialListComplex(MaterialStack materialStack){
+    	if (materialStack.mMaterial.mMaterialList.size() > 1) {
+    		return true;
+    	}
+    	if (materialStack.mMaterial.mMaterialList.size() == 0) {
+    		return false;
+    	}
+    	return isMaterialListComplex(materialStack.mMaterial.mMaterialList.get(0));
+    }
+    
     @Override
     public int hashCode() {
         return mMaterial.hashCode();
