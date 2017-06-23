@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import net.minecraft.block.Block;
 
@@ -21,12 +22,16 @@ public class GT_MetaTileEntity_BronzeBlastFurnace
         super(aName);
     }
 
+	public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+		return new GT_MetaTileEntity_BronzeBlastFurnace(this.mName);
+	}
+
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Bronze Blast Furnace",
-                "How to get your first Steel",
+                "Useable for Steel and general Pyrometallurgy",
                 "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
-                "Bronze Plated Bricks for the rest (32 at least!)",
+                "Built from 32 Bronze Plated Bricks",
                 "Causes 50 Pollution per second"};
     }
 

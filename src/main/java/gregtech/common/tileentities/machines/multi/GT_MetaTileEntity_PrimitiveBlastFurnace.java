@@ -100,9 +100,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 		return (GregTech_API.getCoverBehavior(aCoverID.toStack()).isSimpleCover()) && (super.allowCoverOnSide(aSide, aCoverID));
 	}
 
-	public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-		return new GT_MetaTileEntity_BronzeBlastFurnace(this.mName);
-	}
+	public abstract MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity);
 
 	public void saveNBTData(NBTTagCompound aNBT) {
 		aNBT.setInteger("mProgresstime", this.mProgresstime);

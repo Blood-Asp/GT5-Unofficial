@@ -115,8 +115,8 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_Coil_Kanthal.get(1L, new Object[0]), bits, new Object[] {ItemList.Casing_Coil_Kanthal_Deprecated});
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_Coil_Nichrome.get(1L, new Object[0]), bits, new Object[] {ItemList.Casing_Coil_Nichrome_Deprecated});
 
-        GT_ModHandler.addCraftingRecipe(ItemList.Casing_Firebricks.get(1L, new Object[0]), bits, new Object[] {"BB", "BB", 'B', ItemList.Firebrick.get(1, new Object[0])});
-
+       	GT_ModHandler.addCraftingRecipe(ItemList.Casing_Firebricks.get(1L, new Object[0]), bits, new Object[] {"BB", "BB", 'B', ItemList.Firebrick.get(1, new Object[0])});
+        
         ItemList.Hull_Bronze.set(new GT_MetaTileEntity_BasicHull_Bronze(1, "hull.bronze", "Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Bronze_Bricks.set(new GT_MetaTileEntity_BasicHull_BronzeBricks(2, "hull.bronze_bricked", "Bricked Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Steel.set(new GT_MetaTileEntity_BasicHull_Steel(3, "hull.steel", "Steel Hull", 0, "For improved Steam Machines").getStackForm(1L));
@@ -393,8 +393,10 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         }
 
         ItemList.Machine_Bricked_BlastFurnace.set(new GT_MetaTileEntity_BrickedBlastFurnace(130, "multimachine.brickedblastfurnace", "Bricked Blast Furnace").getStackForm(1L));
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bricked_BlastFurnace.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"BBB", "BPB", "BBB", 'B', ItemList.Firebrick, 'P', Materials.Iron.getPlates(1)});
-
+        if (GT_Mod.gregtechproxy.mBrickedBlastFurnace) {
+        	GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bricked_BlastFurnace.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"BBB", "BPB", "BBB", 'B', ItemList.Firebrick, 'P', Materials.Iron.getPlates(1)});
+        }
+        
         ItemList.Machine_Bronze_Furnace.set(new GT_MetaTileEntity_Furnace_Bronze(103, "bronzemachine.furnace", "Steam Furnace").getStackForm(1L));
         ItemList.Machine_Steel_Furnace.set(new GT_MetaTileEntity_Furnace_Steel(104, "steelmachine.furnace", "High Pressure Furnace").getStackForm(1L));
         ItemList.Machine_Bronze_Macerator.set(new GT_MetaTileEntity_Macerator_Bronze(106, "bronzemachine.macerator", "Steam Macerator").getStackForm(1L));
