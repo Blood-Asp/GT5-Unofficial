@@ -2182,7 +2182,12 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         	return GT_OreDictUnificator.get(OrePrefixes.ingot, this, amount);
         }
 
-     public ItemStack getPlates(int amount){
-     	return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
-     }
+    public ItemStack getBlocks(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.block, this, amount);
+    }
+    
+    public ItemStack getPlates(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
+    }
+
 }
