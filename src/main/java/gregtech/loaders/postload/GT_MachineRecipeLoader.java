@@ -2084,9 +2084,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Emitter_IV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSG, 1L),
-        		ItemList.Emitter_IV.get(1, new Object(){}),
-        		ItemList.Emitter_EV.get(2, new Object(){}),
-        		ItemList.Emitter_HV.get(4, new Object(){}),
+        		ItemList.Electric_Motor_LuV.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Palladium, 8L),
+        		ItemList.Gravistar.get(1, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Electrum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Electrum, 64L),
@@ -2097,9 +2097,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Emitter_LuV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSE, 1L),
-        		ItemList.Emitter_LuV.get(1, new Object(){}),
-        		ItemList.Emitter_IV.get(2, new Object(){}),
-        		ItemList.Emitter_EV.get(4, new Object(){}),
+                ItemList.Electric_Motor_ZPM.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Iridium, 8L),
+                ItemList.Gravistar.get(2, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
@@ -2110,9 +2110,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Emitter_ZPM.get(1, new Object(){}),288000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1L),
-        		ItemList.Emitter_ZPM.get(1, new Object(){}),
-        		ItemList.Emitter_LuV.get(2, new Object(){}),
-        		ItemList.Emitter_IV.get(4, new Object(){}),
+                ItemList.Electric_Motor_UV.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Palladium, 8L),
+                ItemList.Gravistar.get(4, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
@@ -2125,9 +2125,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Sensor_IV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSG, 1L),
-        		ItemList.Sensor_IV.get(1, new Object(){}),
-        		ItemList.Sensor_EV.get(2, new Object(){}),
-        		ItemList.Sensor_HV.get(4, new Object(){}),
+                ItemList.Electric_Motor_LuV.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 8L),
+                ItemList.Gravistar.get(1, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Electrum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Electrum, 64L),
@@ -2138,9 +2138,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Sensor_LuV.get(1, new Object(){}),144000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.HSSE, 1L),
-        		ItemList.Sensor_LuV.get(1, new Object(){}),
-        		ItemList.Sensor_IV.get(2, new Object(){}),
-        		ItemList.Sensor_EV.get(4, new Object(){}),
+                ItemList.Electric_Motor_ZPM.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Osmium, 8L),
+                ItemList.Gravistar.get(2, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
@@ -2151,9 +2151,9 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Sensor_ZPM.get(1, new Object(){}),288000,new ItemStack[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1L),
-        		ItemList.Sensor_ZPM.get(1, new Object(){}),
-        		ItemList.Sensor_LuV.get(2, new Object(){}),
-        		ItemList.Sensor_IV.get(4, new Object(){}),
+                ItemList.Electric_Motor_UV.get(1, new Object(){}),
+                GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Osmium, 8L),
+                ItemList.Gravistar.get(4, new Object(){}),
         		GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 7L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
