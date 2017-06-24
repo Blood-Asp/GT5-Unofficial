@@ -10,8 +10,12 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ChestBuffer;
 import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
 
 public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer {
+	private byte[] weights = {1, 1, 1, 1, 1, 1};
+	boolean onlyOutputToInventories = true;
+	
 	public GT_MetaTileEntity_ItemDistributor(int aID, String aName, String aNameRegional, int aTier) {
 		super(aID, aName, aNameRegional, aTier, 28, "Buffering lots of incoming Items");
 	}
@@ -30,7 +34,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	}
 
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-		return new GT_MetaTileEntity_ChestBuffer(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
+		return new GT_MetaTileEntity_ItemDistributor(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
 	}
 
 	public ITexture getOverlayIcon() {
@@ -43,7 +47,18 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 
 	protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
 		fillStacksIntoFirstSlots();
-		super.moveItems(aBaseMetaTileEntity, aTimer);
+		int tCost = 0;
+		for (byte side = 0; side < 6; side++) {
+			TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(side);
+			if(!onlyOutputToInventories || adjacentTileEntity != null){
+		        tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, adjacentTileEntity, 
+		        		side, GT_Utility.getOppositeSide(side), null, false, (byte) 64, (byte) 1, weights[side], weights[side]);				
+			}
+		}
+        if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+            mSuccess = 50;
+            aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
+        }
 		fillStacksIntoFirstSlots();
 	}
 

@@ -560,12 +560,15 @@ public class GT_Utility {
                     if (listContainsItem(aFilter, aTileEntity1.getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
                         if (isAllowedToTakeFromSlot(aTileEntity1, tGrabSlots[i], aGrabFrom, aTileEntity1.getStackInSlot(tGrabSlots[i]))) {
                             if (isAllowedToPutIntoSlot((IInventory) aTileEntity2, tPutSlots[j], aPutTo, aTileEntity1.getStackInSlot(tGrabSlots[i]), aMaxTargetStackSize)) {
-                                tMovedItemCount = moveStackFromSlotAToSlotB(aTileEntity1, (IInventory) aTileEntity2, tGrabSlots[i], tPutSlots[j], aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce);
+                                tMovedItemCount += moveStackFromSlotAToSlotB(aTileEntity1, (IInventory) aTileEntity2, tGrabSlots[i], tPutSlots[j], aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItemCount), aMinMoveAtOnce);
+                                if (tMovedItemCount >= aMaxMoveAtOnce) {
+                                	return tMovedItemCount;
+                                }
                             }
                         }
                     }
                 }
-            if (tMovedItemCount > 0) return tMovedItemCount;
+                if (tMovedItemCount > 0) return tMovedItemCount;
             }
 
             if (aDoCheckChests && aTileEntity1 instanceof TileEntityChest) {
