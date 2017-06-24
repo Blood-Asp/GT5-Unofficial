@@ -192,8 +192,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mAMHInteraction = true;
     public boolean mForceFreeFace = true;
     public boolean mBrickedBlastFurnace = true;
+    public boolean mEasierEVPlusCables = false;
 
-    
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
         MinecraftForge.EVENT_BUS.register(this);

@@ -274,6 +274,7 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.meIOLoaded = Loader.isModLoaded("EnderIO");
         gregtechproxy.mForceFreeFace = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "forceFreeFace",true);
         gregtechproxy.mBrickedBlastFurnace = tMainConfig.get("general", "BrickedBlastFurnace", true).getBoolean(true);
+        gregtechproxy.mEasierEVPlusCables = tMainConfig.get("general", "EasierEVPlusCables", false).getBoolean(false);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
         gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);//TODO CHECK
