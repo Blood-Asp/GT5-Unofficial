@@ -1550,6 +1550,17 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_ZPM, 'V', ItemList.Conveyor_Module_ZPM, 'D', ItemList.Tool_DataStick});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_UV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_UV, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_MAX.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_MAX, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
+
+        ItemList.Automation_ChestBuffer_ULV.set(new GT_MetaTileEntity_ChestBuffer(9320, "automation.itemdistributor.tier.00", "Ultra Low Voltage Item Distributor", 0).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_LV.set(new GT_MetaTileEntity_ChestBuffer(9321,  "automation.itemdistributor.tier.01", "Low Voltage Item Distributor", 1).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_MV.set(new GT_MetaTileEntity_ChestBuffer(9322,  "automation.itemdistributor.tier.02", "Medium Voltage Item Distributor", 2).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_HV.set(new GT_MetaTileEntity_ChestBuffer(9323,  "automation.itemdistributor.tier.03", "High Voltage Item Distributor", 3).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_EV.set(new GT_MetaTileEntity_ChestBuffer(9324,  "automation.itemdistributor.tier.04", "Extreme Voltage Item Distributor", 4).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_IV.set(new GT_MetaTileEntity_ChestBuffer(9325,  "automation.itemdistributor.tier.05", "Insane Voltage Item Distributor", 5).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_LuV.set(new GT_MetaTileEntity_ChestBuffer(9326, "automation.itemdistributor.tier.06", "Ludicrous Voltage Item Distributor", 6).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_ZPM.set(new GT_MetaTileEntity_ChestBuffer(9327, "automation.itemdistributor.tier.07", "ZPM Voltage Item Distributor", 7).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_UV.set(new GT_MetaTileEntity_ChestBuffer(9328,  "automation.itemdistributor.tier.08", "Ultimate Voltage Item Distributor", 8).getStackForm(1L));
+        ItemList.Automation_ChestBuffer_MAX.set(new GT_MetaTileEntity_ChestBuffer(9329, "automation.itemdistributor.tier.09", "MAX Voltage Item Distributor", 9).getStackForm(1L));
     }
 
     private static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage, long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
