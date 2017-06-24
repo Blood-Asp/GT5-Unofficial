@@ -132,13 +132,26 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
         	}
             break;
         default:
-        	for (Materials dielectric : dielectrics) {
-        		for (Materials syntheticRubber : syntheticRubbers) {
-                	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{aStack, dielectric.getDustSmall(costMultiplier), GT_OreDictUnificator.get(OrePrefixes.foil, aMaterial, costMultiplier)}, 
-                			syntheticRubber.getMolten(costMultiplier * 36), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
-                	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{aStack, dielectric.getDustSmall(costMultiplier), GT_OreDictUnificator.get(OrePrefixes.foil, Materials.PolyphenyleneSulfide, costMultiplier)}, 
-                			syntheticRubber.getMolten(costMultiplier * 36), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
-        		}
+        	if (GT_Mod.gregtechproxy.mEasierEVPlusCables) {
+            	for (Materials rubber : rubbers) {
+                    GT_Values.RA.addAssemblerRecipe(aStack, ItemList.Circuit_Integrated.getWithDamage(0L, 24L, new Object[0]), 
+                    		rubber.getMolten(144 * costMultiplier), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);        		
+            	}
+            	for (Materials dielectric : dielectrics) {
+            		for (Materials syntheticRubber : syntheticRubbers) {
+                    	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{aStack, dielectric.getDustSmall(costMultiplier)}, 
+                    			syntheticRubber.getMolten(costMultiplier * 36), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
+            		}
+            	}        		
+        	} else {
+            	for (Materials dielectric : dielectrics) {
+            		for (Materials syntheticRubber : syntheticRubbers) {
+                    	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{aStack, dielectric.getDustSmall(costMultiplier), GT_OreDictUnificator.get(OrePrefixes.foil, aMaterial, costMultiplier)}, 
+                    			syntheticRubber.getMolten(costMultiplier * 36), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
+                    	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{aStack, dielectric.getDustSmall(costMultiplier), GT_OreDictUnificator.get(OrePrefixes.foil, Materials.PolyphenyleneSulfide, costMultiplier)}, 
+                    			syntheticRubber.getMolten(costMultiplier * 36), GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
+            		}
+            	}        		
         	}
         	break;
         }
@@ -147,5 +160,5 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
             Api.INSTANCE.registries().p2pTunnel().addNewAttunement(aStack, TunnelType.IC2_POWER);
             Api.INSTANCE.registries().p2pTunnel().addNewAttunement(GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), TunnelType.IC2_POWER);
         }
-    }
+    }    
 }
