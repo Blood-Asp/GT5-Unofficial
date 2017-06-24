@@ -116,6 +116,9 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_Coil_Kanthal.get(1L, new Object[0]), bits, new Object[] {ItemList.Casing_Coil_Kanthal_Deprecated});
         //GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_Coil_Nichrome.get(1L, new Object[0]), bits, new Object[] {ItemList.Casing_Coil_Nichrome_Deprecated});
 
+        ItemList.Machine_Bricked_BlastFurnace.set(new GT_MetaTileEntity_BrickedBlastFurnace(140, "multimachine.brickedblastfurnace", "Bricked Blast Furnace").getStackForm(1L));
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bricked_BlastFurnace.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"BFB", "FwF", "BFB", 'B', ItemList.Casing_Firebricks, 'F', OreDictNames.craftingIronFurnace});
+
         ItemList.Hull_Bronze.set(new GT_MetaTileEntity_BasicHull_Bronze(1, "hull.bronze", "Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Bronze_Bricks.set(new GT_MetaTileEntity_BasicHull_BronzeBricks(2, "hull.bronze_bricked", "Bricked Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Steel.set(new GT_MetaTileEntity_BasicHull_Steel(3, "hull.steel", "Steel Hull", 0, "For improved Steam Machines").getStackForm(1L));
@@ -398,9 +401,9 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Boiler_Solar.get(1L, new Object[0]), bits, new Object[]{"GGG", "SSS", aTextPlateMotor, 'M', ItemList.Hull_Bronze_Bricks, 'P', OrePrefixes.pipeSmall.get(Materials.Bronze), 'S', OrePrefixes.plate.get(Materials.Silver), 'G', new ItemStack(Blocks.glass, 1)});
 
         ItemList.Machine_Bronze_BlastFurnace.set(new GT_MetaTileEntity_BronzeBlastFurnace(108, "bronzemachine.blastfurnace", "Bronze Plated Blast Furnace").getStackForm(1L));
-        if (!Loader.isModLoaded("terrafirmacraft")) {
-            GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_BlastFurnace.get(1L, new Object[0]), bits, new Object[]{"PFP", "FwF", "PFP", 'P', OrePrefixes.plate.get(Materials.Bronze), 'F', OreDictNames.craftingIronFurnace});
-        }
+        //if (!Loader.isModLoaded("terrafirmacraft")) {
+            //GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_BlastFurnace.get(1L, new Object[0]), bits, new Object[]{"PFP", "FwF", "PFP", 'P', OrePrefixes.plate.get(Materials.Bronze), 'F', OreDictNames.craftingIronFurnace});
+        //}
         ItemList.Machine_Bronze_Furnace.set(new GT_MetaTileEntity_Furnace_Bronze(103, "bronzemachine.furnace", "Steam Furnace").getStackForm(1L));
         ItemList.Machine_Steel_Furnace.set(new GT_MetaTileEntity_Furnace_Steel(104, "steelmachine.furnace", "High Pressure Furnace").getStackForm(1L));
         ItemList.Machine_Bronze_Macerator.set(new GT_MetaTileEntity_Macerator_Bronze(106, "bronzemachine.macerator", "Steam Macerator").getStackForm(1L));
@@ -1290,7 +1293,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
     ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1169, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
     GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeChemicalReactor.get(1L, new Object[0]), bitsd, new Object[]{"CRC", "PMP", "CBC", 
-    		'C', OrePrefixes.circuit.get(Materials.Elite), 
+    		'C', OrePrefixes.circuit.get(Materials.Advanced),
     		'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 
     		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
     		'M', ItemList.Electric_Motor_HV,
@@ -1396,7 +1399,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(Materials.Superconductor), new GT_MetaPipeEntity_Fluid(5168, "GT_Pipe_PlasmaContain", "Plasma Containment Pipe", 0.5F, Materials.Glowstone, 240, 100000, true).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeTiny.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5170, "GT_Pipe_Plastic_Tiny", "Tiny Plastic Fluid Pipe", 0.25F, Materials.Plastic, 60, 350, true).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeSmall.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5171, "GT_Pipe_Plastic_Small", "Small Plastic Fluid Pipe", 0.375F, Materials.Plastic, 120, 350, true).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5172, "GT_Pipe_Plastic", "Plastic Pipe", 0.5F, Materials.Plastic, 360, 350, true).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5172, "GT_Pipe_Plastic", "Plastic Fluid Pipe", 0.5F, Materials.Plastic, 360, 350, true).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeLarge.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5173, "GT_Pipe_Plastic_Large", "Large Plastic Fluid Pipe", 0.75F, Materials.Plastic, 720, 350, true).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeHuge.get(Materials.Plastic), new GT_MetaPipeEntity_Fluid(5174, "GT_Pipe_Plastic_Huge", "Huge Plastic Fluid Pipe", 0.875F, Materials.Plastic, 1440, 350, true).getStackForm(1L));
         generateFluidPipes(Materials.Polytetrafluoroethylene, Materials.Polytetrafluoroethylene.mName, "PTFE", 5680, 480, 600, true);
@@ -1406,7 +1409,6 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.TungstenSteel, 1L), ItemList.Electric_Pump_IV.get(2L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Ultimate, 1L), 600, 256);
 
         //GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.Superconductor, 1L), bitsd, new Object[]{"WSW", aTextCableHull, "WSW", 'M', OrePrefixes.pipeSmall.get(Materials.Titanium), 'C', OrePrefixes.plate.get(Materials.NeodymiumMagnetic), 'W', OrePrefixes.plate.get(Materials.Plastic), 'S', OrePrefixes.wireGt02.get(Materials.Superconductor)});
-
 
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(Materials.Brass), new GT_MetaPipeEntity_Item(5602, "GT_Pipe_Brass", "Brass Item Pipe", 0.5F, Materials.Brass, 1, 32768, aBoolConst_0).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeLarge.get(Materials.Brass), new GT_MetaPipeEntity_Item(5603, "GT_Pipe_Brass_Large", "Large Brass Item Pipe", 0.75F, Materials.Brass, 2, 16384, aBoolConst_0).getStackForm(1L));
@@ -1594,7 +1596,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     private static void generateFluidPipes(Materials aMaterial, String name, String displayName, int startID, int baseCapacity, int heatCapacity, boolean gasProof){
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeTiny.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID, 		"GT_Pipe_" + name + "_Tiny", 	"Tiny " + displayName + " Fluid Pipe", 	0.25F, 	aMaterial, baseCapacity / 6, 	heatCapacity, gasProof).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeSmall.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID + 1, 	"GT_Pipe_" + name + "_Small", 	"Small " + displayName + " Fluid Pipe", 0.375F, aMaterial, baseCapacity / 3, 	heatCapacity, gasProof).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(aMaterial), new GT_MetaPipeEntity_Fluid(startID + 2, 	"GT_Pipe_" + name, 				displayName + " Pipe", 					0.5F, 	aMaterial, baseCapacity, 		heatCapacity, gasProof).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.pipeMedium.get(aMaterial), new GT_MetaPipeEntity_Fluid(startID + 2, 	"GT_Pipe_" + name, 				displayName + " Fluid Pipe", 					0.5F, 	aMaterial, baseCapacity, 		heatCapacity, gasProof).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeLarge.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID + 3, 	"GT_Pipe_" + name + "_Large", 	"Large " + displayName + " Fluid Pipe", 0.75F, 	aMaterial, baseCapacity * 2, 	heatCapacity, gasProof).getStackForm(1L));
         GT_OreDictUnificator.registerOre(OrePrefixes.pipeHuge.get(aMaterial), 	new GT_MetaPipeEntity_Fluid(startID + 4, 	"GT_Pipe_" + name + "_Huge", 	"Huge " + displayName + " Fluid Pipe", 	0.875F, 	aMaterial, baseCapacity * 4, 	heatCapacity, gasProof).getStackForm(1L));
     }

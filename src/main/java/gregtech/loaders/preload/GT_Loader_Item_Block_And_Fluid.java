@@ -163,7 +163,8 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockCasings3 = new GT_Block_Casings3();
         GregTech_API.sBlockCasings4 = new GT_Block_Casings4();
         GregTech_API.sBlockCasings5 = new GT_Block_Casings5();
-        GregTech_API.sBlockCasings6 = new GT_Block_Casings6();//TODO CHECK?
+        GregTech_API.sBlockCasings6 = new GT_Block_Casings6();
+        GregTech_API.sBlockCasings8 = new GT_Block_Casings8();
         GregTech_API.sBlockGranites = new GT_Block_Granites();
         GregTech_API.sBlockConcretes = new GT_Block_Concretes();
         GregTech_API.sBlockStones = new GT_Block_Stones();
@@ -425,7 +426,7 @@ public class GT_Loader_Item_Block_And_Fluid
         ItemList.sEpichlorhydrin = GT_Mod.gregtechproxy.addFluid("liquid_epichlorhydrin", "Epichlorohydrin", Materials.Epichlorohydrin, 1, 295, Materials.Epichlorohydrin.getCells(1), Materials.Empty.getCells(1), 1000);
         ItemList.sDrillingFluid = GT_Mod.gregtechproxy.addFluid("liquid_drillingfluid", "Drilling Fluid", null, 1, 295);
         ItemList.sToluene = GT_Mod.gregtechproxy.addFluid("liquid_toluene", "Toluene", Materials.Toluene, 1, 295, Materials.Toluene.getCells(1), Materials.Empty.getCells(1), 1000);
-        ItemList.sNitrationMixture = GT_Mod.gregtechproxy.addFluid("liquid_nitrationmixture", "Nitration Mixture", null, 1, 295, Materials.NitrationMixture.getCells(1), Materials.Empty.getCells(1), 1000);
+        ItemList.sNitrationMixture = GT_Mod.gregtechproxy.addFluid("liquid_nitrationmixture", "Nitration Mixture", Materials.NitrationMixture, 1, 295, Materials.NitrationMixture.getCells(1), Materials.Empty.getCells(1), 1000);
 
         GT_Mod.gregtechproxy.addFluid("liquid_heavy_oil", "Heavy Oil", Materials.OilHeavy, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.OilHeavy, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("liquid_medium_oil", "Raw Oil", Materials.OilMedium, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.OilMedium, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);

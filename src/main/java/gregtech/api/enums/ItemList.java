@@ -536,6 +536,7 @@ public enum ItemList implements IItemContainer {
     Machine_Bronze_Compressor,
     Machine_Bronze_AlloySmelter,
     Machine_Bronze_BlastFurnace,
+    Machine_Bricked_BlastFurnace,
     Machine_Steel_Boiler_Lava,
     Machine_Steel_Boiler,
     Machine_Steel_Furnace,
@@ -554,6 +555,7 @@ public enum ItemList implements IItemContainer {
     Casing_Stripes_A, Casing_Stripes_B, Casing_RadioactiveHazard, Casing_BioHazard, Casing_ExplosionHazard, Casing_FireHazard, Casing_AcidHazard, Casing_MagicHazard, Casing_FrostHazard, Casing_NoiseHazard, Casing_Grate, Casing_Vent, Casing_RadiationProof, Casing_Firebox_Bronze, Casing_Firebox_Steel, Casing_Firebox_TungstenSteel, Casing_Chemically_Inert,
     Casing_MiningOsmiridium, Casing_RobustTungstenSteel, Casing_CleanStainlessSteel, Casing_StableTitanium, Casing_Firebox_Titanium,
     Hull_ULV, Hull_LV, Hull_MV, Hull_HV, Hull_EV, Hull_IV, Hull_LuV, Hull_ZPM, Hull_UV, Hull_MAX,
+    CompressedFireclay, Firebrick, Casing_Firebricks,
 
     Automation_Filter_ULV, Automation_Filter_LV, Automation_Filter_MV, Automation_Filter_HV, Automation_Filter_EV, Automation_Filter_IV, Automation_Filter_LuV, Automation_Filter_ZPM, Automation_Filter_UV, Automation_Filter_MAX,
     Automation_TypeFilter_ULV, Automation_TypeFilter_LV, Automation_TypeFilter_MV, Automation_TypeFilter_HV, Automation_TypeFilter_EV, Automation_TypeFilter_IV, Automation_TypeFilter_LuV, Automation_TypeFilter_ZPM, Automation_TypeFilter_UV, Automation_TypeFilter_MAX,
@@ -665,10 +667,10 @@ public enum ItemList implements IItemContainer {
     Circuit_Silicon_Ingot, Circuit_Silicon_Ingot2, Circuit_Silicon_Ingot3, Circuit_Silicon_Wafer, Circuit_Silicon_Wafer2, Circuit_Silicon_Wafer3, Circuit_Wafer_ILC, Circuit_Chip_ILC, Circuit_Wafer_Ram, Circuit_Chip_Ram, 
     Circuit_Wafer_NAND, Circuit_Chip_NAND, Circuit_Wafer_NOR, Circuit_Chip_NOR, Circuit_Wafer_CPU, Circuit_Chip_CPU, Circuit_Wafer_SoC, Circuit_Chip_SoC, Circuit_Wafer_SoC2, Circuit_Chip_SoC2, Circuit_Wafer_PIC, Circuit_Chip_PIC, 
     Circuit_Wafer_HPIC, Circuit_Chip_HPIC, Circuit_Wafer_NanoCPU, Circuit_Chip_NanoCPU, Circuit_Wafer_QuantumCPU, Circuit_Chip_QuantumCPU, 
-    Circuit_Chip_CrystalCPU, Circuit_Chip_CrystalSoC, Circuit_Chip_NeuroCPU, Circuit_Chip_Stemcell,
+    Circuit_Chip_CrystalCPU, Circuit_Chip_CrystalSoC, Circuit_Chip_NeuroCPU, Circuit_Chip_Stemcell, Circuit_Parts_RawCrystalParts,
     Tube_Wires,
     Circuit_Processor, Circuit_Computer, Circuit_Nanoprocessor, Circuit_Nanocomputer, Circuit_Elitenanocomputer, Circuit_Quantumprocessor, Circuit_Quantumcomputer, Circuit_Masterquantumcomputer, 
-    Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Ultimatecrystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip,//TODO new circuit ultimate crystal computer...
+    Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Ultimatecrystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip,
     Machine_LV_CircuitAssembler, Machine_MV_CircuitAssembler, Machine_HV_CircuitAssembler, Machine_EV_CircuitAssembler, Machine_IV_CircuitAssembler, Machine_LuV_CircuitAssembler, Machine_ZPM_CircuitAssembler, Machine_UV_CircuitAssembler, Circuit_Integrated_Good, Machine_IV_LightningRod, Machine_HV_LightningRod, Machine_EV_LightningRod,
    
    Depleted_MNq_1, Depleted_MNq_2, Depleted_MNq_4,
