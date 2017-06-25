@@ -40,6 +40,7 @@ public class GT_Achievements {
     public static List<Materials> oreList = new ArrayList<Materials>();
     public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
+    public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
     public ConcurrentHashMap<String, Boolean> issuedAchievements;
     public int adjX = 5;
@@ -75,6 +76,10 @@ public class GT_Achievements {
                 registerOreAchievement(oreList.get(i));
             }
         }
+
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
+            registerAssAchievement(recipe);
+
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.PICKAXE, 1, Materials.Flint, Materials.Wood, null), "", false);
         registerAchievement("crops", -4, 0, GT_ModHandler.getIC2Item("crop", 1L), "flintpick", false);
         registerAchievement("havestlead", -4, 2, ItemList.Crop_Drop_Plumbilia.get(1, new Object[]{}), "crops", false);
@@ -266,6 +271,15 @@ public class GT_Achievements {
             oreReg++;
             return registerAchievement(aMaterial.mName, -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
                     aMaterial.mMetaItemSubID), AchievementList.openInventory, false);
+        }
+        return null;
+    }
+
+    public Achievement registerAssAchievement(GT_Recipe recipe) {
+        if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
+            assReg++;
+            return registerAchievement(recipe.getOutput(0).getUnlocalizedName(), -(11 + assReg % 5), ((assReg) / 5) - 8, recipe.getOutput(0)
+                    , AchievementList.openInventory, false);
         }
         return null;
     }
