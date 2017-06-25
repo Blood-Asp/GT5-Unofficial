@@ -33,13 +33,15 @@ public class MaterialBuilder {
 	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<TC_Aspects.TC_AspectStack>();
 	private boolean hasCorrespondingFluid = false;
 	private boolean hasCorrespondingGas = false;
+	private boolean canBeCracked = false;
+	private boolean canBeSteamCracked = false;
 	private int liquidTemperature = 300;
 	private int gasTemperature = 300;
 
 	public MaterialBuilder(int metaItemSubID, TextureSet iconSet, String defaultLocalName) {
 		this.metaItemSubID = metaItemSubID;
 		this.iconSet = iconSet;
-		this.name = defaultLocalName.replace(" ", "");
+		this.name = defaultLocalName.replace(" ", "").replace("-", "");
 		this.defaultLocalName = defaultLocalName;
 	}
 
@@ -47,7 +49,8 @@ public class MaterialBuilder {
 		return new Materials(metaItemSubID, iconSet, toolSpeed, durability, toolQuality, types, r, g, b, a, name, defaultLocalName, fuelType, fuelPower, meltingPoint, blastFurnaceTemp,
 				blastFurnaceRequired, transparent, oreValue, densityMultiplier, densityDivider, color, extraData, materialList, aspects)
 				.setHasCorrespondingFluid(hasCorrespondingFluid)
-				.setHasCorrespondingGas(hasCorrespondingGas);
+				.setHasCorrespondingGas(hasCorrespondingGas)
+				.setCanBeCracked(canBeCracked);
 	}
 	
 	public MaterialBuilder setName(String name){
@@ -240,4 +243,14 @@ public class MaterialBuilder {
 		this.gasTemperature = gasTemperature;
 		return this;
 	}
+
+	public boolean canBeCracked() {
+		return canBeCracked;
+	}
+
+	public MaterialBuilder setCanBeCracked(boolean canBeCracked) {
+		this.canBeCracked = canBeCracked;
+		return this;
+	}
+
 }
