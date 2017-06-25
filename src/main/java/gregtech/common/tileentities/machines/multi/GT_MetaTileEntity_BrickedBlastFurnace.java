@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
                 "Controller Block for the Bricked Blast Furnace",
                 "Useable for Steel and general Pyrometallurgy",
                 "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
-                "Built from 32 Firerick blocks",
+                "Built from 32 Fiered Brick Blocks",
                 "Causes 50 Pollution per second"};
     }
 
