@@ -47,7 +47,7 @@ public class GT_Loader_ItemData
         GT_OreDictUnificator.addItemData(new ItemStack(Blocks.clay, 1, 32767), new ItemData(Materials.Clay, 7257600L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(new ItemStack(Blocks.hardened_clay, 1, 32767), new ItemData(Materials.Clay, 3628800L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(new ItemStack(Blocks.stained_hardened_clay, 1, 32767), new ItemData(Materials.Clay, 3628800L, new MaterialStack[0]));
-        GT_OreDictUnificator.addItemData(new ItemStack(Blocks.brick_block, 1, 32767), new ItemData(Materials.Clay, 3628800L, new MaterialStack[0]));
+        GT_OreDictUnificator.addItemData(new ItemStack(Blocks.brick_block, 1, 32767), new ItemData(Materials.Brick, 3628800L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(GT_ModHandler.getIC2Item("Uran238", 1L), new ItemData(Materials.Uranium, 3628800L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(GT_ModHandler.getIC2Item("Uran235", 1L), new ItemData(Materials.Uranium235, 3628800L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(GT_ModHandler.getIC2Item("Plutonium", 1L), new ItemData(Materials.Plutonium, 3628800L, new MaterialStack[0]));

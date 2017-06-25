@@ -140,7 +140,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Metal = new Materials(-1, TextureSet.SET_METALLIC, 	1.0F, 0, 2, false, "Metal", "Metal");
     public static Materials Unknown = new Materials(-1, TextureSet.SET_DULL, 	1.0F, 0, 2, false, "Unknown", "Unknown");
     public static Materials Cobblestone = new Materials(-1, TextureSet.SET_DULL,1.0F, 0, 1, false, "Cobblestone", "Cobblestone");
-    public static Materials Brick = new Materials(-1, TextureSet.SET_DULL, 		1.0F, 0, 1, false, "Brick", "Brick");
     public static Materials BrickNether = new Materials(-1, TextureSet.SET_DULL,1.0F, 0, 1, false, "BrickNether", "BrickNether");
 
     /**
@@ -459,7 +458,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials ChromiumDioxide  = new Materials(361, TextureSet.SET_DULL, 11.0F, 256, 3, 1|2, 230, 200, 200, 0, "ChromiumDioxide", "Chromium Dioxide", 0, 0, 650, 650, false, false, 5, 3, 1, Dyes.dyePink , 1, Arrays.asList(new MaterialStack(Chrome, 1), new MaterialStack(Oxygen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1)));
     public static Materials Cinnabar = new Materials(826, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1 |8 , 150, 0, 0, 0, "Cinnabar", "Cinnabar", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Mercury, 1), new MaterialStack(Sulfur, 1)));
     public static Materials Water = new Materials(701, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 0, 0, 255, 0, "Water", "Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2)));
-    public static Materials Clay = new Materials(805, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1, 200, 200, 220, 0, "Clay", "Clay", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2), new MaterialStack(Water, 6)));
+    public static Materials Clay = new Materials(805, TextureSet.SET_DULL, 				1.0F, 0, 1, 1, 200, 200, 220, 0, "Clay", "Clay", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2), new MaterialStack(Water, 6)));
     public static Materials Coal = new Materials(535, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1|4|8, 70, 70, 70, 0, "Coal", "Coal", 0, 0, -1, 0, false, false, 2, 2, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
     public static Materials Cobaltite = new Materials(827, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1 |8 , 80, 80, 250, 0, "Cobaltite", "Cobaltite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Cobalt, 1), new MaterialStack(Arsenic, 1), new MaterialStack(Sulfur, 1)));
     public static Materials Cooperite = new Materials(828, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1 |8 , 255, 255, 200, 0, "Cooperite", "Sheldonite", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Platinum, 3), new MaterialStack(Nickel, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Palladium, 1)));
@@ -540,6 +539,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
 
+    public static Materials Brick = new MaterialBuilder(625, TextureSet.SET_DULL, "Brick").addDustItems().setRGB(155, 86, 67).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Aluminium, 4), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)).constructMaterial();
+    public static Materials Fireclay = new MaterialBuilder(626, TextureSet.SET_DULL, "Fireclay").addDustItems().setRGB(173, 160, 155).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Brick, 1)).constructMaterial();
     public static Materials BioDiesel = new MaterialBuilder(627, TextureSet.SET_FLUID, "Bio Diesel").addCell().addFluid().setRGB(255, 128, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(192).constructMaterial();
     public static Materials NitrationMixture = new MaterialBuilder(628, TextureSet.SET_FLUID, "Nitration Mixture").addCell().setRGB(230, 226, 171).setColor(Dyes.dyeBrown).constructMaterial();
     public static Materials Glycerol = new MaterialBuilder(629, TextureSet.SET_FLUID, "Glycerol").addCell().addFluid().setRGB(135, 222, 135).setColor(Dyes.dyeLime).setFuelType(MaterialBuilder.SEMIFLUID).setFuelType(164).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
@@ -1251,7 +1252,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Teslatite.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
         Netherrack.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.FLAMMABLE);
         Stone.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.NO_RECYCLING);
-        Brick.add(SubTag.STONE, SubTag.NO_SMASHING);
+        Brick.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         NetherBrick.add(SubTag.STONE, SubTag.NO_SMASHING);
         Endstone.add(SubTag.STONE, SubTag.NO_SMASHING);
         Marble.add(SubTag.STONE, SubTag.NO_SMASHING);
@@ -2096,4 +2097,16 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 		return GT_OreDictUnificator.get(OrePrefixes.gem, this, amount);
 	}
 	
+    public ItemStack getIngots(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.ingot, this, amount);
+    }
+
+    public ItemStack getBlocks(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.block, this, amount);
+    }
+    
+    public ItemStack getPlates(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
+    }
+
 }
