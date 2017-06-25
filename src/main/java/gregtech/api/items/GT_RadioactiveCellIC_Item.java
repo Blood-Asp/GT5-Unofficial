@@ -1,6 +1,7 @@
 package gregtech.api.items;
 
 
+import gregtech.api.GregTech_API;
 import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import ic2.core.IC2Potion;
@@ -11,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-
-import gregtech.api.GregTech_API;
 
 
 public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implements IReactorComponent {

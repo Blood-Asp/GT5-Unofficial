@@ -4,18 +4,14 @@ import gregtech.GT_Mod;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_UO_Fluid;
 import gregtech.api.objects.XSTR;
-import gregtech.common.GT_Proxy;
 import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
 
-import static gregtech.api.util.GT_Utility.getScaleCoordinates;
 import static gregtech.common.GT_Proxy.*;
 
 /**

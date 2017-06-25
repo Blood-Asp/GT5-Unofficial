@@ -30,7 +30,10 @@ import net.minecraft.world.World;
 import squeek.applecore.api.food.FoodValues;
 import squeek.applecore.api.food.IEdible;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.GT_Values.*;

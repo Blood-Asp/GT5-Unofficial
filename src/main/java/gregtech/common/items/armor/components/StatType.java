@@ -1,9 +1,5 @@
 package gregtech.common.items.armor.components;
 
-import java.util.List;
-
-import net.minecraftforge.fluids.FluidStack;
-
 public enum StatType {
 	ELECTRIC,
 	ELECTRIC2,

@@ -9,9 +9,7 @@ import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
-//import forestry.apiculture.items.EnumHoneyComb;
 import forestry.core.genetics.alleles.AlleleHelper;
-//import forestry.plugins.PluginApiculture;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -19,11 +17,13 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
 import java.util.Locale;
+
+//import forestry.apiculture.items.EnumHoneyComb;
+//import forestry.plugins.PluginApiculture;
 
 public enum GT_BeeDefinition implements IBeeDefinition {
     CLAY(GT_BranchDefinition.ORGANIC, "Clay", true, 0x19d0ec, 0xffdc16) {

@@ -1,7 +1,5 @@
 package gregtech.api.objects;
 
-import java.util.List;
-
 import gregtech.api.enums.Materials;
 
 public class MaterialStack implements Cloneable {

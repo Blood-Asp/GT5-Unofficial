@@ -1,10 +1,5 @@
 package gregtech.api.objects;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Random;
-
-import gregtech.api.enums.GT_Values;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;

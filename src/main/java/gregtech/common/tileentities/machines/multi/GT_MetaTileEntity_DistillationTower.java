@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_DistillationTower
         extends GT_MetaTileEntity_MultiBlockBase {
