@@ -18,6 +18,7 @@ import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
@@ -28,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -72,6 +74,8 @@ public class GT_Client extends GT_Proxy
     private final List mMoltenNegG;
     private final List mMoltenNegB;
     private final List mMoltenNegA = Arrays.asList(new Object[0]);
+    /**This is the place to def the value used below**/
+    private long afterSomeTime;
     private long mAnimationTick;
     private boolean mAnimationDirection;
     
@@ -294,6 +298,16 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
         if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
+            afterSomeTime++;
+            if(afterSomeTime>=100L){
+                afterSomeTime=0;
+                StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
+                try {
+                    for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
+                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    }
+                }catch (Exception e){}
+            }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
                 if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix
