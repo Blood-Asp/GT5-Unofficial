@@ -15,6 +15,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +40,7 @@ public class GT_Achievements {
     public static List<Materials> oreList = new ArrayList<Materials>();
     public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
+    public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
     public ConcurrentHashMap<String, Boolean> issuedAchievements;
     public int adjX = 5;
@@ -47,7 +49,7 @@ public class GT_Achievements {
     public GT_Achievements() {
         this.achievementList = new ConcurrentHashMap();
         this.issuedAchievements = new ConcurrentHashMap();
-        int oreList_sS=oreList.size();
+        int oreList_sS = oreList.size();
         for (int i = 0; i < oreList_sS; i++) {
             if (oreList.get(i) != null) {
                 if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
@@ -74,6 +76,10 @@ public class GT_Achievements {
                 registerOreAchievement(oreList.get(i));
             }
         }
+
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
+            registerAssAchievement(recipe);
+
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.PICKAXE, 1, Materials.Flint, Materials.Wood, null), "", false);
         registerAchievement("crops", -4, 0, GT_ModHandler.getIC2Item("crop", 1L), "flintpick", false);
         registerAchievement("havestlead", -4, 2, ItemList.Crop_Drop_Plumbilia.get(1, new Object[]{}), "crops", false);
@@ -99,10 +105,10 @@ public class GT_Achievements {
         registerAchievement("cleandust", 0, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1L), "crushed", false);
         registerAchievement("washing", -2, 6, GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Iron, 1L), "crushed", false);
         registerAchievement("spinit", -4, 6, GT_OreDictUnificator.get(OrePrefixes.crushedCentrifuged, Materials.Redstone, 1L), "crushed", false);
-        if(!GregTech_API.mIC2Classic){
-        registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
-        registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
-        registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
+        if (!GregTech_API.mIC2Classic) {
+            registerAchievement("newfuel", -4, 8, ItemList.ThoriumCell_4.get(1, new Object[]{}), "spinit", false);
+            registerAchievement("newmetal", -4, 10, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lutetium, 1L), "newfuel", false);
+            registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
         }
         registerAchievement("bronze", 2, 0, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bronze, 1L), "flintpick", false);
         registerAchievement("simplyeco", 2, 2, ItemList.Machine_Bronze_Boiler_Solar.get(1, new Object[]{}), "bronze", false);
@@ -111,7 +117,7 @@ public class GT_Achievements {
         registerAchievement("macerator", 0, -2, ItemList.Machine_Bronze_Macerator.get(1, new Object[]{}), "firststeam", false);
         registerAchievement("extract", 0, -4, ItemList.Machine_Bronze_Extractor.get(1, new Object[]{}), "alloysmelter", false);
 
-        registerAchievement("smallparts", 0, -5, ItemList.Circuit_Primitive.get(1, new Object[]{}), "alloysmelter", false);        
+        registerAchievement("smallparts", 0, -5, ItemList.Circuit_Primitive.get(1, new Object[]{}), "alloysmelter", false);
         registerAchievement("gtbasiccircuit", 0, -8, Ic2Items.electronicCircuit.copy(), "smallparts", false);
         registerAchievement("bettercircuits", 0, -9, ItemList.Circuit_Good.get(1, new Object[]{}), "gtbasiccircuit", false);
         registerAchievement("stepforward", -2, -9, Ic2Items.advancedCircuit.copy(), "bettercircuits", false);
@@ -124,7 +130,7 @@ public class GT_Achievements {
         registerAchievement("gtcrystalprocessor", -11, -12, ItemList.Circuit_Crystalprocessor.get(1, new Object[]{}), "gtquantumprocessor", false);
         registerAchievement("gtwetware", -9, -12, ItemList.Circuit_Neuroprocessor.get(1, new Object[]{}), "gtcrystalprocessor", false);
         registerAchievement("gtwetmain", -7, -12, ItemList.Circuit_Wetwaremainframe.get(1, new Object[]{}), "gtwetware", false);
-        
+
         registerAchievement("orbs", -10, -14, ItemList.Energy_LapotronicOrb.get(1, new Object[]{}), "energyflow", false);
         registerAchievement("thatspower", -8, -14, ItemList.Energy_LapotronicOrb2.get(1, new Object[]{}), "orbs", false);
         registerAchievement("datasaving", -2, -12, ItemList.Tool_DataOrb.get(1, new Object[]{}), "stepforward", false);
@@ -269,6 +275,15 @@ public class GT_Achievements {
         return null;
     }
 
+    public Achievement registerAssAchievement(GT_Recipe recipe) {
+        if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
+            assReg++;
+            return registerAchievement(recipe.getOutput(0).getUnlocalizedName(), -(11 + assReg % 5), ((assReg) / 5) - 8, recipe.getOutput(0)
+                    , AchievementList.openInventory, false);
+        }
+        return null;
+    }
+
     public void issueAchievement(EntityPlayer entityplayer, String textId) {
         if (entityplayer == null || !GT_Mod.gregtechproxy.mAchievements) {
             return;
@@ -352,7 +367,9 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
-        if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}
+        if (stack.getItem() == Items.paper) {
+            player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab, 2));
+        }
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
@@ -405,7 +422,7 @@ public class GT_Achievements {
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter")) {
                 issueAchievement(player, "alloysmelter");
                 issueAchievement(player, "buildElecFurnace");
-                if(stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter.tier.3")){
+                if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.alloysmelter.tier.3")) {
                     issueAchievement(player, "buildIndFurnace");
                 }
             } else if (stack.getUnlocalizedName().equals("gt.blockmachines.bronzemachine.extractor")) {
@@ -423,7 +440,7 @@ public class GT_Achievements {
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.")) {
                 issueAchievement(player, "buffer");
                 issueAchievement(player, "buildBatBox");
-                if(stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.3")){
+                if (stack.getUnlocalizedName().startsWith("gt.blockmachines.automation.chestbuffer.tier.3")) {
                     issueAchievement(player, "buildMFE");
                 }
             } else if (stack.getUnlocalizedName().startsWith("gt.blockmachines.basicgenerator.steamturbine.tier.")) {
@@ -506,22 +523,22 @@ public class GT_Achievements {
             return;
         }
         ItemData data = GT_OreDictUnificator.getItemData(stack);
-        if (data != null && data.mPrefix!=null) {
+        if (data != null && data.mPrefix != null) {
             if (data.mPrefix == OrePrefixes.dust) {
                 if (data.mMaterial.mMaterial == Materials.Lutetium) {
                     issueAchievement(player, "newmetal");
                 }
-                if(data.mMaterial.mMaterial != Materials.Gunpowder){
+                if (data.mMaterial.mMaterial != Materials.Gunpowder) {
                     issueAchievement(player, "cleandust");
                 }
             } else if (data.mPrefix.name().startsWith("ore")) {
-                int data_getAllMaterialStacks_sS=data.getAllMaterialStacks().size();
+                int data_getAllMaterialStacks_sS = data.getAllMaterialStacks().size();
                 for (int i = 0; i < data_getAllMaterialStacks_sS; i++) {
                     issueAchievement(player, data.getAllMaterialStacks().get(i).mMaterial.mName);
                     if (data.getAllMaterialStacks().get(i).mMaterial == Materials.AnyIron) {
                         issueAchievement(player, "iron");
                     }
-                    if(data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper||data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin){
+                    if (data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper || data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin) {
                         issueAchievement(event.entityPlayer, "mineOre");
                     }
 
@@ -588,17 +605,30 @@ public class GT_Achievements {
                 issueAchievement(player, "gtlogiccircuit");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32085")) {
                 issueAchievement(player, "gtquantumprocessor");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32089")) {
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32089")) {
                 issueAchievement(player, "gtcrystalprocessor");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32092")) {
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32092")) {
                 issueAchievement(player, "gtwetware");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
                 issueAchievement(player, "gtwetmain");
-            } 
+            }
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");
-        }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
+        } else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
-            issueAchievement(player, "buildQArmor");}
+            issueAchievement(player, "buildQArmor");
+        }
+        if(player.capabilities.isCreativeMode && stack.getUnlocalizedName().equals("gt.metaitem.01.32761")){//Debug Scanner pickup shows all assline recipes.
+            for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
+                issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
+                recipe.mHidden=false;
+            }
+        }
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
+            if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
+                issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
+                recipe.mHidden=false;
+            }
+        }
     }
 }

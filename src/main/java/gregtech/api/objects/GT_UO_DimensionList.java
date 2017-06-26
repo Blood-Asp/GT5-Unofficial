@@ -2,9 +2,6 @@ package gregtech.api.objects;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import gregtech.GT_Mod;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.util.GT_Log;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;

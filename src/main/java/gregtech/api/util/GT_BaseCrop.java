@@ -21,7 +21,6 @@ import speiger.src.crops.api.ICropCardInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.E;
 
