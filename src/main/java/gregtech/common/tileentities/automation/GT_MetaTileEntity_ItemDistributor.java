@@ -9,13 +9,14 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ChestBuffer;
 import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 
 public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer {
-	private byte[] weights = {1, 1, 1, 1, 1, 1};
-	boolean onlyOutputToInventories = true;
-	
+	private byte[] sideWeights = new byte[6];
+	private byte currentSide = 0, currentSideItemCount = 0;
+
 	public GT_MetaTileEntity_ItemDistributor(int aID, String aName, String aNameRegional, int aTier) {
 		super(aID, aName, aNameRegional, aTier, 28, "Buffering lots of incoming Items");
 	}
@@ -34,7 +35,8 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	}
 
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-		return new GT_MetaTileEntity_ItemDistributor(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
+		return new GT_MetaTileEntity_ItemDistributor(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray,
+				this.mTextures);
 	}
 
 	public ITexture getOverlayIcon() {
@@ -47,18 +49,30 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 
 	protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
 		fillStacksIntoFirstSlots();
-		int tCost = 0;
-		for (byte side = 0; side < 6; side++) {
-			TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(side);
-			if(!onlyOutputToInventories || adjacentTileEntity != null){
-		        tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, adjacentTileEntity, 
-		        		side, GT_Utility.getOppositeSide(side), null, false, (byte) 64, (byte) 1, weights[side], weights[side]);				
+		int movedItems = 0;
+		TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
+		int inspectedSides = 0;
+		while (sideWeights[currentSide] == 0) {
+			currentSide = (byte) ((currentSide + 1) % 6);
+			currentSideItemCount = 0;
+			adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
+			inspectedSides += 1;
+			if (inspectedSides == 6) {
+				return;
 			}
 		}
-        if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-            mSuccess = 50;
-            aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
-        }
+		movedItems = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, adjacentTileEntity, currentSide,
+				GT_Utility.getOppositeSide(currentSide), null, false, (byte) 64, (byte) 1,
+				(byte) (sideWeights[currentSide] - currentSideItemCount), (byte) 1);
+		currentSideItemCount += movedItems;
+		if (currentSideItemCount >= sideWeights[currentSide]) {
+			currentSide = (byte) ((currentSide + 1) % 6);
+			currentSideItemCount = 0;
+		}
+		if (movedItems > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+			mSuccess = 50;
+			aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(movedItems), true);
+		}
 		fillStacksIntoFirstSlots();
 	}
 
@@ -72,6 +86,13 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+		sideWeights[aSide] += aPlayer.isSneaking() ? -1 : 1;
+		sideWeights[aSide] = (byte) ((sideWeights[aSide] + 128) % 128);
+		GT_Utility.sendChatToPlayer(aPlayer, trans("110", "Side Weight: " + sideWeights[aSide]));
 	}
 
 	public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
