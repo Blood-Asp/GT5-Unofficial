@@ -113,7 +113,7 @@ public class GT_Loader_Item_Block_And_Fluid
             ItemList.Depleted_Thorium_2.set(new GT_DepletetCell_Item("Double_ThoriumcellDep", "Dual Fuel Rod (Depleted Thorium)", 1));//TODO CHECK num
             ItemList.Depleted_Thorium_4.set(new GT_DepletetCell_Item("Quad_ThoriumcellDep", "Quad Fuel Rod (Depleted Thorium)", 1));//TODO CHECK num
             ItemList.ThoriumCell_1.set(new GT_RadioactiveCellIC_Item("Thoriumcell", "Fuel Rod (Thorium)", 1, 50000, 0.4F, 0, 0.25F, ItemList.Depleted_Thorium_1.get(1, new Object[0]), false));
-            ItemList.ThoriumCell_2.set(new GT_RadioactiveCellIC_Item("Double_Thoriumcell", "Double Fuel Rod (Thorium)", 2, 50000, 0.4F, 0, 0.25F, ItemList.Depleted_Thorium_2.get(1, new Object[0]), false));
+            ItemList.ThoriumCell_2.set(new GT_RadioactiveCellIC_Item("Double_Thoriumcell", "Dual Fuel Rod (Thorium)", 2, 50000, 0.4F, 0, 0.25F, ItemList.Depleted_Thorium_2.get(1, new Object[0]), false));
             ItemList.ThoriumCell_4.set(new GT_RadioactiveCellIC_Item("Quad_Thoriumcell", "Quad Fuel Rod (Thorium)", 4, 50000, 0.4F, 0, 0.25F, ItemList.Depleted_Thorium_4.get(1, new Object[0]), false));
 
             GT_ModHandler.addCraftingRecipe(ItemList.ThoriumCell_2.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "   ", "   ", 'R', ItemList.ThoriumCell_1, 'P', OrePrefixes.plate.get(Materials.Iron)});
@@ -127,7 +127,7 @@ public class GT_Loader_Item_Block_And_Fluid
             ItemList.Depleted_Naquadah_2.set(new GT_DepletetCell_Item("Double_NaquadahcellDep", "Dual Fuel Rod (Depleted Naquadah)", 1));
             ItemList.Depleted_Naquadah_4.set(new GT_DepletetCell_Item("Quad_NaquadahcellDep", "Quad Fuel Rod (Depleted Naquadah)", 1));
             ItemList.NaquadahCell_1.set(new GT_RadioactiveCellIC_Item("Naquadahcell", "Fuel Rod (Naquadah)", 1, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_1.get(1, new Object[0]), false));
-            ItemList.NaquadahCell_2.set(new GT_RadioactiveCellIC_Item("Double_Naquadahcell", "Double Fuel Rod (Naquadah)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_2.get(1, new Object[0]), false));
+            ItemList.NaquadahCell_2.set(new GT_RadioactiveCellIC_Item("Double_Naquadahcell", "Dual Fuel Rod (Naquadah)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_2.get(1, new Object[0]), false));
             ItemList.NaquadahCell_4.set(new GT_RadioactiveCellIC_Item("Quad_Naquadahcell", "Quad Fuel Rod (Naquadah)", 4, 100000, 2F, 1, 1F, ItemList.Depleted_Naquadah_4.get(1, new Object[0]), false));
 
             ////GT_ModHandler.addCraftingRecipe(ItemList.NaquadahCell_2.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "   ", "   ", 'R', ItemList.NaquadahCell_1, 'P', OrePrefixes.plate.get(Materials.Iron)});
@@ -141,7 +141,7 @@ public class GT_Loader_Item_Block_And_Fluid
             ItemList.Depleted_MNq_2.set(new GT_DepletetCell_Item("Double_MNqCellDep", "Dual Fuel Rod (Depleted Nq*)", 1));
             ItemList.Depleted_MNq_4.set(new GT_DepletetCell_Item("Quad_MNqCellDep", "Quad Fuel Rod (Depleted Nq*)", 1));
             ItemList.MNqCell_1.set(new GT_RadioactiveCellIC_Item("MNqCell", "Fuel Rod (Nq* - MOX like behaviour)", 1, 100000, 2F, 1, 1F, ItemList.Depleted_MNq_1.get(1, new Object[0]), true));
-            ItemList.MNqCell_2.set(new GT_RadioactiveCellIC_Item("Double_MNqCell", "Double Fuel Rod (Nq* - MOX like behaviour)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_MNq_2.get(1, new Object[0]), true));
+            ItemList.MNqCell_2.set(new GT_RadioactiveCellIC_Item("Double_MNqCell", "Dual Fuel Rod (Nq* - MOX like behaviour)", 2, 100000, 2F, 1, 1F, ItemList.Depleted_MNq_2.get(1, new Object[0]), true));
             ItemList.MNqCell_4.set(new GT_RadioactiveCellIC_Item("Quad_MNqCell", "Quad Fuel Rod (Nq* - MOX like behaviour)", 4, 100000, 2F, 1, 1F, ItemList.Depleted_MNq_4.get(1, new Object[0]), true));
 
             GT_ModHandler.addThermalCentrifugeRecipe(ItemList.Depleted_MNq_1.get(1, new Object[0]), 5000, new Object[]{GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.NaquadahEnriched, 2L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TungstenSteel, 8L)});
