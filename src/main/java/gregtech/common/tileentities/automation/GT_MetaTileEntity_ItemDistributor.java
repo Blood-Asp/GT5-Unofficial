@@ -11,10 +11,11 @@ import gregtech.common.gui.GT_Container_ChestBuffer;
 import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer {
-	private byte[] sideWeights = new byte[6];
+	private byte[] itemsPerSide = new byte[6];
 	private byte currentSide = 0, currentSideItemCount = 0;
 
 	public GT_MetaTileEntity_ItemDistributor(int aID, String aName, String aNameRegional, int aTier) {
@@ -52,7 +53,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		int movedItems = 0;
 		TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
 		int inspectedSides = 0;
-		while (sideWeights[currentSide] == 0) {
+		while (itemsPerSide[currentSide] == 0) {
 			currentSide = (byte) ((currentSide + 1) % 6);
 			currentSideItemCount = 0;
 			adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
@@ -63,9 +64,9 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		}
 		movedItems = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, adjacentTileEntity, currentSide,
 				GT_Utility.getOppositeSide(currentSide), null, false, (byte) 64, (byte) 1,
-				(byte) (sideWeights[currentSide] - currentSideItemCount), (byte) 1);
+				(byte) (itemsPerSide[currentSide] - currentSideItemCount), (byte) 1);
 		currentSideItemCount += movedItems;
-		if (currentSideItemCount >= sideWeights[currentSide]) {
+		if (currentSideItemCount >= itemsPerSide[currentSide]) {
 			currentSide = (byte) ((currentSide + 1) % 6);
 			currentSideItemCount = 0;
 		}
@@ -90,10 +91,33 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 
 	@Override
 	public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-		sideWeights[aSide] += aPlayer.isSneaking() ? -1 : 1;
-		sideWeights[aSide] = (byte) ((sideWeights[aSide] + 128) % 128);
-		GT_Utility.sendChatToPlayer(aPlayer, trans("110", "Side Weight: " + sideWeights[aSide]));
+		//Adjust items per side by 1 or -1, constrained to the cyclic interval [0, 127]
+		itemsPerSide[aSide] += aPlayer.isSneaking() ? -1 : 1;
+		itemsPerSide[aSide] = (byte) ((itemsPerSide[aSide] + 128) % 128);
+		GT_Utility.sendChatToPlayer(aPlayer, trans("110", "Items per side: " + itemsPerSide[aSide]));
 	}
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByteArray("mItemsPerSide", itemsPerSide);
+        aNBT.setByte("mCurrentSide", currentSide);
+        aNBT.setByte("mCurrentSideItemCount", currentSideItemCount);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        itemsPerSide = aNBT.getByteArray("mItemsPerSide");
+        currentSide = aNBT.getByte("mCurrentSide");
+        currentSideItemCount = aNBT.getByte("mCurrentSideItemCount");
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        aNBT.setByteArray("mItemsPerSide", itemsPerSide);        
+    }
 
 	public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
 		return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
