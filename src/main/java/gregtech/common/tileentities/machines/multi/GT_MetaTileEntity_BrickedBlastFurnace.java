@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -42,12 +43,12 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
 
 	@Override
 	protected boolean isCorrectCasingBlock(Block block) {
-		return true;
+		return block == GregTech_API.sBlockCasings4;
 	}
 
 	@Override
 	protected boolean isCorrectCasingMetaID(int metaID) {
-		return true;
+		return metaID == 15;
 	}
 
 	@Override
