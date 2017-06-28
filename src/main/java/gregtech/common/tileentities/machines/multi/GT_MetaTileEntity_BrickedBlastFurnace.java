@@ -19,7 +19,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
     public GT_MetaTileEntity_BrickedBlastFurnace(String aName) {
         super(aName);
     }
-
+    
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_BrickedBlastFurnace(this.mName);
     }
@@ -40,18 +40,18 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
         return FACING_SIDE;
     }
 
-    @Override
-    protected boolean isCorrectCasingBlock(Block block) {
-        return true;
-    }
+	@Override
+	protected boolean isCorrectCasingBlock(Block block) {
+		return block == GregTech_API.sBlockCasings4;
+	}
 
-    @Override
-    protected boolean isCorrectCasingMetaID(int metaID) {
-        return true;
-    }
+	@Override
+	protected boolean isCorrectCasingMetaID(int metaID) {
+		return metaID == 15;
+	}
 
-    @Override
-    public String getName() {
-        return "Bricked Blast Furnace";
-    }
+	@Override
+	public String getName() {
+		return "Bricked Blast Furnace";
+	}
 }
