@@ -2734,8 +2734,8 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addChemicalRecipe(Materials.Polydimethylsiloxane.getDust(9), Materials.Sulfur.getDust(1), GT_Values.NF, Materials.Silicone.getMolten(1296), GT_Values.NI, 600);
 
-        GT_Values.RA.addChemicalRecipe(Materials.Nitrogen.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Hydrogen.getGas(3000), Materials.Ammonia.getGas(1000), Materials.Empty.getCells(1), 640, 384);
-        GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(3), GT_Utility.getIntegratedCircuit(1), Materials.Nitrogen.getGas(1000), Materials.Ammonia.getGas(1000), Materials.Empty.getCells(3), 640, 384);
+        GT_Values.RA.addChemicalRecipe(Materials.Nitrogen.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Hydrogen.getGas(3000), Materials.Ammonia.getGas(4000), Materials.Empty.getCells(1), 640, 384);
+        GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(3), GT_Utility.getIntegratedCircuit(1), Materials.Nitrogen.getGas(1000), Materials.Ammonia.getGas(4000), Materials.Empty.getCells(3), 640, 384);
 
         GT_Values.RA.addChemicalRecipe(Materials.Methanol.getCells(2), GT_Utility.getIntegratedCircuit(1), Materials.Ammonia.getGas(1000), 	Materials.Dimethylamine.getGas(1000), Materials.Water.getCells(2), 240, 120);
         GT_Values.RA.addChemicalRecipe(Materials.Ammonia.getCells(1),  GT_Utility.getIntegratedCircuit(1), Materials.Methanol.getFluid(2000), Materials.Water.getFluid(2000), 	  Materials.Dimethylamine.getCells(1), 240, 120);
