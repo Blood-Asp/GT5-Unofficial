@@ -40,9 +40,10 @@ public class GT_MetaTileEntity_AssemblyLine
                 "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
                 "UpMiddle: Grate Machine Casing,",
                 "    Assembler Machine Casing,",
-                "    Grate Machine Casing (or Controller)",
+                "    Grate Machine Casing (or Controller or Data Access Hatch)",
                 "Top: Steel Casing(or Energy Hatch)",
-                "Up to 16 repeating slices, last is Output Bus"};
+                "Up to 16 repeating slices, last is Output Bus",
+                "Optional 1x Data Access Hatch next to the Controller"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -168,13 +169,16 @@ public class GT_MetaTileEntity_AssemblyLine
             for (int r = 0; r <= 16; r++) {
                 int i = r * xDir;
 
+                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, 0, i);
                 if (i != 0 && !(aBaseMetaTileEntity.getBlockOffset(0, 0, i) == GregTech_API.sBlockCasings3 && aBaseMetaTileEntity.getMetaIDOffset(0, 0, i) == 10)) {
-                    return false;
+                    if(r == 1 && !addDataAccessToMachineList(tTileEntity, 16)){
+                    	return false;
+                    }
                 }
                 if (!aBaseMetaTileEntity.getBlockOffset(0, -1, i).getUnlocalizedName().equals("blockAlloyGlass")) {
                     return false;
                 }
-                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, -2, i);
+                tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, -2, i);
                 if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
                     if (aBaseMetaTileEntity.getBlockOffset(0, -2, i) != GregTech_API.sBlockCasings2) {
                         return false;
@@ -225,13 +229,16 @@ public class GT_MetaTileEntity_AssemblyLine
             for (int r = 0; r <= 16; r++) {
                 int i = r * -zDir;
 
+                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, 0, 0);
                 if (i != 0 && !(aBaseMetaTileEntity.getBlockOffset(i, 0, 0) == GregTech_API.sBlockCasings3 && aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0) == 10)) {
-                    return false;
+                	if(r == 1 && !addDataAccessToMachineList(tTileEntity, 16)){
+                    	return false;
+                    }
                 }
                 if (!aBaseMetaTileEntity.getBlockOffset(i, -1, 0).getUnlocalizedName().equals("blockAlloyGlass")) {
                     return false;
                 }
-                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, -2, 0);
+                tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, -2, 0);
                 if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
                     if (aBaseMetaTileEntity.getBlockOffset(i, -2, 0) != GregTech_API.sBlockCasings2) {
                         return false;
