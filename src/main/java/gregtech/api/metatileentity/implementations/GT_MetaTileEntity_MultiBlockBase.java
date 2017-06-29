@@ -695,6 +695,35 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return rList;
     }
 
+    /**
+     * @param state 0 for both, 1 for DataStick, 2 for DataOrb
+     */
+    private boolean isCorrectDataItem(ItemStack aStack, byte state){
+    	if (ItemList.Tool_DataStick.isStackEqual(aStack, false, true) && (state == 0 || state == 1)) return true;
+    	if (ItemList.Tool_DataOrb.isStackEqual(aStack, false, true) && (state == 0 || state == 2)) return true;
+    	return false;
+    }
+    
+    /**
+     * @param state 0 for both, 1 for DataStick, 2 for DataOrb
+     */
+    public ArrayList<ItemStack> getDataItems(byte state) {
+        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
+        	rList.add(mInventory[1]);
+        }
+        for (GT_MetaTileEntity_Hatch_DataAccess tHatch : mDataAccessHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                for (int i = 0; i < tHatch.getBaseMetaTileEntity().getSizeInventory(); i++) {
+                    if (tHatch.getBaseMetaTileEntity().getStackInSlot(i) != null
+                    		&& isCorrectDataItem(tHatch.getBaseMetaTileEntity().getStackInSlot(i), state))
+                        rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(i));
+                }
+            }
+        }
+        return rList;
+    }
+
     public GT_Recipe_Map getRecipeMap() {
         return null;
     }
