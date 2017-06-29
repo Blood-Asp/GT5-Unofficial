@@ -71,53 +71,76 @@ public class GT_MetaTileEntity_AssemblyLine
 
     public boolean checkRecipe(ItemStack aStack) {
     	if(GT_Values.D1)System.out.println("Start ALine recipe check");
-        if (!GT_Utility.isStackValid(mInventory[1]) || !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))
-            return false;
+        ArrayList<ItemStack> tDataStickList = getDataItems((byte) 1);
+    	if (tDataStickList.size() == 0) return false;
     	if(GT_Values.D1)System.out.println("Stick accepted");
 
-        NBTTagCompound tTag = mInventory[1].getTagCompound();
-        if (tTag == null) return false;
         ItemStack tStack[] = new ItemStack[15];
-        for (int i = 0; i < 15; i++) {
-            if (!tTag.hasKey("" + i)) continue;
-            if (mInputBusses.get(i) == null) return false;
-            tStack[i] = GT_Utility.loadItem(tTag, "" + i);
-            if (tStack[i] == null) continue;
-        	if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
-            ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
-            if (!GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) || tStack[i].stackSize > stackInSlot.stackSize) {
-            	if(GT_Values.D1)System.out.println(i +" not accepted");
-                return false;
+    	FluidStack[] tFluids = new FluidStack[4];
+    	boolean recipeNA = false;
+    	boolean findRecipe = false;
+    	for (ItemStack tDataStick : tDataStickList){
+    		recipeNA = false;
+    		NBTTagCompound tTag = tDataStick.getTagCompound();
+    		if (tTag == null) continue;
+    		for (int i = 0; i < 15; i++) {
+                if (!tTag.hasKey("" + i)) continue;
+                if (mInputBusses.get(i) == null) {
+                	recipeNA = true;
+                	break;
+                }
+                tStack[i] = GT_Utility.loadItem(tTag, "" + i);
+                if (tStack[i] == null) continue;
+            	if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
+                ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
+                if (!GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) || tStack[i].stackSize > stackInSlot.stackSize) {
+                	if(GT_Values.D1)System.out.println(i +" not accepted");
+                	recipeNA = true;
+                    break;
+                }
+            	if(GT_Values.D1)System.out.println(i+" accepted");
             }
-        	if(GT_Values.D1)System.out.println(i+" accepted");
-        }
-    	if(GT_Values.D1)System.out.println("All Items done, start fluid check");
-        FluidStack[] tFluids = new FluidStack[4];
-        for (int i = 0; i < 4; i++) {
-            if (!tTag.hasKey("f" + i)) continue;
-            tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
-            if (tFluids[i] == null) continue;
-        	if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
-            if (mInputHatches.get(i) == null) return false;
-            FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
-            if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
-            	if(GT_Values.D1)System.out.println(i+" not accepted");
-                return false;
+    		if (recipeNA) continue;
+    		
+    		if(GT_Values.D1)System.out.println("All Items done, start fluid check");
+            for (int i = 0; i < 4; i++) {
+                if (!tTag.hasKey("f" + i)) continue;
+                tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
+                if (tFluids[i] == null) continue;
+            	if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
+                if (mInputHatches.get(i) == null) {
+                	recipeNA = true;
+                	break;
+                }
+                FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
+                if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
+                	if(GT_Values.D1)System.out.println(i+" not accepted");
+                	recipeNA = true;
+                    break;
+                }
+            	if(GT_Values.D1)System.out.println(i+" accepted");
             }
-        	if(GT_Values.D1)System.out.println(i+" accepted");
-        }
-    	if(GT_Values.D1)System.out.println("Input accepted, check other values");
-        if (!tTag.hasKey("output")) return false;
-        mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-        if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
-            return false;
+            if (recipeNA) continue;
+            
+            if(GT_Values.D1)System.out.println("Input accepted, check other values");
+            if (!tTag.hasKey("output")) continue;
+            mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+            if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
+                continue;
+            
+            if (!tTag.hasKey("time")) continue;
+            mMaxProgresstime = tTag.getInteger("time");
+            if (mMaxProgresstime <= 0) continue;
+            
+            if (!tTag.hasKey("eu")) continue;
+            mEUt = tTag.getInteger("eu");
+            
+            if(GT_Values.D1)System.out.println("Find avaiable recipe");
+            findRecipe = true;
+            break;
+    	}
+    	if (!findRecipe) return false;
 
-        if (!tTag.hasKey("time")) return false;
-        mMaxProgresstime = tTag.getInteger("time");
-        if (mMaxProgresstime <= 0) return false;
-
-        if (!tTag.hasKey("eu")) return false;
-        mEUt = tTag.getInteger("eu");
     	if(GT_Values.D1)System.out.println("All checked start consuming inputs");
         for (int i = 0; i < 15; i++) {
             if (tStack[i] == null) continue;
