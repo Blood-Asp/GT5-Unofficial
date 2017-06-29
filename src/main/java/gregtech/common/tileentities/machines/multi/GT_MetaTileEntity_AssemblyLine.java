@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
