@@ -832,7 +832,6 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                     if (GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
                         if (GregTech_API.getCoverBehavior(tCurrentItem).isCoverPlaceable(cSide, new GT_ItemStack(tCurrentItem), this) && mMetaTileEntity.allowCoverOnSide(cSide, new GT_ItemStack(tCurrentItem))) {
                             setCoverItemAtSide(cSide, tCurrentItem);
-                            if (GregTech_API.getCoverBehavior(tCurrentItem) instanceof GT_Cover_PlayerDetector) setOwnerName(aPlayer.getDisplayName());
                             if (!aPlayer.capabilities.isCreativeMode) tCurrentItem.stackSize--;
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
