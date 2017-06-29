@@ -357,9 +357,12 @@ public class GT_Loader_MetaTileEntities implements Runnable {
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_AutoMaintenance.get(1L, new Object[0]), bitsd, new Object[]{"CHC", "AMA", "CHC", 'M', ItemList.Hull_IV,'H',ItemList.Hatch_Maintenance,'A',ItemList.Robot_Arm_IV,'C',OrePrefixes.circuit.get(Materials.Master)});
 
-	ItemList.Hatch_DataAccess.set(new GT_MetaTileEntity_Hatch_DataAccess(131, "hatch.dataaccess", "Data Access Hatch", 6).getStackForm(1L));
+	ItemList.Hatch_DataAccess_EV.set(new GT_MetaTileEntity_Hatch_DataAccess(131, "hatch.dataaccess", "Data Access Hatch", 4).getStackForm(1L));
+	ItemList.Hatch_DataAccess_LuV.set(new GT_MetaTileEntity_Hatch_DataAccess(132, "hatch.dataaccess", "Data Access Hatch", 6).getStackForm(1L));
         
-        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_LuV, 'O', ItemList.Tool_DataOrb , 'C' ,OrePrefixes.circuit.get(Materials.Ultimate)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_EV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_EV, 'O', ItemList.Tool_DataStick , 'C' ,OrePrefixes.circuit.get(Materials.Elite)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_LuV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_LuV, 'O', ItemList.Tool_DataOrb , 'C' ,OrePrefixes.circuit.get(Materials.Ultimate)});
+
 
 
         ItemList.Hatch_Muffler_LV.set(new GT_MetaTileEntity_Hatch_Muffler(91, "hatch.muffler.tier.01", "Muffler Hatch (LV)", 1).getStackForm(1L));
