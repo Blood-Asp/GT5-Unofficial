@@ -25,12 +25,12 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DATA_ACCESS)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DATA_ACCESS)};
     }
 
     @Override
