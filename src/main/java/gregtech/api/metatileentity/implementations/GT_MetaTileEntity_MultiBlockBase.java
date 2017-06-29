@@ -697,16 +697,17 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     /**
-     * @param state 0 for both, 1 for DataStick, 2 for DataOrb
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
-    private boolean isCorrectDataItem(ItemStack aStack, byte state){
-    	if (ItemList.Tool_DataStick.isStackEqual(aStack, false, true) && (state == 0 || state == 1)) return true;
-    	if (ItemList.Tool_DataOrb.isStackEqual(aStack, false, true) && (state == 0 || state == 2)) return true;
+    private boolean isCorrectDataItem(ItemStack aStack, int state){
+    	if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, false, true)) return true;
+    	if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
+    	if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
     	return false;
     }
     
     /**
-     * @param state 0 for both, 1 for DataStick, 2 for DataOrb
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
     public ArrayList<ItemStack> getDataItems(byte state) {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
