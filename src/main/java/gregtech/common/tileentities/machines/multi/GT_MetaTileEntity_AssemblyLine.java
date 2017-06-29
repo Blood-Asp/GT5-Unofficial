@@ -72,9 +72,9 @@ public class GT_MetaTileEntity_AssemblyLine
 
     public boolean checkRecipe(ItemStack aStack) {
     	if(GT_Values.D1)System.out.println("Start ALine recipe check");
-        ArrayList<ItemStack> tDataStickList = getDataItems((byte) 1);
+        ArrayList<ItemStack> tDataStickList = getDataItems(2);
     	if (tDataStickList.size() == 0) return false;
-    	if(GT_Values.D1)System.out.println("Stick accepted");
+    	if(GT_Values.D1)System.out.println("Stick accepted, " + tDataStickList.size() + " Data Sticks found");
 
         ItemStack tStack[] = new ItemStack[15];
     	FluidStack[] tFluids = new FluidStack[4];
