@@ -72,7 +72,7 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-    	return new GT_GUIContainer_4by4(aPlayerInventory, aBaseMetaTileEntity, "Data Access Hatch");
+    	return new GT_GUIContainer_DataAccess(aPlayerInventory, aBaseMetaTileEntity, "Data Access Hatch");
     }
 
     @Override
