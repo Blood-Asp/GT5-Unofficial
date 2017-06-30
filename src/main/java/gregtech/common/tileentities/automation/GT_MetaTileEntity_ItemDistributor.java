@@ -41,9 +41,29 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	}
 
 	public ITexture getOverlayIcon() {
-		return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_CHESTBUFFER);
+		return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_ITEMDISTRIBUTOR);
 	}
 
+    @Override
+    public ITexture[][][] getTextureSet(ITexture[] aTextures) {
+        ITexture[][][] returnTextures = new ITexture[2][17][];
+        ITexture baseIcon = getOverlayIcon(), pipeIcon = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
+        for (int i = 0; i < 17; i++) {
+            returnTextures[0][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], baseIcon};
+            returnTextures[1][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], pipeIcon, baseIcon};
+        }
+        return returnTextures;
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+    	if (aSide == aFacing) {
+    		return mTextures[0][aColorIndex + 1];
+    	} else {
+    		return mTextures[1][aColorIndex + 1];
+    	}
+    }
+    
 	public boolean isValidSlot(int aIndex) {
 		return aIndex < this.mInventory.length - 1;
 	}
