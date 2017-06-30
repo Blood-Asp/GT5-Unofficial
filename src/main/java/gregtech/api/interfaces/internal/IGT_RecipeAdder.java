@@ -99,6 +99,17 @@ public interface IGT_RecipeAdder {
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration);
 
     /**
+
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, boolean aBasicOnly);
+
+    /**
      * Adds a Chemical Recipe
      *
      * @param aInput1   must be != null
@@ -114,11 +125,32 @@ public interface IGT_RecipeAdder {
      * @param aInput1   must be != null
      * @param aInput2   must be != null
      * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, boolean aBasicOnly);
+
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
      * @param aOutput2  must be != null
      * @param aDuration must be > 0
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration);
     
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aOutput2  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, boolean aBasicOnly);
+   
     /**
      * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
      * @param aBasicMaterial The basic Material
