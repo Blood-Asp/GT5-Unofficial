@@ -35,16 +35,45 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		super(aName, aTier, aInvSlotCount, aDescription, aTextures);
 	}
 
-	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 		return new GT_MetaTileEntity_ItemDistributor(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray,
 				this.mTextures);
 	}
 
-	public ITexture getOverlayIcon() {
+	protected void fillStacksIntoFirstSlots() {
+		for (int i = 0; i < this.mInventory.length - 1; i++) {
+			for (int j = i + 1; j < this.mInventory.length - 1; j++) {
+				if ((this.mInventory[j] != null)
+						&& ((this.mInventory[i] == null) || (GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
+					GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1,
+							(byte) 64, (byte) 1);
+				}
+			}
+		}
+	}
+
+	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+		return new GT_GUIContainer_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
+	}
+
+    public ITexture getOverlayIcon() {
 		return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_ITEMDISTRIBUTOR);
 	}
 
-    @Override
+    public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+		return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
+	}
+    
+	@Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+    	if (aSide == aFacing) {
+    		return mTextures[0][aColorIndex + 1];
+    	} else {
+    		return mTextures[1][aColorIndex + 1];
+    	}
+    }
+
+	@Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] returnTextures = new ITexture[2][17][];
         ITexture baseIcon = getOverlayIcon(), pipeIcon = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
@@ -55,20 +84,19 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         return returnTextures;
     }
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-    	if (aSide == aFacing) {
-    		return mTextures[0][aColorIndex + 1];
-    	} else {
-    		return mTextures[1][aColorIndex + 1];
-    	}
-    }
-    
 	public boolean isValidSlot(int aIndex) {
 		return aIndex < this.mInventory.length - 1;
 	}
 
-	protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
+	@Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        itemsPerSide = aNBT.getByteArray("mItemsPerSide");
+        currentSide = aNBT.getByte("mCurrentSide");
+        currentSideItemCount = aNBT.getByte("mCurrentSideItemCount");
+    }
+
+    protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
 		fillStacksIntoFirstSlots();
 		int movedItems = 0;
 		TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
@@ -97,19 +125,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		fillStacksIntoFirstSlots();
 	}
 
-	protected void fillStacksIntoFirstSlots() {
-		for (int i = 0; i < this.mInventory.length - 1; i++) {
-			for (int j = i + 1; j < this.mInventory.length - 1; j++) {
-				if ((this.mInventory[j] != null)
-						&& ((this.mInventory[i] == null) || (GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
-					GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1,
-							(byte) 64, (byte) 1);
-				}
-			}
-		}
-	}
-
-	@Override
+    @Override
 	public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		//Adjust items per side by 1 or -1, constrained to the cyclic interval [0, 127]
 		itemsPerSide[aSide] += aPlayer.isSneaking() ? -1 : 1;
@@ -117,7 +133,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		GT_Utility.sendChatToPlayer(aPlayer, trans("110", "Items per side: " + itemsPerSide[aSide]));
 	}
 
-    @Override
+	@Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByteArray("mItemsPerSide", itemsPerSide);
@@ -125,25 +141,9 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         aNBT.setByte("mCurrentSideItemCount", currentSideItemCount);
     }
 
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        itemsPerSide = aNBT.getByteArray("mItemsPerSide");
-        currentSide = aNBT.getByte("mCurrentSide");
-        currentSideItemCount = aNBT.getByte("mCurrentSideItemCount");
-    }
-
-    @Override
+	@Override
     public void setItemNBT(NBTTagCompound aNBT) {
         super.setItemNBT(aNBT);
         aNBT.setByteArray("mItemsPerSide", itemsPerSide);        
     }
-
-	public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
-	}
-
-	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_GUIContainer_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
-	}
 }
