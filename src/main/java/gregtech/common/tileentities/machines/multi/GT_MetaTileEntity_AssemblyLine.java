@@ -331,7 +331,7 @@ public class GT_MetaTileEntity_AssemblyLine
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
-    public ArrayList<ItemStack> getDataItems(byte state) {
+    public ArrayList<ItemStack> getDataItems(int state) {
         ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
         if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
         	rList.add(mInventory[1]);
