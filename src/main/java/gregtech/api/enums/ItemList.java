@@ -562,6 +562,7 @@ public enum ItemList implements IItemContainer {
     Automation_ChestBuffer_ULV, Automation_ChestBuffer_LV, Automation_ChestBuffer_MV, Automation_ChestBuffer_HV, Automation_ChestBuffer_EV, Automation_ChestBuffer_IV, Automation_ChestBuffer_LuV, Automation_ChestBuffer_ZPM, Automation_ChestBuffer_UV, Automation_ChestBuffer_MAX,
     Automation_SuperBuffer_ULV, Automation_SuperBuffer_LV, Automation_SuperBuffer_MV, Automation_SuperBuffer_HV, Automation_SuperBuffer_EV, Automation_SuperBuffer_IV, Automation_SuperBuffer_LuV, Automation_SuperBuffer_ZPM, Automation_SuperBuffer_UV, Automation_SuperBuffer_MAX,
     Automation_Regulator_ULV, Automation_Regulator_LV, Automation_Regulator_MV, Automation_Regulator_HV, Automation_Regulator_EV, Automation_Regulator_IV, Automation_Regulator_LuV, Automation_Regulator_ZPM, Automation_Regulator_UV, Automation_Regulator_MAX,
+    Automation_ItemDistributor_ULV, Automation_ItemDistributor_LV, Automation_ItemDistributor_MV, Automation_ItemDistributor_HV, Automation_ItemDistributor_EV, Automation_ItemDistributor_IV, Automation_ItemDistributor_LuV, Automation_ItemDistributor_ZPM, Automation_ItemDistributor_UV, Automation_ItemDistributor_MAX,
 
     Hatch_Dynamo_ULV, Hatch_Dynamo_LV, Hatch_Dynamo_MV, Hatch_Dynamo_HV, Hatch_Dynamo_EV, Hatch_Dynamo_IV, Hatch_Dynamo_LuV, Hatch_Dynamo_ZPM, Hatch_Dynamo_UV, Hatch_Dynamo_MAX,
     Hatch_Energy_ULV, Hatch_Energy_LV, Hatch_Energy_MV, Hatch_Energy_HV, Hatch_Energy_EV, Hatch_Energy_IV, Hatch_Energy_LuV, Hatch_Energy_ZPM, Hatch_Energy_UV, Hatch_Energy_MAX,

@@ -24,7 +24,10 @@ public class GT_MetaTileEntity_TypeFilter
     public OrePrefixes mPrefix = OrePrefixes.ore;
 
     public GT_MetaTileEntity_TypeFilter(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 11, "Filtering incoming Items by Type");
+        super(aID, aName, aNameRegional, aTier, 11, new String[]{
+                        		"Filters 1 Item Type",
+                        		"Use Screwdriver to regulate output stack size",
+                        		"Consumes 1 EU per moved Item"});
     }
 
     public GT_MetaTileEntity_TypeFilter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
