@@ -171,8 +171,8 @@ public class GT_LanguageManager {
     	addStringLocalization("Interaction_DESCRIPTION_Index_063", "Emit if 4 Maintenance Needed(inverted)");
     	addStringLocalization("Interaction_DESCRIPTION_Index_064", "Emit if 5 Maintenance Needed");
     	addStringLocalization("Interaction_DESCRIPTION_Index_065", "Emit if 5 Maintenance Needed(inverted)");
-    	addStringLocalization("Interaction_DESCRIPTION_Index_066", "Emit if rotor needs maintainance");
-    	addStringLocalization("Interaction_DESCRIPTION_Index_067", "Emit if rotor needs maintainance(inverted)");    	
+    	addStringLocalization("Interaction_DESCRIPTION_Index_066", "Emit if rotor needs maintenance");
+    	addStringLocalization("Interaction_DESCRIPTION_Index_067", "Emit if rotor needs maintenance(inverted)");    	
     	addStringLocalization("Interaction_DESCRIPTION_Index_068", "Emit if any Player is close");
     	addStringLocalization("Interaction_DESCRIPTION_Index_069", "Emit if other player is close");
     	addStringLocalization("Interaction_DESCRIPTION_Index_070", "Emit if you are close");    	
