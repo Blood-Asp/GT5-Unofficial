@@ -74,8 +74,8 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
             case 7: GT_Utility.sendChatToPlayer(aPlayer, trans("063", "Emit if 4 Maintenance Needed(inverted)")); break;
             case 8: GT_Utility.sendChatToPlayer(aPlayer, trans("064", "Emit if 5 Maintenance Needed")); break;
             case 9: GT_Utility.sendChatToPlayer(aPlayer, trans("065", "Emit if 5 Maintenance Needed(inverted)")); break;
-            case 10: GT_Utility.sendChatToPlayer(aPlayer, trans("066", "Emit if rotor needs maintainance")); break;
-            case 11: GT_Utility.sendChatToPlayer(aPlayer, trans("067", "Emit if rotor needs maintainance(inverted)")); break;
+            case 10: GT_Utility.sendChatToPlayer(aPlayer, trans("066", "Emit if rotor needs maintenance")); break;
+            case 11: GT_Utility.sendChatToPlayer(aPlayer, trans("067", "Emit if rotor needs maintenance(inverted)")); break;
         }
         return aCoverVariable;
     }
