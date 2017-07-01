@@ -48,6 +48,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     private int oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0;
     private short mID = 0;
     private long mTickTimer = 0;
+    private String mOwnerName = ""; //Currently only used by PlayerDetector
 
     public BaseMetaPipeEntity() {
     }
@@ -69,6 +70,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             aNBT.setByte("mColor", mColor);
             aNBT.setByte("mStrongRedstone", mStrongRedstone);
             aNBT.setBoolean("mWorks", !mWorks);
+            aNBT.setString("mOwnerName", mOwnerName);
         } catch (Throwable e) {
             GT_Log.err.println("Encountered CRITICAL ERROR while saving MetaTileEntity, the Chunk whould've been corrupted by now, but I prevented that. Please report immidietly to GregTech Intergalactical!!!");
             e.printStackTrace(GT_Log.err);
@@ -122,6 +124,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             mColor = aNBT.getByte("mColor");
             mStrongRedstone = aNBT.getByte("mStrongRedstone");
             mWorks = !aNBT.getBoolean("mWorks");
+            mOwnerName = aNBT.getString("mOwnerName");
 
             if (mCoverData.length != 6) mCoverData = new int[]{0, 0, 0, 0, 0, 0};
             if (mCoverSides.length != 6) mCoverSides = new int[]{0, 0, 0, 0, 0, 0};
@@ -1101,12 +1104,14 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public String getOwnerName() {
-        return "Player";
+        if (GT_Utility.isStringInvalid(mOwnerName)) return "Player";
+        return mOwnerName;
     }
 
     @Override
     public String setOwnerName(String aName) {
-        return "Player";
+        if (GT_Utility.isStringInvalid(aName)) return mOwnerName = "Player";
+        return mOwnerName = aName;
     }
 
     @Override
