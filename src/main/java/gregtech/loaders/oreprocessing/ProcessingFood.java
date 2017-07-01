@@ -20,6 +20,7 @@ public class ProcessingFood implements gregtech.api.interfaces.IOreRecipeRegistr
             case "foodCheese":
                 GT_Values.RA.addSlicerRecipe(aStack, ItemList.Shape_Slicer_Flat.get(0L, new Object[0]), ItemList.Food_Sliced_Cheese.get(4L, new Object[0]), 64, 4);
                 GT_OreDictUnificator.addItemData(aStack, new gregtech.api.objects.ItemData(Materials.Cheese, 3628800L, new MaterialStack[0]));
+                break;
             case "foodDough":
                 GT_ModHandler.removeFurnaceSmelting(aStack);
                 GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Food_Flat_Dough.get(1L, new Object[0]), 16, 4);
