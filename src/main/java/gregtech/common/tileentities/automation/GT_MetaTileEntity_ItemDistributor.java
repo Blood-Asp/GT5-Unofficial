@@ -7,8 +7,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.gui.GT_Container_ChestBuffer;
-import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
+import gregtech.common.gui.GT_Container_ItemDistributor;
+import gregtech.common.gui.GT_GUIContainer_ItemDistributor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -58,7 +58,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	}
 
 	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_GUIContainer_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
+		return new GT_GUIContainer_ItemDistributor(aPlayerInventory, aBaseMetaTileEntity);
 	}
 
     public ITexture getOverlayIcon() {
@@ -66,7 +66,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	}
 
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
+		return new GT_Container_ItemDistributor(aPlayerInventory, aBaseMetaTileEntity);
 	}
     
     @Override
@@ -96,12 +96,12 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	
     @Override
     public boolean isInputFacing(byte aSide) {
-        return getBaseMetaTileEntity().getFrontFacing() == aSide;
+        return getBaseMetaTileEntity().getFrontFacing() == aSide || itemsPerSide[aSide] == 0;
     }
 
     @Override
     public boolean isOutputFacing(byte aSide) {
-        return getBaseMetaTileEntity().getFrontFacing() != aSide;
+        return getBaseMetaTileEntity().getFrontFacing() != aSide && itemsPerSide[aSide] > 0;
     }
 
 	public boolean isValidSlot(int aIndex) {
