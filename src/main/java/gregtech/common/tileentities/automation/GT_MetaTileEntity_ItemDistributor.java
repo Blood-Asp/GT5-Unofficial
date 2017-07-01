@@ -11,6 +11,7 @@ import gregtech.common.gui.GT_Container_ChestBuffer;
 import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -19,7 +20,11 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 	private byte currentSide = 0, currentSideItemCount = 0;
 
 	public GT_MetaTileEntity_ItemDistributor(int aID, String aName, String aNameRegional, int aTier) {
-		super(aID, aName, aNameRegional, aTier, 28, "Buffering lots of incoming Items");
+		super(aID, aName, aNameRegional, aTier, 28, new String[]{
+				"Distributes Items between different Machine Sides",
+				"Default Items per Machine Side: 0",
+				"Use Screwdriver to increase/decrease Items per Side",
+				"Consumes 1EU per moved Item"});
 	}
 
 	public GT_MetaTileEntity_ItemDistributor(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
@@ -64,6 +69,11 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 		return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
 	}
     
+    @Override
+    public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+        return aSide == aBaseMetaTileEntity.getFrontFacing();
+    }
+    
 	@Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
     	if (aSide == aFacing) {
@@ -82,6 +92,16 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
             returnTextures[1][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], pipeIcon, baseIcon};
         }
         return returnTextures;
+    }
+	
+    @Override
+    public boolean isInputFacing(byte aSide) {
+        return getBaseMetaTileEntity().getFrontFacing() == aSide;
+    }
+
+    @Override
+    public boolean isOutputFacing(byte aSide) {
+        return getBaseMetaTileEntity().getFrontFacing() != aSide;
     }
 
 	public boolean isValidSlot(int aIndex) {

@@ -9,6 +9,7 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Regulator;
 import gregtech.common.gui.GT_GUIContainer_Regulator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +22,11 @@ public class GT_MetaTileEntity_Regulator
     private boolean charge = false, decharge = false;
 
     public GT_MetaTileEntity_Regulator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 20, "Regulating incoming Items");
+        super(aID, aName, aNameRegional, aTier, 20, new String[]{
+        		"Filters up to 9 different Items",
+        		"Allows Item-specific output stack size",
+        		"Allows Item-specific output slot",
+        		"Consumes 1EU per moved Item"});
     }
 
     public GT_MetaTileEntity_Regulator(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
@@ -76,6 +81,11 @@ public class GT_MetaTileEntity_Regulator
         this.mTargetSlots[6] = aNBT.getInteger("mTargetSlot7");
         this.mTargetSlots[7] = aNBT.getInteger("mTargetSlot8");
         this.mTargetSlots[8] = aNBT.getInteger("mTargetSlot9");
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    	//Regulation per Screwdriver is overridden by GUI regulation.
     }
 
     public void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
