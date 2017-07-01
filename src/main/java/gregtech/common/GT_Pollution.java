@@ -100,11 +100,11 @@ public class GT_Pollution {
 			//get pollution
 			int tPollution = chunkData.get(actualPos)[GTPOLLUTION];
 			//remove some
-			tPollution = (int)(0.9945f*tPollution);
-			//tPollution -= 2000;//This does not really matter...
+			tPollution = (int)(0.99f*tPollution);
+			tPollution -= 2000;
 
 			if(tPollution<=0) tPollution = 0;//SANity check
-			else if(tPollution>400000){//Spread Pollution
+			else if(tPollution>50000){//Spread Pollution
 
 				ChunkCoordIntPair[] tNeighbors = new ChunkCoordIntPair[4];//array is faster
 				tNeighbors[0]=(new ChunkCoordIntPair(actualPos.chunkXPos+1,actualPos.chunkZPos));
@@ -117,8 +117,8 @@ public class GT_Pollution {
 					int neighborPollution = chunkData.get(neighborPosition)[GTPOLLUTION];
 					if(neighborPollution*6 < tPollution*5){//METHEMATICS...
 						int tDiff = tPollution - neighborPollution;
-						tDiff = tDiff/20;
-						neighborPollution = GT_Utility.safeInt((long)neighborPollution+tDiff);//tNPol += tDiff;
+						tDiff = tDiff/10;
+						neighborPollution += tDiff;
 						tPollution -= tDiff;
 						chunkData.get(neighborPosition)[GTPOLLUTION] = neighborPollution;
 					}
@@ -126,7 +126,6 @@ public class GT_Pollution {
 
 
 				//Create Pollution effects
-				//Smog filter TODO
 				if(tPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit) {
 					AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(actualPos.chunkXPos << 4, 0, actualPos.chunkZPos << 4, (actualPos.chunkXPos << 4) + 16, 256, (actualPos.chunkZPos << 4) + 16);
 					List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
@@ -144,7 +143,7 @@ public class GT_Pollution {
 					}
 
 
-					//				Poison effects
+					//Poison effects
 					if (tPollution > GT_Mod.gregtechproxy.mPollutionPoisonLimit) {
 						//AxisAlignedBB chunk = AxisAlignedBB.getBoundingBox(tPos.chunkPosX*16, 0, tPos.chunkPosZ*16, tPos.chunkPosX*16+16, 256, tPos.chunkPosZ*16+16);
 						//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
@@ -164,7 +163,7 @@ public class GT_Pollution {
 						}
 
 
-						//				killing plants
+						//killing plants
 						if (tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit) {
 							int f = 20;
 							for (; f < (tPollution / 25000); f++) {
