@@ -2050,7 +2050,7 @@ public class GT_Utility {
             NBTTagCompound tNBT = getNBT(aStack);
             String tData = aX + "," + aY + "," + aZ + "," + aDim + ",";
             if (aFluid!=null)
-            	tData += (aFluid.amount / 5000) + "," + aFluid.getLocalizedName() + ",";
+            	tData += (aFluid.amount) + "," + aFluid.getLocalizedName() + ",";
             for (String tString : aOres) {
                 tData += tString + ",";
             }
