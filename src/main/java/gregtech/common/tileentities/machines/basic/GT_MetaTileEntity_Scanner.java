@@ -111,7 +111,7 @@ public class GT_MetaTileEntity_Scanner
             if (ItemList.Tool_DataStick.isStackEqual(getSpecialSlot(), false, true)) {
                 if (ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                     aStack.stackSize -= 1;
-                    this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
+                    this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{ItemList.Tool_DataStick.get(1, new Object[]{})});
                     this.mMaxProgresstime = (128 / (1 << this.mTier - 1));
                     this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
                     return 2;
