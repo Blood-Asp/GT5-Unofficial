@@ -20,7 +20,7 @@ public class GT_Cover_Shutter
             case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("082", "Open if work enabled")); break;
             case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("083", "Open if work disabled")); break;
             case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("084", "Only Output allowed")); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("085", "Only Intput allowed")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("085", "Only Input allowed")); break;
         }
         return aCoverVariable;
     }
