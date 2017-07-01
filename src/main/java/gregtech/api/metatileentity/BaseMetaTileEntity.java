@@ -1917,8 +1917,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
      */
     private int shiftInventoryIndex(int slotIndex, int nbtVersion){
     	int oldInputSize, newInputSize, oldOutputSize, newOutputSize;
+    	int chemistryUpdateVersion = GT_Mod.calculateTotalGTVersion(509, 31);
     	if (mID >= 211 && mID <= 218) {//Assembler
-    		if (nbtVersion < 509031) {
+    		if (nbtVersion < chemistryUpdateVersion) {
     			oldInputSize = 2;
     			oldOutputSize = 1;
     		} else {
@@ -1927,7 +1928,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     		newInputSize = 6;
     		newOutputSize = 1;
     	} else if (mID >= 421 && mID <= 428){//Chemical Reactor
-    		if (nbtVersion < 509031) {
+    		if (nbtVersion < chemistryUpdateVersion) {
     			oldInputSize = 2;
     			oldOutputSize = 1;
     		} else {
@@ -1936,7 +1937,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     		newInputSize = 2;
     		newOutputSize = 2;
     	} else if (mID >= 531 && mID <= 538) {//Distillery
-    		if (nbtVersion < 509031) {
+    		if (nbtVersion < chemistryUpdateVersion) {
     			oldInputSize = 1;
     			oldOutputSize = 0;
     		} else {
