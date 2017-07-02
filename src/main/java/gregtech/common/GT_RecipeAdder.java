@@ -93,51 +93,68 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return addChemicalRecipe(aInput1, aInput2, null, null, aOutput, aDuration);
     }
 
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, int aEUt) {
-        return addChemicalRecipe(aInput1, aInput2, null, null, aOutput, aDuration, aEUt);
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, boolean aBasicOnly) {
+        return addChemicalRecipe(aInput1, aInput2, null, null, aOutput, aDuration, aBasicOnly);
     }
 
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration) {
         return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aDuration, 30);
     }
 
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, boolean aBasicOnly) {
+        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aDuration, 30, aBasicOnly);
+    }
+
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration) {
         return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aOutput2, aDuration, 30);
+    }
+
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, boolean aBasicOnly) {
+        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aOutput2, aDuration, 30, aBasicOnly);
     }
 
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUTick) {
         return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, GT_Values.NI, aDuration, aEUTick);
     }
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick) {
-        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aOutput2, aDuration, aEUtick, false);
+
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUTick, boolean aBasicOnly) {
+        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, GT_Values.NI, aDuration, aEUTick, aBasicOnly);
     }
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom) {
+
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick){
+        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aOutput2, aDuration, aEUtick, false, false);
+    }
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom){
+        return addChemicalRecipe(aInput1, aInput2, aFluidInput, aFluidOutput, aOutput, aOutput2, aDuration, aEUtick, true, false);
+    }
+
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom, boolean aBasicOnly) {
         if (((aInput1 == null) && (aFluidInput == null)) || ((aOutput == null) && (aOutput2 == null) && (aFluidOutput == null))) {
-         return false;
+            return false;
         }
         if ((aOutput != null || aOutput2 != null) && ((aDuration = GregTech_API.sRecipeFile.get("chemicalreactor", aOutput, aDuration)) <= 0)) {
-        return false;
+            return false;
         }
         if ((aFluidOutput != null) && ((aDuration = GregTech_API.sRecipeFile.get("chemicalreactor", aFluidOutput.getFluid().getName(), aDuration)) <= 0)) {
             return false;
         }
         if (aEUtick <= 0) {
-           return false;
+            return false;
         }
-        GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, aCleanroom ? -200 : 0);
-        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, aCleanroom ? 200:0);
+        if (!aBasicOnly) GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
         return true;
     }
 
     public boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick){
-    	if (areItemsAndFluidsBothNull(aInputs, aFluidInputs) || areItemsAndFluidsBothNull(aOutputs, aFluidOutputs)) {
-    		return false;
-    	}
-    	if (aEUtick <= 0) {
-    		return false;
-    	}
-    	GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, aInputs, aOutputs, null, null, aFluidInputs, aFluidOutputs, aDuration, aEUtick, 0);
-    	return true;
+        if (areItemsAndFluidsBothNull(aInputs, aFluidInputs) || areItemsAndFluidsBothNull(aOutputs, aFluidOutputs)) {
+            return false;
+        }
+        if (aEUtick <= 0) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, aInputs, aOutputs, null, null, aFluidInputs, aFluidOutputs, aDuration, aEUtick, 0);
+        return true;
     }
 
     @Override

@@ -94,22 +94,40 @@ public interface IGT_RecipeAdder {
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput  must be != null
+     * @param aOutput1  must be != null
      * @param aDuration must be > 0
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration);
-
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, int aEUt);
 
     /**
      * Adds a Chemical Recipe
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput  must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput, int aDuration, boolean aBasicOnly);
+
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
      * @param aDuration must be > 0
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration);
+
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, boolean aBasicOnly);
 
     /**
      * Adds a Chemical Recipe
@@ -121,14 +139,25 @@ public interface IGT_RecipeAdder {
      * @param aDuration must be > 0
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration);
-    
+
+    /**
+     * Adds a Chemical Recipe
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aOutput2  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, boolean aBasicOnly);
+
     /**
      * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
      * @param aBasicMaterial The basic Material
      * @param aPolymer The polymer
      */
     public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer);
-    
+
     /**
      * Adds a Chemical Recipe
      *
@@ -140,7 +169,6 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, int aDuration, int aEUtick);
 
-    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom);
     /**
      * Adds a Chemical Recipe
      *
@@ -153,21 +181,21 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick);
 
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aClenroom);
+
     /**
-     +     * Adds a Chemical Recipe that only exists in the Large Chemical Reactor
-     +     *
-     +     * @param aInputs   item inputs
-     +     * @param aFluidInputs fluid inputs
-     +     * @param aFluidOutputs fluid outputs
-     +     * @param aOutputs  item outputs
-     +     * @param aDuration must be > 0
-     +     * @param aEUtick   must be > 0
-     +     * aInputs and aFluidInputs must contain at least one valid input.
-     +     * aOutputs and aFluidOutputs must contain at least one valid output.
-     +     */
-
+     * Adds a Chemical Recipe that only exists in the Large Chemical Reactor
+     *
+     * @param aInputs   item inputs
+     * @param aFluidInputs fluid inputs
+     * @param aFluidOutputs fluid outputs
+     * @param aOutputs  item outputs
+     * @param aDuration must be > 0
+     * @param aEUtick   must be > 0
+     * aInputs and aFluidInputs must contain at least one valid input.
+     * aOutputs and aFluidOutputs must contain at least one valid output.
+     */
     public boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick);
-
 
     /**
      * Adds a Blast Furnace Recipe
