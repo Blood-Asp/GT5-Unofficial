@@ -183,6 +183,9 @@ public interface IGT_RecipeAdder {
 
     public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aClenroom);
 
+
+    public boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aClenroom, boolean aBasicOnly);
+
     /**
      * Adds a Chemical Recipe that only exists in the Large Chemical Reactor
      *
