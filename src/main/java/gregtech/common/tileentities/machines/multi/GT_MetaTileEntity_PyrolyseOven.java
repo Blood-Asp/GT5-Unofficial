@@ -36,7 +36,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "Controller Block for the Pyrolyse Oven",
                 "Industrial Charcoal producer and Oil from Plants",
                 "Size(WxHxD): 5x4x5, Controller (Bottom center)",
-                "3x1x3 Kanthal Heating Coils (At the center of the bottom layer)",
+                "3x1x3 Cupronickel or Kanthal Heating Coils (At the center of the bottom layer)",
                 "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
                 "1x Output Hatch/Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
@@ -131,11 +131,11 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 for (int h = 0; h < 4; h++) {
                     IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, h, zDir + j);
                     if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne h�he
-                        if (h == 0) {// innen boden (kantal coils)
+                        if (h == 0) {// innen boden (Cupronickel oder Kanthal coils)
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
+                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0 && aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
                                 return false;
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
