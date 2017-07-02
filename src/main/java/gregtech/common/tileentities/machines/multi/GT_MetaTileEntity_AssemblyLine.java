@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.ArrayList;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -8,6 +9,8 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataAccess;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
@@ -20,6 +23,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
+
+    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
+
     public GT_MetaTileEntity_AssemblyLine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -35,13 +41,15 @@ public class GT_MetaTileEntity_AssemblyLine
     public String[] getDescription() {
         return new String[]{"Assembling Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Solid Steel Machine Casing(or Maintenance or Input Hatch),",
-                "Input Bus(Last Output Bus), Steel Machine Casing",
-                "Middle: Reinforced Glass, Assembling Line Casing, Reinforced Glass",
-                "UpMiddle: Grate Machine Casing, Assembler Machine Casing,",
-                "Grate Machine Casing(or Controller)",
-                "Top: Solid Steel Casing(or Energy Hatch)",
-                "Up to 16 repeating slices, last is Output Bus"};
+                "Bottom: Steel Machine Casing(or Maintenance or Input Hatch),",
+                "Input Bus (Last Output Bus), Steel Machine Casing",
+                "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
+                "UpMiddle: Grate Machine Casing,",
+                "    Assembler Machine Casing,",
+                "    Grate Machine Casing (or Controller or Data Access Hatch)",
+                "Top: Steel Casing(or Energy Hatch)",
+                "Up to 16 repeating slices, last is Output Bus",
+                "Optional 1x Data Access Hatch next to the Controller"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -68,55 +76,78 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-    	if(GT_Values.D1)System.out.println("Start ALine recipe check");
-        if (!GT_Utility.isStackValid(mInventory[1]) || !ItemList.Tool_DataStick.isStackEqual(mInventory[1], false, true))
-            return false;
-    	if(GT_Values.D1)System.out.println("Stick accepted");
+        if(GT_Values.D1)System.out.println("Start ALine recipe check");
+        ArrayList<ItemStack> tDataStickList = getDataItems(2);
+        if (tDataStickList.size() == 0) return false;
+        if(GT_Values.D1)System.out.println("Stick accepted, " + tDataStickList.size() + " Data Sticks found");
 
-        NBTTagCompound tTag = mInventory[1].getTagCompound();
-        if (tTag == null) return false;
         ItemStack tStack[] = new ItemStack[15];
-        for (int i = 0; i < 15; i++) {
-            if (!tTag.hasKey("" + i)) continue;
-            if (mInputBusses.get(i) == null) return false;
-            tStack[i] = GT_Utility.loadItem(tTag, "" + i);
-            if (tStack[i] == null) continue;
-        	if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
-            ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
-            if (!GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) || tStack[i].stackSize > stackInSlot.stackSize) {
-            	if(GT_Values.D1)System.out.println(i +" not accepted");
-                return false;
-            }
-        	if(GT_Values.D1)System.out.println(i+" accepted");
-        }
-    	if(GT_Values.D1)System.out.println("All Items done, start fluid check");
         FluidStack[] tFluids = new FluidStack[4];
-        for (int i = 0; i < 4; i++) {
-            if (!tTag.hasKey("f" + i)) continue;
-            tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
-            if (tFluids[i] == null) continue;
-        	if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
-            if (mInputHatches.get(i) == null) return false;
-            FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
-            if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
-            	if(GT_Values.D1)System.out.println(i+" not accepted");
-                return false;
+        boolean recipeNA = false;
+        boolean findRecipe = false;
+        for (ItemStack tDataStick : tDataStickList){
+            recipeNA = false;
+            NBTTagCompound tTag = tDataStick.getTagCompound();
+            if (tTag == null) continue;
+            for (int i = 0; i < 15; i++) {
+                if (!tTag.hasKey("" + i)) continue;
+                if (mInputBusses.get(i) == null) {
+                    recipeNA = true;
+                    break;
+                }
+                tStack[i] = GT_Utility.loadItem(tTag, "" + i);
+                if (tStack[i] == null) continue;
+                if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
+                ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
+                if (!GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) || tStack[i].stackSize > stackInSlot.stackSize) {
+                    if(GT_Values.D1)System.out.println(i +" not accepted");
+                    recipeNA = true;
+                    break;
+                }
+                if(GT_Values.D1)System.out.println(i+" accepted");
             }
-        	if(GT_Values.D1)System.out.println(i+" accepted");
+            if (recipeNA) continue;
+
+            if(GT_Values.D1)System.out.println("All Items done, start fluid check");
+            for (int i = 0; i < 4; i++) {
+                if (!tTag.hasKey("f" + i)) continue;
+                tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
+                if (tFluids[i] == null) continue;
+                if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
+                if (mInputHatches.get(i) == null) {
+                    recipeNA = true;
+                    break;
+                }
+                FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
+                if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
+                    if(GT_Values.D1)System.out.println(i+" not accepted");
+                    recipeNA = true;
+                    break;
+                }
+                if(GT_Values.D1)System.out.println(i+" accepted");
+            }
+            if (recipeNA) continue;
+
+            if(GT_Values.D1)System.out.println("Input accepted, check other values");
+            if (!tTag.hasKey("output")) continue;
+            mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
+            if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
+                continue;
+
+            if (!tTag.hasKey("time")) continue;
+            mMaxProgresstime = tTag.getInteger("time");
+            if (mMaxProgresstime <= 0) continue;
+
+            if (!tTag.hasKey("eu")) continue;
+            mEUt = tTag.getInteger("eu");
+
+            if(GT_Values.D1)System.out.println("Find avaiable recipe");
+            findRecipe = true;
+            break;
         }
-    	if(GT_Values.D1)System.out.println("Input accepted, check other values");
-        if (!tTag.hasKey("output")) return false;
-        mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
-        if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
-            return false;
+        if (!findRecipe) return false;
 
-        if (!tTag.hasKey("time")) return false;
-        mMaxProgresstime = tTag.getInteger("time");
-        if (mMaxProgresstime <= 0) return false;
-
-        if (!tTag.hasKey("eu")) return false;
-        mEUt = tTag.getInteger("eu");
-    	if(GT_Values.D1)System.out.println("All checked start consuming inputs");
+        if(GT_Values.D1)System.out.println("All checked start consuming inputs");
         for (int i = 0; i < 15; i++) {
             if (tStack[i] == null) continue;
             ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
@@ -130,18 +161,26 @@ public class GT_MetaTileEntity_AssemblyLine
                 mInputHatches.get(i).mFluid = null;
             }
         }
-    	if(GT_Values.D1)System.out.println("Check overclock");
+        if(GT_Values.D1)System.out.println("Check overclock");
 
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-        calculateOverclockedNessMulti(mEUt, mMaxProgresstime, 1, getMaxInputVoltage());
-        //In case recipe is too OP for that machine
-        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-            return false;
-        this.mEUt = this.mEUt > 0 ? -this.mEUt : this.mEUt;//makes it use power...
+        if (mEUt <= 16) {
+            this.mEUt = (mEUt * (1 << tTier - 1) * (1 << tTier - 1));
+            this.mMaxProgresstime = (mMaxProgresstime / (1 << tTier - 1));
+        } else {
+            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
+                this.mEUt *= 4;
+                this.mMaxProgresstime /= 2;
+            }
+        }
+        if (this.mEUt > 0) {
+            this.mEUt = -this.mEUt;
+        }
+        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
         updateSlots();
-    	if(GT_Values.D1)System.out.println("Recipe sucessfull");
+        if(GT_Values.D1)System.out.println("Recipe sucessfull");
         return true;
     }
 
@@ -159,13 +198,16 @@ public class GT_MetaTileEntity_AssemblyLine
             for (int r = 0; r <= 16; r++) {
                 int i = r * xDir;
 
+                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, 0, i);
                 if (i != 0 && !(aBaseMetaTileEntity.getBlockOffset(0, 0, i) == GregTech_API.sBlockCasings3 && aBaseMetaTileEntity.getMetaIDOffset(0, 0, i) == 10)) {
-                    return false;
+                    if(r == 1 && !addDataAccessToMachineList(tTileEntity, 16)){
+                        return false;
+                    }
                 }
                 if (!aBaseMetaTileEntity.getBlockOffset(0, -1, i).getUnlocalizedName().equals("blockAlloyGlass")) {
                     return false;
                 }
-                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, -2, i);
+                tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(0, -2, i);
                 if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
                     if (aBaseMetaTileEntity.getBlockOffset(0, -2, i) != GregTech_API.sBlockCasings2) {
                         return false;
@@ -216,13 +258,16 @@ public class GT_MetaTileEntity_AssemblyLine
             for (int r = 0; r <= 16; r++) {
                 int i = r * -zDir;
 
+                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, 0, 0);
                 if (i != 0 && !(aBaseMetaTileEntity.getBlockOffset(i, 0, 0) == GregTech_API.sBlockCasings3 && aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0) == 10)) {
-                    return false;
+                    if(r == 1 && !addDataAccessToMachineList(tTileEntity, 16)){
+                        return false;
+                    }
                 }
                 if (!aBaseMetaTileEntity.getBlockOffset(i, -1, 0).getUnlocalizedName().equals("blockAlloyGlass")) {
                     return false;
                 }
-                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, -2, 0);
+                tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(i, -2, 0);
                 if ((!addMaintenanceToMachineList(tTileEntity, 16)) && (!addInputToMachineList(tTileEntity, 16))) {
                     if (aBaseMetaTileEntity.getBlockOffset(i, -2, 0) != GregTech_API.sBlockCasings2) {
                         return false;
@@ -269,6 +314,47 @@ public class GT_MetaTileEntity_AssemblyLine
                     return r > 0 && mEnergyHatches.size() > 0;
                 }
             }
+        }
+        return false;
+    }
+
+    /**
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
+     */
+    private boolean isCorrectDataItem(ItemStack aStack, int state){
+        if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, false, true)) return true;
+        if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
+        if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
+        return false;
+    }
+
+    /**
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
+     */
+    public ArrayList<ItemStack> getDataItems(int state) {
+        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
+            rList.add(mInventory[1]);
+        }
+        for (GT_MetaTileEntity_Hatch_DataAccess tHatch : mDataAccessHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                for (int i = 0; i < tHatch.getBaseMetaTileEntity().getSizeInventory(); i++) {
+                    if (tHatch.getBaseMetaTileEntity().getStackInSlot(i) != null
+                            && isCorrectDataItem(tHatch.getBaseMetaTileEntity().getStackInSlot(i), state))
+                        rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(i));
+                }
+            }
+        }
+        return rList;
+    }
+
+    public boolean addDataAccessToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
         }
         return false;
     }

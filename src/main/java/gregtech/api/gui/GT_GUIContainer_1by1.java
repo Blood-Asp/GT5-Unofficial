@@ -14,6 +14,11 @@ public class GT_GUIContainer_1by1 extends GT_GUIContainerMetaTile_Machine {
         mName = aName;
     }
 
+    public GT_GUIContainer_1by1(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, String aName, String aBackground) {
+        super(new GT_Container_1by1(aInventoryPlayer, aTileEntity), RES_PATH_GUI + aBackground + "1by1.png");
+        mName = aName;
+    }
+
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRendererObj.drawString(mName, 8, 4, 4210752);

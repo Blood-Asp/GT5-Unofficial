@@ -366,6 +366,11 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMc", "fsr", 'M', ItemList.Hull_LV});
         
         ItemList.Hatch_AutoMaintenance.set(new GT_MetaTileEntity_Hatch_Maintenance(111, "hatch.maintenance.auto", "Auto Maintenance Hatch", 6, true).getStackForm(1L));
+        ItemList.Hatch_DataAccess_EV.set(new GT_MetaTileEntity_Hatch_DataAccess(131, "hatch.dataaccess", "Data Access Hatch", 4).getStackForm(1L));
+        ItemList.Hatch_DataAccess_LuV.set(new GT_MetaTileEntity_Hatch_DataAccess(132, "hatch.dataaccess", "Advanced Data Access Hatch", 6).getStackForm(1L));
+
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_EV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_EV, 'O', ItemList.Tool_DataStick , 'C' ,OrePrefixes.circuit.get(Materials.Elite)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_LuV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_LuV, 'O', ItemList.Tool_DataOrb , 'C' ,OrePrefixes.circuit.get(Materials.Ultimate)});
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_AutoMaintenance.get(1L, new Object[0]), bitsd, new Object[]{"CHC", "AMA", "CHC", 'M', ItemList.Hull_LuV,'H',ItemList.Hatch_Maintenance,'A',ItemList.Robot_Arm_LuV,'C',OrePrefixes.circuit.get(Materials.Ultimate)});
 
@@ -1291,13 +1296,13 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Machine_IV_LightningRod.set(new GT_MetaTileEntity_LightningRod(1176, "basicgenerator.lightningrod.05", "Lightning Rod III", 5).getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_IV_LightningRod.get(1L, new Object[0]), bitsd, new Object[]{"LTL", "TMT", "LTL", 'M', ItemList.Hull_UV, 'L', ItemList.ZPM2, 'T', ItemList.Transformer_MAX_UV});
 
-    ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1169, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
-    GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeChemicalReactor.get(1L, new Object[0]), bitsd, new Object[]{"CRC", "PMP", "CBC", 
-    		'C', OrePrefixes.circuit.get(Materials.Advanced),
-    		'R', OrePrefixes.rotor.get(Materials.StainlessSteel), 
-    		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
-    		'M', ItemList.Electric_Motor_HV,
-    		'B', ItemList.Hull_HV});
+        ItemList.Machine_Multi_LargeChemicalReactor.set(new GT_MetaTileEntity_LargeChemicalReactor(1169, "multimachine.chemicalreactor", "Large Chemical Reactor").getStackForm(1));
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_LargeChemicalReactor.get(1L, new Object[0]), bitsd, new Object[]{"CRC", "PMP", "CBC",
+                'C', OrePrefixes.circuit.get(Materials.Advanced),
+                'R', OrePrefixes.rotor.get(Materials.StainlessSteel),
+                'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene),
+                'M', ItemList.Electric_Motor_HV,
+                'B', ItemList.Hull_HV});
     }
 
     private static void run4() {
