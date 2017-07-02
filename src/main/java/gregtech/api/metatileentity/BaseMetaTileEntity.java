@@ -1911,6 +1911,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     /**
      * Shifts the machine Inventory index according to the change in Input/Output Slots.
      * This is NOT done automatically. If you want to change slot count for a machine this method needs to be adapted.
+     * Currently this method only works for GT_MetaTileEntity_BasicMachine
      * @param slotIndex The original Inventory index
      * @param nbtVersion The GregTech version in which the original Inventory Index was saved.
      * @return The corrected Inventory index
@@ -1949,10 +1950,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         	return slotIndex;    		
     	}
     	int indexShift = 0;
-    	if (slotIndex >= oldInputSize) {
+    	if (slotIndex >= GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT + oldInputSize) {
     		indexShift += newInputSize - oldInputSize;
     	}    	
-    	if (slotIndex >= oldInputSize + oldOutputSize) {
+    	if (slotIndex >= GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT + oldInputSize + oldOutputSize) {
     		indexShift += newOutputSize - oldOutputSize;
     	}
     	return slotIndex + indexShift;
