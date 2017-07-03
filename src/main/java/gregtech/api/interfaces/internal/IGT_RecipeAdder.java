@@ -113,6 +113,18 @@ public interface IGT_RecipeAdder {
 
     /**
      * Adds a Chemical Recipe
+     * Only use this when the recipe conflicts in MultiBlock!
+     *
+     * @param aInput1   must be != null
+     * @param aInput2   must be != null
+     * @param aOutput1  must be != null
+     * @param aOutput2  must be != null
+     * @param aDuration must be > 0
+     */
+    public boolean addChemicalRecipeForBasicMachineOnly(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom);
+
+    /**
+     * Adds a Chemical Recipe
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
