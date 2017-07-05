@@ -155,9 +155,11 @@ public class GT_MetaTileEntity_DistillationTower
 				}
 			}
 		}
+        int count = mOutputHatches.size();
+        if (mOutputBusses.size() == 0 || count != 0) return false;
         y++;
         
-        while (y < 12 && !reachedTop) {
+        for (; y < 12 && !reachedTop; y++, count = mOutputHatches.size()) {
        		for (int x = xDir - 1; x <= xDir + 1; x++) { //x=width
        			for (int z = zDir - 1; z <= zDir + 1; z++) { //z=depth
    					IGregTechTileEntity tileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(x, y, z);
@@ -182,7 +184,7 @@ public class GT_MetaTileEntity_DistillationTower
    					}
        			}
        		}
-        	y++;
+        	if (mOutputHatches.size() != count + 1) return false;
         }
         
         return casingAmount >= 7 * y - 5 && y >= 3 && y <= 12 && reachedTop;
