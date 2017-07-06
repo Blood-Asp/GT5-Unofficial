@@ -28,7 +28,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     int drillX, drillY, drillZ;
     boolean isPickingPipes;
     boolean waitMiningPipe;
-    final static int[] RADIUS = new int[]{8, 8, 24, 40}; //Miner radius per tier
+    final static int[] RADIUS = new int[]{8, 8, 16, 24}; //Miner radius per tier
     final static int[] SPEED = new int[]{200, 200, 100, 50}; //Miner cycle time per tier
     final static int[] ENERGY = new int[]{24, 24, 96, 384}; //Miner energy consumption per tier
 
