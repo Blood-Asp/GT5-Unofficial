@@ -43,7 +43,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             DID_NOT_FIND_RECIPE = 0,
             FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS = 1,
             FOUND_AND_SUCCESSFULLY_USED_RECIPE = 2;
-    private static final int OTHER_SLOT_COUNT = 4;
+    public static final int OTHER_SLOT_COUNT = 4;
     public final ItemStack[] mOutputItems;
     public final int mInputSlotCount, mAmperage;
     public boolean mAllowInputFromOutputSide = false, mFluidTransfer = false, mItemTransfer = false, mHasBeenUpdated = false, mStuttering = false, mCharge = false, mDecharge = false;
