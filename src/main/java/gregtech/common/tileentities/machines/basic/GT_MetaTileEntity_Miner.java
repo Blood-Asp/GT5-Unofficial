@@ -21,16 +21,16 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 
 public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
-    private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);
-    private static final Block miningPipeBlock = GT_Utility.getBlockFromStack(miningPipe);
-    private static final Block miningPipeTipBlock = GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 0));
+    private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
+    private static final Block MINING_PIPE_BLOCK = GT_Utility.getBlockFromStack(MINING_PIPE);
+    private static final Block MINING_PIPE_TIP_BLOCK = GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 0));
 
     int drillX, drillY, drillZ;
     boolean isPickingPipes;
     boolean waitMiningPipe;
-    static int[] radius = new int[]{8, 8, 24, 40}; //Miner radius per tier
-    static int[] speed = new int[]{20, 20, 5, 2}; //Miner cycle time per tier
-    static int[] energy = new int[]{24, 24, 96, 384}; //Miner energy consumption per tier
+    final static int[] RADIUS = new int[]{8, 8, 24, 40}; //Miner radius per tier
+    final static int[] SPEED = new int[]{20, 20, 5, 2}; //Miner cycle time per tier
+    final static int[] ENERGY = new int[]{24, 24, 96, 384}; //Miner energy consumption per tier
 
     public GT_MetaTileEntity_Miner(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Digging ore instead of you", 2, 2, "Miner.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
@@ -50,7 +50,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getItem() == miningPipe.getItem());
+        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getItem() == MINING_PIPE.getItem());
     }
 
     public boolean hasFreeSpace() {
@@ -66,32 +66,32 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide()) {
-            if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isUniversalEnergyStored(energy[mTier] * (speed[mTier] - mProgresstime)) && hasFreeSpace()) {
+            if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isUniversalEnergyStored(ENERGY[mTier] * (SPEED[mTier] - mProgresstime)) && hasFreeSpace()) {
                 miningPipe:
                 if (waitMiningPipe) {
                     mMaxProgresstime = 0;
                     for (int i = 0; i < mInputSlotCount; i++) {
                         ItemStack s = getInputAt(i);
-                        if (s != null && s.getItem() == miningPipe.getItem() && s.stackSize > 0) {
+                        if (s != null && s.getItem() == MINING_PIPE.getItem() && s.stackSize > 0) {
                             waitMiningPipe = false;
                             break miningPipe;
                         }
                     }
                     return;
                 }
-                aBaseMetaTileEntity.decreaseStoredEnergyUnits(energy[mTier], true);
-                mMaxProgresstime = speed[mTier];
+                aBaseMetaTileEntity.decreaseStoredEnergyUnits(ENERGY[mTier], true);
+                mMaxProgresstime = SPEED[mTier];
             } else {
                 mMaxProgresstime = 0;
                 return;
             }
-            if (mProgresstime == speed[mTier] - 1) {
+            if (mProgresstime == SPEED[mTier] - 1) {
                 if (isPickingPipes) {
                     if (drillY == 0) {
                         aBaseMetaTileEntity.disableWorking();
                         isPickingPipes = false;
-                    } else if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == miningPipeTipBlock || aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == miningPipeBlock) {
-                        mOutputItems[0] = miningPipe.copy();
+                    } else if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_TIP_BLOCK || aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_BLOCK) {
+                        mOutputItems[0] = MINING_PIPE.copy();
                         mOutputItems[0].stackSize = 1;
                         aBaseMetaTileEntity.getWorld().setBlockToAir(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY, aBaseMetaTileEntity.getZCoord());
                         drillY++;
@@ -103,17 +103,17 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                         return;
                     }
                 }
-                if (drillZ > radius[mTier]) {
+                if (drillZ > RADIUS[mTier]) {
                     if (moveOneDown(aBaseMetaTileEntity)) {
                         return;
                     }
                 }
-                if (drillX > radius[mTier]) {
-                    drillX = -radius[mTier];
+                if (drillX > RADIUS[mTier]) {
+                    drillX = -RADIUS[mTier];
                     drillZ++;
                     return;
                 }
-                while (drillX <= radius[mTier]) {
+                while (drillX <= RADIUS[mTier]) {
                     Block block = aBaseMetaTileEntity.getBlockOffset(drillX, drillY, drillZ);
                     int blockMeta = aBaseMetaTileEntity.getMetaIDOffset(drillX, drillY, drillZ);
                     if (block instanceof GT_Block_Ores_Abstract) {
@@ -140,14 +140,14 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
             isPickingPipes = true;
             return false;
         }
-        if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == miningPipeTipBlock) {
-            aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY, aBaseMetaTileEntity.getZCoord(), miningPipeBlock);
+        if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_TIP_BLOCK) {
+            aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_BLOCK);
         }
         miningPipes:
         {
             for (int i = 0; i < mInputSlotCount; i++) {
                 ItemStack s = getInputAt(i);
-                if (s != null && s.getItem() == miningPipe.getItem() && s.stackSize > 0) {
+                if (s != null && s.getItem() == MINING_PIPE.getItem() && s.stackSize > 0) {
                     s.stackSize--;
                     if (s.stackSize == 0) {
                         mInventory[getInputSlot() + i] = null;
@@ -161,10 +161,10 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         if (aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) != Blocks.air) {
             mineBlock(aBaseMetaTileEntity, 0, drillY - 1, 0);
         }
-        aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), miningPipeTipBlock);
+        aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_TIP_BLOCK);
         drillY--;
-        drillZ = -radius[mTier];
-        drillX = -radius[mTier];
+        drillZ = -RADIUS[mTier];
+        drillX = -RADIUS[mTier];
         return true;
     }
 
