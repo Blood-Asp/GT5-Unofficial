@@ -615,6 +615,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_Press, Machine_MV_Press, Machine_HV_Press, Machine_EV_Press, Machine_IV_Press, Machine_LuV_Press, Machine_ZPM_Press, Machine_UV_Press,
     Machine_LV_Hammer, Machine_MV_Hammer, Machine_HV_Hammer, Machine_EV_Hammer, Machine_IV_Hammer, Machine_LuV_Hammer, Machine_ZPM_Hammer, Machine_UV_Hammer,
     Machine_LV_FluidHeater, Machine_MV_FluidHeater, Machine_HV_FluidHeater, Machine_EV_FluidHeater, Machine_IV_FluidHeater, Machine_LuV_FluidHeater, Machine_ZPM_FluidHeater, Machine_UV_FluidHeater,
+    Machine_LV_Miner, Machine_MV_Miner,
 
     Neutron_Reflector,
     Reactor_Coolant_He_1, Reactor_Coolant_He_3, Reactor_Coolant_He_6, Reactor_Coolant_NaK_1, Reactor_Coolant_NaK_3, Reactor_Coolant_NaK_6,
