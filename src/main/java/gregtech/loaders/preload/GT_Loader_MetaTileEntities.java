@@ -1570,6 +1570,28 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_ZPM, 'V', ItemList.Conveyor_Module_ZPM, 'D', ItemList.Tool_DataStick});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_UV.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_UV, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
         GT_ModHandler.addCraftingRecipe(ItemList.Automation_SuperBuffer_MAX.get(1L, new Object[0]), bitsd, new Object[]{"DMV", "DDD", 'M', ItemList.Hull_MAX, 'V', ItemList.Conveyor_Module_UV, 'D', ItemList.Tool_DataStick});
+
+        ItemList.Automation_ItemDistributor_ULV.set(new GT_MetaTileEntity_ItemDistributor(9320, "automation.itemdistributor.tier.00", "Ultra Low Voltage Item Distributor", 0).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_LV.set(new GT_MetaTileEntity_ItemDistributor(9321,  "automation.itemdistributor.tier.01", "Low Voltage Item Distributor", 1).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_MV.set(new GT_MetaTileEntity_ItemDistributor(9322,  "automation.itemdistributor.tier.02", "Medium Voltage Item Distributor", 2).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_HV.set(new GT_MetaTileEntity_ItemDistributor(9323,  "automation.itemdistributor.tier.03", "High Voltage Item Distributor", 3).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_EV.set(new GT_MetaTileEntity_ItemDistributor(9324,  "automation.itemdistributor.tier.04", "Extreme Voltage Item Distributor", 4).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_IV.set(new GT_MetaTileEntity_ItemDistributor(9325,  "automation.itemdistributor.tier.05", "Insane Voltage Item Distributor", 5).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_LuV.set(new GT_MetaTileEntity_ItemDistributor(9326, "automation.itemdistributor.tier.06", "Ludicrous Voltage Item Distributor", 6).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_ZPM.set(new GT_MetaTileEntity_ItemDistributor(9327, "automation.itemdistributor.tier.07", "ZPM Voltage Item Distributor", 7).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_UV.set(new GT_MetaTileEntity_ItemDistributor(9328,  "automation.itemdistributor.tier.08", "Ultimate Voltage Item Distributor", 8).getStackForm(1L));
+        ItemList.Automation_ItemDistributor_MAX.set(new GT_MetaTileEntity_ItemDistributor(9329, "automation.itemdistributor.tier.09", "MAX Voltage Item Distributor", 9).getStackForm(1L));
+
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_ULV.get(1L, new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_ULV, 'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_LV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_LV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_MV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_MV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_HV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_HV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_EV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_EV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_IV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_IV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_LuV.get(1L, new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_LuV, 'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_ZPM, 'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_UV.get(1L,  new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_UV,  'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Automation_ItemDistributor_MAX.get(1L, new Object[0]), bitsd, new Object[]{"XCX", "VMV", " V ", 'M', ItemList.Hull_MAX, 'V', ItemList.Conveyor_Module_LV, 'C', OreDictNames.craftingChest, 'X', OrePrefixes.circuit.get(Materials.Good)});
     }
 
     private static void makeWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage, long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
