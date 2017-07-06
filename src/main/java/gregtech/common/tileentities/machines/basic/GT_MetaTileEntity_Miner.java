@@ -29,8 +29,8 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     boolean isPickingPipes;
     boolean waitMiningPipe;
     final static int[] RADIUS = new int[]{8, 8, 16, 24}; //Miner radius per tier
-    final static int[] SPEED = new int[]{200, 200, 100, 50}; //Miner cycle time per tier
-    final static int[] ENERGY = new int[]{24, 24, 96, 384}; //Miner energy consumption per tier
+    final static int[] SPEED = new int[]{160, 160, 80, 40}; //Miner cycle time per tier
+    final static int[] ENERGY = new int[]{8, 8, 32, 128}; //Miner energy consumption per tier
 
     public GT_MetaTileEntity_Miner(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Digging ore instead of you", 2, 2, "Miner.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
