@@ -82,7 +82,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("isPickingPipe", isPickingPipes);
+        aNBT.setBoolean("isPickingPipes", isPickingPipes);
     }
 
     @Override

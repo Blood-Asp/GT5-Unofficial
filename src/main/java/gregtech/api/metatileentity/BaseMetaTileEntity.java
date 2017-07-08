@@ -120,6 +120,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             aNBT.setBoolean("mInputDisabled", mInputDisabled);
             aNBT.setBoolean("mOutputDisabled", mOutputDisabled);
             aNBT.setTag("GT.CraftingComponents", mRecipeStuff);
+            aNBT.setInteger("nbtVersion", GT_Mod.TOTAL_VERSION);
         } catch (Throwable e) {
             GT_Log.err.println("Encountered CRITICAL ERROR while saving MetaTileEntity, the Chunk whould've been corrupted by now, but I prevented that. Please report immediately to GregTech Intergalactical!!!");
             e.printStackTrace(GT_Log.err);
@@ -188,6 +189,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mCoverData = aNBT.getIntArray("mCoverData");
             mSidedRedstone = aNBT.getByteArray("mRedstoneSided");
             mRecipeStuff = aNBT.getCompoundTag("GT.CraftingComponents");
+            int nbtVersion = aNBT.getInteger("nbtVersion");
 
             if (mCoverData.length != 6) mCoverData = new int[]{0, 0, 0, 0, 0, 0};
             if (mCoverSides.length != 6) mCoverSides = new int[]{0, 0, 0, 0, 0, 0};
@@ -203,6 +205,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 for (int i = 0; i < tItemList.tagCount(); i++) {
                     NBTTagCompound tTag = tItemList.getCompoundTagAt(i);
                     int tSlot = tTag.getInteger("IntSlot");
+                    tSlot = shiftInventoryIndex(tSlot, nbtVersion);
                     if (tSlot >= 0 && tSlot < mMetaTileEntity.getRealInventory().length) {
                         mMetaTileEntity.getRealInventory()[tSlot] = GT_Utility.loadItem(tTag);
                     }
@@ -1907,4 +1910,55 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity collider) {
         mMetaTileEntity.onEntityCollidedWithBlock(aWorld, aX, aY, aZ, collider);
     }
+
+     /**
+      * Shifts the machine Inventory index according to the change in Input/Output Slots.
+      * This is NOT done automatically. If you want to change slot count for a machine this method needs to be adapted.
+      * Currently this method only works for GT_MetaTileEntity_BasicMachine
+      * @param slotIndex The original Inventory index
+      * @param nbtVersion The GregTech version in which the original Inventory Index was saved.
+      * @return The corrected Inventory index
+      */
+     private int shiftInventoryIndex(int slotIndex, int nbtVersion){
+         int oldInputSize, newInputSize, oldOutputSize, newOutputSize;
+         int chemistryUpdateVersion = GT_Mod.calculateTotalGTVersion(509, 31);
+         if (mID >= 211 && mID <= 218) {//Assembler
+             if (nbtVersion < chemistryUpdateVersion) {
+                 oldInputSize = 2;
+                 oldOutputSize = 1;
+             } else {
+                 return slotIndex;
+             }
+             newInputSize = 6;
+             newOutputSize = 1;
+         } else if (mID >= 421 && mID <= 428){//Chemical Reactor
+             if (nbtVersion < chemistryUpdateVersion) {
+                 oldInputSize = 2;
+                 oldOutputSize = 1;
+             } else {
+                 return slotIndex;
+             }
+             newInputSize = 2;
+             newOutputSize = 2;
+         } else if (mID >= 531 && mID <= 538) {//Distillery
+             if (nbtVersion < chemistryUpdateVersion) {
+                 oldInputSize = 1;
+                 oldOutputSize = 0;
+             } else {
+                 return slotIndex;
+             }
+             newInputSize = 1;
+             newOutputSize = 1;
+         } else {
+             return slotIndex;
+         }
+         int indexShift = 0;
+         if (slotIndex >= GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT + oldInputSize) {indexShift += newInputSize - oldInputSize;
+                	}
+         if (slotIndex >= GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT + oldInputSize + oldOutputSize) {
+             indexShift += newOutputSize - oldOutputSize;
+         }
+         return slotIndex + indexShift;
+     }
 }
+

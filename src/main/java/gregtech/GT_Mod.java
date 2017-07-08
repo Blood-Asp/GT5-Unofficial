@@ -65,7 +65,8 @@ import java.util.regex.Pattern;
 
 @Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false, dependencies = "required-after:dreamcraft; required-after:IC2; after:Forestry; after:PFAAGeologica; after:Thaumcraft; after:Railcraft; after:appliedenergistics2; after:ThermalExpansion; after:TwilightForest; after:harvestcraft; after:magicalcrops; after:BuildCraft|Transport; after:BuildCraft|Silicon; after:BuildCraft|Factory; after:BuildCraft|Energy; after:BuildCraft|Core; after:BuildCraft|Builders; after:GalacticraftCore; after:GalacticraftMars; after:GalacticraftPlanets; after:ThermalExpansion|Transport; after:ThermalExpansion|Energy; after:ThermalExpansion|Factory; after:RedPowerCore; after:RedPowerBase; after:RedPowerMachine; after:RedPowerCompat; after:RedPowerWiring; after:RedPowerLogic; after:RedPowerLighting; after:RedPowerWorld; after:RedPowerControl; after:UndergroundBiomes;")
 public class GT_Mod implements IGT_Mod {
-    public static final int VERSION = 509;
+    public static final int VERSION = 509, SUBVERSION = 31;
+    public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
     public static final int REQUIRED_IC2 = 624;
     @Mod.Instance("gregtech")
     public static GT_Mod instance;
@@ -1218,5 +1219,13 @@ public class GT_Mod implements IGT_Mod {
         	GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipe(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1));
         }
     }
-    
+
+    public static int calculateTotalGTVersion(int minorVersion){
+            	return calculateTotalGTVersion(VERSION, minorVersion);
+            }
+
+    public static int calculateTotalGTVersion(int majorVersion, int minorVersion){
+        return majorVersion * 1000 + minorVersion;
+
+    }
 }
