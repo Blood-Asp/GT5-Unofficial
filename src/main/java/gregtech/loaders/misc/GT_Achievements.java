@@ -207,9 +207,9 @@ public class GT_Achievements {
         registerAchievement("over9000", 7, 7, ItemList.Casing_Coil_NaquadahAlloy.get(1, new Object[]{}), "alienmetallurgy", false);
         registerAchievement("finalpreparations", 7, 9, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadria, 1L), "over9000", false);
         registerAchievement("denseaspossible", 6, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "finalpreparations", false);
-        registerAchievement("whatnow", 10, 10, ItemList.ZPM2.get(1, new Object[]{}), "zpmage", false);
         registerAchievement("zpmage", 8, 10, ItemList.Energy_Module.get(1, new Object[]{}), "denseaspossible", false);
-        registerAchievement("whattheend", 12, 10, ItemList.Maximum_Battery.get(1, new Object[]{}), "whatnow", false);
+        registerAchievement("uvage", 10, 10, ItemList.Energy_Cluster.get(1, new Object[]{}), "zpmage", false);
+        registerAchievement("whatnow", 12, 10, ItemList.ZPM2.get(1, new Object[]{}), "uvage", false);
 
 //        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
 //            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
@@ -602,7 +602,7 @@ public class GT_Achievements {
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32736")) {
                 issueAchievement(player, "zpmage");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32737")) {
-                issueAchievement(player, "whattheend");
+                issueAchievement(player, "uvage");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32030")) {
                 issueAchievement(player, "gtmonosilicon");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32036")) {
