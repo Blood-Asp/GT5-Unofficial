@@ -1442,6 +1442,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         AstralSilver            .add(SubTag.MAGICAL);
 //      Midasium                .add(SubTag.MAGICAL);
         Mithril                 .add(SubTag.MAGICAL);
+
+        Carbon                  .add(SubTag.NO_SMELTING);
     }
     public static void init() {
         new ProcessingConfig();
