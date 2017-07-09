@@ -22,7 +22,7 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachin
         super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks");
     }
 
-    public GT_MetaTileEntity_SuperChest(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+    public GT_MetaTileEntity_SuperChest(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
@@ -48,7 +48,7 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachin
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SuperChest(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_SuperChest(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override
