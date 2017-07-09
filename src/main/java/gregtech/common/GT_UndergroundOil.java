@@ -46,7 +46,7 @@ public class GT_UndergroundOil {
         }
 
         //GEN IT TO GET OBJECT...
-        XSTR tRandom = new XSTR( (aWorld.getSeed() + aWorld.provider.dimensionId * 2 + ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkXPos/(double)96)) + (7 * ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkZPos/96)))));
+        XSTR tRandom = new XSTR( (aWorld.getSeed() + aWorld.provider.dimensionId * 2 + ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkXPos/(double)6)) + (7 * ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkZPos/6)))));
         GT_UO_Fluid uoFluid = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).getRandomFluid(tRandom);
 
         //Fluid stack holder
