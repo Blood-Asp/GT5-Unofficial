@@ -795,6 +795,7 @@ public enum OrePrefixes {
         for (OrePrefixes tPrefix : values())
             if (aOre.startsWith(tPrefix.toString())) {
                 if (tPrefix == oreNether && aOre.equals("oreNetherQuartz")) return ore;
+                if (tPrefix == oreBasalt && aOre.equals("oreBasalticMineralSand")) return ore;
                 return tPrefix;
             }
         return null;
