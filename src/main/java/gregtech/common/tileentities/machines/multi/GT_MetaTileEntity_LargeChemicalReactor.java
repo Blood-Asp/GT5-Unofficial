@@ -115,7 +115,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			long voltage = getMaxInputVoltage();
 			byte tier = (byte) Math.max(1, GT_Utility.getTier(voltage));
 			GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
-					gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
+					false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
 			if (recipe != null && recipe.isRecipeInputEqual(true, fluids, inputs)) {
 				this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
 				this.mEfficiencyIncrease = 10000;
