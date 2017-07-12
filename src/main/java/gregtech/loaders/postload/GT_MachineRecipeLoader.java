@@ -2893,8 +2893,8 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Ethane.getModeratelySteamCracked(2000), 
 				new FluidStack[]{Materials.Ethylene.getGas(250), Materials.Methane.getGas(2750)}, 
 				Materials.Carbon.getDustSmall(3), 240, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Ethane.getModeratelySteamCracked(1000), Materials.Ethylene.getGas(125), Materials.Carbon.getDustTiny(3), 120, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Ethane.getModeratelySteamCracked(400), Materials.Methane.getGas(550), Materials.Carbon.getDustTiny(1), 48, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Ethane.getModeratelySteamCracked(1000), Materials.Ethylene.getGas(125), Materials.Carbon.getDustTiny(3), 240, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Ethane.getModeratelySteamCracked(400), Materials.Methane.getGas(550), Materials.Carbon.getDustTiny(1), 96, 30, false);
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Ethane.getSeverelySteamCracked(500), 
 				new FluidStack[]{Materials.Methane.getGas(750)}, 
 				Materials.Carbon.getDustSmall(1), 60, 120);
@@ -2930,16 +2930,16 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Propane.getLightlySteamCracked(2000), 
 				new FluidStack[]{Materials.Ethylene.getGas(1500), Materials.Methane.getGas(2500)}, 
 				Materials.Carbon.getDustSmall(1), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Propane.getLightlySteamCracked(1000), Materials.Ethylene.getGas(750), Materials.Carbon.getDustTiny(1), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Propane.getLightlySteamCracked(800), Materials.Methane.getGas(1000), GT_Values.NI, 48, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Propane.getLightlySteamCracked(1000), Materials.Ethylene.getGas(750), Materials.Carbon.getDustTiny(1), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Propane.getLightlySteamCracked(800), Materials.Methane.getGas(1000), GT_Values.NI, 96, 30, false);
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Propane.getModeratelySteamCracked(1000), 
 				new FluidStack[]{Materials.Ethylene.getGas(500), Materials.Methane.getGas(1500)}, 
 				Materials.Carbon.getDustSmall(1), 120, 120);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Propane.getSeverelySteamCracked(2000), 
 				new FluidStack[]{Materials.Ethylene.getGas(500), Materials.Methane.getGas(3500)}, 
 				Materials.Carbon.getDustSmall(3), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Propane.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(250), Materials.Carbon.getDustTiny(3), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Propane.getSeverelySteamCracked(500), Materials.Methane.getGas(875), Materials.Carbon.getDustTiny(1), 30, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Propane.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(250), Materials.Carbon.getDustTiny(3), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Propane.getSeverelySteamCracked(500), Materials.Methane.getGas(875), Materials.Carbon.getDustTiny(1), 60, 30, false);
 
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Butadiene.getLightlyHydroCracked(75), 
 				new FluidStack[]{Materials.Butene.getGas(50), Materials.Ethylene.getGas(50)}, 
@@ -2953,21 +2953,21 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butadiene.getLightlySteamCracked(2000), 
 				new FluidStack[]{Materials.Propene.getGas(1500), Materials.Ethylene.getGas(375), Materials.Methane.getGas(375)}, 
 				Materials.Carbon.getDustSmall(6), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Propene.getGas(750), Materials.Carbon.getDustSmall(3), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Ethylene.getGas(187), Materials.Carbon.getDustSmall(3), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Methane.getGas(187), Materials.Carbon.getDustSmall(3), 60, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Propene.getGas(750), Materials.Carbon.getDustSmall(3), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Ethylene.getGas(187), Materials.Carbon.getDustSmall(3), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getLightlySteamCracked(1000), Materials.Methane.getGas(187), Materials.Carbon.getDustSmall(3), 120, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butadiene.getModeratelySteamCracked(2000), 
 				new FluidStack[]{Materials.Propene.getGas(250), Materials.Ethylene.getGas(2250), Materials.Methane.getGas(375)}, 
 				Materials.Carbon.getDustSmall(6), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getModeratelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(3), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getModeratelySteamCracked(800), Materials.Ethylene.getGas(900), Materials.Carbon.getDustTiny(5), 48, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getModeratelySteamCracked(1000), Materials.Methane.getGas(187), Materials.Carbon.getDustSmall(3), 60, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getModeratelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(3), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getModeratelySteamCracked(800), Materials.Ethylene.getGas(900), Materials.Carbon.getDustTiny(5), 96, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getModeratelySteamCracked(1000), Materials.Methane.getGas(187), Materials.Carbon.getDustSmall(3), 120, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butadiene.getSeverelySteamCracked(2000), 
 				new FluidStack[]{Materials.Propene.getGas(250), Materials.Ethylene.getGas(375), Materials.Methane.getGas(2250)}, 
 				Materials.Carbon.getDust(2), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getSeverelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDust(1), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(187), Materials.Carbon.getDust(1), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getSeverelySteamCracked(800), Materials.Methane.getGas(900), Materials.Carbon.getDustTiny(7), 48, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butadiene.getSeverelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDust(1), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butadiene.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(187), Materials.Carbon.getDust(1), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butadiene.getSeverelySteamCracked(800), Materials.Methane.getGas(900), Materials.Carbon.getDustTiny(7), 96, 30, false);
 
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Butene.getLightlyHydroCracked(75), 
 				new FluidStack[]{Materials.Butane.getGas(25), Materials.Propene.getGas(25), Materials.Ethane.getGas(25), Materials.Ethylene.getGas(25), Materials.Methane.getGas(25)}, 
@@ -2984,15 +2984,15 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butene.getModeratelySteamCracked(2000), 
 				new FluidStack[]{Materials.Propene.getGas(250), Materials.Ethylene.getGas(1625), Materials.Methane.getGas(500)}, 
 				Materials.Carbon.getDustSmall(2), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getModeratelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(1), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butene.getModeratelySteamCracked(1000), Materials.Ethylene.getGas(812), Materials.Carbon.getDustSmall(1), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butene.getModeratelySteamCracked(1000), Materials.Methane.getGas(250), Materials.Carbon.getDustSmall(1), 60, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getModeratelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(1), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butene.getModeratelySteamCracked(1000), Materials.Ethylene.getGas(812), Materials.Carbon.getDustSmall(1), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butene.getModeratelySteamCracked(1000), Materials.Methane.getGas(250), Materials.Carbon.getDustSmall(1), 120, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butene.getSeverelySteamCracked(2000), 
 				new FluidStack[]{Materials.Propene.getGas(250), Materials.Ethylene.getGas(625), Materials.Methane.getGas(3000)}, 
 				Materials.Carbon.getDust(3), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(6), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(312), Materials.Carbon.getDustSmall(6), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(500), Materials.Methane.getGas(750), Materials.Carbon.getDustSmall(3), 60, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(1000), Materials.Propene.getGas(125), Materials.Carbon.getDustSmall(6), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(312), Materials.Carbon.getDustSmall(6), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butene.getSeverelySteamCracked(500), Materials.Methane.getGas(750), Materials.Carbon.getDustSmall(3), 120, 30, false);
 
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Butane.getLightlyHydroCracked(75), 
 				new FluidStack[]{Materials.Propane.getGas(50), Materials.Ethane.getGas(50), Materials.Methane.getGas(50)}, 
@@ -3006,24 +3006,24 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butane.getLightlySteamCracked(4000), 
 				new FluidStack[]{Materials.Propane.getGas(3000), Materials.Ethane.getGas(500), Materials.Ethylene.getGas(500), Materials.Methane.getGas(4250)}, 
 				Materials.Carbon.getDustSmall(3), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getLightlySteamCracked(800), Materials.Propane.getGas(600), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getLightlySteamCracked(800), Materials.Ethane.getGas(100), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getLightlySteamCracked(800), Materials.Ethylene.getGas(100), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getLightlySteamCracked(800), Materials.Methane.getGas(850), Materials.Carbon.getDustTiny(1), 24, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getLightlySteamCracked(800), Materials.Propane.getGas(600), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getLightlySteamCracked(800), Materials.Ethane.getGas(100), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getLightlySteamCracked(800), Materials.Ethylene.getGas(100), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getLightlySteamCracked(800), Materials.Methane.getGas(850), Materials.Carbon.getDustTiny(1), 48, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butane.getModeratelySteamCracked(4000), 
 				new FluidStack[]{Materials.Propane.getGas(500), Materials.Ethane.getGas(3000), Materials.Ethylene.getGas(3000), Materials.Methane.getGas(1750)}, 
 				Materials.Carbon.getDustSmall(3), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getModeratelySteamCracked(800), Materials.Propane.getGas(100), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getModeratelySteamCracked(800), Materials.Ethane.getGas(600), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getModeratelySteamCracked(800), Materials.Ethylene.getGas(600), Materials.Carbon.getDustTiny(1), 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getModeratelySteamCracked(800), Materials.Methane.getGas(350), Materials.Carbon.getDustTiny(1), 24, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getModeratelySteamCracked(800), Materials.Propane.getGas(100), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getModeratelySteamCracked(800), Materials.Ethane.getGas(600), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getModeratelySteamCracked(800), Materials.Ethylene.getGas(600), Materials.Carbon.getDustTiny(1), 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getModeratelySteamCracked(800), Materials.Methane.getGas(350), Materials.Carbon.getDustTiny(1), 48, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Butane.getSeverelySteamCracked(2000), 
 				new FluidStack[]{Materials.Propane.getGas(250), Materials.Ethane.getGas(250), Materials.Ethylene.getGas(250), Materials.Methane.getGas(4000)}, 
 				Materials.Carbon.getDustSmall(9), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getSeverelySteamCracked(1000), Materials.Propane.getGas(125), Materials.Carbon.getDustTiny(10), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getSeverelySteamCracked(1000), Materials.Ethane.getGas(125), Materials.Carbon.getDustTiny(10), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(125), Materials.Carbon.getDustTiny(10), 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getSeverelySteamCracked(500), Materials.Methane.getGas(1000), Materials.Carbon.getDustTiny(5), 30, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Butane.getSeverelySteamCracked(1000), Materials.Propane.getGas(125), Materials.Carbon.getDustTiny(10), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Butane.getSeverelySteamCracked(1000), Materials.Ethane.getGas(125), Materials.Carbon.getDustTiny(10), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Butane.getSeverelySteamCracked(1000), Materials.Ethylene.getGas(125), Materials.Carbon.getDustTiny(10), 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(4, Materials.Butane.getSeverelySteamCracked(500), Materials.Methane.getGas(1000), Materials.Carbon.getDustTiny(5), 60, 30, false);
 
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Gas.getLightlyHydroCracked(50), 
 				new FluidStack[]{Materials.Methane.getGas(70), Materials.Hydrogen.getGas(67), Materials.Helium.getGas(1)}, 
@@ -3037,19 +3037,19 @@ if(Loader.isModLoaded("Railcraft")){
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Gas.getLightlySteamCracked(2500), 
 				new FluidStack[]{Materials.Propene.getGas(113), Materials.Ethane.getGas(19), Materials.Ethylene.getGas(213), Materials.Methane.getGas(2566), Materials.Helium.getGas(50)}, 
 				Materials.Carbon.getDustTiny(1), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Gas.getLightlySteamCracked(1000), Materials.Propene.getGas(45), GT_Values.NI, 48, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Gas.getLightlySteamCracked(1000), Materials.Ethane.getGas(7), GT_Values.NI, 48, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Gas.getLightlySteamCracked(1000), Materials.Ethylene.getGas(85), GT_Values.NI, 48, 120, false);
-		GT_Values.RA.addDistilleryRecipe(4, Materials.Gas.getLightlySteamCracked(500), Materials.Methane.getGas(513), GT_Values.NI, 24, 120, false);
-		GT_Values.RA.addDistilleryRecipe(5, Materials.Gas.getLightlySteamCracked(1000), Materials.Helium.getGas(20), GT_Values.NI, 48, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Gas.getLightlySteamCracked(1000), Materials.Propene.getGas(45), GT_Values.NI, 96, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Gas.getLightlySteamCracked(1000), Materials.Ethane.getGas(7), GT_Values.NI, 96, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Gas.getLightlySteamCracked(1000), Materials.Ethylene.getGas(85), GT_Values.NI, 96, 30, false);
+		GT_Values.RA.addDistilleryRecipe(4, Materials.Gas.getLightlySteamCracked(500), Materials.Methane.getGas(513), GT_Values.NI, 48, 30, false);
+		GT_Values.RA.addDistilleryRecipe(5, Materials.Gas.getLightlySteamCracked(1000), Materials.Helium.getGas(20), GT_Values.NI, 96, 30, false);
 		GT_Values.RA.addDistillationTowerRecipe(Materials.Gas.getModeratelySteamCracked(1700), 
 				new FluidStack[]{Materials.Propene.getGas(13), Materials.Ethane.getGas(77), Materials.Ethylene.getGas(157), Materials.Methane.getGas(1732), Materials.Helium.getGas(34)}, 
 				Materials.Carbon.getDustTiny(1), 120, 120);
-		GT_Values.RA.addDistilleryRecipe(1, Materials.Gas.getModeratelySteamCracked(680), Materials.Propene.getGas(5), GT_Values.NI, 48, 120, false);
-		GT_Values.RA.addDistilleryRecipe(2, Materials.Gas.getModeratelySteamCracked(850), Materials.Ethane.getGas(38), GT_Values.NI, 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(3, Materials.Gas.getModeratelySteamCracked(850), Materials.Ethylene.getGas(78), GT_Values.NI, 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(4, Materials.Gas.getModeratelySteamCracked(850), Materials.Methane.getGas(866), GT_Values.NI, 60, 120, false);
-		GT_Values.RA.addDistilleryRecipe(5, Materials.Gas.getModeratelySteamCracked(850), Materials.Helium.getGas(17), GT_Values.NI, 60, 120, false);
+		GT_Values.RA.addDistilleryRecipe(1, Materials.Gas.getModeratelySteamCracked(680), Materials.Propene.getGas(5), GT_Values.NI, 96, 30, false);
+		GT_Values.RA.addDistilleryRecipe(2, Materials.Gas.getModeratelySteamCracked(850), Materials.Ethane.getGas(38), GT_Values.NI, 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(3, Materials.Gas.getModeratelySteamCracked(850), Materials.Ethylene.getGas(78), GT_Values.NI, 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(4, Materials.Gas.getModeratelySteamCracked(850), Materials.Methane.getGas(866), GT_Values.NI, 120, 30, false);
+		GT_Values.RA.addDistilleryRecipe(5, Materials.Gas.getModeratelySteamCracked(850), Materials.Helium.getGas(17), GT_Values.NI, 120, 30, false);
 		GT_Values.RA.addUniversalDistillationRecipe(Materials.Gas.getSeverelySteamCracked(800), 
 				new FluidStack[]{Materials.Propene.getGas(6), Materials.Ethane.getGas(6), Materials.Ethylene.getGas(20), Materials.Methane.getGas(914), Materials.Helium.getGas(16)}, 
 				Materials.Carbon.getDustTiny(1), 120, 120);
