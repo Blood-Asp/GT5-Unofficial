@@ -2552,7 +2552,7 @@ if(Loader.isModLoaded("Railcraft")){
     	GT_Values.RA.addPyrolyseRecipe(Materials.Sugar.getDust(23), 								  Materials.Nitrogen.getGas(500),   2, Materials.Charcoal.getDust(12),   Materials.Water.getFluid(1500), 				160, 96);
     	
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.CharcoalByproducts.getGas(100), 
-    			new FluidStack[]{Materials.WoodTar.getFluid(250), Materials.WoodVinegar.getFluid(50), Materials.WoodGas.getGas(25)}, 
+    			new FluidStack[]{Materials.WoodTar.getFluid(25), Materials.WoodVinegar.getFluid(50), Materials.WoodGas.getGas(25)}, 
     			Materials.Charcoal.getDustSmall(1), 20, 64);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodGas.getGas(100), 
     			new FluidStack[]{Materials.CarbonDioxide.getGas(49), Materials.Ethylene.getGas(2), Materials.Methane.getGas(13), Materials.CarbonMonoxide.getGas(34), Materials.Hydrogen.getGas(2)}, 
