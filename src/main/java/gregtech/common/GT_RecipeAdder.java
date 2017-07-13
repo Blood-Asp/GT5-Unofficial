@@ -567,13 +567,13 @@ public class GT_RecipeAdder
         if (tScale <= 0) tScale = 1;
         if (tScale > 1){
         	//trying to find whether there is a better factor
-        	for (int i = tScale; i <= 10; i++) {
+        	for (int i = tScale; i <= 5; i++) {
         		if (aInput.amount % i == 0 && aDuration % i == 0) {
         			tScale = i;
         			break;
         		}
         	}
-        	for (int i = tScale; i <= 10; i++) {
+        	for (int i = tScale; i <= 5; i++) {
         		if (aInput.amount % i == 0 && aDuration % i == 0 && aOutput.amount % i == 0) {
         			tScale = i;
         			break;
