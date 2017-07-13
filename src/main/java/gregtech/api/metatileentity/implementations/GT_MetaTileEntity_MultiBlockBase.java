@@ -3,6 +3,7 @@ package gregtech.api.metatileentity.implementations;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_Container_MultiMachine;
@@ -47,6 +48,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public ArrayList<GT_MetaTileEntity_Hatch_Muffler> mMufflerHatches = new ArrayList<GT_MetaTileEntity_Hatch_Muffler>();
     public ArrayList<GT_MetaTileEntity_Hatch_Energy> mEnergyHatches = new ArrayList<GT_MetaTileEntity_Hatch_Energy>();
     public ArrayList<GT_MetaTileEntity_Hatch_Maintenance> mMaintenanceHatches = new ArrayList<GT_MetaTileEntity_Hatch_Maintenance>();
+    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
 
     public GT_MetaTileEntity_MultiBlockBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 2);
@@ -804,6 +806,47 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_OutputBus) {
             ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
             return mOutputBusses.add((GT_MetaTileEntity_Hatch_OutputBus) aMetaTileEntity);
+        }
+        return false;
+    }
+
+    /**
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
+     */
+    private boolean isCorrectDataItem(ItemStack aStack, int state){
+    	if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, false, true)) return true;
+    	if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
+    	if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
+    	return false;
+    }
+    
+    /**
+     * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
+     */
+    public ArrayList<ItemStack> getDataItems(int state) {
+        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
+        	rList.add(mInventory[1]);
+        }
+        for (GT_MetaTileEntity_Hatch_DataAccess tHatch : mDataAccessHatches) {
+            if (isValidMetaTileEntity(tHatch)) {
+                for (int i = 0; i < tHatch.getBaseMetaTileEntity().getSizeInventory(); i++) {
+                    if (tHatch.getBaseMetaTileEntity().getStackInSlot(i) != null
+                    		&& isCorrectDataItem(tHatch.getBaseMetaTileEntity().getStackInSlot(i), state))
+                        rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(i));
+                }
+            }
+        }
+        return rList;
+    }
+
+    public boolean addDataAccessToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
         }
         return false;
     }
