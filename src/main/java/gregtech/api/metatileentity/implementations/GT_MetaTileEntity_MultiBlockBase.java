@@ -810,16 +810,24 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return false;
     }
 
+    public int getTotalConfigValue(){
+    	int config = 0;
+    	ArrayList<ItemStack> tCircuitList = getDataItems(1);
+    	for (ItemStack tCircuit : tCircuitList)
+    		config += tCircuit.getItemDamage();
+    	return config;
+    }
+    
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
     private boolean isCorrectDataItem(ItemStack aStack, int state){
-    	if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, false, true)) return true;
+    	if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, true, true)) return true;
     	if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
     	if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
     	return false;
     }
-    
+
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
