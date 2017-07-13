@@ -1231,7 +1231,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CCC", 'M', ItemList.Hull_Steel, 'W', OrePrefixes.plateDouble.get(Materials.Steel), 'E', OrePrefixes.circuit.get(Materials.Basic), 'C', ItemList.Sensor_LV});
         GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_Adv.get(1L, new Object[0]), bitsd, new Object[] { "WWW", "EME", "CCC", 'M', ItemList.Hull_EV, 'W', OrePrefixes.plateDouble.get(Materials.VanadiumSteel),'E', OrePrefixes.circuit.get(Materials.Data), 'C', ItemList.Sensor_EV });
 
-        ItemList.OilDrill.set(new GT_MetaTileEntity_OilDrill(1157, "multimachine.oildrill", "Oil Drilling Rig").getStackForm(1));
+        ItemList.OilDrill.set(new GT_MetaTileEntity_OilDrill1(1157, "multimachine.oildrill", "Oil Drilling Rig").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.OilDrill.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CCC", 'M', ItemList.Hull_MV, 'W', OrePrefixes.frameGt.get(Materials.Steel), 'E', OrePrefixes.circuit.get(Materials.Good), 'C', ItemList.Electric_Motor_MV});
 
         ItemList.OreDrill1.set(new GT_MetaTileEntity_OreDrillingPlant1(1158, "multimachine.oredrill1", "Ore Drilling Plant").getStackForm(1));
