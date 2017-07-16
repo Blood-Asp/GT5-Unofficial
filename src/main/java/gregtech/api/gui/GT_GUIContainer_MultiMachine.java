@@ -55,7 +55,7 @@ public class GT_GUIContainer_MultiMachine extends GT_GUIContainerMetaTile_Machin
                     fontRendererObj.drawString(trans("142", "Running perfectly."), 10, 16, 16448255);
                 }
                 int id = mContainer.mTileEntity.getMetaTileID();
-                if (id == 1157 || id == 1158 || id == 1177 || id == 1178 || id == 1179) {
+                if (id == 1157 || id == 1158 || id == 1177 || id == 1178 || id == 1179 || id == 133 || id == 134 || id == 135 || id == 136) {
                     ItemStack tItem = mContainer.mTileEntity.getMetaTileEntity().getStackInSlot(1);
                     if (tItem == null || !GT_Utility.areStacksEqual(tItem, GT_ModHandler.getIC2Item("miningPipe", 1L))) {
                         fontRendererObj.drawString(trans("143", "Missing Mining Pipe"), 10, ((GT_Container_MultiMachine) mContainer).mActive == 0 ? 40 : 24, 16448255);
