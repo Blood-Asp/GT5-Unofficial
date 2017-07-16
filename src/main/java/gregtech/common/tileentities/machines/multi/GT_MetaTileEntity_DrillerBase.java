@@ -153,6 +153,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
 
     protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead){
     	if(!tryLowerPipe())
+    		if(waitForPipes()) return false;
     		isPickingPipes = true;
     	return true;
     }
