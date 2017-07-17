@@ -112,6 +112,9 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         itemsPerSide = aNBT.getByteArray("mItemsPerSide");
+        if (itemsPerSide.length != 6) {
+            itemsPerSide = new byte[6];
+        }
         currentSide = aNBT.getByte("mCurrentSide");
         currentSideItemCount = aNBT.getByte("mCurrentSideItemCount");
     }
