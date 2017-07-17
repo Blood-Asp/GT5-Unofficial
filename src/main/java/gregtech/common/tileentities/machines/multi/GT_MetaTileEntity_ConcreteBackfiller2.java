@@ -7,12 +7,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.item.ItemStack;
 
-public class GT_MetaTileEntity_ConcreteBackfiller3 extends GT_MetaTileEntity_ConcreteBackfillerBase {
-    public GT_MetaTileEntity_ConcreteBackfiller3(int aID, String aName, String aNameRegional) {
+public class GT_MetaTileEntity_ConcreteBackfiller2 extends GT_MetaTileEntity_ConcreteBackfillerBase {
+    public GT_MetaTileEntity_ConcreteBackfiller2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_ConcreteBackfiller3(String aName) {
+    public GT_MetaTileEntity_ConcreteBackfiller2(String aName) {
         super(aName);
     }
 
@@ -35,7 +35,7 @@ public class GT_MetaTileEntity_ConcreteBackfiller3 extends GT_MetaTileEntity_Con
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_ConcreteBackfiller3(mName);
+        return new GT_MetaTileEntity_ConcreteBackfiller2(mName);
     }
 
     @Override
