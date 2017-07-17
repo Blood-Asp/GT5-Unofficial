@@ -80,10 +80,10 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 	protected void setElectricityStats() {
 		this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        //T1 = 24; T2 = 96; T3 = 384; T4 = 1536
+        //T1 = 24; T2 = 96; T3 = 384
         this.mEUt = 6 * (1 << (getMinTier() << 1));
-        //T1 = 160; T2 = 200; T3 = 240; T4 = 280
-        this.mMaxProgresstime = isPickingPipes ? 80 / (1 << getMinTier()) : (80 + 40 * getMinTier());
+        //T1 = 160; T2 = 300; T3 = 480
+        this.mMaxProgresstime = isPickingPipes ? 80 / (1 << getMinTier()) : (40 + 20 * getMinTier()) * getMinTier();
 
         long voltage = getMaxInputVoltage();
         long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
