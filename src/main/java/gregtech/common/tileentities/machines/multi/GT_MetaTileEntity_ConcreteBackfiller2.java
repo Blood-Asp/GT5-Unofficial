@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_ConcreteBackfiller2 extends GT_MetaTileEntity_Con
                 "1x Maintenance Hatch (One of base casings)",
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
                 "Put Programmed Circuits into Data Access to config radius",
-                "Radius = (total config value) * 2 blocks",
+                "Radius = (total config value)x2 blocks",
                 "Default 64, Maximum 128",};
     }
 
