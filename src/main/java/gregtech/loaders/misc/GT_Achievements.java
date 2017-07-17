@@ -617,6 +617,10 @@ public class GT_Achievements {
                 issueAchievement(player, "gtwetware");
             } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
                 issueAchievement(player, "gtwetmain");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32736")) {
+                issueAchievement(player, "zpmage");
+            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32737")) {
+                issueAchievement(player, "uvage");
             }
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");

@@ -408,12 +408,8 @@ achievement.finalpreparations=Final Preparations
 achievement.finalpreparations.desc=Cool down a Hot Naquadria Ingot
 achievement.denseaspossible=As Dense As Possible
 achievement.denseaspossible.desc=Produce Neutronium
-achievement.zpmage=Welcome to ZPM Energy Age
-achievement.zpmage.desc=Craft a Energy Module
 achievement.whatnow=What now?
 achievement.whatnow.desc=Craft a Ultimate Battery
-achievement.uvage=Welcome to UV Energy Age
-achievement.uvage.desc=Energy Cluster
 
 achievement.gt.metaitem.01.32606=Electric Motor LuV tier
 achievement.gt.metaitem.01.32606.desc=Pickup this item to see the recipe in NEI
@@ -496,7 +492,7 @@ achievement.gt.metaitem.01.32609=Really Ultimate Battery
 achievement.gt.metaitem.01.32609.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32736=Energy Module
 achievement.gt.metaitem.01.32736.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32737=Maximum Battery
+achievement.gt.metaitem.01.32737=Energy Cluster
 achievement.gt.metaitem.01.32737.desc=Pickup this item to see the recipe in NEI
 
 achievement.ic2.itemArmorQuantumHelmet=Quantum Helmet
