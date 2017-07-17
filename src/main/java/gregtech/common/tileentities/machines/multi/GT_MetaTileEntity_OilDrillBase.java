@@ -82,8 +82,8 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         this.mEfficiencyIncrease = 10000;
         //T1 = 24; T2 = 96; T3 = 384
         this.mEUt = 6 * (1 << (getMinTier() << 1));
-        //T1 = 160; T2 = 300; T3 = 480
-        this.mMaxProgresstime = isPickingPipes ? 80 / (1 << getMinTier()) : (40 + 20 * getMinTier()) * getMinTier();
+        //T1 = 160; T2 = 360; T3 = 640
+        this.mMaxProgresstime = isPickingPipes ? 80 / (1 << getMinTier()) : 40 * getMinTier() * getMinTier();
 
         long voltage = getMaxInputVoltage();
         long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
