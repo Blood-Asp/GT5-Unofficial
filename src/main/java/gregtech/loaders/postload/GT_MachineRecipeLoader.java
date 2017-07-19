@@ -2760,6 +2760,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addMixerRecipe(Materials.Dimethylhydrazine.getCells(1), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.Oxygen.getGas(1000), new FluidStack(ItemList.sRocketFuel, 3000), Materials.Empty.getCells(1), 60, 16);
         GT_Values.RA.addMixerRecipe(Materials.Oxygen.getCells(1), GT_Values.NI, GT_Values.NI, GT_Values.NI, Materials.Dimethylhydrazine.getFluid(1000), new FluidStack(ItemList.sRocketFuel, 3000), Materials.Empty.getCells(1), 60, 16);
 
+        //GT_Values.RA.addMixerRecipe(Materials.Carbon.getDust(1),Materials.HSSE.getDust(1),Materials.BlackBronze.getDust(1),Materials.TungstenSteel.getDust(1),Materials.Titanium.getDust(1),Materials.Stone.getDust(1), GT_Values.NF, GT_Values.NF, Materials.Salt.getDust(1), 60, 16);
+
         GT_Values.RA.addChemicalRecipe(Materials.Ammonia.getCells(4), GT_Utility.getIntegratedCircuit(1), Materials.Oxygen.getGas(10000), Materials.Water.getFluid(6000), Materials.NitricOxide.getCells(4), 320, 384);
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(10), GT_Utility.getIntegratedCircuit(1), Materials.Ammonia.getGas(4000), Materials.NitricOxide.getGas(4000), Materials.Water.getCells(6), Materials.Empty.getCells(4), 320, 384);
         
