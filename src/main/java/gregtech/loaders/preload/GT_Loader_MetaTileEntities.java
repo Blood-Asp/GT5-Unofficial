@@ -1065,12 +1065,16 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //ItemList.Machine_UV_Oven.set(new GT_MetaTileEntity_BasicMachine_GT_Recipe(678, "basicmachine.e_oven.tier.08", "Advanced Electric Oven VII", 8, "Just a Furnace with a different Design", GT_Recipe.GT_Recipe_Map.sFurnaceRecipes, 1, 1, 0, 0, 1, "E_Oven.png", (String) GregTech_API.sSoundList.get(Integer.valueOf(207)), aBoolConst_0, aBoolConst_0, 0, "ELECTRIC_OVEN", new Object[]{"CEC", aTextCableHull, "WEW", 'M', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL, 'E', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT, 'W', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE, 'C', GT_MetaTileEntity_BasicMachine_GT_Recipe.X.COIL_HEATING}).getStackForm(1L));
 
         ItemList.Machine_LV_Miner.set(new GT_MetaTileEntity_Miner(679, "basicmachine.miner.tier.01", "Basic miner", 1).getStackForm(1L));
-        ItemList.Machine_MV_Miner.set(new GT_MetaTileEntity_Miner(680, "basicmachine.miner.tier.02", "Advanced miner", 2).getStackForm(1L));
-        ItemList.Machine_MV_Miner.set(new GT_MetaTileEntity_Miner(681, "basicmachine.miner.tier.03", "Advanced miner II", 3).getStackForm(1L));
+        ItemList.Machine_MV_Miner.set(new GT_MetaTileEntity_Miner(680, "basicmachine.miner.tier.02", "Good miner", 2).getStackForm(1L));
+        ItemList.Machine_HV_Miner.set(new GT_MetaTileEntity_Miner(681, "basicmachine.miner.tier.03", "Advanced miner", 3).getStackForm(1L));
+        ItemList.Machine_EV_Miner.set(new GT_MetaTileEntity_Miner(682, "basicmachine.miner.tier.04", "Fast miner", 4).getStackForm(1L));
+        ItemList.Machine_IV_Miner.set(new GT_MetaTileEntity_Miner(683, "basicmachine.miner.tier.05", "Very fast miner", 5).getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_LV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_LV, 'E', ItemList.Electric_Motor_LV, 'C', OrePrefixes.circuit.get(Materials.Basic), 'W', OrePrefixes.cableGt01.get(Materials.Tin), 'S', ItemList.Sensor_LV});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_MV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_MV, 'E', ItemList.Electric_Motor_MV, 'C', OrePrefixes.circuit.get(Materials.Good), 'W', OrePrefixes.cableGt01.get(Materials.Copper), 'S', ItemList.Sensor_MV});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_HV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_HV, 'E', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced), 'W', OrePrefixes.cableGt01.get(Materials.Gold), 'S', ItemList.Sensor_HV});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_EV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_EV, 'E', ItemList.Electric_Motor_EV, 'C', OrePrefixes.circuit.get(Materials.Data), 'W', OrePrefixes.cableGt01.get(Materials.Aluminium), 'S', ItemList.Sensor_EV});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_IV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_IV, 'E', ItemList.Electric_Motor_IV, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt01.get(Materials.Tungsten), 'S', ItemList.Sensor_IV});
 
     }
 
