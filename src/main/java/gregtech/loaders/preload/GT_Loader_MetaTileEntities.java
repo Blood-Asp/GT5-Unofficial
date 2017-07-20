@@ -1066,9 +1066,11 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
         ItemList.Machine_LV_Miner.set(new GT_MetaTileEntity_Miner(679, "basicmachine.miner.tier.01", "Basic miner", 1).getStackForm(1L));
         ItemList.Machine_MV_Miner.set(new GT_MetaTileEntity_Miner(680, "basicmachine.miner.tier.02", "Advanced miner", 2).getStackForm(1L));
+        ItemList.Machine_MV_Miner.set(new GT_MetaTileEntity_Miner(681, "basicmachine.miner.tier.03", "Advanced miner II", 3).getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_LV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_LV, 'E', ItemList.Electric_Motor_LV, 'C', OrePrefixes.circuit.get(Materials.Basic), 'W', OrePrefixes.cableGt01.get(Materials.Tin), 'S', ItemList.Sensor_LV});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_MV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_MV, 'E', ItemList.Electric_Motor_MV, 'C', OrePrefixes.circuit.get(Materials.Good), 'W', OrePrefixes.cableGt01.get(Materials.Copper), 'S', ItemList.Sensor_MV});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_HV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_HV, 'E', ItemList.Electric_Motor_HV, 'C', OrePrefixes.circuit.get(Materials.Advanced), 'W', OrePrefixes.cableGt01.get(Materials.Gold), 'S', ItemList.Sensor_HV});
 
     }
 
