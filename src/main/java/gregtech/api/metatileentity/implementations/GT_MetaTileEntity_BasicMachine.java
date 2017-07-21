@@ -810,7 +810,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
 
-        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
+        if (GT_Mod.gregtechproxy.mLowGravProcessing && (tRecipe.mSpecialValue == -100 || tRecipe.mSpecialValue == -300) &&
                 !isValidForLowGravity(tRecipe,getBaseMetaTileEntity().getWorld().provider.dimensionId))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.mCanBeBuffered) mLastRecipe = tRecipe;
@@ -825,7 +825,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         for (int i = 0; i < mOutputItems.length; i++)
             if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                 mOutputItems[i] = tRecipe.getOutput(i);
-        if (tRecipe.mSpecialValue == -200)
+        if (tRecipe.mSpecialValue == -200 || tRecipe.mSpecialValue == -300)
             for (int i = 0; i < mOutputItems.length; i++)
                 if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
                     mOutputItems[i] = null;
