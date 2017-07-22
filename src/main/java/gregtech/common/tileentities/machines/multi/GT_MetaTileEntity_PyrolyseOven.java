@@ -12,11 +12,13 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
+import gregtech.loaders.oreprocessing.ProcessingLog;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,11 +93,22 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
             }
         }
         FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
-
         if (tInputList.size() > 0) {
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+
+            //Dynamic recipe adding for newly found logWoods - wont be visible in nei most probably
+            if(tRecipe==null){
+                for(ItemStack is:tInputs) {
+                    for (int id : OreDictionary.getOreIDs(is)) {
+                        if (OreDictionary.getOreName(id).equals("logWood"))
+                            ProcessingLog.addPyrolyeOvenRecipes(is);
+                    }
+                }
+                tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+            }
+
             if (tRecipe != null && tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
@@ -139,7 +152,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                                 return false;
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
-                            if ((!addInputToMachineList(tTileEntity, 120)) && (!addMufflerToMachineList(tTileEntity, 120))) {
+                            if ((!addInputToMachineList(tTileEntity, 111)) && (!addMufflerToMachineList(tTileEntity, 111))) {
                                 if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
                                     return false;
                                 }
@@ -154,7 +167,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                         }
                     } else {// Au�erer 5x5 ohne h�he
                         if (h == 0) {// au�en boden (controller, output, energy, maintainance, rest ulv casings)
-                            if ((!addMaintenanceToMachineList(tTileEntity, 120)) && (!addOutputToMachineList(tTileEntity, 120)) && (!addEnergyInputToMachineList(tTileEntity, 120))) {
+                            if ((!addMaintenanceToMachineList(tTileEntity, 111)) && (!addOutputToMachineList(tTileEntity, 111)) && (!addEnergyInputToMachineList(tTileEntity, 111))) {
                                 if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
                                     if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
                                         return false;
