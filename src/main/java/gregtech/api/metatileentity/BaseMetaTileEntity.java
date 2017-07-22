@@ -1931,6 +1931,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
              }
              newInputSize = 6;
              newOutputSize = 1;
+
+
          } else if (mID >= 421 && mID <= 428){//Chemical Reactor
              if (nbtVersion < chemistryUpdateVersion) {
                  oldInputSize = 2;
@@ -1940,6 +1942,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
              }
              newInputSize = 2;
              newOutputSize = 2;
+
          } else if (mID >= 531 && mID <= 538) {//Distillery
              if (nbtVersion < chemistryUpdateVersion) {
                  oldInputSize = 1;
@@ -1949,9 +1952,20 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
              }
              newInputSize = 1;
              newOutputSize = 1;
+         } else if (mID >= 581 && mID <=588){//Mixer
+             if (nbtVersion < chemistryUpdateVersion) {
+                 oldInputSize = 4;
+                 oldOutputSize = 1;
+             }else{
+                 return slotIndex;
+             }
+             newInputSize = 6;
+             newOutputSize = 1;
+
          } else {
              return slotIndex;
          }
+
          int indexShift = 0;
          if (slotIndex >= GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT + oldInputSize) {indexShift += newInputSize - oldInputSize;
                 	}
