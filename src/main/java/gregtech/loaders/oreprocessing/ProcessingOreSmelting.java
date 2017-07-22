@@ -24,20 +24,41 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                 if (aMaterial.mBlastFurnaceTemp <= 1000)
                     GT_ModHandler.addRCBlastFurnaceRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L), aMaterial.mBlastFurnaceTemp * 2);
             } else {
+            	OrePrefixes outputPrefix;
+            	int outputSize;
                 switch (aPrefix) {
                     case crushed:
                     case crushedPurified:
                     case crushedCentrifuged:
-                        ItemStack tStack = GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mDirectSmelting, aMaterial.mDirectSmelting == aMaterial ? 10L : 3L);
-                        if (tStack == null)
-                            tStack = GT_OreDictUnificator.get(aMaterial.contains(SubTag.SMELTING_TO_GEM) ? OrePrefixes.gem : OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
-                        if ((tStack == null) && (!aMaterial.contains(SubTag.SMELTING_TO_GEM)))
-                            tStack = GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
-                        GT_ModHandler.addSmeltingRecipe(aStack, tStack);
+                    	outputPrefix = OrePrefixes.nugget;
+                    	if (aMaterial.mDirectSmelting == aMaterial) {
+                    		outputSize = 10;
+                    	} else {
+                    		outputSize = 3;
+                    	}
+                    	break;
+                    case dustImpure:
+                    case dustPure:
+                    case dustRefined:
+                    	if (aMaterial.mDirectSmelting == aMaterial) {
+                    		outputPrefix = OrePrefixes.ingot;
+                    		outputSize = 1;
+                    	} else {
+                    		outputPrefix = OrePrefixes.nugget;
+                    		outputSize = 3;
+                    	}
                         break;
                     default:
-                        GT_ModHandler.addSmeltingRecipe(aStack, GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L));
+                		outputPrefix = OrePrefixes.ingot;
+                		outputSize = 1;
+                		break;
                 }
+                ItemStack tStack = GT_OreDictUnificator.get(outputPrefix, aMaterial.mDirectSmelting, outputSize);
+                if (tStack == null)
+                    tStack = GT_OreDictUnificator.get(aMaterial.contains(SubTag.SMELTING_TO_GEM) ? OrePrefixes.gem : OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
+                if ((tStack == null) && (!aMaterial.contains(SubTag.SMELTING_TO_GEM)))
+                    tStack = GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
+                GT_ModHandler.addSmeltingRecipe(aStack, tStack);
             }
         }
     }
