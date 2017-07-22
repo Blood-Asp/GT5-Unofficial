@@ -10,7 +10,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
 public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipeRegistrator {
-    private final OrePrefixes[] mSmeltingPrefixes = {OrePrefixes.crushed, OrePrefixes.crushedPurified, OrePrefixes.crushedCentrifuged, OrePrefixes.dustImpure, OrePrefixes.dustPure, OrePrefixes.dustRefined};
+    private final OrePrefixes[] mSmeltingPrefixes = {OrePrefixes.crushed, OrePrefixes.crushedPurified, OrePrefixes.crushedCentrifuged, OrePrefixes.dust, OrePrefixes.dustImpure, OrePrefixes.dustPure, OrePrefixes.dustRefined};
 
     public ProcessingOreSmelting() {
         for (OrePrefixes tPrefix : this.mSmeltingPrefixes) tPrefix.add(this);
@@ -34,9 +34,10 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     	if (aMaterial.mDirectSmelting == aMaterial) {
                     		outputSize = 10;
                     	} else {
-                    		outputSize = 3;
+                    		outputSize = 5;
                     	}
                     	break;
+                    case dust:
                     case dustImpure:
                     case dustPure:
                     case dustRefined:
@@ -45,7 +46,7 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     		outputSize = 1;
                     	} else {
                     		outputPrefix = OrePrefixes.nugget;
-                    		outputSize = 3;
+                    		outputSize = 5;
                     	}
                         break;
                     default:

@@ -872,6 +872,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         YellowLimonite			.setDirectSmelting(Iron			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
         BrownLimonite			.setDirectSmelting(Iron			);
         BandedIron				.setDirectSmelting(Iron			);
+        Magnetite				.setDirectSmelting(Iron			);
         Cassiterite				.setDirectSmelting(Tin			);
         CassiteriteSand			.setDirectSmelting(Tin			);
         Chromite				.setDirectSmelting(Chrome		);
