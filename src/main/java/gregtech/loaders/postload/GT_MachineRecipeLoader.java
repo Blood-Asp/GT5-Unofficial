@@ -3106,6 +3106,55 @@ if(Loader.isModLoaded("Railcraft")){
     	GT_Values.RA.addPrimitiveBlastRecipe(Materials.Iron.getBlocks(1), GT_Values.NI, 36, Materials.Steel.getIngots(9), GT_Values.NI, 64800);
     	GT_Values.RA.addPrimitiveBlastRecipe(Materials.Steel.getDust(1), GT_Values.NI, 2, Materials.Steel.getIngots(1), GT_Values.NI, 7200);
     	
+    	//Roasting
+    	GT_Values.RA.addBlastRecipe(Materials.Tetrahedrite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(2000), Materials.CupricOxide.getDust(1), Materials.AntimonyTrioxide.getDustTiny(3), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Chalcopyrite.getDust(1), Materials.SiliconDioxide.getDust(1), Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(2000), Materials.CupricOxide.getDust(1), Materials.Ferrosilite.getDust(1), 120, 120, 1200);
+    	
+    	GT_Values.RA.addBlastRecipe(Materials.Pyrite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(2000), Materials.BandedIron.getDust(1), Materials.Ash.getDustTiny(1), 120, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.Pentlandite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.Garnierite.getDust(1), Materials.Ash.getDustTiny(1), 120, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.Sphalerite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.Zincite.getDust(1), Materials.Ash.getDustTiny(1), 120, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.Cobaltite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.CobaltOxide.getDust(1), Materials.ArsenicTrioxide.getDust(1), 120, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.Stibnite.getDust(1), GT_Values.NI, Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.AntimonyTrioxide.getDust(1), Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	
+    	//Carbothermic Reduction
+    	GT_Values.RA.addBlastRecipe(Materials.CupricOxide.getDust(1),           Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Copper.getIngots(1),   Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.CupricOxide.getDust(2),           Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Copper.getIngots(2),   Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Malachite.getDust(1),             Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(1500), Materials.Copper.getIngots(1),   Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Malachite.getDust(2),             Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(3000), Materials.Copper.getIngots(2),   Materials.Ash.getDustTiny(2), 240, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.AntimonyTrioxide.getDust(1),      Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(1500), Materials.Antimony.getIngots(1), Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.AntimonyTrioxide.getDust(2),      Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(3000), Materials.Antimony.getIngots(2), Materials.Ash.getDustTiny(2), 240, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.BandedIron.getDust(1),            Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.BandedIron.getDust(2),            Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Magnetite.getDust(1),             Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Magnetite.getDust(2),             Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.YellowLimonite.getDust(1),        Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.YellowLimonite.getDust(2),        Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.BrownLimonite.getDust(1),         Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.BrownLimonite.getDust(2),         Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.BasalticMineralSand.getDust(1),   Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.BasalticMineralSand.getDust(2),   Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.GraniticMineralSand.getDust(1),   Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Iron.getIngots(1),     Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.GraniticMineralSand.getDust(2),   Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Iron.getIngots(2),     Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	
+    	GT_Values.RA.addBlastRecipe(Materials.Cassiterite.getDust(1),           Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Tin.getIngots(1),      Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Cassiterite.getDust(2),           Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Tin.getIngots(2),      Materials.Ash.getDustTiny(2), 240, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.CassiteriteSand.getDust(1),       Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Tin.getIngots(1),      Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.CassiteriteSand.getDust(2),       Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Tin.getIngots(2),      Materials.Ash.getDustTiny(2), 240, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.Garnierite.getDust(1),            Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Nickel.getIngots(1),   Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.Garnierite.getDust(2),            Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Nickel.getIngots(2),   Materials.Ash.getDustTiny(2), 240, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.CobaltOxide.getDust(1),           Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Cobalt.getIngots(1),   Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.CobaltOxide.getDust(2),           Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Cobalt.getIngots(2),   Materials.Ash.getDustTiny(2), 240, 120, 1200);
+
+    	GT_Values.RA.addBlastRecipe(Materials.ArsenicTrioxide.getDust(1),       Materials.Carbon.getDustSmall(2), GT_Values.NF, Materials.CarbonDioxide.getGas(500),  Materials.Arsenic.getIngots(1),  Materials.Ash.getDustTiny(1), 120, 120, 1200);
+    	GT_Values.RA.addBlastRecipe(Materials.ArsenicTrioxide.getDust(2),       Materials.Carbon.getDust(1),      GT_Values.NF, Materials.CarbonDioxide.getGas(1000), Materials.Arsenic.getIngots(2),  Materials.Ash.getDustTiny(2), 240, 120, 1200);
     }
 
 }
