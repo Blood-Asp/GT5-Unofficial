@@ -7,6 +7,7 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipeRegistrator {
@@ -38,6 +39,17 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     	}
                     	break;
                     case dust:
+                    	if (aMaterial.mDirectSmelting != aMaterial) {
+                    		if (!aMaterial.contains(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE)) {
+                    			GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(2), GT_Values.NI,                          2400);
+                    		} else if (aMaterial == Materials.Chalcopyrite) {
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustSmall(4), 2400);
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustTiny(14), 2400);
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDust(2),      2400);
+                    		} else if (aMaterial == Materials.Tetrahedrite) {
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(2), Materials.Antimony.getNuggets(6),      2400);
+                    		}
+                    	}
                     case dustImpure:
                     case dustPure:
                     case dustRefined:
