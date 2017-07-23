@@ -2597,9 +2597,9 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addChemicalRecipe(Materials.Phosphor.getDust(4), GT_Values.NI, Materials.Oxygen.getGas(10000), GT_Values.NF, Materials.PhosphorousPentoxide.getDust(1), 40);
         GT_Values.RA.addChemicalRecipe(Materials.PhosphorousPentoxide.getDust(1), GT_Values.NI, Materials.Water.getFluid(6000), Materials.PhosphoricAcid.getFluid(4000), GT_Values.NI, 40);
         
-        GT_Values.RA.addChemicalRecipe(Materials.Propene.getCells(8),		Materials.PhosphoricAcid.getCells(1), 	Materials.Benzene.getFluid(8000), 		Materials.Cumene.getFluid(16000), Materials.Empty.getCells(9), 1920);
-        GT_Values.RA.addChemicalRecipe(Materials.PhosphoricAcid.getCells(1),Materials.Benzene.getCells(8), 			Materials.Propene.getGas(8000), 		Materials.Cumene.getFluid(16000), Materials.Empty.getCells(9), 1920);
-        GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1),		Materials.Propene.getCells(1), 			Materials.PhosphoricAcid.getFluid(125), Materials.Cumene.getFluid(2000),  Materials.Empty.getCells(2), 240);
+        GT_Values.RA.addChemicalRecipe(Materials.Propene.getCells(8),        Materials.PhosphoricAcid.getCells(1), Materials.Benzene.getFluid(8000),       Materials.Cumene.getFluid(8000), Materials.Empty.getCells(9), 1920);
+        GT_Values.RA.addChemicalRecipe(Materials.PhosphoricAcid.getCells(1), Materials.Benzene.getCells(8),        Materials.Propene.getGas(8000),         Materials.Cumene.getFluid(8000), Materials.Empty.getCells(9), 1920);
+        GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1),        Materials.Propene.getCells(1),        Materials.PhosphoricAcid.getFluid(125), Materials.Cumene.getFluid(1000), Materials.Empty.getCells(2), 240);
         
         GT_Values.RA.addChemicalRecipe(Materials.Cumene.getCells(1), GT_Values.NI, 	Materials.Oxygen.getGas(1000), 	Materials.Acetone.getFluid(1000), 	Materials.Phenol.getCells(1), 	160);
         GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(1), GT_Values.NI, 	Materials.Cumene.getFluid(1000),Materials.Phenol.getFluid(1000), 	Materials.Acetone.getCells(1), 	160);
