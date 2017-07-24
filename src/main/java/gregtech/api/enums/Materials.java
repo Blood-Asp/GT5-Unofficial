@@ -1448,6 +1448,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Mithril                 .add(SubTag.MAGICAL);
 
         Carbon                  .add(SubTag.NO_SMELTING);
+
+        Infinity                .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
+        InfinityCatalyst        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
+        CosmicNeutronium        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
     }
     public static void init() {
         new ProcessingConfig();
