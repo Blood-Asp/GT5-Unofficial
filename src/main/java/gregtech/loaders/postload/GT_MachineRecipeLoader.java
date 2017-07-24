@@ -2776,7 +2776,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addChemicalRecipe(Materials.Sulfur.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.Hydrogen.getGas(2000), Materials.HydricSulfide.getGas(1000), GT_Values.NI, 60, 8);
 
         GT_Values.RA.addChemicalRecipe(Materials.Sulfur.getDust(1), GT_Utility.getIntegratedCircuit(2), Materials.Oxygen.getGas(2000), Materials.SulfurDioxide.getGas(1000), GT_Values.NI, 60, 8);   GT_Values.RA.addChemicalRecipe(Materials.HydricSulfide.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Oxygen.getGas(3000), Materials.SulfurDioxide.getGas(1000), Materials.Water.getCells(1), 120);
-        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(3), GT_Utility.getIntegratedCircuit(1), Materials.HydricSulfide.getGas(1000), Materials.Water.getFluid(1000), Materials.SulfurDioxide.getCells(1), 120);
+        GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(3), GT_Utility.getIntegratedCircuit(1), Materials.HydricSulfide.getGas(1000), Materials.Water.getFluid(1000), Materials.SulfurDioxide.getCells(1), Materials.Empty.getCells(2), 120);
 
         GT_Values.RA.addChemicalRecipe(Materials.SulfurDioxide.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.HydricSulfide.getGas(2000), Materials.Water.getFluid(2000), Materials.Sulfur.getDust(3), Materials.Empty.getCells(1), 120);
         GT_Values.RA.addChemicalRecipe(Materials.HydricSulfide.getCells(2), GT_Utility.getIntegratedCircuit(1), Materials.SulfurDioxide.getGas(1000), Materials.Water.getFluid(2000), Materials.Sulfur.getDust(3), Materials.Empty.getCells(2), 120);
