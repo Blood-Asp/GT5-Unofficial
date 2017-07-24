@@ -35,7 +35,7 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     	if (aMaterial.mDirectSmelting == aMaterial) {
                     		outputSize = 10;
                     	} else {
-                    		outputSize = 5;
+                    		outputSize = 6;
                     	}
                     	break;
                     case dust:
@@ -58,7 +58,7 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     		outputSize = 1;
                     	} else {
                     		outputPrefix = OrePrefixes.nugget;
-                    		outputSize = 5;
+                    		outputSize = 6;
                     	}
                         break;
                     default:
