@@ -34,7 +34,7 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      * Add this to a material with Direct Smelting to prevent the automatic generation of a Bricked/Bronze Blast Furnace recipe. Already listed are:
      * Chalcopyrite, Tetrahedrite
      */
-    public static final SubTag DONT_ADD_DEFAULT_BBF_RECIPE = getNewSubTag("DONT_AUTOGENERATE_BBF_RECIPE");
+    public static final SubTag DONT_ADD_DEFAULT_BBF_RECIPE = getNewSubTag("DONT_ADD_DEFAULT_BBF_RECIPE");
     /**
      * Materials which are outputting less in an Induction Smelter. Already listed are:
      * Pyrite, Tetrahedrite, Sphalerite, Cinnabar
