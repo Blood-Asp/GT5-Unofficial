@@ -30,6 +30,14 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      * Iron, Pyrite, PigIron, DeepIron, ShadowIron, WroughtIron and MeteoricIron.
      */
     public static final SubTag BLASTFURNACE_CALCITE_DOUBLE = getNewSubTag("BLASTFURNACE_CALCITE_DOUBLE"), BLASTFURNACE_CALCITE_TRIPLE = getNewSubTag("BLASTFURNACE_CALCITE_TRIPLE");
+
+    /**
+     * Add this to a material with Direct Smelting to prevent the automatic generation of a Bricked/Bronze Blast Furnace recipe. Already listed are:
+     * Chalcopyrite, Tetrahedrite
+     */
+
+    public static final SubTag DONT_ADD_DEFAULT_BBF_RECIPE = getNewSubTag("DONT_ADD_DEFAULT_BBF_RECIPE");
+
     /**
      * Materials which are outputting less in an Induction Smelter. Already listed are:
      * Pyrite, Tetrahedrite, Sphalerite, Cinnabar

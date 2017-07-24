@@ -4,10 +4,11 @@ import gregtech.api.enums.*;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipeRegistrator {
-    private final OrePrefixes[] mSmeltingPrefixes = {OrePrefixes.crushed, OrePrefixes.crushedPurified, OrePrefixes.crushedCentrifuged, OrePrefixes.dustImpure, OrePrefixes.dustPure, OrePrefixes.dustRefined};
+    private final OrePrefixes[] mSmeltingPrefixes = {OrePrefixes.crushed, OrePrefixes.crushedPurified, OrePrefixes.crushedCentrifuged, OrePrefixes.dust, OrePrefixes.dustImpure, OrePrefixes.dustPure, OrePrefixes.dustRefined};
 
     public ProcessingOreSmelting() {
         for (OrePrefixes tPrefix : this.mSmeltingPrefixes) tPrefix.add(this);
@@ -23,20 +24,53 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                 if (aMaterial.mBlastFurnaceTemp <= 1000 && aMaterial.mDirectSmelting.mBlastFurnaceTemp <= 1000)
                     GT_ModHandler.addRCBlastFurnaceRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L), aMaterial.mBlastFurnaceTemp * 2);
             } else {
+                OrePrefixes outputPrefix;
+                int outputSize;
                 switch (aPrefix) {
                     case crushed:
                     case crushedPurified:
                     case crushedCentrifuged:
-                        ItemStack tStack = GT_OreDictUnificator.get(OrePrefixes.nugget, aMaterial.mDirectSmelting, aMaterial.mDirectSmelting == aMaterial ? 10L : 3L);
-                        if (tStack == null)
-                            tStack = GT_OreDictUnificator.get(aMaterial.contains(SubTag.SMELTING_TO_GEM) ? OrePrefixes.gem : OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
-                        if ((tStack == null) && (!aMaterial.contains(SubTag.SMELTING_TO_GEM)))
-                            tStack = GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
-                        GT_ModHandler.addSmeltingRecipe(aStack, tStack);
+                        outputPrefix = OrePrefixes.nugget;
+                        if (aMaterial.mDirectSmelting == aMaterial) {
+                            outputSize = 10;
+                        } else {
+                            outputSize = 6;
+                        }
                         break;
-                    default:
-                        GT_ModHandler.addSmeltingRecipe(aStack, GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L));
+                    case dust:
+                        if (aMaterial.mDirectSmelting != aMaterial) {
+                            if (!aMaterial.contains(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE)) {
+                                GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(2), GT_Values.NI,                          2400);
+                            } else if (aMaterial == Materials.Chalcopyrite) {
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustSmall(4), 2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustTiny(14), 2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDust(2),      2400);
+                            } else if (aMaterial == Materials.Tetrahedrite) {
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(2), Materials.Antimony.getNuggets(6),      2400);
+                            }
+                        }
+                    case dustImpure:
+                    case dustPure:
+                    case dustRefined:
+                        if (aMaterial.mDirectSmelting == aMaterial) {
+                            outputPrefix = OrePrefixes.ingot;
+                            outputSize = 1;
+                        } else {
+                            outputPrefix = OrePrefixes.nugget;
+                            outputSize = 6;
+                        }
+                        break;
+                        default:
+                            outputPrefix = OrePrefixes.ingot;
+                            outputSize = 1;
+                            break;
                 }
+                ItemStack tStack = GT_OreDictUnificator.get(outputPrefix, aMaterial.mDirectSmelting, outputSize);
+                if (tStack == null)
+                    tStack = GT_OreDictUnificator.get(aMaterial.contains(SubTag.SMELTING_TO_GEM) ? OrePrefixes.gem : OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
+                if ((tStack == null) && (!aMaterial.contains(SubTag.SMELTING_TO_GEM)))
+                    tStack = GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial.mDirectSmelting, 1L);
+                GT_ModHandler.addSmeltingRecipe(aStack, tStack);
             }
         }
     }
