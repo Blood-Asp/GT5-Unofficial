@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 
+	private int coilMetaID;
+	
     public GT_MetaTileEntity_PyrolyseOven(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -100,17 +102,26 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX * 2;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ * 2;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
+        boolean firstCoil = true;
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 for (int h = 0; h < 4; h++) {
                     IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, h, zDir + j);
-                    if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne h�he
+                    if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne hoehe
                         if (h == 0) {// innen boden (kantal coils)
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
+                            int metaID = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j);
+                            if (metaID > 6) {
                                 return false;
+                            } else {
+                            	if (firstCoil) {
+                            		this.coilMetaID = metaID;
+                            		firstCoil = false;
+                            	} else if (metaID != this.coilMetaID) {
+                            		return false;
+                            	}
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
                             if ((!addInputToMachineList(tTileEntity, 111)) && (!addMufflerToMachineList(tTileEntity, 111))) {
@@ -126,8 +137,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                                 return false;
                             }
                         }
-                    } else {// Au�erer 5x5 ohne h�he
-                        if (h == 0) {// au�en boden (controller, output, energy, maintainance, rest ulv casings)
+                    } else {// Aeusserer 5x5 ohne hoehe
+                        if (h == 0) {// aussen boden (controller, output, energy, maintainance, rest ulv casings)
                             if ((!addMaintenanceToMachineList(tTileEntity, 111)) && (!addOutputToMachineList(tTileEntity, 111)) && (!addEnergyInputToMachineList(tTileEntity, 111))) {
                                 if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
                                     if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
@@ -138,7 +149,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                                     }
                                 }
                             }
-                        } else {// au�en �ber boden (ulv casings)
+                        } else {// aussen ueber boden (ulv casings)
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
                                 return false;
                             }
