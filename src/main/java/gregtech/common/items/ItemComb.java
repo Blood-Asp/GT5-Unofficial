@@ -175,7 +175,6 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.LEAD);
 		addSpecialCent(tComb, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Lead, 1), 45);
 		addProcess(tComb, Materials.Lead, 100);
-		addProcess(tComb, Materials.Galena, 100);
 		tComb = getStackForType(CombType.IRON);
 		addProcess(tComb, Materials.Iron, 100);
 		addProcess(tComb, Materials.Magnetite, 100);
