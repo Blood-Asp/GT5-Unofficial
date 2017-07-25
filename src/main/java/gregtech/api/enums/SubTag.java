@@ -54,10 +54,6 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      */
     public static final SubTag WASHING_MERCURY = getNewSubTag("WASHING_MERCURY");
     /**
-     * Add this to your Material if you want to have its Ore Mercury washed with a higher Output chance (100%)
-     */
-    public static final SubTag INCREASE_WASHING_MERCURY = getNewSubTag("INCREASE_WASHING_MERCURY");
-    /**
      * Add this to your Material if you want to have its Ore electromagnetically separated to give Gold.
      */
     public static final SubTag ELECTROMAGNETIC_SEPERATION_GOLD = getNewSubTag("ELECTROMAGNETIC_SEPERATION_GOLD");
