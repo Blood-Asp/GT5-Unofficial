@@ -1,5 +1,6 @@
 package gregtech.loaders.oreprocessing;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.*;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -30,23 +31,30 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     case crushed:
                     case crushedPurified:
                     case crushedCentrifuged:
-                        outputPrefix = OrePrefixes.nugget;
                         if (aMaterial.mDirectSmelting == aMaterial) {
                             outputSize = 10;
+                            outputPrefix = OrePrefixes.nugget;
                         } else {
-                            outputSize = 6;
+                            if (GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre) {
+                                outputSize = 6;
+                                outputPrefix = OrePrefixes.nugget;
+                            } else {
+                                outputSize = 1;
+                                outputPrefix = OrePrefixes.ingot;
+                            }
                         }
                         break;
                     case dust:
                         if (aMaterial.mDirectSmelting != aMaterial) {
                             if (!aMaterial.contains(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE)) {
-                                GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(2), GT_Values.NI,                          2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), GT_Values.NI,                                         2400);
                             } else if (aMaterial == Materials.Chalcopyrite) {
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustSmall(4), 2400);
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDustTiny(14), 2400);
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(2), Materials.Ferrosilite.getDust(2),      2400);
+                                int outputAmount = GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3;
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDustSmall(2 * outputAmount), 2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDustTiny(7 * outputAmount),  2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDust(outputAmount),          2400);
                             } else if (aMaterial == Materials.Tetrahedrite) {
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(2), Materials.Antimony.getNuggets(6),      2400);
+                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), Materials.Antimony.getNuggets(6),                     2400);
                             }
                         }
                     case dustImpure:
@@ -56,8 +64,13 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                             outputPrefix = OrePrefixes.ingot;
                             outputSize = 1;
                         } else {
-                            outputPrefix = OrePrefixes.nugget;
+                            if (GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre) {
                             outputSize = 6;
+                                outputPrefix = OrePrefixes.nugget;
+                            } else {
+                                outputSize = 1;
+                                outputPrefix = OrePrefixes.ingot;
+                            }
                         }
                         break;
                         default:
