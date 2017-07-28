@@ -286,7 +286,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         FluidStack tLiquid = aLiquid.copy();
         boolean isOutputPollution = false;
         for (FluidStack pollutionFluidStack : pollutionFluidStacks) {
-            if (pollutionFluidStack.isFluidEqual(pollutionFluidStack)) {
+            if (tLiquid.isFluidEqual(pollutionFluidStack)) {
                 isOutputPollution = true;
                 break;
             }
