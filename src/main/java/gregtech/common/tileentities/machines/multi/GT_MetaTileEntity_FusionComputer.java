@@ -280,16 +280,19 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         if (this.mEnergyHatches != null) {
             for (GT_MetaTileEntity_Hatch_Energy hatch : this.mEnergyHatches) {
                 hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.mTexturePage=0;
             }
         }
         if (this.mOutputHatches != null) {
             for (GT_MetaTileEntity_Hatch_Output hatch : this.mOutputHatches) {
                 hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.mTexturePage=0;
             }
         }
         if (this.mInputHatches != null) {
             for (GT_MetaTileEntity_Hatch_Input hatch : this.mInputHatches) {
                 hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.mTexturePage=0;
             }
         }
         return true;

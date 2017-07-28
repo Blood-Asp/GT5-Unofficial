@@ -11,12 +11,33 @@ import net.minecraft.world.IBlockAccess;
 public class GT_Packet_TileEntity extends GT_Packet {
     private int mX, mZ, mC0, mC1, mC2, mC3, mC4, mC5;
     private short mY, mID;
-    private byte mTexture, mUpdate, mRedstone, mColor;
+    private byte mTexture, mTexturePage, mUpdate, mRedstone, mColor;
 
     public GT_Packet_TileEntity() {
         super(true);
     }
 
+    //For tiles
+    public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aTexturePage, byte aUpdate, byte aRedstone, byte aColor) {
+        super(false);
+        mX = aX;
+        mY = aY;
+        mZ = aZ;
+        mC0 = aC0;
+        mC1 = aC1;
+        mC2 = aC2;
+        mC3 = aC3;
+        mC4 = aC4;
+        mC5 = aC5;
+        mID = aID;
+        mTexture = aTexture;
+        mTexturePage=aTexturePage;
+        mUpdate = aUpdate;
+        mRedstone = aRedstone;
+        mColor = aColor;
+    }
+
+    //For pipes
     public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aUpdate, byte aRedstone, byte aColor) {
         super(false);
         mX = aX;
@@ -30,6 +51,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
         mC5 = aC5;
         mID = aID;
         mTexture = aTexture;
+        mTexturePage=0;
         mUpdate = aUpdate;
         mRedstone = aRedstone;
         mColor = aColor;
@@ -37,7 +59,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
 
     @Override
     public byte[] encode() {
-        ByteArrayDataOutput tOut = ByteStreams.newDataOutput(40);
+        ByteArrayDataOutput tOut = ByteStreams.newDataOutput(41);
 
         tOut.writeInt(mX);
         tOut.writeShort(mY);
@@ -52,6 +74,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
         tOut.writeInt(mC5);
 
         tOut.writeByte(mTexture);
+        tOut.writeByte(mTexturePage);
         tOut.writeByte(mUpdate);
         tOut.writeByte(mRedstone);
         tOut.writeByte(mColor);
@@ -61,7 +84,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
 
     @Override
     public GT_Packet decode(ByteArrayDataInput aData) {
-        return new GT_Packet_TileEntity(aData.readInt(), aData.readShort(), aData.readInt(), aData.readShort(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readByte(), aData.readByte(), aData.readByte(), aData.readByte());
+        return new GT_Packet_TileEntity(aData.readInt(), aData.readShort(), aData.readInt(), aData.readShort(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readInt(), aData.readByte(), aData.readByte(), aData.readByte(), aData.readByte(), aData.readByte());
     }
 
     @Override
@@ -70,7 +93,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
             TileEntity tTileEntity = aWorld.getTileEntity(mX, mY, mZ);
             if (tTileEntity != null) {
                 if (tTileEntity instanceof BaseMetaTileEntity)
-                    ((BaseMetaTileEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mUpdate, mRedstone, mColor);
+                    ((BaseMetaTileEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mTexturePage, mUpdate, mRedstone, mColor);
                 else if (tTileEntity instanceof BaseMetaPipeEntity)
                     ((BaseMetaPipeEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mUpdate, mRedstone, mColor);
             }
