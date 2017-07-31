@@ -275,10 +275,22 @@ public class GT_RecipeAdder
         return true;
     }
     
-    public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict,int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
+    public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
     	for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
     		if(GT_Utility.isStackValid(tStack))
     		addAssemblerRecipe(aInput1, GT_Utility.copyAmount(aAmount, tStack), aFluidInput, aOutput1, aDuration, aEUt);
+    	}
+    	return true;
+    }
+
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
+    	for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+    		if(GT_Utility.isStackValid(tStack)) {
+    			ItemStack[] extendedInputs = new ItemStack[aInputs.length + 1];
+    			System.arraycopy(aInputs, 0, extendedInputs, 0, aInputs.length);
+    			extendedInputs[aInputs.length] = GT_Utility.copyAmount(aAmount, tStack);
+    			addAssemblerRecipe(extendedInputs, aFluidInput, aOutput1, aDuration, aEUt);
+    		}
     	}
     	return true;
     }
