@@ -30,6 +30,14 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      * Iron, Pyrite, PigIron, DeepIron, ShadowIron, WroughtIron and MeteoricIron.
      */
     public static final SubTag BLASTFURNACE_CALCITE_DOUBLE = getNewSubTag("BLASTFURNACE_CALCITE_DOUBLE"), BLASTFURNACE_CALCITE_TRIPLE = getNewSubTag("BLASTFURNACE_CALCITE_TRIPLE");
+
+    /**
+     * Add this to a material with Direct Smelting to prevent the automatic generation of a Bricked/Bronze Blast Furnace recipe. Already listed are:
+     * Chalcopyrite, Tetrahedrite
+     */
+
+    public static final SubTag DONT_ADD_DEFAULT_BBF_RECIPE = getNewSubTag("DONT_ADD_DEFAULT_BBF_RECIPE");
+
     /**
      * Materials which are outputting less in an Induction Smelter. Already listed are:
      * Pyrite, Tetrahedrite, Sphalerite, Cinnabar
@@ -42,9 +50,14 @@ public final class SubTag implements ICondition<ISubTagContainer> {
     public static final SubTag WASHING_SODIUMPERSULFATE = getNewSubTag("WASHING_SODIUMPERSULFATE");
     /**
      * Add this to your Material if you want to have its Ore Mercury washed. Already listed are:
-     * Gold, Silver, Osmium, Mithril, Platinum, Midasium, Cooperite and AstralSilver.
+     * Gold, Osmium, Mithril, Platinum, Midasium, Cooperite and AstralSilver.
      */
     public static final SubTag WASHING_MERCURY = getNewSubTag("WASHING_MERCURY");
+    /**
+    * Add this to your Material if you want to have its Ore Mercury washed with 99% output chance. Already listed are:
+    * Silver
+    */
+    public static final SubTag WASHING_MERCURY_99_PERCENT = getNewSubTag("WASHING_MERCURY_99_PERCENT");
     /**
      * Add this to your Material if you want to have its Ore electromagnetically separated to give Gold.
      */
