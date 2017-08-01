@@ -632,7 +632,20 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     protected ItemStack[] getAllInputs() {
         ItemStack[] rInputs = new ItemStack[mInputSlotCount];
-        for (int i = 0; i < mInputSlotCount; i++) rInputs[i] = getInputAt(i);
+        int emptySlotLocation = -1;
+        for (int i = 0; i < mInputSlotCount; i++){
+        	ItemStack currentInput = getInputAt(i);
+        	if (emptySlotLocation == -1) {
+            	if (currentInput == null) {
+                	emptySlotLocation = i;
+                	continue;
+            	}
+        	}
+        	rInputs[i] = currentInput;
+        }
+        if (emptySlotLocation != -1) {
+        	rInputs[emptySlotLocation] = GT_Utility.getIntegratedCircuit(0);
+    	}
         return rInputs;
     }
 
