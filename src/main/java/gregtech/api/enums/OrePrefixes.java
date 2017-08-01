@@ -920,8 +920,11 @@ public enum OrePrefixes {
         }
         switch (aMaterial.mName) {
             case "Glass":
+            case "BorosilicateGlass":
                 if (name().startsWith("gem")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Crystal";
                 if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pane";
+                if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Bar";
+                if (name().startsWith("nugget")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Chip";
                 break;
             case "Wheat":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + "Flour";
@@ -941,6 +944,7 @@ public enum OrePrefixes {
             case "Rubber":
             case "Polyethylene":
             case "Epoxid":
+            case "EpoxidFiberReinforced":
             case "Polydimethylsiloxane":
             case "Silicone":
             case "Polysiloxane":

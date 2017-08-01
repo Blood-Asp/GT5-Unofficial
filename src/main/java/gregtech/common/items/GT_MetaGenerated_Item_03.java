@@ -19,6 +19,7 @@ public class GT_MetaGenerated_Item_03
         /**
          * circuit boards tier 1-7:
          * coated circuit board / wood plate + resin
+         * Plastic Circuit Board / Plastic + Copper Foil + Sulfuric Acid
          * phenolic circuit board /carton+glue+chemical bath
          * epoxy circuit board /epoxy plate + copper foil + sulfuric acid
          * fiberglass circuit board (simple + multilayer) / glass + plastic + electrum foil + sulfurci acid
@@ -41,6 +42,7 @@ public class GT_MetaGenerated_Item_03
          * diodes normal+smd
          * transistors normal+smd
          * capacitors normal+smd
+         * Glass Fibers
          */
 //        ItemList.Circuit_Parts_Resistor.set(addItem(tLastID = 10, "Resistor", "Basic Electronic Component", o)); //wiring mv
         ItemList.Circuit_Parts_ResistorSMD.set(addItem(tLastID = 11, "SMD Resistor", "Electronic Component", o));
@@ -53,6 +55,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Parts_TransistorSMD.set(addItem(tLastID = 18, "SMD Transistor", "Electronic Component", o));
 //        ItemList.Circuit_Parts_Capacitor.set(addItem(tLastID = 19, "Capacitor", "Electronic Component", o)); //wiring ev
         ItemList.Circuit_Parts_CapacitorSMD.set(addItem(tLastID = 20, "SMD Capacitor", "Electronic Component", o));
+        ItemList.Circuit_Parts_GlassFiber.set(addItem(tLastID = 21, "Glass Fiber", Materials.BorosilicateGlass.mChemicalFormula, o));
 
 
         /**
