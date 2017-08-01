@@ -14,6 +14,7 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -603,6 +604,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     protected ItemStack[] getAllInputs() {
         ItemStack[] rInputs = new ItemStack[mInputSlotCount];
         int emptySlotLocation = -1;
+        boolean foundIntegratedCircuit = false;
         for (int i = 0; i < mInputSlotCount; i++){
         	ItemStack currentInput = getInputAt(i);
         	if (emptySlotLocation == -1) {
@@ -611,9 +613,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 	continue;
             	}
         	}
+        	if (!foundIntegratedCircuit && currentInput != null && currentInput.getItem() instanceof GT_IntegratedCircuit_Item) {
+        		foundIntegratedCircuit = true;
+        	}
         	rInputs[i] = currentInput;
         }
-        if (emptySlotLocation != -1) {
+        if (emptySlotLocation != -1 && !foundIntegratedCircuit) {
         	rInputs[emptySlotLocation] = GT_Utility.getIntegratedCircuit(0);
     	}
         return rInputs;
