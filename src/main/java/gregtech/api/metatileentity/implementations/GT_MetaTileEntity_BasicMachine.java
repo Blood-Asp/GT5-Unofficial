@@ -602,24 +602,29 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     protected ItemStack[] getAllInputs() {
-        ItemStack[] rInputs = new ItemStack[mInputSlotCount];
-        int emptySlotLocation = -1;
+        ItemStack[] rInputs = new ItemStack[mInputSlotCount + 1];
+        boolean foundEmptySlotOrAreTwoInputsEqual = false;
         boolean foundIntegratedCircuit = false;
         for (int i = 0; i < mInputSlotCount; i++){
         	ItemStack currentInput = getInputAt(i);
-        	if (emptySlotLocation == -1) {
-            	if (currentInput == null) {
-                	emptySlotLocation = i;
-                	continue;
-            	}
-        	}
+           	if (currentInput == null) {
+           		foundEmptySlotOrAreTwoInputsEqual = true;
+               	continue;
+           	}
+        	rInputs[i] = currentInput;
         	if (!foundIntegratedCircuit && currentInput != null && currentInput.getItem() instanceof GT_IntegratedCircuit_Item) {
         		foundIntegratedCircuit = true;
         	}
-        	rInputs[i] = currentInput;
+        	if (!foundEmptySlotOrAreTwoInputsEqual) {
+        		for (int j = 0; j < i; j++) {
+        			if (GT_Utility.areStacksEqual(rInputs[i], rInputs[j])) {
+        				foundEmptySlotOrAreTwoInputsEqual = true;
+        			}
+        		}
+        	}
         }
-        if (emptySlotLocation != -1 && !foundIntegratedCircuit) {
-        	rInputs[emptySlotLocation] = GT_Utility.getIntegratedCircuit(0);
+        if (!foundIntegratedCircuit && foundEmptySlotOrAreTwoInputsEqual) {
+    		rInputs[mInputSlotCount] = GT_Utility.getIntegratedCircuit(0);
     	}
         return rInputs;
     }
