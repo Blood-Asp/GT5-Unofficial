@@ -532,6 +532,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HeavyFuel               = new Materials( 741, TextureSet.SET_FLUID             ,   1.0F,      0,  0,         16                , 255, 255,   0,   0,   "HeavyFuel"               ,   "Heavy Fuel"                    ,     3,    240,         -1,    0, false, false,   1,   1,   1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG                     = new Materials( 742, TextureSet.SET_FLUID             ,   1.0F,      0,  0,         16                , 255, 255,   0,   0,   "LPG"                     ,   "LPG"                           ,    1,     320,         -1,    0, false, false,   1,   1,   1, Dyes.dyeYellow      );
 
+    public static Materials Pyrochlore = new MaterialBuilder(607, TextureSet.SET_METALLIC, "Pyrochlore").addDustItems().addOreItems().setRGB(43, 17, 0).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Calcium, 2), new MaterialStack(Niobium, 2), new MaterialStack(Oxygen, 7)).addElectrolyzerRecipe().constructMaterial();
+
     public static Materials GrowthMediumRaw = new MaterialBuilder(608, TextureSet.SET_FLUID, "Raw Growth Medium").setName("GrowthMediumRaw").addCell().addFluid().setRGB(211, 141, 95).setColor(Dyes.dyeOrange).constructMaterial();
     public static Materials GrowthMediumSterilized = new MaterialBuilder(609, TextureSet.SET_FLUID, "Sterilized Growth Medium").setName("GrowthMediumSterilized").addCell().addFluid().setRGB(222, 170, 135).setColor(Dyes.dyeOrange).constructMaterial();
 
@@ -950,7 +952,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Cobaltite               .setDirectSmelting(Cobalt       );
         Stibnite                .setDirectSmelting(Antimony     );
         Cooperite				.setDirectSmelting(Platinum		).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
-        Pyrolusite				.setDirectSmelting(Manganese	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
         Magnesite				.setDirectSmelting(Magnesium	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
         Molybdenite				.setDirectSmelting(Molybdenum	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
         Galena 					.setDirectSmelting(Lead			);
@@ -1113,6 +1114,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         YellowLimonite          .addOreByProducts(Nickel                , BrownLimonite         , Cobalt                );
         Lepidolite              .addOreByProducts(Lithium               , Caesium               );
         Andradite               .addOreByProducts(GarnetYellow          , Iron                  );
+        Pyrolusite              .addOreByProducts(Manganese             , Tantalite             , Niobium               ).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Phosphorus              .addOreByProducts(Apatite               , Phosphate             , Pyrochlore            );
+        Apatite                 .addOreByProducts(Phosphorus            , Phosphate             , Pyrochlore            );
+        Pyrochlore              .addOreByProducts(Apatite               , Calcite               , Niobium               );
         Quartzite               .addOreByProducts(CertusQuartz          , Barite                );
         CertusQuartz            .addOreByProducts(Quartzite             , Barite                );
         BrownLimonite           .addOreByProducts(Malachite             , YellowLimonite        );
@@ -1155,7 +1160,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Sodalite                .addOreByProducts(Lazurite              , Lapis                 );
         Spodumene               .addOreByProducts(Aluminium             , Lithium               );
         Ruby                    .addOreByProducts(Chrome                , GarnetRed             );
-        Phosphorus              .addOreByProducts(Apatite               , Phosphate             );
         Iridium                 .addOreByProducts(Platinum              , Osmium                );
         Pyrope                  .addOreByProducts(GarnetRed             , Magnesium             );
         Almandine               .addOreByProducts(GarnetRed             , Aluminium             );
@@ -1167,14 +1171,12 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Salt                    .addOreByProducts(RockSalt              , Borax                 );
         RockSalt                .addOreByProducts(Salt                  , Borax                 );
         Naquadah                .addOreByProducts(NaquadahEnriched      );
-        Pyrolusite              .addOreByProducts(Manganese             );
         Molybdenite             .addOreByProducts(Molybdenum            );
         Stibnite                .addOreByProducts(Antimony              );
         Garnierite              .addOreByProducts(Nickel                );
         Lignite                 .addOreByProducts(Coal                  );
         Diamond                 .addOreByProducts(Graphite              );
         Beryllium               .addOreByProducts(Emerald               );
-        Apatite                 .addOreByProducts(Phosphorus            );
         Electrotine             .addOreByProducts(Diamond               );
         Teslatite               .addOreByProducts(Diamond               );
         Magnesite               .addOreByProducts(Magnesium             );
