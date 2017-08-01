@@ -644,7 +644,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Circuit_Parts_Wiring_Advanced.set(addItem(tLastID = 717, "Transistor", "Basic Electronic Component", new Object[0])); ItemList.Circuit_Parts_Transistor.set(ItemList.Circuit_Parts_Wiring_Advanced.get(1,new Object[0]));
         ItemList.Circuit_Parts_Wiring_Elite.set(addItem(tLastID = 718, "Capacitor", "Electronic Component", new Object[0])); ItemList.Circuit_Parts_Capacitor.set(ItemList.Circuit_Parts_Wiring_Elite.get(1,new Object[0]));
         ItemList.Empty_Board_Basic.set(addItem(tLastID = 719, "Phenolic Circuit Board", "A Good Board", new Object[0])); ItemList.Circuit_Board_Phenolic.set(ItemList.Empty_Board_Basic.get(1,new Object[0]));
-        ItemList.Empty_Board_Elite.set(addItem(tLastID = 720, "Fiber-Reinforced Circuit Board", "An Advanced Board", new Object[0])); ItemList.Circuit_Board_Fiberglass.set(ItemList.Empty_Board_Elite.get(1,new Object[0]));
+        ItemList.Empty_Board_Elite.set(addItem(tLastID = 720, "Fiber-Reinforced Circuit Board", "An Extreme Board", new Object[0])); ItemList.Circuit_Board_Fiberglass.set(ItemList.Empty_Board_Elite.get(1,new Object[0]));
 
 
         ItemList.Component_Sawblade_Diamond.set(addItem(tLastID = 721, "Diamond Sawblade", "", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.INSTRUMENTUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 4L), OreDictNames.craftingDiamondBlade}));
