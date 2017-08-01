@@ -323,6 +323,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
+        for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+            if(GT_Utility.isStackValid(tStack)) {
+                ItemStack[] extendedInputs = new ItemStack[aInputs.length + 1];
+                System.arraycopy(aInputs, 0, extendedInputs, 0, aInputs.length);
+                extendedInputs[aInputs.length] = GT_Utility.copyAmount(aAmount, tStack);
+                addAssemblerRecipe(extendedInputs, aFluidInput, aOutput1, aDuration, aEUt);
+            }
+        }
+        return true;
+    }
+
     public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt) {
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
