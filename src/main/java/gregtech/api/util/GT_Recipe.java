@@ -9,6 +9,7 @@ import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.nei.GT_NEI_DefaultHandler.FixedPositionedStack;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -159,7 +160,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mFluidInputs = aFluidInputs;
         mFluidOutputs = aFluidOutputs;
         mDuration = aDuration;
-        mSpecialValue = aSpecialValue;
+        if (aSpecialValue == 0) {
+            for (ItemStack input : mInputs) {
+                if (input != null && input.getItem() instanceof GT_IntegratedCircuit_Item && input.getItemDamage() == 0) {
+                    mSpecialValue = -400;
+                }
+            }
+        } else {
+            mSpecialValue = aSpecialValue;
+        }
+
         mEUt = aEUt;
 
 //		checkCellBalance();
