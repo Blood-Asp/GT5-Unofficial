@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
+	
+	private int coilMetaID;
 
     public GT_MetaTileEntity_PyrolyseOven(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -38,13 +40,16 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "Controller Block for the Pyrolyse Oven",
                 "Industrial Charcoal producer and Oil from Plants",
                 "Size(WxHxD): 5x4x5, Controller (Bottom center)",
-                "3x1x3 Cupronickel or Kanthal Heating Coils (At the center of the bottom layer)",
+                "3x1x3 of Heating Coils (At the center of the bottom layer)",
                 "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
                 "1x Output Hatch/Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
                 "Pyrolyse Oven Casings for the rest (60 at least!)",
+                "Processing speed scales linearly with Coil tier:",
+                "CuNi: 50%, FeAlCr: 100%, Ni4Cr: 150%, Fe50CW: 200%, etc.",
+                "EU/t is not affected by Coil tier",
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
@@ -120,6 +125,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 if (this.mEUt > 0) {
                     this.mEUt = (-this.mEUt);
                 }
+                this.mMaxProgresstime = Math.max(mMaxProgresstime * 2 / (1 + coilMetaID), 1);
                 if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
                 if (tRecipe.mFluidOutputs.length > 0)
                     this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
@@ -139,6 +145,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         int CasingMeta= Loader.isModLoaded("dreamcraft")?2:0;
 
         replaceDeprecatedCoils(aBaseMetaTileEntity);
+        boolean firstCoil = true;
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 for (int h = 0; h < 4; h++) {
@@ -148,8 +155,16 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0 && aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
+                            int metaID = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j);
+                            if (metaID > 6) {
                                 return false;
+                            } else {
+                            	if (firstCoil) {
+                            		this.coilMetaID = metaID;
+                            		firstCoil = false;
+                            	} else if (metaID != this.coilMetaID) {
+                            		return false;
+                            	}
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
                             if ((!addInputToMachineList(tTileEntity, 111)) && (!addMufflerToMachineList(tTileEntity, 111))) {

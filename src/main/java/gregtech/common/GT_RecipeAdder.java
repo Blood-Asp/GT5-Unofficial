@@ -194,7 +194,8 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         if ((aDuration = GregTech_API.sRecipeFile.get("blastfurnace", aInput1, aDuration)) <= 0) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map.sBlastRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput1, aOutput2}, null, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aLevel);
+        GT_Recipe.GT_Recipe_Map.sBlastRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput1, aOutput2}, null, null,
+                new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUt, aLevel);
         return true;
     }
 
@@ -610,6 +611,10 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
 
     public boolean addBrewingRecipe(ItemStack aIngredient, Fluid aInput, Fluid aOutput, boolean aHidden) {
         return addBrewingRecipe(aIngredient, aInput, aOutput, 128, 4, aHidden);
+    }
+
+    public boolean addBrewingRecipeCustom(ItemStack aIngredient, Fluid aInput, Fluid aOutput, int aDuration, int aEUt, boolean aHidden) {
+        return addBrewingRecipe(aIngredient, aInput, aOutput, aDuration, aEUt, aHidden);
     }
 
     public boolean addFermentingRecipe(FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt, boolean aHidden) {
