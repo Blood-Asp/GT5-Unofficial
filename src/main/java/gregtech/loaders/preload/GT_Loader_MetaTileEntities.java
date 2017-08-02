@@ -117,17 +117,17 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         //GT_ModHandler.addShapelessCraftingRecipe(ItemList.Casing_Coil_Nichrome.get(1L, new Object[0]), bits, new Object[] {ItemList.Casing_Coil_Nichrome_Deprecated});
 
         ItemList.Machine_Bricked_BlastFurnace.set(new GT_MetaTileEntity_BrickedBlastFurnace(140, "multimachine.brickedblastfurnace", "Bricked Blast Furnace").getStackForm(1L));
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bricked_BlastFurnace.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"BFB", "FwF", "BFB", 'B', ItemList.Casing_Firebricks, 'F', OreDictNames.craftingIronFurnace});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bricked_BlastFurnace.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"BFB", "FwF", "BFB", 'B', ItemList.Casing_Firebricks, 'F', ItemList. Machine_Steel_Furnace});
 
         ItemList.Hull_Bronze.set(new GT_MetaTileEntity_BasicHull_Bronze(1, "hull.bronze", "Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Bronze_Bricks.set(new GT_MetaTileEntity_BasicHull_BronzeBricks(2, "hull.bronze_bricked", "Bricked Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Steel.set(new GT_MetaTileEntity_BasicHull_Steel(3, "hull.steel", "Steel Hull", 0, "For improved Steam Machines").getStackForm(1L));
-        ItemList.Hull_Steel_Bricks.set(new GT_MetaTileEntity_BasicHull_SteelBricks(4, "hull.steel_bricked", "Bricked Steel Hull", 0, "For improved Steam Machines").getStackForm(1L));
+        ItemList.Hull_Steel_Bricks.set(new GT_MetaTileEntity_BasicHull_SteelBricks(4, "hull.steel_bricked", "Bricked Wrought Iron Hull", 0, "For improved Steam Machines").getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hull_Bronze.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", aTextPlate, 'P', OrePrefixes.plate.get(Materials.Bronze)});
         GT_ModHandler.addCraftingRecipe(ItemList.Hull_Bronze_Bricks.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", "BBB", 'P', OrePrefixes.plate.get(Materials.Bronze), 'B', new ItemStack(Blocks.brick_block, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Hull_Steel.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", aTextPlate, 'P', OrePrefixes.plate.get(Materials.Steel)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Hull_Steel_Bricks.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", "BBB", 'P', OrePrefixes.plate.get(Materials.Steel), 'B', new ItemStack(Blocks.brick_block, 1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hull_Steel.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", aTextPlate, 'P', OrePrefixes.plate.get(Materials.WroughtIron)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hull_Steel_Bricks.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", "BBB", 'P', OrePrefixes.plate.get(Materials.WroughtIron), 'B', new ItemStack(Blocks.brick_block, 1)});
 
         ItemList.Hull_ULV.set(new GT_MetaTileEntity_BasicHull(10, "hull.tier.00", "ULV Machine Hull", 0, imagination, new ITexture[0]).getStackForm(1L));
         ItemList.Hull_LV.set(new GT_MetaTileEntity_BasicHull(11, "hull.tier.01", "LV Machine Hull", 1, imagination, new ITexture[0]).getStackForm(1L));
@@ -401,7 +401,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Machine_Bronze_Boiler_Solar.set(new GT_MetaTileEntity_Boiler_Solar(105, "boiler.solar", "Simple Solar Boiler").getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Boiler.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PwP", "BFB", 'F', OreDictNames.craftingIronFurnace, 'P', OrePrefixes.plate.get(Materials.Bronze), 'B', new ItemStack(Blocks.brick_block, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Boiler.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PwP", "BFB", 'F', OreDictNames.craftingIronFurnace, 'P', OrePrefixes.plate.get(Materials.Steel), 'B', new ItemStack(Blocks.brick_block, 1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Boiler.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PwP", "BFB", 'F', OreDictNames.craftingIronFurnace, 'P', OrePrefixes.plate.get(Materials.WroughtIron), 'B', new ItemStack(Blocks.brick_block, 1)});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Boiler_Lava.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "GGG", aTextPlateMotor, 'M', ItemList.Hull_Steel_Bricks, 'P', OrePrefixes.plate.get(Materials.Steel), 'G', new ItemStack(Blocks.glass, 1)});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Boiler_Solar.get(1L, new Object[0]), bits, new Object[]{"GGG", "SSS", aTextPlateMotor, 'M', ItemList.Hull_Bronze_Bricks, 'P', OrePrefixes.pipeSmall.get(Materials.Bronze), 'S', OrePrefixes.plateDouble.get(Materials.Silver), 'G', new ItemStack(Blocks.glass, 1)});
 
@@ -425,15 +425,15 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Furnace.get(1L, new Object[0]), bits, new Object[]{"XXX", "XMX", "XFX", 'M', ItemList.Hull_Bronze_Bricks, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'F', OreDictNames.craftingFurnace});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Furnace.get(1L, new Object[0]), bits, new Object[]{"XXX", "XMX", "XFX", 'M', ItemList.Hull_Steel_Bricks, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'F', OreDictNames.craftingIronFurnace});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Macerator.get(1L, new Object[0]), bits, new Object[]{"DXD", "XMX", "PXP", 'M', ItemList.Hull_Bronze, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'P', OreDictNames.craftingPiston, 'D', OrePrefixes.gem.get(Materials.Diamond)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Macerator.get(1L, new Object[0]), bits, new Object[]{"DXD", "XMX", "PXP", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'P', OreDictNames.craftingPiston, 'D', OrePrefixes.gem.get(Materials.Diamond)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Macerator.get(1L, new Object[0]), bits, new Object[]{"DXD", "XMX", "PXP", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.WroughtIron), 'P', OreDictNames.craftingPiston, 'D', OrePrefixes.gem.get(Materials.Diamond)});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Extractor.get(1L, new Object[0]), bits, new Object[]{"XXX", "PMG", "XXX", 'M', ItemList.Hull_Bronze, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'P', OreDictNames.craftingPiston, 'G', new ItemStack(Blocks.glass, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Extractor.get(1L, new Object[0]), bits, new Object[]{"XXX", "PMG", "XXX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'P', OreDictNames.craftingPiston, 'G', new ItemStack(Blocks.glass, 1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Extractor.get(1L, new Object[0]), bits, new Object[]{"XXX", "PMG", "XXX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.WroughtIron), 'P', OreDictNames.craftingPiston, 'G', new ItemStack(Blocks.glass, 1)});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Hammer.get(1L, new Object[0]), bits, new Object[]{"XPX", "XMX", "XAX", 'M', ItemList.Hull_Bronze, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'P', OreDictNames.craftingPiston, 'A', OreDictNames.craftingAnvil});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Hammer.get(1L, new Object[0]), bits, new Object[]{"XPX", "XMX", "XAX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'P', OreDictNames.craftingPiston, 'A', OreDictNames.craftingAnvil});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Hammer.get(1L, new Object[0]), bits, new Object[]{"XPX", "XMX", "XAX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.WroughtIron), 'P', OreDictNames.craftingPiston, 'A', OreDictNames.craftingAnvil});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_Compressor.get(1L, new Object[0]), bits, new Object[]{"XXX", aTextPlateMotor, "XXX", 'M', ItemList.Hull_Bronze, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'P', OreDictNames.craftingPiston});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Compressor.get(1L, new Object[0]), bits, new Object[]{"XXX", aTextPlateMotor, "XXX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'P', OreDictNames.craftingPiston});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_Compressor.get(1L, new Object[0]), bits, new Object[]{"XXX", aTextPlateMotor, "XXX", 'M', ItemList.Hull_Steel, 'X', OrePrefixes.pipeSmall.get(Materials.WroughtIron), 'P', OreDictNames.craftingPiston});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Bronze_AlloySmelter.get(1L, new Object[0]), bits, new Object[]{"XXX", "FMF", "XXX", 'M', ItemList.Hull_Bronze_Bricks, 'X', OrePrefixes.pipeSmall.get(Materials.Bronze), 'F', OreDictNames.craftingFurnace});
-        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_AlloySmelter.get(1L, new Object[0]), bits, new Object[]{"XXX", "FMF", "XXX", 'M', ItemList.Hull_Steel_Bricks, 'X', OrePrefixes.pipeSmall.get(Materials.Steel), 'F', OreDictNames.craftingIronFurnace});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_Steel_AlloySmelter.get(1L, new Object[0]), bits, new Object[]{"XXX", "FMF", "XXX", 'M', ItemList.Hull_Steel_Bricks, 'X', OrePrefixes.pipeSmall.get(Materials.WroughtIron), 'F', OreDictNames.craftingIronFurnace});
 
         ItemList.Locker_ULV.set(new GT_MetaTileEntity_Locker(150, "locker.tier.00", "Ultra Low Voltage Locker", 0).getStackForm(1L));
         ItemList.Locker_LV.set(new GT_MetaTileEntity_Locker(151, "locker.tier.01", "Low Voltage Locker", 1).getStackForm(1L));
