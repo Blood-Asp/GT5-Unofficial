@@ -14,6 +14,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.items.GT_IntegratedCircuit_Item;
 import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -154,7 +155,10 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             aCleanroom = false;
         }
         GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, aCleanroom ? -200 : 0);
-        GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        if (!(aInput1 != null && aInput1.getItem() instanceof GT_IntegratedCircuit_Item && aInput1.getItemDamage() >= 10)
+                && !(aInput2 != null && aInput2.getItem() instanceof GT_IntegratedCircuit_Item && aInput2.getItemDamage() >= 10)) {
+            GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        }
         return true;
     }
 
@@ -319,6 +323,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
             if(GT_Utility.isStackValid(tStack))
                 addAssemblerRecipe(aInput1, GT_Utility.copyAmount(aAmount, tStack), aFluidInput, aOutput1, aDuration, aEUt);
+        }
+        return true;
+    }
+
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
+        for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+            if(GT_Utility.isStackValid(tStack)) {
+                ItemStack[] extendedInputs = new ItemStack[aInputs.length + 1];
+                System.arraycopy(aInputs, 0, extendedInputs, 0, aInputs.length);
+                extendedInputs[aInputs.length] = GT_Utility.copyAmount(aAmount, tStack);
+                addAssemblerRecipe(extendedInputs, aFluidInput, aOutput1, aDuration, aEUt);
+            }
         }
         return true;
     }
