@@ -115,11 +115,11 @@ public class GT_Achievements {
         	registerAchievement("reflect", -2, 9, ItemList.Neutron_Reflector.get(1, new Object[]{}), "newfuel", false);
         }
         registerAchievement("bronze", 2, 0, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Bronze, 1L), "flintpick", false);
-        registerAchievement("simplyeco", 2, 2, ItemList.Machine_LP_Boiler_Solar.get(1, new Object[]{}), "bronze", false);
-        registerAchievement("firststeam", 2, -2, ItemList.Machine_LP_Boiler.get(1, new Object[]{}), "bronze", false);
-        registerAchievement("alloysmelter", 2, -4, ItemList.Machine_LP_AlloySmelter.get(1, new Object[]{}), "firststeam", false);
-        registerAchievement("macerator", 0, -2, ItemList.Machine_LP_Macerator.get(1, new Object[]{}), "firststeam", false);
-        registerAchievement("extract", 0, -4, ItemList.Machine_LP_Extractor.get(1, new Object[]{}), "alloysmelter", false);
+        registerAchievement("simplyeco", 2, 2, ItemList.Machine_Bronze_Boiler_Solar.get(1, new Object[]{}), "bronze", false);
+        registerAchievement("firststeam", 2, -2, ItemList.Machine_Bronze_Boiler.get(1, new Object[]{}), "bronze", false);
+        registerAchievement("alloysmelter", 2, -4, ItemList.Machine_Bronze_AlloySmelter.get(1, new Object[]{}), "firststeam", false);
+        registerAchievement("macerator", 0, -2, ItemList.Machine_Bronze_Macerator.get(1, new Object[]{}), "firststeam", false);
+        registerAchievement("extract", 0, -4, ItemList.Machine_Bronze_Extractor.get(1, new Object[]{}), "alloysmelter", false);
 
         registerAchievement("smallparts", 0, -5, ItemList.Circuit_Primitive.get(1, new Object[]{}), "alloysmelter", false);        
         registerAchievement("gtbasiccircuit", 0, -8, Ic2Items.electronicCircuit.copy(), "smallparts", false);
@@ -144,7 +144,7 @@ public class GT_Achievements {
         registerAchievement("luck", 2, -6, ItemList.ZPM.get(1, new Object[]{}), "", false);
 
         registerAchievement("steel", 4, 0, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L), "bronze", false);
-        registerAchievement("highpressure", 4, 2, ItemList.Machine_HP_Boiler.get(1, new Object[]{}), "steel", false);
+        registerAchievement("highpressure", 4, 2, ItemList.Machine_Steel_Boiler.get(1, new Object[]{}), "steel", false);
         registerAchievement("extremepressure", 4, 4, ItemList.Machine_Multi_LargeBoiler_Steel.get(1, new Object[]{}), "highpressure", false);
         registerAchievement("cheapermac", 6, 1, ItemList.Machine_LV_Hammer.get(1, new Object[]{}), "steel", false);
         registerAchievement("complexalloys", 6, 3, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.BlueSteel, 1L), "cheapermac", false);
