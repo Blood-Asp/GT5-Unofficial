@@ -546,7 +546,7 @@ public enum ItemList implements IItemContainer {
     Machine_Steel_Compressor,
     Machine_Steel_AlloySmelter,
 
-    Hull_Bronze, Hull_HP, Hull_Bronze_Bricks, Hull_HP_Bricks,
+    Hull_Bronze, Hull_Steel, Hull_Bronze_Bricks, Hull_Steel_Bricks,
 
     Transformer_LV_ULV, Transformer_MV_LV, Transformer_HV_MV, Transformer_EV_HV, Transformer_IV_EV, Transformer_LuV_IV, Transformer_ZPM_LuV, Transformer_UV_ZPM, Transformer_MAX_UV,
 
