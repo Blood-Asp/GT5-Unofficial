@@ -693,7 +693,7 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_LOCKER_012),
                         new GT_RenderedTexture(OVERLAY_LOCKER_013),
                 },
-                CASING_BLOCKS = new ITexture[128],
+                CASING_BLOCKS = new ITexture[128*16],//16 Pages available 0-15 - each can hold 128 textures 0-127
                 MACHINE_CASINGS[] = new ITexture[16][17];
 
         static {
