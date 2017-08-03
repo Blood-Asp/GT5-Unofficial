@@ -92,8 +92,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             if ((tTileEntity != null) && (tTileEntity.getMetaTileEntity() != null)) {
                 if ((tTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Dynamo)) {
                     this.mDynamoHatches.add((GT_MetaTileEntity_Hatch_Dynamo) tTileEntity.getMetaTileEntity());
-                    ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).mMachineBlock = getCasingTextureIndex();
-                    ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).mTexturePage = (byte) 0;//FORCED TO 0
+                    ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).updateTexture(getCasingTextureIndex());
                 } else {
                     return false;
                 }
