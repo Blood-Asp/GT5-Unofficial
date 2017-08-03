@@ -612,13 +612,16 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_LOCKER_012),
                         new GT_RenderedTexture(OVERLAY_LOCKER_013),
                 },
-                CASING_BLOCKS = new ITexture[128*16],//16 Pages available 0-15 - each can hold 128 textures 0-127
-                MACHINE_CASINGS[] = new ITexture[10][17];
+                CASING_BLOCKS = new ITexture[128],//original variable still limited to 128
+                MACHINE_CASINGS[] = new ITexture[16][17];
+
+        public static ITexture[][] casingTexturePages = new ITexture[128][];//page holder so we don't make an short long array
 
         static {
             for (byte i = 0; i < MACHINE_CASINGS.length; i++)
                 for (byte j = 0; j < MACHINE_CASINGS[i].length; j++)
                     MACHINE_CASINGS[i][j] = new GT_SidedTexture(MACHINECASINGS_BOTTOM[i], MACHINECASINGS_TOP[i], MACHINECASINGS_SIDE[i], Dyes.getModulation(j - 1, Dyes.MACHINE_METAL.mRGBa));
+            casingTexturePages[0]=CASING_BLOCKS;
         }
 
         protected IIcon mIcon;

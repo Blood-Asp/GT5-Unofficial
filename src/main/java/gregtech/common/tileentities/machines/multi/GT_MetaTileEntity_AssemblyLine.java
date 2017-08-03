@@ -353,8 +353,7 @@ public class GT_MetaTileEntity_AssemblyLine
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mTexturePage = (byte) (aBaseCasingIndex>>7);
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
         }
         return false;
