@@ -12,9 +12,6 @@ import net.minecraft.world.IBlockAccess;
 
 public class GT_Block_Casings6
         extends GT_Block_Casings_Abstract {
-
-    public static final short textureOffset = (8 << 7) + 112;//End of PAGE 8 (which is the 9th page)  (8*128+112)
-
     public GT_Block_Casings6() {
         super(GT_Item_Casings6.class, "gt.blockcasings6", GT_Material_Casings.INSTANCE);
         for (int i = 0; i < 16; i = (i + 1)) {
