@@ -613,7 +613,7 @@ public class Textures {
                         new GT_RenderedTexture(OVERLAY_LOCKER_013),
                 },
                 CASING_BLOCKS = new ITexture[128],//original variable still limited to 128
-                MACHINE_CASINGS[] = new ITexture[16][17];
+                MACHINE_CASINGS[] = new ITexture[10][17];
 
         public static ITexture[][] casingTexturePages = new ITexture[128][];//page holder so we don't make an short long array
 
