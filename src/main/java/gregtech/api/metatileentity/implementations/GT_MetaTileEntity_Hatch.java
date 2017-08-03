@@ -79,6 +79,7 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
     @Override
     public final void onValueUpdate(byte aValue) {
         mMachineBlock=actualTexture=(byte)(aValue & 0x7F);
+        mTexturePage=0;
     }
 
     @Override
