@@ -18,7 +18,7 @@ public class GT_Block_Casings6
     public GT_Block_Casings6() {
         super(GT_Item_Casings6.class, "gt.blockcasings6", GT_Material_Casings.INSTANCE);
         for (int i = 0; i < 16; i = (i + 1)) {
-            Textures.BlockIcons.CASING_BLOCKS[i + textureOffset] = new GT_CopiedBlockTexture(this, 6, i);
+            Textures.BlockIcons.casingTexturePages[8][i + 112] = new GT_CopiedBlockTexture(this, 6, i);
         }
         
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Hermetic Casing");
