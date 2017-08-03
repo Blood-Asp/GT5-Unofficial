@@ -263,15 +263,8 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                                             }
                                             addOutput(tStack);
                                         }
-                                    if(mOutputFluids!=null) {
-                                        if (mOutputFluids.length == 1) {
-                                            for (FluidStack tStack : mOutputFluids)
-                                                if (tStack != null) {
-                                                    addOutput(tStack);
-                                                }
-                                        } else if (mOutputFluids.length > 1) {
-                                            addFluidOutputs(mOutputFluids);
-                                        }
+                                    if (mOutputFluids != null) {
+                                    	addFluidOutputs(mOutputFluids);
                                     }
                                     mEfficiency = Math.max(0, Math.min(mEfficiency + mEfficiencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
                                     mOutputItems = null;
@@ -606,13 +599,20 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     protected void addFluidOutputs(FluidStack[] mOutputFluids) {
-        int min=mOutputFluids.length>mOutputHatches.size()?mOutputHatches.size():mOutputFluids.length;
-        for (int i = 0; i < min; ++i) {
-            if (this.mOutputHatches.get(i) != null && mOutputFluids[i] != null && isValidMetaTileEntity(this.mOutputHatches.get(i))) {
-                this.mOutputHatches.get(i).fill(mOutputFluids[i], true);
-            }
+        for (FluidStack outputFluidStack : mOutputFluids) {
+        	if (outputFluidStack != null) {
+        		FluidStack copiedStack = outputFluidStack.copy();
+        		for (GT_MetaTileEntity_Hatch_Output outputhatch : mOutputHatches) {
+            		if (copiedStack.amount <= 0) {
+            			break;
+            		}
+        			if (!isValidMetaTileEntity(outputhatch)) {
+        				continue;
+        			}
+        			copiedStack.amount -= outputhatch.fill(copiedStack, true);
+            	}
+        	}
         }
-
     }
 
     public boolean depleteInput(FluidStack aLiquid) {
