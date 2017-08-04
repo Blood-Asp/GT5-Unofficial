@@ -136,6 +136,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				this.mMaxProgresstime = maxProgresstime;
 				this.mOutputItems = recipe.mOutputs;
 				this.mOutputFluids = recipe.mFluidOutputs;
+				this.updateSlots();
 				return true;
 			}
 		}
