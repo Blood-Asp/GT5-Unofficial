@@ -66,7 +66,7 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
         mTexturePage=aNBT.getByte("mTexturePage");
 
         if(mTexturePage!=0 && getBaseMetaTileEntity().isServerSide())
-            actualTexture|=0x80;//<- lets just hope no one needs the correct value for that in client
+            actualTexture|=0x80;//<- lets just hope no one needs the correct value for that on server
         mMachineBlock=actualTexture;
     }
 
@@ -95,7 +95,7 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
     public final void onTexturePageUpdate(byte aValue) {
         mTexturePage = (byte)(aValue & 0x7F);
         if(mTexturePage!=0 && getBaseMetaTileEntity().isServerSide()) {//just to be sure
-            mMachineBlock|=0x80;//<- lets just hope no one needs the correct value for that in client
+            mMachineBlock|=0x80;//<- lets just hope no one needs the correct value for that on server
             actualTexture=mMachineBlock;
         }
         //set last bit to allow working of the page reset-er to 0 in rare case when texture id is the same but page changes to 0
