@@ -62,8 +62,12 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mMachineBlock=actualTexture=aNBT.getByte("mMachineBlock");
+        actualTexture=aNBT.getByte("mMachineBlock");
         mTexturePage=aNBT.getByte("mTexturePage");
+
+        if(mTexturePage!=0 && getBaseMetaTileEntity().isServerSide())
+            actualTexture|=0x80;//<- lets just hope no one needs the correct value for that in client
+        mMachineBlock=actualTexture;
     }
 
     public final void updateTexture(int textureIndex){
@@ -78,7 +82,8 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
 
     @Override
     public final void onValueUpdate(byte aValue) {
-        mMachineBlock=actualTexture=(byte)(aValue & 0x7F);
+        actualTexture=(byte)(aValue & 0x7F);
+        mMachineBlock=actualTexture;
         mTexturePage=0;
     }
 
@@ -89,6 +94,11 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
 
     public final void onTexturePageUpdate(byte aValue) {
         mTexturePage = (byte)(aValue & 0x7F);
+        if(mTexturePage!=0 && getBaseMetaTileEntity().isServerSide()) {//just to be sure
+            mMachineBlock|=0x80;//<- lets just hope no one needs the correct value for that in client
+            actualTexture=mMachineBlock;
+        }
+        //set last bit to allow working of the page reset-er to 0 in rare case when texture id is the same but page changes to 0
     }
 
     public final byte getTexturePage() {
@@ -127,8 +137,9 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {//in that method since it is usually not overriden, especially for hatches.
-        if(actualTexture!=mMachineBlock){//revert to page 0 on edition of the field - old code
-            mMachineBlock=actualTexture=(byte)(mMachineBlock & 0x7F);//assign back to mMachineBlock just in case the number was negative
+        if(actualTexture!=mMachineBlock){//revert to page 0 on edition of the field - old code way
+            actualTexture=(byte)(mMachineBlock & 0x7F);
+            mMachineBlock=actualTexture;//clear last bit in mMachineBlock since now we are at page 0 after the direct field change
             mTexturePage=0;//assuming old code only supports page 0
         }
         super.onPreTick(aBaseMetaTileEntity, aTick);
