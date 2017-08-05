@@ -120,7 +120,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
         ItemList.Hull_Bronze.set(new GT_MetaTileEntity_BasicHull_Bronze(1, "hull.bronze", "Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
         ItemList.Hull_Bronze_Bricks.set(new GT_MetaTileEntity_BasicHull_BronzeBricks(2, "hull.bronze_bricked", "Bricked Bronze Hull", 0, "For your first Steam Machines").getStackForm(1L));
-        ItemList.Hull_HP.set(new GT_MetaTileEntity_BasicHull_Steel(3, "hull.steel", "Wrough Iron Hull", 0, "For improved Steam Machines").getStackForm(1L));
+        ItemList.Hull_HP.set(new GT_MetaTileEntity_BasicHull_Steel(3, "hull.steel", "Steel Hull", 0, "For improved Steam Machines").getStackForm(1L));
         ItemList.Hull_HP_Bricks.set(new GT_MetaTileEntity_BasicHull_SteelBricks(4, "hull.steel_bricked", "Bricked Wrought Iron Hull", 0, "For improved Steam Machines").getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hull_Bronze.get(1L, new Object[0]), bits, new Object[]{aTextPlate, "PhP", aTextPlate, 'P', OrePrefixes.plate.get(Materials.Bronze)});
