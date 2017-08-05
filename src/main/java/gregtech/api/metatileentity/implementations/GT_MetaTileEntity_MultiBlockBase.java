@@ -532,36 +532,46 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return false;
     }
 
-    public boolean addOutput(FluidStack aLiquid) {
-        if (aLiquid == null) return false;
-        FluidStack tLiquid = aLiquid.copy();
+    private boolean dumpFluid(FluidStack copiedFluidStack, boolean restrictiveHatchesOnly){
         for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
-            if (isValidMetaTileEntity(tHatch) && GT_ModHandler.isSteam(aLiquid) ? tHatch.outputsSteam() : tHatch.outputsLiquids()) {
-                int tAmount = tHatch.fill(tLiquid, false);
-                if (tAmount >= tLiquid.amount) {
-                    return tHatch.fill(tLiquid, true) >= tLiquid.amount;
-                } else if (tAmount > 0) {
-                    tLiquid.amount = tLiquid.amount - tHatch.fill(tLiquid, true);
-                }
+        	if (!isValidMetaTileEntity(tHatch) || (restrictiveHatchesOnly && tHatch.mMode == 0)) {
+        		continue;
+        	}
+        	if (GT_ModHandler.isSteam(copiedFluidStack)) {
+        		if (!tHatch.outputsSteam()) {
+        			continue;
+        		}
+        	} else {
+        		if (!tHatch.outputsLiquids()) {
+        			continue;
+        		}
+        		if (tHatch.isFluidLocked() && tHatch.getLockedFluidName() != null && tHatch.getLockedFluidName() != copiedFluidStack.getUnlocalizedName()) {
+        			continue;
+        		}
+        	}
+            int tAmount = tHatch.fill(copiedFluidStack, false);
+            if (tAmount >= copiedFluidStack.amount) {
+            	tHatch.setLockedFluidName(copiedFluidStack.getUnlocalizedName());
+                return tHatch.fill(copiedFluidStack, true) >= copiedFluidStack.amount;
+            } else if (tAmount > 0) {
+            	tHatch.setLockedFluidName(copiedFluidStack.getUnlocalizedName());
+                copiedFluidStack.amount = copiedFluidStack.amount - tHatch.fill(copiedFluidStack, true);
             }
         }
+        return false;
+    }
+    
+    public boolean addOutput(FluidStack aLiquid) {
+        if (aLiquid == null) return false;
+        FluidStack copiedFluidStack = aLiquid.copy();
+        dumpFluid(copiedFluidStack, true);
+        dumpFluid(copiedFluidStack, false);
         return false;
     }
 
     protected void addFluidOutputs(FluidStack[] mOutputFluids2) {
         for (FluidStack outputFluidStack : mOutputFluids2) {
-        	if (outputFluidStack != null) {
-        		FluidStack copiedStack = outputFluidStack.copy();
-        		for (GT_MetaTileEntity_Hatch_Output outputhatch : mOutputHatches) {
-            		if (copiedStack.amount <= 0) {
-            			break;
-            		}
-        			if (!isValidMetaTileEntity(outputhatch)) {
-        				continue;
-        			}
-        			copiedStack.amount -= outputhatch.fill(copiedStack, true);
-            	}
-        	}
+        	addOutput(outputFluidStack);
         }
     }
 
