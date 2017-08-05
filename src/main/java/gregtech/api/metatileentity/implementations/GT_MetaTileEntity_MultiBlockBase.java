@@ -595,7 +595,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         		if (!tHatch.outputsLiquids()) {
         			continue;
         		}
-        		if (tHatch.isFluidLocked() && tHatch.getLockedFluidName() != null && tHatch.getLockedFluidName() != copiedFluidStack.getUnlocalizedName()) {
+        		if (tHatch.isFluidLocked() && tHatch.getLockedFluidName() != null && !tHatch.getLockedFluidName().equals(copiedFluidStack.getUnlocalizedName())) {
         			continue;
         		}
         	}
@@ -614,8 +614,9 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public boolean addOutput(FluidStack aLiquid) {
         if (aLiquid == null) return false;
         FluidStack copiedFluidStack = aLiquid.copy();
-        dumpFluid(copiedFluidStack, true);
-        dumpFluid(copiedFluidStack, false);
+        if (!dumpFluid(copiedFluidStack, true)){
+            dumpFluid(copiedFluidStack, false);        	
+        }
         return false;
     }
 
