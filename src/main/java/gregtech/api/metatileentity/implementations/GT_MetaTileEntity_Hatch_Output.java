@@ -11,10 +11,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
+	private String lockedFluidName = null;
     public byte mMode = 0;
 
     public GT_MetaTileEntity_Hatch_Output(int aID, String aName, String aNameRegional, int aTier) {
@@ -153,31 +155,46 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return;
-        mMode = (byte) ((mMode + 1) % 8);
+        if (aPlayer.isSneaking()) {
+        	mMode = (byte) ((mMode + 9) % 10);
+        } else {
+            mMode = (byte) ((mMode + 1) % 10);        	
+        }
         switch (mMode) {
             case 0:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs Liquids, Steam and Items"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs misc. Fluids, Steam and Items"));
                 break;
             case 1:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("109","Outputs Steam and Items"));
                 break;
             case 2:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and Liquids"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and misc. Fluids"));
                 break;
             case 3:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("111","Outputs Steam"));
                 break;
             case 4:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs Liquids and Items"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs misc. Fluids and Items"));
                 break;
             case 5:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("113","Outputs only Items"));
                 break;
             case 6:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only Liquids"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only misc. Fluids"));
                 break;
             case 7:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("115","Outputs nothing"));
+                break;
+            case 8:
+            	this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
+                GT_Utility.sendChatToPlayer(aPlayer, trans("115.1", String.format("Outputs items and 1 specific Fluid (%s)", mFluid == null ? 
+                		trans("115.3","currently none, will be locked to the next that is put in"):
+                		mFluid.getLocalizedName())));
+                break;
+            case 9:
+                GT_Utility.sendChatToPlayer(aPlayer, trans("115.2", String.format("Outputs 1 specific Fluid (%s)", mFluid == null ? 
+                		trans("115.3","currently none, will be locked to the next that is put in"):
+                		mFluid.getLocalizedName())));
                 break;
         }
     }
@@ -191,11 +208,23 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     }
 
     public boolean outputsLiquids() {
-        return mMode % 2 == 0;
+        return mMode % 2 == 0 || mMode == 9;
     }
 
     public boolean outputsItems() {
-        return mMode % 4 < 2;
+        return mMode % 4 < 2 && mMode != 9;
+    }
+    
+    public boolean isFluidLocked(){
+    	return mMode == 8 || mMode == 9;
+    }
+    
+    public String getLockedFluidName() {
+    	return lockedFluidName;
+    }
+    
+    public void setLockedFluidName(String lockedFluidName) {
+    	this.lockedFluidName = lockedFluidName;
     }
 
     @Override
