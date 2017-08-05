@@ -98,12 +98,15 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mMode", mMode);
+        aNBT.setString("lockedFluidName", lockedFluidName);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mMode = aNBT.getByte("mMode");
+        lockedFluidName = aNBT.getString("lockedFluidName");
+        lockedFluidName = lockedFluidName.length() == 0 ? null : lockedFluidName;
     }
 
     @Override
@@ -160,6 +163,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         } else {
             mMode = (byte) ((mMode + 1) % 10);        	
         }
+        String inBrackets;
         switch (mMode) {
             case 0:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs misc. Fluids, Steam and Items"));
@@ -186,15 +190,22 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
                 GT_Utility.sendChatToPlayer(aPlayer, trans("115","Outputs nothing"));
                 break;
             case 8:
-            	this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
-                GT_Utility.sendChatToPlayer(aPlayer, trans("115.1", String.format("Outputs items and 1 specific Fluid (%s)", mFluid == null ? 
-                		trans("115.3","currently none, will be locked to the next that is put in"):
-                		mFluid.getLocalizedName())));
+            	if (mFluid == null) {
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            	} else {
+            		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
+            		inBrackets = this.getDrainableStack().getLocalizedName();
+            	}
+                GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.1", "Outputs items and 1 specific Fluid"), inBrackets));
                 break;
             case 9:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("115.2", String.format("Outputs 1 specific Fluid (%s)", mFluid == null ? 
-                		trans("115.3","currently none, will be locked to the next that is put in"):
-                		mFluid.getLocalizedName())));
+            	if (mFluid == null) {
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            	} else {
+            		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
+            		inBrackets = this.getDrainableStack().getLocalizedName();
+            	}
+                GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.2", "Outputs 1 specific Fluid"), inBrackets));
                 break;
         }
     }
