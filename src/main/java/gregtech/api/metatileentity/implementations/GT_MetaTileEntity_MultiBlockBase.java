@@ -551,11 +551,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         	}
             int tAmount = tHatch.fill(copiedFluidStack, false);
             if (tAmount >= copiedFluidStack.amount) {
-            	tHatch.setLockedFluidName(copiedFluidStack.getUnlocalizedName());
-                return tHatch.fill(copiedFluidStack, true) >= copiedFluidStack.amount;
+            	boolean filled = tHatch.fill(copiedFluidStack, true) >= copiedFluidStack.amount;
+            	tHatch.onEmptyingContainerWhenEmpty();
+                return filled;
             } else if (tAmount > 0) {
-            	tHatch.setLockedFluidName(copiedFluidStack.getUnlocalizedName());
                 copiedFluidStack.amount = copiedFluidStack.amount - tHatch.fill(copiedFluidStack, true);
+                tHatch.onEmptyingContainerWhenEmpty();
             }
         }
         return false;

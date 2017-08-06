@@ -11,12 +11,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
 	private String lockedFluidName = null;
+	private EntityPlayer playerThatLockedfluid = null;
     public byte mMode = 0;
 
     public GT_MetaTileEntity_Hatch_Output(int aID, String aName, String aNameRegional, int aTier) {
@@ -167,30 +167,40 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         switch (mMode) {
             case 0:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs misc. Fluids, Steam and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 1:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("109","Outputs Steam and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 2:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and misc. Fluids"));
+                this.setLockedFluidName(null);
                 break;
             case 3:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("111","Outputs Steam"));
+                this.setLockedFluidName(null);
                 break;
             case 4:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs misc. Fluids and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 5:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("113","Outputs only Items"));
+                this.setLockedFluidName(null);
                 break;
             case 6:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only misc. Fluids"));
+                this.setLockedFluidName(null);
                 break;
             case 7:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("115","Outputs nothing"));
+                this.setLockedFluidName(null);
                 break;
             case 8:
+            	playerThatLockedfluid = aPlayer;
             	if (mFluid == null) {
+                    this.setLockedFluidName(null);
             		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
             	} else {
             		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
@@ -199,7 +209,9 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
                 GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.1", "Outputs items and 1 specific Fluid"), inBrackets));
                 break;
             case 9:
+            	playerThatLockedfluid = aPlayer;
             	if (mFluid == null) {
+                    this.setLockedFluidName(null);
             		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
             	} else {
             		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
@@ -241,5 +253,13 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     @Override
     public int getTankPressure() {
         return +100;
+    }
+    
+    @Override
+    protected void onEmptyingContainerWhenEmpty() {
+    	if (this.lockedFluidName == null && this.mFluid != null) {
+        	this.setLockedFluidName(this.mFluid.getUnlocalizedName());
+        	GT_Utility.sendChatToPlayer(playerThatLockedfluid, String.format(trans("151.4","Sucessfully locked Fluid to %s"), mFluid.getLocalizedName()));
+    	}
     }
 }
