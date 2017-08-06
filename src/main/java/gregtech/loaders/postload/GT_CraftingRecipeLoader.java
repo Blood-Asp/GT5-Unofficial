@@ -807,9 +807,6 @@ public class GT_CraftingRecipeLoader implements Runnable {
         }
         if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.disabledrecipes, "QBoots", false)) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("quantumBoots", 1L));
-
-
-
         }
 
         if (Loader.isModLoaded("GraviSuite")) {
