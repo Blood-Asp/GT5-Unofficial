@@ -1589,9 +1589,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
     				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 120 + 60 * i);
     		GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(hydrogenAmount), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30 + 15 * i);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30 + 15 * i);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
     	}
     	aMaterial.setHydroCrackedFluids(crackedFluids);
     }
@@ -1612,9 +1612,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000), 
     				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
     		GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 60 + 30 * i);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 60 + 30 * i);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
     	}
     	aMaterial.setSteamCrackedFluids(crackedFluids);
     }
