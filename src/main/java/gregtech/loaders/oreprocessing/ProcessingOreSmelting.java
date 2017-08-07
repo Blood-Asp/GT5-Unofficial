@@ -45,18 +45,20 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                         }
                         break;
                     case dust:
-                        if (aMaterial.mDirectSmelting != aMaterial) {
-                            if (!aMaterial.contains(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE)) {
-                                GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), GT_Values.NI,                                         2400);
-                            } else if (aMaterial == Materials.Chalcopyrite) {
-                                int outputAmount = GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3;
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDustSmall(2 * outputAmount), 2400);
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDustTiny(7 * outputAmount),  2400);
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDust(outputAmount),          2400);
-                            } else if (aMaterial == Materials.Tetrahedrite) {
-                                GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), Materials.Antimony.getNuggets(6),                     2400);
-                            }
-                        }
+            			int outputAmount = GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3;
+                    	if (aMaterial.mDirectSmelting != aMaterial) {
+                    		if (!aMaterial.contains(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE)) {
+                    			GT_Values.RA.addPrimitiveBlastRecipe(GT_Utility.copyAmount(2, aStack), GT_Values.NI,            2, aMaterial.mDirectSmelting.getIngots(outputAmount), GT_Values.NI,                                         2400);
+                    		} else if (aMaterial == Materials.Chalcopyrite) {
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), new ItemStack(Blocks.sand, 2),       2, aMaterial.mDirectSmelting.getIngots(outputAmount), Materials.Ferrosilite.getDustSmall(2 * outputAmount), 2400);
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.Glass.getDust(2),          2, aMaterial.mDirectSmelting.getIngots(outputAmount), Materials.Ferrosilite.getDustTiny(7 * outputAmount),  2400);
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(outputAmount), Materials.Ferrosilite.getDust(outputAmount),          2400);
+                    		} else if (aMaterial == Materials.Tetrahedrite) {
+                    	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(outputAmount), Materials.Antimony.getNuggets(3 * outputAmount),      2400);
+                    		} else if (aMaterial == Materials.Galena) {
+                    			GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(outputAmount), Materials.Silver.getNuggets(6 * outputAmount),        2400);
+                    		}
+                    	}
                     case dustImpure:
                     case dustPure:
                     case dustRefined:
