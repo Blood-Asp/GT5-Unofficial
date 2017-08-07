@@ -56,6 +56,8 @@ public class ProcessingOreSmelting implements gregtech.api.interfaces.IOreRecipe
                     	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), Materials.SiliconDioxide.getDust(2), 2, aMaterial.mDirectSmelting.getIngots(outputAmount),                                                       Materials.Ferrosilite.getDust(outputAmount),          2400);
                     		} else if (aMaterial == Materials.Tetrahedrite) {
                     	    	GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), Materials.Antimony.getNuggets(6),                     2400);
+                    		} else if (aMaterial == Materials.Galena) {
+                    			GT_Values.RA.addPrimitiveBlastRecipe(aMaterial.getDust(2), GT_Values.NI,                        2, aMaterial.mDirectSmelting.getIngots(GT_Mod.gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre ? 2 : 3), Materials.Silver.getNuggets(6),                       2400);
                     		}
                     	}
                     case dustImpure:
