@@ -109,7 +109,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
             case "Iron": case "Nickel": case "Cupronickel": case "Copper": case "AnnealedCopper":
             case "Kanthal": case "Gold": case "Electrum": case "Silver": case "Blue Alloy":
             case "Nichrome": case "Steel": case "BlackSteel": case "Titanium": case "Aluminium":
-            case "RedstoneAlloy":
+            case "RedstoneAlloy":case "BlueAlloy":
                 GT_Values.RA.addAssemblerRecipe(aStack, GT_Utility.getIntegratedCircuit(24), Materials.Rubber.getMolten(144 * costMultiplier),
                         GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
                 GT_Values.RA.addAssemblerRecipe(aStack, GT_Utility.getIntegratedCircuit(24), Materials.StyreneButadieneRubber.getMolten(108 * costMultiplier),
