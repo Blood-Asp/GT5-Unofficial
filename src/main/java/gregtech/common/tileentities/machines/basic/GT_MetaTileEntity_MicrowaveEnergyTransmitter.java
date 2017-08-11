@@ -45,7 +45,7 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
     public TileEntity tTile = null;
 
     public GT_MetaTileEntity_MicrowaveEnergyTransmitter(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "Transmits Energy wireless");
+        super(aID, aName, aNameRegional, aTier, 3, new String[]{"Transmits Energy Wirelessly", "Use a Dragon Egg or Nitrogen Plasma", "for Inter-dimensional transmission", "0.004EU Loss per 100 Blocks"});
     }
 
     public GT_MetaTileEntity_MicrowaveEnergyTransmitter(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
