@@ -314,12 +314,15 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
             mStored = tmp[0];
             mMax = tmp[1];
         }
-
         return new String[]{
                 getLocalName(),
                 "Stored Items:",
                 GT_Utility.formatNumbers(mStored) + " EU /",
-                GT_Utility.formatNumbers(mMax) + " EU"};
+                GT_Utility.formatNumbers(mMax) + " EU",
+                "Average input:",
+                getBaseMetaTileEntity().getAverageElectricInput()+"",
+                "Average output:",
+                getBaseMetaTileEntity().getAverageElectricOutput()+""};
     }
 
     @Override

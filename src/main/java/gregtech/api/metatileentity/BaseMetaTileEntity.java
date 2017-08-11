@@ -53,7 +53,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     protected long mStoredEnergy = 0, mStoredSteam = 0;
     protected int mAverageEUInputIndex = 0, mAverageEUOutputIndex = 0;
     protected boolean mReleaseEnergy = false;
-    protected int[] mAverageEUInput = new int[]{0, 0, 0, 0, 0}, mAverageEUOutput = new int[]{0, 0, 0, 0, 0};
+    protected int[] mAverageEUInput = new int[11], mAverageEUOutput = new int[11];
     private boolean[] mActiveEUInputs = new boolean[]{false, false, false, false, false, false}, mActiveEUOutputs = new boolean[]{false, false, false, false, false, false};
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
@@ -1574,15 +1574,21 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public long getAverageElectricInput() {
         int rEU = 0;
-        for (int tEU : mAverageEUInput) rEU += tEU;
-        return rEU / mAverageEUInput.length;
+        for (int i = 0; i < mAverageEUInput.length; i++) {
+            if (i != mAverageEUInputIndex)
+                rEU += mAverageEUInput[i];
+        }
+        return rEU / (mAverageEUInput.length - 1);
     }
 
     @Override
     public long getAverageElectricOutput() {
         int rEU = 0;
-        for (int tEU : mAverageEUOutput) rEU += tEU;
-        return rEU / mAverageEUOutput.length;
+        for (int i = 0; i < mAverageEUOutput.length; i++) {
+            if (i != mAverageEUOutputIndex)
+                rEU += mAverageEUOutput[i];
+        }
+        return rEU / (mAverageEUOutput.length - 1);
     }
 
     @Override
