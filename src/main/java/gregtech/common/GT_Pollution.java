@@ -50,7 +50,7 @@ public class GT_Pollution {
 	 * Large Boiler(240)
 	 * Large Gas Turbine(160)
 	 * Multi Smelter(100)
-	 * Pyrolyse Oven(400)
+	 * Pyrolyse Oven(200)
 	 * 
 	 * Machine Explosion(100,000)
 	 * 

@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 
+	private int coilMetaID;
+	
     public GT_MetaTileEntity_PyrolyseOven(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -32,13 +34,16 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 "Controller Block for the Pyrolyse Oven",
                 "Industrial Charcoal producer and Oil from Plants",
                 "Size(WxHxD): 5x4x5, Controller (Bottom center)",
-                "3x1x3 of Kanthal Coil Blocks (At the center of the bottom layer)",
+                "3x1x3 of Coil Blocks (At the center of the bottom layer)",
                 "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
                 "1x Output Hatch/Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
                 "1x Energy Hatch (Any bottom layer casing)",
                 "ULV Machine Casings for the rest (60 at least!)",
+                "Processing speed scales linearly with Coil tier:",
+                "CuNi: 50%, FeAlCr: 100%, Ni4Cr: 150%, Fe50CW: 200%, etc.",
+                "EU/t is not affected by Coil tier",
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
@@ -68,7 +73,6 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                     this.mEfficiencyIncrease = 10000;
 
                     this.mEUt = tRecipe.mEUt;
-                    this.mMaxProgresstime = tRecipe.mDuration;
                     if (tRecipe.mEUt <= 16) {
                         this.mEUt = (tRecipe.mEUt * (1 << tTier - 1) * (1 << tTier - 1));
                         this.mMaxProgresstime = (tRecipe.mDuration / (1 << tTier - 1));
@@ -83,6 +87,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                     if (this.mEUt > 0) {
                         this.mEUt = (-this.mEUt);
                     }
+                    this.mMaxProgresstime = mMaxProgresstime * 2 / (1 + coilMetaID);
                     this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                     if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
                     if (tRecipe.mFluidOutputs.length > 0)
@@ -100,17 +105,26 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX * 2;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ * 2;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
+        boolean firstCoil = true;
         for (int i = -2; i < 3; i++) {
             for (int j = -2; j < 3; j++) {
                 for (int h = 0; h < 4; h++) {
                     IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, h, zDir + j);
-                    if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne h�he
-                        if (h == 0) {// innen boden (kantal coils)
+                    if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// innerer 3x3 ohne hoehe
+                        if (h == 0) {// innen boden (kanthal coils)
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
                                 return false;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 1) {
+                            int metaID = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j);
+                            if (metaID > 6) {
                                 return false;
+                            } else {
+                            	if (firstCoil) {
+                            		this.coilMetaID = metaID;
+                            		firstCoil = false;
+                            	} else if (metaID != this.coilMetaID) {
+                            		return false;
+                            	}
                             }
                         } else if (h == 3) {// innen decke (ulv casings + input + muffler)
                             if ((!addInputToMachineList(tTileEntity, 111)) && (!addMufflerToMachineList(tTileEntity, 111))) {
@@ -126,8 +140,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                                 return false;
                             }
                         }
-                    } else {// Au�erer 5x5 ohne h�he
-                        if (h == 0) {// au�en boden (controller, output, energy, maintainance, rest ulv casings)
+                    } else {// Aeusserer 5x5 ohne hoehe
+                        if (h == 0) {// aussen boden (controller, output, energy, maintainance, rest ulv casings)
                             if ((!addMaintenanceToMachineList(tTileEntity, 111)) && (!addOutputToMachineList(tTileEntity, 111)) && (!addEnergyInputToMachineList(tTileEntity, 111))) {
                                 if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
                                     if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
@@ -138,7 +152,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                                     }
                                 }
                             }
-                        } else {// au�en �ber boden (ulv casings)
+                        } else {// aussen ueber boden (ulv casings)
                             if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings1) {
                                 return false;
                             }
@@ -165,7 +179,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 20;
+        return 10;
     }
 
     @Override
