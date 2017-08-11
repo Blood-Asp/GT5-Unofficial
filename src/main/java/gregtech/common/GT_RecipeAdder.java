@@ -9,6 +9,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.objects.GT_FluidStack;
+import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -577,6 +578,36 @@ public class GT_RecipeAdder
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("distillery", aOutput.getFluid().getUnlocalizedName(), aDuration)) <= 0) {
             return false;
+        }
+        //reduce the batch size if fluid amount is exceeding 
+        int tScale = (Math.max(aInput.amount, aOutput.amount) + 999) / 1000;
+        if (tScale <= 0) tScale = 1;
+        if (tScale > 1){
+        	//trying to find whether there is a better factor
+        	for (int i = tScale; i <= 5; i++) {
+        		if (aInput.amount % i == 0 && aDuration % i == 0) {
+        			tScale = i;
+        			break;
+        		}
+        	}
+        	for (int i = tScale; i <= 5; i++) {
+        		if (aInput.amount % i == 0 && aDuration % i == 0 && aOutput.amount % i == 0) {
+        			tScale = i;
+        			break;
+        		}
+        	}
+        	aInput = new FluidStack(aInput.getFluid(), (aInput.amount + tScale - 1) / tScale);
+        	aOutput = new FluidStack(aOutput.getFluid(), aOutput.amount / tScale);
+        	if (aSolidOutput != null) {
+        		ItemData tData = GT_OreDictUnificator.getItemData(aSolidOutput);
+        		if (tData != null && (tData.mPrefix == OrePrefixes.dust || OrePrefixes.dust.mFamiliarPrefixes.contains(tData.mPrefix)))
+        			aSolidOutput = GT_OreDictUnificator.getDust(tData.mMaterial.mMaterial, tData.mMaterial.mAmount * aSolidOutput.stackSize / tScale);
+        		else {
+        			if (aSolidOutput.stackSize / tScale == 0) aSolidOutput = GT_Values.NI;
+            		else aSolidOutput = new ItemStack(aSolidOutput.getItem(), aSolidOutput.stackSize / tScale);
+        		}
+        	}
+        	aDuration = (aDuration + tScale - 1) / tScale;
         }
         GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistilleryRecipes.addRecipe(true, new ItemStack[]{aCircuit}, new ItemStack[]{aSolidOutput}, null, new FluidStack[]{aInput}, new FluidStack[]{aOutput}, aDuration, aEUt, 0);
         if ((aHidden) && (tRecipe != null)) {
