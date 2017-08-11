@@ -193,6 +193,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mForceFreeFace = false;
     public boolean mEasierEVPlusCables = false;
     public boolean mBrickedBlastFurnace = true;
+    public boolean enableBlackGraniteOres = true;
+    public boolean enableRedGraniteOres = true;
+    public boolean enableMarbleOres = true;
+    public boolean enableBasaltOres = true;
+    public boolean enableGCOres = true;
+    public boolean enableUBOres = true;
     
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);

@@ -41,6 +41,11 @@ public class GT_Block_Ores_GC extends GT_Block_Ores_Abstract {
     }
 
     @Override
+    public boolean[] getEnabledMetas() {
+        return new boolean[]{true, true, true, true, true, true, true, true};
+    }
+
+    @Override
     public ITexture[] getTextureSet() { //Must have 16 entries.
         return new ITexture[]{new GT_CopiedBlockTexture(aMoonBlock, 0, 3), new GT_CopiedBlockTexture(aMoonBlock, 0, 4), new GT_CopiedBlockTexture(aMoonBlock, 0, 6), new GT_CopiedBlockTexture(aMarsBlock, 0, 9), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0),new GT_CopiedBlockTexture(aMoonBlock, 0, 3), new GT_CopiedBlockTexture(aMoonBlock, 0, 4), new GT_CopiedBlockTexture(aMoonBlock, 0, 6), new GT_CopiedBlockTexture(aMarsBlock, 0, 9), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0)};
     }
