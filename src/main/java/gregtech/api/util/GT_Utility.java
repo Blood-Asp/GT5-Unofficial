@@ -1612,7 +1612,7 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " + aX + " Y: " + aY + " Z: " + aZ + " -----");
+        tList.add("----- X: " + aX + " Y: " + aY + " Z: " + aZ + " D: " + aWorld.provider.dimensionId + " -----");
         try {
             if (tTileEntity instanceof IInventory)
                 tList.add(trans("162","Name: ") + ((IInventory) tTileEntity).getInventoryName() + trans("163","  MetaData: ") + aWorld.getBlockMetadata(aX, aY, aZ));
