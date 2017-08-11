@@ -505,7 +505,7 @@ public class GT_Utility {
         }
         if (aTileEntity instanceof ISidedInventory && !((ISidedInventory) aTileEntity).canInsertItem(aSlot, aStack, aSide))
             return false;
-        return aTileEntity.isItemValidForSlot(aSlot, aStack);
+        return aSlot < aTileEntity.getSizeInventory() && aTileEntity.isItemValidForSlot(aSlot, aStack);
     }
 
     /**
