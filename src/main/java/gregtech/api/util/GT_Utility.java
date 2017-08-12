@@ -1590,7 +1590,7 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET+ " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " -----");
+        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET+ " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " D: " +EnumChatFormatting.AQUA+ aWorld.provider.dimensionId +EnumChatFormatting.RESET+ " -----");
         try {
             if (tTileEntity != null && tTileEntity instanceof IInventory)
                 tList.add(trans("162","Name: ") +EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName() +EnumChatFormatting.RESET+ trans("163"," MetaData: ") +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ) +EnumChatFormatting.RESET);
