@@ -1,5 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -66,7 +68,7 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
         actualTexture=aNBT.getByte("mMachineBlock");
         mTexturePage=aNBT.getByte("mTexturePage");
 
-        if(mTexturePage!=0 && getBaseMetaTileEntity().isServerSide())
+        if(mTexturePage!=0 && GT_Values.GT.isServerSide())
             actualTexture|=0x80;//<- lets just hope no one needs the correct value for that on server
         mMachineBlock=actualTexture;
     }
