@@ -6,6 +6,7 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.IItemBehaviour;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.items.behaviors.Behaviour_Scoop;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -92,13 +93,7 @@ public class GT_Tool_Scoop
     }
 
     public void onStatsAddedToTool(GT_MetaGenerated_Tool aItem, int aID) {
-        try {
-            Object tObject = GT_Utility.callConstructor("gregtech.common.items.behaviors.Behaviour_Scoop", 0, null, false, new Object[]{Integer.valueOf(200)});
-            if ((tObject instanceof IItemBehaviour)) {
-                aItem.addItemBehavior(aID, (IItemBehaviour) tObject);
-            }
-        } catch (Throwable e) {
-        }
+        aItem.addItemBehavior(aID, new Behaviour_Scoop(200));
     }
 
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
