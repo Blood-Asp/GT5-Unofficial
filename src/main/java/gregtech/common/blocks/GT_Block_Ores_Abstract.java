@@ -58,11 +58,13 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
                         GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
-                    if (tHideOres) {
-                        if(!(j == 0 && !aHideFirstMeta)){
-                            codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));}
+                        if (tHideOres) {
+                            if (!(j == 0 && !aHideFirstMeta)) {
+                                codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));
+                            }
                             codechicken.nei.api.API.hideItem(new ItemStack(this, 1, (i + 16000) + (j * 1000)));
-                    }}
+                        }
+                    }
                 }
             }
         }
