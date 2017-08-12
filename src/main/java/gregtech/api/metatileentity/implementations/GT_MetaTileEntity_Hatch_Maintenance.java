@@ -141,6 +141,10 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
         }
     }
 
+    public boolean autoMaintainance(){
+        return isRecipeInputEqual(true);
+    }
+
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess) {
         ItemStack[] mInputs=new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),
                 GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),
