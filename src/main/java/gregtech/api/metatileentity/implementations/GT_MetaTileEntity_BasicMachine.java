@@ -14,7 +14,6 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
-import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -602,30 +601,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     protected ItemStack[] getAllInputs() {
-        ItemStack[] rInputs = new ItemStack[mInputSlotCount + 1];
-        boolean foundEmptySlotOrAreTwoInputsEqual = false;
-        boolean foundIntegratedCircuit = false;
-        for (int i = 0; i < mInputSlotCount; i++){
-        	ItemStack currentInput = getInputAt(i);
-           	if (currentInput == null) {
-           		foundEmptySlotOrAreTwoInputsEqual = true;
-               	continue;
-           	}
-        	rInputs[i] = currentInput;
-        	if (!foundIntegratedCircuit && currentInput != null && currentInput.getItem() instanceof GT_IntegratedCircuit_Item) {
-        		foundIntegratedCircuit = true;
-        	}
-        	if (!foundEmptySlotOrAreTwoInputsEqual) {
-        		for (int j = 0; j < i; j++) {
-        			if (GT_Utility.areStacksEqual(rInputs[i], rInputs[j])) {
-        				foundEmptySlotOrAreTwoInputsEqual = true;
-        			}
-        		}
-        	}
-        }
-        if (!foundIntegratedCircuit && foundEmptySlotOrAreTwoInputsEqual) {
-    		rInputs[mInputSlotCount] = GT_Utility.getIntegratedCircuit(0);
-    	}
+        ItemStack[] rInputs = new ItemStack[mInputSlotCount];
+        for (int i = 0; i < mInputSlotCount; i++) rInputs[i] = getInputAt(i);
         return rInputs;
     }
 
