@@ -159,16 +159,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mFluidInputs = aFluidInputs;
         mFluidOutputs = aFluidOutputs;
         mDuration = aDuration;
-        if (aSpecialValue == 0) {
-            for (ItemStack input : mInputs) {
-                if (input != null && input.getItem() instanceof GT_IntegratedCircuit_Item && input.getItemDamage() == 0) {
-                    mSpecialValue = -400;
-                }
-            }
-        } else {
-            mSpecialValue = aSpecialValue;
-        }
-
+        mSpecialValue = aSpecialValue;
         mEUt = aEUt;
 
 //		checkCellBalance();
