@@ -86,11 +86,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				}
 			}
 		}
-		if (mInventory[1] != null) {
-			tInputList.add(mInventory[1]);
-		} else {
-			tInputList.add(GT_Utility.getIntegratedCircuit(0));
-		}
+		tInputList.add(mInventory[1]);
 		ItemStack[] inputs = tInputList.toArray(new ItemStack[tInputList.size()]);
 
 		ArrayList<FluidStack> tFluidList = getStoredFluids();

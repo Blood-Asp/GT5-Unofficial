@@ -9,7 +9,6 @@ import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
-import gregtech.common.items.GT_IntegratedCircuit_Item;
 import gregtech.nei.GT_NEI_DefaultHandler.FixedPositionedStack;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
