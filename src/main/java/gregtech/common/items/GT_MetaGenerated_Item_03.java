@@ -117,7 +117,8 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Wafer_QuantumCPU.set(addItem(tLastID = 56, "QBit Wafer", "Raw Circuit", o));
         ItemList.Circuit_Chip_QuantumCPU.set(addItem(tLastID = 57, "QBit Processing Unit", "Quantum CPU", o));
 
-        ItemList.Circuit_Chip_UHPIC.set(addItem(tLastID = 58, "Ultra High Power IC", "Ultra High Power Circuit", o));
+        ItemList.Circuit_Wafer_UHPIC.set(addItem(tLastID = 58, "UHPIC Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Chip_UHPIC.set(addItem(tLastID = 59, "Ultra High Power IC", "Ultra High Power Circuit", o));
 
         /**
          * Engraved Crystal Chip
