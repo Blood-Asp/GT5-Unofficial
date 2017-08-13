@@ -70,7 +70,7 @@ public class GT_MetaGenerated_Item_03
          * NOR Memory
          * CPU (4 sizes)
          * SoCs(2 sizes, high tier cheap low tech component)
-         * Power IC/High Power IC
+         * Power IC/High Power IC/Ultra High power
          *
          * nanotube interconnected circuit (H-IC + nanotubes)
          *
@@ -116,6 +116,8 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Wafer_QuantumCPU.set(addItem(tLastID = 56, "QBit Wafer", "Raw Circuit", o));
         ItemList.Circuit_Chip_QuantumCPU.set(addItem(tLastID = 57, "QBit Processing Unit", "Quantum CPU", o));
+
+        ItemList.Circuit_Chip_UHPIC.set(addItem(tLastID = 58, "Ultra High Power IC", "Ultra High Power Circuit", o));
 
         /**
          * Engraved Crystal Chip
