@@ -238,7 +238,7 @@ public class GT_LanguageManager {
     	addStringLocalization("Interaction_DESCRIPTION_Index_130", "Fluids ");
     	addStringLocalization("Interaction_DESCRIPTION_Index_131", "Items ");    	
     	addStringLocalization("Interaction_DESCRIPTION_Index_132", "Pipe is loose.");
-    	addStringLocalization("Interaction_DESCRIPTION_Index_133", "Screws are missing.");
+    	addStringLocalization("Interaction_DESCRIPTION_Index_133", "Screws are loose.");
     	addStringLocalization("Interaction_DESCRIPTION_Index_134", "Something is stuck.");
     	addStringLocalization("Interaction_DESCRIPTION_Index_135", "Platings are dented.");
     	addStringLocalization("Interaction_DESCRIPTION_Index_136", "Circuitry burned out.");

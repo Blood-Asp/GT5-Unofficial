@@ -34,7 +34,7 @@ public class GT_GUIContainer_MultiMachine extends GT_GUIContainerMetaTile_Machin
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 1) != 0)
                 fontRendererObj.drawString(trans("132","Pipe is loose."), 10, 16, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 2) != 0)
-                fontRendererObj.drawString(trans("133","Screws are missing."), 10, 24, 16448255);
+                fontRendererObj.drawString(trans("133","Screws are loose."), 10, 24, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 4) != 0)
                 fontRendererObj.drawString(trans("134","Something is stuck."), 10, 32, 16448255);
             if ((((GT_Container_MultiMachine) mContainer).mDisplayErrorCode & 8) != 0)
