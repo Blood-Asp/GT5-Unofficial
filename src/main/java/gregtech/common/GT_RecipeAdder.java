@@ -385,8 +385,8 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-    public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
-        if ((aInput1 == null) || (aOutput1 == null)) {
+    public boolean addAssemblerRecipe(ItemStack[] aInputs,  FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
+        if (areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
             return false;
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("assembling", aOutput1, aDuration)) <= 0) {
@@ -395,7 +395,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         if (!GT_Mod.gregtechproxy.mEnableCleanroom){
             aCleanroom = false;
         }
-        GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, new ItemStack[]{aInput1, (aInput2 == null ? aInput1 : aInput2)}, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput == null ? null : aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
+        GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
         return true;
     }
 
