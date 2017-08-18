@@ -133,21 +133,21 @@ public class GT_Loader_Item_Block_And_Fluid
 
             ////GT_ModHandler.addCraftingRecipe(ItemList.NaquadahCell_2.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "   ", "   ", 'R', ItemList.NaquadahCell_1, 'P', OrePrefixes.plate.get(Materials.Iron)});
             ////GT_ModHandler.addCraftingRecipe(ItemList.NaquadahCell_4.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"RPR", "CPC", "RPR", 'R', ItemList.NaquadahCell_1, 'P', OrePrefixes.plate.get(Materials.Iron), 'C', OrePrefixes.plate.get(Materials.Copper)});
-//(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, ItemStack aOutput5, ItemStack aOutput6, int[] aChances, int aDuration, int aEUt)
+            //(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, ItemStack aOutput5, ItemStack aOutput6, int[] aChances, int aDuration, int aEUt)
             GT_Values.RA.addCentrifugeRecipe(ItemList.Depleted_Naquadah_1.get(1), null,null,null,
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 1L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 1L),
                     GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Naquadria, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.NaquadahEnriched, 2L),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.TungstenSteel, 4L),
-                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 4L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TungstenSteel, 8L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 1L),
                     new int[]{10_000,5_000,5_000,2_500,10_000,10_000},500,2000);
             GT_Values.RA.addCentrifugeRecipe(ItemList.Depleted_Naquadah_2.get(1), null,null,null,
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadria, 1L),
                     GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.NaquadahEnriched, 4L),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.TungstenSteel, 18L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TungstenSteel, 18L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 2L),
                     new int[]{10_000,5_000,5_000,2_500,10_000,10_000},1000,2000);
             GT_Values.RA.addCentrifugeRecipe(ItemList.Depleted_Naquadah_4.get(1), null,null,null,
@@ -171,15 +171,15 @@ public class GT_Loader_Item_Block_And_Fluid
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 1L),
                     GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.NaquadahEnriched, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Naquadria, 2L),
-                    GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.TungstenSteel, 4L),
-                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 4L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TungstenSteel, 8L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 1L),
                     new int[]{10_000,5_000,5_000,2_500,10_000,10_000},500,2000);
             GT_Values.RA.addCentrifugeRecipe(ItemList.Depleted_MNq_2.get(1), null,null,null,
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.NaquadahEnriched, 1L),
                     GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Naquadria, 4L),
-                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.TungstenSteel, 18L),
+                    GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TungstenSteel, 18L),
                     GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 2L),
                     new int[]{10_000,5_000,5_000,2_500,10_000,10_000},1000,2000);
             GT_Values.RA.addCentrifugeRecipe(ItemList.Depleted_MNq_4.get(1), null,null,null,
