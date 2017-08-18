@@ -103,7 +103,8 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mMode", mMode);
-        aNBT.setString("lockedFluidName", lockedFluidName);
+        if(lockedFluidName.length()!=0) aNBT.setString("lockedFluidName", lockedFluidName);
+        else aNBT.removeTag("lockedFluidName");
     }
 
     @Override
