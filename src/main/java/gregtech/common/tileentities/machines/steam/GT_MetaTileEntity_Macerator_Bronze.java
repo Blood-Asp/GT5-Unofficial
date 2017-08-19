@@ -58,8 +58,8 @@ public class GT_MetaTileEntity_Macerator_Bronze extends GT_MetaTileEntity_BasicM
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
         if (tRecipe.getOutput(0) != null) mOutputItems[0] = tRecipe.getOutput(0);
-        this.mEUt = 2;
-        this.mMaxProgresstime = 800;
+        this.mEUt = tRecipe.mEUt;
+        this.mMaxProgresstime = (tRecipe.mDuration * 2);
         getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
