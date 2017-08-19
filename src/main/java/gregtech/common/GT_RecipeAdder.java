@@ -23,6 +23,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class GT_RecipeAdder
         implements IGT_RecipeAdder {
+	
+	private boolean isAddingDeprecatedRecipes = false;
+	
 	@Deprecated
     public boolean addFusionReactorRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt, int aStartEU) {
         return false;
@@ -134,10 +137,10 @@ public class GT_RecipeAdder
         if (aEUtick <= 0) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, isAddingDeprecatedRecipes ? -300 : 0);
         if (!(aInput1 != null && aInput1.getItem() instanceof GT_IntegratedCircuit_Item && aInput1.getItemDamage() >= 10)
         		&& !(aInput2 != null && aInput2.getItem() instanceof GT_IntegratedCircuit_Item && aInput2.getItemDamage() >= 10)) {
-            GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);        	
+            GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, isAddingDeprecatedRecipes ? -300 : 0);        	
         }
         return true;
     }
@@ -1000,6 +1003,14 @@ public class GT_RecipeAdder
     	}
     	return itemsNull && fluidsNull;
 
+	}
+
+	public boolean isAddingDeprecatedRecipes() {
+		return isAddingDeprecatedRecipes;
+	}
+
+	public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes) {
+		this.isAddingDeprecatedRecipes = isAddingDeprecatedRecipes;
 	}
 
 }

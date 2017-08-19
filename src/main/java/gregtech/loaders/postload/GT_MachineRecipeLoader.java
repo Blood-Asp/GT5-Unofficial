@@ -1698,8 +1698,8 @@ if(Loader.isModLoaded("Railcraft")){
 		addProcess(tCrop, Materials.Beryllium, 100, false);
 
 		addRecipesApril2017ChemistryUpdate();
-		if (GT_Mod.gregtechproxy.mReenableSimplifiedChemicalRecipes) {
-			addSimplifiedChemicalRecipes();
+		if (!GT_Mod.gregtechproxy.mDisableOldChemicalRecipes) {
+			addOldChemicalRecipes();
 		} else {
 			GT_Values.RA.addChemicalRecipe(Materials.Sodium.getDust(2), Materials.Sulfur.getDust(1), Materials.SodiumSulfide.getDust(1), 60);
 			GT_Values.RA.addChemicalRecipe(Materials.HydricSulfide.getCells(1), GT_Values.NI, Materials.Water.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(750), Materials.Empty.getCells(1), 60);
@@ -2991,7 +2991,8 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addChemicalRecipe(                   Materials.NitrationMixture.getCells(3), GT_Utility.getIntegratedCircuit(11), Materials.Glycerol.getFluid(1000),         Materials.Glyceryl.getFluid(1000),            Materials.DilutedSulfuricAcid.getCells(3), 180);
 	}
 	
-	private void addSimplifiedChemicalRecipes() {
+	private void addOldChemicalRecipes() {
+		GT_Values.RA.setIsAddingDeprecatedRecipes(true);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Nitrogen, 1L), ItemList.Circuit_Integrated.getWithDamage(0, 1, new Object[0]), Materials.Oxygen.getGas(2000L), Materials.NitrogenDioxide.getGas(1000L), ItemList.Cell_Empty.get(1L, new Object[0]), 1250);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 2L), ItemList.Circuit_Integrated.getWithDamage(0, 1, new Object[0]), Materials.Nitrogen.getGas(1000L), Materials.NitrogenDioxide.getGas(1000L), ItemList.Cell_Empty.get(2L, new Object[0]), 1250);
 
@@ -3026,6 +3027,7 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addMixerRecipe(Materials.Sodium.getDust(2), Materials.Sulfur.getDust(1), GT_Utility.getIntegratedCircuit(2), null, null, null, Materials.SodiumSulfide.getDust(1), 60, 30);
 
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Nitrogen, 1L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1L), Materials.Water.getFluid(2000L), Materials.Glyceryl.getFluid(4000L), ItemList.Cell_Empty.get(1L, new Object[0]), 2700);
+        GT_Values.RA.setIsAddingDeprecatedRecipes(false);
 	}
 	
 	private void addRecipesMay2017OilRefining() {

@@ -662,4 +662,17 @@ public interface IGT_RecipeAdder {
      * @return true if the Sound got added, otherwise false.
      */
     public boolean addSonictronSound(ItemStack aItemStack, String aSoundName);
+
+    /**
+     * Returns whether the recipes added are currently being marked as deprecated.
+     * Currently only affects Chemical Reactor Recipes.
+     */
+	public boolean isAddingDeprecatedRecipes();
+
+	/**
+	 * Sets whether the recipes added from this point on should be marked as deprecated or not.
+     * Currently only affects Chemical Reactor Recipes.
+	 */
+	public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
+
 }
