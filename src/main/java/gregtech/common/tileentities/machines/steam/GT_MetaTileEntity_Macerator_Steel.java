@@ -59,8 +59,8 @@ public class GT_MetaTileEntity_Macerator_Steel
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
         if (tRecipe.getOutput(0) != null) mOutputItems[0] = tRecipe.getOutput(0);
-        this.mEUt = 6;
-        this.mMaxProgresstime = 400;
+        this.mEUt = (3 * tRecipe.mEUt);
+        this.mMaxProgresstime = tRecipe.mDuration;
         getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
