@@ -385,7 +385,12 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-    public boolean addAssemblerRecipe(ItemStack[] aInputs,  FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
+    public boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
+        if(aInput2==null) return addAssemblerRecipe(new ItemStack[]{aInput1},aFluidInput,aOutput1,aDuration,aEUt,aCleanroom);
+        return addAssemblerRecipe(new ItemStack[]{aInput1,aInput2},aFluidInput,aOutput1,aDuration,aEUt,aCleanroom);
+    }
+
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
         if (areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
             return false;
         }
