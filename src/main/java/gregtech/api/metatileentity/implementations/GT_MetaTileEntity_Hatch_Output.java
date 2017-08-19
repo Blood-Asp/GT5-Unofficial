@@ -15,10 +15,17 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
+	private String lockedFluidName = null;
+	private EntityPlayer playerThatLockedfluid = null;
     public byte mMode = 0;
 
     public GT_MetaTileEntity_Hatch_Output(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "Fluid Output for Multiblocks (" + 8000 * (aTier + 1) + "L) (Screwdriver for output type)");
+        super(aID, aName, aNameRegional, aTier, 3, new String[]{
+        		"Fluid Output for Multiblocks",
+        		"Capacity: " + 8000 * (aTier + 1) + "L",
+        		"Right click with screwdriver to restrict output",
+        		"Can be restricted to put out Items and/or Steam/No Steam/1 specific Fluid",
+        		"Restricted Output Hatches are given priority for Multiblock Fluid output"});
     }
 
     public GT_MetaTileEntity_Hatch_Output(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -96,12 +103,15 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mMode", mMode);
+        aNBT.setString("lockedFluidName", lockedFluidName);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mMode = aNBT.getByte("mMode");
+        lockedFluidName = aNBT.getString("lockedFluidName");
+        lockedFluidName = lockedFluidName.length() == 0 ? null : lockedFluidName;
     }
 
     @Override
@@ -153,31 +163,66 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return;
-        mMode = (byte) ((mMode + 1) % 8);
+        if (aPlayer.isSneaking()) {
+        	mMode = (byte) ((mMode + 9) % 10);
+        } else {
+            mMode = (byte) ((mMode + 1) % 10);        	
+        }
+        String inBrackets;
         switch (mMode) {
             case 0:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs Liquids, Steam and Items"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("108","Outputs misc. Fluids, Steam and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 1:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("109","Outputs Steam and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 2:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and Liquids"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("110","Outputs Steam and misc. Fluids"));
+                this.setLockedFluidName(null);
                 break;
             case 3:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("111","Outputs Steam"));
+                this.setLockedFluidName(null);
                 break;
             case 4:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs Liquids and Items"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("112","Outputs misc. Fluids and Items"));
+                this.setLockedFluidName(null);
                 break;
             case 5:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("113","Outputs only Items"));
+                this.setLockedFluidName(null);
                 break;
             case 6:
-                GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only Liquids"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("114","Outputs only misc. Fluids"));
+                this.setLockedFluidName(null);
                 break;
             case 7:
                 GT_Utility.sendChatToPlayer(aPlayer, trans("115","Outputs nothing"));
+                this.setLockedFluidName(null);
+                break;
+            case 8:
+            	playerThatLockedfluid = aPlayer;
+            	if (mFluid == null) {
+                    this.setLockedFluidName(null);
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            	} else {
+            		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
+            		inBrackets = this.getDrainableStack().getLocalizedName();
+            	}
+                GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.1", "Outputs items and 1 specific Fluid"), inBrackets));
+                break;
+            case 9:
+            	playerThatLockedfluid = aPlayer;
+            	if (mFluid == null) {
+                    this.setLockedFluidName(null);
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            	} else {
+            		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
+            		inBrackets = this.getDrainableStack().getLocalizedName();
+            	}
+                GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.2", "Outputs 1 specific Fluid"), inBrackets));
                 break;
         }
     }
@@ -191,15 +236,35 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     }
 
     public boolean outputsLiquids() {
-        return mMode % 2 == 0;
+        return mMode % 2 == 0 || mMode == 9;
     }
 
     public boolean outputsItems() {
-        return mMode % 4 < 2;
+        return mMode % 4 < 2 && mMode != 9;
+    }
+    
+    public boolean isFluidLocked(){
+    	return mMode == 8 || mMode == 9;
+    }
+    
+    public String getLockedFluidName() {
+    	return lockedFluidName;
+    }
+    
+    public void setLockedFluidName(String lockedFluidName) {
+    	this.lockedFluidName = lockedFluidName;
     }
 
     @Override
     public int getTankPressure() {
         return +100;
+    }
+    
+    @Override
+    protected void onEmptyingContainerWhenEmpty() {
+    	if (this.lockedFluidName == null && this.mFluid != null) {
+        	this.setLockedFluidName(this.mFluid.getUnlocalizedName());
+        	GT_Utility.sendChatToPlayer(playerThatLockedfluid, String.format(trans("151.4","Sucessfully locked Fluid to %s"), mFluid.getLocalizedName()));
+    	}
     }
 }
