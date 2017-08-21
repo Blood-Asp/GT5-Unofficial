@@ -190,7 +190,7 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
     @Override
     public final void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
         String tKey = getUnlocalizedName(aStack) + ".tooltip";
-        String[] tStrings = GT_LanguageManager.getTranslation(tKey).split("////");
+        String[] tStrings = GT_LanguageManager.getTranslation(tKey).split("/n ");
         for (String tString : tStrings)
         	if (GT_Utility.isStringValid(tString) && !tKey.equals(tString)) aList.add(tString);
 
