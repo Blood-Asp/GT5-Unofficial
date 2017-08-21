@@ -3027,7 +3027,13 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addChemicalRecipe(Materials.Calcite.getDust(1),   GT_Utility.getIntegratedCircuit(1), GT_Values.NF,                         Materials.CarbonDioxide.getGas(1000), Materials.Quicklime.getDust(1), 240);
         GT_Values.RA.addChemicalRecipe(Materials.Magnesia.getDust(1),  GT_Values.NI,                       Materials.CarbonDioxide.getGas(1000), GT_Values.NF,                         Materials.Magnesite.getDust(1), 80);
         GT_Values.RA.addChemicalRecipe(Materials.Magnesite.getDust(1), GT_Utility.getIntegratedCircuit(1), GT_Values.NF,                         Materials.CarbonDioxide.getGas(1000), Materials.Magnesia.getDust(1), 240);
-		
+        
+        GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), Materials.Empty.getCells(7),         Materials.Water.getFluid(2000), Materials.CarbonDioxide.getGas(1000), Materials.Hydrogen.getCells(8),      150, 480);
+        GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(2),   Materials.Empty.getCells(6),         Materials.Methane.getGas(1000), Materials.CarbonDioxide.getGas(1000), Materials.Hydrogen.getCells(8),      150, 480);
+        GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.Water.getFluid(2000), Materials.Hydrogen.getGas(8000),      Materials.CarbonDioxide.getCells(1), 150, 480);
+        GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(2),   GT_Utility.getIntegratedCircuit(11), Materials.Methane.getGas(1000), Materials.Hydrogen.getGas(8000),      Materials.CarbonDioxide.getCells(1), Materials.Empty.getCells(1), 150, 480);
+        GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), GT_Utility.getIntegratedCircuit(12), Materials.Water.getFluid(2000), Materials.Hydrogen.getGas(8000),      Materials.Empty.getCells(1), 150, 480);
+        GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(2),   GT_Utility.getIntegratedCircuit(12), Materials.Methane.getGas(1000), Materials.Hydrogen.getGas(8000),      Materials.Empty.getCells(2), 150, 480);
 	}
 	
 	private void addOldChemicalRecipes() {
