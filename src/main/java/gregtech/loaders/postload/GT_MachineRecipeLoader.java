@@ -2918,9 +2918,11 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addChemicalRecipe(Materials.Fluorine.getCells(1), 	GT_Utility.getIntegratedCircuit(11), Materials.Hydrogen.getGas(1000), GT_Values.NF, Materials.HydrofluoricAcid.getCells(1), 60, 8);
         GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(1), 	GT_Utility.getIntegratedCircuit(11), Materials.Fluorine.getGas(1000), GT_Values.NF, Materials.HydrofluoricAcid.getCells(1), 60, 8);
 
-        GT_Values.RA.addChemicalRecipe(Materials.Chloroform.getCells(2), 		Materials.HydrofluoricAcid.getCells(4), GT_Values.NF, Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6), 480, 256);
-        GT_Values.RA.addChemicalRecipe(Materials.Chloroform.getCells(2), 		Materials.Empty.getCells(4), Materials.HydrofluoricAcid.getFluid(4000), 	 Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6), 480, 256);
-        GT_Values.RA.addChemicalRecipe(Materials.HydrofluoricAcid.getCells(4),  Materials.Empty.getCells(2), Materials.Chloroform.getFluid(2000), 	 Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6), 480, 256);
+        GT_Values.RA.addChemicalRecipe(Materials.Chloroform.getCells(2),         Materials.HydrofluoricAcid.getCells(4), GT_Values.NF,                              Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6), 480, 256);
+        GT_Values.RA.addChemicalRecipe(Materials.Chloroform.getCells(2),         Materials.Empty.getCells(4),            Materials.HydrofluoricAcid.getFluid(4000), Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6),    480, 256);
+        GT_Values.RA.addChemicalRecipe(Materials.HydrofluoricAcid.getCells(4),  Materials.Empty.getCells(2),            Materials.Chloroform.getFluid(2000),       Materials.Tetrafluoroethylene.getGas(1000), Materials.HydrochloricAcid.getCells(6),    480, 256);
+        GT_Values.RA.addChemicalRecipe(Materials.HydrofluoricAcid.getCells(4),  GT_Utility.getIntegratedCircuit(11),    Materials.Chloroform.getFluid(2000),       Materials.HydrochloricAcid.getFluid(6000),  Materials.Tetrafluoroethylene.getCells(1), Materials.Empty.getCells(3), 480, 256);
+        GT_Values.RA.addChemicalRecipe(Materials.Chloroform.getCells(2),        GT_Utility.getIntegratedCircuit(11),    Materials.HydrofluoricAcid.getFluid(4000), Materials.HydrochloricAcid.getFluid(6000),  Materials.Tetrafluoroethylene.getCells(1), Materials.Empty.getCells(1), 480, 256);
 
         GT_Values.RA.addDefaultPolymerizationRecipes(Materials.Tetrafluoroethylene.mGas, Materials.Polytetrafluoroethylene.mStandardMoltenFluid);
 
