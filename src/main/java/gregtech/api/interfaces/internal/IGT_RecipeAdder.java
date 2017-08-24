@@ -140,10 +140,11 @@ public interface IGT_RecipeAdder {
     /**
      * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
      * @param aBasicMaterial The basic Material
+     * @param aBasicMaterialCell The corresponding Cell basic Material
      * @param aPolymer The polymer
      */
-    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer);
-
+    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, ItemStack aBasicMaterialCell, Fluid aPolymer);
+    
     /**
      * Adds a Chemical Recipe
      *
