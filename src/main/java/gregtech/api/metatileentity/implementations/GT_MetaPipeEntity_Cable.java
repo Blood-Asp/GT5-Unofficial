@@ -44,6 +44,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long mRestRF;
     public short mOverheat;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
+    private int tickDiff=1,lastTickDiff=1;
+    private long lastTickTime;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -229,7 +231,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredAmperage += rUsedAmperes;
         mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
-        if (aVoltage > mVoltage || mTransferredAmperage > mAmperage) {
+        if (aVoltage > mVoltage || mTransferredAmperage > (mAmperage*tickDiff)) {
             if(mOverheat>mMaxOverheat)
                 getBaseMetaTileEntity().setToFire();
             else
@@ -247,6 +249,13 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredVoltage=0;
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
+
+            tickDiff=Math.min((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
+            lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
+            if(lastTickDiff<tickDiff)
+                mOverheat=(short)Math.max(0,mOverheat-100);
+            lastTickDiff=tickDiff;
+
             if(mOverheat>0)mOverheat--;
             if (aTick % 20 == 0) {
                 mTransferredVoltageLast20OK=mTransferredVoltageLast20;
@@ -339,6 +348,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
                 "Heat: "+
                         EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET,
+                "TickDiff: "+ EnumChatFormatting.YELLOW+ tickDiff + EnumChatFormatting.RESET,
                 "Max Load (1t):",
                 EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
                         EnumChatFormatting.YELLOW + Long.toString(mAmperage) + EnumChatFormatting.RESET +" A",
