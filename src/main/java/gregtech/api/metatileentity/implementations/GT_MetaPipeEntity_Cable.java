@@ -23,7 +23,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -43,7 +42,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public int mTransferredAmperage = 0, mTransferredAmperageLast20 = 0,mTransferredAmperageLast20OK=0,mTransferredAmperageOK=0;
     public long mTransferredVoltageLast20 = 0, mTransferredVoltage = 0,mTransferredVoltageLast20OK=0,mTransferredVoltageOK=0;
     public long mRestRF;
-    public short mOverheat;
+    public int mOverheat,mOverHeatToDo;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
     private int tickDiff=1,lastTickDiff=1;
     private long lastTickTime;
@@ -232,11 +231,11 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredAmperage += rUsedAmperes;
         mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
-        if (aVoltage > mVoltage || mTransferredAmperage > (mAmperage*tickDiff)) {
-            if(mOverheat>mMaxOverheat)
-                getBaseMetaTileEntity().setToFire();
-            else
-                mOverheat +=100;
+        if (aVoltage > mVoltage){
+            mOverheat+=100;
+        }
+        if (mTransferredAmperage > (mAmperage*tickDiff)) {
+            mOverHeatToDo+=100;
             return aAmperage;
         }
         return rUsedAmperes;
@@ -251,13 +250,16 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
 
-            tickDiff=Math.min((int)(MinecraftServer.getServer().getTickCounter()-lastTickTime),1);
-            lastTickTime=MinecraftServer.getServer().getTickCounter();
-            if(lastTickDiff<tickDiff)
-                mOverheat=(short)Math.max(0,mOverheat-100);
+            tickDiff=Math.max((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
+            lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
+
+            if(lastTickDiff>=tickDiff)
+                mOverheat+=mOverHeatToDo;
             lastTickDiff=tickDiff;
 
-            if(mOverheat>0)mOverheat--;
+            if(mOverheat>mMaxOverheat) aBaseMetaTileEntity.setToFire();
+            else if(mOverheat>0)mOverheat--;
+
             if (aTick % 20 == 0) {
                 mTransferredVoltageLast20OK=mTransferredVoltageLast20;
                 mTransferredVoltageLast20 = 0;
