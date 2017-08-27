@@ -20,7 +20,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
             long aMaterialMass = aMaterial.getMass();
             int tAmount = (int) (aPrefix.mMaterialAmount / 3628800L);
             if ((tAmount > 0) && (tAmount <= 64) && (aPrefix.mMaterialAmount % 3628800L == 0L)) {
-                int tVoltageMultiplier = ((aMaterial.mBlastFurnaceTemp<20000)?(aMaterial.mBlastFurnaceTemp >= 2800):(aMaterial.mBlastFurnaceTemp >=22800)) ? 60 : 15;
+                int tVoltageMultiplier = aMaterial.mBlastFurnaceTemp >= 2800 ? 60 : 15;
 
                 if (aMaterial.contains(SubTag.NO_SMASHING)) {
                     tVoltageMultiplier /= 4;

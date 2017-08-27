@@ -871,7 +871,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public Collection<SubTag> mSubTags = new LinkedHashSet<SubTag>();
     public Enchantment mEnchantmentTools = null, mEnchantmentArmors = null;
     public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
-    public boolean mBlastFurnaceRequired = false, mTransparent = false;
+    public boolean mBlastFurnaceRequired = false, mAutoGenerateBlastFurnaceRecipes= true, mTransparent = false;
     public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
     public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null";
     public Dyes mColor = Dyes._NULL;
@@ -1519,6 +1519,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
                 aMaterial.mMeltingPoint = (short) GregTech_API.sMaterialProperties.get(aConfigPath, "MeltingPoint", aMaterial.mMeltingPoint);
                 aMaterial.mBlastFurnaceRequired = GregTech_API.sMaterialProperties.get(aConfigPath, "BlastFurnaceRequired", aMaterial.mBlastFurnaceRequired);
                 aMaterial.mBlastFurnaceTemp = (short) GregTech_API.sMaterialProperties.get(aConfigPath, "BlastFurnaceTemp", aMaterial.mBlastFurnaceTemp);
+                aMaterial.mAutoGenerateBlastFurnaceRecipes = GregTech_API.sMaterialProperties.get(aConfigPath, "AutoGenerateBlastFurnaceRecipes", aMaterial.mAutoGenerateBlastFurnaceRecipes);
+                if(aMaterial.mBlastFurnaceTemp>=20000) {
+                    aMaterial.mBlastFurnaceTemp-=20000;
+                    aMaterial.mAutoGenerateBlastFurnaceRecipes=false;
+                }
                 if (GT_Mod.gregtechproxy.mTEMachineRecipes && aMaterial.mBlastFurnaceRequired && aMaterial.mBlastFurnaceTemp < 1500) GT_ModHandler.ThermalExpansion.addSmelterBlastOre(aMaterial);
                 aMaterial.mFuelPower = GregTech_API.sMaterialProperties.get(aConfigPath, "FuelPower", aMaterial.mFuelPower);
                 aMaterial.mFuelType = GregTech_API.sMaterialProperties.get(aConfigPath, "FuelType", aMaterial.mFuelType);
@@ -1709,6 +1714,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         mMeltingPoint = (short) aMeltingPoint;
         mBlastFurnaceRequired = aBlastFurnaceRequired;
         mBlastFurnaceTemp = (short) aBlastFurnaceTemp;
+        if(mBlastFurnaceTemp>=20000) {
+            mBlastFurnaceTemp -= 20000;
+            mAutoGenerateBlastFurnaceRecipes = false;
+        }
         mTransparent = aTransparent;
         mFuelPower = aFuelPower;
         mFuelType = aFuelType;
