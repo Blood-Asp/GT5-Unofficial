@@ -23,6 +23,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.GT_Values.V;
+
 public class GT_MetaTileEntity_ElectricBlastFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeatingCapacity = 0;
@@ -128,7 +130,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
                 int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue)/900;
-		        calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+		        byte overclockCount=calculateOverclockednessEBF(tRecipe.mEUt, tRecipe.mDuration, tVoltage);
                 //In case recipe is too OP for that machine
                 if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                     return false;
@@ -137,7 +139,8 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
                 if(tHeatCapacityDivTiers>0){
                     this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
-                    this.mMaxProgresstime >>=tHeatCapacityDivTiers/2;
+                    this.mMaxProgresstime >>=Math.min(tHeatCapacityDivTiers/2,overclockCount);//extra free overclocking if possible
+                    if(this.mMaxProgresstime<1) this.mMaxProgresstime=1;//no eu efficiency correction
                 }
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                 this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0), tRecipe.getOutput(1)};
@@ -147,6 +150,54 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
             }
         }
         return false;
+    }
+
+    /**
+     * Calcualtes overclocked ness using long integers
+     * @param aEUt          - recipe EUt
+     * @param aDuration     - recipe Duration
+     */
+    protected byte calculateOverclockednessEBF(int aEUt, int aDuration, long maxInputVoltage) {
+        byte mTier=(byte)Math.max(0,GT_Utility.getTier(maxInputVoltage)), timesOverclocked=0;
+        if(mTier==0){
+            //Long time calculation
+            long xMaxProgresstime = ((long)aDuration)<<1;
+            if(xMaxProgresstime>Integer.MAX_VALUE-1){
+                //make impossible if too long
+                mEUt=Integer.MAX_VALUE-1;
+                mMaxProgresstime=Integer.MAX_VALUE-1;
+            }else{
+                mEUt=aEUt>>2;
+                mMaxProgresstime=(int)xMaxProgresstime;
+            }
+            //return 0;
+        }else{
+            //Long EUt calculation
+            long xEUt=aEUt;
+            //Isnt too low EUt check?
+            long tempEUt = xEUt<V[1] ? V[1] : xEUt;
+
+            mMaxProgresstime = aDuration;
+
+            while (tempEUt <= V[mTier -1]) {
+                tempEUt<<=2;//this actually controls overclocking
+                //xEUt *= 4;//this is effect of everclocking
+                mMaxProgresstime>>=1;//this is effect of overclocking
+                xEUt = mMaxProgresstime==0 ? xEUt>>1 : xEUt<<2;//U know, if the time is less than 1 tick make the machine use less power
+                timesOverclocked++;
+            }
+            if(xEUt>Integer.MAX_VALUE-1){
+                mEUt = Integer.MAX_VALUE-1;
+                mMaxProgresstime = Integer.MAX_VALUE-1;
+            }else{
+                mEUt = (int)xEUt;
+                if(mEUt==0)
+                    mEUt = 1;
+                if(mMaxProgresstime==0)
+                    mMaxProgresstime = 1;//set time to 1 tick
+            }
+        }
+        return timesOverclocked;
     }
 
     private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
