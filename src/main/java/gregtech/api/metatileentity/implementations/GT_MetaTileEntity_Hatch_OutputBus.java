@@ -6,9 +6,13 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_OutputBus(int aID, String aName, String aNameRegional, int aTier) {
@@ -102,5 +106,19 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && (aTick&0x7)==0) {
+            IInventory tTileEntity =aBaseMetaTileEntity.getIInventoryAtSide(aBaseMetaTileEntity.getFrontFacing());
+            if(tTileEntity!=null){
+                for (ItemStack aMInventory : mInventory)
+                    GT_Utility.moveOneItemStack(aBaseMetaTileEntity, tTileEntity,
+                            aBaseMetaTileEntity.getFrontFacing(), aBaseMetaTileEntity.getBackFacing(),
+                            null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+            }
+        }
     }
 }
