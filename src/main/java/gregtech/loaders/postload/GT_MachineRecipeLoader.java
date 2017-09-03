@@ -2126,24 +2126,77 @@ if(Loader.isModLoaded("Railcraft")){
             		Materials.SolderingAlloy.getMolten(2880),
             		GregTech_API.mIC2Classic ? Materials.Water.getFluid(10000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 10000)
             }, ItemList.Circuit_Wetwaremainframe.get(1,o), 2000, 300000);
-               
-            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
-            		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
-            		ItemList.Field_Generator_UV.get(2,o),
-            		ItemList.Circuit_Wafer_HPIC.get(64,o),
-            		ItemList.Circuit_Wafer_HPIC.get(64,o),
-            		ItemList.Circuit_Parts_DiodeSMD.get(16,o),
-            		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+
+        if (GregTech_API.sOPStuff.get(ConfigCategories.Recipes.gregtechrecipes, "EnableZPMandUVBatteries", false)) {
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Europium, 16L),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
+                    ItemList.Field_Generator_LuV.get(2, o),
+                    ItemList.Circuit_Wafer_SoC2.get(64, o),
+                    ItemList.Circuit_Wafer_SoC2.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(8, o),
+                    GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32),
             }, new FluidStack[]{
-            		Materials.SolderingAlloy.getMolten(2880),
-            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
-            }, ItemList.ZPM2.get(1,o), 2000, 300000);
-            
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(8000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.Energy_Module.get(1, o), 2000, 100000);
+
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Module.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Americium, 16L),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Energy_Module.get(8L, new Object[0]),
+                    ItemList.Field_Generator_ZPM.get(2, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.NaquadahAlloy, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.Energy_Cluster.get(1, o), 2000, 200000);
+
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Cluster.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Energy_Cluster.get(8L, new Object[0]),
+                    ItemList.Field_Generator_UV.get(2, o),
+                    ItemList.Circuit_Neuroprocessor.get(64, o),
+                    ItemList.Circuit_Neuroprocessor.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000),
+                    Materials.Naquadria.getMolten(1152)
+            }, ItemList.ZPM2.get(1, o), 2000, 300000);
+        }else {
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
+                    ItemList.Field_Generator_UV.get(2, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.ZPM2.get(1, o), 2000, 300000);
+        }
             GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 1), 144000, new ItemStack[]{
             		ItemList.Casing_Fusion_Coil.get(1,o),
             		ItemList.Circuit_Quantummainframe.get(1,o),
