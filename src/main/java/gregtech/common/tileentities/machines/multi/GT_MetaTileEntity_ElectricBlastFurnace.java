@@ -1,13 +1,17 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,6 +24,9 @@ import java.util.ArrayList;
 public class GT_MetaTileEntity_ElectricBlastFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeatingCapacity = 0;
+    private int controllerY;
+    private FluidStack[] pollutionFluidStacks = new FluidStack[]{Materials.CarbonDioxide.getGas(1000), 
+    		Materials.CarbonMonoxide.getGas(1000), Materials.SulfurDioxide.getGas(1000)};
 
     public GT_MetaTileEntity_ElectricBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -43,6 +50,8 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 "1x Energy Hatch (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x Muffler Hatch (Top middle)",
+                "1x Output Hatch to recover CO2/CO/SO2 (optional, any top layer casing),",
+                "    Recovery scales with Muffler Hatch tier",
                 "Heat Proof Machine Casings for the rest",
                 "Each 900K over the min. Heat Capacity grants 5% speedup (multiplicatively)",
                 "Each 1800K over the min. Heat Capacity allows for one upgraded overclock",
@@ -136,6 +145,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 }
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
                 this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0), tRecipe.getOutput(1)};
+                this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
                 updateSlots();
                 return true;
             }
@@ -144,6 +154,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    	controllerY = aBaseMetaTileEntity.getYCoord();
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 
@@ -199,11 +210,13 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                     if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j) != tUsedMeta) {
                         return false;
                     }
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 3, zDir + j) != GregTech_API.sBlockCasings1) {
-                        return false;
-                    }
-                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 3, zDir + j) != 11) {
-                        return false;
+                    if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 3, zDir + j), 11)) {
+                    	if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 3, zDir + j) != GregTech_API.sBlockCasings1) {
+                    		return false;
+                    	}
+                    	if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 3, zDir + j) != 11) {
+                    		return false;
+                    	}
                     }
                 }
             }
@@ -263,4 +276,45 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
             }
         }
     }
+    
+    @Override
+    public boolean addOutput(FluidStack aLiquid) {
+        if (aLiquid == null) return false;
+        int targetHeight;
+        FluidStack tLiquid = aLiquid.copy();
+        boolean isOutputPollution = false;
+        for (FluidStack pollutionFluidStack : pollutionFluidStacks) {
+        	if (tLiquid.isFluidEqual(pollutionFluidStack)) {
+        		isOutputPollution = true;
+        		break;
+        	}
+        }
+    	if (isOutputPollution) {
+    		targetHeight = this.controllerY + 3;
+    		int pollutionReduction = 0;
+            for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
+                if (isValidMetaTileEntity(tHatch)) {
+                	pollutionReduction = 100 - tHatch.calculatePollutionReduction(100);
+                	break;
+                }
+            }
+            tLiquid.amount = tLiquid.amount * (pollutionReduction + 5) / 100;
+    	} else {
+    		targetHeight = this.controllerY;
+    	}
+        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
+            if (isValidMetaTileEntity(tHatch) && GT_ModHandler.isSteam(aLiquid) ? tHatch.outputsSteam() : tHatch.outputsLiquids()) {
+            	if (tHatch.getBaseMetaTileEntity().getYCoord() == targetHeight) {
+            		int tAmount = tHatch.fill(tLiquid, false);
+                	if (tAmount >= tLiquid.amount) {
+                    	return tHatch.fill(tLiquid, true) >= tLiquid.amount;
+                	} else if (tAmount > 0) {
+                    	tLiquid.amount = tLiquid.amount - tHatch.fill(tLiquid, true);
+                	}
+            	}
+            }
+        }
+        return false;
+    }
+
 }
