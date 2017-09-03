@@ -160,7 +160,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mFluidInputs = aFluidInputs;
         mFluidOutputs = aFluidOutputs;
         mDuration = aDuration;
-        mSpecialValue = aSpecialValue;
+        mSpecialValue = aSpecialValue;        	
         mEUt = aEUt;
 
 //		checkCellBalance();
