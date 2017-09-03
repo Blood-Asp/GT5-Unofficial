@@ -655,16 +655,16 @@ if(Loader.isModLoaded("Railcraft")){
         GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell,Materials.SulfuricAcid, 1), null, null, null, new FluidStack(ItemList.sNitricAcid,1000), new FluidStack(ItemList.sNitrationMixture, 2000), ItemList.Cell_Empty.get(1, new Object[0]), 480, 2);
         GT_Values.RA.addChemicalRecipe(ItemList.GelledToluene.get(4, new Object[0]), GT_Values.NI, new FluidStack(ItemList.sNitrationMixture,500), Materials.DilutedSulfuricAcid.getFluid(500), GT_ModHandler.getIC2Item("industrialTnt", 1L), 80, 480);
 
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(12), Materials.NatruralGas.getGas(16000),         Materials.Gas.getGas(16000),          GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NatruralGas, 16L),       GT_Utility.getIntegratedCircuit(12), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Gas, 16L), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(12), Materials.SulfuricGas.getGas(16000),         Materials.Gas.getGas(16000),          GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricGas, 16L),       GT_Utility.getIntegratedCircuit(12), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Gas, 16L), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(12), Materials.SulfuricNaphtha.getFluid(12000),   Materials.Naphtha.getFluid(12000),    GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricNaphtha, 12L),   GT_Utility.getIntegratedCircuit(12), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naphtha, 12L), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(12), Materials.SulfuricLightFuel.getFluid(12000), Materials.LightFuel.getFluid(12000),  GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricLightFuel, 12L), GT_Utility.getIntegratedCircuit(12), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LightFuel, 12L), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(12), Materials.SulfuricHeavyFuel.getFluid(8000),  Materials.HeavyFuel.getFluid(8000),   GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
-        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricHeavyFuel, 8L),  GT_Utility.getIntegratedCircuit(12), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HeavyFuel, 8L), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(4), Materials.NatruralGas.getGas(16000),         Materials.Gas.getGas(16000),          GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NatruralGas, 16L),       GT_Utility.getIntegratedCircuit(4), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Gas, 16L), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(4), Materials.SulfuricGas.getGas(16000),         Materials.Gas.getGas(16000),          GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricGas, 16L),       GT_Utility.getIntegratedCircuit(4), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Gas, 16L), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(4), Materials.SulfuricNaphtha.getFluid(12000),   Materials.Naphtha.getFluid(12000),    GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricNaphtha, 12L),   GT_Utility.getIntegratedCircuit(4), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Naphtha, 12L), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(4), Materials.SulfuricLightFuel.getFluid(12000), Materials.LightFuel.getFluid(12000),  GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricLightFuel, 12L), GT_Utility.getIntegratedCircuit(4), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LightFuel, 12L), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 2L),           GT_Utility.getIntegratedCircuit(4), Materials.SulfuricHeavyFuel.getFluid(8000),  Materials.HeavyFuel.getFluid(8000),   GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HydricSulfide, 1L), Materials.Empty.getCells(1), 160);
+        GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.SulfuricHeavyFuel, 8L),  GT_Utility.getIntegratedCircuit(4), Materials.Hydrogen.getGas(2000),             Materials.HydricSulfide.getGas(1000), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.HeavyFuel, 8L), 160);
 
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 1L), null, Materials.Naphtha.getFluid(576), Materials.Polycaprolactam.getMolten(1296), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Potassium, 1), 640);
         GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Polycaprolactam, 1L), new ItemStack(Items.string, 32), 80, 48);
@@ -2126,24 +2126,77 @@ if(Loader.isModLoaded("Railcraft")){
             		Materials.SolderingAlloy.getMolten(2880),
             		GregTech_API.mIC2Classic ? Materials.Water.getFluid(10000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 10000)
             }, ItemList.Circuit_Wetwaremainframe.get(1,o), 2000, 300000);
-               
-            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
-            		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Circuit_Wetwaremainframe.get(1,o),
-            		ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
-            		ItemList.Field_Generator_UV.get(2,o),
-            		ItemList.Circuit_Wafer_HPIC.get(64,o),
-            		ItemList.Circuit_Wafer_HPIC.get(64,o),
-            		ItemList.Circuit_Parts_DiodeSMD.get(16,o),
-            		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+
+        if (GregTech_API.sOPStuff.get(ConfigCategories.Recipes.gregtechrecipes, "EnableZPMandUVBatteries", false)) {
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Europium, 16L),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Circuit_Wetwarecomputer.get(1, o),
+                    ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
+                    ItemList.Field_Generator_LuV.get(2, o),
+                    ItemList.Circuit_Wafer_SoC2.get(64, o),
+                    ItemList.Circuit_Wafer_SoC2.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(8, o),
+                    GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32),
             }, new FluidStack[]{
-            		Materials.SolderingAlloy.getMolten(2880),
-            		GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
-            }, ItemList.ZPM2.get(1,o), 2000, 300000);
-            
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(8000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.Energy_Module.get(1, o), 2000, 100000);
+
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Module.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Americium, 16L),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                    ItemList.Energy_Module.get(8L, new Object[0]),
+                    ItemList.Field_Generator_ZPM.get(2, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.NaquadahAlloy, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.Energy_Cluster.get(1, o), 2000, 200000);
+
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Cluster.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Energy_Cluster.get(8L, new Object[0]),
+                    ItemList.Field_Generator_UV.get(2, o),
+                    ItemList.Circuit_Neuroprocessor.get(64, o),
+                    ItemList.Circuit_Neuroprocessor.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000),
+                    Materials.Naquadria.getMolten(1152)
+            }, ItemList.ZPM2.get(1, o), 2000, 300000);
+        }else {
+            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1, o), 288000, new ItemStack[]{
+                    GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 16L),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Circuit_Wetwaremainframe.get(1, o),
+                    ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
+                    ItemList.Field_Generator_UV.get(2, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Wafer_HPIC.get(64, o),
+                    ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                    GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 32),
+            }, new FluidStack[]{
+                    Materials.SolderingAlloy.getMolten(2880),
+                    GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)
+            }, ItemList.ZPM2.get(1, o), 2000, 300000);
+        }
             GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 1), 144000, new ItemStack[]{
             		ItemList.Casing_Fusion_Coil.get(1,o),
             		ItemList.Circuit_Quantummainframe.get(1,o),

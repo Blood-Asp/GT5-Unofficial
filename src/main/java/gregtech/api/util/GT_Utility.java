@@ -14,6 +14,7 @@ import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
@@ -1728,6 +1729,15 @@ public class GT_Utility {
                     rEUAmount += 300;
                     String tString = ((ICoverable) tTileEntity).getCoverBehaviorAtSide((byte) aSide).getDescription((byte) aSide, ((ICoverable) tTileEntity).getCoverIDAtSide((byte) aSide), ((ICoverable) tTileEntity).getCoverDataAtSide((byte) aSide), (ICoverable) tTileEntity);
                     if (tString != null && !tString.equals(E)) tList.add(tString);
+                }
+            } catch (Throwable e) {
+                if (D1) e.printStackTrace(GT_Log.err);
+            }
+            try {
+                if (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable) {
+                    GT_MetaPipeEntity_Cable c = (GT_MetaPipeEntity_Cable) ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
+                    tList.add("Max voltage last second " + c.mTransferredVoltageLast20);
+                    tList.add("Max amperage last second " + c.mTransferredAmperageLast20);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
