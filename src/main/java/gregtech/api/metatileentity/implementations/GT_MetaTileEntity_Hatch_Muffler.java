@@ -28,10 +28,12 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public String[] getDescription() {
-        String[] desc = new String[mDescriptionArray.length + 2];
+        String[] desc = new String[mDescriptionArray.length + 3];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
         desc[mDescriptionArray.length] = "DO NOT OBSTRUCT THE OUTPUT!";
         desc[mDescriptionArray.length + 1] = "Reduces Pollution to " + calculatePollutionReduction(100) + "%";
+        //Pollution Recovery scales from 5% at LV to 100% at MAX Voltage
+        desc[mDescriptionArray.length + 2] = "Recovers " + (105 - calculatePollutionReduction(100)) + "% of CO2/CO/SO2";
         return desc;
     }
 
