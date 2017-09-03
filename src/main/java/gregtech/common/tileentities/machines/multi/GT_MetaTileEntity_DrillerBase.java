@@ -133,7 +133,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     }
 
     protected boolean canLowerPipe(){
-    	return !checkBlockAndMeta(xPipe, yHead - 1, zPipe, Blocks.bedrock, W);
+    	return yHead > 0 && !checkBlockAndMeta(xPipe, yHead - 1, zPipe, Blocks.bedrock, W);
     }
 
     private boolean isHasMiningPipes() {
