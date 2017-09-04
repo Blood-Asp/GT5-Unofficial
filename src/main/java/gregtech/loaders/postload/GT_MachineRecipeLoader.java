@@ -2317,13 +2317,48 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 8L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 8L)},
+                new FluidStack[]{
         		Materials.SolderingAlloy.getMolten(2304)},
         		ItemList.Field_Generator_UV.get(1, new Object[]{}), 600, 100000);
         
 
             Object o = new Object[0];
-            GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1, o), 288000, new ItemStack[]{
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Europium, 16L),
+                ItemList.Circuit_Wetwarecomputer.get(1, o),
+                ItemList.Circuit_Wetwarecomputer.get(1, o),
+                ItemList.Circuit_Wetwarecomputer.get(1, o),
+                ItemList.Circuit_Wetwarecomputer.get(1, o),
+                ItemList.Energy_LapotronicOrb2.get(8L, new Object[0]),
+                ItemList.Field_Generator_LuV.get(2, o),
+                ItemList.Circuit_Wafer_SoC2.get(64, o),
+                ItemList.Circuit_Wafer_SoC2.get(64, o),
+                ItemList.Circuit_Parts_DiodeSMD.get(8, o),
+                GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32),},
+                new FluidStack[]{
+                Materials.SolderingAlloy.getMolten(2880), GregTech_API.mIC2Classic ? Materials.Water.getFluid(8000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)},
+                ItemList.Energy_Module.get(1, o), 2000, 100000);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Module.get(1, o), 288000, new ItemStack[]{
+                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Americium, 32L),
+                ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                ItemList.Circuit_Wetwaresupercomputer.get(1, o),
+                ItemList.Energy_Module.get(8L, new Object[0]),
+                ItemList.Field_Generator_ZPM.get(2, o),
+                ItemList.Circuit_Wafer_HPIC.get(64, o),
+                ItemList.Circuit_Wafer_HPIC.get(64, o),
+                ItemList.Circuit_Parts_DiodeSMD.get(16, o),
+                GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.NaquadahAlloy, 32),},
+                new FluidStack[]{
+                Materials.SolderingAlloy.getMolten(2880),
+                GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)},
+                ItemList.Energy_Cluster.get(1, o), 2000, 200000);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
             		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 64L),
             		ItemList.Circuit_Wetwaremainframe.get(1,o),
             		ItemList.Circuit_Wetwaremainframe.get(1,o),
@@ -2348,8 +2383,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                 ItemList.Circuit_Wetwaremainframe.get(1,o),
                 ItemList.ZPM2.get(8,o),
                 ItemList.Field_Generator_UV.get(4,o),
-                ItemList.Circuit_Wafer_HPIC.get(64,o),
-                ItemList.Circuit_Wafer_HPIC.get(64,o),
+                ItemList.Circuit_Wafer_UHPIC.get(64,o),
+                ItemList.Circuit_Wafer_UHPIC.get(64,o),
                 ItemList.Circuit_Wafer_SoC2.get(32,o),
                 ItemList.Circuit_Parts_DiodeSMD.get(64,o),
                 GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.Superconductor, 64),
