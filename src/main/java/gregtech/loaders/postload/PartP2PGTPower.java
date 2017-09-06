@@ -1,9 +1,10 @@
-package appeng.parts.p2p;
+package gregtech.loaders.postload;
 
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
+import appeng.parts.p2p.PartP2PIC2Power;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
@@ -54,20 +55,17 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
     }
 
     public boolean outputEnergy() {
-        if (OutputEnergyA == 0) {
+        if (getOfferedEnergy() == 0) {
             return false;
         }
         TileEntity t = getTileEntityAtSide((byte) side.ordinal());
         if (t instanceof IEnergyConnected) {
-            long l = ((IEnergyConnected) t).injectEnergyUnits(GT_Utility.getOppositeSide(side.ordinal()), (long) OutputVoltageA, ((long) OutputEnergyA) / ((long) OutputVoltageA));
-            if (l > 0) {
-                OutputEnergyA -= ((long) OutputVoltageA) * l;
-                if (OutputEnergyA < 1) {
-                    OutputEnergyA = OutputEnergyB;
-                    OutputVoltageA = OutputVoltageB;
-                    OutputEnergyB = 0;
-                    OutputVoltageB = 0;
-                }
+            long voltage = 8 << (getSourceTier() * 2);
+            if (voltage > getOfferedEnergy()) {
+                voltage = (long) getOfferedEnergy();
+            }
+            if (((IEnergyConnected) t).injectEnergyUnits(GT_Utility.getOppositeSide(side.ordinal()), voltage, 1) > 0) {
+                drawEnergy(voltage);
                 return true;
             }
         }
@@ -76,7 +74,7 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
 
     @Override
     public TickingRequest getTickingRequest(IGridNode iGridNode) {
-        return new TickingRequest(1, 10, false, false);
+        return new TickingRequest(1, 20, false, false);
     }
 
     @Override

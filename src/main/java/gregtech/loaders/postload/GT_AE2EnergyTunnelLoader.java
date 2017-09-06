@@ -1,7 +1,6 @@
 package gregtech.loaders.postload;
 
 import appeng.items.parts.PartType;
-import appeng.parts.p2p.PartP2PGTPower;
 import gregtech.GT_Mod;
 import gregtech.api.util.GT_Log;
 
