@@ -15,6 +15,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
+import static gregtech.api.enums.GT_Values.D1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class GT_Worldgenerator
     private static boolean endAsteroids = true;
     public List<Runnable> mList = new ArrayList();
     public boolean mIsGenerating = false;
+	public static final Object listLock = new Object();
     //private static boolean gcAsteroids = true;
 
 
@@ -46,17 +48,31 @@ public class GT_Worldgenerator
         //gcMaxSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMaxSize", 400);
         //mGCAsteroidProbability = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidProbability", 300);
         GameRegistry.registerWorldGenerator(this, 1073741823);
+		if (D1) {
+			GT_Log.out.println(
+							"GT_Worldgenerator created"
+			);
+		}
     }
 
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+        synchronized (listLock)
+		{
+			this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+			if (D1) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
+        }
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
             for (int i = 0; i < mList_sS; i++) {
-                ((Runnable) this.mList.get(i)).run();
+                WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
+                if (D1) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX/16 + " z:" + toRun.mZ/16 + " SIZE: " + this.mList.size());}
+                synchronized (listLock)
+                {
+                    this.mList.remove(0);
+                }
+                toRun.run();
             }
-            this.mList.clear();
             this.mIsGenerating = false;
         }
     }
@@ -112,6 +128,14 @@ public class GT_Worldgenerator
                             }
                         }
                     }
+					if (D1 & temp) {
+						GT_Log.out.println(
+										"No Orevein Selected!" +
+										" @ dim="+ this.mDimensionType+
+										" chunkX="+ this.mX +
+										" chunkZ="+ this.mZ
+						);
+					}		
                 }
                 int i = 0;
                 for (int tX = this.mX - 16; i < 3; tX += 16) {
@@ -133,6 +157,17 @@ public class GT_Worldgenerator
                     i++;
                 }
             }
+			else
+			{
+				if (D1) {
+					GT_Log.out.println(
+									"Chunk Skipped, not 3x3 center" +
+									" @ dim="+this.mDimensionType+
+									" chunkX="+this.mX+
+									" chunkZ="+this.mZ
+					);
+				}
+			}
             //Asteroid Worldgen
             int tDimensionType = this.mWorld.provider.dimensionId;
             //String tDimensionName = this.mWorld.provider.getDimensionName();
