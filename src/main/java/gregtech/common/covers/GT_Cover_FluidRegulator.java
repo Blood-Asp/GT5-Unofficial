@@ -61,9 +61,9 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 	public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
 			EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
-			aCoverVariable += 16;
+			aCoverVariable += aPlayer.isSneaking() ? 256 : 16;
 		} else {
-			aCoverVariable -= 16;
+			aCoverVariable -= aPlayer.isSneaking() ? 256 : 16;
 		}
 		if (aCoverVariable > mTransferRate) {
 			aCoverVariable = mTransferRate;
