@@ -812,6 +812,9 @@ public class GT_CraftingRecipeLoader implements Runnable {
         if (Loader.isModLoaded("GraviSuite")) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getModItem("GraviSuite", "advNanoChestPlate", 1, GT_Values.W));
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("GraviSuite", "advNanoChestPlate", 1, GT_Values.W), new Object[]{"CJC", "CNC", "WPW", 'C', OrePrefixes.plateAlloy.get(Materials.Carbon), 'J', GT_ModHandler.getModItem("GraviSuite", "advJetpack", 1, GT_Values.W), 'N', GT_ModHandler.getIC2Item("nanoBodyarmor", 1L), 'W', OrePrefixes.wireGt04.get(Materials.Platinum), 'P', OrePrefixes.circuit.get(Materials.Data)});
+
+            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getModItem("GraviSuite", "advLappack", 1, GT_Values.W));
+            GT_ModHandler.addCraftingRecipe(GT_ModHandler.getModItem("GraviSuite", "advLappack", 1, GT_Values.W), new Object[]{"CJC", "TAT", "WPW", 'C', OrePrefixes.plateAlloy.get(Materials.Carbon), 'J',  GT_ModHandler.getIC2Item( "advJetpack", 1, GT_Values.W), 'N', GT_ModHandler.getIC2Item("itemArmorJetpackElectric", 1, GT_Values.W),  'A', GT_ModHandler.getIC2Item( "itemArmorNanoChestplate", 1, GT_Values.W), 'T', OrePrefixes.plate.get(Materials.TungstenSteel), 'W', OrePrefixes.wireGt12.get(Materials.Platinum), 'P', OrePrefixes.circuit.get(Materials.Elite)});
         }
 
         GT_ModHandler.addShapelessCraftingRecipe(Materials.Fireclay.getDust(2), new Object[]{Materials.Brick.getDust(1), Materials.Clay.getDust(1)});
