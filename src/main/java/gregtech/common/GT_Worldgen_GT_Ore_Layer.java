@@ -5,11 +5,11 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.world.GT_Worldgen;
-import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
-import net.minecraft.util.MathHelper;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.NoiseGeneratorImproved;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -68,10 +68,10 @@ public class GT_Worldgen_GT_Ore_Layer
             GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[(mBetweenMeta % 1000)], aMinY, aMaxY, aWeight, aOverworld, aNether, aEnd);
             GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[(mSporadicMeta % 1000)], aMinY, aMaxY, aWeight, aOverworld, aNether, aEnd);
             sWeight += this.mWeight;
-            if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
-            	blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(aName.substring(8, 9).toUpperCase()+aName.substring(9), aWeight, 0.2f, new String[]{"ore"+aPrimary.mName,"ore"+aSecondary.mName,"ore"+aBetween.mName,"ore"+aSporadic.mName}, new float[]{.4f,.4f,.15f,.05f});
+            if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
+                blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(aName.substring(8, 9).toUpperCase() + aName.substring(9), aWeight, 0.2f, new String[]{"ore" + aPrimary.mName, "ore" + aSecondary.mName, "ore" + aBetween.mName, "ore" + aSporadic.mName}, new float[]{.4f, .4f, .15f, .05f});
             }
-            
+
         }
     }
 
@@ -82,13 +82,33 @@ public class GT_Worldgen_GT_Ore_Layer
         if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (this.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (this.mMars)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
             return false;
         }
-        int tMinY = this.mMinY + aRandom.nextInt(this.mMaxY - this.mMinY - 5);
+        int tMinY = 90;//this.mMinY + aRandom.nextInt(this.mMaxY - this.mMinY - 5);
 
-        int cX = aChunkX - aRandom.nextInt(this.mSize);
-        int eX = aChunkX + 16 + aRandom.nextInt(this.mSize);
-        for (int tX = cX; tX <= eX; tX++) {
-            int cZ = aChunkZ - aRandom.nextInt(this.mSize);
-            int eZ = aChunkZ + 16 + aRandom.nextInt(this.mSize);
+        int cX = aChunkX - aRandom.nextInt(mSize);
+        int eX = aChunkX + 16 + aRandom.nextInt(mSize);
+        int cZ = aChunkZ - aRandom.nextInt(mSize);
+        int eZ = aChunkZ + 16 + aRandom.nextInt(mSize);
+        int sx = eX - cX, sz = eZ - cZ, sy = 7;
+        double mx = sx / 2, my = sy / 2, mz = sz / 2;
+        double[] perlin = new double[sx * sy * sz];
+        NoiseGeneratorImproved noise = new NoiseGeneratorImproved(new Random(aRandom.nextLong()));
+        noise.populateNoiseArray(perlin, 0, 0, 0, sx, sy, sz, 0.5, 0.5, 0.5, 0.7);
+        for (int x = 0; x < sx; x++) {
+            for (int z = 0; z < sz; z++) {
+                for (int y = 0; y < sy; y++) {
+                    double arg = Math.abs(perlin[z + y * sx + x * sx * sy]);
+                    if (arg < 0.1d) {
+                        double distance = qrt(x - mx) / qrt(mx) + qrt(y - my) / qrt(my) + qrt(z - mz) / qrt(mz);
+                        if (distance < 1) {
+                            aWorld.setBlock(cX + x, tMinY + y, cZ + z, Block.getBlockFromName("stone"));
+                            //GT_TileEntity_Ores.setOreBlock(aWorld, cX + x, tMinY + y, cZ + z, this.mPrimaryMeta, false);
+                        }
+                    }
+                }
+            }
+        }
+        /*for (int tX = cX; tX <= eX; tX++) {
+
             for (int tZ = cZ; tZ <= eZ; tZ++) {
                 if (this.mSecondaryMeta > 0) {
                     for (int i = tMinY - 1; i < tMinY + 2; i++) {
@@ -111,10 +131,14 @@ public class GT_Worldgen_GT_Ore_Layer
                     GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, this.mSporadicMeta, false);
                 }
             }
-        }
+        }*/
         if (GT_Values.D1) {
-            System.out.println("Generated Orevein: " + this.mWorldGenName+" "+aChunkX +" "+ aChunkZ);
+            System.out.println("Generated Orevein: " + this.mWorldGenName + " " + aChunkX + " " + aChunkZ);
         }
         return true;
+    }
+
+    public static double qrt(double arg) {
+        return arg * arg;
     }
 }
