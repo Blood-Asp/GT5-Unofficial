@@ -14,7 +14,7 @@ public abstract class GT_Worldgen_Ore extends GT_Worldgen {
     private final String aTextWorldgen = "worldgen.";
 
     public GT_Worldgen_Ore(String aName, boolean aDefault, Block aBlock, int aBlockMeta, int aDimensionType, int aAmount, int aSize, int aProbability, int aMinY, int aMaxY, Collection<String> aBiomeList, boolean aAllowToGenerateinVoid) {
-        super(aName, GregTech_API.sWorldgenList, aDefault);
+        super(aName, new String[0]);
         mDimensionType = aDimensionType;
         mBlock = aBlock;
         mBlockMeta = Math.min(Math.max(aBlockMeta, 0), 15);

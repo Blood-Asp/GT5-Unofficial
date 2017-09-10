@@ -21,7 +21,7 @@ public class GT_Worldgen_Stone
     }
 
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        if ((isGenerationAllowed(aWorld, aDimensionType, this.mDimensionType)) && ((this.mBiomeList.isEmpty()) || (this.mBiomeList.contains(aBiome))) && ((this.mProbability <= 1) || (aRandom.nextInt(this.mProbability) == 0))) {
+        if ((isGenerationAllowed(aWorld)) && ((this.mBiomeList.isEmpty()) || (this.mBiomeList.contains(aBiome))) && ((this.mProbability <= 1) || (aRandom.nextInt(this.mProbability) == 0))) {
             for (int i = 0; i < this.mAmount; i++) {
                 int tX = aChunkX + aRandom.nextInt(16);
                 int tY = this.mMinY + aRandom.nextInt(this.mMaxY - this.mMinY);

@@ -153,14 +153,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
                             tRandomWeight -= tWorldGen.mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if ((tWorldGen.mEndAsteroid && tDimensionType == 1) || (tWorldGen.mAsteroid && tDimensionType == -30)) {
+                                    /*if ((tWorldGen.mEndAsteroid && tDimensionType == 1) || (tWorldGen.mAsteroid && tDimensionType == -30)) {
                                         primaryMeta = tWorldGen.mPrimaryMeta;
                                         secondaryMeta = tWorldGen.mSecondaryMeta;
                                         betweenMeta = tWorldGen.mBetweenMeta;
                                         sporadicMeta = tWorldGen.mSporadicMeta;
                                         temp = false;
                                         break;
-                                    }
+                                    }*/
                                 } catch (Throwable e) {
                                     e.printStackTrace(GT_Log.err);
                                 }

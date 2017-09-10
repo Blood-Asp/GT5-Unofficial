@@ -1,24 +1,34 @@
 package gregtech.api.world;
 
-import gregtech.api.GregTech_API;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class GT_Worldgen {
 
     public final String mWorldGenName;
-    public final boolean mEnabled;
-    private final Map<String, Boolean> mDimensionMap = new ConcurrentHashMap<String, Boolean>();
+    public final String[] dimensionNameWhiteList;
+    public final int[] dimensionIDWhiteList;
 
-    public GT_Worldgen(String aName, List aList, boolean aDefault) {
+    public GT_Worldgen(String aName, String[] whiteList) {
         mWorldGenName = aName;
-        mEnabled = GregTech_API.sWorldgenFile.get("worldgen", mWorldGenName, aDefault);
-        if (mEnabled) aList.add(this);
+        List<String> name = new ArrayList<>();
+        List<Integer> id = new ArrayList<>();
+        for (String s : whiteList) {
+            try {
+                id.add(Integer.parseInt(s));
+            } catch (NumberFormatException ignored) {
+                name.add(s);
+            }
+        }
+        dimensionNameWhiteList = name.toArray(new String[name.size()]);
+        dimensionIDWhiteList = new int[id.size()];
+        for (int i = 0; i < dimensionIDWhiteList.length; i++) {
+            dimensionIDWhiteList[i] = id.get(i);
+        }
     }
 
     /**
@@ -43,18 +53,28 @@ public abstract class GT_Worldgen {
      * @param aChunkZ        zCoord of the Chunk
      * @return if the Worldgeneration has been successfully completed
      */
+    @Deprecated
     public boolean executeCavegen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         return false;
     }
 
+    @Deprecated
     public boolean isGenerationAllowed(World aWorld, int aDimensionType, int aAllowedDimensionType) {
-        String aDimName = aWorld.provider.getDimensionName();
-        Boolean tAllowed = mDimensionMap.get(aDimName);
-        if (tAllowed == null) {
-            boolean tValue = GregTech_API.sWorldgenFile.get("worldgen.dimensions." + mWorldGenName, aDimName, aDimensionType == aAllowedDimensionType);
-            mDimensionMap.put(aDimName, tValue);
-            return tValue;
+        return isGenerationAllowed(aWorld);
+    }
+
+    public boolean isGenerationAllowed(World aWorld) {
+        for (int i : dimensionIDWhiteList) {
+            if (aWorld.provider.dimensionId == i) {
+                return true;
+            }
         }
-        return tAllowed;
+        String dimName = aWorld.provider.getClass().getName();
+        for (String s : dimensionNameWhiteList) {
+            if (dimName.contains(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
