@@ -396,7 +396,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected abstract int getMinTier();
 
-    //returns theroretical progress time for LV energy hatch
+    //returns theoretical progress time for LV energy hatch
     protected abstract int getBaseProgressTime();
 
     protected String[] getDescriptionInternal(String tierSuffix) {
