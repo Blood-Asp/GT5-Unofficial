@@ -104,7 +104,7 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
                 } else {
                     aMetaData += 5000;
                 }
-            } else if (!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone)) {
+            } else if (!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone) && !air) {
                 return false;
             }
             aWorld.setBlock(aX, aY, aZ, tOreBlock, getHarvestData((short) aMetaData, ((GT_Block_Ores_Abstract) tOreBlock).getBaseBlockHarvestLevel(aMetaData % 16000 / 1000)), 0);
