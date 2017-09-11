@@ -10,6 +10,7 @@ import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
 import gregtech.common.GT_Worldgenerator;
+import net.minecraft.block.Block;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 
@@ -18,8 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class GT_Worldgenloader
-        implements Runnable {
+public class GT_Worldgenloader implements Runnable {
     public void addOldOreRecordToConfig(String name, int minY, int maxY, int weight, int density, int size, boolean over, boolean nether, boolean end, boolean moon, boolean mars, boolean asteroids, Materials p, Materials s, Materials b, Materials sp) {
         String category = "generation.mixes." + name;
         Configuration c = GregTech_API.advancedWorldgenFile.mConfig;
@@ -74,6 +74,49 @@ public class GT_Worldgenloader
         c.get(category, "Ore", ores).getStringList();
     }
 
+    public void addOldSmallOreRecordToConfig(String name, int minY, int maxY, int amount, boolean over, boolean nether, boolean end, boolean moon, boolean mars, boolean asteroids, Materials p) {
+        String category = "generation.small." + name;
+        Configuration c = GregTech_API.advancedWorldgenFile.mConfig;
+        List<String> list = new ArrayList<>();
+        if (over) {
+            list.add("Surface");
+        }
+        if (nether) {
+            list.add("Hell");
+        }
+        if (end) {
+            list.add("End");
+        }
+        if (moon) {
+            list.add("Moon");
+        }
+        if (mars) {
+            list.add("Mars");
+        }
+        if (asteroids) {
+            list.add("Asteroids");
+        }
+        c.get(category, "Dimensions", list.toArray(new String[list.size()])).getStringList();
+        c.get(category, "Amount", amount).getInt();
+        c.get(category, "MaxHeight", maxY).getInt();
+        c.get(category, "MinHeight", minY).getInt();
+        c.get(category, "Ore", p.mMetaItemSubID).getInt();
+    }
+
+    public void addOldStoneRecordToConfig(String name, Block block, int meta, int amount, int size, int probability, int minY, int maxY) {
+        String category = "generation.blocks." + name;
+        Configuration c = GregTech_API.advancedWorldgenFile.mConfig;
+        c.get(category, "Dimensions", new String[]{"Surface"}).getStringList();
+        c.get(category, "Amount", amount).getInt();
+        c.get(category, "Size", size).getInt();
+        c.get(category, "Probability", probability).getInt();
+        c.get(category, "Metadata", meta).getInt();
+        c.get(category, "MaxHeight", maxY).getInt();
+        c.get(category, "MinHeight", minY).getInt();
+        c.get(category, "GenerateInVoid", false).getBoolean();
+        c.get(category, "Block", Block.blockRegistry.getNameForObject(block)).getString();
+    }
+
     public void run() {
         boolean tPFAA = (GregTech_API.sWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
 
@@ -82,89 +125,84 @@ public class GT_Worldgenloader
             new GT_Worldgenerator_Space();
         }
 
-        new GT_Worldgen_Stone("overworld.stone.blackgranite.tiny", true, GregTech_API.sBlockGranites, 0, 0, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.blackgranite.small", true, GregTech_API.sBlockGranites, 0, 0, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.blackgranite.medium", true, GregTech_API.sBlockGranites, 0, 0, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.blackgranite.large", true, GregTech_API.sBlockGranites, 0, 0, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.blackgranite.huge", true, GregTech_API.sBlockGranites, 0, 0, 1, 400, 240, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.redgranite.tiny", true, GregTech_API.sBlockGranites, 8, 0, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.redgranite.small", true, GregTech_API.sBlockGranites, 8, 0, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.redgranite.medium", true, GregTech_API.sBlockGranites, 8, 0, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.redgranite.large", true, GregTech_API.sBlockGranites, 8, 0, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.redgranite.huge", true, GregTech_API.sBlockGranites, 8, 0, 1, 400, 240, 0, 120, null, false);
-
-        new GT_Worldgen_Stone("nether.stone.blackgranite.tiny", false, GregTech_API.sBlockGranites, 0, -1, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.blackgranite.small", false, GregTech_API.sBlockGranites, 0, -1, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.blackgranite.medium", false, GregTech_API.sBlockGranites, 0, -1, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.blackgranite.large", false, GregTech_API.sBlockGranites, 0, -1, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.blackgranite.huge", false, GregTech_API.sBlockGranites, 0, -1, 1, 400, 240, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.redgranite.tiny", false, GregTech_API.sBlockGranites, 8, -1, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.redgranite.small", false, GregTech_API.sBlockGranites, 8, -1, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.redgranite.medium", false, GregTech_API.sBlockGranites, 8, -1, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.redgranite.large", false, GregTech_API.sBlockGranites, 8, -1, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.redgranite.huge", false, GregTech_API.sBlockGranites, 8, -1, 1, 400, 240, 0, 120, null, false);
-
-        new GT_Worldgen_Stone("overworld.stone.marble.tiny", true, GregTech_API.sBlockStones, 0, 0, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.marble.small", true, GregTech_API.sBlockStones, 0, 0, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.marble.medium", true, GregTech_API.sBlockStones, 0, 0, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.marble.large", true, GregTech_API.sBlockStones, 0, 0, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.marble.huge", true, GregTech_API.sBlockStones, 0, 0, 1, 400, 240, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.basalt.tiny", true, GregTech_API.sBlockStones, 8, 0, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.basalt.small", true, GregTech_API.sBlockStones, 8, 0, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.basalt.medium", true, GregTech_API.sBlockStones, 8, 0, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.basalt.large", true, GregTech_API.sBlockStones, 8, 0, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("overworld.stone.basalt.huge", true, GregTech_API.sBlockStones, 8, 0, 1, 400, 240, 0, 120, null, false);
-
-        new GT_Worldgen_Stone("nether.stone.marble.tiny", false, GregTech_API.sBlockStones, 0, -1, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.marble.small", false, GregTech_API.sBlockStones, 0, -1, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.marble.medium", false, GregTech_API.sBlockStones, 0, -1, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.marble.large", false, GregTech_API.sBlockStones, 0, -1, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.marble.huge", false, GregTech_API.sBlockStones, 0, -1, 1, 400, 240, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.basalt.tiny", false, GregTech_API.sBlockStones, 8, -1, 1, 50, 48, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.basalt.small", false, GregTech_API.sBlockStones, 8, -1, 1, 100, 96, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.basalt.medium", false, GregTech_API.sBlockStones, 8, -1, 1, 200, 144, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.basalt.large", false, GregTech_API.sBlockStones, 8, -1, 1, 300, 192, 0, 120, null, false);
-        new GT_Worldgen_Stone("nether.stone.basalt.huge", false, GregTech_API.sBlockStones, 8, -1, 1, 400, 240, 0, 120, null, false);
-
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.copper", true, 60, 120, 32, !tPFAA, true, true, true, true, false, Materials.Copper);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.tin", true, 60, 120, 32, !tPFAA, true, true, true, true, true, Materials.Tin);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.bismuth", true, 80, 120, 8, !tPFAA, true, false, true, true, false, Materials.Bismuth);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.coal", true, 60, 100, 24, !tPFAA, false, false, false, false, false, Materials.Coal);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.iron", true, 40, 80, 16, !tPFAA, true, true, true, true, false, Materials.Iron);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.lead", true, 40, 80, 16, !tPFAA, true, true, true, true, true, Materials.Lead);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.zinc", true, 30, 60, 12, !tPFAA, true, true, true, true, false, Materials.Zinc);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.gold", true, 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Gold);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.silver", true, 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Silver);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.nickel", true, 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Nickel);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.lapis", true, 20, 40, 4, !tPFAA, false, false, true, false, true, Materials.Lapis);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.diamond", true, 5, 10, 2, !tPFAA, true, false, true, true, true, Materials.Diamond);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.emerald", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Emerald);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.ruby", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Ruby);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.sapphire", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Sapphire);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.greensapphire", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GreenSapphire);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.olivine", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Olivine);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.topaz", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Topaz);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.tanzanite", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Tanzanite);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.amethyst", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Amethyst);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.opal", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Opal);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.jasper", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Jasper);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.bluetopaz", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.BlueTopaz);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.amber", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Amber);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.foolsruby", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.FoolsRuby);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.garnetred", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GarnetRed);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.garnetyellow", true, 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GarnetYellow);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.redstone", true, 5, 20, 8, !tPFAA, true, false, true, true, true, Materials.Redstone);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.platinum", true, 20, 40, 8, false, false, true, false, true, true, Materials.Platinum);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.iridium", true, 20, 40, 8, false, false, true, false, true, true, Materials.Iridium);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.netherquartz", true, 30, 120, 64, false, true, false, false, false, false, Materials.NetherQuartz);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.saltpeter", true, 10, 60, 8, false, true, false, false, false, false, Materials.Saltpeter);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.sulfur_n", true, 10, 60, 32, false, true, false, false, false, false, Materials.Sulfur);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.sulfur_o", true, 5, 15, 8, !tPFAA, false, false, false, false, false, Materials.Sulfur);
-
-        int i = 0;
-        for (int j = GregTech_API.sWorldgenFile.get("worldgen", "AmountOfCustomSmallOreSlots", 16); i < j; i++) {
-            new GT_Worldgen_GT_Ore_SmallPieces("ore.small.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, false, false, false, false, false, false, Materials._NULL);
+        if (!GregTech_API.advancedWorldgenFile.mConfig.hasCategory("generation.blocks")) {
+            addOldStoneRecordToConfig("blackgranite_tiny", GregTech_API.sBlockGranites, 0, 1, 50, 48, 0, 120);
+            addOldStoneRecordToConfig("blackgranite_small", GregTech_API.sBlockGranites, 0, 1, 100, 96, 0, 120);
+            addOldStoneRecordToConfig("blackgranite_medium", GregTech_API.sBlockGranites, 0, 1, 200, 144, 0, 120);
+            addOldStoneRecordToConfig("blackgranite_large", GregTech_API.sBlockGranites, 0, 1, 300, 192, 0, 120);
+            addOldStoneRecordToConfig("blackgranite_huge", GregTech_API.sBlockGranites, 0, 1, 400, 240, 0, 120);
+            addOldStoneRecordToConfig("redgranite_tiny", GregTech_API.sBlockGranites, 8, 1, 50, 48, 0, 120);
+            addOldStoneRecordToConfig("redgranite_small", GregTech_API.sBlockGranites, 8, 1, 100, 96, 0, 120);
+            addOldStoneRecordToConfig("redgranite_medium", GregTech_API.sBlockGranites, 8, 1, 200, 144, 0, 120);
+            addOldStoneRecordToConfig("redgranite_large", GregTech_API.sBlockGranites, 8, 1, 300, 192, 0, 120);
+            addOldStoneRecordToConfig("redgranite_huge", GregTech_API.sBlockGranites, 8, 1, 400, 240, 0, 120);
+            addOldStoneRecordToConfig("marble_tiny", GregTech_API.sBlockStones, 0, 1, 50, 48, 0, 120);
+            addOldStoneRecordToConfig("marble_small", GregTech_API.sBlockStones, 0, 1, 100, 96, 0, 120);
+            addOldStoneRecordToConfig("marble_medium", GregTech_API.sBlockStones, 0, 1, 200, 144, 0, 120);
+            addOldStoneRecordToConfig("marble_large", GregTech_API.sBlockStones, 0, 1, 300, 192, 0, 120);
+            addOldStoneRecordToConfig("marble_huge", GregTech_API.sBlockStones, 0, 1, 400, 240, 0, 120);
+            addOldStoneRecordToConfig("basalt_tiny", GregTech_API.sBlockStones, 8, 1, 50, 48, 0, 120);
+            addOldStoneRecordToConfig("basalt_small", GregTech_API.sBlockStones, 8, 1, 100, 96, 0, 120);
+            addOldStoneRecordToConfig("basalt_medium", GregTech_API.sBlockStones, 8, 1, 200, 144, 0, 120);
+            addOldStoneRecordToConfig("basalt_large", GregTech_API.sBlockStones, 8, 1, 300, 192, 0, 120);
+            addOldStoneRecordToConfig("basalt_huge", GregTech_API.sBlockStones, 8, 1, 400, 240, 0, 120);
         }
+
+        for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.blocks").getChildren()) {
+            int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), amount = c.get("Amount").getInt(-1), meta = c.get("Metadata").getInt(-1), size = c.get("Size").getInt(-1), prob = c.get("Probability").getInt(-1);
+            String block = c.get("Block").getString();
+            boolean allow = c.get("GenerateInVoid").getBoolean(false);
+            String[] dim = c.get("Dimensions").getStringList();
+            if (minH > -1 && maxH > 0 && amount > 0 && meta > -1 && prob > -1 && block != null && dim.length > 0) {
+                new GT_Worldgen_Stone(c.getName(), dim, block, meta, amount, size, prob, minH, maxH, allow);
+            }
+        }
+
+        if (!GregTech_API.advancedWorldgenFile.mConfig.hasCategory("generation.small")) {
+            addOldSmallOreRecordToConfig("copper", 60, 120, 32, !tPFAA, true, true, true, true, false, Materials.Copper);
+            addOldSmallOreRecordToConfig("tin", 60, 120, 32, !tPFAA, true, true, true, true, true, Materials.Tin);
+            addOldSmallOreRecordToConfig("bismuth", 80, 120, 8, !tPFAA, true, false, true, true, false, Materials.Bismuth);
+            addOldSmallOreRecordToConfig("coal", 60, 100, 24, !tPFAA, false, false, false, false, false, Materials.Coal);
+            addOldSmallOreRecordToConfig("iron", 40, 80, 16, !tPFAA, true, true, true, true, false, Materials.Iron);
+            addOldSmallOreRecordToConfig("lead", 40, 80, 16, !tPFAA, true, true, true, true, true, Materials.Lead);
+            addOldSmallOreRecordToConfig("zinc", 30, 60, 12, !tPFAA, true, true, true, true, false, Materials.Zinc);
+            addOldSmallOreRecordToConfig("gold", 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Gold);
+            addOldSmallOreRecordToConfig("silver", 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Silver);
+            addOldSmallOreRecordToConfig("nickel", 20, 40, 8, !tPFAA, true, true, true, true, true, Materials.Nickel);
+            addOldSmallOreRecordToConfig("lapis", 20, 40, 4, !tPFAA, false, false, true, false, true, Materials.Lapis);
+            addOldSmallOreRecordToConfig("diamond", 5, 10, 2, !tPFAA, true, false, true, true, true, Materials.Diamond);
+            addOldSmallOreRecordToConfig("emerald", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Emerald);
+            addOldSmallOreRecordToConfig("ruby", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Ruby);
+            addOldSmallOreRecordToConfig("sapphire", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Sapphire);
+            addOldSmallOreRecordToConfig("greensapphire", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GreenSapphire);
+            addOldSmallOreRecordToConfig("olivine", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Olivine);
+            addOldSmallOreRecordToConfig("topaz", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Topaz);
+            addOldSmallOreRecordToConfig("tanzanite", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Tanzanite);
+            addOldSmallOreRecordToConfig("amethyst", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Amethyst);
+            addOldSmallOreRecordToConfig("opal", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Opal);
+            addOldSmallOreRecordToConfig("jasper", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Jasper);
+            addOldSmallOreRecordToConfig("bluetopaz", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.BlueTopaz);
+            addOldSmallOreRecordToConfig("amber", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.Amber);
+            addOldSmallOreRecordToConfig("foolsruby", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.FoolsRuby);
+            addOldSmallOreRecordToConfig("garnetred", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GarnetRed);
+            addOldSmallOreRecordToConfig("garnetyellow", 5, 250, 1, !tPFAA, true, false, false, true, true, Materials.GarnetYellow);
+            addOldSmallOreRecordToConfig("redstone", 5, 20, 8, !tPFAA, true, false, true, true, true, Materials.Redstone);
+            addOldSmallOreRecordToConfig("platinum", 20, 40, 8, false, false, true, false, true, true, Materials.Platinum);
+            addOldSmallOreRecordToConfig("iridium", 20, 40, 8, false, false, true, false, true, true, Materials.Iridium);
+            addOldSmallOreRecordToConfig("netherquartz", 30, 120, 64, false, true, false, false, false, false, Materials.NetherQuartz);
+            addOldSmallOreRecordToConfig("saltpeter", 10, 60, 8, false, true, false, false, false, false, Materials.Saltpeter);
+            addOldSmallOreRecordToConfig("sulfur_n", 10, 60, 32, false, true, false, false, false, false, Materials.Sulfur);
+            addOldSmallOreRecordToConfig("sulfur_o", 5, 15, 8, !tPFAA, false, false, false, false, false, Materials.Sulfur);
+        }
+
+        for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.small").getChildren()) {
+            int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), amount = c.get("Amount").getInt(-1), ore = c.get("Ore").getInt(-1);
+            String[] dim = c.get("Dimensions").getStringList();
+            if (minH > -1 && maxH > 0 && amount > 0 && ore > 0 && dim.length > 0) {
+                new GT_Worldgen_GT_Ore_SmallPieces(c.getName(), dim, minH, maxH, amount, ore);
+            }
+        }
+
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList.clear();
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
@@ -208,7 +246,7 @@ public class GT_Worldgenloader
         for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.mixes").getChildren()) {
             int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), den = c.get("Density").getInt(-1), size = c.get("Size").getInt(-1), weight = c.get("Weight").getInt(-1);
             String[] dim = c.get("Dimensions").getStringList(), ore = c.get("Ore").getStringList();
-            if (minH > 0 && maxH > 0 && den > 0 && size > 0 && weight > 0 && dim.length > 0 && ore.length > 0) {
+            if (minH > -1 && maxH > 0 && den > 0 && size > 0 && weight > 0 && dim.length > 0 && ore.length > 0) {
                 new GT_Worldgen_GT_Ore_Layer(c.getName(), minH, maxH, weight, den, size, dim, ore);
             }
         }
