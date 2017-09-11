@@ -131,15 +131,14 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
 //                }
 //            }
 //        }
-        int offX = sizeX * sizeY;
+        int offX = sizeZ * sizeY;
         double nv = mDensity / 50d;
         int[] c = {sqr(midY) * sqr(midZ), sqr(midX) * sqr(midZ), sqr(midX) * sqr(midY), sqr(midX) * sqr(midY) * sqr(midZ)};
         for (int i = 0; i < noiseValues.length; i++) {
             if (Math.abs(noiseValues[i]) > nv) continue;
-            int x = i / offX, y = i / sizeX - x * sizeY, z = i - x * offX - y * sizeX;
+            int x = i / offX, y = (i / sizeZ) % sizeY, z = i % sizeZ;
             double d = sqr(x - midX) * c[0] + sqr(y - midY) * c[1] + sqr(z - midZ) * c[2];
             if (d > c[3]) continue;
-
             int randomWeight = rand.nextInt(oreWeight);
             for (WeightedOre ore : oreList) {
                 randomWeight -= ore.weight;
