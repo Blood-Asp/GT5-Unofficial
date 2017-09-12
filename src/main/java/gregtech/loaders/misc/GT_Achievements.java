@@ -629,6 +629,8 @@ public class GT_Achievements {
         }else if ((stack.getItem() == Ic2Items.quantumBodyarmor.getItem()) || (stack.getItem() == Ic2Items.quantumBoots.getItem()) ||
                 (stack.getItem() == Ic2Items.quantumHelmet.getItem()) || (stack.getItem() == Ic2Items.quantumLeggings.getItem())) {
             issueAchievement(player, "buildQArmor");
+        } else if (stack.getUnlocalizedName().equals("ic2.itemPartCircuitAdv")) {
+            issueAchievement(player, "stepforward");
 		}
 		if(player.capabilities.isCreativeMode && stack.getUnlocalizedName().equals("gt.metaitem.01.32761")){//Debug Scanner pickup shows all assline recipes.
             for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
