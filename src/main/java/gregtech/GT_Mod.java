@@ -21,6 +21,7 @@ import gregtech.common.GT_DummyWorld;
 import gregtech.common.GT_Network;
 import gregtech.common.GT_Proxy;
 import gregtech.common.GT_RecipeAdder;
+import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
@@ -281,6 +282,13 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.enableRedGraniteOres = GregTech_API.sWorldgenFile.get("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
         gregtechproxy.enableMarbleOres = GregTech_API.sWorldgenFile.get("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
         gregtechproxy.enableBasaltOres = GregTech_API.sWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
+
+        Materials[] tDisableOres = new Materials[]{Materials.Chrome, Materials.Naquadria, Materials.Silicon, Materials.Cobalt, Materials.Cadmium, Materials.Indium, Materials.Tungsten,
+                Materials.Adamantium, Materials.Mithril, Materials.DarkIron, Materials.Rutile, Materials.Alduorite, Materials.Magnesium, Materials.Nikolite};
+        for(Materials tMat : tDisableOres){
+            if(!GregTech_API.sMaterialComponents.get("disableLaserDrillOres", tMat.mName, false))
+                GT_Block_Ores_Abstract.aBlockedOres.add(tMat);
+        }
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
         gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("havestLevel", "activateHarvestLevelChange", false);//TODO CHECK
