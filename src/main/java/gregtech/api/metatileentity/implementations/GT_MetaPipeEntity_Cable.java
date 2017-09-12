@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.common.GT_Proxy.serverSideDimensionWiseTickCounter;
 
 public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTileEntityCable {
     public final float mThickNess;
@@ -251,8 +250,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
 
-            tickDiff=Math.min((int)(serverSideDimensionWiseTickCounter.get(aBaseMetaTileEntity.getWorld().provider.dimensionId)-lastTickTime),1);
-            lastTickTime=serverSideDimensionWiseTickCounter.get(aBaseMetaTileEntity.getWorld().provider.dimensionId);
+            tickDiff=Math.min((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
+            lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
             if(lastTickDiff<tickDiff)
                 mOverheat=(short)Math.max(0,mOverheat-100);
             lastTickDiff=tickDiff;

@@ -74,7 +74,6 @@ import java.text.DateFormat;
 import java.util.*;
 
 public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
-    public static HashMap<Integer,Long> serverSideDimensionWiseTickCounter =new HashMap<>();
     private static final EnumSet<OreGenEvent.GenerateMinable.EventType> PREVENTED_ORES = EnumSet.of(OreGenEvent.GenerateMinable.EventType.COAL,
             new OreGenEvent.GenerateMinable.EventType[]{OreGenEvent.GenerateMinable.EventType.IRON, OreGenEvent.GenerateMinable.EventType.GOLD,
                     OreGenEvent.GenerateMinable.EventType.DIAMOND, OreGenEvent.GenerateMinable.EventType.REDSTONE, OreGenEvent.GenerateMinable.EventType.LAPIS,
@@ -1247,13 +1246,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                         }
                     }
                 }
-            }
-
-            int dimID=aEvent.world.provider.dimensionId;
-            if(serverSideDimensionWiseTickCounter.containsKey(dimID)){
-                serverSideDimensionWiseTickCounter.put(dimID, serverSideDimensionWiseTickCounter.get(dimID)+1);
-            }else{
-                serverSideDimensionWiseTickCounter.put(dimID,0L);
             }
 
             GT_Pollution.onWorldTick(aEvent);
