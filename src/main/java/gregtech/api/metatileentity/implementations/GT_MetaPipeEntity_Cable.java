@@ -23,6 +23,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -250,8 +251,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
 
-            tickDiff=Math.min((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
-            lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
+            tickDiff=Math.min((int)(MinecraftServer.getServer().getTickCounter()-lastTickTime),1);
+            lastTickTime=MinecraftServer.getServer().getTickCounter();
             if(lastTickDiff<tickDiff)
                 mOverheat=(short)Math.max(0,mOverheat-100);
             lastTickDiff=tickDiff;
