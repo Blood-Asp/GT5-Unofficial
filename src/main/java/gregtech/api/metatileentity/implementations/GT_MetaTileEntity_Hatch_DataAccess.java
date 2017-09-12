@@ -12,7 +12,9 @@ import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_DataAccess(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 16, "Data Access for Multiblocks");
+        super(aID, aName, aNameRegional, aTier, 16, new String[]{
+        		"Data Access for Multiblocks",
+        		"Adds " + (aTier == 4 ? 4 : 16) + " extra slots for Data Sticks"});
     }
 
     public GT_MetaTileEntity_Hatch_DataAccess(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -96,7 +98,7 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
     }
-    
+  
     @Override
     public int getInventoryStackLimit() {
         return 1;

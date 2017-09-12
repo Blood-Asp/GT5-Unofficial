@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.FluidStack;
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
 
+    //public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
+
     public GT_MetaTileEntity_AssemblyLine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -315,25 +317,7 @@ public class GT_MetaTileEntity_AssemblyLine
         }
         return false;
     }
-
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 0;
-    }
-
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-    
-    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
-
+        
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
@@ -343,7 +327,7 @@ public class GT_MetaTileEntity_AssemblyLine
     	if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
     	return false;
     }
-
+    
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
@@ -369,10 +353,25 @@ public class GT_MetaTileEntity_AssemblyLine
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
         }
         return false;
     }
 
+    public int getMaxEfficiency(ItemStack aStack) {
+        return 10000;
+    }
+
+    public int getPollutionPerTick(ItemStack aStack) {
+        return 0;
+    }
+
+    public int getDamageToComponent(ItemStack aStack) {
+        return 0;
+    }
+
+    public boolean explodesOnComponentBreak(ItemStack aStack) {
+        return false;
+    }
 }

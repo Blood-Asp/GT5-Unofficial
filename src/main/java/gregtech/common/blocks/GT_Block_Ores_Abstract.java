@@ -53,15 +53,18 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (GregTech_API.sGeneratedMaterials[i] != null) {
                 for (int j = 0; j < aOreMetaCount; j++) {
+                    if (!this.getEnabledMetas()[j]) continue;
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
                         GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
-                    if (tHideOres) {
-                        if(!(j == 0 && !aHideFirstMeta)){
-                            codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));}
+                        if (tHideOres) {
+                            if (!(j == 0 && !aHideFirstMeta)) {
+                                codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));
+                            }
                             codechicken.nei.api.API.hideItem(new ItemStack(this, 1, (i + 16000) + (j * 1000)));
-                    }}
+                        }
+                    }
                 }
             }
         }
@@ -219,6 +222,8 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     }
 
     public abstract OrePrefixes[] getProcessingPrefix(); //Must have 8 entries; an entry can be null to disable automatic recipes.
+
+    public abstract boolean[] getEnabledMetas(); //Must have 8 entries.
 
     public abstract Block getDroppedBlock();
 

@@ -47,11 +47,10 @@ public class GT_Worldgenerator implements IWorldGenerator {
         if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
             tempDimensionId = 0;
         }
-        new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
+        new WorldGenContainer(aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
     }
 
     public static class WorldGenContainer implements Runnable {
-        public final Random mRandom;
         public int mX;
         public int mZ;
         public final int mDimensionType;
@@ -61,8 +60,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
         public final String mBiome;
         public static HashSet<ChunkCoordIntPair> mGenerated = new HashSet<>(2000);
 
-        public WorldGenContainer(Random aRandom, int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider, String aBiome) {
-            this.mRandom = aRandom;
+        public WorldGenContainer(int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider, String aBiome) {
             this.mX = aX;
             this.mZ = aZ;
             this.mDimensionType = aDimensionType;
@@ -82,22 +80,35 @@ public class GT_Worldgenerator implements IWorldGenerator {
             return mWorld.checkChunksExist(xCenter - 16, 0, zCenter - 16, xCenter + 16, 0, zCenter + 16);
         }
 
+        public Random getRandom(int xChunk, int zChunk) {
+            long worldSeed = mWorld.getSeed();
+            Random fmlRandom = new Random(worldSeed);
+            long xSeed = fmlRandom.nextLong() >> 2 + 1L;
+            long zSeed = fmlRandom.nextLong() >> 2 + 1L;
+            long chunkSeed = (xSeed * xChunk + zSeed * zChunk) ^ worldSeed;
+            fmlRandom.setSeed(chunkSeed);
+            return new XSTR(fmlRandom.nextInt());
+        }
+
         public void run() {
-            int xCenter = getVeinCenterCoordinate(mX >> 4) << 4;
-            int zCenter = getVeinCenterCoordinate(mZ >> 4) << 4;
+            int xCenter = getVeinCenterCoordinate(mX >> 4);
+            int zCenter = getVeinCenterCoordinate(mZ >> 4);
+            Random random = getRandom(xCenter, zCenter);
+            xCenter <<= 4;
+            zCenter <<= 4;
             ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
-            if (surroundingChunksLoaded(xCenter, zCenter) && !mGenerated.contains(centerChunk)) {
+            if (!mGenerated.contains(centerChunk) && surroundingChunksLoaded(xCenter, zCenter)) {
                 mGenerated.add(centerChunk);
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
                     for (int i = 0; (i < 256) && (temp); i++) {
-                        tRandomWeight = this.mRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
+                        tRandomWeight = random.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if (tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, xCenter, zCenter, this.mChunkGenerator, this.mChunkProvider)) {
+                                    if (tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, xCenter, zCenter, this.mChunkGenerator, this.mChunkProvider)) {
                                         temp = false;
                                     }
                                     break;
@@ -114,7 +125,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                     for (int tZ = zCenter - 16; j < 3; tZ += 16) {
                         try {
                             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                                tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
+                                tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
                             }
                         } catch (Throwable e) {
                             e.printStackTrace(GT_Log.err);
@@ -139,7 +150,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                     for (int i = 0; (i < 256) && (temp); i++) {
                         tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
-                            tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
+                            tRandomWeight -= tWorldGen.mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
                                     if ((tWorldGen.mEndAsteroid && tDimensionType == 1) || (tWorldGen.mAsteroid && tDimensionType == -30)) {

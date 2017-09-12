@@ -134,9 +134,10 @@ public interface IGT_RecipeAdder {
     /**
      * Adds Recipes for creating a radically polymerized polymer from a base Material (for example Ethylene -> Polyethylene)
      * @param aBasicMaterial The basic Material
+     * @param aBasicMaterialCell The corresponding Cell basic Material
      * @param aPolymer The polymer
      */
-    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, Fluid aPolymer);
+    public void addDefaultPolymerizationRecipes(Fluid aBasicMaterial, ItemStack aBasicMaterialCell, Fluid aPolymer);
     
     /**
      * Adds a Chemical Recipe
@@ -282,6 +283,7 @@ public interface IGT_RecipeAdder {
 
     public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
+    public boolean addAssemblerRecipe(ItemStack[] aInputs, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
      * Adds a Circuit Assembler Recipe
@@ -661,4 +663,17 @@ public interface IGT_RecipeAdder {
      * @return true if the Sound got added, otherwise false.
      */
     public boolean addSonictronSound(ItemStack aItemStack, String aSoundName);
+
+    /**
+     * Returns whether the recipes added are currently being marked as deprecated.
+     * Currently only affects Chemical Reactor Recipes.
+     */
+	public boolean isAddingDeprecatedRecipes();
+
+	/**
+	 * Sets whether the recipes added from this point on should be marked as deprecated or not.
+     * Currently only affects Chemical Reactor Recipes.
+	 */
+	public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
+
 }

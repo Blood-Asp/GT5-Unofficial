@@ -9,6 +9,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.net.GT_Packet_TileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.*;
@@ -53,12 +54,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     protected long mStoredEnergy = 0, mStoredSteam = 0;
     protected int mAverageEUInputIndex = 0, mAverageEUOutputIndex = 0;
     protected boolean mReleaseEnergy = false;
-    protected int[] mAverageEUInput = new int[]{0, 0, 0, 0, 0}, mAverageEUOutput = new int[]{0, 0, 0, 0, 0};
+    protected int[] mAverageEUInput = new int[11], mAverageEUOutput = new int[11];
     private boolean[] mActiveEUInputs = new boolean[]{false, false, false, false, false, false}, mActiveEUOutputs = new boolean[]{false, false, false, false, false, false};
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mHasEnoughEnergy = true, mRunningThroughTick = false, mInputDisabled = false, mOutputDisabled = false, mMuffler = false, mLockUpgrade = false, mActive = false, mRedstone = false, mWorkUpdate = false, mSteamConverter = false, mInventoryChanged = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false, oRedstone = false;
-    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
+    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
     private long mTickTimer = 0, oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
@@ -513,7 +514,15 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     if (aSideServer) {
                         if (mTickTimer % 10 == 0) {
                             if (mSendClientData) {
-                                NW.sendPacketToAllPlayersInRange(worldObj, new GT_Packet_TileEntity(xCoord, (short) yCoord, zCoord, mID, mCoverSides[0], mCoverSides[1], mCoverSides[2], mCoverSides[3], mCoverSides[4], mCoverSides[5], oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)), oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0, oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)), oColor = mColor), xCoord, zCoord);
+                                NW.sendPacketToAllPlayersInRange(worldObj,
+                                        new GT_Packet_TileEntity(xCoord, (short) yCoord, zCoord, mID,
+                                                mCoverSides[0], mCoverSides[1], mCoverSides[2], mCoverSides[3], mCoverSides[4], mCoverSides[5],
+                                                oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)),
+                                                oTexturePage = (hasValidMetaTileEntity() && mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) ? ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage() : 0,
+                                                oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0,
+                                                oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)),
+                                                oColor = mColor), 
+                                        xCoord, zCoord);
                                 mSendClientData = false;
                             }
                         }
@@ -521,8 +530,13 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         if (mTickTimer > 10) {
                             byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0));
                             if (tData != oTextureData) sendBlockEvent((byte) 0, oTextureData = tData);
+
                             tData = mMetaTileEntity.getUpdateData();
                             if (tData != oUpdateData) sendBlockEvent((byte) 1, oUpdateData = tData);
+                            if(mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) {
+                                tData = ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage();
+                                if (tData != oTexturePage) sendBlockEvent((byte) 1, (byte)((oTexturePage = tData)|0x80));//set last bit as a flag for page
+                            }
                             if (mColor != oColor) sendBlockEvent((byte) 2, oColor = mColor);
                             tData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0));
                             if (tData != oRedstoneData) sendBlockEvent((byte) 3, oRedstoneData = tData);
@@ -571,6 +585,30 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         return null;
     }
 
+    public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aTexturePage, byte aUpdateData, byte aRedstoneData, byte aColorData) {
+        issueTextureUpdate();
+        if (mID != aID && aID > 0) {
+            mID = aID;
+            createNewMetatileEntity(mID);
+        }
+
+        mCoverSides[0] = aCover0;
+        mCoverSides[1] = aCover1;
+        mCoverSides[2] = aCover2;
+        mCoverSides[3] = aCover3;
+        mCoverSides[4] = aCover4;
+        mCoverSides[5] = aCover5;
+
+        for (byte i = 0; i < 6; i++) mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
+
+        receiveClientEvent(0, aTextureData);
+        receiveClientEvent(1, aUpdateData & 0x7F);
+        receiveClientEvent(1, aTexturePage | 0x80);
+        receiveClientEvent(2, aColorData);
+        receiveClientEvent(3, aRedstoneData);
+    }
+
+    @Deprecated
     public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aUpdateData, byte aRedstoneData, byte aColorData) {
         issueTextureUpdate();
         if (mID != aID && aID > 0) {
@@ -588,7 +626,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         for (byte i = 0; i < 6; i++) mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
 
         receiveClientEvent(0, aTextureData);
-        receiveClientEvent(1, aUpdateData);
+        receiveClientEvent(1, aUpdateData & 0x7F);
+        receiveClientEvent(1, 0x80);
         receiveClientEvent(2, aColorData);
         receiveClientEvent(3, aRedstoneData);
     }
@@ -616,7 +655,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 				    //mLockUpgrade	= ((aValue&32) != 0);
                     break;
                 case 1:
-                    if (hasValidMetaTileEntity()) mMetaTileEntity.onValueUpdate((byte) aValue);
+                    if (hasValidMetaTileEntity()) {
+                        if ((aValue & 0x80) == 0) //Is texture index
+                            mMetaTileEntity.onValueUpdate((byte) (aValue & 0x7F));
+                        else if (mMetaTileEntity instanceof GT_MetaTileEntity_Hatch)//is texture page and hatch
+                                ((GT_MetaTileEntity_Hatch) mMetaTileEntity).onTexturePageUpdate((byte) (aValue & 0x7F));
+                    }
                     break;
                 case 2:
                     if (aValue > 16 || aValue < 0) aValue = 0;
@@ -1574,15 +1618,21 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public long getAverageElectricInput() {
         int rEU = 0;
-        for (int tEU : mAverageEUInput) rEU += tEU;
-        return rEU / mAverageEUInput.length;
+        for (int i = 0; i < mAverageEUInput.length; i++) {
+            if (i != mAverageEUInputIndex)
+                rEU += mAverageEUInput[i];
+        }
+        return rEU / (mAverageEUInput.length - 1);
     }
 
     @Override
     public long getAverageElectricOutput() {
         int rEU = 0;
-        for (int tEU : mAverageEUOutput) rEU += tEU;
-        return rEU / mAverageEUOutput.length;
+        for (int i = 0; i < mAverageEUOutput.length; i++) {
+            if (i != mAverageEUOutputIndex)
+                rEU += mAverageEUOutput[i];
+        }
+        return rEU / (mAverageEUOutput.length - 1);
     }
 
     @Override
