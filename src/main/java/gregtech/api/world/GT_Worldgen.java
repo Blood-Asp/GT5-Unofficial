@@ -45,6 +45,19 @@ public abstract class GT_Worldgen {
     }
 
     /**
+     * @param world  The World Object
+     * @param random The Random Generator to use
+     * @param chunkX x coord of the Chunk to generate
+     * @param chunkZ z coord of the Chunk to generate
+     * @param centerX x coord of the vein center
+     * @param centerZ z coord of the vein center
+     * @return if the Worldgeneration has been successfully completed
+     */
+    public boolean executeLayerWorldgen(World world, Random random, int chunkX, int chunkZ, int centerX, int centerZ) {
+        return false;
+    }
+
+    /**
      * @param aWorld         The World Object
      * @param aRandom        The Random Generator to use
      * @param aBiome         The Name of the Biome (always != null)
@@ -78,7 +91,7 @@ public abstract class GT_Worldgen {
         return false;
     }
 
-    public boolean isGenerationAllowed(String name){
+    public boolean isGenerationAllowed(String name) {
         for (String s : dimensionNameWhiteList) {
             if (name.equals(s)) {
                 return true;
