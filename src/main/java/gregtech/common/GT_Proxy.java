@@ -1249,10 +1249,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
 
-            final int dimID=aEvent.world.provider.dimensionId;
-            if(serverSideDimensionWiseTickCounter.containsKey(dimID))
+            int dimID=aEvent.world.provider.dimensionId;
+            if(serverSideDimensionWiseTickCounter.containsKey(dimID)){
                 serverSideDimensionWiseTickCounter.put(dimID, serverSideDimensionWiseTickCounter.get(dimID)+1);
-            else serverSideDimensionWiseTickCounter.put(dimID,0L);
+            }else{
+                serverSideDimensionWiseTickCounter.put(dimID,0L);
+            }
 
             GT_Pollution.onWorldTick(aEvent);
         }

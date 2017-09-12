@@ -250,9 +250,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mTransferredVoltage=0;
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
-            final int dimID=aBaseMetaTileEntity.getWorld().provider.dimensionId;
-            tickDiff=Math.min((int)(serverSideDimensionWiseTickCounter.get(dimID)-lastTickTime),1);
-            lastTickTime=serverSideDimensionWiseTickCounter.get(dimID);
+
+            tickDiff=Math.min((int)(serverSideDimensionWiseTickCounter.get(aBaseMetaTileEntity.getWorld().provider.dimensionId)-lastTickTime),1);
+            lastTickTime=serverSideDimensionWiseTickCounter.get(aBaseMetaTileEntity.getWorld().provider.dimensionId);
             if(lastTickDiff<tickDiff)
                 mOverheat=(short)Math.max(0,mOverheat-100);
             lastTickDiff=tickDiff;
