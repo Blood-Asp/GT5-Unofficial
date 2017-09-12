@@ -8,7 +8,7 @@ GT5-Unofficial is a decompiled and modified version of GT5.07.07. The goal of th
 ## Downloads
 
 Builds can be found on the [IC2 Forums](http://forum.industrial-craft.net/index.php?page=Thread&threadID=11488)
-and as [OneDrive Downloads] (http://1drv.ms/1L4h4gC)
+and as [OneDrive Downloads](http://1drv.ms/1L4h4gC)
 
 ## Installation
 
