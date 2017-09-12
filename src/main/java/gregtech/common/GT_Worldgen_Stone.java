@@ -29,15 +29,16 @@ public class GT_Worldgen_Stone
         blockMeta = aBlockMeta;
         block = Block.getBlockFromName(aBlock);
         allowToGenerateInVoid = aAllowToGenerateinVoid;
+        GregTech_API.sWorldgenList.add(this);
     }
 
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        if ((isGenerationAllowed(aWorld)) && ((probability <= 1) || (aRandom.nextInt(probability) == 0))) {
+        if (isGenerationAllowed(aWorld) && (probability <= 1 || aRandom.nextInt(probability) == 0)) {
             for (int i = 0; i < amount; i++) {
                 int tX = aChunkX + aRandom.nextInt(16);
                 int tY = minY + aRandom.nextInt(maxY - minY);
                 int tZ = aChunkZ + aRandom.nextInt(16);
-                if ((this.allowToGenerateInVoid) || (!aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
+                if (allowToGenerateInVoid || !aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ)) {
                     float math_pi = 3.141593F;//FB: CNT - CNT_ROUGH_CONSTANT_VALUE
                     float var6 = aRandom.nextFloat() * math_pi;
                     float var1d = size / 8.0F;

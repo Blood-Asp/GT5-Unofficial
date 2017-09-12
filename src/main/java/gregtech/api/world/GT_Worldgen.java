@@ -77,4 +77,13 @@ public abstract class GT_Worldgen {
         }
         return false;
     }
+
+    public boolean isGenerationAllowed(String name){
+        for (String s : dimensionNameWhiteList) {
+            if (name.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

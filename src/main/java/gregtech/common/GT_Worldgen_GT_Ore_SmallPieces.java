@@ -1,5 +1,6 @@
 package gregtech.common;
 
+import gregtech.api.GregTech_API;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ public class GT_Worldgen_GT_Ore_SmallPieces
         mMaxY = aMaxY;
         mAmount = aAmount;
         mMeta = aPrimary;
+        GregTech_API.sWorldgenList.add(this);
     }
 
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {

@@ -1,5 +1,7 @@
 package gregtech.common;
 
+import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.world.GT_Worldgen;
@@ -29,14 +31,14 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         public final int weight;
 
         public WeightedOre(String config) {
-            int id, weight;
+            int id = -1, weight = 0;
             try {
                 String[] rawData = config.split("=");
-                id = Integer.parseInt(rawData[0]);
-                weight = Integer.parseInt(rawData[1]);
+                if (rawData.length == 2) {
+                    id = Integer.parseInt(rawData[0]);
+                    weight = Integer.parseInt(rawData[1]);
+                }
             } catch (NumberFormatException ignored) {
-                id = 0;
-                weight = 0;
             }
             this.id = id;
             this.weight = weight;
@@ -52,18 +54,26 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         mSize = aSize;
         oreList = new ArrayList<>();
         int totalOresWeight = 0;
+        float[] chances = new float[ores.length];
+        String[] names = new String[ores.length];
+        int i = 0;
         for (String oreLine : ores) {
             WeightedOre ore = new WeightedOre(oreLine);
             oreList.add(ore);
             totalOresWeight += ore.weight;
             addOreToAchievements(ore.id);
+            names[i] = "ore" + GregTech_API.sGeneratedMaterials[ore.id].mName;
+            chances[i++] = ore.weight;
         }
         oreWeight = totalOresWeight;
+        for (int j = 0; j < chances.length; j++) {
+            chances[j] /= totalOresWeight;
+        }
         sWeight += mWeight;
         sList.add(this);
-        /*if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
-            blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(aName.substring(0, 1).toUpperCase() + aName.substring(1), aWeight, 0.2f, new String[]{"ore" + aPrimary.mName, "ore" + aSecondary.mName, "ore" + aBetween.mName, "ore" + aSporadic.mName}, new float[]{.4f, .4f, .15f, .05f});
-        }*/
+        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
+            ExcavatorHandler.addMineral(aName.substring(0, 1).toUpperCase() + aName.substring(1), aWeight, 0.2f, names, chances);
+        }
     }
 
     private void addOreToAchievements(int id) {
