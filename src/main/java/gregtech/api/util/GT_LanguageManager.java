@@ -316,6 +316,7 @@ public class GT_LanguageManager {
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_208", "Grab");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_209", "Grab");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_210", "Grab");
+        addStringLocalization("Interaction_DESCRIPTION_Index_211", "Items per side: ");
 
     }
     
