@@ -2753,16 +2753,16 @@ if(Loader.isModLoaded("Railcraft")){
     	
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.CharcoalByproducts.getGas(1000), 
     			new FluidStack[]{Materials.WoodTar.getFluid(250), Materials.WoodVinegar.getFluid(500), Materials.WoodGas.getGas(250)}, 
-    			Materials.Charcoal.getDustSmall(1), 200, 64);
+    			Materials.Charcoal.getDustSmall(1), 40, 256);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodGas.getGas(1000), 
     			new FluidStack[]{Materials.CarbonDioxide.getGas(490), Materials.Ethylene.getGas(20), Materials.Methane.getGas(130), Materials.CarbonMonoxide.getGas(340), Materials.Hydrogen.getGas(20)}, 
-    			GT_Values.NI, 200, 64);
+    			GT_Values.NI, 40, 256);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodVinegar.getFluid(1000), 
     			new FluidStack[]{Materials.AceticAcid.getFluid(100), Materials.Water.getFluid(500), Materials.Ethanol.getFluid(10), Materials.Methanol.getFluid(300), Materials.Acetone.getFluid(50), Materials.MethylAcetate.getFluid(10)}, 
-    			GT_Values.NI, 200, 64);
+    			GT_Values.NI, 40, 256);
     	GT_Values.RA.addUniversalDistillationRecipe(Materials.WoodTar.getFluid(1000), 
     			new FluidStack[]{Materials.Creosote.getFluid(500), Materials.Phenol.getFluid(75), Materials.Benzene.getFluid(350), Materials.Toluene.getFluid(75)}, 
-    			GT_Values.NI, 200, 64);
+    			GT_Values.NI, 40, 256);
     	
     	GT_Values.RA.addChemicalRecipe(Materials.Ethylene.getCells(1), 	Materials.AceticAcid.getCells(1), 	Materials.Oxygen.getGas(1000), 			Materials.VinylAcetate.getFluid(1000),Materials.Water.getCells(1), Materials.Empty.getCells(1), 180);
     	GT_Values.RA.addChemicalRecipe(Materials.AceticAcid.getCells(1),Materials.Oxygen.getCells(1), 		Materials.Ethylene.getGas(1000), 		Materials.VinylAcetate.getFluid(1000),Materials.Water.getCells(1), Materials.Empty.getCells(1), 180);
