@@ -48,4 +48,9 @@ public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDr
     protected int getMinTier() {
         return 3;
     }
+
+    @Override
+    protected int getBaseProgressTime() {
+        return 800;
+    }
 }
