@@ -29,13 +29,13 @@ public class GT_UndergroundOil {
         return undergroundOil(chunk,-1);
     }
 
-    public static FluidStack undergroundOil(IGregTechTileEntity te, float drainSpeedCoefficient){
-        return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),drainSpeedCoefficient);
+    public static FluidStack undergroundOil(IGregTechTileEntity te, float readOrDrainCoefficient){
+        return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),readOrDrainCoefficient);
     }
 
     //Returns whole content for information purposes -> when drainSpeedCoeff < 0
     //Else returns extracted fluidStack if amount > 0, or null otherwise
-    public static FluidStack undergroundOil(Chunk chunk, float drainSpeedCoefficient) {
+    public static FluidStack undergroundOil(Chunk chunk, float readOrDrainCoefficient) {
         if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(chunk.worldObj.provider.dimensionId)) return null;
         World aWorld = chunk.worldObj;
 
@@ -51,7 +51,7 @@ public class GT_UndergroundOil {
         if(tInts==null) tInts=getDefaultChunkDataOnCreation();//init if null
         else if(tInts[GTOIL]==0){//FAST stop
             //can return 0 amount stack for info :D
-            return drainSpeedCoefficient>=0 ? null : new FluidStack(FluidRegistry.getFluid(tInts[GTOILFLUID]),0);
+            return readOrDrainCoefficient>=0 ? null : new FluidStack(FluidRegistry.getFluid(tInts[GTOILFLUID]),0);
         }
 
         //GEN IT TO GET OBJECT...
@@ -81,9 +81,9 @@ public class GT_UndergroundOil {
         }
 
         //do stuff on it if needed
-        if(drainSpeedCoefficient>=0){
-            int fluidExtracted=(int)Math.floor(fluidInChunk.amount * (double) drainSpeedCoefficient / DIVIDER);
-            double averageDecrease=uoFluid.DecreasePerOperationAmount * (double)drainSpeedCoefficient;
+        if(readOrDrainCoefficient>=0){
+            int fluidExtracted=(int)Math.floor(fluidInChunk.amount * (double) readOrDrainCoefficient / DIVIDER);
+            double averageDecrease=uoFluid.DecreasePerOperationAmount * (double)readOrDrainCoefficient;
             int decrease=(int)Math.ceil(averageDecrease);
             if(fluidExtracted<=0 || fluidInChunk.amount<=decrease){//decrease - here it is max value of extraction for easy check
                 fluidInChunk=null;
