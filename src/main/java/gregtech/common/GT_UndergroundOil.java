@@ -72,7 +72,7 @@ public class GT_UndergroundOil {
 
         //do stuff on it if needed
         if(drainSpeedCoefficient>=0){
-            if(fluidInChunk.amount<DIVIDER){
+            if(fluidInChunk.amount<DIVIDER || fluidInChunk.amount<uoFluid.DecreasePerOperationAmount){
                 fluidInChunk=null;
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
