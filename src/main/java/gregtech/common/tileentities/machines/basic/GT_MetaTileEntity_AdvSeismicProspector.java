@@ -145,7 +145,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 {
                 	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(x*16,96), 0, GT_Utility.getScaleCoordinates(z*16,96));
                 	ChunkCoordIntPair cInts = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ).getChunkCoordIntPair();
-                	FluidStack tFluid = GT_UndergroundOil.undergroundOil(getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ),-1);
+                	FluidStack tFluid = GT_UndergroundOil.undergroundOilReadInformation(getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ));
             		if (tFluid != null)
 	                	if (tFluids.containsKey(cInts)) {
 	                		if (tFluids.get(cInts).amount<tFluid.amount)

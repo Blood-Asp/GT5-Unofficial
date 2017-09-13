@@ -71,7 +71,7 @@ import java.util.Map.Entry;
 
 import static gregtech.api.enums.GT_Values.*;
 import static gregtech.common.GT_Proxy.GTPOLLUTION;
-import static gregtech.common.GT_UndergroundOil.undergroundOil;
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1770,7 +1770,7 @@ public class GT_Utility {
         }
         
         if (aPlayer.capabilities.isCreativeMode) {
-            FluidStack tFluid = undergroundOil(aWorld.getChunkFromBlockCoords(aX,aZ),-1);//-# to only read
+            FluidStack tFluid = undergroundOilReadInformation(aWorld.getChunkFromBlockCoords(aX,aZ));//-# to only read
             if (tFluid!=null)
             	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
             else

@@ -1,11 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.common.GT_UndergroundOil.undergroundOil;
-
-import java.util.ArrayList;
-
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
@@ -15,6 +9,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_DrillerBase {
 
@@ -114,7 +115,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     private boolean tryFillChunkList(){
         FluidStack tFluid, tOil;
         if (mOilId <= 0) {
-            tFluid = undergroundOil(getBaseMetaTileEntity(), -1);
+            tFluid = undergroundOilReadInformation(getBaseMetaTileEntity());
             if (tFluid == null) return false;
             mOilId = tFluid.getFluidID();
         }
@@ -128,7 +129,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             for (int i = 0; i < range; i++) {
                 for (int j = 0; j < range; j++) {
                     tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i * xDir, zChunk + j * zDir);
-                    tFluid = undergroundOil(tChunk, -1);
+                    tFluid = undergroundOilReadInformation(tChunk);
                     if (tOil.isFluidEqual(tFluid))
                         mOilFieldChunks.add(tChunk);
                 }
