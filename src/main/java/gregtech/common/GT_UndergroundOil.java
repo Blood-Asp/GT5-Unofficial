@@ -19,14 +19,23 @@ import static gregtech.common.GT_Proxy.*;
  */
 public class GT_UndergroundOil {
     public static final short DIVIDER=5000;
+    private static final XSTR random=new XSTR();
 
-    public static FluidStack undergroundOil(IGregTechTileEntity te, float drainSpeedCoefficient){
-        return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),drainSpeedCoefficient);
+    public static FluidStack undergroundOilReadInformation(IGregTechTileEntity te){
+        return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),-1);
+    }
+
+    public static FluidStack undergroundOilReadInformation(Chunk chunk) {
+        return undergroundOil(chunk,-1);
+    }
+
+    public static FluidStack undergroundOil(IGregTechTileEntity te, float readOrDrainCoefficient){
+        return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),readOrDrainCoefficient);
     }
 
     //Returns whole content for information purposes -> when drainSpeedCoeff < 0
     //Else returns extracted fluidStack if amount > 0, or null otherwise
-    public static FluidStack undergroundOil(Chunk chunk, float drainSpeedCoefficient) {
+    public static FluidStack undergroundOil(Chunk chunk, float readOrDrainCoefficient) {
         if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(chunk.worldObj.provider.dimensionId)) return null;
         World aWorld = chunk.worldObj;
 
@@ -42,11 +51,13 @@ public class GT_UndergroundOil {
         if(tInts==null) tInts=getDefaultChunkDataOnCreation();//init if null
         else if(tInts[GTOIL]==0){//FAST stop
             //can return 0 amount stack for info :D
-            return drainSpeedCoefficient>=0 ? null : new FluidStack(FluidRegistry.getFluid(tInts[GTOILFLUID]),0);
+            return readOrDrainCoefficient>=0 ? null : new FluidStack(FluidRegistry.getFluid(tInts[GTOILFLUID]),0);
         }
 
         //GEN IT TO GET OBJECT...
-        XSTR tRandom = new XSTR( (aWorld.getSeed() + aWorld.provider.dimensionId * 2 + ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkXPos/(double)6)) + (7 * ((int)Math.floor((double)chunk.getChunkCoordIntPair().chunkZPos/6)))));
+        final XSTR tRandom = new XSTR(aWorld.getSeed() + aWorld.provider.dimensionId * 2 +
+                       (chunk.getChunkCoordIntPair().chunkXPos>>3) +
+                8267 * (chunk.getChunkCoordIntPair().chunkZPos>>3));
         GT_UO_Fluid uoFluid = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).getRandomFluid(tRandom);
 
         //Fluid stack holder
@@ -63,24 +74,32 @@ public class GT_UndergroundOil {
                 fluidInChunk = new FluidStack(uoFluid.getFluid(),tInts[GTOIL]);
             }else{
                 fluidInChunk  = new FluidStack(uoFluid.getFluid(), uoFluid.getRandomAmount(tRandom));
-                tRandom=new XSTR();
-                fluidInChunk.amount=(int)((float)fluidInChunk.amount*(0.75f+(tRandom.nextFloat()/2f)));//Randomly change amounts by +/- 25%
+                fluidInChunk.amount=(int)((float)fluidInChunk.amount*(0.75f+(random.nextFloat()/2f)));//Randomly change amounts by +/- 25%
             }
             tInts[GTOIL]=fluidInChunk.amount;
             tInts[GTOILFLUID]=fluidInChunk.getFluidID();
         }
 
         //do stuff on it if needed
-        if(drainSpeedCoefficient>=0){
-            if(fluidInChunk.amount<DIVIDER){
+        if(readOrDrainCoefficient>=0){
+            int fluidExtracted=(int)Math.floor(fluidInChunk.amount * (double) readOrDrainCoefficient / DIVIDER);
+            double averageDecrease=uoFluid.DecreasePerOperationAmount * (double)readOrDrainCoefficient;
+            int decrease=(int)Math.ceil(averageDecrease);
+            if(fluidExtracted<=0 || fluidInChunk.amount<=decrease){//decrease - here it is max value of extraction for easy check
                 fluidInChunk=null;
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
-                fluidInChunk.amount = (int)(fluidInChunk.amount*(double)drainSpeedCoefficient/DIVIDER);//give appropriate amount
-                tInts[GTOIL]-=uoFluid.DecreasePerOperationAmount;//diminish amount
+                fluidInChunk.amount = fluidExtracted;//give appropriate amount
+                if(random.nextFloat()<(decrease-averageDecrease)) decrease--;//use random to "subtract double from int"
+                //ex.
+                // averageDecrease=3.9
+                // decrease= ceil from 3.9 = 4
+                // decrease-averageDecrease=0.1 -> chance to subtract 1
+                // if random is < chance then subtract 1
+                tInts[GTOIL]-=decrease;//diminish amount, "randomly" adjusted to double value (averageDecrease)
             }
         }else{//just get info
-            if(fluidInChunk.amount<DIVIDER){
+            if(fluidInChunk.amount<=DIVIDER){
                 fluidInChunk.amount=0;//return informative stack
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
