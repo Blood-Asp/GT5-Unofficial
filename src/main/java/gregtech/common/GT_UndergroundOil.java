@@ -82,18 +82,24 @@ public class GT_UndergroundOil {
 
         //do stuff on it if needed
         if(drainSpeedCoefficient>=0){
-            if(fluidInChunk.amount<DIVIDER || fluidInChunk.amount<=(uoFluid.DecreasePerOperationAmount*(double)drainSpeedCoefficient)+1){
+            int fluidExtracted=(int)Math.floor(fluidInChunk.amount * (double) drainSpeedCoefficient / DIVIDER);
+            double averageDecrease=uoFluid.DecreasePerOperationAmount * (double)drainSpeedCoefficient;
+            int decrease=(int)Math.ceil(averageDecrease);
+            if(fluidExtracted<=0 || fluidInChunk.amount<=decrease){//decrease - here it is max value of extraction for easy check
                 fluidInChunk=null;
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
-                fluidInChunk.amount = (int)(fluidInChunk.amount*(double)drainSpeedCoefficient/DIVIDER);//give appropriate amount
-                double avrDecrease=uoFluid.DecreasePerOperationAmount * (double)drainSpeedCoefficient;
-                int decrease=(int)Math.floor(avrDecrease);
-                decrease+=random.nextFloat()<(avrDecrease-decrease)?1:0;
-                tInts[GTOIL]-=decrease;//diminish amount
+                fluidInChunk.amount = fluidExtracted;//give appropriate amount
+                if(random.nextFloat()<(decrease-averageDecrease)) decrease--;//use random to "subtract double from int"
+                //ex.
+                // averageDecrease=3.9
+                // decrease= ceil from 3.9 = 4
+                // decrease-averageDecrease=0.1 -> chance to subtract 1
+                // if random is < chance then subtract 1
+                tInts[GTOIL]-=decrease;//diminish amount, "randomly" adjusted to double value (averageDecrease)
             }
         }else{//just get info
-            if(fluidInChunk.amount<DIVIDER || fluidInChunk.amount<=(uoFluid.DecreasePerOperationAmount*(double)drainSpeedCoefficient)+1){
+            if(fluidInChunk.amount<=DIVIDER){
                 fluidInChunk.amount=0;//return informative stack
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
