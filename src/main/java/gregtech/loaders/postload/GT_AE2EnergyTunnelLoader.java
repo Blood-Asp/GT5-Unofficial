@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 public class GT_AE2EnergyTunnelLoader implements Runnable {
     @Override
     public void run() {
-        if (GT_Mod.gregtechproxy.mAE2Integration) {
+        if (GT_Mod.gregtechproxy.mAE2Integration && GT_Mod.gregtechproxy.mAE2Tunnel) {
             try {
                 load();
             } catch (Throwable e) {
