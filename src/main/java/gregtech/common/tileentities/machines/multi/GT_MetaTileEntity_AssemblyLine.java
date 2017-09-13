@@ -322,7 +322,7 @@ public class GT_MetaTileEntity_AssemblyLine
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
     private boolean isCorrectDataItem(ItemStack aStack, int state){
-        if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, false, true)) return true;
+        if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, true, true)) return true;
         if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
         if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
         return false;

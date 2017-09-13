@@ -30,14 +30,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements ITileEntityProvider {
-    public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal<>();
+    public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal();
     public static boolean FUCKING_LOCK = false;
     public static boolean tHideOres;
     private final String aTextName = ".name";
     private final String aTextSmall = "Small ";
+    public static Set aBlockedOres = new HashSet<Materials>();
 
     protected GT_Block_Ores_Abstract(String aUnlocalizedName, int aOreMetaCount, boolean aHideFirstMeta, Material aMaterial) {
         super(GT_Item_Ores.class, aUnlocalizedName, aMaterial);
@@ -45,7 +48,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH_ORES);
         tHideOres = Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres;
-        if (aOreMetaCount > 8 || aOreMetaCount < 0) aOreMetaCount = 8;
+        if(aOreMetaCount > 8 || aOreMetaCount < 0) aOreMetaCount = 8;
 
         for (int i = 0; i < 16; i++) {
             GT_ModHandler.addValuableOre(this, i, 1);
@@ -53,9 +56,10 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (GregTech_API.sGeneratedMaterials[i] != null) {
                 for (int j = 0; j < aOreMetaCount; j++) {
+                    if (!this.getEnabledMetas()[j]) continue;
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                    if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
+                    if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0 && !aBlockedOres.contains(GregTech_API.sGeneratedMaterials[i])) {
                         GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
                         if (tHideOres) {
                             if (!(j == 0 && !aHideFirstMeta)) {
@@ -222,6 +226,8 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
 
     public abstract OrePrefixes[] getProcessingPrefix(); //Must have 8 entries; an entry can be null to disable automatic recipes.
 
+    public abstract boolean[] getEnabledMetas(); //Must have 8 entries.
+
     public abstract Block getDroppedBlock();
 
     public abstract Materials[] getDroppedDusts(); //Must have 8 entries; can be null.
@@ -244,7 +250,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public void getSubBlocks(Item aItem, CreativeTabs aTab, List aList) {
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
             Materials tMaterial = GregTech_API.sGeneratedMaterials[i];
-            if ((tMaterial != null) && ((tMaterial.mTypes & 0x8) != 0)) {
+            if ((tMaterial != null) && ((tMaterial.mTypes & 0x8) != 0)&& !aBlockedOres.contains(tMaterial)) {
                 if (!(new ItemStack(aItem, 1, i).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i));
                 if (!(new ItemStack(aItem, 1, i + 1000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 1000));
                 if (!(new ItemStack(aItem, 1, i + 2000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 2000));

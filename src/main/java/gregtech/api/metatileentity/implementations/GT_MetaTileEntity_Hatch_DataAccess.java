@@ -98,4 +98,8 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
     }
+    @Override
+    public int getInventoryStackLimit() {
+        return 1;
+    }
 }

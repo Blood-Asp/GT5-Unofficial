@@ -5,52 +5,47 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDrillingPlantBase {
-    public GT_MetaTileEntity_OreDrillingPlant2(int aID, String aName, String aNameRegional) {
+public class GT_MetaTileEntity_ConcreteBackfiller1 extends GT_MetaTileEntity_ConcreteBackfillerBase {
+    public GT_MetaTileEntity_ConcreteBackfiller1(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_OreDrillingPlant2(String aName) {
+    public GT_MetaTileEntity_ConcreteBackfiller1(String aName) {
         super(aName);
     }
 
     @Override
     public String[] getDescription() {
-        return getDescriptionInternal("II");
+        return getDescriptionInternal("");
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_OreDrillingPlant2(mName);
+        return new GT_MetaTileEntity_ConcreteBackfiller1(mName);
     }
 
     @Override
     protected ItemList getCasingBlockItem() {
-        return ItemList.Casing_StableTitanium;
+        return ItemList.Casing_SolidSteel;
     }
 
     @Override
     protected Materials getFrameMaterial() {
-        return Materials.Titanium;
+        return Materials.Steel;
     }
 
     @Override
     protected int getCasingTextureIndex() {
-        return 50;
+        return 16;
     }
 
     @Override
-    protected int getRadiusInChunks() {
-        return 4;
+    protected int getRadius() {
+        return 16;
     }
 
     @Override
     protected int getMinTier() {
-        return 3;
-    }
-
-    @Override
-    protected int getBaseProgressTime() {
-        return 800;
+        return 2;
     }
 }

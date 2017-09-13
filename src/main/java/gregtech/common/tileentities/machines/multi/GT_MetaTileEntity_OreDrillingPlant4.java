@@ -1,4 +1,3 @@
-
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.enums.ItemList;
@@ -48,5 +47,10 @@ public class GT_MetaTileEntity_OreDrillingPlant4 extends GT_MetaTileEntity_OreDr
     @Override
     protected int getMinTier() {
         return 5;
+    }
+
+    @Override
+    protected int getBaseProgressTime() {
+        return 480;
     }
 }

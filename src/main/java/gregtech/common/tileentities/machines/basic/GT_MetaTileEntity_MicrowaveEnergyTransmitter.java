@@ -153,7 +153,8 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
                         sInterDimensionalTeleportAllowed &&
                                 (
                                         this.hasBlock ||
-                                        mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 1000
+                                                mFluid != null && mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 1000
+
                                 )
                 )
         ;

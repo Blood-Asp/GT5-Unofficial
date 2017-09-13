@@ -161,20 +161,9 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private void setElectricityStats() {
         this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        //T1 = 12; T2 = 48; T3 = 192; T4 = 768
-        this.mEUt = 3 * (1 << (getMinTier() << 1));
-        //T1 = 960; T2 = 480; T3 = 240; T4 = 120
-        this.mMaxProgresstime = (isPickingPipes ? 80 : 1920) / (1 << getMinTier());
-
-        long voltage = getMaxInputVoltage();
-        long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
-        while (this.mEUt <= overclockEu) {
-            this.mEUt *= 4;
-            this.mMaxProgresstime /= 2;
-        }
-
-        this.mEUt = -this.mEUt;
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        int overclock = 1 << GT_Utility.getTier(getMaxInputVoltage()) - 1;
+        this.mEUt = -12 * overclock * overclock;
+        this.mMaxProgresstime = (isPickingPipes ? 80 : getBaseProgressTime()) / overclock;
     }
 
     private ItemStack[] getOutputByDrops(ArrayList<ItemStack> oreBlockDrops) {
@@ -406,6 +395,9 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     protected abstract int getRadiusInChunks();
 
     protected abstract int getMinTier();
+
+    //returns theoretical progress time for LV energy hatch
+    protected abstract int getBaseProgressTime();
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();

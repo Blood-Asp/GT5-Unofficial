@@ -5,12 +5,12 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
-public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDrillingPlantBase {
-    public GT_MetaTileEntity_OreDrillingPlant2(int aID, String aName, String aNameRegional) {
+public class GT_MetaTileEntity_OilDrill2 extends GT_MetaTileEntity_OilDrillBase {
+    public GT_MetaTileEntity_OilDrill2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_OreDrillingPlant2(String aName) {
+    public GT_MetaTileEntity_OilDrill2(String aName) {
         super(aName);
     }
 
@@ -21,7 +21,7 @@ public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDr
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_OreDrillingPlant2(mName);
+        return new GT_MetaTileEntity_OilDrill2(mName);
     }
 
     @Override
@@ -40,17 +40,12 @@ public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDr
     }
 
     @Override
-    protected int getRadiusInChunks() {
-        return 4;
+    protected int getRangeInChunks() {
+        return 3;
     }
 
     @Override
     protected int getMinTier() {
         return 3;
-    }
-
-    @Override
-    protected int getBaseProgressTime() {
-        return 800;
     }
 }
