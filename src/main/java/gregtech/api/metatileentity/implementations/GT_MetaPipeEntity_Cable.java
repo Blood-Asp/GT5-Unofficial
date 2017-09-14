@@ -44,8 +44,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long mRestRF;
     public int mOverheat;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
-    private int tickDiff=1;
-    private long lastTickTime;
+
+    private int[] lastAmperage;
+    private long lastWorldTick;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -242,27 +243,50 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     }
 
     @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        if(aBaseMetaTileEntity.isServerSide()) {
+            lastAmperage = new int[16];
+            lastWorldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime() - 1;//sets initial value -1 since it is in the same tick as first on post tick
+        }
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
+            {//amp handler
+                long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
+                int tickDiff = (int) (worldTick - lastWorldTick);
+                lastWorldTick = worldTick;
+                int ampsAvr=lastAmperage[15]=mTransferredAmperage;
+                if (tickDiff >= 16) {
+                    for (int i = 0; i <= 14; i++) lastAmperage[i]=0;
+                } else {
+                    System.arraycopy(lastAmperage,tickDiff,lastAmperage,0,16-tickDiff);
+                    for (int i = 14; i >=0; i--,--tickDiff) {
+                        if(tickDiff>0){
+                            lastAmperage[i]=0;
+                        }else{
+                            ampsAvr+=lastAmperage[i];
+                        }
+                    }
+                }
+                if (ampsAvr > (mAmperage<<4)) mOverheat+=100*(ampsAvr-(mAmperage<<4));
+            }
+
+            if(mOverheat>=mMaxOverheat) {
+                //if(mInsulated){
+                //todo uninsulate
+                //}else{
+                aBaseMetaTileEntity.setToFire();
+                //}
+            }else if (mOverheat>0){
+                mOverheat--;
+            }
+
             mTransferredVoltageOK=mTransferredVoltage;
             mTransferredVoltage=0;
             mTransferredAmperageOK=mTransferredAmperage;
             mTransferredAmperage = 0;
-
-            tickDiff=Math.max((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
-            lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
-
-            long overHeatAmps=mTransferredAmperage-(mAmperage*tickDiff);
-            if(overHeatAmps>0) mOverheat+=100*overHeatAmps;
-
-            if(mOverheat>mMaxOverheat){
-                //if(mInsulated){
-                    //todo uninsulate
-                //}else{
-                    aBaseMetaTileEntity.setToFire();
-                //}
-            }
-            else if(mOverheat>0)mOverheat--;
 
             if (aTick % 20 == 0) {
                 mTransferredVoltageLast20OK=mTransferredVoltageLast20;
@@ -355,7 +379,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
                 "Heat: "+
                         EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET,
-                "TickDiff: "+ EnumChatFormatting.YELLOW+ tickDiff + EnumChatFormatting.RESET,
                 "Max Load (1t):",
                 EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
                         EnumChatFormatting.YELLOW + Long.toString(mAmperage) + EnumChatFormatting.RESET +" A",
