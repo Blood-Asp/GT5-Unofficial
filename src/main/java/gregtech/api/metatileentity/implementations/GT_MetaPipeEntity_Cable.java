@@ -253,7 +253,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
 
             long overHeatAmps=mTransferredAmperage-(mAmperage*tickDiff);
-            if(overHeatAmps>0) mOverheat+=100*overHeatAmps;
+            if(overHeatAmps>0) mOverheat+=100*overHeatAmps;//todo refactor to average
 
             if(mOverheat>mMaxOverheat){
                 //if(mInsulated){
