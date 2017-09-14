@@ -18,6 +18,7 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
+import gregtech.common.blocks.GT_Block_Machines;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -279,11 +280,19 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             }
 
             if(mOverheat>=mMaxOverheat) {
-                //if(mInsulated){
-                //todo uninsulate
-                //}else{
-                aBaseMetaTileEntity.setToFire();
-                //}
+                if(mInsulated &&
+                        GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-10] instanceof GT_MetaPipeEntity_Cable &&
+                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-10]).mMaterial==mMaterial){
+                    aBaseMetaTileEntity.setOnFire();
+                    aBaseMetaTileEntity.getWorld().setBlock(
+                            aBaseMetaTileEntity.getXCoord(),
+                            aBaseMetaTileEntity.getYCoord(),
+                            aBaseMetaTileEntity.getZCoord(),
+                            GT_Block_Machines.getBlockById(aBaseMetaTileEntity.getMetaTileID()-10));
+                    return;
+                }else{
+                    aBaseMetaTileEntity.setToFire();
+                }
             }else if (mOverheat>0) mOverheat--;
 
             mTransferredVoltageOK=mTransferredVoltage;
