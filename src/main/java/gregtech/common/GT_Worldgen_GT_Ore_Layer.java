@@ -27,11 +27,15 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
     public final int oreWeight;
 
     public static class WeightedOre {
-        public final int id;
-        public final int weight;
+        public int id = -1;
+        public int weight = 0;
+
+        public WeightedOre(int id, int weight) {
+            this.id = id;
+            this.weight = weight;
+        }
 
         public WeightedOre(String config) {
-            int id = -1, weight = 0;
             try {
                 String[] rawData = config.split("=");
                 if (rawData.length == 2) {
@@ -40,8 +44,6 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
                 }
             } catch (NumberFormatException ignored) {
             }
-            this.id = id;
-            this.weight = weight;
         }
     }
 

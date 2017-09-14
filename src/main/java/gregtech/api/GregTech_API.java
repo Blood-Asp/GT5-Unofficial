@@ -26,6 +26,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 
 import java.util.*;
@@ -172,7 +173,8 @@ public class GregTech_API {
     /**
      * The Configuration Objects
      */
-    public static GT_Config sRecipeFile, sMachineFile, sWorldgenFile, sModularArmor, sMaterialProperties , sMaterialComponents, sUnification, sSpecialFile, sClientDataFile, sOPStuff, advancedWorldgenFile;
+    public static Configuration oldWorldgenFile;
+    public static GT_Config sRecipeFile, sMachineFile, sModularArmor, sMaterialProperties , sMaterialComponents, sUnification, sSpecialFile, sClientDataFile, sOPStuff, advancedWorldgenFile;
     public static int TICKS_FOR_LAG_AVERAGING = 25, MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
     /**
      * Initialized by the Block creation.

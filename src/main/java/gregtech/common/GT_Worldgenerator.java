@@ -5,6 +5,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.XSTR;
+import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
@@ -14,32 +15,44 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.config.Configuration;
 
 import java.util.HashSet;
 import java.util.Random;
 
 public class GT_Worldgenerator implements IWorldGenerator {
-    private static int mEndAsteroidProbability = 300;
-    private static int mGCAsteroidProbability = 50;
-    private static int mSize = 100;
-    private static int endMinSize = 50;
-    private static int endMaxSize = 200;
-    private static int gcMinSize = 100;
-    private static int gcMaxSize = 400;
-    private static boolean endAsteroids = true;
-    private static boolean gcAsteroids = true;
+    public static class AsteroidConfig {
+        public boolean enabled;
+        public int minSize;
+        public int maxSize;
+        public int probability;
+    }
 
+    public static AsteroidConfig endAsteroids = new AsteroidConfig();
+    public static AsteroidConfig gcAsteroids = new AsteroidConfig();
+    static {
+        endAsteroids.enabled = true;
+        endAsteroids.minSize = 50;
+        endAsteroids.maxSize = 200;
+        endAsteroids.probability = 300;
+
+        gcAsteroids.enabled = true;
+        gcAsteroids.minSize = 100;
+        gcAsteroids.maxSize = 400;
+        gcAsteroids.probability = 50;
+    }
 
     public GT_Worldgenerator() {
-        endAsteroids = GregTech_API.sWorldgenFile.get("endasteroids", "GenerateAsteroids", true);
-        endMinSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMinSize", 50);
-        endMaxSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMaxSize", 200);
-        mEndAsteroidProbability = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidProbability", 300);
-        gcAsteroids = GregTech_API.sWorldgenFile.get("gcasteroids", "GenerateGCAsteroids", true);
-        gcMinSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMinSize", 100);
-        gcMaxSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMaxSize", 400);
-        mGCAsteroidProbability = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidProbability", 300);
+        configure(endAsteroids, "endasteroids", "GenerateAsteroids", "AsteroidMinSize", "AsteroidMaxSize", "AsteroidProbability");
+        configure(gcAsteroids, "gcasteroids", "GenerateGCAsteroids", "GCAsteroidMinSize", "GCAsteroidMaxSize", "GCAsteroidProbability");
         GameRegistry.registerWorldGenerator(this, 1073741823);
+    }
+
+    private void configure(AsteroidConfig obj, String category, String oldEnabledCfg, String oldMinSizeCfg, String oldMaxSizeCfg, String oldProbabilityCfg) {
+        obj.enabled = GT_Config.getWorldgenConfig(category, oldEnabledCfg, "Enabled", obj.enabled);
+        obj.minSize = GT_Config.getWorldgenConfig(category, oldMinSizeCfg, "MinSize", obj.minSize);
+        obj.maxSize = GT_Config.getWorldgenConfig(category, oldMaxSizeCfg, "MaxSize", obj.maxSize);
+        obj.probability = GT_Config.getWorldgenConfig(category, oldProbabilityCfg, "Probability", obj.probability);
     }
 
     public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
@@ -85,7 +98,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
             Random fmlRandom = new Random(worldSeed);
             long xSeed = fmlRandom.nextLong() >> 2 + 1L;
             long zSeed = fmlRandom.nextLong() >> 2 + 1L;
-            long chunkSeed = (xSeed * xChunk + zSeed * zChunk) ^ worldSeed;
+            long chunkSeed = xSeed * xChunk + zSeed * zChunk ^ worldSeed;
             fmlRandom.setSeed(chunkSeed);
             return new XSTR(fmlRandom.nextInt());
         }
@@ -99,10 +112,10 @@ public class GT_Worldgenerator implements IWorldGenerator {
             ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
             if (!mGenerated.contains(centerChunk) && surroundingChunksLoaded(xCenter, zCenter)) {
                 mGenerated.add(centerChunk);
-                if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
+                if (GT_Worldgen_GT_Ore_Layer.sWeight > 0 && GT_Worldgen_GT_Ore_Layer.sList.size() > 0) {
                     boolean temp = true;
                     int tRandomWeight;
-                    for (int i = 0; (i < 256) && (temp); i++) {
+                    for (int i = 0; i < 256 && temp; i++) {
                         tRandomWeight = random.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
@@ -139,9 +152,10 @@ public class GT_Worldgenerator implements IWorldGenerator {
             int tDimensionType = mWorld.provider.dimensionId;
             String tDimensionName = mWorld.provider.getClass().getName();
             Random aRandom = new Random();
-            if (((tDimensionType == 1) && endAsteroids && ((mEndAsteroidProbability <= 1) || (aRandom.nextInt(mEndAsteroidProbability) == 0))) || ((tDimensionName.contains("Asteroids")) && gcAsteroids && ((mGCAsteroidProbability <= 1) || (aRandom.nextInt(mGCAsteroidProbability) == 0)))) {
+            if (tDimensionType == 1 && endAsteroids.enabled && (endAsteroids.probability <= 1 || aRandom.nextInt(endAsteroids.probability) == 0)
+                    || tDimensionName.contains("Asteroids") && gcAsteroids.enabled && (gcAsteroids.probability <= 1 || aRandom.nextInt(gcAsteroids.probability) == 0)) {
                 GT_Worldgen_GT_Ore_Layer ores = null;
-                if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
+                if (GT_Worldgen_GT_Ore_Layer.sWeight > 0 && GT_Worldgen_GT_Ore_Layer.sList.size() > 0) {
                     asteroidsGen:
                     for (int i = 0; i < 256; i++) {
                         int tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
@@ -149,7 +163,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                             tRandomWeight -= tWorldGen.mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if ((tDimensionType == 1 && tWorldGen.isGenerationAllowed("EndAsteroids")) || (tWorldGen.isGenerationAllowed(mWorld))) {
+                                    if (tDimensionType == 1 && tWorldGen.isGenerationAllowed("EndAsteroids") || tWorldGen.isGenerationAllowed(mWorld)) {
                                         ores = tWorldGen;
                                         break asteroidsGen;
                                     }
@@ -164,12 +178,9 @@ public class GT_Worldgenerator implements IWorldGenerator {
                 int tX = mX + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
                 int tZ = mZ + aRandom.nextInt(16);
-                if (tDimensionType == 1) {
-                    mSize = aRandom.nextInt(endMaxSize - endMinSize);
-                } else {
-                    mSize = aRandom.nextInt(gcMaxSize - gcMinSize);
-                }
-                if ((mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ))) {
+                AsteroidConfig ac = tDimensionType == 1 ? endAsteroids : gcAsteroids;
+                int mSize = aRandom.nextInt(ac.maxSize - ac.minSize);
+                if (mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ)) {
                     float var6 = aRandom.nextFloat() * 3.141593F;
                     double var7 = tX + 8 + MathHelper.sin(var6) * mSize / 8.0F;
                     double var9 = tX + 8 - MathHelper.sin(var6) * mSize / 8.0F;
@@ -199,7 +210,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                                         oreGen:
                                         for (int eZ = tMinZ; eZ <= tMaxZ; eZ++) {
                                             double var45 = (eZ + 0.5D - var24) / (var28 / 2.0D);
-                                            if ((var39 * var39 + var42 * var42 + var45 * var45 < 1.0D) && (mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ))) {
+                                            if (var39 * var39 + var42 * var42 + var45 * var45 < 1.0D && mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ)) {
                                                 int ranOre = aRandom.nextInt(5);
                                                 if (ores != null && ranOre == 0) {
                                                     ranOre = aRandom.nextInt(ores.oreWeight);

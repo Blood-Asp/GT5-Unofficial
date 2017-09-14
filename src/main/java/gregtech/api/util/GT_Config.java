@@ -2,6 +2,7 @@ package gregtech.api.util;
 
 import gregtech.api.GregTech_API;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -95,5 +96,42 @@ public class GT_Config implements Runnable {
     @Override
     public void run() {
         mConfig.save();
+    }
+
+    public static Property findProperty(ConfigCategory category, String name, Object defaultValue) {
+        Property property = category.get(name + "_" + String.valueOf(defaultValue));
+        if (property != null) return property;
+        for (Property prop : category.getOrderedValues()) {
+            if (!prop.getName().startsWith(name)) continue;
+            property = prop;
+        }
+        return property;
+    }
+
+    public static boolean getWorldgenConfig(String category, String name, boolean defaultValue) {
+        return getWorldgenConfig(category, name, name, defaultValue);
+    }
+
+    public static boolean getWorldgenConfig(String category, String oldName, String name, boolean defaultValue) {
+        boolean value = defaultValue;
+        Property property = tryGetPropertyFromOldWorldgen(category, oldName, value);
+        if (property != null) value = property.getBoolean();
+        return GregTech_API.advancedWorldgenFile.mConfig.get(category, name, value).getBoolean();
+    }
+
+//    public static int getWorldgenConfig(String category, String name, int defaultValue) {
+//        return getWorldgenConfig(category, name, name, defaultValue);
+//    }
+
+    public static int getWorldgenConfig(String category, String oldName, String name, int defaultValue) {
+        int value = defaultValue;
+        Property property = tryGetPropertyFromOldWorldgen(category, oldName, value);
+        if (property != null) value = property.getInt();
+        return GregTech_API.advancedWorldgenFile.mConfig.get(category, name, value).getInt();
+    }
+
+    private static Property tryGetPropertyFromOldWorldgen(String category, String name, Object value) {
+        return GregTech_API.oldWorldgenFile != null && !GregTech_API.advancedWorldgenFile.mConfig.hasCategory(category) && GregTech_API.oldWorldgenFile.hasCategory(category)
+                ? findProperty(GregTech_API.oldWorldgenFile.getCategory(category), name, value) : null;
     }
 }

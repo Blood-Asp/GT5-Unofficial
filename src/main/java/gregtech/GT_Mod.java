@@ -46,6 +46,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -120,7 +121,8 @@ public class GT_Mod implements IGT_Mod {
         GT_Config.sConfigFileIDs.save();
         GregTech_API.sRecipeFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Recipes.cfg")));
         GregTech_API.sMachineFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MachineStats.cfg")));
-        GregTech_API.sWorldgenFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg")));
+        File oldWorldgenFile = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg");
+        GregTech_API.oldWorldgenFile = oldWorldgenFile.exists() ? new Configuration(oldWorldgenFile) : null;
         GregTech_API.advancedWorldgenFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "AdvancedWorldGeneration.cfg")));
         GregTech_API.sMaterialProperties = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialProperties.cfg")));
         GregTech_API.sMaterialComponents = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialComponents.cfg")));
@@ -273,12 +275,12 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mEasierIVPlusCables = tMainConfig.get("general", "EasierIVPlusCables", false).getBoolean(false);
         gregtechproxy.mBrickedBlastFurnace = tMainConfig.get("general", "BrickedBlastFurnace", true).getBoolean(true);
         gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre = tMainConfig.get("general", "MixedOreOnlyYieldsTwoThirdsOfPureOre", false).getBoolean(false);
-        gregtechproxy.enableBlackGraniteOres = GregTech_API.sWorldgenFile.get("general", "enableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
-        gregtechproxy.enableRedGraniteOres = GregTech_API.sWorldgenFile.get("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
-        gregtechproxy.enableMarbleOres = GregTech_API.sWorldgenFile.get("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
-        gregtechproxy.enableBasaltOres = GregTech_API.sWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
-        gregtechproxy.enableGCOres = GregTech_API.sWorldgenFile.get("general", "enableGCOres", gregtechproxy.enableGCOres);
-        gregtechproxy.enableUBOres = GregTech_API.sWorldgenFile.get("general", "enableUBOres", gregtechproxy.enableUBOres);
+        gregtechproxy.enableBlackGraniteOres = GT_Config.getWorldgenConfig("general", "enableBlackGraniteOres", "EnableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
+        gregtechproxy.enableRedGraniteOres = GT_Config.getWorldgenConfig("general", "enableRedGraniteOres", "EnableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
+        gregtechproxy.enableMarbleOres = GT_Config.getWorldgenConfig("general", "enableMarbleOres", "EnableMarbleOres", gregtechproxy.enableMarbleOres);
+        gregtechproxy.enableBasaltOres = GT_Config.getWorldgenConfig("general", "enableBasaltOres", "EnableBasaltOres", gregtechproxy.enableBasaltOres);
+        gregtechproxy.enableGCOres = GT_Config.getWorldgenConfig("general", "enableGCOres", "EnableGCOres", gregtechproxy.enableGCOres);
+        gregtechproxy.enableUBOres = GT_Config.getWorldgenConfig("general", "enableUBOres", "EnableUBOres", gregtechproxy.enableUBOres);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
 

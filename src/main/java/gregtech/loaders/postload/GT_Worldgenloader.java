@@ -4,8 +4,8 @@ import bloodasp.galacticgreg.GT_Worldgenerator_Space;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Config;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
@@ -16,62 +16,73 @@ import net.minecraftforge.common.config.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class GT_Worldgenloader implements Runnable {
-    public void addOldOreRecordToConfig(String name, int minY, int maxY, int weight, int density, int size, boolean over, boolean nether, boolean end, boolean moon, boolean mars, boolean asteroids, Materials p, Materials s, Materials b, Materials sp) {
-        String category = "generation.mixes." + name;
+    public void addOldOreRecordToConfig(String name, int minY, int maxY, int weight, int density, int size, boolean over, boolean nether, boolean end, boolean moon, boolean mars, boolean asteroids, Materials p, Materials s, Materials b, Materials a) {
+        String oldCatName = "worldgen.ore.mix." + (name.startsWith("custom") ? name.replace('_', '.') : name);
+        ConfigCategory oldCat = GregTech_API.oldWorldgenFile != null && GregTech_API.oldWorldgenFile.hasCategory(oldCatName)
+                ? GregTech_API.oldWorldgenFile.getCategory(oldCatName) : null;
         Configuration c = GregTech_API.advancedWorldgenFile.mConfig;
-        List<String> list = new ArrayList<>();
-        if (over) {
-            list.add("Surface");
+
+        List<String> dims = new ArrayList<>();
+        if (oldCat != null ? GT_Config.findProperty(oldCat, "Overworld", over).getBoolean() : over) {
+            dims.add("Surface");
         }
-        if (nether) {
-            list.add("Hell");
+        if (oldCat != null ? GT_Config.findProperty(oldCat, "Nether", nether).getBoolean() : nether) {
+            dims.add("Hell");
         }
-        if (end) {
-            list.add("End");
-            list.add("EndAsteroids");
+        if (oldCat != null) {
+            if (GT_Config.findProperty(oldCat, "TheEnd", end).getBoolean()) {
+                dims.add("End");
+            } else if (GT_Config.findProperty(oldCat, "EndAsteroid", end).getBoolean()) {
+                dims.add("EndAsteroids");
+            }
+        } else if (end) {
+            dims.add("End");
+            dims.add("EndAsteroids");
         }
-        if (moon) {
-            list.add("Moon");
+        if (oldCat != null ? GT_Config.findProperty(oldCat, "Moon", moon).getBoolean() : moon) {
+            dims.add("Moon");
         }
-        if (mars) {
-            list.add("Mars");
+        if (oldCat != null ? GT_Config.findProperty(oldCat, "Mars", mars).getBoolean() : mars) {
+            dims.add("Mars");
         }
-        if (asteroids) {
-            list.add("Asteroids");
+        if (oldCat != null ? GT_Config.findProperty(oldCat, "Asteroid", asteroids).getBoolean() : asteroids) {
+            dims.add("Asteroids");
         }
-        c.get(category, "Dimensions", list.toArray(new String[list.size()])).getStringList();
-        c.get(category, "Density", density).getInt();
-        c.get(category, "Weight", weight).getInt();
-        c.get(category, "Size", size).getInt();
-        c.get(category, "MaxHeight", maxY).getInt();
-        c.get(category, "MinHeight", minY).getInt();
-        Map<Integer, Integer> map = new TreeMap<>();
-        map.put(p.mMetaItemSubID, 375);
-        if (map.containsKey(s.mMetaItemSubID)) {
-            map.put(s.mMetaItemSubID, map.get(s.mMetaItemSubID) + 375);
-        } else {
-            map.put(s.mMetaItemSubID, 375);
+
+        String category = "generation.veins." + name;
+        c.get(category, "Dimensions", dims.toArray(new String[dims.size()])).getStringList();
+        c.get(category, "Density", oldCat != null ? GT_Config.findProperty(oldCat, "Density", density).getInt() : density).getInt();
+        c.get(category, "Weight", oldCat != null ? GT_Config.findProperty(oldCat, "RandomWeight", weight).getInt() : weight).getInt();
+        c.get(category, "Size", oldCat != null ? GT_Config.findProperty(oldCat, "Size", size).getInt() : size).getInt();
+        c.get(category, "MaxHeight", oldCat != null ? GT_Config.findProperty(oldCat, "MaxHeight", maxY).getInt() : maxY).getInt();
+        c.get(category, "MinHeight", oldCat != null ? GT_Config.findProperty(oldCat, "MinHeight", minY).getInt() : minY).getInt();
+
+        List<GT_Worldgen_GT_Ore_Layer.WeightedOre> oreList = new ArrayList<>();
+        addOreToList(oreList, oldCat != null ? GT_Config.findProperty(oldCat, "OrePrimaryLayer", p.mMetaItemSubID).getInt() : p.mMetaItemSubID, 3);
+        addOreToList(oreList, oldCat != null ? GT_Config.findProperty(oldCat, "OreSecondaryLayer", s.mMetaItemSubID).getInt() : s.mMetaItemSubID, 3);
+        addOreToList(oreList, oldCat != null ? GT_Config.findProperty(oldCat, "OreSporadiclyInbetween", b.mMetaItemSubID).getInt() : b.mMetaItemSubID, 1);
+        addOreToList(oreList, oldCat != null ? GT_Config.findProperty(oldCat, "OreSporaticlyAround", a.mMetaItemSubID).getInt() : a.mMetaItemSubID, 1);
+
+        String[] ores = new String[oreList.size()];
+        for (int i = 0; i < oreList.size(); i++) {
+            ores[i] = oreList.get(i).id + "=" + oreList.get(i).weight;
         }
-        if (map.containsKey(b.mMetaItemSubID)) {
-            map.put(b.mMetaItemSubID, map.get(b.mMetaItemSubID) + 125);
-        } else {
-            map.put(b.mMetaItemSubID, 125);
+        c.get(category, "Ores", ores).getStringList();
+    }
+
+    private void addOreToList(List<GT_Worldgen_GT_Ore_Layer.WeightedOre> list, int id, int weight) {
+        boolean isExist = false;
+        for (GT_Worldgen_GT_Ore_Layer.WeightedOre wo : list) {
+            if (wo.id != id) continue;
+            isExist = true;
+            wo.weight += weight;
+            break;
         }
-        if (map.containsKey(sp.mMetaItemSubID)) {
-            map.put(sp.mMetaItemSubID, map.get(sp.mMetaItemSubID) + 125);
-        } else {
-            map.put(sp.mMetaItemSubID, 125);
+        if (!isExist) {
+            list.add(new GT_Worldgen_GT_Ore_Layer.WeightedOre(id, weight));
         }
-        String[] ores = new String[map.size()];
-        int j = 0;
-        for (Map.Entry<Integer, Integer> i : map.entrySet()) {
-            ores[j++] = i.getKey() + "=" + i.getValue();
-        }
-        c.get(category, "Ore", ores).getStringList();
     }
 
     public void addOldSmallOreRecordToConfig(String name, int minY, int maxY, int amount, boolean over, boolean nether, boolean end, boolean moon, boolean mars, boolean asteroids, Materials p) {
@@ -118,14 +129,15 @@ public class GT_Worldgenloader implements Runnable {
     }
 
     public void run() {
-        boolean tPFAA = (GregTech_API.sWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
+        boolean tPFAA = Loader.isModLoaded("PFAAGeologica") && GT_Config.getWorldgenConfig("general", "AutoDetectPFAA", true);
 
         new GT_Worldgenerator();
         if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
             new GT_Worldgenerator_Space();
         }
 
-        if (!GregTech_API.advancedWorldgenFile.mConfig.hasCategory("generation.blocks")) {
+        Configuration config = GregTech_API.advancedWorldgenFile.mConfig;
+        if (!config.hasCategory("generation.blocks")) {
             addOldStoneRecordToConfig("blackgranite_tiny", GregTech_API.sBlockGranites, 0, 1, 50, 48, 0, 120);
             addOldStoneRecordToConfig("blackgranite_small", GregTech_API.sBlockGranites, 0, 1, 100, 96, 0, 120);
             addOldStoneRecordToConfig("blackgranite_medium", GregTech_API.sBlockGranites, 0, 1, 200, 144, 0, 120);
@@ -148,17 +160,17 @@ public class GT_Worldgenloader implements Runnable {
             addOldStoneRecordToConfig("basalt_huge", GregTech_API.sBlockStones, 8, 1, 400, 240, 0, 120);
         }
 
-        for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.blocks").getChildren()) {
-            int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), amount = c.get("Amount").getInt(-1), meta = c.get("Metadata").getInt(-1), size = c.get("Size").getInt(-1), prob = c.get("Probability").getInt(-1);
+        for (ConfigCategory c : config.getCategory("generation.blocks").getChildren()) {
+            int minH = c.get("MinHeight").getInt(), maxH = c.get("MaxHeight").getInt(), amount = c.get("Amount").getInt(), meta = c.get("Metadata").getInt(), size = c.get("Size").getInt(), prob = c.get("Probability").getInt();
             String block = c.get("Block").getString();
-            boolean allow = c.get("GenerateInVoid").getBoolean(false);
-            String[] dim = c.get("Dimensions").getStringList();
-            if (minH > -1 && maxH > 0 && amount > 0 && meta > -1 && prob > -1 && block != null && dim.length > 0) {
-                new GT_Worldgen_Stone(c.getName(), dim, block, meta, amount, size, prob, minH, maxH, allow);
+            boolean allow = c.get("GenerateInVoid").getBoolean();
+            String[] dims = c.get("Dimensions").getStringList();
+            if (minH > -1 && maxH > 0 && amount > 0 && meta > -1 && size > -1 && prob > -1 && block != null && dims.length > 0) {
+                new GT_Worldgen_Stone(c.getName(), dims, block, meta, amount, size, prob, minH, maxH, allow);
             }
         }
 
-        if (!GregTech_API.advancedWorldgenFile.mConfig.hasCategory("generation.small")) {
+        if (!config.hasCategory("generation.small")) {
             addOldSmallOreRecordToConfig("copper", 60, 120, 32, !tPFAA, true, true, true, true, false, Materials.Copper);
             addOldSmallOreRecordToConfig("tin", 60, 120, 32, !tPFAA, true, true, true, true, true, Materials.Tin);
             addOldSmallOreRecordToConfig("bismuth", 80, 120, 8, !tPFAA, true, false, true, true, false, Materials.Bismuth);
@@ -195,8 +207,8 @@ public class GT_Worldgenloader implements Runnable {
             addOldSmallOreRecordToConfig("sulfur_o", 5, 15, 8, !tPFAA, false, false, false, false, false, Materials.Sulfur);
         }
 
-        for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.small").getChildren()) {
-            int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), amount = c.get("Amount").getInt(-1), ore = c.get("Ore").getInt(-1);
+        for (ConfigCategory c : config.getCategory("generation.small").getChildren()) {
+            int minH = c.get("MinHeight").getInt(), maxH = c.get("MaxHeight").getInt(), amount = c.get("Amount").getInt(), ore = c.get("Ore").getInt();
             String[] dim = c.get("Dimensions").getStringList();
             if (minH > -1 && maxH > 0 && amount > 0 && ore > 0 && dim.length > 0) {
                 new GT_Worldgen_GT_Ore_SmallPieces(c.getName(), dim, minH, maxH, amount, ore);
@@ -208,7 +220,7 @@ public class GT_Worldgenloader implements Runnable {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
         }
 
-        if (!GregTech_API.advancedWorldgenFile.mConfig.hasCategory("generation.mixes")) {
+        if (!config.hasCategory("generation.veins")) {
             addOldOreRecordToConfig("naquadah", 10, 60, 10, 5, 32, false, false, true, false, true, true, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched);
             addOldOreRecordToConfig("lignite", 50, 130, 160, 8, 32, !tPFAA, false, false, false, false, false, Materials.Lignite, Materials.Lignite, Materials.Lignite, Materials.Coal);
             addOldOreRecordToConfig("coal", 50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Coal, Materials.Coal, Materials.Coal, Materials.Lignite);
@@ -241,18 +253,29 @@ public class GT_Worldgenloader implements Runnable {
             addOldOreRecordToConfig("lapis", 20, 50, 40, 5, 16, !tPFAA, false, true, true, true, true, Materials.Lazurite, Materials.Sodalite, Materials.Lapis, Materials.Calcite);
             addOldOreRecordToConfig("beryllium", 5, 30, 30, 3, 16, !tPFAA, false, true, true, true, true, Materials.Beryllium, Materials.Beryllium, Materials.Emerald, Materials.Thorium);
             addOldOreRecordToConfig("oilsand", 50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands);
+            convertCustomVeins();
         }
 
-        for (ConfigCategory c : GregTech_API.advancedWorldgenFile.mConfig.getCategory("generation.mixes").getChildren()) {
-            int minH = c.get("MinHeight").getInt(-1), maxH = c.get("MaxHeight").getInt(-1), den = c.get("Density").getInt(-1), size = c.get("Size").getInt(-1), weight = c.get("Weight").getInt(-1);
-            String[] dim = c.get("Dimensions").getStringList(), ore = c.get("Ore").getStringList();
-            if (minH > -1 && maxH > 0 && den > 0 && size > 0 && weight > 0 && dim.length > 0 && ore.length > 0) {
-                new GT_Worldgen_GT_Ore_Layer(c.getName(), minH, maxH, weight, den, size, dim, ore);
+        for (ConfigCategory c : config.getCategory("generation.veins").getChildren()) {
+            int minH = c.get("MinHeight").getInt(), maxH = c.get("MaxHeight").getInt(), den = c.get("Density").getInt(), size = c.get("Size").getInt(), weight = c.get("Weight").getInt();
+            String[] dims = c.get("Dimensions").getStringList(), ores = c.get("Ores").getStringList();
+            if (minH > -1 && maxH > 0 && den > 0 && size > 0 && weight > 0 && dims.length > 0 && ores.length > 0) {
+                new GT_Worldgen_GT_Ore_Layer(c.getName(), minH, maxH, weight, den, size, dims, ores);
             }
         }
 
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
+        }
+    }
+
+    private void convertCustomVeins() {
+        if (GregTech_API.oldWorldgenFile == null || !GregTech_API.oldWorldgenFile.hasCategory("worldgen.ore.mix.custom"))
+            return;
+        for (ConfigCategory c : GregTech_API.oldWorldgenFile.getCategory("worldgen.ore.mix.custom").getChildren()) {
+            if (!GregTech_API.oldWorldgenFile.get("worldgen", "ore.mix.custom." + c.getName() + "_false", false).getBoolean())
+                continue;
+            addOldOreRecordToConfig("custom_" + c.getName(), 0, 0, 0, 0, 0, false, false, false, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
         }
     }
 }
