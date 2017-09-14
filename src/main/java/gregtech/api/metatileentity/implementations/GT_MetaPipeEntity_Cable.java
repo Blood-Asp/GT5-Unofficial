@@ -257,7 +257,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
                 int tickDiff = (int) (worldTick - lastWorldTick);
                 lastWorldTick = worldTick;
-                int ampsAvr=lastAmperage[15]=mTransferredAmperage;
+                lastAmperage[15]=mTransferredAmperage;
+                int ampOverheat=mTransferredAmperage-((int)mAmperage<<4);
                 if (tickDiff >= 16) {
                     for (int i = 0; i <= 14; i++) lastAmperage[i]=0;
                 } else {
@@ -266,11 +267,15 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                         if(tickDiff>0){
                             lastAmperage[i]=0;
                         }else{
-                            ampsAvr+=lastAmperage[i];
+                            ampOverheat+=lastAmperage[i];
                         }
                     }
                 }
-                if (ampsAvr > (mAmperage<<4)) mOverheat+=100*(ampsAvr-(mAmperage<<4));
+
+                if (ampOverheat > 0) {
+                    mOverheat+=100*ampOverheat;
+                    lastAmperage[15]-=ampOverheat;
+                }
             }
 
             if(mOverheat>=mMaxOverheat) {
@@ -279,9 +284,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 //}else{
                 aBaseMetaTileEntity.setToFire();
                 //}
-            }else if (mOverheat>0){
-                mOverheat--;
-            }
+            }else if (mOverheat>0) mOverheat--;
 
             mTransferredVoltageOK=mTransferredVoltage;
             mTransferredVoltage=0;
