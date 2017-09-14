@@ -218,7 +218,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
             if (mTargetStackSize == 0) {
                 GT_Utility.sendChatToPlayer(aPlayer, trans("098","Do not regulate Item Stack Size"));
             } else {
-                GT_Utility.sendChatToPlayer(aPlayer, trans("099","Regulate Item Stack Size to: " + mTargetStackSize));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("099","Regulate Item Stack Size to: ") + mTargetStackSize);
             }
         }
     }
