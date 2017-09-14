@@ -281,14 +281,14 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
             if(mOverheat>=mMaxOverheat) {
                 if(mInsulated &&
-                        GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-10] instanceof GT_MetaPipeEntity_Cable &&
-                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-10]).mMaterial==mMaterial){
+                        GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6] instanceof GT_MetaPipeEntity_Cable &&
+                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mMaterial==mMaterial){
                     aBaseMetaTileEntity.setOnFire();
                     aBaseMetaTileEntity.getWorld().setBlock(
                             aBaseMetaTileEntity.getXCoord(),
                             aBaseMetaTileEntity.getYCoord(),
                             aBaseMetaTileEntity.getZCoord(),
-                            GT_Block_Machines.getBlockById(aBaseMetaTileEntity.getMetaTileID()-10));
+                            GT_Block_Machines.getBlockById(aBaseMetaTileEntity.getMetaTileID()-6));
                     return;
                 }else{
                     aBaseMetaTileEntity.setToFire();
