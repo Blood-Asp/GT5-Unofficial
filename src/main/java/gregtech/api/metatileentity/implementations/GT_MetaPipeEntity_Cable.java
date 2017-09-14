@@ -42,9 +42,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public int mTransferredAmperage = 0, mTransferredAmperageLast20 = 0,mTransferredAmperageLast20OK=0,mTransferredAmperageOK=0;
     public long mTransferredVoltageLast20 = 0, mTransferredVoltage = 0,mTransferredVoltageLast20OK=0,mTransferredVoltageOK=0;
     public long mRestRF;
-    public int mOverheat,mOverHeatToDo;
+    public int mOverheat;
     public static short mMaxOverheat=(short) (GT_Mod.gregtechproxy.mWireHeatingTicks * 100);
-    private int tickDiff=1,lastTickDiff=1;
+    private int tickDiff=1;
     private long lastTickTime;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
@@ -232,10 +232,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
         if (aVoltage > mVoltage){
-            mOverheat+=100;
+            mOverheat+=Math.max(100,(100*GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage)));
         }
-        if (mTransferredAmperage > (mAmperage*tickDiff)) {
-            mOverHeatToDo+=100;
+        if (mTransferredAmperage > mAmperage) {
             return aAmperage;
         }
         return rUsedAmperes;
@@ -253,11 +252,16 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             tickDiff=Math.max((int)(aBaseMetaTileEntity.getWorld().getTotalWorldTime()-lastTickTime),1);
             lastTickTime=aBaseMetaTileEntity.getWorld().getTotalWorldTime();
 
-            if(lastTickDiff>=tickDiff)
-                mOverheat+=mOverHeatToDo;
-            lastTickDiff=tickDiff;
+            long overHeatAmps=mTransferredAmperage-(mAmperage*tickDiff);
+            if(overHeatAmps>0) mOverheat+=100*overHeatAmps;
 
-            if(mOverheat>mMaxOverheat) aBaseMetaTileEntity.setToFire();
+            if(mOverheat>mMaxOverheat){
+                //if(mInsulated){
+                    //todo uninsulate
+                //}else{
+                    aBaseMetaTileEntity.setToFire();
+                //}
+            }
             else if(mOverheat>0)mOverheat--;
 
             if (aTick % 20 == 0) {
