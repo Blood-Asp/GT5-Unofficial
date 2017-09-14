@@ -18,7 +18,6 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
-import gregtech.common.blocks.GT_Block_Machines;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -229,16 +228,14 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                     }
                 }
             }
-        mTransferredVoltage=(Math.max(mTransferredVoltage,aVoltage));
+        mTransferredVoltage=Math.max(mTransferredVoltage,aVoltage);
         mTransferredAmperage += rUsedAmperes;
-        mTransferredVoltageLast20 = (Math.max(mTransferredVoltageLast20, aVoltage));
+        mTransferredVoltageLast20 = Math.max(mTransferredVoltageLast20, aVoltage);
         mTransferredAmperageLast20 = Math.max(mTransferredAmperageLast20, mTransferredAmperage);
         if (aVoltage > mVoltage){
-            mOverheat+=Math.max(100,(100*GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage)));
+            mOverheat+=Math.max(100,100*GT_Utility.getTier(aVoltage)-GT_Utility.getTier(mVoltage));
         }
-        if (mTransferredAmperage > mAmperage) {
-            return aAmperage;
-        }
+        if (mTransferredAmperage > mAmperage) return aAmperage;
         return rUsedAmperes;
         //Always return amount of used amperes, used all on overheat
     }
@@ -258,21 +255,20 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
                 int tickDiff = (int) (worldTick - lastWorldTick);
                 lastWorldTick = worldTick;
-                lastAmperage[15]=mTransferredAmperage;
-                int ampOverheat=mTransferredAmperage-((int)mAmperage<<4);
+                int ampOverheat=mTransferredAmperage-((int)mAmperage*16);
                 if (tickDiff >= 16) {
                     for (int i = 0; i <= 14; i++) lastAmperage[i]=0;
                 } else {
                     System.arraycopy(lastAmperage,tickDiff,lastAmperage,0,16-tickDiff);
-                    for (int i = 14; i >=0; i--,--tickDiff) {
-                        if(tickDiff>0){
+                    for (int i = 14; i >=0; i--) {
+                        if(--tickDiff>0){
                             lastAmperage[i]=0;
                         }else{
                             ampOverheat+=lastAmperage[i];
                         }
                     }
                 }
-
+                lastAmperage[15]=mTransferredAmperage;
                 if (ampOverheat > 0) {
                     mOverheat+=100*ampOverheat;
                     lastAmperage[15]-=ampOverheat;
@@ -280,20 +276,18 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             }
 
             if(mOverheat>=mMaxOverheat) {
-                if(mInsulated &&
-                        GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6] instanceof GT_MetaPipeEntity_Cable &&
-                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mMaterial==mMaterial &&
-                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mAmperage<=mAmperage){
-                    aBaseMetaTileEntity.setOnFire();
-                    aBaseMetaTileEntity.getWorld().setBlock(
-                            aBaseMetaTileEntity.getXCoord(),
-                            aBaseMetaTileEntity.getYCoord(),
-                            aBaseMetaTileEntity.getZCoord(),
-                            GT_Block_Machines.getBlockById(aBaseMetaTileEntity.getMetaTileID()-6));
-                    return;
-                }else{
+                //todo someday
+                //int newMeta=aBaseMetaTileEntity.getMetaTileID()-6;
+                //if(mInsulated &&
+                //        GregTech_API.METATILEENTITIES[newMeta] instanceof GT_MetaPipeEntity_Cable &&
+                //        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[newMeta]).mMaterial==mMaterial &&
+                //        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[newMeta]).mAmperage<=mAmperage){
+                //    aBaseMetaTileEntity.setOnFire();
+                //    aBaseMetaTileEntity.setMetaTileEntity(GregTech_API.METATILEENTITIES[newMeta]);
+                //    return;
+                //}else{
                     aBaseMetaTileEntity.setToFire();
-                }
+                //}
             }else if (mOverheat>0) mOverheat--;
 
             mTransferredVoltageOK=mTransferredVoltage;
