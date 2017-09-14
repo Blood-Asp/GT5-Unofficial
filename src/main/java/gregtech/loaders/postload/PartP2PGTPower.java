@@ -4,8 +4,10 @@ import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
+import appeng.parts.AEBasePart;
 import appeng.parts.p2p.PartP2PIC2Power;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -18,19 +20,19 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
     }
 
     public final World getWorld() {
-        return tile.getWorldObj();
+        return getTile().getWorldObj();
     }
 
     public final int getXCoord() {
-        return tile.xCoord;
+        return getTile().xCoord;
     }
 
     public final short getYCoord() {
-        return (short) tile.yCoord;
+        return (short) getTile().yCoord;
     }
 
     public final int getZCoord() {
-        return tile.zCoord;
+        return getTile().zCoord;
     }
 
     public final int getOffsetX(byte aSide, int aMultiplier) {
@@ -58,13 +60,13 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
         if (getOfferedEnergy() == 0) {
             return false;
         }
-        TileEntity t = getTileEntityAtSide((byte) side.ordinal());
+        TileEntity t = getTileEntityAtSide((byte) getSide().ordinal());
         if (t instanceof IEnergyConnected) {
             long voltage = 8 << (getSourceTier() * 2);
             if (voltage > getOfferedEnergy()) {
                 voltage = (long) getOfferedEnergy();
             }
-            if (((IEnergyConnected) t).injectEnergyUnits(GT_Utility.getOppositeSide(side.ordinal()), voltage, 1) > 0) {
+            if (((IEnergyConnected) t).injectEnergyUnits(GT_Utility.getOppositeSide(getSide().ordinal()), voltage, 1) > 0) {
                 drawEnergy(voltage);
                 return true;
             }
@@ -80,5 +82,17 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
     @Override
     public TickRateModulation tickingRequest(IGridNode iGridNode, int i) {
         return outputEnergy() ? TickRateModulation.FASTER : TickRateModulation.SLOWER;
+    }
+
+    public ForgeDirection getSide(){
+    	try {
+    		Field fSide = AEBasePart.class.getDeclaredField("side");
+			fSide.setAccessible(true);
+    		return (ForgeDirection) fSide.get(this);
+    	} catch (Exception e) {
+    		GT_Log.out.println("A fatal error occured at the P2P tunnel for GT electricity");
+            e.printStackTrace(GT_Log.out);
+    		throw new RuntimeException(e);
+    	}
     }
 }
