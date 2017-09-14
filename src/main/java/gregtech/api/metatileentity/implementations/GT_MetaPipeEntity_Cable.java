@@ -282,7 +282,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             if(mOverheat>=mMaxOverheat) {
                 if(mInsulated &&
                         GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6] instanceof GT_MetaPipeEntity_Cable &&
-                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mMaterial==mMaterial){
+                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mMaterial==mMaterial &&
+                        ((GT_MetaPipeEntity_Cable)GregTech_API.METATILEENTITIES[aBaseMetaTileEntity.getMetaTileID()-6]).mAmperage<=mAmperage){
                     aBaseMetaTileEntity.setOnFire();
                     aBaseMetaTileEntity.getWorld().setBlock(
                             aBaseMetaTileEntity.getXCoord(),
