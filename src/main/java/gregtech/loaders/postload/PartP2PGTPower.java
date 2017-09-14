@@ -1,5 +1,7 @@
 package gregtech.loaders.postload;
 
+import java.lang.reflect.Field;
+
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
