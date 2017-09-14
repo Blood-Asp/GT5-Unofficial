@@ -39,13 +39,18 @@ public class GT_Item_Machines
                     int i = 0;
                     for (String tDescription : tTileEntity.getDescription()) {
                         if (GT_Utility.isStringValid(tDescription)) {
-                            if(tDescription.contains("%%%")){
-                                String[] tString = tDescription.split("%%%");
-                                if(tString.length>=2){
-                                    aList.add(GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tString[0], !GregTech_API.sPostloadFinished )+" "+tString[1]);
-                                }
-                            }else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
-                                aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
+                        	if(tDescription.contains("%%%")){
+                        		String[] tString = tDescription.split("%%%");
+                        		if(tString.length>=2){
+                                                StringBuffer tBuffer = new StringBuffer();
+                        			Object tRep[] = new String[tString.length / 2];
+                        			for (int j = 0; j < tString.length; j++)
+                        				if (j % 2 == 0) tBuffer.append(tString[j]);
+                        				else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}
+                                                aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished), tRep));
+                        		}
+                        	}else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
+                            aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
                         }else i++;
                     }
                 }
