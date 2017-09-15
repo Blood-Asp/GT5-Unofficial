@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -99,12 +100,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
             ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
             if (!mGenerated.contains(centerChunk) && surroundingChunksLoaded(xCenter, zCenter)) {
                 mGenerated.add(centerChunk);
-                if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
+                int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType);
+                ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType);
+                if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
                     for (int i = 0; (i < 256) && (temp); i++) {
-                        tRandomWeight = random.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
+                        tRandomWeight = random.nextInt(tWeight);
+                        for (GT_Worldgen tWorldGen : tList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
                             if (tRandomWeight <= 0) {
                                 try {

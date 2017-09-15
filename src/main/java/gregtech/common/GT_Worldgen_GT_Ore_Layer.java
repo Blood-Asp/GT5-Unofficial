@@ -12,12 +12,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
     public static ArrayList<GT_Worldgen_GT_Ore_Layer> sList = new ArrayList();
+    @Deprecated
     public static int sWeight = 0;
+    protected static HashMap<String, OreGenList> sDimSpecifiedOreGenMap = new HashMap<>();
     public final short mMinY;
     public final short mMaxY;
     public final short mWeight;
@@ -36,6 +39,36 @@ public class GT_Worldgen_GT_Ore_Layer
     public final boolean mMars;
     public final boolean mAsteroid;
     public final String aTextWorldgen = "worldgen.";
+
+    protected static class OreGenList {
+    	public ArrayList<GT_Worldgen_GT_Ore_Layer> list = new ArrayList<>();
+    	public int weight = 0;
+    }
+
+    protected static OreGenList getOreGenData(World aWorld, int aDimensionType) {
+    	String aDimName = aWorld.provider.getDimensionName();
+    	OreGenList rList;
+    	if ((rList = sDimSpecifiedOreGenMap.get(aDimName)) == null) {
+    		System.out.println("Initializing dimensional-specified Orevein list for: " + aDimName);
+    		rList = new OreGenList();
+    		for (GT_Worldgen_GT_Ore_Layer tOreGen : sList)
+    			if (tOreGen.isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (tOreGen.mNether)) || ((aDimensionType == 0) && (tOreGen.mOverworld)) || ((aDimensionType == 1) && (tOreGen.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (tOreGen.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (tOreGen.mMars)) ? aDimensionType : ~aDimensionType)) {
+    				rList.list.add(tOreGen);
+    				rList.weight += tOreGen.mWeight;
+    			}
+    		
+    		sDimSpecifiedOreGenMap.put(aDimName, rList);
+    	}
+    	return rList;
+    }
+
+    public static int getOreGenWeight(World aWorld, int aDimensionType) {
+    	return getOreGenData(aWorld, aDimensionType).weight;
+    }
+
+    public static ArrayList<GT_Worldgen_GT_Ore_Layer> getOreGenList(World aWorld, int aDimensionType) {
+    	return getOreGenData(aWorld, aDimensionType).list;
+    }
 
     public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
         super(aName, sList, aDefault);
@@ -79,9 +112,11 @@ public class GT_Worldgen_GT_Ore_Layer
         if (!this.mRestrictBiome.equals("None") && !(this.mRestrictBiome.equals(aBiome))) {
             return false; //Not the correct biome for ore mix
         }
+        /*
         if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (this.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (this.mMars)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
             return false;
         }
+        */
         int tMinY = this.mMinY + aRandom.nextInt(this.mMaxY - this.mMinY - 5);
 
         int cX = aChunkX - aRandom.nextInt(this.mSize);
