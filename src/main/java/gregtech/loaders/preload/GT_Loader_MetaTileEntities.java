@@ -1336,11 +1336,6 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         makeWires(Materials.Lead, 1220, bEC ? 2L : 2L, bEC ? 4L : 4L, 2L, gregtech.api.enums.GT_Values.V[1], true, aBoolConst_0);
         makeWires(Materials.Tin, 1240, bEC ? 1L : 1L, bEC ? 2L : 2L, 1L, gregtech.api.enums.GT_Values.V[1], true, aBoolConst_0);
 
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt01, Materials.Tin, new GT_MetaPipeEntity_CableDebug(1256, aTextWire1 + Materials.Tin.mName.toLowerCase() + ".01d", "1x " + Materials.Tin.mDefaultLocalName + aTextWire2+" Debug", 0.125F, Materials.Tin, 1, 1L, 32, false, false).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt02, Materials.Tin, new GT_MetaPipeEntity_CableDebug(1257, aTextWire1 + Materials.Tin.mName.toLowerCase() + ".02d", "2x " + Materials.Tin.mDefaultLocalName + aTextWire2+" Debug", 0.25F, Materials.Tin, 1, 2L, 32, false, false).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt04, Materials.Tin, new GT_MetaPipeEntity_CableDebug(1258, aTextWire1 + Materials.Tin.mName.toLowerCase() + ".04d", "4x " + Materials.Tin.mDefaultLocalName + aTextWire2+" Debug", 0.375F, Materials.Tin, 1, 4L, 32, false, false).getStackForm(1L));
-        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt08, Materials.Tin, new GT_MetaPipeEntity_CableDebug(1259, aTextWire1 + Materials.Tin.mName.toLowerCase() + ".08d", "8x " + Materials.Tin.mDefaultLocalName + aTextWire2+" Debug", 0.5F,  Materials.Tin, 1, 8L, 32, false, false).getStackForm(1L));
-
         makeWires(Materials.Zinc, 1260, bEC ? 1L : 1L, bEC ? 2L : 2L, 1L, gregtech.api.enums.GT_Values.V[1], true, aBoolConst_0);
         makeWires(Materials.SolderingAlloy, 1280, bEC ? 1L : 1L, bEC ? 2L : 2L, 1L, gregtech.api.enums.GT_Values.V[1], true, aBoolConst_0);
 
