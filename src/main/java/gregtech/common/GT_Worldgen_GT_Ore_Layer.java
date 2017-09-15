@@ -12,15 +12,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
     public static ArrayList<GT_Worldgen_GT_Ore_Layer> sList = new ArrayList();
     @Deprecated
     public static int sWeight = 0;
-    protected static HashMap<String, OreGenList> sDimSpecifiedOreGenMap = new HashMap<>();
+    protected static ConcurrentHashMap<String, OreGenList> sDimSpecifiedOreGenMap = new ConcurrentHashMap<>();
     public final short mMinY;
     public final short mMaxY;
     public final short mWeight;
