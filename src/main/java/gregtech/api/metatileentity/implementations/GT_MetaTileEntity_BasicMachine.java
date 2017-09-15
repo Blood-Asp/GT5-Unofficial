@@ -2,6 +2,7 @@ package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
+import gregtech.api.util.GT_Log;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_Container_BasicMachine;
@@ -29,6 +30,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import java.util.Arrays;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.debugCleanroom;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -829,7 +831,15 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         if (tRecipe.mSpecialValue == -200 || tRecipe.mSpecialValue == -300)
             for (int i = 0; i < mOutputItems.length; i++)
                 if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
+                {
+					if (debugCleanroom) {
+						GT_Log.out.println(
+							"BasicMachine: Voiding output due to efficiency failure. mEfficiency = " + 
+							mCleanroom.mEfficiency
+						);
+					}
                     mOutputItems[i] = null;
+                }
         mOutputFluid = tRecipe.getFluidOutput(0);
         if(!skipOC){
             calculateOverclockedNess(tRecipe);
