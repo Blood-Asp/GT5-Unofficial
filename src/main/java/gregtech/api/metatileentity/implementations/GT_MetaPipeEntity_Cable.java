@@ -255,23 +255,44 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
                 int tickDiff = (int) (worldTick - lastWorldTick);
                 lastWorldTick = worldTick;
-                int ampOverheat=mTransferredAmperageOK-((int)mAmperage*16);//16+tickDiff-1
-                if (tickDiff >= 16) {
-                    for (int i = 0; i <= 14; i++) lastAmperage[i]=0;
-                } else {
-                    System.arraycopy(lastAmperage,tickDiff,lastAmperage,0,16-tickDiff);
-                    for (int i = 14; i >=0; i--) {
-                        if(--tickDiff>0){
-                            lastAmperage[i]=0;
-                        }else{
-                            ampOverheat+=lastAmperage[i];
-                        }
+
+                //for(int i=0;i<16;i++) sendToPlayerAppend(lastAmperage[i]+" ");
+                //sendToPlayerAppend(tickDiff+" ");
+                //sendToPlayerAppend(mTransferredAmperage+" ");
+                //sendToPlayerAppend(mTransferredAmperageOK+" ");
+
+                if (tickDiff >= 16) for (int i = 0; i <= 14; i++) lastAmperage[i] = 0;
+                else {
+                    System.arraycopy(lastAmperage, tickDiff, lastAmperage, 0, 16 - tickDiff);
+                    for (int i = 14; i >= 0; i--) {
+                        if (--tickDiff > 0) lastAmperage[i] = 0;
+                        else break;
                     }
                 }
-                lastAmperage[15]=mTransferredAmperageOK;
-                if (ampOverheat > 0) {
-                    mOverheat+=100*ampOverheat;
-                    lastAmperage[15]-=ampOverheat;
+
+                lastAmperage[15] = mTransferredAmperage;
+
+                if (lastAmperage[15] > mAmperage) {
+                    int i = 0;
+                    for (; i < 15; i++) {
+                        int diff = (int) mAmperage - lastAmperage[i];
+                        if (diff > 0) {
+                            lastAmperage[15] -= diff;
+                            lastAmperage[i] += diff;
+                            if (lastAmperage[15] <= mAmperage) break;
+                        }
+                    }
+                    if (lastAmperage[15] != mAmperage) {
+                        lastAmperage[i] -= (int) mAmperage - lastAmperage[15];
+                        lastAmperage[15] = (int) mAmperage;
+                    }
+                }
+
+                //sendToPlayer(lastAmperage[15]);
+
+                if (lastAmperage[15] > mAmperage) {
+                    mOverheat += 100 * (lastAmperage[15] - mAmperage);
+                    lastAmperage[15] -= mAmperage;
                 }
             }
 

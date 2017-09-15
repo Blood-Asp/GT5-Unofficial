@@ -258,55 +258,45 @@ public class GT_MetaPipeEntity_CableDebug extends MetaPipeEntity implements IMet
                 int tickDiff = (int) (worldTick - lastWorldTick);
                 lastWorldTick = worldTick;
 
+                for (int i = 0; i < 16; i++) sendToPlayerAppend(lastAmperage[i] + " ");
+                sendToPlayerAppend(tickDiff + " ");
+                sendToPlayerAppend(mTransferredAmperage + " ");
+                sendToPlayerAppend(mTransferredAmperageOK + " ");
 
-                for(int i=0;i<16;i++) sendToPlayerAppend(lastAmperage[i]+" ");
-                sendToPlayerAppend(tickDiff+" ");
-                sendToPlayerAppend(mTransferredAmperage+" ");
-                sendToPlayerAppend(mTransferredAmperageOK+" ");
-
-                //int ampOverheat=mTransferredAmperageOK-((int)mAmperage*16);//16+tickDiff-1
-                if (tickDiff >= 16) {
-                    for (int i = 0; i <= 14; i++) lastAmperage[i]=0;
-                } else {
-                    System.arraycopy(lastAmperage,tickDiff,lastAmperage,0,16-tickDiff);
-                    for (int i = 14; i >=0; i--) {
-                        if(--tickDiff>0){
-                            lastAmperage[i]=0;
-                        }else{
-                            break;
-                            //ampOverheat+=lastAmperage[i];
-                        }
+                if (tickDiff >= 16) for (int i = 0; i <= 14; i++) lastAmperage[i] = 0;
+                else {
+                    System.arraycopy(lastAmperage, tickDiff, lastAmperage, 0, 16 - tickDiff);
+                    for (int i = 14; i >= 0; i--) {
+                        if (--tickDiff > 0) lastAmperage[i] = 0;
+                        else break;
                     }
                 }
 
-                lastAmperage[15]=mTransferredAmperage;
+                lastAmperage[15] = mTransferredAmperage;
 
-                if(lastAmperage[15]>mAmperage) {
+                if (lastAmperage[15] > mAmperage) {
                     int i = 0;
                     for (; i < 15; i++) {
                         int diff = (int) mAmperage - lastAmperage[i];
                         if (diff > 0) {
                             lastAmperage[15] -= diff;
                             lastAmperage[i] += diff;
+                            if (lastAmperage[15] <= mAmperage) break;
                         }
-                        if (lastAmperage[15] <= mAmperage) break;
                     }
-                    if(lastAmperage[15]!=mAmperage){
-                        lastAmperage[i]-=(int)mAmperage-lastAmperage[15];
-                        lastAmperage[15]=(int)mAmperage;
+                    if (lastAmperage[15] != mAmperage) {
+                        lastAmperage[i] -= (int) mAmperage - lastAmperage[15];
+                        lastAmperage[15] = (int) mAmperage;
                     }
                 }
-
-
 
                 sendToPlayer(lastAmperage[15]);
 
                 if (lastAmperage[15] > mAmperage) {
-                    mOverheat+=100*(lastAmperage[15]-mAmperage);
-                    lastAmperage[15]-=mAmperage;
+                    mOverheat += 100 * (lastAmperage[15] - mAmperage);
+                    lastAmperage[15] -= mAmperage;
                 }
             }
-
 
             if(mOverheat>=mMaxOverheat) {
                 //todo someday
@@ -319,7 +309,7 @@ public class GT_MetaPipeEntity_CableDebug extends MetaPipeEntity implements IMet
                 //    aBaseMetaTileEntity.setMetaTileEntity(GregTech_API.METATILEENTITIES[newMeta]);
                 //    return;
                 //}else{
-                aBaseMetaTileEntity.setToFire();
+                    aBaseMetaTileEntity.setToFire();
                 //}
             }else if (mOverheat>0) mOverheat--;
 
