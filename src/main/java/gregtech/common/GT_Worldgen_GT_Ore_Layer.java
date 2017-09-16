@@ -45,14 +45,15 @@ public class GT_Worldgen_GT_Ore_Layer
     	public int weight = 0;
     }
 
-    protected static OreGenList getOreGenData(World aWorld, int aDimensionType) {
-    	String aDimName = aWorld.provider.getDimensionName();
+    protected static OreGenList getOreGenData(World aWorld, int aDimensionType, boolean tAsteroid) {
+    	String aDimName = aWorld.provider.getDimensionName() + (tAsteroid ? ".asteroid" : "");
     	OreGenList rList;
     	if ((rList = sDimSpecifiedOreGenMap.get(aDimName)) == null) {
-    		System.out.println("Initializing dimensional-specified Orevein list for: " + aDimName);
+    		if (GT_Values.D1) System.out.println("Initializing dimensional-specified Orevein list for: " + aDimName);
     		rList = new OreGenList();
     		for (GT_Worldgen_GT_Ore_Layer tOreGen : sList)
-    			if (tOreGen.isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (tOreGen.mNether)) || ((aDimensionType == 0) && (tOreGen.mOverworld)) || ((aDimensionType == 1) && (tOreGen.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (tOreGen.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (tOreGen.mMars)) ? aDimensionType : ~aDimensionType)) {
+    			if ((tAsteroid && ((tOreGen.mEndAsteroid && aDimensionType == 1) || (tOreGen.mAsteroid && aDimensionType == -30))) ||
+    					tOreGen.isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (tOreGen.mNether)) || ((aDimensionType == 0) && (tOreGen.mOverworld)) || ((aDimensionType == 1) && (tOreGen.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (tOreGen.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (tOreGen.mMars)) ? aDimensionType : ~aDimensionType)) {
     				rList.list.add(tOreGen);
     				rList.weight += tOreGen.mWeight;
     			}
@@ -62,12 +63,12 @@ public class GT_Worldgen_GT_Ore_Layer
     	return rList;
     }
 
-    public static int getOreGenWeight(World aWorld, int aDimensionType) {
-    	return getOreGenData(aWorld, aDimensionType).weight;
+    public static int getOreGenWeight(World aWorld, int aDimensionType, boolean tAsteroid) {
+    	return getOreGenData(aWorld, aDimensionType, tAsteroid).weight;
     }
 
-    public static ArrayList<GT_Worldgen_GT_Ore_Layer> getOreGenList(World aWorld, int aDimensionType) {
-    	return getOreGenData(aWorld, aDimensionType).list;
+    public static ArrayList<GT_Worldgen_GT_Ore_Layer> getOreGenList(World aWorld, int aDimensionType, boolean tAsteroid) {
+    	return getOreGenData(aWorld, aDimensionType, tAsteroid).list;
     }
 
     public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {

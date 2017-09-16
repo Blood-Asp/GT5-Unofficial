@@ -100,8 +100,8 @@ public class GT_Worldgenerator implements IWorldGenerator {
             ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
             if (!mGenerated.contains(centerChunk) && surroundingChunksLoaded(xCenter, zCenter)) {
                 mGenerated.add(centerChunk);
-                int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType);
-                ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType);
+                int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType, false);
+                ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType, false);
                 if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
@@ -147,23 +147,25 @@ public class GT_Worldgenerator implements IWorldGenerator {
                 short secondaryMeta = 0;
                 short betweenMeta = 0;
                 short sporadicMeta = 0;
-                if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
+                int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, tDimensionType, true);
+                ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, tDimensionType, true);
+                if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
                     for (int i = 0; (i < 256) && (temp); i++) {
-                        tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
+                        tRandomWeight = aRandom.nextInt(tWeight);
+                        for (GT_Worldgen_GT_Ore_Layer tWorldGen : tList) {
                             tRandomWeight -= tWorldGen.mWeight;
                             if (tRandomWeight <= 0) {
                                 try {
-                                    if ((tWorldGen.mEndAsteroid && tDimensionType == 1) || (tWorldGen.mAsteroid && tDimensionType == -30)) {
+                                    //if ((tWorldGen.mEndAsteroid && tDimensionType == 1) || (tWorldGen.mAsteroid && tDimensionType == -30)) {
                                         primaryMeta = tWorldGen.mPrimaryMeta;
                                         secondaryMeta = tWorldGen.mSecondaryMeta;
                                         betweenMeta = tWorldGen.mBetweenMeta;
                                         sporadicMeta = tWorldGen.mSporadicMeta;
                                         temp = false;
                                         break;
-                                    }
+                                    //}
                                 } catch (Throwable e) {
                                     e.printStackTrace(GT_Log.err);
                                 }
