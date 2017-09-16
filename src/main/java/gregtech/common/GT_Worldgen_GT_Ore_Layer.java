@@ -4,7 +4,9 @@ import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 import gregtech.api.objects.XSTR;
+import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
@@ -39,7 +41,8 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
                     id = Integer.parseInt(rawData[0]);
                     weight = Integer.parseInt(rawData[1]);
                 }
-            } catch (NumberFormatException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace(GT_Log.err);
             }
         }
     }
@@ -98,24 +101,26 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         mSize = aSize;
         oreList = new ArrayList<>();
         int totalOresWeight = 0;
-        float[] chances = new float[ores.length];
-        String[] names = new String[ores.length];
-        int i = 0;
         for (String oreLine : ores) {
             WeightedOre ore = new WeightedOre(oreLine);
+            if (ore.id == -1 || GregTech_API.sGeneratedMaterials[ore.id] == null) continue;
             oreList.add(ore);
-            totalOresWeight += ore.weight;
             addOreToAchievements(ore.id);
-            names[i] = "ore" + GregTech_API.sGeneratedMaterials[ore.id].mName;
-            chances[i++] = ore.weight;
+            totalOresWeight += ore.weight;
         }
         oreWeight = totalOresWeight;
-        for (int j = 0; j < chances.length; j++) {
-            chances[j] /= totalOresWeight;
-        }
         sList.add(this);
+
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
-            ExcavatorHandler.addMineral(aName.substring(0, 1).toUpperCase() + aName.substring(1), aWeight, 0.2f, names, chances);
+            int size = oreList.size();
+            float[] chances = new float[size];
+            String[] names = new String[size];
+            for (int i = 0; i < size; i++) {
+                names[i] = "ore" + GregTech_API.sGeneratedMaterials[oreList.get(i).id].mName;
+                chances[i] = (float) oreList.get(i).weight / oreWeight;
+            }
+            String upperCasedName = aName.substring(0, 1).toUpperCase() + aName.substring(1);
+            ExcavatorHandler.addMineral(upperCasedName, aWeight, 0.2f, names, chances);
         }
     }
 
