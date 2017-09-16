@@ -112,10 +112,12 @@ public class GT_Worldgenerator
         }
 
         public void run() {
+			String tDimensionName = this.mWorld.provider.getDimensionName();
             if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
 				int oreveinRNG = this.mRandom.nextInt(100);
                 if (( oreveinRNG < oreveinPercentage) && (GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
+
                     int tRandomWeight;
 					int i;
                     for (i = 0; (i < 256) && (temp); i++) {
@@ -139,12 +141,15 @@ public class GT_Worldgenerator
 										"No orevein selected!" +
 										" @ dim="+ this.mDimensionType+
 										" chunkX="+ this.mX +
-										" chunkZ="+ this.mZ
+										" chunkZ="+ this.mZ + 
+										" dimensionName=" + tDimensionName
 						);
 					} else if (D1)
 					{
 						GT_Log.out.println(
-										"Orevein took " + i + " attempts to find"
+										"Orevein took " + i + 
+										" attempts to find" + 
+										" dimensionName=" + tDimensionName
 						);
 					}
 						
@@ -158,7 +163,8 @@ public class GT_Worldgenerator
 										" chunkX="+ this.mX +
 										" chunkZ="+ this.mZ +
 										" RNG=" + oreveinRNG +
-										" %=" + oreveinPercentage
+										" %=" + oreveinPercentage+ 
+										" dimensionName=" + tDimensionName
 						);
                 	}
                 }
@@ -190,7 +196,8 @@ public class GT_Worldgenerator
 									"Skipped chunk, not 3x3 center" +
 									" @ dim="+this.mDimensionType+
 									" chunkX="+this.mX+
-									" chunkZ="+this.mZ
+									" chunkZ="+this.mZ+ 
+									" dimensionName=" + tDimensionName
 					);
 				}
 			}

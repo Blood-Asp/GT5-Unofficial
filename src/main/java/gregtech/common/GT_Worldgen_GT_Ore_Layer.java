@@ -108,7 +108,6 @@ public class GT_Worldgen_GT_Ore_Layer
                 if ((this.mBetweenMeta > 0) && ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0))) {
                     if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY + 2 + aRandom.nextInt(2), tZ, this.mBetweenMeta, false))
 						placeCount[2]++;
-                    execCount[2]++;
                 }
                 if (this.mPrimaryMeta > 0) {
                     for (int i = tMinY + 3; i < tMinY + 6; i++) {
@@ -127,7 +126,6 @@ public class GT_Worldgen_GT_Ore_Layer
         if (D1) {
             GT_Log.out.println(
                             "Generated Orevein:" + this.mWorldGenName +
-                            " @ dim="+aDimensionType+
                             " chunkX="+aChunkX+
                             " chunkZ="+aChunkZ+
                             " chunkY="+tMinY+
