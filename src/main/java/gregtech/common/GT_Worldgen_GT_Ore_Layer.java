@@ -4,18 +4,17 @@ import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.objects.XSTR;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
-    public static ArrayList<GT_Worldgen_GT_Ore_Layer> sList = new ArrayList<>();
-    public static int sWeight = 0;
+    public static List<GT_Worldgen_GT_Ore_Layer> sList = new ArrayList<>();
+    public static Map<Object, WorldgenList> dimensionToOregen = new TreeMap<>();
     public final int mMinY;
     public final int mMaxY;
     public final int mWeight;
@@ -45,13 +44,58 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         }
     }
 
+    public static class WorldgenList {
+        public List<GT_Worldgen_GT_Ore_Layer> list = new ArrayList<>();
+        public int totalWeight;
+
+        public GT_Worldgen_GT_Ore_Layer getWorldgen(int randomWeight) {
+            for (GT_Worldgen_GT_Ore_Layer i : list) {
+                randomWeight -= i.mWeight;
+                if (randomWeight <= 0) {
+                    return i;
+                }
+            }
+            return null;
+        }
+    }
+
+    public static WorldgenList getWorldgenList(World world) {
+        if (dimensionToOregen.containsKey(world.provider.dimensionId)) {
+            return dimensionToOregen.get(world.provider.dimensionId);
+        }
+        WorldgenList w = new WorldgenList();
+        for (GT_Worldgen_GT_Ore_Layer i : sList) {
+            if (i.isGenerationAllowed(world)) {
+                w.list.add(i);
+                w.totalWeight += i.mWeight;
+            }
+        }
+        dimensionToOregen.put(world.provider.dimensionId, w);
+        return w;
+    }
+
+    public static WorldgenList getWorldgenList(String world) {
+        if (dimensionToOregen.containsKey(world)) {
+            return dimensionToOregen.get(world);
+        }
+        WorldgenList w = new WorldgenList();
+        for (GT_Worldgen_GT_Ore_Layer i : sList) {
+            if (i.isGenerationAllowed(world)) {
+                w.list.add(i);
+                w.totalWeight += i.mWeight;
+            }
+        }
+        dimensionToOregen.put(world, w);
+        return w;
+    }
+
     public GT_Worldgen_GT_Ore_Layer(String aName, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, String[] dimWhiteList, String[] ores) {
         super(aName, dimWhiteList);
         mMinY = aMinY;
         mMaxY = aMaxY;
         mWeight = aWeight;
         mDensity = aDensity;
-        mSize = Math.min(16, aSize);
+        mSize = aSize;
         oreList = new ArrayList<>();
         int totalOresWeight = 0;
         float[] chances = new float[ores.length];
@@ -69,7 +113,6 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         for (int j = 0; j < chances.length; j++) {
             chances[j] /= totalOresWeight;
         }
-        sWeight += mWeight;
         sList.add(this);
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             ExcavatorHandler.addMineral(aName.substring(0, 1).toUpperCase() + aName.substring(1), aWeight, 0.2f, names, chances);
@@ -107,37 +150,39 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[id % 1000], mMinY, mMaxY, mWeight, over, hell, end);
     }
 
-    public boolean executeLayerWorldgen(World world, Random rnd, int chunkX, int chunkZ, int centerX, int centerZ) {
-        if (!isGenerationAllowed(world)) {
-            return false;
-        }
-        int minY = 90;//this.mMinY + rnd.nextInt(this.mMaxY - this.mMinY - 5);
-        int maxY = minY + 14;
-        int minX = Math.max(centerX - rnd.nextInt(mSize), chunkX);
-        int maxX = Math.min(centerX + 16 + rnd.nextInt(mSize), chunkX + 16);
-        int minZ = Math.max(centerZ - rnd.nextInt(mSize), chunkZ);
-        int maxZ = Math.min(centerZ + 16 + rnd.nextInt(mSize), chunkZ + 16);
-        float nv = mDensity / 20f;
-        Random rand = new Random(rnd.nextLong() ^ ((((long) chunkX) << 32) | chunkZ));
-        for (int x = minX; x < maxX; x++) {
-            for (int z = minZ; z < maxZ; z++) {
-                for (int y = minY; y < maxY; y++) {
-                    float noiseValue = rand.nextFloat();
-                    if (noiseValue > nv) continue;
+    public void executeLayerWorldgen(World world, Random rnd, int chunkX, int chunkZ, int centerX, int centerZ) {
+        int minY = mMinY + rnd.nextInt(mMaxY - mMinY) - 3;
+        int maxY = minY + 7;
+        int minX = centerX - rnd.nextInt(mSize);
+        int maxX = centerX + 16 + rnd.nextInt(mSize);
+        int minZ = centerZ - rnd.nextInt(mSize);
+        int maxZ = minZ + ((int) ((maxX - minX) * (rnd.nextFloat() / 2 - 0.25f))) + (maxX - minX);
+        maxX = Math.min(chunkX + 16, maxX);
+        minX = Math.max(chunkX, minX);
+        maxZ = Math.min(chunkZ + 16, maxZ);
+        minZ = Math.max(chunkZ, minZ);
+        if (minX < maxX && minZ < maxZ) {
+            float nv = mDensity / 15f;
+            Random rand = new XSTR(rnd.nextLong() ^ chunkX ^ chunkZ);
+            for (int x = minX; x < maxX; x++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    for (int y = minY; y < maxY; y++) {
+                        float noiseValue = rand.nextFloat();
+                        if (noiseValue > nv) continue;
 
-                    int randomWeight = rand.nextInt(oreWeight);
-                    for (WeightedOre ore : oreList) {
-                        randomWeight -= ore.weight;
-                        if (randomWeight > 0) continue;
-                        GT_TileEntity_Ores.setOreBlock(world, x, y, z, ore.id, false, true);
-                        break;
+                        int randomWeight = rand.nextInt(oreWeight);
+                        for (WeightedOre ore : oreList) {
+                            randomWeight -= ore.weight;
+                            if (randomWeight > 0) continue;
+                            GT_TileEntity_Ores.setOreBlock(world, x, y, z, ore.id, false);
+                            break;
+                        }
                     }
                 }
             }
+            if (GT_Values.D1) {
+                System.out.println("Generated Orevein: " + mWorldGenName + " " + chunkX + " " + chunkZ);
+            }
         }
-        if (GT_Values.D1) {
-            System.out.println("Generated Orevein: " + mWorldGenName + " " + chunkX + " " + chunkZ);
-        }
-        return true;
     }
 }

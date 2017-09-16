@@ -4,17 +4,16 @@ import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
+import gregtech.common.GT_Worldgen_GT_Ore_Layer.WorldgenList;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.config.Configuration;
 
 import java.util.Random;
 
@@ -28,6 +27,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
 
     public static AsteroidConfig endAsteroids = new AsteroidConfig();
     public static AsteroidConfig gcAsteroids = new AsteroidConfig();
+
     static {
         endAsteroids.enabled = true;
         endAsteroids.minSize = 50;
@@ -54,28 +54,22 @@ public class GT_Worldgenerator implements IWorldGenerator {
     }
 
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        int tempDimensionId = aWorld.provider.dimensionId;
-        if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
-            tempDimensionId = 0;
-        }
-        new WorldGenContainer(aX, aZ, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider).run();
+        new WorldGenContainer(aX, aZ, aWorld).run();
     }
 
     public static class WorldGenContainer implements Runnable {
         public int mX;
         public int mZ;
-        public final int mDimensionType;
         public final World mWorld;
-        public final IChunkProvider mChunkGenerator;
-        public final IChunkProvider mChunkProvider;
+        int xCenter;
+        int zCenter;
 
-        public WorldGenContainer(int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-            this.mX = aX;
-            this.mZ = aZ;
-            this.mDimensionType = aDimensionType;
-            this.mWorld = aWorld;
-            this.mChunkGenerator = aChunkGenerator;
-            this.mChunkProvider = aChunkProvider;
+        public WorldGenContainer(int aX, int aZ, World aWorld) {
+            mX = aX;
+            mZ = aZ;
+            mWorld = aWorld;
+            xCenter = getVeinCenterCoordinate(mX);
+            zCenter = getVeinCenterCoordinate(mZ);
         }
 
         //returns a coordinate of a center chunk of 3x3 square; the argument belongs to this square
@@ -84,80 +78,58 @@ public class GT_Worldgenerator implements IWorldGenerator {
             return c - c % 3 - 2;
         }
 
-        public Random getRandom(int xChunk, int zChunk) {
-            long worldSeed = mWorld.getSeed();
-            Random fmlRandom = new Random(worldSeed);
-            long xSeed = fmlRandom.nextLong() >> 2 + 1L;
-            long zSeed = fmlRandom.nextLong() >> 2 + 1L;
-            long chunkSeed = xSeed * xChunk + zSeed * zChunk ^ worldSeed;
-            fmlRandom.setSeed(chunkSeed);
-            return new XSTR(fmlRandom.nextInt());
+        public Random getRandom(long xChunk, long zChunk) {
+            return new Random(mWorld.getSeed() ^ ((xChunk << 32) | zChunk));
+        }
+
+        public void generateOreLayerAt(int xCenter, int zCenter) {
+            Random random = getRandom(xCenter, zCenter);
+            WorldgenList list = GT_Worldgen_GT_Ore_Layer.getWorldgenList(mWorld);
+            try {
+                list.getWorldgen(random.nextInt(list.totalWeight)).executeLayerWorldgen(mWorld, random, mX << 4, mZ << 4, xCenter << 4, zCenter << 4);
+            } catch (Throwable e) {
+                e.printStackTrace(GT_Log.err);
+            }
         }
 
         public void run() {
-            int xCenter = getVeinCenterCoordinate(mX);
-            int zCenter = getVeinCenterCoordinate(mZ);
-            Random random = getRandom(xCenter, zCenter);
-            {
-                if (GT_Worldgen_GT_Ore_Layer.sWeight > 0 && GT_Worldgen_GT_Ore_Layer.sList.size() > 0) {
-                    int tRandomWeight;
-                    generated:
-                    for (int i = 0; i < 64; i++) {
-                        tRandomWeight = random.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
-                            tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
-                            if (tRandomWeight <= 0) {
-                                try {
-                                    if (tWorldGen.executeLayerWorldgen(mWorld, random, mX << 4, mZ << 4, xCenter << 4, zCenter << 4)) {
-                                        break generated;
-                                    }
-                                    break;
-                                } catch (Throwable e) {
-                                    e.printStackTrace(GT_Log.err);
-                                }
-                            }
-                        }
-                    }
+            generateOreLayerAt(xCenter, zCenter);
+            generateOreLayerAt(xCenter, zCenter - 3);
+            generateOreLayerAt(xCenter, zCenter + 3);
+            generateOreLayerAt(xCenter - 3, zCenter);
+            generateOreLayerAt(xCenter + 3, zCenter);
+            generateOreLayerAt(xCenter - 3, zCenter - 3);
+            generateOreLayerAt(xCenter - 3, zCenter + 3);
+            generateOreLayerAt(xCenter + 3, zCenter - 3);
+            generateOreLayerAt(xCenter + 3, zCenter + 3);
+            try {
+                for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
+                    tWorldGen.executeWorldgen(mWorld, getRandom(mX, mZ), mX << 4, mZ << 4);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace(GT_Log.err);
+            }
+            //Asteroid Worldgen
+            Random aRandom = getRandom(mX, mZ);
+            if ((mWorld.provider.dimensionId == 1 && endAsteroids.enabled && (endAsteroids.probability <= 1 || aRandom.nextInt(endAsteroids.probability) == 0))
+                    || (mWorld.provider.getClass().getName().contains("Asteroids") && gcAsteroids.enabled && (gcAsteroids.probability <= 1 || aRandom.nextInt(gcAsteroids.probability) == 0))) {
+                GT_Worldgen_GT_Ore_Layer ores = null;
+                WorldgenList list;
+                if (mWorld.provider.dimensionId == 1) {
+                    list = GT_Worldgen_GT_Ore_Layer.getWorldgenList("EndAsteroids");
+                } else {
+                    list = GT_Worldgen_GT_Ore_Layer.getWorldgenList(mWorld);
                 }
                 try {
-                    for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                        tWorldGen.executeWorldgen(mWorld, random, "null", mDimensionType, mX << 4, mZ << 4, mChunkGenerator, mChunkProvider);
-                    }
+                    ores = list.getWorldgen(aRandom.nextInt(list.totalWeight));
                 } catch (Throwable e) {
                     e.printStackTrace(GT_Log.err);
                 }
-            }
-            //Asteroid Worldgen
-            int tDimensionType = mWorld.provider.dimensionId;
-            String tDimensionName = mWorld.provider.getClass().getName();
-            Random aRandom = new Random();
-            if (tDimensionType == 1 && endAsteroids.enabled && (endAsteroids.probability <= 1 || aRandom.nextInt(endAsteroids.probability) == 0)
-                    || tDimensionName.contains("Asteroids") && gcAsteroids.enabled && (gcAsteroids.probability <= 1 || aRandom.nextInt(gcAsteroids.probability) == 0)) {
-                GT_Worldgen_GT_Ore_Layer ores = null;
-                if (GT_Worldgen_GT_Ore_Layer.sWeight > 0 && GT_Worldgen_GT_Ore_Layer.sList.size() > 0) {
-                    asteroidsGen:
-                    for (int i = 0; i < 256; i++) {
-                        int tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
-                            tRandomWeight -= tWorldGen.mWeight;
-                            if (tRandomWeight <= 0) {
-                                try {
-                                    if (tDimensionType == 1 && tWorldGen.isGenerationAllowed("EndAsteroids") || tWorldGen.isGenerationAllowed(mWorld)) {
-                                        ores = tWorldGen;
-                                        break asteroidsGen;
-                                    }
-                                } catch (Throwable e) {
-                                    e.printStackTrace(GT_Log.err);
-                                }
-                            }
-                        }
-                    }
-                }
                 if (GT_Values.D1) System.out.println("do asteroid gen: " + mX + " " + mZ);
-                int tX = mX + aRandom.nextInt(16);
+                int tX = (mX << 4) + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
-                int tZ = mZ + aRandom.nextInt(16);
-                AsteroidConfig ac = tDimensionType == 1 ? endAsteroids : gcAsteroids;
+                int tZ = (mZ << 4) + aRandom.nextInt(16);
+                AsteroidConfig ac = mWorld.provider.dimensionId == 1 ? endAsteroids : gcAsteroids;
                 int mSize = aRandom.nextInt(ac.maxSize - ac.minSize);
                 if (mWorld.getBlock(tX, tY, tZ).isAir(mWorld, tX, tY, tZ)) {
                     float var6 = aRandom.nextFloat() * 3.141593F;
@@ -200,7 +172,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                                                         continue oreGen;
                                                     }
                                                 }
-                                                if (tDimensionType == 1) {
+                                                if (mWorld.provider.dimensionId == 1) {
                                                     mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 2);
                                                 } else {
                                                     mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
@@ -215,7 +187,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
                 }
             }
 
-            Chunk tChunk = this.mWorld.getChunkFromBlockCoords(this.mX, this.mZ);
+            Chunk tChunk = mWorld.getChunkFromChunkCoords(mX, mZ);
             if (tChunk != null) {
                 tChunk.isModified = true;
             }

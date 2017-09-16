@@ -4,12 +4,10 @@ import gregtech.api.GregTech_API;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.Random;
 
-public class GT_Worldgen_GT_Ore_SmallPieces
-        extends GT_Worldgen {
+public class GT_Worldgen_GT_Ore_SmallPieces extends GT_Worldgen {
     public final int mMinY;
     public final int mMaxY;
     public final int mAmount;
@@ -24,9 +22,9 @@ public class GT_Worldgen_GT_Ore_SmallPieces
         GregTech_API.sWorldgenList.add(this);
     }
 
-    public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+    public void executeWorldgen(World aWorld, Random aRandom, int aChunkX, int aChunkZ) {
         if (!isGenerationAllowed(aWorld)) {
-            return false;
+            return;
         }
         if (mMeta > 0) {
             int i = 0;
@@ -34,6 +32,5 @@ public class GT_Worldgen_GT_Ore_SmallPieces
                 GT_TileEntity_Ores.setOreBlock(aWorld, aChunkX + aRandom.nextInt(16), mMinY + aRandom.nextInt(Math.max(1, mMaxY - mMinY)), aChunkZ + aRandom.nextInt(16), mMeta, true);
             }
         }
-        return true;
     }
 }

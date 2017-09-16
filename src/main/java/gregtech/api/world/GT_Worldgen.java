@@ -40,21 +40,30 @@ public abstract class GT_Worldgen {
      * @param aChunkZ        zCoord of the Chunk
      * @return if the Worldgeneration has been successfully completed
      */
+    @Deprecated
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         return false;
     }
 
     /**
-     * @param world  The World Object
-     * @param random The Random Generator to use
-     * @param chunkX x coord of the Chunk to generate
-     * @param chunkZ z coord of the Chunk to generate
+     * @param world         The World Object
+     * @param random        The Random Generator to use
+     * @param chunkX        xCoord of the Chunk
+     * @param chunkZ        zCoord of the Chunk
+     */
+    public void executeWorldgen(World world, Random random, int chunkX, int chunkZ) {
+        executeWorldgen(world, random, "null", 0, chunkX, chunkZ, null, null);
+    }
+
+    /**
+     * @param world   The World Object
+     * @param random  The Random Generator to use
+     * @param chunkX  x coord of the Chunk to generate
+     * @param chunkZ  z coord of the Chunk to generate
      * @param centerX x coord of the vein center
      * @param centerZ z coord of the vein center
-     * @return if the Worldgeneration has been successfully completed
      */
-    public boolean executeLayerWorldgen(World world, Random random, int chunkX, int chunkZ, int centerX, int centerZ) {
-        return false;
+    public void executeLayerWorldgen(World world, Random random, int chunkX, int chunkZ, int centerX, int centerZ) {
     }
 
     /**
