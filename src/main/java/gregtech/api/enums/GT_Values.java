@@ -118,6 +118,10 @@ public class GT_Values {
      */
     public static IGT_NetworkHandler NW;
     /**
+     * Debug parameter for cleanroom testing.
+     */
+    public static boolean debugCleanroom = false;	
+    /**
      * Not really Constants, but they set using the Config and therefore should be constant (those are for the Debug Mode)
      */
     public static boolean D1 = false, D2 = false;

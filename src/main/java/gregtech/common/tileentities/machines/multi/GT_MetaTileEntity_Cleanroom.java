@@ -11,9 +11,11 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Log;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import static gregtech.api.enums.GT_Values.debugCleanroom;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeatingCapacity = 0;
@@ -62,6 +64,12 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		int mPlascreteCount = 0;
 		boolean doorState = false;
 		mUpdate = 100;
+		
+		if (debugCleanroom) {
+			GT_Log.out.println(
+							"Cleanroom: Checking machine"
+			);
+		}
 		for (int i = 1; i < 8; i++) {
 			Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, 0);
 			int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0);
@@ -71,6 +79,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 					z = i;
 					break;
 				} else {
+					if (debugCleanroom) {
+						GT_Log.out.println(
+							"Cleanroom: Unable to detect room edge?"
+						);
+					}
 					return false;
 				}
 			}
@@ -84,6 +97,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 			}
 		}
 		if (y > -2) {
+			if (debugCleanroom) {
+				GT_Log.out.println(
+					"Cleanroom: Room not tall enough?"
+				);
+			}
 			return false;
 		}
 		for (int dX = -x; dX <= x; dX++) {
@@ -95,11 +113,21 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 						if (y == 0) {
 							if (dX == -x || dX == x || dZ == -z || dZ == z) {
 								if (tBlock != GregTech_API.sBlockReinforced || tMeta != 2) {
+									if (debugCleanroom) {
+										GT_Log.out.println(
+											"Cleanroom: Non reinforced block on top edge? tMeta != 2"
+										);
+									}
 									return false;
 								}
 							} else if (dX == 0 && dZ == 0) {
 							} else {
 								if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
+									if (debugCleanroom) {
+										GT_Log.out.println(
+											"Cleanroom: Non reinforced block on top face interior? tMeta != 11"
+										);
+									}
 									return false;
 								}
 							}
@@ -115,15 +143,30 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 									mDoorCount++;
 								} else {
 									if (tTileEntity == null) {
+											if (debugCleanroom) {
+												GT_Log.out.println(
+													"Cleanroom: Missing block? Not a tTileEntity"
+												);
+											}
 											return false;
 									}
 									IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
 									if (aMetaTileEntity == null) {
+										if (debugCleanroom) {
+											GT_Log.out.println(
+												"Cleanroom: Missing block? Not a aMetaTileEntity"
+											);
+										}
 										return false;
 									}
 									if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicHull) {
 										mHullCount++;
 									} else {
+										if (debugCleanroom) {
+											GT_Log.out.println(
+												"Cleanroom: Incorrect block?"
+											);
+										}
 										return false;
 									}
 								}
@@ -143,6 +186,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 					if (tTileEntity != null) {
 						IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
 						if (aMetaTileEntity != null && aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe) {
+							if (debugCleanroom) {
+								GT_Log.out.println(
+									"Cleanroom: Machine detected, adding pointer back to cleanroom"
+								);
+							}
 							((GT_MetaTileEntity_BasicMachine_GT_Recipe) aMetaTileEntity).mCleanroom = this;
 						}
 					}
