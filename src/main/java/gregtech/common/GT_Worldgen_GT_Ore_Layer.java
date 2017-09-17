@@ -1,5 +1,9 @@
 package gregtech.common;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
@@ -10,10 +14,6 @@ import gregtech.loaders.misc.GT_Achievements;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {

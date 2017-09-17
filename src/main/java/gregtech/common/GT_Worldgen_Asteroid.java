@@ -1,7 +1,6 @@
 package gregtech.common;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import gregtech.api.GregTech_API;
