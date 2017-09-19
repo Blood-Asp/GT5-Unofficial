@@ -1,6 +1,7 @@
 package gregtech.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -22,11 +24,66 @@ public class GT_Worldgenerator implements IWorldGenerator {
     }
 
     public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        int tempDimensionId = aWorld.provider.dimensionId;
-        if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
-            tempDimensionId = 0;
-        }
-        new WorldGenContainer(aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
+        processChunk(aWorld, aX, aZ);
+    }
+
+    //returns a coordinate of a center chunk of 3x3 square; the argument belongs to this square
+    public static int getVeinCenterCoordinate(int c) {
+        c += c < 0 ? 1 : 3;
+        return c - c % 3 - 2;
+    }
+
+    protected static boolean areSurroundingChunksExist(World aWorld, ChunkCoordIntPair aCoord) {
+    	int count = 0;
+    	for (int i = -1; i < 2; i++)
+			for (int j = -1; j < 2; j++)
+				if (aWorld.getChunkProvider().chunkExists(aCoord.chunkXPos + i, aCoord.chunkZPos + j)) count++;
+    	return count >= 9;
+    }
+
+    private static final HashMap<Integer, HashSet<ChunkCoordIntPair>> sGeneratedCenters = new HashMap<>(), sUngeneratedChunks = new HashMap<>();
+
+    public static void processChunk(World aWorld, int aX, int aZ) {
+    	ChunkCoordIntPair cCoord = new ChunkCoordIntPair(getVeinCenterCoordinate(aX), getVeinCenterCoordinate(aZ));
+    	if (!isCenterGenerated(aWorld, cCoord)) {
+    		if (areSurroundingChunksExist(aWorld, cCoord) && !aWorld.isRemote) {
+    			putTo(aWorld, sGeneratedCenters, cCoord);
+    			(new WorldGenContainer(cCoord, aWorld)).run();
+    		} else {
+    			putTo(aWorld, sUngeneratedChunks, new ChunkCoordIntPair(aX, aZ));
+    		}
+    	}
+    }
+
+    protected static void putTo(World aWorld, HashMap<Integer, HashSet<ChunkCoordIntPair>> aMap, ChunkCoordIntPair aCoord) {
+    	synchronized (aMap) {
+    		HashSet<ChunkCoordIntPair> set;
+        	if ((set = aMap.get(aWorld.provider.dimensionId)) == null) aMap.put(aWorld.provider.dimensionId, set = new HashSet<ChunkCoordIntPair>(100));
+        	set.add(aCoord);
+    	}
+    }
+
+    protected static void removeFrom(World aWorld, HashMap<Integer, HashSet<ChunkCoordIntPair>> aMap, ChunkCoordIntPair aCoord) {
+    	synchronized (aMap) {
+    		HashSet<ChunkCoordIntPair> set;
+        	if ((set = aMap.get(aWorld.provider.dimensionId)) != null) set.remove(aCoord);;
+    	}
+    }
+
+    protected static boolean isCenterGenerated(World aWorld, ChunkCoordIntPair cCoord) {
+    	synchronized (sGeneratedCenters) {
+    		HashSet<ChunkCoordIntPair> set;
+        	if ((set = sGeneratedCenters.get(aWorld.provider.dimensionId)) == null) sGeneratedCenters.put(aWorld.provider.dimensionId, set = new HashSet<ChunkCoordIntPair>(100));
+    		return set.contains(cCoord);
+    	}
+    }
+
+    protected static boolean isChunkUngenerated(World aWorld, ChunkCoordIntPair aCoord) {
+    	synchronized (sUngeneratedChunks) {
+    		HashSet<ChunkCoordIntPair> set;
+        	if ((set = sUngeneratedChunks.get(aWorld.provider.dimensionId)) == null) sUngeneratedChunks.put(aWorld.provider.dimensionId, set = new HashSet<ChunkCoordIntPair>(100));
+    		return set.contains(aCoord);
+    	}
     }
 
     public static class WorldGenContainer implements Runnable {
@@ -37,22 +94,19 @@ public class GT_Worldgenerator implements IWorldGenerator {
         public final IChunkProvider mChunkGenerator;
         public final IChunkProvider mChunkProvider;
         public final String mBiome;
-        public static HashSet<ChunkCoordIntPair> mGenerated = new HashSet<>(2000);
 
-        public WorldGenContainer(int aX, int aZ, int aDimensionType, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider, String aBiome) {
-            this.mX = aX;
-            this.mZ = aZ;
-            this.mDimensionType = aDimensionType;
+        public WorldGenContainer(ChunkCoordIntPair aCoord, World aWorld) {
+        	this.mChunkGenerator = aWorld.provider.createChunkGenerator();
+        	this.mChunkProvider = aWorld.getChunkProvider();
+        	this.mX = aCoord.chunkXPos << 4;
+            this.mZ = aCoord.chunkZPos << 4;
             this.mWorld = aWorld;
-            this.mChunkGenerator = aChunkGenerator;
-            this.mChunkProvider = aChunkProvider;
-            this.mBiome = aBiome;
-        }
-
-        //returns a coordinate of a center chunk of 3x3 square; the argument belongs to this square
-        public int getVeinCenterCoordinate(int c) {
-            c += c < 0 ? 1 : 3;
-            return c - c % 3 - 2;
+            this.mBiome = aWorld.getBiomeGenForCoords(aCoord.chunkXPos << 4 + 8, aCoord.chunkZPos << 4 + 8).biomeName;
+            int tempDimensionId = aWorld.provider.dimensionId;
+            if (tempDimensionId != -1 && tempDimensionId != 1 && !mChunkGenerator.getClass().getName().contains("galacticraft")) {
+                tempDimensionId = 0;
+            }
+            this.mDimensionType = tempDimensionId;
         }
 
         public boolean surroundingChunksLoaded(int xCenter, int zCenter) {
@@ -70,58 +124,46 @@ public class GT_Worldgenerator implements IWorldGenerator {
         }
 
         public void run() {
-            int xCenter = getVeinCenterCoordinate(mX >> 4);
-            int zCenter = getVeinCenterCoordinate(mZ >> 4);
-            Random random = getRandom(xCenter, zCenter);
-            xCenter <<= 4;
-            zCenter <<= 4;
-            ChunkCoordIntPair centerChunk = new ChunkCoordIntPair(xCenter, zCenter);
-            if (!mGenerated.contains(centerChunk) && surroundingChunksLoaded(xCenter, zCenter)) {
-                mGenerated.add(centerChunk);
-                int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType, false);
-                ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType, false);
-                if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
-                    boolean temp = true;
-                    int tRandomWeight;
-                    for (int i = 0; (i < 256) && (temp); i++) {
-                        tRandomWeight = random.nextInt(tWeight);
-                        for (GT_Worldgen tWorldGen : tList) {
-                            tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
-                            if (tRandomWeight <= 0) {
-                                try {
-                                    if (tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, xCenter, zCenter, this.mChunkGenerator, this.mChunkProvider)) {
-                                        temp = false;
-                                    }
-                                    break;
-                                } catch (Throwable e) {
-                                    e.printStackTrace(GT_Log.err);
+            Random random = getRandom(mX, mZ);
+            int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType, false);
+            ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType, false);
+            if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
+                boolean temp = true;
+                int tRandomWeight;
+                for (int i = 0; (i < 256) && (temp); i++) {
+                    tRandomWeight = random.nextInt(tWeight);
+                    for (GT_Worldgen tWorldGen : tList) {
+                        tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
+                        if (tRandomWeight <= 0) {
+                            try {
+                                if (tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, mX, mZ, this.mChunkGenerator, this.mChunkProvider)) {
+                                    temp = false;
                                 }
+                                break;
+                            } catch (Throwable e) {
+                                e.printStackTrace(GT_Log.err);
                             }
                         }
                     }
                 }
-                int i = 0;
-                for (int tX = xCenter - 16; i < 3; tX += 16) {
-                    int j = 0;
-                    for (int tZ = zCenter - 16; j < 3; tZ += 16) {
-                        try {
-                            for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                                tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
-                            }
-                        } catch (Throwable e) {
-                            e.printStackTrace(GT_Log.err);
+            }
+            for (int i = -16; i <= 16; i += 16)
+            	for (int j = -16; j <= 16; j += 16) {
+            		try {
+                        for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
+                            tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, mX + i, mZ + j, this.mChunkGenerator, this.mChunkProvider);
                         }
-                        j++;
+                    } catch (Throwable e) {
+                        e.printStackTrace(GT_Log.err);
                     }
-                    i++;
-                }
-            }
-            //Asteroid Worldgen
-            //I mean why don't we just put it into the sWorldgenList?
-            Chunk tChunk = this.mWorld.getChunkFromBlockCoords(this.mX, this.mZ);
-            if (tChunk != null) {
-                tChunk.isModified = true;
-            }
+            		Chunk tChunk = this.mWorld.getChunkFromBlockCoords(mX + i, mZ + j);
+                    if (tChunk != null) {
+                        tChunk.isModified = true;
+                    }
+            	}
+            for (int i = -1; i < 2; i++)
+				for (int j = -1; j < 2; j++)
+					removeFrom(mWorld, sUngeneratedChunks, new ChunkCoordIntPair(mX >> 4 + i, mZ >> 4 + j));
         }
     }
 }

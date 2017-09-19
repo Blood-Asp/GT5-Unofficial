@@ -19,7 +19,7 @@ public class GT_Worldgenloader
 
         new GT_Worldgenerator();
         if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
-            new GT_Worldgenerator_Space();
+            //new GT_Worldgenerator_Space();
         }
 
         new GT_Worldgen_Stone("overworld.stone.blackgranite.tiny", true, GregTech_API.sBlockGranites, 0, 0, 1, 50, 48, 0, 120, null, false);
