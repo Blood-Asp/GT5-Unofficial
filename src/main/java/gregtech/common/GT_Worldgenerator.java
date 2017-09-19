@@ -4,6 +4,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
@@ -78,8 +79,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
             return c - c % 3 - 2;
         }
 
-        public Random getRandom(long xChunk, long zChunk) {
-            return new Random(mWorld.getSeed() ^ ((xChunk << 32) | zChunk));
+        public Random getRandom(int xChunk, int zChunk) {
+            long worldSeed = mWorld.getSeed();
+            Random fmlRandom = new Random(worldSeed);
+            long xSeed = fmlRandom.nextLong() >> 2 + 1L;
+            long zSeed = fmlRandom.nextLong() >> 2 + 1L;
+            long chunkSeed = xSeed * xChunk + zSeed * zChunk ^ worldSeed;
+            fmlRandom.setSeed(chunkSeed);
+            return new XSTR(fmlRandom.nextInt());
         }
 
         public void generateOreLayerAt(int xCenter, int zCenter) {

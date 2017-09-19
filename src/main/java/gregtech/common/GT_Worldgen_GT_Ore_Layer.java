@@ -4,7 +4,6 @@ import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.Materials;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
@@ -16,7 +15,7 @@ import java.util.*;
 
 public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
     public static List<GT_Worldgen_GT_Ore_Layer> sList = new ArrayList<>();
-    public static Map<Object, WorldgenList> dimensionToOregen = new TreeMap<>();
+    public static Map<Object, WorldgenList> dimensionToOregen = new HashMap<>();
     public final int mMinY;
     public final int mMaxY;
     public final int mWeight;
@@ -54,7 +53,7 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         public GT_Worldgen_GT_Ore_Layer getWorldgen(int randomWeight) {
             for (GT_Worldgen_GT_Ore_Layer i : list) {
                 randomWeight -= i.mWeight;
-                if (randomWeight <= 0) {
+                if (randomWeight < 0) {
                     return i;
                 }
             }
@@ -155,17 +154,22 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
         GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[id % 1000], mMinY, mMaxY, mWeight, over, hell, end);
     }
 
+    public double nextGausian(Random rand){
+        return rand.nextGaussian() /10 +0.5;
+    }
+
     public void executeLayerWorldgen(World world, Random rnd, int chunkX, int chunkZ, int centerX, int centerZ) {
         int minY = mMinY + rnd.nextInt(mMaxY - mMinY) - 3;
         int maxY = minY + 7;
-        int minX = centerX - rnd.nextInt(mSize);
-        int maxX = centerX + 16 + rnd.nextInt(mSize);
-        int minZ = centerZ - rnd.nextInt(mSize);
-        int maxZ = minZ + ((int) ((maxX - minX) * (rnd.nextFloat() / 2 - 0.25f))) + (maxX - minX);
+        int minX = centerX - (int) (nextGausian(rnd) * mSize);
+        int maxX = centerX + 16 + (int) (nextGausian(rnd) * mSize);
+        int minZ = centerZ - (int) (nextGausian(rnd) * mSize);
+        int maxZ = centerZ + 16 + (int) (nextGausian(rnd) * mSize);
         maxX = Math.min(chunkX + 16, maxX);
         minX = Math.max(chunkX, minX);
         maxZ = Math.min(chunkZ + 16, maxZ);
         minZ = Math.max(chunkZ, minZ);
+
         if (minX < maxX && minZ < maxZ) {
             float nv = mDensity / 15f;
             Random rand = new XSTR(rnd.nextLong() ^ chunkX ^ chunkZ);
@@ -178,7 +182,7 @@ public class GT_Worldgen_GT_Ore_Layer extends GT_Worldgen {
                         int randomWeight = rand.nextInt(oreWeight);
                         for (WeightedOre ore : oreList) {
                             randomWeight -= ore.weight;
-                            if (randomWeight > 0) continue;
+                            if (randomWeight >= 0) continue;
                             GT_TileEntity_Ores.setOreBlock(world, x, y, z, ore.id, false);
                             break;
                         }
