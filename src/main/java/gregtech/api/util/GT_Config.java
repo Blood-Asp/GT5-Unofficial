@@ -119,17 +119,6 @@ public class GT_Config implements Runnable {
         return GregTech_API.advancedWorldgenFile.mConfig.get(category, name, value).getBoolean();
     }
 
-//    public static int getWorldgenConfig(String category, String name, int defaultValue) {
-//        return getWorldgenConfig(category, name, name, defaultValue);
-//    }
-
-    public static int getWorldgenConfig(String category, String oldName, String name, int defaultValue) {
-        int value = defaultValue;
-        Property property = tryGetPropertyFromOldWorldgen(category, oldName, value);
-        if (property != null) value = property.getInt();
-        return GregTech_API.advancedWorldgenFile.mConfig.get(category, name, value).getInt();
-    }
-
     private static Property tryGetPropertyFromOldWorldgen(String category, String name, Object value) {
         return GregTech_API.oldWorldgenFile != null && !GregTech_API.advancedWorldgenFile.mConfig.hasCategory(category) && GregTech_API.oldWorldgenFile.hasCategory(category)
                 ? findProperty(GregTech_API.oldWorldgenFile.getCategory(category), name, value) : null;
