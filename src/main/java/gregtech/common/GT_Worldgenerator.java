@@ -13,7 +13,6 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
