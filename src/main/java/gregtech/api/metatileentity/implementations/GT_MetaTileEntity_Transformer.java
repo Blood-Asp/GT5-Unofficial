@@ -112,7 +112,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long getMinimumStoredEU() {
-        return 512;
+        return V[mTier + 1];
     }
 
     @Override
@@ -132,12 +132,12 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxAmperesOut() {
-        return getBaseMetaTileEntity().isActive() ? (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]) : 1;
+        return getBaseMetaTileEntity().isActive() ? 4 : 1;
     }
 
     @Override
     public long maxAmperesIn() {
-        return getBaseMetaTileEntity().isActive() ? 1 : (V[mTier + 1] / V[mTier] < 4 ? 4 : V[mTier + 1] / V[mTier]);
+        return getBaseMetaTileEntity().isActive() ? 1 : 4;
     }
 
     @Override
