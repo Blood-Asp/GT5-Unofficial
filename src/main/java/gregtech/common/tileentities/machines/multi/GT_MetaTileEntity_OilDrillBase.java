@@ -1,5 +1,11 @@
 package gregtech.common.tileentities.machines.multi;
 
+import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
+
+import java.util.ArrayList;
+
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
@@ -9,13 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.util.ArrayList;
-
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.common.GT_UndergroundOil.undergroundOil;
-import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_DrillerBase {
 
@@ -86,21 +85,20 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 
     @Override
     protected boolean workingAtBottom(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
-    	if(tryLowerPipe(true)) {
-    		workState = STATE_DOWNWARD;
-        	setElectricityStats();
+    	switch (tryLowerPipe(true)) {
+    	case 0: workState = STATE_DOWNWARD; setElectricityStats(); return true;
+    	case 3: workState = STATE_UPWARD; return true;
     	}
-    	else {
-    		if (tryFillChunkList()) {
-                float speed = .5F+(GT_Utility.getTier(getMaxInputVoltage()) - getMinTier()) *.25F;
-                FluidStack tFluid = pumpOil(speed);
-                if (tFluid != null && tFluid.amount > getTotalConfigValue()){
-                    this.mOutputFluids = new FluidStack[]{tFluid};
-                    return true;
-                }
+    	
+    	if (!reachingVoidOrBedrock() && tryFillChunkList()) {
+    		float speed = .5F+(GT_Utility.getTier(getMaxInputVoltage()) - getMinTier()) *.25F;
+            FluidStack tFluid = pumpOil(speed);
+            if (tFluid != null && tFluid.amount > getTotalConfigValue()){
+                this.mOutputFluids = new FluidStack[]{tFluid};
+                return true;
             }
-    		workState = STATE_UPWARD;
     	}
+    	workState = STATE_UPWARD;
     	return true;
     }
 

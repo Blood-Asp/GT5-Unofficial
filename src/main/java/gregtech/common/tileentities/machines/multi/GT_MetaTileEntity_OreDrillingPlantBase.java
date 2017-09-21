@@ -1,6 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.VN;
 
 import java.util.ArrayList;
 
@@ -46,11 +46,11 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
         fillMineListIfEmpty(xDrill, yDrill, zDrill, xPipe, zPipe, yHead);
         if (oreBlockPositions.isEmpty()) {
-            if (!tryLowerPipe()) {
-            	if (waitForPipes()) return false;
-                workState = STATE_AT_BOTTOM;
-                return true;
-            }
+        	switch (tryLowerPipe()) {
+        	case 2: mMaxProgresstime = 0; return false;
+        	case 3: workState = STATE_UPWARD; return true;
+        	case 1: workState = STATE_AT_BOTTOM; return true;
+        	}
             //new layer - fill again
             fillMineListIfEmpty(xDrill, yDrill, zDrill, xPipe, zPipe, yHead);
         }
@@ -60,10 +60,14 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
         while ((oreBlock == null || oreBlock == Blocks.air) && !oreBlockPositions.isEmpty()) {
             oreBlockPos = oreBlockPositions.remove(0);
-            oreBlock = getBaseMetaTileEntity().getBlock(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+            if (GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ, true))
+            	oreBlock = getBaseMetaTileEntity().getBlock(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
         }
 
-        if (!tryConsumeDrillingFluid()) return false;
+        if (!tryConsumeDrillingFluid()) {
+        	oreBlockPositions.add(0, oreBlockPos);
+        	return false;
+        }
         if (oreBlock != null && oreBlock != Blocks.air) {
             ArrayList<ItemStack> oreBlockDrops = getBlockDrops(oreBlock, oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
             getBaseMetaTileEntity().getWorld().setBlockToAir(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);

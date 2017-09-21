@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.VN;
 
 import gregtech.api.GregTech_API;
@@ -92,15 +91,15 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
 	}
     
 	private boolean isRefillableBlock(int aX, int aY, int aZ){
-		if (getBaseMetaTileEntity().getTileEntity(aX, aY, aZ) != null) return false;
-		if (getBaseMetaTileEntity().getAir(aX, aY, aZ) || !getBaseMetaTileEntity().getBlock(aX, aY, aZ).getMaterial().isSolid())
-			return true;
-		return false;
+		IGregTechTileEntity aBaseTile = getBaseMetaTileEntity();
+		if (aBaseTile.getTileEntity(aX, aY, aZ) != null) return false;
+		if (!aBaseTile.getAir(aX, aY, aZ) && aBaseTile.getBlock(aX, aY, aZ).getMaterial().isSolid()) return false;
+		if (!GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseTile), aX, aY, aZ, GregTech_API.sBlockConcretes, 8, true)) return false;
+		return true;
 	}
 	
 	private boolean tryRefillBlock(int aX, int aY, int aZ) {
-		if (!tryConsumeFluid())
-			return false;
+		if (!tryConsumeFluid()) return false;
 		getBaseMetaTileEntity().getWorld().setBlock(aX, aY, aZ, GregTech_API.sBlockConcretes, 8, 3);
 		return true;
 	}
