@@ -1,6 +1,5 @@
 package gregtech.loaders.postload;
 
-import bloodasp.galacticgreg.GT_Worldgenerator_Space;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
@@ -143,9 +142,6 @@ public class GT_Worldgenloader implements Runnable {
         boolean tPFAA = Loader.isModLoaded("PFAAGeologica") && GT_Config.getWorldgenConfig("general", "AutoDetectPFAA", true);
 
         new GT_Worldgenerator();
-        if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
-            new GT_Worldgenerator_Space();
-        }
 
         Configuration config = GregTech_API.advancedWorldgenFile.mConfig;
         if (!config.hasCategory("generation.blocks")) {
