@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import static gregtech.api.enums.GT_Values.VN;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -7,9 +9,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-
-import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.GT_Values.VN;
 
 public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTileEntity_DrillerBase {
 
@@ -53,18 +52,9 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
     protected void setElectricityStats() {
         this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        //T1 = 48; T2 = 192; T3 = 768; T4 = 3072
-        this.mEUt = 12 * (1 << (getMinTier() << 1));
-        this.mMaxProgresstime = (isPickingPipes ? 240: 80) / (1 << getMinTier());
-
-        long voltage = getMaxInputVoltage();
-        long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
-        while (this.mEUt <= overclockEu) {
-            this.mEUt *= 4;
-            this.mMaxProgresstime /= 2;
-        }
-
-        this.mEUt = -this.mEUt;
+        int tier = Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+        this.mEUt = -6 * (1 << (tier << 1));
+        this.mMaxProgresstime = (workState == STATE_UPWARD ? 240 : 80) / (1 << tier);
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
     }
 
@@ -94,22 +84,22 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
             mLastZOff = 0;
             return true;
         } else {
-            isPickingPipes = false;
+            workState = STATE_DOWNWARD;
             stopMachine();
             return false;
         }
     }
 
     private boolean isRefillableBlock(int aX, int aY, int aZ){
-        if (getBaseMetaTileEntity().getTileEntity(aX, aY, aZ) != null) return false;
-        if (getBaseMetaTileEntity().getAir(aX, aY, aZ) || !getBaseMetaTileEntity().getBlock(aX, aY, aZ).getMaterial().isSolid())
-            return true;
-        return false;
+        IGregTechTileEntity aBaseTile = getBaseMetaTileEntity();
+        if (aBaseTile.getTileEntity(aX, aY, aZ) != null) return false;
+        if (!aBaseTile.getAir(aX, aY, aZ) && aBaseTile.getBlock(aX, aY, aZ).getMaterial().isSolid()) return false;
+        if (!GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseTile), aX, aY, aZ, GregTech_API.sBlockConcretes, 8, true)) return false;
+        return true;
     }
 
     private boolean tryRefillBlock(int aX, int aY, int aZ) {
-        if (!tryConsumeFluid())
-            return false;
+        if (!tryConsumeFluid()) return false;
         getBaseMetaTileEntity().getWorld().setBlock(aX, aY, aZ, GregTech_API.sBlockConcretes, 8, 3);
         return true;
     }

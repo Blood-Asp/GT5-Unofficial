@@ -15,8 +15,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -26,8 +28,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.util.GT_Utility.getFakePlayer;
 
 public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
+    private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
+    private static final Block MINING_PIPE_BLOCK = GT_Utility.getBlockFromStack(MINING_PIPE);
+    private static final Block MINING_PIPE_TIP_BLOCK = GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 0));
+
 
     public ArrayList<ChunkPosition> mPumpList = new ArrayList<ChunkPosition>();
     public int mPumpTimer = 0;
@@ -187,7 +194,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     private boolean moveOneDown() {
         if ((this.mInventory[0] == null) || (this.mInventory[0].stackSize < 1)
-                || (!GT_Utility.areStacksEqual(this.mInventory[0], GT_ModHandler.getIC2Item("miningPipe", 1L)))) {
+                || (!GT_Utility.areStacksEqual(this.mInventory[0], MINING_PIPE))) {
             return false;
         }
         int yHead = getYOfPumpHead();
@@ -198,11 +205,11 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
             return false;
         }
-        if (!(getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord(), GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 1L))))) {
+        if (!GT_Utility.setBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord(), MINING_PIPE_TIP_BLOCK, 0, false)) {
             return false;
         }
         if (yHead != getBaseMetaTileEntity().getYCoord()) {
-            getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), yHead, getBaseMetaTileEntity().getZCoord(), GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipe", 1L)));
+            getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), yHead, getBaseMetaTileEntity().getZCoord(), MINING_PIPE_BLOCK);
         }
         getBaseMetaTileEntity().decrStackSize(0, 1);
         return true;
@@ -210,19 +217,16 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     private int getYOfPumpHead() {
         int y = getBaseMetaTileEntity().getYCoord() - 1;
-        while (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) == GT_Utility
-                .getBlockFromStack(GT_ModHandler.getIC2Item("miningPipe", 1L))) {
+        while (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) == MINING_PIPE_BLOCK) {
             y--;
         }
         if (y == getBaseMetaTileEntity().getYCoord() - 1) {
-            if (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) != GT_Utility
-                    .getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 1L))) {
+            if (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) != MINING_PIPE_TIP_BLOCK) {
                 return y + 1;
             }
-        } else if (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) != GT_Utility
-                .getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 1L)) && this.mInventory[0] != null && this.mInventory[0].stackSize > 0 && GT_Utility.areStacksEqual(this.mInventory[0], GT_ModHandler.getIC2Item("miningPipe", 1L))) {
-            getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(),
-                    GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("miningPipeTip", 1L)));
+        } else if (getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord()) != MINING_PIPE_TIP_BLOCK
+                && this.mInventory[0] != null && this.mInventory[0].stackSize > 0 && GT_Utility.areStacksEqual(this.mInventory[0], MINING_PIPE)) {
+            getBaseMetaTileEntity().getWorld().setBlock(getBaseMetaTileEntity().getXCoord(), y, getBaseMetaTileEntity().getZCoord(), MINING_PIPE_BLOCK);
             getBaseMetaTileEntity().decrStackSize(0, 1);
         }
         return y;
@@ -297,6 +301,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     }
 
     private boolean consumeFluid(int aX, int aY, int aZ) {
+        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), aX, aY, aZ, true)) return false;
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
         int aMeta = getBaseMetaTileEntity().getMetaID(aX, aY, aZ);
         if ((GT_Utility.isBlockValid(aBlock)) && ((this.mPumpedBlock1 == aBlock) || (this.mPumpedBlock2 == aBlock))) {
@@ -463,4 +468,11 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP),
                 new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP),};
     }
+    private FakePlayer mFakePlayer = null;
+
+        protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
+            if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+            mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
+            return mFakePlayer;
+        }
 }
