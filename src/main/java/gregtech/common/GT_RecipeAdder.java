@@ -24,6 +24,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GT_RecipeAdder implements IGT_RecipeAdder {
+
+    private boolean isAddingDeprecatedRecipes = false;
+
     @Deprecated
     public boolean addFusionReactorRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt, int aStartEU) {
         return false;
@@ -163,6 +166,27 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         if (!(aInput1 != null && aInput1.getItem() instanceof GT_IntegratedCircuit_Item && aInput1.getItemDamage() >= 10)
                 && !(aInput2 != null && aInput2.getItem() instanceof GT_IntegratedCircuit_Item && aInput2.getItemDamage() >= 10)) {
             GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
+        }
+        return true;
+    }
+
+    public boolean addChemicalRecipeDeprecated(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick) {
+        if (((aInput1 == null) && (aFluidInput == null)) || ((aOutput == null) && (aOutput2 == null) && (aFluidOutput == null))) {
+            return false;
+        }
+        if ((aOutput != null || aOutput2 != null) && ((aDuration = GregTech_API.sRecipeFile.get("chemicalreactor", aOutput, aDuration)) <= 0)) {
+            return false;
+        }
+        if ((aFluidOutput != null) && ((aDuration = GregTech_API.sRecipeFile.get("chemicalreactor", aFluidOutput.getFluid().getName(), aDuration)) <= 0)) {
+            return false;
+        }
+        if (aEUtick <= 0) {
+            return false;
+        }
+        GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, isAddingDeprecatedRecipes ? -400 : 0);
+        if (!(aInput1 != null && aInput1.getItem() instanceof GT_IntegratedCircuit_Item && aInput1.getItemDamage() >= 10)
+                && !(aInput2 != null && aInput2.getItem() instanceof GT_IntegratedCircuit_Item && aInput2.getItemDamage() >= 10)) {
+            GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, isAddingDeprecatedRecipes ? -400 : 0);
         }
         return true;
     }
@@ -1195,4 +1219,14 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return itemsNull && fluidsNull;
 
     }
+
+    public boolean isAddingDeprecatedRecipes() {
+        return isAddingDeprecatedRecipes;
+
+    }
+
+    public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes) {
+        this.isAddingDeprecatedRecipes = isAddingDeprecatedRecipes;
+    }
+
 }
