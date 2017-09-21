@@ -215,7 +215,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     @Override
     public String getAlternativeModeText(){
     	return
-                getBaseMetaTileEntity().isAllowedToWork() ? trans("145","Step Down, In: ") : trans("146","Step Up, In: ") +
+                (getBaseMetaTileEntity().isAllowedToWork() ? trans("145","Step Down, In: ") : trans("146","Step Up, In: ")) +
                         maxEUInput() +
                         trans("148","V ") +
                         maxAmperesIn() +
