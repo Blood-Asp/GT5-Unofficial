@@ -53,18 +53,9 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
 	protected void setElectricityStats() {
 		this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        //T1 = 48; T2 = 192; T3 = 768; T4 = 3072
-        this.mEUt = 12 * (1 << (getMinTier() << 1));
-        this.mMaxProgresstime = (isPickingPipes ? 240: 80) / (1 << getMinTier());
-
-        long voltage = getMaxInputVoltage();
-        long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
-        while (this.mEUt <= overclockEu) {
-            this.mEUt *= 4;
-            this.mMaxProgresstime /= 2;
-        }
-
-        this.mEUt = -this.mEUt;
+        int tier = Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+        this.mEUt = -6 * (1 << (tier << 1));
+        this.mMaxProgresstime = (workState == STATE_UPWARD ? 240 : 80) / (1 << tier);
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);		
 	}
 	
@@ -94,7 +85,7 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
 			mLastZOff = 0;
             return true;
         } else {
-            isPickingPipes = false;
+            workState = STATE_DOWNWARD;
             stopMachine();
             return false;
         }

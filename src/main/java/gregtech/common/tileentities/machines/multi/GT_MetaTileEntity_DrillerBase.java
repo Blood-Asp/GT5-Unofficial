@@ -39,7 +39,8 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private ForgeDirection back;
     
     private int xDrill, yDrill, zDrill, xPipe, zPipe, yHead;
-    protected boolean isPickingPipes;
+    protected int workState;
+    protected static final int STATE_DOWNWARD = 0, STATE_AT_BOTTOM = 1, STATE_UPWARD = 2;
 
     public GT_MetaTileEntity_DrillerBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -57,7 +58,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         int frameId = 4096 + getFrameMaterial().mMetaItemSubID;
         frameMeta = GregTech_API.METATILEENTITIES[frameId] != null ? GregTech_API.METATILEENTITIES[frameId].getTileEntityBaseType() : W;
         casingTextureIndex = getCasingTextureIndex();
-        isPickingPipes = false;
+        workState = STATE_DOWNWARD;
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -69,13 +70,14 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("isPickingPipe", isPickingPipes);
+        aNBT.setInteger("workState", workState);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        isPickingPipes = aNBT.getBoolean("isPickingPipes");
+        workState = aNBT.getInteger("workState");
+        if (aNBT.hasKey("isPickingPipes")) workState = aNBT.getBoolean("isPickingPipes") ? STATE_UPWARD : STATE_DOWNWARD;
     }
 
     protected boolean tryPickPipe() {
@@ -90,15 +92,21 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     }
 
     protected boolean tryLowerPipe() {
+    	return tryLowerPipe(false);
+    }
+
+    protected boolean tryLowerPipe(boolean isSimulating) {
         if (!isHasMiningPipes()) return false;
 
         if (yHead <= 0) return false;
         if (!canLowerPipe()) return false;
 
-        getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead - 1, zPipe, miningPipeTipBlock);
-        if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
+        if (!isSimulating) {
+        	getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead - 1, zPipe, miningPipeTipBlock);
+            if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
 
-        getBaseMetaTileEntity().decrStackSize(1, 1);
+            getBaseMetaTileEntity().decrStackSize(1, 1);
+        }
         return true;
     }
 
@@ -154,18 +162,27 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         return false;
     }
 
-    protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead){
-    	if(!tryLowerPipe())
+    protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
+    	if(!tryLowerPipe()) {
     		if(waitForPipes()) return false;
-    		isPickingPipes = true;
+    		workState = STATE_AT_BOTTOM;
+    	}
     	return true;
     }
-    
+
+    protected boolean workingAtBottom(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
+    	if(tryLowerPipe(true))
+    		workState = STATE_DOWNWARD;
+    	else
+    		workState = STATE_UPWARD;
+    	return true;
+    }
+
     protected boolean workingUpward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
     	if (tryPickPipe()) {
             return true;
         } else {
-            isPickingPipes = false;
+            workState = STATE_DOWNWARD;
             stopMachine();
             return false;
         }
@@ -181,10 +198,16 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
             return false;
         }
         putMiningPipesFromInputsInController();
-        if (!isPickingPipes)
+        switch (workState) {
+        case STATE_DOWNWARD:
         	return workingDownward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
-        else
+        case STATE_AT_BOTTOM:
+        	return workingAtBottom(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
+        case STATE_UPWARD:
         	return workingUpward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
+        default:
+        	return false;
+        }
     }
     
     @Override

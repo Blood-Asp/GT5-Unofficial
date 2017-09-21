@@ -78,27 +78,20 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     protected void setElectricityStats() {
         this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        //T1 = 24; T2 = 96; T3 = 384
-        this.mEUt = 6 * (1 << (getMinTier() << 1));
-        //160 per chunk in MV
-        this.mMaxProgresstime = (isPickingPipes ? 80 : 640 * getRangeInChunks() * getRangeInChunks()) / (1 << getMinTier());
-
-        long voltage = getMaxInputVoltage();
-        long overclockEu = V[Math.max(1, GT_Utility.getTier(voltage)) - 1];
-        while (this.mEUt <= overclockEu) {
-            this.mEUt *= 4;
-            this.mMaxProgresstime /= 2;
-        }
-
-        this.mEUt = -this.mEUt;
+        int tier = Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
+        this.mEUt = -3 * (1 << (tier << 1));
+        this.mMaxProgresstime = (workState == STATE_AT_BOTTOM ? 320 * getRangeInChunks() * getRangeInChunks() : 80) / (1 << tier);
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
     }
 
     @Override
-    protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead){
-        if (!tryLowerPipe()){
-            if (waitForPipes()) return false;
-            if (tryFillChunkList()) {
+    protected boolean workingAtBottom(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
+    	if(tryLowerPipe(true)) {
+    		workState = STATE_DOWNWARD;
+        	setElectricityStats();
+    	}
+    	else {
+    		if (tryFillChunkList()) {
                 float speed = .5F+(GT_Utility.getTier(getMaxInputVoltage()) - getMinTier()) *.25F;
                 FluidStack tFluid = pumpOil(speed);
                 if (tFluid != null && tFluid.amount > getTotalConfigValue()){
@@ -106,10 +99,9 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                     return true;
                 }
             }
-            isPickingPipes = true;
-            return true;
-        }
-        return true;
+    		workState = STATE_UPWARD;
+    	}
+    	return true;
     }
 
     private boolean tryFillChunkList(){
@@ -124,11 +116,10 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         if (mOilFieldChunks.isEmpty()) {
             Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
             int range = getRangeInChunks();
-            int xChunk = (tChunk.xPosition / range) * range, zChunk = (tChunk.zPosition / range) * range;
-            int xDir = tChunk.xPosition < 0 ? -1 : 1, zDir = tChunk.zPosition < 0 ? -1 : 1;
+            int xChunk = (tChunk.xPosition / range) * range - (tChunk.xPosition < 0 ? range : 0), zChunk = (tChunk.zPosition / range) * range - (tChunk.zPosition < 0 ? range : 0);
             for (int i = 0; i < range; i++) {
                 for (int j = 0; j < range; j++) {
-                    tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i * xDir, zChunk + j * zDir);
+                    tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i, zChunk + j);
                     tFluid = undergroundOilReadInformation(tChunk);
                     if (tOil.isFluidEqual(tFluid))
                         mOilFieldChunks.add(tChunk);
