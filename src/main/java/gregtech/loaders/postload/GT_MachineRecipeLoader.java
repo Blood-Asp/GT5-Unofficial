@@ -14,8 +14,10 @@ import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
 import ic2.api.recipe.Recipes;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.Fluid;
@@ -922,6 +924,21 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addBrewingRecipe(GT_ModHandler.getIC2Item("biochaff", 1), FluidRegistry.WATER, FluidRegistry.getFluid("ic2biomass"), false);
         GT_Values.RA.addBrewingRecipe(GT_ModHandler.getIC2Item("biochaff", 1), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("ic2biomass"), false);
+
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), new ItemStack(Items.wheat, 4, 32767), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), new ItemStack(Items.wheat, 4, 32767), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("BiomesOPlenty", "plants", 4, 6), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("BiomesOPlenty", "plants", 4, 6), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("harvestcraft", "oatsItem", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("harvestcraft", "oatsItem", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("harvestcraft", "ryeItem", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("harvestcraft", "ryeItem", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("harvestcraft", "barleyItem", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("harvestcraft", "barleyItem", 4, 6), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("BiomesOPlenty", ":barleyFood", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("BiomesOPlenty", "barleyFood", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 4L), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
+        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 4L), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
 
         addPotionRecipes("waterbreathing", new ItemStack(Items.fish, 1, 3));
         addPotionRecipes("fireresistance", new ItemStack(Items.magma_cream, 1, 0));
