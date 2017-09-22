@@ -656,8 +656,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return addBrewingRecipe(aIngredient, aInput, aOutput, 128, 4, aHidden);
     }
 
-    public boolean addBrewingRecipeCustom(ItemStack aIngredient, Fluid aInput, Fluid aOutput, int aDuration, int aEUt, boolean aHidden) {
-        return addBrewingRecipe(aIngredient, aInput, aOutput, aDuration, aEUt, aHidden);
+    public boolean addBrewingRecipeCustom(ItemStack aIngredient, FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt, boolean aHidden) {
+        if ((aInput == null) || (aOutput == null)) {
+            return false;
+        }
+        if (!GregTech_API.sRecipeFile.get("brewing", aOutput.getUnlocalizedName(), true)) {
+            return false;
+        }
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sBrewingRecipes.addRecipe(false, new ItemStack[]{aIngredient}, null, null, new FluidStack[]{new FluidStack(aInput, 750)}, new FluidStack[]{new FluidStack(aOutput, 750)}, aDuration, aEUt, 0);
+        if ((aHidden) && (tRecipe != null)) {
+            tRecipe.mHidden = true;
+        }
+        return true;
     }
 
     public boolean addFermentingRecipe(FluidStack aInput, FluidStack aOutput, int aDuration, int aEUt, boolean aHidden) {
