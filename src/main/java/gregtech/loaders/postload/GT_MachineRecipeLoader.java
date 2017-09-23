@@ -912,15 +912,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addBrewingRecipe(new ItemStack(Items.fermented_spider_eye, 1, 0), FluidRegistry.getFluid("potion.mundane"), FluidRegistry.getFluid("potion.weakness"), false);
         GT_Values.RA.addBrewingRecipe(new ItemStack(Items.fermented_spider_eye, 1, 0), FluidRegistry.getFluid("potion.thick"), FluidRegistry.getFluid("potion.weakness"), false);
 
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "mulch", 16L, 0), FluidRegistry.WATER, FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 16L, 0), FluidRegistry.WATER, FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerCompound", 16L, 0), FluidRegistry.WATER, FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "mulch", 12L, 0), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 12L, 0), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerCompound", 12L, 0), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("biomass"), false);
-        GT_Values.RA.addBrewingRecipeCustom(GT_ModHandler.getModItem(aTextForestry, "mulch", 10L, 0), FluidRegistry.getFluidStack("juice", 750), FluidRegistry.getFluidStack("biomass", 750), 128, 4, false);
-        GT_Values.RA.addBrewingRecipeCustom(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 10L, 0), FluidRegistry.getFluidStack("juice", 750), FluidRegistry.getFluidStack("biomass", 750), 128, 4, false);
-        GT_Values.RA.addBrewingRecipeCustom(GT_ModHandler.getModItem(aTextForestry, "fertilizerCompound", 10L, 0),FluidRegistry.getFluidStack("juice", 750), FluidRegistry.getFluidStack("biomass", 750), 128, 4, false);
+        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "mulch", 2L, 0), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("biomass"), false);
+        GT_Values.RA.addBrewingRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 8L, 0), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("biomass"), false);
+        GT_Values.RA.addBrewingRecipeCustom(GT_ModHandler.getModItem(aTextForestry, "mulch", 1L, 0), FluidRegistry.getFluidStack("juice", 750), FluidRegistry.getFluidStack("biomass", 750), 128, 4, false);
+        GT_Values.RA.addBrewingRecipeCustom(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 4L, 0), FluidRegistry.getFluidStack("juice", 750), FluidRegistry.getFluidStack("biomass", 750), 128, 4, false);
 
         GT_Values.RA.addBrewingRecipe(GT_ModHandler.getIC2Item("biochaff", 1), FluidRegistry.WATER, FluidRegistry.getFluid("ic2biomass"), false);
         GT_Values.RA.addBrewingRecipe(GT_ModHandler.getIC2Item("biochaff", 1), GT_ModHandler.getDistilledWater(750L).getFluid(), FluidRegistry.getFluid("ic2biomass"), false);
@@ -937,9 +932,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("harvestcraft", "barleyItem", 4, 6), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
         GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_ModHandler.getModItem("BiomesOPlenty", ":barleyFood", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
         GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_ModHandler.getModItem("BiomesOPlenty", "barleyFood", 4), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
-        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 4L), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
-        GT_Values.RA.addMixerRecipe(new ItemStack(Blocks.dirt, 1, 3), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 4L), GT_Utility.getIntegratedCircuit(1),  GT_Values.NI, GT_Values.NF, Materials.Water.getFluid(100), GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 1L, 0), 200, 16);
-
+      
         addPotionRecipes("waterbreathing", new ItemStack(Items.fish, 1, 3));
         addPotionRecipes("fireresistance", new ItemStack(Items.magma_cream, 1, 0));
         addPotionRecipes("nightvision", new ItemStack(Items.golden_carrot, 1, 0));
