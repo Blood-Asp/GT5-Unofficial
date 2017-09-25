@@ -20,6 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.GT_Values.V;
+
 public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
     private static final Block MINING_PIPE_BLOCK = GT_Utility.getBlockFromStack(MINING_PIPE);
@@ -130,6 +132,11 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 }
             }
         }
+    }
+
+    @Override
+    public long maxEUStore() {
+        return mTier == 1 ? 4096 : V[mTier] * 64;
     }
 
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
