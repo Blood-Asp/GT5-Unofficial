@@ -33,7 +33,9 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 GT_ModHandler.removeRecipe(new ItemStack[]{aStack});
 
                 if (aMaterial.mStandardMoltenFluid != null) {
-                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Plate.get(0L, new Object[0]), aMaterial.getMolten(144L), GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 1L), 32, 8);
+                    if (!(aMaterial == Materials.AnnealedCopper || aMaterial == Materials.WroughtIron)) {
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Plate.get(0L, new Object[0]), aMaterial.getMolten(144L), GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 1L), 32, 8);
+                    }
                 }
                 switch (aMaterial.mName) {
                     case "Iron":

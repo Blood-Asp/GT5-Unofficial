@@ -37,8 +37,10 @@ public class ProcessingToolHead implements gregtech.api.interfaces.IOreRecipeReg
         switch (aPrefix) {
             case toolHeadArrow:
                 if (aMaterial.mStandardMoltenFluid != null)
-                    GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Arrow.get(0L, new Object[0]), aMaterial.getMolten(36L), GT_Utility.copyAmount(1L, new Object[]{aStack}), 16, 4);
-                if (aSpecialRecipeReq2) {
+                    if (!(aMaterial == Materials.AnnealedCopper || aMaterial == Materials.WroughtIron)) {
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Arrow.get(0L, new Object[0]), aMaterial.getMolten(36L), GT_Utility.copyAmount(1L, new Object[]{aStack}), 16, 4);
+                    }
+                    if (aSpecialRecipeReq2) {
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadArrow, aMaterial, 1L), GT_Proxy.tBits, new Object[]{"Xf", 'X', OrePrefixes.gemChipped.get(aMaterial)});
                     GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadArrow, aMaterial, 3L), GT_Proxy.tBits, new Object[]{(aMaterial.contains(SubTag.WOOD) ? 115 : 'x') + "Pf", 'P', OrePrefixes.plate.get(aMaterial)});
                 }

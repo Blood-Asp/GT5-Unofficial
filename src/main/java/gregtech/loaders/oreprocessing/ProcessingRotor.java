@@ -18,7 +18,9 @@ public class ProcessingRotor implements gregtech.api.interfaces.IOreRecipeRegist
             GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, aMaterial, 1L), Materials.Lead.getMolten(48), GT_OreDictUnificator.get(OrePrefixes.rotor, aMaterial, 1L), 240, 24);
             GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, aMaterial, 1L), Materials.SolderingAlloy.getMolten(16), GT_OreDictUnificator.get(OrePrefixes.rotor, aMaterial, 1L), 240, 24);
             GT_Values.RA.addExtruderRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 5L), ItemList.Shape_Extruder_Rotor.get(0L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.rotor, aMaterial, 1L), 200, 60);
+            if (!(aMaterial == Materials.AnnealedCopper || aMaterial == Materials.WroughtIron)) {
             GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Rotor.get(0L, new Object[0]),  aMaterial.getMolten(612L), GT_OreDictUnificator.get(OrePrefixes.rotor, aMaterial, 1L), 100, 60);
+         }
         }
     }
 }

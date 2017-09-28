@@ -782,6 +782,14 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Ball.get(0L, new Object[0]), FluidRegistry.getFluidStack("glass.molten", 1000), ItemList.Circuit_Parts_Glass_Tube.get(1, new Object[0]), 200, 24);
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Ball.get(0L, new Object[0]), new FluidStack(ItemList.sToluene, 100), ItemList.GelledToluene.get(1, new Object[0]), 100, 16);
 
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Nugget.get(0L, new Object[0]), Materials.AnnealedCopper.getMolten(16), GT_OreDictUnificator.get(OrePrefixes.nugget, Materials.Copper, 1L), 16, 4);
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Ingot.get(0L, new Object[0]), Materials.AnnealedCopper.getMolten(144), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Copper, 1L), 32, 8);
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Block.get(0L, new Object[0]), Materials.AnnealedCopper.getMolten(1296), GT_OreDictUnificator.get(OrePrefixes.block, Materials.Copper, 1L), 288, 8);
+
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Nugget.get(0L, new Object[0]), Materials.WroughtIron.getMolten(16), GT_OreDictUnificator.get(OrePrefixes.nugget, Materials.Iron, 1L), 16, 4);
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Ingot.get(0L, new Object[0]), Materials.WroughtIron.getMolten(144), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L), 32, 8);
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Block.get(0L, new Object[0]), Materials.WroughtIron.getMolten(1296), GT_OreDictUnificator.get(OrePrefixes.block, Materials.Iron, 1L), 288, 8);
+
         GT_Values.RA.addChemicalRecipe(new ItemStack(Items.sugar), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Plastic, 1), new FluidStack(ItemList.sToluene, 133), GT_Values.NF, ItemList.GelledToluene.get(2, new Object[0]), 140, 192);
 
         GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell,Materials.SulfuricAcid, 1),  GT_Values.NI,  GT_Values.NI,  GT_Values.NI,  GT_Values.NI, GT_Utility.getIntegratedCircuit(1), new FluidStack(ItemList.sNitricAcid,1000), new FluidStack(ItemList.sNitrationMixture, 2000), ItemList.Cell_Empty.get(1, new Object[0]), 480, 2);

@@ -29,7 +29,9 @@ public class ProcessingBlock implements gregtech.api.interfaces.IOreRecipeRegist
             GT_ModHandler.removeRecipe(new ItemStack[]{tStack3, tStack3, tStack3, tStack3, tStack3, tStack3, tStack3, tStack3, tStack3});
         }
         if (aMaterial.mStandardMoltenFluid != null) {
+            if (!(aMaterial == Materials.AnnealedCopper || aMaterial == Materials.WroughtIron)) {
             GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Block.get(0L, new Object[0]), aMaterial.getMolten(1296L), GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L), 288, 8);
+            }
         }
         if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.storageblockcrafting, OrePrefixes.block.get(aMaterial).toString(), false)) {
             if ((tStack1 == null) && (tStack2 == null) && (tStack3 != null))
