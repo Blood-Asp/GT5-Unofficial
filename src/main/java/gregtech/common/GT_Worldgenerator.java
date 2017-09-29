@@ -47,14 +47,14 @@ public class GT_Worldgenerator implements IWorldGenerator {
         Random r = new XSTR();
         int xCenter = getVeinCenterCoordinate(mX), zCenter = getVeinCenterCoordinate(mZ);
         generateOreLayerAt(aWorld, r, mX, mZ, xCenter, zCenter);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter, zCenter - 3);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter, zCenter + 3);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter - 3);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter + 3);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter - 3);
-        generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter + 3);
+        if (mZ < zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter, zCenter - 3);
+        if (mZ > zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter, zCenter + 3);
+        if (mX < xCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter);
+        if (mX > xCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter);
+        if (mX < xCenter && mZ < zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter - 3);
+        if (mX < xCenter && mZ > zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter - 3, zCenter + 3);
+        if (mX > xCenter && mZ < zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter - 3);
+        if (mX > xCenter && mZ > zCenter) generateOreLayerAt(aWorld, r, mX, mZ, xCenter + 3, zCenter + 3);
         long seed = getRandomSeed(aWorld, mX, mZ);
         try {
             for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
