@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;

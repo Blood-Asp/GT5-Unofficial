@@ -39,10 +39,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.NW;
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1201,14 +1201,13 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     
     public void dropItems(ItemStack tItem){
     	if(tItem==null)return;
-        Random tRandom = new Random();
-        EntityItem tItemEntity = new EntityItem(this.worldObj, this.xCoord + tRandom.nextFloat() * 0.8F + 0.1F, this.yCoord + tRandom.nextFloat() * 0.8F + 0.1F, this.zCoord + tRandom.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
+        EntityItem tItemEntity = new EntityItem(this.worldObj, this.xCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, this.yCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, this.zCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
         if (tItem.hasTagCompound()) {
             tItemEntity.getEntityItem().setTagCompound((NBTTagCompound) tItem.getTagCompound().copy());
         }
-        tItemEntity.motionX = (tRandom.nextGaussian() * 0.0500000007450581D);
-        tItemEntity.motionY = (tRandom.nextGaussian() * 0.0500000007450581D + 0.2000000029802322D);
-        tItemEntity.motionZ = (tRandom.nextGaussian() * 0.0500000007450581D);
+        tItemEntity.motionX = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D);
+        tItemEntity.motionY = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D + 0.2000000029802322D);
+        tItemEntity.motionZ = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D);
         tItemEntity.hurtResistantTime = 999999;
         tItemEntity.lifespan = 60000;
         try {

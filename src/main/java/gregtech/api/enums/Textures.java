@@ -9,9 +9,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.TreeMap;
-
 import static gregtech.api.enums.GT_Values.RES_PATH_BLOCK;
 import static gregtech.api.enums.GT_Values.RES_PATH_ITEM;
 

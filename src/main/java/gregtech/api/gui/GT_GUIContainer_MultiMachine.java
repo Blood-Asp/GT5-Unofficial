@@ -1,16 +1,16 @@
 package gregtech.api.gui;
 
-    import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.items.GT_MetaGenerated_Tool_01;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_DrillerBase;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_LargeTurbine;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 
-    import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-    import gregtech.api.util.GT_LanguageManager;
-    import gregtech.api.util.GT_ModHandler;
-    import gregtech.api.util.GT_Utility;
-    import gregtech.common.items.GT_MetaGenerated_Tool_01;
-    import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_DrillerBase;
-    import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_LargeTurbine;
-    import net.minecraft.entity.player.InventoryPlayer;
-    import net.minecraft.item.ItemStack;
+import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 
 
 

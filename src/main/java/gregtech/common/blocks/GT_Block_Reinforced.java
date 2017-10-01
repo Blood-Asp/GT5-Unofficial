@@ -35,6 +35,8 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
+
 public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public GT_Block_Reinforced(String aName) {
@@ -202,9 +204,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public void dropBlockAsItemWithChance(World aWorld, int aX, int aY, int aZ, int par5, float chance, int par7) {
         if (par5 == 4) {
-            Random ran = new Random();
-
-            this.dropBlockAsItem(aWorld, aX, aY, aZ, new ItemStack(Items.coal, ran.nextInt(2) + 1, 1));
+            this.dropBlockAsItem(aWorld, aX, aY, aZ, new ItemStack(Items.coal, XSTR_INSTANCE.nextInt(2) + 1, 1));
         } else {
             super.dropBlockAsItemWithChance(aWorld, aX, aY, aZ, par5, chance, par7);
         }

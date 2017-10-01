@@ -1,11 +1,11 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.VN;
-
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+
+import static gregtech.api.enums.GT_Values.VN;
 
 public class GT_MetaTileEntity_ConcreteBackfiller2 extends GT_MetaTileEntity_ConcreteBackfillerBase {
     public GT_MetaTileEntity_ConcreteBackfiller2(int aID, String aName, String aNameRegional) {

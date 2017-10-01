@@ -4,7 +4,6 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.IToolStats;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
@@ -14,8 +13,6 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
-import gregtech.common.tools.GT_Tool_Turbine;
-import gregtech.common.tools.GT_Tool_Turbine_Small;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,6 +21,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_LargeTurbine {
 
@@ -149,6 +148,11 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
             looseFit^=true;
             GT_Utility.sendChatToPlayer(aPlayer, "Fitting: "+(looseFit?"Loose - More Flow":"Tight - More Efficiency"));
         }
+    }
+
+    @Override
+    public int getDamageToComponent(ItemStack aStack) {
+        return (looseFit && XSTR_INSTANCE.nextInt(4)==0)?0:1;
     }
 
     @Override

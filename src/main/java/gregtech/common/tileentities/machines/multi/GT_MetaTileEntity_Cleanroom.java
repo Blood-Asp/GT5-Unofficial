@@ -10,11 +10,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+
 import static gregtech.api.enums.GT_Values.debugCleanroom;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {

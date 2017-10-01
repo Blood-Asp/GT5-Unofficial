@@ -1,12 +1,13 @@
 package gregtech.common.covers;
 
 import gregtech.api.interfaces.tileentity.ICoverable;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_Cover_SolarPanel
         extends GT_CoverBehavior {
@@ -44,7 +45,7 @@ public class GT_Cover_SolarPanel
         }
         if (coverState == 1 || (coverState == 2 && aTimer % 8L == 0L))
             aTileEntity.injectEnergyUnits((byte) 6, ((100L-(long)coverNum)*((long)this.mVoltage))/100L, 1L);
-        if(aTimer % 28800L == 0L && coverNum<100 && (coverNum>10 || (new XSTR()).nextInt(3)==2))
+        if(aTimer % 28800L == 0L && coverNum<100 && (coverNum>10 || XSTR_INSTANCE.nextInt(3)==2))
             coverNum++;
         return coverState+(coverNum<<2);
     }

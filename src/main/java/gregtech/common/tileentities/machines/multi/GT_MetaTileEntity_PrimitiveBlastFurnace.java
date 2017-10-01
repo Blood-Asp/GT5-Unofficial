@@ -5,7 +5,6 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
@@ -19,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEntity {
     public static final int INPUT_SLOTS = 3, OUTPUT_SLOTS = 3;
@@ -177,9 +178,9 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if ((aBaseMetaTileEntity.isClientSide()) && (aBaseMetaTileEntity.isActive())) {
             aBaseMetaTileEntity.getWorld().spawnParticle("largesmoke",
-                    aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(),
+                    aBaseMetaTileEntity.getOffsetX(aBaseMetaTileEntity.getBackFacing(), 1) + XSTR_INSTANCE.nextFloat(),
                     aBaseMetaTileEntity.getOffsetY(aBaseMetaTileEntity.getBackFacing(), 1),
-                    aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + (new XSTR()).nextFloat(), 0.0D, 0.3D, 0.0D);
+                    aBaseMetaTileEntity.getOffsetZ(aBaseMetaTileEntity.getBackFacing(), 1) + XSTR_INSTANCE.nextFloat(), 0.0D, 0.3D, 0.0D);
         }
         if (aBaseMetaTileEntity.isServerSide()) {
             if (this.mUpdate-- == 0) {

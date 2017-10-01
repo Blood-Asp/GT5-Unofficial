@@ -33,8 +33,6 @@ import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.event.terraingen.BiomeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 

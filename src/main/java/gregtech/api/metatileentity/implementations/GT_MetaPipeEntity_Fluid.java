@@ -10,7 +10,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
@@ -31,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     public final float mThickNess;
@@ -302,7 +302,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 5, 1.0F, aX, aY, aZ);
             for (byte i = 0; i < 6; i++)
                 for (int l = 0; l < 2; ++l)
-                    getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5 + (new XSTR()).nextFloat(), aY - 0.5 + (new XSTR()).nextFloat(), aZ - 0.5 + (new XSTR()).nextFloat(), ForgeDirection.getOrientation(i).offsetX / 5.0, ForgeDirection.getOrientation(i).offsetY / 5.0, ForgeDirection.getOrientation(i).offsetZ / 5.0);
+                    getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5 + XSTR_INSTANCE.nextFloat(), aY - 0.5 + XSTR_INSTANCE.nextFloat(), aZ - 0.5 + XSTR_INSTANCE.nextFloat(), ForgeDirection.getOrientation(i).offsetX / 5.0, ForgeDirection.getOrientation(i).offsetY / 5.0, ForgeDirection.getOrientation(i).offsetZ / 5.0);
         }
     }
 

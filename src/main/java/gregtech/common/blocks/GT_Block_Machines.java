@@ -12,7 +12,6 @@ import gregtech.api.items.GT_Generic_Block;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.BaseTileEntity;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_BaseCrop;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
@@ -41,7 +40,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_Block_Machines
         extends GT_Generic_Block
@@ -336,18 +336,17 @@ public class GT_Block_Machines
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
             IGregTechTileEntity tGregTechTileEntity = (IGregTechTileEntity) tTileEntity;
-            Random tRandom = new XSTR();
             mTemporaryTileEntity.set(tGregTechTileEntity);
             for (int i = 0; i < tGregTechTileEntity.getSizeInventory(); i++) {
                 ItemStack tItem = tGregTechTileEntity.getStackInSlot(i);
                 if ((tItem != null) && (tItem.stackSize > 0) && (tGregTechTileEntity.isValidSlot(i))) {
-                    EntityItem tItemEntity = new EntityItem(aWorld, aX + tRandom.nextFloat() * 0.8F + 0.1F, aY + tRandom.nextFloat() * 0.8F + 0.1F, aZ + tRandom.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
+                    EntityItem tItemEntity = new EntityItem(aWorld, aX + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, aY + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, aZ + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
                     if (tItem.hasTagCompound()) {
                         tItemEntity.getEntityItem().setTagCompound((NBTTagCompound) tItem.getTagCompound().copy());
                     }
-                    tItemEntity.motionX = (tRandom.nextGaussian() * 0.0500000007450581D);
-                    tItemEntity.motionY = (tRandom.nextGaussian() * 0.0500000007450581D + 0.2000000029802322D);
-                    tItemEntity.motionZ = (tRandom.nextGaussian() * 0.0500000007450581D);
+                    tItemEntity.motionX = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D);
+                    tItemEntity.motionY = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D + 0.2000000029802322D);
+                    tItemEntity.motionZ = (XSTR_INSTANCE.nextGaussian() * 0.0500000007450581D);
                     aWorld.spawnEntityInWorld(tItemEntity);
                     tItem.stackSize = 0;
                     tGregTechTileEntity.setInventorySlotContents(i, null);

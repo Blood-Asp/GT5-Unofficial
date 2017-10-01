@@ -21,6 +21,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
+
 public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_LargeTurbine {
 
     public boolean achievement = false;
@@ -138,6 +140,11 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
             looseFit^=true;
             GT_Utility.sendChatToPlayer(aPlayer, "Fitting: "+(looseFit?"Loose - More Flow":"Tight - More Efficiency"));
         }
+    }
+
+    @Override
+    public int getDamageToComponent(ItemStack aStack) {
+        return (looseFit && XSTR_INSTANCE.nextInt(4)==0)?0:1;
     }
 
     @Override

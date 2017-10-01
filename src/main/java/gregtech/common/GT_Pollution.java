@@ -3,7 +3,6 @@ package gregtech.common;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.GT_Mod;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 import static gregtech.common.GT_Proxy.*;
 
 //import net.minecraft.entity.EntityLiving;
@@ -57,7 +57,6 @@ public class GT_Pollution {
 	 * Muffler Hatch Pollution reduction:
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
-	private static XSTR tRan = new XSTR();
 	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process
 	private HashMap<ChunkCoordIntPair,int[]> chunkData;//link to chunk data that is saved/loaded
 	private int operationsPerTick=0;//how much chunks should be processed in each cycle
@@ -132,7 +131,7 @@ public class GT_Pollution {
 					List<EntityLivingBase> tEntitys = aWorld.getEntitiesWithinAABB(EntityLivingBase.class, chunk);
 					for (EntityLivingBase tEnt : tEntitys) {
 						if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
-							switch (tRan.nextInt(3)) {
+							switch (XSTR_INSTANCE.nextInt(3)) {
 								default:
 									tEnt.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, Math.min(tPollution / 1000, 1000), tPollution / 400000));
 								case 1:
@@ -150,7 +149,7 @@ public class GT_Pollution {
 						//List<EntityLiving> tEntitys = aWorld.getEntitiesWithinAABB(EntityLiving.class, chunk);
 						for (EntityLivingBase tEnt : tEntitys) {
 							if (!GT_Utility.isWearingFullGasHazmat(tEnt)) {
-								switch (tRan.nextInt(4)) {
+								switch (XSTR_INSTANCE.nextInt(4)) {
 									default:
 										tEnt.addPotionEffect(new PotionEffect(Potion.hunger.id, tPollution / 500000));
 									case 1:
@@ -168,9 +167,9 @@ public class GT_Pollution {
 						if (tPollution > GT_Mod.gregtechproxy.mPollutionVegetationLimit) {
 							int f = 20;
 							for (; f < (tPollution / 25000); f++) {
-								int x = (actualPos.chunkXPos << 4) + tRan.nextInt(16);
-								int y = 60 + (-f + tRan.nextInt(f * 2 + 1));
-								int z = (actualPos.chunkZPos << 4) + tRan.nextInt(16);
+								int x = (actualPos.chunkXPos << 4) + XSTR_INSTANCE.nextInt(16);
+								int y = 60 + (-f + XSTR_INSTANCE.nextInt(f * 2 + 1));
+								int z = (actualPos.chunkZPos << 4) + XSTR_INSTANCE.nextInt(16);
 								damageBlock(aWorld, x, y, z, tPollution > GT_Mod.gregtechproxy.mPollutionSourRainLimit);
 							}
 						}

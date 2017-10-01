@@ -15,7 +15,6 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.GT_RecipeAdder;
 import gregtech.common.blocks.*;
 import gregtech.common.items.*;
 import gregtech.common.items.armor.ElectricModularArmor1;

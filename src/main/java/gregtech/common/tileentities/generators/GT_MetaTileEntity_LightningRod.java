@@ -7,12 +7,13 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.objects.XSTR;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMachineBlock {
     public GT_MetaTileEntity_LightningRod(int aID, String aName, String aNameRegional, int aTier) {
@@ -44,7 +45,6 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         World aWorld = aBaseMetaTileEntity.getWorld();
-        XSTR aXSTR = new XSTR();
         if (!aWorld.isRemote) {
         	if(aBaseMetaTileEntity.getStoredEU()>0){
                 aBaseMetaTileEntity.setActive(true);
@@ -53,7 +53,7 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
                 aBaseMetaTileEntity.setActive(false);
             }
         	
-            if (aTick % 256 == 0 && (aWorld.isThundering() || (aWorld.isRaining() && aXSTR.nextInt(10) == 0))) {
+            if (aTick % 256 == 0 && (aWorld.isThundering() || (aWorld.isRaining() && XSTR_INSTANCE.nextInt(10) == 0))) {
                 int aRodValue = 0;
                 boolean isRodValid = true;
                 int aX = aBaseMetaTileEntity.getXCoord();
@@ -72,7 +72,7 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
                     }
                 }
                 if (!aWorld.isThundering() && ((aY + aRodValue) < 128)) aRodValue = 0;
-                if (aXSTR.nextInt(4 * aWorld.getHeight()) < (aRodValue * (aY + aRodValue))) {
+                if (XSTR_INSTANCE.nextInt(4 * aWorld.getHeight()) < (aRodValue * (aY + aRodValue))) {
                     aBaseMetaTileEntity.increaseStoredEnergyUnits(maxEUStore() - aBaseMetaTileEntity.getStoredEU(), false);
                     aWorld.addWeatherEffect(new EntityLightningBolt(aWorld, aX, aY + aRodValue, aZ));
                 }

@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
 
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 import static gregtech.common.GT_Proxy.*;
 
 /**
@@ -19,7 +20,6 @@ import static gregtech.common.GT_Proxy.*;
  */
 public class GT_UndergroundOil {
     public static final short DIVIDER=5000;
-    private static final XSTR random=new XSTR();
 
     public static FluidStack undergroundOilReadInformation(IGregTechTileEntity te){
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),-1);
@@ -74,7 +74,7 @@ public class GT_UndergroundOil {
                 fluidInChunk = new FluidStack(uoFluid.getFluid(),tInts[GTOIL]);
             }else{
                 fluidInChunk  = new FluidStack(uoFluid.getFluid(), uoFluid.getRandomAmount(tRandom));
-                fluidInChunk.amount=(int)((float)fluidInChunk.amount*(0.75f+(random.nextFloat()/2f)));//Randomly change amounts by +/- 25%
+                fluidInChunk.amount=(int)((float)fluidInChunk.amount*(0.75f+(XSTR_INSTANCE.nextFloat()/2f)));//Randomly change amounts by +/- 25%
             }
             tInts[GTOIL]=fluidInChunk.amount;
             tInts[GTOILFLUID]=fluidInChunk.getFluidID();
@@ -90,12 +90,12 @@ public class GT_UndergroundOil {
                 tInts[GTOIL]=0;//so in next access it will stop way above
             }else{
                 fluidInChunk.amount = fluidExtracted;//give appropriate amount
-                if(random.nextFloat()<(decrease-averageDecrease)) decrease--;//use random to "subtract double from int"
+                if(XSTR_INSTANCE.nextFloat()<(decrease-averageDecrease)) decrease--;//use XSTR_INSTANCE to "subtract double from int"
                 //ex.
                 // averageDecrease=3.9
                 // decrease= ceil from 3.9 = 4
                 // decrease-averageDecrease=0.1 -> chance to subtract 1
-                // if random is < chance then subtract 1
+                // if XSTR_INSTANCE is < chance then subtract 1
                 tInts[GTOIL]-=decrease;//diminish amount, "randomly" adjusted to double value (averageDecrease)
             }
         }else{//just get info

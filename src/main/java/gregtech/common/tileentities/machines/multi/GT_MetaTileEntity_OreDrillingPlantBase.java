@@ -30,7 +30,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.api.enums.GT_Values.W;
 
 public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_MultiBlockBase {
     private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);

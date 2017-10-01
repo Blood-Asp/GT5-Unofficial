@@ -6,7 +6,6 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Proxy;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class ProcessingToolHead implements gregtech.api.interfaces.IOreRecipeRegistrator {//TODO COMPARE WITH OLD TOOL HEAD??? generator

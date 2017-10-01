@@ -15,11 +15,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
-import static gregtech.api.enums.GT_Values.D1;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_Worldgenerator
         implements IWorldGenerator {
