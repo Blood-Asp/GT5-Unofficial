@@ -112,8 +112,8 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
             superheated_threshold /= 4f; // unchanged
             do_lava = true;
         } else if (mInputHotFluidHatch.getFluid().isFluidEqual(FluidRegistry.getFluidStack("ic2hotcoolant", 1))) {
-            //steam_output_multiplier /= 2f; // boosted x2 on top of x5 -> total x10
-            superheated_threshold /=10f; // 10x smaller since the Hot Things production in reactor is the same.
+            steam_output_multiplier /= 2f; // was boosted x2 on top of x5 -> total x10 -> nerf with this code back to 5x
+            superheated_threshold /=5f; // 10x smaller since the Hot Things production in reactor is the same.
         } else {
             // If we're working with neither, fail out
             superheated_threshold=0;
@@ -147,8 +147,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
             int tGeneratedEU = (int) (this.mEUt * 2L * this.mEfficiency / 10000L); // APPROXIMATELY how much steam to generate.
             if (tGeneratedEU > 0) {
 
-                if (superheated)
-                    tGeneratedEU /= 2; // We produce half as much superheated steam if necessary
+                if (superheated) tGeneratedEU /= 2; // We produce half as much superheated steam if necessary
 
                 int distilledConsumed = useWater(tGeneratedEU / 160f); // how much distilled water to consume
                 //tGeneratedEU = distilledConsumed * 160; // EXACTLY how much steam to generate, producing a perfect 1:160 ratio with distilled water consumption
@@ -302,7 +301,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
                 EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
                         EnumChatFormatting.YELLOW + Integer.toString(mMaxProgresstime/20) + EnumChatFormatting.RESET +" s",
                 "Probably uses (in steam): "+
-                        EnumChatFormatting.RED + Integer.toString(-mEUt) + EnumChatFormatting.RESET + " EU/t",
+                        (superheated?EnumChatFormatting.RED:EnumChatFormatting.YELLOW) + Integer.toString(superheated?-2*mEUt:-mEUt) + EnumChatFormatting.RESET + " EU/t",
                 "Problems: "+
                         EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
                         " Efficiency: "+

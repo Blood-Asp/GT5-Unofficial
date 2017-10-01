@@ -354,8 +354,23 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
                 aList.add(tOffset + 1, EnumChatFormatting.WHITE + tMaterial.mDefaultLocalName + EnumChatFormatting.YELLOW + " lvl " + getHarvestLevel(aStack, "") + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 2, EnumChatFormatting.WHITE + "Turbine Efficiency: " + EnumChatFormatting.BLUE + (50.0F + (10.0F * getToolCombatDamage(aStack))) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Steam flow: " + EnumChatFormatting.GOLD + aOptFlow + EnumChatFormatting.GRAY + " L/t");
-                aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Gas flow (Burn energy per tick): " + EnumChatFormatting.GOLD + aOptFlow + EnumChatFormatting.GRAY + " EU/t");
-                aList.add(tOffset + 3, EnumChatFormatting.WHITE + "Optimal Plasma flow (Plasma energy per tick): " + EnumChatFormatting.GOLD + aOptFlow*40 + EnumChatFormatting.GRAY + " EU/t");
+                {
+                    int aBaseEff=(int)(5+getToolCombatDamage(aStack))*1000;
+                    int aOptFlowLoose=aOptFlow*4;
+                    if(aBaseEff>10000){
+                        aOptFlowLoose*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
+                        aBaseEff=7500;
+                    }else if(aBaseEff>7500){
+                        aOptFlowLoose*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
+                        aBaseEff*=0.75f;
+                    }else{
+                        aBaseEff*=0.75f;
+                    }
+                    aList.add(tOffset + 4, EnumChatFormatting.GRAY + "Turbine Efficiency (Loose): " + EnumChatFormatting.BLUE + aBaseEff/100f + EnumChatFormatting.DARK_GRAY);
+                    aList.add(tOffset + 5, EnumChatFormatting.GRAY + "Optimal Steam flow (Loose): " + EnumChatFormatting.GOLD + aOptFlowLoose + EnumChatFormatting.DARK_GRAY + " L/t");
+                }
+                aList.add(tOffset + 6, EnumChatFormatting.WHITE + "Optimal Gas flow (Burn energy per tick): " + EnumChatFormatting.GOLD + aOptFlow + EnumChatFormatting.GRAY + " EU/t");
+                aList.add(tOffset + 7, EnumChatFormatting.WHITE + "Optimal Plasma flow (Plasma energy per tick): " + EnumChatFormatting.GOLD + aOptFlow*40 + EnumChatFormatting.GRAY + " EU/t");
 
             } else {
                 aList.add(tOffset + 0, EnumChatFormatting.WHITE + "Durability: " + EnumChatFormatting.GREEN + (tMaxDamage - getToolDamage(aStack)) + " / " + tMaxDamage + EnumChatFormatting.GRAY);
