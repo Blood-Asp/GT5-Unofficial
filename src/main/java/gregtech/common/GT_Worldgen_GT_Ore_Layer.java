@@ -140,6 +140,10 @@ public class GT_Worldgen_GT_Ore_Layer
                             " Sporadic="+execCount[3]+","+placeCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSporadicMeta).getDisplayName()
             );
         }
-        return true;
+		// Didn't place anything, return false
+		if( (placeCount[0] + placeCount[1] + placeCount[2] + placeCount[3]) == 0 )
+			return false;
+		else 
+        	return true;
     }
 }
