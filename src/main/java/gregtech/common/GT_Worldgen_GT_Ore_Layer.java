@@ -15,7 +15,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.debugOrevein;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -123,7 +123,8 @@ public class GT_Worldgen_GT_Ore_Layer
                 }
             }
         }
-        if (D1) {
+        if (debugOrevein) {
+			String tDimensionName = aWorld.provider.getDimensionName();
             GT_Log.out.println(
                             "Generated Orevein:" + this.mWorldGenName +
                             " chunkX="+aChunkX+
@@ -132,7 +133,8 @@ public class GT_Worldgen_GT_Ore_Layer
                             " Secondary="+placeCount[1]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSecondaryMeta).getDisplayName()+
                             " Between="+placeCount[2]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mBetweenMeta).getDisplayName()+
                             " Primary="+placeCount[0]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
-                            " Sporadic="+placeCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSporadicMeta).getDisplayName()
+                            " Sporadic="+placeCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSporadicMeta).getDisplayName() +
+                            " Dimension=" + tDimensionName
             );
         }
 		// Didn't place anything, return false

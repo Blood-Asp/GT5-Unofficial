@@ -18,6 +18,8 @@ import net.minecraft.world.gen.ChunkProviderHell;
 import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.oreveinPercentage;
 import static gregtech.api.enums.GT_Values.debugWorldGen;
+import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.oreveinAttempts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +122,7 @@ public class GT_Worldgenerator
 
                     int tRandomWeight;
 					int i;
-                    for (i = 0; (i < 256) && (temp); i++) {
+                    for (i = 0; (i < oreveinAttempts) && (temp); i++) {
                         tRandomWeight = this.mRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
@@ -136,15 +138,15 @@ public class GT_Worldgenerator
                             }
                         }
                     }
-					if (D1 & temp) {
+					if (debugOrevein & temp) {
 						GT_Log.out.println(
 										"No orevein selected!" +
-										" @ dim="+ this.mDimensionType+
 										" chunkX="+ this.mX +
 										" chunkZ="+ this.mZ + 
+										" oreveinAttemps=" + oreveinAttempts +
 										" dimensionName=" + tDimensionName
 						);
-					} else if (D1)
+					} else if (debugOrevein)
 					{
 						GT_Log.out.println(
 										"Orevein took " + i + 
@@ -155,11 +157,10 @@ public class GT_Worldgenerator
 						
                 }else
                 {
-                	if((oreveinRNG >= oreveinPercentage) && (D1))
+                	if((oreveinRNG >= oreveinPercentage) && (debugOrevein))
                 	{
 						GT_Log.out.println(
 										"Skipped orevein in this 3x3 chunk!" +
-										" @ dim="+ this.mDimensionType+
 										" chunkX="+ this.mX +
 										" chunkZ="+ this.mZ +
 										" RNG=" + oreveinRNG +
@@ -191,7 +192,7 @@ public class GT_Worldgenerator
             }
 			else
 			{
-				if (D1) {
+				if (debugOrevein) {
 					GT_Log.out.println(
 									"Skipped chunk, not 3x3 center" +
 									" @ dim="+this.mDimensionType+
@@ -214,7 +215,7 @@ public class GT_Worldgenerator
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
-                    for (int i = 0; (i < 256) && (temp); i++) {
+                    for (int i = 0; (i < oreveinAttempts) && (temp); i++) {
                         tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
