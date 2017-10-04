@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 112;
+	private static final int CASING_INDEX = 64+14/*112*/;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);

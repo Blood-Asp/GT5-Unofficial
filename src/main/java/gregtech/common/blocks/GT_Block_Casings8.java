@@ -11,10 +11,12 @@ import net.minecraft.util.IIcon;
 
 public class GT_Block_Casings8
         extends GT_Block_Casings_Abstract {
+
+    //WATCH OUT FOR TEXTURE ID's
     public GT_Block_Casings8() {
         super(GT_Item_Casings8.class, "gt.blockcasings8", GT_Material_Casings.INSTANCE);
-        for (int i = 0; i < 16; i = (i + 1)) {
-            Textures.BlockIcons.CASING_BLOCKS[(i + 112)] = new GT_CopiedBlockTexture(this, 6, i);
+        for (int i = 0; i < 2/*16*/; i = (i + 1)) {
+            Textures.BlockIcons.CASING_BLOCKS[(i + 64 + 14)] = new GT_CopiedBlockTexture(this, 6, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Chemically Inert Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "PTFE Pipe Casing");
@@ -22,6 +24,7 @@ public class GT_Block_Casings8
         ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 1));
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int aSide, int aMeta) {
