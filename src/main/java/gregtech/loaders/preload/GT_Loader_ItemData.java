@@ -72,6 +72,7 @@ public class GT_Loader_ItemData
         GT_OreDictUnificator.addItemData(new ItemStack(Items.iron_door, 1), new ItemData(Materials.Iron, 21772800L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(new ItemStack(Items.cauldron, 1), new ItemData(Materials.Iron, 25401600L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(new ItemStack(Blocks.iron_bars, 8, 32767), new ItemData(Materials.Iron, 10886400L, new MaterialStack[0]));
+        GT_OreDictUnificator.addItemData(GT_ModHandler.getModItem("dreamcraft", "item.SteelBars", 8L, 0), new ItemData(Materials.Steel, 10886400L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(GT_ModHandler.getIC2Item("ironFurnace", 1L), new ItemData(Materials.Iron, 18144000L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(ItemList.IC2_Food_Can_Empty.get(1L, new Object[0]), new ItemData(Materials.Tin, 1814400L, new MaterialStack[0]));
         GT_OreDictUnificator.addItemData(ItemList.IC2_Fuel_Rod_Empty.get(1L, new Object[0]), new ItemData(Materials.Iron, 3628800L, new MaterialStack[0]));
