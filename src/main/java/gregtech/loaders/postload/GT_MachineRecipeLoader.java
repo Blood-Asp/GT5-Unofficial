@@ -1746,6 +1746,10 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 8), null, 1, EnumCube.COKE_BLOCK.getItem(8), Materials.Creosote.getFluid(32000), 2560, 64);
             GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 8), Materials.Nitrogen.getGas(1000), 2, EnumCube.COKE_BLOCK.getItem(8), Materials.Creosote.getFluid(32000), 1280, 96);
         }
+        if(Loader.isModLoaded("Forestry")) {
+            GT_Values.RA.addPyrolyseRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 4L), Materials.Water.getFluid(4000), 1, null, Materials.Biomass.getFluid(5000), 900, 10);
+            GT_Values.RA.addPyrolyseRecipe(GT_ModHandler.getModItem(aTextForestry, "mulch", 4L), Materials.Water.getFluid(4000), 1, null, Materials.Biomass.getFluid(5000), 900, 10);
+        }
 
         GT_Values.RA.addCentrifugeRecipe(new ItemStack(Items.golden_apple, 1, 1), GT_Values.NI, GT_Values.NF, Materials.Methane.getGas(4608L), new ItemStack(Items.gold_ingot, 64), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, null, 9216, 5);
         GT_Values.RA.addCentrifugeRecipe(new ItemStack(Items.golden_apple, 1, 0), GT_Values.NI, GT_Values.NF, Materials.Methane.getGas(576L), new ItemStack(Items.gold_ingot, 7), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, null, 9216, 5);
