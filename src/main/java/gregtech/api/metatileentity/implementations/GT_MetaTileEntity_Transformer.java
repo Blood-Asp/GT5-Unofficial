@@ -132,12 +132,12 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxAmperesOut() {
-        return getBaseMetaTileEntity().isActive() ? 4 : 1;
+        return getBaseMetaTileEntity().isAllowedToWork() ? 4 : 1;
     }
 
     @Override
     public long maxAmperesIn() {
-        return getBaseMetaTileEntity().isActive() ? 1 : 4;
+        return getBaseMetaTileEntity().isAllowedToWork() ? 1 : 4;
     }
 
     @Override
