@@ -419,7 +419,7 @@ public class MaterialStack implements Cloneable {
              }
          }
 		 if (mAmount == 50) {
-             temp4 = "\u2083"+"\u2081";
+             temp4 = "\u2085"+"\u2080";
              
              if (mMaterial.mMaterialList.size() > 1 || isMaterialListComplex(this)) {
                 temp1 = "(";
