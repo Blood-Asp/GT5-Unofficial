@@ -1891,4 +1891,10 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             this.mModID = ((aModID == null) || (aModID.equals("UNKNOWN")) ? null : aModID);
         }
     }
+
+    @SubscribeEvent
+     public void onBlockEvent(BlockEvent event) {
+        if (event.block.getUnlocalizedName().equals("blockAlloyGlass"))
+            GregTech_API.causeMachineUpdate(event.world, event.x, event.y, event.z);
+    }
 }
