@@ -1,21 +1,288 @@
 package gregtech.loaders.postload;
 
-import bloodasp.galacticgreg.GT_Worldgenerator_Space;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Worldgen_Asteroid;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
 import gregtech.common.GT_Worldgenerator;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Property;
 
 public class GT_Worldgenloader
         implements Runnable {
+	private static final GT_Config ADV_FILE = GregTech_API.sAdvWorldgenFile, OLD_FILE = GregTech_API.sWorldgenFile; 
+	private static final String dims = "DimensionWhiteList", biomes = "RestrictedBiomes";
+
+ 	private static class DimListBuffer {
+		HashSet<String> mList = new HashSet<>();
+		
+		public void add(String aDimList) {
+			if (GT_Utility.isStringValid(aDimList)) mList.add(aDimList);
+		}
+		
+		public void clear() {
+			mList.clear();
+		}
+		
+		public String[] get() {
+			return mList.toArray(new String[mList.size()]);
+		}
+	}
+
+	public static void transferOldFile1() {
+		System.out.println("Transfer basic worldgen configs");
+		transferValue("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres);
+		transferValue("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres);
+		transferValue("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres);
+		transferValue("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres);
+		transferValue("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres);
+		transferValue("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres);
+		System.out.println("Transfer of basic configs finished.");
+	}
+
+	private void transferOldFile2() {
+		System.out.println("Transfer multiple worldgen configs:");
+		transferValue(ConfigCategories.general, "AutoDetectPFAA", true);
+		
+		String block = "", category;
+		int meta = 0;
+		DimListBuffer tDimList = new DimListBuffer();
+		
+		System.out.println("Transfer stone worldgen configs");
+		for (String type : new String[]{"blackgranite", "redgranite", "marble", "basalt"}) {
+			switch (type) {
+			case "blackgranite": block = getBlockName(GregTech_API.sBlockGranites); meta = 0; break;
+			case "redgranite": block = getBlockName(GregTech_API.sBlockGranites); meta = 8; break;
+			case "marble": block = getBlockName(GregTech_API.sBlockStones); meta = 0; break;
+			case "basalt": block = getBlockName(GregTech_API.sBlockStones); meta = 8; break;
+			}
+			int prob = 0, range = 0;
+			for (String size : new String[]{"tiny", "small", "medium", "large", "huge"}) {
+				switch (size) {
+				case "tiny": range = 50; prob = 48; break;
+				case "small": range = 100; prob = 96; break;
+				case "medium": range = 200; prob = 144; break;
+				case "large": range = 300; prob = 196; break;
+				case "huge": range = 400; prob = 240; break;
+				}
+				String tName = "overworld.stone." + type + "." + size;
+				category = "worldgen.stone." + type + "." + size;
+				transferValue("worldgen", "worldgen", "stone." + type + "." + size, tName, true);
+				transferValue(category, "worldgen." + tName, "Probability", "Probability", prob);
+				transferValue(category, "worldgen." + tName, "Amount", "Amount", 1);
+				transferValue(category, "worldgen." + tName, "Size", "Size", range);
+				transferValue(category, "worldgen." + tName, "MinHeight", "MinHeight", 0);
+				transferValue(category, "worldgen." + tName, "MaxHeight", "MaxHeight", 120);
+				tDimList.clear();
+				if (OLD_FILE.find("worldgen", tName, true))
+					tDimList.add("Overworld");
+				transferOldDimList(tName, tDimList);
+				ADV_FILE.get(category, dims, tDimList.get());
+				ADV_FILE.get(category, "Block", block);
+				ADV_FILE.get(category, "BlockMeta", meta);
+				ADV_FILE.get(category, biomes, new String[0]);
+			}
+		}
+		System.out.println("Transfer of stone configs finished.");
+		
+		System.out.println("Transfer asteroid worldgen configs");
+		category = "worldgen.asteroid.endasteroids";
+		transferValue("worldgen", "endasteroids", "asteroid.endasteroids", "GenerateAsteroids", true);
+		transferValue(category, "endasteroids", "Probability", "AsteroidProbability", 300);
+		transferValue(category, "endasteroids", "MinSize", "AsteroidMinSize", 50);
+		transferValue(category, "endasteroids", "MaxSize", "AsteroidMaxSize", 200);
+		ADV_FILE.get(category, dims, new String[]{"The End"});
+		ADV_FILE.get(category, "Block", getBlockName(Blocks.end_stone));
+		ADV_FILE.get(category, "BlockMeta", 0);
+		ADV_FILE.get(category, biomes, new String[0]);
+		
+		category = "worldgen.asteroid.gcasteroids";
+		transferValue("worldgen", "gcasteroids", "asteroid.gcasteroids", "GenerateGCAsteroids", true);
+		transferValue(category, "gcasteroids", "Probability", "GCAsteroidProbability", 300);
+		transferValue(category, "gcasteroids", "MinSize", "GCAsteroidMinSize", 100);
+		transferValue(category, "gcasteroids", "MaxSize", "GCAsteroidMaxSize", 400);
+		ADV_FILE.get(category, dims, new String[]{"Asteroids"});
+		ADV_FILE.get(category, "Block", getBlockName(GregTech_API.sBlockGranites));
+		ADV_FILE.get(category, "BlockMeta", 8);
+		ADV_FILE.get(category, biomes, new String[0]);
+		System.out.println("Transfer of asteroid configs finished.");
+		
+		System.out.println("Transfer small ore worldgen configs");
+		for (ConfigCategory c : OLD_FILE.mConfig.getCategory("worldgen.ore.small").getChildren()) {
+			if (c.getName().equals("custom")) {
+				System.out.println("Transfer custom small ore configs");
+				HashSet<String> names = new HashSet<>();
+				for (ConfigCategory _c : c.getChildren()) {
+					if ((block = getMaterialName(_c.get("Ore_-1").getInt())) != null) {
+						if (names.contains(block)) {
+							int i = 1;
+							for (; names.contains(block + i); i++);
+							block = block + i;
+						}
+						transferSmallOres(_c, block, "custom." + _c.getName());
+						names.add(block);
+					}
+				}
+				System.out.println("Transfer of custom small ore finished.");
+			} else {
+				transferSmallOres(c, c.getName(), c.getName());
+			}
+		}
+		System.out.println("Transfer of all small ore configs finished");
+		
+		System.out.println("Transfer oregen configs");
+		for (ConfigCategory c : OLD_FILE.mConfig.getCategory("worldgen.ore.mix").getChildren()) {
+			if (c.getName().equals("custom")) {
+				System.out.println("Transfer custom oregen configs");
+				HashSet<String> names = new HashSet<>();
+				for (ConfigCategory _c : c.getChildren()) {
+					block = getMaterialName(_c.get("OrePrimaryLayer_-1").getInt());
+					if (block == null || names.contains(block)) block = getMaterialName(_c.get("OreSecondaryLayer_-1").getInt());
+					if (block == null || names.contains(block)) block = getMaterialName(_c.get("OreSporadiclyInbetween_-1").getInt());
+					if (block == null || names.contains(block)) block = getMaterialName(_c.get("OreSporaticlyAround_-1").getInt());
+					if (block != null) {
+						if (names.contains(block)) {
+							int i = 1;
+							for (; names.contains(block + "-" + i); i++);
+							block = block + "-" + i;
+						}
+						transferOreVeins(_c, block, "custom." + _c.getName());
+						names.add(block);
+					}
+				}
+				System.out.println("Transfer of custom oregen configs finished.");
+			} else {
+				transferOreVeins(c, c.getName(), c.getName());
+			}
+		}
+		System.out.println("Transfer of all oregen configs finished");
+	}
+
+	private void transferSmallOres(ConfigCategory c, String aName, String aOldName) {
+		DimListBuffer tDimList = new DimListBuffer();
+		String oldCategory = "worldgen.ore.small." + aOldName;
+		String category = "worldgen.ore.small." + aName;
+		boolean isCustom = aOldName.startsWith("custom");
+		for (Map.Entry<String, Property> e : c.getValues().entrySet()) {
+			if (e.getKey().startsWith("Ore")) {
+				String[] k = splitConfig(e.getKey());
+				String defaultMaterialName = getMaterialName(Integer.parseInt(k[1])), materialName = getMaterialName(e.getValue().getInt());
+				if (materialName == null) return;
+				if (defaultMaterialName == null) if (isCustom) defaultMaterialName = materialName; else return;
+				ADV_FILE.set(category, "Ore", defaultMaterialName, materialName);
+				break;
+			}
+		}
+		for (Map.Entry<String, Property> e : c.getValues().entrySet()) {
+			String[] k = splitConfig(e.getKey());
+			if (k.length == 2) {
+				switch (k[0]) {
+				case "Ore": break;
+				case "Amount":
+				case "MinHeight":
+				case "MaxHeight":
+					transferValue(category, oldCategory, k[0], k[0], Integer.parseInt(k[1]), isCustom); break;
+				case "Overworld":
+				case "Nether":
+				case "Moon":
+				case "Mars":
+					if (e.getValue().getBoolean()) tDimList.add(k[0]); break;
+				case "TheEnd":
+					if (e.getValue().getBoolean()) tDimList.add("The End"); break;
+				case "Asteroid":
+					if (e.getValue().getBoolean()) tDimList.add("Asteroids"); break;
+				case "RestrictToBiomeName":
+					String biome = e.getValue().getString();
+					ADV_FILE.get(category, biomes, biome.equals("None") ? new String[0] : new String[]{biome}); break;
+				}
+			}
+		}
+		transferOldDimList("ore.small." + aOldName, tDimList);
+		ADV_FILE.get(category, dims, tDimList.get());
+		
+		transferValue("worldgen", "worldgen", "ore.small." + aName, "ore.small." + aOldName, true);
+	}
+
+	private void transferOreVeins(ConfigCategory c, String aName, String aOldName) {
+		DimListBuffer tDimList = new DimListBuffer();
+		String oldCategory = "worldgen.ore.mix." + aOldName;
+		String category = "worldgen.ore.mix." + aName;
+		boolean isCustom = aOldName.startsWith("custom");
+		HashMap<String, String> oreBuffer = new HashMap<>();
+		int count = 0;
+		for (Map.Entry<String, Property> e : c.getValues().entrySet()) {
+			if (e.getKey().startsWith("Ore")) {
+				String[] k = splitConfig(e.getKey());
+				String materialName = getMaterialName(e.getValue().getInt());
+				if (materialName == null) {
+					oreBuffer.put(k[0], null);
+					continue;
+				}
+				oreBuffer.put(k[0], materialName);
+				count++;
+				if (oreBuffer.size() == 4) break;
+			}
+		}
+		if (count == 0) return;
+		for (Map.Entry<String, String> e : oreBuffer.entrySet()) {
+			ADV_FILE.get(category, e.getKey(), e.getValue() == null ? new String[0] : aOldName.equals("apatite") && e.getKey().endsWith("Around") ?new String[]{"Pyrochlore:30", "Phosphate:70"} : new String[]{e.getValue() + ":100"});
+		}
+		
+		for (Map.Entry<String, Property> e : c.getValues().entrySet()) {
+			String[] k = splitConfig(e.getKey());
+			if (k.length == 2) {
+				switch (k[0]) {
+				case "OrePrimaryLayer":
+				case "OreSecondaryLayer":
+				case "OreSporadiclyInbetween":
+				case "OreSporaticlyAround":
+					break;
+				case "Size":
+				case "RandomWeight":
+				case "Density":
+				case "MinHeight":
+				case "MaxHeight":
+					transferValue(category, oldCategory, k[0], k[0], Integer.parseInt(k[1]), isCustom); break;
+				case "Overworld":
+				case "Nether":
+				case "Moon":
+				case "Mars":
+					if (e.getValue().getBoolean()) tDimList.add(k[0]); break;
+				case "TheEnd":
+					if (e.getValue().getBoolean()) tDimList.add("The End"); break;
+				case "EndAsteroid":
+					if (e.getValue().getBoolean()) tDimList.add("endasteroids"); break;
+				case "Asteroid":
+					if (e.getValue().getBoolean()) tDimList.add("gcasteroids"); break;
+				case "RestrictToBiomeName":
+					String biome = e.getValue().getString();
+					ADV_FILE.get(category, biomes, biome.equals("None") ? new String[0] : new String[]{biome}); break;
+				}
+			}
+		}
+		
+		transferOldDimList("ore.mix." + aOldName, tDimList);
+		ADV_FILE.get(category, dims, tDimList.get());
+		
+		transferValue("worldgen", "worldgen", "ore.mix." + aName, "ore.mix." + aOldName, true);
+	}
+
     public void run() {
-        boolean tPFAA = (GregTech_API.sWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
+    	/*if (GregTech_API.worldgenFileUpdate)*/ transferOldFile2();
+        boolean tPFAA = (GregTech_API.sAdvWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
 
         new GT_Worldgenerator();
         if (Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
@@ -153,5 +420,80 @@ public class GT_Worldgenloader
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
         }
+    }
+
+    private static boolean transferValue(Object aCategory, String aName, boolean aDefault) {
+    	return transferValue(aCategory, aCategory, aName, aName, aDefault);
+    }
+
+    private static int transferValue(Object aCategory, String aName, int aDefault) {
+    	return transferValue(aCategory, aCategory, aName, aName, aDefault);
+    }
+
+    private static double transferValue(Object aCategory, String aName, double aDefault) {
+    	return transferValue(aCategory, aCategory, aName, aName, aDefault);
+    }
+
+    private static String transferValue(Object aCategory, String aName, String aDefault) {
+    	return transferValue(aCategory, aCategory, aName, aName, aDefault);
+    }
+
+    private static boolean transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, boolean aDefault) {
+    	return transferValue(aCategory, aOldCategory, aName, aOldName, aDefault, false);
+    }
+
+    private static int transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, int aDefault) {
+    	return transferValue(aCategory, aOldCategory, aName, aOldName, aDefault, false);
+    }
+
+    private static double transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, double aDefault) {
+    	return transferValue(aCategory, aOldCategory, aName, aOldName, aDefault, false);
+    }
+
+    private static String transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, String aDefault) {
+    	return transferValue(aCategory, aOldCategory, aName, aOldName, aDefault, false);
+    }
+
+    private static boolean transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, boolean aDefault, boolean aCustom) {
+    	boolean aPrefered = OLD_FILE.find(aOldCategory, aOldName, aDefault);
+    	return ADV_FILE.set(aCategory, aName, aCustom ? aDefault : aPrefered, aPrefered);
+    }
+
+    private static int transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, int aDefault, boolean aCustom) {
+    	int aPrefered = OLD_FILE.find(aOldCategory, aOldName, aDefault);
+    	return ADV_FILE.set(aCategory, aName, aCustom ? aDefault : aPrefered, aPrefered);
+    }
+
+    private static double transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, double aDefault, boolean aCustom) {
+    	double aPrefered = OLD_FILE.find(aOldCategory, aOldName, aDefault);
+    	return ADV_FILE.set(aCategory, aName, aCustom ? aDefault : aPrefered, aPrefered);
+    }
+
+    private static String transferValue(Object aCategory, Object aOldCategory, String aName, String aOldName, String aDefault, boolean aCustom) {
+    	String aPrefered = OLD_FILE.find(aOldCategory, aOldName, aDefault);
+    	return ADV_FILE.set(aCategory, aName, aCustom ? aDefault : aPrefered, aPrefered);
+    }
+
+    private static void transferOldDimList(String aName, DimListBuffer aBuffer) {
+    	ConfigCategory aCategory = OLD_FILE.mConfig.getCategory("worldgen.dimensions." + aName);
+    	for (Property p : aCategory.getOrderedValues())
+    		if (p.getBoolean()) aBuffer.add(splitConfig(p.getName())[0]);
+    }
+
+    private static String[] splitConfig(String aConfig) {
+    	if (!aConfig.contains("_")) throw new IllegalArgumentException("Argument must be seperated by '_'.");
+    	return new String[]{aConfig.substring(0, aConfig.lastIndexOf('_')), aConfig.substring(aConfig.lastIndexOf('_') + 1, aConfig.length())};
+    }
+
+    private static String getBlockName(Block aBlock) {
+    	return Block.blockRegistry.getNameForObject(aBlock);
+    }
+
+    private static String getMaterialName(int aID) {
+    	try {
+    		return GregTech_API.sMaterials[aID].mName;
+    	} catch (Throwable t) {
+    		return null;
+    	}
     }
 }

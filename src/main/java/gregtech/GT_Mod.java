@@ -121,7 +121,10 @@ public class GT_Mod implements IGT_Mod {
         GT_Config.sConfigFileIDs.save();
         GregTech_API.sRecipeFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Recipes.cfg")));
         GregTech_API.sMachineFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MachineStats.cfg")));
-        GregTech_API.sWorldgenFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg")));
+        File fWorldgen = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg"), fAdvWorldgen = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "AdvWorldGeneration.cfg");
+        /*if (GregTech_API.worldgenFileUpdate = (!fAdvWorldgen.exists() && fWorldgen.exists()))*/ GregTech_API.sWorldgenFile = new GT_Config(new Configuration(fWorldgen));
+        GregTech_API.sAdvWorldgenFile = new GT_Config(new Configuration(fAdvWorldgen));
+        /*if (GregTech_API.worldgenFileUpdate)*/ GT_Worldgenloader.transferOldFile1();
         GregTech_API.sMaterialProperties = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialProperties.cfg")));
         GregTech_API.sMaterialComponents = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialComponents.cfg")));
         GregTech_API.sUnification = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Unification.cfg")));
@@ -274,12 +277,12 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mEasierIVPlusCables = tMainConfig.get("general", "EasierIVPlusCables", false).getBoolean(false);
         gregtechproxy.mBrickedBlastFurnace = tMainConfig.get("general", "BrickedBlastFurnace", true).getBoolean(true);
         gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre = tMainConfig.get("general", "MixedOreOnlyYieldsTwoThirdsOfPureOre", false).getBoolean(false);
-        gregtechproxy.enableBlackGraniteOres = GregTech_API.sWorldgenFile.get("general", "enableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
-        gregtechproxy.enableRedGraniteOres = GregTech_API.sWorldgenFile.get("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
-        gregtechproxy.enableMarbleOres = GregTech_API.sWorldgenFile.get("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
-        gregtechproxy.enableBasaltOres = GregTech_API.sWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
-        gregtechproxy.enableGCOres = GregTech_API.sWorldgenFile.get("general", "enableGCOres", gregtechproxy.enableGCOres);
-        gregtechproxy.enableUBOres = GregTech_API.sWorldgenFile.get("general", "enableUBOres", gregtechproxy.enableUBOres);
+        gregtechproxy.enableBlackGraniteOres = GregTech_API.sAdvWorldgenFile.get("general", "enableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
+        gregtechproxy.enableRedGraniteOres = GregTech_API.sAdvWorldgenFile.get("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
+        gregtechproxy.enableMarbleOres = GregTech_API.sAdvWorldgenFile.get("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
+        gregtechproxy.enableBasaltOres = GregTech_API.sAdvWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
+        gregtechproxy.enableGCOres = GregTech_API.sAdvWorldgenFile.get("general", "enableGCOres", gregtechproxy.enableGCOres);
+        gregtechproxy.enableUBOres = GregTech_API.sAdvWorldgenFile.get("general", "enableUBOres", gregtechproxy.enableUBOres);
 
         Materials[] tDisableOres = new Materials[]{Materials.Chrome, Materials.Naquadria, Materials.Silicon, Materials.Cobalt, Materials.Cadmium, Materials.Indium, Materials.Tungsten,
         		Materials.Adamantium, Materials.Mithril, Materials.DarkIron, Materials.Rutile, Materials.Alduorite, Materials.Magnesium, Materials.Nikolite};
