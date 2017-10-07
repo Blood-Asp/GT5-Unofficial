@@ -225,7 +225,7 @@ public class GT_Worldgenloader
 	}
 
 	private void transferOreVeins(ConfigCategory c, String aName, String aOldName) {
-		DimListBuffer tDimList = new DimListBuffer();
+		DimListBuffer tDimList = new DimListBuffer(), tAsteroidList = new DimListBuffer();
 		String oldCategory = "worldgen.ore.mix." + aOldName;
 		String category = "worldgen.ore.mix." + aName;
 		boolean isCustom = aOldName.startsWith("custom");
@@ -272,9 +272,9 @@ public class GT_Worldgenloader
 				case "TheEnd":
 					if (e.getValue().getBoolean()) tDimList.addEnd();; break;
 				case "EndAsteroid":
-					if (e.getValue().getBoolean()) tDimList.add("endasteroids"); break;
+					if (e.getValue().getBoolean()) tAsteroidList.add("endasteroids"); break;
 				case "Asteroid":
-					if (e.getValue().getBoolean()) tDimList.add("gcasteroids"); break;
+					if (e.getValue().getBoolean()) tAsteroidList.add("gcasteroids"); break;
 				case "RestrictToBiomeName":
 					String biome = e.getValue().getString();
 					ADV_FILE.get(category, biomes, biome.equals("None") ? new String[0] : new String[]{biome}); break;
@@ -284,6 +284,7 @@ public class GT_Worldgenloader
 		
 		transferOldDimList("ore.mix." + aOldName, tDimList);
 		ADV_FILE.get(category, dims, tDimList.get());
+		ADV_FILE.get(category, "Asteroids", tAsteroidList.get());
 		
 		transferValue("worldgen", "worldgen", "ore.mix." + aName, "ore.mix." + aOldName, true);
 	}
@@ -319,7 +320,7 @@ public class GT_Worldgenloader
             //new GT_Worldgenerator_Space();
         }
 
-        final String textWorldgen = "worldgen";
+        final String textWorldgen = "worldgen.";
         int dMeta, cMeta, dSize, cSize, dProb, cProb, dMinY, cMinY, dMaxY, cMaxY, dAmount, cAmount;
         String dBlock, cName;
         String[] cDims, cBiomes;

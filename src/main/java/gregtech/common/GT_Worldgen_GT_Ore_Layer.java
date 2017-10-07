@@ -8,6 +8,7 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Utility;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
@@ -26,23 +27,79 @@ public class GT_Worldgen_GT_Ore_Layer
     public final short mWeight;
     public final short mDensity;
     public final short mSize;
-    public final short mPrimaryMeta;
-    public final short mSecondaryMeta;
-    public final short mBetweenMeta;
-    public final short mSporadicMeta;
+    @Deprecated
+    public final short mPrimaryMeta, mSecondaryMeta, mBetweenMeta, mSporadicMeta;
+    @Deprecated
     public final String mRestrictBiome;
-    public final boolean mOverworld;
-    public final boolean mNether;
-    public final boolean mEnd;
-    public final boolean mEndAsteroid;
-    public final boolean mMoon;
-    public final boolean mMars;
-    public final boolean mAsteroid;
+    @Deprecated
+    public final boolean mOverworld, mNether, mEnd, mEndAsteroid, mMoon, mMars, mAsteroid;
     public final String aTextWorldgen = "worldgen.";
+    
+    public final ArrayList<String> mBiomeList = new ArrayList<>();
+
+    protected static class WeightedOre {
+    	protected int mWeight, mMeta;
+    	
+    	public WeightedOre() {
+    		this(-1, 0);
+    	}
+    	
+    	public WeightedOre(int aMeta, int aWeight) {
+    		mMeta = aMeta; mWeight = aWeight;
+    	}
+    	
+    	public WeightedOre(Materials aMaterial, int aWeight) {
+    		this(aMaterial == null ? -1 : aMaterial.mMetaItemSubID, aWeight);
+    	}
+    	
+    	public WeightedOre(String aConfig) {
+    		if (GT_Utility.isStringValid(aConfig)) {
+    			String[] k = aConfig.split(":");
+        		try {mMeta = Integer.parseInt(k[0]);}
+    			catch (Exception e) {mMeta = Materials.get(k[0]).mMetaItemSubID;}
+    			try {mWeight = Integer.parseInt(k[1]);}
+    			catch (Exception e) {mWeight = 0;}
+    		} else {mMeta = -1; mWeight = 0;}
+    	}
+    	
+    	public boolean isValid() {
+    		return mMeta > 0 && mMeta < 1000 && mWeight > 0;
+    	}
+    }
+
+    protected static class WeightedOreList {
+    	protected ArrayList<WeightedOre> mOres = new ArrayList<>();
+    	protected int mWeight = 0;
+    	
+    	public void add(WeightedOre aOre) {
+    		if (aOre.isValid()) {
+    			mOres.add(aOre);
+    			mWeight += aOre.mWeight;
+    		}
+    	}
+    	
+    	public void addAll(String... aConfigs) {
+    		for (String s : aConfigs) add(new WeightedOre(s));
+    	}
+    	
+    	public int getOre() {
+    		return mOres.isEmpty() ? -1 : mOres.get(0).mMeta;
+    	}
+    	
+    	public int getOre(Random aRandom) {
+    		if (!mOres.isEmpty()) {
+    			int tWeight = aRandom.nextInt(mWeight);
+    			for (WeightedOre o : mOres) {
+    				if ((tWeight -= o.mWeight) < 0) return o.mMeta;
+    			}
+    		}
+    		return -1;
+    	}
+    }
 
     protected static class OreGenList {
     	public ArrayList<GT_Worldgen_GT_Ore_Layer> list = new ArrayList<>();
-    	public int weight = 0;
+    	public int mWeight = 0;
     }
 
     protected static OreGenList getOreGenData(World aWorld, int aDimensionType, boolean tAsteroid) {
@@ -55,7 +112,7 @@ public class GT_Worldgen_GT_Ore_Layer
     			if ((tAsteroid && ((tOreGen.mEndAsteroid && aDimensionType == 1) || (tOreGen.mAsteroid && aDimensionType == -30))) ||
     					tOreGen.isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (tOreGen.mNether)) || ((aDimensionType == 0) && (tOreGen.mOverworld)) || ((aDimensionType == 1) && (tOreGen.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (tOreGen.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (tOreGen.mMars)) ? aDimensionType : ~aDimensionType)) {
     				rList.list.add(tOreGen);
-    				rList.weight += tOreGen.mWeight;
+    				rList.mWeight += tOreGen.mWeight;
     			}
     		
     		sDimSpecifiedOreGenMap.put(aDimName, rList);
@@ -64,13 +121,14 @@ public class GT_Worldgen_GT_Ore_Layer
     }
 
     public static int getOreGenWeight(World aWorld, int aDimensionType, boolean tAsteroid) {
-    	return getOreGenData(aWorld, aDimensionType, tAsteroid).weight;
+    	return getOreGenData(aWorld, aDimensionType, tAsteroid).mWeight;
     }
 
     public static ArrayList<GT_Worldgen_GT_Ore_Layer> getOreGenList(World aWorld, int aDimensionType, boolean tAsteroid) {
     	return getOreGenData(aWorld, aDimensionType, tAsteroid).list;
     }
 
+    @Deprecated
     public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
         super(aName, sList, aDefault, null);// TODO
         this.mOverworld = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Overworld", aOverworld);
