@@ -201,7 +201,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         if (yHead <= 0) {
             return false;
         }
-        if ((!consumeFluid(getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord())) && (!getBaseMetaTileEntity().getAir(getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord()))) {
+        if ((!consumeFluid(getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord())) && (!getBaseMetaTileEntity().getBlock(getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord()).isAir(getBaseMetaTileEntity().getWorld(), getBaseMetaTileEntity().getXCoord(), yHead - 1, getBaseMetaTileEntity().getZCoord()))) {
 
             return false;
         }
