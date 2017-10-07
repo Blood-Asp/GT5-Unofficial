@@ -122,9 +122,9 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.sRecipeFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Recipes.cfg")));
         GregTech_API.sMachineFile = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MachineStats.cfg")));
         File fWorldgen = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg"), fAdvWorldgen = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "AdvWorldGeneration.cfg");
-        /*if (GregTech_API.worldgenFileUpdate = (!fAdvWorldgen.exists() && fWorldgen.exists()))*/ GregTech_API.sWorldgenFile = new GT_Config(new Configuration(fWorldgen));
+        if (GregTech_API.worldgenFileUpdate = (!fAdvWorldgen.exists() && fWorldgen.exists())) GregTech_API.sWorldgenFile = new GT_Config(new Configuration(fWorldgen));
         GregTech_API.sAdvWorldgenFile = new GT_Config(new Configuration(fAdvWorldgen));
-        /*if (GregTech_API.worldgenFileUpdate)*/ GT_Worldgenloader.transferOldFile1();
+        if (GregTech_API.worldgenFileUpdate) GT_Worldgenloader.transferOldFile1();
         GregTech_API.sMaterialProperties = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialProperties.cfg")));
         GregTech_API.sMaterialComponents = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialComponents.cfg")));
         GregTech_API.sUnification = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Unification.cfg")));

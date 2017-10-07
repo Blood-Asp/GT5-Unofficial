@@ -20,8 +20,8 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
 	
 	public GT_Worldgen_Asteroid(String aName, boolean aDefault, Block aBlock, int aBlockMeta, int aMinY, int aMaxY, int aMinSize, int aMaxSize, int aProbability, String[] aDimList, String[] aBiomeList) {
 		super(aName, aDefault, aBlock, aBlockMeta, ~0, 1, 0, aProbability, aMinY, aMaxY, aDimList, aBiomeList, true);
-		mMinSize = aMinSize;
-		mMaxSize = aMaxSize;
+		this.mMinSize = aMinSize;
+		this.mMaxSize = Math.max(this.mMinSize, aMaxSize);
 	}
 
 	@Override
