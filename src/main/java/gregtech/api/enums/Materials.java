@@ -1258,32 +1258,32 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Naquadah.mChemicalFormula = "Nq";
         NaquadahEnriched.mChemicalFormula = "Nq+";
         Naquadria.mChemicalFormula = "Nq*";
-        NaquadahAlloy.mChemicalFormula="Nq2KeC";
+        NaquadahAlloy.mChemicalFormula="Nq\u2082KeC";
         Sunnarium.mChemicalFormula = "Su";
         Adamantium.mChemicalFormula="Ad";
         InfusedGold.mChemicalFormula="AuMa*";
         MeteoricIron.mChemicalFormula="SpFe";
-        MeteoricSteel.mChemicalFormula="SpFe50C";
+        MeteoricSteel.mChemicalFormula="SpFe\u2085\u2080C";
         Duranium.mChemicalFormula="Du";
         Tritanium.mChemicalFormula="Tt";
         Ardite.mChemicalFormula="Ai";
         Manyullyn.mChemicalFormula="AiCo";
-        Mytryl.mChemicalFormula="SpPt2FeMa";
+        Mytryl.mChemicalFormula="SpPt\u2082FeMa";
         BlackPlutonium.mChemicalFormula="SpPu";
         Ledox.mChemicalFormula="SpPb";
-        CallistoIce.mChemicalFormula="SpH2O";
+        CallistoIce.mChemicalFormula="SpH\u2082O";
         Quantium.mChemicalFormula="Qt";
         Desh.mChemicalFormula="De";
         Draconium.mChemicalFormula="D";
         DraconiumAwakened.mChemicalFormula="D*";
-        BlueAlloy.mChemicalFormula="AgRp4";
-        RedAlloy.mChemicalFormula="Cu("+Redstone.mChemicalFormula+")4";
+        BlueAlloy.mChemicalFormula="AgRp\u2084";
+        RedAlloy.mChemicalFormula="Cu("+Redstone.mChemicalFormula+")\u2084";
         AnyIron.mChemicalFormula="Fe";
         AnyCopper.mChemicalFormula="Cu";
         ElectrumFlux.mChemicalFormula="The formula is too long...";
-        DeepIron.mChemicalFormula="Sp2Fe";
+        DeepIron.mChemicalFormula="Sp\u2082Fe";
         Ichorium.mChemicalFormula="IcMa";
-//      Duralumin.mChemicalFormula="Al6CuMnMg";
+//      Duralumin.mChemicalFormula="Al\u2086CuMnMg";
     }
 
     private static void initSubTags() {
