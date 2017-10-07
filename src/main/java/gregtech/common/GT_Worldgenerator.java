@@ -124,28 +124,16 @@ public class GT_Worldgenerator implements IWorldGenerator {
 
         public void run() {
             Random random = getRandom(mX, mZ);
-            int tWeight = GT_Worldgen_GT_Ore_Layer.getOreGenWeight(this.mWorld, this.mDimensionType, false);
-            ArrayList<GT_Worldgen_GT_Ore_Layer> tList = GT_Worldgen_GT_Ore_Layer.getOreGenList(this.mWorld, this.mDimensionType, false);
-            if ((tWeight > 0) && (tList != null) && (tList.size() > 0)) {
-                boolean temp = true;
-                int tRandomWeight;
-                for (int i = 0; (i < 256) && (temp); i++) {
-                    tRandomWeight = random.nextInt(tWeight);
-                    for (GT_Worldgen tWorldGen : tList) {
-                        tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
-                        if (tRandomWeight <= 0) {
-                            try {
-                                if (tWorldGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, mX, mZ, this.mChunkGenerator, this.mChunkProvider)) {
-                                    temp = false;
-                                }
-                                break;
-                            } catch (Throwable e) {
-                                e.printStackTrace(GT_Log.err);
-                            }
-                        }
-                    }
-                }
-            }
+            GT_Worldgen_GT_Ore_Layer tOreGen;
+            for (int i = 0; i < 256; i++) {
+            	if ((tOreGen = GT_Worldgen_GT_Ore_Layer.getRandomOreVein(this.mWorld, this.mDimensionType, null, random)) == null) break;
+        		try {
+        			if (tOreGen.executeWorldgen(this.mWorld, random, this.mBiome, this.mDimensionType, mX, mZ, this.mChunkGenerator, this.mChunkProvider))
+        				break;
+        		} catch (Throwable t) {
+        			t.printStackTrace(GT_Log.err);
+        		}
+        	}
             for (int i = -16; i <= 16; i += 16)
             	for (int j = -16; j <= 16; j += 16) {
             		try {

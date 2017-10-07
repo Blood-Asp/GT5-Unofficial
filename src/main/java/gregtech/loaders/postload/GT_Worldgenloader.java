@@ -14,6 +14,7 @@ import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Worldgen_Asteroid;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
+import gregtech.common.GT_Worldgen_GT_Ore_Layer.WeightedOreList;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
 import gregtech.common.GT_Worldgenerator;
@@ -311,6 +312,36 @@ public class GT_Worldgenloader
 		}
 	}
 
+	private static class OreVeinProp {
+		public int mMinY, mMaxY, mWeight, mDensity, mSize;
+		public DimListBuffer mDimList = new DimListBuffer(), mAsteroidList = new DimListBuffer();
+		public WeightedOreList mPrimaries = new WeightedOreList(), mSecondaries = new WeightedOreList(), mBetweens = new WeightedOreList(), mSporadics = new WeightedOreList();
+		public OreVeinProp() {
+			this(0, 0, 0, 0, 0, false, false, false, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
+		}
+		public OreVeinProp(int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
+			this(aMinY, aMaxY, aWeight, aDensity, aSize, aOverworld, aNether, aEnd, aMoon, aMars, aAsteroid, aPrimary.mName + ":100", aSecondary.mName + ":100", aBetween.mName + ":100", aSporadic.mName + ":100");
+		}
+		public OreVeinProp(int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, String aPrimaries, String aSecondaries, String aBetweens, String aSporadics) {
+			mMinY = aMinY;
+			mMaxY = aMaxY;
+			mWeight = aWeight;
+			mDensity = aDensity;
+			mSize = aSize;
+			if (aOverworld) mDimList.addOverworld();
+			if (aNether) mDimList.addNether();
+			if (aEnd) mDimList.addEnd();
+			if (aMoon) mDimList.addMoon();
+			if (aMars) mDimList.addMars();
+			if (aEnd) mAsteroidList.add("endasteroids");
+			if (aAsteroid) mAsteroidList.add("gcasteroids");
+			mPrimaries.addAll(aPrimaries.split(";"));
+			mSecondaries.addAll(aSecondaries.split(";"));
+			mBetweens.addAll(aBetweens.split(";"));
+			mSporadics.addAll(aSporadics.split(";"));
+		}
+	}
+
     public void run() {
     	/*if (GregTech_API.worldgenFileUpdate)*/ transferOldFile2();
         boolean tPFAA = (GregTech_API.sAdvWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
@@ -409,45 +440,70 @@ public class GT_Worldgenloader
         	new GT_Worldgen_GT_Ore_SmallPieces(cName, true, cMinY, cMaxY, cAmount, cDims, cBiomes, cMeta);
         }
         
-        new GT_Worldgen_Asteroid(true);
-
+        //new GT_Worldgen_Asteroid(true); //TODO
+        
+        HashMap<String, OreVeinProp> defaultOreVeins = new HashMap<>();
+        defaultOreVeins.put("naquadah", new OreVeinProp(10, 60, 10, 5, 32, false, false, true, false, true, true, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched));
+        defaultOreVeins.put("lignite", new OreVeinProp(50, 130, 160, 8, 32, !tPFAA, false, false, false, false, false, Materials.Lignite, Materials.Lignite, Materials.Lignite, Materials.Coal));
+        defaultOreVeins.put("coal", new OreVeinProp(50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Coal, Materials.Coal, Materials.Coal, Materials.Lignite));
+        defaultOreVeins.put("magnetite", new OreVeinProp(50, 120, 160, 3, 32, !tPFAA, true, false, true, true, false, Materials.Magnetite, Materials.Magnetite, Materials.Iron, Materials.VanadiumMagnetite));
+        defaultOreVeins.put("gold", new OreVeinProp(60, 80, 160, 3, 32, !tPFAA, false, false, true, true, true, Materials.Magnetite, Materials.Magnetite, Materials.VanadiumMagnetite, Materials.Gold));
+        defaultOreVeins.put("iron", new OreVeinProp(10, 40, 120, 4, 24, !tPFAA, true, false, true, true, false, Materials.BrownLimonite, Materials.YellowLimonite, Materials.BandedIron, Materials.Malachite));
+        defaultOreVeins.put("cassiterite", new OreVeinProp(40, 120, 50, 5, 24, !tPFAA, false, true, true, true, true, Materials.Tin, Materials.Tin, Materials.Cassiterite, Materials.Tin));
+        defaultOreVeins.put("tetrahedrite", new OreVeinProp(80, 120, 70, 4, 24, !tPFAA, true, false, true, true, true, Materials.Tetrahedrite, Materials.Tetrahedrite, Materials.Copper, Materials.Stibnite));
+        defaultOreVeins.put("netherquartz", new OreVeinProp(40, 80, 80, 5, 24, false, true, false, false, false, false, Materials.NetherQuartz, Materials.NetherQuartz, Materials.NetherQuartz, Materials.NetherQuartz));
+        defaultOreVeins.put("sulfur", new OreVeinProp(5, 20, 100, 5, 24, false, true, false, false, true, false, Materials.Sulfur, Materials.Sulfur, Materials.Pyrite, Materials.Sphalerite));
+        defaultOreVeins.put("copper", new OreVeinProp(10, 30, 80, 4, 24, !tPFAA, true, false, true, true, false, Materials.Chalcopyrite, Materials.Iron, Materials.Pyrite, Materials.Copper));
+        defaultOreVeins.put("bauxite", new OreVeinProp(50, 90, 80, 4, 24, !tPFAA, tPFAA, false, true, true, true, Materials.Bauxite, Materials.Bauxite, Materials.Aluminium, Materials.Ilmenite));
+        defaultOreVeins.put("salts", new OreVeinProp(50, 60, 50, 3, 24, !tPFAA, false, false, true, false, false, Materials.RockSalt, Materials.Salt, Materials.Lepidolite, Materials.Spodumene));
+        defaultOreVeins.put("redstone", new OreVeinProp(10, 40, 60, 3, 24, !tPFAA, true, false, true, true, true, Materials.Redstone, Materials.Redstone, Materials.Ruby, Materials.Cinnabar));
+        defaultOreVeins.put("soapstone", new OreVeinProp(10, 40, 40, 3, 16, !tPFAA, false, false, true, true, false, Materials.Soapstone, Materials.Talc, Materials.Glauconite, Materials.Pentlandite));
+        defaultOreVeins.put("nickel", new OreVeinProp(10, 40, 40, 3, 16, !tPFAA, true, true, true, true, true, Materials.Garnierite, Materials.Nickel, Materials.Cobaltite, Materials.Pentlandite));
+        defaultOreVeins.put("platinum", new OreVeinProp(40, 50, 5, 3, 16, !tPFAA, false, true, false, true, true, Materials.Cooperite, Materials.Palladium, Materials.Platinum, Materials.Iridium));
+        defaultOreVeins.put("pitchblende", new OreVeinProp(10, 40, 40, 3, 16, !tPFAA, false, false, true, true, true, Materials.Pitchblende, Materials.Pitchblende, Materials.Uraninite, Materials.Uraninite));
+        defaultOreVeins.put("uranium", new OreVeinProp(20, 30, 20, 3, 16, !tPFAA, false, false, true, true, true, Materials.Uraninite, Materials.Uraninite, Materials.Uranium, Materials.Uranium));
+        defaultOreVeins.put("monazite", new OreVeinProp(20, 40, 30, 3, 16, !tPFAA, tPFAA, false, true, true, true, Materials.Bastnasite, Materials.Bastnasite, Materials.Monazite, Materials.Neodymium));
+        defaultOreVeins.put("molybdenum", new OreVeinProp(20, 50, 5, 3, 16, !tPFAA, false, true, true, true, true, Materials.Wulfenite, Materials.Molybdenite, Materials.Molybdenum, Materials.Powellite));
+        defaultOreVeins.put("tungstate", new OreVeinProp(20, 50, 10, 3, 16, !tPFAA, false, true, true, true, true, Materials.Scheelite, Materials.Scheelite, Materials.Tungstate, Materials.Lithium));
+        defaultOreVeins.put("sapphire", new OreVeinProp(10, 40, 60, 3, 16, !tPFAA, tPFAA, tPFAA, true, true, true, Materials.Almandine, Materials.Pyrope, Materials.Sapphire, Materials.GreenSapphire));
+        defaultOreVeins.put("manganese", new OreVeinProp(20, 30, 20, 3, 16, !tPFAA, false, true, true, false, true, Materials.Grossular, Materials.Spessartine, Materials.Pyrolusite, Materials.Tantalite));
+        defaultOreVeins.put("quartz", new OreVeinProp(40, 80, 60, 3, 16, !tPFAA, tPFAA, false, true, true, true, Materials.Quartzite, Materials.Barite, Materials.CertusQuartz, Materials.CertusQuartz));
+        defaultOreVeins.put("diamond", new OreVeinProp(5, 20, 40, 2, 16, !tPFAA, false, false, true, true, true, Materials.Graphite, Materials.Graphite, Materials.Diamond, Materials.Coal));
+        defaultOreVeins.put("olivine", new OreVeinProp(10, 40, 60, 3, 16, !tPFAA, false, true, true, true, true, Materials.Bentonite, Materials.Magnesite, Materials.Olivine, Materials.Glauconite));
+        defaultOreVeins.put("apatite", new OreVeinProp(40, 60, 60, 3, 16, !tPFAA, false, false, false, false, false, "Apatite:100", "Apatite:100", "Phosphorus:100", "Pyrochlore:30;Phosphate:70"));
+        defaultOreVeins.put("galena", new OreVeinProp(30, 60, 40, 5, 16, !tPFAA, false, false, true, true, true, Materials.Galena, Materials.Galena, Materials.Silver, Materials.Lead));
+        defaultOreVeins.put("lapis", new OreVeinProp(20, 50, 40, 5, 16, !tPFAA, false, true, true, true, true, Materials.Lazurite, Materials.Sodalite, Materials.Lapis, Materials.Calcite));
+        defaultOreVeins.put("beryllium", new OreVeinProp(5, 30, 30, 3, 16, !tPFAA, false, true, true, true, true, Materials.Beryllium, Materials.Beryllium, Materials.Emerald, Materials.Thorium));
+        defaultOreVeins.put("oilsand", new OreVeinProp(50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands));
+        
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList.clear();
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
         }
-
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.naquadah", true, 10, 60, 10, 5, 32, false, false, true, false, true, true, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.lignite", true, 50, 130, 160, 8, 32, !tPFAA, false, false, false, false, false, Materials.Lignite, Materials.Lignite, Materials.Lignite, Materials.Coal);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.coal", true, 50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Coal, Materials.Coal, Materials.Coal, Materials.Lignite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.magnetite", true, 50, 120, 160, 3, 32, !tPFAA, true, false, true, true, false, Materials.Magnetite, Materials.Magnetite, Materials.Iron, Materials.VanadiumMagnetite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.gold", true, 60, 80, 160, 3, 32, !tPFAA, false, false, true, true, true, Materials.Magnetite, Materials.Magnetite, Materials.VanadiumMagnetite, Materials.Gold);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.iron", true, 10, 40, 120, 4, 24, !tPFAA, true, false, true, true, false, Materials.BrownLimonite, Materials.YellowLimonite, Materials.BandedIron, Materials.Malachite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.cassiterite", true, 40, 120, 50, 5, 24, !tPFAA, false, true, true, true, true, Materials.Tin, Materials.Tin, Materials.Cassiterite, Materials.Tin);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.tetrahedrite", true, 80, 120, 70, 4, 24, !tPFAA, true, false, true, true, true, Materials.Tetrahedrite, Materials.Tetrahedrite, Materials.Copper, Materials.Stibnite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.netherquartz", true, 40, 80, 80, 5, 24, false, true, false, false, false, false, Materials.NetherQuartz, Materials.NetherQuartz, Materials.NetherQuartz, Materials.NetherQuartz);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.sulfur", true, 5, 20, 100, 5, 24, false, true, false, false, true, false, Materials.Sulfur, Materials.Sulfur, Materials.Pyrite, Materials.Sphalerite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.copper", true, 10, 30, 80, 4, 24, !tPFAA, true, false, true, true, false, Materials.Chalcopyrite, Materials.Iron, Materials.Pyrite, Materials.Copper);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.bauxite", true, 50, 90, 80, 4, 24, !tPFAA, tPFAA, false, true, true, true, Materials.Bauxite, Materials.Bauxite, Materials.Aluminium, Materials.Ilmenite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.salts", true, 50, 60, 50, 3, 24, !tPFAA, false, false, true, false, false, Materials.RockSalt, Materials.Salt, Materials.Lepidolite, Materials.Spodumene);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.redstone", true, 10, 40, 60, 3, 24, !tPFAA, true, false, true, true, true, Materials.Redstone, Materials.Redstone, Materials.Ruby, Materials.Cinnabar);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.soapstone", true, 10, 40, 40, 3, 16, !tPFAA, false, false, true, true, false, Materials.Soapstone, Materials.Talc, Materials.Glauconite, Materials.Pentlandite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.nickel", true, 10, 40, 40, 3, 16, !tPFAA, true, true, true, true, true, Materials.Garnierite, Materials.Nickel, Materials.Cobaltite, Materials.Pentlandite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.platinum", true, 40, 50, 5, 3, 16, !tPFAA, false, true, false, true, true, Materials.Cooperite, Materials.Palladium, Materials.Platinum, Materials.Iridium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.pitchblende", true, 10, 40, 40, 3, 16, !tPFAA, false, false, true, true, true, Materials.Pitchblende, Materials.Pitchblende, Materials.Uraninite, Materials.Uraninite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.uranium", true, 20, 30, 20, 3, 16, !tPFAA, false, false, true, true, true, Materials.Uraninite, Materials.Uraninite, Materials.Uranium, Materials.Uranium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.monazite", true, 20, 40, 30, 3, 16, !tPFAA, tPFAA, false, true, true, true, Materials.Bastnasite, Materials.Bastnasite, Materials.Monazite, Materials.Neodymium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.molybdenum", true, 20, 50, 5, 3, 16, !tPFAA, false, true, true, true, true, Materials.Wulfenite, Materials.Molybdenite, Materials.Molybdenum, Materials.Powellite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.tungstate", true, 20, 50, 10, 3, 16, !tPFAA, false, true, true, true, true, Materials.Scheelite, Materials.Scheelite, Materials.Tungstate, Materials.Lithium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.sapphire", true, 10, 40, 60, 3, 16, !tPFAA, tPFAA, tPFAA, true, true, true, Materials.Almandine, Materials.Pyrope, Materials.Sapphire, Materials.GreenSapphire);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.manganese", true, 20, 30, 20, 3, 16, !tPFAA, false, true, true, false, true, Materials.Grossular, Materials.Spessartine, Materials.Pyrolusite, Materials.Tantalite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.quartz", true, 40, 80, 60, 3, 16, !tPFAA, tPFAA, false, true, true, true, Materials.Quartzite, Materials.Barite, Materials.CertusQuartz, Materials.CertusQuartz);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.diamond", true, 5, 20, 40, 2, 16, !tPFAA, false, false, true, true, true, Materials.Graphite, Materials.Graphite, Materials.Diamond, Materials.Coal);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.olivine", true, 10, 40, 60, 3, 16, !tPFAA, false, true, true, true, true, Materials.Bentonite, Materials.Magnesite, Materials.Olivine, Materials.Glauconite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.apatite", true, 40, 60, 60, 3, 16, !tPFAA, false, false, false, false, false, Materials.Apatite, Materials.Apatite, Materials.Phosphorus, Materials.Pyrochlore);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.galena", true, 30, 60, 40, 5, 16, !tPFAA, false, false, true, true, true, Materials.Galena, Materials.Galena, Materials.Silver, Materials.Lead);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.lapis", true, 20, 50, 40, 5, 16, !tPFAA, false, true, true, true, true, Materials.Lazurite, Materials.Sodalite, Materials.Lapis, Materials.Calcite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.beryllium", true, 5, 30, 30, 3, 16, !tPFAA, false, true, true, true, true, Materials.Beryllium, Materials.Beryllium, Materials.Emerald, Materials.Thorium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.oilsand", true, 50, 80, 80, 6, 32, !tPFAA, false, false, false, false, false, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands, Materials.Oilsands);
+        
+        OreVeinProp _prop;
+        int cDens;
+        String[] cAsteroids;
+        WeightedOreList[] cOres = new WeightedOreList[4];
+        for (ConfigCategory cOre : ADV_FILE.mConfig.getCategory("worldgen.ore.mix").getChildren()) {
+        	_prop = defaultOreVeins.get(cOre.getName());
+        	if (_prop == null) _prop = new OreVeinProp();
+        	cName = "ore.mix." + cOre.getName();
+        	cMinY = ADV_FILE.get(textWorldgen + cName, "MinHeight", _prop.mMinY);
+        	cMaxY = ADV_FILE.get(textWorldgen + cName, "MaxHeight", _prop.mMaxY);
+        	cProb = ADV_FILE.get(textWorldgen + cName, "RandomWeight", _prop.mWeight);
+        	cDens = ADV_FILE.get(textWorldgen + cName, "Density", _prop.mDensity);
+        	cSize = ADV_FILE.get(textWorldgen + cName, "Size", _prop.mSize);
+        	cOres[0] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OrePrimaryLayer", _prop.mPrimaries.toConfig()));
+        	cOres[1] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OreSecondaryLayer", _prop.mSecondaries.toConfig()));
+        	cOres[2] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OreSporadiclyInbetween", _prop.mBetweens.toConfig()));
+        	cOres[3] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OreSporaticlyAround", _prop.mSporadics.toConfig()));
+        	cDims = ADV_FILE.get(textWorldgen + cName, dims, _prop.mDimList.get());
+        	cAsteroids = ADV_FILE.get(textWorldgen + cName, "Asteroids", _prop.mAsteroidList.get());
+        	cBiomes = ADV_FILE.get(textWorldgen + cName, biomes, new String[0]);
+        	if (cMinY < 0 || cProb <= 0 || cDens <= 0 || (cOres[0].isEmpty() && cOres[1].isEmpty() && cOres[2].isEmpty() && cOres[3].isEmpty())) continue;
+        	new GT_Worldgen_GT_Ore_Layer(cName, true, cMinY, cMaxY, cProb, cDens, cSize, cDims, cAsteroids, cBiomes, cOres[0], cOres[1], cOres[2], cOres[3]);
+        }
         
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
@@ -514,7 +570,7 @@ public class GT_Worldgenloader
 
     private static String[] splitConfig(String aConfig) {
     	if (!aConfig.contains("_")) throw new IllegalArgumentException("Argument must be seperated by '_'.");
-    	return new String[]{aConfig.substring(0, aConfig.lastIndexOf('_')), aConfig.substring(aConfig.lastIndexOf('_') + 1, aConfig.length())};
+    	return new String[]{aConfig.substring(0, aConfig.lastIndexOf('_')), aConfig.substring(aConfig.lastIndexOf('_') + 1)};
     }
 
     public static String getBlockName(Block aBlock) {

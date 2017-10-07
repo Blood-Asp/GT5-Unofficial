@@ -14,8 +14,8 @@ public abstract class GT_Worldgen {
 
     public final String mWorldGenName;
     public final boolean mEnabled;
-    protected final Collection<String> mDimensionWhiteList = new ArrayList<>();
-    protected final Collection<Integer> mDimensionIDWhiteList = new ArrayList<>();
+    private final Collection<String> mDimensionWhiteList = new ArrayList<>();
+    private final Collection<Integer> mDimensionIDWhiteList = new ArrayList<>();
 
     public GT_Worldgen(String aName, List aList, boolean aDefault, String[] aDimWhiteList) {
         mWorldGenName = aName;
@@ -70,5 +70,29 @@ public abstract class GT_Worldgen {
 
     public boolean isGenerationAllowed(World aWorld) {
         return mDimensionWhiteList.contains(aWorld.provider.getDimensionName()) || mDimensionWhiteList.contains(aWorld.provider.dimensionId);
+    }
+
+    protected boolean isOverWorldAllowed() {
+    	return this.mDimensionWhiteList.contains("OverWorld") || this.mDimensionIDWhiteList.contains(0);
+    }
+
+    protected boolean isNetherAllowed() {
+    	return this.mDimensionWhiteList.contains("Nether") || this.mDimensionIDWhiteList.contains(-1);
+    }
+
+    protected boolean isEndAllowed() {
+    	return this.mDimensionWhiteList.contains("The End") || this.mDimensionIDWhiteList.contains(1);
+    }
+
+    protected boolean isMoonAllowed() {
+    	return this.mDimensionWhiteList.contains("Moon");
+    }
+
+    protected boolean isMarsAllowed() {
+    	return this.mDimensionWhiteList.contains("Mars");
+    }
+
+    protected boolean isAsteroidAllowed() {
+    	return this.mDimensionWhiteList.contains("Asteroids");
     }
 }

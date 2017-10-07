@@ -32,12 +32,12 @@ public class GT_Worldgen_GT_Ore_SmallPieces
         this.mAmount = ((short) Math.max(1, GregTech_API.sAdvWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Amount", aAmount)));
         this.mMeta = ((short) Materials.get(GregTech_API.sAdvWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Ore", aPrimary.mName)).mMetaItemSubID);
         this.mBiomeList = new ArrayList<String>(Arrays.asList(GregTech_API.sAdvWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "RestrictedBiomes", new String[0])));
-        this.mOverworld = this.mDimensionWhiteList.contains("OverWorld") || this.mDimensionIDWhiteList.contains(0);
-    	this.mNether = this.mDimensionWhiteList.contains("Nether") || this.mDimensionIDWhiteList.contains(-1);
-    	this.mEnd = this.mDimensionWhiteList.contains("The End") || this.mDimensionIDWhiteList.contains(1);
-    	this.mMoon = this.mDimensionWhiteList.contains("Moon");
-    	this.mMars = this.mDimensionWhiteList.contains("Mars");
-    	this.mAsteroid = this.mDimensionWhiteList.contains("Asteroids");
+        this.mOverworld = this.isOverWorldAllowed();
+    	this.mNether = this.isNetherAllowed();
+    	this.mEnd = this.isEndAllowed();
+    	this.mMoon = this.isMoonAllowed();
+    	this.mMars = this.isMarsAllowed();
+    	this.mAsteroid = this.isAsteroidAllowed();
         this.mRestrictBiome = this.mBiomeList.isEmpty() ? "None" : this.mBiomeList.get(0);
     }
 
@@ -48,12 +48,12 @@ public class GT_Worldgen_GT_Ore_SmallPieces
     	this.mAmount = (short) Math.max(1, aAmount);
     	this.mMeta = (short) aOreMeta;
     	this.mBiomeList = new ArrayList<String>(Arrays.asList(aBiomeWhiteList));
-    	this.mOverworld = this.mDimensionWhiteList.contains("OverWorld") || this.mDimensionIDWhiteList.contains(0);
-    	this.mNether = this.mDimensionWhiteList.contains("Nether") || this.mDimensionIDWhiteList.contains(-1);
-    	this.mEnd = this.mDimensionWhiteList.contains("The End") || this.mDimensionIDWhiteList.contains(1);
-    	this.mMoon = this.mDimensionWhiteList.contains("Moon");
-    	this.mMars = this.mDimensionWhiteList.contains("Mars");
-    	this.mAsteroid = this.mDimensionWhiteList.contains("Asteroids");
+    	this.mOverworld = this.isOverWorldAllowed();
+    	this.mNether = this.isNetherAllowed();
+    	this.mEnd = this.isEndAllowed();
+    	this.mMoon = this.isMoonAllowed();
+    	this.mMars = this.isMarsAllowed();
+    	this.mAsteroid = this.isAsteroidAllowed();
     	this.mRestrictBiome = this.mBiomeList.isEmpty() ? "None" : this.mBiomeList.get(0);
     }
 
@@ -61,7 +61,7 @@ public class GT_Worldgen_GT_Ore_SmallPieces
         if (!this.mBiomeList.isEmpty() && !this.mBiomeList.contains(aBiome)) {
             return false; //Not the correct biome for small ore
         }
-        if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
+        if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.isNetherAllowed())) || ((aDimensionType == 0) && (this.isOverWorldAllowed())) || ((aDimensionType == 1) && (this.isEndAllowed())) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
             return false;
         }
         if (this.mMeta > 0) {
