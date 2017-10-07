@@ -24,7 +24,7 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen {
     public final boolean gcAsteroids;
 
 	public GT_Worldgen_Asteroid(boolean aDefault) {
-		super("Asteroid", GregTech_API.sWorldgenList, aDefault);
+		super("Asteroid", GregTech_API.sWorldgenList, aDefault, null); //TODO
 		endAsteroids = GregTech_API.sWorldgenFile.get("endasteroids", "GenerateAsteroids", true);
         endMinSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMinSize", 50);
         endMaxSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMaxSize", 200);
