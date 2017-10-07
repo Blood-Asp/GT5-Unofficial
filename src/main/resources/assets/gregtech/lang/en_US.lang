@@ -38,7 +38,7 @@ achievement.Malachite.desc=Height: 10-40, Chance: 120, Overworld/Nether/Mars/Gan
 achievement.Tin=Find Tin Ore
 achievement.Tin.desc=Height: 60-220, Chance: 50, Overworld/Twilight-Forrest/End/End-Asteroids/Moon/IO/Venus/Miranda/Tceti//
 achievement.Cassiterite=Find Cassiterite Ore
-achievement.Cassiterite.desc=Height: 60-220, Chance: 50, Overworld/Twilight-Forrest/End/End-Asteroids/Moon/IO/Venus/Miranda/Tceti//
+achievement.Cassiterite.desc=Height: 60-220, Chance: 50, Overworld/Twilight-Forrest/End/End-Asteroids/Moon/IO/Venus/Miranda/Tceti/DeepDarkDim//
 achievement.Tetrahedrite=Find Tetrahedrite Ore
 achievement.Tetrahedrite.desc=Height: 80-120, Chance: 70, Nether/End/End-Asteroids/Mars/Deimos/Asteroids/Ganymed/Venus/Miranda/KuiperBelt/VegaB//
 achievement.Copper=Find Copper Ore
@@ -375,6 +375,8 @@ achievement.Manganese=Manganese Ore
 achievement.Manganese.desc=Height: 43-53, Chance: 10, DeepDarkDim/
 achievement.Antimony=Antimony Ore
 achievement.Antimony.desc=Height: 22-32, Chance: 10, DeepDarkDim/
+achievement.Arsenic=Arsenic Ore
+achievement.Arsenic.desc=Height: 45-55, Chance: 10, DeepDarkDim/
 
 achievement.flintpick=First Tools
 achievement.flintpick.desc=Craft a flint pick
