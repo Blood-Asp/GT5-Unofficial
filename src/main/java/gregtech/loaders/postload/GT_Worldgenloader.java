@@ -300,7 +300,7 @@ public class GT_Worldgenloader
  		Block mBlock;
  		public DimListBuffer mDimList = new DimListBuffer();
  		public StoneProp() {
- 			this(0, 0, 0, 0, 0, Blocks.air, 0, "");
+ 			this(0, 0, 0, 0, 0, null, 0, "");
  		}
  		public StoneProp(int aMinY, int aMaxY, int aAmount, int aSize, int aProbability, Block aBlock, int aMeta, String aDimList) {
  			mMinY = aMinY;
@@ -321,7 +321,7 @@ public class GT_Worldgenloader
 			case "redgranite": mBlock = GregTech_API.sBlockGranites; mMeta = 8; break;
 			case "marble": mBlock = GregTech_API.sBlockStones; mMeta = 0; break;
 			case "basalt": mBlock = GregTech_API.sBlockStones; mMeta = 8; break;
-			default: mBlock = Blocks.air; mMeta = 0; flag = false;
+			default: mBlock = null; mMeta = 0; flag = false;
         	}
  			switch (aScale) {
     		case "tiny": mSize = 50; mProbability = 48; break;
@@ -343,7 +343,7 @@ public class GT_Worldgenloader
 		public DimListBuffer mDimList = new DimListBuffer();
 		public Block mBlock;
 		public AsteroidProp() {
-			this(0, 0, 0, 0, 0, Blocks.air, 0, "");
+			this(0, 0, 0, 0, 0, null, 0, "");
 		}
 		public AsteroidProp(int aMinY, int aMaxY, int aMinSize, int aMaxSize, int aProbability, Block aBlock, int aMeta, String aDimList) {
 			mMinY = aMinY;
@@ -450,6 +450,29 @@ public class GT_Worldgenloader
         	}
         }
         
+        HashMap<String, AsteroidProp> defaultAsteroids = new HashMap<>();
+        defaultAsteroids.put("endasteroids", new AsteroidProp(50, 200, 50, 200, 300, Blocks.end_stone, 0, "The End"));
+        defaultAsteroids.put("gcasteroids", new AsteroidProp(50, 200, 100, 400, 300, GregTech_API.sBlockGranites, 8, "Asteroids"));
+        
+        AsteroidProp propAsteroid;
+        int cMinSize, cMaxSize;
+        for (ConfigCategory cOre : ADV_FILE.mConfig.getCategory("worldgen.asteroid").getChildren()) {
+        	propAsteroid = defaultAsteroids.get(cOre.getName());
+        	if (propAsteroid == null) propAsteroid = new AsteroidProp();
+        	cName = "asteroid." + cOre.getName();
+        	cMinY = ADV_FILE.get(textWorldgen + cName, "MinHeight", propAsteroid.mMinY);
+        	cMaxY = ADV_FILE.get(textWorldgen + cName, "MaxHeight", propAsteroid.mMaxY);
+        	cMinSize = ADV_FILE.get(textWorldgen + cName, "MinSize", propAsteroid.mMinSize);
+        	cMaxSize = ADV_FILE.get(textWorldgen + cName, "MaxSize", propAsteroid.mMaxSize);
+        	cProb = ADV_FILE.get(textWorldgen + cName, "Probability", propAsteroid.mProbability);
+        	cBlock = Block.getBlockFromName(ADV_FILE.get(textWorldgen + cName, "Block", getBlockName(propAsteroid.mBlock)));
+    		cMeta = ADV_FILE.get(textWorldgen + cName, "BlockMeta", propAsteroid.mMeta);
+        	cDims = ADV_FILE.get(textWorldgen + cName, dims, propAsteroid.mDimList.get());
+        	cBiomes = ADV_FILE.get(textWorldgen + cName, biomes, new String[0]);
+        	if (cBlock == null || cBlock.equals(Blocks.air) || cMinSize < 0 || cProb <= 0 || cMinY <= 0) continue;
+        	new GT_Worldgen_Asteroid(cName, true, cBlock, cMeta, cMinY, cMaxY, cMinSize, cMaxSize, cProb, cDims, cBiomes);
+        }
+        
         HashMap<String, SmallOreProp> defaultSmallOres = new HashMap<>();
         defaultSmallOres.put("copper", new SmallOreProp(60, 120, 32, !tPFAA, true, true, true, true, false, Materials.Copper));
         defaultSmallOres.put("tin", new SmallOreProp(60, 120, 32, !tPFAA, true, true, true, true, true, Materials.Tin));
@@ -499,29 +522,6 @@ public class GT_Worldgenloader
         	cBiomes = ADV_FILE.get(textWorldgen + cName, biomes, new String[0]);
         	if (cMinY < 0 || cMeta <= 0) continue;
         	new GT_Worldgen_GT_Ore_SmallPieces(cName, true, cMinY, cMaxY, cAmount, cDims, cBiomes, cMeta);
-        }
-        
-        HashMap<String, AsteroidProp> defaultAsteroids = new HashMap<>();
-        defaultAsteroids.put("endasteroids", new AsteroidProp(50, 200, 50, 200, 300, Blocks.end_stone, 0, "The End"));
-        defaultAsteroids.put("gcasteroids", new AsteroidProp(50, 200, 100, 400, 300, GregTech_API.sBlockGranites, 8, "Asteroids"));
-        
-        AsteroidProp propAsteroid;
-        int cMinSize, cMaxSize;
-        for (ConfigCategory cOre : ADV_FILE.mConfig.getCategory("worldgen.asteroid").getChildren()) {
-        	propAsteroid = defaultAsteroids.get(cOre.getName());
-        	if (propAsteroid == null) propAsteroid = new AsteroidProp();
-        	cName = "asteroid." + cOre.getName();
-        	cMinY = ADV_FILE.get(textWorldgen + cName, "MinHeight", propAsteroid.mMinY);
-        	cMaxY = ADV_FILE.get(textWorldgen + cName, "MaxHeight", propAsteroid.mMaxY);
-        	cMinSize = ADV_FILE.get(textWorldgen + cName, "MinSize", propAsteroid.mMinSize);
-        	cMaxSize = ADV_FILE.get(textWorldgen + cName, "MaxSize", propAsteroid.mMaxSize);
-        	cProb = ADV_FILE.get(textWorldgen + cName, "Probability", propAsteroid.mProbability);
-        	cBlock = Block.getBlockFromName(ADV_FILE.get(textWorldgen + cName, "Block", getBlockName(propAsteroid.mBlock)));
-    		cMeta = ADV_FILE.get(textWorldgen + cName, "BlockMeta", propAsteroid.mMeta);
-        	cDims = ADV_FILE.get(textWorldgen + cName, dims, propAsteroid.mDimList.get());
-        	cBiomes = ADV_FILE.get(textWorldgen + cName, biomes, new String[0]);
-        	if (cBlock == null || cBlock.equals(Blocks.air) || cMinSize < 0 || cProb <= 0 || cMinY <= 0) continue;
-        	new GT_Worldgen_Asteroid(cName, true, cBlock, cMeta, cMinY, cMaxY, cMinSize, cMaxSize, cProb, cDims, cBiomes);
         }
         
         HashMap<String, OreVeinProp> defaultOreVeins = new HashMap<>();
@@ -656,7 +656,8 @@ public class GT_Worldgenloader
     }
 
     public static String getBlockName(Block aBlock) {
-    	return Block.blockRegistry.getNameForObject(aBlock);
+    	String tName = Block.blockRegistry.getNameForObject(aBlock);
+    	return GT_Utility.isStringValid(tName) ? tName : "NULL";
     }
 
     private static String getMaterialName(int aID) {

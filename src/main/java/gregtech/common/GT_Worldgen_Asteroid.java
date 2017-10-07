@@ -79,12 +79,11 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                                         double var45 = (eZ + 0.5D - var24) / (var28 / 2.0D);
                                         double var50 = var39 * var39 + var42 * var42 + var45 * var45;
                                         if ((var50 < 1.0D) && (aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
+                                        	aWorld.setBlock(eX, eY, eZ, mBlock, mBlockMeta, 2);
                                             int ranOre = aRandom.nextInt(50);
                                             if (ranOre < 10) {
                                             	if ((tOreMeta = ores.getOre(aRandom)) > 0)
-                                            		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false, true);
-                                            } else {
-                                            	aWorld.setBlock(eX, eY, eZ, mBlock, mBlockMeta, 2);
+                                            		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false);
                                             }
                                         }
                                     }

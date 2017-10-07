@@ -1,7 +1,9 @@
 package gregtech.common;
 
+import java.util.Collection;
+import java.util.Random;
+
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.GT_Values;
 import gregtech.api.world.GT_Worldgen_Ore;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
@@ -11,9 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import java.util.Collection;
-import java.util.Random;
 
 public class GT_Worldgen_Stone
         extends GT_Worldgen_Ore {

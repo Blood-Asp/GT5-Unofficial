@@ -1,6 +1,5 @@
 package gregtech.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
@@ -124,6 +123,9 @@ public class GT_Worldgenerator implements IWorldGenerator {
 
         public void run() {
             Random random = getRandom(mX, mZ);
+            for (int i = -1; i < 2; i++)
+				for (int j = -1; j < 2; j++)
+					removeFrom(mWorld, sUngeneratedChunks, new ChunkCoordIntPair(mX >> 4 + i, mZ >> 4 + j));
             GT_Worldgen_GT_Ore_Layer tOreGen;
             for (int i = 0; i < 256; i++) {
             	if ((tOreGen = GT_Worldgen_GT_Ore_Layer.getRandomOreVein(this.mWorld, this.mDimensionType, null, random)) == null) break;
@@ -148,9 +150,6 @@ public class GT_Worldgenerator implements IWorldGenerator {
                         tChunk.isModified = true;
                     }
             	}
-            for (int i = -1; i < 2; i++)
-				for (int j = -1; j < 2; j++)
-					removeFrom(mWorld, sUngeneratedChunks, new ChunkCoordIntPair(mX >> 4 + i, mZ >> 4 + j));
         }
     }
 }
