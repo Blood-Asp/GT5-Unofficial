@@ -11,12 +11,27 @@ import net.minecraft.world.IBlockAccess;
 
 public class GT_Block_Casings1
         extends GT_Block_Casings_Abstract {
+	
+	/**
+	 * Texture Index Information
+	 * Textures.BlockIcons.casingTexturePages[0][0-63] - Gregtech
+	 * Textures.BlockIcons.casingTexturePages[0][64-127] - GT++
+	 * Textures.BlockIcons.casingTexturePages[1][0-127] - Gregtech
+	 * Textures.BlockIcons.casingTexturePages[2][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[3][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[4][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[5][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[6][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[7][0-127] - Free
+	 * Textures.BlockIcons.casingTexturePages[8][0-127] - TecTech	  
+	 */
+	
+	
     public GT_Block_Casings1() {
         super(GT_Item_Casings1.class, "gt.blockcasings", GT_Material_Casings.INSTANCE);
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
+    	for (byte i = 0; i < 16; i = (byte) (i + 1)) {
             Textures.BlockIcons.CASING_BLOCKS[i] = new GT_CopiedBlockTexture(this, 6, i);
         }
-        Textures.BlockIcons.CASING_BLOCKS[111] = new GT_CopiedBlockTexture(this, 6, 0,Dyes.MACHINE_METAL.mRGBa);
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "ULV Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "LV Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "MV Machine Casing");
