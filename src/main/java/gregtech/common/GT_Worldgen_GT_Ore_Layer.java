@@ -117,7 +117,7 @@ public class GT_Worldgen_GT_Ore_Layer
     		return mOres.isEmpty();
     	}
     	
-    	public int getOre() {
+    	private int getOre() {
     		return mOres.isEmpty() ? -1 : mOres.get(0).mMeta;
     	}
     	
@@ -269,7 +269,7 @@ public class GT_Worldgen_GT_Ore_Layer
         int eX = aChunkX + 16 + aRandom.nextInt(this.mSize);
         int tOreMeta;
         for (int tX = cX; tX <= eX; tX++) {
-            int cZ = aChunkZ - aRandom.nextInt(this.mSize);
+        	int cZ = aChunkZ - aRandom.nextInt(this.mSize);
             int eZ = aChunkZ + 16 + aRandom.nextInt(this.mSize);
             for (int tZ = cZ; tZ <= eZ; tZ++) {
                 if (!this.mSecondaries.isEmpty()) {
@@ -298,9 +298,7 @@ public class GT_Worldgen_GT_Ore_Layer
                 }
             }
         }
-        if (GT_Values.D1) {
-            System.out.println("Generated Orevein: " + this.mWorldGenName+" "+aChunkX +" "+ aChunkZ);
-        }
+        if (GT_Values.D1) System.out.println("Generated Orevein: " + this.mWorldGenName+" "+aChunkX +" "+ aChunkZ);
         return true;
     }
 }

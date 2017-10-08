@@ -1,16 +1,13 @@
 package gregtech.common;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
-import gregtech.api.util.GT_Log;
+import gregtech.api.objects.XSTR;
 import gregtech.api.world.GT_Worldgen_Ore;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer.WeightedOreList;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -29,25 +26,26 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
 		int tDimensionType = aWorld.provider.dimensionId;
         String tDimensionName = aWorld.provider.getDimensionName();
         String tAsteroidName = this.mWorldGenName.substring(9);
-        aRandom = new Random();
+        aRandom = new XSTR();
         if (isGenerationAllowed(aWorld, aDimensionType, mDimensionType) && (this.mProbability <= 0 || aRandom.nextInt(mProbability) == 0)) {
             WeightedOreList ores = new WeightedOreList();
             int tOreMeta;
-            int tDens = 1; //TODO
-            GT_Worldgen_GT_Ore_Layer tOreGen = GT_Worldgen_GT_Ore_Layer.getRandomOreVein(aWorld, tDimensionType, tAsteroidName, aRandom);
-            if (tOreGen != null) {
-            	ores.addAll(tOreGen.mPrimaries, 3);
-            	ores.addAll(tOreGen.mSecondaries, 3);
-            	ores.addAll(tOreGen.mBetweens, 2);
-            	ores.addAll(tOreGen.mSporadics, 2);
-            	tDens = Math.max(1, tOreGen.mDensity);
+            int tDensity = 1;
+            GT_Worldgen_GT_Ore_Layer tOreGen = null;
+            for (int i = 0; i < 256; i++) {
+            	if ((tOreGen = GT_Worldgen_GT_Ore_Layer.getRandomOreVein(aWorld, tDimensionType, tAsteroidName, aRandom)) != null) {
+                	ores.addAll(tOreGen.mPrimaries, 3);
+                	ores.addAll(tOreGen.mSecondaries, 3);
+                	ores.addAll(tOreGen.mBetweens, 2);
+                	ores.addAll(tOreGen.mSporadics, 2);
+                	tDensity = Math.max(1, tOreGen.mDensity);
+                	if (!ores.isEmpty()) break;
+                }
             }
-            if (GT_Values.D1) System.out.println("do asteroid gen: " + aChunkX + " " + aChunkZ);
             int tX = aChunkX + aRandom.nextInt(16);
             int tY = mMinY + aRandom.nextInt(mMaxY - mMinY);
             int tZ = aChunkZ + aRandom.nextInt(16);
             int tSize = mMinSize + aRandom.nextInt(mMaxSize - mMinSize);
-            int tDensity = Math.max(tDens, tDens * tSize / 100);
             if ((aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
                 float var6 = aRandom.nextFloat() * 3.141593F / 2;
                 double var7 = tX + 8 + MathHelper.sin(var6) * tSize / 8.0F;
@@ -80,11 +78,12 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                                         double var50 = var39 * var39 + var42 * var42 + var45 * var45;
                                         if ((var50 < 1.0D) && (aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
                                         	aWorld.setBlock(eX, eY, eZ, mBlock, mBlockMeta, 2);
-                                            int ranOre = aRandom.nextInt(50);
-                                            if (ranOre < 10) {
-                                            	if ((tOreMeta = ores.getOre(aRandom)) > 0)
-                                            		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false);
-                                            }
+                                        	try {
+                                        		if (aRandom.nextInt((int) (150 * var50 * var50 / tDensity)) < 10 && aRandom.nextBoolean()) {
+                                                	if ((tOreMeta = ores.getOre(aRandom)) > 0)
+                                                		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false);
+                                                }
+                                        	} catch (Exception e) {}
                                         }
                                     }
                                 }
@@ -93,6 +92,7 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                     }
                 }
             }
+            if (GT_Values.D1) System.out.println("Generated Asteroid: " + (tOreGen == null ? "Empty" : tOreGen.mWorldGenName) +" "+aChunkX +" "+ aChunkZ);
         } else {
         	return false;
         }
