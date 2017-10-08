@@ -71,7 +71,7 @@ public class GT_Worldgen_GT_Ore_Layer
     		if (isValid()) {
     			Materials tMaterial = GregTech_API.sMaterials[mMeta];
     			if (tMaterial != null) {
-    				return tMaterial.mName + ":" + "mWeight";
+    				return tMaterial.mName + ":" + mWeight;
     			}
     		}
     		return "NULL:0";
