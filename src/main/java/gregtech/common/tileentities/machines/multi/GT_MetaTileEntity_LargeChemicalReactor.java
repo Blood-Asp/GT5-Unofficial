@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 64+14/*112*/;
+	private final int CASING_INDEX = 176;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -58,11 +58,11 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			boolean aRedstone) {
 		if (aSide == aFacing) {
 			return new ITexture[] {
-					Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX],
+					Textures.BlockIcons.casingTexturePages[1][48],
 					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE
 							: Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR) };
 		}
-		return new ITexture[] { Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX] };
+		return new ITexture[] { Textures.BlockIcons.casingTexturePages[1][48] };
 	}
 	
 	@Override
