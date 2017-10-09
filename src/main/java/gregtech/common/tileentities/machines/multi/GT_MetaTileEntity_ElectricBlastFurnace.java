@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.VN;
 
 public class GT_MetaTileEntity_ElectricBlastFurnace
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -397,8 +398,9 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                         EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
                 "Probably uses: "+
                         EnumChatFormatting.RED + Integer.toString(-mEUt) + EnumChatFormatting.RESET + " EU/t",
-                "Maximum total power (to all Energy Hatches, not single ones): ",
-                EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t * 2A",
+                "Max Energy Income: "+
+                        EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t(*2A) Tier: "+
+                        EnumChatFormatting.YELLOW+VN[GT_Utility.getTier(getMaxInputVoltage())]+ EnumChatFormatting.RESET,
                 "Problems: "+
                         EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
                         " Efficiency: "+

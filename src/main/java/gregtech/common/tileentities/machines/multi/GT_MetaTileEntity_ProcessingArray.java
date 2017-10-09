@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine.isValidForLowGravity;
 
 public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBlockBase {
@@ -415,8 +416,9 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                         EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
                 "Probably uses: "+
                         EnumChatFormatting.RED + Integer.toString(-mEUt) + EnumChatFormatting.RESET + " EU/t",
-                "Maximum total power (to all Energy Hatches, not single ones): ",
-                EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t * 2A",
+                "Max Energy Income: "+
+                        EnumChatFormatting.YELLOW+Long.toString(getMaxInputVoltage())+EnumChatFormatting.RESET+ " EU/t(*2A) Tier: "+
+                        EnumChatFormatting.YELLOW+VN[GT_Utility.getTier(getMaxInputVoltage())]+ EnumChatFormatting.RESET,
                 "Problems: "+
                         EnumChatFormatting.RED+ (getIdealStatus() - getRepairStatus())+EnumChatFormatting.RESET+
                         " Efficiency: "+
