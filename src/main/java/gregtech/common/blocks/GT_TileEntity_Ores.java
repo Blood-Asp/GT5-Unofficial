@@ -1,5 +1,8 @@
 package gregtech.common.blocks;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
@@ -18,15 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPosition;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.common.util.BlockSnapshot;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntity {
     public short mMetaData = 0;
@@ -112,31 +107,7 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
             } else if (!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone) && !air) {
                 return false;
             }
-            synchronized (((GT_Block_Ores_Abstract) tOreBlock).avoidTileEntityCreation) {
-            	((GT_Block_Ores_Abstract) tOreBlock).avoidTileEntityCreation = true;
-            	int tOreBlockMeta = getHarvestData((short) aMetaData, ((GT_Block_Ores_Abstract) tOreBlock).getBaseBlockHarvestLevel(aMetaData % 16000 / 1000));
-            	aWorld.setBlock(aX, aY, aZ, tOreBlock, tOreBlockMeta, 0);
-            	GT_TileEntity_Ores aTileEntity = new GT_TileEntity_Ores();
-            	aTileEntity.setWorldObj(aWorld);
-            	aTileEntity.xCoord = aX;
-            	aTileEntity.yCoord = aY;
-            	aTileEntity.zCoord = aZ;
-            	aTileEntity.mMetaData = ((short) aMetaData);
-            	aTileEntity.mNatural = true;
-                
-            	Chunk tChunk = aWorld.getChunkFromChunkCoords(aX >> 4, aZ >> 4);
-                if (tChunk != null) {
-                	ChunkPosition tChunkPosition = new ChunkPosition(aX & 15, aY, aZ & 15);
-                    if (tChunk.chunkTileEntityMap.containsKey(tChunkPosition))
-                    	((TileEntity) tChunk.chunkTileEntityMap.get(tChunkPosition)).invalidate();
-                    aTileEntity.validate();
-                    tChunk.chunkTileEntityMap.put(tChunkPosition, aTileEntity);
-                }
-            	
-            	aTileEntity.updateContainingBlockInfo();
-            	aTileEntity.blockMetadata = tOreBlockMeta;
-            	((GT_Block_Ores_Abstract) tOreBlock).avoidTileEntityCreation = false;
-            }
+            GT_Block_Ores_Abstract.setOreBlock(aWorld, aX, aY, aZ, (GT_Block_Ores_Abstract) tOreBlock, aMetaData);
             return true;
         }
         return false;
