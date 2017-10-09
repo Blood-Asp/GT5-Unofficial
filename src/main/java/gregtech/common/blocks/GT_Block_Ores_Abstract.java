@@ -1,5 +1,8 @@
 package gregtech.common.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,11 +29,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.world.chunk.Chunk;
 
 public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements ITileEntityProvider {
     public static ThreadLocal<GT_TileEntity_Ores> mTemporaryTileEntity = new ThreadLocal();
@@ -38,7 +40,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public static boolean tHideOres;
     private final String aTextName = ".name";
     private final String aTextSmall = "Small ";
-    public static Boolean avoidTileEntityCreation = false;
+    private static Boolean avoidTileEntityCreation = false;
 
     protected GT_Block_Ores_Abstract(String aUnlocalizedName, int aOreMetaCount, boolean aHideFirstMeta, Material aMaterial) {
         super(GT_Item_Ores.class, aUnlocalizedName, aMaterial);
@@ -266,6 +268,32 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
                 if (!(new ItemStack(aItem, 1, i + 22000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 22000));
                 if (!(new ItemStack(aItem, 1, i + 23000).getDisplayName().contains(aTextName))) aList.add(new ItemStack(aItem, 1, i + 23000));
             }
+        }
+    }
+
+    public static void setOreBlock(World aWorld, int aX, int aY, int aZ, GT_Block_Ores_Abstract aOreBlock, int aOreMeta) {
+    	synchronized (avoidTileEntityCreation) {
+        	avoidTileEntityCreation = true;
+        	int tOreBlockMeta = GT_TileEntity_Ores.getHarvestData((short) aOreMeta, aOreBlock.getBaseBlockHarvestLevel(aOreMeta % 16000 / 1000));
+        	aWorld.setBlock(aX, aY, aZ, aOreBlock, tOreBlockMeta, 0);
+        	GT_TileEntity_Ores aTileEntity = new GT_TileEntity_Ores();
+        	aTileEntity.setWorldObj(aWorld);
+        	aTileEntity.xCoord = aX;
+        	aTileEntity.yCoord = aY;
+        	aTileEntity.zCoord = aZ;
+        	aTileEntity.mMetaData = ((short) aOreMeta);
+        	aTileEntity.mNatural = true;
+        	aTileEntity.blockType = aOreBlock;
+        	aTileEntity.blockMetadata = tOreBlockMeta;
+        	Chunk tChunk = aWorld.getChunkFromChunkCoords(aX >> 4, aZ >> 4);
+            if (tChunk != null) {
+            	ChunkPosition tChunkPosition = new ChunkPosition(aX & 15, aY, aZ & 15);
+                if (tChunk.chunkTileEntityMap.containsKey(tChunkPosition))
+                	((TileEntity) tChunk.chunkTileEntityMap.get(tChunkPosition)).invalidate();
+                aTileEntity.validate();
+                tChunk.chunkTileEntityMap.put(tChunkPosition, aTileEntity);
+            }
+        	avoidTileEntityCreation = false;
         }
     }
 }
