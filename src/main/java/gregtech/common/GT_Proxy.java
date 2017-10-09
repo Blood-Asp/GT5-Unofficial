@@ -1789,7 +1789,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
     @SubscribeEvent
-    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {//ALWAYS SAVE FROM THE HASH MAP DATA
+    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
+    	if (GT_Worldgenerator.isChunkUngenerated(event.world, event.getChunk().getChunkCoordIntPair()) || !event.getChunk().isModified) event.getData().setBoolean("GT_UNGENERATED", true);
+        else event.getData().removeTag("GT_UNGENERATED");
+    	
+    	//ALWAYS SAVE FROM THE HASH MAP DATA
         HashMap<ChunkCoordIntPair,int []> chunkData=dimensionWiseChunkData.get(event.world.provider.dimensionId);
         if(chunkData==null) return;//no dim info stored
 
@@ -1803,10 +1807,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         if(tInts[1]>0)event.getData().setInteger("GTPOLLUTION", tInts[GTPOLLUTION]);
         else event.getData().removeTag("GTPOLLUTION");
         event.getData().setByte("GTOILVER", oilVer);//version mark
+        
     }
 
     @SubscribeEvent
     public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
+        if (event.getData().getBoolean("GT_UNGENERATED")) GT_Worldgenerator.processChunk(event.world, event.getChunk().xPosition, event.getChunk().zPosition);
         final int worldID=event.world.provider.dimensionId;
         HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(worldID);
         if (chunkData == null){
@@ -1857,6 +1863,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ////Already loaded chunk data
         ////DO NOTHING - this chunk data was already loaded and stored in hash map
         //}
+        
     }
     
     @SubscribeEvent

@@ -1,5 +1,8 @@
 package gregtech.common;
 
+import java.util.Collection;
+import java.util.Random;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.world.GT_Worldgen_Ore;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
@@ -11,13 +14,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import java.util.Collection;
-import java.util.Random;
-
 public class GT_Worldgen_Stone
         extends GT_Worldgen_Ore {
+	@Deprecated
     public GT_Worldgen_Stone(String aName, boolean aDefault, Block aBlock, int aBlockMeta, int aDimensionType, int aAmount, int aSize, int aProbability, int aMinY, int aMaxY, Collection<String> aBiomeList, boolean aAllowToGenerateinVoid) {
         super(aName, aDefault, aBlock, aBlockMeta, aDimensionType, aAmount, aSize, aProbability, aMinY, aMaxY, aBiomeList, aAllowToGenerateinVoid);
+    }
+
+    public GT_Worldgen_Stone(String aName, boolean aDefault, Block aBlock, int aBlockMeta, int aDimensionType, int aAmount, int aSize, int aProbability, int aMinY, int aMaxY, String[] aDimList, String[] aBiomeList, boolean aAllowToGenerateinVoid) {
+        super(aName, aDefault, aBlock, aBlockMeta, aDimensionType, aAmount, aSize, aProbability, aMinY, aMaxY, aDimList, aBiomeList, aAllowToGenerateinVoid);
     }
 
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {

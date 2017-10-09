@@ -145,7 +145,7 @@ public class GregTech_API {
     /**
      * A List containing all the Materials, which are somehow in use by GT and therefor receive a specific Set of Items.
      */
-    public static final Materials[] sGeneratedMaterials = new Materials[1000];
+    public static final Materials[] sGeneratedMaterials = new Materials[1000], sMaterials = new Materials[1000];
     /**
      * This is the generic Cover behavior. Used for the default Covers, which have no Behavior.
      */
@@ -172,7 +172,10 @@ public class GregTech_API {
     /**
      * The Configuration Objects
      */
-    public static GT_Config sRecipeFile = null, sMachineFile = null, sWorldgenFile = null, sModularArmor = null, sMaterialProperties = null, sMaterialComponents = null, sUnification = null, sSpecialFile = null, sClientDataFile, sOPStuff = null;
+    public static GT_Config sRecipeFile = null, sMachineFile = null, sAdvWorldgenFile = null, sModularArmor = null, sMaterialProperties = null, sMaterialComponents = null, sUnification = null, sSpecialFile = null, sClientDataFile, sOPStuff = null;
+    @Deprecated
+    public static GT_Config sWorldgenFile = null;
+    public static boolean worldgenFileUpdate = false;
     public static int TICKS_FOR_LAG_AVERAGING = 25, MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
     /**
      * Initialized by the Block creation.
