@@ -1,18 +1,14 @@
 package gregtech.common;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Random;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.XSTR;
 import gregtech.api.world.GT_Worldgen_Ore;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer.WeightedOreList;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -35,11 +31,9 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
         Random tRandom = new XSTR();
         if (isGenerationAllowed(aWorld, aDimensionType, mDimensionType) && (this.mProbability <= 0 || tRandom.nextInt(mProbability) == 0)) {
             WeightedOreList ores = new WeightedOreList();
-            HashMap<ChunkPosition, Integer> specifiedOre = new HashMap<>();
             int tOreMeta = -1;
             int tDensity = 1;
             GT_Worldgen_GT_Ore_Layer tOreGen = null;
-            ChunkPosition tPos;
             for (int i = 0; i < 256; i++) {
             	if ((tOreGen = GT_Worldgen_GT_Ore_Layer.getRandomOreVein(aWorld, tDimensionType, tAsteroidName, tRandom)) != null) {
                 	ores.addAll(tOreGen.mPrimaries, 3);
@@ -55,6 +49,9 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
             int tZ = aChunkZ + tRandom.nextInt(16);
             int tSize = mMinSize + tRandom.nextInt(mMaxSize - mMinSize);
             if ((aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
+            	ArrayList<ChunkPosition> tGenerateOre = new ArrayList<>();
+            	ArrayList<ChunkPosition> tDontGenerateOre = new ArrayList<>();
+            	ChunkPosition tPos;
                 float var6 = tRandom.nextFloat() * 3.141593F / 2;
                 double var7 = tX + 8 + MathHelper.sin(var6) * tSize / 8.0F;
                 double var9 = tX + 8 - MathHelper.sin(var6) * tSize / 8.0F;
@@ -85,26 +82,13 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                                         double var45 = (eZ + 0.5D - var24) / (var28 / 2.0D);
                                         double var50 = var39 * var39 + var42 * var42 + var45 * var45;
                                         if ((var50 < 1.0D) && (aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
-                                        	Block tTargetedBlock = aWorld.getBlock(eX, eY, eZ);
-                                            if (tTargetedBlock instanceof GT_Block_Ores_Abstract) {
-                                                TileEntity tTileEntity = aWorld.getTileEntity(eX, eY, eZ);
-                                                if ((tTileEntity instanceof GT_TileEntity_Ores)) {
-                                                    if (tTargetedBlock != GregTech_API.sBlockOres1) {
-                                                        ((GT_TileEntity_Ores) tTileEntity).convertOreBlock(aWorld, eX, eY, eZ);
-                                                    }
-                                                    ((GT_TileEntity_Ores)tTileEntity).overrideOreBlockMaterial(this.mBlock, (byte) this.mBlockMeta);
-                                                }
-                                            } else {
-                                                aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 3);
-                                            }
-                                            if (!specifiedOre.containsKey(tPos = new ChunkPosition(eX, eY, eZ))) {
-                                            	tOreMeta = -1;
-                                            	if (tRandom.nextInt(Math.max(1, (int) (40.0D * var50 * var50 / tDensity))) == 0)
-                                            		tOreMeta = ores.getOre(tRandom);
-                                            	specifiedOre.put(tPos, tOreMeta);
-                                            }
-                                            if ((tOreMeta = specifiedOre.get(tPos)) > 0)
-                                        		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false, true);
+                                        	aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 2);
+                                        	if (!tGenerateOre.contains(tPos = new ChunkPosition(eX, eY, eZ)) && !tDontGenerateOre.contains(tPos)) {
+                                        		if (tRandom.nextInt(Math.max(1, (int) (40.0D * var50 * var50 / tDensity))) == 0)
+                                        			tGenerateOre.add(tPos);
+                                        		else
+                                        			tDontGenerateOre.add(tPos);
+                                        	}
                                         }
                                     }
                                 }
@@ -112,6 +96,9 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                         }
                     }
                 }
+                for (ChunkPosition pos : tGenerateOre)
+                	if ((tOreMeta = ores.getOre(aRandom)) > 0)
+                		GT_TileEntity_Ores.setOreBlock(aWorld, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, tOreMeta, false, true);
             }
             if (GT_Values.D1) System.out.println("Generated Asteroid: " + (tOreGen == null ? "Empty" : tOreGen.mWorldGenName) +" "+aChunkX +" "+ aChunkZ);
         } else {
