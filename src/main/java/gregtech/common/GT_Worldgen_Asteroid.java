@@ -84,7 +84,7 @@ public class GT_Worldgen_Asteroid extends GT_Worldgen_Ore {
                                         if ((var50 < 1.0D) && (aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
                                         	aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 2);
                                         	if (!tGenerateOre.contains(tPos = new ChunkPosition(eX, eY, eZ)) && !tDontGenerateOre.contains(tPos)) {
-                                        		if (tRandom.nextInt(Math.max(1, (int) (40.0D * var50 * var50 / tDensity))) == 0)
+                                        		if (tRandom.nextInt(Math.max(1, (int) (30.0D * var50 / tDensity))) == 0)
                                         			tGenerateOre.add(tPos);
                                         		else
                                         			tDontGenerateOre.add(tPos);
