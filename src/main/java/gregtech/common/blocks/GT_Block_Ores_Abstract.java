@@ -38,6 +38,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     public static boolean tHideOres;
     private final String aTextName = ".name";
     private final String aTextSmall = "Small ";
+    public static Boolean avoidTileEntityCreation = false;
 
     protected GT_Block_Ores_Abstract(String aUnlocalizedName, int aOreMetaCount, boolean aHideFirstMeta, Material aMaterial) {
         super(GT_Item_Ores.class, aUnlocalizedName, aMaterial);
@@ -177,7 +178,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
     }
 
     public boolean hasTileEntity(int aMeta) {
-        return true;
+        return !avoidTileEntityCreation;
     }
 
     public boolean renderAsNormalBlock() {
