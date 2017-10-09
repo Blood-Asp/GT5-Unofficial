@@ -1,24 +1,32 @@
 package gregtech.api.world;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
 import gregtech.api.GregTech_API;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class GT_Worldgen {
 
     public final String mWorldGenName;
     public final boolean mEnabled;
-    private final Map<String, Boolean> mDimensionMap = new ConcurrentHashMap<String, Boolean>();
+    private final Collection<String> mDimensionWhiteList = new ArrayList<>();
+    private final Collection<Integer> mDimensionIDWhiteList = new ArrayList<>();
 
-    public GT_Worldgen(String aName, List aList, boolean aDefault) {
+    public GT_Worldgen(String aName, List aList, boolean aDefault, String[] aDimWhiteList) {
         mWorldGenName = aName;
-        mEnabled = GregTech_API.sWorldgenFile.get("worldgen", mWorldGenName, aDefault);
+        mEnabled = GregTech_API.sAdvWorldgenFile.get("worldgen", mWorldGenName, aDefault);
         if (mEnabled) aList.add(this);
+        for (String s : GregTech_API.sAdvWorldgenFile.get("worldgen." + mWorldGenName, "DimensionWhiteList", aDimWhiteList)) {
+        	if (GT_Utility.isStringValid(s)) {
+        		try {mDimensionIDWhiteList.add(Integer.parseInt(s));}
+        		catch (NumberFormatException e) {mDimensionWhiteList.add(s);}
+        	}
+        }        	
     }
 
     /**
@@ -48,13 +56,43 @@ public abstract class GT_Worldgen {
     }
 
     public boolean isGenerationAllowed(World aWorld, int aDimensionType, int aAllowedDimensionType) {
-        String aDimName = aWorld.provider.getDimensionName();
-        Boolean tAllowed = mDimensionMap.get(aDimName);
-        if (tAllowed == null) {
-            boolean tValue = GregTech_API.sWorldgenFile.get("worldgen.dimensions." + mWorldGenName, aDimName, aDimensionType == aAllowedDimensionType);
-            mDimensionMap.put(aDimName, tValue);
-            return tValue;
-        }
-        return tAllowed;
+    	if (isGenerationAllowed(aWorld)) return true; 
+    	if (aDimensionType == aAllowedDimensionType) {
+    		mDimensionWhiteList.add(aWorld.provider.getDimensionName());
+    		Collection<String> tList = new ArrayList<>();
+    		tList.addAll(mDimensionWhiteList);
+    		for (Integer i : mDimensionIDWhiteList) tList.add(i.toString());
+    		GregTech_API.sAdvWorldgenFile.get("worldgen." + mWorldGenName, "DimensionWhiteList", tList.toArray(new String[0]));
+    		return true;
+    	}
+    	return false;
+    }
+
+    public boolean isGenerationAllowed(World aWorld) {
+        return mDimensionWhiteList.contains(aWorld.provider.getDimensionName()) || mDimensionWhiteList.contains(aWorld.provider.dimensionId);
+    }
+
+    protected boolean isOverWorldAllowed() {
+    	return this.mDimensionWhiteList.contains("OverWorld") || this.mDimensionIDWhiteList.contains(0);
+    }
+
+    protected boolean isNetherAllowed() {
+    	return this.mDimensionWhiteList.contains("Nether") || this.mDimensionIDWhiteList.contains(-1);
+    }
+
+    protected boolean isEndAllowed() {
+    	return this.mDimensionWhiteList.contains("The End") || this.mDimensionIDWhiteList.contains(1);
+    }
+
+    protected boolean isMoonAllowed() {
+    	return this.mDimensionWhiteList.contains("Moon");
+    }
+
+    protected boolean isMarsAllowed() {
+    	return this.mDimensionWhiteList.contains("Mars");
+    }
+
+    protected boolean isAsteroidAllowed() {
+    	return this.mDimensionWhiteList.contains("Asteroids");
     }
 }
