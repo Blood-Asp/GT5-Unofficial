@@ -1,18 +1,14 @@
 package gregtech.common.worldgen;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.XSTR;
 import gregtech.common.blocks.GT_TileEntity_Ores;
-import gregtech.common.worldgen.GT_Worldgen_Stone;
 import gregtech.common.worldgen.GT_Worldgen_Layer.WeightedOreList;
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
 	public final int mMinSize;
@@ -47,9 +43,6 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
             int tZ = aChunkZ + tRandom.nextInt(16);
             int tSize = mMinSize + tRandom.nextInt(mSize - mMinSize);
             if ((aWorld.getBlock(tX, tY, tZ).isAir(aWorld, tX, tY, tZ))) {
-            	ArrayList<ChunkPosition> tGenerateOre = new ArrayList<>();
-            	ArrayList<ChunkPosition> tDontGenerateOre = new ArrayList<>();
-            	ChunkPosition tPos;
                 float var6 = tRandom.nextFloat() * 3.141593F;
                 double var7 = tX + 8 + MathHelper.sin(var6) * tSize / 8.0F;
                 double var9 = tX + 8 - MathHelper.sin(var6) * tSize / 8.0F;
@@ -81,12 +74,9 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
                                         double var50 = var39 * var39 + var42 * var42 + var45 * var45;
                                         if ((var50 < 1.0D) && (aWorld.getBlock(eX, eY, eZ).isAir(aWorld, eX, eY, eZ))) {
                                         	aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 2);
-                                        	if (!tGenerateOre.contains(tPos = new ChunkPosition(eX, eY, eZ)) && !tDontGenerateOre.contains(tPos)) {
-                                        		if (tRandom.nextInt(Math.max(1, (int) (30.0D * var50 / tDensity))) == 0)
-                                        			tGenerateOre.add(tPos);
-                                        		else
-                                        			tDontGenerateOre.add(tPos);
-                                        	}
+                                        	if (tRandom.nextInt(Math.max(1, (int) (30.0D * var50 * var50 / tDensity))) == 0)
+                                        		if ((tOreMeta = ores.getOre(aRandom)) > 0)
+                                            		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false, true);
                                         }
                                     }
                                 }
@@ -94,9 +84,6 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
                         }
                     }
                 }
-                for (ChunkPosition pos : tGenerateOre)
-                	if ((tOreMeta = ores.getOre(aRandom)) > 0)
-                		GT_TileEntity_Ores.setOreBlock(aWorld, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ, tOreMeta, false, true);
             }
             if (GT_Values.D1) System.out.println("Generated Asteroid: " + (tOreGen == null ? "Empty" : tOreGen.mWorldGenName) +" "+aChunkX +" "+ aChunkZ);
         }
