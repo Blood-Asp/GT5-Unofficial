@@ -1,4 +1,4 @@
-package gregtech.common;
+package gregtech.common.worldgen;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.world.GT_Worldgen;
@@ -13,17 +13,17 @@ public class GT_Worldgen_SmallPieces extends GT_Worldgen {
     public final int mAmount;
     public final int mMeta;
 
-    public GT_Worldgen_SmallPieces(String aName, String[] dimWhiteList, int aMinY, int aMaxY, int aAmount, int aPrimary) {
-        super(aName, dimWhiteList);
+    public GT_Worldgen_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, String[] aDimWhiteList, String[] aBiomeWhiteList, int aOreMeta) {
+        super(aName, GregTech_API.sWorldgenList, aDefault, aDimWhiteList, aBiomeWhiteList);
         mMinY = aMinY;
         mMaxY = aMaxY;
         mAmount = aAmount;
-        mMeta = aPrimary;
-        GregTech_API.sWorldgenList.add(this);
+        mMeta = aOreMeta;
     }
 
-    public void executeWorldgen(World aWorld, Random aRandom, int aChunkX, int aChunkZ) {
-        if (!isGenerationAllowed(aWorld)) {
+    @Override
+    public void executeWorldgen(World aWorld, Random aRandom, int aChunkX, int aChunkZ, String aBiome) {
+        if (!isGenerationAllowed(aWorld) || !isBiomeAllowed(aBiome)) {
             return;
         }
         if (mMeta > 0) {

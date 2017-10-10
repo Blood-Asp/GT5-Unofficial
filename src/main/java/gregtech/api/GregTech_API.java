@@ -146,7 +146,7 @@ public class GregTech_API {
     /**
      * A List containing all the Materials, which are somehow in use by GT and therefor receive a specific Set of Items.
      */
-    public static final Materials[] sGeneratedMaterials = new Materials[1000];
+    public static final Materials[] sGeneratedMaterials = new Materials[1000], sMaterials = new Materials[1000];
     /**
      * This is the generic Cover behavior. Used for the default Covers, which have no Behavior.
      */
@@ -173,9 +173,10 @@ public class GregTech_API {
     /**
      * The Configuration Objects
      */
-    public static Configuration oldWorldgenFile;
-    public static GT_Config sRecipeFile, sMachineFile, sModularArmor, sMaterialProperties , sMaterialComponents, sUnification, sSpecialFile, sClientDataFile, sOPStuff, advancedWorldgenFile;
+    public static GT_Config oldWorldgenFile;
+    public static GT_Config sRecipeFile, sMachineFile, sModularArmor, sMaterialProperties , sMaterialComponents, sUnification, sSpecialFile, sClientDataFile, sOPStuff, sAdvWorldgenFile;
     public static int TICKS_FOR_LAG_AVERAGING = 25, MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
+    public static boolean worldgenFileUpdate;
     /**
      * Initialized by the Block creation.
      */
@@ -184,6 +185,7 @@ public class GregTech_API {
     public static Block sBlockOres1, sBlockOresUb1, sBlockOresUb2, sBlockOresUb3, sBlockOresGC, sBlockGem, sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
     public static Block sBlockGranites, sBlockConcretes, sBlockStones;
     public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5, sBlockCasings8;
+    public static Block[] sBlockOresCustom;
     /**
      * Getting assigned by the Config
      */
