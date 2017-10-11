@@ -47,15 +47,16 @@ public class GT_Worldgenerator implements IWorldGenerator {
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         Random r = new XSTR();
         int xCenter = getVeinCenterCoordinate(aX), zCenter = getVeinCenterCoordinate(aZ);
+        boolean bXN = aX < xCenter, bXP = aX > xCenter, bZN = aZ < zCenter, bZP = aZ > zCenter;
         generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter - 3);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter + 3);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter - 3);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter + 3);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter - 3);
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter + 3);
+        if (bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter - 3);
+        if (bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter + 3);
+        if (bXN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter);
+        if (bXP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter);
+        if (bXN && bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter - 3);
+        if (bXN && bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter + 3);
+        if (bXP && bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter - 3);
+        if (bXP && bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter + 3);
         long seed = getRandomSeed(aWorld, aX, aZ);
         String aBiome = aWorld.getBiomeGenForCoords(aX << 4 + 8, aZ << 4 + 8).biomeName;
         try {

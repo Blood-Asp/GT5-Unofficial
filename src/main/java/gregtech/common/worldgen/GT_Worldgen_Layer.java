@@ -203,16 +203,24 @@ public class GT_Worldgen_Layer
     	return Math.max(1, Math.max(MathHelper.abs_int(a - x), MathHelper.abs_int(b - x)) / this.mDensity);
     }
 
-    public double nextGausian(Random aRandom) {
-        return aRandom.nextGaussian() / 10 + 0.5;
+    private int getRandomSize(Random aRandom) {
+        return Math.max(0, (int) ((aRandom.nextGaussian() / 10 + 0.5) * this.mSize));
+    }
+
+    private void generateOre(World aWorld, int aX, int aY, int aZ, int aMinX, int aMaxX, int aMinZ, int aMaxZ, WeightedOreList aOres, Random aRandom) {
+    	if (aY < 0) return;
+    	int tOreMeta;
+    	if (aRandom.nextInt(getDense(aMinX, aMaxX, aX)) == 0 || aRandom.nextInt(getDense(aMinZ, aMaxZ, aZ)) == 0)
+    		if ((tOreMeta = aOres.getOre(aRandom)) > 0)
+            	GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOreMeta, false);
     }
 
     public void executeLayerWorldgen(World aWorld, Random aRandom, int chunkX, int chunkZ, int centerX, int centerZ) {
     	int tMinY = this.mMinY + aRandom.nextInt(this.mMaxY - this.mMinY - 5);
-        int aMinX = centerX - (int) (nextGausian(aRandom) * mSize);
-        int aMaxX = centerX + 16 + (int) (nextGausian(aRandom) * mSize);
-        int aMinZ = centerZ - (int) (nextGausian(aRandom) * mSize);
-        int aMaxZ = centerZ + 16 + (int) (nextGausian(aRandom) * mSize);
+        int aMinX = centerX - getRandomSize(aRandom);
+        int aMaxX = centerX + 16 + getRandomSize(aRandom);
+        int aMinZ = centerZ - getRandomSize(aRandom);
+        int aMaxZ = centerZ + 16 + getRandomSize(aRandom);
         int tMaxX = Math.min(chunkX + 16, aMaxX);
         int tMinX = Math.max(chunkX, aMinX);
         int tMaxZ = Math.min(chunkZ + 16, aMaxZ);
@@ -224,28 +232,18 @@ public class GT_Worldgen_Layer
             for (int tX = tMinX; tX <= tMaxX; tX++) {
             	for (int tZ = tMinZ; tZ <= tMaxZ; tZ++) {
                     if (!this.mSecondaries.isEmpty()) {
-                        for (int i = tMinY - 1; i < tMinY + 2; i++) {
-                            if ((aRandom.nextInt(getDense(aMinZ, aMaxZ, tZ)) == 0) || (aRandom.nextInt(getDense(aMinX, aMaxX, tX)) == 0)) {
-                                if ((tOreMeta = this.mSecondaries.getOre(aRandom)) > 0)
-                                	GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, tOreMeta, false);
-                            }
-                        }
+                        for (int i = tMinY - 1; i < tMinY + 2; i++)
+                        	this.generateOre(aWorld, tX, i, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSecondaries, aRandom);
                     }
                     if (!this.mPrimaries.isEmpty()) {
-                        for (int i = tMinY + 3; i < tMinY + 6; i++) {
-                            if ((aRandom.nextInt(getDense(aMinZ, aMaxZ, tZ)) == 0) || (aRandom.nextInt(getDense(aMinX, aMaxX, tX)) == 0)) {
-                                if ((tOreMeta = this.mPrimaries.getOre(aRandom)) > 0)
-                                	GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, tOreMeta, false);
-                            }
-                        }
+                        for (int i = tMinY + 3; i < tMinY + 6; i++)
+                        	this.generateOre(aWorld, tX, i, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mPrimaries, aRandom);
                     }
-                    if ((!this.mBetweens.isEmpty()) && ((aRandom.nextInt(getDense(aMinZ, aMaxZ, tZ)) == 0) || (aRandom.nextInt(getDense(aMinX, aMaxX, tX)) == 0))) {
-                        if ((tOreMeta = this.mBetweens.getOre(aRandom)) > 0)
-                        	GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY + 1 + aRandom.nextInt(3), tZ, tOreMeta, false);
+                    if (!this.mBetweens.isEmpty()) {
+                    	this.generateOre(aWorld, tX, tMinY + 1 + aRandom.nextInt(3), tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mBetweens, aRandom);
                     }
-                    if ((!this.mSporadics.isEmpty()) && ((aRandom.nextInt(getDense(aMinZ, aMaxZ, tZ)) == 0) || (aRandom.nextInt(getDense(aMinX, aMaxX, tX)) == 0))) {
-                        if ((tOreMeta = this.mSporadics.getOre(aRandom)) > 0)
-                        	GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, tOreMeta, false);
+                    if (!this.mSporadics.isEmpty()) {
+                    	this.generateOre(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSporadics, aRandom);
                     }
                 }
             }
