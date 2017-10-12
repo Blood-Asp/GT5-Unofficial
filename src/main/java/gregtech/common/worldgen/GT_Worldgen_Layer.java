@@ -30,6 +30,7 @@ public class GT_Worldgen_Layer
     public final short mWeight;
     public final short mDensity;
     public final short mSize;
+    public final short mThickness;
     
     public final HashSet<String> mAsteroidList = new HashSet<>();
     public final WeightedOreList mPrimaries, mSecondaries, mBetweens, mSporadics; 
@@ -162,13 +163,14 @@ public class GT_Worldgen_Layer
     	return null;
     }
 
-    public GT_Worldgen_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, String[] aDimList, String[] aAsteroidList, String[] aBiomeList, WeightedOreList aPrimaries, WeightedOreList aSecondaries, WeightedOreList aBetweens, WeightedOreList aSporadics) {
+    public GT_Worldgen_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, int aThickness, String[] aDimList, String[] aAsteroidList, String[] aBiomeList, WeightedOreList aPrimaries, WeightedOreList aSecondaries, WeightedOreList aBetweens, WeightedOreList aSporadics) {
     	super(aName, sList, aDefault, aDimList, aBiomeList);
     	this.mMinY = (short) aMinY;
     	this.mMaxY = (short) Math.max(aMinY + 5, aMaxY);
     	this.mWeight = (short) aWeight;
     	this.mDensity = (short) aDensity;
     	this.mSize = (short) Math.max(1, aSize);
+    	this.mThickness = (short) Math.max(5, aThickness);
     	this.mPrimaries = aPrimaries;
     	this.mSecondaries = aSecondaries;
     	this.mBetweens = aBetweens;
@@ -225,14 +227,13 @@ public class GT_Worldgen_Layer
         int tMinX = Math.max(chunkX, aMinX);
         int tMaxZ = Math.min(chunkZ + 16, aMaxZ);
         int tMinZ = Math.max(chunkZ, aMinZ);
-        int aThickness = 6;
         
         if (tMinX < tMaxX && tMinZ < tMaxZ) {
             aRandom.setSeed(aRandom.nextLong() ^ chunkX ^ chunkZ);
-            int var00 = (aThickness + 2) / 3;
-            int var01 = (aThickness - 2) / 3;
-            int var02 = aThickness - var01 - var01 + 2;
-            int var03 = aThickness % 3;
+            int var00 = (this.mThickness + 2) / 3;
+            int var01 = (this.mThickness - 2) / 3;
+            int var02 = this.mThickness - var01 - var01 + 2;
+            int var03 = this.mThickness % 3;
             int var04 = tMinY - var01;
             int var05 = var01 & 1;
             int var06 = tMinY + var00;

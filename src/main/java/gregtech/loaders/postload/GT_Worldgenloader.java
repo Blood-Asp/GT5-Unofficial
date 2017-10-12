@@ -570,7 +570,7 @@ public class GT_Worldgenloader
         }
         
         OreVeinProp propVein;
-        int cDens;
+        int cDens, cThic;
         String[] cAsteroids;
         WeightedOreList[] cOres = new WeightedOreList[4];
         for (ConfigCategory cOre : ADV_FILE.mConfig.getCategory("worldgen.ore.mix").getChildren()) {
@@ -582,6 +582,7 @@ public class GT_Worldgenloader
         	cProb = ADV_FILE.get(textWorldgen + cName, "RandomWeight", propVein.mWeight);
         	cDens = ADV_FILE.get(textWorldgen + cName, "Density", propVein.mDensity);
         	cSize = ADV_FILE.get(textWorldgen + cName, "Size", propVein.mSize);
+        	if ((cThic = ADV_FILE.get(textWorldgen + cName, "Thickness", 7)) < 5) ADV_FILE.set(textWorldgen + cName, "Thickness", 7, cThic = 5);
         	cOres[0] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OrePrimaryLayer", propVein.mPrimaries.toConfig()));
         	cOres[1] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OreSecondaryLayer", propVein.mSecondaries.toConfig()));
         	cOres[2] = new WeightedOreList(ADV_FILE.get(textWorldgen + cName, "OreSporadiclyInbetween", propVein.mBetweens.toConfig()));
@@ -590,7 +591,7 @@ public class GT_Worldgenloader
         	cAsteroids = ADV_FILE.get(textWorldgen + cName, "Asteroids", propVein.mAsteroidList.get());
         	cBiomes = ADV_FILE.get(textWorldgen + cName, biomes, new String[0]);
         	if (cMinY < 0 || cProb <= 0 || cDens <= 0 || (cOres[0].isEmpty() && cOres[1].isEmpty() && cOres[2].isEmpty() && cOres[3].isEmpty())) continue;
-        	new GT_Worldgen_Layer(cName, true, cMinY, cMaxY, cProb, cDens, cSize, cDims, cAsteroids, cBiomes, cOres[0], cOres[1], cOres[2], cOres[3]);
+        	new GT_Worldgen_Layer(cName, true, cMinY, cMaxY, cProb, cDens, cSize, cThic, cDims, cAsteroids, cBiomes, cOres[0], cOres[1], cOres[2], cOres[3]);
         }
         
         if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
