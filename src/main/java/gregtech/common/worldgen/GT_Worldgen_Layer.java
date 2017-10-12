@@ -225,26 +225,56 @@ public class GT_Worldgen_Layer
         int tMinX = Math.max(chunkX, aMinX);
         int tMaxZ = Math.min(chunkZ + 16, aMaxZ);
         int tMinZ = Math.max(chunkZ, aMinZ);
+        int aThickness = 6;
         
         if (tMinX < tMaxX && tMinZ < tMaxZ) {
             aRandom.setSeed(aRandom.nextLong() ^ chunkX ^ chunkZ);
+            int var00 = (aThickness + 2) / 3;
+            int var01 = (aThickness - 2) / 3;
+            int var02 = aThickness - var01 - var01 + 2;
+            int var03 = aThickness % 3;
+            int var04 = tMinY - var01;
+            int var05 = var01 & 1;
+            int var06 = tMinY + var00;
+            int var07 = var06 - var01 - ((var01 + (var03 == 0 ? 0 : 1)) >> 1);
+            int var08 = var01 + var01 + 2;
+            int[] arg0 = {0, 0}, arg1 = {1, 0}, arg2 = {0, 1};
             int tOreMeta;
             for (int tX = tMinX; tX <= tMaxX; tX++) {
             	for (int tZ = tMinZ; tZ <= tMaxZ; tZ++) {
-                    if (!this.mSecondaries.isEmpty()) {
-                        for (int i = tMinY - 1; i < tMinY + 2; i++)
-                        	this.generateOre(aWorld, tX, i, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSecondaries, aRandom);
-                    }
-                    if (!this.mPrimaries.isEmpty()) {
-                        for (int i = tMinY + 3; i < tMinY + 6; i++)
-                        	this.generateOre(aWorld, tX, i, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mPrimaries, aRandom);
-                    }
-                    if (!this.mBetweens.isEmpty()) {
-                    	this.generateOre(aWorld, tX, tMinY + 1 + aRandom.nextInt(3), tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mBetweens, aRandom);
-                    }
-                    if (!this.mSporadics.isEmpty()) {
-                    	this.generateOre(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSporadics, aRandom);
-                    }
+            		if (var03 == 0) {
+            			if (aRandom.nextBoolean())
+            				arg0 = arg1;
+            			else
+            				arg0 = arg2;
+            		}
+            		int[] arg3 = {0, 1, 2, 3};
+            		for (int i = 3; i >= 0; i--) {
+            			int j = aRandom.nextInt(i + 1);
+            			switch (arg3[j]) {
+            			case 0:
+            				if (!this.mSecondaries.isEmpty())
+                                for (int tY = 0, rY = var04; tY < var00 + arg0[0]; tY++)
+                                	generateOre(aWorld, tX, rY + tY, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSecondaries, aRandom);
+            				break;
+            			case 1:
+            				if (!this.mPrimaries.isEmpty())
+                                for (int tY = 0, rY = var06 + arg0[0]; tY < var00 + arg0[1]; tY++)
+                                	generateOre(aWorld, tX, rY + tY, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mPrimaries, aRandom);
+            				break;
+            			case 2:
+            				if (!this.mBetweens.isEmpty())
+                            	for (int tY = 0, rY = var07 + ((var05 + aRandom.nextInt(var08)) >> 1); tY < var01; tY ++)
+                            		generateOre(aWorld, tX, rY + tY, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mBetweens, aRandom);
+            				break;
+            			case 3:
+            				if (!this.mSporadics.isEmpty())
+                            	for (int tY = 0, rY = var04 + aRandom.nextInt(var02); tY < var01; tY++)
+                            		generateOre(aWorld, tX, rY + tY + tY, tZ, aMinX, aMaxX, aMinZ, aMaxZ, this.mSporadics, aRandom);
+            				break;
+            			}
+            			arg3[j] = arg3[i];
+            		}
                 }
             }
             if (GT_Values.D1) System.out.println("Generated Orevein: " + mWorldGenName + " " + chunkX + " " + chunkZ);
