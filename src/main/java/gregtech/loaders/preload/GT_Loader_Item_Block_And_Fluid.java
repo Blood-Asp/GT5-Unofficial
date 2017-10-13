@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -164,8 +165,7 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockStones = new GT_Block_Stones();
         
         HashMap<String, OreBlockProp[]> tOreBlocks = GT_Worldgenloader.loadOreBlocks();
-        GregTech_API.sBlockOresCustom = new Block[Math.max(0, tOreBlocks.size() - 5)];
-        int k = 0;
+        ArrayList<GT_Block_Ores> tCustomOreBlocks = new ArrayList<>();
         for (Map.Entry<String, OreBlockProp[]> o : tOreBlocks.entrySet()) {
         	String tName = "gt.blockores." + o.getKey();
         	switch(o.getKey()) {
@@ -174,9 +174,10 @@ public class GT_Loader_Item_Block_And_Fluid
         	case "ub1": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb1 = new GT_Block_Ores(tName, true, (short) -2, o.getValue()); break;
         	case "ub2": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb2 = new GT_Block_Ores(tName, true, (short) -3, o.getValue()); break;
         	case "ub3": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb3 = new GT_Block_Ores(tName, true, (short) -4, o.getValue()); break;
-        	default: GregTech_API.sBlockOresCustom[k] = new GT_Block_Ores(tName, true, (short) ++k, o.getValue()); break;
+        	default: tCustomOreBlocks.add(new GT_Block_Ores(tName, true, (short) (tCustomOreBlocks.size() + 1), o.getValue())); break;
         	}
         }
+        GregTech_API.sBlockOresCustom = tCustomOreBlocks.toArray(new Block[tCustomOreBlocks.size()]);
         /*
         GregTech_API.sBlockOres1 = new GT_Block_Ores_GT();
         if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) {

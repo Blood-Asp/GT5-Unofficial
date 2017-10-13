@@ -39,6 +39,18 @@ public class GT_Worldgenloader
 		OreBlockProp[] blockList;
 		
 		blockList = new OreBlockProp[]{
+				new OreBlockProp(Blocks.stone, 0, OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(Blocks.netherrack, 0, OrePrefixes.oreNetherrack, Materials.Netherrack, true),
+				new OreBlockProp(Blocks.end_stone, 0, OrePrefixes.oreEndstone, Materials.Endstone, true),
+				new OreBlockProp(GregTech_API.sBlockGranites, 0, OrePrefixes.oreBlackgranite, Materials.GraniteBlack, GT_Mod.gregtechproxy.enableBlackGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE)),
+				new OreBlockProp(GregTech_API.sBlockGranites, 8, OrePrefixes.oreRedgranite, Materials.GraniteRed, GT_Mod.gregtechproxy.enableRedGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE)),
+				new OreBlockProp(GregTech_API.sBlockStones, 0, OrePrefixes.oreMarble, Materials.Marble, GT_Mod.gregtechproxy.enableMarbleOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE)),
+				new OreBlockProp(GregTech_API.sBlockStones, 8, OrePrefixes.oreBasalt, Materials.Basalt, GT_Mod.gregtechproxy.enableBasaltOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE)),
+				OreBlockProp.NONE
+		};
+		allBlocks.put("gt", blockList);
+		
+		blockList = new OreBlockProp[]{
 				new OreBlockProp("GalacticraftCore:tile.moonBlock:3", OrePrefixes.ore, Materials.Stone, true),
 				new OreBlockProp("GalacticraftCore:tile.moonBlock:4", OrePrefixes.ore, Materials.Stone, true),
 				new OreBlockProp("GalacticraftMars:tile.mars:6", OrePrefixes.ore, Materials.Stone, true),
@@ -89,7 +101,7 @@ public class GT_Worldgenloader
 				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
 				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
 				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
-				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true)
 		};
 		defaultBlocks.put("ub3", blockList);
 		
@@ -121,18 +133,6 @@ public class GT_Worldgenloader
 			if (flag)
 				allBlocks.put(c.getName(), blockList);
 		}
-		
-		blockList = new OreBlockProp[]{
-				new OreBlockProp(Blocks.stone, 0, OrePrefixes.ore, Materials.Stone, true),
-				new OreBlockProp(Blocks.netherrack, 0, OrePrefixes.oreNetherrack, Materials.Netherrack, true),
-				new OreBlockProp(Blocks.end_stone, 0, OrePrefixes.oreEndstone, Materials.Endstone, true),
-				new OreBlockProp(GregTech_API.sBlockGranites, 0, OrePrefixes.oreBlackgranite, Materials.GraniteBlack, GT_Mod.gregtechproxy.enableBlackGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE)),
-				new OreBlockProp(GregTech_API.sBlockGranites, 8, OrePrefixes.oreRedgranite, Materials.GraniteRed, GT_Mod.gregtechproxy.enableRedGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE)),
-				new OreBlockProp(GregTech_API.sBlockStones, 0, OrePrefixes.oreMarble, Materials.Marble, GT_Mod.gregtechproxy.enableMarbleOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE)),
-				new OreBlockProp(GregTech_API.sBlockStones, 8, OrePrefixes.oreBasalt, Materials.Basalt, GT_Mod.gregtechproxy.enableBasaltOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE)),
-				OreBlockProp.NONE
-		};
-		allBlocks.put("gt", blockList);
 		
 		return allBlocks;
 	}

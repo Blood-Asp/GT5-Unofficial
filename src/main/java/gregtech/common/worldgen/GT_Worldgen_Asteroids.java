@@ -56,18 +56,17 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
                     double var24 = var11 + (var13 - var11) * var19 / tSize;
                     double var26 = tRandom.nextDouble() * tSize / 16.0D;
                     double var28 = (MathHelper.sin(var19 * 3.141593F / tSize) + 1.0F) * var26 + 1.0D;
-                    double var30 = (MathHelper.sin(var19 * 3.141593F / tSize) + 1.0F) * var26 + 1.0D;
                     int tMinX = MathHelper.floor_double(var20 - var28 / 2.0D);
-                    int tMinY = MathHelper.floor_double(var22 - var30 / 2.0D);
+                    int tMinY = MathHelper.floor_double(var22 - var28 / 2.0D);
                     int tMinZ = MathHelper.floor_double(var24 - var28 / 2.0D);
                     int tMaxX = MathHelper.floor_double(var20 + var28 / 2.0D);
-                    int tMaxY = MathHelper.floor_double(var22 + var30 / 2.0D);
+                    int tMaxY = MathHelper.floor_double(var22 + var28 / 2.0D);
                     int tMaxZ = MathHelper.floor_double(var24 + var28 / 2.0D);
                     for (int eX = tMinX; eX <= tMaxX; eX++) {
                         double var39 = (eX + 0.5D - var20) / (var28 / 2.0D);
                         if (var39 * var39 < 1.0D) {
                             for (int eY = tMinY; eY <= tMaxY; eY++) {
-                                double var42 = (eY + 0.5D - var22) / (var30 / 2.0D);
+                                double var42 = (eY + 0.5D - var22) / (var28 / 2.0D);
                                 if (var39 * var39 + var42 * var42 < 1.0D) {
                                     for (int eZ = tMinZ; eZ <= tMaxZ; eZ++) {
                                         double var45 = (eZ + 0.5D - var24) / (var28 / 2.0D);
@@ -75,8 +74,7 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
                                         if ((var50 < 1.0D) && (aWorld.getBlock(eX, eY, eZ).isAir(aWorld, eX, eY, eZ))) {
                                         	aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 2);
                                         	if (tRandom.nextInt(Math.max(1, (int) (30.0D * var50 * var50 / tDensity))) == 0)
-                                        		if ((tOreMeta = ores.getOre(aRandom)) > 0)
-                                            		GT_TileEntity_Ores.setOreBlock(aWorld, eX, eY, eZ, tOreMeta, false, true);
+                                        		ores.generateOre(aWorld, eX, eY, eZ, aRandom, true);
                                         }
                                     }
                                 }

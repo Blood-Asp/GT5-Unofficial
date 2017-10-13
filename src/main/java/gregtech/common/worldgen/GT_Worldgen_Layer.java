@@ -122,6 +122,12 @@ public class GT_Worldgen_Layer
     		}
     		return -1;
     	}
+    	
+    	public void generateOre(World aWorld, int aX, int aY, int aZ, Random aRandom, boolean air) {
+    		int tOreMeta;
+    		if ((tOreMeta = getOre(aRandom)) > 0)
+            	GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOreMeta, false, air);
+    	}
     }
 
     public static class OreGenList {
@@ -136,7 +142,7 @@ public class GT_Worldgen_Layer
     		if (GT_Values.D1) System.out.println("Initializing dimensional-specified Orevein list for: " + aDimName);
     		rList = new OreGenList();
     		for (GT_Worldgen_Layer tOreGen : sList)
-    			if ((GT_Utility.isStringValid(aAsteroid) && tOreGen.mAsteroidList.contains(aAsteroid)) || tOreGen.isGenerationAllowed(aWorld)) {
+    			if (GT_Utility.isStringValid(aAsteroid) ? tOreGen.mAsteroidList.contains(aAsteroid) : tOreGen.isGenerationAllowed(aWorld)) {
     				rList.list.add(tOreGen);
     				rList.mWeight += tOreGen.mWeight;
     			}
@@ -213,8 +219,7 @@ public class GT_Worldgen_Layer
     	if (aY < 0) return;
     	int tOreMeta;
     	if (aRandom.nextInt(getDense(aMinX, aMaxX, aX)) == 0 || aRandom.nextInt(getDense(aMinZ, aMaxZ, aZ)) == 0)
-    		if ((tOreMeta = aOres.getOre(aRandom)) > 0)
-            	GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOreMeta, false);
+    		aOres.generateOre(aWorld, aMaxZ, aY, aZ, aRandom, false);
     }
 
     public void executeLayerWorldgen(World aWorld, Random aRandom, int chunkX, int chunkZ, int centerX, int centerZ) {

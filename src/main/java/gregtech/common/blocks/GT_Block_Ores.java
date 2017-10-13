@@ -42,7 +42,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     public static boolean tHideOres;
     private final String aTextName = ".name";
     private final String aTextSmall = "Small ";
-    private static Boolean generatingOre = false;
+    private static Boolean avoidTileEntityCreation = false;
 
     private final int mDropState;
     private final boolean[] mEnabled;
@@ -202,7 +202,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	case -4: return GregTech_API.sBlockOresUb2;
     	case -5: return GregTech_API.sBlockOresUb3;
     	default:
-    		if (aDropState >= 0 && aDropState < GregTech_API.sBlockOresCustom.length)
+    		if (aDropState > 0 && aDropState <= GregTech_API.sBlockOresCustom.length)
         		return GregTech_API.sBlockOresCustom[aDropState - 1];
     		return GregTech_API.sBlockOres1;
     	}
@@ -334,7 +334,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     }
 
     public boolean hasTileEntity(int aMeta) {
-        return !generatingOre;
+        return !avoidTileEntityCreation;
     }
 
     public boolean renderAsNormalBlock() {
@@ -416,8 +416,8 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     }
 
     public static void setOreBlock(World aWorld, int aX, int aY, int aZ, GT_Block_Ores aOreBlock, int aOreMeta) {
-    	synchronized (generatingOre) {
-        	generatingOre = true;
+    	synchronized (avoidTileEntityCreation) {
+        	avoidTileEntityCreation = true;
         	int tOreBlockMeta = GT_TileEntity_Ores.getHarvestData((short) aOreMeta, aOreBlock.getBaseBlockHarvestLevel(aOreMeta % 16000 / 1000));
         	aWorld.setBlock(aX, aY, aZ, aOreBlock, tOreBlockMeta, 0);
         	GT_TileEntity_Ores aTileEntity = new GT_TileEntity_Ores();
@@ -437,7 +437,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
                 aTileEntity.validate();
                 tChunk.chunkTileEntityMap.put(tChunkPosition, aTileEntity);
             }
-        	generatingOre = false;
+        	avoidTileEntityCreation = false;
         }
     }
 }
