@@ -17,9 +17,9 @@ import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.common.worldgen.GT_Worldgen_Layer.WeightedOreList.WeightedOre;
 import gregtech.loaders.misc.GT_Achievements;
+import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
 
 public class GT_Worldgen_Layer
         extends GT_Worldgen {
@@ -39,9 +39,10 @@ public class GT_Worldgen_Layer
     	
     	protected static class WeightedOre {
         	protected int mWeight, mMeta;
+        	protected Block mBlock = null;
         	
         	public WeightedOre() {
-        		this(-1, 0);
+        		this(0, 0);
         	}
         	
         	public WeightedOre(int aMeta, int aWeight) {
@@ -49,32 +50,66 @@ public class GT_Worldgen_Layer
         	}
         	
         	public WeightedOre(Materials aMaterial, int aWeight) {
-        		this(aMaterial == null ? -1 : aMaterial.mMetaItemSubID, aWeight);
+        		this(aMaterial == null ? 0 : aMaterial.mMetaItemSubID, aWeight);
         	}
         	
         	public WeightedOre(String aConfig) {
         		if (GT_Utility.isStringValid(aConfig)) {
         			String[] k = aConfig.split("::");
-            		try {mMeta = Integer.parseInt(k[0]);}
-        			catch (Exception e) {mMeta = Materials.get(k[0]).mMetaItemSubID;}
-        			try {mWeight = Integer.parseInt(k[1]);}
-        			catch (Exception e) {mWeight = 100;}
-        		} else {mMeta = -1; mWeight = 0;}
+        			if (k[0].startsWith("Material:")) {
+        				k[0] = k[0].substring(9);
+        				try {mMeta = Integer.parseInt(k[0]);}
+            			catch (Exception e) {mMeta = Materials.get(k[0]).mMetaItemSubID;}
+        				if (mMeta > 0) {
+        					try {mWeight = Integer.parseInt(k[1]);}
+                			catch (Exception e) {mWeight = 100;}
+        					return;
+        				}
+        			} else if (k[0].startsWith("Block:")) {
+        				k[0] = k[0].substring(6);
+        				boolean flag = false;
+        				try {mMeta = Integer.parseInt(k[0].substring(k[0].lastIndexOf(":") + 1));}
+        				catch (Exception e) {mMeta = 0; flag = true;}
+        				try {mBlock = Block.getBlockFromName(flag ? k[0] : k[0].substring(0, k[0].lastIndexOf(":")));}
+        				catch (Exception e) {}
+        				if (mBlock != null) {
+        					mMeta = -(++mMeta);
+        					try {mWeight = Integer.parseInt(k[1]);}
+                			catch (Exception e) {mWeight = 100;}
+        					return;
+        				}
+        				
+        			}
+        		}
+        		mMeta = 0;
+        		mWeight = 0;
+        	}
+        	
+        	public WeightedOre copy() {
+        		WeightedOre o = new WeightedOre();
+        		o.mBlock = mBlock;
+        		o.mMeta = mMeta;
+        		o.mWeight = mWeight;
+        		return o;
         	}
         	
         	@Override
         	public String toString() {
         		if (isValid()) {
-        			Materials tMaterial = GregTech_API.sMaterials[mMeta];
-        			if (tMaterial != null) {
-        				return tMaterial.mName + ":" + mWeight;
+        			if (mMeta > 0) {
+        				Materials tMaterial = GregTech_API.sMaterials[mMeta];
+            			if (tMaterial != null) {
+            				return "Material:" + tMaterial.mName + "::" + mWeight;
+            			}
+        			} else {
+        				return "Block:" + Block.blockRegistry.getNameForObject(mBlock) + "::" + mWeight;
         			}
         		}
         		return "NULL:0";
         	}
         	
         	public boolean isValid() {
-        		return mMeta > 0 && mMeta < 1000 && mWeight > 0;
+        		return (mMeta > 0 && mMeta < 1000 && mWeight > 0) || (mBlock != null && mMeta < 0 && mMeta >= -16);
         	}
         }
     	
@@ -98,8 +133,11 @@ public class GT_Worldgen_Layer
     	}
     	
     	public void addAll(WeightedOreList aOreList, int aWeight) {
-    		for (WeightedOre o : aOreList.mOres)
-    			add(new WeightedOre(o.mMeta, o.mWeight * aWeight));
+    		for (WeightedOre o : aOreList.mOres) {
+    			WeightedOre o0 = o.copy();
+    			o0.mWeight *= aWeight;
+    			add(o0);
+    		}
     	}
     	
     	public String[] toConfig() {
@@ -112,21 +150,28 @@ public class GT_Worldgen_Layer
     		return mOres.isEmpty();
     	}
     	
-    	public int getOre(Random aRandom) {
+    	private WeightedOre getOre(Random aRandom) {
     		if (!mOres.isEmpty()) {
-    			if (mOres.size() == 1) return mOres.get(0).mMeta;
+    			if (mOres.size() == 1) return mOres.get(0);
     			int tWeight = aRandom.nextInt(mWeight);
     			for (WeightedOre o : mOres) {
-    				if ((tWeight -= o.mWeight) <= 0) return o.mMeta;
+    				if ((tWeight -= o.mWeight) <= 0) return o;
     			}
     		}
-    		return -1;
+    		return null;
     	}
     	
     	public void generateOre(World aWorld, int aX, int aY, int aZ, Random aRandom, boolean air) {
-    		int tOreMeta;
-    		if ((tOreMeta = getOre(aRandom)) > 0)
-            	GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOreMeta, false, air);
+    		WeightedOre tOre = getOre(aRandom);
+    		if (tOre != null && tOre.isValid()) {
+    			try {
+    				if (tOre.mMeta > 0)
+        				GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOre.mMeta, false, air);
+        			else {
+        				aWorld.setBlock(aX, aY, aZ, tOre.mBlock, -1 - tOre.mMeta, 2);
+        			}
+    			} catch (Exception e) {}
+    		}
     	}
     }
 
@@ -190,10 +235,15 @@ public class GT_Worldgen_Layer
     	tOreList.addAll(this.mBetweens, 3);
     	tOreList.addAll(this.mSporadics, 1);
     	boolean tOverworld = this.isGenerationAllowed("Overworld", "Surface") || this.isGenerationAllowed(0), tNether = this.isGenerationAllowed("Nether", "Hell") || this.isGenerationAllowed(-1), tEnd = this.isGenerationAllowed("The End", "End") || this.isGenerationAllowed(1);
+    	float f = 0.0f;
     	for (WeightedOre o : tOreList.mOres) {
-    		Materials tMaterial = GregTech_API.sGeneratedMaterials[o.mMeta];
-    		GT_Achievements.registerOre(tMaterial, this.mMinY, this.mMaxY, this.mWeight, tOverworld, tNether, tEnd);
-    		tIEWeightedOres.put("ore" + tMaterial.mName, ((float) o.mWeight) / tOreList.mWeight);
+    		if (o.mMeta > 0) {
+    			Materials tMaterial = GregTech_API.sGeneratedMaterials[o.mMeta];
+        		GT_Achievements.registerOre(tMaterial, this.mMinY, this.mMaxY, this.mWeight, tOverworld, tNether, tEnd);
+        		tIEWeightedOres.put("ore" + tMaterial.mName, ((float) o.mWeight) / tOreList.mWeight);
+    		} else {
+    			f += 0.8f * o.mWeight / tOreList.mWeight; //TODO ?
+    		}
     	}
     	if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
     		String[] tNames = new String[tIEWeightedOres.size()];
@@ -203,7 +253,7 @@ public class GT_Worldgen_Layer
     			tNames[i] = e.getKey();
     			tWeights[i++] = e.getValue();
     		}
-        	blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(mWorldGenName.substring(8, 9).toUpperCase() + mWorldGenName.substring(9), mWeight, 0.2f, tNames, tWeights);
+        	blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(mWorldGenName.substring(8, 9).toUpperCase() + mWorldGenName.substring(9), mWeight, 0.2f + f, tNames, tWeights);
         }
     }
 

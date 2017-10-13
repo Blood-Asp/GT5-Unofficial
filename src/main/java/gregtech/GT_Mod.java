@@ -123,7 +123,15 @@ public class GT_Mod implements IGT_Mod {
         File oldWorldgenFile = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "WorldGeneration.cfg"), advWorldgenFile = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "AdvancedWorldGeneration.cfg");
         GregTech_API.oldWorldgenFile = (GregTech_API.worldgenFileUpdate = (!advWorldgenFile.exists() && oldWorldgenFile.exists())) ? new GT_Config(new Configuration(oldWorldgenFile)) : null;
         GregTech_API.sAdvWorldgenFile = new GT_Config(new Configuration(advWorldgenFile));
-        if (GregTech_API.worldgenFileUpdate) GT_Worldgenloader.transferOldFile1();
+        GT_Worldgenloader.setCustomExamples();
+        if (GregTech_API.worldgenFileUpdate) {
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres, GregTech_API.oldWorldgenFile.find("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres));
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres, GregTech_API.oldWorldgenFile.find("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres));
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres, GregTech_API.oldWorldgenFile.find("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres));
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres, GregTech_API.oldWorldgenFile.find("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres));
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres, GregTech_API.oldWorldgenFile.find("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres));
+        	GregTech_API.sAdvWorldgenFile.set("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres, GregTech_API.oldWorldgenFile.find("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres));
+        }
         GregTech_API.sMaterialProperties = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialProperties.cfg")));
         GregTech_API.sMaterialComponents = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialComponents.cfg")));
         GregTech_API.sUnification = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "Unification.cfg")));
