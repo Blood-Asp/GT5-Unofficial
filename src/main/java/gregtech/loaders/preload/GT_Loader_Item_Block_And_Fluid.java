@@ -16,9 +16,12 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.*;
+import gregtech.common.blocks.GT_Block_Ores.OreBlockProp;
 import gregtech.common.items.*;
 import gregtech.common.items.armor.ElectricModularArmor1;
 import gregtech.common.items.armor.ModularArmor_Item;
+import gregtech.loaders.postload.GT_Worldgenloader;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -28,7 +31,9 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class GT_Loader_Item_Block_And_Fluid
         implements Runnable {
@@ -157,7 +162,23 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockGranites = new GT_Block_Granites();
         GregTech_API.sBlockConcretes = new GT_Block_Concretes();
         GregTech_API.sBlockStones = new GT_Block_Stones();
-        GregTech_API.sBlockOres1 = new GT_Block_Ores();
+        
+        HashMap<String, OreBlockProp[]> tOreBlocks = GT_Worldgenloader.loadOreBlocks();
+        GregTech_API.sBlockOresCustom = new Block[Math.max(0, tOreBlocks.size() - 5)];
+        int k = 0;
+        for (Map.Entry<String, OreBlockProp[]> o : tOreBlocks.entrySet()) {
+        	String tName = "gt.blockores." + o.getKey();
+        	switch(o.getKey()) {
+        	case "gt": GregTech_API.sBlockOres1 = new GT_Block_Ores("gt.blockores", false, (short) -1, o.getValue()); break;
+        	case "gc": if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars") && GT_Mod.gregtechproxy.enableGCOres) GregTech_API.sBlockOresGC = new GT_Block_Ores(tName, true, (short) -2, o.getValue()); break;
+        	case "ub1": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb1 = new GT_Block_Ores(tName, true, (short) -2, o.getValue()); break;
+        	case "ub2": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb2 = new GT_Block_Ores(tName, true, (short) -3, o.getValue()); break;
+        	case "ub3": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb3 = new GT_Block_Ores(tName, true, (short) -4, o.getValue()); break;
+        	default: GregTech_API.sBlockOresCustom[k] = new GT_Block_Ores(tName, true, (short) ++k, o.getValue()); break;
+        	}
+        }
+        /*
+        GregTech_API.sBlockOres1 = new GT_Block_Ores_GT();
         if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) {
             GregTech_API.sBlockOresUb1 = new GT_Block_Ores_UB1();
             GregTech_API.sBlockOresUb2 = new GT_Block_Ores_UB2();
@@ -165,7 +186,7 @@ public class GT_Loader_Item_Block_And_Fluid
         }
         if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars") && GT_Mod.gregtechproxy.enableGCOres) {
             GregTech_API.sBlockOresGC = new GT_Block_Ores_GC();
-        }
+        }*/
         GregTech_API.sBlockMetal1 = new GT_Block_Metal("gt.blockmetal1", new Materials[]{
                 Materials.Adamantium,
                 Materials.Aluminium,

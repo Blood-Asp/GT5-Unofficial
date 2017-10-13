@@ -4,7 +4,7 @@ import java.util.Random;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.world.GT_Worldgen;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
+import gregtech.common.blocks.GT_Block_Ores;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -84,7 +84,7 @@ public class GT_Worldgen_Stone
                                         if (var12d + var45 * var45 < 1.0F) {
                                             Block tTargetedBlock = aWorld.getBlock(eX, eY, eZ);
                                             int tTargetedBlockMeta = aWorld.getBlockMetadata(eX, eY, eZ);
-                                            if (tTargetedBlock instanceof GT_Block_Ores_Abstract) {
+                                            if (tTargetedBlock instanceof GT_Block_Ores) {
                                                 TileEntity tTileEntity = aWorld.getTileEntity(eX, eY, eZ);
                                                 if ((tTileEntity instanceof GT_TileEntity_Ores)) {
                                                     if (tTargetedBlock != GregTech_API.sBlockOres1) {

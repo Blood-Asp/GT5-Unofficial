@@ -10,7 +10,7 @@ import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
+import gregtech.common.blocks.GT_Block_Ores;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -98,7 +98,7 @@ public class Behaviour_Prospecting
 					tY = aY-4-tQuality+tRandom.nextInt(j);
 					tZ = aZ-4-tQuality+tRandom.nextInt(j);
 					tBlock = aWorld.getBlock(tX, tY, tZ);
-                    if ((tBlock instanceof GT_Block_Ores_Abstract)) {
+                    if ((tBlock instanceof GT_Block_Ores)) {
                         TileEntity tTileEntity = aWorld.getTileEntity(tX, tY, tZ);
                         if ((tTileEntity instanceof GT_TileEntity_Ores)) {
                             Materials tMaterial = GregTech_API.sGeneratedMaterials[(((GT_TileEntity_Ores) tTileEntity).mMetaData % 1000)];

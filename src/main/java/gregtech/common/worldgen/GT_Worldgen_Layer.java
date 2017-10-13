@@ -54,7 +54,7 @@ public class GT_Worldgen_Layer
         	
         	public WeightedOre(String aConfig) {
         		if (GT_Utility.isStringValid(aConfig)) {
-        			String[] k = aConfig.split(":");
+        			String[] k = aConfig.split("::");
             		try {mMeta = Integer.parseInt(k[0]);}
         			catch (Exception e) {mMeta = Materials.get(k[0]).mMetaItemSubID;}
         			try {mWeight = Integer.parseInt(k[1]);}

@@ -2,6 +2,7 @@ package gregtech.loaders.postload;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import cpw.mods.fml.common.Loader;
@@ -10,8 +11,12 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures;
+import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Ores.OreBlockProp;
 import gregtech.common.worldgen.GT_Worldgen_Asteroids;
 import gregtech.common.worldgen.GT_Worldgen_Layer;
 import gregtech.common.worldgen.GT_Worldgen_Layer.WeightedOreList;
@@ -28,6 +33,109 @@ public class GT_Worldgenloader
         implements Runnable {
 	private static final GT_Config ADV_FILE = GregTech_API.sAdvWorldgenFile, OLD_FILE = GregTech_API.oldWorldgenFile; 
 	private static final String dims = "DimensionWhiteList", biomes = "RestrictedBiomes";
+
+	public static HashMap<String, OreBlockProp[]> loadOreBlocks() {
+		HashMap<String, OreBlockProp[]> defaultBlocks = new HashMap<>(), allBlocks = new LinkedHashMap<>();
+		OreBlockProp[] blockList;
+		
+		blockList = new OreBlockProp[]{
+				new OreBlockProp("GalacticraftCore:tile.moonBlock:3", OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp("GalacticraftCore:tile.moonBlock:4", OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp("GalacticraftMars:tile.mars:6", OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp("GalacticraftMars:tile.mars:9", OrePrefixes.ore, Materials.Stone, true),
+				OreBlockProp.NONE,
+				OreBlockProp.NONE,
+				OreBlockProp.NONE,
+				OreBlockProp.NONE
+		};
+		defaultBlocks.put("gc", blockList);
+		
+		String ub = "UndergroundBiomes:";
+		String name = "igneousStone:";
+		int k = 0;
+		blockList = new OreBlockProp[]{
+				new OreBlockProp(ub + name + (k++), OrePrefixes.oreRedgranite, Materials.GraniteRed, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.oreBlackgranite, Materials.GraniteBlack, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.oreBasalt, Materials.Basalt, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true)
+		};
+		defaultBlocks.put("ub1", blockList);
+		
+		name = "metamorphicStone:";
+		k = 0;
+		blockList = new OreBlockProp[]{
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.oreMarble, Materials.Marble, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true)
+		};
+		defaultBlocks.put("ub2", blockList);
+		
+		name = "sedimentaryStone:";
+		k = 0;
+		blockList = new OreBlockProp[]{
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(ub + name + (k++), OrePrefixes.ore, Materials.Stone, true),
+		};
+		defaultBlocks.put("ub3", blockList);
+		
+		ADV_FILE.mConfig.getCategory("blockores.gc");
+		ADV_FILE.mConfig.getCategory("blockores.ub1");
+		ADV_FILE.mConfig.getCategory("blockores.ub2");
+		ADV_FILE.mConfig.getCategory("blockores.ub3");
+		ADV_FILE.mConfig.getCategory("blockores.custom_replaceable_block");
+		for (ConfigCategory c : ADV_FILE.mConfig.getCategory("blockores").getChildren()) {
+			blockList = defaultBlocks.get(c.getName());
+			if (blockList == null) blockList = OreBlockProp.getEmptyList();
+			boolean flag = false;
+			for (int i = 0; i < 8; i++) {
+				String tName = "blockores." + c.getName() + "." + i;
+				OreBlockProp prop = new OreBlockProp(
+							ADV_FILE.get(tName, "Block", blockList[i].getBlockName()) + ":" +
+							ADV_FILE.get(tName, "BlockMeta", blockList[i].getBlockMeta()),
+							ADV_FILE.get(tName, "OrePrefix", blockList[i].mOrePrefix),
+							ADV_FILE.get(tName, "DustToDrop", blockList[i].mDroppedDust),
+							ADV_FILE.get(tName, "Enabled", blockList[i].isValid())
+						);
+				if (prop.isValid()) {
+					blockList[i] = prop;
+					flag = true;
+				}
+				else
+					blockList[i] = OreBlockProp.NONE;
+			}
+			if (flag)
+				allBlocks.put(c.getName(), blockList);
+		}
+		
+		blockList = new OreBlockProp[]{
+				new OreBlockProp(Blocks.stone, 0, OrePrefixes.ore, Materials.Stone, true),
+				new OreBlockProp(Blocks.netherrack, 0, OrePrefixes.oreNetherrack, Materials.Netherrack, true),
+				new OreBlockProp(Blocks.end_stone, 0, OrePrefixes.oreEndstone, Materials.Endstone, true),
+				new OreBlockProp(GregTech_API.sBlockGranites, 0, OrePrefixes.oreBlackgranite, Materials.GraniteBlack, GT_Mod.gregtechproxy.enableBlackGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE)),
+				new OreBlockProp(GregTech_API.sBlockGranites, 8, OrePrefixes.oreRedgranite, Materials.GraniteRed, GT_Mod.gregtechproxy.enableRedGraniteOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE)),
+				new OreBlockProp(GregTech_API.sBlockStones, 0, OrePrefixes.oreMarble, Materials.Marble, GT_Mod.gregtechproxy.enableMarbleOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE)),
+				new OreBlockProp(GregTech_API.sBlockStones, 8, OrePrefixes.oreBasalt, Materials.Basalt, GT_Mod.gregtechproxy.enableBasaltOres).setTexture(new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE)),
+				OreBlockProp.NONE
+		};
+		allBlocks.put("gt", blockList);
+		
+		return allBlocks;
+	}
 
 	public static void transferOldFile1() {
 		System.out.println("Transfer basic worldgen configs");
@@ -229,7 +337,7 @@ public class GT_Worldgenloader
 		}
 		if (count == 0) return;
 		for (Map.Entry<String, String> e : oreBuffer.entrySet()) {
-			ADV_FILE.get(category, e.getKey(), e.getValue() == null ? new String[0] : aOldName.equals("apatite") && e.getKey().endsWith("Around") ?new String[]{"Pyrochlore:30", "Phosphate:70"} : new String[]{e.getValue() + ":100"});
+			ADV_FILE.get(category, e.getKey(), e.getValue() == null ? new String[0] : aOldName.equals("apatite") && e.getKey().endsWith("Around") ?new String[]{"Pyrochlore::30", "Phosphate::70"} : new String[]{e.getValue() + "::100"});
 		}
 		
 		for (Map.Entry<String, Property> e : c.getValues().entrySet()) {
@@ -426,10 +534,10 @@ public class GT_Worldgenloader
         final String textWorldgen = "worldgen.";
         
         // Format examples for custom worldgens
-        ADV_FILE.get(textWorldgen + "stone.custom_stone.custom_scale", dims, new String[0]);
-        ADV_FILE.get(textWorldgen + "asteroid.custom_asteroid", dims, new String[0]);
-        ADV_FILE.get(textWorldgen + "ore.small.custom", dims, new String[0]);
-        ADV_FILE.get(textWorldgen + "ore.mix.custom", dims, new String[0]);
+        ADV_FILE.mConfig.getCategory(textWorldgen + "stone.custom_stone.custom_scale");
+        ADV_FILE.mConfig.getCategory(textWorldgen + "asteroid.custom_asteroid");
+        ADV_FILE.mConfig.getCategory(textWorldgen + "ore.small.custom");
+        ADV_FILE.mConfig.getCategory(textWorldgen + "ore.mix.custom");
         
         StoneProp _prop;
         int cMeta, cSize, cProb, cMinY, cMaxY, cAmount;

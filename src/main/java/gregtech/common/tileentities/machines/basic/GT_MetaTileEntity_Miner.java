@@ -10,7 +10,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
+import gregtech.common.blocks.GT_Block_Ores;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -110,7 +110,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     while (drillX <= RADIUS[mTier]) {
                         Block block = aBaseMetaTileEntity.getBlockOffset(drillX, drillY, drillZ);
                         int blockMeta = aBaseMetaTileEntity.getMetaIDOffset(drillX, drillY, drillZ);
-                        if (block instanceof GT_Block_Ores_Abstract) {
+                        if (block instanceof GT_Block_Ores) {
                             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(drillX, drillY, drillZ);
                             if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural) {
                                 mineBlock(aBaseMetaTileEntity, drillX, drillY, drillZ);
