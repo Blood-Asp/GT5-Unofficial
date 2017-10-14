@@ -14,10 +14,12 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_Utility;
 import gregtech.api.world.GT_Worldgen;
+import gregtech.common.blocks.GT_Block_Ores;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.common.worldgen.GT_Worldgen_Layer.WeightedOreList.WeightedOre;
 import gregtech.loaders.misc.GT_Achievements;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -165,8 +167,20 @@ public class GT_Worldgen_Layer
     		WeightedOre tOre = getOre(aRandom);
     		if (tOre != null && tOre.isValid()) {
     			try {
-    				if (tOre.mMeta > 0)
+    				if (tOre.mMeta > 0) {
+    					Block tBlock = aWorld.getBlock(aX, aY, aZ);
+    					if (tBlock == Blocks.air && !air) return;
+    					int tMeta = aWorld.getBlockMetadata(aX, aY, aZ);
+    					String BlockName = Block.blockRegistry.getNameForObject(tBlock) + ":" + tMeta;
+    					if (GT_Block_Ores.getBlockReplaceData(BlockName) == 0 &&
+    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack) &&
+    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone) &&
+    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockGranites) &&
+    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockStones) &&
+    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone))
+    						return;
         				GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOre.mMeta, false, air);
+    				}
         			else {
         				aWorld.setBlock(aX, aY, aZ, tOre.mBlock, -1 - tOre.mMeta, 2);
         			}
