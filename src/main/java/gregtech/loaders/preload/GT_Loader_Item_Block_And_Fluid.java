@@ -253,6 +253,8 @@ public class GT_Loader_Item_Block_And_Fluid
 							GregTech_API.sAdvWorldgenFile.get(tName, "BlockMeta", blockList[i].getBlockMeta()),
 							GregTech_API.sAdvWorldgenFile.get(tName, "OrePrefix", blockList[i].mOrePrefix),
 							GregTech_API.sAdvWorldgenFile.get(tName, "DustToDrop", blockList[i].mDroppedDust),
+							GregTech_API.sAdvWorldgenFile.get(tName, "HarvestTool", blockList[i].mHarvestTool),
+							GregTech_API.sAdvWorldgenFile.get(tName, "BasicHardness", blockList[i].mBaseHardness),
 							GregTech_API.sAdvWorldgenFile.get(tName, "Enabled", blockList[i].isValid())
 						);
 				if (prop.isValid()) {

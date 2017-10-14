@@ -45,11 +45,11 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     private static Boolean avoidTileEntityCreation = false;
 
     private final int mDropState;
-    private final boolean[] mEnabled;
-    private final OrePrefixes[] mPrefixes;
-    private final Object[] mDroppedDusts;
-    private final ITexture[] mTextures;
-    private final int[] mHarvestLevel;
+    private final boolean[] mEnabled = new boolean[8];
+    private final OrePrefixes[] mPrefixes = new OrePrefixes[8];
+    private final Object[] mDroppedDusts = new Object[8];
+    private final ITexture[] mTextures = new ITexture[16];
+    private final double[] mBaseHardness = new double[16];
     
     public static final HashMap<String, Integer> sBlockReplacementMap = new HashMap<>();
     
@@ -57,8 +57,9 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	public static final OreBlockProp NONE = new OreBlockProp("NULL", OrePrefixes.ore, null, false);
     	private static final ITexture TEXTURE_STONE = new GT_CopiedBlockTexture(Blocks.stone, 0, 0);
 
-    	public String mBlockName, mOrePrefix, mDroppedDust;
+    	public String mBlockName, mOrePrefix, mDroppedDust, mHarvestTool;
     	public boolean mEnabled;
+    	public double mBaseHardness;
     	private Block mBlock;
     	private int mBlockMeta;
     	private ITexture mTexture = null;
@@ -72,9 +73,15 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	}
 
     	public OreBlockProp(String aBlockConfig, String aPrefixConfig, String aDroppedDustConfig, boolean aEnabled) {
+    		this(aBlockConfig, aPrefixConfig, aDroppedDustConfig, "pickaxe", 1.0D, aEnabled);
+    	}
+
+    	public OreBlockProp(String aBlockConfig, String aPrefixConfig, String aDroppedDustConfig, String aTool, double aHardness, boolean aEnabled) {
     		mBlockName = aBlockConfig;
     		mOrePrefix = aPrefixConfig;
     		mDroppedDust = aDroppedDustConfig;
+    		mHarvestTool = aTool;
+    		mBaseHardness = aHardness;
     		try {mBlock = Block.getBlockFromName(mBlockName.substring(0, mBlockName.lastIndexOf(":")));}
     		catch (Exception e) {mBlock = null;}
     		try {mBlockMeta = Integer.parseInt(mBlockName.substring(mBlockName.lastIndexOf(":") + 1));}
@@ -122,12 +129,12 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     		return 0;
     	}
 
-    	public static OreBlockProp[] getEmptyList() {
-    		return new OreBlockProp[]{NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE};
-    	}
-
     	public boolean isValid() {
     		return !(mBlock == null || mBlockMeta < 0 || mBlockMeta >= 16);
+    	}
+
+    	public static OreBlockProp[] getEmptyList() {
+    		return new OreBlockProp[]{NONE, NONE, NONE, NONE, NONE, NONE, NONE, NONE};
     	}
     }
 
@@ -149,18 +156,21 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         assert aOreBlocks.length == 8;
         
         this.mDropState = aDropState;
-        this.mEnabled = new boolean[]{aOreBlocks[0].mEnabled, aOreBlocks[1].mEnabled, aOreBlocks[2].mEnabled, aOreBlocks[3].mEnabled, aOreBlocks[4].mEnabled, aOreBlocks[5].mEnabled, aOreBlocks[6].mEnabled, aOreBlocks[7].mEnabled};
-        this.mPrefixes = new OrePrefixes[]{aOreBlocks[0].getPrefix(), aOreBlocks[1].getPrefix(), aOreBlocks[2].getPrefix(), aOreBlocks[3].getPrefix(), aOreBlocks[4].getPrefix(), aOreBlocks[5].getPrefix(), aOreBlocks[6].getPrefix(), aOreBlocks[7].getPrefix()};
-        this.mDroppedDusts = new Object[]{aOreBlocks[0].getDustDrop(), aOreBlocks[1].getDustDrop(), aOreBlocks[2].getDustDrop(), aOreBlocks[3].getDustDrop(), aOreBlocks[4].getDustDrop(), aOreBlocks[5].getDustDrop(), aOreBlocks[6].getDustDrop(), aOreBlocks[7].getDustDrop()};
-        this.mTextures = new ITexture[]{aOreBlocks[0].getTexture(), aOreBlocks[1].getTexture(), aOreBlocks[2].getTexture(), aOreBlocks[3].getTexture(), aOreBlocks[4].getTexture(), aOreBlocks[5].getTexture(), aOreBlocks[6].getTexture(), aOreBlocks[7].getTexture(), aOreBlocks[0].getTexture(), aOreBlocks[1].getTexture(), aOreBlocks[2].getTexture(), aOreBlocks[3].getTexture(), aOreBlocks[4].getTexture(), aOreBlocks[5].getTexture(), aOreBlocks[6].getTexture(), aOreBlocks[7].getTexture()};
-        this.mHarvestLevel = new int[]{aOreBlocks[0].getHarvestLevel(), aOreBlocks[1].getHarvestLevel(), aOreBlocks[2].getHarvestLevel(), aOreBlocks[3].getHarvestLevel(), aOreBlocks[4].getHarvestLevel(), aOreBlocks[5].getHarvestLevel(), aOreBlocks[6].getHarvestLevel(), aOreBlocks[7].getHarvestLevel()};
-        
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
+        	this.mEnabled[i] = aOreBlocks[i].mEnabled;
+        	this.mPrefixes[i] = aOreBlocks[i].getPrefix();
+        	this.mDroppedDusts[i] = aOreBlocks[i].getDustDrop();
+        	this.mBaseHardness[i] = aOreBlocks[i].mBaseHardness;
+        	this.mBaseHardness[i + 8] = aOreBlocks[i].mBaseHardness;
+        	this.mTextures[i] = aOreBlocks[i].getTexture();
+        	this.mTextures[i + 8] = aOreBlocks[i].getTexture();
+        	this.setHarvestLevel(aOreBlocks[i].mHarvestTool, aOreBlocks[i].getHarvestLevel(), i);
+        	this.setHarvestLevel(aOreBlocks[i].mHarvestTool, aOreBlocks[i].getHarvestLevel(), i + 8);
         	sBlockReplacementMap.put(aOreBlocks[i].mBlockName, (this.mDropState << 16) |  i);
-
-        for (int i = 0; i < 16; i++) {
-            GT_ModHandler.addValuableOre(this, i, 1);
+        	GT_ModHandler.addValuableOre(this, i, 1);
+        	GT_ModHandler.addValuableOre(this, i + 8, 1);
         }
+        
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (GregTech_API.sGeneratedMaterials[i] != null) {
                 for (int j = 0; j < 8; j++) {
@@ -224,9 +234,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     }
 
     public int getBaseBlockHarvestLevel(int aMeta) {
-        if (aMeta >= 0 && aMeta < 8)
-        	return this.mHarvestLevel[aMeta];
-        return 0;
+    	return super.getHarvestLevel(aMeta);
     }
 
     public String getUnlocalizedName() {
@@ -294,20 +302,18 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         return (!(entity instanceof EntityDragon)) && (super.canEntityDestroy(world, x, y, z, entity));
     }
 
-    public String getHarvestTool(int aMeta) {
-        return aMeta < 8 ? "pickaxe" : "shovel";
-    }
-
     public int getHarvestLevel(int aMeta) {
-        return aMeta == 5 || aMeta == 6 ? 2 : aMeta % 8;
+        return aMeta;
     }
 
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
-        return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
+    	int aMeta = aWorld.getBlockMetadata(aX, aY, aZ);
+        return (float) (mBaseHardness[aMeta] < 0 ? mBaseHardness[aMeta] : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aMeta) * 1.0D));
     }
 
     public float getExplosionResistance(Entity par1Entity, World aWorld, int aX, int aY, int aZ, double explosionX, double explosionY, double explosionZ) {
-        return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
+    	int aMeta = aWorld.getBlockMetadata(aX, aY, aZ);
+        return (float) (mBaseHardness[aMeta] < 0 ? 6000000.0F : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aMeta) * 1.0D));
     }
 
     protected boolean canSilkHarvest() {
