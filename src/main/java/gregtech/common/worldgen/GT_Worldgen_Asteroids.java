@@ -73,7 +73,7 @@ public class GT_Worldgen_Asteroids extends GT_Worldgen_Stone {
                                         double var50 = var39 * var39 + var42 * var42 + var45 * var45;
                                         if ((var50 < 1.0D) && (aWorld.getBlock(eX, eY, eZ).isAir(aWorld, eX, eY, eZ))) {
                                         	aWorld.setBlock(eX, eY, eZ, this.mBlock, this.mBlockMeta, 2);
-                                        	if (tRandom.nextInt(Math.max(1, (int) (30.0D * var50 * var50 / tDensity))) == 0)
+                                        	if (tRandom.nextInt(Math.max(1, (int) (50.0D * Math.pow(var50, 1.5) / tDensity))) == 0)
                                         		ores.generateOre(aWorld, eX, eY, eZ, aRandom, true);
                                         }
                                     }
