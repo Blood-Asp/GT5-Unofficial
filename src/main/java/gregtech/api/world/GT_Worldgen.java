@@ -111,7 +111,7 @@ public abstract class GT_Worldgen {
                 return true;
             if (s.startsWith("?") && aWorldName.contains(s.substring(1)))
     			return true;
-            if (s.startsWith("#") && aWorldProviderClassName.contains(s.substring(1)))
+            if (s.startsWith("@") && aWorldProviderClassName.contains(s.substring(1)))
     			return true;
         }
         return false;

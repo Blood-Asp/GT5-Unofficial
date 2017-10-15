@@ -32,11 +32,13 @@ public class GT_Worldgen_Stone
 
     @Override
     public void executeWorldgen(World aWorld, Random aRandom, int aChunkX, int aChunkZ, String aBiome) {
-        if (!(isGenerationAllowed(aWorld) && isBiomeAllowed(aBiome) && (mProbability <= 1 || aRandom.nextInt(mProbability) == 0))) {
+        if (!(isGenerationAllowed(aWorld) && isBiomeAllowed(aBiome))) {
             return;
         }
         
         for (int i = 0; i < mAmount; i++) {
+        	if (mProbability <= 1 || aRandom.nextInt(mProbability) == 0)
+        		continue;
             int tX = aChunkX + aRandom.nextInt(16);
             int tY = mMinY + aRandom.nextInt(mMaxY - mMinY);
             int tZ = aChunkZ + aRandom.nextInt(16);
