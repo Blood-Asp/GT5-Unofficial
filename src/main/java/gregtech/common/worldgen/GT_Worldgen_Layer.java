@@ -72,7 +72,7 @@ public class GT_Worldgen_Layer
         				boolean flag = false;
         				try {mMeta = Integer.parseInt(k[0].substring(k[0].lastIndexOf(":") + 1));}
         				catch (Exception e) {mMeta = 0; flag = true;}
-        				try {mBlock = Block.getBlockFromName(flag ? k[0] : k[0].substring(0, k[0].lastIndexOf(":")));}
+        				try {mBlock = (Block) Block.blockRegistry.getObject(flag ? k[0] : k[0].substring(0, k[0].lastIndexOf(":")));}
         				catch (Exception e) {}
         				if (mBlock != null) {
         					mMeta = -(++mMeta);
@@ -104,7 +104,7 @@ public class GT_Worldgen_Layer
             				return "Material:" + tMaterial.mName + "::" + mWeight;
             			}
         			} else {
-        				return "Block:" + Block.blockRegistry.getNameForObject(mBlock) + "::" + mWeight;
+        				return "Block:" + Block.blockRegistry.getNameForObject(mBlock) + (-1 - mMeta) + "::" + mWeight;
         			}
         		}
         		return "NULL:0";
@@ -167,23 +167,21 @@ public class GT_Worldgen_Layer
     		WeightedOre tOre = getOre(aRandom);
     		if (tOre != null && tOre.isValid()) {
     			try {
-    				if (tOre.mMeta > 0) {
-    					Block tBlock = aWorld.getBlock(aX, aY, aZ);
-    					if (tBlock == Blocks.air && !air) return;
-    					int tMeta = aWorld.getBlockMetadata(aX, aY, aZ);
-    					String BlockName = Block.blockRegistry.getNameForObject(tBlock) + ":" + tMeta;
-    					if (GT_Block_Ores.getBlockReplaceData(BlockName) == 0 &&
-    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack) &&
-    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone) &&
-    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockGranites) &&
-    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockStones) &&
-    							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone))
-    						return;
+    				Block tBlock = aWorld.getBlock(aX, aY, aZ);
+					if (tBlock == Blocks.air && !air) return;
+					int tMeta = aWorld.getBlockMetadata(aX, aY, aZ);
+					String BlockName = Block.blockRegistry.getNameForObject(tBlock) + ":" + tMeta;
+					if (GT_Block_Ores.getBlockReplaceData(BlockName) == 0 &&
+							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack) &&
+							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone) &&
+							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockGranites) &&
+							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, GregTech_API.sBlockStones) &&
+							!tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone))
+						return;
+    				if (tOre.mMeta > 0)
         				GT_TileEntity_Ores.setOreBlock(aWorld, aX, aY, aZ, tOre.mMeta, false, air);
-    				}
-        			else {
+        			else
         				aWorld.setBlock(aX, aY, aZ, tOre.mBlock, -1 - tOre.mMeta, 2);
-        			}
     			} catch (Exception e) {}
     		}
     	}

@@ -271,7 +271,7 @@ public class GT_Loader_Item_Block_And_Fluid
         ArrayList<GT_Block_Ores> tCustomOreBlocks = new ArrayList<>();
         for (Map.Entry<String, OreBlockProp[]> o : allBlocks.entrySet()) {
         	String tName = "gt.blockores." + o.getKey();
-        	String tTool = GregTech_API.sAdvWorldgenFile.get("blockores." + o.getKey(), "HarvestTool", "pickaxe");
+        	String tTool = o.getKey() == "gt" ? "pickaxe" : GregTech_API.sAdvWorldgenFile.get("blockores." + o.getKey(), "HarvestTool", "pickaxe");
         	switch(o.getKey()) {
         	case "gt": GregTech_API.sBlockOres1 = new GT_Block_Ores("gt.blockores", false, (short) -1, "pickaxe", o.getValue()); break;
         	case "gc": if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars") && GT_Mod.gregtechproxy.enableGCOres) GregTech_API.sBlockOresGC = new GT_Block_Ores(tName, true, (short) -2, tTool, o.getValue()); break;

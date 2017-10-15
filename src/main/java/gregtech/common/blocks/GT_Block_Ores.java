@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import appeng.api.definitions.Items;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -228,8 +229,20 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     		for (int i = 0; i < 8; i++) {
     			if (this.mDroppedDustsBuffer[i].startsWith("Material:"))
     				this.mDroppedDusts[i] = Materials.get(this.mDroppedDustsBuffer[i].substring(9));
-        		else if (this.mDroppedDustsBuffer[i].startsWith("ItemStack:"))
-        			this.mDroppedDusts[i] = GT_OreDictUnificator.get(this.mDroppedDustsBuffer[i].substring(10), 1L);
+        		else if (this.mDroppedDustsBuffer[i].startsWith("Item:")) {
+        			String tName = this.mDroppedDustsBuffer[i].substring(5);
+        			int tMeta = 0;
+        			Object tItem = null;
+        			try {
+        				tMeta = Integer.parseInt(tName.substring(tName.lastIndexOf(":") + 1));
+        				tItem = Item.itemRegistry.getObject(tName.substring(0, tName.lastIndexOf(":")));
+        			} catch (Exception e) {
+        				tMeta = 0;
+        				tItem = Item.itemRegistry.getObject(tName);
+        			}
+        			if (tItem instanceof Item)
+        				this.mDroppedDusts[i] = GT_OreDictUnificator.get(new ItemStack((Item) tItem, 1, tMeta));
+        		}
         		else
         			this.mDroppedDusts[i] = null;
     		}
