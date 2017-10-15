@@ -61,7 +61,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	public static final OreBlockProp NONE = new OreBlockProp("NULL", OrePrefixes.ore, null, false);
     	private static final ITexture TEXTURE_STONE = new GT_CopiedBlockTexture(Blocks.stone, 0, 0);
 
-    	public String mBlockName, mOrePrefix, mDroppedDust, mHarvestTool;
+    	public String mBlockName, mOrePrefix, mDroppedDust;
     	public boolean mEnabled;
     	public double mBaseHardness;
     	private Block mBlock;
@@ -77,14 +77,13 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	}
 
     	public OreBlockProp(String aBlockConfig, String aPrefixConfig, String aDroppedDustConfig, boolean aEnabled) {
-    		this(aBlockConfig, aPrefixConfig, aDroppedDustConfig, "pickaxe", 1.0D, aEnabled);
+    		this(aBlockConfig, aPrefixConfig, aDroppedDustConfig, 1.0D, aEnabled);
     	}
 
-    	public OreBlockProp(String aBlockConfig, String aPrefixConfig, String aDroppedDustConfig, String aTool, double aHardness, boolean aEnabled) {
+    	public OreBlockProp(String aBlockConfig, String aPrefixConfig, String aDroppedDustConfig, double aHardness, boolean aEnabled) {
     		mBlockName = aBlockConfig;
     		mOrePrefix = aPrefixConfig;
     		mDroppedDust = aDroppedDustConfig;
-    		mHarvestTool = aTool;
     		mBaseHardness = aHardness;
     		try {mBlock = Block.getBlockFromName(mBlockName.substring(0, mBlockName.lastIndexOf(":")));}
     		catch (Exception e) {mBlock = null;}
@@ -150,7 +149,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
      * @param aOreBlocks List of the Blocks which will be replaced by ore. Must have 8 entries.
      * @param aDropState -1 for vanilla GT ores, -2 for GC ores, -3, -4, -5 for UB ores; positive value for custom ores; 0 for not available.
      */
-    public GT_Block_Ores(String aUnlocalizedName, boolean aHideFirstMeta, short aDropState, OreBlockProp... aOreBlocks) {
+    public GT_Block_Ores(String aUnlocalizedName, boolean aHideFirstMeta, short aDropState, String aHarvestTool, OreBlockProp... aOreBlocks) {
         super(GT_Item_Ores.class, aUnlocalizedName, Material.rock);
         this.isBlockContainer = true;
         setStepSound(soundTypeStone);
@@ -168,8 +167,8 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         	this.mBaseHardness[i] = aOreBlocks[i].mBaseHardness;
         	this.mTextures[i] = aOreBlocks[i].getTexture();
         	this.mTextures[i + 8] = aOreBlocks[i].getTexture();
-        	this.setHarvestLevel(aOreBlocks[i].mHarvestTool, aOreBlocks[i].getHarvestLevel(), i);
-        	this.setHarvestLevel(aOreBlocks[i].mHarvestTool, aOreBlocks[i].getHarvestLevel(), i + 8);
+        	this.setHarvestLevel(aHarvestTool, aOreBlocks[i].getHarvestLevel(), i);
+        	this.setHarvestLevel(aHarvestTool, aOreBlocks[i].getHarvestLevel(), i + 8);
         	sBlockReplacementMap.put(aOreBlocks[i].mBlockName, (this.mDropState << 16) |  i);
         	GT_ModHandler.addValuableOre(this, i, 1);
         	GT_ModHandler.addValuableOre(this, i + 8, 1);
