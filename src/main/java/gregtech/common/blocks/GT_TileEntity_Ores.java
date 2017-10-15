@@ -247,11 +247,17 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
                 }
             }
             if (tRandom.nextInt(3 + aFortune) > 1) {
-                Object dust = ((GT_Block_Ores) aDroppedOre).getDroppedDusts()[this.mMetaData / 1000 % 16];
-                if (dust instanceof Materials)
-                	rList.add(GT_OreDictUnificator.get(tRandom.nextInt(3) > 0 ? OrePrefixes.dustImpure : OrePrefixes.dust,(Materials) dust, 1L));
-                if (dust instanceof ItemStack)
-                	rList.add((ItemStack) dust);
+                Object dustObj = ((GT_Block_Ores) aDroppedOre).getDroppedDusts()[this.mMetaData / 1000 % 16];
+                ItemStack dust = null;
+                if (dustObj instanceof Materials) {
+                	OrePrefixes tPrefix = tRandom.nextInt(3) > 0 ? OrePrefixes.dustImpure.doGenerateItem((Materials) dustObj) ? OrePrefixes.dustImpure : OrePrefixes.dust : OrePrefixes.dust;
+                	if (tPrefix.doGenerateItem((Materials) dustObj))
+                		dust = GT_OreDictUnificator.get(tPrefix, (Materials) dustObj, 1L);
+                }
+                if (dustObj instanceof ItemStack)
+                	dust = (ItemStack) dustObj;
+                if (dust != null)
+                	rList.add(dust);
             }
         }
         return rList;

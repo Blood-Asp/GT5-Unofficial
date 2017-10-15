@@ -30,11 +30,11 @@ public class GT_Worldgenloader
 	private static final String dims = "DimensionWhiteList", biomes = "RestrictedBiomes";
 	
 	public static void setCustomExamples() {
-		ADV_FILE.mConfig.getCategory("blockores.custom_replaceable_block");
 		ADV_FILE.mConfig.getCategory("worldgen.stone.custom_stone.custom_scale");
         ADV_FILE.mConfig.getCategory("worldgen.asteroid.custom_asteroid");
         ADV_FILE.mConfig.getCategory("worldgen.ore.small.custom");
         ADV_FILE.mConfig.getCategory("worldgen.ore.mix.custom");
+        ADV_FILE.mConfig.getCategory("blockores.custom_replaceable_block");
 	}
 
 	private void transferOldFile() {

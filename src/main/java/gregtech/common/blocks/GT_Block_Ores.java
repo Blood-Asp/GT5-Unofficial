@@ -1,5 +1,7 @@
 package gregtech.common.blocks;
 
+import static gregtech.api.enums.GT_Values.MOD_ID;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,9 @@ import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.render.GT_Renderer_Block;
+import gregtech.loaders.oreprocessing.ProcessingOre;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -49,7 +53,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     private final OrePrefixes[] mPrefixes = new OrePrefixes[8];
     private final Object[] mDroppedDusts = new Object[8];
     private final ITexture[] mTextures = new ITexture[16];
-    private final double[] mBaseHardness = new double[16];
+    private final double[] mBaseHardness = new double[8];
     
     public static final HashMap<String, Integer> sBlockReplacementMap = new HashMap<>();
     
@@ -154,6 +158,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         tHideOres = Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres;
         
         assert aOreBlocks.length == 8;
+        ItemStack[] aCustomDustByproduct = new ItemStack[8];
         
         this.mDropState = aDropState;
         for (int i = 0; i < 8; i++) {
@@ -161,7 +166,6 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         	this.mPrefixes[i] = aOreBlocks[i].getPrefix();
         	this.mDroppedDusts[i] = aOreBlocks[i].getDustDrop();
         	this.mBaseHardness[i] = aOreBlocks[i].mBaseHardness;
-        	this.mBaseHardness[i + 8] = aOreBlocks[i].mBaseHardness;
         	this.mTextures[i] = aOreBlocks[i].getTexture();
         	this.mTextures[i + 8] = aOreBlocks[i].getTexture();
         	this.setHarvestLevel(aOreBlocks[i].mHarvestTool, aOreBlocks[i].getHarvestLevel(), i);
@@ -169,6 +173,10 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         	sBlockReplacementMap.put(aOreBlocks[i].mBlockName, (this.mDropState << 16) |  i);
         	GT_ModHandler.addValuableOre(this, i, 1);
         	GT_ModHandler.addValuableOre(this, i + 8, 1);
+        	
+        	ItemStack dust = this.mDroppedDusts[i] instanceof Materials ? OrePrefixes.dust.doGenerateItem((Materials) this.mDroppedDusts[i]) ? GT_OreDictUnificator.get(OrePrefixes.dust, (Materials) this.mDroppedDusts[i], 1L) : null : this.mDroppedDusts[i] instanceof ItemStack ? ((ItemStack) this.mDroppedDusts[i]) : null;
+        	ItemStack dust1 = mPrefixes[i] != null ? GT_OreDictUnificator.getDust(mPrefixes[i].mSecondaryMaterial) : null;
+        	aCustomDustByproduct[i] = this.mPrefixes[i] != null && GT_Utility.areStacksEqual(dust, dust1) && dust.stackSize == dust1.stackSize ? null : dust;
         }
         
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
@@ -178,7 +186,11 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
-                        GT_OreDictUnificator.registerOre(this.mPrefixes[j] != null ? this.mPrefixes[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
+                    	ItemStack tStack = new ItemStack(this, 1, i + (j * 1000));
+                    	if (aCustomDustByproduct[j] != null)
+                    		ProcessingOre.registerException(GregTech_API.sGeneratedMaterials[i], "", MOD_ID, tStack, aCustomDustByproduct[j]);
+                    	GT_OreDictUnificator.registerOre(this.mPrefixes[j] != null ? this.mPrefixes[j].get(GregTech_API.sGeneratedMaterials[i]) : "", tStack);
+                        
                         if (tHideOres) {
                             if (!(j == 0 && !aHideFirstMeta)) {
                                 codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i + (j * 1000)));
@@ -307,13 +319,21 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     }
 
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
-    	int aMeta = aWorld.getBlockMetadata(aX, aY, aZ);
-        return (float) (mBaseHardness[aMeta] < 0 ? mBaseHardness[aMeta] : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aMeta) * 1.0D));
+    	TileEntity tTile = aWorld.getTileEntity(aX, aY, aZ);
+    	if (tTile instanceof GT_TileEntity_Ores) {
+    		int aMeta = ((GT_TileEntity_Ores) tTile).mMetaData / 16000 % 8;
+    		return (float) (mBaseHardness[aMeta] < 0 ? mBaseHardness[aMeta] : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0D));
+    	}
+    	return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
     }
 
     public float getExplosionResistance(Entity par1Entity, World aWorld, int aX, int aY, int aZ, double explosionX, double explosionY, double explosionZ) {
-    	int aMeta = aWorld.getBlockMetadata(aX, aY, aZ);
-        return (float) (mBaseHardness[aMeta] < 0 ? 6000000.0F : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aMeta) * 1.0D));
+    	TileEntity tTile = aWorld.getTileEntity(aX, aY, aZ);
+    	if (tTile instanceof GT_TileEntity_Ores) {
+    		int aMeta = ((GT_TileEntity_Ores) tTile).mMetaData / 16000 % 8;
+    		return (float) (mBaseHardness[aMeta] < 0 ? 6000000.0F : Math.max(mBaseHardness[aMeta], 1.0D + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0D));
+    	}
+    	return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
     }
 
     protected boolean canSilkHarvest() {

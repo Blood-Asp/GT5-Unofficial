@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistrator {
-    private ArrayList<Materials> mAlreadyListedOres = new ArrayList(1000);
+    private static ArrayList<Materials> mAlreadyListedOres = new ArrayList(1000);
 
     public ProcessingOre() {
         for (OrePrefixes tPrefix : OrePrefixes.values())
@@ -19,16 +19,20 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
     }
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
-        boolean tIsRich = (aPrefix == OrePrefixes.oreNether) || (aPrefix == OrePrefixes.oreEnd) || (aPrefix == OrePrefixes.oreDense);
+        this.registerOre(aPrefix, aMaterial, aOreDictName, aModName, aStack, null);
+    }
+
+    private void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack, ItemStack aReplacement) {
+    	boolean tIsRich = (aPrefix == OrePrefixes.oreNether) || (aPrefix == OrePrefixes.oreEnd) || (aPrefix == OrePrefixes.oreDense);
 
         if (aMaterial == Materials.Oilsands) {
             GT_Values.RA.addCentrifugeRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), null, null, Materials.Oil.getFluid(tIsRich ? 1000L : 500L), new ItemStack(net.minecraft.init.Blocks.sand, 1, 0), null, null, null, null, null, new int[]{tIsRich ? '?' : '?'}, tIsRich ? 2000 : 1000, 5);
         } else {
-            registerStandardOreRecipes(aPrefix, aMaterial, GT_Utility.copyAmount(1L, new Object[]{aStack}), Math.max(1, gregtech.api.GregTech_API.sOPStuff.get(gregtech.api.enums.ConfigCategories.Materials.oreprocessingoutputmultiplier, aMaterial.toString(), 1)) * (tIsRich ? 2 : 1));
+            registerStandardOreRecipes(aPrefix, aMaterial, GT_Utility.copyAmount(1L, new Object[]{aStack}), Math.max(1, gregtech.api.GregTech_API.sOPStuff.get(gregtech.api.enums.ConfigCategories.Materials.oreprocessingoutputmultiplier, aMaterial.toString(), 1)) * (tIsRich ? 2 : 1), aReplacement);
         }
     }
 
-    private boolean registerStandardOreRecipes(OrePrefixes aPrefix, Materials aMaterial, ItemStack aOreStack, int aMultiplier) {
+    private boolean registerStandardOreRecipes(OrePrefixes aPrefix, Materials aMaterial, ItemStack aOreStack, int aMultiplier, ItemStack aReplacement) {
         if ((aOreStack == null) || (aMaterial == null)) return false;
         GT_ModHandler.addValuableOre(GT_Utility.getBlockFromStack(aOreStack), aOreStack.getItemDamage(), aMaterial.mOreValue);
         Materials tMaterial = aMaterial.mOreReplacement;
@@ -101,8 +105,16 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
 
         if (tCrushed != null) {
             GT_Values.RA.addForgeHammerRecipe(aOreStack, GT_Utility.copy(new Object[]{GT_Utility.copyAmount(tCrushed.stackSize, new Object[]{tGem}), tCrushed}), 16, 10);
-            GT_ModHandler.addPulverisationRecipe(aOreStack, GT_Utility.mul(2L, new Object[]{tCrushed}), tMaterial.contains(SubTag.PULVERIZING_CINNABAR) ? GT_OreDictUnificator.get(OrePrefixes.crystal, Materials.Cinnabar, GT_OreDictUnificator.get(OrePrefixes.gem, tPrimaryByMaterial, GT_Utility.copyAmount(1L, new Object[]{tPrimaryByProduct}), 1L), 1L) : GT_OreDictUnificator.get(OrePrefixes.gem, tPrimaryByMaterial, GT_Utility.copyAmount(1L, new Object[]{tPrimaryByProduct}), 1L), tPrimaryByProduct == null ? 0 : tPrimaryByProduct.stackSize * 10 * aMultiplier * aMaterial.mByProductMultiplier, GT_OreDictUnificator.getDust(aPrefix.mSecondaryMaterial), 50, true);
+            GT_ModHandler.addPulverisationRecipe(aOreStack, GT_Utility.mul(2L, new Object[]{tCrushed}), tMaterial.contains(SubTag.PULVERIZING_CINNABAR) ? GT_OreDictUnificator.get(OrePrefixes.crystal, Materials.Cinnabar, GT_OreDictUnificator.get(OrePrefixes.gem, tPrimaryByMaterial, GT_Utility.copyAmount(1L, new Object[]{tPrimaryByProduct}), 1L), 1L) : GT_OreDictUnificator.get(OrePrefixes.gem, tPrimaryByMaterial, GT_Utility.copyAmount(1L, new Object[]{tPrimaryByProduct}), 1L), tPrimaryByProduct == null ? 0 : tPrimaryByProduct.stackSize * 10 * aMultiplier * aMaterial.mByProductMultiplier, aPrefix == null ? aReplacement : GT_OreDictUnificator.getDust(aPrefix.mSecondaryMaterial), 50, true);
         }
         return true;
+    }
+
+    private static final ProcessingOre INSTANCE = new ProcessingOre(0);
+
+    private ProcessingOre(int a){}
+
+    public static void registerException(Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack, ItemStack aOreDustByproduct) {
+    	INSTANCE.registerOre(null, aMaterial, aOreDictName, aModName, aStack, aOreDustByproduct);
     }
 }
