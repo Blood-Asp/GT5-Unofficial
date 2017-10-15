@@ -1,7 +1,5 @@
 package gregtech.common.blocks;
 
-import static gregtech.api.enums.GT_Values.MOD_ID;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +17,6 @@ import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Utility;
 import gregtech.common.render.GT_Renderer_Block;
 import gregtech.loaders.oreprocessing.ProcessingOre;
 import net.minecraft.block.Block;
@@ -51,7 +48,8 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     private final int mDropState;
     private final boolean[] mEnabled = new boolean[8];
     private final OrePrefixes[] mPrefixes = new OrePrefixes[8];
-    private final Object[] mDroppedDusts = new Object[8];
+    private final String[] mDroppedDustsBuffer = new String[8];
+    private Object[] mDroppedDusts = null;
     private final ITexture[] mTextures = new ITexture[16];
     private final double[] mBaseHardness = new double[8];
     
@@ -111,15 +109,8 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     	}
 
     	public OrePrefixes getPrefix() {
-    		return OrePrefixes.getOrePrefix(mOrePrefix);
-    	}
-
-    	public Object getDustDrop() {
-    		if (mDroppedDust.startsWith("Material:"))
-    			return Materials.get(mDroppedDust.substring(9));
-    		else if (mDroppedDust.startsWith("ItemStack:"))
-    			return GT_OreDictUnificator.get(mDroppedDust.substring(10), 1L);
-    		return null;
+    		OrePrefixes tPrefix = OrePrefixes.getOrePrefix(mOrePrefix);
+    		return tPrefix == null ? OrePrefixes.ore : tPrefix;
     	}
 
     	public ITexture getTexture() {
@@ -157,13 +148,12 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         tHideOres = Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres;
         
         assert aOreBlocks.length == 8;
-        ItemStack[] aCustomDustByproduct = new ItemStack[8];
         
         this.mDropState = aDropState;
         for (int i = 0; i < 8; i++) {
         	this.mEnabled[i] = aOreBlocks[i].mEnabled;
         	this.mPrefixes[i] = aOreBlocks[i].getPrefix();
-        	this.mDroppedDusts[i] = aOreBlocks[i].getDustDrop();
+        	this.mDroppedDustsBuffer[i] = aOreBlocks[i].mDroppedDust;
         	this.mBaseHardness[i] = aOreBlocks[i].mBaseHardness;
         	this.mTextures[i] = aOreBlocks[i].getTexture();
         	this.mTextures[i + 8] = aOreBlocks[i].getTexture();
@@ -172,10 +162,6 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
         	sBlockReplacementMap.put(aOreBlocks[i].mBlockName, (this.mDropState << 16) |  i);
         	GT_ModHandler.addValuableOre(this, i, 1);
         	GT_ModHandler.addValuableOre(this, i + 8, 1);
-        	
-        	ItemStack dust = this.mDroppedDusts[i] instanceof Materials ? OrePrefixes.dust.doGenerateItem((Materials) this.mDroppedDusts[i]) ? GT_OreDictUnificator.get(OrePrefixes.dust, (Materials) this.mDroppedDusts[i], 1L) : null : this.mDroppedDusts[i] instanceof ItemStack ? ((ItemStack) this.mDroppedDusts[i]) : null;
-        	ItemStack dust1 = mPrefixes[i] != null ? GT_OreDictUnificator.getDust(mPrefixes[i].mSecondaryMaterial) : null;
-        	aCustomDustByproduct[i] = this.mPrefixes[i] != null && GT_Utility.areStacksEqual(dust, dust1) && dust.stackSize == dust1.stackSize ? null : dust;
         }
         
         for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
@@ -185,10 +171,7 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0) {
-                    	ItemStack tStack = new ItemStack(this, 1, i + (j * 1000));
-                    	if (aCustomDustByproduct[j] != null)
-                    		ProcessingOre.registerException(GregTech_API.sGeneratedMaterials[i], "", MOD_ID, tStack, aCustomDustByproduct[j]);
-                    	GT_OreDictUnificator.registerOre(this.mPrefixes[j] != null ? this.mPrefixes[j].get(GregTech_API.sGeneratedMaterials[i]) : "", tStack);
+                    	GT_OreDictUnificator.registerOre(this.mPrefixes[j] != null ? this.mPrefixes[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
                         
                         if (tHideOres) {
                             if (!(j == 0 && !aHideFirstMeta)) {
@@ -200,6 +183,9 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
                 }
             }
         }
+        
+        if (mDropState != -1)
+        	ProcessingOre.addToPretreatList(this);
     }
 
     public OrePrefixes[] getProcessingPrefix() { //Must have 8 entries; an entry can be null to disable automatic recipes.
@@ -237,6 +223,17 @@ public class GT_Block_Ores extends GT_Generic_Block implements ITileEntityProvid
     }
 
     public Object[] getDroppedDusts() { //Must have 8 entries; can be null.
+    	if (this.mDroppedDusts == null) {
+    		this.mDroppedDusts = new Object[8];
+    		for (int i = 0; i < 8; i++) {
+    			if (this.mDroppedDustsBuffer[i].startsWith("Material:"))
+    				this.mDroppedDusts[i] = Materials.get(this.mDroppedDustsBuffer[i].substring(9));
+        		else if (this.mDroppedDustsBuffer[i].startsWith("ItemStack:"))
+        			this.mDroppedDusts[i] = GT_OreDictUnificator.get(this.mDroppedDustsBuffer[i].substring(10), 1L);
+        		else
+        			this.mDroppedDusts[i] = null;
+    		}
+    	}
     	return this.mDroppedDusts;
     }
 

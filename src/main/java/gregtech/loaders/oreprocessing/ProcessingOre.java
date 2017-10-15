@@ -1,16 +1,25 @@
 package gregtech.loaders.oreprocessing;
 
 import gregtech.GT_Mod;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Ores;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static gregtech.api.enums.GT_Values.MOD_ID;
 
 public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistrator {
-    private static ArrayList<Materials> mAlreadyListedOres = new ArrayList(1000);
+    private ArrayList<Materials> mAlreadyListedOres = new ArrayList(1000);
+    private static ArrayList<GT_Block_Ores> mPretreatOres = new ArrayList<>();
+    private HashMap<GT_Block_Ores, ItemStack[]> mPretreatMap = new HashMap<>();
+    private boolean mPretreatInit = false;
 
     public ProcessingOre() {
         for (OrePrefixes tPrefix : OrePrefixes.values())
@@ -19,6 +28,23 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
     }
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
+    	if (!mPretreatInit) {
+    		this.pretreatInit();
+    		mPretreatInit = true;
+    	}
+    	if (aMaterial != null && aMaterial.mMetaItemSubID > 0) {
+    		for (Map.Entry<GT_Block_Ores, ItemStack[]> e : mPretreatMap.entrySet()) {
+        		for (int i = 0; i < 8; i++) {
+        			if (e.getValue()[i] != null) {
+        				ItemStack tOre = new ItemStack(e.getKey(), 1, aMaterial.mMetaItemSubID + (i * 1000));
+            			if (GT_Utility.areStacksEqual(aStack, tOre)) {
+            				this.registerOre(null, aMaterial, aOreDictName, aModName, aStack, e.getValue()[i]);
+            				return;
+            			}
+        			}
+        		}
+        	}
+    	}
         this.registerOre(aPrefix, aMaterial, aOreDictName, aModName, aStack, null);
     }
 
@@ -110,11 +136,27 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
         return true;
     }
 
-    private static final ProcessingOre INSTANCE = new ProcessingOre(0);
+    public static void addToPretreatList(GT_Block_Ores aOre) {
+    	mPretreatOres.add(aOre);
+    }
 
-    private ProcessingOre(int a){}
-
-    public static void registerException(Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack, ItemStack aOreDustByproduct) {
-    	INSTANCE.registerOre(null, aMaterial, aOreDictName, aModName, aStack, aOreDustByproduct);
+    private void pretreatInit() {
+    	for (GT_Block_Ores aOre : mPretreatOres) {
+    		boolean[] aEnabled = aOre.getEnabledMetas();
+    		Object[] aDroppedDusts = aOre.getDroppedDusts();
+    		OrePrefixes[] aPrefixes = aOre.getProcessingPrefix();
+    		ItemStack[] tCustomedItems = new ItemStack[8];
+    		for (int i = 0; i < 8; i++) {
+    			if (!aEnabled[i]) continue;
+    			ItemStack dust = aDroppedDusts[i] instanceof Materials ? OrePrefixes.dust.doGenerateItem((Materials) aDroppedDusts[i]) ? GT_OreDictUnificator.get(OrePrefixes.dust, (Materials) aDroppedDusts[i], 1L) : null : aDroppedDusts[i] instanceof ItemStack ? ((ItemStack) aDroppedDusts[i]) : null;
+            	ItemStack dust1 = aPrefixes[i] != null ? GT_OreDictUnificator.getDust(aPrefixes[i].mSecondaryMaterial) : null;
+            	if (aPrefixes[i] != null && GT_Utility.areStacksEqual(dust, dust1)) {
+            		tCustomedItems[i] = null;
+            	} else {
+            		tCustomedItems[i] = dust;
+            	}
+    		}
+    		mPretreatMap.put(aOre, tCustomedItems);
+    	}
     }
 }
