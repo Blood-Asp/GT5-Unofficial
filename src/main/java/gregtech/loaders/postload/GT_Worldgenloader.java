@@ -53,6 +53,8 @@ public class GT_Worldgenloader
 			case "marble": block = getBlockName(GregTech_API.sBlockStones); meta = 0; break;
 			case "basalt": block = getBlockName(GregTech_API.sBlockStones); meta = 8; break;
 			}
+			ADV_FILE.get("worldgen.stone." + type, "Block", block);
+			ADV_FILE.get("worldgen.stone." + type, "BlockMeta", meta);
 			int prob = 0, size = 0;
 			for (String scale : new String[]{"tiny", "small", "medium", "large", "huge"}) {
 				switch (scale) {
@@ -75,8 +77,6 @@ public class GT_Worldgenloader
 				if (OLD_FILE.find("worldgen", "nether.stone." + type + "." + scale, true)) tDimList.addNether();
 				transferOldDimList(tName, tDimList);
 				ADV_FILE.get(category, dims, tDimList.get());
-				ADV_FILE.get(category, "Block", block);
-				ADV_FILE.get(category, "BlockMeta", meta);
 				ADV_FILE.get(category, biomes, new String[0]);
 			}
 		}
@@ -428,12 +428,13 @@ public class GT_Worldgenloader
         Block cBlock;
         boolean cVoid, cCustom;
         for (ConfigCategory cStone : ADV_FILE.mConfig.getCategory("worldgen.stone").getChildren()) {
+        	_prop = new StoneProp(cStone.getName(), "");
+        	cBlock = getBlock(ADV_FILE.get(textWorldgen + "stone." + cStone.getName(), "Block", getBlockName(_prop.mBlock)));
+    		cMeta = ADV_FILE.get(textWorldgen + "stone." + cStone.getName(), "BlockMeta", _prop.mMeta);
         	for (ConfigCategory cScale : cStone.getChildren()) {
         		_prop = new StoneProp(cStone.getName(), cScale.getName());
         		cCustom = _prop.mCustom;
         		cName = "stone." + cStone.getName() + "." + cScale.getName();
-        		cBlock = getBlock(ADV_FILE.get(textWorldgen + cName, "Block", getBlockName(_prop.mBlock)));
-        		cMeta = ADV_FILE.get(textWorldgen + cName, "BlockMeta", _prop.mMeta);
         		cAmount = ADV_FILE.get(textWorldgen + cName, "Amount", _prop.mAmount);
         		cSize = ADV_FILE.get(textWorldgen + cName, "Size", _prop.mSize);
         		cProb = ADV_FILE.get(textWorldgen + cName, "Probability", _prop.mProbability);
