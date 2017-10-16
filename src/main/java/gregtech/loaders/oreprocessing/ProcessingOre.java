@@ -7,6 +7,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Ores;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -32,19 +33,12 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
     		this.pretreatInit();
     		mPretreatInit = true;
     	}
-    	if (aMaterial != null && aMaterial.mMetaItemSubID > 0) {
-    		for (Map.Entry<GT_Block_Ores, ItemStack[]> e : mPretreatMap.entrySet()) {
-        		for (int i = 0; i < 8; i++) {
-        			if (e.getValue()[i] != null) {
-        				ItemStack tOre = new ItemStack(e.getKey(), 1, aMaterial.mMetaItemSubID + (i * 1000));
-            			if (GT_Utility.areStacksEqual(aStack, tOre)) {
-            				this.registerOre(null, aMaterial, aOreDictName, aModName, aStack, e.getValue()[i]);
-            				return;
-            			}
-        			}
-        		}
-        	}
-    	}
+    	ItemStack[] tList = mPretreatMap.get(Block.getBlockFromItem(aStack.getItem()));
+		int tMeta = aStack.getItemDamage() / 1000;
+		if (tList != null && tMeta >= 0 && tMeta < 8 && tList[tMeta] != null) {
+			this.registerOre(null, aMaterial, aOreDictName, aModName, aStack, tList[tMeta]);
+			return;
+		}
         this.registerOre(aPrefix, aMaterial, aOreDictName, aModName, aStack, null);
     }
 
