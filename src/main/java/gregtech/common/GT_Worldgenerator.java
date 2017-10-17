@@ -24,6 +24,7 @@ import static gregtech.api.enums.GT_Values.oreveinAttempts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.HashSet;
 
 import static gregtech.api.enums.GT_Values.D1;
 
@@ -39,6 +40,7 @@ public class GT_Worldgenerator
     //private static int gcMaxSize = 400;
     private static boolean endAsteroids = true;
     public List<Runnable> mList = new ArrayList();
+	public HashSet<Long> ProcChunks = new HashSet<Long>();
     public boolean mIsGenerating = false;
 	public static final Object listLock = new Object();
     //private static boolean gcAsteroids = true;
@@ -64,15 +66,21 @@ public class GT_Worldgenerator
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         synchronized (listLock)
 		{
-			this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-			if (debugWorldGen) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
+			if (!this.ProcChunks.contains( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL)) ) {
+				this.ProcChunks.add( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL));
+				this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+				if (debugWorldGen) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
+			} else {
+				if (debugWorldGen) {GT_Log.out.println("DUP WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size() + " ProcChunks.size(): " + ProcChunks.size() ); }
+			}
         }
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
             for (int i = 0; i < mList_sS; i++) {
                 WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
-                if (debugWorldGen) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX/16 + " z:" + toRun.mZ/16 + " SIZE: " + this.mList.size());}
+                if (debugWorldGen) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX/16 + " z:" + toRun.mZ/16 + " SIZE: " + this.mList.size() + " i: " + i );}
+				this.ProcChunks.remove( ((long)(toRun.mX/16) << 32) | ((long)(toRun.mZ/16) & 0x00000000ffffffffL));
                 synchronized (listLock)
                 {
                     this.mList.remove(0);
@@ -114,7 +122,9 @@ public class GT_Worldgenerator
         }
 
         public void run() {
-			String tDimensionName = this.mWorld.provider.getDimensionName();
+			String tDimensionName = "";
+			if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
+			long startTime = System.nanoTime();
             if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
 				int oreveinRNG = this.mRandom.nextInt(100);
                 if (( oreveinRNG < oreveinPercentage) && (GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
@@ -313,6 +323,14 @@ public class GT_Worldgenerator
             if (tChunk != null) {
                 tChunk.isModified = true;
             }
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			if (debugWorldGen) {
+				GT_Log.out.println(
+					"Oregen took " + duration + 
+					" nanoseconds"
+					);
+			}
         }
     }
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.debugWorldGen;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -51,7 +52,15 @@ public class GT_Worldgen_GT_Ore_Layer
         //this.mMars = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Mars", aMars);
         //this.mAsteroid = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Asteroid", aAsteroid);
         this.mMinY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MinHeight", aMinY));
-        this.mMaxY = ((short) Math.max(this.mMinY + 5, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY)));
+        short mMaxY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY));
+		if (mMaxY < (this.mMinY + 7))	{
+			GT_Log.out.println(
+					"Oremix " + this.mWorldGenName +
+				    " has invalid Min/Max heights!"
+				);
+			mMaxY = (short) (this.mMinY + 7);
+		}
+		this.mMaxY = mMaxY;
         this.mWeight = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "RandomWeight", aWeight));
         this.mDensity = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Density", aDensity));
         this.mSize = ((short) Math.max(1, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Size", aSize)));
@@ -130,6 +139,7 @@ public class GT_Worldgen_GT_Ore_Layer
                             " chunkX="+aChunkX+
                             " chunkZ="+aChunkZ+
                             " chunkY="+tMinY+
+                            " Density=" + this.mDensity +
                             " Secondary="+placeCount[1]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSecondaryMeta).getDisplayName()+
                             " Between="+placeCount[2]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mBetweenMeta).getDisplayName()+
                             " Primary="+placeCount[0]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
