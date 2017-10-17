@@ -18,7 +18,7 @@ public abstract class GT_Worldgen {
 
     public GT_Worldgen(String aName, List aList, boolean aDefault, String[] aDimWhiteList, String[] aBiomeWhiteList) {
         mWorldGenName = aName;
-        mEnabled = GregTech_API.sAdvWorldgenFile.get("worldgen", mWorldGenName, aDefault);
+        mEnabled = GregTech_API.sAdvWorldgenFile.getBoolean("worldgen", mWorldGenName, aDefault);
         if (mEnabled) aList.add(this);
         List<String> aDimName = new ArrayList<>(), aBiomeName = new ArrayList<>();
         List<Integer> aDimID = new ArrayList<>();

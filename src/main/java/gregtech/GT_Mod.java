@@ -125,12 +125,12 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.sAdvWorldgenFile = new GT_Config(new Configuration(advWorldgenFile));
         GT_Worldgenloader.setCustomExamples();
         if (GregTech_API.worldgenFileUpdate) {
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres, GregTech_API.oldWorldgenFile.find("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres));
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres, GregTech_API.oldWorldgenFile.find("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres));
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres, GregTech_API.oldWorldgenFile.find("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres));
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres, GregTech_API.oldWorldgenFile.find("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres));
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres, GregTech_API.oldWorldgenFile.find("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres));
-        	GregTech_API.sAdvWorldgenFile.set("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres, GregTech_API.oldWorldgenFile.find("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableBlackGraniteOres", GregTech_API.oldWorldgenFile.find("general", "enableBlackGraniteOres", GT_Mod.gregtechproxy.enableBlackGraniteOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableRedGraniteOres", GregTech_API.oldWorldgenFile.find("general", "enableRedGraniteOres", GT_Mod.gregtechproxy.enableRedGraniteOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableMarbleOres", GregTech_API.oldWorldgenFile.find("general", "enableMarbleOres", GT_Mod.gregtechproxy.enableMarbleOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableBasaltOres", GregTech_API.oldWorldgenFile.find("general", "enableBasaltOres", GT_Mod.gregtechproxy.enableBasaltOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableGCOres", GregTech_API.oldWorldgenFile.find("general", "enableGCOres", GT_Mod.gregtechproxy.enableGCOres));
+        	GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableUBOres", GregTech_API.oldWorldgenFile.find("general", "enableUBOres", GT_Mod.gregtechproxy.enableUBOres));
         }
         GregTech_API.sMaterialProperties = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialProperties.cfg")));
         GregTech_API.sMaterialComponents = new GT_Config(new Configuration(new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "MaterialComponents.cfg")));
@@ -283,12 +283,12 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mEasierIVPlusCables = tMainConfig.get("general", "EasierIVPlusCables", false).getBoolean(false);
         gregtechproxy.mBrickedBlastFurnace = tMainConfig.get("general", "BrickedBlastFurnace", true).getBoolean(true);
         gregtechproxy.mMixedOreOnlyYieldsTwoThirdsOfPureOre = tMainConfig.get("general", "MixedOreOnlyYieldsTwoThirdsOfPureOre", false).getBoolean(false);
-        gregtechproxy.enableBlackGraniteOres = GregTech_API.sAdvWorldgenFile.get("general", "enableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
-        gregtechproxy.enableRedGraniteOres = GregTech_API.sAdvWorldgenFile.get("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
-        gregtechproxy.enableMarbleOres = GregTech_API.sAdvWorldgenFile.get("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
-        gregtechproxy.enableBasaltOres = GregTech_API.sAdvWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
-        gregtechproxy.enableGCOres = GregTech_API.sAdvWorldgenFile.get("general", "enableGCOres", gregtechproxy.enableGCOres);
-        gregtechproxy.enableUBOres = GregTech_API.sAdvWorldgenFile.get("general", "enableUBOres", gregtechproxy.enableUBOres);
+        gregtechproxy.enableBlackGraniteOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableBlackGraniteOres", gregtechproxy.enableBlackGraniteOres);
+        gregtechproxy.enableRedGraniteOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableRedGraniteOres", gregtechproxy.enableRedGraniteOres);
+        gregtechproxy.enableMarbleOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableMarbleOres", gregtechproxy.enableMarbleOres);
+        gregtechproxy.enableBasaltOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
+        gregtechproxy.enableGCOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableGCOres", gregtechproxy.enableGCOres);
+        gregtechproxy.enableUBOres = GregTech_API.sAdvWorldgenFile.getBoolean("general", "enableUBOres", gregtechproxy.enableUBOres);
 
         GregTech_API.mUseOnlyGoodSolderingMaterials = GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.harderrecipes, "useonlygoodsolderingmaterials", GregTech_API.mUseOnlyGoodSolderingMaterials);
 

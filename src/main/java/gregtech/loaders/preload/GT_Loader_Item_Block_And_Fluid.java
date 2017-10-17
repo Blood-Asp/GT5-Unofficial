@@ -245,17 +245,17 @@ public class GT_Loader_Item_Block_And_Fluid
 		for (ConfigCategory c : GregTech_API.sAdvWorldgenFile.mConfig.getCategory("blockores").getChildren()) {
 			blockList = defaultBlocks.get(c.getName());
 			if (blockList == null) blockList = OreBlockProp.getEmptyList();
-			GregTech_API.sAdvWorldgenFile.get("blockores." + c.getName(), "HarvestTool", "pickaxe");
+			GregTech_API.sAdvWorldgenFile.getString("blockores." + c.getName(), "HarvestTool", "pickaxe");
 			boolean flag = false;
 			for (int i = 0; i < 8; i++) {
 				String tName = "blockores." + c.getName() + "." + i;
 				OreBlockProp prop = new OreBlockProp(
-							GregTech_API.sAdvWorldgenFile.get(tName, "Block", blockList[i].getBlockName()) + ":" +
-							GregTech_API.sAdvWorldgenFile.get(tName, "BlockMeta", blockList[i].getBlockMeta()),
-							GregTech_API.sAdvWorldgenFile.get(tName, "OrePrefix", blockList[i].mOrePrefix),
-							GregTech_API.sAdvWorldgenFile.get(tName, "DustToDrop", blockList[i].mDroppedDust),
-							GregTech_API.sAdvWorldgenFile.get(tName, "BasicHardness", blockList[i].mBaseHardness),
-							GregTech_API.sAdvWorldgenFile.get(tName, "Enabled", blockList[i].isValid())
+							GregTech_API.sAdvWorldgenFile.getString(tName, "Block", blockList[i].getBlockName()) + ":" +
+							GregTech_API.sAdvWorldgenFile.getInt(tName, "BlockMeta", blockList[i].getBlockMeta()),
+							GregTech_API.sAdvWorldgenFile.getString(tName, "OrePrefix", blockList[i].mOrePrefix),
+							GregTech_API.sAdvWorldgenFile.getString(tName, "DustToDrop", blockList[i].mDroppedDust),
+							GregTech_API.sAdvWorldgenFile.getDouble(tName, "BasicHardness", blockList[i].mBaseHardness),
+							GregTech_API.sAdvWorldgenFile.getBoolean(tName, "Enabled", blockList[i].isValid())
 						);
 				if (prop.isValid()) {
 					blockList[i] = prop;
@@ -271,7 +271,7 @@ public class GT_Loader_Item_Block_And_Fluid
         ArrayList<GT_Block_Ores> tCustomOreBlocks = new ArrayList<>();
         for (Map.Entry<String, OreBlockProp[]> o : allBlocks.entrySet()) {
         	String tName = "gt.blockores." + o.getKey();
-        	String tTool = o.getKey() == "gt" ? "pickaxe" : GregTech_API.sAdvWorldgenFile.get("blockores." + o.getKey(), "HarvestTool", "pickaxe");
+        	String tTool = o.getKey() == "gt" ? "pickaxe" : GregTech_API.sAdvWorldgenFile.getString("blockores." + o.getKey(), "HarvestTool", "pickaxe");
         	switch(o.getKey()) {
         	case "gt": GregTech_API.sBlockOres1 = new GT_Block_Ores("gt.blockores", false, (short) -1, "pickaxe", o.getValue()); break;
         	case "gc": if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars") && GT_Mod.gregtechproxy.enableGCOres) GregTech_API.sBlockOresGC = new GT_Block_Ores(tName, true, (short) -2, tTool, o.getValue()); break;
@@ -279,8 +279,8 @@ public class GT_Loader_Item_Block_And_Fluid
         	case "ub2": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb2 = new GT_Block_Ores(tName, true, (short) -3, tTool, o.getValue()); break;
         	case "ub3": if(Loader.isModLoaded("UndergroundBiomes") && GT_Mod.gregtechproxy.enableUBOres) GregTech_API.sBlockOresUb3 = new GT_Block_Ores(tName, true, (short) -4, tTool, o.getValue()); break;
         	default:
-        		if (GregTech_API.sAdvWorldgenFile.mConfig.getCategory("general").get("enable" + tName) == null) GregTech_API.sAdvWorldgenFile.set("general", "enable" + tName, false, true);
-        		if (GregTech_API.sAdvWorldgenFile.get("general", "enable" + tName, false)) tCustomOreBlocks.add(new GT_Block_Ores(tName, true, (short) (tCustomOreBlocks.size() + 1), tTool, o.getValue()));
+        		if (GregTech_API.sAdvWorldgenFile.mConfig.getCategory("general").get("enable" + tName) == null) GregTech_API.sAdvWorldgenFile.getBoolean("general", "enable" + tName, true);
+        		if (GregTech_API.sAdvWorldgenFile.getBoolean("general", "enable" + tName, false)) tCustomOreBlocks.add(new GT_Block_Ores(tName, true, (short) (tCustomOreBlocks.size() + 1), tTool, o.getValue()));
         		break;
         	}
         }
