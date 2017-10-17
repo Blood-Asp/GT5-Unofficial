@@ -15,7 +15,8 @@ import net.minecraft.world.chunk.IChunkProvider;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.debugWorldGen;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -51,7 +52,15 @@ public class GT_Worldgen_GT_Ore_Layer
         //this.mMars = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Mars", aMars);
         //this.mAsteroid = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Asteroid", aAsteroid);
         this.mMinY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MinHeight", aMinY));
-        this.mMaxY = ((short) Math.max(this.mMinY + 5, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY)));
+        short mMaxY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY));
+		if (mMaxY < (this.mMinY + 7))	{
+			GT_Log.out.println(
+					"Oremix " + this.mWorldGenName +
+				    " has invalid Min/Max heights!"
+				);
+			mMaxY = (short) (this.mMinY + 7);
+		}
+		this.mMaxY = mMaxY;
         this.mWeight = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "RandomWeight", aWeight));
         this.mDensity = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Density", aDensity));
         this.mSize = ((short) Math.max(1, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Size", aSize)));
@@ -92,7 +101,6 @@ public class GT_Worldgen_GT_Ore_Layer
         int cX = aChunkX - aRandom.nextInt(this.mSize);
         int eX = aChunkX + 16 + aRandom.nextInt(this.mSize);
 
-        int[] execCount=new int[4];
 		int[] placeCount=new int[4];
         for (int tX = cX; tX <= eX; tX++) {
             int cZ = aChunkZ - aRandom.nextInt(this.mSize);
@@ -103,43 +111,46 @@ public class GT_Worldgen_GT_Ore_Layer
                         if ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0)) {
                             if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, this.mSecondaryMeta, false))
 								placeCount[1]++;
-                            execCount[1]++;
                         }
                     }
                 }
                 if ((this.mBetweenMeta > 0) && ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0))) {
                     if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY + 2 + aRandom.nextInt(2), tZ, this.mBetweenMeta, false))
 						placeCount[2]++;
-                    execCount[2]++;
                 }
                 if (this.mPrimaryMeta > 0) {
                     for (int i = tMinY + 3; i < tMinY + 6; i++) {
                         if ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0)) {
                             if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, i, tZ, this.mPrimaryMeta, false))
 								placeCount[0]++;
-                            execCount[0]++;
                         }
                     }
                 }
                 if ((this.mSporadicMeta > 0) && ((aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cZ - tZ), MathHelper.abs_int(eZ - tZ)) / this.mDensity)) == 0) || (aRandom.nextInt(Math.max(1, Math.max(MathHelper.abs_int(cX - tX), MathHelper.abs_int(eX - tX)) / this.mDensity)) == 0))) {
                     if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, tMinY - 1 + aRandom.nextInt(7), tZ, this.mSporadicMeta, false))
 						placeCount[3]++;
-                    execCount[3]++;
                 }
             }
         }
-        if (D1) {
+        if (debugOrevein) {
+			String tDimensionName = aWorld.provider.getDimensionName();
             GT_Log.out.println(
                             "Generated Orevein:" + this.mWorldGenName +
-                            " @ dim="+aDimensionType+
                             " chunkX="+aChunkX+
                             " chunkZ="+aChunkZ+
-                            " Secondary="+execCount[1]+","+placeCount[1]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSecondaryMeta).getDisplayName()+
-                            " Between="+execCount[2]+","+placeCount[2]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mBetweenMeta).getDisplayName()+
-                            " Primary="+execCount[0]+","+placeCount[0]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
-                            " Sporadic="+execCount[3]+","+placeCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSporadicMeta).getDisplayName()
+                            " chunkY="+tMinY+
+                            " Density=" + this.mDensity +
+                            " Secondary="+placeCount[1]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSecondaryMeta).getDisplayName()+
+                            " Between="+placeCount[2]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mBetweenMeta).getDisplayName()+
+                            " Primary="+placeCount[0]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mPrimaryMeta).getDisplayName()+
+                            " Sporadic="+placeCount[3]+" "+new ItemStack(GregTech_API.sBlockOres1,1,mSporadicMeta).getDisplayName() +
+                            " Dimension=" + tDimensionName
             );
         }
-        return true;
+		// Didn't place anything, return false
+		if( (placeCount[0] + placeCount[1] + placeCount[2] + placeCount[3]) == 0 )
+			return false;
+		else 
+        	return true;
     }
 }

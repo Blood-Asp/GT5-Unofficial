@@ -15,10 +15,16 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.oreveinPercentage;
+import static gregtech.api.enums.GT_Values.debugWorldGen;
+import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.oreveinAttempts;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.HashSet;
 
 import static gregtech.api.enums.GT_Values.D1;
 
@@ -34,6 +40,7 @@ public class GT_Worldgenerator
     //private static int gcMaxSize = 400;
     private static boolean endAsteroids = true;
     public List<Runnable> mList = new ArrayList();
+	public HashSet<Long> ProcChunks = new HashSet<Long>();
     public boolean mIsGenerating = false;
 	public static final Object listLock = new Object();
     //private static boolean gcAsteroids = true;
@@ -49,34 +56,33 @@ public class GT_Worldgenerator
         //gcMaxSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMaxSize", 400);
         //mGCAsteroidProbability = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidProbability", 300);
         GameRegistry.registerWorldGenerator(this, 1073741823);
-		if (D1) {
+		if (debugWorldGen) {
 			GT_Log.out.println(
 							"GT_Worldgenerator created"
 			);
 		}
     }
 
+
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        synchronized (listLock)
-		{
-			this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-			if (D1) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
-        }
+        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
             for (int i = 0; i < mList_sS; i++) {
-                WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
-                if (D1) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX/16 + " z:" + toRun.mZ/16 + " SIZE: " + this.mList.size());}
-                synchronized (listLock)
-                {
-                    this.mList.remove(0);
-                }
-                toRun.run();
+                ((Runnable) this.mList.get(i)).run();
             }
+			if (debugWorldGen) {
+				GT_Log.out.println(
+								"Tossing " + (this.mList.size() - mList_sS) + 
+								" chunks!"
+				);
+			}
+            this.mList.clear();
             this.mIsGenerating = false;
         }
     }
+
 
     //public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {//TODO CHECK???
     //    int tempDimensionId = aWorld.provider.dimensionId;
@@ -109,11 +115,17 @@ public class GT_Worldgenerator
         }
 
         public void run() {
+			String tDimensionName = "";
+			if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
+			long startTime = System.nanoTime();
             if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
-                if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
+				int oreveinRNG = this.mRandom.nextInt(100);
+                if (( oreveinRNG < oreveinPercentage) && (GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
+
                     int tRandomWeight;
-                    for (int i = 0; (i < 256) && (temp); i++) {
+					int i;
+                    for (i = 0; (i < oreveinAttempts) && (temp); i++) {
                         tRandomWeight = this.mRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
@@ -129,15 +141,38 @@ public class GT_Worldgenerator
                             }
                         }
                     }
-					if (D1 & temp) {
+					if (debugOrevein & temp) {
 						GT_Log.out.println(
-										"No Orevein Selected!" +
-										" @ dim="+ this.mDimensionType+
+										"No orevein selected!" +
 										" chunkX="+ this.mX +
-										" chunkZ="+ this.mZ
+										" chunkZ="+ this.mZ + 
+										" oreveinAttemps=" + oreveinAttempts +
+										" dimensionName=" + tDimensionName
 						);
-					}		
+					} else if (debugOrevein)
+					{
+						GT_Log.out.println(
+										"Orevein took " + i + 
+										" attempts to find" + 
+										" dimensionName=" + tDimensionName
+						);
+					}
+						
+                }else
+                {
+                	if((oreveinRNG >= oreveinPercentage) && (debugOrevein))
+                	{
+						GT_Log.out.println(
+										"Skipped orevein in this 3x3 chunk!" +
+										" chunkX="+ this.mX +
+										" chunkZ="+ this.mZ +
+										" RNG=" + oreveinRNG +
+										" %=" + oreveinPercentage+ 
+										" dimensionName=" + tDimensionName
+						);
+                	}
                 }
+				
                 int i = 0;
                 for (int tX = this.mX - 16; i < 3; tX += 16) {
                     int j = 0;
@@ -160,12 +195,13 @@ public class GT_Worldgenerator
             }
 			else
 			{
-				if (D1) {
+				if (debugOrevein) {
 					GT_Log.out.println(
-									"Chunk Skipped, not 3x3 center" +
+									"Skipped chunk, not 3x3 center" +
 									" @ dim="+this.mDimensionType+
 									" chunkX="+this.mX+
-									" chunkZ="+this.mZ
+									" chunkZ="+this.mZ+ 
+									" dimensionName=" + tDimensionName
 					);
 				}
 			}
@@ -182,7 +218,7 @@ public class GT_Worldgenerator
                 if ((GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
                     boolean temp = true;
                     int tRandomWeight;
-                    for (int i = 0; (i < 256) && (temp); i++) {
+                    for (int i = 0; (i < oreveinAttempts) && (temp); i++) {
                         tRandomWeight = aRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
                             tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
@@ -280,6 +316,14 @@ public class GT_Worldgenerator
             if (tChunk != null) {
                 tChunk.isModified = true;
             }
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			if (debugWorldGen) {
+				GT_Log.out.println(
+					"Oregen took " + duration + 
+					" nanoseconds"
+					);
+			}
         }
     }
 }

@@ -117,14 +117,30 @@ public class GT_Values {
      * For Internal Usage (Network)
      */
     public static IGT_NetworkHandler NW;
-    /**
-     * Debug parameter for cleanroom testing.
-     */
-    public static boolean debugCleanroom = false;	
-    /**
+	/**
+	 * Control percentage of filled 3x3 chunks. Lower number means less oreveins spawn
+	 */
+	public static int oreveinPercentage;
+	/**
+	 * Control number of attempts to find a valid orevein. Lower numbers is slightly faster chunkgen, but more empty chunks with thin stone height.
+	 */
+	public static int oreveinAttempts;
+	/**
      * Not really Constants, but they set using the Config and therefore should be constant (those are for the Debug Mode)
      */
     public static boolean D1 = false, D2 = false;
+	/**
+	 * Debug parameter for cleanroom testing.
+	 */	 
+	public static boolean debugCleanroom = false;
+	/**
+	 * Debug parameter for world generation. Tracks chunks added/removed from run queue.
+	 */
+	public static boolean debugWorldGen = false;
+	/**
+	 * Debug parameter for orevein generation.
+	 */
+	public static boolean debugOrevein = false;
     /**
      * If you have to give something a World Parameter but there is no World... (Dummy World)
      */
