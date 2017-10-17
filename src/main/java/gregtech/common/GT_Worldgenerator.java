@@ -63,33 +63,26 @@ public class GT_Worldgenerator
 		}
     }
 
+
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
-        synchronized (listLock)
-		{
-			if (!this.ProcChunks.contains( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL)) ) {
-				this.ProcChunks.add( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL));
-				this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-				if (debugWorldGen) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
-			} else {
-				if (debugWorldGen) {GT_Log.out.println("DUP WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size() + " ProcChunks.size(): " + ProcChunks.size() ); }
-			}
-        }
+        this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
             for (int i = 0; i < mList_sS; i++) {
-                WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
-                if (debugWorldGen) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX/16 + " z:" + toRun.mZ/16 + " SIZE: " + this.mList.size() + " i: " + i );}
-				this.ProcChunks.remove( ((long)(toRun.mX/16) << 32) | ((long)(toRun.mZ/16) & 0x00000000ffffffffL));
-                synchronized (listLock)
-                {
-                    this.mList.remove(0);
-                }
-                toRun.run();
+                ((Runnable) this.mList.get(i)).run();
             }
+			if (debugWorldGen) {
+				GT_Log.out.println(
+								"Tossing " + (this.mList.size() - mList_sS) + 
+								" chunks!"
+				);
+			}
+            this.mList.clear();
             this.mIsGenerating = false;
         }
     }
+
 
     //public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {//TODO CHECK???
     //    int tempDimensionId = aWorld.provider.dimensionId;
