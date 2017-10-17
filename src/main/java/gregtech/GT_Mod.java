@@ -220,6 +220,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);
         gregtechproxy.mFlintChance = tMainConfig.get(aTextGeneral, "FlintAndSteelChance", 30).getInt(30);
         gregtechproxy.mItemDespawnTime = tMainConfig.get(aTextGeneral, "ItemDespawnTime", 6000).getInt(6000);
+        gregtechproxy.mNerfStorageBlocks = tMainConfig.get(aTextGeneral, "NerfStorageBlocks", true).getBoolean(true);
         gregtechproxy.mDisableVanillaOres = tMainConfig.get(aTextGeneral, "DisableVanillaOres", true).getBoolean(true);
         gregtechproxy.mNerfDustCrafting = tMainConfig.get(aTextGeneral, "NerfDustCrafting", true).getBoolean(true);
         gregtechproxy.mIncreaseDungeonLoot = tMainConfig.get(aTextGeneral, "IncreaseDungeonLoot", true).getBoolean(true);
