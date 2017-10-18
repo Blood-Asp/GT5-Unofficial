@@ -302,6 +302,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
 
     protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
         if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+        mFakePlayer.setWorld(aBaseTile.getWorld());
         mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
         return mFakePlayer;
     }
