@@ -205,6 +205,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
 
     protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
     	if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+    	mFakePlayer.setWorld(aBaseTile.getWorld());
     	mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
     	return mFakePlayer;
     }

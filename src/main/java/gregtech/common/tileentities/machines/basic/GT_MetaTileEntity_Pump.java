@@ -454,6 +454,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
     	if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+    	mFakePlayer.setWorld(aBaseTile.getWorld());
     	mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
     	return mFakePlayer;
     }
