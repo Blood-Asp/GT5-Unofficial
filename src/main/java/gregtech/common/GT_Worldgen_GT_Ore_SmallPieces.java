@@ -12,7 +12,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.D1;
-import static gregtech.api.enums.GT_Values.D2;
+import static gregtech.api.enums.GT_Values.debugSmallOres;
 
 public class GT_Worldgen_GT_Ore_SmallPieces
         extends GT_Worldgen {
@@ -54,7 +54,7 @@ public class GT_Worldgen_GT_Ore_SmallPieces
                 count++;
             }
         }
-        if(D2){
+        if(debugSmallOres){
             GT_Log.out.println(
                     "Small Ore:" + this.mWorldGenName +
                             " @ dim="+aDimensionType+
