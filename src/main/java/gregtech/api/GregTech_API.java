@@ -146,7 +146,7 @@ public class GregTech_API {
     /**
      * A List containing all the Materials, which are somehow in use by GT and therefor receive a specific Set of Items.
      */
-    public static final Materials[] sGeneratedMaterials = new Materials[1000], sMaterials = new Materials[1000];
+    public static final Materials[] sGeneratedMaterials = new Materials[1000];
     /**
      * This is the generic Cover behavior. Used for the default Covers, which have no Behavior.
      */

@@ -99,7 +99,7 @@ public class GT_Worldgen_Layer
         	public String toString() {
         		if (isValid()) {
         			if (mMeta > 0) {
-        				Materials tMaterial = GregTech_API.sMaterials[mMeta];
+        				Materials tMaterial = GregTech_API.sGeneratedMaterials[mMeta];
             			if (tMaterial != null) {
             				return "Material:" + tMaterial.mName + "::" + mWeight;
             			}

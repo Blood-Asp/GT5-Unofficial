@@ -645,11 +645,12 @@ public class GT_Worldgenloader
     }
 
     private static String getMaterialName(int aID) {
-    	try {
-    		return GregTech_API.sMaterials[aID].mName;
-    	} catch (Throwable t) {
-    		return null;
+    	if (aID >= 0 && aID < 1000) {
+    		if (GregTech_API.sGeneratedMaterials[aID] != null)
+    			return GregTech_API.sGeneratedMaterials[aID].mName;
+    		return Integer.toString(aID);
     	}
+    	return Materials._NULL.mName;
     }
 
     private static int getMaterialID(String aConfig) {

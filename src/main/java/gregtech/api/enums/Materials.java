@@ -1394,11 +1394,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         for (Materials aMaterial : MATERIALS_ARRAY) {
             if (aMaterial.mMetaItemSubID >= 0) {
                 if (aMaterial.mMetaItemSubID < 1000) {
-                	if (GregTech_API.sMaterials[aMaterial.mMetaItemSubID] == null) {
-                        GregTech_API.sMaterials[aMaterial.mMetaItemSubID] = aMaterial;
-                        if (aMaterial.mHasParentMod)
-                        	GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] = aMaterial;
-                    } else throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is already used!");
+                    if (aMaterial.mHasParentMod) {
+                        if (GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] == null) {
+                            GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] = aMaterial;
+                        } else throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is already used!");
+                    }
                 } else throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is/over the maximum of 1000");
             }
         }
