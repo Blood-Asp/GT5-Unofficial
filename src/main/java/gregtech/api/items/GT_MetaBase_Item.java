@@ -198,13 +198,13 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
                 tStats = getElectricStats(aStack);
         if (tStats != null) {
             if (tStats[3] > 0) {
-                aList.add(EnumChatFormatting.AQUA + "Contains " + GT_Utility.formatNumbers(tStats[3]) + " EU   Tier: " + (tStats[2] >= 0 ? tStats[2] : 0) + EnumChatFormatting.GRAY);
+                aList.add(EnumChatFormatting.AQUA + String.format(trans("009", "Contains %s EU   Tier: %s"), GT_Utility.formatNumbers(tStats[3]), "" + (tStats[2] >= 0 ? tStats[2] : 0)) + EnumChatFormatting.GRAY);
             } else {
                 long tCharge = getRealCharge(aStack);
                 if (tStats[3] == -2 && tCharge <= 0) {
-                    aList.add(EnumChatFormatting.AQUA + "Empty. You should recycle it properly." + EnumChatFormatting.GRAY);
+                    aList.add(EnumChatFormatting.AQUA + trans("010", "Empty. You should recycle it properly.") + EnumChatFormatting.GRAY);
                 } else {
-                    aList.add(String.valueOf(EnumChatFormatting.AQUA) + GT_Utility.formatNumbers(tCharge) + " / " + GT_Utility.formatNumbers(Math.abs(tStats[0])) + " EU - Voltage: " + V[(int) (tStats[2] >= 0 ? tStats[2] < V.length ? tStats[2] : V.length - 1 : 1)] + EnumChatFormatting.GRAY);
+                    aList.add(String.valueOf(EnumChatFormatting.AQUA) + String.format(trans("011", "%s / %s EU - Voltage: %s"), GT_Utility.formatNumbers(tCharge), GT_Utility.formatNumbers(Math.abs(tStats[0])), "" + V[(int) (tStats[2] >= 0 ? tStats[2] < V.length ? tStats[2] : V.length - 1 : 1)]) + EnumChatFormatting.GRAY);
                 }
             }
         }
@@ -212,8 +212,8 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         tStats = getFluidContainerStats(aStack);
         if (tStats != null && tStats[0] > 0) {
             FluidStack tFluid = getFluidContent(aStack);
-            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? "No Fluids Contained" : GT_Utility.getFluidName(tFluid, true))) + EnumChatFormatting.GRAY);
-            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? 0 : tFluid.amount) + "L / " + tStats[0] + "L") + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? trans("012", "No Fluids Contained") : GT_Utility.getFluidName(tFluid, true))) + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.BLUE + String.format(trans("013", "%sL / %sL"), "" + (tFluid == null ? 0 : tFluid.amount), "" + tStats[0]) + EnumChatFormatting.GRAY);
         }
 
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));

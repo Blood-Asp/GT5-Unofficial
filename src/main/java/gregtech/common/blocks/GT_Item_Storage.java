@@ -24,7 +24,7 @@ public class GT_Item_Storage extends ItemBlock {
     public String getItemStackDisplayName(ItemStack aStack) {
     	String aName = super.getItemStackDisplayName(aStack);
     	if (this.field_150939_a instanceof GT_Block_Metal) {
-    		int aDamage = aStack.getItemDamage();
+    		int aDamage = getDamage(aStack);
     		if (aDamage >= 0 && aDamage < ((GT_Block_Metal) this.field_150939_a).mMats.length){
     			Materials aMaterial = ((GT_Block_Metal) this.field_150939_a).mMats[aDamage];
     			if (aMaterial != null)
