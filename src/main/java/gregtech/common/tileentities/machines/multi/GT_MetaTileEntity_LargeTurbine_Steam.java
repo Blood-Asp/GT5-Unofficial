@@ -146,7 +146,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getFrontFacing()) {
             looseFit^=true;
-            GT_Utility.sendChatToPlayer(aPlayer, "Fitting: "+(looseFit?"Loose - More Flow":"Tight - More Efficiency"));
+            GT_Utility.sendChatToPlayer(aPlayer, looseFit ? trans("500", "Fitting: Loose - More Flow") : trans("501", "Fitting: Tight - More Efficiency"));
         }
     }
 

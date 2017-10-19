@@ -20,6 +20,17 @@ public class GT_Item_Storage extends ItemBlock {
         return this.field_150939_a.getUnlocalizedName() + "." + getDamage(aStack);
     }
 
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	if (this.field_150939_a instanceof GT_Block_Metal) {
+    		int aDamage = aStack.getItemDamage();
+    		if (aDamage >= 0 && aDamage < ((GT_Block_Metal) this.field_150939_a).mMats.length) {
+    			aName = ((GT_Block_Metal) this.field_150939_a).mMats[aDamage].getLocalizedNameForItem(aName);
+    		}
+    	}
+    	return aName;
+    }
+
     public int getMetadata(int aMeta) {
         return aMeta;
     }

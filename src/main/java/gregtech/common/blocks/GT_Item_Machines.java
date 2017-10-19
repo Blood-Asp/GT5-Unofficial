@@ -2,7 +2,12 @@ package gregtech.common.blocks;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Frame;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Item;
 import gregtech.api.util.GT_ItsNotMyFaultException;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
@@ -98,6 +103,27 @@ public class GT_Item_Machines
             return getUnlocalizedName() + "." + GregTech_API.METATILEENTITIES[tDamage].getMetaName();
         }
         return "";
+    }
+
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	short aDamage = (short) getDamage(aStack);
+    	if (aDamage >= 0 && aDamage < GregTech_API.METATILEENTITIES.length && GregTech_API.METATILEENTITIES[aDamage] != null) {
+            Materials aMaterial = null;
+            if (GregTech_API.METATILEENTITIES[aDamage] instanceof GT_MetaPipeEntity_Item) {
+            	aMaterial = ((GT_MetaPipeEntity_Item) GregTech_API.METATILEENTITIES[aDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[aDamage] instanceof GT_MetaPipeEntity_Fluid) {
+            	aMaterial = ((GT_MetaPipeEntity_Fluid) GregTech_API.METATILEENTITIES[aDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[aDamage] instanceof GT_MetaPipeEntity_Cable) {
+            	aMaterial = ((GT_MetaPipeEntity_Cable) GregTech_API.METATILEENTITIES[aDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[aDamage] instanceof GT_MetaPipeEntity_Frame) {
+            	aMaterial = ((GT_MetaPipeEntity_Frame) GregTech_API.METATILEENTITIES[aDamage]).mMaterial;
+            }
+            if (aMaterial != null) {
+            	aName = aMaterial.getLocalizedNameForItem(aName);
+            }
+        }
+    	return aName;
     }
 
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
