@@ -874,7 +874,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
     public boolean mBlastFurnaceRequired = false, mAutoGenerateBlastFurnaceRecipes= true, mTransparent = false;
     public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
-    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null";
+    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null", mLocalizedName = "null";
     public Dyes mColor = Dyes._NULL;
     public short mMeltingPoint = 0, mBlastFurnaceTemp = 0, mGasTemp = 0;
     public int mTypes = 0;
@@ -2094,6 +2094,19 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Override
     public String toString() {
         return this.mName;
+    }
+
+    public String getLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
+    }
+
+    public static String getLocalizedNameForItem(String aFormat, int aMaterialID) {
+    	if (aMaterialID >= 0 && aMaterialID < 1000) {
+    		Materials aMaterial = GregTech_API.sGeneratedMaterials[aMaterialID];
+    		if (aMaterial != null)
+    			return aMaterial.getLocalizedNameForItem(aFormat);
+    	}
+    	return aFormat;
     }
 
     public static volatile int VERSION = 509;
