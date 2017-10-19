@@ -317,7 +317,16 @@ public class GT_LanguageManager {
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_209", "Grab");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_210", "Grab");
         addStringLocalization("Interaction_DESCRIPTION_Index_211", "Items per side: ");
-
+        
+        addStringLocalization("Item_DESCRIPTION_Index_000", "Stored Heat: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_001", "Durability: %s/%s");
+        addStringLocalization("Item_DESCRIPTION_Index_002", "%s lvl %s");
+        addStringLocalization("Item_DESCRIPTION_Index_003", "Attack Damage: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_004", "Mining Speed: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_005", "Turbine Efficiency: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_006", "Optimal Steam flow: %sL/sec");
+        addStringLocalization("Item_DESCRIPTION_Index_007", "Optimal Gas flow(EU burnvalue per tick): %sEU/t");
+        addStringLocalization("Item_DESCRIPTION_Index_008", "Optimal Plasma flow(Plasma energyvalue per tick): %sEU/t");
     }
     
 }

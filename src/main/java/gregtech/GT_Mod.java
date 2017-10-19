@@ -316,6 +316,10 @@ public class GT_Mod implements IGT_Mod {
         GT_Log.out.println("GT_Mod: Generating Lang-File");
         GT_LanguageManager.sEnglishFile = new Configuration(new File(aEvent.getModConfigurationDirectory().getParentFile(), "GregTech.lang"));
         GT_LanguageManager.sEnglishFile.load();
+        for (Materials aMaterial : Materials.values()) {
+        	if (aMaterial != null)
+        		aMaterial.mLocalizedName = GT_LanguageManager.addStringLocalization("Material." + aMaterial.mName.toLowerCase(), aMaterial.mDefaultLocalName);
+        }
 
         GT_Log.out.println("GT_Mod: Removing all original Scrapbox Drops.");
         try {

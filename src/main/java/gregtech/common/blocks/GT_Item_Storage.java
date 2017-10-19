@@ -1,6 +1,7 @@
 package gregtech.common.blocks;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -18,6 +19,19 @@ public class GT_Item_Storage extends ItemBlock {
 
     public String getUnlocalizedName(ItemStack aStack) {
         return this.field_150939_a.getUnlocalizedName() + "." + getDamage(aStack);
+    }
+
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	if (this.field_150939_a instanceof GT_Block_Metal) {
+    		int aDamage = aStack.getItemDamage();
+    		if (aDamage >= 0 && aDamage < ((GT_Block_Metal) this.field_150939_a).mMats.length){
+    			Materials aMaterial = ((GT_Block_Metal) this.field_150939_a).mMats[aDamage];
+    			if (aMaterial != null)
+    				return aMaterial.getLocalizedNameForItem(aName);
+    		}
+    	}
+    	return aName;
     }
 
     public int getMetadata(int aMeta) {
