@@ -259,7 +259,8 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
             return 0;
         //REALLY?? THIS IS THE CULPRIT THAT CHARGES ITEMS AT INSTANT!!!
         //long tChargeBefore = getRealCharge(aStack), tNewCharge = aCharge == Integer.MAX_VALUE ? Long.MAX_VALUE : Math.min(Math.abs(tStats[0]), tChargeBefore + (aIgnoreTransferLimit ? (long) aCharge : Math.min(tStats[1], (long) aCharge)));
-        long tChargeBefore = getRealCharge(aStack), tNewCharge = Math.min(Math.abs(tStats[0]), tChargeBefore + (aIgnoreTransferLimit ? (long) aCharge : Math.min(tStats[1], (long) aCharge)));
+        long tTransfer = aIgnoreTransferLimit ? (long) aCharge : Math.min(tStats[1], (long) aCharge);
+        long tChargeBefore = getRealCharge(aStack), tNewCharge = Math.min(Math.abs(tStats[0]), Long.MAX_VALUE - tTransfer >= tChargeBefore ? tChargeBefore + tTransfer : Long.MAX_VALUE);
         if (!aSimulate) setCharge(aStack, tNewCharge);
         return tNewCharge - tChargeBefore;
     }
