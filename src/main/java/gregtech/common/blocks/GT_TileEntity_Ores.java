@@ -38,7 +38,7 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
     }
 
     public static boolean setOreBlock(World aWorld, int aX, int aY, int aZ, int aMetaData, boolean isSmallOre) {
-        return setOreBlock(aWorld, aX, aY, aZ, aMetaData, isSmallOre, false);
+        return setOreBlock(aWorld, aX, aY, aZ, aMetaData, isSmallOre, true);
     }
 
     public static boolean setOreBlock(World aWorld, int aX, int aY, int aZ, int aMetaData, boolean isSmallOre, boolean air) {
