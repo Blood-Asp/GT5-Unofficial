@@ -305,7 +305,12 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public String[] getDescription() {
-        return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/sec", "Routing Value: %%%" + mStepSize};
+    	if (mTickTime == 20)
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/sec", "Routing Value: %%%" + mStepSize};
+    	else if (mTickTime % 20 == 0)
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/%%%" + (mTickTime / 20) + " %%%sec", "Routing Value: %%%" + mStepSize};
+    	else
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/%%%" + mTickTime + " %%%ticks", "Routing Value: %%%" + mStepSize};
     }
 
     private boolean isInventoryEmpty() {
