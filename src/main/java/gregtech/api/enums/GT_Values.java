@@ -141,6 +141,10 @@ public class GT_Values {
 	 * Debug parameter for orevein generation.
 	 */
 	public static boolean debugOrevein = false;
+	/**
+	 * Debug parameter for small ore generation.
+	 */
+	public static boolean debugSmallOres = false;
     /**
      * If you have to give something a World Parameter but there is no World... (Dummy World)
      */
