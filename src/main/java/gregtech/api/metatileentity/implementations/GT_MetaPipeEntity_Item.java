@@ -53,13 +53,13 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         mTickTime = 20;
     }
 
-    public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
+    public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
         super(aName, aInvSlotCount);
         mIsRestrictive = aIsRestrictive;
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
-        mTickTime = 20;
+        mTickTime = aTickTime;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaPipeEntity_Item(mName, mThickNess, mMaterial, mInventory.length, mStepSize, mIsRestrictive);
+        return new GT_MetaPipeEntity_Item(mName, mThickNess, mMaterial, mInventory.length, mStepSize, mIsRestrictive, mTickTime);
     }
 
     @Override
