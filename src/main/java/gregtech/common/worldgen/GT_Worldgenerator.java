@@ -6,10 +6,12 @@ import gregtech.api.GregTech_API;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import java.util.HashSet;
 import java.util.Random;
 
 public class GT_Worldgenerator implements IWorldGenerator {
@@ -46,17 +48,16 @@ public class GT_Worldgenerator implements IWorldGenerator {
 
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         Random r = new XSTR();
-        int xCenter = getVeinCenterCoordinate(aX), zCenter = getVeinCenterCoordinate(aZ);
-        boolean bXN = aX < xCenter, bXP = aX > xCenter, bZN = aZ < zCenter, bZP = aZ > zCenter;
-        generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter);
-        if (bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter - 3);
-        if (bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter, zCenter + 3);
-        if (bXN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter);
-        if (bXP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter);
-        if (bXN && bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter - 3);
-        if (bXN && bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter - 3, zCenter + 3);
-        if (bXP && bZN) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter - 3);
-        if (bXP && bZP) generateOreLayerAt(aWorld, r, aX, aZ, xCenter + 3, zCenter + 3);
+        HashSet<ChunkCoordIntPair> tVeinCenters = new HashSet<>();
+        int tRange = (GT_Worldgen_Layer.getOreGenData(aWorld, null).mMaxSize + 15) / 16;
+        for (int i = -tRange; i <= tRange; i++) {
+        	for (int j = -tRange; j < tRange; j++) {
+        		tVeinCenters.add(new ChunkCoordIntPair(getVeinCenterCoordinate(aX + i), getVeinCenterCoordinate(aZ + j)));
+        	}
+        }
+        for (ChunkCoordIntPair center : tVeinCenters) {
+        	generateOreLayerAt(aWorld, r, aX, aZ, center.chunkXPos, center.chunkZPos);
+        }
         long seed = getRandomSeed(aWorld, aX, aZ);
         String aBiome = aWorld.getBiomeGenForCoords(aX << 4 + 8, aZ << 4 + 8).biomeName;
         try {

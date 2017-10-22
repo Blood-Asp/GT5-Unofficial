@@ -190,6 +190,7 @@ public class GT_Worldgen_Layer
     public static class OreGenList {
     	protected ArrayList<GT_Worldgen_Layer> list = new ArrayList<>();
     	protected int mWeight = 0;
+    	protected int mMaxSize = 0;
     }
 
     public static OreGenList getOreGenData(World aWorld, String aAsteroid) {
@@ -202,6 +203,7 @@ public class GT_Worldgen_Layer
     			if (GT_Utility.isStringValid(aAsteroid) ? tOreGen.mAsteroidList.contains(aAsteroid) : tOreGen.isGenerationAllowed(aWorld)) {
     				rList.list.add(tOreGen);
     				rList.mWeight += tOreGen.mWeight;
+    				rList.mMaxSize = Math.max(rList.mMaxSize, tOreGen.mSize);
     			}
     		
     		sDimSpecifiedOreGenMap.put(aDimName, rList);
@@ -281,7 +283,7 @@ public class GT_Worldgen_Layer
     	if (aY < 0) return;
     	int tOreMeta;
     	if (aRandom.nextInt(getDense(aMinX, aMaxX, aX)) == 0 || aRandom.nextInt(getDense(aMinZ, aMaxZ, aZ)) == 0)
-    		aOres.generateOre(aWorld, aMaxZ, aY, aZ, aRandom, false);
+    		aOres.generateOre(aWorld, aX, aY, aZ, aRandom, false);
     }
 
     public void executeLayerWorldgen(World aWorld, Random aRandom, int chunkX, int chunkZ, int centerX, int centerZ) {
