@@ -122,12 +122,12 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public long maxEUInput() {
-        return V[getBaseMetaTileEntity().isActive() ? mTier + 1 : mTier];
+        return V[getBaseMetaTileEntity().isAllowedToWork() ? mTier + 1 : mTier];
     }
 
     @Override
     public long maxEUOutput() {
-        return V[getBaseMetaTileEntity().isActive() ? mTier : mTier + 1];
+        return V[getBaseMetaTileEntity().isAllowedToWork() ? mTier : mTier + 1];
     }
 
     @Override
