@@ -6,9 +6,8 @@ import gregtech.api.enums.*;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.GT_Proxy;
 import net.minecraft.item.ItemStack;
-import scala.tools.nsc.doc.model.Public;
+
 
 public class ProcessingBlock implements gregtech.api.interfaces.IOreRecipeRegistrator {
     public ProcessingBlock() {
