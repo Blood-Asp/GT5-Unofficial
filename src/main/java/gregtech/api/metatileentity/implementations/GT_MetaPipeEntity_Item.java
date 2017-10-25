@@ -53,6 +53,11 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         mTickTime = 20;
     }
 
+    @Deprecated
+    public GT_MetaPipeEntity_Item(String aName, float aThickness, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
+        this(aName, aThickness, aMaterial, aInvSlotCount, aStepSize, aIsRestrictive, 20);
+    }
+
     public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
         super(aName, aInvSlotCount);
         mIsRestrictive = aIsRestrictive;
