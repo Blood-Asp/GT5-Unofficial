@@ -16,6 +16,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
 import ic2.api.energy.tile.IEnergySink;
@@ -253,10 +254,21 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
+    }
+
+    @Override
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
+    }
+
+    private boolean onConnectionToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
     	if (GT_Mod.gregtechproxy.gt6Pipe) {
     		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if ((mConnections & (1 << tSide)) == 0)
+    		if ((mConnections & (1 << tSide)) == 0) {
+    			if (GT_Mod.gregtechproxy.costlyCableConnection && !GT_ModHandler.consumeSolderingMaterial(aPlayer)) return false;
     			connect(tSide);
+    		}
     		else
     			disconnect(tSide);
     		return true;
