@@ -1,7 +1,7 @@
 package gregtech.api.interfaces.metatileentity;
 
 /**
- * For pipes, wires, and other MetaTiles which should be decided whether they should connect to the block at each side.
+ * For pipes, wires, and other MetaTiles which need to be decided whether they should connect to the block at each side.
  */
 public interface IConnectable {
 	/**

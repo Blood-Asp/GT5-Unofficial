@@ -44,7 +44,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     public long mTransferredAmperage = 0, mTransferredAmperageLast20 = 0, mTransferredVoltageLast20 = 0;
     public long mRestRF;
     public short mOverheat;
-    private boolean mCheckConnections = !GT_Mod.gregtechproxy.gt6Pipe;
+    private boolean mCheckConnections = !GT_Mod.gregtechproxy.gt6Cable;
 
     public GT_MetaPipeEntity_Cable(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, long aCableLossPerMeter, long aAmperage, long aVoltage, boolean aInsulated, boolean aCanShock) {
         super(aID, aName, aNameRegional, 0);
@@ -247,7 +247,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 for (byte i = 0; i < 6; i++) {
                     if ((mCheckConnections || (mConnections & (1 << i)) != 0) && connect(i) <= 0) disconnect(i);
                 }
-                if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
+                if (GT_Mod.gregtechproxy.gt6Cable) mCheckConnections = false;
             }
         }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
@@ -263,7 +263,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     }
 
     private boolean onConnectionToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	if (GT_Mod.gregtechproxy.gt6Pipe) {
+    	if (GT_Mod.gregtechproxy.gt6Cable) {
     		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
     		if ((mConnections & (1 << tSide)) == 0) {
     			if (GT_Mod.gregtechproxy.costlyCableConnection && !GT_ModHandler.consumeSolderingMaterial(aPlayer)) return false;
@@ -308,6 +308,19 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         return rConnect;
 	}
 
+	@Override
+	public void disconnect(byte aSide) {
+		if (aSide >= 6) return;
+		mConnections &= ~(1 << aSide);
+		if (GT_Mod.gregtechproxy.gt6Cable) {
+			byte tSide = GT_Utility.getOppositeSide(aSide);
+			IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
+			IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
+			if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) != 0)
+				((MetaPipeEntity) tPipe).disconnect(tSide);
+		}
+	}
+
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
@@ -335,13 +348,13 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        if (GT_Mod.gregtechproxy.gt6Pipe)
+        if (GT_Mod.gregtechproxy.gt6Cable)
         	aNBT.setByte("mConnections", mConnections);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
-        if (GT_Mod.gregtechproxy.gt6Pipe) {
+        if (GT_Mod.gregtechproxy.gt6Cable) {
         	if (!aNBT.hasKey("mConnections"))
         		mCheckConnections = true;
         	mConnections = aNBT.getByte("mConnections");
