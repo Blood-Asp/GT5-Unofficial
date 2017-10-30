@@ -194,10 +194,14 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
     	if (GT_Mod.gregtechproxy.gt6Pipe) {
     		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if ((mConnections & (1 << tSide)) == 0)
-    			connect(tSide);
-    		else
+    		if ((mConnections & (1 << tSide)) == 0) {
+    			if (connect(tSide) > 0)
+    				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
+    		}
+    		else {
     			disconnect(tSide);
+    			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+    		}
     		return true;
     	}
         return false;
