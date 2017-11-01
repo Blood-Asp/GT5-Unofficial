@@ -298,7 +298,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity{
                 		case 0:
                 			disconnect(tSide); break;
                 		case 2:
-                			tTanks.put(aBaseMetaTileEntity.getITankContainerAtSide(tSide), ForgeDirection.getOrientation(tSide).getOpposite()); break;
+                			if ((mLastReceivedFrom & (1 << tSide)) == 0)
+                				tTanks.put(aBaseMetaTileEntity.getITankContainerAtSide(tSide), ForgeDirection.getOrientation(tSide).getOpposite()); break;
                 		}
                 }
                 if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
