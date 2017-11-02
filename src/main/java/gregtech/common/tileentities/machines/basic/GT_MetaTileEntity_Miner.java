@@ -135,8 +135,8 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
 
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
         if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0 
-        		|| GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), 0, aBaseMetaTileEntity.getYCoord() + drillY - 1, 0) < 0 
-        		|| !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), 0, drillY - 1, 0, MINING_PIPE_TIP_BLOCK, 0, true)) {
+        		|| GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord()) < 0
+        		|| !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_TIP_BLOCK, 0, true)) {
             isPickingPipes = true;
             return false;
         }
