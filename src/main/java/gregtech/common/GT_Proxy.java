@@ -149,8 +149,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mArcSmeltIntoAnnealed = true;
     public boolean mMagneticraftRecipes = true;
     public boolean mImmersiveEngineeringRecipes = true;
-    private boolean isFirstServerWorldTick = true;
-    private boolean mOreDictActivated = false;
+    
     public boolean mChangeHarvestLevels=false;
     public boolean mNerfedCombs = true;
     public boolean mNerfedCrops = true;
@@ -175,12 +174,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public final GT_UO_DimensionList mUndergroundOil = new GT_UO_DimensionList();
     public int mTicksUntilNextCraftSound = 0;
     public double mMagneticraftBonusOutputPercent = 100.0d;
-    private World mUniverse = null;
-    private final String aTextThermalExpansion = "ThermalExpansion";
-    private final String aTextRailcraft = "Railcraft";
-    private final String aTextTwilightForest = "TwilightForest";
-    private final String aTextForestry = "Forestry";
-    private final String aTextArsmagica2 = "arsmagica2";
     public boolean mTEMachineRecipes = false;
     public boolean mEnableAllMaterials = false;
     public boolean mEnableAllComponents = false;
@@ -201,7 +194,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean enableBasaltOres = true;
     public boolean enableGCOres = true;
     public boolean enableUBOres = true;
-    
+    private World mUniverse = null;
+    private final String aTextThermalExpansion = "ThermalExpansion";
+    private final String aTextRailcraft = "Railcraft";
+    private final String aTextTwilightForest = "TwilightForest";
+    private final String aTextForestry = "Forestry";
+    private final String aTextArsmagica2 = "arsmagica2";
+    private boolean isFirstServerWorldTick = true;
+    private boolean mOreDictActivated = false;
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
         MinecraftForge.EVENT_BUS.register(this);
