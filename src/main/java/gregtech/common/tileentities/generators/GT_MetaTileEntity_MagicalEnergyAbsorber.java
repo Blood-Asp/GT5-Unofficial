@@ -39,13 +39,11 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public static boolean sAllowMultipleEggs = true;
     public static GT_MetaTileEntity_MagicalEnergyAbsorber mActiveSiphon = null;
     public static int sEnergyPerEnderCrystal = 32;
-    public static int sEnergyFromVis = 512; //really? this high? no wonder no eu was generating... (it was 12800 at the time)
+    public static int sEnergyFromVis = 512;
     public static int sDragonEggEnergyPerTick = 128;
     public static boolean isThaumcraftLoaded;
-    public static boolean tLameMode = false; // if you use this... lame.
     public int mEfficiency;
     public EntityEnderCrystal mTargetedCrystal;
-    //public static int[] VoltageOut = {32, 128,512,2048}; // Because what the fuck even is this code.
 
     public GT_MetaTileEntity_MagicalEnergyAbsorber(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, "Feasts on magic close to it", new ITexture[0]);
@@ -113,9 +111,6 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
             if (isThaumcraftLoaded) {
                 try {
                 	int multFactor = 2;
-                	if (tLameMode){
-                		multFactor = 10; //Don't do this. Unless you want to be cheaty and lame.
-                	}
                     World tmpWorld = this.getBaseMetaTileEntity().getWorld();
                     int tmpX = this.getBaseMetaTileEntity().getXCoord();
                     int tmpY = this.getBaseMetaTileEntity().getYCoord() + 2; //Add 2 because +1 is the node stabiliser and +2 is the node itself
