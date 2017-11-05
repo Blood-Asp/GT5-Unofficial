@@ -841,22 +841,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     static {
         initSubTags();
-        Iron					.mOreReRegistrations.add(AnyIron	);
-        PigIron					.mOreReRegistrations.add(AnyIron	);
-        WroughtIron				.mOreReRegistrations.add(AnyIron	);
 
-        Copper					.mOreReRegistrations.add(AnyCopper	);
-        AnnealedCopper			.mOreReRegistrations.add(AnyCopper	);
-
-        Bronze					.mOreReRegistrations.add(AnyBronze	);
-        
-        Rubber					.mOreReRegistrations.add(AnyRubber);
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnyRubber);
-        Silicone				.mOreReRegistrations.add(AnyRubber);
-        
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnySyntheticRubber);
-        Silicone				.mOreReRegistrations.add(AnySyntheticRubber);
-        
         Peanutwood				.setMaceratingInto(Wood				);
         WoodSealed				.setMaceratingInto(Wood				);
         NetherBrick				.setMaceratingInto(Netherrack		);
