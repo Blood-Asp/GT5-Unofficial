@@ -17,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.ArrayList;
 
@@ -133,7 +134,9 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0 || aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) == Blocks.bedrock) {
+        if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0 
+        		|| GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord()) < 0
+        		|| !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_TIP_BLOCK, 0, true)) {
             isPickingPipes = true;
             return false;
         }
@@ -166,6 +169,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public void mineBlock(IGregTechTileEntity aBaseMetaTileEntity, int x, int y, int z) {
+    	if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z, true));
         ArrayList<ItemStack> drops = getBlockDrops(aBaseMetaTileEntity.getBlockOffset(x, y, z), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z);
         if (drops.size() > 0)
             mOutputItems[0] = drops.get(0);
@@ -196,4 +200,14 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         drillY = aNBT.getInteger("drillY");
         drillZ = aNBT.getInteger("drillZ");
     }
+
+    private FakePlayer mFakePlayer = null;
+
+    protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
+    	if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+    	mFakePlayer.setWorld(aBaseTile.getWorld());
+    	mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
+    	return mFakePlayer;
+    }
+
 }

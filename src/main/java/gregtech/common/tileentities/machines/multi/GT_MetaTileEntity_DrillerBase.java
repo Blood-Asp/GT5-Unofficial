@@ -23,6 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_MultiBlockBase {
@@ -39,7 +40,8 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private ForgeDirection back;
     
     private int xDrill, yDrill, zDrill, xPipe, zPipe, yHead;
-    protected boolean isPickingPipes;
+    protected int workState;
+    protected static final int STATE_DOWNWARD = 0, STATE_AT_BOTTOM = 1, STATE_UPWARD = 2;
 
     public GT_MetaTileEntity_DrillerBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -57,7 +59,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         int frameId = 4096 + getFrameMaterial().mMetaItemSubID;
         frameMeta = GregTech_API.METATILEENTITIES[frameId] != null ? GregTech_API.METATILEENTITIES[frameId].getTileEntityBaseType() : W;
         casingTextureIndex = getCasingTextureIndex();
-        isPickingPipes = false;
+        workState = STATE_DOWNWARD;
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -69,13 +71,14 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("isPickingPipe", isPickingPipes);
+        aNBT.setInteger("workState", workState);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        isPickingPipes = aNBT.getBoolean("isPickingPipes");
+        workState = aNBT.getInteger("workState");
+        if (aNBT.hasKey("isPickingPipes")) workState = aNBT.getBoolean("isPickingPipes") ? STATE_UPWARD : STATE_DOWNWARD;
     }
 
     protected boolean tryPickPipe() {
@@ -89,17 +92,30 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         return false;
     }
 
-    protected boolean tryLowerPipe() {
-        if (!isHasMiningPipes()) return false;
+    /**
+     * @return 0 for succeeded, 1 for invalid block, 2 for not having mining pipes, 3 for event canceled.
+     */
+    protected int tryLowerPipe() {
+    	return tryLowerPipe(false);
+    }
 
-        if (yHead <= 0) return false;
-        if (!canLowerPipe()) return false;
-
-        getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead - 1, zPipe, miningPipeTipBlock);
-        if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
-
-        getBaseMetaTileEntity().decrStackSize(1, 1);
-        return true;
+    /**
+     * @return 0 for succeeded, 1 for invalid block, 2 for not having mining pipes, 3 for event canceled.
+     */
+    protected int tryLowerPipe(boolean isSimulating) {
+        if (!isHasMiningPipes()) return 2;
+        switch (canLowerPipe()) {
+        case 1: return 1;
+        case 2: return 3;
+        }
+        
+        if (!GT_Utility.setBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), xPipe, yHead - 1, zPipe, miningPipeTipBlock, 0, isSimulating)) return 3;
+        if (!isSimulating) {
+            if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
+            getBaseMetaTileEntity().decrStackSize(1, 1);
+        }
+        
+        return 0;
     }
 
     private void putMiningPipesFromInputsInController() {
@@ -132,8 +148,19 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     	return true;
     }
 
-    protected boolean canLowerPipe(){
-    	return yHead > 0 && !checkBlockAndMeta(xPipe, yHead - 1, zPipe, Blocks.bedrock, W);
+    /**
+     * @return 0 for available, 1 for invalid block, 2 for event canceled.
+     */
+    protected int canLowerPipe(){
+    	IGregTechTileEntity aBaseTile = getBaseMetaTileEntity(); 
+    	if (yHead > 0 && GT_Utility.getBlockHardnessAt(aBaseTile.getWorld(), xPipe, yHead - 1, zPipe) >= 0) {
+    		return GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseTile), xPipe, yHead - 1, zPipe, true) ? 0 : 2;
+    	}
+    	return 1;
+    }
+
+    protected boolean reachingVoidOrBedrock() {
+    	return yHead <= 0 || checkBlockAndMeta(xPipe, yHead - 1, zPipe, Blocks.bedrock, W);
     }
 
     private boolean isHasMiningPipes() {
@@ -154,18 +181,27 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         return false;
     }
 
-    protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead){
-    	if(!tryLowerPipe())
-    		if(waitForPipes()) return false;
-    		isPickingPipes = true;
-    	return true;
+    protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
+    	switch (tryLowerPipe()) {
+    	case 2: mMaxProgresstime = 0; return false;
+    	case 3: workState = STATE_UPWARD; return true;
+    	case 1: workState = STATE_AT_BOTTOM; return true;
+    	default: return true;
+    	}
     }
-    
+
+    protected boolean workingAtBottom(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
+    	switch (tryLowerPipe(true)) {
+    	case 0: workState = STATE_DOWNWARD; return true;
+    	default: workState = STATE_UPWARD; return true;
+    	}
+    }
+
     protected boolean workingUpward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
     	if (tryPickPipe()) {
             return true;
         } else {
-            isPickingPipes = false;
+            workState = STATE_DOWNWARD;
             stopMachine();
             return false;
         }
@@ -181,10 +217,16 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
             return false;
         }
         putMiningPipesFromInputsInController();
-        if (!isPickingPipes)
+        switch (workState) {
+        case STATE_DOWNWARD:
         	return workingDownward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
-        else
+        case STATE_AT_BOTTOM:
+        	return workingAtBottom(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
+        case STATE_UPWARD:
         	return workingUpward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
+        default:
+        	return false;
+        }
     }
     
     @Override
@@ -255,13 +297,14 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         return (meta == W || getBaseMetaTileEntity().getMetaID(x, y, z) == meta)
                 && getBaseMetaTileEntity().getBlock(x, y, z) == block;
     }
-    
-    protected boolean waitForPipes(){
-    	if (canLowerPipe()) {
-			mMaxProgresstime = 0;
-			return true;
-		}
-    	return false;
+
+    private FakePlayer mFakePlayer = null;
+
+    protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
+    	if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+    	mFakePlayer.setWorld(aBaseTile.getWorld());
+    	mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
+    	return mFakePlayer;
     }
 
     @Override
@@ -288,8 +331,6 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
-    
-    public abstract Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity);
 
     protected abstract ItemList getCasingBlockItem();
 
@@ -348,7 +389,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_DataAccess) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture((byte) aBaseCasingIndex);
             return mDataAccessHatches.add((GT_MetaTileEntity_Hatch_DataAccess) aMetaTileEntity);
         }
         return false;
