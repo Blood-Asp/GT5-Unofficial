@@ -113,7 +113,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                 	int multFactor = 2;
                     World tmpWorld = this.getBaseMetaTileEntity().getWorld();
                     int tmpX = this.getBaseMetaTileEntity().getXCoord();
-                    int tmpY = this.getBaseMetaTileEntity().getYCoord() + 2; //Add 2 because +1 is the node stabiliser and +2 is the node itself
+                    int tmpY = this.getBaseMetaTileEntity().getYCoord();
                     int tmpZ = this.getBaseMetaTileEntity().getZCoord();
                     int fire = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.FIRE, 1000); // all of these should be 1000
                     int earth = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.EARTH, 1000);
