@@ -537,7 +537,7 @@ public class GT_Achievements {
                 int data_getAllMaterialStacks_sS = data.getAllMaterialStacks().size();
                 for (int i = 0; i < data_getAllMaterialStacks_sS; i++) {
                     issueAchievement(player, data.getAllMaterialStacks().get(i).mMaterial.mName);
-                    if (data.getAllMaterialStacks().get(i).mMaterial == Materials.AnyIron) {
+                    if (data.getAllMaterialStacks().get(i).mMaterial == Materials.Iron) {
                         issueAchievement(player, "iron");
                     }
                     if (data.getAllMaterialStacks().get(i).mMaterial == Materials.Copper || data.getAllMaterialStacks().get(i).mMaterial == Materials.Tin) {

@@ -3,6 +3,7 @@ package gregtech.common.tileentities.machines.basic;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.events.TeleporterUsingEvent;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -34,6 +35,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.enums.GT_Values.V;
@@ -281,7 +283,9 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                         if (((tObject instanceof Entity)) && (!((Entity) tObject).isDead)) {
                             Entity tEntity = (Entity) tObject;
 //                	System.out.println("teleport"+(Math.pow(tDistance, 1.5)));
-                            if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((int) (Math.pow(tDistance, 1.5) * weightCalculation(tEntity) * sFPowerMultiplyer), false)) {
+                            TeleporterUsingEvent tEvent = new TeleporterUsingEvent(tEntity, mTargetX, mTargetY, mTargetZ, mTargetD, hasEgg);
+                            MinecraftForge.EVENT_BUS.post(tEvent);
+                            if (!tEvent.isCanceled() && getBaseMetaTileEntity().decreaseStoredEnergyUnits((int) (Math.pow(tDistance, 1.5) * weightCalculation(tEntity) * sFPowerMultiplyer), false)) {
                                 if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasEgg || mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)))) {
                                     mFluid.amount = mFluid.amount - ((int) Math.min(10, (Math.pow(tDistance, 1.5) * weightCalculation(tEntity) / 8192)));
                                     if (mFluid.amount < 1) {

@@ -156,7 +156,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     switch (mTier) {
                         case 0:
                         case 1:
-                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.AnyCopper);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Copper);
                             break;
                         case 2:
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Cupronickel);
@@ -190,7 +190,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     switch (mTier) {
                         case 0:
                         case 1:
-                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.AnyCopper);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Copper);
                             break;
                         case 2:
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Cupronickel);
@@ -258,7 +258,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     switch (mTier) {
                         case 0:
                         case 1:
-                            aRecipe[i] = OrePrefixes.stick.get(Materials.AnyIron);
+                            aRecipe[i] = OrePrefixes.stick.get(Materials.Iron);
                             break;
                         case 2:
                         case 3:
@@ -283,10 +283,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Tin);
                             break;
                         case 2:
-                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.AnyCopper);
+                            aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Copper);
                             break;
                         case 3:
-                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.AnyCopper);
+                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.Copper);
                             break;
                         case 4:
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.AnnealedCopper);

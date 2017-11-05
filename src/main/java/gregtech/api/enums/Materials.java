@@ -818,7 +818,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
     public boolean mBlastFurnaceRequired = false, mTransparent = false;
     public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
-    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null";
+    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null", mLocalizedName = "null";
     public Dyes mColor = Dyes._NULL;
     public short mMeltingPoint = 0, mBlastFurnaceTemp = 0, mGasTemp = 0;
     public int mTypes = 0;
@@ -841,22 +841,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     static {
         initSubTags();
-        Iron					.mOreReRegistrations.add(AnyIron	);
-        PigIron					.mOreReRegistrations.add(AnyIron	);
-        WroughtIron				.mOreReRegistrations.add(AnyIron	);
 
-        Copper					.mOreReRegistrations.add(AnyCopper	);
-        AnnealedCopper			.mOreReRegistrations.add(AnyCopper	);
-
-        Bronze					.mOreReRegistrations.add(AnyBronze	);
-        
-        Rubber					.mOreReRegistrations.add(AnyRubber);
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnyRubber);
-        Silicone				.mOreReRegistrations.add(AnyRubber);
-        
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnySyntheticRubber);
-        Silicone				.mOreReRegistrations.add(AnySyntheticRubber);
-        
         Peanutwood				.setMaceratingInto(Wood				);
         WoodSealed				.setMaceratingInto(Wood				);
         NetherBrick				.setMaceratingInto(Netherrack		);
@@ -1982,6 +1967,19 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public FluidStack getMolten(long aAmount) {
         if (mStandardMoltenFluid == null) return null;
         return new GT_FluidStack(mStandardMoltenFluid, (int) aAmount);
+    }
+
+    public String getLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
+    }
+
+    public static String getLocalizedNameForItem(String aFormat, int aMaterialID) {
+    	if (aMaterialID >= 0 && aMaterialID < 1000) {
+    		Materials aMaterial = GregTech_API.sGeneratedMaterials[aMaterialID];
+    		if (aMaterial != null)
+    			return aMaterial.getLocalizedNameForItem(aFormat);
+    	}
+    	return aFormat;
     }
 
     @Override
