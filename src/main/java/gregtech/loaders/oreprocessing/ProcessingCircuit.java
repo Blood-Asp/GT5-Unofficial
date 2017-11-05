@@ -29,7 +29,7 @@ public class ProcessingCircuit implements gregtech.api.interfaces.IOreRecipeRegi
             case "Basic":
                 GT_ModHandler.removeRecipeByOutput(aStack);
                 GT_ModHandler.addCraftingRecipe(aStack, new Object[]{"RIR","VBV","CCC",'R',ItemList.Circuit_Parts_Resistor.get(1,new Object[0]),'C',GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.RedAlloy, 1),'V', ItemList.Circuit_Parts_Vacuum_Tube.get(1,new Object[0]),'B',ItemList.Circuit_Board_Coated.get(1,new Object[0]),'I',ItemList.IC2_Item_Casing_Steel.get(1,new Object[0])});
-                GT_ModHandler.addShapelessCraftingRecipe(ItemList.Circuit_Basic.get(1L, new Object[0]), new Object[]{ItemList.Circuit_Integrated.getWildcard(1L, new Object[0])});
+                GT_ModHandler.addShapelessCraftingRecipe(aStack, new Object[]{ItemList.Circuit_Integrated.getWildcard(1L, new Object[0])});
                break;
             case "Advanced":
                 GT_ModHandler.removeRecipeByOutput(aStack);
