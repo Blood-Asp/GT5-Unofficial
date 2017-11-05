@@ -15,8 +15,9 @@ Please note we have a level of quality to maintain, please follow the guidelines
 ## Pull Request Process
 
 1. Ensure any new build dependencies are noted within the PR details and why it's a valid requirement. 
-2. Try ensure that the build works successfully and attempt to test it yourself thoroughly. 
-3. You will have the Pull Request merged in once you have the sign-off of tone other developer & @Blood-Asp, also whenever @Blood-Asp finds time. 
+2. Try ensure that the build works successfully and attempt to test it yourself thoroughly.  
+3. Please open a new PR for each issue you wish to resolve instead of fixing ten bugs in one go. This makes review easier, thank you. 
+4. You will have the Pull Request merged in once you have the sign-off of tone other developer & @Blood-Asp, also whenever @Blood-Asp finds time. 
 
 ## Standard of Quality
 
