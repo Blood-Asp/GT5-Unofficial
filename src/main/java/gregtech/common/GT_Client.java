@@ -16,6 +16,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
 import gregtech.api.util.GT_Recipe;
@@ -563,15 +564,25 @@ public class GT_Client extends GT_Proxy
         try {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             if (player == null) return 0;
-            ItemStack held = player.getCurrentEquippedItem();
-            if (held == null) return 0;
-            int[] ids = OreDictionary.getOreIDs(held);
+            ItemStack tCurrentItem = player.getCurrentEquippedItem();
+            if (tCurrentItem == null) return 0;
+            int[] ids = OreDictionary.getOreIDs(tCurrentItem);
             int hide = 0;
             for (int i : ids) {
                 if (OreDictionary.getOreName(i).equals("craftingToolSolderingIron")) {
                     hide |= 0x1;
                     break;
                 }
+            }
+            if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sHardHammerList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSoftHammerList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sCrowbarList)
+            		|| GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
+            	hide |= 0x2;
             }
             return hide;
         }catch(Exception e){

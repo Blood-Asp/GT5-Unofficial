@@ -12,6 +12,7 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -25,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileEntityItemPipe{
@@ -355,6 +357,13 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
+    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0)
+    		return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 1, aZ + 1);
+    	else
+    		return getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+    }
+
+    private AxisAlignedBB getActualCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
     	float tSpace = (1f - mThickNess)/2;
     	float tSide0 = tSpace;
     	float tSide1 = 1f - tSpace;
@@ -379,6 +388,14 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     	if((tConn & (1 << ForgeDirection.EAST.ordinal()) ) != 0) tSide5 = 1f;
     	
     	return AxisAlignedBB.getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
-    
+    }
+
+    @Override
+    public void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider) {
+    	super.addCollisionBoxesToList(aWorld, aX, aY, aZ, inputAABB, outputAABB, collider);
+    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0) {
+    		AxisAlignedBB aabb = getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+    		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
+    	}
     }
 }
