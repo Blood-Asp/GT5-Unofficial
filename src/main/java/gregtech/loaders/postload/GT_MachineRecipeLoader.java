@@ -3371,7 +3371,7 @@ if(Loader.isModLoaded("Railcraft")){
 				Materials.Carbon.getDustTiny(3), 120, 120);
 		//Recipes for gasoline
 				GT_Values.RA.addMixerRecipe(Materials.LightFuel.getCells(16), Materials.Gas.getCells(2), Materials.Ethanol.getCells(1), Materials.Acetone.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRaw.getCells(20), 200, 120);
-				GT_Values.RA.addChemicalRecipe(Materials.GasolineRaw.getCells(10), Materials.Toluene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRegular.getCells(10), 10, 120);
+				GT_Values.RA.addChemicalRecipe(Materials.GasolineRaw.getCells(10), Materials.Toluene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRegular.getCells(11), 10, 120);
 				GT_Values.RA.addMixerRecipe(Materials.GasolineRegular.getCells(20), Materials.Octane.getCells(2), Materials.NitricOxide.getCells(6), Materials.Toluene.getCells(1), GT_Values.NF, Materials.GasolinePremium.getFluid(25), ItemList.Cell_Empty.get(29), 200, 120);
 	}
 
