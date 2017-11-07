@@ -3370,9 +3370,11 @@ if(Loader.isModLoaded("Railcraft")){
 						Materials.Butadiene.getGas(50), Materials.Propane.getGas(10), Materials.Propene.getGas(100), Materials.Ethane.getGas(15), Materials.Ethylene.getGas(150), Materials.Methane.getGas(150)}, 
 				Materials.Carbon.getDustTiny(3), 120, 120);
 		//Recipes for gasoline
-				GT_Values.RA.addMixerRecipe(Materials.LightFuel.getCells(16), Materials.Gas.getCells(2), Materials.Ethanol.getCells(1), Materials.Acetone.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRaw.getCells(20), 200, 120);
+		GT_Values.RA.addChemicalRecipe(Materials.Nitrogen.getCells(2), Materials.Oxygen.getCells(1), GT_Values.NF, GT_Values.NF, Materials.NitrousOxide.getCells(3), 200, 30);
+				GT_Values.RA.addChemicalRecipe(Materials.Ethanol.getCells(1), Materials.Butene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.AntiKnock.getCells(2), 400, 480);
+				GT_Values.RA.addMixerRecipe(Materials.Naphtha.getCells(16), Materials.Gas.getCells(2), Materials.Methanol.getCells(1), Materials.Acetone.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRaw.getCells(20), 200, 120);
 				GT_Values.RA.addChemicalRecipe(Materials.GasolineRaw.getCells(10), Materials.Toluene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRegular.getCells(11), 10, 120);
-				GT_Values.RA.addMixerRecipe(Materials.GasolineRegular.getCells(20), Materials.Octane.getCells(2), Materials.NitricOxide.getCells(6), Materials.Toluene.getCells(1), GT_Values.NF, Materials.GasolinePremium.getFluid(25000L), ItemList.Cell_Empty.get(29), 200, 120);
+				GT_Values.RA.addMixerRecipe(Materials.GasolineRegular.getCells(20), Materials.Octane.getCells(2), Materials.NitrousOxide.getCells(6), Materials.Toluene.getCells(1), Materials.AntiKnock.getFluid(3000L), Materials.GasolinePremium.getFluid(25000L), ItemList.Cell_Empty.get(29), 200, 120);
 	}
 
 	public void addPotionRecipes(String aName,ItemStack aItem){
