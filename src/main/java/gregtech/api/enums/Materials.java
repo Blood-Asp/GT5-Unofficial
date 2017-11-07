@@ -745,10 +745,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HSSS = new Materials( 374, TextureSet.SET_METALLIC, 	   14.0F, 3000, 4, 1|2|64|128, 102, 0, 51, 0, "HSSS", "HSS-S", 0, 0, 5400, 5400, true, false, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Iridium, 2), new MaterialStack(Osmium, 1)));
     public static Materials DilutedSulfuricAcid = new MaterialBuilder(640, TextureSet.SET_FLUID, "Diluted Sulfuric Acid").addCell().addFluid().setRGB(192, 120, 32).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(SulfuricAcid, 1)).constructMaterial();
     public static Materials EpoxidFiberReinforced = new Materials(610, TextureSet.SET_DULL,3.0F, 64, 1, 1|2|64|128, 160, 112, 16, 0, "EpoxidFiberReinforced", "Fiber-Reinforced Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Epoxid, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials AntiKnock = new MaterialBuilder(994, TextureSet.SET_FLUID, "Ethyl Tert-Butyl Ether").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).constructMaterial();
     public static Materials Octane = new MaterialBuilder(995, TextureSet.SET_FLUID, "Octane").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.DIESEL).setFuelPower(80).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 18)).constructMaterial();
     public static Materials GasolineRaw = new MaterialBuilder(996, TextureSet.SET_FLUID, "Raw Gasoline").addCell().addFluid().setRGB(255,100,0).setColor(Dyes.dyeOrange).constructMaterial();
-    public static Materials GasolineRegular = new MaterialBuilder(997, TextureSet.SET_FLUID, "Regular Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(384).constructMaterial();
-    public static Materials GasolinePremium = new MaterialBuilder(998, TextureSet.SET_FLUID, "Premium Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(640).constructMaterial();
+    public static Materials GasolineRegular = new MaterialBuilder(997, TextureSet.SET_FLUID, "Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(384).constructMaterial();
+    public static Materials GasolinePremium = new MaterialBuilder(998, TextureSet.SET_FLUID, "High Octane Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(640).constructMaterial();
     
     /**
      * Materials which are renamed automatically
