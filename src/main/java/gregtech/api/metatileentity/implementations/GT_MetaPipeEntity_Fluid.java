@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
+import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
@@ -34,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.GT_Values.D1;
 
-public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity{
+public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     public final float mThickNess;
     public final Materials mMaterial;
     public final int mCapacity, mHeatResistance, mPipeAmount;
@@ -388,6 +389,9 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity{
                     }  
             	}
             }
+        } else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
+    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
+        		rConnect = -1;
         }
 		if (rConnect > 0) {
 			if (GT_Mod.gregtechproxy.gt6Pipe && tFluidPipe != null) {

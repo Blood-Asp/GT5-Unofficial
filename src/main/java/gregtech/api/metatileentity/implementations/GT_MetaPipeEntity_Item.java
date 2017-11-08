@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileEntityItemPipe{
+public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileEntityItemPipe {
     public final float mThickNess;
     public final Materials mMaterial;
     public final int mStepSize;
@@ -165,7 +165,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
             for (byte i = 0; i < 6; i++) {
-                if ((mCheckConnections || (mConnections & (1 << i)) != 0) && connect(i) <= 0) disconnect(i);
+                if ((mCheckConnections || (mConnections & (1 << i)) != 0) && connect(i) == 0) disconnect(i);
             }
             if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
 
