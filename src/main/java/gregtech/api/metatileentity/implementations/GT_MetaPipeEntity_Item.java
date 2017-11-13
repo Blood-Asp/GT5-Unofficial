@@ -253,6 +253,9 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
                     }
                 }
             }
+        } else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
+    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
+    		rConnect = -1;
         }
         if (rConnect > 0) {
         	super.connect(aSide);

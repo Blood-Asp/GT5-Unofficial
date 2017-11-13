@@ -276,24 +276,14 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 	                rConnect = 1;
 	            }
 	        }
-		}
+		} else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
+    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
+    		rConnect = -1;
+    	}
         if (rConnect > 0) {
         	super.connect(aSide);
         }
         return rConnect;
-	}
-
-	@Override
-	public void disconnect(byte aSide) {
-		if (aSide >= 6) return;
-		mConnections &= ~(1 << aSide);
-		if (GT_Mod.gregtechproxy.gt6Cable) {
-			byte tSide = GT_Utility.getOppositeSide(aSide);
-			IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
-			IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
-			if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) != 0)
-				((MetaPipeEntity) tPipe).disconnect(tSide);
-		}
 	}
 
     @Override
