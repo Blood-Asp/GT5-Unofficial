@@ -34,6 +34,10 @@ public abstract class GT_Worldgen {
         return false;
     }
 
+    public int executeWorldgenChunkified(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, int seedX, int seedZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+        return 0;
+    }
+
     /**
      * @param aWorld         The World Object
      * @param aRandom        The Random Generator to use

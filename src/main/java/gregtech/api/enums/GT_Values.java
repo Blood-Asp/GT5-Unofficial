@@ -122,9 +122,17 @@ public class GT_Values {
 	 */
 	public static int oreveinPercentage;
 	/**
-	 * Control number of attempts to find a valid orevein. Lower numbers is slightly faster chunkgen, but more empty chunks with thin stone height.
+	 * Control number of attempts to find a valid orevein. Generally this maximum limit isn't hit, selecting a vein is cheap
 	 */
 	public static int oreveinAttempts;
+	/**
+	 * Control number of attempts to place a valid orevein.  If a vein wasn't placed due to height restrictions, completely in the water, etc, another attempt is tried.
+	 */
+	public static int oreveinMaxPlacementAttempts;
+	/**
+	 * How wide to look for oreveins that affect a requested chunk. Trying to use oreveins larger than this will not work correctly. Increasing the size will cause additional worldgenerator lag.
+	 */
+	public static int oreveinMaxSize; 
 	/**
      * Not really Constants, but they set using the Config and therefore should be constant (those are for the Debug Mode)
      */
