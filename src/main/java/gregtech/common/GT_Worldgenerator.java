@@ -47,7 +47,7 @@ implements IWorldGenerator {
     public static List<Runnable> mList = new ArrayList();
 	public static HashSet<Long> ProcChunks = new HashSet<Long>();
 	// This is probably not going to work.  Trying to create a fake orevein to put into hashtable when there will be no ores in a vein.
-	public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 100, 0, 0, 0, false, false, false, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
+	public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
 	public static Hashtable<Long, GT_Worldgen> validOreveins = new Hashtable(1024);
     public boolean mIsGenerating = false;
 	public static final Object listLock = new Object();
@@ -141,12 +141,19 @@ implements IWorldGenerator {
         }
 
 		public void worldGenFindVein( int oreseedX, int oreseedZ) {
-			Long oreveinSeed = this.mWorld.getSeed() ^ ( (long)oreseedX << 32) | ( (long)oreseedZ & 0x00000000ffffffffL ); // Use an RNG that is identical every time it is called for this oreseed
+			long oreveinSeed = (long)this.mWorld.getSeed() ^  (( (long)oreseedX << 32) | ( (long)oreseedZ & 0x00000000ffffffffL )); // Use an RNG that is identical every time it is called for this oreseed
 			XSTR oreveinRNG = new XSTR( oreveinSeed );  
 			int oreveinPercentageRoll = oreveinRNG.nextInt(100); // Roll the dice, see if we get an orevein here at all
 			int noOrePlacedCount=0;
 			String tDimensionName = "";
 			if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
+			if (debugOrevein) GT_Log.out.println(
+				" Finding oreveins for oreveinSeed="+ oreveinSeed +
+				" mX="+ this.mX +
+				" mZ="+ this.mZ + 
+				" oreseedX="+ oreseedX +
+				" oreseedZ="+ oreseedZ									
+			);	
 
 			// Search for a valid orevein for this dimension
 			if( !validOreveins.containsKey(oreveinSeed) ) {
@@ -160,13 +167,17 @@ implements IWorldGenerator {
 	                    for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
 	                        tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
 	                        if (tRandomWeight <= 0) {
-	                            try {
-									oreveinRNG.setSeed(oreveinSeed);  // reset seed for RNG to only be based on oreseed X/Z
-									int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, oreveinRNG, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
+	                            try { 
+									int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed ), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
 									switch(placementResult) {
 										case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
 											if (debugOrevein) GT_Log.out.println(
-												" Adding orevein to hash table. Orevein took " + (i-1) + 
+												" Adding orevein to hash table. oreveinSeed=" + oreveinSeed + 
+												" mX="+ this.mX +
+												" mZ="+ this.mZ + 
+												" oreseedX="+ oreseedX +
+												" oreseedZ="+ oreseedZ +
+												" Orevein took " + (i-1) + 
 												" attempts to find" + 
 												" and " + placementAttempts +
 												" tries to place " +
@@ -184,6 +195,14 @@ implements IWorldGenerator {
 									}
 	                                break; // Try the next orevein
 	                            } catch (Throwable e) {
+	                            	if (debugOrevein) GT_Log.out.println(
+										"Exception occurred on oreVein" + tWorldGen +
+										" oreveinSeed="+ oreveinSeed +
+										" mX="+ this.mX +
+										" mZ="+ this.mZ + 
+										" oreseedX="+ oreseedX +
+										" oreseedZ="+ oreseedZ									
+									);	
 	                                e.printStackTrace(GT_Log.err);
 	                            }
 	                        }
@@ -193,22 +212,26 @@ implements IWorldGenerator {
 					if ((!oreveinFound) && (this.mX == oreseedX) && (this.mZ == oreseedZ)){
 						if (debugOrevein) GT_Log.out.println(
 							" Adding empty orevein to hash table. Could not find/place valid orevein" +
-							" chunkX="+ this.mX*16 +
-							" chunkZ="+ this.mZ*16 + 
-							" oreseedX="+ oreseedX*16 +
-							" oreseedZ="+ oreseedZ*16 + 
+							" oreveinSeed="+ oreveinSeed +
+							" mX="+ this.mX +
+							" mZ="+ this.mZ + 
+							" oreseedX="+ oreseedX +
+							" oreseedZ="+ oreseedZ + 
 							" tries at oremix=" + i +
 							" placementAttempts=" + placementAttempts +
-							"in dimensionName=" + tDimensionName
+							" in dimensionName=" + tDimensionName
 						);
 						validOreveins.put(oreveinSeed, noOresInVein );
 					}
 				} else if(oreveinPercentageRoll >= oreveinPercentage) {
 					if (debugOrevein) GT_Log.out.println(
 						" Skipped orevein in this 3x3 chunk!" +
-						" chunkX="+ this.mX +
-						" chunkZ="+ this.mZ +
-						" RNG=" + oreveinRNG +
+						" oreveinSeed="+ oreveinSeed +
+						" mX="+ this.mX +
+						" mZ="+ this.mZ +
+						" oreseedX=" + oreseedX +
+						" oreseedZ="+ oreseedZ + 
+						" RNG=" + oreveinPercentageRoll +
 						" %=" + oreveinPercentage+ 
 						" dimensionName=" + tDimensionName
 					);
@@ -218,10 +241,12 @@ implements IWorldGenerator {
 				// oreseed is located in the previously processed table
 				if (debugOrevein) GT_Log.out.println(
 					" Valid orevein found in hash table" +
-					" chunkX="+ this.mX*16 +
-					" chunkZ="+ this.mZ*16 + 
-					" oreseedX="+ oreseedX*16 +
-					" oreseedZ="+ oreseedZ*16 + 
+					" oreveinSeed="+ oreveinSeed +					
+					" validOreveins.size()=" + validOreveins.size() +
+					" mX="+ this.mX +
+					" mZ="+ this.mZ + 
+					" oreseedX="+ oreseedX +
+					" oreseedZ="+ oreseedZ + 
 					" in dimensionName=" + tDimensionName
 				);
 				GT_Worldgen tWorldGen = validOreveins.get(oreveinSeed);
@@ -234,10 +259,10 @@ implements IWorldGenerator {
 			long startTime = System.nanoTime();
 
 			// Determine bounding box on how far out to check for oreveins affecting this chunk
-			int wXbox = this.mX - (oreveinMaxSize/4);
-			int eXbox = this.mX + (oreveinMaxSize/4 + 1); // Need to add 1 since it is compared using a <
-			int nZbox = this.mZ - (oreveinMaxSize/4);
-			int sZbox = this.mZ + (oreveinMaxSize/4 + 1);
+			int wXbox = this.mX - (oreveinMaxSize/16);
+			int eXbox = this.mX + (oreveinMaxSize/16 + 1); // Need to add 1 since it is compared using a <
+			int nZbox = this.mZ - (oreveinMaxSize/16);
+			int sZbox = this.mZ + (oreveinMaxSize/16 + 1);
 
 			// Search for orevein seeds and add to the list;
 			for( int x = wXbox; x < eXbox; x++ ) {
@@ -251,12 +276,15 @@ implements IWorldGenerator {
 
 			// Now process each oreseed vs this requested chunk
 			for( ; seedList.size() != 0; ) {
+				
 				worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );
 				seedList.remove(0);
 			}
 
 			// Do leftover worldgen for this chunk (GT_Stones and GT_small_ores)
-				
+
+/////RAH Disable these for now
+/*
 			try {
 				for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
 					tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, this.mChunkGenerator, this.mChunkProvider);
@@ -264,7 +292,7 @@ implements IWorldGenerator {
 			} catch (Throwable e) {
 				e.printStackTrace(GT_Log.err);
 			}
-		
+*/		
 	/*		
             if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
 				int oreveinRNG = this.mRandom.nextInt(100);

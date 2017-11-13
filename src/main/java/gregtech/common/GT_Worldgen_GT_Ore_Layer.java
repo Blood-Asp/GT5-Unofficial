@@ -96,6 +96,14 @@ public class GT_Worldgen_GT_Ore_Layer
     }
 
     public int executeWorldgenChunkified(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, int aSeedX, int aSeedZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+		if( mWorldGenName.equals("NoOresInVein") ) {
+			if (debugOrevein) GT_Log.out.println(
+                            " NoOresInVein, skipping"
+            );
+			// This is a special empty orevein
+			return ORE_PLACED;
+		}
+			
 		//if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (this.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (this.mMars)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
         if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
             return WRONG_DIMENSION;
@@ -106,15 +114,15 @@ public class GT_Worldgen_GT_Ore_Layer
 		int[] placeCount=new int[4];
 
 		// Need to "reseed" RNG with values based on the orevein constants so that two oreveins at this same chunk don't end up trying the same sizes and offsets.
-		aRandom.nextInt( this.mPrimaryMeta + this.mSecondaryMeta + this.mSporadicMeta + this.mBetweenMeta);
+		aRandom.nextInt( this.mPrimaryMeta + this.mSecondaryMeta + this.mSporadicMeta + this.mBetweenMeta + aChunkX + aChunkZ);
 		
 		int tMinY = mMinY + aRandom.nextInt(mMaxY - mMinY - 5);
 		// Determine West/East ends of orevein
 		int wXVein = aSeedX - aRandom.nextInt(mSize);        // West side
 		int eXVein = aSeedX + 16 + aRandom.nextInt(mSize);
 		// Limit Orevein to only blocks present in current chunk
-		int wX = Math.max( wXVein, aChunkX);
-		int eX = Math.min( eXVein, aChunkX + 16);
+		int wX = Math.max( wXVein, aChunkX + 1);
+		int eX = Math.min( eXVein, aChunkX + 15);
 		if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
 /*
 			if (debugOrevein) {
@@ -129,8 +137,8 @@ public class GT_Worldgen_GT_Ore_Layer
 		int nZVein = aSeedZ - aRandom.nextInt(mSize);
 		int sZVein = aSeedZ + 16 + aRandom.nextInt(mSize);
 		
-		int nZ = Math.max(nZVein, aChunkZ);
-		int sZ = Math.min(sZVein, aChunkZ+16);
+		int nZ = Math.max(nZVein, aChunkZ + 1);
+		int sZ = Math.min(sZVein, aChunkZ + 15);
 		if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
 /*
 			if (debugOrevein) {
@@ -141,22 +149,25 @@ public class GT_Worldgen_GT_Ore_Layer
 */
 			return NO_OVERLAP;
 		}
-		// Need to "reseed" RNG with values based on the chunkX/Z location so that filled chunks don't repeat the same RNG values
-		aRandom.nextInt( aChunkX + aChunkZ );
-		
-		// To allow for early exit due to no ore placed in the bottom layer (probably because we are in the sky), unroll 1 pass through the loop
+		if (debugOrevein) GT_Log.out.println(
+        	 "wX=" + wX +
+        	" eX=" + eX +
+        	" nZ=" + nZ +
+        	" sZ=" + sZ
+        );
+ 		// To allow for early exit due to no ore placed in the bottom layer (probably because we are in the sky), unroll 1 pass through the loop
 		// Now we do bottom-level-first oregen, and work our way upwards.
 		int level = tMinY - 1; //Dunno why, but the first layer is actually played one below tMinY.  Go figure.
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX)));
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ)));
-					if ( ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSecondaryMeta > 0) ) {
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
 							placeCount[1]++;
 						}
 					}
-					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
 							placeCount[3]++;
 					}
@@ -173,15 +184,15 @@ public class GT_Worldgen_GT_Ore_Layer
 		}
 		for (level = tMinY; level < (tMinY-1+3); level++) {
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX)));
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ)));
-					if ( ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSecondaryMeta > 0) ) {
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
 							placeCount[1]++;
 						}
 					}
-					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
 							placeCount[3]++;
 					}
@@ -191,15 +202,15 @@ public class GT_Worldgen_GT_Ore_Layer
 		// Low Middle layer is between + sporadic
 		// level should be = tMinY-1+3 from end of for loop
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX)));
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ)));
-					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
 							placeCount[2]++;
 						}
 					}
-					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
 							placeCount[3]++;
 					}
@@ -208,20 +219,20 @@ public class GT_Worldgen_GT_Ore_Layer
 		// High Middle layer is between + primary + sporadic
 		level++; // Increment level to next layer
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX)));
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ)));
-					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
 							placeCount[2]++;
 						}
 					}
-					else if ( ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mPrimaryMeta > 0) ) {
+					else if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, false)) {
 							placeCount[0]++;
 						}
 					}
-					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
 							placeCount[3]++;
 					}
@@ -231,15 +242,15 @@ public class GT_Worldgen_GT_Ore_Layer
 		level++; // Increment level to next layer
 		for( ; level < (tMinY + 6); level++){ // should do two layers
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX)));
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ)));
-					if ( ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mPrimaryMeta > 0) ) {
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, false)) {
 							placeCount[0]++;
 						}
 					}
-					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ/mDensity) == 0) || (aRandom.nextInt(placeX/mDensity) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+					else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
 							placeCount[3]++;
 					}
@@ -251,8 +262,10 @@ public class GT_Worldgen_GT_Ore_Layer
             GT_Log.out.println(
                             "Generated Orevein:" + this.mWorldGenName +
                             " Dimension=" + tDimensionName +
-							" cX="+aChunkX+
-                            " cZ="+aChunkZ+
+							" mX="+aChunkX/16+
+                            " mZ="+aChunkZ/16+
+                            " oreseedX="+ aSeedX/16 +
+							" oreseedZ="+ aSeedZ/16 +
                             " cY="+tMinY+
                             " Den=" + this.mDensity +
                             " Sec="+placeCount[1]+
