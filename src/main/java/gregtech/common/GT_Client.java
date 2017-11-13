@@ -145,63 +145,72 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(+.25D, .0D, +.50D);
         GL11.glVertex3d(-.25D, .0D, -.50D);
         GL11.glVertex3d(-.25D, .0D, +.50D);
-        int[][] GridSwitchArr = new int[][]{
-        	{0, 5, 3, 1, 2, 4},
-        	{5, 0, 1, 3, 2, 4},
-        	{1, 3, 0, 5, 2, 4},
-        	{3, 1, 5, 0, 2, 4},
-        	{4, 2, 3, 1, 0, 5},
-        	{2, 4, 3, 1, 5, 0},
-        }; 
-        switch (GridSwitchArr[aEvent.target.sideHit][GT_Utility.determineWrenchingSide((byte) aEvent.target.sideHit, (float) aEvent.target.hitVec.xCoord - (float) aEvent.target.blockX, (float) aEvent.target.hitVec.yCoord - (float) aEvent.target.blockY, (float) aEvent.target.hitVec.zCoord - (float) aEvent.target.blockZ)]) {
-        case 0:
-        	GL11.glVertex3d(+.25D, .0D, +.25D);
-        	GL11.glVertex3d(-.25D, .0D, -.25D);
-        	GL11.glVertex3d(-.25D, .0D, +.25D);
-        	GL11.glVertex3d(+.25D, .0D, -.25D);
-        	break;
-        case 1:
-        	GL11.glVertex3d(-.25D, .0D, +.50D);
-			GL11.glVertex3d(+.25D, .0D, +.25D);
-			GL11.glVertex3d(-.25D, .0D, +.25D);
-			GL11.glVertex3d(+.25D, .0D, +.50D);
-        	break;
-        case 2:
-        	GL11.glVertex3d(-.50D, .0D, -.25D);
-			GL11.glVertex3d(-.25D, .0D, +.25D);
-			GL11.glVertex3d(-.50D, .0D, +.25D);
-			GL11.glVertex3d(-.25D, .0D, -.25D);
-        	break;
-        case 3:
-        	GL11.glVertex3d(-.25D, .0D, -.50D);
-			GL11.glVertex3d(+.25D, .0D, -.25D);
-			GL11.glVertex3d(-.25D, .0D, -.25D);
-			GL11.glVertex3d(+.25D, .0D, -.50D);
-        	break;
-        case 4:
-        	GL11.glVertex3d(+.50D, .0D, -.25D);
-			GL11.glVertex3d(+.25D, .0D, +.25D);
-			GL11.glVertex3d(+.50D, .0D, +.25D);
-			GL11.glVertex3d(+.25D, .0D, -.25D);
-        	break;
-        case 5:
-        	GL11.glVertex3d(+.50D, .0D, +.50D);
-        	GL11.glVertex3d(+.25D, .0D, +.25D);
-        	GL11.glVertex3d(+.50D, .0D, +.25D);
-        	GL11.glVertex3d(+.25D, .0D, +.50D);
-        	GL11.glVertex3d(+.50D, .0D, -.50D);
-        	GL11.glVertex3d(+.25D, .0D, -.25D);
-        	GL11.glVertex3d(+.50D, .0D, -.25D);
-        	GL11.glVertex3d(+.25D, .0D, -.50D);
-        	GL11.glVertex3d(-.50D, .0D, +.50D);
-        	GL11.glVertex3d(-.25D, .0D, +.25D);
-        	GL11.glVertex3d(-.50D, .0D, +.25D);
-        	GL11.glVertex3d(-.25D, .0D, +.50D);
-        	GL11.glVertex3d(-.50D, .0D, -.50D);
-        	GL11.glVertex3d(-.25D, .0D, -.25D);
-        	GL11.glVertex3d(-.50D, .0D, -.25D);
-        	GL11.glVertex3d(-.25D, .0D, -.50D);
-        	break;
+        GL11.glLineWidth(2.0F);
+        TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
+        if (tTile instanceof BaseMetaPipeEntity) {
+        	int[][] GridSwitchArr = new int[][]{
+            	{0, 5, 3, 1, 2, 4},
+            	{5, 0, 1, 3, 2, 4},
+            	{1, 3, 0, 5, 2, 4},
+            	{3, 1, 5, 0, 2, 4},
+            	{4, 2, 3, 1, 0, 5},
+            	{2, 4, 3, 1, 5, 0},
+            }; 
+        	int tConnections = ((BaseMetaPipeEntity) tTile).mConnections;
+        	for (byte i = 0; i < 6; i++) {
+        		if ((tConnections & (1 << i)) != 0) {
+        			switch (GridSwitchArr[aEvent.target.sideHit][i]) {
+        	        case 0:
+        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	break;
+        	        case 1:
+        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
+        				GL11.glVertex3d(+.25D, .0D, +.25D);
+        				GL11.glVertex3d(-.25D, .0D, +.25D);
+        				GL11.glVertex3d(+.25D, .0D, +.50D);
+        	        	break;
+        	        case 2:
+        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
+        				GL11.glVertex3d(-.25D, .0D, +.25D);
+        				GL11.glVertex3d(-.50D, .0D, +.25D);
+        				GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	break;
+        	        case 3:
+        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
+        				GL11.glVertex3d(+.25D, .0D, -.25D);
+        				GL11.glVertex3d(-.25D, .0D, -.25D);
+        				GL11.glVertex3d(+.25D, .0D, -.50D);
+        	        	break;
+        	        case 4:
+        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
+        				GL11.glVertex3d(+.25D, .0D, +.25D);
+        				GL11.glVertex3d(+.50D, .0D, +.25D);
+        				GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	break;
+        	        case 5:
+        	        	GL11.glVertex3d(+.50D, .0D, +.50D);
+        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.50D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, +.50D);
+        	        	GL11.glVertex3d(+.50D, .0D, -.50D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.50D);
+        	        	GL11.glVertex3d(-.50D, .0D, +.50D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.50D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
+        	        	GL11.glVertex3d(-.50D, .0D, -.50D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
+        	        	break;
+        	        }
+        		}
+        	}
         }
         GL11.glEnd();
         GL11.glPopMatrix();

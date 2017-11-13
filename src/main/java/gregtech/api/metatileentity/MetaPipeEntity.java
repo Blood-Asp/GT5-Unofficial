@@ -708,13 +708,11 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 	public int connect(byte aSide) {
 		if (aSide >= 6) return 0;
 		mConnections |= (1 << aSide);
-    	if (GT_Mod.gregtechproxy.gt6Pipe) {
-    		byte tSide = GT_Utility.getOppositeSide(aSide);
-    		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
-    		IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
-			if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) == 0)
-				((MetaPipeEntity) tPipe).connect(tSide);
-    	}
+		byte tSide = GT_Utility.getOppositeSide(aSide);
+		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
+		IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
+		if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) == 0)
+			((MetaPipeEntity) tPipe).connect(tSide);
     	return 1;
 	}
 
@@ -722,12 +720,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 	public void disconnect(byte aSide) {
 		if (aSide >= 6) return;
 		mConnections &= ~(1 << aSide);
-		if (GT_Mod.gregtechproxy.gt6Pipe) {
-			byte tSide = GT_Utility.getOppositeSide(aSide);
-			IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
-			IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
-			if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) != 0)
-				((MetaPipeEntity) tPipe).disconnect(tSide);
-		}
+		byte tSide = GT_Utility.getOppositeSide(aSide);
+		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
+		IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
+		if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) != 0)
+			((MetaPipeEntity) tPipe).disconnect(tSide);
 	}
 }
