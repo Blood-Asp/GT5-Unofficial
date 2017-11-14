@@ -97,9 +97,11 @@ public class GT_Worldgen_GT_Ore_Layer
 
     public int executeWorldgenChunkified(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, int aSeedX, int aSeedZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
 		if( mWorldGenName.equals("NoOresInVein") ) {
+			/*
 			if (debugOrevein) GT_Log.out.println(
                             " NoOresInVein, skipping"
             );
+            */
 			// This is a special empty orevein
 			return ORE_PLACED;
 		}
@@ -121,8 +123,8 @@ public class GT_Worldgen_GT_Ore_Layer
 		int wXVein = aSeedX - aRandom.nextInt(mSize);        // West side
 		int eXVein = aSeedX + 16 + aRandom.nextInt(mSize);
 		// Limit Orevein to only blocks present in current chunk
-		int wX = Math.max( wXVein, aChunkX + 1);
-		int eX = Math.min( eXVein, aChunkX + 15);
+		int wX = Math.max( wXVein, aChunkX);
+		int eX = Math.min( eXVein, aChunkX + 16);
 		if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
 /*
 			if (debugOrevein) {
@@ -137,8 +139,8 @@ public class GT_Worldgen_GT_Ore_Layer
 		int nZVein = aSeedZ - aRandom.nextInt(mSize);
 		int sZVein = aSeedZ + 16 + aRandom.nextInt(mSize);
 		
-		int nZ = Math.max(nZVein, aChunkZ + 1);
-		int sZ = Math.min(sZVein, aChunkZ + 15);
+		int nZ = Math.max(nZVein, aChunkZ);
+		int sZ = Math.min(sZVein, aChunkZ + 16);
 		if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
 /*
 			if (debugOrevein) {
@@ -149,19 +151,16 @@ public class GT_Worldgen_GT_Ore_Layer
 */
 			return NO_OVERLAP;
 		}
-		if (debugOrevein) GT_Log.out.println(
-        	 "wX=" + wX +
-        	" eX=" + eX +
-        	" nZ=" + nZ +
-        	" sZ=" + sZ
-        );
+		// Adjust the density down the more chunks we are away from the oreseed.  The 5 chunks surrounding the seed should always be max density due to truncation of Math.sqrt().
+		int localDensity = Math.max(1, this.mDensity / ((int)Math.sqrt(2 + Math.pow(aChunkX/16 - aSeedX/16, 2) + Math.pow(aChunkZ/16 - aSeedZ/16, 2))) );
+
  		// To allow for early exit due to no ore placed in the bottom layer (probably because we are in the sky), unroll 1 pass through the loop
 		// Now we do bottom-level-first oregen, and work our way upwards.
 		int level = tMinY - 1; //Dunno why, but the first layer is actually played one below tMinY.  Go figure.
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
 					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
 							placeCount[1]++;
@@ -184,9 +183,9 @@ public class GT_Worldgen_GT_Ore_Layer
 		}
 		for (level = tMinY; level < (tMinY-1+3); level++) {
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
 					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
 							placeCount[1]++;
@@ -202,9 +201,9 @@ public class GT_Worldgen_GT_Ore_Layer
 		// Low Middle layer is between + sporadic
 		// level should be = tMinY-1+3 from end of for loop
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
 					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
 							placeCount[2]++;
@@ -219,9 +218,9 @@ public class GT_Worldgen_GT_Ore_Layer
 		// High Middle layer is between + primary + sporadic
 		level++; // Increment level to next layer
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
 					if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
 							placeCount[2]++;
@@ -242,9 +241,9 @@ public class GT_Worldgen_GT_Ore_Layer
 		level++; // Increment level to next layer
 		for( ; level < (tMinY + 6); level++){ // should do two layers
 			for (int tX = wX; tX < eX; tX++) {
-				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wX - tX), MathHelper.abs_int(eX - tX))/mDensity);
+				int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
 				for (int tZ = nZ; tZ < sZ; tZ++) {
-					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZ - tZ), MathHelper.abs_int(nZ - tZ))/mDensity);
+					int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
 					if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
 						if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, false)) {
 							placeCount[0]++;
@@ -267,6 +266,7 @@ public class GT_Worldgen_GT_Ore_Layer
                             " oreseedX="+ aSeedX/16 +
 							" oreseedZ="+ aSeedZ/16 +
                             " cY="+tMinY+
+                            " locDen=" + localDensity +
                             " Den=" + this.mDensity +
                             " Sec="+placeCount[1]+
                             " Spo="+placeCount[3]+
