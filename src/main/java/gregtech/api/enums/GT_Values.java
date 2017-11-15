@@ -153,7 +153,11 @@ public class GT_Values {
 	 * Debug parameter for small ore generation.
 	 */
 	public static boolean debugSmallOres = false;
-    /**
+	/**
+	 * Debug parameter for stones generation.
+	 */
+	public static boolean debugStones = false;
+	/**
      * If you have to give something a World Parameter but there is no World... (Dummy World)
      */
     public static World DW;

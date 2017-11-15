@@ -192,6 +192,7 @@ public class GT_Mod implements IGT_Mod {
 		GT_Values.debugWorldGen = tMainConfig.get(aTextGeneral, "debugWorldGen", false).getBoolean(false);
 		GT_Values.debugOrevein = tMainConfig.get(aTextGeneral, "debugOrevein", false).getBoolean(false);
 		GT_Values.debugSmallOres = tMainConfig.get(aTextGeneral, "debugSmallOres", false).getBoolean(false);
+		GT_Values.debugStones = tMainConfig.get(aTextGeneral, "debugStones", false).getBoolean(false);
 		GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_75",75).getInt(75);
 		GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64",64).getInt(64);
 		GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8",8).getInt(8);

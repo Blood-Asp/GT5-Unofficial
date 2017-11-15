@@ -173,7 +173,7 @@ implements IWorldGenerator {
 									int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed ), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
 									switch(placementResult) {
 										case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
-											if (debugWorldGen) GT_Log.out.println(
+											if (debugOrevein) GT_Log.out.println(
 												" Added oreveinSeed=" + oreveinSeed + 
 												" mX="+ this.mX +
 												" mZ="+ this.mZ + 
@@ -196,7 +196,7 @@ implements IWorldGenerator {
 									}
 	                                break; // Try the next orevein
 	                            } catch (Throwable e) {
-	                            	if (debugWorldGen) GT_Log.out.println(
+	                            	if (debugOrevein) GT_Log.out.println(
 										"Exception occurred on oreVein" + tWorldGen +
 										" oreveinSeed="+ oreveinSeed +
 										" mX="+ this.mX +
@@ -211,7 +211,7 @@ implements IWorldGenerator {
 					}
 					// Only add an empty orevein if are unable to place a vein at the oreseed chunk.
 					if ((!oreveinFound) && (this.mX == oreseedX) && (this.mZ == oreseedZ)){
-						if (debugWorldGen) GT_Log.out.println(
+						if (debugOrevein) GT_Log.out.println(
 							" Empty oreveinSeed="+ oreveinSeed +
 							" mX="+ this.mX +
 							" mZ="+ this.mZ + 
@@ -224,7 +224,7 @@ implements IWorldGenerator {
 						validOreveins.put(oreveinSeed, noOresInVein );
 					}
 				} else if(oreveinPercentageRoll >= oreveinPercentage) {
-					if (debugWorldGen) GT_Log.out.println(
+					if (debugOrevein) GT_Log.out.println(
 						" Skipped oreveinSeed="+ oreveinSeed +
 						" mX="+ this.mX +
 						" mZ="+ this.mZ +
@@ -238,7 +238,7 @@ implements IWorldGenerator {
 	        	}
 			}else {
 				// oreseed is located in the previously processed table
-				if (debugWorldGen) GT_Log.out.print(
+				if (debugOrevein) GT_Log.out.print(
 					" Valid oreveinSeed="+ oreveinSeed +					
 					" validOreveins.size()=" + validOreveins.size() + " "
 				);
@@ -268,15 +268,19 @@ implements IWorldGenerator {
 			}
 
 			// Now process each oreseed vs this requested chunk
-			for( ; seedList.size() != 0; ) {
+			for( ; seedList.size() != 0; seedList.remove(0) ) {
 				worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );
-				seedList.remove(0);
 			}
 
 			// Do leftover worldgen for this chunk (GT_Stones and GT_small_ores)
 
 			try {
 				for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
+					/*
+					if (debugWorldGen) GT_Log.out.println(
+						"tWorldGen.mWorldGenName="+tWorldGen.mWorldGenName
+					);
+					*/
 					tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, this.mChunkGenerator, this.mChunkProvider);
 				}
 			} catch (Throwable e) {

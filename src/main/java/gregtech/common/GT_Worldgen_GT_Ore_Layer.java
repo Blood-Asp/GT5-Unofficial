@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugOrevein;
-import static gregtech.api.enums.GT_Values.debugWorldGen;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -97,11 +96,9 @@ public class GT_Worldgen_GT_Ore_Layer
 
     public int executeWorldgenChunkified(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, int aSeedX, int aSeedZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
 		if( mWorldGenName.equals("NoOresInVein") ) {
-			/*
 			if (debugOrevein) GT_Log.out.println(
-                            " NoOresInVein, skipping"
+                            " NoOresInVein"
             );
-            */
 			// This is a special empty orevein
 			return ORE_PLACED;
 		}
@@ -116,39 +113,35 @@ public class GT_Worldgen_GT_Ore_Layer
 		int[] placeCount=new int[4];
 
 		// Need to "reseed" RNG with values based on the orevein constants so that two oreveins at this same chunk don't end up trying the same sizes and offsets.
-		aRandom.nextInt( this.mPrimaryMeta + this.mSecondaryMeta + this.mSporadicMeta + this.mBetweenMeta + aChunkX + aChunkZ);
+		aRandom.nextInt( this.mPrimaryMeta + this.mSecondaryMeta + this.mSporadicMeta + this.mBetweenMeta + Math.abs(aChunkX + aChunkZ));
 		
 		int tMinY = mMinY + aRandom.nextInt(mMaxY - mMinY - 5);
 		// Determine West/East ends of orevein
 		int wXVein = aSeedX - aRandom.nextInt(mSize);        // West side
 		int eXVein = aSeedX + 16 + aRandom.nextInt(mSize);
 		// Limit Orevein to only blocks present in current chunk
-		int wX = Math.max( wXVein, aChunkX);
-		int eX = Math.min( eXVein, aChunkX + 16);
+		int wX = Math.max( wXVein, aChunkX + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
+		int eX = Math.min( eXVein, aChunkX + 2 + 16);
 		if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
-/*
 			if (debugOrevein) {
-				System.out.println(
-					"No overlap in X dim!"
+				GT_Log.out.println(
+					"No X overlap"
 				);
 			}
-*/
 			return NO_OVERLAP;
 		}
 		// Determine North/Sound ends of orevein
 		int nZVein = aSeedZ - aRandom.nextInt(mSize);
 		int sZVein = aSeedZ + 16 + aRandom.nextInt(mSize);
 		
-		int nZ = Math.max(nZVein, aChunkZ);
-		int sZ = Math.min(sZVein, aChunkZ + 16);
+		int nZ = Math.max(nZVein, aChunkZ + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
+		int sZ = Math.min(sZVein, aChunkZ + 2 + 16);
 		if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
-/*
 			if (debugOrevein) {
-				System.out.println(
-					"No overlap in Z dim!"
+				GT_Log.out.println(
+					"No Z overlap"
 				);
 			}
-*/
 			return NO_OVERLAP;
 		}
 		// Adjust the density down the more chunks we are away from the oreseed.  The 5 chunks surrounding the seed should always be max density due to truncation of Math.sqrt().
@@ -173,12 +166,9 @@ public class GT_Worldgen_GT_Ore_Layer
 				}
 			}
 		if ((placeCount[1]+placeCount[3])==0) {
-/*
-			GT_Log.out.println(
-                            "Generated Orevein:" + this.mWorldGenName +
-                            " did not place any ores in bottom layer, skipping"
+			if (debugOrevein) GT_Log.out.println(
+	            " No ore in bottom layer"
             );
-*/
 			return NO_ORE_IN_BOTTOM_LAYER;  // Exit early, didn't place anything in the bottom layer
 		}
 		for (level = tMinY; level < (tMinY-1+3); level++) {
