@@ -273,7 +273,6 @@ implements IWorldGenerator {
 			}
 
 			// Do leftover worldgen for this chunk (GT_Stones and GT_small_ores)
-
 			try {
 				for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
 					/*
@@ -286,105 +285,6 @@ implements IWorldGenerator {
 			} catch (Throwable e) {
 				e.printStackTrace(GT_Log.err);
 			}
-/*		
-			// Old non-chunkified oregen	
-            if ((Math.abs(this.mX / 16) % 3 == 1) && (Math.abs(this.mZ / 16) % 3 == 1)) {
-				int oreveinRNG = this.mRandom.nextInt(100);
-                if (( oreveinRNG < oreveinPercentage) && (GT_Worldgen_GT_Ore_Layer.sWeight > 0) && (GT_Worldgen_GT_Ore_Layer.sList.size() > 0)) {
-                    boolean temp = true;
-
-                    int tRandomWeight;
-					int i;
-					int placementAttempts=0;
-                    for (i = 0; (i < oreveinAttempts) && (temp) && (placementAttempts<oreveinMaxPlacementAttempts); i++) {
-                        tRandomWeight = this.mRandom.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
-                            tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
-                            if (tRandomWeight <= 0) {
-                                try {
-									int genResult = tWorldGen.executeWorldgenInt(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX, this.mZ, this.mChunkGenerator, this.mChunkProvider);
-                                    if (genResult == GT_Worldgen_GT_Ore_Layer.ORE_PLACED) { // Successful ore placement
-                                        temp = false;
-                                    } else if (genResult == GT_Worldgen_GT_Ore_Layer.NO_ORE_IN_BOTTOM_LAYER) { // Ore vein allowed, but could not place any
-										placementAttempts++;
-                                    }
-                                    break;
-                                } catch (Throwable e) {
-                                    e.printStackTrace(GT_Log.err);
-                                }
-                            }
-                        }
-                    }
-					if (debugOrevein & temp) {
-						GT_Log.out.println(
-										" Could not find/place valid orevein" +
-										" chunkX="+ this.mX +
-										" chunkZ="+ this.mZ + 
-										" tries at oremix=" + i +
-										" placementAttempts=" + placementAttempts +
-										" oreveinMaxPlacementAttempts=" + oreveinMaxPlacementAttempts +
-										"in dimensionName=" + tDimensionName
-						);
-					} else if (debugOrevein)
-					{
-						GT_Log.out.println(
-										" Orevein took " + (i-1) + 
-										" attempts to find" + 
-										" and " + placementAttempts +
-										" tries to place " +
-										" in dimensionName=" + tDimensionName
-						);
-					}
-						
-                }else
-                {
-                	if((oreveinRNG >= oreveinPercentage) && (debugOrevein))
-                	{
-						GT_Log.out.println(
-										" Skipped orevein in this 3x3 chunk!" +
-										" chunkX="+ this.mX +
-										" chunkZ="+ this.mZ +
-										" RNG=" + oreveinRNG +
-										" %=" + oreveinPercentage+ 
-										" dimensionName=" + tDimensionName
-						);
-                	}
-                }
-				
-                int i = 0;
-                for (int tX = this.mX - 16; i < 3; tX += 16) {
-                    int j = 0;
-                    for (int tZ = this.mZ - 16; j < 3; tZ += 16) {
-                        String tBiome = this.mWorld.getBiomeGenForCoords(tX + 8, tZ + 8).biomeName;
-                        //if (tBiome == null) {//TODO NEEDED?
-                        //    tBiome = BiomeGenBase.plains.biomeName;
-                        //}
-                        try {
-                            for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                                tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, tX, tZ, this.mChunkGenerator, this.mChunkProvider);
-                            }
-                        } catch (Throwable e) {
-                            e.printStackTrace(GT_Log.err);
-                        }
-                        j++;
-                    }
-                    i++;
-                }
-            }
-			else
-			{
-				if (debugOrevein) {
-					GT_Log.out.println(
-									" Skipped chunk, not 3x3 center" +
-									" @ dim="+this.mDimensionType+
-									" chunkX="+this.mX+
-									" chunkZ="+this.mZ+ 
-									" dimensionName=" + tDimensionName
-					);
-				}
-			}
-
-*/
 			
             //Asteroid Worldgen
             int tDimensionType = this.mWorld.provider.dimensionId;
