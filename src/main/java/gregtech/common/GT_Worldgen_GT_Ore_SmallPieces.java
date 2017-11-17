@@ -47,9 +47,9 @@ public class GT_Worldgen_GT_Ore_SmallPieces
             return false;
         }
         int count=0;
-	
+    
         if (this.mMeta > 0) {
-			int j = Math.max(1, this.mAmount / 2 + aRandom.nextInt(this.mAmount) / 2);
+            int j = Math.max(1, this.mAmount / 2 + aRandom.nextInt(this.mAmount) / 2);
             for ( int i = 0; i < j; i++) {
                 GT_TileEntity_Ores.setOreBlock(aWorld, aChunkX + 8 + aRandom.nextInt(16), this.mMinY + aRandom.nextInt(Math.max(1, this.mMaxY - this.mMinY)), aChunkZ + 8 + aRandom.nextInt(16), this.mMeta, true);
                 count++;
@@ -59,8 +59,8 @@ public class GT_Worldgen_GT_Ore_SmallPieces
             GT_Log.out.println(
                     "Small Ore:" + this.mWorldGenName +
                             " @ dim="+aDimensionType+
-							" mX="+aChunkX/16+
-							" mZ="+aChunkZ/16+
+                            " mX="+aChunkX/16+
+                            " mZ="+aChunkZ/16+
                             " ore="+count
             );
         }

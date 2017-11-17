@@ -51,9 +51,9 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
         String BlockName = tBlock.getUnlocalizedName();
         aMetaData += isSmallOre ? 16000 : 0;
         if ((aMetaData > 0) && ((tBlock != Blocks.air) || air)) {
-			if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone)) {
-				//Do nothing, stone background is default background.
-				//Do this comparison first since stone is most common
+            if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.stone)) {
+                //Do nothing, stone background is default background.
+                //Do this comparison first since stone is most common
             } else if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.netherrack)) {
                 aMetaData += 1000;
             } else if (tBlock.isReplaceableOreGen(aWorld, aX, aY, aZ, Blocks.end_stone)) {
@@ -78,7 +78,7 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
                 } else {
                     aMetaData += 5000;
                 }
-			} else if (BlockName.equals("tile.igneousStone")) {
+            } else if (BlockName.equals("tile.igneousStone")) {
                 if (GregTech_API.sBlockOresUb1 != null) {
                     tOreBlock = GregTech_API.sBlockOresUb1;
                     aMetaData += (BlockMeta * 1000);
