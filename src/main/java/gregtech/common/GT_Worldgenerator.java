@@ -74,21 +74,42 @@ implements IWorldGenerator {
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         synchronized (listLock)
         {
-            if (!this.ProcChunks.contains( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL)) ) {
-                this.ProcChunks.add( ((long)aX << 32) | ((long)(aZ) & 0x00000000ffffffffL));
-                this.mList.add(new WorldGenContainer(new XSTR(aRandom.nextInt()), aX, aZ, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-                if (debugWorldGen) {GT_Log.out.println("ADD WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size());}
+/*
+            if (debugWorldGen) GT_Log.out.println(
+                "aWorld.getSeed()="+aWorld.getSeed()
+            );
+            if (!this.ProcChunks.contains( ((aWorld.provider.dimensionId & 0xffL)<<56) |( ((long)aX & 0x000000000fffffffL) << 28) | ( (long)aZ & 0x000000000fffffffL )) ) { // Have to add ProcChunks due to Deep Dark bug that calls oregen twice
+                this.ProcChunks.add( ((aWorld.provider.dimensionId & 0xffL)<<56) |( ((long)aX & 0x000000000fffffffL) << 28) | ( (long)aZ & 0x000000000fffffffL ));
+*/
+                this.mList.add(new WorldGenContainer(new XSTR(Math.abs(aRandom.nextInt()) +1), aX, aZ, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+
+                if (debugWorldGen) GT_Log.out.println(
+                    "ADD WorldSeed:"+aWorld.getSeed() +
+                    " DimId" + aWorld.provider.dimensionId + 
+                    " chunk x:" + aX + 
+                    " z:" + aZ + 
+                    " SIZE: " + this.mList.size()
+                );
+/*
             } else {
                 if (debugWorldGen) {GT_Log.out.println("DUP WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size() + " ProcChunks.size(): " + ProcChunks.size() ); }
             }
+*/
         }
+
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
             for (int i = 0; i < mList_sS; i++) {
                 WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
-                if (debugWorldGen) {GT_Log.out.println("RUN WorldGen chunk x:" + toRun.mX + " z:" + toRun.mZ + " SIZE: " + this.mList.size() + " i: " + i );}
-                this.ProcChunks.remove( ((long)(toRun.mX) << 32) | ((long)(toRun.mZ) & 0x00000000ffffffffL));
+                if (debugWorldGen) GT_Log.out.println(
+                    "RUN WorldSeed:"+aWorld.getSeed()+
+                    " DimId" + aWorld.provider.dimensionId + 
+                    " chunk x:" + toRun.mX + 
+                    " z:" + toRun.mZ + 
+                    " SIZE: " + this.mList.size() + 
+                    " i: " + i 
+                );
                 synchronized (listLock)
                 {
                     this.mList.remove(0);
@@ -141,21 +162,26 @@ implements IWorldGenerator {
         }
 
         public void worldGenFindVein( int oreseedX, int oreseedZ) {
-            long oreveinSeed = (long)this.mWorld.getSeed() ^  (( (long)oreseedX << 32) | ( (long)oreseedZ & 0x00000000ffffffffL )); // Use an RNG that is identical every time it is called for this oreseed
+            // Explanation of oreveinseed implementation.
+            // (long)this.mWorld.getSeed()<<16)    Deep Dark does two oregen passes, one with getSeed set to +1 the original world seed.  This pushes that +1 off the low bits of oreseedZ, so that the hashes are far apart for the two passes.
+            // ((this.mWorld.provider.dimensionId & 0xffL)<<56)    Puts the dimension in the top bits of the hash, to make sure to get unique hashes per dimension
+            // ((long)oreseedX & 0x000000000fffffffL) << 28)    Puts the chunk X in the bits 29-55. Cuts off the top few bits of the chunk so we have bits for dimension.
+            // ( (long)oreseedZ & 0x000000000fffffffL ))    Puts the chunk Z in the bits 0-27. Cuts off the top few bits of the chunk so we have bits for dimension.
+            long oreveinSeed = ((long)this.mWorld.getSeed()<<16) ^  ((long)((this.mWorld.provider.dimensionId & 0xffL)<<56) |( ((long)oreseedX & 0x000000000fffffffL) << 28) | ( (long)oreseedZ & 0x000000000fffffffL )); // Use an RNG that is identical every time it is called for this oreseed. 
             XSTR oreveinRNG = new XSTR( oreveinSeed );  
             int oreveinPercentageRoll = oreveinRNG.nextInt(100); // Roll the dice, see if we get an orevein here at all
             int noOrePlacedCount=0;
             String tDimensionName = "";
             if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
-            /*
+
             if (debugOrevein) GT_Log.out.println(
                 " Finding oreveins for oreveinSeed="+ oreveinSeed +
                 " mX="+ this.mX +
                 " mZ="+ this.mZ + 
                 " oreseedX="+ oreseedX +
-                " oreseedZ="+ oreseedZ                                    
+                " oreseedZ="+ oreseedZ +
+                " worldSeed="+this.mWorld.getSeed()
             );
-            */
 
             // Search for a valid orevein for this dimension
             if( !validOreveins.containsKey(oreveinSeed) ) {
@@ -163,7 +189,6 @@ implements IWorldGenerator {
                     int placementAttempts = 0;
                     boolean oreveinFound = false;
                     int i;
-                    
                     for( i = 0; (i < oreveinAttempts) && (!oreveinFound) && (placementAttempts<oreveinMaxPlacementAttempts); i++ ) {
                         int tRandomWeight = oreveinRNG.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
@@ -175,10 +200,6 @@ implements IWorldGenerator {
                                         case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
                                             if (debugOrevein) GT_Log.out.println(
                                                 " Added oreveinSeed=" + oreveinSeed + 
-                                                " mX="+ this.mX +
-                                                " mZ="+ this.mZ + 
-                                                " oreseedX="+ oreseedX +
-                                                " oreseedZ="+ oreseedZ +
                                                 " tries at oremix=" + i +
                                                 " placementAttempts=" + placementAttempts +
                                                 " dimensionName=" + tDimensionName
@@ -243,8 +264,20 @@ implements IWorldGenerator {
                     " validOreveins.size()=" + validOreveins.size() + " "
                 );
                 GT_Worldgen tWorldGen = validOreveins.get(oreveinSeed);
-                oreveinRNG.setSeed(oreveinSeed);  // reset seed for RNG to only be based on oreseed X/Z
-                tWorldGen.executeWorldgenChunkified(this.mWorld, oreveinRNG, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
+                oreveinRNG.setSeed(oreveinSeed);  // Reset RNG to only be based on oreseed X/Z
+                int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, oreveinRNG, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
+                switch( placementResult )
+                {
+                    case GT_Worldgen_GT_Ore_Layer.NO_ORE_IN_BOTTOM_LAYER:
+                        if (debugOrevein) GT_Log.out.print(
+                            " No ore in bottom layer"
+                        );
+                        break;
+                    case GT_Worldgen_GT_Ore_Layer.NO_OVERLAP:
+                        if (debugOrevein) GT_Log.out.print(
+                            " No overlap"
+                        );
+                }
             }
         }
             
@@ -252,16 +285,20 @@ implements IWorldGenerator {
             long startTime = System.nanoTime();
 
             // Determine bounding box on how far out to check for oreveins affecting this chunk
-            int wXbox = this.mX - (oreveinMaxSize/16);
-            int eXbox = this.mX + (oreveinMaxSize/16 + 1); // Need to add 1 since it is compared using a <
-            int nZbox = this.mZ - (oreveinMaxSize/16);
-            int sZbox = this.mZ + (oreveinMaxSize/16 + 1);
+            int wXbox = this.mX - (oreveinMaxSize/16);
+            int eXbox = this.mX + (oreveinMaxSize/16 + 1); // Need to add 1 since it is compared using a <
+            int nZbox = this.mZ - (oreveinMaxSize/16);
+            int sZbox = this.mZ + (oreveinMaxSize/16 + 1);
 
             // Search for orevein seeds and add to the list;
             for( int x = wXbox; x < eXbox; x++ ) {
                 for( int z = nZbox; z < sZbox; z++ ) {
                     // Determine if this X/Z is an orevein seed
                     if ( ( (Math.abs(x)%3) == 1) && ( (Math.abs(z)%3) == 1 ) ) {
+                        if (debugWorldGen) GT_Log.out.println(
+                            "Adding seed x="+x+
+                            " z="+z
+                        );
                         seedList.add( new NearbySeeds(x,z) );
                     }
                 }
@@ -269,6 +306,10 @@ implements IWorldGenerator {
 
             // Now process each oreseed vs this requested chunk
             for( ; seedList.size() != 0; seedList.remove(0) ) {
+                if (debugWorldGen) GT_Log.out.println(
+                    "Processing seed x="+seedList.get(0).mX+
+                    " z="+seedList.get(0).mZ 
+                );
                 worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );
             }
 

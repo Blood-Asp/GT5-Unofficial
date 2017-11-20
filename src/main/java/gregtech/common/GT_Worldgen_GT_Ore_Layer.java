@@ -105,6 +105,13 @@ public class GT_Worldgen_GT_Ore_Layer
             
         //if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (this.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (this.mMars)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
         if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
+            /*
+            if (debugOrevein) {
+                GT_Log.out.println(
+                    "Wrong dimension"
+                );
+            }
+            */
             return WRONG_DIMENSION;
         }
         if (!this.mRestrictBiome.equals("None") && !(this.mRestrictBiome.equals(aBiome))) {
@@ -123,11 +130,13 @@ public class GT_Worldgen_GT_Ore_Layer
         int wX = Math.max( wXVein, aChunkX + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int eX = Math.min( eXVein, aChunkX + 2 + 16);
         if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
+            /*
             if (debugOrevein) {
                 GT_Log.out.println(
                     "No X overlap"
                 );
             }
+            */
             return NO_OVERLAP;
         }
         // Determine North/Sound ends of orevein
@@ -137,11 +146,13 @@ public class GT_Worldgen_GT_Ore_Layer
         int nZ = Math.max(nZVein, aChunkZ + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int sZ = Math.min(sZVein, aChunkZ + 2 + 16);
         if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
+            /*
             if (debugOrevein) {
                 GT_Log.out.println(
                     "No Z overlap"
                 );
             }
+            */
             return NO_OVERLAP;
         }
         // Adjust the density down the more chunks we are away from the oreseed.  The 5 chunks surrounding the seed should always be max density due to truncation of Math.sqrt().
@@ -256,6 +267,10 @@ public class GT_Worldgen_GT_Ore_Layer
                             " oreseedX="+ aSeedX/16 +
                             " oreseedZ="+ aSeedZ/16 +
                             " cY="+tMinY+
+                            " wXVein" + wXVein +
+                            " eXVein" + eXVein +
+                            " nZVein" + nZVein +
+                            " sZVein" + sZVein +
                             " locDen=" + localDensity +
                             " Den=" + this.mDensity +
                             " Sec="+placeCount[1]+
@@ -265,6 +280,6 @@ public class GT_Worldgen_GT_Ore_Layer
             );
         }
         // Something (at least the bottom layer must have 1 block) must have been placed, return true
-           return ORE_PLACED;
+        return ORE_PLACED;
     }
 }
