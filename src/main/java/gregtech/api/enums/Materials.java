@@ -527,7 +527,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     public static Materials NatruralGas = new Materials(733, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "NatruralGas", "Natural Gas", 1, 15, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
     public static Materials SulfuricGas = new Materials(734, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "SulfuricGas", "Sulfuric Gas", 1, 20, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
-    public static Materials Gas = new Materials(735, TextureSet.SET_FLUID, 				1.0F, 0, 1, 16, 255, 255, 255, 0, "Gas", "Refinery Gas", 1, 128, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
+    public static Materials Gas = new Materials(735, TextureSet.SET_FLUID, 				1.0F, 0, 1, 16, 255, 255, 255, 0, "Gas", "Refinery Gas", 1, 128, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite).setCanBeCracked(true);
     public static Materials SulfuricNaphtha = new Materials(736, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricNaphtha", "Sulfuric Naphtha", 1, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
     public static Materials SulfuricLightFuel = new Materials(737, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricLightFuel", "Sulfuric Light Fuel", 0, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
     public static Materials SulfuricHeavyFuel = new Materials(738, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricHeavyFuel", "Sulfuric Heavy Fuel", 3, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
