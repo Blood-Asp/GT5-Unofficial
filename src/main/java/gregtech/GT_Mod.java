@@ -1240,7 +1240,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
-        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1),
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),
