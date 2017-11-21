@@ -48,7 +48,7 @@ implements IWorldGenerator {
     public static HashSet<Long> ProcChunks = new HashSet<Long>();
     // This is probably not going to work.  Trying to create a fake orevein to put into hashtable when there will be no ores in a vein.
     public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
-    public static Hashtable<Long, GT_Worldgen> validOreveins = new Hashtable(1024);
+    public static Hashtable<Long, GT_Worldgen_GT_Ore_Layer> validOreveins = new Hashtable(1024);
     public boolean mIsGenerating = false;
     public static final Object listLock = new Object();
     //private static boolean gcAsteroids = true;
@@ -197,7 +197,7 @@ implements IWorldGenerator {
                                 try { 
                                     // Adjust the seed so that this layer has a series of unique random numbers.  Otherwise multiple attempts at this same oreseed will get the same offset and X/Z values. If an orevein failed, any orevein with the 
                                     // same minimum heights would fail as well.  This prevents that, giving each orevein a unique height each pass through here.
-                                    int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed + tWorldGen.mPrimaryMeta), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
+                                    int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed ^ (tWorldGen.mPrimaryMeta)), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
                                     switch(placementResult) {
                                         case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
                                             if (debugOrevein) GT_Log.out.println(
@@ -265,8 +265,8 @@ implements IWorldGenerator {
                     " Valid oreveinSeed="+ oreveinSeed +                    
                     " validOreveins.size()=" + validOreveins.size() + " "
                 );
-                GT_Worldgen tWorldGen = validOreveins.get(oreveinSeed);
-                oreveinRNG.setSeed(oreveinSeed);  // Reset RNG to only be based on oreseed X/Z
+                GT_Worldgen_GT_Ore_Layer tWorldGen = validOreveins.get(oreveinSeed);
+                oreveinRNG.setSeed(oreveinSeed ^ (tWorldGen.mPrimaryMeta));  // Reset RNG to only be based on oreseed X/Z and type of vein
                 int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, oreveinRNG, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
                 switch( placementResult )
                 {
