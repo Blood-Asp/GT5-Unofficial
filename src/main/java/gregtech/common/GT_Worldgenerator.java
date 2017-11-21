@@ -21,7 +21,7 @@ import static gregtech.api.enums.GT_Values.debugWorldGen;
 import static gregtech.api.enums.GT_Values.debugOrevein;
 import static gregtech.api.enums.GT_Values.oreveinAttempts;
 import static gregtech.api.enums.GT_Values.oreveinMaxPlacementAttempts;
-import static gregtech.api.enums.GT_Values.oreveinMaxSize;
+// Disabled for hardcoded value.    import static gregtech.api.enums.GT_Values.oreveinMaxSize;
 import gregtech.api.enums.Materials;
 
 
@@ -191,11 +191,13 @@ implements IWorldGenerator {
                     int i;
                     for( i = 0; (i < oreveinAttempts) && (!oreveinFound) && (placementAttempts<oreveinMaxPlacementAttempts); i++ ) {
                         int tRandomWeight = oreveinRNG.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
-                        for (GT_Worldgen tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
-                            tRandomWeight -= ((GT_Worldgen_GT_Ore_Layer) tWorldGen).mWeight;
+                        for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
+                            tRandomWeight -= ( tWorldGen).mWeight;
                             if (tRandomWeight <= 0) {
                                 try { 
-                                    int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed ), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
+                                    // Adjust the seed so that this layer has a series of unique random numbers.  Otherwise multiple attempts at this same oreseed will get the same offset and X/Z values. If an orevein failed, any orevein with the 
+                                    // same minimum heights would fail as well.  This prevents that, giving each orevein a unique height each pass through here.
+                                    int placementResult = tWorldGen.executeWorldgenChunkified(this.mWorld, new XSTR( oreveinSeed + tWorldGen.mPrimaryMeta), this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, oreseedX*16, oreseedZ*16, this.mChunkGenerator, this.mChunkProvider);
                                     switch(placementResult) {
                                         case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
                                             if (debugOrevein) GT_Log.out.println(
@@ -269,12 +271,12 @@ implements IWorldGenerator {
                 switch( placementResult )
                 {
                     case GT_Worldgen_GT_Ore_Layer.NO_ORE_IN_BOTTOM_LAYER:
-                        if (debugOrevein) GT_Log.out.print(
+                        if (debugOrevein) GT_Log.out.println(
                             " No ore in bottom layer"
                         );
                         break;
                     case GT_Worldgen_GT_Ore_Layer.NO_OVERLAP:
-                        if (debugOrevein) GT_Log.out.print(
+                        if (debugOrevein) GT_Log.out.println(
                             " No overlap"
                         );
                 }
@@ -283,8 +285,15 @@ implements IWorldGenerator {
             
         public void run() {
             long startTime = System.nanoTime();
+            int oreveinMaxSize;
 
             // Determine bounding box on how far out to check for oreveins affecting this chunk
+            // For now, manually reducing oreveinMaxSize when not in the Underdark for performance
+            if(this.mWorld.provider.getDimensionName().equals("Underdark") ) {
+                oreveinMaxSize=64;
+            } else {
+                oreveinMaxSize=32;
+            }
             int wXbox = this.mX - (oreveinMaxSize/16);
             int eXbox = this.mX + (oreveinMaxSize/16 + 1); // Need to add 1 since it is compared using a <
             int nZbox = this.mZ - (oreveinMaxSize/16);
@@ -313,6 +322,8 @@ implements IWorldGenerator {
                 worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );
             }
 
+            long oregenTime = System.nanoTime();
+
             // Do leftover worldgen for this chunk (GT_Stones and GT_small_ores)
             try {
                 for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
@@ -326,6 +337,8 @@ implements IWorldGenerator {
             } catch (Throwable e) {
                 e.printStackTrace(GT_Log.err);
             }
+
+            long leftOverTime = System.nanoTime();
             
             //Asteroid Worldgen
             int tDimensionType = this.mWorld.provider.dimensionId;
@@ -442,7 +455,9 @@ implements IWorldGenerator {
             long duration = (endTime - startTime);
             if (debugWorldGen) {
                 GT_Log.out.println(
-                    " Oregen took " + duration + 
+                    " Oregen took " + (oregenTime-startTime)+
+                    " Leftover gen took " + (leftOverTime - oregenTime ) +
+                    " Worldgen took " + duration + 
                     " nanoseconds"
                     );
             }

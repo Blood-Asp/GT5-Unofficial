@@ -131,8 +131,9 @@ public class GT_Values {
     public static int oreveinMaxPlacementAttempts;
     /**
      * How wide to look for oreveins that affect a requested chunk. Trying to use oreveins larger than this will not work correctly. Increasing the size will cause additional worldgenerator lag.
+     * Disabled for now, using 64 in Deep Dark, 32 elsewhere
      */
-    public static int oreveinMaxSize; 
+    // public static int oreveinMaxSize; 
     /**
      * Not really Constants, but they set using the Config and therefore should be constant (those are for the Debug Mode)
      */

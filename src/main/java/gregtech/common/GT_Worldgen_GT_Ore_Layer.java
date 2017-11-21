@@ -102,10 +102,8 @@ public class GT_Worldgen_GT_Ore_Layer
             // This is a special empty orevein
             return ORE_PLACED;
         }
-            
-        //if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) || ((aWorld.provider.getDimensionName().equals("Moon")) && (this.mMoon)) || ((aWorld.provider.getDimensionName().equals("Mars")) && (this.mMars)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
         if (!isGenerationAllowed(aWorld, aDimensionType, ((aDimensionType == -1) && (this.mNether)) || ((aDimensionType == 0) && (this.mOverworld)) || ((aDimensionType == 1) && (this.mEnd)) ? aDimensionType : aDimensionType ^ 0xFFFFFFFF)) {
-            /*
+            /* // Debug code, but spams log
             if (debugOrevein) {
                 GT_Log.out.println(
                     "Wrong dimension"
@@ -115,13 +113,10 @@ public class GT_Worldgen_GT_Ore_Layer
             return WRONG_DIMENSION;
         }
         if (!this.mRestrictBiome.equals("None") && !(this.mRestrictBiome.equals(aBiome))) {
-            return WRONG_BIOME; //Not the correct biome for ore mix
+            return WRONG_BIOME;
         }
         int[] placeCount=new int[4];
 
-        // Need to "reseed" RNG with values based on the orevein constants so that two oreveins at this same chunk don't end up trying the same sizes and offsets.
-        aRandom.nextInt( this.mPrimaryMeta + this.mSecondaryMeta + this.mSporadicMeta + this.mBetweenMeta + Math.abs(aChunkX + aChunkZ));
-        
         int tMinY = mMinY + aRandom.nextInt(mMaxY - mMinY - 5);
         // Determine West/East ends of orevein
         int wXVein = aSeedX - aRandom.nextInt(mSize);        // West side
