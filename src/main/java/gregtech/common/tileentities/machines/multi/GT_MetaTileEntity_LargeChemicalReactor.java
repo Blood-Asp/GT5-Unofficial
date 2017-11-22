@@ -45,8 +45,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				"Size(WxHxD): 3x3x3",
 				"3x3x3 of Chemically Inert Machine Casings (hollow, min 8!)",
 				"Controller (Front centered)",
-				"1x Cupronickel Coil Block (Bottom centered)",
 				"1x PTFE Pipe Machine Casing (inside the hollow casings)",
+				"1x Cupronickel Coil Block (next to PTFE Pipe Machine Casing)",
 				"1x Input Bus/Hatch (Any inert casing)",
 				"1x Output Bus/Hatch (Any inert casing)",
 				"1x Maintenance Hatch (Any inert casing)",
@@ -151,20 +151,37 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
 		int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 		int casingAmount = 0;
+		boolean hasHeatingCoil = false;
 		// x=width, z=depth, y=height
 		for (int x = -1 + xDir; x <= xDir + 1; x++) {
 			for (int z = -1 + zDir; z <= zDir + 1; z++) {
 				for (int y = -1; y <= 1; y++) {
+					if (x == 0 && y == 0 && z == 0) {
+						continue;
+					}
 					IGregTechTileEntity tileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(x, y, z);
 					Block block = aBaseMetaTileEntity.getBlockOffset(x, y, z);
-					if (x == xDir && z == zDir && y <= 0) {
-						if ((y == -1)
-								&& (block != GregTech_API.sBlockCasings5 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 0)) {
-							return false;
-						} else if (y == 0 && (block != GregTech_API.sBlockCasings8 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 1)) {
+					int centerCoords = 0;
+					if (x == xDir) {
+						centerCoords++;
+					}
+					if (y == 0) {
+						centerCoords++;
+					}
+					if (z == zDir) {
+						centerCoords++;
+					}
+					if (centerCoords == 3) {
+						if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 1) {
+							continue;
+						} else {
 							return false;
 						}
-					} else if (x != 0 || y != 0 || z != 0) {
+					}
+					if (centerCoords == 2 && block == GregTech_API.sBlockCasings5 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
+						hasHeatingCoil = true;
+						continue;
+					}
 						if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
 								&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
 								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
@@ -174,13 +191,12 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 								return false;
 							}
 						}
-					}
 
 				}
 			}
 
 		}
-		return casingAmount >= 8;
+		return casingAmount >= 8 && hasHeatingCoil;
 	}
 
 	@Override
