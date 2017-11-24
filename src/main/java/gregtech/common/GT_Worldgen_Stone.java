@@ -109,11 +109,12 @@ public class GT_Worldgen_Stone
                 int tX = x + stoneRNG.nextInt(16);
                 int tY = mMinY + stoneRNG.nextInt(mMaxY - mMinY);
                 int tZ = z + stoneRNG.nextInt(16);
+
                 //Determine the XYZ sizes of the stoneseed
                 double xSize = sizeConversion[stoneRNG.nextInt(sizeConversion.length)];
                 double ySize = sizeConversion[stoneRNG.nextInt(sizeConversion.length)/2];  // Skew the ySize towards the larger sizes, more long skinny pipes
                 double zSize = sizeConversion[stoneRNG.nextInt(sizeConversion.length)];
-                
+
                 //Equation for an ellipsoid centered around 0,0,0
                 // Sx, Sy, and Sz are size controls (size = 1/S_)
                 // 1 = full size, 1.333 = 75%, 2 = 50%, 4 = 25%
@@ -126,7 +127,27 @@ public class GT_Worldgen_Stone
                 int tMaxY = tY+(int)(realSize/ySize+2.0);
                 int tMinZ = tZ-(int)(realSize/zSize-1.0);
                 int tMaxZ = tZ+(int)(realSize/zSize+2.0);
-                
+
+                // If the (tY-ySize) of the stoneseed is air in the current chunk, mark the seed empty and move on.
+                if(aWorld.getBlock(aChunkX + 8, tMinY, aChunkZ + 8).isAir(aWorld, aChunkX + 8, tMinY, aChunkZ + 8)) {
+                    if (debugStones) GT_Log.out.println(
+                        mWorldGenName +
+                        " tX=" + tX +
+                        " tY=" + tY +
+                        " tZ=" + tZ +
+                        " realSize=" + realSize +
+                        " xSize=" + realSize/xSize +
+                        " ySize=" + realSize/ySize +
+                        " zSize=" + realSize/zSize +
+                        " tMinY=" + tMinY +
+                        " tMaxY=" + tMaxY +
+                        " - Skipped because first requesting chunk would not contain this stone"
+                    );
+                    long hash = ((long)((aWorld.provider.dimensionId & 0xffL)<<56) |( ((long)x & 0x000000000fffffffL) << 28) | ( (long)z & 0x000000000fffffffL ));
+                    validStoneSeeds.remove(hash);
+                    validStoneSeeds.put( hash, new StoneSeeds(false) );
+                }
+
                 //Chop the boundaries by the parts that intersect with the current chunk
                 int wX = Math.max( tMinX, aChunkX + 8);
                 int eX = Math.min( tMaxX, aChunkX + 8 + 16 );

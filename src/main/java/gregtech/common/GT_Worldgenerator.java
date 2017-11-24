@@ -74,32 +74,20 @@ implements IWorldGenerator {
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         synchronized (listLock)
         {
-/*
+            this.mList.add(new WorldGenContainer(new XSTR(Math.abs(aRandom.nextInt()) +1), aX, aZ, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
             if (debugWorldGen) GT_Log.out.println(
-                "aWorld.getSeed()="+aWorld.getSeed()
+                "ADD WorldSeed:"+aWorld.getSeed() +
+                " DimId" + aWorld.provider.dimensionId + 
+                " chunk x:" + aX + 
+                " z:" + aZ + 
+                " SIZE: " + this.mList.size()
             );
-            if (!this.ProcChunks.contains( ((aWorld.provider.dimensionId & 0xffL)<<56) |( ((long)aX & 0x000000000fffffffL) << 28) | ( (long)aZ & 0x000000000fffffffL )) ) { // Have to add ProcChunks due to Deep Dark bug that calls oregen twice
-                this.ProcChunks.add( ((aWorld.provider.dimensionId & 0xffL)<<56) |( ((long)aX & 0x000000000fffffffL) << 28) | ( (long)aZ & 0x000000000fffffffL ));
-*/
-                this.mList.add(new WorldGenContainer(new XSTR(Math.abs(aRandom.nextInt()) +1), aX, aZ, ((aChunkGenerator instanceof ChunkProviderEnd)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.sky) ? 1 : ((aChunkGenerator instanceof ChunkProviderHell)) || (aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8) == BiomeGenBase.hell) ? -1 : 0, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
-
-                if (debugWorldGen) GT_Log.out.println(
-                    "ADD WorldSeed:"+aWorld.getSeed() +
-                    " DimId" + aWorld.provider.dimensionId + 
-                    " chunk x:" + aX + 
-                    " z:" + aZ + 
-                    " SIZE: " + this.mList.size()
-                );
-/*
-            } else {
-                if (debugWorldGen) {GT_Log.out.println("DUP WorldGen chunk x:" + aX + " z:" + aZ + " SIZE: " + this.mList.size() + " ProcChunks.size(): " + ProcChunks.size() ); }
-            }
-*/
         }
 
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
             int mList_sS=this.mList.size();
+            mList_sS = Math.min(mList_sS, 5); // Run a maximum of 5 chunks at a time through worldgen. Extra chunks get done later.
             for (int i = 0; i < mList_sS; i++) {
                 WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
                 if (debugWorldGen) GT_Log.out.println(
@@ -119,14 +107,6 @@ implements IWorldGenerator {
             this.mIsGenerating = false;
         }
     }
-
-    //public synchronized void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {//TODO CHECK???
-    //    int tempDimensionId = aWorld.provider.dimensionId;
-    //    if (tempDimensionId != -1 && tempDimensionId != 1 && !aChunkGenerator.getClass().getName().contains("galacticraft")) {
-    //        tempDimensionId = 0;
-    //    }
-    //    new WorldGenContainer(new XSTR(aRandom.nextInt()), aX * 16, aZ * 16, tempDimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName).run();
-    //}
 
     public static class WorldGenContainer
             implements Runnable {
@@ -290,10 +270,11 @@ implements IWorldGenerator {
             // Determine bounding box on how far out to check for oreveins affecting this chunk
             // For now, manually reducing oreveinMaxSize when not in the Underdark for performance
             if(this.mWorld.provider.getDimensionName().equals("Underdark") ) {
-                oreveinMaxSize=64;
+                oreveinMaxSize=32;  // Leave Deep Dark/Underdark max oregen at 32, instead of 64
             } else {
                 oreveinMaxSize=32;
             }
+            
             int wXbox = this.mX - (oreveinMaxSize/16);
             int eXbox = this.mX + (oreveinMaxSize/16 + 1); // Need to add 1 since it is compared using a <
             int nZbox = this.mZ - (oreveinMaxSize/16);
