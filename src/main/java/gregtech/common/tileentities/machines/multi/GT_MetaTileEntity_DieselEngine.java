@@ -31,7 +31,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public GT_MetaTileEntity_DieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
-    
+
     public GT_MetaTileEntity_DieselEngine(String aName) {
         super(aName);
     }
@@ -222,7 +222,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public int getPollutionPerTick(ItemStack aStack) {
         return 16;
     }
-    
+
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
@@ -231,12 +231,13 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     @Override
     public String[] getInfoData() {
         return new String[]{
-            "Diesel Engine",
-            "Current Output: "+mEUt*mEfficiency/10000 +" EU/t",
-            "Fuel Consumption: "+fuelConsumption+"L/t",
-            "Fuel Value: "+fuelValue+" EU/L",
-            "Fuel Remaining: "+fuelRemaining+" Litres",
-            "Current Efficiency: "+(mEfficiency/100)+"%"};
+                "Diesel Engine",
+                "Current Output: " + mEUt * mEfficiency / 10000 + " EU/t",
+                "Fuel Consumption: " + fuelConsumption + "L/t",
+                "Fuel Value: " + fuelValue + " EU/L",
+                "Fuel Remaining: " + fuelRemaining + " Litres",
+                "Current Efficiency: " + (mEfficiency / 100) + "%",
+                getIdealStatus() == getRepairStatus() ? "No Maintainance issues" : "Needs Maintainance"};
     }
 
     @Override
