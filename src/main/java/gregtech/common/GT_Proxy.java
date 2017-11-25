@@ -129,6 +129,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public ArrayList<String> mBufferedPlayerActivity = new ArrayList();
     public boolean mHardcoreCables = false;
     public boolean mDisableVanillaOres = true;
+    public boolean mNerfStorageBlocks = true;
     public boolean mNerfDustCrafting = true;
     public boolean mSortToTheEnd = true;
     public boolean mCraftingUnification = true;
@@ -1008,11 +1009,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                     case cableGt01:
                                         if (aMaterial == Materials.Tin) {
                                             GT_OreDictUnificator.registerOre(OreDictNames.craftingWireTin, aEvent.Ore);
-                                        } else if (aMaterial == Materials.AnyCopper) {
+                                        } else if (aMaterial == Materials.Copper) {
                                             GT_OreDictUnificator.registerOre(OreDictNames.craftingWireCopper, aEvent.Ore);
                                         } else if (aMaterial == Materials.Gold) {
                                             GT_OreDictUnificator.registerOre(OreDictNames.craftingWireGold, aEvent.Ore);
-                                        } else if (aMaterial == Materials.AnyIron) {
+                                        } else if (aMaterial == Materials.Iron) {
                                             GT_OreDictUnificator.registerOre(OreDictNames.craftingWireIron, aEvent.Ore);
                                         }
                                         break;
@@ -1889,6 +1890,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             this.mMaterial = aMaterial;
             this.mModID = ((aModID == null) || (aModID.equals("UNKNOWN")) ? null : aModID);
         }
+    }
+
+    @SubscribeEvent
+    public void onBlockEvent(BlockEvent event) {
+    	if (event.block.getUnlocalizedName().equals("blockAlloyGlass"))
+    		GregTech_API.causeMachineUpdate(event.world, event.x, event.y, event.z);
     }
 
 

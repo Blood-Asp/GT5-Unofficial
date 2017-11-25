@@ -57,8 +57,8 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
             if (GregTech_API.sGeneratedMaterials[i] != null) {
                 for (int j = 0; j < aOreMetaCount; j++) {
                     if (!this.getEnabledMetas()[j]) continue;
-                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
-                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedName(GregTech_API.sGeneratedMaterials[i]));
+                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + (i + (j * 1000)) + aTextName, getLocalizedNameFormat(GregTech_API.sGeneratedMaterials[i]));
+                    GT_LanguageManager.addStringLocalization(getUnlocalizedName() + "." + ((i + 16000) + (j * 1000)) + aTextName, aTextSmall + getLocalizedNameFormat(GregTech_API.sGeneratedMaterials[i]));
                     if ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x8) != 0 && !aBlockedOres.contains(GregTech_API.sGeneratedMaterials[i])) {
                         GT_OreDictUnificator.registerOre(this.getProcessingPrefix()[j] != null ? this.getProcessingPrefix()[j].get(GregTech_API.sGeneratedMaterials[i]) : "", new ItemStack(this, 1, i + (j * 1000)));
                         if (tHideOres) {
@@ -99,33 +99,38 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         FUCKING_LOCK = false;
     }
 
+    public String getLocalizedNameFormat(Materials aMaterial) {
+    	switch (aMaterial.mName) {
+        case "InfusedAir":
+        case "InfusedDull":
+        case "InfusedEarth":
+        case "InfusedEntropy":
+        case "InfusedFire":
+        case "InfusedOrder":
+        case "InfusedVis":
+        case "InfusedWater":
+            return "%material Infused Stone";
+        case "Vermiculite":
+        case "Bentonite":
+        case "Kaolinite":
+        case "Talc":
+        case "BasalticMineralSand":
+        case "GraniticMineralSand":
+        case "GlauconiteSand":
+        case "CassiteriteSand":
+        case "GarnetSand":
+        case "QuartzSand":
+        case "Pitchblende":
+        case "FullersEarth":
+            return "%material";
+        default:
+            return "%material" + OrePrefixes.ore.mLocalizedMaterialPost;
+    }
+    }
+
+    @Deprecated
     public String getLocalizedName(Materials aMaterial) {
-        switch (aMaterial.mName) {
-            case "InfusedAir":
-            case "InfusedDull":
-            case "InfusedEarth":
-            case "InfusedEntropy":
-            case "InfusedFire":
-            case "InfusedOrder":
-            case "InfusedVis":
-            case "InfusedWater":
-                return aMaterial.mDefaultLocalName + " Infused Stone";
-            case "Vermiculite":
-            case "Bentonite":
-            case "Kaolinite":
-            case "Talc":
-            case "BasalticMineralSand":
-            case "GraniticMineralSand":
-            case "GlauconiteSand":
-            case "CassiteriteSand":
-            case "GarnetSand":
-            case "QuartzSand":
-            case "Pitchblende":
-            case "FullersEarth":
-                return aMaterial.mDefaultLocalName;
-            default:
-                return aMaterial.mDefaultLocalName + OrePrefixes.ore.mLocalizedMaterialPost;
-        }
+        return aMaterial.getLocalizedNameForItem(getLocalizedNameFormat(aMaterial));
     }
 
     public boolean onBlockEventReceived(World p_149696_1_, int p_149696_2_, int p_149696_3_, int p_149696_4_, int p_149696_5_, int p_149696_6_) {

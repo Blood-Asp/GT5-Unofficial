@@ -220,6 +220,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);
         gregtechproxy.mFlintChance = tMainConfig.get(aTextGeneral, "FlintAndSteelChance", 30).getInt(30);
         gregtechproxy.mItemDespawnTime = tMainConfig.get(aTextGeneral, "ItemDespawnTime", 6000).getInt(6000);
+        gregtechproxy.mNerfStorageBlocks = tMainConfig.get(aTextGeneral,"NerfStorageBlocks",true).getBoolean(true);
         gregtechproxy.mDisableVanillaOres = tMainConfig.get(aTextGeneral, "DisableVanillaOres", true).getBoolean(true);
         gregtechproxy.mNerfDustCrafting = tMainConfig.get(aTextGeneral, "NerfDustCrafting", true).getBoolean(true);
         gregtechproxy.mIncreaseDungeonLoot = tMainConfig.get(aTextGeneral, "IncreaseDungeonLoot", true).getBoolean(true);
@@ -319,6 +320,10 @@ public class GT_Mod implements IGT_Mod {
         GT_Log.out.println("GT_Mod: Generating Lang-File");
         GT_LanguageManager.sEnglishFile = new Configuration(new File(aEvent.getModConfigurationDirectory().getParentFile(), "GregTech.lang"));
         GT_LanguageManager.sEnglishFile.load();
+        for (Materials aMaterial : Materials.values()) {
+        	if (aMaterial != null)
+        		aMaterial.mLocalizedName = GT_LanguageManager.addStringLocalization("Material." + aMaterial.mName.toLowerCase(), aMaterial.mDefaultLocalName);
+        }
 
         GT_Log.out.println("GT_Mod: Removing all original Scrapbox Drops.");
         try {
@@ -1177,7 +1182,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
-        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1),
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),

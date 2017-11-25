@@ -1,6 +1,7 @@
 package gregtech.common.blocks;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -22,6 +23,10 @@ public class GT_Item_Ores
 
     public String getUnlocalizedName(ItemStack aStack) {
         return this.field_150939_a.getUnlocalizedName() + "." + getDamage(aStack);
+    }
+
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	return Materials.getLocalizedNameForItem(super.getItemStackDisplayName(aStack), getDamage(aStack) % 1000);
     }
 
     public boolean placeBlockAt(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int side, float hitX, float hitY, float hitZ, int aMeta) {

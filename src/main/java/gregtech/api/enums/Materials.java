@@ -536,6 +536,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
 
+    public static Materials Chlorobenzene = new MaterialBuilder(605, TextureSet.SET_FLUID, "Chlorobenzene").addCell().addFluid().setRGB(0, 50, 65).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials DilutedHydrochloricAcid = new MaterialBuilder(606, TextureSet.SET_FLUID, "Diluted Hydrochloric Acid").setName("DilutedHydrochloricAcid_GT5U").addCell().addFluid().setRGB(153, 167, 163).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 1)).constructMaterial();
     public static Materials Pyrochlore = new MaterialBuilder(607, TextureSet.SET_METALLIC, "Pyrochlore").addDustItems().addOreItems().setRGB(43, 17, 0).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Calcium, 2), new MaterialStack(Niobium, 2), new MaterialStack(Oxygen, 7)).addElectrolyzerRecipe().constructMaterial();
     public static Materials GrowthMediumRaw = new MaterialBuilder(608, TextureSet.SET_FLUID, "Raw Growth Medium").setName("GrowthMediumRaw").addCell().addFluid().setRGB(211, 141, 95).setColor(Dyes.dyeOrange).constructMaterial();
@@ -818,7 +819,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
     public boolean mBlastFurnaceRequired = false, mTransparent = false;
     public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
-    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null";
+    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null", mLocalizedName = "null";
     public Dyes mColor = Dyes._NULL;
     public short mMeltingPoint = 0, mBlastFurnaceTemp = 0, mGasTemp = 0;
     public int mTypes = 0;
@@ -841,22 +842,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     static {
         initSubTags();
-        Iron					.mOreReRegistrations.add(AnyIron	);
-        PigIron					.mOreReRegistrations.add(AnyIron	);
-        WroughtIron				.mOreReRegistrations.add(AnyIron	);
 
-        Copper					.mOreReRegistrations.add(AnyCopper	);
-        AnnealedCopper			.mOreReRegistrations.add(AnyCopper	);
-
-        Bronze					.mOreReRegistrations.add(AnyBronze	);
-        
-        Rubber					.mOreReRegistrations.add(AnyRubber);
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnyRubber);
-        Silicone				.mOreReRegistrations.add(AnyRubber);
-        
-        StyreneButadieneRubber	.mOreReRegistrations.add(AnySyntheticRubber);
-        Silicone				.mOreReRegistrations.add(AnySyntheticRubber);
-        
         Peanutwood				.setMaceratingInto(Wood				);
         WoodSealed				.setMaceratingInto(Wood				);
         NetherBrick				.setMaceratingInto(Netherrack		);
@@ -1982,6 +1968,19 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public FluidStack getMolten(long aAmount) {
         if (mStandardMoltenFluid == null) return null;
         return new GT_FluidStack(mStandardMoltenFluid, (int) aAmount);
+    }
+
+    public String getLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
+    }
+
+    public static String getLocalizedNameForItem(String aFormat, int aMaterialID) {
+    	if (aMaterialID >= 0 && aMaterialID < 1000) {
+    		Materials aMaterial = GregTech_API.sGeneratedMaterials[aMaterialID];
+    		if (aMaterial != null)
+    			return aMaterial.getLocalizedNameForItem(aFormat);
+    	}
+    	return aFormat;
     }
 
     @Override

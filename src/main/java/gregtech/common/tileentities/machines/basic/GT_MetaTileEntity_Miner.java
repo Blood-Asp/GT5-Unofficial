@@ -17,8 +17,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.ArrayList;
+
+import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
@@ -33,7 +36,8 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     final static int[] ENERGY = new int[]{8, 8, 32, 128}; //Miner energy consumption per tier
 
     public GT_MetaTileEntity_Miner(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "Digging ore instead of you", 2, 2, "Miner.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
+        super(aID, aName, aNameRegional, aTier, 1, new String[]{"Digging ore instead of you", ENERGY[aTier] + " EU/t, " + SPEED[aTier] / 20 + " sec per block",
+                "Work area " + (RADIUS[aTier] * 2 + 1) + "x" + (RADIUS[aTier] * 2 + 1)}, 2, 2, "Miner.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
     }
 
     public GT_MetaTileEntity_Miner(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -132,8 +136,15 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         }
     }
 
+    @Override
+    public long maxEUStore() {
+        return mTier == 1 ? 4096 : V[mTier] * 64;
+    }
+
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0 || aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) == Blocks.bedrock) {
+        if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0 
+        		|| GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord()) < 0
+        		|| !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_TIP_BLOCK, 0, true)) {
             isPickingPipes = true;
             return false;
         }
@@ -166,6 +177,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public void mineBlock(IGregTechTileEntity aBaseMetaTileEntity, int x, int y, int z) {
+    	if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z, true));
         ArrayList<ItemStack> drops = getBlockDrops(aBaseMetaTileEntity.getBlockOffset(x, y, z), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z);
         if (drops.size() > 0)
             mOutputItems[0] = drops.get(0);
@@ -196,4 +208,14 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         drillY = aNBT.getInteger("drillY");
         drillZ = aNBT.getInteger("drillZ");
     }
+
+    private FakePlayer mFakePlayer = null;
+
+    protected FakePlayer getFakePlayer(IGregTechTileEntity aBaseTile) {
+    	if (mFakePlayer == null) mFakePlayer = GT_Utility.getFakePlayer(aBaseTile);
+    	mFakePlayer.setWorld(aBaseTile.getWorld());
+    	mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
+    	return mFakePlayer;
+    }
+
 }
