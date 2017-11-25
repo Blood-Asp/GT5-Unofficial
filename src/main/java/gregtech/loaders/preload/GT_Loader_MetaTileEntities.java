@@ -1265,16 +1265,16 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.OilCracker.set(new GT_MetaTileEntity_OilCracker(1160, "multimachine.cracker", "Oil Cracking Unit").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.OilCracker.get(1L, new Object[0]), bitsd, new Object[]{aTextWireCoil, "EME", aTextWireCoil, 'M', ItemList.Hull_HV, 'W', ItemList.Casing_Coil_Cupronickel, 'E', OrePrefixes.circuit.get(Materials.Advanced), 'C', ItemList.Electric_Pump_HV});
 
-        ItemList.MicroTransmitter_HV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1161, "basicmachine.microtransmitter.tier.03", "HV Microwave Energy Transmitter", 3).getStackForm(1L));
-        ItemList.MicroTransmitter_EV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1162, "basicmachine.microtransmitter.tier.04", "EV Microwave Energy Transmitter", 4).getStackForm(1L));
-        ItemList.MicroTransmitter_IV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1163, "basicmachine.microtransmitter.tier.05", "IV Microwave Energy Transmitter", 5).getStackForm(1L));
-        ItemList.MicroTransmitter_LUV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1164, "basicmachine.microtransmitter.tier.06", "LuV Microwave Energy Transmitter", 6).getStackForm(1L));
-        ItemList.MicroTransmitter_ZPM.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1165, "basicmachine.microtransmitter.tier.07", "ZPM Microwave Energy Transmitter", 7).getStackForm(1L));
+        ItemList.MicroTransmitter_HV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1161, "basicmachine.microtransmitter.03", "HV Microwave Energy Transmitter", 3).getStackForm(1L));
+        ItemList.MicroTransmitter_EV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1162, "basicmachine.microtransmitter.04", "EV Microwave Energy Transmitter", 4).getStackForm(1L));
+        ItemList.MicroTransmitter_IV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1163, "basicmachine.microtransmitter.05", "IV Microwave Energy Transmitter", 5).getStackForm(1L));
+        ItemList.MicroTransmitter_LUV.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1164, "basicmachine.microtransmitter.06", "LuV Microwave Energy Transmitter", 6).getStackForm(1L));
+        ItemList.MicroTransmitter_ZPM.set(new GT_MetaTileEntity_MicrowaveEnergyTransmitter(1165, "basicmachine.microtransmitter.07", "ZPM Microwave Energy Transmitter", 7).getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_HV.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_HV, 'B', ItemList.Battery_RE_HV_Lithium, 'C', ItemList.Emitter_HV, 'G', OrePrefixes.circuit.get(Materials.Advanced), 'P', ItemList.Field_Generator_HV});
         GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_EV.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_EV, 'B', ItemList.IC2_LapotronCrystal, 'C', ItemList.Emitter_EV, 'G', OrePrefixes.circuit.get(Materials.Data), 'P', ItemList.Field_Generator_EV});
         GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_IV.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_IV, 'B', ItemList.Energy_LapotronicOrb, 'C', ItemList.Emitter_EV, 'G', OrePrefixes.circuit.get(Materials.Elite), 'P', ItemList.Field_Generator_EV});
         GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_LUV.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_LuV, 'B', ItemList.Energy_LapotronicOrb2, 'C', ItemList.Emitter_IV, 'G', OrePrefixes.circuit.get(Materials.Master), 'P', ItemList.Field_Generator_IV});
-        GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_ZPM, 'B', ItemList.ZPM2, 'C', ItemList.Emitter_IV, 'G', OrePrefixes.circuit.get(Materials.Ultimate), 'P', ItemList.Field_Generator_IV});
+        GT_ModHandler.addCraftingRecipe(ItemList.MicroTransmitter_ZPM.get(1L, new Object[0]), bitsd, new Object[]{"CPC", aTextCableHull, "GBG", 'M', ItemList.Hull_ZPM, 'B', GregTech_API.sOPStuff.get(ConfigCategories.Recipes.gregtechrecipes, "EnableZPMandUVBatteries", false) ? ItemList.Energy_Module : ItemList.ZPM2, 'C', ItemList.Emitter_IV, 'G', OrePrefixes.circuit.get(Materials.Ultimate), 'P', ItemList.Field_Generator_IV});
 
         ItemList.CuringOven.set(new GT_MetaTileEntity_CuringOven(1166, "basicmachine.curingoven", "Curing Oven", 1).getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.CuringOven.get(1L, new Object[0]), bitsd, new Object[]{"CWC", aTextCableHull, aTextMotorWire, 'M', ItemList.Hull_LV, 'E', OrePrefixes.circuit.get(Materials.Basic), 'W', GT_OreDictUnificator.get(OrePrefixes.cable, Materials.Tin, 1), 'C', GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Cupronickel, 1)});
@@ -1323,6 +1323,8 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
     }
 
     private static void run4() {
+    	long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
+    	long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
         for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
             if (((GregTech_API.sGeneratedMaterials[i] != null) && ((GregTech_API.sGeneratedMaterials[i].mTypes & 0x2) != 0)) || (GregTech_API.sGeneratedMaterials[i] == Materials.Wood)) {
                 new GT_MetaPipeEntity_Frame(4096 + i, "GT_Frame_" + GregTech_API.sGeneratedMaterials[i], "%material Frame Box", GregTech_API.sGeneratedMaterials[i]);
