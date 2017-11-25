@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public static boolean sAllowMultipleEggs = true;
     public static GT_MetaTileEntity_MagicalEnergyAbsorber mActiveSiphon = null;
     public static int sEnergyPerEnderCrystal = 32;
-    public static int sEnergyFromVis = 12800;
+    public static int sEnergyFromVis = 512;
     public static int sDragonEggEnergyPerTick = 128;
     public static boolean isThaumcraftLoaded;
     public int mEfficiency;
@@ -109,34 +109,31 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
             // Energyzed node
             if (isThaumcraftLoaded) {
                 try {
+                	int multFactor = 2;
                     World tmpWorld = this.getBaseMetaTileEntity().getWorld();
                     int tmpX = this.getBaseMetaTileEntity().getXCoord();
                     int tmpY = this.getBaseMetaTileEntity().getYCoord();
                     int tmpZ = this.getBaseMetaTileEntity().getZCoord();
-                    int fire = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.FIRE, 1000);
+                    int fire = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.FIRE, 1000); // all of these should be 1000
                     int earth = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.EARTH, 1000);
                     int air = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.AIR, 1000);
-                    int destruction = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ENTROPY, 1000);
+                    int entropy = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ENTROPY, 1000);
                     int order = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ORDER, 1000);
                     int water = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.WATER, 1000);
-                    int visEU = (int) (Math.pow(fire, 4) + Math.pow(earth, 4) + Math.pow(air, 4) + Math.pow(destruction, 4) + Math.pow(order, 4) + Math.pow(
-                            water, 4));
-                    int mult = 85;
-                    if (fire > 4)
-                        mult += 15;
-                    if (earth > 4)
-                        mult += 15;
-                    if (air > 4)
-                        mult += 15;
-                    if (destruction > 4)
-                        mult += 15;
-                    if (order > 4)
-                        mult += 15;
-                    if (water > 4)
-                        mult += 15;
-                    visEU = (visEU * mult) / 100;
-                    getBaseMetaTileEntity().increaseStoredEnergyUnits(Math.min(maxEUOutput(), visEU * getEfficiency() / this.sEnergyFromVis), false);
+                    int visEU = (int) (Math.pow(fire, 2) + Math.pow(earth, 2) + Math.pow(air, 2) + Math.pow(entropy, 2) + Math.pow(order, 2) + Math.pow(water, 2));
+                    int mult = 0; //this should make it more dependant on how big your node is
+                    mult += fire * multFactor;
+                    mult += earth * multFactor;
+                    mult += air * multFactor;
+                    mult += entropy * multFactor;
+                    mult += order * multFactor;
+                    mult += water * multFactor;
+                    visEU = (visEU * mult) / 100; 
+                    
+                   getBaseMetaTileEntity().increaseStoredEnergyUnits(Math.min(maxEUOutput(), visEU * getEfficiency() / sEnergyFromVis), false);
+                    
                 } catch (Throwable e) {
+                	
                 }
             }
             // EnderCrystal
