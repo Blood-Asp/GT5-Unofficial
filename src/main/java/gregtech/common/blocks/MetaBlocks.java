@@ -112,7 +112,8 @@ public class MetaBlocks {
         int generationIndex = 0;
         for(Material material : Material.MATERIAL_REGISTRY.getObjectsWithIds()) {
             if(material instanceof DustMaterial) {
-            	int id = Material.MATERIAL_REGISTRY.getIDForObject(material), index = id / 16;
+            	int id = Material.MATERIAL_REGISTRY.getIDForObject(material);
+            	int index = id / 16;
             	if (index > generationIndex) {
             		createCompressedBlock(materialBuffer, generationIndex);
             		Arrays.fill(materialBuffer, Materials._NULL);
