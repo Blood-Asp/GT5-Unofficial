@@ -1592,12 +1592,16 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
     				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
     		int hydrogenAmount = 2 * i + 2;
+    		int crackerEUT = 120 + 60 * i;
+    		int crackerT = 20 + 10 * i;
+    		int chemReactorEUT = 30;
+    		int chemReactorT = (crackerT*crackerEUT) / chemReactorEUT;
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 120 + 60 * i);
+    				new FluidStack(crackedFluids[i], 1000), crackerT, crackerEUT);
     		GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(hydrogenAmount), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), chemReactorT, chemReactorEUT);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     	}
     	aMaterial.setHydroCrackedFluids(crackedFluids);
     }
@@ -1613,14 +1617,18 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		uncrackedFluid = (GT_Fluid) aMaterial.mGas;
     	}
     	for (int i = 0; i < 3; i++) {
+    		int crackerEUT = 240 + 120 * i;
+    		int crackerT = 20 + 10 * i;
+    		int chemReactorEUT = 30;
+    		int chemReactorT = (crackerT*crackerEUT) / chemReactorEUT;
     		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
     				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
+    				new FluidStack(crackedFluids[i], 1000), crackerT, crackerEUT);
     		GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     	}
     	aMaterial.setSteamCrackedFluids(crackedFluids);
     }
