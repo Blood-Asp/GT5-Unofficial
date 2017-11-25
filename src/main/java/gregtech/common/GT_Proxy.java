@@ -130,6 +130,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mHardcoreCables = false;
     public boolean mDisableVanillaOres = true;
     public boolean mNerfStorageBlocks = true;
+    public boolean mHardMachineCasings = true;
     public boolean mNerfDustCrafting = true;
     public boolean mSortToTheEnd = true;
     public boolean mCraftingUnification = true;
