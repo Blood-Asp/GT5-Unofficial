@@ -10,6 +10,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
@@ -17,6 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Boiler_Bronze
         extends GT_MetaTileEntity_Boiler {
@@ -126,8 +128,8 @@ public class GT_MetaTileEntity_Boiler_Bronze
             
             if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()) &&
                     (this.mInventory[2] != null) && !byproductStuffed) {
-                int fuelEnergy, byproductChance;
-                Object byproduct;
+                int fuelEnergy = 0, byproductChance = 1;
+                Object byproduct = Materials.Ash;
                 boolean validFuel = false;
                 if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Coal))) || 
                     (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Coal))) || 
@@ -167,7 +169,7 @@ public class GT_MetaTileEntity_Boiler_Bronze
                         if(!aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, byproduct, 1L))) {
                             //We can only get here if the output wasn't stuffed, so if the add fails, it can only be because the byproduct types don't match
                             //Have attempted to mix ash types, so add one to the size of the stack and convert all ash to light ashes
-                            aBaseMetaTileEntity.setInventorySlotContents(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, byproductStack.stackSize + 1)) {
+                            aBaseMetaTileEntity.setInventorySlotContents(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, byproductStack.stackSize + 1));
                         }
                     }
                 }
