@@ -38,6 +38,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -606,18 +608,73 @@ public class GT_ModHandler {
     }
 
     public static boolean addMagneticraftRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aChance2, ItemStack aOutput3, int aChance3){
-        if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
-          ItemData  tData = GT_OreDictUnificator.getAssociation(aInput);
-          if(tData!=null&&tData.mPrefix!=null){
-            if(tData.mPrefix==OrePrefixes.ore||tData.mPrefix==OrePrefixes.oreBlackgranite||tData.mPrefix==OrePrefixes.oreEndstone||tData.mPrefix==OrePrefixes.oreNetherrack||tData.mPrefix==OrePrefixes.oreRedgranite){
-            	com.cout970.magneticraft.api.access.MgRecipeRegister.registerCrusherRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-          }else if(tData.mPrefix==OrePrefixes.crushed||tData.mPrefix==OrePrefixes.crushedCentrifuged||tData.mPrefix==OrePrefixes.crushedPurified){
-        	  com.cout970.magneticraft.api.access.MgRecipeRegister.registerGrinderRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-          	}
-          }
-        }
-        return true;
-    }
+		if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
+			ItemData  tData = GT_OreDictUnificator.getAssociation(aInput);
+			if(tData!=null&&tData.mPrefix!=null){
+				if(tData.mPrefix==OrePrefixes.ore||tData.mPrefix==OrePrefixes.oreBlackgranite||tData.mPrefix==OrePrefixes.oreEndstone||tData.mPrefix==OrePrefixes.oreNetherrack||tData.mPrefix==OrePrefixes.oreRedgranite){
+					registerMagneticraftCrusherRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+				}else if(tData.mPrefix==OrePrefixes.crushed||tData.mPrefix==OrePrefixes.crushedCentrifuged||tData.mPrefix==OrePrefixes.crushedPurified){
+					registerMagneticraftGrinderRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean registerMagneticraftSifterRecipe(final ItemStack in, final ItemStack out, final ItemStack extra,
+			final float prob) {
+		//Get Magnetiraft Recipe Handler
+				Class cls;
+				try {
+					cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+					//Get registerCrusherRecipe method from class.
+					Method mCrusher = cls.getDeclaredMethod("registerSifterRecipe", ItemStack.class, ItemStack.class,
+							ItemStack.class, float.class);
+					//Invoke Method
+					return (boolean) mCrusher.invoke(null, in, out, extra, prob);
+
+				}
+				catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					return false;
+				}
+	}
+
+	public static boolean registerMagneticraftCrusherRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
+			final float prob1, final ItemStack out2, final float prob2) {
+		//Get Magnetiraft Recipe Handler
+		Class cls;
+		try {
+			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+			//Get registerCrusherRecipe method from class.
+			Method mCrusher = cls.getDeclaredMethod("registerCrusherRecipe", ItemStack.class, ItemStack.class,
+					ItemStack.class, float.class, ItemStack.class, float.class);
+			//Invoke Method
+			return (boolean) mCrusher.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			return false;
+		}
+	}
+
+	public static boolean registerMagneticraftGrinderRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
+			final float prob1, final ItemStack out2, final float prob2) {
+		//Get Magnetiraft Recipe Handler
+		Class cls;
+		try {
+			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+
+			//Get registerGrinderRecipe method from class.
+			Method mGrinder = cls.getDeclaredMethod("registerGrinderRecipe", ItemStack.class, ItemStack.class,
+					ItemStack.class, float.class, ItemStack.class, float.class);
+			//Invoke Method
+			return (boolean) mGrinder.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			return false;
+		}
+	}
 
     /**
      * Adds a Recipe to the Sawmills of GregTech and ThermalCraft
