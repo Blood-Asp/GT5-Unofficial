@@ -635,6 +635,7 @@ public class GT_ModHandler {
 
 				}
 				catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Sifter handler.");
 					return false;
 				}
 	}
@@ -653,6 +654,7 @@ public class GT_ModHandler {
 
 		}
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Crusher handler.");
 			return false;
 		}
 	}
@@ -672,6 +674,7 @@ public class GT_ModHandler {
 
 		}
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Grinder handler.");
 			return false;
 		}
 	}
