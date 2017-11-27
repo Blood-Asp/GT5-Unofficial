@@ -159,8 +159,8 @@ achievement.Apatite=Find Apatite Ore
 achievement.Apatite.desc=Height: 40-60, Chance: 60, Overworld
 achievement.Phosphorus=Find Phosphorus Ore
 achievement.Phosphorus.desc=Height: 40-60, Chance: 60, Overworld
-achievement.Phosphate=Find Phosphate Ore
-achievement.Phosphate.desc=Height: 40-60, Chance: 60, Overworld
+achievement.Pyrochlore=Find Pyrochlore Ore
+achievement.Pyrochlore.desc=Height: 40-60, Chance: 60, Overworld
 achievement.Galena=Find Galena Ore
 achievement.Galena.desc=Height: 30-60, Chance: 40, Overworld
 achievement.Silver=Find Silver Ore
@@ -408,6 +408,10 @@ achievement.finalpreparations=Final Preparations
 achievement.finalpreparations.desc=Cool down a Hot Naquadria Ingot
 achievement.denseaspossible=As Dense As Possible
 achievement.denseaspossible.desc=Produce Neutronium
+achievement.zpmage=Energy Module
+achievement.zpmage.desc=Craft a Energy Module
+achievement.uvage=Energy Cluster
+achievement.uvage.desc=Craft a Energy Cluster
 achievement.whatnow=What now?
 achievement.whatnow.desc=Craft a Ultimate Battery
 
@@ -418,19 +422,19 @@ achievement.gt.metaitem.01.32607.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32608=Electric Motor UV tier
 achievement.gt.metaitem.01.32608.desc=Pickup this item to see the recipe in NEI
 
-achievement.gt.metaitem.01.32615=Electric Pump LuV tier
-achievement.gt.metaitem.01.32615.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32616=Electric Pump ZPM tier
-achievement.gt.metaitem.01.32616.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32617=Electric Pump UV tier
-achievement.gt.metaitem.01.32617.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32620=Electric Pump LuV tier
+achievement.gt.metaitem.01.32620.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32621=Electric Pump ZPM tier
+achievement.gt.metaitem.01.32621.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32622=Electric Pump UV tier
+achievement.gt.metaitem.01.32622.desc=Pickup this item to see the recipe in NEI
 
-achievement.gt.metaitem.01.32635=Conveyor Module LuV tier
-achievement.gt.metaitem.01.32635.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32636=Conveyor Module ZPM tier
+achievement.gt.metaitem.01.32636=Conveyor Module LuV tier
 achievement.gt.metaitem.01.32636.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32637=Conveyor Module UV tier
+achievement.gt.metaitem.01.32637=Conveyor Module ZPM tier
 achievement.gt.metaitem.01.32637.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32638=Conveyor Module UV tier
+achievement.gt.metaitem.01.32638.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32645=Electric Piston LuV tier
 achievement.gt.metaitem.01.32645.desc=Pickup this item to see the recipe in NEI
@@ -446,11 +450,11 @@ achievement.gt.metaitem.01.32656.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32657=Robot Arm UV tier
 achievement.gt.metaitem.01.32657.desc=Pickup this item to see the recipe in NEI
 
-achievement.gt.metaitem.01.32675=Field Generator tier VI
+achievement.gt.metaitem.01.32675=Field Generator LuV tier
 achievement.gt.metaitem.01.32675.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32676=Field Generator tier VII
+achievement.gt.metaitem.01.32676=Field Generator ZPM tier
 achievement.gt.metaitem.01.32676.desc=Pickup this item to see the recipe in NEI
-achievement.gt.metaitem.01.32677=Field Generator tier VIII
+achievement.gt.metaitem.01.32677=Field Generator UV tier
 achievement.gt.metaitem.01.32677.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32685=Emitter LuV tier
@@ -494,6 +498,8 @@ achievement.gt.metaitem.01.32736=Energy Module
 achievement.gt.metaitem.01.32736.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32737=Energy Cluster
 achievement.gt.metaitem.01.32737.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32599=Lapotronic Energy Orb Cluster
+achievement.gt.metaitem.01.32599.desc=Pickup this item to see the recipe in NEI
 
 achievement.ic2.itemArmorQuantumHelmet=Quantum Helmet
 achievement.ic2.itemArmorQuantumHelmet.desc=Pickup this item to see the recipe in NEI
@@ -540,4 +546,3 @@ for.bees.species.iridium=Iridium
 for.bees.species.uranium=Uranium
 for.bees.species.plutonium=Plutonium
 for.bees.species.naquadah=Naquadah
-
