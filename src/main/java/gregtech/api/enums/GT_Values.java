@@ -117,34 +117,47 @@ public class GT_Values {
      * For Internal Usage (Network)
      */
     public static IGT_NetworkHandler NW;
-	/**
-	 * Control percentage of filled 3x3 chunks. Lower number means less oreveins spawn
-	 */
-	public static int oreveinPercentage;
-	/**
-	 * Control number of attempts to find a valid orevein. Lower numbers is slightly faster chunkgen, but more empty chunks with thin stone height.
-	 */
-	public static int oreveinAttempts;
-	/**
+    /**
+     * Control percentage of filled 3x3 chunks. Lower number means less oreveins spawn
+     */
+    public static int oreveinPercentage;
+    /**
+     * Control number of attempts to find a valid orevein. Generally this maximum limit isn't hit, selecting a vein is cheap
+     */
+    public static int oreveinAttempts;
+    /**
+     * Control number of attempts to place a valid orevein.  If a vein wasn't placed due to height restrictions, completely in the water, etc, another attempt is tried.
+     */
+    public static int oreveinMaxPlacementAttempts;
+    /**
+     * How wide to look for oreveins that affect a requested chunk. Trying to use oreveins larger than this will not work correctly. Increasing the size will cause additional worldgenerator lag.
+     * Disabled for now, using 64 in Deep Dark, 32 elsewhere
+     */
+    // public static int oreveinMaxSize; 
+    /**
      * Not really Constants, but they set using the Config and therefore should be constant (those are for the Debug Mode)
      */
     public static boolean D1 = false, D2 = false;
-	/**
-	 * Debug parameter for cleanroom testing.
-	 */	 
-	public static boolean debugCleanroom = false;
-	/**
-	 * Debug parameter for world generation. Tracks chunks added/removed from run queue.
-	 */
-	public static boolean debugWorldGen = false;
-	/**
-	 * Debug parameter for orevein generation.
-	 */
-	public static boolean debugOrevein = false;
-	/**
-	 * Debug parameter for small ore generation.
-	 */
-	public static boolean debugSmallOres = false;
+    /**
+     * Debug parameter for cleanroom testing.
+     */     
+    public static boolean debugCleanroom = false;
+    /**
+     * Debug parameter for world generation. Tracks chunks added/removed from run queue.
+     */
+    public static boolean debugWorldGen = false;
+    /**
+     * Debug parameter for orevein generation.
+     */
+    public static boolean debugOrevein = false;
+    /**
+     * Debug parameter for small ore generation.
+     */
+    public static boolean debugSmallOres = false;
+    /**
+     * Debug parameter for stones generation.
+     */
+    public static boolean debugStones = false;
     /**
      * If you have to give something a World Parameter but there is no World... (Dummy World)
      */
