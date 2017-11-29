@@ -34,6 +34,8 @@ import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.event.terraingen.BiomeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
@@ -146,7 +148,6 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(+.25D, .0D, +.50D);
         GL11.glVertex3d(-.25D, .0D, -.50D);
         GL11.glVertex3d(-.25D, .0D, +.50D);
-        GL11.glLineWidth(2.0F);
         TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
         if (tTile instanceof BaseMetaPipeEntity) {
         	int[][] GridSwitchArr = new int[][]{
