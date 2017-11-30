@@ -2425,7 +2425,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GregTech_API.mIC2Classic ? Materials.Water.getFluid(16000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)},
                 ItemList.Energy_Cluster.get(1, o), 2000, 200000);
 
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_LapotronicOrb2.get(1,o), 288000, new ItemStack[]{
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Energy_Cluster.get(1,o), 288000, new ItemStack[]{
             		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 64L),
             		ItemList.Circuit_Wetwaremainframe.get(1,o),
             		ItemList.Circuit_Wetwaremainframe.get(1,o),
