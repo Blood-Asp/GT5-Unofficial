@@ -317,7 +317,10 @@ public class GT_LanguageManager {
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_209", "Grab");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_210", "Grab");
         addStringLocalization("Interaction_DESCRIPTION_Index_211", "Items per side: ");
-        
+        addStringLocalization("Interaction_DESCRIPTION_Index_212", "Input enabled");
+        addStringLocalization("Interaction_DESCRIPTION_Index_213", "Input disabled");
+        addStringLocalization("Interaction_DESCRIPTION_Index_214", "Connected");
+        addStringLocalization("Interaction_DESCRIPTION_Index_215", "Disconnected");
         addStringLocalization("Item_DESCRIPTION_Index_000", "Stored Heat: %s");
         addStringLocalization("Item_DESCRIPTION_Index_001", "Durability: %s/%s");
         addStringLocalization("Item_DESCRIPTION_Index_002", "%s lvl %s");

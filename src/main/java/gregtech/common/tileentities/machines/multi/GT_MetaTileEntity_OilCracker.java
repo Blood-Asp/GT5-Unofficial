@@ -38,12 +38,13 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                 "Thermally cracks heavy hydrocarbons into lighter fractions",
                 "Size(WxHxD): 5x3x3 (Hollow), Controller (Front center)",
                 "Ring of 8 Cupronickel Coils (Each side of Controller)",
-                "1x Hydrocarbon Input Bus/Hatch (Any left side casing)",
+                "1x Hydrocarbon Input Bus/Hatch (Any left/right side casing)",
                 "1x Steam/Hydrogen Input Hatch (Any middle ring casing)",
-                "1x Cracked Hydrocarbon Output Hatch (Any right side casing)",
-                "1x Maintenance Hatch (Any middle ring casing)",
-                "1x Energy Hatch (Any middle ring casing)",
-                "Clean Stainless Steel Machine Casings for the rest (18 at least!)"};
+                "1x Cracked Hydrocarbon Output Hatch (Any left/right side casing)",
+                "1x Maintenance Hatch (Any casing)",
+                "1x Energy Hatch (Any casing)",
+                "Clean Stainless Steel Machine Casings for the rest (18 at least!)",
+                "Input/Output Hatches must be on opposite sides"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -95,6 +96,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
         int zDir = this.orientation.offsetZ;
         int amount = 0;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
+        boolean negSideInput = false, negSideOutput = false, posSideInput = false, posSideOutput = false;
         if (xDir != 0) {
             for (int i = -1; i < 2; i++) {// xDirection
                 for (int j = -1; j < 2; j++) {// height
@@ -110,8 +112,19 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                             }
                             if (h == 2 || h == -2) {
                                 IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, j, h + zDir);
-                                boolean tSide = ((aBaseMetaTileEntity.getBackFacing() == 4 && 2 == h) || (aBaseMetaTileEntity.getBackFacing() == 5 && -2 == h));
-                                if (tSide ? !addInputToMachineList(tTileEntity, 49) : !addOutputToMachineList(tTileEntity, 49)) {
+                                if (addInputToMachineList(tTileEntity, 49)) {
+                                	if (h == -2) {
+                                		negSideInput = true;
+                                	} else {
+                                		posSideInput = true;
+                                	}
+                                } else if (addOutputToMachineList(tTileEntity, 49)) {
+                                	if (h == -2) {
+                                		negSideOutput = true;
+                                	} else {
+                                		posSideOutput = true;
+                                	}                                	
+                                } else if (!addEnergyInputToMachineList(tTileEntity, 49) && !addMaintenanceToMachineList(tTileEntity, 49)){
                                     if (aBaseMetaTileEntity.getBlockOffset(xDir + i, j, h + zDir) != GregTech_API.sBlockCasings4) {
                                         return false;
                                     }
@@ -156,8 +169,19 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                             }
                             if (h == 2 || h == -2) {
                                 IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + h, j, i + zDir);
-                                boolean tSide = (aBaseMetaTileEntity.getBackFacing() == h || (aBaseMetaTileEntity.getBackFacing() == 3 && -2 == h));
-                                if (tSide ? !addOutputToMachineList(tTileEntity, 49) : !addInputToMachineList(tTileEntity, 49)) {
+                                if (addInputToMachineList(tTileEntity, 49)) {
+                                	if (h == -2) {
+                                		negSideInput = true;
+                                	} else {
+                                		posSideInput = true;
+                                	}
+                                } else if (addOutputToMachineList(tTileEntity, 49)) {
+                                	if (h == -2) {
+                                		negSideOutput = true;
+                                	} else {
+                                		posSideOutput = true;
+                                	}                                	
+                                } else if (!addEnergyInputToMachineList(tTileEntity, 49) && !addMaintenanceToMachineList(tTileEntity, 49)){
                                     if (aBaseMetaTileEntity.getBlockOffset(xDir + h, j, i + zDir) != GregTech_API.sBlockCasings4) {
                                         return false;
                                     }
@@ -187,6 +211,10 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                     }
                 }
             }
+        }
+        if ((negSideInput && negSideOutput) || (posSideInput && posSideOutput) 
+        		|| (negSideInput && posSideInput) || (negSideOutput && posSideOutput)) {
+        	return false;
         }
         if (amount < 18) return false;
         return true;

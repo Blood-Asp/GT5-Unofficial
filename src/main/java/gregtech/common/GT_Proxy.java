@@ -11,6 +11,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
+import gregtech.api.interfaces.IBlockOnWalkOver;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.interfaces.internal.IThaumcraftCompat;
@@ -25,6 +26,7 @@ import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.armor.ModularArmor_Item;
 import gregtech.common.items.armor.gui.*;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -45,6 +47,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings.GameType;
@@ -53,6 +56,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -130,6 +134,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mHardcoreCables = false;
     public boolean mDisableVanillaOres = true;
     public boolean mNerfStorageBlocks = true;
+    public boolean mHardMachineCasings = true;
     public boolean mNerfDustCrafting = true;
     public boolean mSortToTheEnd = true;
     public boolean mCraftingUnification = true;
@@ -202,6 +207,9 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean enableBasaltOres = true;
     public boolean enableGCOres = true;
     public boolean enableUBOres = true;
+    public boolean gt6Pipe = true;
+    public boolean gt6Cable = false;
+    public boolean costlyCableConnection = false;
     
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
@@ -1193,6 +1201,15 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             e.printStackTrace(GT_Log.err);
         }
     }
+    
+    @SubscribeEvent
+    public void onLivingUpdate(LivingUpdateEvent aEvent) {
+        if (aEvent.entityLiving.onGround) {
+            int tX = MathHelper.floor_double(aEvent.entityLiving.posX), tY = MathHelper.floor_double(aEvent.entityLiving.boundingBox.minY-0.001F), tZ = MathHelper.floor_double(aEvent.entityLiving.posZ);
+            Block tBlock = aEvent.entityLiving.worldObj.getBlock(tX, tY, tZ);
+            if (tBlock instanceof IBlockOnWalkOver) ((IBlockOnWalkOver)tBlock).onWalkOver(aEvent.entityLiving, aEvent.entityLiving.worldObj, tX, tY, tZ);
+        }
+    }
 
     @SubscribeEvent
     public void onFluidContainerRegistration(FluidContainerRegistry.FluidContainerRegisterEvent aFluidEvent) {
@@ -1589,12 +1606,16 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
     				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
     		int hydrogenAmount = 2 * i + 2;
+    		int crackerEUT = 120 + 60 * i;
+    		int crackerT = 20 + 10 * i;
+    		int chemReactorEUT = 30;
+    		int chemReactorT = (crackerT*crackerEUT) / chemReactorEUT;
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 120 + 60 * i);
+    				new FluidStack(crackedFluids[i], 1000), crackerT, crackerEUT);
     		GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(hydrogenAmount), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), chemReactorT, chemReactorEUT);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     	}
     	aMaterial.setHydroCrackedFluids(crackedFluids);
     }
@@ -1610,14 +1631,18 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     		uncrackedFluid = (GT_Fluid) aMaterial.mGas;
     	}
     	for (int i = 0; i < 3; i++) {
+    		int crackerEUT = 240 + 120 * i;
+    		int crackerT = 20 + 10 * i;
+    		int chemReactorEUT = 30;
+    		int chemReactorT = (crackerT*crackerEUT) / chemReactorEUT;
     		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
     				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
     		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
+    				new FluidStack(crackedFluids[i], 1000), crackerT, crackerEUT);
     		GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), chemReactorT, chemReactorEUT);
     	}
     	aMaterial.setSteamCrackedFluids(crackedFluids);
     }
