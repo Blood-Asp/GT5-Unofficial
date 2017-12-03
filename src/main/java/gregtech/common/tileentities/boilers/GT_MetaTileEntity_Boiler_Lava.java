@@ -26,7 +26,7 @@ public class GT_MetaTileEntity_Boiler_Lava
         super(aID, aName, aNameRegional, new String[]{
                 "A Boiler running off Lava",
                 "Produces 600L of Steam per second",
-                "Drops to 200L of Steam per second as byproduct fills",
+                "Drops to 200L of Steam per second as byproduct slot fills",
                 "Clean out byproducts to keep efficiency high",
                 "Causes 20 Pollution per second"});
     }
