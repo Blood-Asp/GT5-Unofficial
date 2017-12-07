@@ -1198,7 +1198,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sulfur, 1),
         		GT_OreDictUnificator.get(ItemList.Block_SSFUEL.get(1, new Object[0])),
         		GT_OreDictUnificator.get(ItemList.Block_MSSFUEL.get(1, new Object[0])),
-        		GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Lava, 1),
         		GT_OreDictUnificator.get(OrePrefixes.rod, Materials.Blaze, 1));
         if (Loader.isModLoaded("Thaumcraft")) {
         	GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipe(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1));
