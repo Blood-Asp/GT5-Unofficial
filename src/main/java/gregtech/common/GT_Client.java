@@ -135,7 +135,7 @@ public class GT_Client extends GT_Proxy
         Rotation.sideRotations[aEvent.target.sideHit].glApply();
         GL11.glTranslated(0.0D, -0.501D, 0.0D);
         GL11.glLineWidth(2.0F);
-        GL11.glColour4f(0.0F, 0.0F, 0.0F, 0.5F);
+        GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.5F);
         GL11.glBegin(1);
         GL11.glVertex3d(+.50D, .0D, -.25D);
         GL11.glVertex3d(-.50D, .0D, -.25D);
@@ -225,7 +225,7 @@ public class GT_Client extends GT_Proxy
     }
 
     @SubscribeEvent
-    public void manipulateColour(EntityViewRenderEvent.FogColours event) {
+    public void manipulateColor(EntityViewRenderEvent.FogColors event) {
     	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
         event.red = 140f/255f;
         event.green = 80f/255f;
@@ -234,23 +234,23 @@ public class GT_Client extends GT_Proxy
     }
     
     @SubscribeEvent
-    public void manipulateGrassColour(BiomeEvent.GetGrassColour event) {
+    public void manipulateGrassColor(BiomeEvent.GetGrassColor event) {
     	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-        event.newColour = 0xD2691E;
+        event.newColor = 0xD2691E;
     	}
     }
 
     @SubscribeEvent
-    public void manipulateWaterColour(BiomeEvent.GetWaterColour event) {
+    public void manipulateWaterColor(BiomeEvent.GetWaterColor event) {
     	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-        event.newColour = 0x556B2F;
+        event.newColor = 0x556B2F;
     	}
     }
 
     @SubscribeEvent
-    public void manipulateFoliageColour(BiomeEvent.GetFoliageColour event) {
+    public void manipulateFoliageColor(BiomeEvent.GetFoliageColor event) {
     	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
-        event.newColour = 0xCD853F;
+        event.newColor = 0xCD853F;
     	}
     }
 

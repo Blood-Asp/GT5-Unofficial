@@ -7,7 +7,7 @@ import gregtech.api.items.GT_MetaBase_Item;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockColoured;
+import net.minecraft.block.BlockColored;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -88,7 +88,7 @@ public class Behaviour_Spray_Colour
 
     private boolean colourize(World aWorld, int aX, int aY, int aZ, int aSide) {
         Block aBlock = aWorld.getBlock(aX, aY, aZ);
-        if ((aBlock != Blocks.air) && ((this.mAllowedVanillaBlocks.contains(aBlock)) || ((aBlock instanceof BlockColoured)))) {
+        if ((aBlock != Blocks.air) && ((this.mAllowedVanillaBlocks.contains(aBlock)) || ((aBlock instanceof BlockColored)))) {
             if (aBlock == Blocks.hardened_clay) {
                 aWorld.setBlock(aX, aY, aZ, Blocks.stained_hardened_clay, (this.mColour ^ 0xFFFFFFFF) & 0xF, 3);
                 return true;

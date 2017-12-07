@@ -28,11 +28,11 @@ public class GT_GUIContainerMetaTile_Machine extends GT_GUIContainer {
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         if (GregTech_API.sColouredGUI && mContainer != null && mContainer.mTileEntity != null) {
-            int tColour = mContainer.mTileEntity.getColourization() & 15;
-            if (tColour < ItemDye.field_150922_c.length) {
-                tColour = ItemDye.field_150922_c[tColour];
-                GL11.glColour4f(((tColour >> 16) & 255) / 255.0F, ((tColour >> 8) & 255) / 255.0F, (tColour & 255) / 255.0F, 1.0F);
-            } else GL11.glColour4f(1.0F, 1.0F, 1.0F, 1.0F);
-        } else GL11.glColour4f(1.0F, 1.0F, 1.0F, 1.0F);
+            int tColor = mContainer.mTileEntity.getColourization() & 15;
+            if (tColor < ItemDye.field_150922_c.length) {
+                tColor = ItemDye.field_150922_c[tColor];
+                GL11.glColor4f(((tColor >> 16) & 255) / 255.0F, ((tColor >> 8) & 255) / 255.0F, (tColor & 255) / 255.0F, 1.0F);
+            } else GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        } else GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }
