@@ -44,7 +44,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 "A programmed circuit in the main block throttles the boiler (-1000L/s per config)",
                 "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
                 "3x1x3 of " +getCasingMaterial()+ " Firebox Casings (Bottom layer, Min 3)",
-                "3x4x3 of " +getCasingMaterial()+ " Machine Casings/Plated Bricks (Above Fireboxes, hollow, Min 24!)",
+                "3x4x3 of " +getCasingMaterial()+ " " +getCasingBlockType()+ " (Above Fireboxes, hollow, Min 24!)",
                 "1x3x1 of " +getCasingMaterial()+ " Pipe Casings (Inside the Hollow Machine Casings/Plated Bricks)",
                 "1x Fuel Input Hatch/Bus (Any Firebox)",
                 "1x Water Input Hatch (Any Firebox)",
@@ -59,6 +59,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public abstract String getCasingMaterial();
 
     public abstract Block getCasingBlock();
+    
+    public abstract String getCasingBlockType();
 
     public abstract byte getCasingMeta();
 
