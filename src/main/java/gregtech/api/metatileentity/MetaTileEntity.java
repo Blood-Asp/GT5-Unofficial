@@ -805,12 +805,12 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     }
 
     @Override
-    public void onColorChangeServer(byte aColor) {
+    public void onColourChangeServer(byte aColour) {
         //
     }
 
     @Override
-    public void onColorChangeClient(byte aColor) {
+    public void onColourChangeClient(byte aColour) {
         //
     }
 

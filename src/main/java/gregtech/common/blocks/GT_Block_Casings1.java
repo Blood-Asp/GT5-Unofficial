@@ -93,7 +93,7 @@ public class GT_Block_Casings1
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
     }
 
-    public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
-        return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
+    public int colourMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
+        return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colourMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }
 }

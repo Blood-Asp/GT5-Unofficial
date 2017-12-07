@@ -59,7 +59,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mHasEnoughEnergy = true, mRunningThroughTick = false, mInputDisabled = false, mOutputDisabled = false, mMuffler = false, mLockUpgrade = false, mActive = false, mRedstone = false, mWorkUpdate = false, mSteamConverter = false, mInventoryChanged = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false, oRedstone = false;
-    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
+    private byte mColour = 0, oColour = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
     private long mTickTimer = 0, oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
@@ -104,7 +104,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             aNBT.setIntArray("mCoverData", mCoverData);
             aNBT.setIntArray("mCoverSides", mCoverSides);
             aNBT.setByteArray("mRedstoneSided", mSidedRedstone);
-            aNBT.setByte("mColor", mColor);
+            aNBT.setByte("mColour", mColour);
             aNBT.setByte("mLightValue", mLightValue);
             aNBT.setByte("mOtherUpgrades", mOtherUpgrades);
             aNBT.setByte("mWorkData", mWorkData);
@@ -170,7 +170,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             else mID = aID;
             mStoredSteam = aNBT.getLong("mStoredSteam");
             mStoredEnergy = aNBT.getLong("mStoredEnergy");
-            mColor = aNBT.getByte("mColor");
+            mColour = aNBT.getByte("mColour");
             mLightValue = aNBT.getByte("mLightValue");
             mWorkData = aNBT.getByte("mWorkData");
             mStrongRedstone = aNBT.getByte("mStrongRedstone");
@@ -302,8 +302,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 case 1:
                     tCode++;
                     if (aSideClient) {
-                        if (mColor != oColor) {
-                            mMetaTileEntity.onColorChangeClient(oColor = mColor);
+                        if (mColour != oColour) {
+                            mMetaTileEntity.onColourChangeClient(oColour = mColour);
                             issueTextureUpdate();
                         }
 
@@ -521,7 +521,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                                 oTexturePage = (hasValidMetaTileEntity() && mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) ? ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage() : 0,
                                                 oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0,
                                                 oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)),
-                                                oColor = mColor), 
+                                                oColour = mColour), 
                                         xCoord, zCoord);
                                 mSendClientData = false;
                             }
@@ -537,7 +537,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 tData = ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage();
                                 if (tData != oTexturePage) sendBlockEvent((byte) 1, (byte)((oTexturePage = tData)|0x80));//set last bit as a flag for page
                             }
-                            if (mColor != oColor) sendBlockEvent((byte) 2, oColor = mColor);
+                            if (mColour != oColour) sendBlockEvent((byte) 2, oColour = mColour);
                             tData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0));
                             if (tData != oRedstoneData) sendBlockEvent((byte) 3, oRedstoneData = tData);
                             if (mLightValue != oLightValue) {
@@ -585,7 +585,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         return null;
     }
 
-    public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aTexturePage, byte aUpdateData, byte aRedstoneData, byte aColorData) {
+    public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aTexturePage, byte aUpdateData, byte aRedstoneData, byte aColourData) {
         issueTextureUpdate();
         if (mID != aID && aID > 0) {
             mID = aID;
@@ -604,12 +604,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         receiveClientEvent(0, aTextureData);
         receiveClientEvent(1, aUpdateData & 0x7F);
         receiveClientEvent(1, aTexturePage | 0x80);
-        receiveClientEvent(2, aColorData);
+        receiveClientEvent(2, aColourData);
         receiveClientEvent(3, aRedstoneData);
     }
 
     @Deprecated
-    public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aUpdateData, byte aRedstoneData, byte aColorData) {
+    public final void receiveMetaTileEntityData(short aID, int aCover0, int aCover1, int aCover2, int aCover3, int aCover4, int aCover5, byte aTextureData, byte aUpdateData, byte aRedstoneData, byte aColourData) {
         issueTextureUpdate();
         if (mID != aID && aID > 0) {
             mID = aID;
@@ -628,7 +628,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         receiveClientEvent(0, aTextureData);
         receiveClientEvent(1, aUpdateData & 0x7F);
         receiveClientEvent(1, 0x80);
-        receiveClientEvent(2, aColorData);
+        receiveClientEvent(2, aColourData);
         receiveClientEvent(3, aRedstoneData);
     }
 
@@ -664,7 +664,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     break;
                 case 2:
                     if (aValue > 16 || aValue < 0) aValue = 0;
-                    mColor = (byte) aValue;
+                    mColour = (byte) aValue;
                     break;
                 case 3:
                     mSidedRedstone[0] = (byte) ((aValue & 1) == 1 ? 15 : 0);
@@ -1067,7 +1067,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         ITexture rIcon = getCoverTexture(aSide);
         if (rIcon != null) return new ITexture[]{rIcon};
         if (hasValidMetaTileEntity())
-            return mMetaTileEntity.getTexture(this, aSide, mFacing, (byte) (mColor - 1), mActive, getOutputRedstoneSignal(aSide) > 0);
+            return mMetaTileEntity.getTexture(this, aSide, mFacing, (byte) (mColour - 1), mActive, getOutputRedstoneSignal(aSide) > 0);
         return Textures.BlockIcons.ERROR_RENDERING;
     }
 
@@ -1226,7 +1226,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (mMuffler) tNBT.setBoolean("mMuffler", mMuffler);
         if (mLockUpgrade) tNBT.setBoolean("mLockUpgrade", mLockUpgrade);
         if (mSteamConverter) tNBT.setBoolean("mSteamConverter", mSteamConverter);
-        if (mColor > 0) tNBT.setByte("mColor", mColor);
+        if (mColour > 0) tNBT.setByte("mColour", mColour);
         if (mOtherUpgrades > 0) tNBT.setByte("mOtherUpgrades", mOtherUpgrades);
         if (mStrongRedstone > 0) tNBT.setByte("mStrongRedstone", mStrongRedstone);
         for (byte i = 0; i < mCoverSides.length; i++) {
@@ -1256,9 +1256,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             if (!privateAccess() || aPlayer.getDisplayName().equalsIgnoreCase(getOwnerName())) {
                 ItemStack tCurrentItem = aPlayer.inventory.getCurrentItem();
                 if (tCurrentItem != null) {
-                    if (getColorization() >= 0 && GT_Utility.areStacksEqual(new ItemStack(Items.water_bucket, 1), tCurrentItem)) {
+                    if (getColourization() >= 0 && GT_Utility.areStacksEqual(new ItemStack(Items.water_bucket, 1), tCurrentItem)) {
                         tCurrentItem.func_150996_a(Items.bucket);
-                        setColorization((byte) (getColorization() >= 16 ? -2 : -1));
+                        setColourization((byte) (getColourization() >= 16 ? -2 : -1));
                         return true;
                     }
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList)) {
@@ -1901,15 +1901,15 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public byte getColorization() {
-        return (byte) (mColor - 1);
+    public byte getColourization() {
+        return (byte) (mColour - 1);
     }
 
     @Override
-    public byte setColorization(byte aColor) {
-        if (aColor > 15 || aColor < -1) aColor = -1;
-        if (canAccessData()) mMetaTileEntity.onColorChangeServer(aColor);
-        return mColor = (byte) (aColor + 1);
+    public byte setColourization(byte aColour) {
+        if (aColour > 15 || aColour < -1) aColour = -1;
+        if (canAccessData()) mMetaTileEntity.onColourChangeServer(aColour);
+        return mColour = (byte) (aColour + 1);
     }
 
     @Override

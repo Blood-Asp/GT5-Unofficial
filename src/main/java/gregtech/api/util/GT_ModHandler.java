@@ -153,7 +153,7 @@ public class GT_ModHandler {
         sSpecialRecipeClasses.add("mods.railcraft.common.util.crafting.RoutingTicketCopyRecipe");
         sSpecialRecipeClasses.add("mods.railcraft.common.util.crafting.TankCartFilterRecipe");
         sSpecialRecipeClasses.add("mods.railcraft.common.emblems.LocomotiveEmblemRecipe");
-        sSpecialRecipeClasses.add("mods.railcraft.common.emblems.EmblemPostColorRecipe");
+        sSpecialRecipeClasses.add("mods.railcraft.common.emblems.EmblemPostColourRecipe");
         sSpecialRecipeClasses.add("mods.railcraft.common.emblems.EmblemPostEmblemRecipe");
         sSpecialRecipeClasses.add("mods.immibis.redlogic.interaction.RecipeDyeLumarButton");
         sSpecialRecipeClasses.add("thaumcraft.common.items.armor.RecipesRobeArmorDyes");

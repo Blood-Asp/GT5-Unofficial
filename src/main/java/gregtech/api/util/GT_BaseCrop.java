@@ -45,8 +45,8 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
      * @param aGrowthSpeed  how fast the Crop grows. if < 0 then its set to Tier*300
      * @param aHarvestSize  the size the Crop needs to be harvested. forced to be between 2 and max size
      */
-    public GT_BaseCrop(int aID, String aCropName, String aDiscoveredBy, ItemStack aBaseSeed, int aTier, int aMaxSize, int aGrowthSpeed, int aAfterHarvestSize, int aHarvestSize, int aStatChemical, int aStatFood, int aStatDefensive, int aStatColor, int aStatWeed, String[] aAttributes, ItemStack aDrop, ItemStack[] aSpecialDrops) {
-        new GT_BaseCrop(aID, aCropName, aDiscoveredBy, aBaseSeed, aTier, aMaxSize, aGrowthSpeed, aAfterHarvestSize, aHarvestSize, aStatChemical, aStatFood, aStatDefensive, aStatColor, aStatWeed, aAttributes, null, aDrop, aSpecialDrops);
+    public GT_BaseCrop(int aID, String aCropName, String aDiscoveredBy, ItemStack aBaseSeed, int aTier, int aMaxSize, int aGrowthSpeed, int aAfterHarvestSize, int aHarvestSize, int aStatChemical, int aStatFood, int aStatDefensive, int aStatColour, int aStatWeed, String[] aAttributes, ItemStack aDrop, ItemStack[] aSpecialDrops) {
+        new GT_BaseCrop(aID, aCropName, aDiscoveredBy, aBaseSeed, aTier, aMaxSize, aGrowthSpeed, aAfterHarvestSize, aHarvestSize, aStatChemical, aStatFood, aStatDefensive, aStatColour, aStatWeed, aAttributes, null, aDrop, aSpecialDrops);
     }
 
     /**
@@ -63,7 +63,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
      * @param aHarvestSize  the size the Crop needs to be harvested. forced to be between 2 and max size
      * @param aBlock        the block below needed for crop to grow. If null no block needed
      */
-    public GT_BaseCrop(int aID, String aCropName, String aDiscoveredBy, ItemStack aBaseSeed, int aTier, int aMaxSize, int aGrowthSpeed, int aAfterHarvestSize, int aHarvestSize, int aStatChemical, int aStatFood, int aStatDefensive, int aStatColor, int aStatWeed, String[] aAttributes, Materials aBlock, ItemStack aDrop, ItemStack[] aSpecialDrops) {
+    public GT_BaseCrop(int aID, String aCropName, String aDiscoveredBy, ItemStack aBaseSeed, int aTier, int aMaxSize, int aGrowthSpeed, int aAfterHarvestSize, int aHarvestSize, int aStatChemical, int aStatFood, int aStatDefensive, int aStatColour, int aStatWeed, String[] aAttributes, Materials aBlock, ItemStack aDrop, ItemStack[] aSpecialDrops) {
         mName = aCropName;
         aID = GT_Config.addIDConfig(ConfigCategories.IDs.crops, mName.replaceAll(" ", "_"), aID);
         if (aDiscoveredBy != null && !aDiscoveredBy.equals(E)) mDiscoveredBy = aDiscoveredBy;
@@ -77,7 +77,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
             mStats[0] = aStatChemical;
             mStats[1] = aStatFood;
             mStats[2] = aStatDefensive;
-            mStats[3] = aStatColor;
+            mStats[3] = aStatColour;
             mStats[4] = aStatWeed;
             mAttributes = aAttributes;
             mBlock = aBlock;

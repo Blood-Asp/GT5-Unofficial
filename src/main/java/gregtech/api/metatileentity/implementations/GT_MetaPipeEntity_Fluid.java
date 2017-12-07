@@ -90,9 +90,9 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections, byte aColorIndex, boolean aConnected, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections, byte aColourIndex, boolean aConnected, boolean aRedstone) {
     	float tThickNess = getThickNess();
-    	if (mDisableInput == 0) return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColorIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+    	if (mDisableInput == 0) return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColourIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColourIndex, mMaterial.mRGBa))};
         byte tMask = 0;
         byte[][] sRestrictionArray = new byte[][]{
         	{2, 3, 5, 4},
@@ -103,18 +103,18 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         	{1, 0, 2, 3}
         };
         if (aSide >= 0 && aSide < 6) for (byte i = 0; i < 4; i++) if ((mDisableInput & (1 << sRestrictionArray[aSide][i])) != 0) tMask |= 1 << i;
-        return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColorIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), getRestrictorTexture(tMask)};
+        return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColourIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColourIndex, mMaterial.mRGBa)), getRestrictorTexture(tMask)};
     }
 
-    protected static final ITexture getBaseTexture(float aThickNess, int aPipeAmount, Materials aMaterial, byte aColorIndex) {
-    	if (aPipeAmount >= 9) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeNonuple.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aPipeAmount >= 4) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeQuadruple.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aThickNess < 0.124F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aThickNess < 0.374F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aThickNess < 0.499F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aThickNess < 0.749F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	if (aThickNess < 0.874F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
-    	return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
+    protected static final ITexture getBaseTexture(float aThickNess, int aPipeAmount, Materials aMaterial, byte aColourIndex) {
+    	if (aPipeAmount >= 9) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeNonuple.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aPipeAmount >= 4) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeQuadruple.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aThickNess < 0.124F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aThickNess < 0.374F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aThickNess < 0.499F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aThickNess < 0.749F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	if (aThickNess < 0.874F) return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
+    	return new GT_RenderedTexture(aMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColourIndex, aMaterial.mRGBa));
     }
 
     protected static final ITexture getRestrictorTexture(byte aMask) {
@@ -354,9 +354,9 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		if (tTileEntity != null) {
             if (tTileEntity instanceof IGregTechTileEntity) {
-                if (getBaseMetaTileEntity().getColorization() >= 0) {
-                    byte tColor = ((IGregTechTileEntity) tTileEntity).getColorization();
-                    if (tColor >= 0 && (tColor & 15) != (getBaseMetaTileEntity().getColorization() & 15)) {
+                if (getBaseMetaTileEntity().getColourization() >= 0) {
+                    byte tColour = ((IGregTechTileEntity) tTileEntity).getColourization();
+                    if (tColour >= 0 && (tColour & 15) != (getBaseMetaTileEntity().getColourization() & 15)) {
                         return rConnect;
                     }
                 }

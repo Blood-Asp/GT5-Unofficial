@@ -11,14 +11,14 @@ import net.minecraft.world.IBlockAccess;
 public class GT_Packet_TileEntity extends GT_Packet {
     private int mX, mZ, mC0, mC1, mC2, mC3, mC4, mC5;
     private short mY, mID;
-    private byte mTexture, mTexturePage, mUpdate, mRedstone, mColor;
+    private byte mTexture, mTexturePage, mUpdate, mRedstone, mColour;
 
     public GT_Packet_TileEntity() {
         super(true);
     }
 
     //For tiles
-    public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aTexturePage, byte aUpdate, byte aRedstone, byte aColor) {
+    public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aTexturePage, byte aUpdate, byte aRedstone, byte aColour) {
         super(false);
         mX = aX;
         mY = aY;
@@ -34,11 +34,11 @@ public class GT_Packet_TileEntity extends GT_Packet {
         mTexturePage=aTexturePage;
         mUpdate = aUpdate;
         mRedstone = aRedstone;
-        mColor = aColor;
+        mColour = aColour;
     }
 
     //For pipes
-    public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aUpdate, byte aRedstone, byte aColor) {
+    public GT_Packet_TileEntity(int aX, short aY, int aZ, short aID, int aC0, int aC1, int aC2, int aC3, int aC4, int aC5, byte aTexture, byte aUpdate, byte aRedstone, byte aColour) {
         super(false);
         mX = aX;
         mY = aY;
@@ -54,7 +54,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
         mTexturePage=0;
         mUpdate = aUpdate;
         mRedstone = aRedstone;
-        mColor = aColor;
+        mColour = aColour;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class GT_Packet_TileEntity extends GT_Packet {
         tOut.writeByte(mTexturePage);
         tOut.writeByte(mUpdate);
         tOut.writeByte(mRedstone);
-        tOut.writeByte(mColor);
+        tOut.writeByte(mColour);
 
         return tOut.toByteArray();
     }
@@ -93,9 +93,9 @@ public class GT_Packet_TileEntity extends GT_Packet {
             TileEntity tTileEntity = aWorld.getTileEntity(mX, mY, mZ);
             if (tTileEntity != null) {
                 if (tTileEntity instanceof BaseMetaTileEntity)
-                    ((BaseMetaTileEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mTexturePage, mUpdate, mRedstone, mColor);
+                    ((BaseMetaTileEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mTexturePage, mUpdate, mRedstone, mColour);
                 else if (tTileEntity instanceof BaseMetaPipeEntity)
-                    ((BaseMetaPipeEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mUpdate, mRedstone, mColor);
+                    ((BaseMetaPipeEntity) tTileEntity).receiveMetaTileEntityData(mID, mC0, mC1, mC2, mC3, mC4, mC5, mTexture, mUpdate, mRedstone, mColour);
             }
         }
     }

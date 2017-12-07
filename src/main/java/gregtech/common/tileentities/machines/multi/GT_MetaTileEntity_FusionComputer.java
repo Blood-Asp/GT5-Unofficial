@@ -205,7 +205,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     public abstract String[] getDescription();
 
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
         ITexture[] sTexture;
         if (aSide == aFacing) {
             sTexture = new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS, Dyes.getModulation(-1, Dyes._NULL.mRGBa)), new GT_RenderedTexture(getIconOverlay())};

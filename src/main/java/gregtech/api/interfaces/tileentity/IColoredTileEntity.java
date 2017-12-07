@@ -1,15 +1,15 @@
 package gregtech.api.interfaces.tileentity;
 
-public interface IColoredTileEntity {
+public interface IColouredTileEntity {
     /**
-     * @return 0 - 15 are Colors, while -1 means uncolored
+     * @return 0 - 15 are Colours, while -1 means uncoloured
      */
-    public byte getColorization();
+    public byte getColourization();
 
     /**
-     * Sets the Color Modulation of the Block
+     * Sets the Colour Modulation of the Block
      *
-     * @param aColor the Color you want to set it to. -1 for reset.
+     * @param aColour the Colour you want to set it to. -1 for reset.
      */
-    public byte setColorization(byte aColor);
+    public byte setColourization(byte aColour);
 }

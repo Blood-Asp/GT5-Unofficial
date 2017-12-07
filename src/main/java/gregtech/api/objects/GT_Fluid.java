@@ -17,7 +17,7 @@ public class GT_Fluid extends Fluid implements Runnable {
     }
 
     @Override
-    public int getColor() {
+    public int getColour() {
         return (Math.max(0, Math.min(255, mRGBa[0])) << 16) | (Math.max(0, Math.min(255, mRGBa[1])) << 8) | Math.max(0, Math.min(255, mRGBa[2]));
     }
 

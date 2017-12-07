@@ -61,7 +61,7 @@ public class GT_MetaGenerated_Item_Renderer
                 GL11.glTranslated(-0.5D, -0.42D, 0.0D);
             }
         }
-        GL11.glColor3f(1.0F, 1.0F, 1.0F);
+        GL11.glColour3f(1.0F, 1.0F, 1.0F);
         if (aMetaData < aItem.mOffset) {
             IIconContainer aIcon = aItem.getIconContainer(aMetaData);
             IIcon tOverlay = null;
@@ -84,7 +84,7 @@ public class GT_MetaGenerated_Item_Renderer
             GL11.glBlendFunc(770, 771);
             if (tFluidIcon == null) {
                 short[] tModulation = aItem.getRGBa(aStack);
-                GL11.glColor3f(tModulation[0] / 255.0F, tModulation[1] / 255.0F, tModulation[2] / 255.0F);
+                GL11.glColour3f(tModulation[0] / 255.0F, tModulation[1] / 255.0F, tModulation[2] / 255.0F);
             }
             if (type.equals(IItemRenderer.ItemRenderType.INVENTORY)) {
                 GT_RenderUtil.renderItemIcon(tIcon, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
@@ -93,8 +93,8 @@ public class GT_MetaGenerated_Item_Renderer
             }
             if (tFluidIcon != null) {
                 assert (tFluid != null);
-                int tColor = tFluid.getFluid().getColor(tFluid);
-                GL11.glColor3f((tColor >> 16 & 0xFF) / 255.0F, (tColor >> 8 & 0xFF) / 255.0F, (tColor & 0xFF) / 255.0F);
+                int tColour = tFluid.getFluid().getColour(tFluid);
+                GL11.glColour3f((tColour >> 16 & 0xFF) / 255.0F, (tColour >> 8 & 0xFF) / 255.0F, (tColour & 0xFF) / 255.0F);
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
                 GL11.glBlendFunc(770, 771);
                 GL11.glDepthFunc(514);
@@ -105,7 +105,7 @@ public class GT_MetaGenerated_Item_Renderer
                 }
                 GL11.glDepthFunc(515);
             }
-            GL11.glColor3f(1.0F, 1.0F, 1.0F);
+            GL11.glColour3f(1.0F, 1.0F, 1.0F);
             if (tOverlay != null) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
                 GL11.glBlendFunc(770, 771);

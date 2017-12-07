@@ -516,13 +516,13 @@ public class GT_Block_Machines
         return null;
     }
 
-    public boolean recolourBlock(World aWorld, int aX, int aY, int aZ, ForgeDirection aSide, int aColor) {
+    public boolean recolourBlock(World aWorld, int aX, int aY, int aZ, ForgeDirection aSide, int aColour) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
-            if (((IGregTechTileEntity) tTileEntity).getColorization() == (byte) ((aColor ^ 0xFFFFFFFF) & 0xF)) {
+            if (((IGregTechTileEntity) tTileEntity).getColourization() == (byte) ((aColour ^ 0xFFFFFFFF) & 0xF)) {
                 return false;
             }
-            ((IGregTechTileEntity) tTileEntity).setColorization((byte) ((aColor ^ 0xFFFFFFFF) & 0xF));
+            ((IGregTechTileEntity) tTileEntity).setColourization((byte) ((aColour ^ 0xFFFFFFFF) & 0xF));
             return true;
         }
         return false;

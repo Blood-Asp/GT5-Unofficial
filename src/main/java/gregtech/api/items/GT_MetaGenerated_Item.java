@@ -245,7 +245,7 @@ public abstract class GT_MetaGenerated_Item extends GT_MetaBase_Item implements 
     }
 
     /**
-     * @return the Color Modulation the Material is going to be rendered with.
+     * @return the Colour Modulation the Material is going to be rendered with.
      */
     public short[] getRGBa(ItemStack aStack) {
         return Materials._NULL.getRGBA();

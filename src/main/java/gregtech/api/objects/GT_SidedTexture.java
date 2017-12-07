@@ -1,7 +1,7 @@
 package gregtech.api.objects;
 
 import gregtech.api.enums.Dyes;
-import gregtech.api.interfaces.IColorModulationContainer;
+import gregtech.api.interfaces.IColourModulationContainer;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import net.minecraft.block.Block;
@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 
-public class GT_SidedTexture implements ITexture, IColorModulationContainer {
+public class GT_SidedTexture implements ITexture, IColourModulationContainer {
     private final IIconContainer[] mIconContainer;
     private final boolean mAllowAlpha;
     /**
      * DO NOT MANIPULATE THE VALUES INSIDE THIS ARRAY!!!
      * <p/>
      * Just set this variable to another different Array instead.
-     * Otherwise some colored things will get Problems.
+     * Otherwise some coloured things will get Problems.
      */
     public short[] mRGBa;
 
@@ -45,37 +45,37 @@ public class GT_SidedTexture implements ITexture, IColorModulationContainer {
 
     @Override
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer[5].getIcon());
         if (mIconContainer[5].getOverlayIcon() != null) {
-            Tessellator.instance.setColorRGBA(153, 153, 153, 255);
+            Tessellator.instance.setColourRGBA(153, 153, 153, 255);
             aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer[5].getOverlayIcon());
         }
     }
 
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer[4].getIcon());
         if (mIconContainer[4].getOverlayIcon() != null) {
-            Tessellator.instance.setColorRGBA(153, 153, 153, 255);
+            Tessellator.instance.setColourRGBA(153, 153, 153, 255);
             aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer[4].getOverlayIcon());
         }
     }
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 1.0F), (int) (mRGBa[1] * 1.0F), (int) (mRGBa[2] * 1.0F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 1.0F), (int) (mRGBa[1] * 1.0F), (int) (mRGBa[2] * 1.0F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer[1].getIcon());
         if (mIconContainer[1].getOverlayIcon() != null) {
-            Tessellator.instance.setColorRGBA(255, 255, 255, 255);
+            Tessellator.instance.setColourRGBA(255, 255, 255, 255);
             aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer[1].getOverlayIcon());
         }
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.5F), (int) (mRGBa[1] * 0.5F), (int) (mRGBa[2] * 0.5F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 0.5F), (int) (mRGBa[1] * 0.5F), (int) (mRGBa[2] * 0.5F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         IIcon aIcon = mIconContainer[0].getIcon();
 
         float d_16 = 16.0F;
@@ -106,7 +106,7 @@ public class GT_SidedTexture implements ITexture, IColorModulationContainer {
         Tessellator.instance.addVertexWithUV((double)d12, (double)d13, (double)d15, (double)d4, (double)d6);
 
         if ((aIcon = mIconContainer[0].getOverlayIcon()) != null) {
-            Tessellator.instance.setColorRGBA(128, 128, 128, 255);
+            Tessellator.instance.setColourRGBA(128, 128, 128, 255);
 
             d3 = (float)aIcon.getInterpolatedU(aRenderer.renderMaxX * d_16);
             d4 = (float)aIcon.getInterpolatedU(aRenderer.renderMinX * d_16);
@@ -138,20 +138,20 @@ public class GT_SidedTexture implements ITexture, IColorModulationContainer {
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer[3].getIcon());
         if (mIconContainer[3].getOverlayIcon() != null) {
-            Tessellator.instance.setColorRGBA(204, 204, 204, 255);
+            Tessellator.instance.setColourRGBA(204, 204, 204, 255);
             aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer[3].getOverlayIcon());
         }
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        Tessellator.instance.setColourRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer[2].getIcon());
         if (mIconContainer[2].getOverlayIcon() != null) {
-            Tessellator.instance.setColorRGBA(204, 204, 204, 255);
+            Tessellator.instance.setColourRGBA(204, 204, 204, 255);
             aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer[2].getOverlayIcon());
         }
     }

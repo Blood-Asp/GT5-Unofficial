@@ -56,8 +56,8 @@ public class GT_NEI_AssLineHandler
         }
     }
 
-    public static void drawText(int aX, int aY, String aString, int aColor) {
-        Minecraft.getMinecraft().fontRenderer.drawString(aString, aX, aY, aColor);
+    public static void drawText(int aX, int aY, String aString, int aColour) {
+        Minecraft.getMinecraft().fontRenderer.drawString(aString, aX, aY, aColour);
     }
 
     public TemplateRecipeHandler newInstance() {
@@ -168,7 +168,7 @@ public class GT_NEI_AssLineHandler
     }
 
     public void drawBackground(int recipe) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glColour4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(getGuiTexture());
         GuiDraw.drawTexturedModalRect(-4, -8, 1, 3, 174, 79);
     }

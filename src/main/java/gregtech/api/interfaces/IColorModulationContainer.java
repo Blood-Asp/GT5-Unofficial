@@ -1,5 +1,5 @@
 package gregtech.api.interfaces;
 
-public interface IColorModulationContainer {
+public interface IColourModulationContainer {
     public short[] getRGBA();
 }

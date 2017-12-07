@@ -287,7 +287,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
             ItemList.SPRAY_CAN_DYES[i].set(addItem(tLastID = 430 + 2 * i, "Spray Can (" + Dyes.get(i).mName + ")", "Full", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.SENSUS, 4L)}));
             ItemList.SPRAY_CAN_DYES_USED[i].set(addItem(tLastID + 1, "Spray Can (" + Dyes.get(i).mName + ")", "Used", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.SENSUS, 3L), SubTag.INVISIBLE}));
-            IItemBehaviour<GT_MetaBase_Item> tBehaviour = new Behaviour_Spray_Color(ItemList.Spray_Empty.get(1L, new Object[0]), ItemList.SPRAY_CAN_DYES_USED[i].get(1L, new Object[0]), ItemList.SPRAY_CAN_DYES[i].get(1L, new Object[0]), 512L, i);
+            IItemBehaviour<GT_MetaBase_Item> tBehaviour = new Behaviour_Spray_Colour(ItemList.Spray_Empty.get(1L, new Object[0]), ItemList.SPRAY_CAN_DYES_USED[i].get(1L, new Object[0]), ItemList.SPRAY_CAN_DYES[i].get(1L, new Object[0]), 512L, i);
             addItemBehavior(32000 + tLastID, tBehaviour);
             addItemBehavior(32001 + tLastID, tBehaviour);
         }

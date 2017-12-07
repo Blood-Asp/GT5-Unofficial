@@ -55,44 +55,44 @@ public class GT_MetaTileEntity_PlasmaGenerator
         return this.mEfficiency;
     }
 
-    public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+    public ITexture[] getFront(byte aColour) {
+        return new ITexture[]{super.getFront(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
-    public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
+    public ITexture[] getBack(byte aColour) {
+        return new ITexture[]{super.getBack(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
     }
 
-    public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
+    public ITexture[] getBottom(byte aColour) {
+        return new ITexture[]{super.getBottom(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
     }
 
-    public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
+    public ITexture[] getTop(byte aColour) {
+        return new ITexture[]{super.getTop(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
     }
 
-    public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
+    public ITexture[] getSides(byte aColour) {
+        return new ITexture[]{super.getSides(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)};
     }
 
-    public ITexture[] getFrontActive(byte aColor) {
-        return new ITexture[]{super.getFrontActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+    public ITexture[] getFrontActive(byte aColour) {
+        return new ITexture[]{super.getFrontActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW), Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
-    public ITexture[] getBackActive(byte aColor) {
-        return new ITexture[]{super.getBackActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
+    public ITexture[] getBackActive(byte aColour) {
+        return new ITexture[]{super.getBackActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
     }
 
-    public ITexture[] getBottomActive(byte aColor) {
-        return new ITexture[]{super.getBottomActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
+    public ITexture[] getBottomActive(byte aColour) {
+        return new ITexture[]{super.getBottomActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
     }
 
-    public ITexture[] getTopActive(byte aColor) {
-        return new ITexture[]{super.getTopActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
+    public ITexture[] getTopActive(byte aColour) {
+        return new ITexture[]{super.getTopActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
     }
 
-    public ITexture[] getSidesActive(byte aColor) {
-        return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
+    public ITexture[] getSidesActive(byte aColour) {
+        return new ITexture[]{super.getSidesActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
     }
 
 	@Override

@@ -1023,8 +1023,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                         }
                                         break;
                                     case lens:
-                                        if ((aMaterial.contains(SubTag.TRANSPARENT)) && (aMaterial.mColor != Dyes._NULL)) {
-                                            GT_OreDictUnificator.registerOre("craftingLens" + aMaterial.mColor.toString().replaceFirst("dye", ""), aEvent.Ore);
+                                        if ((aMaterial.contains(SubTag.TRANSPARENT)) && (aMaterial.mColour != Dyes._NULL)) {
+                                            GT_OreDictUnificator.registerOre("craftingLens" + aMaterial.mColour.toString().replaceFirst("dye", ""), aEvent.Ore);
                                         }
                                         break;
                                     case plate:
@@ -1115,7 +1115,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                 for (Dyes tDye : Dyes.VALUES) {
                                     if (aEvent.Name.endsWith(tDye.name().replaceFirst("dye", ""))) {
                                         GT_OreDictUnificator.addToBlacklist(aEvent.Ore);
-                                        GT_Log.ore.println(tModToName + " Oh man, why the fuck would anyone need a OreDictified Color for this, that is even too much for GregTech... do not report this, this is just a random Comment about how ridiculous this is.");
+                                        GT_Log.ore.println(tModToName + " Oh man, why the fuck would anyone need a OreDictified Colour for this, that is even too much for GregTech... do not report this, this is just a random Comment about how ridiculous this is.");
                                         return;
                                     }
                                 }

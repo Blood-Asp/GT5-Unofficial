@@ -28,8 +28,8 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],aSide==1?(aActive ? new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW) : new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)):Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColourIndex + 1],aSide==1?(aActive ? new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW) : new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)):Textures.BlockIcons.OVERLAYS_ENERGY_OUT_MULTI[mTier]};
     }
 
     @Override

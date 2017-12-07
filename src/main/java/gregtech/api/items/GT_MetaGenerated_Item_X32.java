@@ -69,7 +69,7 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
 	/* ---------- OVERRIDEABLE FUNCTIONS ---------- */
 
     /**
-     * @return the Color Modulation the Material is going to be rendered with.
+     * @return the Colour Modulation the Material is going to be rendered with.
      */
     @Override
     public short[] getRGBa(ItemStack aStack) {

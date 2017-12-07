@@ -56,35 +56,35 @@ public class GT_MetaTileEntity_Compressor_Steel
         sendLoopStart((byte) 1);
     }
 
-    public ITexture[] getSideFacingActive(byte aColor) {
-        return new ITexture[]{super.getSideFacingActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_STEAM_COMPRESSOR_ACTIVE)};
+    public ITexture[] getSideFacingActive(byte aColour) {
+        return new ITexture[]{super.getSideFacingActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_STEAM_COMPRESSOR_ACTIVE)};
     }
 
-    public ITexture[] getSideFacingInactive(byte aColor) {
-        return new ITexture[]{super.getSideFacingInactive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_STEAM_COMPRESSOR)};
+    public ITexture[] getSideFacingInactive(byte aColour) {
+        return new ITexture[]{super.getSideFacingInactive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_STEAM_COMPRESSOR)};
     }
 
-    public ITexture[] getFrontFacingActive(byte aColor) {
-        return new ITexture[]{super.getFrontFacingActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_COMPRESSOR_ACTIVE)};
+    public ITexture[] getFrontFacingActive(byte aColour) {
+        return new ITexture[]{super.getFrontFacingActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_COMPRESSOR_ACTIVE)};
     }
 
-    public ITexture[] getFrontFacingInactive(byte aColor) {
-        return new ITexture[]{super.getFrontFacingInactive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_COMPRESSOR)};
+    public ITexture[] getFrontFacingInactive(byte aColour) {
+        return new ITexture[]{super.getFrontFacingInactive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_COMPRESSOR)};
     }
 
-    public ITexture[] getTopFacingActive(byte aColor) {
-        return new ITexture[]{super.getTopFacingActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_COMPRESSOR_ACTIVE)};
+    public ITexture[] getTopFacingActive(byte aColour) {
+        return new ITexture[]{super.getTopFacingActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_COMPRESSOR_ACTIVE)};
     }
 
-    public ITexture[] getTopFacingInactive(byte aColor) {
-        return new ITexture[]{super.getTopFacingInactive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_COMPRESSOR)};
+    public ITexture[] getTopFacingInactive(byte aColour) {
+        return new ITexture[]{super.getTopFacingInactive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_COMPRESSOR)};
     }
 
-    public ITexture[] getBottomFacingActive(byte aColor) {
-        return new ITexture[]{super.getBottomFacingActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_COMPRESSOR_ACTIVE)};
+    public ITexture[] getBottomFacingActive(byte aColour) {
+        return new ITexture[]{super.getBottomFacingActive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_COMPRESSOR_ACTIVE)};
     }
 
-    public ITexture[] getBottomFacingInactive(byte aColor) {
-        return new ITexture[]{super.getBottomFacingInactive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_COMPRESSOR)};
+    public ITexture[] getBottomFacingInactive(byte aColour) {
+        return new ITexture[]{super.getBottomFacingInactive(aColour)[0], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_COMPRESSOR)};
     }
 }

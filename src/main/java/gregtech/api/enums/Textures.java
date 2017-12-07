@@ -113,8 +113,8 @@ public class Textures {
         public static final ITexture[] FRESHFOAM = new ITexture[]{new GT_RenderedTexture(CFOAM_FRESH)};
         /**
          * Icons for Hardened CFoam
-         * 0 = No Color
-         * 1 - 16 = Colors
+         * 0 = No Colour
+         * 1 - 16 = Colours
          */
         public static final ITexture[][] HARDENEDFOAMS = new ITexture[][]{
                 new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.CONSTRUCTION_FOAM.mRGBa)},

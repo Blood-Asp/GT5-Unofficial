@@ -52,20 +52,20 @@ public class GT_CoolantCell_Item
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
         int rHeat = getHeatOfStack(aStack) * 10 / this.heatStorage;
-        EnumChatFormatting color;
+        EnumChatFormatting colour;
         switch (rHeat) {
-        case 0: color = EnumChatFormatting.BLUE; break;
+        case 0: colour = EnumChatFormatting.BLUE; break;
         case 1:
-        case 2: color = EnumChatFormatting.GREEN; break;
+        case 2: colour = EnumChatFormatting.GREEN; break;
         case 3:
         case 4:
         case 5:
-        case 6: color = EnumChatFormatting.YELLOW; break;
+        case 6: colour = EnumChatFormatting.YELLOW; break;
         case 7:
-        case 8: color = EnumChatFormatting.RED; break;
-        default: color = EnumChatFormatting.DARK_RED; break;
+        case 8: colour = EnumChatFormatting.RED; break;
+        default: colour = EnumChatFormatting.DARK_RED; break;
         }
-        aList.add(EnumChatFormatting.WHITE + String.format(trans("000", "Stored Heat: %s"), "" + color + getHeatOfStack(aStack)));
+        aList.add(EnumChatFormatting.WHITE + String.format(trans("000", "Stored Heat: %s"), "" + colour + getHeatOfStack(aStack)));
         switch (getControlTagOfStack(aStack)) {
             case 1:
                 aList.add(StatCollector.translateToLocal("ic2.reactoritem.heatwarning.line1"));

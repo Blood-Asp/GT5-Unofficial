@@ -16,7 +16,7 @@ public class GT_CropLoader
         GT_Log.out.println("GT_Mod: Register Crops to IC2.");
         try {
         	ItemStack[] tI = new ItemStack[]{ItemList.Crop_Drop_Indigo.get(4L, new Object[0]),ItemList.Crop_Drop_MilkWart.get(4L, new Object[0]),new ItemStack(Blocks.brown_mushroom, 4),new ItemStack(Blocks.red_mushroom, 4)};
-            new GT_BaseCrop(124, "Indigo", "Eloraam", 				tI[0], 2, 4,    0, 1, 4, 1, 1, 0, 4, 0, new String[]{"Flower", "Color", "Ingredient"}, 									ItemList.Crop_Drop_Indigo.get(1L, new Object[0]), null);
+            new GT_BaseCrop(124, "Indigo", "Eloraam", 				tI[0], 2, 4,    0, 1, 4, 1, 1, 0, 4, 0, new String[]{"Flower", "Colour", "Ingredient"}, 									ItemList.Crop_Drop_Indigo.get(1L, new Object[0]), null);
             new GT_BaseCrop(125, "Flax", "Eloraam", 				null,  2, 4,    0, 1, 4, 1, 1, 2, 0, 1, new String[]{"Silk", "Vine", "Addictive"}, 										new ItemStack(Items.string, 1), null);
             new GT_BaseCrop(126, "Oilberries", "Spacetoad", 		null,  9, 4,    0, 1, 4, 6, 1, 2, 1,12, new String[]{"Fire", "Dark", "Reed", "Rotten", "Coal", "Oil"}, 					ItemList.Crop_Drop_OilBerry.get(1L, new Object[0]), null);
             new GT_BaseCrop(127, "Bobsyeruncleranks", "GenerikB", 	null, 11, 4,    0, 1, 4, 4, 0, 8, 2, 9, new String[]{"Shiny", "Vine", "Emerald", "Berylium", "Crystal"}, Materials.Emerald, ItemList.Crop_Drop_BobsYerUncleRanks.get(1L, new Object[0]), new ItemStack[]{new ItemStack(Items.emerald, 1)});
