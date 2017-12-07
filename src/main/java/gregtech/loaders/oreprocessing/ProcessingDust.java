@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistrator {
     public ProcessingDust() {
@@ -61,11 +62,21 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     long tItemAmount = 0L;
                     long tCapsuleCount = 0L;
                     long tDensityMultiplier = aMaterial.getDensity() > 3628800L ? aMaterial.getDensity() / 3628800L : 1L;
+                    long greatestCommonDivisor = 1l; //reduces ItemStack size overflow, reduces size of inputs/outputs
+                    if (tDensityMultiplier > 1L) {
+                    	int weightedListSize = 0;
+                    	for (MaterialStack materialStack : aMaterial.mMaterialList) {
+                    		weightedListSize += materialStack.mAmount;
+                    	}
+                    	greatestCommonDivisor = GT_Utility.euclidianAlgorithm(weightedListSize, (int) tDensityMultiplier);
+                    }
+                    long adjustedDensityMultiplier = tDensityMultiplier / greatestCommonDivisor;
+                    
                     ArrayList<ItemStack> tList = new ArrayList();
                     for (MaterialStack tMat : aMaterial.mMaterialList)
                         if (tMat.mAmount > 0L) {
                             if (tMat.mMaterial == Materials.Air) {
-                                tDustStack = ItemList.Cell_Air.get(tMat.mAmount / 2L, new Object[0]);
+                                tDustStack = ItemList.Cell_Air.get(tMat.mAmount * adjustedDensityMultiplier / 2L, new Object[0]);
                             } else {
                                 tDustStack = GT_OreDictUnificator.get(OrePrefixes.dust, tMat.mMaterial, tMat.mAmount);
                                 if (tDustStack == null)
@@ -75,7 +86,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                                 tItemAmount += tMat.mAmount * 3628800L;
                                 if (tDustStack != null) {
                                     ItemStack tmp793_791 = tDustStack;
-                                    tmp793_791.stackSize = ((int) (tmp793_791.stackSize * tDensityMultiplier));
+                                    tmp793_791.stackSize = ((int) (tmp793_791.stackSize * adjustedDensityMultiplier));
                                     while ((tDustStack.stackSize > 64) && (tList.size() < 6) && (tCapsuleCount + GT_ModHandler.getCapsuleCellContainerCount(tDustStack) * 64 <= 64L)) {
                                         tCapsuleCount += GT_ModHandler.getCapsuleCellContainerCount(tDustStack) * 64;
                                         tList.add(GT_Utility.copyAmount(64L, new Object[]{tDustStack}));
@@ -88,7 +99,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                                 }
                             }
                         }
-                    tItemAmount = (tItemAmount * tDensityMultiplier % aMaterial.getDensity() > 0L ? 1 : 0) + tItemAmount * tDensityMultiplier / aMaterial.getDensity();
+                    tItemAmount = (tItemAmount * adjustedDensityMultiplier % aMaterial.getDensity() > 0L ? 1 : 0) + tItemAmount * adjustedDensityMultiplier / aMaterial.getDensity();
                     if (tList.size() > 0) {
                         FluidStack tFluid = null;
                         int tList_sS = tList.size();
@@ -100,10 +111,27 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                                 break;
                             }
                         }
-                        if ((aMaterial.mExtraData & 0x1) != 0)
-                            GT_Values.RA.addElectrolyzerRecipe(GT_Utility.copyAmount(tItemAmount, new Object[]{aStack}), tCapsuleCount > 0L ? ItemList.Cell_Empty.get(tCapsuleCount, new Object[0]) : null, null, tFluid, tList.size() < 1 ? null : (ItemStack) tList.get(0), tList.size() < 2 ? null : (ItemStack) tList.get(1), tList.size() < 3 ? null : (ItemStack) tList.get(2), tList.size() < 4 ? null : (ItemStack) tList.get(3), tList.size() < 5 ? null : (ItemStack) tList.get(4), tList.size() < 6 ? null : (ItemStack) tList.get(5), null, (int) Math.max(1L, Math.abs(aMaterial.getProtons() * 2L * tItemAmount)), Math.min(4, tList.size()) * 30);
+                        if ((aMaterial.mExtraData & 0x1) != 0) {
+                        	int EUt, duration;
+                        	if (aMaterial.isReverseRecipeEUByMaterialValue()) {
+                        		duration = (int) (aMaterial.calculateReverseRecipeEUByMaterialValue() * tItemAmount / 120);
+                        		EUt = 120;
+                        	} else {
+                        		duration = (int) Math.max(1L, Math.abs(aMaterial.getProtons() * 2L * tItemAmount));
+                        		EUt = Math.min(4, tList.size()) * 30;
+                        	}
+                            GT_Values.RA.addElectrolyzerRecipe(GT_Utility.copyAmount(tItemAmount, new Object[]{aStack}), tCapsuleCount > 0L ? ItemList.Cell_Empty.get(tCapsuleCount, new Object[0]) : null, null, tFluid, tList.size() < 1 ? null : (ItemStack) tList.get(0), tList.size() < 2 ? null : (ItemStack) tList.get(1), tList.size() < 3 ? null : (ItemStack) tList.get(2), tList.size() < 4 ? null : (ItemStack) tList.get(3), tList.size() < 5 ? null : (ItemStack) tList.get(4), tList.size() < 6 ? null : (ItemStack) tList.get(5), null, duration, EUt);
+                        }
                         if ((aMaterial.mExtraData & 0x2) != 0) {
-                            GT_Values.RA.addCentrifugeRecipe(GT_Utility.copyAmount(tItemAmount, new Object[]{aStack}), tCapsuleCount > 0L ? ItemList.Cell_Empty.get(tCapsuleCount, new Object[0]) : null, null, tFluid, tList.size() < 1 ? null : (ItemStack) tList.get(0), tList.size() < 2 ? null : (ItemStack) tList.get(1), tList.size() < 3 ? null : (ItemStack) tList.get(2), tList.size() < 4 ? null : (ItemStack) tList.get(3), tList.size() < 5 ? null : (ItemStack) tList.get(4), tList.size() < 6 ? null : (ItemStack) tList.get(5), null, (int) Math.max(1L, Math.abs(aMaterial.getMass() * 4L * tItemAmount)), Math.min(4, tList.size()) * 5);
+                        	int EUt, duration;
+                        	if (aMaterial.isReverseRecipeEUByMaterialValue()) {
+                        		duration = aMaterial.calculateReverseRecipeEUByMaterialValue() / 30;
+                        		EUt = 30;
+                        	} else {
+                        		duration = (int) Math.max(1L, Math.abs(aMaterial.getMass() * 4L * tItemAmount));
+                        		EUt = Math.min(4, tList.size()) * 5;
+                        	}
+                            GT_Values.RA.addCentrifugeRecipe(GT_Utility.copyAmount(tItemAmount, new Object[]{aStack}), tCapsuleCount > 0L ? ItemList.Cell_Empty.get(tCapsuleCount, new Object[0]) : null, null, tFluid, tList.size() < 1 ? null : (ItemStack) tList.get(0), tList.size() < 2 ? null : (ItemStack) tList.get(1), tList.size() < 3 ? null : (ItemStack) tList.get(2), tList.size() < 4 ? null : (ItemStack) tList.get(3), tList.size() < 5 ? null : (ItemStack) tList.get(4), tList.size() < 6 ? null : (ItemStack) tList.get(5), null, duration, EUt);
                         }
                     }
                 }

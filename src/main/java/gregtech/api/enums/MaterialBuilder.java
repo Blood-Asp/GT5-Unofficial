@@ -37,6 +37,7 @@ public class MaterialBuilder {
 	private boolean canBeSteamCracked = false;
 	private int liquidTemperature = 300;
 	private int gasTemperature = 300;
+	private boolean reverseRecipeEUByMaterialValue = false;
 
 	public MaterialBuilder(int metaItemSubID, TextureSet iconSet, String defaultLocalName) {
 		this.metaItemSubID = metaItemSubID;
@@ -50,7 +51,8 @@ public class MaterialBuilder {
 				blastFurnaceRequired, transparent, oreValue, densityMultiplier, densityDivider, color, extraData, materialList, aspects)
 				.setHasCorrespondingFluid(hasCorrespondingFluid)
 				.setHasCorrespondingGas(hasCorrespondingGas)
-				.setCanBeCracked(canBeCracked);
+				.setCanBeCracked(canBeCracked)
+				.setReverseRecipeEUByMaterialValue(reverseRecipeEUByMaterialValue);
 	}
 	
 	public MaterialBuilder setName(String name){
@@ -250,6 +252,24 @@ public class MaterialBuilder {
 
 	public MaterialBuilder setCanBeCracked(boolean canBeCracked) {
 		this.canBeCracked = canBeCracked;
+		return this;
+	}
+
+	public boolean isReverseRecipeEUByMaterialValue() {
+		return reverseRecipeEUByMaterialValue;
+	}
+
+	public MaterialBuilder setReverseRecipeEUByMaterialValue(boolean reverseRecipeEUByMaterialValue) {
+		this.reverseRecipeEUByMaterialValue = reverseRecipeEUByMaterialValue;
+		return this;
+	}
+	
+	public MaterialBuilder setDensityToFormulaSize(){
+		this.densityMultiplier = 0;
+		for (MaterialStack materialStack : this.materialList) {
+			densityMultiplier += materialStack.mAmount;
+		}
+		this.densityDivider = 1;
 		return this;
 	}
 
