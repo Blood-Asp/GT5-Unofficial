@@ -2271,6 +2271,22 @@ public class GT_Utility {
             aStack.setTagCompound(tNBT);
         }
     }
+    
+    /**
+     * Finds the greatest common divisor of a and b
+     * @param a An int
+     * @param b An int
+     * @return The greatest common divisor of a and b
+     */
+    public static int euclidianAlgorithm(int a, int b){
+    	if (a == b) {
+    		return a;
+    	} else if (a > b) {
+    		return euclidianAlgorithm(a - b, b);
+    	} else {
+    		return euclidianAlgorithm(a, b - a);
+    	}
+    }
 
     /**
      * THIS IS BULLSHIT!!! WHY DO I HAVE TO DO THIS SHIT JUST TO HAVE ENCHANTS PROPERLY!?!
