@@ -114,7 +114,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                         if ((aMaterial.mExtraData & 0x1) != 0) {
                         	int EUt, duration;
                         	if (aMaterial.isReverseRecipeEUByMaterialValue()) {
-                        		duration = (int) (aMaterial.calculateReverseRecipeEUByMaterialValue() * tItemAmount / 120);
+                        		duration = (int) (aMaterial.calculateReverseRecipeEUByMaterialValue() / 120);
                         		EUt = 120;
                         	} else {
                         		duration = (int) Math.max(1L, Math.abs(aMaterial.getProtons() * 2L * tItemAmount));

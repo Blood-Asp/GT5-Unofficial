@@ -91,7 +91,7 @@ public class ProcessingCell
                                 //GT_Values.RA.addElectrolyzerRecipe(GT_Utility.copyAmount(tItemAmount, new Object[] { aStack }), tCapsuleCount >  0L ? (int)tCapsuleCount : 0, (ItemStack)tList.get(0), tList.size() <  2 ? null : (ItemStack)tList.get(1), tList.size() <  3 ? null : (ItemStack)tList.get(2), tList.size() <  4 ? null : (ItemStack)tList.get(3), tList.size() <  5 ? null : (ItemStack)tList.get(4), tList.size()    < 6 ? null : tCapsuleCount < 0L ? ItemList.Cell_Empty.get(-tCapsuleCount, new Object[0]) : (ItemStack)tList.get(5), (int)Math.max(1L, Math.abs(aMaterial.getProtons() * 8L * tItemAmount)), Math.min(4, tList.size()) * 30);
                             	int EUt, duration;
                             	if (aMaterial.isReverseRecipeEUByMaterialValue()) {
-                            		duration = (int)(aMaterial.calculateReverseRecipeEUByMaterialValue() * tItemAmount / 120);
+                            		duration = (int)(aMaterial.calculateReverseRecipeEUByMaterialValue() / 120);
                             		EUt = 120;
                             	} else {
                             		duration = (int) Math.max(1L, Math.abs(aMaterial.getProtons() * 8L * tItemAmount));
