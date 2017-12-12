@@ -55,6 +55,7 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                     IGregTechTileEntity aBaseMetaTileEntity = aMetaTileEntity.getBaseMetaTileEntity();
                     aMap.put(aMetaTileEntity, aStep);
                     for (byte i = 0, j = 0; i < 6; i++) {
+                    	if (aMetaTileEntity instanceof IConnectable && !((IConnectable) aMetaTileEntity).isConnectedAtSide(i)) continue;
                         j = GT_Utility.getOppositeSide(i);
                         if (aSuckItems) {
                             if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {

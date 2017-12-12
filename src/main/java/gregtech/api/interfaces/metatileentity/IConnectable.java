@@ -13,4 +13,6 @@ public interface IConnectable {
 	 * Try to disconnect to the Block at the specified side
 	 */
 	public void disconnect(byte aSide);
+
+	public boolean isConnectedAtSide(int aSide);
 }
