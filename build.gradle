@@ -71,10 +71,6 @@ repositories {
         url "http://jenkins.usrv.de:8082/nexus/content/repositories/releases/"
     }
     ivy {
-        name "BuildCraft"
-        artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
-    }
-    ivy {
         name 'CoFHLib'
         artifactPattern "http://addons-origin.cursecdn.com/files/${config.cofhlib.cf}/[module]-[revision].[ext]"
     }
@@ -116,7 +112,6 @@ dependencies {
     provided ("com.enderio:EnderIO:${config.enderio.version}:dev") {
         transitive = false
     }
-    provided name: 'buildcraft', version: config.buildcraft.version, classifier: "dev", ext: 'jar'
     provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
     provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
     provided name: 'Railcraft', version: config.railcraft.version, ext: 'jar'

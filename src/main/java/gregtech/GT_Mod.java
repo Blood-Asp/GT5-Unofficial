@@ -189,11 +189,14 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.D1 = tMainConfig.get(aTextGeneral, "Debug", false).getBoolean(false);
         GT_Values.D2 = tMainConfig.get(aTextGeneral, "Debug2", false).getBoolean(false);
         GT_Values.debugCleanroom = tMainConfig.get(aTextGeneral, "debugCleanroom", false).getBoolean(false);
-		GT_Values.debugWorldGen = tMainConfig.get(aTextGeneral, "debugWorldGen", false).getBoolean(false);
-		GT_Values.debugOrevein = tMainConfig.get(aTextGeneral, "debugOrevein", false).getBoolean(false);
-		GT_Values.debugSmallOres = tMainConfig.get(aTextGeneral, "debugSmallOres", false).getBoolean(false);
-		GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_75",75).getInt(75);
-		GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64",64).getInt(64);
+        GT_Values.debugWorldGen = tMainConfig.get(aTextGeneral, "debugWorldGen", false).getBoolean(false);
+        GT_Values.debugOrevein = tMainConfig.get(aTextGeneral, "debugOrevein", false).getBoolean(false);
+        GT_Values.debugSmallOres = tMainConfig.get(aTextGeneral, "debugSmallOres", false).getBoolean(false);
+        GT_Values.debugStones = tMainConfig.get(aTextGeneral, "debugStones", false).getBoolean(false);
+        GT_Values.oreveinPercentage = tMainConfig.get(aTextGeneral, "oreveinPercentage_75",75).getInt(75);
+        GT_Values.oreveinAttempts = tMainConfig.get(aTextGeneral, "oreveinAttempts_64",64).getInt(64);
+        GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8",8).getInt(8);
+        //GT_Values.oreveinMaxSize = tMainConfig.get(aTextGeneral, "oreveinMaxSize_64",64).getInt(64);
 
         GregTech_API.TICKS_FOR_LAG_AVERAGING = tMainConfig.get(aTextGeneral, "TicksForLagAveragingWithScanner", 25).getInt(25);
         GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = tMainConfig.get(aTextGeneral, "MillisecondsPassedInGTTileEntityUntilLagWarning", 100).getInt(100);
@@ -230,6 +233,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);
         gregtechproxy.mFlintChance = tMainConfig.get(aTextGeneral, "FlintAndSteelChance", 30).getInt(30);
         gregtechproxy.mItemDespawnTime = tMainConfig.get(aTextGeneral, "ItemDespawnTime", 6000).getInt(6000);
+        gregtechproxy.mHardMachineCasings= tMainConfig.get(aTextGeneral,"HardMachineCasings",true).getBoolean(true);
         gregtechproxy.mDisableVanillaOres = tMainConfig.get(aTextGeneral, "DisableVanillaOres", true).getBoolean(true);
         gregtechproxy.mNerfDustCrafting = tMainConfig.get(aTextGeneral, "NerfDustCrafting", true).getBoolean(true);
         gregtechproxy.mIncreaseDungeonLoot = tMainConfig.get(aTextGeneral, "IncreaseDungeonLoot", true).getBoolean(true);
@@ -1243,7 +1247,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
-        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1),
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),
