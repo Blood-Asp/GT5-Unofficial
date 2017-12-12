@@ -165,7 +165,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
             tCovered = true;
         }
-        if((mConnections & (byte)(Math.pow(2, aSide))) != 0){
+        if(isConnectedAtSide(aSide)){
         	tCovered = true;
         }
         //System.out.println("Cover: "+mBaseMetaTileEntity.getCoverIDAtSide(aSide));
@@ -729,7 +729,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
 		IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
-		if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) == 0)
+		if (this.getClass().isInstance(tPipe) && !((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
 			((MetaPipeEntity) tPipe).connect(tSide);
     	return 1;
 	}
@@ -741,7 +741,11 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
 		IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
-		if (this.getClass().isInstance(tPipe) && (((MetaPipeEntity) tPipe).mConnections & (1 << tSide)) != 0)
+		if (this.getClass().isInstance(tPipe) && ((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
 			((MetaPipeEntity) tPipe).disconnect(tSide);
+	}
+
+	public boolean isConnectedAtSide(int aSide) {
+		return (mConnections & (1 << aSide)) != 0;
 	}
 }
