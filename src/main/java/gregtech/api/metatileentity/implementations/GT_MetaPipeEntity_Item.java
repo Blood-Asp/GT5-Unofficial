@@ -164,8 +164,15 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
-            for (byte i = 0; i < 6; i++) {
-                if ((mCheckConnections || (mConnections & (1 << i)) != 0) && connect(i) == 0) disconnect(i);
+            for (byte tSide = 0; tSide < 6; tSide++) {
+            	ICoverable tBaseMetaTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(tSide) instanceof ICoverable ? (ICoverable) aBaseMetaTileEntity.getTileEntityAtSide(tSide) : null;
+            	byte uSide = GT_Utility.getOppositeSide(tSide);
+                if ((mCheckConnections || (mConnections & (1 << tSide)) != 0
+                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity)))
+                		&& connect(tSide) == 0) {
+                	disconnect(tSide);
+                }
             }
             if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
 
@@ -245,9 +252,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
                     }
                 }
                 if (temp) {
-                    if ((tTileEntity instanceof ICoverable && ((ICoverable) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((ICoverable) tTileEntity).getCoverIDAtSide(tSide), ((ICoverable) tTileEntity).getCoverDataAtSide(tSide), ((ICoverable) tTileEntity)))
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())
+                    if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())
                     		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())) {
                     	rConnect = 1;
                     }

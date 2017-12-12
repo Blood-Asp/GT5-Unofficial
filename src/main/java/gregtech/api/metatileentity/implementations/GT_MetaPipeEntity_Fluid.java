@@ -265,16 +265,22 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             if (mLastReceivedFrom == oLastReceivedFrom) {
                 ConcurrentHashMap<IFluidHandler, ForgeDirection> tTanks = new ConcurrentHashMap<IFluidHandler, ForgeDirection>();
                 
-                for (byte tSide = 0, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
+                for (byte tSide = 0, uSide = 0, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
                 	tSide = (byte) ((i + j) % 6);
-                	if (mCheckConnections || (mConnections & (1 << tSide)) != 0)
+                	uSide = GT_Utility.getOppositeSide(tSide);
+                	IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide(tSide);
+                	ICoverable tBaseMetaTileEntity = tTank instanceof ICoverable ? (ICoverable) tTank : null;
+                	if (mCheckConnections || (mConnections & (1 << tSide)) != 0
+                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity))) {
                 		switch (connect(tSide)) {
                 		case 0:
                 			disconnect(tSide); break;
                 		case 2:
                 			if ((mLastReceivedFrom & (1 << tSide)) == 0)
-                				tTanks.put(aBaseMetaTileEntity.getITankContainerAtSide(tSide), ForgeDirection.getOrientation(tSide).getOpposite()); break;
+                				tTanks.put(tTank, ForgeDirection.getOrientation(tSide).getOpposite()); break;
                 		}
+                	}
                 }
                 if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
                 
@@ -367,9 +373,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             FluidTankInfo[] tInfo = tTileEntity.getTankInfo(ForgeDirection.getOrientation(aSide).getOpposite());
             if (tInfo != null) {
             	if (tInfo.length > 0) {
-            		if ((tTileEntity instanceof ICoverable && ((ICoverable) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((ICoverable) tTileEntity).getCoverIDAtSide(tSide), ((ICoverable) tTileEntity).getCoverDataAtSide(tSide), ((ICoverable) tTileEntity)))
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())) {
+            		if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())) {
             			rConnect = 1;
                     }
             		if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())) {
