@@ -600,7 +600,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     }
 
     public boolean isInputDisabledAtSide(int aSide) {
-    	return (mDisableInput & (1 << aSide)) == 0;
+    	return (mDisableInput & (1 << aSide)) != 0;//... if not zero then it is
     }
 
     @Override
