@@ -394,9 +394,14 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             	}
             }
         }
-		if (rConnect == 0 && !getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
-    		rConnect = -1;
-    	}
+		if (rConnect == 0) {
+			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+				rConnect = -1;
+			}
+			if (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getTimer() < 30) { //Not ready
+				rConnect = -1;
+			}
+		}
 		if (rConnect > 0) {
 			if (GT_Mod.gregtechproxy.gt6Pipe && tFluidPipe != null) {
 				if (!isInputDisabledAtSide(aSide) || !tFluidPipe.isInputDisabledAtSide(tSide)) {
