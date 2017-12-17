@@ -393,10 +393,10 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                     }  
             	}
             }
-        } else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
-    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
-        		rConnect = -1;
         }
+		if (rConnect == 0 && !getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+    		rConnect = -1;
+    	}
 		if (rConnect > 0) {
 			if (GT_Mod.gregtechproxy.gt6Pipe && tFluidPipe != null) {
 				if (!isInputDisabledAtSide(aSide) || !tFluidPipe.isInputDisabledAtSide(tSide)) {
@@ -592,7 +592,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
     @Override
     public boolean isLiquidInput(byte aSide) {
-    	return isInputDisabledAtSide(aSide);
+    	return !isInputDisabledAtSide(aSide);
     }
 
     @Override
