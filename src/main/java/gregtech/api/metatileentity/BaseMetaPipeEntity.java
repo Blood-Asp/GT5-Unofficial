@@ -629,6 +629,11 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
+    public boolean energyStateReady() {
+    	return true;
+    }
+    
+    @Override
     public boolean inputEnergyFrom(byte aSide) {
         return false;
     }
