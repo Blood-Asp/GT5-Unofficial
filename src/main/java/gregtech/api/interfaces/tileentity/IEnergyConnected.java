@@ -42,6 +42,11 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
     public boolean outputsEnergyTo(byte aSide);
 
     /**
+     * Are we ready for energy state?
+     */
+    public boolean energyStateReady();
+
+    /**
      * Utility for the Network
      */
     public static class Util {

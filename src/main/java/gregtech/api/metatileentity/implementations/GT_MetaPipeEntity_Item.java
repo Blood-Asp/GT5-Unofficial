@@ -263,9 +263,6 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
 				rConnect = -1;
 			}
-			if (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getTimer() < 30) { //Not ready
-				rConnect = -1;
-			}
 		}
         if (rConnect > 0) {
         	super.connect(aSide);
