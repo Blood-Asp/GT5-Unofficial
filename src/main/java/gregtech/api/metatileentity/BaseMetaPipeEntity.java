@@ -629,11 +629,6 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public boolean energyStateReady() {
-    	return true;
-    }
-    
-    @Override
     public boolean inputEnergyFrom(byte aSide) {
         return false;
     }
@@ -1329,4 +1324,9 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity collider) {
         mMetaTileEntity.onEntityCollidedWithBlock(aWorld, aX, aY, aZ, collider);
     }
+
+	@Override
+	public boolean energyStateReady() {
+		return true;
+	}
 }

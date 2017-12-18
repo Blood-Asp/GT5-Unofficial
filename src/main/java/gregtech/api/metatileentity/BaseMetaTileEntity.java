@@ -393,12 +393,6 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             issueBlockUpdate();
                         }
 
-                        if (mTickTimer > 20) {
-                            // We're ready to tell about our energy state - Only used server side
-                            mEnergyStateReady = true;
-                        }
-
-
                         if (mTickTimer > 20 && mMetaTileEntity.isElectric()) {
                             mAcceptedAmperes = 0;
 
@@ -462,6 +456,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                     }
                                 }
                             }
+                            // We're ready to tell about our energy state - Only used server side
+                            mEnergyStateReady = true;
                         }
 
                         if (!hasValidMetaTileEntity()) {
