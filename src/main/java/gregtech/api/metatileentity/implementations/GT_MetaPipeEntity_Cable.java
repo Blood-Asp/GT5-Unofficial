@@ -361,9 +361,14 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 	                rConnect = 1;
 	            }
 	        }
-		} else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
-    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
-    		rConnect = -1;
+		}
+		if (rConnect == 0) {
+			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+				rConnect = -1;
+			}
+    		if (tTileEntity instanceof IEnergyConnected && !((IEnergyConnected) tTileEntity).energyStateReady()) { //Energy state not ready
+    			rConnect = -1;
+    		}
 		}
         if (rConnect > 0) {
         	super.connect(aSide);
