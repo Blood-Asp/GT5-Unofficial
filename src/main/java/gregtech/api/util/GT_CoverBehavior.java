@@ -196,9 +196,9 @@ public abstract class GT_CoverBehavior {
     }
 
     /**
-     * The MC Color of this Lens. -1 for no Color (meaning this isn't a Lens then).
+     * The MC Colour of this Lens. -1 for no Colour (meaning this isn't a Lens then).
      */
-    public byte getLensColor(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+    public byte getLensColour(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return -1;
     }
 

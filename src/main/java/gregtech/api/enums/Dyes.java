@@ -1,6 +1,6 @@
 package gregtech.api.enums;
 
-import gregtech.api.interfaces.IColorModulationContainer;
+import gregtech.api.interfaces.IColourModulationContainer;
 import gregtech.api.objects.GT_ArrayList;
 import gregtech.api.util.GT_Utility;
 import net.minecraftforge.fluids.Fluid;
@@ -8,9 +8,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-public enum Dyes implements IColorModulationContainer {
+public enum Dyes implements IColourModulationContainer {
     /**
-     * The valid Colors, see VALUES Array below
+     * The valid Colours, see VALUES Array below
      */
     dyeBlack(0, 32, 32, 32, "Black"),
     dyeRed(1, 255, 0, 0, "Red"),
@@ -29,11 +29,11 @@ public enum Dyes implements IColorModulationContainer {
     dyeOrange(14, 255, 128, 0, "Orange"),
     dyeWhite(15, 255, 255, 255, "White"),
     /**
-     * The NULL Color
+     * The NULL Colour
      */
     _NULL(-1, 255, 255, 255, "INVALID COLOR"),
     /**
-     * Additional Colors only used for direct Color referencing
+     * Additional Colours only used for direct Colour referencing
      */
     CABLE_INSULATION(-1, 64, 64, 64, "Cable Insulation"),
     CONSTRUCTION_FOAM(-1, 64, 64, 64, "Construction Foam"),
@@ -52,18 +52,18 @@ public enum Dyes implements IColorModulationContainer {
         mRGBa = new short[]{(short) aR, (short) aG, (short) aB, 0};
     }
 
-    public static Dyes get(int aColor) {
-        if (aColor >= 0 && aColor < 16) return VALUES[aColor];
+    public static Dyes get(int aColour) {
+        if (aColour >= 0 && aColour < 16) return VALUES[aColour];
         return _NULL;
     }
 
-    public static short[] getModulation(int aColor, short[] aDefaultModulation) {
-        if (aColor >= 0 && aColor < 16) return VALUES[aColor].mRGBa;
+    public static short[] getModulation(int aColour, short[] aDefaultModulation) {
+        if (aColour >= 0 && aColour < 16) return VALUES[aColour].mRGBa;
         return aDefaultModulation;
     }
 
-    public static Dyes get(String aColor) {
-        Object tObject = GT_Utility.getFieldContent(Dyes.class, aColor, false, false);
+    public static Dyes get(String aColour) {
+        Object tObject = GT_Utility.getFieldContent(Dyes.class, aColour, false, false);
         if (tObject instanceof Dyes) return (Dyes) tObject;
         return _NULL;
     }

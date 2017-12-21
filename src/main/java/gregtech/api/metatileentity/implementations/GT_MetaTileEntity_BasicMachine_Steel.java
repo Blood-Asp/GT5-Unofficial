@@ -37,72 +37,72 @@ public abstract class GT_MetaTileEntity_BasicMachine_Steel extends GT_MetaTileEn
     }
 
     @Override
-    public ITexture[] getSideFacingActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getSideFacingActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getSideFacingInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getSideFacingInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getFrontFacingActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getFrontFacingActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getFrontFacingInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getFrontFacingInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getTopFacingActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getTopFacingActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getTopFacingInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getTopFacingInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getBottomFacingActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getBottomFacingActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getBottomFacingInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColor, Dyes._NULL.mRGBa))};
+    public ITexture[] getBottomFacingInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColour, Dyes._NULL.mRGBa))};
     }
 
     @Override
-    public ITexture[] getBottomFacingPipeActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getBottomFacingPipeActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
     @Override
-    public ITexture[] getBottomFacingPipeInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getBottomFacingPipeInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM : Textures.BlockIcons.MACHINE_STEEL_BOTTOM, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
     @Override
-    public ITexture[] getTopFacingPipeActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getTopFacingPipeActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
     @Override
-    public ITexture[] getTopFacingPipeInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getTopFacingPipeInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_TOP : Textures.BlockIcons.MACHINE_STEEL_TOP, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
     @Override
-    public ITexture[] getSideFacingPipeActive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getSideFacingPipeActive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
     @Override
-    public ITexture[] getSideFacingPipeInactive(byte aColor) {
-        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColor, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getSideFacingPipeInactive(byte aColour) {
+        return new ITexture[]{new GT_RenderedTexture(mTier == 1 ? Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE : Textures.BlockIcons.MACHINE_STEEL_SIDE, Dyes.getModulation(aColour, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 }

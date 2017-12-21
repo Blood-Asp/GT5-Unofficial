@@ -15,7 +15,7 @@ public class GT_CopiedBlockTexture implements ITexture {
      * DO NOT MANIPULATE THE VALUES INSIDE THIS ARRAY!!!
      * <p/>
      * Just set this variable to another different Array instead.
-     * Otherwise some colored things will get Problems.
+     * Otherwise some coloured things will get Problems.
      */
     public short[] mRGBa;
 

@@ -1,7 +1,7 @@
 package gregtech.api.objects;
 
 import gregtech.api.enums.Dyes;
-import gregtech.api.interfaces.IColorModulationContainer;
+import gregtech.api.interfaces.IColourModulationContainer;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import net.minecraft.block.Block;
@@ -9,14 +9,14 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 
-public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
+public class GT_RenderedTexture implements ITexture, IColourModulationContainer {
     private final IIconContainer mIconContainer;
     private final boolean mAllowAlpha;
     /**
      * DO NOT MANIPULATE THE VALUES INSIDE THIS ARRAY!!!
      * <p/>
      * Just set this variable to another different Array instead.
-     * Otherwise some colored things will get Problems.
+     * Otherwise some coloured things will get Problems.
      */
     public short[] mRGBa;
 

@@ -143,17 +143,17 @@ public class GT_RadioactiveCell_Item
         super.addAdditionalToolTips(aList, aStack, aPlayer);
         //aList.add("Time left: " + (this.maxDelay - getDurabilityOfStack(aStack)) + " secs");
         int rDmg = getDurabilityOfStack(aStack) * 6 / this.maxDmg;
-        EnumChatFormatting color2;
+        EnumChatFormatting colour2;
         switch (rDmg) {
         case 0:
-        case 1: color2 = EnumChatFormatting.WHITE; break;
+        case 1: colour2 = EnumChatFormatting.WHITE; break;
         case 2:
         case 3:
-        case 4: color2 = EnumChatFormatting.GRAY; break;
-        default: color2 = EnumChatFormatting.DARK_GRAY; break;
+        case 4: colour2 = EnumChatFormatting.GRAY; break;
+        default: colour2 = EnumChatFormatting.DARK_GRAY; break;
         }
-        EnumChatFormatting color1 = this instanceof GT_DepletetCell_Item ? color2 = EnumChatFormatting.DARK_GRAY : EnumChatFormatting.WHITE;
-        aList.add(color1 + String.format(trans("001", "Durability: %s/%s"), "" + color2 + (this.maxDmg - getDurabilityOfStack(aStack)) + color1, "" + this.maxDmg));
+        EnumChatFormatting colour1 = this instanceof GT_DepletetCell_Item ? colour2 = EnumChatFormatting.DARK_GRAY : EnumChatFormatting.WHITE;
+        aList.add(colour1 + String.format(trans("001", "Durability: %s/%s"), "" + colour2 + (this.maxDmg - getDurabilityOfStack(aStack)) + colour1, "" + this.maxDmg));
     }
 
 	@Override

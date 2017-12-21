@@ -49,11 +49,11 @@ public class GT_MetaTileEntity_Locker
         return rTextures;
     }
 
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{this.mTextures[2][(aColorIndex + 1)][0], this.mTextures[2][(aColorIndex + 1)][1], Textures.BlockIcons.LOCKERS[java.lang.Math.abs(this.mType % Textures.BlockIcons.LOCKERS.length)]};
+            return new ITexture[]{this.mTextures[2][(aColourIndex + 1)][0], this.mTextures[2][(aColourIndex + 1)][1], Textures.BlockIcons.LOCKERS[java.lang.Math.abs(this.mType % Textures.BlockIcons.LOCKERS.length)]};
         }
-        return this.mTextures[0][(aColorIndex + 1)];
+        return this.mTextures[0][(aColourIndex + 1)];
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

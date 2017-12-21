@@ -13,10 +13,10 @@ import net.minecraftforge.common.util.ForgeDirection;
  * Interface for getting Connected to the GregTech Energy Network.
  * <p/>
  * This is all you need to connect to the GT Network.
- * IColoredTileEntity is needed for not connecting differently coloured Blocks to each other.
+ * IColouredTileEntity is needed for not connecting differently coloured Blocks to each other.
  * IHasWorldObjectAndCoords is needed for the InWorld related Stuff. @BaseTileEntity does implement most of that Interface.
  */
-public interface IExperimentalEnergyTileEntity extends IColoredTileEntity, IHasWorldObjectAndCoords {
+public interface IExperimentalEnergyTileEntity extends IColouredTileEntity, IHasWorldObjectAndCoords {
     /**
      * Inject Energy Call for Electricity. Gets called by EnergyEmitters to inject Energy into your Block
      * <p/>
@@ -73,9 +73,9 @@ public interface IExperimentalEnergyTileEntity extends IColoredTileEntity, IHasW
                     j = GT_Utility.getOppositeSide(i);
                     TileEntity tTileEntity = aEmitter.getTileEntityAtSide(i);
                     if (tTileEntity instanceof IExperimentalEnergyTileEntity) {
-                        if (aEmitter.getColorization() >= 0) {
-                            byte tColor = ((IExperimentalEnergyTileEntity) tTileEntity).getColorization();
-                            if (tColor >= 0 && tColor != aEmitter.getColorization()) continue;
+                        if (aEmitter.getColourization() >= 0) {
+                            byte tColour = ((IExperimentalEnergyTileEntity) tTileEntity).getColourization();
+                            if (tColour >= 0 && tColour != aEmitter.getColourization()) continue;
                         }
                         rUsedSecondary += ((IExperimentalEnergyTileEntity) tTileEntity).injectEnergy(aEnergyType, j, aPrimary, aSecondary - rUsedSecondary);
                     } else if (IC_ENERGY && aEnergyType == SubTag.ENERGY_ELECTRICITY && tTileEntity instanceof IEnergySink) {

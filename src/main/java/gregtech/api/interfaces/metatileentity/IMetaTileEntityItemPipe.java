@@ -59,9 +59,9 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                         if (aSuckItems) {
                             if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {
                                 IGregTechTileEntity tItemPipe = aBaseMetaTileEntity.getIGregTechTileEntityAtSide(i);
-                                if (aBaseMetaTileEntity.getColorization() >= 0) {
-                                    byte tColor = tItemPipe.getColorization();
-                                    if (tColor >= 0 && tColor != aBaseMetaTileEntity.getColorization()) {
+                                if (aBaseMetaTileEntity.getColourization() >= 0) {
+                                    byte tColour = tItemPipe.getColourization();
+                                    if (tColour >= 0 && tColour != aBaseMetaTileEntity.getColourization()) {
                                         continue;
                                     }
                                 }
@@ -76,9 +76,9 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                             if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsOut(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {
                                 IGregTechTileEntity tItemPipe = aBaseMetaTileEntity.getIGregTechTileEntityAtSide(i);
                                 if (tItemPipe != null) {
-                                    if (aBaseMetaTileEntity.getColorization() >= 0) {
-                                        byte tColor = tItemPipe.getColorization();
-                                        if (tColor >= 0 && tColor != aBaseMetaTileEntity.getColorization()) {
+                                    if (aBaseMetaTileEntity.getColourization() >= 0) {
+                                        byte tColour = tItemPipe.getColourization();
+                                        if (tColour >= 0 && tColour != aBaseMetaTileEntity.getColourization()) {
                                             continue;
                                         }
                                     }

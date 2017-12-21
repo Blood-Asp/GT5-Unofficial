@@ -75,11 +75,11 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
     }
     
 	@Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
     	if (aSide == aFacing) {
-    		return mTextures[0][aColorIndex + 1];
+    		return mTextures[0][aColourIndex + 1];
     	} else {
-    		return mTextures[1][aColorIndex + 1];
+    		return mTextures[1][aColourIndex + 1];
     	}
     }
 

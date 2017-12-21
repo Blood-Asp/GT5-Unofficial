@@ -20,25 +20,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class Behaviour_Spray_Color
+public class Behaviour_Spray_Colour
         extends Behaviour_None {
     private final ItemStack mEmpty;
     private final ItemStack mUsed;
     private final ItemStack mFull;
     private final long mUses;
-    private final byte mColor;
+    private final byte mColour;
     private final Collection<Block> mAllowedVanillaBlocks = Arrays.asList(new Block[]{Blocks.glass, Blocks.glass_pane, Blocks.stained_glass, Blocks.stained_glass_pane, Blocks.carpet, Blocks.hardened_clay, ItemList.TE_Rockwool.getBlock()});
     private final String mTooltip;
     private final String mTooltipUses = GT_LanguageManager.addStringLocalization("gt.behaviour.paintspray.uses", "Remaining Uses:");
     private final String mTooltipUnstackable = GT_LanguageManager.addStringLocalization("gt.behaviour.unstackable", "Not usable when stacked!");
 
-    public Behaviour_Spray_Color(ItemStack aEmpty, ItemStack aUsed, ItemStack aFull, long aUses, int aColor) {
+    public Behaviour_Spray_Colour(ItemStack aEmpty, ItemStack aUsed, ItemStack aFull, long aUses, int aColour) {
         this.mEmpty = aEmpty;
         this.mUsed = aUsed;
         this.mFull = aFull;
         this.mUses = aUses;
-        this.mColor = ((byte) aColor);
-        this.mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.paintspray." + this.mColor + ".tooltip", "Can Color things in " + Dyes.get(this.mColor).mName);
+        this.mColour = ((byte) aColour);
+        this.mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.paintspray." + this.mColour + ".tooltip", "Can Colour things in " + Dyes.get(this.mColour).mName);
     }
 
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
@@ -59,7 +59,7 @@ public class Behaviour_Spray_Color
             Items.feather.setDamage(aStack, Items.feather.getDamage(this.mUsed));
             tUses = this.mUses;
         }
-        if ((GT_Utility.areStacksEqual(aStack, this.mUsed, true)) && (colorize(aWorld, aX, aY, aZ, aSide))) {
+        if ((GT_Utility.areStacksEqual(aStack, this.mUsed, true)) && (colourize(aWorld, aX, aY, aZ, aSide))) {
             GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(102)), 1.0F, 1.0F, aX, aY, aZ);
             if (!aPlayer.capabilities.isCreativeMode) {
                 tUses -= 1L;
@@ -86,28 +86,28 @@ public class Behaviour_Spray_Color
         return rOutput;
     }
 
-    private boolean colorize(World aWorld, int aX, int aY, int aZ, int aSide) {
+    private boolean colourize(World aWorld, int aX, int aY, int aZ, int aSide) {
         Block aBlock = aWorld.getBlock(aX, aY, aZ);
         if ((aBlock != Blocks.air) && ((this.mAllowedVanillaBlocks.contains(aBlock)) || ((aBlock instanceof BlockColored)))) {
             if (aBlock == Blocks.hardened_clay) {
-                aWorld.setBlock(aX, aY, aZ, Blocks.stained_hardened_clay, (this.mColor ^ 0xFFFFFFFF) & 0xF, 3);
+                aWorld.setBlock(aX, aY, aZ, Blocks.stained_hardened_clay, (this.mColour ^ 0xFFFFFFFF) & 0xF, 3);
                 return true;
             }
             if (aBlock == Blocks.glass_pane) {
-                aWorld.setBlock(aX, aY, aZ, Blocks.stained_glass_pane, (this.mColor ^ 0xFFFFFFFF) & 0xF, 3);
+                aWorld.setBlock(aX, aY, aZ, Blocks.stained_glass_pane, (this.mColour ^ 0xFFFFFFFF) & 0xF, 3);
                 return true;
             }
             if (aBlock == Blocks.glass) {
-                aWorld.setBlock(aX, aY, aZ, Blocks.stained_glass, (this.mColor ^ 0xFFFFFFFF) & 0xF, 3);
+                aWorld.setBlock(aX, aY, aZ, Blocks.stained_glass, (this.mColour ^ 0xFFFFFFFF) & 0xF, 3);
                 return true;
             }
-            if (aWorld.getBlockMetadata(aX, aY, aZ) == ((this.mColor ^ 0xFFFFFFFF) & 0xF)) {
+            if (aWorld.getBlockMetadata(aX, aY, aZ) == ((this.mColour ^ 0xFFFFFFFF) & 0xF)) {
                 return false;
             }
-            aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (this.mColor ^ 0xFFFFFFFF) & 0xF, 3);
+            aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (this.mColour ^ 0xFFFFFFFF) & 0xF, 3);
             return true;
         }
-        return aBlock.recolourBlock(aWorld, aX, aY, aZ, ForgeDirection.getOrientation(aSide), (this.mColor ^ 0xFFFFFFFF) & 0xF);
+        return aBlock.recolourBlock(aWorld, aX, aY, aZ, ForgeDirection.getOrientation(aSide), (this.mColour ^ 0xFFFFFFFF) & 0xF);
     }
 
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {

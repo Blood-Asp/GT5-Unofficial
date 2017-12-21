@@ -10,7 +10,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntityCable;
-import gregtech.api.interfaces.tileentity.IColoredTileEntity;
+import gregtech.api.interfaces.tileentity.IColouredTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
@@ -80,26 +80,26 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections, byte aColorIndex, boolean aConnected, boolean aRedstone) {
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aConnections, byte aColourIndex, boolean aConnected, boolean aRedstone) {
         if (!mInsulated)
-            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], Dyes.getModulation(aColorIndex, mMaterial.mRGBa) )};
+            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], Dyes.getModulation(aColourIndex, mMaterial.mRGBa) )};
         if (aConnected) {
             float tThickNess = getThickNess();
             if (tThickNess < 0.124F)
-                return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.374F)//0.375 x1
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_TINY, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_TINY, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.499F)//0.500 x2
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_SMALL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_SMALL, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.624F)//0.625 x4
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.749F)//0.750 x8
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM_PLUS, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_MEDIUM_PLUS, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
             if (tThickNess < 0.874F)//0.825 x12
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_LARGE, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
-            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_HUGE, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_LARGE, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
+            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[TextureSet.INDEX_wire], mMaterial.mRGBa), new GT_RenderedTexture(Textures.BlockIcons.INSULATION_HUGE, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
         }
-        return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColorIndex, Dyes.CABLE_INSULATION.mRGBa))};
+        return new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.INSULATION_FULL, Dyes.getModulation(aColourIndex, Dyes.CABLE_INSULATION.mRGBa))};
     }
 
     @Override
@@ -155,9 +155,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 if (!aAlreadyPassedTileEntityList.contains(tTileEntity)) {
                     aAlreadyPassedTileEntityList.add(tTileEntity);
                     if (tTileEntity instanceof IEnergyConnected) {
-                        if (getBaseMetaTileEntity().getColorization() >= 0) {
-                            byte tColor = ((IEnergyConnected) tTileEntity).getColorization();
-                            if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) continue;
+                        if (getBaseMetaTileEntity().getColourization() >= 0) {
+                            byte tColour = ((IEnergyConnected) tTileEntity).getColourization();
+                            if (tColour >= 0 && tColour != getBaseMetaTileEntity().getColourization()) continue;
                         }
                         if (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof IMetaTileEntityCable && ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(GT_Utility.getOppositeSide(i)).letsEnergyIn(GT_Utility.getOppositeSide(i), ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(GT_Utility.getOppositeSide(i)), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(GT_Utility.getOppositeSide(i)), ((IGregTechTileEntity) tTileEntity))) {
                             if (((IGregTechTileEntity) tTileEntity).getTimer() > 50)
@@ -260,10 +260,10 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aSide);
 		if (tTileEntity != null) {
 			if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()) || getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()) || getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())) {
-	            if (tTileEntity instanceof IColoredTileEntity) {
-	                if (getBaseMetaTileEntity().getColorization() >= 0) {
-	                    byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-	                    if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization())
+	            if (tTileEntity instanceof IColouredTileEntity) {
+	                if (getBaseMetaTileEntity().getColourization() >= 0) {
+	                    byte tColour = ((IColouredTileEntity) tTileEntity).getColourization();
+	                    if (tColour >= 0 && tColour != getBaseMetaTileEntity().getColourization())
 	                    	return rConnect;
 	                }
 	            }

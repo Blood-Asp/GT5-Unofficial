@@ -327,11 +327,11 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      *
      * @param aSide       is the Side of the Block
      * @param aFacing     is the direction the Block is facing (or a Bitmask of all Connections in case of Pipes)
-     * @param aColorIndex The Minecraft Color the Block is having
+     * @param aColourIndex The Minecraft Colour the Block is having
      * @param aActive     if the Machine is currently active (use this instead of calling mBaseMetaTileEntity.mActive!!!). Note: In case of Pipes this means if this Side is connected to something or not.
      * @param aRedstone   if the Machine is currently outputting a RedstoneSignal (use this instead of calling mBaseMetaTileEntity.mRedstone!!!)
      */
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone);
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone);
 
     /**
      * The Textures used for the Item rendering. Return null if you want the regular 3D Block Rendering.
@@ -374,9 +374,9 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
 
     public boolean connectsToItemPipe(byte aSide);
 
-    public void onColorChangeServer(byte aColor);
+    public void onColourChangeServer(byte aColour);
 
-    public void onColorChangeClient(byte aColor);
+    public void onColourChangeClient(byte aColour);
 
     public int getLightOpacity();
     

@@ -17,10 +17,10 @@ import static gregtech.api.enums.GT_Values.V;
  * Interface for getting Connected to the GregTech Energy Network.
  * <p/>
  * This is all you need to connect to the GT Network.
- * IColoredTileEntity is needed for not connecting differently coloured Blocks to each other.
+ * IColouredTileEntity is needed for not connecting differently coloured Blocks to each other.
  * IHasWorldObjectAndCoords is needed for the InWorld related Stuff. @BaseTileEntity does implement most of that Interface.
  */
-public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAndCoords {
+public interface IEnergyConnected extends IColouredTileEntity, IHasWorldObjectAndCoords {
     /**
      * Inject Energy Call for Electricity. Gets called by EnergyEmitters to inject Energy into your Block
      * <p/>
@@ -57,9 +57,9 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                     j = GT_Utility.getOppositeSide(i);
                     TileEntity tTileEntity = aEmitter.getTileEntityAtSide(i);
                     if (tTileEntity instanceof IEnergyConnected) {
-                        if (aEmitter.getColorization() >= 0) {
-                            byte tColor = ((IEnergyConnected) tTileEntity).getColorization();
-                            if (tColor >= 0 && tColor != aEmitter.getColorization()) continue;
+                        if (aEmitter.getColourization() >= 0) {
+                            byte tColour = ((IEnergyConnected) tTileEntity).getColourization();
+                            if (tColour >= 0 && tColour != aEmitter.getColourization()) continue;
                         }
                         rUsedAmperes += ((IEnergyConnected) tTileEntity).injectEnergyUnits(j, aVoltage, aAmperage - rUsedAmperes);
 //				} else if (tTileEntity instanceof IEnergySink) {

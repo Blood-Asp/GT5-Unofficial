@@ -42,8 +42,8 @@ public class GT_Spray_Hydration_Item extends GT_Tool_Item {
         } catch (Throwable e) {/*Do nothing*/}
 
         if (aTileEntity instanceof IGregTechTileEntity) {
-            if (((IGregTechTileEntity) aTileEntity).getColorization() >= 0 && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer)) {
-                ((IGregTechTileEntity) aTileEntity).setColorization((byte) -1);
+            if (((IGregTechTileEntity) aTileEntity).getColourization() >= 0 && GT_ModHandler.damageOrDechargeItem(aStack, 1, 1000, aPlayer)) {
+                ((IGregTechTileEntity) aTileEntity).setColourization((byte) -1);
                 GT_Utility.sendSoundToPlayers(aWorld, GregTech_API.sSoundList.get(102), 1.0F, -1, aX, aY, aZ);
             }
         }

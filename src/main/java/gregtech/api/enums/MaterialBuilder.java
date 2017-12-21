@@ -27,7 +27,7 @@ public class MaterialBuilder {
 	private int oreValue = 1;
 	private int densityMultiplier = 1;
 	private int densityDivider = 1;
-	private Dyes color = Dyes._NULL;
+	private Dyes colour = Dyes._NULL;
 	private int extraData = 0;
 	private List<MaterialStack> materialList = new ArrayList<MaterialStack>();
 	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<TC_Aspects.TC_AspectStack>();
@@ -47,7 +47,7 @@ public class MaterialBuilder {
 
 	public Materials constructMaterial() {
 		return new Materials(metaItemSubID, iconSet, toolSpeed, durability, toolQuality, types, r, g, b, a, name, defaultLocalName, fuelType, fuelPower, meltingPoint, blastFurnaceTemp,
-				blastFurnaceRequired, transparent, oreValue, densityMultiplier, densityDivider, color, extraData, materialList, aspects)
+				blastFurnaceRequired, transparent, oreValue, densityMultiplier, densityDivider, colour, extraData, materialList, aspects)
 				.setHasCorrespondingFluid(hasCorrespondingFluid)
 				.setHasCorrespondingGas(hasCorrespondingGas)
 				.setCanBeCracked(canBeCracked);
@@ -134,8 +134,8 @@ public class MaterialBuilder {
 		return this;
 	}
 	
-	public MaterialBuilder setColor(Dyes color){
-		this.color = color;
+	public MaterialBuilder setColour(Dyes colour){
+		this.colour = colour;
 		return this;
 	}
 

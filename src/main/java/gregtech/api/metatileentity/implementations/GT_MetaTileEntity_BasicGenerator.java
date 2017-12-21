@@ -52,8 +52,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return mTextures[(aActive ? 5 : 0) + (aSide == aFacing ? 0 : aSide == GT_Utility.getOppositeSide(aFacing) ? 1 : aSide == 0 ? 2 : aSide == 1 ? 3 : 4)][aColorIndex + 1];
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
+        return mTextures[(aActive ? 5 : 0) + (aSide == aFacing ? 0 : aSide == GT_Utility.getOppositeSide(aFacing) ? 1 : aSide == 0 ? 2 : aSide == 1 ? 3 : 4)][aColourIndex + 1];
     }
 
     @Override
@@ -71,44 +71,44 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
         return true;
     }
 
-    public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getFront(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getBack(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getBottom(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getTop(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getSides(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getFrontActive(byte aColor) {
-        return getFront(aColor);
+    public ITexture[] getFrontActive(byte aColour) {
+        return getFront(aColour);
     }
 
-    public ITexture[] getBackActive(byte aColor) {
-        return getBack(aColor);
+    public ITexture[] getBackActive(byte aColour) {
+        return getBack(aColour);
     }
 
-    public ITexture[] getBottomActive(byte aColor) {
-        return getBottom(aColor);
+    public ITexture[] getBottomActive(byte aColour) {
+        return getBottom(aColour);
     }
 
-    public ITexture[] getTopActive(byte aColor) {
-        return getTop(aColor);
+    public ITexture[] getTopActive(byte aColour) {
+        return getTop(aColour);
     }
 
-    public ITexture[] getSidesActive(byte aColor) {
-        return getSides(aColor);
+    public ITexture[] getSidesActive(byte aColour) {
+        return getSides(aColour);
     }
 
     @Override

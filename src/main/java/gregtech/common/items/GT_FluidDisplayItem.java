@@ -54,7 +54,7 @@ public class GT_FluidDisplayItem
     }
 
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack aStack, int aRenderPass) {
+    public int getColourFromItemStack(ItemStack aStack, int aRenderPass) {
         Fluid tFluid = FluidRegistry.getFluid(aStack.getItemDamage());
         return tFluid == null ? 16777215 : tFluid.getColor();
     }

@@ -47,60 +47,60 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing) return mTextures[5][aColorIndex + 1];
-        if (GT_Utility.getOppositeSide(aSide) == aFacing) return mTextures[0][aColorIndex + 1];
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
+        if (aSide == aFacing) return mTextures[5][aColourIndex + 1];
+        if (GT_Utility.getOppositeSide(aSide) == aFacing) return mTextures[0][aColourIndex + 1];
         switch (aFacing) {
             case 0:
-                return mTextures[4][aColorIndex + 1];
+                return mTextures[4][aColourIndex + 1];
             case 1:
-                return mTextures[2][aColorIndex + 1];
+                return mTextures[2][aColourIndex + 1];
             case 2:
                 switch (aSide) {
                     case 0:
-                        return mTextures[2][aColorIndex + 1];
+                        return mTextures[2][aColourIndex + 1];
                     case 1:
-                        return mTextures[2][aColorIndex + 1];
+                        return mTextures[2][aColourIndex + 1];
                     case 4:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                     case 5:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                 }
             case 3:
                 switch (aSide) {
                     case 0:
-                        return mTextures[4][aColorIndex + 1];
+                        return mTextures[4][aColourIndex + 1];
                     case 1:
-                        return mTextures[4][aColorIndex + 1];
+                        return mTextures[4][aColourIndex + 1];
                     case 4:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                     case 5:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                 }
             case 4:
                 switch (aSide) {
                     case 0:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                     case 1:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                     case 2:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                     case 3:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                 }
             case 5:
                 switch (aSide) {
                     case 0:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                     case 1:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                     case 2:
-                        return mTextures[1][aColorIndex + 1];
+                        return mTextures[1][aColourIndex + 1];
                     case 3:
-                        return mTextures[3][aColorIndex + 1];
+                        return mTextures[3][aColourIndex + 1];
                 }
         }
-        return mTextures[5][aColorIndex + 1];
+        return mTextures[5][aColourIndex + 1];
     }
 
     @Override

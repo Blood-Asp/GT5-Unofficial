@@ -151,8 +151,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return mTextures[mMainFacing < 2 ? aSide == aFacing ? aActive ? 2 : 3 : aSide == 0 ? aActive ? 6 : 7 : aSide == 1 ? aActive ? 4 : 5 : aActive ? 0 : 1 : aSide == mMainFacing ? aActive ? 2 : 3 : (showPipeFacing() && aSide == aFacing) ? aSide == 0 ? aActive ? 8 : 9 : aSide == 1 ? aActive ? 10 : 11 : aActive ? 12 : 13 : aSide == 0 ? aActive ? 6 : 7 : aSide == 1 ? aActive ? 4 : 5 : aActive ? 0 : 1][aColorIndex + 1];
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColourIndex, boolean aActive, boolean aRedstone) {
+        return mTextures[mMainFacing < 2 ? aSide == aFacing ? aActive ? 2 : 3 : aSide == 0 ? aActive ? 6 : 7 : aSide == 1 ? aActive ? 4 : 5 : aActive ? 0 : 1 : aSide == mMainFacing ? aActive ? 2 : 3 : (showPipeFacing() && aSide == aFacing) ? aSide == 0 ? aActive ? 8 : 9 : aSide == 1 ? aActive ? 10 : 11 : aActive ? 12 : 13 : aSide == 0 ? aActive ? 6 : 7 : aSide == 1 ? aActive ? 4 : 5 : aActive ? 0 : 1][aColourIndex + 1];
     }
 
     @Override
@@ -808,59 +808,59 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
 
-    public ITexture[] getSideFacingActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getSideFacingActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getSideFacingInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getSideFacingInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getFrontFacingActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getFrontFacingActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getFrontFacingInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getFrontFacingInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getTopFacingActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getTopFacingActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getTopFacingInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getTopFacingInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getBottomFacingActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getBottomFacingActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getBottomFacingInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1]};
+    public ITexture[] getBottomFacingInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1]};
     }
 
-    public ITexture[] getBottomFacingPipeActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getBottomFacingPipeActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
-    public ITexture[] getBottomFacingPipeInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getBottomFacingPipeInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
-    public ITexture[] getTopFacingPipeActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getTopFacingPipeActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
-    public ITexture[] getTopFacingPipeInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getTopFacingPipeInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
-    public ITexture[] getSideFacingPipeActive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getSideFacingPipeActive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 
-    public ITexture[] getSideFacingPipeInactive(byte aColor) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColor + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
+    public ITexture[] getSideFacingPipeInactive(byte aColour) {
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColour + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT)};
     }
 }

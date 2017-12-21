@@ -168,7 +168,7 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      */
     public static final SubTag TRANSPARENT = getNewSubTag("TRANSPARENT");
     /**
-     * If this Material has a Color
+     * If this Material has a Colour
      */
     public static final SubTag HAS_COLOR = getNewSubTag("HAS_COLOR");
     /**
