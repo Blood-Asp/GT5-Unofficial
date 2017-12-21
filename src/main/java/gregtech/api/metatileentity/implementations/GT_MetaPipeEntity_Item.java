@@ -164,8 +164,15 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
-            for (byte i = 0; i < 6; i++) {
-                if ((mCheckConnections || (mConnections & (1 << i)) != 0) && connect(i) == 0) disconnect(i);
+            for (byte tSide = 0; tSide < 6; tSide++) {
+            	ICoverable tBaseMetaTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(tSide) instanceof ICoverable ? (ICoverable) aBaseMetaTileEntity.getTileEntityAtSide(tSide) : null;
+            	byte uSide = GT_Utility.getOppositeSide(tSide);
+                if ((mCheckConnections || isConnectedAtSide(tSide)
+                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity)))
+                		&& connect(tSide) == 0) {
+                	disconnect(tSide);
+                }
             }
             if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
 
@@ -196,7 +203,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
     	if (GT_Mod.gregtechproxy.gt6Pipe) {
     		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if ((mConnections & (1 << tSide)) == 0) {
+    		if (!isConnectedAtSide(tSide)) {
     			if (connect(tSide) > 0)
     				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
@@ -245,18 +252,18 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
                     }
                 }
                 if (temp) {
-                    if ((tTileEntity instanceof ICoverable && ((ICoverable) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((ICoverable) tTileEntity).getCoverIDAtSide(tSide), ((ICoverable) tTileEntity).getCoverDataAtSide(tSide), ((ICoverable) tTileEntity)))
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())
+                    if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())
                     		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())) {
                     	rConnect = 1;
                     }
                 }
             }
-        } else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
-    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
-    		rConnect = -1;
         }
+		if (rConnect == 0) {
+			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+				rConnect = -1;
+			}
+		}
         if (rConnect > 0) {
         	super.connect(aSide);
         }
@@ -275,7 +282,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             byte tOffset = (byte) getBaseMetaTileEntity().getRandomNumber(6), tSide = 0;
             for (byte i = 0; i < 6; i++) {
                 tSide = (byte) ((i + tOffset) % 6);
-                if (isInventoryEmpty() || (tSide != mLastReceivedFrom || aSender != getBaseMetaTileEntity())) {
+                if (isConnectedAtSide(tSide) && (isInventoryEmpty() || (tSide != mLastReceivedFrom || aSender != getBaseMetaTileEntity()))) {
                     if (insertItemStackIntoTileEntity(aSender, tSide)) return true;
                 }
             }
@@ -322,17 +329,23 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     }
 
     @Override
+    public boolean canInsertItem(int aIndex, ItemStack aStack, int aSide) {
+    	return isConnectedAtSide(aSide) && super.canInsertItem(aIndex, aStack, aSide);
+    }
+
+    @Override
     public boolean canExtractItem(int aIndex, ItemStack aStack, int aSide) {
-        return true;
+        return isConnectedAtSide(aSide);
     }
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return true;
+        return isConnectedAtSide(aSide);
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+    	if (!isConnectedAtSide(aSide)) return false;
         if (isInventoryEmpty()) mLastReceivedFrom = aSide;
         return mLastReceivedFrom == aSide && mInventory[aIndex] == null;
     }
