@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
 
     public String[] getDescription() {
         return new String[]{
-                "Controller Block for the Large Diesel Engine",
+                "Controller Block for the Large Combustion Engine",
                 "Size(WxHxD): 3x3x4, Controller (front centered)",
                 "3x3x4 of Stable Titanium Machine Casing (hollow, Min 16!)",
                 "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
@@ -48,7 +48,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
                 "1x Dynamo Hatch (back centered)",
                 "Engine Intake Casings must not be obstructed in front (only air blocks)",
-                "Supply Diesel Fuel and 1000L of Lubricant per hour to run.",
+                "Supply Flammable Fuels and 1000L of Lubricant per hour to run.",
                 "Supply 40L of Oxygen per second to boost output (optional).",
                 "Default: Produces 2048EU/t at 100% efficiency",
                 "Boosted: Produces 6144EU/t at 150% efficiency",
