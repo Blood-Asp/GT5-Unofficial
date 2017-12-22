@@ -7,10 +7,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemSmeltedEvent;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.*;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
@@ -211,9 +208,14 @@ public class GT_Achievements {
         registerAchievement("over9000", 7, 7, ItemList.Casing_Coil_NaquadahAlloy.get(1, new Object[]{}), "alienmetallurgy", false);
         registerAchievement("finalpreparations", 7, 9, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadria, 1L), "over9000", false);
         registerAchievement("denseaspossible", 6, 10, ItemList.FusionComputer_UV.get(1, new Object[]{}), "finalpreparations", false);
-        registerAchievement("zpmage", 8, 10, ItemList.Energy_Module.get(1, new Object[]{}), "denseaspossible", false);
-        registerAchievement("uvage", 10, 10, ItemList.Energy_Cluster.get(1, new Object[]{}), "zpmage", false);
-        registerAchievement("whatnow", 12, 10, ItemList.ZPM2.get(1, new Object[]{}), "uvage", false);
+        if(GregTech_API.sOPStuff.get(ConfigCategories.Recipes.gregtechrecipes, "EnableZPMandUVBatteries", false)) {
+            registerAchievement("zpmage", 8, 10, ItemList.Energy_Module.get(1, new Object[]{}), "denseaspossible", false);
+            registerAchievement("uvage", 10, 10, ItemList.Energy_Cluster.get(1, new Object[]{}), "zpmage", false);
+            registerAchievement("whatnow", 12, 10, ItemList.ZPM2.get(1, new Object[]{}), "uvage", false);
+        }else {
+            registerAchievement("whatnow", 8, 10, ItemList.ZPM2.get(1, new Object[]{}), "denseaspossible", false);
+        }
+
 //        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
 //            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
 //                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
