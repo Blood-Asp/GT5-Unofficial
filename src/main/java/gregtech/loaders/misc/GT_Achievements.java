@@ -187,7 +187,7 @@ public class GT_Achievements {
         registerAchievement("amplifier", 16, -5, ItemList.Machine_LV_Amplifab.get(1, new Object[]{}), "hightech", false);
         registerAchievement("scanning", 13, -3, ItemList.Machine_HV_Scanner.get(1, new Object[]{}), "hightech", false);
         registerAchievement("alienpower", 14, -5, ItemList.Generator_Naquadah_Mark_I.get(1, new Object[]{}), "hightech", false);
-        registerAchievement("universal", 15, -6, ItemList.Machine_LV_Massfab.get(1, new Object[]{}), "hightech", false);
+        registerAchievement("universal", 15, -6, ItemList.Machine_HV_Massfab.get(1, new Object[]{}), "hightech", false);
         registerAchievement("replication", 17, -6, ItemList.Machine_LV_Replicator.get(1, new Object[]{}), "universal", false);
 
         registerAchievement("tungstensteel", 16, 4, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.TungstenSteel, 1L), "tungsten", false);
