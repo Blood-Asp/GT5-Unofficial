@@ -715,6 +715,6 @@ public interface IGT_RecipeAdder {
      * Currently only affects Chemical Reactor Recipes.
      */
 
-    public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
+    //public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
 
 }
