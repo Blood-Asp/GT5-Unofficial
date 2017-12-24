@@ -278,12 +278,12 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Concrete.getMolten(144L));
         GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L)), Materials.Concrete.getMolten(144L), GT_Values.NF);
 
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L)), Materials.Redstone.getMolten(1000L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L)), Materials.Glass.getMolten(1000L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L)), Materials.Blaze.getMolten(1000L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Redstone.getMolten(1000L));
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Glass.getMolten(1000L));
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Blaze.getMolten(1000L));
+        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L)), Materials.Redstone.getMolten(144l), GT_Values.NF);
+        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L)), Materials.Glass.getMolten(144l), GT_Values.NF);
+        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L)), Materials.Blaze.getMolten(144l), GT_Values.NF);
+        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Redstone.getMolten(144l));
+        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Glass.getMolten(144l));
+        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Blaze.getMolten(144l));
 
         Materials tMaterial = Materials.Iron;
         if (tMaterial.mStandardMoltenFluid != null) {
