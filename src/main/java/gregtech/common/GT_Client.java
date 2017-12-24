@@ -16,6 +16,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
+import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
@@ -449,6 +450,10 @@ public class GT_Client extends GT_Proxy
                 }
                 if ((((aTileEntity instanceof ITurnable)) || (ROTATABLE_VANILLA_BLOCKS.contains(aBlock)) || ((aTileEntity instanceof IWrenchable))) && (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))) {
                     drawGrid(aEvent);
+                    return;
+                }
+                if (aTileEntity instanceof BaseTileEntity && (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList))) {
+                	drawGrid(aEvent);
                     return;
                 }
             } catch (Throwable e) {
