@@ -36,6 +36,7 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.Promethium.mHasParentMod = false;
             Materials.Rubidium.mHasParentMod = false;
             Materials.Samarium.mHasParentMod = false;
+            Materials.SamariumMagnetic.mHasParentMod = false;
             Materials.Scandium.mHasParentMod = false;
             Materials.Strontium.mHasParentMod = false;
             Materials.Tellurium.mHasParentMod = false;

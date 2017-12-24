@@ -38,6 +38,8 @@ public class ProcessingTransforming
                 break;
             case "Neodymium":
                 GT_Values.RA.addPolarizerRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(aPrefix, Materials.NeodymiumMagnetic, 1L), (int) Math.max(16L, aPrefix.mMaterialAmount * 128L / 3628800L), 256);
+            case "Samarium":
+                GT_Values.RA.addPolarizerRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(aPrefix, Materials.SamariumMagnetic, 1L), (int) Math.max(16L, aPrefix.mMaterialAmount * 128L / 3628800L), 4096);
         }
     }
 }
