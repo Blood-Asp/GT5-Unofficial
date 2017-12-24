@@ -248,14 +248,13 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     private boolean onConnectionToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
     	if (GT_Mod.gregtechproxy.gt6Cable) {
-    		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if (!isConnectedAtSide(tSide)) {
+    		if (!isConnectedAtSide(aWrenchingSide)) {
     			if (GT_Mod.gregtechproxy.costlyCableConnection && !GT_ModHandler.consumeSolderingMaterial(aPlayer)) return false;
-    			if (connect(tSide) > 0)
+    			if (connect(aWrenchingSide) > 0)
     				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
     		else {
-    			disconnect(tSide);
+    			disconnect(aWrenchingSide);
     			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
     		}
     		return true;
