@@ -27,16 +27,6 @@ public class GT_MetaGenerated_Item_99
 
     private BitSet enabled=new BitSet();
 
-    private void registerd(Materials tMaterial,int i){
-        enabled.set(i);
-        ItemStack tStack = addItem(i,getDefaultLocalizationFormat(cellMolten, tMaterial, i),tMaterial.getToolTip(cellMolten.mMaterialAmount / M));
-        if (cellMolten.mIsUnificatable) {
-            GT_OreDictUnificator.set(cellMolten, tMaterial, tStack);
-        } else {
-            GT_OreDictUnificator.registerOre(cellMolten.get(tMaterial), tStack);
-        }
-    }
-
     private void register(Materials tMaterial,int i){
         ItemStack tStack = new ItemStack(this, 1, i);
         enabled.set(i);
@@ -58,7 +48,7 @@ public class GT_MetaGenerated_Item_99
         for (Materials tMaterial:GregTech_API.sGeneratedMaterials) {
             if (tMaterial == null || tMaterial.mMetaItemSubID<0 || tMaterial.mMetaItemSubID>=1000) continue;
             //if (tMaterial.getcells(1)==null) {
-            if ((tMaterial.contains(SubTag.SMELTING_TO_FLUID)) && (!tMaterial.contains(SubTag.NO_SMELTING))) {
+            if ((tMaterial.contains(SubTag.SMELTING_TO_FLUID)) && (!tMaterial.contains(SubTag.NO_SMELTING)) && !tMaterial.contains(SubTag.SMELTING_TO_GEM)) {
                 register(tMaterial,tMaterial.mMetaItemSubID);
                 if (tMaterial.mSmeltInto != tMaterial) {
                     register(tMaterial.mSmeltInto,tMaterial.mSmeltInto.mMetaItemSubID);
