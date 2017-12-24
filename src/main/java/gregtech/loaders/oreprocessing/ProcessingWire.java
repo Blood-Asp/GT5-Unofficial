@@ -122,6 +122,8 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
                     }
                 }
             case "RedstoneAlloy":
+                GT_Values.RA.addAssemblerRecipe(aStack, GT_Utility.getIntegratedCircuit(24), Materials.Rubber.getMolten(144 * costMultiplier),
+                        GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
                 GT_Values.RA.addAssemblerRecipe(aStack, GT_Utility.getIntegratedCircuit(24), Materials.StyreneButadieneRubber.getMolten(108 * costMultiplier),
                         GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), 100, 8);
                 GT_Values.RA.addAssemblerRecipe(aStack, GT_Utility.getIntegratedCircuit(24), Materials.Silicone.getMolten(72 * costMultiplier),
