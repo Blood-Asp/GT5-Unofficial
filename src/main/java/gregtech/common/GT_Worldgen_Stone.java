@@ -9,14 +9,13 @@ import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import java.util.Collection;
-import java.util.Random;
-import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugStones;
 

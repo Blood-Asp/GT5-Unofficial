@@ -5,16 +5,11 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IBlockOnWalkOver;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidBlock;
 
 public class GT_Block_Concretes
         extends GT_Block_Stones_Abstract implements IBlockOnWalkOver{

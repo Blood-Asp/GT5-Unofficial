@@ -1,5 +1,6 @@
 package gregtech.api.items;
 
+import gregtech.common.items.GT_DepletetCell_Item;
 import ic2.api.item.IBoxable;
 import ic2.core.util.StackUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
-
-import gregtech.common.items.GT_DepletetCell_Item;
 
 public class GT_RadioactiveCell_Item
         extends GT_Generic_Item  implements IBoxable{

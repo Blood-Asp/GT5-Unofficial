@@ -3,6 +3,7 @@ package gregtech.common;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.Materials;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
@@ -15,23 +16,12 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraft.world.gen.ChunkProviderHell;
-import static gregtech.api.enums.GT_Values.D1;
-import static gregtech.api.enums.GT_Values.oreveinPercentage;
-import static gregtech.api.enums.GT_Values.debugWorldGen;
-import static gregtech.api.enums.GT_Values.debugOrevein;
-import static gregtech.api.enums.GT_Values.oreveinAttempts;
-import static gregtech.api.enums.GT_Values.oreveinMaxPlacementAttempts;
+
+import java.util.*;
+
+import static gregtech.api.enums.GT_Values.*;
+
 // Disabled for hardcoded value.    import static gregtech.api.enums.GT_Values.oreveinMaxSize;
-import gregtech.api.enums.Materials;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.HashSet;
-import java.util.Hashtable;
-
-import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_Worldgenerator
 implements IWorldGenerator {
@@ -286,7 +276,8 @@ implements IWorldGenerator {
                     // Determine if this X/Z is an orevein seed
                     if ( ( (Math.abs(x)%3) == 1) && ( (Math.abs(z)%3) == 1 ) ) {
                         if (debugWorldGen) GT_Log.out.println(
-                            "Adding seed x="+x+
+                            
+"Adding seed x="+x+
                             " z="+z
                         );
                         seedList.add( new NearbySeeds(x,z) );
@@ -297,7 +288,8 @@ implements IWorldGenerator {
             // Now process each oreseed vs this requested chunk
             for( ; seedList.size() != 0; seedList.remove(0) ) {
                 if (debugWorldGen) GT_Log.out.println(
-                    "Processing seed x="+seedList.get(0).mX+
+                    
+"Processing seed x="+seedList.get(0).mX+
                     " z="+seedList.get(0).mZ 
                 );
                 worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );

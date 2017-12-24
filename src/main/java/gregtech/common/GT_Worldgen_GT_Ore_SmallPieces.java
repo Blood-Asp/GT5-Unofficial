@@ -5,13 +5,11 @@ import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.debugSmallOres;
 
 public class GT_Worldgen_GT_Ore_SmallPieces

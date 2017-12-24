@@ -1,11 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.common.GT_UndergroundOil.undergroundOil;
-import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
-
-import java.util.ArrayList;
-
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
@@ -15,6 +9,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+
+import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.common.GT_UndergroundOil.undergroundOil;
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_DrillerBase {
 

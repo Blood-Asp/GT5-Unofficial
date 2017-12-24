@@ -1,7 +1,5 @@
 package gregtech.common.tileentities.machines.basic;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_Container_BasicTank;
 import gregtech.api.gui.GT_GUIContainer_BasicTank;
@@ -28,13 +26,12 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayDeque;
-import java.util.Iterator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.util.GT_Utility.getFakePlayer;
 
 public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
