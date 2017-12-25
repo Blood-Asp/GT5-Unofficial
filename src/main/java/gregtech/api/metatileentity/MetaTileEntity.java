@@ -176,19 +176,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 		
 		return true;
     }
-
-    @Override
-    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-		byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
-		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
-		if(tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable))
-		{
-			// The tile entity we're facing is a cable, let's try to connect to it
-			return ((GT_MetaPipeEntity_Cable)((IGregTechTileEntity) tTileEntity).getMetaTileEntity()).onSolderingToolRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
-		}
-		
-		return true;
-    }
         
     @Override
     public void onExplosion() {/*Do nothing*/}

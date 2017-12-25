@@ -211,11 +211,6 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     }
 
     @Override
-    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        return false;
-    }
-
-    @Override
     public void onExplosion() {/*Do nothing*/}
 
     @Override
