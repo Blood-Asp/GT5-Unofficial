@@ -1321,9 +1321,6 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
-                        } else if (mMetaTileEntity.onSolderingToolRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
-                            GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 500, aPlayer);
-                            GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         } 
                         return true;
                     }

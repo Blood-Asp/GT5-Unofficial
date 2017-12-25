@@ -311,7 +311,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
     }
 
-    @Override
     public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
     	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
     }
