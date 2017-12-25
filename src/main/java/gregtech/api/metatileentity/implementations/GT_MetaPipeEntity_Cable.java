@@ -238,23 +238,27 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
-    }
-
-    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
-    }
-
-    private boolean onConnectionToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	if (GT_Mod.gregtechproxy.gt6Cable) {
-    		if (!isConnectedAtSide(aWrenchingSide)) {
-    			if (GT_Mod.gregtechproxy.costlyCableConnection && !GT_ModHandler.consumeSolderingMaterial(aPlayer)) return false;
+        if (GT_Mod.gregtechproxy.gt6Cable && GT_ModHandler.damageOrDechargeItem(aPlayer.inventory.getCurrentItem(), 1, 500, aPlayer)) {
+            if(isConnectedAtSide(aWrenchingSide)) {
+                disconnect(aWrenchingSide);
+                GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+            }else if(!GT_Mod.gregtechproxy.costlyCableConnection){
     			if (connect(aWrenchingSide) > 0)
     				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
-    		else {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (GT_Mod.gregtechproxy.gt6Cable && GT_ModHandler.damageOrDechargeItem(aPlayer.inventory.getCurrentItem(), 1, 500, aPlayer)) {
+            if (isConnectedAtSide(aWrenchingSide)) {
     			disconnect(aWrenchingSide);
     			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+            } else if (!GT_Mod.gregtechproxy.costlyCableConnection || GT_ModHandler.consumeSolderingMaterial(aPlayer)) {
+                if (connect(aWrenchingSide) > 0)
+                    GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
     		return true;
     	}

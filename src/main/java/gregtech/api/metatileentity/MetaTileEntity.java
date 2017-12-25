@@ -165,16 +165,26 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
     @Override
     public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if(!aPlayer.isSneaking()) return false;
 		byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
 		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
-
-		if(tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable))
-		{
+        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
 			// The tile entity we're facing is a cable, let's try to connect to it
-			return ((GT_MetaPipeEntity_Cable)((IGregTechTileEntity) tTileEntity).getMetaTileEntity()).onWireCutterRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
+            return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onWireCutterRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
+        }
+        return false;
 		}
 		
-		return true;
+    @Override
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if(!aPlayer.isSneaking()) return false;
+        byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
+        TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
+        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
+            // The tile entity we're facing is a cable, let's try to connect to it
+            return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onSolderingToolRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
+        }
+        return false;
     }
         
     @Override

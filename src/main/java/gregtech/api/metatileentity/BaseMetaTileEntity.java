@@ -1308,7 +1308,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)) {
                         byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-                        if (GT_ModHandler.useSolderingIron(tCurrentItem, aPlayer)) {
+                        if (mMetaTileEntity.onSolderingToolRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
+                            //logic handled internally
+                            GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 1.0F, -1, xCoord, yCoord, zCoord);
+                        } else if (GT_ModHandler.useSolderingIron(tCurrentItem, aPlayer)) {
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
@@ -1319,7 +1322,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)) {
                     	byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
                         if (mMetaTileEntity.onWireCutterRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
-                            GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer);
+                            //logic handled internally
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         return true;
