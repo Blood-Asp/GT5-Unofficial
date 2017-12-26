@@ -39,21 +39,17 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     private boolean mCheckConnections = !GT_Mod.gregtechproxy.gt6Pipe;
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
-        super(aID, aName, aNameRegional, aInvSlotCount);
+        super(aID, aName, aNameRegional, aInvSlotCount, false);
         mIsRestrictive = aIsRestrictive;
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
         mTickTime = aTickTime;
+        addInfo(aID);
     }
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
-        super(aID, aName, aNameRegional, aInvSlotCount);
-        mIsRestrictive = aIsRestrictive;
-        mThickNess = aThickNess;
-        mMaterial = aMaterial;
-        mStepSize = aStepSize;
-        mTickTime = 20;
+        this(aID, aName, aNameRegional, aThickNess, aMaterial, aInvSlotCount, aStepSize, aIsRestrictive, 20);
     }
 
     public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {

@@ -52,7 +52,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     }
 
     public GT_MetaPipeEntity_Fluid(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aCapacity, int aHeatResistance, boolean aGasProof, int aFluidTypes) {
-    	super(aID, aName, aNameRegional, 0);
+    	super(aID, aName, aNameRegional, 0, false);
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mCapacity = aCapacity;
@@ -60,6 +60,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         mHeatResistance = aHeatResistance;
         mPipeAmount = aFluidTypes;
         mFluids = new FluidStack[mPipeAmount];
+        addInfo(aID);
     }
 
     @Deprecated
