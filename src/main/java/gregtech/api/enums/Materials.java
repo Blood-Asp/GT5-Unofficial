@@ -2107,6 +2107,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         return this.mName;
     }
 
+    public String getDefaultLocalizedNameForItem(String aFormat) {
+        return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mDefaultLocalName).replace("%temp", "%s");
+    }
+
     public String getLocalizedNameForItem(String aFormat) {
     	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
     }

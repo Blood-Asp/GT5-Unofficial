@@ -54,7 +54,7 @@ public abstract class GT_MetaGenerated_Item_X01 extends GT_MetaGenerated_Item {
             if (tMaterial == null) continue;
             if (mPrefix.doGenerateItem(tMaterial)) {
                 ItemStack tStack = new ItemStack(this, 1, i);
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", getDefaultLocalizationFormat(tPrefix, tMaterial, i));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", GT_LanguageManager.i18nPlaceholder ? getDefaultLocalizationFormat(tPrefix, tMaterial, i) : getDefaultLocalization(tPrefix, tMaterial, i));
                 GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".tooltip", tMaterial.getToolTip(tPrefix.mMaterialAmount / M));
                 String tOreName = getOreDictString(tPrefix, tMaterial);
                 tPrefix = OrePrefixes.getOrePrefix(tOreName);
@@ -75,7 +75,6 @@ public abstract class GT_MetaGenerated_Item_X01 extends GT_MetaGenerated_Item {
      * @param aMetaData a Index from [0 - 31999]
      * @return the Localized Name when default LangFiles are used.
      */
-    @Deprecated
     public String getDefaultLocalization(OrePrefixes aPrefix, Materials aMaterial, int aMetaData) {
         return aPrefix.getDefaultLocalNameForItem(aMaterial);
     }
