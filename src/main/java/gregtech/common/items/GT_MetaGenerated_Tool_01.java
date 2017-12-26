@@ -48,6 +48,10 @@ public class GT_MetaGenerated_Tool_01  extends GT_MetaGenerated_Tool {
     public static final short BUZZSAW = 140;
     public static final short SCREWDRIVER_LV = 150;
     public static final short SOLDERING_IRON_LV = 160;
+    public static final short SOLDERING_IRON_MV = 162;
+    public static final short SOLDERING_IRON_HV = 164;
+    public static final short SOLDERING_IRON_EV = 166;
+    public static final short SOLDERING_IRON_IV = 168;
     public static final short TURBINE_SMALL = 170;
     public static final short TURBINE = 172;
     public static final short TURBINE_LARGE = 174;
@@ -96,6 +100,10 @@ public class GT_MetaGenerated_Tool_01  extends GT_MetaGenerated_Tool {
         addTool(140, "Buzzsaw (LV)", "Not suitable for harvesting Blocks", new GT_Tool_BuzzSaw(), ToolDictNames.craftingToolSaw, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 2L));
         GregTech_API.registerTool(addTool(150, "Screwdriver (LV)", "Adjusts Covers and Machines", new GT_Tool_Screwdriver_LV(), ToolDictNames.craftingToolScrewdriver, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L)), GregTech_API.sScrewdriverList);
         GregTech_API.registerTool(addTool(SOLDERING_IRON_LV, "Soldering Iron (LV)", "Fixes burned out Circuits. Needs soldering materials in inventory and 10kEU", new GT_Tool_Soldering_Iron(), ToolDictNames.craftingToolSolderingIron, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 2L)), GregTech_API.sSolderingToolList);
+        GregTech_API.registerTool(addTool(SOLDERING_IRON_MV, "Soldering Iron (MV)", "Fixes burned out Circuits. Needs soldering materials in inventory and 400kEU", new GT_Tool_Soldering_Iron(), ToolDictNames.craftingToolSolderingIron, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 5L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 4L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 4L)), GregTech_API.sSolderingToolList);
+        GregTech_API.registerTool(addTool(SOLDERING_IRON_HV, "Soldering Iron (HV)", "Fixes burned out Circuits. Needs soldering materials in inventory and 1,6mioEU", new GT_Tool_Soldering_Iron(), ToolDictNames.craftingToolSolderingIron, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 6L)), GregTech_API.sSolderingToolList);
+        GregTech_API.registerTool(addTool(SOLDERING_IRON_EV, "Soldering Iron (EV)", "Fixes burned out Circuits. Needs soldering materials in inventory and 10mioEU", new GT_Tool_Soldering_Iron(), ToolDictNames.craftingToolSolderingIron, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 8L)), GregTech_API.sSolderingToolList);
+        GregTech_API.registerTool(addTool(SOLDERING_IRON_IV, "Soldering Iron (IV)", "Fixes burned out Circuits. Needs soldering materials in inventory and 100mioEU", new GT_Tool_Soldering_Iron(), ToolDictNames.craftingToolSolderingIron, new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 10L), new TC_Aspects.TC_AspectStack(TC_Aspects.FABRICO, 10L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 10L)), GregTech_API.sSolderingToolList);
 
         addTool(TURBINE_SMALL, "Small Turbine", "Turbine Rotors for your power station", new GT_Tool_Turbine_Small());
         addTool(TURBINE, "Turbine", "Turbine Rotors for your power station", new GT_Tool_Turbine_Normal());
