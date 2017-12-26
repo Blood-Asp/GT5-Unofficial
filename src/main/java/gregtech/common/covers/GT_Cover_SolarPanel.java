@@ -43,8 +43,10 @@ public class GT_Cover_SolarPanel
                 }
             }
         }
-        if (coverState == 1 || (coverState == 2 && aTimer % 8L == 0L))
+        if (coverState == 1 || (coverState == 2 && aTimer % 8L == 0L)) {
             aTileEntity.injectEnergyUnits((byte) 6, ((100L-(long)coverNum)*((long)this.mVoltage))/100L, 1L);
+            
+        }
         if(aTimer % 28800L == 0L && coverNum<100 && (coverNum>10 || XSTR_INSTANCE.nextInt(3)==2))
             coverNum++;
         return coverState+(coverNum<<2);
@@ -72,6 +74,10 @@ public class GT_Cover_SolarPanel
         return false;
     }
 
+    public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+        return true;
+    }
+    
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }
