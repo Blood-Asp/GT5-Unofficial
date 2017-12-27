@@ -96,12 +96,13 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-        if (aAddInfo && GT.isClientSide()) {
+        if (aAddInfo) {
             addInfo(aID);
         }
     }
 
     protected final void addInfo(int aID) {
+    	if (GT.isServerSide()) return;
     	ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
         tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
     }
