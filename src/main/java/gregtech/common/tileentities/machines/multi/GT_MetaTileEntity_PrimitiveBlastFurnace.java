@@ -155,8 +155,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
                                     || !isCorrectCasingMetaID(getBaseMetaTileEntity().getMetaIDOffset(xDir + i, j, zDir + k))) {
                                 return false;
                             }
-                        } else if ((!GT_Utility.arrayContains(getBaseMetaTileEntity().getBlockOffset(xDir + i, j, zDir + k),
-                                new Object[] { Blocks.lava, Blocks.flowing_lava, null }))
+                        } else if ((!GT_Utility.arrayContains(getBaseMetaTileEntity().getBlockOffset(xDir + i, j, zDir + k), Blocks.lava, Blocks.flowing_lava, null))
                                 && (!getBaseMetaTileEntity().getAirOffset(xDir + i, j, zDir + k))) {
                             return false;
                         }
@@ -204,7 +203,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
                 GT_Pollution.addPollution(this.getBaseMetaTileEntity().getWorld(),
                         new ChunkPosition(this.getBaseMetaTileEntity().getXCoord(), this.getBaseMetaTileEntity().getYCoord(),
                                 this.getBaseMetaTileEntity().getZCoord()),
-                        50);
+                        200);
             }
 
             aBaseMetaTileEntity.setActive((this.mMaxProgresstime > 0) && (this.mMachine));
@@ -265,11 +264,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         if (this.mInventory[absoluteSlot] == null || outputStack == null) {
             return true;
         }
-        if (((this.mInventory[absoluteSlot].stackSize + outputStack.stackSize <= this.mInventory[absoluteSlot].getMaxStackSize())
-                && (GT_Utility.areStacksEqual(this.mInventory[absoluteSlot], outputStack)))) {
-            return true;
-        }
-        return false;
+        return ((this.mInventory[absoluteSlot].stackSize + outputStack.stackSize <= this.mInventory[absoluteSlot].getMaxStackSize()) && (GT_Utility.areStacksEqual(this.mInventory[absoluteSlot], outputStack)));
     }
 
     private boolean checkRecipe() {
