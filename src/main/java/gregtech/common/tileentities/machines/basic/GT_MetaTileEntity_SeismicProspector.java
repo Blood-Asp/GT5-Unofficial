@@ -74,9 +74,14 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
                 this.ready = false;
                 GT_Utility.ItemNBT.setBookTitle(aPlayer.getCurrentEquippedItem(), "Raw Prospection Data");
                 List<String> tStringList = new ArrayList<String>();
+
+                //range by tier
+                int min=-range();
+                int max=range();
+
                 for (int i = this.getBaseMetaTileEntity().getYCoord(); i > 0; i--) {
-                    for (int f = -2; f < 3; f++) {
-                        for (int g = -2; g < 3; g++) {
+                    for (int f = min; f <= max; f++) {
+                        for (int g = min; g <= max; g++) {
                             Block tBlock = this.getBaseMetaTileEntity().getBlockOffset(f, -i, g);
                             if ((tBlock instanceof GT_Block_Ores_Abstract)) {
                                 TileEntity tTileEntity = getBaseMetaTileEntity().getWorld().getTileEntity(getBaseMetaTileEntity().getXCoord() + f, getBaseMetaTileEntity().getYCoord() + (-i), getBaseMetaTileEntity().getZCoord() + g);
@@ -117,4 +122,13 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
         return true;
     }
 
+    private int range() {
+        switch (mTier) {
+            case 1: return 2;//default range on tier 1;
+            case 2: return 4;
+            case 3: return 8;
+            case 4: return 16;
+        }
+        return 0;
+    }
 }
