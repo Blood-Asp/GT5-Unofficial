@@ -81,10 +81,11 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
                 //range by tier
                 int min=-range();
                 int max=range();
+                int step=step();
 
                 for (int i = this.getBaseMetaTileEntity().getYCoord(); i > 0; i--) {
-                    for (int f = min; f <= max; f++) {
-                        for (int g = min; g <= max; g++) {
+                    for (int f = min; f <= max; f+=step) {
+                        for (int g = min; g <= max; g+=step) {
                             Block tBlock = this.getBaseMetaTileEntity().getBlockOffset(f, -i, g);
                             if ((tBlock instanceof GT_Block_Ores_Abstract)) {
                                 TileEntity tTileEntity = getBaseMetaTileEntity().getWorld().getTileEntity(getBaseMetaTileEntity().getXCoord() + f, getBaseMetaTileEntity().getYCoord() + (-i), getBaseMetaTileEntity().getZCoord() + g);
@@ -132,5 +133,14 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
             case 3: return 48;
         }
         return 0;
+    }
+
+    private int step(){
+        switch (mTier){
+            case 1: return 1;
+            case 2: return 3;
+            case 3: return 4;
+        }
+        return 1;
     }
 }
