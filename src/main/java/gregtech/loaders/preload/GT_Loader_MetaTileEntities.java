@@ -1241,10 +1241,16 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Charcoal_Pile.set(new GT_MetaTileEntity_Charcoal_Pit(1155, "multimachine.charcoalpile", "Charcoal Pile Igniter").getStackForm(1));
         GT_ModHandler.addCraftingRecipe(ItemList.Charcoal_Pile.get(1L, new Object[0]), bitsd, new Object[]{"EXE", "EME", " C ", 'M', ItemList.Hull_HP_Bricks, 'E', OrePrefixes.plate.get(Materials.AnyBronze), 'C', new ItemStack(Items.flint_and_steel, 1), 'X', OrePrefixes.rotor.get(Materials.Steel),});
 
-        ItemList.Seismic_Prospector.set(new GT_MetaTileEntity_SeismicProspector(1156, "basicmachine.seismicprospector", "Seismic Prospector", 1).getStackForm(1));
-        ItemList.Seismic_Prospector_Adv.set(new GT_MetaTileEntity_AdvSeismicProspector(1173, "basicmachine.seismicprospector.3", "Advanced Seismic Prospector", 4, 95, 4).getStackForm(1));
-        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CCC", 'M', ItemList.Hull_HP, 'W', OrePrefixes.plateDouble.get(Materials.Steel), 'E', OrePrefixes.circuit.get(Materials.Basic), 'C', ItemList.Sensor_LV});
-        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_Adv.get(1L, new Object[0]), bitsd, new Object[] { "WWW", "EME", "CCC", 'M', ItemList.Hull_EV, 'W', OrePrefixes.plateDouble.get(Materials.VanadiumSteel),'E', OrePrefixes.circuit.get(Materials.Data), 'C', ItemList.Sensor_EV });
+        ItemList.Seismic_Prospector_LV.set(new GT_MetaTileEntity_SeismicProspector(1156, "basicmachine.seismicprospector", "Seismic Prospector LV", 1).getStackForm(1));
+        ItemList.Seismic_Prospector_MV.set(new GT_MetaTileEntity_SeismicProspector(2100, "basicmachine.seismicprospector", "Seismic Prospector MV", 2).getStackForm(1));
+        ItemList.Seismic_Prospector_HV.set(new GT_MetaTileEntity_SeismicProspector(2101, "basicmachine.seismicprospector", "Seismic Prospector HV", 3).getStackForm(1));
+
+        ItemList.Seismic_Prospector_Adv_EV.set(new GT_MetaTileEntity_AdvSeismicProspector(1173, "basicmachine.seismicprospector.3", "Advanced Seismic Prospector EV", 4, 120, 6).getStackForm(1));
+
+        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_LV.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CXC", 'M', ItemList.Hull_LV, 'W', OrePrefixes.plateDouble.get(Materials.Steel), 'E', OrePrefixes.circuit.get(Materials.Basic), 'C', ItemList.Sensor_LV, 'X', OrePrefixes.cableGt02.get(Materials.Tin)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_MV.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CXC", 'M', ItemList.Hull_MV, 'W', OrePrefixes.plateDouble.get(Materials.BlackSteel), 'E', OrePrefixes.circuit.get(Materials.Good), 'C', ItemList.Sensor_MV, 'X', OrePrefixes.cableGt02.get(Materials.Copper)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_HV.get(1L, new Object[0]), bitsd, new Object[]{"WWW", "EME", "CXC", 'M', ItemList.Hull_HV, 'W', OrePrefixes.plateDouble.get(Materials.StainlessSteel), 'E', OrePrefixes.circuit.get(Materials.Advanced), 'C', ItemList.Sensor_HV, 'X', OrePrefixes.cableGt04.get(Materials.Gold)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Seismic_Prospector_Adv_EV.get(1L, new Object[0]), bitsd, new Object[] { "WWW", "EME", "CXC", 'M', ItemList.Hull_EV, 'W', OrePrefixes.plateDouble.get(Materials.VanadiumSteel),'E', OrePrefixes.circuit.get(Materials.Data), 'C', ItemList.Sensor_EV, 'X', OrePrefixes.cableGt04.get(Materials.Aluminium) });
 
         ItemList.OilDrill1.set(new GT_MetaTileEntity_OilDrill1(1157, "multimachine.oildrill1", "Oil Drilling Rig").getStackForm(1));
         ItemList.OilDrill2.set(new GT_MetaTileEntity_OilDrill2(141, "multimachine.oildrill2", "Oil Drilling Rig II").getStackForm(1));
