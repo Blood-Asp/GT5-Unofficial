@@ -28,7 +28,7 @@ public class GT_UO_DimensionList {
 		return fDimensionList.get("Default");
 	}
 
-	public boolean CheckBlackList(int aDimensionId){
+	private boolean CheckBlackList(int aDimensionId){
 		try {
 			return java.util.Arrays.binarySearch(blackList, aDimensionId) >= 0;
 		} catch (Exception e) {

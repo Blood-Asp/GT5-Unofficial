@@ -34,12 +34,13 @@ public class GT_UndergroundOil {
         return undergroundOil(te.getWorld().getChunkFromBlockCoords(te.getXCoord(),te.getZCoord()),readOrDrainCoefficient);
     }
 
-    //Returns whole content for information purposes -> when drainSpeedCoeff < 0
+    //Returns whole content for information purposes -> when drainSpeedCoefficient < 0
     //Else returns extracted fluidStack if amount > 0, or null otherwise
     public static FluidStack undergroundOil(Chunk chunk, float readOrDrainCoefficient) {
         World aWorld = chunk.worldObj;
         int dimensionId=aWorld.provider.dimensionId;
-        if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(dimensionId)) return null;
+        GT_UO_Dimension dimension=GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
+        if(dimension==null) return null;
 
         //Read hash map
         HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(dimensionId);
@@ -61,15 +62,14 @@ public class GT_UndergroundOil {
                        (chunk.getChunkCoordIntPair().chunkXPos>>3) +
                 8267 * (chunk.getChunkCoordIntPair().chunkZPos>>3));
 
-        GT_UO_Dimension dimension=GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
         GT_UO_Fluid uoFluid = dimension.getRandomFluid(tRandom);
 
         //Fluid stack holder
         FluidStack fluidInChunk;
 
-        //Set fluidstack from uoFluid
+        //Set fluid stack from uoFluid
         if (uoFluid == null || uoFluid.getFluid()==null){
-            tInts[GTOILFLUID]=Integer.MAX_VALUE;//null fluid pointer... kindof
+            tInts[GTOILFLUID]=Integer.MAX_VALUE;//null fluid pointer... kind of
             tInts[GTOIL]=0;
             chunkData.put(chunk.getChunkCoordIntPair(),tInts);//update hash map
             return null;
