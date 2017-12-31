@@ -32,6 +32,7 @@ public class GT_MetaGenerated_Tool_01  extends GT_MetaGenerated_Tool {
     public static final short UNIVERSALSPADE = 32;
     public static final short KNIFE = 34;
     public static final short BUTCHERYKNIFE = 36;
+    @Deprecated
     public static final short SICKLE = 38;
     public static final short SENSE = 40;
     public static final short PLOW = 42;
