@@ -1946,10 +1946,10 @@ public class GT_Utility {
     }
 
     public static String joinListToString(List<String> list) {
-        String result = "";
+        StringBuilder result = new StringBuilder(32);
         for (String s : list)
-            result += (result.isEmpty() ? "" : "|") + s;
-        return result;
+            result.append(result.length()==0?s:'|'+s);
+        return result.toString();
     }
 
     public static ItemStack getIntegratedCircuit(int config){
@@ -2067,7 +2067,7 @@ public class GT_Utility {
             return tNBT.getString("author");
         }
 
-        public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String[] aOres) {
+        public static void setProspectionData(ItemStack aStack, int aX, int aY, int aZ, int aDim, FluidStack aFluid, String... aOres) {
             NBTTagCompound tNBT = getNBT(aStack);
             String tData = aX + "," + aY + "," + aZ + "," + aDim + ",";
             if (aFluid!=null)

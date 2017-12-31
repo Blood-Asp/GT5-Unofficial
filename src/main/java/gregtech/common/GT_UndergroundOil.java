@@ -2,6 +2,7 @@ package gregtech.common;
 
 import gregtech.GT_Mod;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.GT_UO_Dimension;
 import gregtech.api.objects.GT_UO_Fluid;
 import gregtech.api.objects.XSTR;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -36,14 +37,15 @@ public class GT_UndergroundOil {
     //Returns whole content for information purposes -> when drainSpeedCoeff < 0
     //Else returns extracted fluidStack if amount > 0, or null otherwise
     public static FluidStack undergroundOil(Chunk chunk, float readOrDrainCoefficient) {
-        if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(chunk.worldObj.provider.dimensionId)) return null;
         World aWorld = chunk.worldObj;
+        int dimensionId=aWorld.provider.dimensionId;
+        if (GT_Mod.gregtechproxy.mUndergroundOil.CheckBlackList(dimensionId)) return null;
 
         //Read hash map
-        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(aWorld.provider.dimensionId);
+        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(dimensionId);
         if(chunkData==null){
             chunkData=new HashMap<>(1024);
-            dimensionWiseChunkData.put(aWorld.provider.dimensionId,chunkData);
+            dimensionWiseChunkData.put(dimensionId,chunkData);
         }
 
         int[] tInts = chunkData.get(chunk.getChunkCoordIntPair());
@@ -55,10 +57,12 @@ public class GT_UndergroundOil {
         }
 
         //GEN IT TO GET OBJECT...
-        final XSTR tRandom = new XSTR(aWorld.getSeed() + aWorld.provider.dimensionId * 2 +
+        final XSTR tRandom = new XSTR(aWorld.getSeed() + dimensionId * 2 +
                        (chunk.getChunkCoordIntPair().chunkXPos>>3) +
                 8267 * (chunk.getChunkCoordIntPair().chunkZPos>>3));
-        GT_UO_Fluid uoFluid = GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(aWorld.provider.dimensionId).getRandomFluid(tRandom);
+
+        GT_UO_Dimension dimension=GT_Mod.gregtechproxy.mUndergroundOil.GetDimension(dimensionId);
+        GT_UO_Fluid uoFluid = dimension.getRandomFluid(tRandom);
 
         //Fluid stack holder
         FluidStack fluidInChunk;

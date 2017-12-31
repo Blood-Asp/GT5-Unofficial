@@ -51,11 +51,12 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isServerSide()) {
             ItemStack aStack = aPlayer.getCurrentEquippedItem();
+            ItemData stackData= GT_OreDictUnificator.getItemData(aStack);
             if (!ready && (aStack != null) && (
             		(aStack.getItem() == Item.getItemFromBlock(Blocks.tnt) && aStack.stackSize > 1 ) ||
             		(aStack.getItem() == Ic2Items.industrialTnt.getItem()  && aStack.stackSize > 0 ) ||
             		(aStack.getItem() == Ic2Items.dynamite.getItem()  	   && aStack.stackSize > 3 ) ||
-            		(GT_OreDictUnificator.getItemData(aStack).mMaterial.mMaterial == Materials.Glyceryl  && aStack.stackSize > 0 ) ||
+            		(stackData!=null && stackData.mMaterial.mMaterial == Materials.Glyceryl  && aStack.stackSize > 0 ) ||
                     (aStack.getItem() == ItemList.Block_Powderbarrel.getItem() && aStack.getItemDamage()==ItemList.Block_Powderbarrel.get(1).getItemDamage() && aStack.stackSize > 7 )
             		) ) {
                 if ((!aPlayer.capabilities.isCreativeMode) && (aStack.stackSize != 111)) {
