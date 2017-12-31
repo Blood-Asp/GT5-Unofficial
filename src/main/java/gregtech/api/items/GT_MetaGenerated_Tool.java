@@ -18,6 +18,7 @@ import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tools.GT_Tool_Turbine;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -347,13 +348,12 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
         IToolStats tStats = getToolStats(aStack);
         int tOffset = getElectricStats(aStack) != null ? 2 : 1;
         if (tStats != null) {
-            String name = aStack.getUnlocalizedName();
-            if (name.equals("gt.metatool.01.170") || name.equals("gt.metatool.01.172") || name.equals("gt.metatool.01.174") || name.equals("gt.metatool.01.176")) {
+            if (tStats instanceof GT_Tool_Turbine) {
                 int aOptFlow=GT_Utility.safeInt((long)Math.max(Float.MIN_NORMAL, ((GT_MetaGenerated_Tool) aStack.getItem()).getToolStats(aStack).getSpeedMultiplier() * ((GT_MetaGenerated_Tool) aStack.getItem()).getPrimaryMaterial(aStack).mToolSpeed * 50));
                 aList.add(tOffset + 0, EnumChatFormatting.WHITE + String.format(trans("001", "Durability: %s/%s"), "" + EnumChatFormatting.GREEN + (tMaxDamage - getToolDamage(aStack)) + " ", " " + tMaxDamage) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 1, EnumChatFormatting.WHITE + String.format(trans("002", "%s lvl %s"), tMaterial.mLocalizedName + EnumChatFormatting.YELLOW, "" + getHarvestLevel(aStack, "")) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 2, EnumChatFormatting.WHITE + String.format(trans("005", "Turbine Efficiency: %s"), "" + EnumChatFormatting.BLUE + (50.0F + (10.0F * getToolCombatDamage(aStack)))) + EnumChatFormatting.GRAY);
-                aList.add(tOffset + 3, EnumChatFormatting.WHITE + String.format(trans("006", "Optimal Steam flow: %sL/sec"), "" + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 1000) + EnumChatFormatting.GRAY));
+                aList.add(tOffset + 3, EnumChatFormatting.WHITE + String.format(trans("006", "Optimal Steam flow: %sL/sec"), "" + EnumChatFormatting.GOLD + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 1000) + EnumChatFormatting.GRAY));
                 {
                     int aBaseEff=(int)(5+getToolCombatDamage(aStack))*1000;
                     int aOptFlowLoose=aOptFlow*4;
@@ -369,14 +369,14 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
                     aList.add(tOffset + 4, EnumChatFormatting.GRAY + String.format(trans("500", "Turbine Efficiency (Loose): %s"), "" + EnumChatFormatting.BLUE + aBaseEff/100f) + EnumChatFormatting.DARK_GRAY);
                     aList.add(tOffset + 5, EnumChatFormatting.GRAY + String.format(trans("501", "Optimal Steam flow (Loose): %s L/t"), "" + EnumChatFormatting.GOLD + aOptFlowLoose + EnumChatFormatting.DARK_GRAY));
                 }
-                aList.add(tOffset + 6, EnumChatFormatting.WHITE + String.format(trans("007", "Optimal Gas flow(EU burnvalue per tick): %sEU/t"), "" + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 50) + EnumChatFormatting.GRAY));
-                aList.add(tOffset + 7, EnumChatFormatting.WHITE + String.format(trans("008", "Optimal Plasma flow(Plasma energyvalue per tick): %sEU/t"), "" + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 2000) + EnumChatFormatting.GRAY));
+                aList.add(tOffset + 6, EnumChatFormatting.WHITE + String.format(trans("007", "Optimal Gas flow(EU burnvalue per tick): %sEU/t"), "" + EnumChatFormatting.GOLD + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 50) + EnumChatFormatting.GRAY));
+                aList.add(tOffset + 7, EnumChatFormatting.WHITE + String.format(trans("008", "Optimal Plasma flow(Plasma energyvalue per tick): %sEU/t"), "" + EnumChatFormatting.GOLD + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed * 2000) + EnumChatFormatting.GRAY));
 
             } else {
             	aList.add(tOffset + 0, EnumChatFormatting.WHITE + String.format(trans("001", "Durability: %s/%s"), "" + EnumChatFormatting.GREEN + (tMaxDamage - getToolDamage(aStack)) + " ", " " + tMaxDamage) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 1, EnumChatFormatting.WHITE + String.format(trans("002", "%s lvl %s"), tMaterial.mLocalizedName + EnumChatFormatting.YELLOW, "" + getHarvestLevel(aStack, "")) + EnumChatFormatting.GRAY);
                 aList.add(tOffset + 2, EnumChatFormatting.WHITE + String.format(trans("003", "Attack Damage: %s"), "" + EnumChatFormatting.BLUE + getToolCombatDamage(aStack)) + EnumChatFormatting.GRAY);
-                aList.add(tOffset + 3, EnumChatFormatting.WHITE + String.format(trans("004", "Mining Speed: %s"), "" + EnumChatFormatting.LIGHT_PURPLE + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed)) + EnumChatFormatting.GRAY);
+                aList.add(tOffset + 3, EnumChatFormatting.WHITE + String.format(trans("004", "Mining Speed: %s"), "" + EnumChatFormatting.GOLD + Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed)) + EnumChatFormatting.GRAY);
                 NBTTagCompound aNBT = aStack.getTagCompound();
                 if (aNBT != null) {
                     aNBT = aNBT.getCompoundTag("GT.ToolStats");
