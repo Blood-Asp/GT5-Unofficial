@@ -85,7 +85,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                         GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Mold_Bottle.get(0L, new Object[0]), new ItemStack(Items.glass_bottle, 1), tAmount * 64, 4);
                         break;
                     case "Steel":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 32);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 30);
                         if (tAmount * 2 <= 64)
                             GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Casing.get(0L, new Object[0]), GT_ModHandler.getIC2Item("casingadviron", tAmount * 2), tAmount * 32, 3 * tVoltageMultiplier);
                         if (tAmount * 2 <= 64)
@@ -93,7 +93,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                         break;
                     case "Iron":
                     case "WroughtIron":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), GT_ModHandler.getIC2Item("fuelRod", tAmount), tAmount * 128, 32);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), GT_ModHandler.getIC2Item("fuelRod", tAmount), tAmount * 128, 30);
                         if (tAmount * 2 <= 64)
                             GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Casing.get(0L, new Object[0]), GT_ModHandler.getIC2Item("casingiron", tAmount * 2), tAmount * 32, 3 * tVoltageMultiplier);
                         if (tAmount * 2 <= 64)
@@ -102,7 +102,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                             GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(31L, new Object[]{aStack}), ItemList.Shape_Mold_Anvil.get(0L, new Object[0]), new ItemStack(Blocks.anvil, 1, 0), tAmount * 512, 4 * tVoltageMultiplier);
                         break;
                     case "Tin":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 32);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 30);
                         if (tAmount * 2 <= 64)
                             GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Casing.get(0L, new Object[0]), GT_ModHandler.getIC2Item("casingtin", tAmount * 2), tAmount * 32, 3 * tVoltageMultiplier);
                         if (tAmount * 2 <= 64)
@@ -134,7 +134,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                             GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Mold_Casing.get(0L, new Object[0]), GT_ModHandler.getIC2Item("casinggold", tAmount * 3), tAmount * 128, 1 * tVoltageMultiplier);
                         break;
                     case "Polytetrafluoroethylene":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 32);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, new Object[]{aStack}), ItemList.Shape_Extruder_Cell.get(0L, new Object[0]), ItemList.Cell_Empty.get(tAmount, new Object[0]), tAmount * 128, 30);
                     	break;
                 }
             }
