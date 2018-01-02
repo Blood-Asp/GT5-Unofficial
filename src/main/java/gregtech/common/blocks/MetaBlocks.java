@@ -1,8 +1,13 @@
 package gregtech.common.blocks;
 
+import gregtech.api.capability.internal.IGregTechTileEntity;
+import gregtech.api.metatileentity.IMetaTileEntity;
+import gregtech.api.metatileentity.PaintableMetaTileEntity;
+import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.type.DustMaterial;
 import gregtech.api.unification.material.type.Material;
 import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -10,16 +15,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,10 +65,28 @@ public class MetaBlocks {
     private static final IItemColor ORE_ITEM_COLOR = (stack, tintIndex) ->
         tintIndex == 1 ? ((BlockOre) ((ItemBlock) stack.getItem()).getBlock()).material.materialRGB : 0xFFFFFF;
 
-    public static void init() {
-        MACHINE = new BlockMachine();
-        MACHINE.setRegistryName("machine");
+    private static final IBlockColor MACHINE_BLOCK_COLOR = (IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) -> {
+        IGregTechTileEntity tileEntity = (IGregTechTileEntity) worldIn.getTileEntity(pos);
+        if (tileEntity != null) {
+            IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
+            if (metaTileEntity instanceof PaintableMetaTileEntity) {
+                EnumDyeColor color = ((PaintableMetaTileEntity) metaTileEntity).getColor();
+                if (color != null) {
+                    return color.getColorValue();
+                }
+            }
+        }
+        return 0xFFFFFF;
+    };
 
+    private static final IItemColor MACHINE_ITEM_COLOR = (stack, tintIndex) -> {
+        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Color")) {
+            return EnumDyeColor.byMetadata(stack.getTagCompound().getInteger("Color")).getColorValue();
+        }
+        return 0xFFFFFF;
+    };
+
+    public static void init() {
         BOILER_CASING = new BlockBoilerCasing();
         BOILER_CASING.setRegistryName("boiler_casing");
         METAL_CASING = new BlockMetalCasing();
@@ -87,32 +110,41 @@ public class MetaBlocks {
 
         COMPRESSED = new HashMap<>();
         ORES = new HashMap<>();
-        ArrayList<DustMaterial> materialBuffer = new ArrayList<>();
+        Material[] materialBuffer = new Material[16];
+        Arrays.fill(materialBuffer, Materials._NULL);
         int generationIndex = 0;
         for(Material material : Material.MATERIAL_REGISTRY.getObjectsWithIds()) {
             if(material instanceof DustMaterial) {
-                materialBuffer.add((DustMaterial) material);
-                if(materialBuffer.size() == 16) {
-                    createCompressedBlock(materialBuffer, generationIndex);
-                    materialBuffer.clear();
-                    generationIndex++;
-                }
+            	int id = Material.MATERIAL_REGISTRY.getIDForObject(material);
+            	int index = id / 16;
+            	if (index > generationIndex) {
+            		createCompressedBlock(materialBuffer, generationIndex);
+            		Arrays.fill(materialBuffer, Materials._NULL);
+            	}
+            	if (!OrePrefix.block.isIgnored(material)) {
+            		materialBuffer[id % 16] = material;
+            		generationIndex = index;
+            	}
                 if(material.hasFlag(DustMaterial.MatFlags.GENERATE_ORE)) {
                     createOreBlock((DustMaterial) material);
                 }
             }
         }
-        if(!materialBuffer.isEmpty()) {
-            createCompressedBlock(materialBuffer, generationIndex);
-        }
+        createCompressedBlock(materialBuffer, generationIndex);
 
+        MetaTileEntities.init();
+
+        MACHINE = new BlockMachine();
+        MACHINE.setRegistryName("machine");
     }
 
-    private static void createCompressedBlock(Collection<DustMaterial> materials, int index) {
-        materials.removeIf(OrePrefix.block::isIgnored);
+    private static void createCompressedBlock(Material[] materials, int index) {
         BlockCompressed block = new BlockCompressed(materials);
         block.setRegistryName("compressed_" + index);
-        materials.forEach(material -> COMPRESSED.put(material, block));
+        for (Material material : materials) {
+        	if (material instanceof DustMaterial)
+        		COMPRESSED.put((DustMaterial) material, block);
+        }
     }
 
     private static void createOreBlock(DustMaterial material) {
@@ -133,9 +165,10 @@ public class MetaBlocks {
         registerItemModel(GRANITE);
         registerItemModel(MINERAL);
         registerItemModel(CONCRETE);
+        MACHINE.registerItemModel();
 
-        COMPRESSED.values().stream().distinct().forEach(block -> registerItemModel(block));
-        ORES.values().stream().distinct().forEach(block -> registerItemModel(block));
+        COMPRESSED.values().stream().distinct().forEach(MetaBlocks::registerItemModel);
+        ORES.values().stream().distinct().forEach(MetaBlocks::registerItemModel);
     }
 
     @SideOnly(Side.CLIENT)
@@ -147,6 +180,12 @@ public class MetaBlocks {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public static void registerStateMappers() {
+        MetaBlocks.MACHINE.registerStateMapper();
+    }
+
+    @SideOnly(Side.CLIENT)
     public static void registerColors() {
         MetaBlocks.COMPRESSED.values().stream().distinct().forEach(block -> {
             Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(COMPRESSED_BLOCK_COLOR, block);
@@ -158,6 +197,8 @@ public class MetaBlocks {
             Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ORE_ITEM_COLOR, block);
         });
 
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(MACHINE_BLOCK_COLOR, MetaBlocks.MACHINE);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(MACHINE_ITEM_COLOR, MetaBlocks.MACHINE);
     }
 
     private static String statePropertiesToString(Map<IProperty<?>, Comparable<?>> properties) {

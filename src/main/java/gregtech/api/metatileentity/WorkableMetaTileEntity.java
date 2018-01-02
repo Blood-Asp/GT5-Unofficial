@@ -26,7 +26,7 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
     protected NonNullList<ItemStack> itemOutputs;
 
     private boolean isActive;
-    private boolean workingEnabled;
+    private boolean workingEnabled = true;
 
     public WorkableMetaTileEntity(IMetaTileEntityFactory factory, int tier, RecipeMap<T, ?> recipeMap) {
         super(factory, tier);
@@ -58,14 +58,14 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
     protected boolean setupAndConsumeRecipeInputs(T recipe) {
         int totalEUt = recipe.getEUt() * recipe.getDuration();
         return (totalEUt >= 0 ? getEnergyStored() >= totalEUt : getEnergyStored() - totalEUt <= getEnergyCapacity()) &&
-                recipe.isRecipeInputEqual(true, false, importItems, importFluids) &&
                 addItemsToItemHandler(exportItems, true, recipe.getOutputs()) &&
-                addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs());
+                addFluidsToFluidHandler(exportFluids, true, recipe.getFluidOutputs()) &&
+                recipe.isRecipeInputEqual(true, false, importItems, importFluids);
     }
 
     protected void setupRecipe(T recipe) {
         this.progressTime = 1;
-        this.maxProgressTime = recipe.getDuration();
+        setMaxProgress(recipe.getDuration());
         this.recipeEUt = recipe.getEUt();
         this.fluidOutputs = recipe.getFluidOutputs();
         this.itemOutputs = recipe.getOutputs();
@@ -76,7 +76,7 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
         addItemsToItemHandler(exportItems, false, itemOutputs);
         addFluidsToFluidHandler(exportFluids, false, fluidOutputs);
         this.progressTime = 0;
-        this.maxProgressTime = 0;
+        setMaxProgress(0);
         this.recipeEUt = 0;
         this.fluidOutputs = null;
         this.itemOutputs = null;
@@ -91,6 +91,14 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
     @Override
     public int getMaxProgress() {
         return maxProgressTime;
+    }
+
+    public void setMaxProgress(int maxProgress) {
+        this.maxProgressTime = maxProgress;
+        if(!getWorld().isRemote) {
+            markDirty();
+            holder.writeCustomData(6, buf -> buf.writeInt(maxProgress));
+        }
     }
 
     @Override
@@ -128,7 +136,10 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
     @Override
     public void setActive(boolean active) {
         this.isActive = active;
-
+        if(!getWorld().isRemote) {
+            markDirty();
+            holder.writeCustomData(5, buf -> buf.writeBoolean(active));
+        }
     }
 
     @Override
@@ -136,6 +147,10 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
         switch (dataId) {
             case 5:
                 this.isActive = buf.readBoolean();
+                markBlockForRenderUpdate(); // FIXME this rerenders chank everytime when recipe is completed
+                break;
+            case 6:
+                this.maxProgressTime = buf.readInt();
                 break;
             default:
                 super.receiveCustomData(dataId, buf);
@@ -181,8 +196,8 @@ public abstract class WorkableMetaTileEntity<T extends Recipe> extends TieredMet
         super.loadNBTData(data);
         this.isActive = data.getBoolean("Active");
         this.workingEnabled = data.getBoolean("WorkEnabled");
-        if(progressTime > 0) {
-            this.progressTime = data.getInteger("Progress");
+        this.progressTime = data.getInteger("Progress");
+        if (progressTime > 0) {
             this.maxProgressTime = data.getInteger("MaxProgress");
             this.recipeEUt = data.getInteger("RecipeEUt");
             NBTTagList itemOutputsList = data.getTagList("ItemOutputs", Constants.NBT.TAG_COMPOUND);

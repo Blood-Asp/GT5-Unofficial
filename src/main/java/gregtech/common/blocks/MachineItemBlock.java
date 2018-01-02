@@ -5,6 +5,7 @@ import gregtech.api.metatileentity.GregtechTileEntity;
 import gregtech.api.metatileentity.IMetaTileEntity;
 import gregtech.api.metatileentity.IMetaTileEntityFactory;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -37,28 +38,13 @@ public class MachineItemBlock extends ItemBlock {
     }
 
     @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return I18n.format(getUnlocalizedName(stack));
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag tooltipFlag) {
         tooltip.addAll(Arrays.asList(getFactory(stack).getDescription(stack)));
     }
-
-    @Override
-    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        if (!world.setBlockState(pos, newState, 3))
-            return false;
-
-        IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() == this.block) {
-            IMetaTileEntity tileEntity = getFactory(stack).constructMetaTileEntity();
-            GregtechTileEntity realTileEntity = new GregtechTileEntity();
-            realTileEntity.setMetaTileEntity(tileEntity);
-            world.setTileEntity(pos, realTileEntity);
-            if(stack.hasTagCompound()) {
-                tileEntity.initFromItemStackData(stack.getTagCompound());
-            }
-            this.block.onBlockPlacedBy(world, pos, state, player, stack);
-        }
-        return true;
-    }
-
 }

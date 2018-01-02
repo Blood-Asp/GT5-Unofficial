@@ -3,43 +3,44 @@
   "defaults": {
     "model": "minecraft:cube_all",
     "textures": {
-      "all": "gregtech:blocks/iconsets/RENDERING_ERROR"
+      "all": "missingno"
     }
   },
   "variants": {
-    "casing_variant": {
+    "variant": {
       "bronze_bricks": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/RENDERING_ERROR"
+          "all": "missingno"
         }
       },
       "engine_intake": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/MACHINE_CASING_ENGINE_INTAKE"
+          "all": "gregtech:blocks/iconsets/machine_casing_engine_intake"
         }
       },
       "grate": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/MACHINE_CASING_GRATE"
+          "all": "gregtech:blocks/iconsets/machine_casing_grate"
         }
       },
       "assembler": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/MACHINE_CASING_ASSEMBLER"
+          "all": "gregtech:blocks/iconsets/machine_casing_assembler"
         }
       },
       "assembling_machine": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/RENDERING_ERROR"
-        }},
+          "all": "missingno"
+        }
+      },
       "fusion": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/FUSIONI_8"
+          "all": "gregtech:blocks/iconsets/fusioni_8"
         }
       },
       "fusion_mk2": {
         "textures": {
-          "all": "gregtech:blocks/iconsets/FUSIONII_8"
+          "all": "gregtech:blocks/iconsets/fusionii_8"
         }
       }
     }

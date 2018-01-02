@@ -5,6 +5,7 @@ import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.hash.TShortObjectHashMap;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
+import gregtech.api.capability.impl.ThermalFluidHandlerItemStack;
 import gregtech.api.items.OreDictNames;
 import gregtech.api.items.metaitem.stats.IElectricStats;
 import gregtech.api.items.metaitem.stats.IFluidStats;
@@ -41,11 +42,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -130,47 +126,25 @@ public abstract class MetaItem<T extends MetaItem<?>.MetaValueItem> extends Item
     }
 
     //////////////////////////////////////////////////////////////////
-    //                 IFluidContainer Implementation               //
+    //                     FluidContainer Stuff                     //
     //////////////////////////////////////////////////////////////////
 
-    private IFluidStats getFluidStats(ItemStack itemStack) {
-        T metaValueItem = getItem(itemStack);
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        T metaValueItem = getItem(stack);
         if(metaValueItem == null) {
-            return FluidStats.EMPTY;
+            return null;
         }
         IFluidStats fluidStats = metaValueItem.getFluidStats();
         if (fluidStats == null) {
-            return FluidStats.EMPTY;
+            return null;
         }
-        return fluidStats;
+        return new ThermalFluidHandlerItemStack(stack,
+            fluidStats.getCapacity(stack),
+            fluidStats.getMinFluidTemperature(stack),
+            fluidStats.getMaxFluidTemperature(stack));
     }
-
-    /* TODO FLUID CONTAINERS
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-        return new FluidHandlerItemStack(stack, 16000);
-    }
-
-    @Override
-    public FluidStack getFluid(ItemStack container) {
-        return getFluidStats(container).getFluid(container);
-    }
-
-    @Override
-    public int getCapacity(ItemStack container) {
-        return getFluidStats(container).getCapacity(container);
-    }
-
-    @Override
-    public int fill(ItemStack container, FluidStack resource, boolean doFill) {
-        return getFluidStats(container).fill(container, resource, doFill);
-    }
-
-    @Override
-    public FluidStack drain(ItemStack container, int maxDrain, boolean doDrain) {
-        return getFluidStats(container).drain(container, maxDrain, doDrain);
-    }
-    */
 
     //////////////////////////////////////////////////////////////////
     //                 INuclearStats  Implementation            //
@@ -472,30 +446,32 @@ public abstract class MetaItem<T extends MetaItem<?>.MetaValueItem> extends Item
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        for(T enabledItem : metaItems.valueCollection()) {
-            if(enabledItem.isVisible()) {
-                ItemStack itemStack = enabledItem.getStackForm();
-                IElectricStats electricStats = getManager(itemStack);
-                /*if(getCapacity(itemStack) > 0) {
-                    for(Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-                        if(electricStats.getMaxCharge(itemStack) > 0) {
-                            ItemStack chargedFilledStack = itemStack.copy();
-                            fill(chargedFilledStack, new FluidStack(fluid, Integer.MAX_VALUE), true);
-                            electricStats.charge(chargedFilledStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
-                            subItems.add(chargedFilledStack);
-                        } else {
-                            ItemStack filledStack = itemStack.copy();
-                            fill(filledStack, new FluidStack(fluid, Integer.MAX_VALUE), true);
-                            subItems.add(filledStack);
+        if (this.isInCreativeTab(tab)) {
+            for (T enabledItem : metaItems.valueCollection()) {
+                if (enabledItem.isVisible()) {
+                    ItemStack itemStack = enabledItem.getStackForm();
+                    /*if(getCapacity(itemStack) > 0) {
+                        for(Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+                            if(electricStats.getMaxCharge(itemStack) > 0) {
+                                ItemStack chargedFilledStack = itemStack.copy();
+                                fill(chargedFilledStack, new FluidStack(fluid, Integer.MAX_VALUE), true);
+                                electricStats.charge(chargedFilledStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
+                                subItems.add(chargedFilledStack);
+                            } else {
+                                ItemStack filledStack = itemStack.copy();
+                                fill(filledStack, new FluidStack(fluid, Integer.MAX_VALUE), true);
+                                subItems.add(filledStack);
+                            }
                         }
+                    }*/
+                    IElectricStats electricStats = getManager(itemStack);
+                    if (electricStats.getMaxCharge(itemStack) > 0) {
+                        ItemStack chargedStack = itemStack.copy();
+                        electricStats.charge(chargedStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
+                        subItems.add(chargedStack);
                     }
-                }*/
-                if(electricStats.getMaxCharge(itemStack) > 0) {
-                    ItemStack chargedStack = itemStack.copy();
-                    electricStats.charge(chargedStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false);
-                    subItems.add(chargedStack);
+                    subItems.add(itemStack);
                 }
-                subItems.add(itemStack);
             }
         }
     }

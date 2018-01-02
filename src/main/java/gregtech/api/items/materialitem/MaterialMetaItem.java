@@ -9,22 +9,26 @@ import gregtech.api.unification.material.type.MarkerMaterial;
 import gregtech.api.unification.material.type.Material;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.util.GTUtility;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MaterialMetaItem extends StandardMetaItem {
 
@@ -59,12 +63,22 @@ public class MaterialMetaItem extends StandardMetaItem {
 
     @SideOnly(Side.CLIENT)
     public void registerModels() {
-        ArrayList<ResourceLocation> models = new ArrayList<>();
         for(short metaItem : generatedItems) {
             OrePrefix prefix = this.orePrefixes[metaItem / 1000];
             Material material = Material.MATERIAL_REGISTRY.getObjectById(metaItem % 1000);
-            //material.materialIconSet
+            ModelBakery.registerItemVariants(this, prefix.materialIconType.getItemModelPath(material.materialIconSet));
         }
+
+        int orePrefixAmount = (int) Arrays.stream(this.orePrefixes).filter(Objects::nonNull).count();
+
+        ModelLoader.setCustomMeshDefinition(this, stack -> {
+            if (stack.getMetadata() < orePrefixAmount * 1000) {
+                OrePrefix prefix = this.orePrefixes[stack.getMetadata() / 1000];
+                Material material = Material.MATERIAL_REGISTRY.getObjectById(stack.getMetadata() % 1000);
+                return new ModelResourceLocation(prefix.materialIconType.getItemModelPath(material.materialIconSet), "inventory");
+            }
+            return new ModelResourceLocation("builtin/missing", "missing");
+        });
     }
 
     protected boolean canGenerate(OrePrefix orePrefix, Material material) {
@@ -96,12 +110,12 @@ public class MaterialMetaItem extends StandardMetaItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-        if(tab == GregTechAPI.TAB_GREGTECH) {
+        if(this.isInCreativeTab(tab)) {
             super.getSubItems(tab, subItems);
-        }
-        if(tab == GregTechAPI.TAB_GREGTECH_MATERIALS) {
-            for(short metadata : generatedItems) {
-                subItems.add(new ItemStack(this, 1, metadata));
+            if(tab == GregTechAPI.TAB_GREGTECH_MATERIALS || tab == CreativeTabs.SEARCH) {
+                for(short metadata : generatedItems) {
+                    subItems.add(new ItemStack(this, 1, metadata));
+                }
             }
         }
     }
@@ -123,4 +137,17 @@ public class MaterialMetaItem extends StandardMetaItem {
         }
     }
 
+    //TODO DELETE ON RELEASE
+    @Override
+    public void addInformation(ItemStack itemStack, @Nullable World worldIn, List<String> lines, ITooltipFlag tooltipFlag) {
+        if (itemStack.getMetadata() >= 32000) return;
+        OrePrefix prefix = this.orePrefixes[itemStack.getMetadata() / 1000];
+        Material material = Material.MATERIAL_REGISTRY.getObjectById(itemStack.getMetadata() % 1000);
+        if (prefix != null) {
+            lines.add("IconType: " + prefix.materialIconType);
+        }
+        if (material != null) {
+            lines.add("IconSet: " + material.materialIconSet);
+        }
+    }
 }

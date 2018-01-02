@@ -5,20 +5,8 @@
 
 package gregtech.common;
 
-import gregtech.api.model.ResourcePackHook;
-import gregtech.common.blocks.BlockCompressed;
-import gregtech.common.blocks.BlockOre;
 import gregtech.common.blocks.MetaBlocks;
-import gregtech.common.blocks.models.BlockCompressedFactory;
-import gregtech.common.blocks.models.BlockOreFactory;
 import gregtech.common.items.MetaItems;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -66,6 +54,8 @@ public class ClientProxy extends CommonProxy {
 
     public void onPreLoad() {
         super.onPreLoad();
+//        ModelLoaderRegistry.registerLoader(MTEModelLoader.INSTANCE);
+//        MTEModelLoader.INSTANCE.addMTE2ModelMapping(new GTResourceLocation("block/basic_mte"), new MetaTileEntityModel(MetaTileEntityBakedModel::new));
     }
 
     @Override
@@ -86,9 +76,16 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
+        MetaBlocks.registerStateMappers();
         MetaBlocks.registerItemModels();
         MetaItems.registerModels();
     }
+
+//    @SubscribeEvent
+//    public void onTextureStitchPre(TextureStitchEvent.Pre event) {
+//        TextureMap map = event.getMap();
+//        map.registerSprite(new GTResourceLocation("textures/gui/slot_bronze_furnace_background.png"));
+//    }
 
 //    @SubscribeEvent
 //    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {

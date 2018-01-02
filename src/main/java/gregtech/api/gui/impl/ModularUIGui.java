@@ -14,7 +14,7 @@ public class ModularUIGui extends GuiContainer {
         return modularUI;
     }
 
-    public ModularUIGui(ModularUI modularUI) {
+    public ModularUIGui(ModularUI<?> modularUI) {
         super(new ModularUIContainer(modularUI));
         this.modularUI = modularUI;
     }
@@ -27,11 +27,18 @@ public class ModularUIGui extends GuiContainer {
     }
 
     @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         modularUI.guiWidgets.values().stream()
-                .filter(widget -> widget.drawPriority >= Widget.SLOT_DRAW_PRIORITY)
+                .filter(widget -> widget.drawPriority > Widget.SLOT_DRAW_PRIORITY)
                 .sorted()
-                .forEach(widget -> widget.draw(mouseX, mouseY));
+                .forEach(widget -> widget.drawInForeground(mouseX, mouseY));
     }
 
     @Override
@@ -39,9 +46,9 @@ public class ModularUIGui extends GuiContainer {
         mc.renderEngine.bindTexture(modularUI.backgroundPath);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
         modularUI.guiWidgets.values().stream()
-                .filter(widget -> widget.drawPriority < Widget.SLOT_DRAW_PRIORITY)
+                .filter(widget -> widget.drawPriority <= Widget.SLOT_DRAW_PRIORITY)
                 .sorted()
-                .forEach(widget -> widget.draw(mouseX, mouseY));
+                .forEach(widget -> widget.drawInBackground(guiLeft, guiTop, partialTicks,  mouseX, mouseY));
     }
 
     @Override

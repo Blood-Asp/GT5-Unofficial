@@ -5,6 +5,7 @@ import gregtech.api.unification.stack.MaterialStack;
 import gregtech.api.unification.material.type.DustMaterial;
 import gregtech.api.unification.material.type.FluidMaterial;
 import gregtech.api.unification.material.type.GemMaterial;
+import gregtech.api.unification.material.type.MarkerMaterial;
 import gregtech.api.unification.material.type.Material;
 import gregtech.api.unification.material.type.MetalMaterial;
 import gregtech.api.unification.material.type.RoughMaterial;
@@ -33,6 +34,7 @@ import static gregtech.api.unification.material.type.SolidMaterial.MatFlags.GENE
 import static gregtech.api.unification.material.type.SolidMaterial.MatFlags.GENERATE_ROD;
 import static gregtech.api.unification.material.type.SolidMaterial.MatFlags.MORTAR_GRINDABLE;
 
+@SuppressWarnings("WeakerAccess")
 public class Materials {
 
     private static final long STD_SOLID = GENERATE_PLATE | GENERATE_ROD | GENERATE_BOLT_SCREW;
@@ -41,6 +43,7 @@ public class Materials {
     private static final long EXT_METAL = STD_METAL | GENERATE_ROD | GENERATE_BOLT_SCREW;
     private static final long EXT2_METAL = EXT_METAL | GENERATE_GEAR | GENERATE_FOIL | GENERATE_FINE_WIRE;
 
+    public static MarkerMaterial _NULL = new MarkerMaterial("_null");
     /**
      * Direct Elements
      */
@@ -434,13 +437,6 @@ public class Materials {
         for (DustMaterial dustMaterial : new DustMaterial[]{Zinc, Nickel, Copper, Cobalt, Cobaltite, Tetrahedrite}) {
             dustMaterial.washedIn = SodiumPersulfate;
         }
-        for (Material material : new DustMaterial[]{Iron, PigIron, WroughtIron}) {
-            material.oreReRegistrations.add(MarkerMaterials.GenericMaterial.AnyIron);
-        }
-        for (Material material : new DustMaterial[]{Copper, AnnealedCopper}) {
-            material.oreReRegistrations.add(MarkerMaterials.GenericMaterial.AnyCopper);
-        }
-        Bronze.oreReRegistrations.add(MarkerMaterials.GenericMaterial.AnyBronze);
 
         Neodymium.magneticMaterial = NeodymiumMagnetic;
         Steel.magneticMaterial = SteelMagnetic;

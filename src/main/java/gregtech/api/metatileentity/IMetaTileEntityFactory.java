@@ -6,9 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-
-import java.io.File;
 
 public interface IMetaTileEntityFactory {
 
@@ -18,9 +15,7 @@ public interface IMetaTileEntityFactory {
     String getMetaName();
     String getUnlocalizedName();
 
-    ResourceLocation getModelLocation();
-
-    IBlockState getDefaultRenderState();
+    ResourceLocation getStateLocation();
 
     /**
      * @return a short description of tile entity stack
@@ -38,7 +33,7 @@ public interface IMetaTileEntityFactory {
     ItemStack getStackForm(int amount);
 
     /**
-     * The onCreated function of the item class redirects here
+     * The onCreated function of the Item class redirects here
      */
     void onCreated(ItemStack stack, World world, EntityPlayer player);
 
