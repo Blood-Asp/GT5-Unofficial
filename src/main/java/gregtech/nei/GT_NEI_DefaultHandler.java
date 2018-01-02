@@ -332,7 +332,7 @@ public class GT_NEI_DefaultHandler
         }
 
         public FixedPositionedStack(Object object, int x, int y, int aChance) {
-            super(object, x, y, true);
+            super(GT_OreDictUnificator.getNonUnifiedStacks(object), x, y, true);
             this.mChance = aChance;
         }
 
