@@ -178,7 +178,7 @@ public class GT_OreDictUnificator {
     	List<ItemStack> rList = new ArrayList<ItemStack>();
     	for (ItemStack aStack : aStacks) {
     		rList.add(aStack);
-    		List<ItemStack> tList = sUnificationTable.get(new GT_ItemStack(get(false, aStack)));
+    		List<ItemStack> tList = sUnificationTable.get(new GT_ItemStack(aStack));
     		if (tList != null) {
     			for (ItemStack tStack : tList) {
             		ItemStack tStack1 = GT_Utility.copyAmount(aStack.stackSize, tStack);
