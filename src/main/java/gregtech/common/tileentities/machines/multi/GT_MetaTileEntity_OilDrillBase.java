@@ -129,7 +129,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     }
 
     private float csig(float input) {
-        return (float) ((float) 1 + Math.tanh((-1.0)*input/1100.0));
+        return (float) ((float) 1 + Math.tanh((-1.0)*input/1100.0));  //20*(1 + tanh((-1)*x/1100)), x=0 to 600
     }
 
     private FluidStack pumpOil(float speed){
