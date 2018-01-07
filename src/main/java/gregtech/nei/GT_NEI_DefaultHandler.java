@@ -284,7 +284,6 @@ public class GT_NEI_DefaultHandler
             } else if (gui instanceof GT_GUIContainer_FusionReactor) {
                 return (canHandle(gui)) && (new Rectangle(145, 0, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_FusionReactor) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_FusionReactor) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI, new Object[0]) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI, new Object[0]));
             } else if (gui instanceof GT_GUIContainer_PrimitiveBlastFurnace) {
-            	int[] a = codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui);
                 return (canHandle(gui)) && (new Rectangle(51, 10, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI, new Object[0]) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI, new Object[0]));
             }
             return false;
@@ -331,7 +330,7 @@ public class GT_NEI_DefaultHandler
         }
 
         public FixedPositionedStack(Object object, int x, int y, int aChance) {
-            super(object, x, y, true);
+            super(GT_OreDictUnificator.getNonUnifiedStacks(object), x, y, true);
             this.mChance = aChance;
         }
 
