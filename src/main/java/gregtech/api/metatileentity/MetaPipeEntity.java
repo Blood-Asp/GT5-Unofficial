@@ -739,7 +739,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 		mConnections |= (1 << aSide);
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
-		IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
+		IMetaTileEntity tPipe = tTileEntity != null ? tTileEntity.getMetaTileEntity() : null;
 		if (this.getClass().isInstance(tPipe) && !((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
 			((MetaPipeEntity) tPipe).connect(tSide);
     	return 1;

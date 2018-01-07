@@ -649,4 +649,29 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
     	}
     }
+
+    @Override
+    public FluidStack drain(ForgeDirection aSide, int maxDrain, boolean doDrain) {
+        if(isConnectedAtSide(aSide.ordinal()) || aSide==ForgeDirection.UNKNOWN)
+            return super.drain(aSide, maxDrain, doDrain);
+        return null;
+    }
+
+    @Override
+    public FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
+        if(isConnectedAtSide(aSide.ordinal()) || aSide==ForgeDirection.UNKNOWN)
+            return super.drain(aSide, aFluid, doDrain);
+        return null;
+    }
+
+    //Stub method?
+    //@Override
+    //public int fill(FluidStack resource, boolean doFill) {}
+
+    @Override
+    public int fill(ForgeDirection aSide, FluidStack aFluid, boolean doFill) {
+        if(isConnectedAtSide(aSide.ordinal()) || aSide==ForgeDirection.UNKNOWN)
+            return super.fill(aSide, aFluid, doFill);
+        return 0;
+    }
 }
