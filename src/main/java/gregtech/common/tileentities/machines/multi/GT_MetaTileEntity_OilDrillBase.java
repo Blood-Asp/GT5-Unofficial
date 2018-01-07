@@ -76,10 +76,10 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
         int tier = Math.max(0, GT_Utility.getTier(getMaxInputVoltage()));
-        this.mEUt = (workState==STATE_AT_BOTTOM?-1:-7) << (tier << 1);//(1/4) A of current tier when at bottom (7/8) A of current tier while mining
+        this.mEUt = -7 << (tier << 1);//(1/4) A of current tier when at bottom (7/8) A of current tier while mining
         this.mMaxProgresstime = Math.max(1,
                 (workState == STATE_AT_BOTTOM ?
-                        (240 * (getRangeInChunks() * getRangeInChunks()))>>(getMinTier()-1)  :
+                        (120 * (getRangeInChunks() * getRangeInChunks()))>>(getMinTier()-1)  :
                         120
                 ) >> tier);
     }
