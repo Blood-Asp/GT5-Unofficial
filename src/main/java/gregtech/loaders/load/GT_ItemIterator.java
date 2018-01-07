@@ -103,11 +103,11 @@ public class GT_ItemIterator
                         if ((tItem instanceof IFluidContainerItem)) {
                             GT_OreDictUnificator.addToBlacklist(new ItemStack(tItem, 1, 32767));
                         }
-                        if ((tName.equals("item.ItemSensorLocationCard")) || (tName.equals("item.ItemEnergySensorLocationCard")) || (tName.equals("item.ItemEnergyArrayLocationCard")) || (tName.equals("item.ItemTextCard"))) {
-                            GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 32);
+                        if ((tName.equals("item.ItemSensorLocationCard")) || (tName.equals("item.ItemEnergySensorLocationCard")) || (tName.equals("item.ItemEnergyArrayLocationCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemVanillaMachineCard")) || (tName.equals("item.RFSensorCard")) || (tName.equals("item.Item55ReactorCard"))) {
+                            GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
                         }
-                        if (tName.equals("item.ItemTimeCard")) {
-                            GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 1L), 100, 32);
+                            if ((tName.equals("item.ItemTimeCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.ItemLiquidArrayLocationCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.CardAppeng"))) {
+                            GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 1L), 100, 30);
                         }
                         if (tName.equals("tile.ArsMagica:ore_vinteum")) {
                             GT_OreDictUnificator.set(OrePrefixes.ore, Materials.Vinteum, new ItemStack(tItem, 1, 0));
