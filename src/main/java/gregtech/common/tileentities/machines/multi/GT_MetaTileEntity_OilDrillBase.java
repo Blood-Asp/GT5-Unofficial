@@ -64,9 +64,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "DrillingRig.png");
     }
 
-    protected int getRangeInChunks(){
-        return 0;
-    }
+    protected abstract int getRangeInChunks();
 
     @Override
     protected boolean checkHatches() {
@@ -77,10 +75,13 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     protected void setElectricityStats() {
         this.mEfficiency = getCurrentEfficiency(null);
         this.mEfficiencyIncrease = 10000;
-        int tier = Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
-        this.mEUt = -3 * (1 << (tier << 1));
-        this.mMaxProgresstime = (workState == STATE_AT_BOTTOM ? (1280 * getRangeInChunks() * getRangeInChunks() / (1 << getMinTier())) : 80) / (1 << tier);
-        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        int tier = Math.max(0, GT_Utility.getTier(getMaxInputVoltage()));
+        this.mEUt = (workState==STATE_AT_BOTTOM?-1:-7) << (tier << 1);//(1/4) A of current tier when at bottom (7/8) A of current tier while mining
+        this.mMaxProgresstime = Math.max(1,
+                (workState == STATE_AT_BOTTOM ?
+                        (240 * (getRangeInChunks() * getRangeInChunks()))>>(getMinTier()-1)  :
+                        120
+                ) >> tier);
     }
 
     @Override
@@ -124,8 +125,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 }
             }
         }
-        if (mOilFieldChunks.isEmpty()) return false;
-        return true;
+        return !mOilFieldChunks.isEmpty();
     }
 
     private FluidStack pumpOil(float speed){
@@ -134,7 +134,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         tOil = new FluidStack(FluidRegistry.getFluid(mOilId), 0);
         for (Chunk tChunk : mOilFieldChunks) {
             tFluid = undergroundOil(getBaseMetaTileEntity(),speed);
-            if (tFluid == null) mOilFieldChunks.remove(tChunk);
+            if (tFluid == null || tFluid.amount<1) mOilFieldChunks.remove(tChunk);
             if (tOil.isFluidEqual(tFluid)) tOil.amount += tFluid.amount;
         }
         return tOil.amount == 0 ? null : tOil;
