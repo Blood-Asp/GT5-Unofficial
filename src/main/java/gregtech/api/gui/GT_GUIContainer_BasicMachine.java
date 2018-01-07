@@ -33,9 +33,14 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
     }
 
     @Override
+    public void drawScreen(int par1, int par2, float par3) {
+    	super.drawScreen(par1, par2, par3);
+    	drawTooltip(par1, par2);
+    }
+
+    @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         fontRendererObj.drawString(mName, 8, 4, 4210752);
-        drawTooltip(par1, par2);
     }
 
     private void drawTooltip(int x2, int y2) {
@@ -53,7 +58,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
             }
         }
         if (!list.isEmpty())
-            drawHoveringText(list, x, y, fontRendererObj);
+            drawHoveringText(list, x2, y2, fontRendererObj);
     }
 
     @Override
