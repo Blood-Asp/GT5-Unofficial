@@ -91,7 +91,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         }
 
         if (reachingVoidOrBedrock() && tryFillChunkList()) {
-            float speed = 20.0F+(GT_Utility.getTier(getMaxInputVoltage()) - getMinTier()) *1.5F;
+            float speed = .5F+(GT_Utility.getTier(getMaxInputVoltage()) - getMinTier()) *.25F;
             FluidStack tFluid = pumpOil(speed);
             if (tFluid != null && tFluid.amount > getTotalConfigValue()){
                 this.mOutputFluids = new FluidStack[]{tFluid};
