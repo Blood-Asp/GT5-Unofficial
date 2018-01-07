@@ -128,19 +128,14 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         return true;
     }
 
-    private float csig(float input) {
-        return (float) ((float) 1 + Math.tanh((-1.0)*input/1100.0));
-    }
-
     private FluidStack pumpOil(float speed){
         if (mOilId <= 0) return null;
         FluidStack tFluid, tOil;
         tOil = new FluidStack(FluidRegistry.getFluid(mOilId), 0);
         for (Chunk tChunk : mOilFieldChunks) {
-            tFluid = undergroundOil(getBaseMetaTileEntity(),speed*csig(undergroundOilReadInformation(getBaseMetaTileEntity()).amount));
+            tFluid = undergroundOil(getBaseMetaTileEntity(),speed);
             if (tFluid == null) mOilFieldChunks.remove(tChunk);
             if (tOil.isFluidEqual(tFluid)) tOil.amount += tFluid.amount;
-
         }
         return tOil.amount == 0 ? null : tOil;
     }
