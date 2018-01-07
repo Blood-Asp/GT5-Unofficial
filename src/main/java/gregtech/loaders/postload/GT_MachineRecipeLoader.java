@@ -1709,12 +1709,13 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 8L), new ItemStack(Items.flint, 1), ItemList.IC2_Compressed_Coal_Ball.get(1L, new Object[0]), 400, 4);
 
         if(Loader.isModLoaded("IC2NuclearControl")) {
-            GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(8L, new Object[0]), ItemList.NC_SensorCard.get(8L, new Object[0]), GT_ModHandler.getIC2Item("electronicCircuit", 4L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(1L, new Object[0]), ItemList.NC_SensorCard.get(1L, new Object[0]), GT_ModHandler.getIC2Item("electronicCircuit", 4L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "RFSensorCard", 1L, 0), GT_ModHandler.getModItem("IC2NuclearControl", "RFSensorCard", 1L, 0),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
         }
-        
+
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("tinCableItem", 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 1L), GT_ModHandler.getIC2Item("insulatedTinCableItem", 1L), 100, 2);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("copperCableItem", 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Rubber, 1L), GT_ModHandler.getIC2Item("insulatedCopperCableItem", 1L), 100, 2);
