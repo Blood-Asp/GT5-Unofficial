@@ -103,10 +103,10 @@ public class GT_ItemIterator
                         if ((tItem instanceof IFluidContainerItem)) {
                             GT_OreDictUnificator.addToBlacklist(new ItemStack(tItem, 1, 32767));
                         }
-                        if ((tName.equals("item.ItemSensorLocationCard")) || (tName.equals("item.ItemEnergySensorLocationCard")) || (tName.equals("item.ItemEnergyArrayLocationCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemVanillaMachineCard")) || (tName.equals("item.RFSensorCard")) || (tName.equals("item.Item55ReactorCard"))) {
+                        if ((tName.equals("item.ItemSensorLocationCard")) || (tName.equals("item.ItemEnergySensorLocationCard")) || (tName.equals("item.ItemEnergyArrayLocationCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemTextCard")) || (tName.equals("item.ItemVanillaMachineCard")) || (tName.equals("item.RFSensorCard")) || (tName.equals("item.Item55ReactorCard")) || (tName.equals("gt.sensorcard"))) {
                             GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
                         }
-                            if ((tName.equals("item.ItemTimeCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.ItemLiquidArrayLocationCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.ItemMultipleSensorLocationCard")) || (tName.equals("item.CardAppeng"))) {
+                            if ((tName.equals("item.ItemTimeCard")) || (tName.equals("item.ItemCounterSensorLocationCard")) || (tName.equals("item.ItemLiquidSensorLocationCard")) || (tName.equals("item.ItemGeneratorSensorLocationCard")) || (tName.equals("item.ItemLiquidArrayLocationCard")) || (tName.equals("item.ItemInventoryScannerCard")) || (tName.equals("item.AppengCard")) || (tName.equals("item.RFenergyCard")) || (tName.equals("item.ItemVanillaMachineCard"))) {
                             GT_Values.RA.addAssemblerRecipe(new ItemStack(tItem, 1, 32767), null, GT_ModHandler.getIC2Item("electronicCircuit", 1L), 100, 30);
                         }
                         if (tName.equals("tile.ArsMagica:ore_vinteum")) {
