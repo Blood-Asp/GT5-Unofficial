@@ -1170,14 +1170,21 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
     
     private boolean canMoveFluidOnSide(ForgeDirection aSide, Fluid aFluid, boolean isFill) {
-        if (aSide == ForgeDirection.UNKNOWN 
-            || ( (isFill ? mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) : mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()))
-                    && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this)
-                    && mMetaTileEntity.isConnectedAtSide((byte) aSide.ordinal())
-                    )
-                )
-        	return true;
-    	return false;
+        if (aSide == ForgeDirection.UNKNOWN)
+            return true;
+
+        if (!mMetaTileEntity.isConnectedAtSide((byte) aSide.ordinal()))
+            return false;
+
+        if(isFill && mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this))
+            return true;
+
+        if (!isFill && mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) 
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this))
+            return true;
+
+        return false;
     }
 
     @Override
