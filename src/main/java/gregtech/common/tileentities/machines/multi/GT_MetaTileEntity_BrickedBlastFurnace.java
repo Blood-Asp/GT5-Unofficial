@@ -28,7 +28,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Bricked Blast Furnace",
-                "Controller has to be placed in the Center of the second layer",
+                "Controller has to be placed in the (front) center of the second layer",
                 "Useable for Steel and general Pyrometallurgy",
                 "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
                 "Built from 32 Fired Brick Blocks",
