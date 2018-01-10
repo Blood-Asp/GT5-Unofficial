@@ -49,6 +49,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                 "1x Superheated Steam Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
                 "1x Dynamo Hatch (Back centered)",
+                "1x Output Hatch for Steam (Side centered)",
                 "Titanium Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)",
                 "Output depending on Rotor and fitting",
