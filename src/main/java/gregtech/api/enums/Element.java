@@ -132,6 +132,7 @@ public enum Element {
     Lv(116, 177, 0, -1, null, "Livermorium", false),
     Fa(117, 177, 0, -1, null, "Farnsium", false), // Uus, Ununseptium
     Uuo(118, 176, 0, -1, null, "Ununoctium", false),
+    Tn(125, 198, 0, -1, null, "Tritanium", false),
 
     Ma(0, 0, 100, -1, null, "Magic", false),
     Nt(0, 100000, 0, -1, null, "Neutronium", false),
@@ -259,6 +260,7 @@ public enum Element {
     $Lv(-116, -177, 0, -1, null, "Anti-Livermorium", false),
     $Uus(-117, -177, 0, -1, null, "Anti-Ununseptium", false),
     $Uuo(-118, -176, 0, -1, null, "Anti-Ununoctium", false),
+    $Tn(-125, -198, 0, -1, null, "Anti-Tritanium", false),
 
     $Ma(0, 0, -100, -1, null, "Anti-Magic", false),
     $Nt(0, -10000, 0, -1, null, "Anti-Neutronium", false);
