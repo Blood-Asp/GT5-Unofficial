@@ -13,7 +13,6 @@ public enum ConfigCategories {
 
     public enum Materials {
         heatdamage,
-        oreprocessingoutputmultiplier,
         blastfurnacerequirements,
         blastinductionsmelter,;
     }
