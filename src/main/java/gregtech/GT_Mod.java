@@ -63,7 +63,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false, dependencies = "required-after:dreamcraft; required-after:IC2; after:Forestry; after:PFAAGeologica; after:Thaumcraft; after:Railcraft; after:appliedenergistics2; after:ThermalExpansion; after:TwilightForest; after:harvestcraft; after:magicalcrops; after:BuildCraft|Transport; after:BuildCraft|Silicon; after:BuildCraft|Factory; after:BuildCraft|Energy; after:BuildCraft|Core; after:BuildCraft|Builders; after:GalacticraftCore; after:GalacticraftMars; after:GalacticraftPlanets; after:ThermalExpansion|Transport; after:ThermalExpansion|Energy; after:ThermalExpansion|Factory; after:RedPowerCore; after:RedPowerBase; after:RedPowerMachine; after:RedPowerCompat; after:RedPowerWiring; after:RedPowerLogic; after:RedPowerLighting; after:RedPowerWorld; after:RedPowerControl; after:UndergroundBiomes;")
+@Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false, dependencies = "required-after:dreamcraft; required-after:IC2; after:Forestry; after:PFAAGeologica; after:Thaumcraft; after:Railcraft; after:appliedenergistics2; after:ThermalExpansion; after:TwilightForest; after:harvestcraft; after:magicalcrops; after:BuildCraft|Transport; after:BuildCraft|Silicon; after:BuildCraft|Factory; after:BuildCraft|Energy; after:BuildCraft|Core; after:BuildCraft|Builders; after:GalacticraftCore; after:GalacticraftMars; after:GalacticraftPlanets; after:ThermalExpansion|Transport; after:ThermalExpansion|Energy; after:ThermalExpansion|Factory; after:RedPowerCore; after:RedPowerBase; after:RedPowerMachine; after:RedPowerCompat; after:RedPowerWiring; after:RedPowerLogic; after:RedPowerLighting; after:RedPowerWorld; after:RedPowerControl; after:UndergroundBiomes; after:TConstruct; after:Translocator;")
 public class GT_Mod implements IGT_Mod {
     public static final int VERSION = 509, SUBVERSION = 31;
     public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
@@ -137,7 +137,12 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.mIC2Classic = Loader.isModLoaded("IC2-Classic-Spmod");
         GregTech_API.mMagneticraft = Loader.isModLoaded("Magneticraft");
         GregTech_API.mImmersiveEngineering = Loader.isModLoaded("ImmersiveEngineering");
-        GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");        
+        GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");
+        GregTech_API.mTranslocator = Loader.isModLoaded("Translocator");
+        GregTech_API.mTConstruct = Loader.isModLoaded("TConstruct");
+        GT_Log.out.println("GT_Mod: Are you there Translocator? " + GregTech_API.mTranslocator);
+        GT_Log.out.println("GT_Mod: Are you there TConstruct? " + GregTech_API.mTConstruct);
+        
         GT_Log.mLogFile = new File(aEvent.getModConfigurationDirectory().getParentFile(), "logs/GregTech.log");
         if (!GT_Log.mLogFile.exists()) {
             try {
@@ -325,6 +330,10 @@ public class GT_Mod implements IGT_Mod {
                 tPrefix.mDefaultStackSize = ((byte) Math.min(64, Math.max(16, tMainConfig.get("features", "MaxOtherBlockStackSize", 64).getInt())));
             }
         }
+
+        new Enchantment_EnderDamage();
+        new Enchantment_Radioactivity();
+
         //GT_Config.troll = (Calendar.getInstance().get(2) + 1 == 4) && (Calendar.getInstance().get(5) >= 1) && (Calendar.getInstance().get(5) <= 2);
         Materials.init();
 
@@ -460,9 +469,6 @@ public class GT_Mod implements IGT_Mod {
         }else{System.out.println("noMaterial "+reEnable);}
         }else{System.out.println("noPrefix "+reEnable);}}
         
-        new Enchantment_EnderDamage();
-        new Enchantment_Radioactivity();
-
         new GT_Loader_OreProcessing().run();
         new GT_Loader_OreDictionary().run();
         new GT_Loader_ItemData().run();

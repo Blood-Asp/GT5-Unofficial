@@ -1,6 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -231,6 +232,8 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
                 if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity().connectsToItemPipe(tSide)) {
                 	rConnect = 1;
                 }
+            } else if(GregTech_API.mTranslocator == true && tTileEntity instanceof codechicken.translocator.TileItemTranslocator) {
+                rConnect = 1;
             }
             if (rConnect == 0) {
             	if (tTileEntity instanceof IInventory) {
