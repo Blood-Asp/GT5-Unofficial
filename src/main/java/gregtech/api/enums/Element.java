@@ -134,8 +134,8 @@ public enum Element {
     Og(118, 176, 0, -1, null, "Oganesson", false),
     Tn(125, 198, 0, -1, null, "Tritanium", false),
 
-    De(22, 27, 0, -1, null, "Desh", true), 
-    Oh(76, 125, 0, -1, null, "Oriharukon", true),
+    De(22, 27, 0, -1, null, "Desh", false), 
+    Oh(76, 125, 0, -1, null, "Oriharukon", false),
        
     Ma(0, 0, 100, -1, null, "Magic", false),
     Nt(0, 100000, 0, -1, null, "Neutronium", false),
