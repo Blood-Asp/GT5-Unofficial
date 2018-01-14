@@ -369,7 +369,11 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                 if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Fluid) {
                 	tFluidPipe = (GT_MetaPipeEntity_Fluid) ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
                 }
+            } else if(GregTech_API.mTranslocator == true && tTileEntity instanceof tconstruct.smeltery.logic.FaucetLogic) {
+                // Tinker Construct Faucets return a null tank info, so check the class
+                rConnect = 1;
             }
+            
             FluidTankInfo[] tInfo = tTileEntity.getTankInfo(ForgeDirection.getOrientation(aSide).getOpposite());
             if (tInfo != null) {
             	if (tInfo.length > 0) {
@@ -390,7 +394,10 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                     			GT_Utility.areStacksEqual(tCover, ItemList.FluidRegulator_IV.get(1, new Object[]{},true)))) {
                     		rConnect = 1;
                     	}
-                    }  
+                    } else if(GregTech_API.mTranslocator == true && tTileEntity instanceof codechicken.translocator.TileLiquidTranslocator) {
+                        // Translocators return a TankInfo, but it's of 0 length - so check the class if we see this pattern
+                        rConnect = 1;
+                    }
             	}
             }
         }
@@ -418,7 +425,6 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         if (aIndex == 9) {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 5, 1.0F, aX, aY, aZ);
             for (byte i = 0; i < 6; i++)
-                for (int l = 0; l < 2; ++l)
                     getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5 + XSTR_INSTANCE.nextFloat(), aY - 0.5 + XSTR_INSTANCE.nextFloat(), aZ - 0.5 + XSTR_INSTANCE.nextFloat(), ForgeDirection.getOrientation(i).offsetX / 5.0, ForgeDirection.getOrientation(i).offsetY / 5.0, ForgeDirection.getOrientation(i).offsetZ / 5.0);
         }
     }
