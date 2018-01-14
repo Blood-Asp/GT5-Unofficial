@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1173,7 +1174,9 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
         if (aSide == ForgeDirection.UNKNOWN)
             return true;
 
-        if (!mMetaTileEntity.isConnectedAtSide((byte) aSide.ordinal()))
+        IFluidHandler tTileEntity = getITankContainerAtSide((byte) aSide.ordinal());
+        // Only require a connection if there's something to connect to - Allows fluid cells & buckets to interact with the pipe
+        if (tTileEntity != null && !mMetaTileEntity.isConnectedAtSide((byte) aSide.ordinal()))
             return false;
 
         if(isFill && mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
