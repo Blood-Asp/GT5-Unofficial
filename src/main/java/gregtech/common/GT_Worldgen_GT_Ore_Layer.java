@@ -7,6 +7,8 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -40,7 +42,7 @@ public class GT_Worldgen_GT_Ore_Layer
     public static final int NO_ORE_IN_BOTTOM_LAYER=2;
     public static final int NO_OVERLAP=3;
     public static final int ORE_PLACED=4;
-
+    public static final int NO_OVERLAP_AIR_BLOCK=5;
     
     //public final boolean mMoon;
     //public final boolean mMars;
@@ -124,14 +126,18 @@ public class GT_Worldgen_GT_Ore_Layer
         int wX = Math.max( wXVein, aChunkX + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int eX = Math.min( eXVein, aChunkX + 2 + 16);
         if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
-            /*
-            if (debugOrevein) {
-                GT_Log.out.println(
-                    "No X overlap"
-                );
+            Block tBlock = aWorld.getBlock(aChunkX + 8, tMinY, aChunkZ + 8);
+            if (tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.stone) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.netherrack) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.end_stone) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, GregTech_API.sBlockGranites) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, GregTech_API.sBlockStones) ) {
+                // Didn't reach, but could have placed. Save orevein for future use.
+                return NO_OVERLAP;
+            } else {
+                // Didn't reach, but couldn't place in test spot anywys, try for another orevein
+                return NO_OVERLAP_AIR_BLOCK;
             }
-            */
-            return NO_OVERLAP;
         }
         // Determine North/Sound ends of orevein
         int nZVein = aSeedZ - aRandom.nextInt(mSize);
@@ -140,14 +146,31 @@ public class GT_Worldgen_GT_Ore_Layer
         int nZ = Math.max(nZVein, aChunkZ + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int sZ = Math.min(sZVein, aChunkZ + 2 + 16);
         if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
-            /*
-            if (debugOrevein) {
-                GT_Log.out.println(
-                    "No Z overlap"
-                );
+            Block tBlock = aWorld.getBlock(aChunkX + 8, tMinY, aChunkZ + 8);
+            if (tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.stone) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.netherrack) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, Blocks.end_stone) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, GregTech_API.sBlockGranites) ||
+                tBlock.isReplaceableOreGen(aWorld, aChunkX+8, tMinY, aChunkZ + 8, GregTech_API.sBlockStones) ) {
+                // Didn't reach, but could have placed. Save orevein for future use.
+                return NO_OVERLAP;
+            } else {
+                // Didn't reach, but couldn't place in test spot anywys, try for another orevein
+                return NO_OVERLAP_AIR_BLOCK;
             }
-            */
-            return NO_OVERLAP;
+        }
+
+        if (debugOrevein) {
+            String tDimensionName = aWorld.provider.getDimensionName();
+            GT_Log.out.print(
+                            "Trying Orevein:" + this.mWorldGenName +
+                            " Dimension=" + tDimensionName +
+                            " mX="+aChunkX/16+
+                            " mZ="+aChunkZ/16+
+                            " oreseedX="+ aSeedX/16 +
+                            " oreseedZ="+ aSeedZ/16 +
+                            " cY="+tMinY
+                            );
         }
         // Adjust the density down the more chunks we are away from the oreseed.  The 5 chunks surrounding the seed should always be max density due to truncation of Math.sqrt().
         int localDensity = Math.max(1, this.mDensity / ((int)Math.sqrt(2 + Math.pow(aChunkX/16 - aSeedX/16, 2) + Math.pow(aChunkZ/16 - aSeedZ/16, 2))) );
@@ -254,13 +277,6 @@ public class GT_Worldgen_GT_Ore_Layer
         if (debugOrevein) {
             String tDimensionName = aWorld.provider.getDimensionName();
             GT_Log.out.println(
-                            "Generated Orevein:" + this.mWorldGenName +
-                            " Dimension=" + tDimensionName +
-                            " mX="+aChunkX/16+
-                            " mZ="+aChunkZ/16+
-                            " oreseedX="+ aSeedX/16 +
-                            " oreseedZ="+ aSeedZ/16 +
-                            " cY="+tMinY+
                             " wXVein" + wXVein +
                             " eXVein" + eXVein +
                             " nZVein" + nZVein +
