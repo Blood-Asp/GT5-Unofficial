@@ -108,7 +108,13 @@ implements IWorldGenerator {
         public final IChunkProvider mChunkGenerator;
         public final IChunkProvider mChunkProvider;
         public final String mBiome;
+        // Used for outputting orevein weights and bins
+        //        static int test=0;
+
+
         // Local class to track which orevein seeds must be checked when doing chunkified worldgen
+
+
         class NearbySeeds {
             public int mX;
             public int mZ;
@@ -130,6 +136,30 @@ implements IWorldGenerator {
             this.mChunkProvider = aChunkProvider;
             this.mBiome = aBiome;
         }
+
+        // How to evaluate oregen distribution
+        // - Enable debugOreveins
+        // - Fly around for a while, or teleport jumping ~320 blocks at a time, with 
+        //   a 15-30s pause for worldgen to catch up
+        // - Do this across a large area, at least 2000x2000 blocks for good numbers
+        // - Open logs\gregtech.log
+        // - Using notepad++, do a Search | Find  - enter "Added" for the search term
+        // - Select Find All In Current Document
+        // - In the Search window, right-click and Select All
+        // - Copy and paste to a new file
+        // - Delete extraneous stuff at top, and blank line at bottom.  Line count is 
+        //   # of total oreveins
+        // - For simple spot checks, use Find All in Current Document for specific 
+        //   oremixes, ie ore.mix.diamond, to check how many appear in the list.
+        // - For more complex work, import file into Excel, and sort based on oremix 
+        //   column.  Drag select the oremix names, in the bottom right will be how many 
+        //   entries to add in a seperate tab to calculate %ages.
+        //
+        // When using the ore weights, discount or remove the high altitude veins since
+        // their high weight are offset by their rareness. I usually just use zero for them.
+        // Actual spawn rates will vary based upon the average height of the stone layers
+        // in the dimension. For example veins that range above and below the average height 
+        // will be less, and veins that are completely above the average height will be much less.
 
         public void worldGenFindVein( int oreseedX, int oreseedZ) {
             // Explanation of oreveinseed implementation.
@@ -159,6 +189,22 @@ implements IWorldGenerator {
                     int placementAttempts = 0;
                     boolean oreveinFound = false;
                     int i;
+
+                    // Used for outputting orevein weights and bins
+                    /*
+                    if( test==0 )
+                        {
+                        test = 1;
+                        GT_Log.out.println(
+                            "sWeight = " + GT_Worldgen_GT_Ore_Layer.sWeight 
+                            );
+                        for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
+                            GT_Log.out.println(
+                                ( tWorldGen).mWorldGenName + " mWeight = " + ( tWorldGen).mWeight + " mSize = " + (tWorldGen).mSize
+                                );
+                            }
+                        }
+                    */
                     for( i = 0; (i < oreveinAttempts) && (!oreveinFound) && (placementAttempts<oreveinMaxPlacementAttempts); i++ ) {
                         int tRandomWeight = oreveinRNG.nextInt(GT_Worldgen_GT_Ore_Layer.sWeight);
                         for (GT_Worldgen_GT_Ore_Layer tWorldGen : GT_Worldgen_GT_Ore_Layer.sList) {
@@ -171,7 +217,8 @@ implements IWorldGenerator {
                                     switch(placementResult) {
                                         case GT_Worldgen_GT_Ore_Layer.ORE_PLACED:
                                             if (debugOrevein) GT_Log.out.println(
-                                                " Added oreveinSeed=" + oreveinSeed + 
+                                                " Added near oreveinSeed=" + oreveinSeed + " " +
+                                                ( tWorldGen).mWorldGenName +
                                                 " tries at oremix=" + i +
                                                 " placementAttempts=" + placementAttempts +
                                                 " dimensionName=" + tDimensionName
@@ -184,7 +231,26 @@ implements IWorldGenerator {
                                             // SHould do retry in this case until out of chances
                                             break;
                                         case GT_Worldgen_GT_Ore_Layer.NO_OVERLAP:
-                                            // Orevein didn't reach this chunk, can't add it yet to the hash
+                                            if (debugOrevein) GT_Log.out.println(
+                                                " Added far oreveinSeed=" + oreveinSeed + " " +
+                                                ( tWorldGen).mWorldGenName +
+                                                " tries at oremix=" + i +
+                                                " placementAttempts=" + placementAttempts +
+                                                " dimensionName=" + tDimensionName
+                                            );
+                                            validOreveins.put(oreveinSeed, tWorldGen);
+                                            oreveinFound = true;
+                                            break;
+                                        case GT_Worldgen_GT_Ore_Layer.NO_OVERLAP_AIR_BLOCK:
+                                            if (debugOrevein) GT_Log.out.println(
+                                                " No overlap and air block in test spot=" + oreveinSeed + " " +
+                                                ( tWorldGen).mWorldGenName +
+                                                " tries at oremix=" + i +
+                                                " placementAttempts=" + placementAttempts +
+                                                " dimensionName=" + tDimensionName
+                                            );
+                                            // SHould do retry in this case until out of chances
+                                            placementAttempts++;
                                             break;
                                     }
                                     break; // Try the next orevein
@@ -195,14 +261,14 @@ implements IWorldGenerator {
                                         " mX="+ this.mX +
                                         " mZ="+ this.mZ + 
                                         " oreseedX="+ oreseedX +
-                                        " oreseedZ="+ oreseedZ                                    
-                                    );    
+                                        " oreseedZ="+ oreseedZ
+                                    );
                                     e.printStackTrace(GT_Log.err);
                                 }
                             }
                         }
                     }
-                    // Only add an empty orevein if are unable to place a vein at the oreseed chunk.
+                    // Only add an empty orevein if unable to place a vein at the oreseed chunk.
                     if ((!oreveinFound) && (this.mX == oreseedX) && (this.mZ == oreseedZ)){
                         if (debugOrevein) GT_Log.out.println(
                             " Empty oreveinSeed="+ oreveinSeed +
