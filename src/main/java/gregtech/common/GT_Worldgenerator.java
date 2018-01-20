@@ -137,12 +137,30 @@ implements IWorldGenerator {
             this.mBiome = aBiome;
         }
 
-
         // How to evaluate oregen distribution
-        // 
+        // - Enable debugOreveins
+        // - Fly around for a while, or teleport jumping ~320 blocks at a time, with 
+        //   a 15-30s pause for worldgen to catch up
+        // - Do this across a large area, at least 2000x2000 blocks for good numbers
+        // - Open logs\gregtech.log
+        // - Using notepad++, do a Search | Find  - enter "Added" for the search term
+        // - Select Find All In Current Document
+        // - In the Search window, right-click and Select All
+        // - Copy and paste to a new file
+        // - Delete extraneous stuff at top, and blank line at bottom.  Line count is 
+        //   # of total oreveins
+        // - For simple spot checks, use Find All in Current Document for specific 
+        //   oremixes, ie ore.mix.diamond, to check how many appear in the list.
+        // - For more complex work, import file into Excel, and sort based on oremix 
+        //   column.  Drag select the oremix names, in the bottom right will be how many 
+        //   entries to add in a seperate tab to calculate %ages.
+        //
+        // When using the ore weights, discount or remove the high altitude veins since
+        // their high weight are offset by their rareness. I usually just use zero for them.
+        // Actual spawn rates will vary based upon the average height of the stone layers
+        // in the dimension. For example veins that range above and below the average height 
+        // will be less, and veins that are completely above the average height will be much less.
 
-
-        
         public void worldGenFindVein( int oreseedX, int oreseedZ) {
             // Explanation of oreveinseed implementation.
             // (long)this.mWorld.getSeed()<<16)    Deep Dark does two oregen passes, one with getSeed set to +1 the original world seed.  This pushes that +1 off the low bits of oreseedZ, so that the hashes are far apart for the two passes.
