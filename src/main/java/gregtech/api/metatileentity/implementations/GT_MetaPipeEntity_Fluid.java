@@ -298,7 +298,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                                 tAmount /= tSuccessfulTankAmount;
                                 for (Entry<IFluidHandler, ForgeDirection> tTileEntity : tTanks.entrySet()) {
                                     if (mFluids[index] == null || mFluids[index].amount <= 0) break;
-                                    int tFilledAmount = tTileEntity.getKey().fill(tTileEntity.getValue(), drain(tAmount, false), false);
+                                    int tFilledAmount = tTileEntity.getKey().fill(tTileEntity.getValue(), drainFromIndex(tAmount, false, index), false);
                                     if (tFilledAmount > 0)
                                         tTileEntity.getKey().fill(tTileEntity.getValue(), drainFromIndex(tFilledAmount, true, index), true);
                                 }
