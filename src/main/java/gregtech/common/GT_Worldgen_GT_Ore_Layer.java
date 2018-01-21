@@ -116,6 +116,10 @@ public class GT_Worldgen_GT_Ore_Layer
         if (!this.mRestrictBiome.equals("None") && !(this.mRestrictBiome.equals(aBiome))) {
             return WRONG_BIOME;
         }
+        // For optimal performance, this should be done upstream. Meh
+        String tDimensionName = aWorld.provider.getDimensionName();
+        boolean isUnderdark = tDimensionName.equals("Underdark");
+        
         int[] placeCount=new int[4];
 
         int tMinY = mMinY + aRandom.nextInt(mMaxY - mMinY - 5);
@@ -161,7 +165,6 @@ public class GT_Worldgen_GT_Ore_Layer
         }
 
         if (debugOrevein) {
-            String tDimensionName = aWorld.provider.getDimensionName();
             GT_Log.out.print(
                             "Trying Orevein:" + this.mWorldGenName +
                             " Dimension=" + tDimensionName +
@@ -183,12 +186,12 @@ public class GT_Worldgen_GT_Ore_Layer
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, isUnderdark)) {
                             placeCount[1]++;
                         }
                     }
                     else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
@@ -205,12 +208,12 @@ public class GT_Worldgen_GT_Ore_Layer
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, isUnderdark)) {
                             placeCount[1]++;
                         }
                     }
                     else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
@@ -223,12 +226,12 @@ public class GT_Worldgen_GT_Ore_Layer
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
                             placeCount[2]++;
                         }
                     }
                     else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
@@ -240,17 +243,17 @@ public class GT_Worldgen_GT_Ore_Layer
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
                             placeCount[2]++;
                         }
                     }
                     else if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
                             placeCount[0]++;
                         }
                     }
                     else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
@@ -263,19 +266,18 @@ public class GT_Worldgen_GT_Ore_Layer
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, false)) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
                             placeCount[0]++;
                         }
                     }
                     else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
-                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, false))
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
             }
         }    
         if (debugOrevein) {
-            String tDimensionName = aWorld.provider.getDimensionName();
             GT_Log.out.println(
                             " wXVein" + wXVein +
                             " eXVein" + eXVein +

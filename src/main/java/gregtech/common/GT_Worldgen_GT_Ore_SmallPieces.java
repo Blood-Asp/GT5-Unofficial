@@ -45,11 +45,14 @@ public class GT_Worldgen_GT_Ore_SmallPieces
             return false;
         }
         int count=0;
-    
+        // For optimal performance, this should be done upstream. Meh
+        String tDimensionName = aWorld.provider.getDimensionName();
+        boolean isUnderdark = tDimensionName.equals("Underdark");
+
         if (this.mMeta > 0) {
             int j = Math.max(1, this.mAmount / 2 + aRandom.nextInt(this.mAmount) / 2);
             for ( int i = 0; i < j; i++) {
-                GT_TileEntity_Ores.setOreBlock(aWorld, aChunkX + 8 + aRandom.nextInt(16), this.mMinY + aRandom.nextInt(Math.max(1, this.mMaxY - this.mMinY)), aChunkZ + 8 + aRandom.nextInt(16), this.mMeta, true);
+                GT_TileEntity_Ores.setOreBlock(aWorld, aChunkX + 8 + aRandom.nextInt(16), this.mMinY + aRandom.nextInt(Math.max(1, this.mMaxY - this.mMinY)), aChunkZ + 8 + aRandom.nextInt(16), this.mMeta, true, isUnderdark);
                 count++;
             }
         }
