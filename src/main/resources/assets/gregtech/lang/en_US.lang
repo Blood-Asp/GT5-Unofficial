@@ -374,11 +374,13 @@ achievement.Magnesium.desc=Height: 32-42, Chance: 10, DeepDarkDim//
 achievement.Manganese=Manganese Ore
 achievement.Manganese.desc=Height: 43-53, Chance: 10, DeepDarkDim//
 achievement.Antimony=Antimony Ore
-achievement.Antimony.desc=Height: 22-32, Chance: 10, DeepDarkDim//
+achievement.Antimony.desc=Height: 40-60, 22-32, Chance: 10, Mercury, DeepDarkDim//
 achievement.Arsenic=Arsenic Ore
-achievement.Arsenic.desc=Height: 45-55, Chance: 10, DeepDarkDim//
+achievement.Arsenic.desc=Height: 40-60, 45-55, Chance: 10, Mercury, DeepDarkDim//
 achievement.Pyrochlore=Pyrochlore Ore
 achievement.Pyrochlore.desc=Height: 40-60, Chance: 16, Overworld/TwilightForest/TCetiE/DeepDarkDim//
+achievement.Bismuth=Bismuth Ore
+achievement.Bismuth.desc=Height: 40-60, Chance:5, Mercury//
 
 achievement.flintpick=First Tools
 achievement.flintpick.desc=Craft a flint pick
