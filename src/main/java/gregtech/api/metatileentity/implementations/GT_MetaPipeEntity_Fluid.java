@@ -317,6 +317,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                                 tTankAmounts.set(tankIndex, (successfulTankInfo.fluid != null)
                                         ? successfulTankInfo.capacity - successfulTankInfo.fluid.amount
                                         : successfulTankInfo.capacity);
+                            } else {
+                                tTankAmounts.set(tankIndex, mCapacity * 20);
                             }
 
                             totalFreeAmount += tTankAmounts.get(tankIndex);
