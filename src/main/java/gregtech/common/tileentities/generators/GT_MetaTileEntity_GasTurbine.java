@@ -19,7 +19,8 @@ public class GT_MetaTileEntity_GasTurbine
 
     public GT_MetaTileEntity_GasTurbine(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, new String[]{
-                "Requires flammable Gasses"});
+                "Requires flammable Gasses",
+                "Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
         onConfigLoad();
     }
 
