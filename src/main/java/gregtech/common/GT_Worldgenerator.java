@@ -415,9 +415,9 @@ implements IWorldGenerator {
                     }
                 }
                 //if(GT_Values.D1)System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
-                int tX = mX + aRandom.nextInt(16);
+                int tX = mX * 16 + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
-                int tZ = mZ + aRandom.nextInt(16);
+                int tZ = mZ * 16 + aRandom.nextInt(16);
                 if (tDimensionType == 1) {
                     mSize = aRandom.nextInt((int) (endMaxSize - endMinSize));
                     //} else if (tDimensionName.equals("Asteroids")) {
