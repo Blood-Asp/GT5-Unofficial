@@ -124,7 +124,6 @@ public interface IGT_RecipeAdder {
      */
     public boolean addChemicalRecipeForBasicMachineOnly(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick);
 
-    public boolean addChemicalRecipeForBasicMachineOnly(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick, boolean aCleanroom);
 
     /**
      * Adds a Chemical Recipe
@@ -183,9 +182,6 @@ public interface IGT_RecipeAdder {
      +     */
 
     public boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick);
-
-
-    public boolean addChemicalRecipeDeprecated(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick);
 
 
     /**
@@ -709,20 +705,4 @@ public interface IGT_RecipeAdder {
      * @return true if the Sound got added, otherwise false.
      */
     public boolean addSonictronSound(ItemStack aItemStack, String aSoundName);
-
-
-    /**
-     * Returns whether the recipes added are currently being marked as deprecated.
-     * Currently only affects Chemical Reactor Recipes.
-     */
-
-    public boolean isAddingDeprecatedRecipes();
-
-    /**
-     * Sets whether the recipes added from this point on should be marked as deprecated or not.
-     * Currently only affects Chemical Reactor Recipes.
-     */
-
-    //public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
-
 }
