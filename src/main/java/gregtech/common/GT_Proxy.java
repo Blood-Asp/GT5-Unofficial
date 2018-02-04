@@ -496,6 +496,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_OreDictUnificator.registerOre("cropGrape", GT_ModHandler.getModItem("magicalcrops", "magicalcrops_CropProduce", 1L, 4));
         GT_OreDictUnificator.registerOre("cropTea", GT_ModHandler.getModItem("ganyssurface", "teaLeaves", 1L, 0));
 
+        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanoBootsTraveller", 1L, 32767));
+        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanosuitGogglesRevealing", 1L, 32767));
+        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumBootsTraveller", 1L, 32767));
+        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumGogglesRevealing", 1L, 32767));
+
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
             if ((tData.filledContainer.getItem() == Items.potionitem) && (tData.filledContainer.getItemDamage() == 0)) {
