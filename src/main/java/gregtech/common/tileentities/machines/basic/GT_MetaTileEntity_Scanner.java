@@ -171,7 +171,7 @@ public class GT_MetaTileEntity_Scanner
             	if(GT_Utility.areStacksEqual(tRecipe.mResearchItem, aStack, true)){
             	
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+" Construction Data");
+                GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], tRecipe.mOutput.getDisplayName()+" Construction Data");
 
                 NBTTagCompound tNBT = this.mOutputItems[0].getTagCompound();
                 if (tNBT == null) {
@@ -196,25 +196,25 @@ public class GT_MetaTileEntity_Scanner
                 }
                 tNBT.setString("author", "Assembling Line Recipe Generator");
                 NBTTagList tNBTList = new NBTTagList();
-                tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mOutput.getDisplayName())+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
+                tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+tRecipe.mOutput.getDisplayName()+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
                 for(int i=0;i<tRecipe.mInputs.length;i++){
                 	if (tRecipe.mOreDictAlt[i] != null) {
                 		int count = 0;
                 		StringBuilder tBuilder = new StringBuilder("Input Bus "+(i+1)+": ");
                 		for (ItemStack tStack : tRecipe.mOreDictAlt[i]) {
                 			if (tStack != null) {
-                				tBuilder.append((count == 0 ? "" : "\nOr ") + tStack.stackSize+" "+GT_LanguageManager.getTranslation(tStack.getDisplayName()));
+                				tBuilder.append((count == 0 ? "" : "\nOr ") + tStack.stackSize+" "+tStack.getDisplayName());
                     			count++;
                 			}
                 		}
                 		if (count > 0) tNBTList.appendTag(new NBTTagString(tBuilder.toString()));
                 	} else if(tRecipe.mInputs[i]!=null){
-                		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+GT_LanguageManager.getTranslation(tRecipe.mInputs[i].getDisplayName())));
+                		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+tRecipe.mInputs[i].getDisplayName()));
                 	}
                 }
                 for(int i=0;i<tRecipe.mFluidInputs.length;i++){
                 	if(tRecipe.mFluidInputs[i]!=null){
-                		tNBTList.appendTag(new NBTTagString("Input Hatch "+(i+1)+": "+tRecipe.mFluidInputs[i].amount+"L "+GT_LanguageManager.getTranslation(tRecipe.mFluidInputs[i].getLocalizedName())));
+                		tNBTList.appendTag(new NBTTagString("Input Hatch "+(i+1)+": "+tRecipe.mFluidInputs[i].amount+"L "+tRecipe.mFluidInputs[i].getLocalizedName()));
                 	}
                 }
                 tNBT.setTag("pages", tNBTList);
