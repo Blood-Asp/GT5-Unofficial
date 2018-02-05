@@ -139,6 +139,7 @@ public enum Element {
     Oh(76, 125, 0, -1, null, "Oriharukon", false),
        
     Ma(0, 0, 100, -1, null, "Magic", false),
+    Nq(130, 200, 0, -1, null, "Naquadah", false),
     Nt(0, 100000, 0, -1, null, "Neutronium", false),
 
     $H(-1, -0, 0, -1, null, "Anti-Hydrogen", false),
@@ -271,6 +272,7 @@ public enum Element {
     $Oh(-76, -125, 0, -1, null, "Anti-Oriharukon", true),
 
     $Ma(0, 0, -100, -1, null, "Anti-Magic", false),
+    $Nq(-130, -200, 0, -1, null, "Anti-Naquadah", false),
     $Nt(0, -10000, 0, -1, null, "Anti-Neutronium", false);
 
     public static volatile int VERSION = 509;
