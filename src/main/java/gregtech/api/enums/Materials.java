@@ -1334,7 +1334,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
                 Electrum, Invar, /**IronCompressed,**/ Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
                 YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, Shadow, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel,
                 TungstenSteel, AstralSilver, /**Midasium,**/ Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, Void, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, SamariumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, HeeEndium,
-                VanadiumSteel, Kalendrite, Ignatius, Trinium, Infinity, InfinityCatalyst, Realgar, Chrysotile, BlackPlutonium, Alduorite, Adluorite, Vinteum, Rubracium, Draconium, DraconiumAwakened);
+                VanadiumSteel, Kalendrite, Ignatius, Trinium, Infinity, InfinityCatalyst, Realgar, Chrysotile, BlackPlutonium, Alduorite, Adluorite, Vinteum, Rubracium, Draconium, DraconiumAwakened, Pentacadmiummagnesiumhexaoxid,Titaniumonabariumdecacoppereikosaoxid,
+                Uraniumtriplatinid, Vanadiumtriindinid, Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid, Tetranaquadahdiindiumhexaplatiumosminid);
 
         SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 
