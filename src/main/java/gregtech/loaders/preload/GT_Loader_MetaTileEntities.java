@@ -1395,7 +1395,19 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         makeWires(Materials.NaquadahAlloy, 1800, bEC ? 4L : 64L, bEC ? 8L : 128L, 2L, gregtech.api.enums.GT_Values.V[8], true, aBoolConst_0);
         makeWires(Materials.Duranium, 1820, bEC ? 8L : 64L, bEC ? 16L : 128L, 1L, gregtech.api.enums.GT_Values.V[8], true, aBoolConst_0);
 
-        makeWires(Materials.Superconductor, 2020, 0L, 0L, 4L, gregtech.api.enums.GT_Values.V[9], aBoolConst_0, true);
+        makeWires(Materials.Superconductor, 2020, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[9], aBoolConst_0, true);
+        makeOnlyWires(Materials.Pentacadmiummagnesiumhexaoxid, 2030, 1L, 1L, 4L, gregtech.api.enums.GT_Values.V[2], aBoolConst_0, true);
+        makeOnlyWires(Materials.Titaniumonabariumdecacoppereikosaoxid, 2040, 1L, 1L, 4L, gregtech.api.enums.GT_Values.V[3], aBoolConst_0, true);
+        makeOnlyWires(Materials.Uraniumtriplatinid, 2050, 1L, 1L, 4L, gregtech.api.enums.GT_Values.V[4], aBoolConst_0, true);
+        makeOnlyWires(Materials.Vanadiumtriindinid, 2060, 1L, 1L, 4L, gregtech.api.enums.GT_Values.V[5], aBoolConst_0, true);
+        makeOnlyWires(Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid, 2070, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[6], aBoolConst_0, true);
+        makeOnlyWires(Materials.Tetranaquadahdiindiumhexaplatiumosminid, 2080, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[7], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorMV, 2110, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[2], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorHV, 2120, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[3], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorEV, 2130, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[4], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorIV, 2140, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[5], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorLuV, 2150, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[6], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorZPM, 2160, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[7], aBoolConst_0, true);
 
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("copperCableItem", 2L), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"xP", 'P', OrePrefixes.plate.get(Materials.AnyCopper)});
@@ -1665,7 +1677,17 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
             GT_OreDictUnificator.registerOre(OrePrefixes.cableGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 9, aTextCable1 + aMaterial.mName.toLowerCase() + ".08", "8x " + name + aTextCable2, 0.625F, aMaterial, aLossInsulated, 8L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
             GT_OreDictUnificator.registerOre(OrePrefixes.cableGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 10, aTextCable1 + aMaterial.mName.toLowerCase() + ".12", "12x " + name + aTextCable2, 0.75F, aMaterial, aLossInsulated, 12L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
             GT_OreDictUnificator.registerOre(OrePrefixes.cableGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 11, aTextCable1 + aMaterial.mName.toLowerCase() + ".16", "16x " + name + aTextCable2, 0.875F, aMaterial, aLossInsulated, 16L * aAmperage, aVoltage, true, aBoolConst_0).getStackForm(1L));
+            }
+
         }
+    private static void makeOnlyWires(Materials aMaterial, int aStartID, long aLossInsulated, long aLoss, long aAmperage, long aVoltage, boolean aInsulatable, boolean aAutoInsulated) {
+        String name = GT_LanguageManager.i18nPlaceholder ? "%material" : aMaterial.mDefaultLocalName;
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt01, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 0, aTextWire1 + aMaterial.mName.toLowerCase() + ".01", "1x " + name + aTextWire2, 0.125F, aMaterial, aLoss, 1L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt02, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 1, aTextWire1 + aMaterial.mName.toLowerCase() + ".02", "2x " + name + aTextWire2, 0.25F, aMaterial, aLoss, 2L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt04, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 2, aTextWire1 + aMaterial.mName.toLowerCase() + ".04", "4x " + name + aTextWire2, 0.375F, aMaterial, aLoss, 4L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt08, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 3, aTextWire1 + aMaterial.mName.toLowerCase() + ".08", "8x " + name + aTextWire2, 0.5F, aMaterial, aLoss, 8L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt12, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 4, aTextWire1 + aMaterial.mName.toLowerCase() + ".12", "12x " + name + aTextWire2, 0.625F, aMaterial, aLoss, 12L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt16, aMaterial, new GT_MetaPipeEntity_Cable(aStartID + 5, aTextWire1 + aMaterial.mName.toLowerCase() + ".16", "16x " + name + aTextWire2, 0.75F, aMaterial, aLoss, 16L * aAmperage, aVoltage, aBoolConst_0, !aAutoInsulated).getStackForm(1L));
     }
 
     public void run() {
