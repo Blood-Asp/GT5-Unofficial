@@ -85,8 +85,11 @@ public class GregTech_API {
      * 10240 - 10751 are reserved for VirMan.
      * 10752 - 11263 are reserved for Briareos81.
      * 11264 - 12000 are reserved for Quantum64.
-     * 12001 - 12200 are reserved for the next one who asks me.
-     * 12001 - 32766 are currently free.
+     * 12001 - 12500 are reserved for RedMage17.
+     * 12501 - 13000 are reserved for the next one who asks me.
+     * 13001 - 31000 are currently free.
+     * 31001 - 32000 are reserved for Alkalus.
+     * 32001 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's

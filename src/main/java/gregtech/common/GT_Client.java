@@ -145,7 +145,6 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(+.25D, .0D, +.50D);
         GL11.glVertex3d(-.25D, .0D, -.50D);
         GL11.glVertex3d(-.25D, .0D, +.50D);
-        GL11.glLineWidth(2.0F);
         TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
         if (tTile instanceof BaseMetaPipeEntity) {
         	int[][] GridSwitchArr = new int[][]{

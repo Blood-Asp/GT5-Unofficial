@@ -59,6 +59,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mHasEnoughEnergy = true, mRunningThroughTick = false, mInputDisabled = false, mOutputDisabled = false, mMuffler = false, mLockUpgrade = false, mActive = false, mRedstone = false, mWorkUpdate = false, mSteamConverter = false, mInventoryChanged = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false, oRedstone = false;
+    private boolean mEnergyStateReady = false;
     private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
@@ -454,6 +455,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                     }
                                 }
                             }
+                            mEnergyStateReady = true;
                         }
 
                         if (!hasValidMetaTileEntity()) {
@@ -2008,4 +2010,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     	}
     	return slotIndex + indexShift;
     }
+
+	@Override
+	public boolean energyStateReady() {
+		return isClientSide() || mEnergyStateReady;
+	}
 }

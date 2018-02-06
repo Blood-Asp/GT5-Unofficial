@@ -102,7 +102,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         	{1, 0, 2, 3},
         	{1, 0, 2, 3}
         };
-        if (aSide >= 0 && aSide < 6) for (byte i = 0; i < 4; i++) if ((mDisableInput & (1 << sRestrictionArray[aSide][i])) != 0) tMask |= 1 << i;
+        if (aSide >= 0 && aSide < 6) for (byte i = 0; i < 4; i++) if (isInputDisabledAtSide(sRestrictionArray[aSide][i])) tMask |= 1 << i;
         return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColorIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), getRestrictorTexture(tMask)};
     }
 
@@ -265,16 +265,22 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             if (mLastReceivedFrom == oLastReceivedFrom) {
                 ConcurrentHashMap<IFluidHandler, ForgeDirection> tTanks = new ConcurrentHashMap<IFluidHandler, ForgeDirection>();
                 
-                for (byte tSide = 0, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
+                for (byte tSide = 0, uSide = 0, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
                 	tSide = (byte) ((i + j) % 6);
-                	if (mCheckConnections || (mConnections & (1 << tSide)) != 0)
+                	uSide = GT_Utility.getOppositeSide(tSide);
+                	IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide(tSide);
+                	ICoverable tBaseMetaTileEntity = tTank instanceof ICoverable ? (ICoverable) tTank : null;
+                	if (mCheckConnections || isConnectedAtSide(tSide)
+                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity))) {
                 		switch (connect(tSide)) {
                 		case 0:
                 			disconnect(tSide); break;
                 		case 2:
                 			if ((mLastReceivedFrom & (1 << tSide)) == 0)
-                				tTanks.put(aBaseMetaTileEntity.getITankContainerAtSide(tSide), ForgeDirection.getOrientation(tSide).getOpposite()); break;
+                				tTanks.put(tTank, ForgeDirection.getOrientation(tSide).getOpposite()); break;
                 		}
+                	}
                 }
                 if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
                 
@@ -321,17 +327,17 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
     		byte tMask = (byte) (1 << tSide);
     		if (aPlayer.isSneaking()) {
-    			if ((mDisableInput & tMask) != 0) {
+    			if (isInputDisabledAtSide(tSide)) {
     				mDisableInput &= ~tMask;
     				GT_Utility.sendChatToPlayer(aPlayer, trans("212", "Input enabled"));
-    				if ((mConnections & tMask) == 0)
+    				if (!isConnectedAtSide(tSide))
             			connect(tSide);
     			} else {
     				mDisableInput |= tMask;
     				GT_Utility.sendChatToPlayer(aPlayer, trans("213", "Input disabled"));
     			}
     		} else {
-    			if ((mConnections & tMask) == 0) {
+    			if (!isConnectedAtSide(tSide)) {
     				if (connect(tSide) > 0)
     				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     			}
@@ -367,9 +373,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             FluidTankInfo[] tInfo = tTileEntity.getTankInfo(ForgeDirection.getOrientation(aSide).getOpposite());
             if (tInfo != null) {
             	if (tInfo.length > 0) {
-            		if ((tTileEntity instanceof ICoverable && ((ICoverable) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((ICoverable) tTileEntity).getCoverIDAtSide(tSide), ((ICoverable) tTileEntity).getCoverDataAtSide(tSide), ((ICoverable) tTileEntity)))
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())
-                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())) {
+            		if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())) {
             			rConnect = 1;
                     }
             		if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsFluidOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), null, getBaseMetaTileEntity())) {
@@ -389,15 +393,17 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                     }  
             	}
             }
-        } else if (getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4 != getBaseMetaTileEntity().getXCoord() >> 4 
-    			|| getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4 != getBaseMetaTileEntity().getZCoord() >> 4) { // if chunk unloaded
-        		rConnect = -1;
         }
+		if (rConnect == 0) {
+			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+				rConnect = -1;
+			}
+		}
 		if (rConnect > 0) {
 			if (GT_Mod.gregtechproxy.gt6Pipe && tFluidPipe != null) {
-				if ((mDisableInput & (1 << aSide)) == 0 || (tFluidPipe.mDisableInput & (1 << tSide)) == 0) {
+				if (!isInputDisabledAtSide(aSide) || !tFluidPipe.isInputDisabledAtSide(tSide)) {
 					mConnections |= (1 << aSide);
-					if ((tFluidPipe.mConnections & (1 << tSide)) == 0) tFluidPipe.connect(tSide);
+					if (!tFluidPipe.isConnectedAtSide(tSide)) tFluidPipe.connect(tSide);
 				} else rConnect = 0;
 			} else {
 				mConnections |= (1 << aSide);
@@ -588,12 +594,16 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
     @Override
     public boolean isLiquidInput(byte aSide) {
-    	return (mDisableInput & (1 << aSide)) == 0;
+    	return !isInputDisabledAtSide(aSide);
     }
 
     @Override
     public boolean isLiquidOutput(byte aSide) {
     	return true;
+    }
+
+    public boolean isInputDisabledAtSide(int aSide) {
+    	return (mDisableInput & (1 << aSide)) != 0;
     }
 
     @Override
