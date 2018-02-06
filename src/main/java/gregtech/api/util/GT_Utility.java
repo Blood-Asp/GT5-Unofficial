@@ -9,9 +9,11 @@ import gregtech.api.enchants.Enchantment_Radioactivity;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.SubTag;
+import gregtech.api.enums.Textures;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
@@ -1123,6 +1125,17 @@ public class GT_Utility {
             if (tStack != null && (tStack.stackSize == 0 || tStack.getItem() == null))
                 aInventory.setInventorySlotContents(i, null);
         }
+    }
+
+    /**
+     * Initializes a new texture page.
+     */
+    public static boolean addTexturePage(byte page){
+        if(Textures.BlockIcons.casingTexturePages[page]==null){
+            Textures.BlockIcons.casingTexturePages[page]=new ITexture[128];
+            return true;
+        }
+        return false;
     }
 
     /**
