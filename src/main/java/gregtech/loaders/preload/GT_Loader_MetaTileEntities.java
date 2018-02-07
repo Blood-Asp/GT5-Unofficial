@@ -1396,18 +1396,18 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         makeWires(Materials.Duranium, 1820, bEC ? 8L : 64L, bEC ? 16L : 128L, 1L, gregtech.api.enums.GT_Values.V[8], true, aBoolConst_0);
 
         makeWires(Materials.Superconductor, 2020, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[9], aBoolConst_0, true);
-        makeWires(Materials.Pentacadmiummagnesiumhexaoxid, 2200, bEC ? 1L : 128L, bEC ? 2L : 256L, 4L, gregtech.api.enums.GT_Values.V[2],true, aBoolConst_0);
-        makeWires(Materials.Titaniumonabariumdecacoppereikosaoxid, 2220, bEC ? 1L : 128L, bEC ? 2L : 256L, 4L, gregtech.api.enums.GT_Values.V[3], true, aBoolConst_0);
-        makeWires(Materials.Uraniumtriplatinid, 2240, bEC ? 1L : 128L, bEC ? 2L : 256L, 4L, gregtech.api.enums.GT_Values.V[4], true, aBoolConst_0);
-        makeWires(Materials.Vanadiumtriindinid, 2260,  bEC ? 1L : 128L, bEC ? 2L : 256L, 4L, gregtech.api.enums.GT_Values.V[5], true, aBoolConst_0);
+        makeWires(Materials.Pentacadmiummagnesiumhexaoxid, 2200, bEC ? 1L : 128L, bEC ? 2L : 256L, 1L, gregtech.api.enums.GT_Values.V[2],true, aBoolConst_0);
+        makeWires(Materials.Titaniumonabariumdecacoppereikosaoxid, 2220, bEC ? 1L : 128L, bEC ? 2L : 256L, 1L, gregtech.api.enums.GT_Values.V[3], true, aBoolConst_0);
+        makeWires(Materials.Uraniumtriplatinid, 2240, bEC ? 1L : 128L, bEC ? 2L : 256L, 2L, gregtech.api.enums.GT_Values.V[4], true, aBoolConst_0);
+        makeWires(Materials.Vanadiumtriindinid, 2260,  bEC ? 1L : 128L, bEC ? 2L : 256L, 2L, gregtech.api.enums.GT_Values.V[5], true, aBoolConst_0);
         makeWires(Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid, 2280, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[6], true, aBoolConst_0);
         makeWires(Materials.Tetranaquadahdiindiumhexaplatiumosminid, 2300, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[7], true, aBoolConst_0);
-        makeWires(Materials.SuperconductorMV, 2320, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[2], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorHV, 2340, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[3], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorEV, 2360, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[4], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorIV, 2380, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[5], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorLuV, 2400, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[6], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorZPM, 2420, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[7], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorMV, 2320, 0L, 0L, 2L, gregtech.api.enums.GT_Values.V[2], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorHV, 2340, 0L, 0L, 2L, gregtech.api.enums.GT_Values.V[3], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorEV, 2360, 0L, 0L, 4L, gregtech.api.enums.GT_Values.V[4], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorIV, 2380, 0L, 0L, 4L, gregtech.api.enums.GT_Values.V[5], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorLuV, 2400, 0L, 0L, 8L, gregtech.api.enums.GT_Values.V[6], aBoolConst_0, true);
+        makeWires(Materials.SuperconductorZPM, 2420, 0L, 0L, 8L, gregtech.api.enums.GT_Values.V[7], aBoolConst_0, true);
 
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("copperCableItem", 2L), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED, new Object[]{"xP", 'P', OrePrefixes.plate.get(Materials.AnyCopper)});
