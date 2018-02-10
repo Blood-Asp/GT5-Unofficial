@@ -2,6 +2,7 @@ package gregtech.api.metatileentity.implementations;
 
 import cofh.api.energy.IEnergyReceiver;
 import gregtech.GT_Mod;
+import static gregtech.api.enums.GT_Values.D1;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
@@ -16,10 +17,15 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
+import gregtech.common.covers.GT_Cover_SolarPanel;
+import gregtech.loaders.postload.PartP2PGTPower;
 import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +40,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import appeng.api.parts.IPartHost;
 
 import static gregtech.api.enums.GT_Values.VN;
 
@@ -140,7 +148,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
-    	if (!isConnectedAtSide(aSide))
+    	if (!isConnectedAtSide(aSide) && aSide != 6)
     		return 0;
         if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return 0;
@@ -149,7 +157,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public long transferElectricity(byte aSide, long aVoltage, long aAmperage, ArrayList<TileEntity> aAlreadyPassedTileEntityList) {
-    	if (!isConnectedAtSide(aSide))
+    	if (!isConnectedAtSide(aSide) && aSide != 6)
     		return 0;
         long rUsedAmperes = 0;
         aVoltage -= mCableLossPerMeter;
@@ -238,25 +246,27 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
-    }
-
-    @Override
-    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	return onConnectionToolRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
-    }
-
-    private boolean onConnectionToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	if (GT_Mod.gregtechproxy.gt6Cable) {
-    		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if (!isConnectedAtSide(tSide)) {
-    			if (GT_Mod.gregtechproxy.costlyCableConnection && !GT_ModHandler.consumeSolderingMaterial(aPlayer)) return false;
-    			if (connect(tSide) > 0)
+        if (GT_Mod.gregtechproxy.gt6Cable && GT_ModHandler.damageOrDechargeItem(aPlayer.inventory.getCurrentItem(), 1, 500, aPlayer)) {
+            if(isConnectedAtSide(aWrenchingSide)) {
+                disconnect(aWrenchingSide);
+                GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+            }else if(!GT_Mod.gregtechproxy.costlyCableConnection){
+    			if (connect(aWrenchingSide) > 0)
     				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
-    		else {
-    			disconnect(tSide);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (GT_Mod.gregtechproxy.gt6Cable && GT_ModHandler.damageOrDechargeItem(aPlayer.inventory.getCurrentItem(), 1, 500, aPlayer)) {
+            if (isConnectedAtSide(aWrenchingSide)) {
+    			disconnect(aWrenchingSide);
     			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+            } else if (!GT_Mod.gregtechproxy.costlyCableConnection || GT_ModHandler.consumeSolderingMaterial(aPlayer)) {
+                if (connect(aWrenchingSide) > 0)
+                    GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
     		}
     		return true;
     	}
@@ -269,29 +279,67 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 		if (aSide >= 6) return rConnect;
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aSide);
-		if (tTileEntity != null) {
-			if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).alwaysLookConnected(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())
-					|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())
-					|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity())) {
-	            if (tTileEntity instanceof IColoredTileEntity) {
-	                if (getBaseMetaTileEntity().getColorization() >= 0) {
-	                    byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-	                    if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization())
-	                    	return rConnect;
-	                }
-	            }
-	            if ((tTileEntity instanceof IEnergyConnected && (((IEnergyConnected) tTileEntity).inputEnergyFrom(tSide) || ((IEnergyConnected) tTileEntity).outputsEnergyTo(tSide)))
-	            		|| (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof IMetaTileEntityCable
-	                    		&& (((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity))
-	                    				|| ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).letsEnergyIn(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity))
-	                    				|| ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).letsEnergyOut(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity))))
-	            		|| (tTileEntity instanceof IEnergySink && ((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) getBaseMetaTileEntity(), ForgeDirection.getOrientation(tSide)))
-	            		|| (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver && ((IEnergyReceiver) tTileEntity).canConnectEnergy(ForgeDirection.getOrientation(tSide)))
-	            		/*|| (tTileEntity instanceof IEnergyEmitter && ((IEnergyEmitter)tTileEntity).emitsEnergyTo((TileEntity)getBaseMetaTileEntity(), ForgeDirection.getOrientation(tSide)))*/) {
-	                rConnect = 1;
-	            }
-	        }
-		}
+		GT_CoverBehavior coverBehavior = getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide);
+		int coverId = getBaseMetaTileEntity().getCoverIDAtSide(aSide), coverData = getBaseMetaTileEntity().getCoverDataAtSide(aSide);
+		
+		boolean sAlwaysLookConnected = coverBehavior.alwaysLookConnected(aSide, coverId, coverData, getBaseMetaTileEntity());
+		boolean sLetEnergyIn = coverBehavior.letsEnergyIn(aSide, coverId, coverData, getBaseMetaTileEntity());
+		boolean sLetEnergyOut = coverBehavior.letsEnergyOut(aSide, coverId, coverData, getBaseMetaTileEntity()); 
+		
+        if (sAlwaysLookConnected || sLetEnergyIn || sLetEnergyOut) {
+            if (tTileEntity instanceof IColoredTileEntity) {
+                if (getBaseMetaTileEntity().getColorization() >= 0) {
+                    byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
+                    if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) {
+                    	return rConnect;
+                    }
+                }
+            }
+            
+            boolean sHasSolarPanel = coverBehavior instanceof GT_Cover_SolarPanel;
+            
+            boolean tIsEnergyIsConnected = tTileEntity instanceof IEnergyConnected;
+            boolean tEnergyInOrOut = (tIsEnergyIsConnected && (((IEnergyConnected) tTileEntity).inputEnergyFrom(tSide) || ((IEnergyConnected) tTileEntity).outputsEnergyTo(tSide)));
+            
+            boolean tIsGregTechTileEntity = tTileEntity instanceof IGregTechTileEntity;
+            boolean tIsTileEntityCable = tIsGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof IMetaTileEntityCable; 
+            boolean tAlwaysLookConnected = tIsGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity));
+            boolean tLetEnergyIn = tIsGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).letsEnergyIn(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity));
+            boolean tLetEnergyOut = tIsGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(tSide).letsEnergyOut(tSide, ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(tSide), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(tSide), ((IGregTechTileEntity) tTileEntity));
+
+            boolean tIsEnergySink = tTileEntity instanceof IEnergySink;
+            boolean tSinkAcceptsEnergyFromSide = tIsEnergySink && ((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) getBaseMetaTileEntity(), ForgeDirection.getOrientation(tSide));
+
+            boolean tIsGTp2pProvider = (GT_Mod.gregtechproxy.mAE2Integration && tTileEntity instanceof IEnergySource 
+            		&& tTileEntity instanceof IPartHost && ((IPartHost)tTileEntity).getPart(ForgeDirection.getOrientation(tSide)) instanceof PartP2PGTPower);
+            boolean tGTp2pProvidesEnergyToSide = tIsGTp2pProvider && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) getBaseMetaTileEntity(), ForgeDirection.getOrientation(tSide));
+
+            boolean tIsEnergyReceiver = tTileEntity instanceof IEnergyReceiver;
+            boolean tEnergyReceiverCanAcceptFromSide = tIsEnergyReceiver && ((IEnergyReceiver) tTileEntity).canConnectEnergy(ForgeDirection.getOrientation(tSide));
+
+            if (   (tIsEnergyIsConnected && tEnergyInOrOut)
+                || sHasSolarPanel
+                || ((tIsGregTechTileEntity && tIsTileEntityCable) && (tAlwaysLookConnected || tLetEnergyIn || tLetEnergyOut) )
+                || (tIsEnergySink && tSinkAcceptsEnergyFromSide)
+                || (tIsGTp2pProvider && tGTp2pProvidesEnergyToSide)
+                || (GregTech_API.mOutputRF && tIsEnergyReceiver && tEnergyReceiverCanAcceptFromSide)
+            		/*|| (tTileEntity instanceof IEnergyEmitter && ((IEnergyEmitter)tTileEntity).emitsEnergyTo((TileEntity)getBaseMetaTileEntity(), ForgeDirection.getOrientation(tSide)))*/) 
+            {
+                rConnect = 1;
+            }
+
+            if(D1 && rConnect == 0) {
+            	GT_Log.out.println("Gt6StyleCable - Debug: ");
+            	GT_Log.out.println("\t AlwaysLookConnected:" + sAlwaysLookConnected + " LetEnergyIn:" + sLetEnergyIn + " LetEnergyOut:" + sLetEnergyOut);
+            	GT_Log.out.println("\t sHasSolarPanel:" + sHasSolarPanel);
+            	GT_Log.out.println("\t tIsEnergyIsConnected:" + tIsEnergyIsConnected + " tEnergyInOrOut:" +tEnergyInOrOut);
+            	GT_Log.out.println("\t tIsGregTechTileEntity:" + tIsGregTechTileEntity + " tIsTileEntityCable:" + tIsTileEntityCable);
+            	GT_Log.out.println("\t tIsEnergySink:" + tIsEnergySink + " tSinkAcceptsEnergyFromSide:" + tSinkAcceptsEnergyFromSide );
+            	GT_Log.out.println("\t tIsGTp2pProvider:" + tIsGTp2pProvider + " tGTp2pProvidesEnergyToSide:" + tGTp2pProvidesEnergyToSide );
+            	GT_Log.out.println("\t tIsEnergyReceiver:" + tIsEnergyReceiver + " tEnergyReceiverCanAcceptFromSide:" + tEnergyReceiverCanAcceptFromSide );
+            }
+
+        }
 		if (rConnect == 0) {
 			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
 				rConnect = -1;
