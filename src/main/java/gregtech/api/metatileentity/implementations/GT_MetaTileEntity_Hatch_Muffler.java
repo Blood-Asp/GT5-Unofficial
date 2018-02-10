@@ -55,8 +55,8 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
 
     @Override
     public boolean isFacingValid(byte aFacing) {
-        return true;
-    }
+        return aFacing != 0;
+    }    
 
     @Override
     public boolean isAccessAllowed(EntityPlayer aPlayer) {
