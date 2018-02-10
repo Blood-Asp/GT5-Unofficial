@@ -901,9 +901,8 @@ public enum OrePrefixes {
         return name() + aMaterial;
     }
 
-    @Deprecated
     public String getDefaultLocalNameForItem(Materials aMaterial) {
-    	return aMaterial.getLocalizedNameForItem(getDefaultLocalNameFormatForItem(aMaterial));
+    	return aMaterial.getDefaultLocalizedNameForItem(getDefaultLocalNameFormatForItem(aMaterial));
     }
 
     @SuppressWarnings("incomplete-switch")

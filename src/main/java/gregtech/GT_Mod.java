@@ -286,6 +286,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.gt6Pipe = tMainConfig.get("general", "GT6StyledPipesConnection", true).getBoolean(true);
         gregtechproxy.gt6Cable = tMainConfig.get("general", "GT6StyledWiresConnection", false).getBoolean(false);
         gregtechproxy.costlyCableConnection = tMainConfig.get("general", "CableConnectionRequiresSolderingMaterial", false).getBoolean(false);
+        GT_LanguageManager.i18nPlaceholder = tMainConfig.get("general", "UsePlaceholderForMaterialNamesInLangFile", true).getBoolean(true);
 
         Materials[] tDisableOres = new Materials[]{Materials.Chrome, Materials.Naquadria, Materials.Silicon, Materials.Cobalt, Materials.Cadmium, Materials.Indium, Materials.Tungsten,
         		Materials.Adamantium, Materials.Mithril, Materials.DarkIron, Materials.Rutile, Materials.Alduorite, Materials.Magnesium, Materials.Nikolite};

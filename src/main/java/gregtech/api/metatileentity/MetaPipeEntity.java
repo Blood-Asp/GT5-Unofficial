@@ -79,6 +79,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
      * }
      */
     public MetaPipeEntity(int aID, String aBasicName, String aRegionalName, int aInvSlotCount) {
+        this(aID, aBasicName, aRegionalName, aInvSlotCount, true);
+    }
+
+    public MetaPipeEntity(int aID, String aBasicName, String aRegionalName, int aInvSlotCount, boolean aAddInfo) {
         if (GregTech_API.sPostloadStarted || !GregTech_API.sPreloadStarted)
             throw new IllegalAccessError("This Constructor has to be called in the load Phase");
         if (GregTech_API.METATILEENTITIES[aID] == null) {
@@ -92,10 +96,15 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-        if (GT.isClientSide()) {
-            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
+        if (aAddInfo) {
+            addInfo(aID);
         }
+    }
+
+    protected final void addInfo(int aID) {
+    	if (GT.isServerSide()) return;
+    	ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
+        tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
     }
 
     /**

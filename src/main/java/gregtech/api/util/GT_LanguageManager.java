@@ -17,6 +17,7 @@ public class GT_LanguageManager {
     public static final HashMap<String, String> TEMPMAP = new HashMap<String, String>(), BUFFERMAP = new HashMap<String, String>(), LANGMAP = new HashMap<String, String>();
     public static Configuration sEnglishFile;
     public static boolean sUseEnglishFile = false;
+    public static boolean i18nPlaceholder = true;
 
     public static String addStringLocalization(String aKey, String aEnglish) {
         return addStringLocalization(aKey, aEnglish, true);

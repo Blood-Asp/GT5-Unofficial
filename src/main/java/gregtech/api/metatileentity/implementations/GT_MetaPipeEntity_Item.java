@@ -1,6 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -25,6 +26,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static gregtech.api.enums.GT_Values.GT;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,12 +43,13 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     private boolean mCheckConnections = !GT_Mod.gregtechproxy.gt6Pipe;
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
-        super(aID, aName, aNameRegional, aInvSlotCount);
+        super(aID, aName, aNameRegional, aInvSlotCount, false);
         mIsRestrictive = aIsRestrictive;
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
         mTickTime = aTickTime;
+        addInfo(aID);
     }
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
