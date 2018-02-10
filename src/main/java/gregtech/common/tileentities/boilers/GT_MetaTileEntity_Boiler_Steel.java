@@ -10,10 +10,12 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -119,31 +121,61 @@ public class GT_MetaTileEntity_Boiler_Steel
                 sendSound((byte) 1);
                 this.mSteam.amount = 24000;
             }
+
+            //Check the boiler has not been choked by output and can keep burning fuel
+            boolean byproductStuffed = false;
+
+            ItemStack byproductStack = aBaseMetaTileEntity.getStackInSlot(3);
+
+            if(byproductStack != null && !(GT_Utility.isStackInvalid(byproductStack)) && byproductStack.stackSize == byproductStack.getMaxStackSize()) {
+                byproductStuffed = true;
+            }
+
             if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()) &&
-                    (this.mInventory[2] != null)) {
-                if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Coal)))) {
-                    this.mProcessingEnergy += 160;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(3) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
-                    }
-                } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Charcoal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Charcoal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Charcoal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Charcoal)))) {
-                    this.mProcessingEnergy += 160;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(3) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1L));
-                    }
+                    (this.mInventory[2] != null) && !byproductStuffed) {
+                int fuelEnergy = 0, byproductChance = 1;
+                Object byproduct = Materials.Ash;
+                boolean validFuel = false;
+                if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Coal))) ||
+                    (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Coal))) ||
+                    (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Coal))) ||
+                    (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Coal)))) {
+                    fuelEnergy = 160;
+                    byproductChance = 3;
+                    byproduct = Materials.DarkAsh;
+                    validFuel = true;
+                } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Charcoal))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Charcoal))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Charcoal))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Charcoal)))) {
+                    fuelEnergy = 160;
+                    byproductChance = 3;
+                    byproduct = Materials.Ash;
+                    validFuel = true;
                 } else if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCoke")) {
-                    this.mProcessingEnergy += 640;
+                    fuelEnergy = 640;
+                    byproductChance = 2;
+                    byproduct = Materials.Ash;
+                    validFuel = true;
+                } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Lignite))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Lignite))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Lignite))) ||
+                           (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Lignite)))) {
+                    fuelEnergy = 120;
+                    byproductChance = 8;
+                    byproduct = Materials.DarkAsh;
+                    validFuel = true;
+                }
+
+                if(validFuel) {
+                    this.mProcessingEnergy += fuelEnergy;
                     aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(2) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1L));
-                    }
-                } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Lignite)))) {
-                    this.mProcessingEnergy += 120;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(8) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
+                    if (aBaseMetaTileEntity.getRandomNumber(byproductChance) == 0) {
+                        if(!aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, byproduct, 1L))) {
+                            //We can only get here if the output wasn't stuffed, so if the add fails, it can only be because the byproduct types don't match
+                            //Have attempted to mix ash types, so add one to the size of the stack and convert all ash to light ashes
+                            aBaseMetaTileEntity.setInventorySlotContents(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, byproductStack.stackSize + 1));
+                        }
                     }
                 }
             }
