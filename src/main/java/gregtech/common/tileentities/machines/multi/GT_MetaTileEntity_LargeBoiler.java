@@ -170,7 +170,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public boolean onRunningTick(ItemStack aStack) {
         if (this.mEUt > 0) {
             if (this.mSuperEfficencyIncrease > 0)
-                this.mEfficiency = Math.min(10000, this.mEfficiency + this.mSuperEfficencyIncrease);
+                mEfficiency = Math.max(0, Math.min(mEfficiency + mSuperEfficencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
             int tGeneratedEU = (int) (this.mEUt * 2L * this.mEfficiency / 10000L);
             if (tGeneratedEU > 0) {
                 long amount = (tGeneratedEU + 160) / 160;
@@ -277,7 +277,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     private int adjustBurnTimeForConfig(int rawBurnTime) {
-        if (mEfficiency < 10000) {
+        if (mEfficiency < getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)) {
             return rawBurnTime;
         }
         int adjustedEUt = Math.max(25, getEUt() - 25 * integratedCircuitConfig);
