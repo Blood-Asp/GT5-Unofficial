@@ -1498,13 +1498,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     }
     
     public static class GT_Recipe_Map_LargeChemicalReactor extends GT_Recipe_Map{
-    	private static int INPUT_COUNT = 2;
+        private static int TOTAL_INPUT_COUNT = 6;
     	private static int OUTPUT_COUNT = 2;
-    	private static int FLUID_INPUT_COUNT = 4;
     	private static int FLUID_OUTPUT_COUNT = 4;
     	
         public GT_Recipe_Map_LargeChemicalReactor() {
-            super(new HashSet<GT_Recipe>(200), "gt.recipe.largechemicalreactor", "Large Chemical Reactor", null, RES_PATH_GUI + "basicmachines/Default", INPUT_COUNT, OUTPUT_COUNT, 0, 0, 1, E, 1, E, true, true);
+            super(new HashSet<GT_Recipe>(200), "gt.recipe.largechemicalreactor", "Large Chemical Reactor", null, RES_PATH_GUI + "basicmachines/Default", 2, OUTPUT_COUNT, 0, 0, 1, E, 1, E, true, true);
         }
 
         @Override
@@ -1594,20 +1593,19 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
 			@Override
 			public ArrayList<PositionedStack> getInputPositionedStacks() {
-				int itemLimit = Math.min(mInputs.length, INPUT_COUNT);
-				int fluidLimit = Math.min(mFluidInputs.length, FLUID_INPUT_COUNT);
-				ArrayList<PositionedStack> inputStacks = new ArrayList<PositionedStack>(itemLimit + fluidLimit);
+			    int itemLimit = Math.min(mInputs.length, TOTAL_INPUT_COUNT);
+			    int fluidLimit = Math.min(mFluidInputs.length, TOTAL_INPUT_COUNT - itemLimit);
+			    int inputlimit = itemLimit + fluidLimit;
+			    int j = 0;
+
+				ArrayList<PositionedStack> inputStacks = new ArrayList<PositionedStack>(inputlimit);
 				
-				for (int i = 0; i < itemLimit; i++) {
-                    inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - i * 18, 5));
+				for (int i = 0; i < itemLimit; i++, j++) {
+			        inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - j%3 * 18, (j >= 3 ? 5 : 23) ));
 				}
 				
-				for (int i = 0; i < fluidLimit; i++) {
-                    if (i < 3) {
-                        inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - i * 18, 23));
-                    } else {
-                        inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 12, 5));
-                    }
+				for (int i = 0; i < fluidLimit; i++, j++) {
+                    inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - j%3 * 18, (j >= 3 ? 5 : 23)));
 				}
 				
 				return inputStacks;
