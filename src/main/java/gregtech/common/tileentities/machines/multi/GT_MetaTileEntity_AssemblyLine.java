@@ -196,6 +196,14 @@ public class GT_MetaTileEntity_AssemblyLine
         return true;
     }
 
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        for(GT_MetaTileEntity_Hatch_DataAccess hatch_dataAccess:mDataAccessHatches){
+            hatch_dataAccess.setActive(true);
+        }
+        return super.onRunningTick(aStack);
+    }
+
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
         if (aIndex == 20) {
