@@ -953,6 +953,8 @@ public enum OrePrefixes {
             case "PolyvinylChloride":
             case "Polystyrene":
             case "StyreneButadieneRubber":
+            case "RawRubber":
+            case "RawStyreneButadieneRubber":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material" + " Pulp";
                 if (name().startsWith("plate")) return mLocalizedMaterialPre + "%material" + " Sheet";
                 if (name().startsWith("ingot")) return mLocalizedMaterialPre + "%material" + " Bar";
