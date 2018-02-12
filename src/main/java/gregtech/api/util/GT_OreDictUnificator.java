@@ -138,7 +138,11 @@ public class GT_OreDictUnificator {
     }
 
     public static ItemStack get(boolean aUseBlackList, ItemStack aStack) {
-        if (GT_Utility.isStackInvalid(aStack)) return null;
+        return get(aUseBlackList, aStack, false);
+    }
+
+    private static ItemStack get(boolean aUseBlackList, ItemStack aStack, boolean aOnUnificationTableCreation) {
+    	if (GT_Utility.isStackInvalid(aStack)) return null;
         ItemData tPrefixMaterial = getAssociation(aStack);
         ItemStack rStack = null;
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData() || (aUseBlackList && tPrefixMaterial.mBlackListed))
@@ -149,7 +153,7 @@ public class GT_OreDictUnificator {
         }
         if (tPrefixMaterial.mUnificationTarget == null) {
         	tPrefixMaterial.mUnificationTarget = sName2StackMap.get(tPrefixMaterial.toString());
-        	sUnificationTable.clear();
+        	if (!aOnUnificationTableCreation) sUnificationTable.clear();
         }
         rStack = tPrefixMaterial.mUnificationTarget;
         if (GT_Utility.isStackInvalid(rStack)) return GT_Utility.copy(aStack);
@@ -163,8 +167,8 @@ public class GT_OreDictUnificator {
     		if (sUnificationTable.isEmpty() && !sItemStack2DataMap.isEmpty()) {
             	for (GT_ItemStack tGTStack0 : sItemStack2DataMap.keySet()) {
             		ItemStack tStack0 = tGTStack0.toStack();
-            		ItemStack tStack1 = get(false, tStack0);
-            		if (!GT_Utility.areStacksEqual(tStack0, tStack1)) {
+            		ItemStack tStack1 = get(false, tStack0, true);
+            		if (tStack0 != null && tStack1 != null && !GT_Utility.areStacksEqual(tStack0, tStack1)) {
             			GT_ItemStack tGTStack1 = new GT_ItemStack(tStack1);
             			List<ItemStack> list = sUnificationTable.get(tGTStack1);
             			if (list == null) sUnificationTable.put(tGTStack1, list = new ArrayList<ItemStack>());
