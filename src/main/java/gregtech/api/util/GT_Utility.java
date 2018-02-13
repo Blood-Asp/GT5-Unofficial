@@ -8,9 +8,11 @@ import gregtech.api.enchants.Enchantment_Radioactivity;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.SubTag;
+import gregtech.api.enums.Textures;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
@@ -54,7 +56,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
 
@@ -66,6 +73,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
+
+import com.mojang.authlib.GameProfile;
 
 import static gregtech.api.enums.GT_Values.*;
 import static gregtech.common.GT_Proxy.GTPOLLUTION;
@@ -1115,6 +1124,17 @@ public class GT_Utility {
                 aInventory.setInventorySlotContents(i, null);
         }
     }
+    
+    /**
+     * Initializes a new texture page.
+     */
+    public static boolean addTexturePage(byte page){
+        if(Textures.BlockIcons.casingTexturePages[page]==null){
+            Textures.BlockIcons.casingTexturePages[page]=new ITexture[128];
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Converts a Number to a String
@@ -1981,7 +2001,41 @@ public class GT_Utility {
     public static ItemStack getIntegratedCircuit(int config){
     	return ItemList.Circuit_Integrated.getWithDamage(0, config, new Object[0]);
     }
-    
+
+    public static float getBlockHardnessAt(World aWorld, int aX, int aY, int aZ) {
+    	return aWorld.getBlock(aX, aY, aZ).getBlockHardness(aWorld, aX, aY, aZ);
+    }
+
+    public static FakePlayer getFakePlayer(IGregTechTileEntity aBaseMetaTileEntity) {
+    	if (aBaseMetaTileEntity.getWorld() instanceof WorldServer) {
+    		return FakePlayerFactory.get((WorldServer) aBaseMetaTileEntity.getWorld(), new GameProfile(null, aBaseMetaTileEntity.getOwnerName()));
+    	}
+    	return null;
+    }
+
+    public static boolean eraseBlockByFakePlayer(FakePlayer aPlayer, int aX, int aY, int aZ, boolean isSimulate) {
+    	if (aPlayer == null) return false;
+    	World aWorld = aPlayer.worldObj;
+    	BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(aX, aY, aZ, aWorld, aWorld.getBlock(aX, aY, aZ), aWorld.getBlockMetadata(aX, aY, aZ), aPlayer);
+    	MinecraftForge.EVENT_BUS.post(event);
+    	if (!event.isCanceled()) {
+    		if (!isSimulate) return aWorld.setBlockToAir(aX, aY, aZ);
+    		return true;
+    	}
+    	return false;
+    }
+
+    public static boolean setBlockByFakePlayer(FakePlayer aPlayer, int aX, int aY, int aZ, Block aBlock, int aMeta, boolean isSimulate) {
+    	if (aPlayer == null) return false;
+    	World aWorld = aPlayer.worldObj;
+    	BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(aPlayer, new BlockSnapshot(aWorld, aX, aY, aZ, aBlock, aMeta), ForgeDirection.UNKNOWN);
+    	if (!event.isCanceled()) {
+    		if (!isSimulate) return aWorld.setBlock(aX, aY, aZ, aBlock, aMeta, 3);
+    		return true;
+    	}
+    	return false;
+    }
+
     public static class ItemNBT {
         public static void setNBT(ItemStack aStack, NBTTagCompound aNBT) {
             if (aNBT == null) {

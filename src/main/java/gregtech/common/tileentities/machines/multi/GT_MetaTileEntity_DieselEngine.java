@@ -31,14 +31,14 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public GT_MetaTileEntity_DieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
-    
+
     public GT_MetaTileEntity_DieselEngine(String aName) {
         super(aName);
     }
 
     public String[] getDescription() {
         return new String[]{
-                "Controller Block for the Large Diesel Engine",
+                "Controller Block for the Large Combustion Engine",
                 "Size(WxHxD): 3x3x4, Controller (front centered)",
                 "3x3x4 of Stable Titanium Machine Casing (hollow, Min 16!)",
                 "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
@@ -48,7 +48,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
                 "1x Dynamo Hatch (back centered)",
                 "Engine Intake Casings must not be obstructed in front (only air blocks)",
-                "Supply Diesel Fuel and 1000L of Lubricant per hour to run.",
+                "Supply Flammable Fuels and 1000L of Lubricant per hour to run.",
                 "Supply 40L of Oxygen per second to boost output (optional).",
                 "Default: Produces 2048EU/t at 100% efficiency",
                 "Boosted: Produces 6144EU/t at 150% efficiency",
@@ -222,7 +222,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public int getPollutionPerTick(ItemStack aStack) {
         return 16;
     }
-    
+
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
@@ -231,12 +231,13 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     @Override
     public String[] getInfoData() {
         return new String[]{
-            "Diesel Engine",
-            "Current Output: "+mEUt*mEfficiency/10000 +" EU/t",
-            "Fuel Consumption: "+fuelConsumption+"L/t",
-            "Fuel Value: "+fuelValue+" EU/L",
-            "Fuel Remaining: "+fuelRemaining+" Litres",
-            "Current Efficiency: "+(mEfficiency/100)+"%"};
+                "Diesel Engine",
+                "Current Output: " + mEUt * mEfficiency / 10000 + " EU/t",
+                "Fuel Consumption: " + fuelConsumption + "L/t",
+                "Fuel Value: " + fuelValue + " EU/L",
+                "Fuel Remaining: " + fuelRemaining + " Litres",
+                "Current Efficiency: " + (mEfficiency / 100) + "%",
+                getIdealStatus() == getRepairStatus() ? "No Maintainance issues" : "Needs Maintainance"};
     }
 
     @Override

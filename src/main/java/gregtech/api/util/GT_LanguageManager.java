@@ -17,6 +17,7 @@ public class GT_LanguageManager {
     public static final HashMap<String, String> TEMPMAP = new HashMap<String, String>(), BUFFERMAP = new HashMap<String, String>(), LANGMAP = new HashMap<String, String>();
     public static Configuration sEnglishFile;
     public static boolean sUseEnglishFile = false;
+    public static boolean i18nPlaceholder = true;
 
     public static String addStringLocalization(String aKey, String aEnglish) {
         return addStringLocalization(aKey, aEnglish, true);
@@ -317,7 +318,30 @@ public class GT_LanguageManager {
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_209", "Grab");
 //    	addStringLocalization("Interaction_DESCRIPTION_Index_210", "Grab");
         addStringLocalization("Interaction_DESCRIPTION_Index_211", "Items per side: ");
-
+        addStringLocalization("Interaction_DESCRIPTION_Index_212", "Input enabled");
+        addStringLocalization("Interaction_DESCRIPTION_Index_213", "Input disabled");
+        addStringLocalization("Interaction_DESCRIPTION_Index_214", "Connected");
+        addStringLocalization("Interaction_DESCRIPTION_Index_215", "Disconnected");
+        addStringLocalization("Interaction_DESCRIPTION_Index_216", "Deprecated Recipe");
+        addStringLocalization("Item_DESCRIPTION_Index_000", "Stored Heat: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_001", "Durability: %s/%s");
+        addStringLocalization("Item_DESCRIPTION_Index_002", "%s lvl %s");
+        addStringLocalization("Item_DESCRIPTION_Index_003", "Attack Damage: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_004", "Mining Speed: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_005", "Turbine Efficiency: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_006", "Optimal Steam flow: %sL/sec");
+        addStringLocalization("Item_DESCRIPTION_Index_007", "Optimal Gas flow(EU burnvalue per tick): %sEU/t");
+        addStringLocalization("Item_DESCRIPTION_Index_008", "Optimal Plasma flow(Plasma energyvalue per tick): %sEU/t");
+        addStringLocalization("Item_DESCRIPTION_Index_009", "Contains %s EU   Tier: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_010", "Empty. You should recycle it properly.");
+        addStringLocalization("Item_DESCRIPTION_Index_011", "%s / %s EU - Voltage: %s");
+        addStringLocalization("Item_DESCRIPTION_Index_012", "No Fluids Contained");
+        addStringLocalization("Item_DESCRIPTION_Index_013", "%sL / %sL");
+        addStringLocalization("Item_DESCRIPTION_Index_014", "Missing Coodinates!");
+        addStringLocalization("Item_DESCRIPTION_Index_015", "Device at:");
+        addStringLocalization("Item_DESCRIPTION_Index_016", "Amount: %s L");
+        addStringLocalization("Item_DESCRIPTION_Index_017", "Temperature: %s K");
+        addStringLocalization("Item_DESCRIPTION_Index_018", "State: %s");
     }
     
 }

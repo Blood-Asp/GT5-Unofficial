@@ -188,6 +188,8 @@ public enum OrePrefixes {
     pipeMedium("Medium Pipes", "Medium ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 3, 64, 80),
     pipeLarge("Large pipes", "Large ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 6, 64, 81),
     pipeHuge("Huge Pipes", "Huge ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 12, 64, 82),
+    pipeQuadruple("Quadruple Pipes", "Quadruple ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M *12, 64, 84),
+    pipeNonuple("Nonuple Pipes", "Nonuple ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 9, 64, 85),
     pipeRestrictiveTiny("Tiny Restrictive Pipes", "Tiny Restrictive ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M / 2, 64, 78),
     pipeRestrictiveSmall("Small Restrictive Pipes", "Small Restrictive ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 1, 64, 79),
     pipeRestrictiveMedium("Medium Restrictive Pipes", "Medium Restrictive ", " Pipe", true, true, false, false, true, false, true, false, false, false, 0, M * 3, 64, 80),
@@ -700,7 +702,8 @@ public enum OrePrefixes {
                         || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.Naquadah || aMaterial == Materials.Manganese ||
                         aMaterial == Materials.Plastic || aMaterial == Materials.Silicone || aMaterial == Materials.PolyvinylChloride || aMaterial == Materials.PolyphenyleneSulfide ||
                 		aMaterial == Materials.Nichrome || aMaterial == Materials.BlackSteel || aMaterial == Materials.Titanium || aMaterial == Materials.TungstenSteel || 
-                		aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium))
+                		aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium || 
+                		aMaterial == Materials.Europium))
                     foil.mDisabledItems.add(aMaterial);
                 //Fine Wire
                 if (!enableUnusedFineWires && !(aMaterial == Materials.Steel || aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Platinum || aMaterial == Materials.Osmium ||
@@ -898,26 +901,30 @@ public enum OrePrefixes {
         return name() + aMaterial;
     }
 
-    @SuppressWarnings("incomplete-switch")
     public String getDefaultLocalNameForItem(Materials aMaterial) {
+    	return aMaterial.getDefaultLocalizedNameForItem(getDefaultLocalNameFormatForItem(aMaterial));
+    }
+
+    @SuppressWarnings("incomplete-switch")
+    public String getDefaultLocalNameFormatForItem(Materials aMaterial) {
         // Certain Materials have slightly different Localizations.
         switch (this) {
             case crateGtDust:
-                return mLocalizedMaterialPre + OrePrefixes.dust.getDefaultLocalNameForItem(aMaterial);
+                return mLocalizedMaterialPre + OrePrefixes.dust.getDefaultLocalNameFormatForItem(aMaterial);
             case crateGtIngot:
-                return mLocalizedMaterialPre + OrePrefixes.ingot.getDefaultLocalNameForItem(aMaterial);
+                return mLocalizedMaterialPre + OrePrefixes.ingot.getDefaultLocalNameFormatForItem(aMaterial);
             case crateGtGem:
-                return mLocalizedMaterialPre + OrePrefixes.gem.getDefaultLocalNameForItem(aMaterial);
+                return mLocalizedMaterialPre + OrePrefixes.gem.getDefaultLocalNameFormatForItem(aMaterial);
             case crateGtPlate:
-                return mLocalizedMaterialPre + OrePrefixes.plate.getDefaultLocalNameForItem(aMaterial);
+                return mLocalizedMaterialPre + OrePrefixes.plate.getDefaultLocalNameFormatForItem(aMaterial);
         }
         switch (aMaterial.mName) {
             case "Glass":
             case "BorosilicateGlass":
-                if (name().startsWith("gem")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Crystal";
-                if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pane";
-                if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Bar";
-                if (name().startsWith("nugget")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Chip";
+                if (name().startsWith("gem")) return mLocalizedMaterialPre + "%material" + " Crystal";
+                if (name().startsWith("plate")) return mLocalizedMaterialPre + "%material" + " Pane";
+                if (name().startsWith("ingot")) return mLocalizedMaterialPre + "%material" + " Bar";
+                if (name().startsWith("nugget")) return mLocalizedMaterialPre + "%material" + " Chip";
                 break;
             case "Wheat":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + "Flour";
@@ -927,11 +934,11 @@ public enum OrePrefixes {
                 break;
             case "Wood":
             case "WoodSealed":
-                if (name().startsWith("bolt")) return "Short " + aMaterial.mDefaultLocalName + " Stick";
-                if (name().startsWith("stick")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Stick";
-                if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pulp";
-                if (name().startsWith("nugget")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Chip";
-                if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Plank";
+                if (name().startsWith("bolt")) return "Short " + "%material" + " Stick";
+                if (name().startsWith("stick")) return mLocalizedMaterialPre + "%material" + " Stick";
+                if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material" + " Pulp";
+                if (name().startsWith("nugget")) return mLocalizedMaterialPre + "%material" + " Chip";
+                if (name().startsWith("plate")) return mLocalizedMaterialPre + "%material" + " Plank";
                 break;
             case "Plastic":
             case "Rubber":
@@ -946,17 +953,19 @@ public enum OrePrefixes {
             case "PolyvinylChloride":
             case "Polystyrene":
             case "StyreneButadieneRubber":
-                if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Pulp";
-                if (name().startsWith("plate")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Sheet";
-                if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Bar";
-                if (name().startsWith("nugget")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Chip";
-                if (name().startsWith("foil")) return "Thin " + aMaterial.mDefaultLocalName + " Sheet";
+            case "RawRubber":
+            case "RawStyreneButadieneRubber":
+                if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material" + " Pulp";
+                if (name().startsWith("plate")) return mLocalizedMaterialPre + "%material" + " Sheet";
+                if (name().startsWith("ingot")) return mLocalizedMaterialPre + "%material" + " Bar";
+                if (name().startsWith("nugget")) return mLocalizedMaterialPre + "%material" + " Chip";
+                if (name().startsWith("foil")) return "Thin " + "%material" + " Sheet";
                 break;
             case "FierySteel":
                 if (mIsContainer) return mLocalizedMaterialPre + "Fiery Blood" + mLocalizedMaterialPost;
                 break;
             case "Steeleaf":
-                if (name().startsWith("ingot")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName;
+                if (name().startsWith("ingot")) return mLocalizedMaterialPre + "%material";
                 break;
             case "Bone":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + "Bone Meal";
@@ -969,7 +978,7 @@ public enum OrePrefixes {
             case "Chili":
             case "Cheese":
             case "Snow":
-                if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Powder";
+                if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material" + " Powder";
                 break;
             case "Paper":
                 if (name().startsWith("dust")) return mLocalizedMaterialPre + "Chad";
@@ -996,7 +1005,7 @@ public enum OrePrefixes {
             case "RockSalt":
             case "VolcanicAsh":
             case "RareEarth":
-                if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName;
+                if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material";
                 break;
             case "Vermiculite":
             case "Bentonite":
@@ -1010,13 +1019,13 @@ public enum OrePrefixes {
             case "QuartzSand":
             case "Pitchblende":
             case "FullersEarth":
-                if (name().startsWith("dust")) return mLocalizedMaterialPre + aMaterial.mDefaultLocalName;
+                if (name().startsWith("dust")) return mLocalizedMaterialPre + "%material";
                 switch (this) {
                     case crushedCentrifuged:
                     case crushedPurified:
-                        return mLocalizedMaterialPre + aMaterial.mDefaultLocalName;
+                        return mLocalizedMaterialPre + "%material";
                     case crushed:
-                        return "Ground " + aMaterial.mDefaultLocalName;
+                        return "Ground " + "%material";
                 }
                 break;
         }
@@ -1030,22 +1039,22 @@ public enum OrePrefixes {
                 case "InfusedOrder":
                 case "InfusedVis":
                 case "InfusedWater":
-                    if (name().startsWith("gem")) return mLocalizedMaterialPre + "Shard of " + aMaterial.mDefaultLocalName;
-                    if (name().startsWith("crystal")) return mLocalizedMaterialPre + "Shard of " + aMaterial.mDefaultLocalName;
+                    if (name().startsWith("gem")) return mLocalizedMaterialPre + "Shard of " + "%material";
+                    if (name().startsWith("crystal")) return mLocalizedMaterialPre + "Shard of " + "%material";
                     if (name().startsWith("plate"))
-                        return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Crystal Plate";
+                        return mLocalizedMaterialPre + "%material" + " Crystal Plate";
                     if (name().startsWith("dust"))
-                        return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Crystal Powder";
+                        return mLocalizedMaterialPre + "%material" + " Crystal Powder";
                     switch (this) {
                         case crushedCentrifuged:
                         case crushedPurified:
                         case crushed:
-                            return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + " Crystals";
+                            return mLocalizedMaterialPre + "%material" + " Crystals";
                     }
                     break;
             }
         }
         // Use Standard Localization
-        return mLocalizedMaterialPre + aMaterial.mDefaultLocalName + mLocalizedMaterialPost;
+        return mLocalizedMaterialPre + "%material" + mLocalizedMaterialPost;
     }
 }

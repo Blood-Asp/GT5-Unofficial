@@ -85,8 +85,11 @@ public class GregTech_API {
      * 10240 - 10751 are reserved for VirMan.
      * 10752 - 11263 are reserved for Briareos81.
      * 11264 - 12000 are reserved for Quantum64.
-     * 12001 - 12200 are reserved for the next one who asks me.
-     * 12001 - 32766 are currently free.
+     * 12001 - 12500 are reserved for RedMage17.
+     * 12501 - 13000 are reserved for the next one who asks me.
+     * 13001 - 31000 are currently free.
+     * 31001 - 32000 are reserved for Alkalus.
+     * 32001 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's
@@ -127,7 +130,7 @@ public class GregTech_API {
     /**
      * The List of Tools, which can be used. Accepts regular damageable Items and Electric Items
      */
-    public static final GT_HashSet<GT_ItemStack> sToolList = new GT_HashSet<GT_ItemStack>(), sCrowbarList = new GT_HashSet<GT_ItemStack>(), sScrewdriverList = new GT_HashSet<GT_ItemStack>(), sWrenchList = new GT_HashSet<GT_ItemStack>(), sSoftHammerList = new GT_HashSet<GT_ItemStack>(), sHardHammerList = new GT_HashSet<GT_ItemStack>(), sSolderingToolList = new GT_HashSet<GT_ItemStack>(), sSolderingMetalList = new GT_HashSet<GT_ItemStack>();
+    public static final GT_HashSet<GT_ItemStack> sToolList = new GT_HashSet<GT_ItemStack>(), sCrowbarList = new GT_HashSet<GT_ItemStack>(), sScrewdriverList = new GT_HashSet<GT_ItemStack>(), sWrenchList = new GT_HashSet<GT_ItemStack>(), sSoftHammerList = new GT_HashSet<GT_ItemStack>(), sHardHammerList = new GT_HashSet<GT_ItemStack>(),  sWireCutterList = new GT_HashSet<GT_ItemStack>(), sSolderingToolList = new GT_HashSet<GT_ItemStack>(), sSolderingMetalList = new GT_HashSet<GT_ItemStack>();
     /**
      * The List of Hazmat Armors
      */
@@ -573,6 +576,15 @@ public class GregTech_API {
      */
     public static boolean registerHardHammer(ItemStack aTool) {
         return registerTool(aTool, sHardHammerList);
+    }
+
+    /**
+     * Register a Wire Cutter to interact with Machines
+     * <p/>
+     * You need to register Tools in the Load Phase, because otherwise the Autodetection will assign a Tool Type in certain Cases during postload (When IToolWrench or similar Interfaces are implemented).
+     */
+    public static boolean registerWireCutter(ItemStack aTool) {
+        return registerTool(aTool, sWireCutterList);
     }
 
     /**

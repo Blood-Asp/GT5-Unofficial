@@ -2,6 +2,7 @@ package gregtech.common.tileentities.machines.multi;
 
 import gregtech.GT_Mod;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
@@ -9,6 +10,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -42,7 +44,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 "A programmed circuit in the main block throttles the boiler (-1000L/s per config)",
                 "Size(WxHxD): 3x5x3, Controller (Front middle in Fireboxes)",
                 "3x1x3 of " +getCasingMaterial()+ " Firebox Casings (Bottom layer, Min 3)",
-                "3x4x3 of " +getCasingMaterial()+ " Machine Casings/Plated Bricks (Above Fireboxes, hollow, Min 24!)",
+                "3x4x3 of " +getCasingMaterial()+ " " +getCasingBlockType()+ " (Above Fireboxes, hollow, Min 24!)",
                 "1x3x1 of " +getCasingMaterial()+ " Pipe Casings (Inside the Hollow Machine Casings/Plated Bricks)",
                 "1x Fuel Input Hatch/Bus (Any Firebox)",
                 "1x Water Input Hatch (Any Firebox)",
@@ -57,6 +59,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public abstract String getCasingMaterial();
 
     public abstract Block getCasingBlock();
+    
+    public abstract String getCasingBlockType();
 
     public abstract byte getCasingMeta();
 
@@ -136,22 +140,24 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (!tInputList.isEmpty()) {
             for (ItemStack tInput : tInputList) {
-                if (GT_Utility.getFluidForFilledItem(tInput, true) == null && (this.mMaxProgresstime = GT_ModHandler.getFuelValue(tInput) / 80) > 0) {
-                    this.excessFuel += GT_ModHandler.getFuelValue(tInput) % 80;
-                    this.mMaxProgresstime += this.excessFuel / 80;
-                    this.excessFuel %= 80;
-                    this.mMaxProgresstime = adjustBurnTimeForConfig(runtimeBoost(this.mMaxProgresstime));
-                    this.mEUt = adjustEUtForConfig(getEUt());
-                    this.mEfficiencyIncrease = this.mMaxProgresstime * getEfficiencyIncrease();
-                    this.mOutputItems = new ItemStack[]{GT_Utility.getContainerItem(tInput, true)};
-                    tInput.stackSize -= 1;
-                    updateSlots();
-                    if (this.mEfficiencyIncrease > 5000) {
-                        this.mEfficiencyIncrease = 0;
-                        this.mSuperEfficencyIncrease = 20;
-                    }
-                    return true;
-                }
+				if (tInput != GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Lava, 1)){
+					if (GT_Utility.getFluidForFilledItem(tInput, true) == null && (this.mMaxProgresstime = GT_ModHandler.getFuelValue(tInput) / 80) > 0) {
+                    	this.excessFuel += GT_ModHandler.getFuelValue(tInput) % 80;
+                    	this.mMaxProgresstime += this.excessFuel / 80;
+                    	this.excessFuel %= 80;
+                    	this.mMaxProgresstime = adjustBurnTimeForConfig(runtimeBoost(this.mMaxProgresstime));
+                    	this.mEUt = adjustEUtForConfig(getEUt());
+                    	this.mEfficiencyIncrease = this.mMaxProgresstime * getEfficiencyIncrease();
+                    	this.mOutputItems = new ItemStack[]{GT_Utility.getContainerItem(tInput, true)};
+                    	tInput.stackSize -= 1;
+                    	updateSlots();
+                    	if (this.mEfficiencyIncrease > 5000) {
+                        	this.mEfficiencyIncrease = 0;
+                        	this.mSuperEfficencyIncrease = 20;
+                    	}
+                    	return true;
+                	}
+				}
             }
         }
         this.mMaxProgresstime = 0;
@@ -164,7 +170,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     public boolean onRunningTick(ItemStack aStack) {
         if (this.mEUt > 0) {
             if (this.mSuperEfficencyIncrease > 0)
-                this.mEfficiency = Math.min(10000, this.mEfficiency + this.mSuperEfficencyIncrease);
+                mEfficiency = Math.max(0, Math.min(mEfficiency + mSuperEfficencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
             int tGeneratedEU = (int) (this.mEUt * 2L * this.mEfficiency / 10000L);
             if (tGeneratedEU > 0) {
                 long amount = (tGeneratedEU + 160) / 160;
@@ -271,7 +277,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler
     }
 
     private int adjustBurnTimeForConfig(int rawBurnTime) {
-        if (mEfficiency < 10000) {
+        if (mEfficiency < getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)) {
             return rawBurnTime;
         }
         int adjustedEUt = Math.max(25, getEUt() - 25 * integratedCircuitConfig);

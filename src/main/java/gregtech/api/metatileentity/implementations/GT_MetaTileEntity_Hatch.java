@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -77,6 +76,14 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
         mMachineBlock=actualTexture;
     }
 
+    /**
+     * 
+     * @param textureIndex
+     * Index between 0-127.
+     * Add 128 per page, if texture index is not on first page.
+     * 
+     */
+    
     public final void updateTexture(int textureIndex){
         onValueUpdate((byte) textureIndex);
         onTexturePageUpdate((byte) (textureIndex>>7));

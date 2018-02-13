@@ -18,6 +18,7 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Recipe.GT_Recipe_WithAlt;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -160,7 +161,6 @@ public class GT_NEI_AssLineHandler
                 }
             }
         }
-        CachedDefaultRecipe tNEIRecipe;
     }
 
     public String getOverlayIdentifier() {
@@ -374,53 +374,11 @@ public class GT_NEI_AssLineHandler
             super();
             this.mRecipe = aRecipe;
 
-            if (aRecipe.getRepresentativeInput(0) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(0), 12, 0));
-            }
-            if (aRecipe.getRepresentativeInput(1) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(1), 30, 0));
-            }
-            if (aRecipe.getRepresentativeInput(2) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(2), 48, 0));
-            }
-            if (aRecipe.getRepresentativeInput(3) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(3), 66, 0));
-            }
-            if (aRecipe.getRepresentativeInput(4) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(4), 12, 18));
-            }
-            if (aRecipe.getRepresentativeInput(5) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(5), 30, 18));
-            }
-            if (aRecipe.getRepresentativeInput(6) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(6), 48, 18));
-            }
-            if (aRecipe.getRepresentativeInput(7) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(7), 66, 18));
-            }
-            if (aRecipe.getRepresentativeInput(8) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(8), 12,36));
-            }
-            if (aRecipe.getRepresentativeInput(9) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(9), 30,36));
-            }
-            if (aRecipe.getRepresentativeInput(10) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(10),48, 36));
-            }
-            if (aRecipe.getRepresentativeInput(11) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(11),66, 36));
-            }
-            if (aRecipe.getRepresentativeInput(12) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(12), 12, 54));
-            }
-            if (aRecipe.getRepresentativeInput(13) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(13), 30, 54));
-            }
-            if (aRecipe.getRepresentativeInput(14) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(14), 48, 54));
-            }
-            if (aRecipe.getRepresentativeInput(15) != null) {
-                this.mInputs.add(new FixedPositionedStack(aRecipe.getRepresentativeInput(15), 66, 54));
+            for (int i = 0; i < 16; i++) {
+            	Object obj = aRecipe instanceof GT_Recipe_WithAlt ? ((GT_Recipe_WithAlt) aRecipe).getAltRepresentativeInput(i) : aRecipe.getRepresentativeInput(i);
+            	if (obj != null) {
+            		this.mInputs.add(new FixedPositionedStack(obj, 18 * (i % 4) + 12, 18 * (i / 4)));
+            	}
             }
 
             if (aRecipe.mSpecialItems != null) {

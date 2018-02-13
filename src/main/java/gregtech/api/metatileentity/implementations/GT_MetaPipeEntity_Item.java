@@ -1,6 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -12,6 +13,8 @@ import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -23,7 +26,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import static gregtech.api.enums.GT_Values.GT;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileEntityItemPipe {
@@ -34,32 +40,34 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public int mTransferredItems = 0;
     public byte mLastReceivedFrom = 0, oLastReceivedFrom = 0;
     public boolean mIsRestrictive = false;
+    private boolean mCheckConnections = !GT_Mod.gregtechproxy.gt6Pipe;
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
-        super(aID, aName, aNameRegional, aInvSlotCount);
+        super(aID, aName, aNameRegional, aInvSlotCount, false);
         mIsRestrictive = aIsRestrictive;
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
         mTickTime = aTickTime;
+        addInfo(aID);
     }
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
-        super(aID, aName, aNameRegional, aInvSlotCount);
-        mIsRestrictive = aIsRestrictive;
-        mThickNess = aThickNess;
-        mMaterial = aMaterial;
-        mStepSize = aStepSize;
-        mTickTime = 20;
+        this(aID, aName, aNameRegional, aThickNess, aMaterial, aInvSlotCount, aStepSize, aIsRestrictive, 20);
     }
 
+    @Deprecated
     public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive) {
-        super(aName, aInvSlotCount);
+        this(aName, aThickNess, aMaterial, aInvSlotCount, aStepSize, aIsRestrictive, 20);
+    }
+
+    public GT_MetaPipeEntity_Item(String aName, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
+    	super(aName, aInvSlotCount);
         mIsRestrictive = aIsRestrictive;
         mThickNess = aThickNess;
         mMaterial = aMaterial;
         mStepSize = aStepSize;
-        mTickTime = 20;
+        mTickTime = aTickTime;
     }
 
     @Override
@@ -69,7 +77,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaPipeEntity_Item(mName, mThickNess, mMaterial, mInventory.length, mStepSize, mIsRestrictive);
+        return new GT_MetaPipeEntity_Item(mName, mThickNess, mMaterial, mInventory.length, mStepSize, mIsRestrictive, mTickTime);
     }
 
     @Override
@@ -141,70 +149,36 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setByte("mLastReceivedFrom", mLastReceivedFrom);
+        if (GT_Mod.gregtechproxy.gt6Pipe)
+        	aNBT.setByte("mConnections", mConnections);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         mLastReceivedFrom = aNBT.getByte("mLastReceivedFrom");
+        if (GT_Mod.gregtechproxy.gt6Pipe) {
+        	if (!aNBT.hasKey("mConnections"))
+        		mCheckConnections = true;
+        	mConnections = aNBT.getByte("mConnections");
+        }
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
-            mConnections = 0;
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
-            for (byte i = 0; i < 6; i++) {
-                TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(i);
-                if (tTileEntity != null) {
-                    boolean temp = GT_Utility.isConnectableNonInventoryPipe(tTileEntity, GT_Utility.getOppositeSide(i));
-                    if (tTileEntity instanceof IGregTechTileEntity) {
-                        temp = true;
-                        if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() == null) continue;
-                        if (aBaseMetaTileEntity.getColorization() >= 0) {
-                            byte tColor = ((IGregTechTileEntity) tTileEntity).getColorization();
-                            if (tColor >= 0 && tColor != aBaseMetaTileEntity.getColorization()) {
-                                continue;
-                            }
-                        }
-                        if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity().connectsToItemPipe(GT_Utility.getOppositeSide(i))) {
-                            mConnections |= (1 << i);
-                            continue;
-                        }
-                    }
-                    if (tTileEntity instanceof IInventory) {
-                        temp = true;
-                        if (((IInventory) tTileEntity).getSizeInventory() <= 0) {
-                            continue;
-                        }
-                    }
-                    if (tTileEntity instanceof ISidedInventory) {
-                        temp = true;
-                        int[] tSlots = ((ISidedInventory) tTileEntity).getAccessibleSlotsFromSide(GT_Utility.getOppositeSide(i));
-                        if (tSlots == null || tSlots.length <= 0) {
-                            continue;
-                        }
-                    }
-                    if (temp) {
-                        if (tTileEntity instanceof ICoverable && ((ICoverable) tTileEntity).getCoverBehaviorAtSide(GT_Utility.getOppositeSide(i)).alwaysLookConnected(GT_Utility.getOppositeSide(i), ((ICoverable) tTileEntity).getCoverIDAtSide(GT_Utility.getOppositeSide(i)), ((ICoverable) tTileEntity).getCoverDataAtSide(GT_Utility.getOppositeSide(i)), ((ICoverable) tTileEntity))) {
-                            mConnections |= (1 << i);
-                            continue;
-                        }
-                        if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).alwaysLookConnected(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), aBaseMetaTileEntity)) {
-                            mConnections |= (1 << i);
-                            continue;
-                        }
-                        if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -1, aBaseMetaTileEntity)) {
-                            mConnections |= (1 << i);
-                            continue;
-                        }
-                        if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsOut(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -1, aBaseMetaTileEntity)) {
-                            mConnections |= (1 << i);
-                            continue;
-                        }
-                    }
+            for (byte tSide = 0; tSide < 6; tSide++) {
+            	ICoverable tBaseMetaTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(tSide) instanceof ICoverable ? (ICoverable) aBaseMetaTileEntity.getTileEntityAtSide(tSide) : null;
+            	byte uSide = GT_Utility.getOppositeSide(tSide);
+                if ((mCheckConnections || isConnectedAtSide(tSide)
+                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity)))
+                		&& connect(tSide) == 0) {
+                	disconnect(tSide);
                 }
             }
+            if (GT_Mod.gregtechproxy.gt6Pipe) mCheckConnections = false;
 
             if (oLastReceivedFrom == mLastReceivedFrom) {
                 doTickProfilingInThisTick = false;
@@ -219,7 +193,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
                         tPipeList.add(tTileEntity);
                         while (!temp && !isInventoryEmpty() && tTileEntity.sendItemStack(aBaseMetaTileEntity))
                             for (IMetaTileEntityItemPipe tPipe : tPipeList)
-                                if (!tPipe.incrementTransferCounter(1)) temp = false;
+                                if (!tPipe.incrementTransferCounter(1)) temp = true;
                     }
                 }
             }
@@ -228,6 +202,77 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             oLastReceivedFrom = mLastReceivedFrom;
         }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
+
+    @Override
+    public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    	if (GT_Mod.gregtechproxy.gt6Pipe) {
+    		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
+    		if (!isConnectedAtSide(tSide)) {
+    			if (connect(tSide) > 0)
+    				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
+    		}
+    		else {
+    			disconnect(tSide);
+    			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+    		}
+    		return true;
+    	}
+        return false;
+    }
+
+	@Override
+	public int connect(byte aSide) {
+		int rConnect = 0;
+		if (aSide >= 6) return rConnect;
+		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aSide);
+		byte tSide = GT_Utility.getOppositeSide(aSide);
+        if (tTileEntity != null) {
+            boolean temp = GT_Utility.isConnectableNonInventoryPipe(tTileEntity, tSide);
+            if (tTileEntity instanceof IGregTechTileEntity) {
+                temp = true;
+                if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() == null) return rConnect;
+                if (getBaseMetaTileEntity().getColorization() >= 0) {
+                    byte tColor = ((IGregTechTileEntity) tTileEntity).getColorization();
+                    if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) {
+                    	return rConnect;
+                    }
+                }
+                if (((IGregTechTileEntity) tTileEntity).getMetaTileEntity().connectsToItemPipe(tSide)) {
+                	rConnect = 1;
+                }
+            }
+            if (rConnect == 0) {
+            	if (tTileEntity instanceof IInventory) {
+                    temp = true;
+                    if (((IInventory) tTileEntity).getSizeInventory() <= 0) {
+                    	return rConnect;
+                    }
+                }
+                if (tTileEntity instanceof ISidedInventory) {
+                    temp = true;
+                    int[] tSlots = ((ISidedInventory) tTileEntity).getAccessibleSlotsFromSide(tSide);
+                    if (tSlots == null || tSlots.length <= 0) {
+                    	return rConnect;
+                    }
+                }
+                if (temp) {
+                    if (getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())
+                    		|| getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsItemsOut(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), -1, getBaseMetaTileEntity())) {
+                    	rConnect = 1;
+                    }
+                }
+            }
+        }
+		if (rConnect == 0) {
+			if (!getBaseMetaTileEntity().getWorld().getChunkProvider().chunkExists(getBaseMetaTileEntity().getOffsetX(aSide, 1) >> 4, getBaseMetaTileEntity().getOffsetZ(aSide, 1) >> 4)) { // if chunk unloaded
+				rConnect = -1;
+			}
+		}
+        if (rConnect > 0) {
+        	super.connect(aSide);
+        }
+        return rConnect;
+	}
 
     @Override
     public boolean incrementTransferCounter(int aIncrement) {
@@ -241,7 +286,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             byte tOffset = (byte) getBaseMetaTileEntity().getRandomNumber(6), tSide = 0;
             for (byte i = 0; i < 6; i++) {
                 tSide = (byte) ((i + tOffset) % 6);
-                if (isInventoryEmpty() || (tSide != mLastReceivedFrom || aSender != getBaseMetaTileEntity())) {
+                if (isConnectedAtSide(tSide) && (isInventoryEmpty() || (tSide != mLastReceivedFrom || aSender != getBaseMetaTileEntity()))) {
                     if (insertItemStackIntoTileEntity(aSender, tSide)) return true;
                 }
             }
@@ -288,24 +333,35 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     }
 
     @Override
+    public boolean canInsertItem(int aIndex, ItemStack aStack, int aSide) {
+    	return isConnectedAtSide(aSide) && super.canInsertItem(aIndex, aStack, aSide);
+    }
+
+    @Override
     public boolean canExtractItem(int aIndex, ItemStack aStack, int aSide) {
-        return true;
+        return isConnectedAtSide(aSide);
     }
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return true;
+        return isConnectedAtSide(aSide);
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+    	if (!isConnectedAtSide(aSide)) return false;
         if (isInventoryEmpty()) mLastReceivedFrom = aSide;
         return mLastReceivedFrom == aSide && mInventory[aIndex] == null;
     }
 
     @Override
     public String[] getDescription() {
-        return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/sec", "Routing Value: %%%" + mStepSize};
+    	if (mTickTime == 20)
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/sec", "Routing Value: %%%" + mStepSize};
+    	else if (mTickTime % 20 == 0)
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/%%%" + (mTickTime / 20) + "%%% sec", "Routing Value: %%%" + mStepSize};
+    	else
+    		return new String[]{"Item Capacity: %%%" + getMaxPipeCapacity() + "%%% Stacks/%%%" + mTickTime + "%%% ticks", "Routing Value: %%%" + mStepSize};
     }
 
     private boolean isInventoryEmpty() {
@@ -315,12 +371,19 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public float getThickNess() {
-        if(GT_Mod.instance.isClientSide() && GT_Client.hideValue==1) return 0.0625F;
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x1) != 0) return 0.0625F;
         return mThickNess;
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
+    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0)
+    		return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 1, aZ + 1);
+    	else
+    		return getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+    }
+
+    private AxisAlignedBB getActualCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
     	float tSpace = (1f - mThickNess)/2;
     	float tSide0 = tSpace;
     	float tSide1 = 1f - tSpace;
@@ -345,6 +408,14 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     	if((tConn & (1 << ForgeDirection.EAST.ordinal()) ) != 0) tSide5 = 1f;
     	
     	return AxisAlignedBB.getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
-    
+    }
+
+    @Override
+    public void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider) {
+    	super.addCollisionBoxesToList(aWorld, aX, aY, aZ, inputAABB, outputAABB, collider);
+    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0) {
+    		AxisAlignedBB aabb = getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+    		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
+    	}
     }
 }

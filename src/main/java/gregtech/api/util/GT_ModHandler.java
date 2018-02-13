@@ -38,6 +38,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -606,18 +608,76 @@ public class GT_ModHandler {
     }
 
     public static boolean addMagneticraftRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aChance2, ItemStack aOutput3, int aChance3){
-        if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
-          ItemData  tData = GT_OreDictUnificator.getAssociation(aInput);
-          if(tData!=null&&tData.mPrefix!=null){
-            if(tData.mPrefix==OrePrefixes.ore||tData.mPrefix==OrePrefixes.oreBlackgranite||tData.mPrefix==OrePrefixes.oreEndstone||tData.mPrefix==OrePrefixes.oreNetherrack||tData.mPrefix==OrePrefixes.oreRedgranite){
-            	com.cout970.magneticraft.api.access.MgRecipeRegister.registerCrusherRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-          }else if(tData.mPrefix==OrePrefixes.crushed||tData.mPrefix==OrePrefixes.crushedCentrifuged||tData.mPrefix==OrePrefixes.crushedPurified){
-        	  com.cout970.magneticraft.api.access.MgRecipeRegister.registerGrinderRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-          	}
-          }
-        }
-        return true;
-    }
+		if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
+			ItemData  tData = GT_OreDictUnificator.getAssociation(aInput);
+			if(tData!=null&&tData.mPrefix!=null){
+				if(tData.mPrefix==OrePrefixes.ore||tData.mPrefix==OrePrefixes.oreBlackgranite||tData.mPrefix==OrePrefixes.oreEndstone||tData.mPrefix==OrePrefixes.oreNetherrack||tData.mPrefix==OrePrefixes.oreRedgranite){
+					registerMagneticraftCrusherRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+				}else if(tData.mPrefix==OrePrefixes.crushed||tData.mPrefix==OrePrefixes.crushedCentrifuged||tData.mPrefix==OrePrefixes.crushedPurified){
+					registerMagneticraftGrinderRecipe(aInput, aOutput1, aOutput2,(float)((float)aChance2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), aOutput3,(float)((float)aChance3/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean registerMagneticraftSifterRecipe(final ItemStack in, final ItemStack out, final ItemStack extra,
+			final float prob) {
+		//Get Magnetiraft Recipe Handler
+				Class cls;
+				try {
+					cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+					//Get registerCrusherRecipe method from class.
+					Method mCrusher = cls.getDeclaredMethod("registerSifterRecipe", ItemStack.class, ItemStack.class,
+							ItemStack.class, float.class);
+					//Invoke Method
+					return (boolean) mCrusher.invoke(null, in, out, extra, prob);
+
+				}
+				catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Sifter handler.");
+					return false;
+				}
+	}
+
+	public static boolean registerMagneticraftCrusherRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
+			final float prob1, final ItemStack out2, final float prob2) {
+		//Get Magnetiraft Recipe Handler
+		Class cls;
+		try {
+			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+			//Get registerCrusherRecipe method from class.
+			Method mCrusher = cls.getDeclaredMethod("registerCrusherRecipe", ItemStack.class, ItemStack.class,
+					ItemStack.class, float.class, ItemStack.class, float.class);
+			//Invoke Method
+			return (boolean) mCrusher.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Crusher handler.");
+			return false;
+		}
+	}
+
+	public static boolean registerMagneticraftGrinderRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
+			final float prob1, final ItemStack out2, final float prob2) {
+		//Get Magnetiraft Recipe Handler
+		Class cls;
+		try {
+			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+
+			//Get registerGrinderRecipe method from class.
+			Method mGrinder = cls.getDeclaredMethod("registerGrinderRecipe", ItemStack.class, ItemStack.class,
+					ItemStack.class, float.class, ItemStack.class, float.class);
+			//Invoke Method
+			return (boolean) mGrinder.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Grinder handler.");
+			return false;
+		}
+	}
 
     /**
      * Adds a Recipe to the Sawmills of GregTech and ThermalCraft
@@ -1718,21 +1778,12 @@ public class GT_ModHandler {
                 EntityPlayer tPlayer = (EntityPlayer) aPlayer;
                 if (tPlayer.capabilities.isCreativeMode) return true;
                 if (isElectricItem(aStack) && ic2.api.item.ElectricItem.manager.getCharge(aStack) > 1000.0d) {
-                    for (int i = 0; i < tPlayer.inventory.mainInventory.length; i++) {
-                        if (GT_Utility.isStackInList(tPlayer.inventory.mainInventory[i], GregTech_API.sSolderingMetalList)) {
-                            if (tPlayer.inventory.mainInventory[i].stackSize < 1) return false;
-                            if (tPlayer.inventory.mainInventory[i].stackSize == 1) {
-                                tPlayer.inventory.mainInventory[i] = null;
-                            } else {
-                                tPlayer.inventory.mainInventory[i].stackSize--;
-                            }
-                            if (tPlayer.inventoryContainer != null) tPlayer.inventoryContainer.detectAndSendChanges();
-                            if (canUseElectricItem(aStack, 10000)) {
-                                return GT_ModHandler.useElectricItem(aStack, 10000, (EntityPlayer) aPlayer);
-                            }
-                            GT_ModHandler.useElectricItem(aStack, (int) ic2.api.item.ElectricItem.manager.getCharge(aStack), (EntityPlayer) aPlayer);
-                            return false;
+                    if (consumeSolderingMaterial(tPlayer)) {
+                    	if (canUseElectricItem(aStack, 10000)) {
+                            return GT_ModHandler.useElectricItem(aStack, 10000, (EntityPlayer) aPlayer);
                         }
+                        GT_ModHandler.useElectricItem(aStack, (int) ic2.api.item.ElectricItem.manager.getCharge(aStack), (EntityPlayer) aPlayer);
+                        return false;
                     }
                 }
             } else {
@@ -1741,6 +1792,26 @@ public class GT_ModHandler {
             }
         }
         return false;
+    }
+
+    /**
+     * Simply consumes some soldering material
+     */
+    public static boolean consumeSolderingMaterial(EntityPlayer aPlayer) {
+    	if (aPlayer.capabilities.isCreativeMode) return true;
+        for (int i = 0; i < aPlayer.inventory.mainInventory.length; i++) {
+            if (GT_Utility.isStackInList(aPlayer.inventory.mainInventory[i], GregTech_API.sSolderingMetalList)) {
+                if (aPlayer.inventory.mainInventory[i].stackSize < 1) return false;
+                if (aPlayer.inventory.mainInventory[i].stackSize == 1) {
+                    aPlayer.inventory.mainInventory[i] = null;
+                } else {
+                    aPlayer.inventory.mainInventory[i].stackSize--;
+                }
+                if (aPlayer.inventoryContainer != null) aPlayer.inventoryContainer.detectAndSendChanges();
+                return true;
+            }
+        }
+    	return false;
     }
 
     /**

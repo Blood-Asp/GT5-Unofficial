@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
-	private static final int CASING_INDEX = 112;
+	private final int CASING_INDEX = 176;
 
 	public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -45,12 +45,12 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 				"Size(WxHxD): 3x3x3",
 				"3x3x3 of Chemically Inert Machine Casings (hollow, min 8!)",
 				"Controller (Front centered)",
-				"1x Cupronickel Coil Block (Bottom centered)",
 				"1x PTFE Pipe Machine Casing (inside the hollow casings)",
+				"1x Cupronickel Coil Block (next to PTFE Pipe Machine Casing)",
 				"1x Input Bus/Hatch (Any inert casing)",
 				"1x Output Bus/Hatch (Any inert casing)",
 				"1x Maintenance Hatch (Any inert casing)",
-				"1x Energy Hatch (Any inert casing)"};
+				"1x Energy Hatch (Any inert casing)" };
 	}
 
 	@Override
@@ -58,17 +58,17 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			boolean aRedstone) {
 		if (aSide == aFacing) {
 			return new ITexture[] {
-					Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX],
+					Textures.BlockIcons.casingTexturePages[1][48],
 					new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE
 							: Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR) };
 		}
-		return new ITexture[] { Textures.BlockIcons.CASING_BLOCKS[CASING_INDEX] };
+		return new ITexture[] { Textures.BlockIcons.casingTexturePages[1][48] };
 	}
-	
+
 	@Override
-    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeChemicalReactor.png");
-    }
+	}
 
 	@Override
 	public boolean isCorrectMachinePart(ItemStack aStack) {
@@ -134,7 +134,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 					maxProgresstime = 2;
 					EUt = recipe.mEUt * recipe.mDuration / 2;
 				}
-				
+
 				this.mEUt = -EUt;
 				this.mMaxProgresstime = maxProgresstime;
 				this.mOutputItems = recipe.mOutputs;
@@ -151,28 +151,44 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
 		int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
 		int casingAmount = 0;
+		boolean hasHeatingCoil = false;
 		// x=width, z=depth, y=height
 		for (int x = -1 + xDir; x <= xDir + 1; x++) {
 			for (int z = -1 + zDir; z <= zDir + 1; z++) {
 				for (int y = -1; y <= 1; y++) {
+					if (x == 0 && y == 0 && z == 0) {
+						continue;
+					}
 					IGregTechTileEntity tileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(x, y, z);
 					Block block = aBaseMetaTileEntity.getBlockOffset(x, y, z);
-					if (x == xDir && z == zDir && y <= 0) {
-						if ((y == -1)
-								&& (block != GregTech_API.sBlockCasings5 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 0)) {
-							return false;
-						} else if (y == 0 && (block != GregTech_API.sBlockCasings8 || aBaseMetaTileEntity.getMetaIDOffset(x, y, z) != 1)) {
+					int centerCoords = 0;
+					if (x == xDir) {
+						centerCoords++;
+					}
+					if (y == 0) {
+						centerCoords++;
+					}
+					if (z == zDir) {
+						centerCoords++;
+					}
+					if (centerCoords == 3) {
+						if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 1) {
+							continue;
+						} else {
 							return false;
 						}
-					} else if (x != 0 || y != 0 || z != 0) {
-						if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
-								&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
-								&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
-							if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
-								casingAmount++;
-							} else {
-								return false;
-							}
+					}
+					if (centerCoords == 2 && block == GregTech_API.sBlockCasings5 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
+						hasHeatingCoil = true;
+						continue;
+					}
+					if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
+							&& !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
+							&& !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
+						if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
+							casingAmount++;
+						} else {
+							return false;
 						}
 					}
 
@@ -180,7 +196,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			}
 
 		}
-		return casingAmount >= 8;
+		return casingAmount >= 8 && hasHeatingCoil;
 	}
 
 	@Override
