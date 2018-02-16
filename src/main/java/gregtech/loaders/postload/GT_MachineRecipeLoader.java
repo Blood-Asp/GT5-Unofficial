@@ -3379,7 +3379,12 @@ if(Loader.isModLoaded("Railcraft")){
 						 Materials.Propene.getGas(300), Materials.Ethylene.getGas(300), Materials.Methane.getGas(300)}, 
 				Materials.Carbon.getDustSmall(1), 120, 120);
 		//Recipes for gasoline
-		GT_Values.RA.addChemicalRecipe(Materials.Nitrogen.getCells(2), Materials.Oxygen.getCells(1), GT_Values.NF, GT_Values.NF, Materials.NitrousOxide.getCells(3), 200, 30);
+
+		GT_Values.RA.addChemicalRecipe(                   Materials.Nitrogen.getCells(2), GT_Utility.getIntegratedCircuit(2), Materials.Oxygen.getGas(1000),   Materials.NitrousOxide.getGas(3000), Materials.Empty.getCells(2),                      200, 30);
+		GT_Values.RA.addChemicalRecipe(                   Materials.Oxygen.getCells(1),   GT_Utility.getIntegratedCircuit(2), Materials.Nitrogen.getGas(2000), Materials.NitrousOxide.getGas(3000), Materials.Empty.getCells(1),                      200, 30);
+		GT_Values.RA.addChemicalRecipeForBasicMachineOnly(Materials.Oxygen.getCells(1),   Materials.Empty.getCells(2),        Materials.Nitrogen.getGas(2000), GT_Values.NF,                        Materials.NitrousOxide.getCells(3), GT_Values.NI, 200, 30);
+		GT_Values.RA.addChemicalRecipeForBasicMachineOnly(Materials.Nitrogen.getCells(2), Materials.Empty.getCells(1),        Materials.Oxygen.getGas(1000),   GT_Values.NF,                        Materials.NitrousOxide.getCells(3), GT_Values.NI, 200, 30);
+		GT_Values.RA.addChemicalRecipeForBasicMachineOnly(Materials.Nitrogen.getCells(2), Materials.Oxygen.getCells(1),       GT_Values.NF,                    GT_Values.NF,                        Materials.NitrousOxide.getCells(3), GT_Values.NI, 200, 30);
 		GT_Values.RA.addChemicalRecipe(Materials.Ethanol.getCells(1), Materials.Butene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.AntiKnock.getCells(2), 400, 480);
 		GT_Values.RA.addMixerRecipe(Materials.Naphtha.getCells(16), Materials.Toluene.getCells(2), Materials.Methanol.getCells(1), (GT_Mod.gregtechproxy.mMoreComplicatedChemicalRecipes ? Materials.Acetone : Materials.AceticAcid).getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolineRegular.getCells(20), 200, 120);
 		GT_Values.RA.addMixerRecipe(Materials.GasolineRegular.getCells(20), Materials.AntiKnock.getCells(3), Materials.NitrousOxide.getCells(6), Materials.Toluene.getCells(1), GT_Values.NF, GT_Values.NF, Materials.GasolinePremium.getCells(30), 200, 120);
