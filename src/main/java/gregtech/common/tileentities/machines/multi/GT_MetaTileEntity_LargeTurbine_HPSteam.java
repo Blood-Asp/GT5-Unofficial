@@ -180,19 +180,17 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         }
 
         return new String[]{
-                EnumChatFormatting.BLUE+"Large Turbine"+EnumChatFormatting.RESET,
-                "Stored Energy:",
-                EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+
-                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
-                tRunning,
-                "Current Output: "+EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t",
-                "Optimal Flow: "+EnumChatFormatting.YELLOW+GT_Utility.safeInt((long)realOptFlow)+EnumChatFormatting.RESET+" L/t",
-                "Turbine Fitting: "+EnumChatFormatting.YELLOW+(looseFit?"Loose - More Flow":"Tight - More Efficiency"),
-                "Fuel Remaining: "+EnumChatFormatting.GOLD+storedFluid+EnumChatFormatting.RESET+"L",
-                "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%",
-                "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%",
-                tMaintainance,
-                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
+                // 8 Lines available for information panels
+                tRunning + ": " + EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t", /* 1 */
+                tMaintainance, /* 2 */
+                "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%", /* 2 */
+                "Stored Energy:" + EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+ /* 3 */
+                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU", 
+                "Optimal Flow: "+EnumChatFormatting.YELLOW+GT_Utility.safeInt((long)realOptFlow)+EnumChatFormatting.RESET+" L/t" + /* 4 */
+                        EnumChatFormatting.YELLOW+"("+(looseFit?"Loose":"Tight")+")", /* 5 */
+                "Fuel Remaining: "+EnumChatFormatting.GOLD+storedFluid+EnumChatFormatting.RESET+"L", /* 6 */
+                "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%", /* 7 */
+                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %" /* 8 */
         };
     }
     
