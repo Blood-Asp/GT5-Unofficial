@@ -17,6 +17,7 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
     public static boolean aEnableGCMarsMats = Loader.isModLoaded("GalacticraftMars") || aTGregSupport;
     public static boolean aEnableTwilightMats = Loader.isModLoaded(GT_Values.MOD_ID_TF) || aTGregSupport;
     public static boolean aEnableMetallurgyMats = Loader.isModLoaded("Metallurgy") || aTGregSupport;
+    public static boolean aEnableIHLMats = Loader.isModLoaded("ihl") || aTGregSupport;
 
     public ProcessingModSupport() {
         Materials.add(this);
@@ -38,16 +39,13 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.GarnetSand.mHasParentMod = false;
             Materials.GlauconiteSand.mHasParentMod = false;
             Materials.GraniticMineralSand.mHasParentMod = false;
-            Materials.Gypsum.mHasParentMod = false;
             Materials.Kaolinite.mHasParentMod = false;
             Materials.Kyanite.mHasParentMod = false;
-            Materials.Mica.mHasParentMod = false;
             Materials.Mirabilite.mHasParentMod = false;
             Materials.Perlite.mHasParentMod = false;
             Materials.Pollucite.mHasParentMod = false;
             Materials.Pumice.mHasParentMod = false;
             Materials.QuartzSand.mHasParentMod = false;
-            Materials.Trona.mHasParentMod = false;
             Materials.Vermiculite.mHasParentMod = false;
             Materials.VolcanicAsh.mHasParentMod = false;
             Materials.Wollastonite.mHasParentMod = false;
@@ -135,6 +133,11 @@ public class ProcessingModSupport implements gregtech.api.interfaces.IMaterialHa
             Materials.Komatiite.mHasParentMod = false;
             Materials.Rhyolite.mHasParentMod = false;
             Materials.Siltstone.mHasParentMod = false;
+        }
+        if (!aEnableIHLMats && !aEnablePFAAMats) {
+            Materials.Mica.mHasParentMod = false;
+            Materials.Gypsum.mHasParentMod = false;
+            Materials.Trona.mHasParentMod = false;
         }
         if (!aEnableTwilightMats) {
             Materials.FierySteel.mHasParentMod = false;
