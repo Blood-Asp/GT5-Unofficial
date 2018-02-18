@@ -132,6 +132,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private final DateFormat mDateFormat = DateFormat.getInstance();
     public ArrayList<String> mBufferedPlayerActivity = new ArrayList();
     public boolean mHardcoreCables = false;
+    public boolean mSmallLavaBoilerEfficiencyLoss = true;
     public boolean mDisableVanillaOres = true;
     public boolean mNerfStorageBlocks = true;
     public boolean mHardMachineCasings = true;

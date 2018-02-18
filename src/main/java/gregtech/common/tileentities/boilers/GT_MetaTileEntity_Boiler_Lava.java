@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.boilers;
 
+import gregtech.GT_Mod;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -100,20 +101,28 @@ public class GT_MetaTileEntity_Boiler_Lava
                             aBaseMetaTileEntity.doExplosion(2048L);
                             return;
                         }
-                        this.mFluid.amount -= 1;
-
+                        
                         int maxOutput = 300;
                         int minOutput = 100;
-
+                        
                         double efficiency = 1.0;
 
-                        ItemStack byproductStack = aBaseMetaTileEntity.getStackInSlot(3);
+						if (GT_Mod.gregtechproxy.mSmallLavaBoilerEfficiencyLoss) {
+							ItemStack byproductStack = aBaseMetaTileEntity.getStackInSlot(3);
 
-                        if(byproductStack != null && !(GT_Utility.isStackInvalid(byproductStack))) {
-                            //Efficiency drops from 100% when there is no byproduct, to 0% when there is a full stack of byproduct
-                            efficiency = 1.0 - (double) byproductStack.stackSize / (double) byproductStack.getMaxStackSize();
+							if (byproductStack != null && !(GT_Utility.isStackInvalid(byproductStack))) {
+								// Efficiency drops from 100% when there is no byproduct, 
+								// to 0% when there is a full stack of byproduct
+								efficiency = 1.0 - (double) byproductStack.stackSize / (double) byproductStack.getMaxStackSize();
+							}
+						}
+                        
+                        //Decrease water amount in proportion to steam production
+                        //Can't decrease by a fraction, as fluid amounts are integers, so need to decrease randomly so expected amount consumed is correct
+                        if(aBaseMetaTileEntity.getRandomNumber(100) < Math.round(efficiency * 100.0)) {
+                        	this.mFluid.amount -= 1;
                         }
-
+                        
                         //Steam output drops from maxOutput when efficiency is 100% to minOutput when efficiency is 0%
                         long output = (minOutput + Math.round((double) (maxOutput - minOutput) * efficiency));
 
@@ -146,7 +155,10 @@ public class GT_MetaTileEntity_Boiler_Lava
                 this.mTemperature += 1;
                 if (aBaseMetaTileEntity.getRandomNumber(333) == 0) {
                     //Produce one byproduct on average every one bucket of lava
-                    aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustImpure, Materials.Stone, 1L));
+                    if(!aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustImpure, Materials.Stone, 1L))) {
+                        //If the output slot had something in it already, stick one dust in:
+                        aBaseMetaTileEntity.setInventorySlotContents(3, GT_OreDictUnificator.get(OrePrefixes.dustImpure, Materials.Stone, 1));
+                    }
                 }
             }
 
