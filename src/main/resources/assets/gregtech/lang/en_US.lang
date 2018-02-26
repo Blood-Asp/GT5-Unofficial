@@ -688,6 +688,13 @@ achievement.item.PikoCircuit.desc=Pickup this item to see the recipe in NEI
 achievement.item.QuantumCircuit=Quantum Circuit
 achievement.item.QuantumCircuit.desc=Pickup this item to see the recipe in NEI
 
+achievement.item.StargateShieldingFoil=Stargate-Radiation-Containment-Plate
+achievement.item.StargateShieldingFoil.desc=Pickup this item to see the recipe in NEI
+achievement.item.StargateChevron=Stargate Chevron
+achievement.item.StargateChevron.desc=Pickup this item to see the recipe in NEI
+achievement.item.StargateFramePart=Stargate Frame Part
+achievement.item.StargateFramePart.desc=Pickup this item to see the recipe in NEI
+
 achievement.gt.metaitem.01.32605=Ultimate Battery
 achievement.gt.metaitem.01.32605.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32609=Really Ultimate Battery
