@@ -1940,8 +1940,7 @@ public class GT_Utility {
         return false;
     }
 
-    public static ArrayList<String> sortByValueToList( Map<String, Integer> map )
-    {
+    public static ArrayList<String> sortByValueToList( Map<String, Integer> map ) {
         List<Map.Entry<String, Integer>> list =
             new LinkedList<Map.Entry<String, Integer>>( map.entrySet() );
         Collections.sort( list, new Comparator<Map.Entry<String, Integer>>()
@@ -2118,8 +2117,9 @@ public class GT_Utility {
             ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
             for (String aStr : aOils) {
             	String[] aStats = aStr.split(",");
-            	tOilsTransformed.add(aStats[3] + " " + aStats[2] + "L");
+            	tOilsTransformed.add(aStats[0] + ":" + aStats[1] + "L " + aStats[2]);
             }
+            
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
             tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
@@ -2141,7 +2141,7 @@ public class GT_Utility {
                     for (int i = 6; tDataArray.length > i; i++) {
                         tOres += (tDataArray[i] + " ");
                     }
-                    tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
+                    tNBTList.appendTag(new NBTTagString("§nProspection Data §rFrom: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
                     tNBT.setTag("pages", tNBTList);
                 }
                 setNBT(aStack, tNBT);
@@ -2161,7 +2161,7 @@ public class GT_Utility {
 
                 NBTTagList tNBTList = new NBTTagList();
 
-                String tPageText = "Advanced prospection\n"
+                String tPageText = "§nAdvanced prospection§r\n\n"
                     + tPos + "\n"
                     + "Results:\n"
                     + "- Close Range Ores: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
@@ -2170,20 +2170,35 @@ public class GT_Utility {
                     + "- Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
                     + "Lists was sorted by volume";
                 tNBTList.appendTag(new NBTTagString(tPageText));
-
+  
                 if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", 20, tNearOres);
+                    fillBookWithList(tNBTList, "§nClose Range Ores§r%s\n\n", ", ", 20, tNearOres);
                 if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", 20, tMiddleOres);
+                    fillBookWithList(tNBTList, "§nMid Range Ores§r%s\n\n", ", ", 20, tMiddleOres);
                 if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", 20, tFarOres);
+                    fillBookWithList(tNBTList, "§nFar Range Ores§r%s\n\n", ", ", 20, tFarOres);
+                
+                tPageText = "§nOre notes§r\n\n"
+                        + "Close range:\nR <= " + tBounds[0] + "\n"
+                        + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
+                        + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2] + "\n"
+                        + "\n"
+                        + "[F][F][F][F][F]" + "\n"
+                        + "[F][M][M][M][F]" + "\n"
+                        + "[F][M]§2[C]§0[M][F]" + "\n"
+                        + "[F][M][M][M][F]" + "\n"
+                        + "[F][F][F][F][F]";
+                tNBTList.appendTag(new NBTTagString(tPageText));
+                
                 if (tOils != null)
-                    fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
+                    fillBookWithList(tNBTList, "§nOils§r%s\n\n", "\n", 9, tOils);
 
-                tPageText = "Notes\n\n"
-                    + "Close range:\nR <= " + tBounds[0] + "\n"
-                    + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
-                    + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2];
+                tPageText = "§nOil notes§r\n\n"
+                    + "[1][2][3]" + "\n"
+                    + "[4]§2[5]§0[6]" + "\n"
+                    + "[7][8][9]" + "\n"
+                    + "\n"
+                    + "§2[5]§0 — Prospector";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
                 tNBT.setString("author", tPos);

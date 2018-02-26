@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -10,6 +11,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_UndergroundOil;
@@ -24,25 +26,30 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_BasicMachine {    
+public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_BasicMachine {
     boolean ready = false;
     int radius;
     int near;
     int middle;
     int step;
 
+    private int mOilId = 0;
+    private ArrayList<Chunk> mOilFieldChunks = new ArrayList<Chunk>();
+
     public GT_MetaTileEntity_AdvSeismicProspector(int aID, String aName, String aNameRegional, int aTier, int aRadius, int aStep) {
         super(aID, aName, aNameRegional, aTier, 1, // amperage
-                "Place, activate with explosives ("
-                + "8 Glyceryl, "
-                + "32 TNT or "
-                + "16 ITNT), use Data Stick",
+                "",
                 1, // input slot count
                 1, // output slot count
                 "Default.png", // GUI name
@@ -60,6 +67,16 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         near = near + near % 2; // making near value even;
         middle = near * 2;
         step = aStep;
+    }
+
+    public String[] getDescription() {
+        return new String[]{
+        		"Place, activate with explosives ("
+                        + "8 Glyceryl, "
+                        + "32 TNT or "
+                        + "16 ITNT), use Data Stick",
+                "Ore prospection area 191x191 blocks",
+                "Oil prospection area 3x3 oilfields"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures,
@@ -109,7 +126,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 prospectOres(tNearOres, tMiddleOres, tFarOres);
 
                 // prospecting oils
-                HashMap<String, Integer> tOils = new HashMap<String, Integer>();
+                ArrayList<String> tOils = new ArrayList<String>();
                 prospectOils(tOils);
 
                 GT_Utility.ItemNBT.setAdvancedProspectionData(mTier,
@@ -118,7 +135,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                     this.getBaseMetaTileEntity().getYCoord(),
                     this.getBaseMetaTileEntity().getZCoord(),
                     this.getBaseMetaTileEntity().getWorld().provider.dimensionId,
-                    GT_Utility.sortByValueToList(tOils),
+                    tOils,
                     GT_Utility.sortByValueToList(tNearOres),
                     GT_Utility.sortByValueToList(tMiddleOres),
                     GT_Utility.sortByValueToList(tFarOres),
@@ -129,36 +146,55 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         return true;
     }
 
-    private void prospectOils(HashMap<String, Integer> aOils) {
+    private void prospectOils(ArrayList<String> aOils) {
 
-        int tLeftXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() - radius, 16);
-        int tRightXBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getXCoord() + radius, 16);
+        FluidStack tFluid;
 
-        int tLeftZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() - radius, 16);
-        int tRightZBound = GT_Utility.getScaleCoordinates(this.getBaseMetaTileEntity().getZCoord() + radius, 16);
+        Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
+        int range = 6;
+        int xChunk = (tChunk.xPosition / range) * range - ((tChunk.xPosition < 0 && tChunk.xPosition % range != 0) ? range : 0);
+        int zChunk = (tChunk.zPosition / range) * range - ((tChunk.zPosition < 0 && tChunk.zPosition % range != 0) ? range : 0);
 
-        HashMap<ChunkCoordIntPair, FluidStack> tFluids = new HashMap<>();
+        HashMap<Integer, FluidStack> tFluids = new HashMap<>();
+        ArrayList<String> minmax = new ArrayList<>();
+        int cInts = 0;
 
         try {
-            for (int x = tLeftXBound; x <= tRightXBound; ++x)
-                for (int z = tLeftZBound; z <= tRightZBound; ++z) 
-                {
-                	ChunkPosition tPos = new ChunkPosition(GT_Utility.getScaleCoordinates(x*16,96), 0, GT_Utility.getScaleCoordinates(z*16,96));
-                	ChunkCoordIntPair cInts = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ).getChunkCoordIntPair();
-                	FluidStack tFluid = GT_UndergroundOil.undergroundOilReadInformation(getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(tPos.chunkPosX,tPos.chunkPosZ));
-            		if (tFluid != null)
-	                	if (tFluids.containsKey(cInts)) {
-	                		if (tFluids.get(cInts).amount<tFluid.amount)
-	                			tFluids.get(cInts).amount = tFluid.amount;
-	                	} else tFluids.put(cInts, tFluid);
-                }
-			
-    		for (Map.Entry<ChunkCoordIntPair, FluidStack> fl : tFluids.entrySet()) {
-    			aOils.put(fl.getKey().chunkXPos + "," + fl.getKey().chunkZPos + "," + fl.getValue().amount + "," + fl.getValue().getLocalizedName(), fl.getValue().amount);
-    		}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}        
+        	for (int x = -1; x < 2; ++x) {
+            	for (int z = -1; z < 2; ++z) {
+                    int min = 1000;
+                    int max = 0;
+
+    		        for (int i = 0; i < range; i++) {
+    		            for (int j = 0; j < range; j++) {
+    		            	tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + z * 6, zChunk + j + x * 6);
+    		                tFluid = undergroundOilReadInformation(tChunk);
+    		        		if (tFluid != null) {
+    	                		if (max < tFluid.amount)
+    	                			max = tFluid.amount;
+    	                		if (min > tFluid.amount)
+    	                			min = tFluid.amount;
+
+    		                	if (tFluids.containsKey(cInts)) {
+    		                		if (tFluids.get(cInts).amount < tFluid.amount)
+    		                			tFluids.get(cInts).amount = tFluid.amount;
+    		                	} else tFluids.put(cInts, tFluid);
+    		        		}
+    		            }
+    		        }
+    		        cInts++;
+    		        minmax.add(min + "-" + max);
+            	}
+            }
+
+            int i = 0;
+            for (Map.Entry<Integer, FluidStack> fl : tFluids.entrySet()) {
+            	aOils.add(i + 1 + "," + minmax.get(i) + "," + fl.getValue().getLocalizedName());
+    			i++;
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     //private void putOil(int x, int z, HashMap<String, Integer> aOils) {//TODO Old method??
