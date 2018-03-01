@@ -122,7 +122,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 for (int j = 0; j < range; j++) {
                     tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i, zChunk + j);
                     tFluid = undergroundOilReadInformation(tChunk);
-                    if (tOil.isFluidEqual(tFluid))
+                    if (tOil.isFluidEqual(tFluid) && tFluid.amount > 0)
                         mOilFieldChunks.add(tChunk);
                 }
             }
