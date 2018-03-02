@@ -111,6 +111,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             mOilId = tFluid.getFluidID();
         }
         tOil = new FluidStack(FluidRegistry.getFluid(mOilId), 0);
+        int totalAmount = 0;
 
         if (mOilFieldChunks.isEmpty()) {
             Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
@@ -122,12 +123,15 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 for (int j = 0; j < range; j++) {
                     tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i, zChunk + j);
                     tFluid = undergroundOilReadInformation(tChunk);
-                    if (tOil.isFluidEqual(tFluid) && tFluid.amount > 0)
+                    if (tOil.isFluidEqual(tFluid)) {
                         mOilFieldChunks.add(tChunk);
+                        totalAmount += tFluid.amount;
+                    }
+
                 }
             }
         }
-        if (mOilFieldChunks.isEmpty()) return false;
+        if (totalAmount == 0) return false;
         return true;
     }
 
