@@ -2117,7 +2117,7 @@ public class GT_Utility {
             ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
             for (String aStr : aOils) {
             	String[] aStats = aStr.split(",");
-            	tOilsTransformed.add(aStats[0] + ":" + aStats[1] + "L " + aStats[2]);
+            	tOilsTransformed.add(aStats[0] + ": " + aStats[1] + "L " + aStats[2]);
             }
             
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));

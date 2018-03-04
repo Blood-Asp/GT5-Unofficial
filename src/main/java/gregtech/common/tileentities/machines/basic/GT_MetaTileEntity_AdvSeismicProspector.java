@@ -155,42 +155,30 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         int xChunk = (tChunk.xPosition / range) * range - ((tChunk.xPosition < 0 && tChunk.xPosition % range != 0) ? range : 0);
         int zChunk = (tChunk.zPosition / range) * range - ((tChunk.zPosition < 0 && tChunk.zPosition % range != 0) ? range : 0);
 
-        HashMap<Integer, FluidStack> tFluids = new HashMap<>();
-        ArrayList<String> minmax = new ArrayList<>();
+        ArrayList<Integer> minMaxValue = new ArrayList<>();
+        ArrayList<FluidStack> FluidName = new ArrayList<>();
         int cInts = 0;
 
         try {
-        	for (int x = -1; x < 2; ++x) {
-            	for (int z = -1; z < 2; ++z) {
-                    int min = 1000;
-                    int max = 0;
-
+        	for (int z = -1; z <= 1; ++z) {
+            	for (int x = -1; x <= 1; ++x) {
     		        for (int i = 0; i < range; i++) {
     		            for (int j = 0; j < range; j++) {
-    		            	tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + z * 6, zChunk + j + x * 6);
+    		            	tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + x * 6, zChunk + j + z * 6);
     		                tFluid = undergroundOilReadInformation(tChunk);
     		        		if (tFluid != null) {
-    	                		if (max < tFluid.amount)
-    	                			max = tFluid.amount;
-    	                		if (min > tFluid.amount)
-    	                			min = tFluid.amount;
-
-    		                	if (tFluids.containsKey(cInts)) {
-    		                		if (tFluids.get(cInts).amount < tFluid.amount)
-    		                			tFluids.get(cInts).amount = tFluid.amount;
-    		                	} else tFluids.put(cInts, tFluid);
+                                minMaxValue.add(tFluid.amount);
+                                FluidName.add(cInts, tFluid);
     		        		}
     		            }
     		        }
-    		        cInts++;
-    		        minmax.add(min + "-" + max);
-            	}
-            }
+                    int min = Collections.min(minMaxValue);
+                    int max = Collections.max(minMaxValue);
+                    aOils.add(cInts + 1 + "," + min + "-" + max + "," + FluidName.get(cInts).getLocalizedName());
 
-            int i = 0;
-            for (Map.Entry<Integer, FluidStack> fl : tFluids.entrySet()) {
-            	aOils.add(i + 1 + "," + minmax.get(i) + "," + fl.getValue().getLocalizedName());
-    			i++;
+                    minMaxValue.clear();
+                    cInts++;
+            	}
             }
         } catch (Exception e) {
 
@@ -203,7 +191,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     //        aOils.put(x + "," + z + "," + (tFluid.amount / 5000) + "," + tFluid.getLocalizedName(), tFluid.amount / 5000);
     //}
 
-    private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {        
+    private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {
         int tLeftXBound = this.getBaseMetaTileEntity().getXCoord() - radius;
         int tRightXBound = tLeftXBound + 2*radius;
 
@@ -221,13 +209,13 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                     prospectHole(i, k, aMiddleOres);
                 else
                     prospectHole(i, k, aFarOres);
-            } 
+            }
     }
 
     private void prospectHole(int i, int k, Map<String, Integer> aOres) {
         String tFoundOre;
         for (int j = this.getBaseMetaTileEntity().getYCoord(); j > 0; j--) {
-            tFoundOre = checkForOre(i, j, k);                            
+            tFoundOre = checkForOre(i, j, k);
             if (tFoundOre != null)
                 countOre(aOres, tFoundOre);
         }
