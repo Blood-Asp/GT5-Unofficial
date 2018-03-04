@@ -2232,6 +2232,7 @@ public class GT_Utility {
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
                         + "\n"
+                        + "[5] - Prospector";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
                 tNBT.setString("author", tPos);
