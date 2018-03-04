@@ -142,14 +142,17 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         return mTier == 1 ? 4096 : V[mTier] * 64;
     }
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (aBaseMetaTileEntity.getYCoord() + drillY - 1 < 0
-                || GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), 0, aBaseMetaTileEntity.getYCoord() + drillY - 1, 0) < 0
-                || !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), 0, drillY - 1, 0, MINING_PIPE_TIP_BLOCK, 0, true)) {
+        int xCoord = aBaseMetaTileEntity.getXCoord();
+        int zCoord = aBaseMetaTileEntity.getZCoord();
+        short yCoord = aBaseMetaTileEntity.getYCoord();
+        if (yCoord + drillY - 1 < 0
+                || GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), xCoord, yCoord + drillY - 1, zCoord) < 0
+                || !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), xCoord, yCoord + drillY - 1, zCoord, MINING_PIPE_TIP_BLOCK, 0, true)) {
             isPickingPipes = true;
             return false;
         }
         if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_TIP_BLOCK) {
-            aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_BLOCK);
+            aBaseMetaTileEntity.getWorld().setBlock(xCoord, yCoord + drillY, zCoord, MINING_PIPE_BLOCK);
         }
         miningPipes:
         {
@@ -169,7 +172,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         if (aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) != Blocks.air) {
             mineBlock(aBaseMetaTileEntity, 0, drillY - 1, 0);
         }
-        aBaseMetaTileEntity.getWorld().setBlock(aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord() + drillY - 1, aBaseMetaTileEntity.getZCoord(), MINING_PIPE_TIP_BLOCK);
+        aBaseMetaTileEntity.getWorld().setBlock(xCoord, yCoord + drillY - 1, zCoord, MINING_PIPE_TIP_BLOCK);
         drillY--;
         drillZ = -RADIUS[mTier];
         drillX = -RADIUS[mTier];
