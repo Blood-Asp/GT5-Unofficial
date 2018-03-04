@@ -2194,11 +2194,12 @@ public class GT_Utility {
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                    + "[1][2][3]" + "\n"
-                    + "[4][5][6]" + "\n"
-                    + "[7][8][9]" + "\n"
-                    + "\n"
-                    + "[5] - Prospector";
+                        + "Prospects from NW to SE 324 chunks (9 oilfields) around and gives min-max amount" + "\n\n"
+                        + "[1][2][3]" + "\n"
+                        + "[4][5][6]" + "\n"
+                        + "[7][8][9]" + "\n"
+                        + "\n"
+                        + "[5] - Prospector";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
                 tNBT.setString("author", tPos);
