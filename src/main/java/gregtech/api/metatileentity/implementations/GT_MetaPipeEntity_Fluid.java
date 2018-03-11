@@ -8,7 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
-import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
@@ -30,8 +29,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.GT_Values.D1;
 
@@ -230,7 +227,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             }
 
             for (FluidStack tFluid : mFluids) {
-            	if (tFluid != null && tFluid.amount > 0) {
+                if (tFluid != null && tFluid.amount > 0) {
                     int tTemperature = tFluid.getFluid().getTemperature(tFluid);
                     if (tTemperature > mHeatResistance) {
                         if (aBaseMetaTileEntity.getRandomNumber(100) == 0) {
@@ -269,21 +266,22 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                 ArrayList<ForgeDirection> tDirectionsList = new ArrayList<>();
 
                 for (byte tSide = 0, uSide = 0, i = 0, j = (byte) aBaseMetaTileEntity.getRandomNumber(6); i < 6; i++) {
-                	tSide = (byte) ((i + j) % 6);
-                	uSide = GT_Utility.getOppositeSide(tSide);
-                	IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide(tSide);
-                	ICoverable tBaseMetaTileEntity = tTank instanceof ICoverable ? (ICoverable) tTank : null;
-                	if (mCheckConnections || isConnectedAtSide(tSide)
-                			|| aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
-                			|| (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity))) {
-                		switch (connect(tSide)) {
-                		case 0:
-                			disconnect(tSide); break;
-                		case 2:
-                			if ((mLastReceivedFrom & (1 << tSide)) == 0) {
-                                tTanksList.add(tTank);
-                                tDirectionsList.add(ForgeDirection.getOrientation(tSide).getOpposite());
-                            }
+                    tSide = (byte) ((i + j) % 6);
+                    uSide = GT_Utility.getOppositeSide(tSide);
+                    IFluidHandler tTank = aBaseMetaTileEntity.getITankContainerAtSide(tSide);
+                    ICoverable tBaseMetaTileEntity = tTank instanceof ICoverable ? (ICoverable) tTank : null;
+                    if (mCheckConnections || isConnectedAtSide(tSide)
+                            || aBaseMetaTileEntity.getCoverBehaviorAtSide(tSide).alwaysLookConnected(tSide, aBaseMetaTileEntity.getCoverIDAtSide(tSide), aBaseMetaTileEntity.getCoverDataAtSide(tSide), aBaseMetaTileEntity)
+                            || (tBaseMetaTileEntity != null && tBaseMetaTileEntity.getCoverBehaviorAtSide(uSide).alwaysLookConnected(uSide, tBaseMetaTileEntity.getCoverIDAtSide(uSide), tBaseMetaTileEntity.getCoverDataAtSide(uSide), tBaseMetaTileEntity))) {
+                        switch (connect(tSide)) {
+                            case 0:
+                                disconnect(tSide);
+                                break;
+                            case 2:
+                                if ((mLastReceivedFrom & (1 << tSide)) == 0) {
+                                    tTanksList.add(tTank);
+                                    tDirectionsList.add(ForgeDirection.getOrientation(uSide));
+                                }
                         }
                     }
                 }
@@ -302,7 +300,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                         for (int tankIndex = 0; tankIndex < tTanksList.size(); tankIndex++) {
                             IFluidHandler tTileEntity = tTanksList.get(tankIndex);
                             ForgeDirection dir = tDirectionsList.get(tankIndex);
-                            FluidTankInfo[] tTankInfoList = tTileEntity.getTankInfo(dir.getOpposite());
+                            FluidTankInfo[] tTankInfoList = tTileEntity.getTankInfo(dir);
                             tTankAmounts.add(0);
 
                             FluidTankInfo successfulTankInfo = null;
@@ -317,7 +315,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                             }
                             if (successfulTankInfo != null) {
                                 tTankAmounts.set(tankIndex, (successfulTankInfo.fluid != null)
-                                        ? successfulTankInfo.capacity - successfulTankInfo.fluid.amount
+                                        ? Math.max(successfulTankInfo.capacity - successfulTankInfo.fluid.amount, 0)
                                         : successfulTankInfo.capacity);
                             } else {
                                 tTankAmounts.set(tankIndex, mCapacity * 20);
@@ -329,8 +327,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                         // Accounting of proportions
                         if (totalFreeAmount > tAmount) {
                             for (int tankIndex = 0; tankIndex < tTanksList.size(); tankIndex++) {
-                                double tankAmount = (double)tTankAmounts.get(tankIndex);
-                                tTankAmounts.set(tankIndex, (int)Math.floor(tankAmount * tAmount / totalFreeAmount));
+                                double tankAmount = (double) tTankAmounts.get(tankIndex);
+                                tTankAmounts.set(tankIndex, (int) Math.floor(tankAmount * tAmount / totalFreeAmount));
                                 totalOverAmount += tTankAmounts.get(tankIndex);
                             }
                             totalOverAmount = tAmount - totalOverAmount;
@@ -387,7 +385,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             }
 
             oLastReceivedFrom = mLastReceivedFrom;
-        }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
+        } else if (aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected == 4)
+            aBaseMetaTileEntity.issueTextureUpdate();
     }
 
     @Override
