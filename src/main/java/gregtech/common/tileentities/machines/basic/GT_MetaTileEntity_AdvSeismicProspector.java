@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.machines.basic;
 
-import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -22,13 +21,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
 public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_BasicMachine {
     boolean ready = false;
@@ -144,38 +143,38 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         FluidStack tFluid;
 
         Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
-        int range = 6;
+        int range = 6; //(int)Math.ceil((double)radius / 16);
         int xChunk = (tChunk.xPosition / range) * range - ((tChunk.xPosition < 0 && tChunk.xPosition % range != 0) ? range : 0);
         int zChunk = (tChunk.zPosition / range) * range - ((tChunk.zPosition < 0 && tChunk.zPosition % range != 0) ? range : 0);
 
-        ArrayList<Integer> minMaxValue = new ArrayList<>();
-        ArrayList<FluidStack> FluidName = new ArrayList<>();
-        int cInts = 0;
+        LinkedHashMap<ChunkCoordIntPair, FluidStack> tFluids = new LinkedHashMap<>();
+        int oilFieldCount = 0;
 
         try {
-        	for (int z = -1; z <= 1; ++z) {
-            	for (int x = -1; x <= 1; ++x) {
-    		        for (int i = 0; i < range; i++) {
-    		            for (int j = 0; j < range; j++) {
-    		            	tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + x * 6, zChunk + j + z * 6);
-    		                tFluid = undergroundOilReadInformation(tChunk);
-    		        		if (tFluid != null) {
+            for (int z = -1; z <= 1; ++z) {
+                for (int x = -1; x <= 1; ++x) {
+                    ChunkCoordIntPair cInts = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(x, z).getChunkCoordIntPair();
+                    ArrayList<Integer> minMaxValue = new ArrayList<>();
+
+                    for (int i = 0; i < range; i++) {
+                        for (int j = 0; j < range; j++) {
+                            tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + x * 6, zChunk + j + z * 6);
+                            tFluid = undergroundOilReadInformation(tChunk);
+                            if (tFluid != null) {
                                 minMaxValue.add(tFluid.amount);
-                                FluidName.add(cInts, tFluid);
-    		        		}
-    		            }
-    		        }
+                                if (!tFluids.containsKey(cInts)) {
+                                    tFluids.put(cInts, tFluid);
+                                }
+                            }
+                        }
+                    }
+
                     int min = Collections.min(minMaxValue);
                     int max = Collections.max(minMaxValue);
-                    aOils.add(cInts + 1 + "," + min + "-" + max + "," + FluidName.get(cInts).getLocalizedName());
-
-                    minMaxValue.clear();
-                    cInts++;
-            	}
+                    aOils.add(++oilFieldCount + "," + min + "-" + max + "," + tFluids.get(cInts).getLocalizedName());
+                }
             }
-        } catch (Exception e) {
-
-        }
+        } catch (Exception e) {/*Do nothing*/}
     }
 
     private void prospectOres(Map<String, Integer> aNearOres, Map<String, Integer> aMiddleOres, Map<String, Integer> aFarOres) {
