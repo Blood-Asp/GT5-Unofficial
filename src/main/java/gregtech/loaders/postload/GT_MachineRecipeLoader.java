@@ -2140,10 +2140,12 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Neutronium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.round, Materials.Neutronium, 16),
         		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 2L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NaquadahAlloy, 64L),
+        		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NaquadahAlloy, 64L),
+        		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NaquadahAlloy, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NaquadahAlloy, 64L),
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 2L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
         		Materials.SolderingAlloy.getMolten(1296),
         		Materials.Lubricant.getFluid(2000)}, ItemList.Electric_Motor_UV.get(1, new Object[]{}), 600, 100000);
 
@@ -2186,7 +2188,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Neutronium, 8L),
         		GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Silicone, 16L),
         		GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.Neutronium, 2L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 2L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 2L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
         		Materials.SolderingAlloy.getMolten(1296),
         		Materials.Lubricant.getFluid(2000)}, ItemList.Electric_Pump_UV.get(1, new Object[]{}), 600, 100000);
 
@@ -2217,7 +2220,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Neutronium, 2L),
         		GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Neutronium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.round, Materials.Neutronium, 32L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 2L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 2L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
                 Materials.SolderingAlloy.getMolten(1296),
         		Materials.Lubricant.getFluid(2000),
                 Materials.StyreneButadieneRubber.getMolten(2880)}, ItemList.Conveyor_Module_UV.get(1, new Object[]{}), 600, 100000);
@@ -2257,7 +2261,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Neutronium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.gear, Materials.Neutronium, 1L),
         		GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Neutronium, 2L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 4L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 4L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
         		Materials.SolderingAlloy.getMolten(1296),
         		Materials.Lubricant.getFluid(2000)}, ItemList.Electric_Piston_UV.get(1, new Object[]{}), 600, 100000);
 
@@ -2299,7 +2304,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                 new Object[]{OrePrefixes.circuit.get(Materials.Master), 8},
                 new Object[]{OrePrefixes.circuit.get(Materials.Elite), 8},
                 new Object[]{OrePrefixes.circuit.get(Materials.Data), 24},
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 6L)}, new FluidStack[]{
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 6L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
         		Materials.SolderingAlloy.getMolten(2304),
         		Materials.Lubricant.getFluid(2000)}, ItemList.Robot_Arm_UV.get(1, new Object[]{}), 600, 100000);
 
@@ -2334,7 +2340,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.VanadiumGallium, 7L)}, new FluidStack[]{
-        		Materials.SolderingAlloy.getMolten(576)},
+        		Materials.SolderingAlloy.getMolten(1152)},
         		ItemList.Emitter_ZPM.get(1, new Object[]{}), 600, 24000);
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Emitter_ZPM.get(1, new Object(){}),288000,new Object[]{
@@ -2346,8 +2352,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 7L)}, new FluidStack[]{
-        		Materials.SolderingAlloy.getMolten(576)},
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 7L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
+        		Materials.SolderingAlloy.getMolten(2304)},
         		ItemList.Emitter_UV.get(1, new Object[]{}), 600, 100000);
 
 //        Sensor
@@ -2375,7 +2382,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Platinum, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.VanadiumGallium, 7L)}, new FluidStack[]{
-        		Materials.SolderingAlloy.getMolten(576)},
+        		Materials.SolderingAlloy.getMolten(1152)},
         		ItemList.Sensor_ZPM.get(1, new Object[]{}), 600, 24000);
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Sensor_ZPM.get(1, new Object(){}),288000,new Object[]{
@@ -2387,8 +2394,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Osmiridium, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 7L)}, new FluidStack[]{
-        		Materials.SolderingAlloy.getMolten(576)},
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 7L)}, new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
+        		Materials.SolderingAlloy.getMolten(2304)},
         		ItemList.Sensor_UV.get(1, new Object[]{}), 600, 100000);
 
 //        Field Generator
@@ -2439,8 +2447,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Naquadah, 64L),
-        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NiobiumTitanium, 8L)},
+        		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 8L)},
                 new FluidStack[]{
+                Materials.Naquadria.getMolten(1296),
         		Materials.SolderingAlloy.getMolten(2304)},
         		ItemList.Field_Generator_UV.get(1, new Object[]{}), 600, 100000);
         
