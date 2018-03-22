@@ -132,9 +132,9 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         FluidStack tFluid;
 
         Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
-        int range = 6; //(int)Math.ceil((double)radius / 16);
-        int xChunk = (tChunk.xPosition / range) * range - ((tChunk.xPosition < 0 && tChunk.xPosition % range != 0) ? range : 0);
-        int zChunk = (tChunk.zPosition / range) * range - ((tChunk.zPosition < 0 && tChunk.zPosition % range != 0) ? range : 0);
+        int oilfieldSize = 8;
+        int xChunk = (tChunk.xPosition / oilfieldSize) * oilfieldSize - ((tChunk.xPosition < 0 && tChunk.xPosition % oilfieldSize != 0) ? oilfieldSize : 0);
+        int zChunk = (tChunk.zPosition / oilfieldSize) * oilfieldSize - ((tChunk.zPosition < 0 && tChunk.zPosition % oilfieldSize != 0) ? oilfieldSize : 0);
 
         LinkedHashMap<ChunkCoordIntPair, FluidStack> tFluids = new LinkedHashMap<>();
         int oilFieldCount = 0;
@@ -145,9 +145,11 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                     ChunkCoordIntPair cInts = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(x, z).getChunkCoordIntPair();
                     ArrayList<Integer> minMaxValue = new ArrayList<>();
 
-                    for (int i = 0; i < range; i++) {
-                        for (int j = 0; j < range; j++) {
-                            tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i + x * 6, zChunk + j + z * 6);
+                    for (int i = 0; i < oilfieldSize; i++) {
+                        for (int j = 0; j < oilfieldSize; j++) {
+                            tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(
+                                    xChunk + i + x * oilfieldSize,
+                                    zChunk + j + z * oilfieldSize);
                             tFluid = undergroundOilReadInformation(tChunk);
                             if (tFluid != null) {
                                 minMaxValue.add(tFluid.amount);
