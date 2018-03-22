@@ -37,9 +37,6 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     int middle;
     int step;
 
-    private int mOilId = 0;
-    private ArrayList<Chunk> mOilFieldChunks = new ArrayList<Chunk>();
-
     public GT_MetaTileEntity_AdvSeismicProspector(int aID, String aName, String aNameRegional, int aTier, int aRadius, int aStep) {
         super(aID, aName, aNameRegional, aTier, 1, // amperage
                 "",
@@ -70,15 +67,6 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                         + "16 ITNT), use Data Stick",
                 "Ore prospection area 191x191 blocks",
                 "Oil prospection area 3x3 oilfields"};
-    }
-
-    protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures,
-            String aGUIName, String aNEIName, int aNear, int aMiddle, int aRadius, int aStep) {
-        super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
-        radius = aRadius;
-        near = aNear;
-        middle = aMiddle;
-        step = aStep;
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
