@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import appeng.api.parts.IPartHost;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyStorage;
 import crazypants.enderio.machine.capbank.TileCapBank;
@@ -150,7 +151,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
                     if (tTileEntity instanceof IReactorChamber) {
                         tTileEntity = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
                     }
-                    if (tTileEntity instanceof IEnergySource && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, ForgeDirection.getOrientation(GT_Utility.getOppositeSide(i)))) {
+                    if (tTileEntity instanceof IEnergySource && !(tTileEntity instanceof IPartHost) && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, ForgeDirection.getOrientation(GT_Utility.getOppositeSide(i)))) {
                         long tEU = Math.min(maxEUInput(), (long) ((IEnergySource) tTileEntity).getOfferedEnergy());
                         ((IEnergySource) tTileEntity).drawEnergy(tEU);
                         aBaseMetaTileEntity.injectEnergyUnits((byte) 6, tEU, 1);
