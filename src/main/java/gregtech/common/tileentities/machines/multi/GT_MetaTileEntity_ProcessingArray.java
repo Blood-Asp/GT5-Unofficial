@@ -427,7 +427,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                         EnumChatFormatting.GREEN+tTier+EnumChatFormatting.RESET+
                         " Discount: "+
                         EnumChatFormatting.GREEN+(1<<mMult)+EnumChatFormatting.RESET + " x",
-                "Parallel processing: "+EnumChatFormatting.GREEN+(mInventory[1].stackSize<<mMult)+EnumChatFormatting.RESET
+                "Parallel processing: "+EnumChatFormatting.GREEN+((mInventory[1] != null) ? (mInventory[1].stackSize<<mMult) : 0)+EnumChatFormatting.RESET
         };
     }
 
