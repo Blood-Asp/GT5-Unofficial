@@ -21,10 +21,10 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
                 GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.redstone_torch, 3, 32767), GT_Utility.copyAmount(1L, new Object[]{aStack}), Materials.Concrete.getMolten(144L), new ItemStack(net.minecraft.init.Items.comparator, 1, 0), 800, 1);
                 break;
             case "craftingWireCopper":
-                GT_Values.RA.addAssemblerRecipe(ItemList.Circuit_Basic.get(1L, new Object[0]), GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_ModHandler.getIC2Item("frequencyTransmitter", 1L), 800, 1);
+                GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.getFirstOre(OrePrefixes.circuit.get(Materials.Basic), 1), GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_ModHandler.getIC2Item("frequencyTransmitter", 1L), 800, 1);
                 break;
             case "craftingWireTin":
-                GT_Values.RA.addAssemblerRecipe(ItemList.Circuit_Basic.get(1L, new Object[0]), GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_ModHandler.getIC2Item("frequencyTransmitter", 1L), 800, 1);
+                GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.getFirstOre(OrePrefixes.circuit.get(Materials.Basic), 1), GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_ModHandler.getIC2Item("frequencyTransmitter", 1L), 800, 1);
                 break;
             case "craftingLensBlue":
                 GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Iron, 1L), GT_Utility.copyAmount(0L, new Object[]{aStack}), GT_ModHandler.getModItem("appliedenergistics2", "item.ItemMultiMaterial", 1L, 13), 2000, 1920);
