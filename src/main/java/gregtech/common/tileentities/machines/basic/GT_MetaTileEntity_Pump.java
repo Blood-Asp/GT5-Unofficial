@@ -253,9 +253,9 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                 if (tTank != null) {
                     FluidStack tDrained = drain(1000, false);
                     if (tDrained != null) {
-                        int tFilledAmount = tTank.fill(ForgeDirection.UP, tDrained, false);
+                        int tFilledAmount = tTank.fill(ForgeDirection.DOWN, tDrained, false);
                         if (tFilledAmount > 0)
-                            tTank.fill(ForgeDirection.UP, drain(tFilledAmount, true), true);
+                            tTank.fill(ForgeDirection.DOWN, drain(tFilledAmount, true), true);
                     }
                 }
             }

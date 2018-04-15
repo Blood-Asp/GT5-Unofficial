@@ -1298,7 +1298,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         CallistoIce.mChemicalFormula="SpH\u2082O";
         Quantium.mChemicalFormula="Qt";
         Desh.mChemicalFormula="De";
-	Oriharukon.mChemicalFormula="Oh";
+	    Oriharukon.mChemicalFormula="Oh";
         Draconium.mChemicalFormula="D";
         DraconiumAwakened.mChemicalFormula="D*";
         BlueAlloy.mChemicalFormula="AgRp\u2084";
@@ -1309,9 +1309,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         DeepIron.mChemicalFormula="Sp\u2082Fe";
         Ichorium.mChemicalFormula="IcMa";
 //      Duralumin.mChemicalFormula="Al\u2086CuMnMg";
-        Infinity.mChemicalFormula="I*";
-        InfinityCatalyst.mChemicalFormula="IC";
+        Infinity.mChemicalFormula="If*";
+        InfinityCatalyst.mChemicalFormula="If";
         //Pentacadmiummagneiumhexaoxid.mChemicalFormula="Cd5MgO6";
+        CosmicNeutronium.mChemicalFormula="SpNt";
     }
 
     private static void initSubTags() {
