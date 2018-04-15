@@ -44,7 +44,6 @@ public class ItemComb extends Item {
 		return new ItemStack(this, count, type.ordinal());
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tabs, List list) {

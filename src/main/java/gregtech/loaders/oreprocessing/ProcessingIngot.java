@@ -104,6 +104,8 @@ public class ProcessingIngot implements gregtech.api.interfaces.IOreRecipeRegist
             case ingotHot:
                 GT_Values.RA.addVacuumFreezerRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L), (int) Math.max(aMaterialMass * 3L, 1L));
                 break;
+		default:
+			break;
         }
     }
 }

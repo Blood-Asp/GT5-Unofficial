@@ -176,6 +176,8 @@ public class ProcessingToolHead implements gregtech.api.interfaces.IOreRecipeReg
                     GT_Values.RA.addFormingPressRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, aMaterial, 3L), GT_OreDictUnificator.get(OrePrefixes.screw, aMaterial, 2L), GT_OreDictUnificator.get(OrePrefixes.turbineBlade, aMaterial, 1L), 200, 60);
                 }
                 break;
+		default:
+			break;
         }
     }
 }
