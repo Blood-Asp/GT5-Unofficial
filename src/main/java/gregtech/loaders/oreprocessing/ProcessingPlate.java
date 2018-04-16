@@ -185,6 +185,8 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                         GT_ModHandler.removeRecipeByOutput(aStack);
                 }
                 break;
+		default:
+			break;
         }
     }
 }

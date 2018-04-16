@@ -42,6 +42,8 @@ public class ProcessingCrushedOre implements gregtech.api.interfaces.IOreRecipeR
 				        }
 				}}
 				break;
+		default:
+			break;
 		}
 	}
 }

@@ -140,6 +140,8 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
                     GT_Values.RA.addLaserEngraverRecipe(GT_Utility.copyAmount(3L, new Object[]{aStack}), is, GT_OreDictUnificator.get(OrePrefixes.gemExquisite, aMaterial, 1L),2400,2000);
                 }
                 break;
+		default:
+			break;
         }
     }
 }

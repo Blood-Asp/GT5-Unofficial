@@ -30,6 +30,8 @@ public class ProcessingOrePoor implements gregtech.api.interfaces.IOreRecipeRegi
                 break;
             case oreRich:
                 aMultiplier = 4;
+		default:
+			break;
         }
         if (aMaterial != null) {
             GT_Values.RA.addForgeHammerRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, aMultiplier), 16, 10);

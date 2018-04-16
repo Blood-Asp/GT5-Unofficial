@@ -53,6 +53,8 @@ public class ProcessingGear implements gregtech.api.interfaces.IOreRecipeRegistr
                     }
                 }
                 break;
+		default:
+			break;
         }
     }
 }
