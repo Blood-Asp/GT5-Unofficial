@@ -1450,7 +1450,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         generateFluidMultiPipes(Materials.Steel, Materials.Steel.mName, "Steel", 5210, 240, 2500, true);
         generateFluidMultiPipes(Materials.StainlessSteel, Materials.StainlessSteel.mName, "StainlessSteel", 5215, 360, 3000, true);
         generateFluidMultiPipes(Materials.Titanium, Materials.Titanium.mName, "Titanium", 5220, 480, 5000, true);
-        generateFluidMultiPipes(Materials.TungstenSteel, Materials.TungstenSteel.mName, "Bronze", 5225, 600, 7500, true);
+        generateFluidMultiPipes(Materials.TungstenSteel, Materials.TungstenSteel.mName, "Tungstensteel", 5225, 600, 7500, true);
         generateFluidMultiPipes(Materials.Plastic, Materials.Plastic.mName, "Plastic", 5230, 360, 350, true);
         generateFluidMultiPipes(Materials.Polytetrafluoroethylene, Materials.Polytetrafluoroethylene.mName, "PTFE", 5235, 480, 600, true);
 
