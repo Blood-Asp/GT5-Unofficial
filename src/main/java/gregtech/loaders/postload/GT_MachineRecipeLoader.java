@@ -2569,7 +2569,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 new FluidStack[]{
                         Materials.Naquadria.getMolten(2592),
                         Materials.SolderingAlloy.getMolten(4608)},
-                ItemList.Field_Generator_UV.get(1, new Object[]{}), 800, 200000);
+                ItemList.Field_Generator_UHV.get(1, new Object[]{}), 800, 200000);
 
         Object o = new Object[0];
 
