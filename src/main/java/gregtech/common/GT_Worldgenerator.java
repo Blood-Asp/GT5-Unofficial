@@ -37,7 +37,7 @@ implements IWorldGenerator {
     public static List<Runnable> mList = new ArrayList();
     public static HashSet<Long> ProcChunks = new HashSet<Long>();
     // This is probably not going to work.  Trying to create a fake orevein to put into hashtable when there will be no ores in a vein.
-    public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
+    public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
     public static Hashtable<Long, GT_Worldgen_GT_Ore_Layer> validOreveins = new Hashtable(1024);
     public boolean mIsGenerating = false;
     public static final Object listLock = new Object();
