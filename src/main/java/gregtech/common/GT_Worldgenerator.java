@@ -19,6 +19,8 @@ import net.minecraft.world.gen.ChunkProviderHell;
 
 import java.util.*;
 
+import bloodasp.galacticgreg.GT_Worldgen_GT_Ore_Layer_Space;
+
 import static gregtech.api.enums.GT_Values.*;
 
 // Disabled for hardcoded value.    import static gregtech.api.enums.GT_Values.oreveinMaxSize;
@@ -37,7 +39,7 @@ implements IWorldGenerator {
     public static List<Runnable> mList = new ArrayList();
     public static HashSet<Long> ProcChunks = new HashSet<Long>();
     // This is probably not going to work.  Trying to create a fake orevein to put into hashtable when there will be no ores in a vein.
-    public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
+    public static GT_Worldgen_GT_Ore_Layer noOresInVein = new GT_Worldgen_GT_Ore_Layer( "NoOresInVein", false, 0, 255, 0, 255, 16,  false, false, false, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium, Materials.Aluminium);
     public static Hashtable<Long, GT_Worldgen_GT_Ore_Layer> validOreveins = new Hashtable(1024);
     public boolean mIsGenerating = false;
     public static final Object listLock = new Object();
@@ -173,7 +175,7 @@ implements IWorldGenerator {
             int noOrePlacedCount=0;
             String tDimensionName = "";
             if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
-
+            
             if (debugOrevein) GT_Log.out.println(
                 " Finding oreveins for oreveinSeed="+ oreveinSeed +
                 " mX="+ this.mX +
