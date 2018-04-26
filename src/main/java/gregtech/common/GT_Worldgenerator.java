@@ -19,6 +19,8 @@ import net.minecraft.world.gen.ChunkProviderHell;
 
 import java.util.*;
 
+import bloodasp.galacticgreg.GT_Worldgen_GT_Ore_Layer_Space;
+
 import static gregtech.api.enums.GT_Values.*;
 
 // Disabled for hardcoded value.    import static gregtech.api.enums.GT_Values.oreveinMaxSize;
@@ -173,7 +175,7 @@ implements IWorldGenerator {
             int noOrePlacedCount=0;
             String tDimensionName = "";
             if (debugOrevein) { tDimensionName = this.mWorld.provider.getDimensionName(); }
-
+            
             if (debugOrevein) GT_Log.out.println(
                 " Finding oreveins for oreveinSeed="+ oreveinSeed +
                 " mX="+ this.mX +

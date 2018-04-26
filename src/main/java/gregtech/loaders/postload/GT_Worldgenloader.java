@@ -1,8 +1,7 @@
 package gregtech.loaders.postload;
 
-//import bloodasp.galacticgreg.GT_Worldgenerator_Space;
+import bloodasp.galacticgreg.WorldGenGaGT;
 import cpw.mods.fml.common.Loader;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
@@ -104,10 +103,10 @@ public class GT_Worldgenloader
         for (int j = GregTech_API.sWorldgenFile.get("worldgen", "AmountOfCustomSmallOreSlots", 16); i < j; i++) {
             new GT_Worldgen_GT_Ore_SmallPieces("ore.small.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, false, false, false, false, false, false, Materials._NULL);
         }
-        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
+        /*if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList.clear();
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
-        }
+        }*/
 
         new GT_Worldgen_GT_Ore_Layer("ore.mix.naquadah", true, 10, 90, 30, 5, 32, false, false, false, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.lignite", true, 80, 210, 160, 8, 32, true, false, false, Materials.Lignite, Materials.Lignite, Materials.Lignite, Materials.Coal);
@@ -144,8 +143,8 @@ public class GT_Worldgenloader
         
         /*
          * custom GTNH OreMixes
-         * WARNING: NO DUPLICATS OR DEPRECATED MATERIALS IN HERE.
-         * 
+         * WARNING: NO DUPLICATS IN aName OR DEPRECATED MATERIALS IN HERE.
+         * Materials can be used unlimited, since achievements for Ores are turned off.
          */
         
         //aName, aDefault, aMinY, aMaxY, aWeight, aDensity, aSize, aOverworld, aNether, aEnd, aPrimary, aSecondary, aBetween, aSporadic
@@ -246,7 +245,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.realgarneodymiumgiant", true, 205, 215, 100, 10, 32, false, false, false, Materials.Realgar, Materials.Neodymium, Materials.Realgar, Materials.Neodymium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.heavypentele", true, 40, 60, 60, 5, 32, false, false, false, Materials.Arsenic, Materials.Bismuth, Materials.Antimony, Materials.Antimony);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.europa", true, 55, 65, 110, 4, 24, false, false, false, Materials.Magnesite, Materials.BandedIron, Materials.Sulfur, Materials.Opal);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.europacore", true, 5, 9, 5, 2, 16, false, false, false, Materials.Chrome, Materials.Tungsten, Materials.Molybdenum, Materials.Manganese);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.europacore", true, 5, 15, 5, 2, 16, false, false, false, Materials.Chrome, Materials.Tungsten, Materials.Molybdenum, Materials.Manganese);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.secondlanthanid", true, 10, 40, 10, 3, 24, false, false, false, Materials.Samarium, Materials.Europium, Materials.Promethium, Materials.Gadolinium);
 
         i = 0;
@@ -254,8 +253,12 @@ public class GT_Worldgenloader
             new GT_Worldgen_GT_Ore_Layer("ore.mix.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, 0, 0, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
         }
         
-        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
+        //DO NOT DELETE V THIS V 
+        new WorldGenGaGT().run(); //this function calles Galactic Greg and enables its generation.
+        //DO NOT DELETE ^ THIS ^ 
+        
+        /*if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
-        }
+        }*/
     }
 }

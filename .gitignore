@@ -11,7 +11,6 @@ thumbs.db
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 *.txt
@@ -20,7 +19,10 @@ thumbs.db
 hs_err_pid*
 
 ### Eclipse ###
-
+libs/Galacticraft-Planets-Dev-1.7-3.0.12.503.jar
+libs/GalacticraftCore-Dev-1.7-3.0.12.503.jar
+libs/MicdoodleCore-Dev-1.7-3.0.12.503.jar
+libs/gregtech-5.09.32.22-dev.jar
 *.pydevproject
 .metadata
 .gradle

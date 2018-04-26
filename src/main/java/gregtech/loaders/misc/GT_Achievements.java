@@ -33,8 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_Achievements {
 
-    public static List<Materials> oreList = new ArrayList<Materials>();
-    public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
+    //public static List<Materials> oreList = new ArrayList<Materials>();
+    //public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
     public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
@@ -45,7 +45,7 @@ public class GT_Achievements {
     public GT_Achievements() {
         this.achievementList = new ConcurrentHashMap<>();
         this.issuedAchievements = new ConcurrentHashMap<>();
-        int oreList_sS=oreList.size();
+        /*int oreList_sS=oreList.size();
         for (int i = 0; i < oreList_sS; i++) {
             if (oreList.get(i) != null) {
                 if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
@@ -77,7 +77,7 @@ public class GT_Achievements {
                 registerOreAchievement(oreList.get(i));
             }
         }
-
+*/
         for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
             registerAssAchievement(recipe);
 
@@ -231,13 +231,13 @@ public class GT_Achievements {
         }
     }
 
-    public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
+    /*public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
         if (aMaterial != Materials._NULL) {
             oreList.add(aMaterial);
             //if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
         }
         oreStats.add(new Integer[]{min, max, chance, overworld ? 1 : 0, nether ? 1 : 0, end ? 1 : 0});
-    }
+    }*/
 
     public Achievement registerAchievement(String textId, int x, int y, ItemStack icon, Achievement requirement, boolean special) {
         if (!GT_Mod.gregtechproxy.mAchievements) {
@@ -274,7 +274,8 @@ public class GT_Achievements {
         return achievement;
     }
 
-    public Achievement registerOreAchievement(Materials aMaterial) {
+    /*public Achievement registerOreAchievement(Materials aMaterial) {
+    	
         if (this.achievementList.get(aMaterial.mName) == null) {
             oreReg++;
             return registerAchievement(aMaterial.mName, -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
@@ -282,7 +283,7 @@ public class GT_Achievements {
         }
         return null;
     }
-
+*/
     public Achievement registerAssAchievement(GT_Recipe recipe) {
         if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
             assReg++;
