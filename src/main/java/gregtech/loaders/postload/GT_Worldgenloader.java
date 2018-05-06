@@ -1,14 +1,17 @@
 package gregtech.loaders.postload;
 
-import bloodasp.galacticgreg.WorldGenGaGT;
 import cpw.mods.fml.common.Loader;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Log;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
 import gregtech.common.GT_Worldgenerator;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 public class GT_Worldgenloader
         implements Runnable {
@@ -253,9 +256,19 @@ public class GT_Worldgenloader
             new GT_Worldgen_GT_Ore_Layer("ore.mix.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, 0, 0, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
         }
         
-        //DO NOT DELETE V THIS V 
-        new WorldGenGaGT().run(); //this function calles Galactic Greg and enables its generation.
-        //DO NOT DELETE ^ THIS ^ 
+        //DO NOT DELETE V THIS V - redundant, removed, GALACTIGREG should load itself when jar is in mods folder!, in case if it is REALLY NEEDED, use this reflection but i highly doubt it...
+        //try {
+        //    Class clazz = Class.forName("bloodasp.galacticgreg.WorldGenGaGT");
+        //    Constructor constructor=clazz.getConstructor();
+        //    Method method=clazz.getMethod("run");
+        //    method.invoke(constructor.newInstance());
+        //    GT_Log.out.println("Started Galactic Greg ore gen code");
+        //    //this function calls Galactic Greg and enables its generation.
+        //}catch (Exception e){
+        //    GT_Log.err.println("Unable to start Galactic Greg ore gen code");
+        //    e.printStackTrace(GT_Log.err);
+        //}
+        //DO NOT DELETE ^ THIS ^
         
         /*if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
             blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
