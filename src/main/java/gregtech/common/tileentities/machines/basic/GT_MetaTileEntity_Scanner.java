@@ -150,6 +150,7 @@ public class GT_MetaTileEntity_Scanner
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     return 2;
                 }
+                
             }
             if (getSpecialSlot() == null && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                 if (GT_Utility.ItemNBT.getBookTitle(aStack).equals("Raw Prospection Data")) {
