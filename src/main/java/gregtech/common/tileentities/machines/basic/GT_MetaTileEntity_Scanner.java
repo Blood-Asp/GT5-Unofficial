@@ -151,32 +151,6 @@ public class GT_MetaTileEntity_Scanner
                     return 2;
                 }
                 
-                if (aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic")){
-                	String sTier ="";
-                	
-                	if (aStack.getItem().getUnlocalizedName().contains("moonbuggy")) 
-                		sTier = "100";
-                	else if(aStack.getItem().getUnlocalizedName().contains("cargo")) 
-                		sTier = "101";
-                	else if(aStack.getItem().getUnlocalizedName().contains("astro")) 
-                		sTier = "102";
-                	else if (aStack.getItem().getUnlocalizedName().matches(".*\\d+.*"))
-                		sTier = aStack.getItem().getUnlocalizedName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
-                	else 
-                		sTier = "1";
-                	
-                	getSpecialSlot().stackSize -= 1;
-                    aStack.stackSize -= 1;
-                	
-                	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                	this.mOutputItems[0].setTagCompound(GT_Utility.getNBTContainingShort(new NBTTagCompound(), "rocket_tier", Short.parseShort(sTier) ));
-                	calculateOverclockedNess(512,36000);
-                    //In case recipe is too OP for that machine
-                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
-                    return 2;
-                }
-                
             }
             if (getSpecialSlot() == null && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                 if (GT_Utility.ItemNBT.getBookTitle(aStack).equals("Raw Prospection Data")) {
