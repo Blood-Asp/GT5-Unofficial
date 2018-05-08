@@ -4,14 +4,21 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -95,7 +102,7 @@ public class GT_MetaTileEntity_Scanner
                 if (ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) {
                     aStack.stackSize -= 1;
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{ItemList.Tool_DataStick.get(1, new Object[]{})});
-                    calculateOverclockedNess(32,512);
+                    calculateOverclockedNess(30,512);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -109,7 +116,7 @@ public class GT_MetaTileEntity_Scanner
                     this.mOutputItems[0] = ItemList.Tool_DataOrb.get(1L, new Object[0]);
                     Behaviour_DataOrb.setDataTitle(this.mOutputItems[0], "Elemental-Scan");
                     Behaviour_DataOrb.setDataName(this.mOutputItems[0], tData.mMaterial.mMaterial.mElement.name());
-                    calculateOverclockedNess(32,GT_Utility.safeInt(tData.mMaterial.mMaterial.getMass() * 8192L));
+                    calculateOverclockedNess(30,GT_Utility.safeInt(tData.mMaterial.mMaterial.getMass() * 8192L));
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -120,7 +127,7 @@ public class GT_MetaTileEntity_Scanner
                 if (ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                     aStack.stackSize -= 1;
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                    calculateOverclockedNess(32,128);
+                    calculateOverclockedNess(30,128);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -132,7 +139,7 @@ public class GT_MetaTileEntity_Scanner
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                     this.mOutputItems[0].setTagCompound(aStack.getTagCompound());
-                    calculateOverclockedNess(32,128);
+                    calculateOverclockedNess(30,128);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -144,7 +151,7 @@ public class GT_MetaTileEntity_Scanner
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                     this.mOutputItems[0].setTagCompound(GT_Utility.getNBTContainingShort(new NBTTagCompound(), "map_id", (short) aStack.getItemDamage()));
-                    calculateOverclockedNess(32,128);
+                    calculateOverclockedNess(30,128);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -153,16 +160,15 @@ public class GT_MetaTileEntity_Scanner
                 
                 if (aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic")){
                 	String sTier ="";
-                	
-                	if (aStack.getItem().getUnlocalizedName().contains("moonbuggy")) 
+                	if (aStack.getIconIndex().getIconName().matches(".*buggy+.*")) 
                 		sTier = "100";
-                	else if(aStack.getItem().getUnlocalizedName().contains("cargo")) 
+                	else if(aStack.getIconIndex().getIconName().matches(".*cargo+.*")) 
                 		sTier = "101";
-                	else if(aStack.getItem().getUnlocalizedName().contains("astro")) 
+                	else if(aStack.getIconIndex().getIconName().matches(".*astro+.*")) 
                 		sTier = "102";
-                	else if (aStack.getItem().getUnlocalizedName().matches(".*\\d+.*"))
-                		sTier = aStack.getItem().getUnlocalizedName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
-                	else 
+                	else if (aStack.getIconIndex().getIconName().matches(".*\\d+.*"))
+                		sTier = aStack.getIconIndex().getIconName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
+                	else
                 		sTier = "1";
                 	
                 	getSpecialSlot().stackSize -= 1;
@@ -170,7 +176,8 @@ public class GT_MetaTileEntity_Scanner
                 	
                 	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                 	this.mOutputItems[0].setTagCompound(GT_Utility.getNBTContainingShort(new NBTTagCompound(), "rocket_tier", Short.parseShort(sTier) ));
-                	calculateOverclockedNess(512,36000);
+                	
+                	calculateOverclockedNess(480,36000);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -185,7 +192,7 @@ public class GT_MetaTileEntity_Scanner
                     aStack.stackSize -= 1;
 
                     this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{aStack});
-                    calculateOverclockedNess(32,1000);
+                    calculateOverclockedNess(30,1000);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
