@@ -158,7 +158,7 @@ public class GT_MetaTileEntity_Scanner
                     return 2;
                 }
                 
-                if (aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic")){
+                if ((aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic"))&&!aStack.getIconIndex().getIconName().contains("dreamcraft")){
                 	String sTier ="";
                 	if (aStack.getIconIndex().getIconName().matches(".*buggy+.*")) 
                 		sTier = "100";
