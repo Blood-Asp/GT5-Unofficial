@@ -613,7 +613,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_OreWasher, Machine_MV_OreWasher, Machine_HV_OreWasher, Machine_EV_OreWasher, Machine_IV_OreWasher,
     Machine_LV_RockBreaker, Machine_MV_RockBreaker, Machine_HV_RockBreaker, Machine_EV_RockBreaker, Machine_IV_RockBreaker,
     Machine_LV_Boxinator, Machine_MV_Boxinator, Machine_HV_Boxinator, Machine_EV_Boxinator, Machine_IV_Boxinator,
-    Machine_LV_Unboxinator, Machine_MV_Unboxinator, Machine_HV_Unboxinator, Machine_EV_Unboxinator, Machine_IV_Unboxinator,
+    Machine_LV_Unboxinator, Machine_MV_Unboxinator, Machine_HV_Unboxinator, Machine_EV_Unboxinator, Machine_IV_Unboxinator, Machine_LuV_Unboxinator, Machine_ZPM_Unboxinator, Machine_UV_Unboxinator,
     Machine_LV_ChemicalReactor, Machine_MV_ChemicalReactor, Machine_HV_ChemicalReactor, Machine_EV_ChemicalReactor, Machine_IV_ChemicalReactor,
     Machine_LV_FluidCanner, Machine_MV_FluidCanner, Machine_HV_FluidCanner, Machine_EV_FluidCanner, Machine_IV_FluidCanner,
     Machine_LV_Disassembler, Machine_MV_Disassembler, Machine_HV_Disassembler, Machine_EV_Disassembler, Machine_IV_Disassembler,
