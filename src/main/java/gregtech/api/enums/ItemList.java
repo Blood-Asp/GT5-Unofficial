@@ -618,7 +618,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_FluidCanner, Machine_MV_FluidCanner, Machine_HV_FluidCanner, Machine_EV_FluidCanner, Machine_IV_FluidCanner,
     Machine_LV_Disassembler, Machine_MV_Disassembler, Machine_HV_Disassembler, Machine_EV_Disassembler, Machine_IV_Disassembler,
     Machine_LV_Bundler, Machine_MV_Bundler, Machine_HV_Bundler, Machine_EV_Bundler, Machine_IV_Bundler,
-    Machine_LV_Massfab, Machine_MV_Massfab, Machine_HV_Massfab, Machine_EV_Massfab, Machine_IV_Massfab,
+    Machine_LV_Massfab, Machine_MV_Massfab, Machine_HV_Massfab, Machine_EV_Massfab, Machine_IV_Massfab, Machine_LuV_Massfab, Machine_ZPM_Massfab, Machine_UV_Massfab,
     Machine_LV_Amplifab, Machine_MV_Amplifab, Machine_HV_Amplifab, Machine_EV_Amplifab, Machine_IV_Amplifab,
     Machine_LV_Replicator, Machine_MV_Replicator, Machine_HV_Replicator, Machine_EV_Replicator, Machine_IV_Replicator,
     Machine_LV_Brewery, Machine_MV_Brewery, Machine_HV_Brewery, Machine_EV_Brewery, Machine_IV_Brewery,
