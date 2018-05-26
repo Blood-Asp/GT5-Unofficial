@@ -27,7 +27,7 @@ public class GT_Tool_ButcheryKnife
     }
 
     public int getToolDamagePerEntityAttack() {
-        return 400;
+        return 200;
     }
 
     public float getBaseDamage() {
