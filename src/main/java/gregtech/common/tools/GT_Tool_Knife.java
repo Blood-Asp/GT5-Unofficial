@@ -2,6 +2,7 @@ package gregtech.common.tools;
 
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -27,7 +28,11 @@ public class GT_Tool_Knife
     }
 
     public float getBaseDamage() {
-        return 2.0F;
+        return 1.0F;
+    }
+
+    public int getHurtResistanceTime(int aOriginalHurtResistance, Entity aEntity) {
+        return aOriginalHurtResistance * 6;
     }
 
     public float getSpeedMultiplier() {
