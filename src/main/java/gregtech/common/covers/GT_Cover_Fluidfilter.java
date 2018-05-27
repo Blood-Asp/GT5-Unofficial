@@ -61,16 +61,18 @@ public class GT_Cover_Fluidfilter
     
     @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
-        if(aFluid==null){return true;}
+        if(aFluid==null){
+        	return true;
+        }
         int aFilterMode = aCoverVariable & 7;
         int aFilterFluid = aCoverVariable >>> 3;
-        return aFluid.getID() == aFilterFluid ? (aFilterMode == 0 || aFilterMode == 2 ? true : false) : (aFilterMode == 1 || aFilterMode == 3 ? true : false);
+        return aFluid.getID() == aFilterFluid ? aFilterMode == 0 || aFilterMode == 2 : aFilterMode == 1 || aFilterMode == 3;
     }
     
     @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         int aFilterMode = aCoverVariable & 7;
-        return  aFilterMode == 0 || aFilterMode == 1 ? false : true;
+        return  aFilterMode != 0 && aFilterMode != 1;
     }
     
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {

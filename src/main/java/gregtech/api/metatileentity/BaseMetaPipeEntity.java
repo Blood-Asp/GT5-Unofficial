@@ -1,5 +1,11 @@
 package gregtech.api.metatileentity;
 
+import static gregtech.api.enums.GT_Values.NW;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import cpw.mods.fml.common.FMLLog;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
@@ -9,7 +15,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IPipeRenderedTileEntity;
 import gregtech.api.net.GT_Packet_TileEntity;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -27,12 +37,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static gregtech.api.enums.GT_Values.NW;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -1180,11 +1184,11 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             return false;
 
         if(isFill && mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
-                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this))
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this))
             return true;
 
         if (!isFill && mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) 
-                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this))
+                && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()),aFluid, this))
             return true;
 
         return false;
