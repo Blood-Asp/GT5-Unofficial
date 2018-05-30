@@ -49,17 +49,39 @@ public class GT_MetaTileEntity_ChestBuffer
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        fillStacksIntoFirstSlots();
+        if(aBaseMetaTileEntity.hasInventoryBeenModified())
+        {
+            fillStacksIntoFirstSlots();
+        }
         super.moveItems(aBaseMetaTileEntity, aTimer);
-        fillStacksIntoFirstSlots();
+        if(mSuccess == 50) {
+            fillStacksIntoFirstSlots();
+        }
     }
 
     protected void fillStacksIntoFirstSlots() {
         for (int i = 0; i < this.mInventory.length - 1; i++) {
             for (int j = i + 1; j < this.mInventory.length - 1; j++) {
-                if ((this.mInventory[j] != null) && ((this.mInventory[i] == null) || (GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
+//                if ((this.mInventory[j] != null) && ((this.mInventory[i] == null) || (GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
+                if ((this.mInventory[j] != null) && ((GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
                     GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
                 }
+            }
+        }
+        // Find first non-null item from the tail
+        int lastValid;
+        for( lastValid = this.mInventory.length-1; lastValid >0; lastValid-- ) {
+            if(this.mInventory[lastValid] == null) {
+                continue;
+                }
+            break;
+        }
+        // Go back to the start of the array, swapping any nulls with the last valid item and move last valid item down 1
+        for (int i = lastValid; i >= 0; i-- ) {
+            if(this.mInventory[i] == null) {
+                //Swap the current null with the last valid item
+                GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), lastValid, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+                lastValid --;
             }
         }
     }
