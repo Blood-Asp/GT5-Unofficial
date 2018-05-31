@@ -10,6 +10,12 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ChestBuffer;
 import gregtech.common.gui.GT_GUIContainer_ChestBuffer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class GT_MetaTileEntity_ChestBuffer
         extends GT_MetaTileEntity_Buffer {
@@ -49,39 +55,112 @@ public class GT_MetaTileEntity_ChestBuffer
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if(aBaseMetaTileEntity.hasInventoryBeenModified())
-        {
+        if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
             fillStacksIntoFirstSlots();
         }
-        super.moveItems(aBaseMetaTileEntity, aTimer);
+        // mSuccess will be negative if the call is caused by the %200 aTimer. Otherwise it will be positive, and only every other tick is a push attempted.
+        if ( (mSuccess <= 0 ) || (( mSuccess > 0 ) && ( (mSuccess % 2) == 0 )) ){
+            super.moveItems(aBaseMetaTileEntity, aTimer);
+        }
+        // mSuccesss is set to 50 on a successful move
         if(mSuccess == 50) {
             fillStacksIntoFirstSlots();
         }
+        if(mSuccess < 0) {
+            mSuccess = 0;
+        }
     }
 
+// Implementation using Java built in sort algorithm
+// Uses terribad string comparison to sort against.  Would be better if we did something else?
+    protected void sortStacks() {
+        Arrays.sort(this.mInventory, new Comparator<ItemStack>() {
+                @Override
+                // Taken from https://gist.github.com/Choonster/876acc3217229e172e46
+                public int compare(ItemStack o1, ItemStack o2) {
+                    if( o2 == null )
+                        return -1;
+                    if( o1 == null )
+                        return 1;
+                    Item item1 = o1.getItem();
+                    Item item2 = o2.getItem();
+                
+                    // If item1 is a block and item2 isn't, sort item1 before item2
+                    if (((item1 instanceof ItemBlock)) && (!(item2 instanceof ItemBlock))) {
+                        return -1;
+                    }
+                
+                    // If item2 is a block and item1 isn't, sort item1 after item2
+                    if (((item2 instanceof ItemBlock)) && (!(item1 instanceof ItemBlock))) {
+                        return 1;
+                    }
+                
+                    String displayName1 = o1.getDisplayName();
+                    String displayName2 = o2.getDisplayName();
+                
+                    int result = displayName1.compareToIgnoreCase(displayName2);
+                    //System.out.println("sorter: " + displayName1 + " " + displayName2 + " " + result);
+                    return result;
+                }
+            });
+    }
+
+// Implementation of insertion sort 
+// Worst case time of a 2.8ms
+/*
+    public int compare(ItemStack o1, ItemStack o2) {
+        if( o2 == null )
+            return -1;
+        if( o1 == null )
+            return 1;
+        Item item1 = o1.getItem();
+        Item item2 = o2.getItem();
+    
+        // If item1 is a block and item2 isn't, sort item1 before item2
+        if (((item1 instanceof ItemBlock)) && (!(item2 instanceof ItemBlock))) {
+            return -1;
+        }
+    
+        // If item2 is a block and item1 isn't, sort item1 after item2
+        if (((item2 instanceof ItemBlock)) && (!(item1 instanceof ItemBlock))) {
+            return 1;
+        }
+    
+        String displayName1 = o1.getDisplayName();
+        String displayName2 = o2.getDisplayName();
+    
+        int result = displayName1.compareToIgnoreCase(displayName2);
+        //System.out.println("sorter: " + displayName1 + " " + displayName2 + " " + result);
+        return result;
+    }
+
+    protected void sortStacks() {
+        int i = 1, j;
+        while( i < this.mInventory.length ){
+            j = i;
+            while( (j > 0) && ( compare(this.mInventory[j-1], this.mInventory[j]) == -1) ) {
+                GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, j-1, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+                j--;
+            }
+            i++;
+        }
+    }
+*/
+
     protected void fillStacksIntoFirstSlots() {
-        for (int i = 0; i < this.mInventory.length - 1; i++) {
-            for (int j = i + 1; j < this.mInventory.length - 1; j++) {
-//                if ((this.mInventory[j] != null) && ((this.mInventory[i] == null) || (GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
+        sortStacks();
+        // Merge small stacks together
+        for (int i = 0; i < this.mInventory.length-1;) {
+            //System.out.println( (this.mInventory[i] == null) ? "Slot empty " + i : "Slot " + i + " holds " + this.mInventory[i].getDisplayName());
+            for (int j = i + 1; j < this.mInventory.length; j++) {
                 if ((this.mInventory[j] != null) && ((GT_Utility.areStacksEqual(this.mInventory[i], this.mInventory[j])))) {
                     GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+                    //System.out.println( "Moving slot " + j + " into slot " +  i );
                 }
-            }
-        }
-        // Find first non-null item from the tail
-        int lastValid;
-        for( lastValid = this.mInventory.length-1; lastValid >0; lastValid-- ) {
-            if(this.mInventory[lastValid] == null) {
-                continue;
+                else {
+                    i=j;
+                    break; // No more matching items for this i, do next i
                 }
-            break;
-        }
-        // Go back to the start of the array, swapping any nulls with the last valid item and move last valid item down 1
-        for (int i = lastValid; i >= 0; i-- ) {
-            if(this.mInventory[i] == null) {
-                //Swap the current null with the last valid item
-                GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), lastValid, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
-                lastValid --;
             }
         }
     }
