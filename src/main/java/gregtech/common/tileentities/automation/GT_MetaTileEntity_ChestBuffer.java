@@ -58,8 +58,9 @@ public class GT_MetaTileEntity_ChestBuffer
         if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
             fillStacksIntoFirstSlots();
         }
-        // mSuccess will be negative if the call is caused by the %200 aTimer. Otherwise it will be positive, and only every other tick is a push attempted.
-        if ( (mSuccess <= 0 ) || (( mSuccess > 0 ) && ( (mSuccess % 2) == 0 )) ){
+        // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
+        // For the first 6 ticks after a successful move (49->44), push every tick. Then go to every 5 ticks.
+        if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
             super.moveItems(aBaseMetaTileEntity, aTimer);
         }
         // mSuccesss is set to 50 on a successful move
@@ -78,7 +79,7 @@ public class GT_MetaTileEntity_ChestBuffer
                 @Override
                 // Taken from https://gist.github.com/Choonster/876acc3217229e172e46
                 public int compare(ItemStack o1, ItemStack o2) {
-                    if( o2 == null )
+                    if( o2 == null )
                         return -1;
                     if( o1 == null )
                         return 1;
@@ -94,58 +95,40 @@ public class GT_MetaTileEntity_ChestBuffer
                     if (((item2 instanceof ItemBlock)) && (!(item1 instanceof ItemBlock))) {
                         return 1;
                     }
-                
-                    String displayName1 = o1.getDisplayName();
-                    String displayName2 = o2.getDisplayName();
-                
-                    int result = displayName1.compareToIgnoreCase(displayName2);
-                    //System.out.println("sorter: " + displayName1 + " " + displayName2 + " " + result);
-                    return result;
+
+                    // If the items are blocks, use the string comparison
+                    if ((item1 instanceof ItemBlock)) { // only need to check one since we did the check above
+                        String displayName1 = o1.getDisplayName();
+                        String displayName2 = o2.getDisplayName();
+                        int result = displayName1.compareToIgnoreCase(displayName2);
+                        //System.out.println("sorter: " + displayName1 + " " + displayName2 + " " + result);
+                        return result;
+                    } else
+                    {
+                        // Not a block.  Use the ID and damage to compare them.
+                        int id1 = Item.getIdFromItem( item1 );
+                        int id2 = Item.getIdFromItem( item2 );
+                        if ( id1 < id2 ) {
+                            return -1;
+                        }
+                        if ( id1 > id2 ) {
+                            return 1;
+                        }
+                        // id1 must equal id2, get their damage and compare
+                        id1 = o1.getItemDamage();
+                        id2 = o2.getItemDamage();
+                        
+                        if ( id1 < id2 ) {
+                        	return -1;
+                        }
+                        if ( id1 > id2 ) {
+                        	return 1;
+                        }
+                        return 0;
+                    }
                 }
             });
     }
-
-// Implementation of insertion sort 
-// Worst case time of a 2.8ms
-/*
-    public int compare(ItemStack o1, ItemStack o2) {
-        if( o2 == null )
-            return -1;
-        if( o1 == null )
-            return 1;
-        Item item1 = o1.getItem();
-        Item item2 = o2.getItem();
-    
-        // If item1 is a block and item2 isn't, sort item1 before item2
-        if (((item1 instanceof ItemBlock)) && (!(item2 instanceof ItemBlock))) {
-            return -1;
-        }
-    
-        // If item2 is a block and item1 isn't, sort item1 after item2
-        if (((item2 instanceof ItemBlock)) && (!(item1 instanceof ItemBlock))) {
-            return 1;
-        }
-    
-        String displayName1 = o1.getDisplayName();
-        String displayName2 = o2.getDisplayName();
-    
-        int result = displayName1.compareToIgnoreCase(displayName2);
-        //System.out.println("sorter: " + displayName1 + " " + displayName2 + " " + result);
-        return result;
-    }
-
-    protected void sortStacks() {
-        int i = 1, j;
-        while( i < this.mInventory.length ){
-            j = i;
-            while( (j > 0) && ( compare(this.mInventory[j-1], this.mInventory[j]) == -1) ) {
-                GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, j-1, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
-                j--;
-            }
-            i++;
-        }
-    }
-*/
 
     protected void fillStacksIntoFirstSlots() {
         sortStacks();

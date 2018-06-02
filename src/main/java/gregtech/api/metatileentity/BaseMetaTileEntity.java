@@ -712,8 +712,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     if (tTime > tWorstTime) {
                         tWorstTime = tTime;
                     }
+                    // Uncomment this line to print out tick-by-tick times.
+                    //tList.add("tTime " + tTime);
                 }
-                tList.add("Average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ns since " + mTimeStatistics.length + " ticks with worst time of " + tWorstTime + "ns.");
+                tList.add("Average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ns over " + mTimeStatistics.length + " ticks with worst time of " + tWorstTime + "ns.");
             }
             if (mLagWarningCount > 0) {
                 tList.add("Caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");
