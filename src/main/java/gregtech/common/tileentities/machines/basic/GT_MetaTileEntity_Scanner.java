@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import cpw.mods.fml.common.FMLLog;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
 import gregtech.GT_Mod;
@@ -16,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -28,6 +30,7 @@ import net.minecraft.nbt.NBTTagString;
 
 public class GT_MetaTileEntity_Scanner
         extends GT_MetaTileEntity_BasicMachine {
+	
     public GT_MetaTileEntity_Scanner(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Scans Crops and other things.", 1, 1, "Scanner.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_SCANNER)});
     }
@@ -158,16 +161,27 @@ public class GT_MetaTileEntity_Scanner
                     return 2;
                 }
                 
-                if ((aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic"))&&!aStack.getIconIndex().getIconName().contains("dreamcraft")){
+                if ((aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic"))&&!aStack.getItem().getUnlocalizedName().contains("Schematics")){
                 	String sTier ="";
-                	if (aStack.getIconIndex().getIconName().matches(".*buggy+.*")) 
-                		sTier = "100";
-                	else if(aStack.getIconIndex().getIconName().matches(".*cargo+.*")) 
-                		sTier = "101";
-                	else if(aStack.getIconIndex().getIconName().matches(".*astro+.*")) 
-                		sTier = "102";
-                	else if (aStack.getIconIndex().getIconName().matches(".*\\d+.*"))
-                		sTier = aStack.getIconIndex().getIconName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
+                	
+                	if (aStack.getItem().getIdFromItem(aStack.getItem()) == GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem().getIdFromItem(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem())) {
+                		if (aStack.getItemDamage()==0 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).copy().toString())) 
+                			sTier = "100";
+                		else if (aStack.getItemDamage()==1 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 1).copy().toString())) 
+                			sTier = "2";
+                	}
+                	
+                	else if (aStack.getItem().getIdFromItem(aStack.getItem()) == GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).getItem().getIdFromItem(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).getItem())) {
+                		if(aStack.getItemDamage()==0 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).copy().toString()))
+                			sTier = "3";
+                		else if(aStack.getItemDamage()==1 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 1).copy().toString())) 
+                			sTier = "101";
+                		else if(aStack.getItemDamage()==2 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 2).copy().toString())) 
+                			sTier = "102";
+                	}
+                	
+                	else if (aStack.getUnlocalizedName().matches(".*\\d+.*"))
+                		sTier = aStack.getUnlocalizedName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
                 	else
                 		sTier = "1";
                 	
