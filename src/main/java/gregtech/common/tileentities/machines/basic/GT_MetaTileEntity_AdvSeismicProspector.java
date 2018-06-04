@@ -62,9 +62,9 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     public String[] getDescription() {
         return new String[]{
         		"Place, activate with explosives ("
-                        + "8 Glyceryl, "
-                        + "32 TNT or "
-                        + "16 ITNT), use Data Stick",
+                        + "4 Glyceryl, "
+                        + "16 TNT or "
+                        + "8 ITNT), use Data Stick",
                 "Ore prospection area 191x191 blocks",
                 "Oil prospection area 3x3 oilfields"};
     }
@@ -88,9 +88,9 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         if (aBaseMetaTileEntity.isServerSide()) {
             ItemStack aStack = aPlayer.getCurrentEquippedItem();
 
-            if (!ready && (GT_Utility.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 32)
-                    || GT_Utility.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 16)
-                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 8))) {
+            if (!ready && (GT_Utility.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 16)
+                    || GT_Utility.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 8)
+                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 4))) {
 
                 this.ready = true;
                 this.mMaxProgresstime = (aPlayer.capabilities.isCreativeMode ? 20 : 800);
