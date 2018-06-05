@@ -1,5 +1,6 @@
 package gregtech.common.blocks;
 
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
@@ -56,8 +57,12 @@ public class GT_Block_Casings2
         ItemList.Casing_Pipe_TungstenSteel.set(new ItemStack(this, 1, 15));
         
         //Special handler for Pyrolyse Oven Casing
-        Textures.BlockIcons.CASING_BLOCKS[22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.MACHINE_METAL.mRGBa);
-    }
+        if (GregTech_API.sUseMachineMetal) {
+            Textures.BlockIcons.CASING_BLOCKS[22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.MACHINE_METAL.mRGBa);
+        } else {
+            Textures.BlockIcons.CASING_BLOCKS[22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.dyeWhite.mRGBa);
+        }
+}
 
     public IIcon getIcon(int aSide, int aMeta) {
         switch (aMeta) {

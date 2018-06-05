@@ -199,6 +199,12 @@ public class GregTech_API {
     public static boolean mTranslocator = false;
     public static boolean mTConstruct = false;
 
+    /**
+     * Option to not use MACHINE_METAL mixing into colors
+     */
+    public static boolean  sUseMachineMetal = false;
+    
+
     public static boolean mUseOnlyGoodSolderingMaterials = false;
 
     private static final String aTextIC2Lower = MOD_ID_IC2.toLowerCase(Locale.ENGLISH);
