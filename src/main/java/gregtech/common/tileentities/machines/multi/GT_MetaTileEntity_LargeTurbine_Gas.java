@@ -42,6 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 "1x Dynamo Hatch (Back centered)",
                 "Stainless Steel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)"};
+                "Produces " + getPollutionPerTick(null)*20 + " pollution per second"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {
