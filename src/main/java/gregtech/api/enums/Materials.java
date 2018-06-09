@@ -496,7 +496,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Plastic                 = new Materials( 874, TextureSet.SET_DULL              ,   3.0F,     32,  1, 1|2          |64|128      , 200, 200, 200,   0,   "Plastic"                 ,   "Polyethylene"                  ,    0,       0,        400,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Epoxid                  = new Materials( 470, TextureSet.SET_DULL              ,   3.0F,     32,  1, 1|2          |64|128      , 200, 140,  20,   0,   "Epoxid"                  ,   "Epoxid"                        ,    0,       0,        400,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Polydimethylsiloxane=new MaterialBuilder(633, TextureSet.SET_FLUID             ,                                                                                                     "Polydimethylsiloxane").addDustItems().setRGB(245, 245, 245).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Silicone                = new Materials( 471, TextureSet.SET_DULL              ,   3.0F,    128,  1, 1|2          |64|128      , 220, 220, 220,   0,   "Silicone"                ,   "Silicone Rubber"               ,    0,       0,        900,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));    public static Materials Polycaprolactam         = new Materials( 472, TextureSet.SET_DULL              ,   3.0F,     32,  1, 1|2          |64|128      ,  50,  50,  50,   0,   "Polycaprolactam"         ,   "Polycaprolactam"               ,    0,       0,        500,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 11), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Silicone                = new Materials( 471, TextureSet.SET_DULL              ,   3.0F,    128,  1, 1|2          |64|128      , 220, 220, 220,   0,   "Silicone"                ,   "Silicone Rubber"               ,    0,       0,        900,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Polycaprolactam         = new Materials( 472, TextureSet.SET_DULL              ,   3.0F,     32,  1, 1|2          |64|128      ,  50,  50,  50,   0,   "Polycaprolactam"         ,   "Polycaprolactam"               ,    0,       0,        500,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 11), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Polytetrafluoroethylene = new Materials( 473, TextureSet.SET_DULL              ,   3.0F,     32,  1, 1|2          |64|128      , 100, 100, 100,   0,   "Polytetrafluoroethylene" ,   "Polytetrafluoroethylene"       ,    0,       0,       1400,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Powellite               = new Materials( 883, TextureSet.SET_DULL              ,   1.0F,      0,  2, 1    |8                   , 255, 255,   0,   0,   "Powellite"               ,   "Powellite"                     ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeYellow      , 2, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4)));
     public static Materials Pumice                  = new Materials( 926, TextureSet.SET_DULL              ,   1.0F,      0,  2, 1    |8                   , 230, 185, 185,   0,   "Pumice"                  ,   "Pumice"                        ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeGray        , 2, Arrays.asList(new MaterialStack(Stone, 1)));
@@ -752,6 +753,19 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials DilutedSulfuricAcid =new MaterialBuilder(640, TextureSet.SET_FLUID             ,                                                                                                     "Diluted Sulfuric Acid").addCell().addFluid().setRGB(192, 120, 32).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(SulfuricAcid, 1)).constructMaterial();
     public static Materials EpoxidFiberReinforced   = new Materials( 610, TextureSet.SET_DULL                 ,3.0F,     64,  1, 1|2          |64|128      , 160, 112,  16,   0,   "EpoxidFiberReinforced"   ,   "Fiber-Reinforced Epoxy Resin"  ,    0,       0,        400,    0, false, false,   1,   1,   1, Dyes.dyeBrown       , 2, Arrays.asList(new MaterialStack(Epoxid, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
 
+    // Polybenzimidazole stuff
+    public static Materials PotassiumHydroxide     = new MaterialBuilder(950, TextureSet.SET_DULL       ,                                                                                                     "Potassium Hydroxide").setName("PotassiumHydroxide").addDustItems().setRGB(129, 34, 141).setColor(Dyes.dyePurple).setMaterialList(new MaterialStack(Potassium, 1), new MaterialStack(Oxygen, 1), new MaterialStack(Hydrogen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials ManganeseDioxide = new MaterialBuilder(951, TextureSet.SET_DULL       ,                                                                                                     "Manganese Dioxide").setName("Manganesedioxide").addDustItems().setRGB(255, 228, 225).setColor(Dyes.dyePink).setMaterialList(new MaterialStack(Manganese, 1), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Nitrochlorobenzene = new MaterialBuilder(952, TextureSet.SET_FLUID             ,                                                                                                     "2-Nitrochlorobenzene").addCell().addFluid().setRGB(143, 181, 26).setColor(Dyes.dyeLime).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 4), new MaterialStack(Chlorine, 1), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 2)).constructMaterial();
+    public static Materials Dimethylbenzene = new MaterialBuilder(953, TextureSet.SET_FLUID             ,                                                                                                     "Dimethylbenzene").addCell().addFluid().setRGB(102, 156, 64).setColor(Dyes.dyeLime).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 10)).constructMaterial();
+    public static Materials PotassiumPermanganate = new MaterialBuilder(954, TextureSet.SET_DULL       ,                                                                                                     "Potassium Permanganate").setName("PotassiumPermanganate").addDustItems().setRGB(255, 8, 127).setColor(Dyes.dyePink).setMaterialList(new MaterialStack(Potassium, 1), new MaterialStack(Manganese, 1), new MaterialStack(Oxygen, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials PhthalicAcid = new MaterialBuilder(955, TextureSet.SET_FLUID             ,                                                                                                     "Phtalic Acid").addCell().addFluid().setRGB(54, 133, 71).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 4)).constructMaterial();
+    public static Materials Dichlorobenzidine = new MaterialBuilder(956, TextureSet.SET_FLUID             ,                                                                                                     "3,3-Dichlorobenzidine").addCell().addFluid().setRGB(161, 222, 166).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 12),new MaterialStack(Hydrogen, 10), new MaterialStack(Nitrogen, 2), new MaterialStack(Chlorine, 2)).constructMaterial();
+    public static Materials Diaminobenzidin = new MaterialBuilder(957, TextureSet.SET_FLUID             ,                                                                                                     "3,3-Diaminobenzidine").addCell().addFluid().setRGB(51, 125, 89).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 12),new MaterialStack(Hydrogen, 14),new MaterialStack(Nitrogen, 4)).constructMaterial();
+    public static Materials Diphenylisophthalate = new MaterialBuilder(958, TextureSet.SET_FLUID             ,                                                                                                     "Diphenyl Isophtalate").addCell().addFluid().setRGB(36, 110, 87).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 20),new MaterialStack(Hydrogen, 20),new MaterialStack(Oxygen, 4)).constructMaterial();
+    public static Materials Polybenzimidazole   = new Materials( 959, TextureSet.SET_DULL                 ,3.0F,     64,  1, 1|2          |64|128      , 45, 45,  45,   0,   "Polybenzimidazole"   ,   "Polybenzimidazole"  ,    0,       0,        1450,    0, false, false,   1,   1,   1, Dyes.dyeBlack       , 0, Arrays.asList(new MaterialStack(Carbon, 20), new MaterialStack(Nitrogen, 4), new MaterialStack(Hydrogen, 12)), Arrays.asList(new TC_AspectStack(TC_Aspects.ORDO, 2),new TC_AspectStack(TC_Aspects.VOLATUS, 1)));
+
+
     public static Materials NitrousOxide       = new MaterialBuilder(993, TextureSet.SET_FLUID             ,                                                                                                      "Nitrous Oxide").addCell().addGas().setRGB(125, 200, 255).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials AntiKnock          = new MaterialBuilder(994, TextureSet.SET_FLUID             ,                                                                                                      "Ethyl Tert-Butyl Ether").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).constructMaterial();
     public static Materials Octane             = new MaterialBuilder(995, TextureSet.SET_FLUID             ,                                                                                                      "Octane").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.DIESEL).setFuelPower(80).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 18)).constructMaterial();
@@ -824,7 +838,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     /**
      * Materials which are renamed automatically
      */
-//  @Deprecated public static Materials Duralium                = new Materials(Duralumin,false);
+/*  @Deprecated public static Materials Duralium                = new Materials(Duralumin,false);
 //  @Deprecated public static Materials Dural                   = new Materials(Duralumin,false);
 //  @Deprecated public static Materials Duralum                 = new Materials(Duralumin,false);
 //  @Deprecated public static Materials Duraluminium            = new Materials(Duralumin,false);
@@ -882,8 +896,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Wolframite              = new Materials(Tungstate, false);
     @Deprecated public static Materials Wolframium              = new Materials(Tungsten, false);
     @Deprecated public static Materials Wolfram                 = new Materials(Tungsten, false);
+    */
     @Deprecated public static Materials Nikolite                = new Materials(Electrotine, false);
-	
+
+
     public final short[] mRGBa = new short[]{255, 255, 255, 0}, mMoltenRGBa = new short[]{255, 255, 255, 0};
     public TextureSet mIconSet;
     public int mMetaItemSubID;
@@ -913,7 +929,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 
     private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false;
     private Fluid[] hydroCrackedFluids = new Fluid[3], steamCrackedFluids = new Fluid[3];
-    
+
     /**
      * This Fluid is used as standard Unit for Molten Materials. 1296 is a Molten Block, that means 144 is one Material Unit worth of fluid.
      */
@@ -1920,7 +1936,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         }
         return mChemicalFormula;
     }
-    
+
     /**
      * Adds a Class implementing IMaterialRegistrator to the master list
      */
@@ -2150,16 +2166,16 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     }
 
     public static volatile int VERSION = 509;
-    
+
     public static Collection<Materials> getAll(){
     	return MATERIALS_MAP.values();
     }
-    
+
 
 	public boolean hasCorrespondingFluid() {
 		return hasCorrespondingFluid;
 	}
-	
+
 
 	public Materials setHasCorrespondingFluid(boolean hasCorrespondingFluid) {
 		this.hasCorrespondingFluid = hasCorrespondingFluid;
@@ -2255,7 +2271,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public ItemStack getCells(int amount){
 		return GT_OreDictUnificator.get(OrePrefixes.cell, this, amount);
 	}
-	
+
 	public ItemStack getDust(int amount){
 		return GT_OreDictUnificator.get(OrePrefixes.dust, this, amount);
 	}
@@ -2267,7 +2283,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 	public ItemStack getDustTiny(int amount){
 		return GT_OreDictUnificator.get(OrePrefixes.dustTiny, this, amount);
 	}
-	
+
 	public ItemStack getGems(int amount){
 		return GT_OreDictUnificator.get(OrePrefixes.gem, this, amount);
 	}
@@ -2281,7 +2297,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public ItemStack getBlocks(int amount){
     	return GT_OreDictUnificator.get(OrePrefixes.block, this, amount);
     }
-    
+
     public ItemStack getPlates(int amount){
     	return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
     }
