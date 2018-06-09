@@ -3704,42 +3704,50 @@ public class GT_MachineRecipeLoader implements Runnable {
          * Adds recipes related to producing Polybenzimidazole.
      	 */
             private void addPolybenzimidazoleRecipes() {
-            	//Potassium Hydroxide
-            	GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.Water.getFluid(1000),null, Materials.PotassiumHydroxide.getDust(1), 100, 30);
-            	//Potassium Permanganate
-            	GT_Values.RA.addChemicalRecipe(Materials.PotassiumHydroxide.getDust(1),Materials.ManganeseDioxide.getDust(1),Materials.Oxygen.getGas(1000), null, Materials.PotassiumPermanganate.getDust(1), 100, 30);
+
+            	//Potassium Nitride
+            	GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.Ammonia.getGas(1000), GT_Values.NF, Materials.PotassiumNitrade.getDust(1), 100, 30);
+
+            	// Chrome Trioxide
+            	GT_Values.RA.addChemicalRecipe(Materials.Chrome.getDust(1), GT_Utility.getIntegratedCircuit(3), Materials.Oxygen.getGas(3000), GT_Values.NF, Materials.ChromiumTrioxide.getDust(1), 100, 60);
+
+            	//Potassium Dichromate
+            	GT_Values.RA.addChemicalRecipe(Materials.PotassiumNitrade.getDust(2), Materials.ChromiumTrioxide.getDust(2), Materials.Potassiumdichromate.getDust(1), 100, 30);
 
             	//Nitrochlorobenzene
-            	GT_Values.RA.addChemicalRecipe(Materials.Chlorobenzene.getCells(1),GT_Utility.getIntegratedCircuit(1),Materials.NitrationMixture.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Nitrochlorobenzene.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Chlorobenzene.getCells(1),GT_Utility.getIntegratedCircuit(11),Materials.NitrationMixture.getFluid(1000), Materials.Nitrochlorobenzene.getFluid(1000),Materials.DilutedSulfuricAcid.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.NitrationMixture.getCells(1),GT_Utility.getIntegratedCircuit(1),Materials.Chlorobenzene.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Nitrochlorobenzene.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.NitrationMixture.getCells(1),GT_Utility.getIntegratedCircuit(11),Materials.Chlorobenzene.getFluid(1000), Materials.Nitrochlorobenzene.getFluid(1000),Materials.DilutedSulfuricAcid.getCells(1), 100, 30);
+            	GT_Values.RA.addChemicalRecipe(Materials.Chlorobenzene.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.NitrationMixture.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000), Materials.Nitrochlorobenzene.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.Chlorobenzene.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.NitrationMixture.getFluid(1000), Materials.Nitrochlorobenzene.getFluid(1000), Materials.DilutedSulfuricAcid.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.NitrationMixture.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Chlorobenzene.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000), Materials.Nitrochlorobenzene.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.NitrationMixture.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.Chlorobenzene.getFluid(1000), Materials.Nitrochlorobenzene.getFluid(1000), Materials.DilutedSulfuricAcid.getCells(1), 100, 240);
 
             	//Dimethylbenzene
             	GT_Values.RA.addDistilleryRecipe(5, Materials.WoodTar.getFluid(200), Materials.Dimethylbenzene.getFluid(40), 1, 64, false);
+            	GT_Values.RA.addDistilleryRecipe(5, Materials.CharcoalByproducts.getFluid(200), Materials.Dimethylbenzene.getFluid(20), 1, 64, false);
+
+            	GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.Benzene.getFluid(1000), GT_Values.NF,Materials.Dimethylbenzene.getCells(1), 4000, 120);
+            	GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(2), GT_Utility.getIntegratedCircuit(12), Materials.Methane.getGas(2000), GT_Values.NF, Materials.Dimethylbenzene.getCells(1), 4000, 120);
 
             	//Phtalic Acid
-            	GT_Values.RA.addChemicalRecipe(Materials.Dimethylbenzene.getCells(1),Materials.PotassiumPermanganate.getDustTiny(1),Materials.Oxygen.getGas(2000), Materials.Water.getFluid(2000),Materials.PhthalicAcid.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Dimethylbenzene.getCells(1),Materials.PotassiumPermanganate.getDustTiny(1),Materials.Oxygen.getGas(2000), Materials.PhthalicAcid.getFluid(1000),Materials.Water.getCells(2), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(2),Materials.PotassiumPermanganate.getDustTiny(1),Materials.Dimethylbenzene.getFluid(1000), Materials.Water.getFluid(2000),Materials.PhthalicAcid.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(2),Materials.PotassiumPermanganate.getDustTiny(1),Materials.Dimethylbenzene.getFluid(1000), Materials.PhthalicAcid.getFluid(1000),Materials.Water.getCells(2), 100, 30);
+            	GT_Values.RA.addChemicalRecipe(Materials.Dimethylbenzene.getCells(1), Materials.Potassiumdichromate.getDustTiny(1), Materials.Oxygen.getGas(2000), Materials.Water.getFluid(2000),Materials.PhthalicAcid.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.Dimethylbenzene.getCells(1), Materials.Potassiumdichromate.getDustTiny(1),Materials.Oxygen.getGas(2000), Materials.PhthalicAcid.getFluid(1000),Materials.Water.getCells(2), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(2), Materials.Potassiumdichromate.getDustTiny(1),Materials.Dimethylbenzene.getFluid(1000), Materials.Water.getFluid(2000),Materials.PhthalicAcid.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.Oxygen.getCells(2), Materials.Potassiumdichromate.getDustTiny(1),Materials.Dimethylbenzene.getFluid(1000), Materials.PhthalicAcid.getFluid(1000),Materials.Water.getCells(2), 100, 240);
 
             	//Dichlorobenzidine
-            	GT_Values.RA.addChemicalRecipe(Materials.Zinc.getDustTiny(1), GT_Utility.getIntegratedCircuit(1), Materials.Nitrochlorobenzene.getFluid(1000), Materials.Dichlorobenzidine.getFluid(1000), null, null, 200, 240, false);
+            	GT_Values.RA.addChemicalRecipe(Materials.Copper.getDustTiny(1), GT_Utility.getIntegratedCircuit(1), Materials.Nitrochlorobenzene.getFluid(1000), Materials.Dichlorobenzidine.getFluid(1000),Materials.Copper.getDust(1), 200, 240);
 
             	//Diphenyl Isophthalate
-            	GT_Values.RA.addChemicalRecipe(Materials.PhthalicAcid.getCells(1),Materials.SulfuricAcid.getCells(1),Materials.Phenol.getFluid(2000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.PhthalicAcid.getCells(1),Materials.Phenol.getCells(2),Materials.SulfuricAcid.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.SulfuricAcid.getCells(1),Materials.Phenol.getCells(2),Materials.PhthalicAcid.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 30);
+            	GT_Values.RA.addChemicalRecipe(Materials.PhthalicAcid.getCells(1),Materials.SulfuricAcid.getCells(1),Materials.Phenol.getFluid(2000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.PhthalicAcid.getCells(1),Materials.Phenol.getCells(2),Materials.SulfuricAcid.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 240);
+            	GT_Values.RA.addChemicalRecipe(Materials.SulfuricAcid.getCells(1),Materials.Phenol.getCells(2),Materials.PhthalicAcid.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(1000),Materials.Diphenylisophthalate.getCells(1), 100, 240);
 
             	//Diaminobenzidin
-            	GT_Values.RA.addChemicalRecipe(Materials.Ammonia.getCells(2),Materials.Copper.getDust(1),Materials.Dichlorobenzidine.getFluid(1000), Materials.HydrochloricAcid.getFluid(2000),Materials.Diaminobenzidin.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Dichlorobenzidine.getCells(1),Materials.Copper.getDust(1),Materials.Ammonia.getGas(2000), Materials.Diaminobenzidin.getFluid(1000),Materials.HydrochloricAcid.getCells(2), 100, 30);
+            	GT_Values.RA.addChemicalRecipe(Materials.Ammonia.getCells(2), Materials.Zinc.getDust(1), Materials.Dichlorobenzidine.getFluid(1000), Materials.HydrochloricAcid.getFluid(2000), Materials.Diaminobenzidin.getCells(1), 100, 480);
+            	GT_Values.RA.addChemicalRecipe(Materials.Dichlorobenzidine.getCells(1),Materials.Zinc.getDust(1), Materials.Ammonia.getGas(2000), Materials.Diaminobenzidin.getFluid(1000), Materials.HydrochloricAcid.getCells(2), 100, 480);
 
             	//Polybenzimidazole
-            	GT_Values.RA.addChemicalRecipe(Materials.Diphenylisophthalate.getCells(1),GT_Utility.getIntegratedCircuit(1),Materials.Diaminobenzidin.getFluid(1000), Materials.Polybenzimidazole.getMolten(1000),Materials.Phenol.getCells(1), 100, 30);
-            	GT_Values.RA.addChemicalRecipe(Materials.Diaminobenzidin.getCells(1),GT_Utility.getIntegratedCircuit(1),Materials.Diphenylisophthalate.getFluid(1000), Materials.Polybenzimidazole.getMolten(1000),Materials.Phenol.getCells(1), 100, 30);
-
+            	GT_Values.RA.addChemicalRecipe(Materials.Diphenylisophthalate.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Diaminobenzidin.getFluid(1000), Materials.Polybenzimidazole.getMolten(1000), Materials.Phenol.getCells(1), 100, 1920);
+            	GT_Values.RA.addChemicalRecipe(Materials.Diaminobenzidin.getCells(1), GT_Utility.getIntegratedCircuit(1), Materials.Diphenylisophthalate.getFluid(1000), Materials.Polybenzimidazole.getMolten(1000), Materials.Phenol.getCells(1), 100, 1920);
 
             }
 }
