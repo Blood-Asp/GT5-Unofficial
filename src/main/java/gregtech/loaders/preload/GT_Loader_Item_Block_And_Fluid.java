@@ -447,8 +447,8 @@ public class GT_Loader_Item_Block_And_Fluid
         }
 
         GT_Mod.gregtechproxy.addFluid("Air", "Air", Materials.Air, 2, 295, ItemList.Cell_Air.get(1L, new Object[0]), ItemList.Cell_Empty.get(1L, new Object[0]), 2000);
-        GT_Mod.gregtechproxy.addFluid("LiquidAir", "Liquid Air", Materials.LiquidAir, 2, 60, ItemList.Cell_LiquidAir.get(1L, new Object[0]), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
-        GT_Mod.gregtechproxy.addFluid("LiquidNitrogen", "Liquid Nitrogen", Materials.LiquidNitrogen, 2, 77, ItemList.Cell_LiquidNitrogen.get(1L, new Object[0]), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+        GT_Mod.gregtechproxy.addFluid("LiquidAir", "Liquid Air", Materials.LiquidAir, 2, 60, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidAir, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+        GT_Mod.gregtechproxy.addFluid("LiquidNitrogen", "Liquid Nitrogen", Materials.LiquidNitrogen, 2, 77, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidNitrogen, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Oxygen", "Oxygen", Materials.Oxygen, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Hydrogen", "Hydrogen", Materials.Hydrogen, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
         GT_Mod.gregtechproxy.addFluid("Deuterium", "Deuterium", Materials.Deuterium, 2, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Deuterium, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 1000);

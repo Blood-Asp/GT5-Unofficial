@@ -250,8 +250,7 @@ public class GT_ModHandler {
         return ItemList.Cell_Water.get(aAmount);
     }
 
-    public static ItemStack getLavaCell(long aAmount) {
-        return ItemList.Cell_Lava.get(aAmount);
+    public static ItemStack getLavaCell(long aAmount) { return ItemList.Cell_Lava.get(aAmount);
     }
 
     /**
