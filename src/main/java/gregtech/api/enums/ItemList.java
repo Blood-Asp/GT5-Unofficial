@@ -203,6 +203,8 @@ public enum ItemList implements IItemContainer {
     Cell_Water,
     Cell_Lava,
     Cell_Air,
+    Cell_LiquidAir,
+    Cell_LiquidNitrogen,
     Large_Fluid_Cell_Steel,
     Large_Fluid_Cell_TungstenSteel,
     Large_Fluid_Cell_Aluminium,
