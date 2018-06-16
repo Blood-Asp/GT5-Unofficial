@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.basic;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IIndividual;
@@ -16,6 +17,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_Assemblyline_Server;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -219,7 +221,11 @@ public class GT_MetaTileEntity_Scanner
             	if(GT_Utility.areStacksEqual(tRecipe.mResearchItem, aStack, true)){
             	
             	String s = tRecipe.mOutput.getDisplayName();
-            		
+            	if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+            		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mOutput.getDisplayName());
+                if (s==null)
+               	 s=tRecipe.mOutput.getDisplayName();
+            	}
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                 GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], s+" Construction Data");
                 
@@ -247,6 +253,11 @@ public class GT_MetaTileEntity_Scanner
                 tNBT.setString("author", "Assembling Line Recipe Generator");
                 NBTTagList tNBTList = new NBTTagList();
                 s=tRecipe.mOutput.getDisplayName();
+                if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+            		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mOutput.getDisplayName());
+                if (s==null)
+                	 s=tRecipe.mOutput.getDisplayName();
+                }
                 tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+s+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
                 for(int i=0;i<tRecipe.mInputs.length;i++){
                 	if (tRecipe.mOreDictAlt[i] != null) {
@@ -262,12 +273,22 @@ public class GT_MetaTileEntity_Scanner
                 		if (count > 0) tNBTList.appendTag(new NBTTagString(tBuilder.toString()));
                 	} else if(tRecipe.mInputs[i]!=null){
                 		s=tRecipe.mInputs[i].getDisplayName();
+                		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+                    		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mInputs[i].getDisplayName());
+                		if (s==null)
+                			s=tRecipe.mInputs[i].getDisplayName();
+                		}
                 		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+s));
                 	}
                 }
                 for(int i=0;i<tRecipe.mFluidInputs.length;i++){
                 	if(tRecipe.mFluidInputs[i]!=null){
                 		s=tRecipe.mFluidInputs[i].getLocalizedName();
+                		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+                    		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mFluidInputs[i].getLocalizedName());
+                		if (s==null)
+                			s=tRecipe.mFluidInputs[i].getLocalizedName();
+                		}
                 		tNBTList.appendTag(new NBTTagString("Input Hatch "+(i+1)+": "+tRecipe.mFluidInputs[i].amount+"L "+s));
                 	}
                 }
