@@ -585,7 +585,11 @@ public class GT_Mod implements IGT_Mod {
             for (Runnable tRunnable : GregTech_API.sAfterGTPreload) {
                 tRunnable.run();
             }
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+        } catch (Throwable e) {
+        	e.printStackTrace(GT_Log.err);
+        }
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer())
+        	GT_Assemblyline_Server.fillMap(aEvent);
     }
 
     @Mod.EventHandler
