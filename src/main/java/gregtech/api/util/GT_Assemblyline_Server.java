@@ -69,9 +69,9 @@ public class GT_Assemblyline_Server {
 					!entry.getKey().contains("_tiny")
 					)
 						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-".name".length())));	
-					else if (entry.getKey().contains("_huge")||entry.getKey().contains("_small")||entry.getKey().contains("_tiny"))
+					else if (entry.getKey().contains("_huge")||entry.getKey().contains("_tiny"))
 						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-"_tiny.name".length())));	
-					else if (entry.getKey().contains("_large"))
+					else if (entry.getKey().contains("_large")||entry.getKey().contains("_small"))
 						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-"_large.name".length())));
 					else if (entry.getKey().contains("_nonuple"))
 						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-"_nonuple.name".length())));
