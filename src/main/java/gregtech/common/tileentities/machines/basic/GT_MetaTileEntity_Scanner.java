@@ -223,8 +223,8 @@ public class GT_MetaTileEntity_Scanner
             	String s = tRecipe.mOutput.getDisplayName();
             	if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mOutput.getDisplayName());
-                if (s==null)
-               	 s=tRecipe.mOutput.getDisplayName();
+            		if (s==null)
+            			s=tRecipe.mOutput.getDisplayName();
             	}
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                 GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], s+" Construction Data");
@@ -255,8 +255,8 @@ public class GT_MetaTileEntity_Scanner
                 s=tRecipe.mOutput.getDisplayName();
                 if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mOutput.getDisplayName());
-                if (s==null)
-                	 s=tRecipe.mOutput.getDisplayName();
+            		if (s==null)
+            			s=tRecipe.mOutput.getDisplayName();
                 }
                 tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+s+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
                 for(int i=0;i<tRecipe.mInputs.length;i++){
@@ -266,6 +266,13 @@ public class GT_MetaTileEntity_Scanner
                 		for (ItemStack tStack : tRecipe.mOreDictAlt[i]) {
                 			if (tStack != null) {
                 				s=tStack.getDisplayName();
+                				if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+                					s=GT_Assemblyline_Server.lServerNames.get(tStack.getDisplayName());
+                					if (s==null)
+                						s=tStack.getDisplayName();
+                				}
+                				
+                				
                 				tBuilder.append((count == 0 ? "" : "\nOr ") + tStack.stackSize+" "+s);
                     			count++;
                 			}
@@ -275,8 +282,8 @@ public class GT_MetaTileEntity_Scanner
                 		s=tRecipe.mInputs[i].getDisplayName();
                 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
                     		s = GT_Assemblyline_Server.lServerNames.get(tRecipe.mInputs[i].getDisplayName());
-                		if (s==null)
-                			s=tRecipe.mInputs[i].getDisplayName();
+                    		if (s==null)
+                    			s=tRecipe.mInputs[i].getDisplayName();
                 		}
                 		tNBTList.appendTag(new NBTTagString("Input Bus "+(i+1)+": "+tRecipe.mInputs[i].stackSize+" "+s));
                 	}
