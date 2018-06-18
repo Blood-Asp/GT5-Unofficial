@@ -227,7 +227,6 @@ public class GT_MetaTileEntity_Scanner
             			s=tRecipe.mOutput.getDisplayName();
             	}
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-            	
             	//remove possible old NBTTagCompound
             	this.mOutputItems[0].setTagCompound(new NBTTagCompound());
                 GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], s+" Construction Data");

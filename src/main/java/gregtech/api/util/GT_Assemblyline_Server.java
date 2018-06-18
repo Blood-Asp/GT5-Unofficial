@@ -36,6 +36,7 @@ public class GT_Assemblyline_Server {
 		for (Map.Entry<String, Property> entry : internal.entrySet())
 		{
 				s=entry.getValue().getString().replaceAll("%", "");
+
 			if (entry.getKey().contains("metaitem") && s.contains("material"))
 				internal2.put(entry.getKey(), s);
 			else if (entry.getKey().contains("blockmachines") && s.contains("material"))
@@ -87,7 +88,6 @@ public class GT_Assemblyline_Server {
 				i=i%1000;
 				lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
 			}
-			
 			else if(entry.getKey().contains("blockmetal")) {
 				Materials[] mMats = null;
 				String t = entry.getKey().substring("gt.blockmetal".length());
