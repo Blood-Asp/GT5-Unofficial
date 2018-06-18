@@ -105,8 +105,8 @@ public class GT_MetaTileEntity_Scanner
             }
             if (ItemList.Tool_DataOrb.isStackEqual(getSpecialSlot(), false, true)) {
                 if (ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) {
-                    aStack.stackSize -= 1;
-                    this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{ItemList.Tool_DataStick.get(1, new Object[]{})});
+                	aStack.stackSize -= 1;
+                    this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
                     calculateOverclockedNess(30,512);
                     //In case recipe is too OP for that machine
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
@@ -227,12 +227,16 @@ public class GT_MetaTileEntity_Scanner
             			s=tRecipe.mOutput.getDisplayName();
             	}
             	this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
+            	
+            	//remove possible old NBTTagCompound
+            	this.mOutputItems[0].setTagCompound(new NBTTagCompound());
                 GT_Utility.ItemNBT.setBookTitle(this.mOutputItems[0], s+" Construction Data");
                 
                 NBTTagCompound tNBT = this.mOutputItems[0].getTagCompound();
                 if (tNBT == null) {
                     tNBT = new NBTTagCompound();
-                }     
+                }
+                
                 tNBT.setTag("output", tRecipe.mOutput.writeToNBT(new NBTTagCompound()));
                 tNBT.setInteger("time", tRecipe.mDuration);
                 tNBT.setInteger("eu", tRecipe.mEUt);

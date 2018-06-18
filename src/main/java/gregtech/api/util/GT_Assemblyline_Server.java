@@ -19,7 +19,7 @@ public class GT_Assemblyline_Server {
 	
 	
 	public static LinkedHashMap<String,String> lServerNames = new LinkedHashMap<String,String>();
-	private static LinkedHashMap<String,String> internal2= new LinkedHashMap<String,String>(),internal3 = new LinkedHashMap<String,String>(),internal4= new LinkedHashMap<String,String>(),internal5= new LinkedHashMap<String,String>();
+	private static LinkedHashMap<String,String> internal2= new LinkedHashMap<String,String>(),internal3 = new LinkedHashMap<String,String>(),internal4= new LinkedHashMap<String,String>();
 	private static HashMap<String, Property> internal = new HashMap<String, Property>();
 	
 	public static void fillMap(FMLPreInitializationEvent aEvent) {
@@ -36,14 +36,12 @@ public class GT_Assemblyline_Server {
 		for (Map.Entry<String, Property> entry : internal.entrySet())
 		{
 				s=entry.getValue().getString().replaceAll("%", "");
-			if (entry.getKey().contains("metaitem")&&s.contains("material"))
+			if (entry.getKey().contains("metaitem") && s.contains("material"))
 				internal2.put(entry.getKey(), s);
-			else if (entry.getKey().contains("blockmachines")&&s.contains("material"))
+			else if (entry.getKey().contains("blockmachines") && s.contains("material"))
 				internal3.put(entry.getKey(), s);
-			else if (entry.getKey().contains("blockores")&&s.contains("material"))
+			else if ((entry.getKey().contains("blockores")||(entry.getKey().contains("blockmetal")||entry.getKey().contains("blockgem"))) && s.contains("material"))
 				internal4.put(entry.getKey(), s);
-			else if ((entry.getKey().contains("blockmetal")||entry.getKey().contains("blockgem"))&&s.contains("material"))
-				internal5.put(entry.getKey(), s);
 			else
 				lServerNames.put(entry.getKey(), s);
 		}
@@ -84,15 +82,13 @@ public class GT_Assemblyline_Server {
 				lServerNames.put(entry.getKey(), entry.getValue());
 		}
 		for (Map.Entry<String, String> entry : internal4.entrySet()) {
-			if (entry.getValue().contains("blockores")) {
+			if (entry.getKey().contains("blockores")) {
 				int i = Integer.parseInt(entry.getKey().substring("gt.blockores.".length(), entry.getKey().length()-".name".length()));
 				i=i%1000;
 				lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
 			}
-		}
-		
-		for (Map.Entry<String, String> entry : internal5.entrySet()) {
-			if(entry.getKey().contains("blockmetal")) {
+			
+			else if(entry.getKey().contains("blockmetal")) {
 				Materials[] mMats = null;
 				String t = entry.getKey().substring("gt.blockmetal".length());
 					t=t.substring(0,1);
