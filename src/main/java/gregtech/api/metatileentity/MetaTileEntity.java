@@ -61,6 +61,8 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
      */
     private IGregTechTileEntity mBaseMetaTileEntity;
 
+    public long mSoundRequests=0;
+
     /**
      * This registers your Machine at the List.
      * Use only ID's larger than 2048, because i reserved these ones.
@@ -259,6 +261,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     @Override
     public final void sendLoopStart(byte aIndex) {
         if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 5, aIndex);
+        mSoundRequests++;
     }
 
     @Override

@@ -64,7 +64,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
-    private long mTickTimer = 0, oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
+    public long mTickTimer = 0;
+    private long oOutput = 0, mAcceptedAmperes = Long.MAX_VALUE;
+    public long mLastSoundTick = 0;
+    private long mLastCheckTick = 0;
     private String mOwnerName = "";
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
 
@@ -715,7 +718,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     // Uncomment this line to print out tick-by-tick times.
                     //tList.add("tTime " + tTime);
                 }
-                tList.add("Average CPU-load of ~" + (tAverageTime / mTimeStatistics.length) + "ns over " + mTimeStatistics.length + " ticks with worst time of " + tWorstTime + "ns.");
+                tList.add("Average CPU load of ~" + (tAverageTime / mTimeStatistics.length) + "ns over " + mTimeStatistics.length + " ticks with worst time of " + tWorstTime + "ns.");
+                tList.add("Recorded " + mMetaTileEntity.mSoundRequests + " sound requests in " + (mTickTimer - mLastCheckTick) + " ticks." );
+                mLastCheckTick = mTickTimer;
+                mMetaTileEntity.mSoundRequests = 0;
             }
             if (mLagWarningCount > 0) {
                 tList.add("Caused " + (mLagWarningCount >= 10 ? "more than 10" : mLagWarningCount) + " Lag Spike Warnings (anything taking longer than " + GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING + "ms) on the Server.");

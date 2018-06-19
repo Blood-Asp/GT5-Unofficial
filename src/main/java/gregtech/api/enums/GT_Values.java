@@ -159,6 +159,10 @@ public class GT_Values {
      */
     public static boolean debugStones = false;
     /**
+     * Number of ticks between sending sound packets to clients for electric machines. Default is 1.5 seconds. Trying to mitigate lag and FPS drops.
+     */
+    public static int ticksBetweenSounds = 30;
+    /**
      * If you have to give something a World Parameter but there is no World... (Dummy World)
      */
     public static World DW;
