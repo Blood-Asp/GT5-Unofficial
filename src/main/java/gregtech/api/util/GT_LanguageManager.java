@@ -323,6 +323,8 @@ public class GT_LanguageManager {
         addStringLocalization("Interaction_DESCRIPTION_Index_214", "Connected");
         addStringLocalization("Interaction_DESCRIPTION_Index_215", "Disconnected");
 		addStringLocalization("Interaction_DESCRIPTION_Index_216", "Deprecated Recipe");
+		addStringLocalization("Interaction_DESCRIPTION_Index_217", "Stocking mode. Keeps this many items in destination input slots.");
+		addStringLocalization("Interaction_DESCRIPTION_Index_218", "Transfer size mode. Add exactly this many items in destination input slots as long as there is room.");
 		addStringLocalization("Interaction_DESCRIPTION_Index_500", "Fitting: Loose - More Flow");
 		addStringLocalization("Interaction_DESCRIPTION_Index_501", "Fitting: Tight - More Efficiency");
 
