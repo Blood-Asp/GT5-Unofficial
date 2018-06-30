@@ -122,6 +122,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         if (isHasMiningPipes(maxPipes)) return;
 
         ItemStack pipes = getStackInSlot(1);
+        if(pipes != null && !pipes.isItemEqual(miningPipe)) return;
         for (ItemStack storedItem : getStoredInputs()) {
             if (!storedItem.isItemEqual(miningPipe)) continue;
 
