@@ -598,14 +598,14 @@ public class GT_ModHandler {
     }
     
     public static boolean addImmersiveEngineeringRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aChance2, ItemStack aOutput3, int aChance3){
-    	if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
+    	/*if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
     		blusunrize.immersiveengineering.common.IERecipes.addCrusherRecipe(aOutput1, aInput, 6000, aOutput2, 0.15f);
-    	}
+    	}*/
     	return true;
     }
 
     public static boolean addMagneticraftRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aChance2, ItemStack aOutput3, int aChance3){
-        if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
+   /*     if(GregTech_API.mMagneticraft && GT_Mod.gregtechproxy.mMagneticraftRecipes){
           ItemData  tData = GT_OreDictUnificator.getAssociation(aInput);
           if(tData!=null&&tData.mPrefix!=null){
             if(tData.mPrefix==OrePrefixes.ore||tData.mPrefix==OrePrefixes.oreBlackgranite||tData.mPrefix==OrePrefixes.oreEndstone||tData.mPrefix==OrePrefixes.oreNetherrack||tData.mPrefix==OrePrefixes.oreRedgranite){
@@ -615,6 +615,7 @@ public class GT_ModHandler {
           	}
           }
         }
+        */
         return true;
     }
 

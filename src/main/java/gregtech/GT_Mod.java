@@ -135,8 +135,8 @@ public class GT_Mod implements IGT_Mod {
 
         GregTech_API.sClientDataFile = new GT_Config(new Configuration(new File(aEvent.getModConfigurationDirectory().getParentFile(), "GregTech.cfg")));
         GregTech_API.mIC2Classic = Loader.isModLoaded("IC2-Classic-Spmod");
-        GregTech_API.mMagneticraft = Loader.isModLoaded("Magneticraft");
-        GregTech_API.mImmersiveEngineering = Loader.isModLoaded("ImmersiveEngineering");
+        //GregTech_API.mMagneticraft = Loader.isModLoaded("Magneticraft");
+        //GregTech_API.mImmersiveEngineering = Loader.isModLoaded("ImmersiveEngineering");
         GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");
         GregTech_API.mTranslocator = Loader.isModLoaded("Translocator");
         GregTech_API.mTConstruct = Loader.isModLoaded("TConstruct");

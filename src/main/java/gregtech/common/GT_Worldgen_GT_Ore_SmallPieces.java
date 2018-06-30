@@ -8,6 +8,7 @@ import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugSmallOres;
@@ -21,11 +22,12 @@ public class GT_Worldgen_GT_Ore_SmallPieces
     public final boolean mOverworld;
     public final boolean mNether;
     public final boolean mEnd;
-
     public final String mBiome;
     public final String aTextWorldgen = "worldgen.";
+    public static ArrayList<GT_Worldgen_GT_Ore_SmallPieces> sList = new ArrayList<GT_Worldgen_GT_Ore_SmallPieces>();
+    
     //TODO CHECk IF INSTANTIATION IS CORRECT
-    public GT_Worldgen_GT_Ore_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, boolean aOverworld, boolean aNether, boolean aEnd, boolean GC_UNUSED1, boolean GC_UNUSED2, boolean GC_UNUSED3, Materials aPrimary) {
+    public GT_Worldgen_GT_Ore_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, boolean aOverworld, boolean aNether, boolean aEnd, Materials aPrimary) {
         super(aName, GregTech_API.sWorldgenList, aDefault);
         this.mOverworld = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Overworld", aOverworld);
         this.mNether = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Nether", aNether);
@@ -35,9 +37,24 @@ public class GT_Worldgen_GT_Ore_SmallPieces
         this.mAmount = ((short) Math.max(1, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Amount", aAmount)));
         this.mMeta = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Ore", aPrimary.mMetaItemSubID));
         this.mBiome = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "BiomeName", "None");
+        this.sList.add(this);
     }
+    
+    public GT_Worldgen_GT_Ore_SmallPieces(String aName, boolean aDefault, int aMinY, int aMaxY, int aAmount, boolean aOverworld, boolean aNether, boolean aEnd, boolean GC_UNUSED1, boolean GC_UNUSED2, boolean GC_UNUSED3, Materials aPrimary) {
+    	 super(aName, GregTech_API.sWorldgenList, aDefault);
+         this.mOverworld = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Overworld", aOverworld);
+         this.mNether = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Nether", aNether);
+         this.mEnd = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "TheEnd", aEnd);
+         this.mMinY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MinHeight", aMinY));
+         this.mMaxY = ((short) Math.max(this.mMinY + 1, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY)));
+         this.mAmount = ((short) Math.max(1, GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Amount", aAmount)));
+         this.mMeta = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Ore", aPrimary.mMetaItemSubID));
+         this.mBiome = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "BiomeName", "None");
+         this.sList.add(this);
+    }
+    
 
-    public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+	public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         if (!this.mBiome.equals("None") && !(this.mBiome.equals(aBiome))) {
             return false; //Not the correct biome for ore mix
         }
