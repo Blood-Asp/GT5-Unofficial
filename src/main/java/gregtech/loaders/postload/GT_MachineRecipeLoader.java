@@ -2286,7 +2286,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 Materials.Lubricant.getFluid(2000)}, ItemList.Electric_Piston_UV.get(1, new Object[]{}), 600, 100000);
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Electric_Piston_UV.get(1, new Object(){}),576000,new ItemStack[]{
-                ItemList.Electric_Motor_UV.get(1, new Object(){}),
+                ItemList.Electric_Motor_UHV.get(1, new Object(){}),
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Bedrockium, 6L),
                 GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Neutronium, 8L),
                 GT_OreDictUnificator.get(OrePrefixes.round, Materials.Neutronium, 64L),
