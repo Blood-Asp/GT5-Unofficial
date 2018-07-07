@@ -8,12 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_Conveyor
-        extends GT_CoverBehavior {
+public class GT_Cover_Conveyor extends GT_CoverBehavior {
     public final int mTickRate;
+    private final int mMaxStacks;
 
-    public GT_Cover_Conveyor(int aTickRate) {
+    public GT_Cover_Conveyor(int aTickRate, int maxStacks) {
         this.mTickRate = aTickRate;
+        this.mMaxStacks = maxStacks;
     }
 
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
@@ -23,14 +24,27 @@ public class GT_Cover_Conveyor
             }
         }
         TileEntity tTileEntity = aTileEntity.getTileEntityAtSide(aSide);
-        //aTileEntity.decreaseStoredEnergyUnits(1L, true);
-        if (((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= 128L)) {
-            if (aTileEntity.isUniversalEnergyStored(256L)) {
-                aTileEntity.decreaseStoredEnergyUnits(4 * GT_Utility.moveOneItemStack(aCoverVariable % 2 == 0 ? aTileEntity : tTileEntity, aCoverVariable % 2 != 0 ? aTileEntity : tTileEntity, aCoverVariable % 2 != 0 ? GT_Utility.getOppositeSide(aSide) : aSide, aCoverVariable % 2 == 0 ? GT_Utility.getOppositeSide(aSide) : aSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1), true);
-            }
-        } else {
-            GT_Utility.moveOneItemStack(aCoverVariable % 2 == 0 ? aTileEntity : tTileEntity, aCoverVariable % 2 != 0 ? aTileEntity : tTileEntity, aCoverVariable % 2 != 0 ? GT_Utility.getOppositeSide(aSide) : aSide, aCoverVariable % 2 == 0 ? GT_Utility.getOppositeSide(aSide) : aSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+        Object fromEntity = aCoverVariable % 2 == 0 ? aTileEntity : tTileEntity,
+                 toEntity = aCoverVariable % 2 != 0 ? aTileEntity : tTileEntity;
+        byte fromSide = aCoverVariable % 2 != 0 ? GT_Utility.getOppositeSide(aSide) : aSide,
+               toSide = aCoverVariable % 2 == 0 ? GT_Utility.getOppositeSide(aSide) : aSide;
+        boolean costsEnergy = ((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= 128L);
+        byte moved;
+
+        for(int i=0 ; i < this.mMaxStacks ; i++) {
+            // Costs energy but we don't have enough, bail
+            if ((costsEnergy && !aTileEntity.isUniversalEnergyStored(256L)))
+                break;
+
+            moved = GT_Utility.moveOneItemStack(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+
+            if(moved == 0)
+                break;
+
+            if (costsEnergy)
+                aTileEntity.decreaseStoredEnergyUnits(4 * moved, true);
         }
+
         return aCoverVariable;
     }
 
