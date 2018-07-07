@@ -124,7 +124,8 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.infinity",true,2,40,2,false, false, false, Materials.Infinity);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.bedrockium",true,5,25,6,false, false, false, Materials.Bedrockium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.realgar",true,15,85,16,false, true, false, Materials.Realgar);
-        
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.certusquartz",true,5,115,16,false, true, false, Materials.CertusQuartz);
+
         //GT Default Veins
 
         new GT_Worldgen_GT_Ore_Layer("ore.mix.naquadah", true, 10, 90, 30, 5, 32, false, false, false, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched);
