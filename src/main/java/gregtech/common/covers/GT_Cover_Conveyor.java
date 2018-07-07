@@ -12,6 +12,11 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
     public final int mTickRate;
     private final int mMaxStacks;
 
+    public GT_Cover_Conveyor(int aTickRate) {
+        this.mTickRate = aTickRate;
+        this.mMaxStacks = 1;
+    }
+
     public GT_Cover_Conveyor(int aTickRate, int maxStacks) {
         this.mTickRate = aTickRate;
         this.mMaxStacks = maxStacks;
