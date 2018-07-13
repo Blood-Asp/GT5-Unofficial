@@ -88,7 +88,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork()
-                && aBaseMetaTileEntity.getUniversalEnergyStored() < maxEUOutput() + aBaseMetaTileEntity.getEUCapacity()) {
+                && aBaseMetaTileEntity.getUniversalEnergyStored() <= aBaseMetaTileEntity.getEUCapacity() - maxEUOutput()) {
             // Dragon Egg
             if (hasEgg() && aTick % 10 == 0) {
                 getBaseMetaTileEntity().increaseStoredEnergyUnits(sDragonEggEnergyPerTick * getEfficiency() / 10, false);
