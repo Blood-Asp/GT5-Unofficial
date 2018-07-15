@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public static boolean sAllowMultipleEggs = true;
     public static GT_MetaTileEntity_MagicalEnergyAbsorber mActiveSiphon = null;
     public static int sEnergyPerEnderCrystal = 32;
-    public static int sEnergyFromVis = 512;
+    public static int sEnergyFromVis = 20;
     public static int sDragonEggEnergyPerTick = 128;
     public static boolean isThaumcraftLoaded;
     public int mEfficiency;
@@ -80,7 +80,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                 100 - this.mTier * 10);
         this.sAllowMultipleEggs = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyAbsorber.AllowMultipleEggs", false);
         this.sEnergyPerEnderCrystal = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyAbsorber.EnergyPerTick.EnderCrystal", 32);
-        this.sEnergyFromVis = (GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyAbsorber.EnergyPerVisDivisor", 2500) * 10);
+        this.sEnergyFromVis = (GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyAbsorber.EnergyPerVis", 20));
         this.sDragonEggEnergyPerTick = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyAbsorber.EnergyPerTick", 2048);
         this.isThaumcraftLoaded = Loader.isModLoaded("Thaumcraft");
     }
@@ -109,31 +109,28 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
             // Energyzed node
             if (isThaumcraftLoaded) {
                 try {
-                	int multFactor = 2;
                     World tmpWorld = this.getBaseMetaTileEntity().getWorld();
                     int tmpX = this.getBaseMetaTileEntity().getXCoord();
                     int tmpY = this.getBaseMetaTileEntity().getYCoord();
                     int tmpZ = this.getBaseMetaTileEntity().getZCoord();
-                    int fire = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.FIRE, 1000); // all of these should be 1000
-                    int earth = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.EARTH, 1000);
-                    int air = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.AIR, 1000);
-                    int entropy = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ENTROPY, 1000);
-                    int order = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ORDER, 1000);
-                    int water = VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.WATER, 1000);
-                    int visEU = (int) (Math.pow(fire, 2) + Math.pow(earth, 2) + Math.pow(air, 2) + Math.pow(entropy, 2) + Math.pow(order, 2) + Math.pow(water, 2));
-                    int mult = 0; //this should make it more dependant on how big your node is
-                    mult += fire * multFactor;
-                    mult += earth * multFactor;
-                    mult += air * multFactor;
-                    mult += entropy * multFactor;
-                    mult += order * multFactor;
-                    mult += water * multFactor;
-                    visEU = (visEU * mult) / 100; 
-                    
-                   getBaseMetaTileEntity().increaseStoredEnergyUnits(Math.min(maxEUOutput(), visEU * getEfficiency() / sEnergyFromVis), false);
-                    
+
+                    // Try to drain as much VIS as needed for max EU/t
+                    int maxVisPerDrain = (int) Math.round(Math.sqrt(maxEUOutput() * 10000 / (sEnergyFromVis * getEfficiency())));
+                    int toDrain = maxVisPerDrain;
+                    // Attempt to drain all aspects until enough VIS drained.
+                    if (	(toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.FIRE, toDrain)) > 0
+                    	 && (toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.EARTH, toDrain)) > 0
+                    	 && (toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.AIR, toDrain)) > 0
+                    	 && (toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ENTROPY, toDrain)) > 0
+                    	 && (toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.ORDER, toDrain)) > 0)
+                    	     toDrain -= VisNetHandler.drainVis(tmpWorld, tmpX, tmpY, tmpZ, Aspect.WATER, toDrain);
+
+                    int drained = maxVisPerDrain - toDrain;
+                    int visEU = (int) (Math.pow(drained, 2) * sEnergyFromVis * getEfficiency() / 10000);
+                    getBaseMetaTileEntity().increaseStoredEnergyUnits(Math.min(maxEUOutput(), visEU), false);
+
                 } catch (Throwable e) {
-                	
+
                 }
             }
             // EnderCrystal
