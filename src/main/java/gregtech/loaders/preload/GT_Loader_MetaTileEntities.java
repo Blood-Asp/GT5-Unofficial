@@ -377,7 +377,11 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Hatch_Maintenance.set(new GT_MetaTileEntity_Hatch_Maintenance(90, "hatch.maintenance", "Maintenance Hatch", 1).getStackForm(1L));
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMc", "fsr", 'M', ItemList.Hull_LV});
-        
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMC", "fsr", 'M', ItemList.Hull_LV, 'C', GT_ModHandler.getModItem("Railcraft", "tool.crowbar", 1L, 0)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMC", "fsr", 'M', ItemList.Hull_LV, 'C', GT_ModHandler.getModItem("Railcraft", "tool.crowbar.reinforced", 1L, 0)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMC", "fsr", 'M', ItemList.Hull_LV, 'C', GT_ModHandler.getModItem("Railcraft", "tool.crowbar.magic", 1L, 0)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Maintenance.get(1L, new Object[0]), bitsd, new Object[]{"dwx", "hMC", "fsr", 'M', ItemList.Hull_LV, 'C', GT_ModHandler.getModItem("Railcraft", "tool.crowbar.void", 1L, 0)});
+
         ItemList.Hatch_AutoMaintenance.set(new GT_MetaTileEntity_Hatch_Maintenance(111, "hatch.maintenance.auto", "Auto Maintenance Hatch", 6, true).getStackForm(1L));
         ItemList.Hatch_DataAccess_EV.set(new GT_MetaTileEntity_Hatch_DataAccess(145, "hatch.dataaccess", "Data Access Hatch", 4).getStackForm(1L));
         ItemList.Hatch_DataAccess_LuV.set(new GT_MetaTileEntity_Hatch_DataAccess(146, "hatch.dataaccess.adv", "Advanced Data Access Hatch", 6).getStackForm(1L));
