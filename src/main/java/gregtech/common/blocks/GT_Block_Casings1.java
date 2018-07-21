@@ -1,6 +1,5 @@
 package gregtech.common.blocks;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.objects.GT_CopiedBlockTexture;
@@ -95,10 +94,6 @@ public class GT_Block_Casings1
     }
 
     public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
-        if (GregTech_API.sUseMachineMetal) {
-            return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
-        } else {
-            return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.dyeWhite.mRGBa[0] << 16 | gregtech.api.enums.Dyes.dyeWhite.mRGBa[1] << 8 | gregtech.api.enums.Dyes.dyeWhite.mRGBa[2];
-        }
+        return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }
 }

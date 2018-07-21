@@ -31,7 +31,7 @@ public class GT_GUIContainerMetaTile_Machine extends GT_GUIContainer {
             byte colorByte=mContainer.mTileEntity.getColorization();
             Dyes color;
             if(colorByte != -1) color= Dyes.get(colorByte);
-            else color=(GregTech_API.sUseMachineMetal) ? Dyes.MACHINE_METAL : Dyes.dyeWhite; // Maybe not use white here?
+            else color=Dyes.MACHINE_METAL;
             GL11.glColor3ub((byte)color.mRGBa[0], (byte)color.mRGBa[1], (byte)color.mRGBa[2]);
         } else GL11.glColor3ub((byte)255,(byte)255,(byte)255);
     }
