@@ -29,7 +29,7 @@ import java.util.Arrays;
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 	
 	private int coilMetaID;
-	public static GT_CopiedBlockTexture mTextureULV = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,(GregTech_API.sUseMachineMetal)? Dyes.MACHINE_METAL.mRGBa : Dyes.dyeWhite.mRGBa);
+	public static GT_CopiedBlockTexture mTextureULV = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0, Dyes.MACHINE_METAL.mRGBa);
 	
 	//private final int CASING_INDEX = 22;
 

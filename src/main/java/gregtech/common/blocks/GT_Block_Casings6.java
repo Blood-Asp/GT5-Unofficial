@@ -2,7 +2,6 @@ package gregtech.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.objects.GT_CopiedBlockTexture;
@@ -99,10 +98,6 @@ public class GT_Block_Casings6
     }
 
     public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
-        if(GregTech_API.sUseMachineMetal) {
-            return gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
-        } else {
-            return gregtech.api.enums.Dyes.dyeWhite.mRGBa[0] << 16 | gregtech.api.enums.Dyes.dyeWhite.mRGBa[1] << 8 | gregtech.api.enums.Dyes.dyeWhite.mRGBa[2];
-        }
+        return gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }
 }
