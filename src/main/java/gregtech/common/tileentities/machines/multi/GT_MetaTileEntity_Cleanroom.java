@@ -42,9 +42,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 "Controller (Top center)",
                 "Top besides contoller and edges: Filter Casings",
                 "1 Reinforced Door (keep closed for 100% efficency)",
-				"1x ULV+ Energy Hatch, 1x Maintainance Hatch",
+				"2x LV or 1MV Energy Hatch, 1x Maintainance Hatch",
                 "Up to 10 Machine Hull Item & Energy transfer through walls",
-                "Remaining Blocks: Plascrete, 20 min"};
+                "Remaining Blocks: Plascrete, 20 min",
+				"Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency"};
     }
 
 	@Override
