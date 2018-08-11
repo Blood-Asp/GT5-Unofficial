@@ -86,7 +86,7 @@ public class GregTech_API {
      * 10752 - 11263 are reserved for Briareos81.
      * 11264 - 12000 are reserved for Quantum64.
      * 12001 - 12500 are reserved for RedMage17.
-     * 12501 - 13000 are reserved for the next one who asks me.
+     * 12501 - 13000 are reserved for bartimaeusnek.
      * 13001 - 14999 are currently free.
      * 15000 - 16999 are reserved for TecTech.
      * 17000 - 31000 are currently free.
