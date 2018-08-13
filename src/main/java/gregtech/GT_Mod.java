@@ -194,6 +194,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.D1 = tMainConfig.get(aTextGeneral, "Debug", false).getBoolean(false);
         GT_Values.D2 = tMainConfig.get(aTextGeneral, "Debug2", false).getBoolean(false);
         GT_Values.debugCleanroom = tMainConfig.get(aTextGeneral, "debugCleanroom", false).getBoolean(false);
+        GT_Values.debugDriller = tMainConfig.get(aTextGeneral, "debugDriller", false).getBoolean(false);
         GT_Values.debugWorldGen = tMainConfig.get(aTextGeneral, "debugWorldGen", false).getBoolean(false);
         GT_Values.debugOrevein = tMainConfig.get(aTextGeneral, "debugOrevein", false).getBoolean(false);
         GT_Values.debugSmallOres = tMainConfig.get(aTextGeneral, "debugSmallOres", false).getBoolean(false);

@@ -143,6 +143,10 @@ public class GT_Values {
      */     
     public static boolean debugCleanroom = false;
     /**
+     * Debug parameter for driller testing.
+     */     
+    public static boolean debugDriller = false;
+    /**
      * Debug parameter for world generation. Tracks chunks added/removed from run queue.
      */
     public static boolean debugWorldGen = false;
