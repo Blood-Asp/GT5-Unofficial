@@ -36,6 +36,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     int near;
     int middle;
     int step;
+    int cX;
+    int cZ;
 
     public GT_MetaTileEntity_AdvSeismicProspector(int aID, String aName, String aNameRegional, int aTier, int aRadius, int aStep) {
         super(aID, aName, aNameRegional, aTier, 1, // amperage
@@ -66,18 +68,20 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                         + "16 TNT or "
                         + "8 ITNT), use Data Stick",
                 "Ore prospect area = " 
-                    + radius
+                    + radius*2
                     + "x"
-                    + radius
-                    + " chunks",
-
+                    + radius*2
+                    + " blocks below prospector",
+                "Near < " + near,
+                "Middle < " + middle,
+                "Far >= " + middle,
                 "Oil prospection area 3x3 oilfields"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
             String aGUIName, String aNEIName, int aNear, int aMiddle, int aRadius, int aStep) {
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
-        radius = aRadius*16;
+        radius = aRadius;
         near = aNear;
         middle = aMiddle;
         step = aStep;
@@ -191,6 +195,9 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 int di = Math.abs(i - this.getBaseMetaTileEntity().getXCoord());
                 int dk = Math.abs(k - this.getBaseMetaTileEntity().getZCoord());
 
+                cX = (i/16)*16;
+                cZ = (k/16)*16;
+
                 if (di <= near && dk <= near)
                     prospectHole(i, k, aNearOres);
                 else if (di <= middle && dk <= middle)
@@ -205,7 +212,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         for (int j = this.getBaseMetaTileEntity().getYCoord(); j > 0; j--) {
             tFoundOre = checkForOre(i, j, k);
             if (tFoundOre != null)
-                countOre(aOres, tFoundOre);
+                countOre(aOres, tFoundOre, cX, cZ);
         }
     }
 
@@ -234,7 +241,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         return null;
     }
 
-    private static void countOre(Map<String, Integer> map, String ore) {
+    private static void countOre(Map<String, Integer> map, String ore, int cCX, int cCZ) {
+        ore = ore + " at " + (cCX +8)+ "," + (cCZ + 8);
         Integer oldCount = map.get(ore);
         oldCount = (oldCount == null) ? 0 : oldCount;
 
