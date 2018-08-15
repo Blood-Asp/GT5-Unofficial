@@ -2173,17 +2173,17 @@ public class GT_Utility {
                 tNBTList.appendTag(new NBTTagString(tPageText));
   
                 if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 8, tNearOres);
+                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 7, tNearOres);
                 if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 8, tMiddleOres);
+                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 7, tMiddleOres);
                 if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 8, tFarOres);
+                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 7, tFarOres);
                 
                if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 324 chunks (9 oilfields) around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 324 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"

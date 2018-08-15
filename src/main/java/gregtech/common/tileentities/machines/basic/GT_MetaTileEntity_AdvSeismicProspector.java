@@ -63,19 +63,21 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
     public String[] getDescription() {
         return new String[]{
-        		"Place, activate with explosives ("
-                        + "4 Glyceryl, "
-                        + "16 TNT or "
-                        + "8 ITNT), use Data Stick",
-                "Ore prospect area = " 
+        		"Place, activate with explosives",
+                 "2 Powderbarrels, "
+                     + "4 Glyceryl Trinitrate, "
+                     + "16 TNT, or "
+                     + "8 ITNT", 
+                "Use Data Stick, Scan Data Stick, Print Data Stick, Bind Pages into Book",
+                "Ore prospecting area = " 
                     + radius*2
                     + "x"
                     + radius*2
-                    + " blocks below prospector",
+                    + " ONLY blocks below prospector",
                 "Near < " + near,
                 "Middle < " + middle,
                 "Far >= " + middle,
-                "Oil prospection area 3x3 oilfields"};
+                "Oil prospecting area 3x3 oilfields"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
@@ -99,7 +101,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
             if (!ready && (GT_Utility.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 16)
                     || GT_Utility.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 8)
-                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 4))) {
+                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 4)
+                    || GT_Utility.consumeItems(aPlayer, aStack, ItemList.Block_Powderbarrel.getItem(), 2) )) {
 
                 this.ready = true;
                 this.mMaxProgresstime = (aPlayer.capabilities.isCreativeMode ? 20 : 800);
