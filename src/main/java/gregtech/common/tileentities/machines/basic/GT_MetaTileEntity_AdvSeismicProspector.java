@@ -65,14 +65,19 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                         + "4 Glyceryl, "
                         + "16 TNT or "
                         + "8 ITNT), use Data Stick",
-                "Ore prospection area 191x191 blocks",
+                "Ore prospect area = " 
+                    + radius
+                    + "x"
+                    + radius
+                    + " chunks",
+
                 "Oil prospection area 3x3 oilfields"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
             String aGUIName, String aNEIName, int aNear, int aMiddle, int aRadius, int aStep) {
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
-        radius = aRadius;
+        radius = aRadius*16;
         near = aNear;
         middle = aMiddle;
         step = aStep;

@@ -2178,19 +2178,7 @@ public class GT_Utility {
                 if (tFarOres != null)
                     fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", 20, tFarOres);
                 
-                tPageText = "Ore notes\n\n"
-                        + "Close range:\nR <= " + tBounds[0] + "\n"
-                        + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
-                        + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2] + "\n"
-                        + "\n"
-                        + "[F][F][F][F][F]" + "\n"
-                        + "[F][M][M][M][F]" + "\n"
-                        + "[F][M][C][M][F]" + "\n"
-                        + "[F][M][M][M][F]" + "\n"
-                        + "[F][F][F][F][F]";
-                tNBTList.appendTag(new NBTTagString(tPageText));
-                
-                if (tOils != null)
+               if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
