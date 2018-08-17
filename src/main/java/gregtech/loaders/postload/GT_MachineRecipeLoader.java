@@ -3705,7 +3705,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             	GT_Values.RA.addDistilleryRecipe(5, Materials.CharcoalByproducts.getFluid(200), Materials.Dimethylbenzene.getFluid(20), 100, 120, false);
 
             	GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.Benzene.getFluid(1000), GT_Values.NF,Materials.Dimethylbenzene.getCells(1), 4000, 120);
-            	GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(2), GT_Utility.getIntegratedCircuit(12), Materials.Methane.getGas(2000), GT_Values.NF, Materials.Dimethylbenzene.getCells(1), 4000, 120);
+            	GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1), GT_Utility.getIntegratedCircuit(12), Materials.Methane.getGas(1000), GT_Values.NF, Materials.Dimethylbenzene.getCells(1), 4000, 120);
 
             	//Phtalic Acid
             	GT_Values.RA.addChemicalRecipe(Materials.Dimethylbenzene.getCells(1), Materials.Potassiumdichromate.getDustTiny(1), Materials.Oxygen.getGas(2000), Materials.Water.getFluid(2000),Materials.PhthalicAcid.getCells(1), 100, 1920);
