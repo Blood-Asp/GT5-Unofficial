@@ -36,6 +36,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
     int near;
     int middle;
     int step;
+    int cX;
+    int cZ;
 
     public GT_MetaTileEntity_AdvSeismicProspector(int aID, String aName, String aNameRegional, int aTier, int aRadius, int aStep) {
         super(aID, aName, aNameRegional, aTier, 1, // amperage
@@ -61,12 +63,21 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
     public String[] getDescription() {
         return new String[]{
-        		"Place, activate with explosives ("
-                        + "4 Glyceryl, "
-                        + "16 TNT or "
-                        + "8 ITNT), use Data Stick",
-                "Ore prospection area 191x191 blocks",
-                "Oil prospection area 3x3 oilfields"};
+        		"Place, activate with explosives",
+                 "2 Powderbarrels, "
+                     + "4 Glyceryl Trinitrate, "
+                     + "16 TNT, or "
+                     + "8 ITNT", 
+                "Use Data Stick, Scan Data Stick, Print Data Stick, Bind Pages into Book",
+                "Ore prospecting area = " 
+                    + radius*2
+                    + "x"
+                    + radius*2
+                    + " ONLY blocks below prospector",
+                "Near < " + near,
+                "Middle < " + middle,
+                "Far >= " + middle,
+                "Oil prospecting area 3x3 oilfields"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
@@ -90,7 +101,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
 
             if (!ready && (GT_Utility.consumeItems(aPlayer, aStack, Item.getItemFromBlock(Blocks.tnt), 16)
                     || GT_Utility.consumeItems(aPlayer, aStack, Ic2Items.industrialTnt.getItem(), 8)
-                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 4))) {
+                    || GT_Utility.consumeItems(aPlayer, aStack, Materials.Glyceryl, 4)
+                    || GT_Utility.consumeItems(aPlayer, aStack, ItemList.Block_Powderbarrel.getItem(), 2) )) {
 
                 this.ready = true;
                 this.mMaxProgresstime = (aPlayer.capabilities.isCreativeMode ? 20 : 800);
@@ -186,6 +198,9 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 int di = Math.abs(i - this.getBaseMetaTileEntity().getXCoord());
                 int dk = Math.abs(k - this.getBaseMetaTileEntity().getZCoord());
 
+                cX = (i/16)*16;
+                cZ = (k/16)*16;
+
                 if (di <= near && dk <= near)
                     prospectHole(i, k, aNearOres);
                 else if (di <= middle && dk <= middle)
@@ -200,7 +215,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         for (int j = this.getBaseMetaTileEntity().getYCoord(); j > 0; j--) {
             tFoundOre = checkForOre(i, j, k);
             if (tFoundOre != null)
-                countOre(aOres, tFoundOre);
+                countOre(aOres, tFoundOre, cX, cZ);
         }
     }
 
@@ -229,7 +244,8 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
         return null;
     }
 
-    private static void countOre(Map<String, Integer> map, String ore) {
+    private static void countOre(Map<String, Integer> map, String ore, int cCX, int cCZ) {
+        ore = ore + " at " + (cCX +8)+ "," + (cCZ + 8);
         Integer oldCount = map.get(ore);
         oldCount = (oldCount == null) ? 0 : oldCount;
 

@@ -2106,7 +2106,7 @@ public class GT_Utility {
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
             
             tNBT.setByte("prospection_tier", aTier);
-            tNBT.setString("prospection_pos", "X: " + aX + " Y: " + aY + " Z: " + aZ + " Dim: " + aDim);
+            tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);
 
             // ores
             tNBT.setString("prospection_near", joinListToString(aNearOres));
@@ -2135,13 +2135,13 @@ public class GT_Utility {
                 String tData = tNBT.getString("prospection");
                 String[] tDataArray = tData.split(",");
                 if (tDataArray.length > 6) {
-                    tNBT.setString("author", "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2] + " Dim: " + tDataArray[3]);
+                    tNBT.setString("author", " Dim: " + tDataArray[3] + "X: " + tDataArray[0] + " Y: " + tDataArray[1] + " Z: " + tDataArray[2]);
                     NBTTagList tNBTList = new NBTTagList();
                     String tOres = " Prospected Ores: ";
                     for (int i = 6; tDataArray.length > i; i++) {
                         tOres += (tDataArray[i] + " ");
                     }
-                    tNBTList.appendTag(new NBTTagString("Prospection Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
+                    tNBTList.appendTag(new NBTTagString("Tier " + tTier + " Prospecting Data From: X" + tDataArray[0] + " Z:" + tDataArray[2] + " Dim:" + tDataArray[3] + " Produces " + tDataArray[4] + "L " + tDataArray[5] + " " + tOres));
                     tNBT.setTag("pages", tNBTList);
                 }
                 setNBT(aStack, tNBT);
@@ -2161,40 +2161,29 @@ public class GT_Utility {
 
                 NBTTagList tNBTList = new NBTTagList();
 
-                String tPageText = "Advanced prospection\n\n"
-                    + tPos + "\n"
-                    + "Results:\n"
-                    + "- Close Range Ores: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
-                    + "- Mid Range Ores: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
-                    + "- Far Range Ores: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
-                    + "- Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
-                    + "Lists was sorted by volume";
+                String tPageText = "Prospector report\n"
+                    + tPos + "\n\n"
+                    + "Ores found:\n"
+                    + "Close <" + tBounds[0] + " blocks: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
+                    + "Mid <" + tBounds[1] + " blocks: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
+                    + "Far <" + tBounds[2] + " blocks: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
+                    + "Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
+                    + "Lists sorted by volume\n"
+                    + "Location is center of chunk with ore";
                 tNBTList.appendTag(new NBTTagString(tPageText));
   
                 if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", ", ", 20, tNearOres);
+                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 7, tNearOres);
                 if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", ", ", 20, tMiddleOres);
+                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 7, tMiddleOres);
                 if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", ", ", 20, tFarOres);
+                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 7, tFarOres);
                 
-                tPageText = "Ore notes\n\n"
-                        + "Close range:\nR <= " + tBounds[0] + "\n"
-                        + "Mid range:\n" + tBounds[0] + " < R <= " + tBounds[1] + "\n"
-                        + "Far range:\n" + tBounds[1] + " < R <= " + tBounds[2] + "\n"
-                        + "\n"
-                        + "[F][F][F][F][F]" + "\n"
-                        + "[F][M][M][M][F]" + "\n"
-                        + "[F][M][C][M][F]" + "\n"
-                        + "[F][M][M][M][F]" + "\n"
-                        + "[F][F][F][F][F]";
-                tNBTList.appendTag(new NBTTagString(tPageText));
-                
-                if (tOils != null)
+               if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 324 chunks (9 oilfields) around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 324 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
@@ -2202,7 +2191,7 @@ public class GT_Utility {
                         + "[5] - Prospector";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
-                tNBT.setString("author", tPos);
+                tNBT.setString("author", tPos.replace("\n"," "));
                 tNBT.setTag("pages", tNBTList);
                 setNBT(aStack, tNBT);
             }
