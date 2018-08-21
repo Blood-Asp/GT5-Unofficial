@@ -865,10 +865,38 @@ public enum OrePrefixes {
         return true;
     }
 
+    private static final HashMap<String, HashMap<ItemStack, Boolean>>mCachedResults = new HashMap<String, HashMap<ItemStack, Boolean>>();
+
     public boolean contains(ItemStack aStack) {
-        if (aStack == null) return false;
-        for (ItemStack tStack : mPrefixedItems)
-            if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())) return true;
+
+        if (aStack == null){
+            return false;
+        }
+
+        HashMap<ItemStack, Boolean> aCurrentSet;
+        if (mCachedResults.get(this.toString()) != null){
+            aCurrentSet = mCachedResults.get(this.toString());
+        }
+
+        else {
+            aCurrentSet = new HashMap<ItemStack, Boolean>();
+            mCachedResults.put(this.toString(), aCurrentSet);
+        }
+
+        if (aCurrentSet.get(aStack) != null){
+            return aCurrentSet.get(aStack);
+        }
+        else {
+            for (ItemStack tStack : mPrefixedItems){
+                if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
+                    aCurrentSet.put(aStack, true);
+                    return true;
+                }
+            }
+        }
+
+        aCurrentSet.put(aStack, false);
+
         return false;
     }
 
