@@ -1539,7 +1539,7 @@ public class GT_Utility {
             startWorld.onEntityRemoved(entity);
         }
 
-        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+        entity.setLocationAndAngles(aX, aY, aZ, entity.rotationYaw, entity.rotationPitch);
 
         ((WorldServer) destinationWorld).theChunkProviderServer.loadChunk((int) aX >> 4, (int) aZ >> 4);
 
@@ -1560,17 +1560,17 @@ public class GT_Utility {
             destinationWorld.spawnEntityInWorld(entity);
             entity.setWorld(destinationWorld);
         }
-        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+        entity.setLocationAndAngles(aX, aY, aZ, entity.rotationYaw, entity.rotationPitch);
 
         destinationWorld.updateEntityWithOptionalForce(entity, false);
-        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+        entity.setLocationAndAngles(aX, aY, aZ, entity.rotationYaw, entity.rotationPitch);
 
         if ((entity instanceof EntityPlayerMP)) {
             EntityPlayerMP player = (EntityPlayerMP) entity;
             if (interDimensional) {
                 player.mcServer.getConfigurationManager().func_72375_a(player, (WorldServer) destinationWorld);
             }
-            player.playerNetServerHandler.setPlayerLocation(aX, aY, aY, player.rotationYaw, player.rotationPitch);
+            player.playerNetServerHandler.setPlayerLocation(aX, aY, aZ, player.rotationYaw, player.rotationPitch);
         }
 
         destinationWorld.updateEntityWithOptionalForce(entity, false);
@@ -1588,7 +1588,7 @@ public class GT_Utility {
             player.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(player.experience, player.experienceTotal, player.experienceLevel));
             FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, startWorld.provider.dimensionId, destinationWorld.provider.dimensionId);
         }
-        entity.setLocationAndAngles(aX, aY, aY, entity.rotationYaw, entity.rotationPitch);
+        entity.setLocationAndAngles(aX, aY, aZ, entity.rotationYaw, entity.rotationPitch);
 
         destinationWorld.theProfiler.endSection();
         entity.fallDistance = 0;
