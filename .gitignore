@@ -84,10 +84,7 @@ gradlew.bat
 
 *.bat
 libs/
-*.java
-*.json
 *.dat
-*.cfg
 *.dat_old
 *.dat_mcr
 *.lock
@@ -96,6 +93,3 @@ libs/
 *.log
 *.jar
 *.errored
-*.conf
-*.xml
-*.recipe

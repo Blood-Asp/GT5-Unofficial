@@ -878,7 +878,7 @@ public enum OrePrefixes {
         }
 
         else {
-            aCurrentSet = new ObjMap<Integer, Boolean>(mPrefixedItems.size(), 0.5f);
+            aCurrentSet = new ObjMap<Integer, Boolean>((mPrefixedItems != null && mPrefixedItems.size() > 0 ? mPrefixedItems.size() : 1000), 0.5f);
             mCachedResults.put(this.toString(), aCurrentSet);
         }
 
