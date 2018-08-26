@@ -8,6 +8,7 @@ import gregtech.api.interfaces.IOreRecipeRegistrator;
 import gregtech.api.interfaces.ISubTagContainer;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
+import gregtech.api.objects.ObjMap;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.loaders.materialprocessing.ProcessingModSupport;
@@ -865,10 +866,34 @@ public enum OrePrefixes {
         return true;
     }
 
+    private static final LinkedHashMap<String, ObjMap<Integer, Boolean>>mCachedResults = new LinkedHashMap<String, ObjMap<Integer, Boolean>>();
+    
     public boolean contains(ItemStack aStack) {
-        if (aStack == null) return false;
-        for (ItemStack tStack : mPrefixedItems)
-            if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())) return true;
+        if (aStack == null){
+            return false;
+        }
+        ObjMap<Integer, Boolean> aCurrentSet;
+        if (mCachedResults.get(this.toString()) != null){
+            aCurrentSet = mCachedResults.get(this.toString());
+        }
+
+        else {
+            aCurrentSet = new ObjMap<Integer, Boolean>((mPrefixedItems != null && mPrefixedItems.size() > 0 ? mPrefixedItems.size() : 1000), 0.5f);
+            mCachedResults.put(this.toString(), aCurrentSet);
+        }
+
+        if (aCurrentSet.get(aStack.hashCode()) != null){
+            return aCurrentSet.get(aStack.hashCode());
+        }
+        else {
+            for (ItemStack tStack : mPrefixedItems){
+                if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
+                    aCurrentSet.put(aStack.hashCode(), true);
+                    return true;
+                }
+            }
+        }
+        aCurrentSet.put(aStack.hashCode(), false);
         return false;
     }
 
