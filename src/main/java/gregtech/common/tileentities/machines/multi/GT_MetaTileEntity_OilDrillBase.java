@@ -112,12 +112,13 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             tFluid = undergroundOilReadInformation(getBaseMetaTileEntity());
             if (tFluid == null) return false;
             mOilId = tFluid.getFluidID();
-            if (debugDriller) {
-                GT_Log.out.println(
-                    " mOilId null, adding fluid = " + mOilId
-                );
-            }
         }
+        if (debugDriller) {
+            GT_Log.out.println(
+                " Driller on  fluid = " + mOilId
+            );
+        }
+
         tOil = new FluidStack(FluidRegistry.getFluid(mOilId), 0);
 
         if (mOilFieldChunks.isEmpty()) {
@@ -176,18 +177,32 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 " pump speed = " + speed
              );
         }
+
+        ArrayList<Chunk> emptyChunks = new ArrayList<Chunk>();
         
         for (Chunk tChunk : mOilFieldChunks) {
             tFluid = undergroundOil(tChunk,speed);
             if (debugDriller) {
                 GT_Log.out.println(
                     " chunkX = " + tChunk.getChunkCoordIntPair().chunkXPos + 
-                    " chunkZ = " + tChunk.getChunkCoordIntPair().chunkZPos +
-                    " Oil pumped = " + tFluid.amount
+                    " chunkZ = " + tChunk.getChunkCoordIntPair().chunkZPos 
                 );
+                if( tFluid != null ) {
+                    GT_Log.out.println(
+                        "     Fluid pumped = " + tFluid.amount
+                    );
+                } else {
+                    GT_Log.out.println(
+                        "     No fluid pumped " 
+                    );
+                }
+                
             }
-            if (tFluid == null || tFluid.amount<1) mOilFieldChunks.remove(tChunk);
+            if (tFluid == null || tFluid.amount<1) emptyChunks.add(tChunk);
             if (tOil.isFluidEqual(tFluid)) tOil.amount += tFluid.amount;
+        }
+        for( Chunk tChunk : emptyChunks) {
+            mOilFieldChunks.remove( tChunk );
         }
         return tOil.amount == 0 ? null : tOil;
     }
