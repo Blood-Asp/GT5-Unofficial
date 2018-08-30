@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.lang.Math; //Java was written by idiots
 
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.GT_Values.debugDriller;
@@ -111,20 +112,49 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             tFluid = undergroundOilReadInformation(getBaseMetaTileEntity());
             if (tFluid == null) return false;
             mOilId = tFluid.getFluidID();
+            if (debugDriller) {
+                GT_Log.out.println(
+                    " mOilId null, adding fluid = " + mOilId
+                );
+            }
         }
         tOil = new FluidStack(FluidRegistry.getFluid(mOilId), 0);
 
         if (mOilFieldChunks.isEmpty()) {
             Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
             int range = getRangeInChunks();
-            int xChunk = (tChunk.xPosition / range) * range;
-            int zChunk = (tChunk.zPosition / range) * range;
+            int xChunk = Math.floorDiv(tChunk.xPosition,range) * range; //Java was written by idiots.  For negative values, / returns rounded towards zero. Fucking morons.
+            int zChunk = Math.floorDiv(tChunk.zPosition,range) * range;
+            if (debugDriller) {
+                GT_Log.out.println(
+                    "tChunk.xPosition = " + tChunk.xPosition +
+                    " tChunk.zPosition = " + tChunk.zPosition +
+                    " xChunk = " + xChunk  +
+                    " zChunk = " + zChunk
+                );
+            }
             for (int i = 0; i < range; i++) {
                 for (int j = 0; j < range; j++) {
+                    if (debugDriller) {
+                        GT_Log.out.println(
+                            " getChunkX = " + (xChunk + i) +
+                            " getChunkZ = " + (zChunk + j)
+                        );
+                    }
                     tChunk = getBaseMetaTileEntity().getWorld().getChunkFromChunkCoords(xChunk + i, zChunk + j);
                     tFluid = undergroundOilReadInformation(tChunk);
+                    if (debugDriller) {
+                        GT_Log.out.println(
+                            " Fluid in chunk = " + tFluid.getFluid().getID()
+                        );
+                    }
                     if (tOil.isFluidEqual(tFluid) && tFluid.amount > 0) {
                         mOilFieldChunks.add(tChunk);
+                        if (debugDriller) {
+                            GT_Log.out.println(
+                                " Matching fluid, quantity = " + tFluid.amount
+                            );
+                        }
                     }
                 }
             }
