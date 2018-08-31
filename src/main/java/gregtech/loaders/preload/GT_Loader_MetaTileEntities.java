@@ -1142,7 +1142,10 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         ItemList.Generator_Naquadah_Mark_III.set(new GT_MetaTileEntity_FluidNaquadahReactor(1192, "basicgenerator.naquadah.tier.06", "Naquadah Reactor Mark III", 6).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_IV.set(new GT_MetaTileEntity_SolidNaquadahReactor3(1188, "basicgenerator.naquadah.tier.07", "Naquadah Reactor Mark IV", 7).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_V.set(new GT_MetaTileEntity_SolidNaquadahReactor4(1189, "basicgenerator.naquadah.tier.08", "Naquadah Reactor Mark V", 8).getStackForm(1L));
-		//TODO CHECK RECIPES
+        ItemList.Generator_Naquadah_Mark_VI.set(new GT_MetaTileEntity_SolidNaquadahReactor5(1189, "basicgenerator.naquadah.tier.09", "Naquadah Reactor Mark V", 9).getStackForm(1L));
+        ItemList.Generator_Naquadah_Mark_VII.set(new GT_MetaTileEntity_SolidNaquadahReactor6(1189, "basicgenerator.naquadah.tier.10", "Naquadah Reactor Mark V", 10).getStackForm(1L));
+        ItemList.Generator_Naquadah_Mark_VIII.set(new GT_MetaTileEntity_SolidNaquadahReactor7(1189, "basicgenerator.naquadah.tier.11", "Naquadah Reactor Mark V", 11).getStackForm(1L));
+        //TODO CHECK RECIPES
         //GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_I.get(1L, new Object[0]), bitsd, new Object[]{"UCU", "FMF", aTextWireCoil, 'M', ItemList.Hull_EV, 'F', ItemList.Field_Generator_EV, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt04.get(Materials.Aluminium), 'U', OrePrefixes.stick.get(Materials.Uranium235)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_II.get(1L, new Object[0]), bitsd, new Object[]{"PCP", "FMF", aTextWireCoil, 'M', ItemList.Hull_IV, 'F', ItemList.Field_Generator_IV, 'C', OrePrefixes.circuit.get(Materials.Master), 'W', OrePrefixes.cableGt04.get(Materials.Tungsten), 'P', OrePrefixes.stick.get(Materials.Plutonium241)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Generator_Naquadah_Mark_III.get(1L, new Object[0]), bitsd, new Object[]{"NCN", "FMF", aTextWireCoil, 'M', ItemList.Hull_LuV, 'F', ItemList.Field_Generator_LuV, 'C', OrePrefixes.circuit.get(Materials.Ultimate), 'W', OrePrefixes.cableGt04.get(Materials.NiobiumTitanium), 'N', OrePrefixes.stick.get(Materials.NaquadahEnriched)});
