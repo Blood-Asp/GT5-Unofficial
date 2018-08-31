@@ -362,8 +362,9 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Elite                   = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Elite"                   ,   "Elite"                         ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 6)));
     public static Materials Master                  = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Master"                  ,   "Master"                        ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 7)));
     public static Materials Ultimate                = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Ultimate"                ,   "Ultimate"                      ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 8)));
-    public static Materials Superconductor          = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Superconductor"          ,   "Superconductor UHV"                ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 8)));
-    public static Materials Infinite                = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Infinite"                ,   "Infinite"                      ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   );
+    public static Materials Superconductor          = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Superconductor"          ,   "Superconductor"                ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 9)));
+    public static Materials Infinite                = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Infinite"                ,   "Infinite"                      ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 10)));
+    public static Materials Bio                     = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Bio"                     ,   "Bio"                           ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 11)));
 
     /**
      * Not possible to determine exact Components
@@ -1513,6 +1514,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Ultimate                .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         Superconductor          .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         Infinite                .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
+        Bio                     .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         SuperconductorMV        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         SuperconductorHV        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         SuperconductorEV        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
