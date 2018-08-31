@@ -49,7 +49,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
         return new String[]{
-                "Controller Block for the Oil Drilling Rig " + (tierSuffix != null ? tierSuffix : ""),
+                "Controller Block for the Oil/Gas/Fluid Drilling Rig " + (tierSuffix != null ? tierSuffix : ""),
                 "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
                 "3x1x3 Base of " + casings,
                 "1x3x1 " + casings + " pillar (Center of base)",
