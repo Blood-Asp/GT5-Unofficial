@@ -847,6 +847,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials SuperconductorIV      = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                ,  51,  0,  51,   0,   "SuperconductorIV"   ,   "Superconductor IV"       ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeMagenta    , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 24)));
     public static Materials SuperconductorLuV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 153, 76,   0,   0,   "SuperconductorLuV"  ,   "Superconductor LuV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeBrown      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 28)));
     public static Materials SuperconductorZPM     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                ,  10, 10,  10,   0,   "SuperconductorZPM"  ,   "Superconductor ZPM"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeBlack      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 32)));
+    public static Materials SuperconductorUV      = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                ,  10, 10,  10,   0,   "SuperconductorUV"   ,   "Superconductor UV"       ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeBlack      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 48)));
+    public static Materials SuperconductorUHV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                ,  10, 10,  10,   0,   "SuperconductorUHV"  ,   "Superconductor UHV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeWhite      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 64)));
 
     /**
      * Materials which are renamed automatically
@@ -1524,6 +1526,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         SuperconductorIV        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         SuperconductorLuV       .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         SuperconductorZPM       .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
+        SuperconductorUV        .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
+        SuperconductorUHV       .add(SubTag.NO_SMASHING, SubTag.NO_SMELTING);
 
         Blaze                   .add(SubTag.MAGICAL, SubTag.NO_SMELTING, SubTag.SMELTING_TO_FLUID, SubTag.MORTAR_GRINDABLE, SubTag.UNBURNABLE, SubTag.BURNING);
         FierySteel              .add(SubTag.MAGICAL, SubTag.UNBURNABLE, SubTag.BURNING);
