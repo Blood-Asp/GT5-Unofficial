@@ -734,9 +734,15 @@ achievement.gt.blockmachines.fusioncomputer.tier.08=Fusion Computer Mark III
 achievement.gt.blockmachines.fusioncomputer.tier.08.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.03.32072=Neuro Processing Unit
+achievement.gt.metaitem.03.32077.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.03.32077=Bio Processing Unit
 achievement.gt.metaitem.03.32072.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.03.32095=Wetware Mainframe
 achievement.gt.metaitem.03.32095.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.03.32099=Bioware Supercomputer
+achievement.gt.metaitem.03.32099.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.03.32120=Bio Mainframe
+achievement.gt.metaitem.03.32120.desc=Pickup this item to see the recipe in NEI
 
 achievement.item.NanoCircuit=Nano Circuit
 achievement.item.NanoCircuit.desc=Pickup this item to see the recipe in NEI
