@@ -2,12 +2,15 @@ package gregtech.api.metatileentity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IConnectable;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -20,6 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -733,17 +737,60 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 
+
+
 	@Override
 	public int connect(byte aSide) {
 		if (aSide >= 6) return 0;
-		mConnections |= (1 << aSide);
-		byte tSide = GT_Utility.getOppositeSide(aSide);
-		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
-		IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
-		if (this.getClass().isInstance(tPipe) && !((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
-			((MetaPipeEntity) tPipe).connect(tSide);
-    	return 1;
+
+		final byte tSide = GT_Utility.getOppositeSide(aSide);
+		final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+        final GT_CoverBehavior coverBehavior = getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide);
+        final int coverId = baseMetaTile.getCoverIDAtSide(aSide),
+                  coverData = baseMetaTile.getCoverDataAtSide(aSide);
+
+        boolean alwaysLookConnected = coverBehavior.alwaysLookConnected(aSide, coverId, coverData, baseMetaTile);
+        boolean letsIn = letsIn(coverBehavior, aSide, coverId, coverData, baseMetaTile);
+        boolean letsOut = letsOut(coverBehavior, aSide, coverId, coverData, baseMetaTile);
+
+        // Careful - tTileEntity might be null, and that's ok -- so handle it
+        TileEntity tTileEntity = baseMetaTile.getTileEntityAtSide(aSide);
+
+        if ((alwaysLookConnected || letsIn || letsOut))  {
+            // Are we trying to connect to a pipe? let's do it!
+            IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
+            if (getClass().isInstance(tPipe)) {
+                connectAtSide(aSide);
+                if (!((MetaPipeEntity) tPipe).isConnectedAtSide(tSide)) {
+                    // Make sure pipes all get together -- connect back to us if we're connecting to a pipe
+                    ((MetaPipeEntity) tPipe).connect(tSide);
+                }
+                return 1;
+            }
+            else if(((GT_Mod.gregtechproxy.gt6Cable || GT_Mod.gregtechproxy.gt6Pipe) && baseMetaTile.getAirAtSide(aSide)) || canConnect(aSide, tTileEntity)) {
+                // Allow open connections to Air, so that it'll connect to the next block placed down next to it
+                // NOTE: Will need to check valid connection on a block update because of this, otherwise
+                //  we might end up connected to silly things
+                connectAtSide(aSide);
+                return 1;
+            }
+            if (!baseMetaTile.getWorld().getChunkProvider().chunkExists(baseMetaTile.getOffsetX(aSide, 1) >> 4, baseMetaTile.getOffsetZ(aSide, 1) >> 4)) {
+                // Target chunk unloaded
+                return -1;
+            }
+
+        }
+    	return 0;
 	}
+
+	public void checkConnections() {
+        // Try connecting to connecting to everything around us: Only used when GT6 style cables/pipes are disabled
+        for (byte aSide = 0; aSide < 6; aSide++) if (connect(aSide) == 0) disconnect(aSide);
+    }
+
+	private void connectAtSide(byte aSide) {
+        mConnections |= (1 << aSide);
+    }
 
 	@Override
 	public void disconnect(byte aSide) {
@@ -759,4 +806,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 	public boolean isConnectedAtSide(int aSide) {
 		return (mConnections & (1 << aSide)) != 0;
 	}
+
+
+	public boolean letsIn(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
+    public boolean letsOut(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
+
+	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
 }
