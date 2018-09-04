@@ -50,6 +50,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     private byte[] mSidedRedstone = new byte[]{0, 0, 0, 0, 0, 0};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mInventoryChanged = false, mWorkUpdate = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false;
+    private boolean mCheckConnections = false;
     private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, mLagWarningCount = 0;
     private int oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0;
     private short mID = 0;
@@ -1294,8 +1295,9 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public byte setColorization(byte aColor) {
         if (aColor > 15 || aColor < -1) aColor = -1;
+        mColor = (byte) (aColor + 1);
         if (canAccessData()) mMetaTileEntity.onColorChangeServer(aColor);
-        return mColor = (byte) (aColor + 1);
+        return mColor;
     }
 
     @Override
@@ -1351,6 +1353,18 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     public void markDirty() {
         super.markDirty();
         mInventoryChanged = true;
+    }
+
+    public void onNeighborBlockChange(int aX, int aY, int aZ) {
+        if (canAccessData()) {
+            final IMetaTileEntity meta = getMetaTileEntity();
+            if (meta instanceof MetaPipeEntity) {
+                // Trigger a checking of connections in case someone placed down a block that the pipe/wire shouldn't be connected to.
+                // However; don't do it immediately in case the world isn't finished loading
+                //  (This caused issues with AE2 GTEU p2p connections.
+                ((MetaPipeEntity) meta).setCheckConnections();
+            }
+        }
     }
 
     @Override

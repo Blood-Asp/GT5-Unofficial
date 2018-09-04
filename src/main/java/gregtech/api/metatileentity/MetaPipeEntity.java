@@ -6,6 +6,7 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IConnectable;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IColoredTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
@@ -59,6 +60,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
      * This variable tells, which directions the Block is connected to. It is a Bitmask.
      */
     public byte mConnections = 0;
+    protected boolean mCheckConnections = false;
     /**
      * Only assigned for the MetaTileEntity in the List! Also only used to get the localized Name for the ItemStack and for getInvName.
      */
@@ -639,12 +641,16 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     @Override
     public void onColorChangeServer(byte aColor) {
-        //
+        setCheckConnections();
     }
 
     @Override
     public void onColorChangeClient(byte aColor) {
-        //
+        // Do nothing apparently
+    }
+
+    public void setCheckConnections() {
+        mCheckConnections = true;
     }
 
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
@@ -737,7 +743,19 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 
+    private boolean connectableColor(TileEntity tTileEntity) {
+        // Determine if two entities are connectable based on their colorization:
+        //  Uncolored can connect to anything
+        //  If both are colored they must be the same color to connect.
+        if (tTileEntity instanceof IColoredTileEntity) {
+            if (getBaseMetaTileEntity().getColorization() >= 0) {
+                byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
+                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
+            }
+        }
 
+        return true;
+    }
 
 	@Override
 	public int connect(byte aSide) {
@@ -755,6 +773,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
         // Careful - tTileEntity might be null, and that's ok -- so handle it
         TileEntity tTileEntity = baseMetaTile.getTileEntityAtSide(aSide);
+        if (!connectableColor(tTileEntity)) return 0;
 
         if ((alwaysLookConnected || letsIn || letsOut))  {
             // Are we trying to connect to a pipe? let's do it!
@@ -769,8 +788,6 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
             }
             else if(((GT_Mod.gregtechproxy.gt6Cable || GT_Mod.gregtechproxy.gt6Pipe) && baseMetaTile.getAirAtSide(aSide)) || canConnect(aSide, tTileEntity)) {
                 // Allow open connections to Air, so that it'll connect to the next block placed down next to it
-                // NOTE: Will need to check valid connection on a block update because of this, otherwise
-                //  we might end up connected to silly things
                 connectAtSide(aSide);
                 return 1;
             }
@@ -783,9 +800,16 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     	return 0;
 	}
 
-	public void checkConnections() {
-        // Try connecting to connecting to everything around us: Only used when GT6 style cables/pipes are disabled
-        for (byte aSide = 0; aSide < 6; aSide++) if (connect(aSide) == 0) disconnect(aSide);
+
+    public void checkConnections() {
+        // Verify connections around us.  If GT6 style cables are not enabled then revert to old behavior and try
+        // connecting to everything around us
+        for (byte aSide = 0; aSide < 6; aSide++) {
+            if ((!GT_Mod.gregtechproxy.gt6Cable || isConnectedAtSide(aSide)) && connect(aSide) == 0) {
+                disconnect(aSide);
+            }
+        }
+        mCheckConnections = false;
     }
 
 	private void connectAtSide(byte aSide) {

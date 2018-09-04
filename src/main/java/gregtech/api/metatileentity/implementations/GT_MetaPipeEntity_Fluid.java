@@ -227,7 +227,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                 mLastReceivedFrom = 0;
             }
 
-            if (!GT_Mod.gregtechproxy.gt6Pipe) checkConnections();
+            if (!GT_Mod.gregtechproxy.gt6Pipe || mCheckConnections) checkConnections();
 
             boolean shouldDistribute = (oLastReceivedFrom == mLastReceivedFrom);
             for (int i = 0, j = aBaseMetaTileEntity.getRandomNumber(mPipeAmount); i < mPipeAmount; i++) {
@@ -386,15 +386,6 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
 
         if (coverBehavior instanceof GT_Cover_Drain) return true;
-
-        if (gTileEntity != null && getBaseMetaTileEntity().getColorization() >= 0) {
-            // If we're painted...
-            byte tColor = gTileEntity.getColorization();
-            if (tColor >= 0 && (tColor & 15) != (getBaseMetaTileEntity().getColorization() & 15)) {
-                // and the other tile entity is painted.. then we must both be painted the same color
-                return false;
-            }
-        }
 
         // Tinker Construct Faucets return a null tank info, so check the class
         if (GregTech_API.mTConstruct && tTileEntity instanceof tconstruct.smeltery.logic.FaucetLogic) return true;
