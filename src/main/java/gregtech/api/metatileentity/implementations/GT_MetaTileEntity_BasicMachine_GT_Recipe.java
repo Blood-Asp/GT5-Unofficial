@@ -308,10 +308,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.YttriumBariumCuprate);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.SuperconductorUHV);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Superconductor);
+                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.SuperconductorUHV);
                             break;
                     }
                     continue;
