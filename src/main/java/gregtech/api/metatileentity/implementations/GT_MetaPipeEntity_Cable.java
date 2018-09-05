@@ -295,7 +295,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
                 mTransferredVoltageLast20 = 0;
                 mTransferredAmperageLast20OK=mTransferredAmperageLast20;
                 mTransferredAmperageLast20 = 0;
-                if (!GT_Mod.gregtechproxy.gt6Cable) checkConnections();
+                if (!GT_Mod.gregtechproxy.gt6Cable || mCheckConnections) checkConnections();
             }
         } else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
     }
@@ -347,13 +347,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         final byte tSide = GT_Utility.getOppositeSide(aSide);
         final ForgeDirection tDir = ForgeDirection.getOrientation(tSide);
 
-        if (tTileEntity instanceof IColoredTileEntity) {
-            if (getBaseMetaTileEntity().getColorization() >= 0) {
-                byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
-            }
-        }
-
         // GT Machine handling
         if ((tTileEntity instanceof IEnergyConnected) &&
             (((IEnergyConnected) tTileEntity).inputEnergyFrom(tSide, false) || ((IEnergyConnected) tTileEntity).outputsEnergyTo(tSide, false)))
@@ -385,6 +378,13 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
         return false;
     }
+
+    @Override
+    public boolean getGT6StyleConnection() {
+        // Yes if GT6 Cables are enabled
+        return GT_Mod.gregtechproxy.gt6Cable;
+    }
+
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {

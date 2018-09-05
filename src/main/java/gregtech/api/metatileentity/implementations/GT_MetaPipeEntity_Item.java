@@ -158,7 +158,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
-            if (!GT_Mod.gregtechproxy.gt6Pipe) checkConnections();
+            if (!GT_Mod.gregtechproxy.gt6Pipe || mCheckConnections) checkConnections();
 
             if (oLastReceivedFrom == mLastReceivedFrom) {
                 doTickProfilingInThisTick = false;
@@ -220,16 +220,8 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
         if (gTileEntity != null) {
             if (gTileEntity.getMetaTileEntity() == null) return false;
-            connectable = true;
-            if ( getBaseMetaTileEntity().getColorization() >= 0) {
-                // If we're painted...
-                byte tColor = gTileEntity.getColorization();
-                if (tColor >= 0 && (tColor & 15) != (getBaseMetaTileEntity().getColorization() & 15)) {
-                    // and the other tile entity is painted.. then we must both be painted the same color
-                    return false;
-                }
-            }
             if (gTileEntity.getMetaTileEntity().connectsToItemPipe(tSide)) return true;
+            connectable = true;
         }
 
         if (tTileEntity instanceof IInventory) {
@@ -239,11 +231,16 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         if (tTileEntity instanceof ISidedInventory) {
             int[] tSlots = ((ISidedInventory) tTileEntity).getAccessibleSlotsFromSide(tSide);
             if (tSlots == null || tSlots.length <= 0) return false;
-
             connectable = true;
         }
 
         return connectable;
+    }
+
+    @Override
+    public boolean getGT6StyleConnection() {
+        // Yes if GT6 pipes are enabled
+        return GT_Mod.gregtechproxy.gt6Pipe;
     }
 
 
