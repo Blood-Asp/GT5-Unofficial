@@ -237,6 +237,12 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
         return connectable;
     }
 
+    @Override
+    public boolean getGT6StyleConnection() {
+        // Yes if GT6 pipes are enabled
+        return GT_Mod.gregtechproxy.gt6Pipe;
+    }
+
 
     @Override
     public boolean incrementTransferCounter(int aIncrement) {

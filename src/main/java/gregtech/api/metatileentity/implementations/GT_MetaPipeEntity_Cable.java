@@ -380,6 +380,13 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     }
 
     @Override
+    public boolean getGT6StyleConnection() {
+        // Yes if GT6 Cables are enabled
+        return GT_Mod.gregtechproxy.gt6Cable;
+    }
+
+
+    @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
     }

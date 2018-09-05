@@ -407,6 +407,12 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     }
 
     @Override
+    public boolean getGT6StyleConnection() {
+        // Yes if GT6 pipes are enabled
+        return GT_Mod.gregtechproxy.gt6Pipe;
+    }
+
+    @Override
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
         super.doSound(aIndex, aX, aY, aZ);
         if (aIndex == 9) {

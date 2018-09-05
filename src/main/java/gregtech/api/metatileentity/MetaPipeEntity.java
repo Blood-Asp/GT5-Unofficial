@@ -763,7 +763,9 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
 		final byte tSide = GT_Utility.getOppositeSide(aSide);
 		final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
-        final GT_CoverBehavior coverBehavior = getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide);
+		if (baseMetaTile == null) return 0;
+
+        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
         final int coverId = baseMetaTile.getCoverIDAtSide(aSide),
                   coverData = baseMetaTile.getCoverDataAtSide(aSide);
 
@@ -786,8 +788,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
                 }
                 return 1;
             }
-            else if(((GT_Mod.gregtechproxy.gt6Cable || GT_Mod.gregtechproxy.gt6Pipe) && baseMetaTile.getAirAtSide(aSide)) || canConnect(aSide, tTileEntity)) {
-                // Allow open connections to Air, so that it'll connect to the next block placed down next to it
+            else if((getGT6StyleConnection() && baseMetaTile.getAirAtSide(aSide)) || canConnect(aSide, tTileEntity)) {
+                // Allow open connections to Air, if the GT6 style pipe/cables are enabled, so that it'll connect to the next block placed down next to it
                 connectAtSide(aSide);
                 return 1;
             }
@@ -800,12 +802,11 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     	return 0;
 	}
 
-
-    public void checkConnections() {
+    protected void checkConnections() {
         // Verify connections around us.  If GT6 style cables are not enabled then revert to old behavior and try
         // connecting to everything around us
         for (byte aSide = 0; aSide < 6; aSide++) {
-            if ((!GT_Mod.gregtechproxy.gt6Cable || isConnectedAtSide(aSide)) && connect(aSide) == 0) {
+            if ((!getGT6StyleConnection() || isConnectedAtSide(aSide)) && connect(aSide) == 0) {
                 disconnect(aSide);
             }
         }
@@ -836,4 +837,5 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     public boolean letsOut(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
 
 	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
+	public boolean getGT6StyleConnection() { return false; }
 }
