@@ -1139,7 +1139,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
         ItemList.Generator_Naquadah_Mark_I.set(new GT_MetaTileEntity_NaquadahReactor(1190, "basicgenerator.naquadah.tier.04",new String[]{"Requires Enriched Naquadah Bolts"}, "Naquadah Reactor Mark I", 4).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_II.set(new GT_MetaTileEntity_NaquadahReactor(1191, "basicgenerator.naquadah.tier.05",new String[]{"Requires Enriched Naquadah Rods"}, "Naquadah Reactor Mark II", 5).getStackForm(1L));
-        ItemList.Generator_Naquadah_Mark_III.set(new GT_MetaTileEntity_NaquadahReactor(1192, "basicgenerator.naquadah.tier.06",new String[]{"Requires Naquadah Long Rods"}, "Naquadah Reactor Mark III", 6).getStackForm(1L));
+        ItemList.Generator_Naquadah_Mark_III.set(new GT_MetaTileEntity_NaquadahReactor(1192, "basicgenerator.naquadah.tier.06",new String[]{"Requires Enriched Naquadah Long Rods"}, "Naquadah Reactor Mark III", 6).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_IV.set(new GT_MetaTileEntity_NaquadahReactor(1188, "basicgenerator.naquadah.tier.07",new String[]{"Requires Naquadria Rods"}, "Naquadah Reactor Mark IV", 7).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_V.set(new GT_MetaTileEntity_NaquadahReactor(1189, "basicgenerator.naquadah.tier.08",new String[]{"Requires Naquadria Long Rods"}, "Naquadah Reactor Mark V", 8).getStackForm(1L));
         ItemList.Generator_Naquadah_Mark_VI.set(new GT_MetaTileEntity_NaquadahReactor(1168, "basicgenerator.naquadah.tier.09",new String[]{"Requires fluid Naquadah Fuel"}, "Naquadah Reactor Mark VI", GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels,9).getStackForm(1L));
