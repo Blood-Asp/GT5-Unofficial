@@ -63,10 +63,10 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
                 ret = GT_Recipe.GT_Recipe_Map.sExtraHugeNaquadahReactorFuels;
                 break;
             }
-            case 8:{
-                ret = GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels;
-                break;
-            }
+            //case 8:{
+                //ret = GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels;
+                //break;
+            //}
             default:{
                 ret = mRecipeMap;
                 break;
