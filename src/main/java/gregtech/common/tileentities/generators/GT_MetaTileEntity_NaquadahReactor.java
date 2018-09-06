@@ -10,16 +10,28 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenera
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 
-public class GT_MetaTileEntity_SolidNaquadahReactor4
-        extends GT_MetaTileEntity_BasicGenerator {
-    public int mEfficiency;
+public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGenerator {
 
-    public GT_MetaTileEntity_SolidNaquadahReactor4(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires Long Naquadria Rods", new ITexture[0]);
+    public int mEfficiency;
+    public GT_Recipe.GT_Recipe_Map mRecipeMap = null;
+
+    public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, int aTier) {
+        super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
         onConfigLoad();
     }
 
-    public GT_MetaTileEntity_SolidNaquadahReactor4(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+    public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, GT_Recipe.GT_Recipe_Map mRecipeMap, int aTier) {
+        super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
+        this.mRecipeMap=mRecipeMap;
+        onConfigLoad();
+    }
+
+    public GT_MetaTileEntity_NaquadahReactor(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
+    public GT_MetaTileEntity_NaquadahReactor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
@@ -29,23 +41,67 @@ public class GT_MetaTileEntity_SolidNaquadahReactor4
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SolidNaquadahReactor4(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_NaquadahReactor(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
-        return GT_Recipe.GT_Recipe_Map.sExtraHugeNaquadahReactorFuels;
+        GT_Recipe.GT_Recipe_Map ret;
+        switch (this.mTier){
+            case 4: {
+                ret = GT_Recipe.GT_Recipe_Map.sSmallNaquadahReactorFuels;
+                break;
+            }
+            case 5: {
+                ret = GT_Recipe.GT_Recipe_Map.sLargeNaquadahReactorFuels;
+                break;
+            }
+            case 6: {
+                ret = GT_Recipe.GT_Recipe_Map.sHugeNaquadahReactorFuels;
+                break;
+            }
+            case 7: {
+                ret = GT_Recipe.GT_Recipe_Map.sExtraHugeNaquadahReactorFuels;
+                break;
+            }
+            //case 8:{
+                //ret = GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels;
+                //break;
+            //}
+            default:{
+                ret = mRecipeMap;
+                break;
+            }
+
+        }
+        return ret;
     }
 
     public int getCapacity() {
-        return 0;
+        return mRecipeMap != null ? mRecipeMap.mMinimalInputFluids>0 ? 8000*(mTier+1) : 0 : 0 ;
     }
 
     public int getEfficiency() {
         return mEfficiency;
     }
 
+    private int getBaseEff(){
+        int ret;
+        switch (this.mTier){
+            case 4: {
+                ret = 80;
+                break;
+            }
+            default: {
+                ret = 100 + (50*(mTier-5));
+                break;
+            }
+
+        }
+        return ret;
+    }
+
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 200);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, getBaseEff());
     }
 
     public ITexture[] getFront(byte aColor) {
