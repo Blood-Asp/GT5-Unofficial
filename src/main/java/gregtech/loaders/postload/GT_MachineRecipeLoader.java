@@ -1,7 +1,6 @@
 package gregtech.loaders.postload;
 
 import codechicken.nei.api.API;
-import com.dreammaster.gthandler.CustomItemList;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
@@ -463,8 +462,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidExtractionRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Monazite, 1L), GT_Values.NI, Materials.Helium.getGas(200L), 10000, 64, 64);
 
         GT_Values.RA.addFluidExtractionRecipe(GT_ModHandler.getModItem("IC2","blockAlloyGlass", 1L, 0), GT_Values.NI, Materials.ReinforceGlass.getFluid(144), 10000, 100, 1920);
-        GT_Values.RA.addFluidExtractionRecipe(CustomItemList.ReinforcedGlassPLate.get(2L), GT_Values.NI, Materials.ReinforceGlass.getFluid(144), 10000, 75, 1920);
-        GT_Values.RA.addFluidExtractionRecipe(CustomItemList.ReinforcedGlassLense.get(2L), GT_Values.NI, Materials.ReinforceGlass.getFluid(144), 10000, 50, 1920);
+        GT_Values.RA.addFluidExtractionRecipe(GT_ModHandler.getModItem("dreamcraft","item.ReinforcedGlassPLate", 2L, 0), GT_Values.NI, Materials.ReinforceGlass.getFluid(144), 10000, 75, 1920);
+        GT_Values.RA.addFluidExtractionRecipe(GT_ModHandler.getModItem("dreamcraft","item.ReinforcedGlassLense", 2L, 0), GT_Values.NI, Materials.ReinforceGlass.getFluid(144), 10000, 50, 1920);
 
         GT_Values.RA.addFluidSmelterRecipe(new ItemStack(Items.snowball, 1, 0), GT_Values.NI, Materials.Water.getFluid(250L), 10000, 32, 4);
         GT_Values.RA.addFluidSmelterRecipe(new ItemStack(Blocks.snow, 1, 0), GT_Values.NI, Materials.Water.getFluid(1000L), 10000, 128, 4);
@@ -597,7 +596,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Cylinder.get(0, o), Materials.Polytetrafluoroethylene.getMolten(36), ItemList.Circuit_Parts_PetriDish.get(1, o), 160, 16);
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Cylinder.get(0, o), Materials.Polystyrene.getMolten(36), ItemList.Circuit_Parts_PetriDish.get(1, o), 160, 16);
 
-        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Plate.get(0L, new Object[0]), Materials.ReinforceGlass.getMolten(72), CustomItemList.ReinforcedGlassPLate.get(1L),160, 1920);
+        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Plate.get(0L, new Object[0]), Materials.ReinforceGlass.getMolten(72), GT_ModHandler.getModItem("dreamcraft", "item.ReinforcedGlassPLate", 1L, 0),160, 1920);
         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Block.get(0L, new Object[0]), Materials.ReinforceGlass.getMolten(144), GT_ModHandler.getModItem("IC2", "blockAlloyGlass", 1L), 160, 1920);
 
         GT_Values.RA.addMixerRecipe(Materials.Sugar.getDust(4), Materials.MeatRaw.getDust(1), Materials.Salt.getDustTiny(1), GT_Values.NI, GT_ModHandler.getDistilledWater(4000), Materials.GrowthMediumRaw.getFluid(4000), GT_Values.NI, 160, 16);
