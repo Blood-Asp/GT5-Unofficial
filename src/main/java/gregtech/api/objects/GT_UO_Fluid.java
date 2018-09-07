@@ -41,7 +41,7 @@ public class GT_UO_Fluid {
 			aConfigCategory.get("DecreasePerOperationAmount").comment = "Decrease per operation (actual fluid gained works like (Litre)VeinData/5000)";
 			DecreasePerOperationAmount = aConfigCategory.get("DecreasePerOperationAmount").getInt(5);
 		}
-		//System.out.println("GT UO "+aConfigCategory.getName()+" Fluid:"+Registry+" Max:"+MaxAmount+" Min:"+MinAmount+" Chance:"+Chance);
+		//GT_FML_LOGGER.info("GT UO "+aConfigCategory.getName()+" Fluid:"+Registry+" Max:"+MaxAmount+" Min:"+MinAmount+" Chance:"+Chance);
 	}
 	
 	public Fluid getFluid(){

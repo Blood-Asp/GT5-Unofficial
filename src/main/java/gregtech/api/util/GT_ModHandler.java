@@ -699,7 +699,7 @@ public class GT_ModHandler {
                                     break;
                             }
                             }catch(Exception e){System.err.println(e);}
-                            //System.out.println("#####Processed IC2 " + aGTRecipeMap.mUnlocalizedName + " Recipe: In(" + tStack.getUnlocalizedName() + ") - Out(" + ((RecipeOutput) tRecipe.getValue()).items.get(0).getUnlocalizedName() + ")");
+                            //GT_FML_LOGGER.info("#####Processed IC2 " + aGTRecipeMap.mUnlocalizedName + " Recipe: In(" + tStack.getUnlocalizedName() + ") - Out(" + ((RecipeOutput) tRecipe.getValue()).items.get(0).getUnlocalizedName() + ")");
                         }
                         if (aRemoveIC2Recipe) aRecipesToRemove.put(tStack, ((RecipeOutput) tRecipe.getValue()).items.get(0));
                     }

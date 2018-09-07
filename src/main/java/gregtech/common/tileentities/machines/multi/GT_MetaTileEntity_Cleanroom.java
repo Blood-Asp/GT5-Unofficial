@@ -1,6 +1,8 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
@@ -11,6 +13,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import static gregtech.api.enums.GT_Values.debugCleanroom;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
-    private int mHeatingCapacity = 0;
 
     public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -67,6 +69,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		int mDoorCount = 0;
 		int mHullCount = 0;
 		int mPlascreteCount = 0;
+		int mGlassCount = 0;
 		boolean doorState = false;
 		mUpdate = 100;
 		
@@ -138,6 +141,8 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 							}
 						} else if (tBlock == GregTech_API.sBlockReinforced && tMeta == 2) {
 							mPlascreteCount++;
+						} else if (tBlock != null && tBlock.getUnlocalizedName().equals("blockAlloyGlass")){
+							++mGlassCount;
 						} else {
 							IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 							if ((!addMaintenanceToMachineList(tTileEntity, 82)) && (!addEnergyInputToMachineList(tTileEntity, 82))) {
@@ -210,8 +215,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         	byte t = (byte) Math.max(1, (byte)(15/(10000f / mEfficiency)));
         aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
         }
-        
-        return mPlascreteCount>=20;
+
+        float ratio = (((float)mPlascreteCount)/100f)* GT_Values.cleanroomGlass;
+
+        return mPlascreteCount>=20 && mGlassCount < (int) Math.floor(ratio);
     }
     
     @Override

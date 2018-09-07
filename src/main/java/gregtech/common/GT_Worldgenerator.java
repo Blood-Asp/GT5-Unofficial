@@ -419,7 +419,7 @@ implements IWorldGenerator {
                         }
                     }
                 }
-                //if(GT_Values.D1)System.out.println("do asteroid gen: "+this.mX+" "+this.mZ);
+                //if(GT_Values.D1)GT_FML_LOGGER.info("do asteroid gen: "+this.mX+" "+this.mZ);
                 int tX = mX * 16 + aRandom.nextInt(16);
                 int tY = 50 + aRandom.nextInt(200 - 50);
                 int tZ = mZ * 16 + aRandom.nextInt(16);
