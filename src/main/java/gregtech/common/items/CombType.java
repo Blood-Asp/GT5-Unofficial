@@ -9,6 +9,12 @@ public enum CombType {
     COAL("coal", true, Materials.Coal, 100),
     STICKY("stickyresin", true, Materials._NULL, 50),
     OIL("oil", true, Materials._NULL, 100),
+
+    //IC2 Line
+    COOLANT("coolant", true, Materials._NULL, 100),
+    ENERGY("energy", true, Materials._NULL, 80),
+    LAPOTRON("lapotron", true, Materials._NULL, 60),
+
     //Gem Line
     STONE("stone", true, Materials._NULL, 70),
     CERTUS("certus", true, Materials.CertusQuartz, 100),
@@ -41,17 +47,22 @@ public enum CombType {
     PLATINUM("platina", true, Materials.Platinum, 40),
     IRIDIUM("quantaria", true, Materials.Iridium, 20),
 
-
     // Radioactive Line
     URANIUM("urania", true, Materials.Uranium, 50),
     PLUTONIUM("plutonium", true, Materials.Plutonium, 10),
-    NAQUADAH("stargatium", true, Materials.Naquadah, 10),;
+    NAQUADAH("stargatium", true, Materials.Naquadah, 10);
 
     private static int[][] colours = new int[][]{
+            //organic
             {0x906237, 0x58300B},
             {0x525252, 0x666666},
             {0x2E8F5B, 0xDCC289},
             {0x4C4C4C, 0x333333},
+            //ic2
+            {0x144F5A, 0x2494A2},
+            {0xC11F1F, 0xEBB9B9},
+            {0x6478FF, 0x1414FF},
+            //gems
             {0x808080, 0x999999},
             {0x57CFFB, 0xBBEEFF},
             {0x7D0F0F, 0xD11919},

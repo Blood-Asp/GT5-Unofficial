@@ -15,6 +15,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
+import ic2.core.block.comp.Energy;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,6 +30,7 @@ import java.util.Locale;
 //import forestry.plugins.PluginApiculture;
 
 public enum GT_BeeDefinition implements IBeeDefinition {
+    //organic
     CLAY(GT_BranchDefinition.ORGANIC, "Clay", true, 0xC8C8DA, 0x0000FF) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
@@ -178,6 +180,70 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(getSpecies("Agrarian"), getSpecies("Batty"), 10);
         }
     },
+
+    //IC2
+    COOLANT(GT_BranchDefinition.IC2, "Coolant", true, 0x144F5A, 0x2494A2) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 4), 0.30f);
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.COOLANT), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.ARID);
+            beeSpecies.setTemperature(EnumTemperature.COLD);
+            beeSpecies.setHasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.ICY.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("Icy"), getSpecies("Glacial"), 10);
+        }
+    },
+    ENERGY(GT_BranchDefinition.IC2, "Energy", true, 0xC11F1F, 0xEBB9B9) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 12), 0.30f);
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.WARM);
+            beeSpecies.setHasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.DEMONIC.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("Demonic"), getSpecies("Volcanic"), 10);
+        }
+    },
+    LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", true, 0x6478FF, 0x1414FF) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.20f);
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPOTRON), 0.10f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.ICY);
+            beeSpecies.setHasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.ICY.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(LAPIS.species, ENERGY.species, 6);
+        }
+    },
+//gems
     REDSTONE(GT_BranchDefinition.GEM, "Redstone", true, 0x7D0F0F, 0xD11919) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {

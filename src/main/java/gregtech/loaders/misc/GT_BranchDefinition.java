@@ -22,6 +22,15 @@ public enum GT_BranchDefinition {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOW);
         }
     },
+    IC2("Industrialis") {
+        @Override
+        protected void setBranchProperties(IAllele[] alleles) {
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.NOCTURNAL, false);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.WHEAT);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
+        }
+    },
     GEM("Ornamentis") {
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
