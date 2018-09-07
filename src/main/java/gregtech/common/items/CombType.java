@@ -49,7 +49,7 @@ public enum CombType {
 
     private static int[][] colours = new int[][]{
             {0x906237, 0x58300B},
-            {0x666666, 0x525252},
+            {0x525252, 0x666666},
             {0x2E8F5B, 0xDCC289},
             {0x4C4C4C, 0x333333},
             {0x808080, 0x999999},
