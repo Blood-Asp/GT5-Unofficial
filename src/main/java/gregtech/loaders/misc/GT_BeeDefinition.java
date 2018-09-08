@@ -798,9 +798,22 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     }
 
     private static IAlleleBeeSpecies getSpecies(String name) {
-        return (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele((new StringBuilder()).append("forestry.species").append(name).toString());
+        return getSpecies("forestry", name);
     }
 
+    private static IAlleleBeeSpecies getSpecies(String modid, String name) {
+        String s;
+        switch(modid) {
+            case "extrabees": s = new StringBuilder().append("extrabees.species.").append(name).toString();break;
+            case "gendustry": s = new StringBuilder().append("gendustry.bee.").append(name).toString();break;
+            case "magicbees": s = new StringBuilder().append("magicbees.species").append(name).toString();break;
+            case "forestry":
+            default: s = new StringBuilder().append("forestry.species").append(name).toString();break;
+
+        }
+        return (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(s);
+    }
+    
     protected abstract void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies);
 
     protected abstract void setAlleles(IAllele[] template);
