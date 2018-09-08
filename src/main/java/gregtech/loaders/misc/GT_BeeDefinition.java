@@ -177,7 +177,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies("Agrarian"), getSpecies("BATTY"), 10);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("Agrarian"), getSpecies("TCBatty"), 10);
         }
     },
 
