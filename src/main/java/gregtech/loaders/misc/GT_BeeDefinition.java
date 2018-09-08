@@ -156,7 +156,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         	IBeeMutationCustom tMutation = registerMutation(COAL.species, STICKYRESIN.species, 4);
         }
     },
-    SANDWITCH(GT_BranchDefinition.ORGANIC, "Sandwitch", true, 0x32CD32, 0xDAA520) {
+    SANDWICH(GT_BranchDefinition.ORGANIC, "Sandwich", true, 0x32CD32, 0xDAA520) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 9), 0.15f);
