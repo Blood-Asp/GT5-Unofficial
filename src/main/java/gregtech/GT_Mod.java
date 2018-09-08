@@ -57,6 +57,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -111,6 +113,7 @@ public class GT_Mod implements IGT_Mod {
     public static GT_Achievements achievements;
     private final String aTextGeneral = "general";
     private final String aTextIC2 = "ic2_";
+    public static final Logger GT_FML_LOGGER = LogManager.getLogger("GregTech GTNH");
    
     static {
         if ((509 != GregTech_API.VERSION) || (509 != GT_ModHandler.VERSION) || (509 != GT_OreDictUnificator.VERSION) || (509 != GT_Recipe.VERSION) || (509 != GT_Utility.VERSION) || (509 != GT_RecipeRegistrator.VERSION) || (509 != Element.VERSION) || (509 != Materials.VERSION) || (509 != OrePrefixes.VERSION)) {
@@ -150,7 +153,9 @@ public class GT_Mod implements IGT_Mod {
             for (Runnable tRunnable : GregTech_API.sBeforeGTPreload) {
                 tRunnable.run();
             }
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+        } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
+        }
         File tFile = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "GregTech.cfg");
         Configuration tMainConfig = new Configuration(tFile);
         tMainConfig.load();
@@ -241,15 +246,19 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.oreveinMaxPlacementAttempts = tMainConfig.get(aTextGeneral, "oreveinMaxPlacementAttempts_8",8).getInt(8);
         //GT_Values.oreveinMaxSize = tMainConfig.get(aTextGeneral, "oreveinMaxSize_64",64).getInt(64);
         GT_Values.ticksBetweenSounds = tMainConfig.get("machines", "TicksBetweenSounds", 30).getInt(30);
+        GT_Values.cleanroomGlass= (float) tMainConfig.get("machines","ReinforcedGlassPercentageForCleanroom",5D).getDouble(5D);
 
         GregTech_API.TICKS_FOR_LAG_AVERAGING = tMainConfig.get(aTextGeneral, "TicksForLagAveragingWithScanner", 25).getInt(25);
         GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = tMainConfig.get(aTextGeneral, "MillisecondsPassedInGTTileEntityUntilLagWarning", 100).getInt(100);
         if (tMainConfig.get(aTextGeneral, "disable_STDOUT", false).getBoolean(false)) {
+            GT_FML_LOGGER.info("Disableing Console Messages.");
+            GT_FML_LOGGER.exit();
             System.out.close();
-        }
-        if (tMainConfig.get(aTextGeneral, "disable_STDERR", false).getBoolean(false)) {
             System.err.close();
         }
+        /*if (tMainConfig.get(aTextGeneral, "disable_STDERR", false).getBoolean(false)) {
+            System.err.close();
+        }*/
         GregTech_API.sMachineExplosions = tMainConfig.get("machines", "machines_explosion_damage", true).getBoolean(false);
         GregTech_API.sMachineFlammable = tMainConfig.get("machines", "machines_flammable", true).getBoolean(false);
         GregTech_API.sMachineNonWrenchExplosions = tMainConfig.get("machines", "explosions_on_nonwrenching", true).getBoolean(false);
@@ -406,7 +415,7 @@ public class GT_Mod implements IGT_Mod {
         EntityRegistry.registerModEntity(GT_Entity_Arrow.class, "GT_Entity_Arrow", 1, GT_Values.GT, 160, 1, true);
         EntityRegistry.registerModEntity(GT_Entity_Arrow_Potion.class, "GT_Entity_Arrow_Potion", 2, GT_Values.GT, 160, 1, true);
 
-        System.out.println("preReader");
+        GT_FML_LOGGER.info("preReader");
         List<String> oreTags = new ArrayList<String>();
         if(Loader.isModLoaded("MineTweaker3")){
         	File globalDir = new File("scripts");
@@ -441,7 +450,7 @@ public class GT_Mod implements IGT_Mod {
         					  try{
         					  hit = hit.substring(2);
         					  meta = Integer.parseInt(hit);
-        					  }catch(Exception e){System.out.println("parseError: "+hit);}
+        					  }catch(Exception e){GT_FML_LOGGER.info("parseError: "+hit);}
         					  if(meta>0&&meta<32000){
         					  int prefix = meta/1000;
         					  int material = meta % 1000;
@@ -454,7 +463,7 @@ public class GT_Mod implements IGT_Mod {
         					  if(GregTech_API.sGeneratedMaterials[material]!=null){
         						  tag += GregTech_API.sGeneratedMaterials[material].mName;
         						  if(!oreTags.contains(tag)) oreTags.add(tag);
-        					  }else if(material>0){System.out.println("MaterialDisabled: "+material+" "+m.group(1));}
+        					  }else if(material>0){GT_FML_LOGGER.info("MaterialDisabled: "+material+" "+m.group(1));}
         					  }
         				  }
         			  }
@@ -469,10 +478,10 @@ public class GT_Mod implements IGT_Mod {
         	if(StringUtils.startsWithAny(test, preS)){
         	mMTTags.add(test);
         	if(GT_Values.D1)
-        	System.out.println("oretag: "+test);
+        	GT_FML_LOGGER.info("oretag: "+test);
         	}}
         
-        System.out.println("reenableMetaItems");
+        GT_FML_LOGGER.info("reenableMetaItems");
         for(String reEnable : mMTTags){
         OrePrefixes tPrefix = OrePrefixes.getOrePrefix(reEnable);
         if(tPrefix!=null){
@@ -508,8 +517,8 @@ public class GT_Mod implements IGT_Mod {
         	OrePrefixes.ring.mDisabledItems.remove(tName);
         	OrePrefixes.ring.mGeneratedItems.add(tName);
         }
-        }else{System.out.println("noMaterial "+reEnable);}
-        }else{System.out.println("noPrefix "+reEnable);}}
+        }else{GT_FML_LOGGER.info("noMaterial "+reEnable);}
+        }else{GT_FML_LOGGER.info("noPrefix "+reEnable);}}
         
         new GT_Loader_OreProcessing().run();
         new GT_Loader_OreDictionary().run();
@@ -723,9 +732,9 @@ public class GT_Mod implements IGT_Mod {
         Map<IRecipeInput, RecipeOutput> aThermalCentrifugeRecipeList = GT_ModHandler.getThermalCentrifugeRecipeList();
 
         GT_Log.out.println("GT_Mod: Activating OreDictionary Handler, this can take some time, as it scans the whole OreDictionary");
-        FMLLog.info("If your Log stops here, you were too impatient. Wait a bit more next time, before killing Minecraft with the Task Manager.", new Object[0]);
+        GT_FML_LOGGER.info("If your Log stops here, you were too impatient. Wait a bit more next time, before killing Minecraft with the Task Manager.", new Object[0]);
         gregtechproxy.activateOreDictHandler();
-        FMLLog.info("Congratulations, you have been waiting long enough. Have a Cake.", new Object[0]);
+        GT_FML_LOGGER.info("Congratulations, you have been waiting long enough. Have a Cake.", new Object[0]);
         GT_Log.out.println("GT_Mod: List of Lists of Tool Recipes: "+GT_ModHandler.sSingleNonBlockDamagableRecipeList_list.toString());
         GT_Log.out.println("GT_Mod: Vanilla Recipe List -> Outputs null or stackSize <=0: " + GT_ModHandler.sVanillaRecipeList_warntOutput.toString());
         GT_Log.out.println("GT_Mod: Single Non Block Damagable Recipe List -> Outputs null or stackSize <=0: " + GT_ModHandler.sSingleNonBlockDamagableRecipeList_warntOutput.toString());
@@ -1131,21 +1140,21 @@ public class GT_Mod implements IGT_Mod {
         }
         for (ItemStack tOutput : tStacks) {
             if (gregtechproxy.mRegisteredOres.contains(tOutput)) {
-                FMLLog.severe("GT-ERR-01: @ " + tOutput.getUnlocalizedName() + "   " + tOutput.getDisplayName(), new Object[0]);
-                FMLLog.severe("A Recipe used an OreDict Item as Output directly, without copying it before!!! This is a typical CallByReference/CallByValue Error", new Object[0]);
-                FMLLog.severe("Said Item will be renamed to make the invalid Recipe visible, so that you can report it properly.", new Object[0]);
-                FMLLog.severe("Please check all Recipes outputting this Item, and report the Recipes to their Owner.", new Object[0]);
-                FMLLog.severe("The Owner of the ==>RECIPE<==, NOT the Owner of the Item, which has been mentioned above!!!", new Object[0]);
-                FMLLog.severe("And ONLY Recipes which are ==>OUTPUTTING<== the Item, sorry but I don't want failed Bug Reports.", new Object[0]);
-                FMLLog.severe("GregTech just reports this Error to you, so you can report it to the Mod causing the Problem.", new Object[0]);
-                FMLLog.severe("Even though I make that Bug visible, I can not and will not fix that for you, that's for the causing Mod to fix.", new Object[0]);
-                FMLLog.severe("And speaking of failed Reports:", new Object[0]);
-                FMLLog.severe("Both IC2 and GregTech CANNOT be the CAUSE of this Problem, so don't report it to either of them.", new Object[0]);
-                FMLLog.severe("I REPEAT, BOTH, IC2 and GregTech CANNOT be the source of THIS BUG. NO MATTER WHAT.", new Object[0]);
-                FMLLog.severe("Asking in the IC2 Forums, which Mod is causing that, won't help anyone, since it is not possible to determine, which Mod it is.", new Object[0]);
-                FMLLog.severe("If it would be possible, then I would have had added the Mod which is causing it to the Message already. But it is not possible.", new Object[0]);
-                FMLLog.severe("Sorry, but this Error is serious enough to justify this Wall-O-Text and the partially allcapsed Language.", new Object[0]);
-                FMLLog.severe("Also it is a Ban Reason on the IC2-Forums to post this seriously.", new Object[0]);
+                GT_FML_LOGGER.error("GT-ERR-01: @ " + tOutput.getUnlocalizedName() + "   " + tOutput.getDisplayName(), new Object[0]);
+                GT_FML_LOGGER.error("A Recipe used an OreDict Item as Output directly, without copying it before!!! This is a typical CallByReference/CallByValue Error", new Object[0]);
+                GT_FML_LOGGER.error("Said Item will be renamed to make the invalid Recipe visible, so that you can report it properly.", new Object[0]);
+                GT_FML_LOGGER.error("Please check all Recipes outputting this Item, and report the Recipes to their Owner.", new Object[0]);
+                GT_FML_LOGGER.error("The Owner of the ==>RECIPE<==, NOT the Owner of the Item, which has been mentioned above!!!", new Object[0]);
+                GT_FML_LOGGER.error("And ONLY Recipes which are ==>OUTPUTTING<== the Item, sorry but I don't want failed Bug Reports.", new Object[0]);
+                GT_FML_LOGGER.error("GregTech just reports this Error to you, so you can report it to the Mod causing the Problem.", new Object[0]);
+                GT_FML_LOGGER.error("Even though I make that Bug visible, I can not and will not fix that for you, that's for the causing Mod to fix.", new Object[0]);
+                GT_FML_LOGGER.error("And speaking of failed Reports:", new Object[0]);
+                GT_FML_LOGGER.error("Both IC2 and GregTech CANNOT be the CAUSE of this Problem, so don't report it to either of them.", new Object[0]);
+                GT_FML_LOGGER.error("I REPEAT, BOTH, IC2 and GregTech CANNOT be the source of THIS BUG. NO MATTER WHAT.", new Object[0]);
+                GT_FML_LOGGER.error("Asking in the IC2 Forums, which Mod is causing that, won't help anyone, since it is not possible to determine, which Mod it is.", new Object[0]);
+                GT_FML_LOGGER.error("If it would be possible, then I would have had added the Mod which is causing it to the Message already. But it is not possible.", new Object[0]);
+                GT_FML_LOGGER.error("Sorry, but this Error is serious enough to justify this Wall-O-Text and the partially allcapsed Language.", new Object[0]);
+                GT_FML_LOGGER.error("Also it is a Ban Reason on the IC2-Forums to post this seriously.", new Object[0]);
                 tOutput.setStackDisplayName("ERROR! PLEASE CHECK YOUR LOG FOR 'GT-ERR-01'!");
             } else {
                 GT_OreDictUnificator.setStack(tOutput);

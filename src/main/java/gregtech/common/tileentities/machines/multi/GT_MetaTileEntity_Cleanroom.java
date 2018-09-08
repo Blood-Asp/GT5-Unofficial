@@ -1,6 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import static gregtech.api.enums.GT_Values.debugCleanroom;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
-    private int mHeatingCapacity = 0;
 
     public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -31,7 +31,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 
 	@Override
 	public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-		return new GT_MetaTileEntity_Cleanroom(this.mName);
+		return new GT_MetaTileEntity_Cleanroom(mName);
 	}
 
 	@Override
@@ -45,6 +45,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 				"1x LV or 1x MV Energy Hatch, 1x Maintainance Hatch",
 				"Up to 10 Machine Hull Item & Energy transfer through walls",
 				"Remaining Blocks: Plascrete, 20 min",
+				GT_Values.cleanroomGlass+"% of the Plascrete can be Reinforced Glass (min 20 Plascrete still apply)",
 				"Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency",
 				"An energy hatch accepts up to 2A, so you can use 2A LV or 1A MV",
 				"2 LV batteries + 1 LV generator or 1 MV generator",
@@ -53,9 +54,9 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 
 	@Override
 	public boolean checkRecipe(ItemStack aStack) {
-		this.mEfficiencyIncrease = 100;
-		this.mMaxProgresstime = 100;
-		this.mEUt = -4;
+		mEfficiencyIncrease = 100;
+		mMaxProgresstime = 100;
+		mEUt = -4;
 		return true;
 	}
 
@@ -67,8 +68,9 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		int mDoorCount = 0;
 		int mHullCount = 0;
 		int mPlascreteCount = 0;
+		int mGlassCount = 0;
 		boolean doorState = false;
-		mUpdate = 100;
+		this.mUpdate = 100;
 		
 		if (debugCleanroom) {
 			GT_Log.out.println(
@@ -138,9 +140,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 							}
 						} else if (tBlock == GregTech_API.sBlockReinforced && tMeta == 2) {
 							mPlascreteCount++;
+						} else if (tBlock != null && tBlock.getUnlocalizedName().equals("blockAlloyGlass")){
+							++mGlassCount;
 						} else {
 							IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
-							if ((!addMaintenanceToMachineList(tTileEntity, 82)) && (!addEnergyInputToMachineList(tTileEntity, 82))) {
+							if ((!this.addMaintenanceToMachineList(tTileEntity, 82)) && (!this.addEnergyInputToMachineList(tTileEntity, 82))) {
 								if (tBlock instanceof ic2.core.block.BlockIC2Door) {
 									if ((tMeta & 8) == 0) {
 										doorState = (Math.abs(dX) > Math.abs(dZ) == ((tMeta & 1) != 0)) != ((tMeta & 4) != 0);
@@ -181,7 +185,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 				}
 			}
 		}
-		if (mMaintenanceHatches.size() != 1 || mEnergyHatches.size() != 1 || mDoorCount != 2 || mHullCount > 10) {
+		if (this.mMaintenanceHatches.size() != 1 || this.mEnergyHatches.size() != 1 || mDoorCount != 2 || mHullCount > 10) {
 			return false;
 		}
 		for (int dX = -x + 1; dX <= x - 1; dX++) {
@@ -204,14 +208,16 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		}
 
         if (doorState) {
-            mEfficiency = Math.max(0, mEfficiency - 200);
+			this.mEfficiency = Math.max(0, this.mEfficiency - 200);
         }
         for(byte i = 0 ; i<6 ; i++){
-        	byte t = (byte) Math.max(1, (byte)(15/(10000f / mEfficiency)));
+        	byte t = (byte) Math.max(1, (byte)(15/(10000f / this.mEfficiency)));
         aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
         }
-        
-        return mPlascreteCount>=20;
+
+        float ratio = (((float)mPlascreteCount)/100f)* GT_Values.cleanroomGlass;
+
+        return mPlascreteCount>=20 && mGlassCount < (int) Math.floor(ratio);
     }
     
     @Override
@@ -230,7 +236,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 
 	@Override
 	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "MultiblockDisplay.png");
+		return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, this.getLocalName(), "MultiblockDisplay.png");
 	}
 
 	@Override

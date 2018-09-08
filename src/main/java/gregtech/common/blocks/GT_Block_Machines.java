@@ -41,6 +41,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_Block_Machines
@@ -267,14 +268,14 @@ public class GT_Block_Machines
                 e.printStackTrace(GT_Log.err);
             }
             GT_Log.out.println("GT_Mod: Starting Block Icon Load Phase");
-            System.out.println("GT_Mod: Starting Block Icon Load Phase");
+            GT_FML_LOGGER.info("GT_Mod: Starting Block Icon Load Phase");
             try {
                 for (Runnable tRunnable : GregTech_API.sGTBlockIconload) {
                     tRunnable.run();
                 }
             } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
             GT_Log.out.println("GT_Mod: Finished Block Icon Load Phase");
-            System.out.println("GT_Mod: Finished Block Icon Load Phase");
+            GT_FML_LOGGER.info("GT_Mod: Finished Block Icon Load Phase");
         }
     }
 

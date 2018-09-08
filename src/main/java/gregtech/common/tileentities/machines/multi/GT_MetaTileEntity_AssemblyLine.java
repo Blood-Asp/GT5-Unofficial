@@ -22,6 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import static gregtech.GT_Mod.GT_FML_LOGGER;
+
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -77,22 +79,26 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-        if(GT_Values.D1)System.out.println("Start ALine recipe check");
+        if(GT_Values.D1)
+            GT_FML_LOGGER.info("Start ALine recipe check");
         ArrayList<ItemStack> tDataStickList = getDataItems(2);
         if (tDataStickList.size() == 0) return false;
-        if(GT_Values.D1)System.out.println("Stick accepted, " + tDataStickList.size() + " Data Sticks found");
+            if(GT_Values.D1)
+                GT_FML_LOGGER.info("Stick accepted, " + tDataStickList.size() + " Data Sticks found");
 
         ItemStack tStack[] = new ItemStack[15];
         FluidStack[] tFluids = new FluidStack[4];
         boolean findRecipe = false;
         nextDS:for (ItemStack tDataStick : tDataStickList){
             NBTTagCompound tTag = tDataStick.getTagCompound();
-            if (tTag == null) continue;
+            if (tTag == null)
+                continue;
             for (int i = 0; i < 15; i++) {
     			int count = tTag.getInteger("a"+i);
-                if (!tTag.hasKey("" + i) && count <= 0) continue;
+                if (!tTag.hasKey("" + i) && count <= 0)
+                    continue;
                 if (mInputBusses.get(i) == null) {
-                	continue nextDS;
+                    continue nextDS;
                 }
                 
                 ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
@@ -101,7 +107,8 @@ public class GT_MetaTileEntity_AssemblyLine
             		for (int j = 0; j < count; j++) {
             			tStack[i] = GT_Utility.loadItem(tTag, "a" + i + ":" + j);
             			if (tStack[i] == null) continue;
-            			if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
+            			    if(GT_Values.D1)
+            			        GT_FML_LOGGER.info("Item "+i+" : "+tStack[i].getUnlocalizedName());
             			if (GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) && tStack[i].stackSize <= stackInSlot.stackSize) {
             				flag = false;
             				break;
@@ -114,66 +121,79 @@ public class GT_MetaTileEntity_AssemblyLine
             			flag = false;
             			continue;
             		}
-            		if(GT_Values.D1)System.out.println("Item "+i+" : "+tStack[i].getUnlocalizedName());
+            		if(GT_Values.D1)
+            		    GT_FML_LOGGER.info("Item "+i+" : "+tStack[i].getUnlocalizedName());
         			if (GT_Utility.areStacksEqual(tStack[i], stackInSlot, true) && tStack[i].stackSize <= stackInSlot.stackSize) {
         				flag = false;
         			}
             	}
-                if(GT_Values.D1) System.out.println(i + (flag ? " not accepted" : " accepted"));
-                if (flag) continue nextDS;
+                if(GT_Values.D1)
+                    GT_FML_LOGGER.info(i + (flag ? " not accepted" : " accepted"));
+                if (flag)
+                    continue nextDS;
             }
 
-            if(GT_Values.D1)System.out.println("All Items done, start fluid check");
+            if(GT_Values.D1)GT_FML_LOGGER.info("All Items done, start fluid check");
             for (int i = 0; i < 4; i++) {
                 if (!tTag.hasKey("f" + i)) continue;
                 tFluids[i] = GT_Utility.loadFluid(tTag, "f" + i);
                 if (tFluids[i] == null) continue;
-                if(GT_Values.D1)System.out.println("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
+                    if(GT_Values.D1)
+                        GT_FML_LOGGER.info("Fluid "+i+" "+tFluids[i].getUnlocalizedName());
                 if (mInputHatches.get(i) == null) {
                     continue nextDS;
                 }
                 FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
                 if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
-                    if(GT_Values.D1)System.out.println(i+" not accepted");
+                    if(GT_Values.D1)
+                        GT_FML_LOGGER.info(i+" not accepted");
                     continue nextDS;
                 }
-                if(GT_Values.D1)System.out.println(i+" accepted");
+                if(GT_Values.D1)
+                    GT_FML_LOGGER.info(i+" accepted");
             }
 
-            if(GT_Values.D1)System.out.println("Input accepted, check other values");
-            if (!tTag.hasKey("output")) continue;
+            if(GT_Values.D1)
+                GT_FML_LOGGER.info("Input accepted, check other values");
+            if (!tTag.hasKey("output"))
+                continue;
             mOutputItems = new ItemStack[]{GT_Utility.loadItem(tTag, "output")};
             if (mOutputItems[0] == null || !GT_Utility.isStackValid(mOutputItems[0]))
                 continue;
 
-            if (!tTag.hasKey("time")) continue;
+            if (!tTag.hasKey("time"))
+                continue;
             mMaxProgresstime = tTag.getInteger("time");
-            if (mMaxProgresstime <= 0) continue;
+            if (mMaxProgresstime <= 0)
+                continue;
 
-            if (!tTag.hasKey("eu")) continue;
+            if (!tTag.hasKey("eu"))
+                continue;
             mEUt = tTag.getInteger("eu");
 
-            if(GT_Values.D1)System.out.println("Find avaiable recipe");
-            findRecipe = true;
+            if(GT_Values.D1)GT_FML_LOGGER.info("Find avaiable recipe");
+                findRecipe = true;
             break;
         }
         if (!findRecipe) return false;
 
-        if(GT_Values.D1)System.out.println("All checked start consuming inputs");
+        if(GT_Values.D1)GT_FML_LOGGER.info("All checked start consuming inputs");
         for (int i = 0; i < 15; i++) {
-            if (tStack[i] == null) continue;
+            if (tStack[i] == null)
+                continue;
             ItemStack stackInSlot = mInputBusses.get(i).getBaseMetaTileEntity().getStackInSlot(0);
             stackInSlot.stackSize -= tStack[i].stackSize;
         }
 
         for (int i = 0; i < 4; i++) {
-            if (tFluids[i] == null) continue;
+            if (tFluids[i] == null)
+                continue;
             mInputHatches.get(i).mFluid.amount -= tFluids[i].amount;
             if (mInputHatches.get(i).mFluid.amount <= 0) {
                 mInputHatches.get(i).mFluid = null;
             }
         }
-        if(GT_Values.D1)System.out.println("Check overclock");
+        if(GT_Values.D1)GT_FML_LOGGER.info("Check overclock");
 
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(getMaxInputVoltage()));
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
@@ -192,7 +212,8 @@ public class GT_MetaTileEntity_AssemblyLine
         }
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
         updateSlots();
-        if(GT_Values.D1)System.out.println("Recipe sucessfull");
+        if(GT_Values.D1)
+            GT_FML_LOGGER.info("Recipe sucessfull");
         return true;
     }
 
