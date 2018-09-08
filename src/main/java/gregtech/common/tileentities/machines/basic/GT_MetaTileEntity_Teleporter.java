@@ -309,7 +309,7 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
                     for (Object tObject : entities_in_box) {
                         if (((tObject instanceof Entity)) && (!((Entity) tObject).isDead)) {
                             Entity tEntity = (Entity) tObject;
-//                	System.out.println("teleport"+(Math.pow(tDistance, 1.5)));
+//                	GT_FML_LOGGER.info("teleport"+(Math.pow(tDistance, 1.5)));
                             if (getBaseMetaTileEntity().decreaseStoredEnergyUnits((long) (Math.pow(tDistance, 1.5) * weightCalculation(tEntity) * sFPowerMultiplyer), false)) {
                                 //if (hasDimensionalTeleportCapability() && this.mTargetD != getBaseMetaTileEntity().getWorld().provider.dimensionId && (hasEgg || mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)))) {
                                 //    mFluid.amount = mFluid.amount - ((int) Math.min(10, (Math.pow(tDistance, 1.5) * weightCalculation(tEntity) / 8192)));

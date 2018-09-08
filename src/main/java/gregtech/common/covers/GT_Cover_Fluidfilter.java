@@ -47,7 +47,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
     }
 
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        //System.out.println("rightclick");
+        //GT_FML_LOGGER.info("rightclick");
         if (
                 ((aX > 0.375D) && (aX < 0.625D)) ||
                 ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D))) ||

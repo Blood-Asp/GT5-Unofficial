@@ -17,17 +17,15 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
 
     public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
+        if (aTier > 8 || aTier < 4) {
+            new Exception("Tier without Recipe Map!");
+        }
         onConfigLoad();
     }
 
     public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, GT_Recipe.GT_Recipe_Map mRecipeMap, int aTier) {
         super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
         this.mRecipeMap=mRecipeMap;
-        onConfigLoad();
-    }
-
-    public GT_MetaTileEntity_NaquadahReactor(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
 

@@ -175,4 +175,9 @@ public class GT_Values {
      * This will prevent NEI from crashing but spams the Log.
      */
     public static boolean allow_broken_recipemap = false;
+
+    /**
+     * This will set the percentage how much ReinforcedGlass is Allowed in Cleanroom Walls.
+     */
+    public static float cleanroomGlass = 5.0f;
 }

@@ -566,7 +566,7 @@ public class GT_Achievements {
 //                issueAchievement(player, "stepforward");
             }
         }
-//        System.out.println(stack.getUnlocalizedName());
+//        GT_FML_LOGGER.info(stack.getUnlocalizedName());
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
             if (stack.getUnlocalizedName().equals("gt.metaitem.02.32500")) {
                 issueAchievement(player, "havestlead");

@@ -77,6 +77,7 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.*;
 import static gregtech.common.GT_Proxy.GTPOLLUTION;
 import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
@@ -888,7 +889,7 @@ public class GT_Utility {
         ItemData tOreName = GT_OreDictUnificator.getAssociation(aInput);
         for (int i = 0; i < aOutput.length; i++) {
             if (aOutput[i] == null) {
-                System.out.println("EmptyIC2Output!" + aInput.getUnlocalizedName());
+                GT_FML_LOGGER.info("EmptyIC2Output!" + aInput.getUnlocalizedName());
                 return false;
             }
         }
