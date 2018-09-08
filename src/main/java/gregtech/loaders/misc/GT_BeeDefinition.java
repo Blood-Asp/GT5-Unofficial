@@ -48,7 +48,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies("Industrious"), getSpecies("Diligent"), 20);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry", "Industrious"), getSpecies("forestry", "Diligent"), 20);
         }
     },
     SLIMEBALL(GT_BranchDefinition.ORGANIC, "SlimeBall", true, 0x4E9E55, 0x00FF15) {
@@ -70,7 +70,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Marshy"), CLAY.species, 15);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Marshy"), CLAY.species, 15);
         }
     },
     PEAT(GT_BranchDefinition.ORGANIC, "Peat", true, 0x906237, 0x58300B) {
@@ -91,7 +91,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Rural"), CLAY.species, 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Rural"), CLAY.species, 20);
         }
     },
     STICKYRESIN(GT_BranchDefinition.ORGANIC, "StickyResin", true, 0x2E8F5B, 0xDCC289) {
@@ -130,7 +130,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Industrious"), PEAT.species, 9);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Industrious"), PEAT.species, 9);
             //tMutation.requireResource(Blocks.coal_block, 0);
             tMutation.requireResource("blockCoal");
         }
@@ -177,7 +177,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies("Agrarian"), getSpecies("TCBatty"), 10);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Agrarian"), getSpecies("magicbees","TCBatty"), 10);
         }
     },
 
@@ -186,7 +186,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 4), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.COOLANT), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.COOLANT), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.COLD);
             beeSpecies.setHasEffect();
@@ -199,14 +199,14 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies("Icy"), getSpecies("Glacial"), 10);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Icy"), getSpecies("forestry","Glacial"), 10);
         }
     },
     ENERGY(GT_BranchDefinition.IC2, "Energy", true, 0xC11F1F, 0xEBB9B9) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 12), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.WARM);
             beeSpecies.setHasEffect();
@@ -219,15 +219,15 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies("Demonic"), getSpecies("Volcanic"), 10);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Demonic"), getSpecies("extrabees","volcanic"), 10);
         }
     },
     LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", true, 0x6478FF, 0x1414FF) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.20f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPOTRON), 0.10f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LAPOTRON), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
             beeSpecies.setTemperature(EnumTemperature.ICY);
             beeSpecies.setHasEffect();
@@ -260,7 +260,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Industrious"), getSpecies("Demonic"), 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Industrious"), getSpecies("forestry","Demonic"), 20);
         }
     },
     LAPIS(GT_BranchDefinition.GEM, "Lapis", true, 0x1947D1, 0x476CDA) {
@@ -279,7 +279,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Demonic"), getSpecies("Imperial"), 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Demonic"), getSpecies("forestry","Imperial"), 20);
         }
     },
     CERTUS(GT_BranchDefinition.GEM, "CertusQuartz", true, 0x57CFFB, 0xBBEEFF) {
@@ -298,7 +298,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Hermitic"), LAPIS.species, 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Hermitic"), LAPIS.species, 20);
         }
     },
     RUBY(GT_BranchDefinition.GEM, "Ruby", true, 0xE6005C, 0xCC0052) {
@@ -374,7 +374,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, getSpecies("Ended"), 10);
+        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, getSpecies("forestry","Ended"), 10);
         }
     },
     EMERALD(GT_BranchDefinition.GEM, "Emerald", true, 0x248F24, 0x2EB82E) {
@@ -412,7 +412,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Majestic"), CLAY.species, 25);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Majestic"), CLAY.species, 25);
         }
     },
     TIN(GT_BranchDefinition.METAL, "Tin", true, 0xD4D4D4, 0xDDDDDD) {
@@ -431,7 +431,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(CLAY.species, getSpecies("Diligent"), 25);
+        	IBeeMutationCustom tMutation = registerMutation(CLAY.species, getSpecies("forestry","Diligent"), 25);
         }
     },
     LEAD(GT_BranchDefinition.METAL, "Lead", true, 0x666699, 0xA3A3CC) {
@@ -661,7 +661,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Heroic"), MANGANESE.species, 5);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Heroic"), MANGANESE.species, 5);
         	tMutation.requireResource(GregTech_API.sBlockMetal7, 11);
         }
     },
@@ -722,7 +722,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies("Avenging"), PLATINUM.species, 5);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies("forestry","Avenging"), PLATINUM.species, 5);
         	tMutation.requireResource(GregTech_API.sBlockMetal7, 14);
         }
     },
@@ -795,10 +795,6 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         for (GT_BeeDefinition bee : values()) {
             bee.registerMutations();
         }
-    }
-
-    private static IAlleleBeeSpecies getSpecies(String name) {
-        return getSpecies("forestry", name);
     }
 
     private static IAlleleBeeSpecies getSpecies(String modid, String name) {
