@@ -382,7 +382,10 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         if (tTileEntity == null) return false;
 
         final byte tSide = (byte)ForgeDirection.getOrientation(aSide).getOpposite().ordinal();
-        final GT_CoverBehavior coverBehavior = getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide);
+        final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+        if (baseMetaTile == null) return false;
+
+        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
         final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
 
         if (coverBehavior instanceof GT_Cover_Drain) return true;
@@ -393,9 +396,9 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         final IFluidHandler fTileEntity = (tTileEntity instanceof IFluidHandler) ? (IFluidHandler) tTileEntity : null;
 
         if (fTileEntity != null) {
-        FluidTankInfo[] tInfo = fTileEntity.getTankInfo(ForgeDirection.getOrientation(tSide));
+            FluidTankInfo[] tInfo = fTileEntity.getTankInfo(ForgeDirection.getOrientation(tSide));
             if (tInfo != null) {
-                if (tInfo.length > 0) return true;  // Already checked letsFluidIn/Out in connect()
+                if (tInfo.length > 0) return true;
 
                 // Translocators return a TankInfo, but it's of 0 length - so check the class if we see this pattern
                 if (GregTech_API.mTranslocator  && tTileEntity instanceof codechicken.translocator.TileLiquidTranslocator) return true;

@@ -1,7 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
-import static gregtech.api.enums.GT_Values.D1;
 import cofh.api.energy.IEnergyReceiver;
+import com.google.common.collect.Sets;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
@@ -11,7 +11,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntityCable;
-import gregtech.api.interfaces.tileentity.IColoredTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -19,15 +18,23 @@ import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_CoverBehavior;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
 import gregtech.common.covers.GT_Cover_SolarPanel;
 import gregtech.loaders.postload.PartP2PGTPower;
+import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
+import ic2.api.energy.tile.IEnergyTile;
+import ic2.api.reactor.IReactorChamber;
+import micdoodle8.mods.galacticraft.api.power.EnergySource;
+import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceAdjacent;
+import micdoodle8.mods.galacticraft.api.power.IEnergyHandlerGC;
+import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
+import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
+import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +47,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import appeng.api.parts.IPartHost;
@@ -152,64 +159,74 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         return (int) mAmperage * 64;
     }
 
+    private void pullFromIc2EnergySources(IGregTechTileEntity aBaseMetaTileEntity) {
+        if(!GT_Mod.gregtechproxy.ic2EnergySourceCompat) return;
+
+        for( byte aSide = 0 ; aSide < 6 ; aSide++) if(isConnectedAtSide(aSide)) {
+            final TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(aSide);
+            final TileEntity tEmitter;
+            if (tTileEntity instanceof IReactorChamber)
+                tEmitter = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
+            else tEmitter = (tTileEntity == null || tTileEntity instanceof IEnergyTile || EnergyNet.instance == null) ? tTileEntity :
+                EnergyNet.instance.getTileEntity(tTileEntity.getWorldObj(), tTileEntity.xCoord, tTileEntity.yCoord, tTileEntity.zCoord);
+
+            if (tEmitter instanceof IEnergySource) {
+                final GT_CoverBehavior coverBehavior = aBaseMetaTileEntity.getCoverBehaviorAtSide(aSide);
+                final int coverId = aBaseMetaTileEntity.getCoverIDAtSide(aSide),
+                    coverData = aBaseMetaTileEntity.getCoverDataAtSide(aSide);
+                final ForgeDirection tDirection = ForgeDirection.getOrientation(GT_Utility.getOppositeSide(aSide));
+
+                if (((IEnergySource) tEmitter).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, tDirection) &&
+                    coverBehavior.letsEnergyIn(aSide, coverId, coverData, aBaseMetaTileEntity)) {
+                    final long tEU = (long) ((IEnergySource) tEmitter).getOfferedEnergy();
+
+                    if (transferElectricity(aSide, tEU, 1, Sets.newHashSet((TileEntity) aBaseMetaTileEntity)) > 0)
+                        ((IEnergySource) tEmitter).drawEnergy(tEU);
+                }
+            }
+        }
+    }
+
     @Override
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
     	if (!isConnectedAtSide(aSide) && aSide != 6)
     		return 0;
         if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).letsEnergyIn(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
             return 0;
-        return transferElectricity(aSide, aVoltage, aAmperage, new ArrayList<TileEntity>(Arrays.asList((TileEntity) getBaseMetaTileEntity())));
+        return transferElectricity(aSide, aVoltage, aAmperage, Sets.newHashSet((TileEntity) getBaseMetaTileEntity()));
     }
 
     @Override
+    @Deprecated
     public long transferElectricity(byte aSide, long aVoltage, long aAmperage, ArrayList<TileEntity> aAlreadyPassedTileEntityList) {
-        if (!isConnectedAtSide(aSide) && aSide != 6)
-            return 0;
+        return transferElectricity(aSide, aVoltage, aAmperage, new HashSet<>(aAlreadyPassedTileEntityList));
+    }
+
+    @Override
+    public long transferElectricity(byte aSide, long aVoltage, long aAmperage, HashSet<TileEntity> aAlreadyPassedSet) {
+        if (!isConnectedAtSide(aSide) && aSide != 6) return 0;
+
         long rUsedAmperes = 0;
+        final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+
         aVoltage -= mCableLossPerMeter;
         if (aVoltage > 0) for (byte i = 0; i < 6 && aAmperage > rUsedAmperes; i++)
-            if (i != aSide && isConnectedAtSide(i) && getBaseMetaTileEntity().getCoverBehaviorAtSide(i).letsEnergyOut(i, getBaseMetaTileEntity().getCoverIDAtSide(i), getBaseMetaTileEntity().getCoverDataAtSide(i), getBaseMetaTileEntity())) {
-                TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(i);
-                if (!aAlreadyPassedTileEntityList.contains(tTileEntity)) {
-                    aAlreadyPassedTileEntityList.add(tTileEntity);
-                    if (tTileEntity instanceof IEnergyConnected) {
-                        if (getBaseMetaTileEntity().getColorization() >= 0) {
-                            byte tColor = ((IEnergyConnected) tTileEntity).getColorization();
-                            if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) continue;
+            if (i != aSide && isConnectedAtSide(i) && baseMetaTile.getCoverBehaviorAtSide(i).letsEnergyOut(i, baseMetaTile.getCoverIDAtSide(i), baseMetaTile.getCoverDataAtSide(i), baseMetaTile)) {
+                final TileEntity tTileEntity = baseMetaTile.getTileEntityAtSide(i);
+
+                if (aAlreadyPassedSet.add(tTileEntity)) {
+                    final byte tSide = GT_Utility.getOppositeSide(i);
+                    final IGregTechTileEntity tBaseMetaTile = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity) : null;
+                    final IMetaTileEntity tMeta = tBaseMetaTile != null ? tBaseMetaTile.getMetaTileEntity() : null;
+
+                    if (tMeta instanceof IMetaTileEntityCable) {
+                        if (tBaseMetaTile.getCoverBehaviorAtSide(tSide).letsEnergyIn(tSide, tBaseMetaTile.getCoverIDAtSide(tSide), tBaseMetaTile.getCoverDataAtSide(tSide), tBaseMetaTile) && ((IGregTechTileEntity) tTileEntity).getTimer() > 50) {
+                            rUsedAmperes += ((IMetaTileEntityCable) ((IGregTechTileEntity) tTileEntity).getMetaTileEntity()).transferElectricity(tSide, aVoltage, aAmperage - rUsedAmperes, aAlreadyPassedSet);
                         }
-                        if (tTileEntity instanceof IGregTechTileEntity && ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof IMetaTileEntityCable && ((IGregTechTileEntity) tTileEntity).getCoverBehaviorAtSide(GT_Utility.getOppositeSide(i)).letsEnergyIn(GT_Utility.getOppositeSide(i), ((IGregTechTileEntity) tTileEntity).getCoverIDAtSide(GT_Utility.getOppositeSide(i)), ((IGregTechTileEntity) tTileEntity).getCoverDataAtSide(GT_Utility.getOppositeSide(i)), ((IGregTechTileEntity) tTileEntity))) {
-                            if (((IGregTechTileEntity) tTileEntity).getTimer() > 50)
-                                rUsedAmperes += ((IMetaTileEntityCable) ((IGregTechTileEntity) tTileEntity).getMetaTileEntity()).transferElectricity(GT_Utility.getOppositeSide(i), aVoltage, aAmperage - rUsedAmperes, aAlreadyPassedTileEntityList);
-                        } else {
-                            rUsedAmperes += ((IEnergyConnected) tTileEntity).injectEnergyUnits(GT_Utility.getOppositeSide(i), aVoltage, aAmperage - rUsedAmperes);
-                        }
-                    } else if (tTileEntity instanceof IEnergySink) {
-                        ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        if (((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) getBaseMetaTileEntity(), tDirection)) {
-                            if (((IEnergySink) tTileEntity).getDemandedEnergy() > 0 && ((IEnergySink) tTileEntity).injectEnergy(tDirection, aVoltage, aVoltage) < aVoltage)
-                                rUsedAmperes++;
-                        }
-                    } else if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
-                        ForgeDirection tDirection = ForgeDirection.getOrientation(i).getOpposite();
-                        long rfOUT = aVoltage * GregTech_API.mEUtoRF / 100;
-                        int rfOut = rfOUT > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) rfOUT;
-                        if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
-                            ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, false);
-                            rUsedAmperes++;
-                        } else if (((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, rfOut, true) > 0) {
-                            if (mRestRF == 0) {
-                                int RFtrans = ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, (int) rfOut, false);
-                                rUsedAmperes++;
-                                mRestRF = rfOut - RFtrans;
-                            } else {
-                                int RFtrans = ((IEnergyReceiver) tTileEntity).receiveEnergy(tDirection, (int) mRestRF, false);
-                                mRestRF = mRestRF - RFtrans;
-                            }
-                        }
-                        if (GregTech_API.mRFExplosions && ((IEnergyReceiver) tTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600) {
-                            if (rfOut > 32 * GregTech_API.mEUtoRF / 100) this.doExplosion(rfOut);
-                        }
+                    } else {
+                        rUsedAmperes += insertEnergyInto(tTileEntity, tSide, aVoltage, aAmperage - rUsedAmperes);
                     }
+
                 }
             }
         mTransferredVoltage = Math.max(mTransferredVoltage, aVoltage);
@@ -220,9 +237,97 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             mOverheat += Math.max(100, 100 * GT_Utility.getTier(aVoltage) - GT_Utility.getTier(mVoltage));
         }
         if (mTransferredAmperage > mAmperage) return aAmperage;
+
+        // Always return amount of used amperes, used on overheat
         return rUsedAmperes;
-        //Always return amount of used amperes, used all on overheat
     }
+
+    private long insertEnergyInto(TileEntity tTileEntity, byte tSide, long aVoltage, long aAmperage) {
+        if (aAmperage == 0) return 0;
+
+        final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+        final ForgeDirection tDirection = ForgeDirection.getOrientation(tSide);
+
+        if (tTileEntity instanceof IEnergyConnected) {
+            return ((IEnergyConnected) tTileEntity).injectEnergyUnits(tSide, aVoltage, aAmperage);
+        }
+
+        // AE2 Compat
+        if (GT_Mod.gregtechproxy.mAE2Integration && tTileEntity instanceof appeng.tile.powersink.IC2) {
+            if (((appeng.tile.powersink.IC2) tTileEntity).acceptsEnergyFrom((TileEntity) baseMetaTile, tDirection)) {
+                long rUsedAmperes = 0;
+                while (aAmperage > rUsedAmperes && ((appeng.tile.powersink.IC2)tTileEntity).getDemandedEnergy() > 0 && ((appeng.tile.powersink.IC2)tTileEntity).injectEnergy(tDirection, aVoltage, aVoltage) <= aVoltage)
+                    rUsedAmperes++;
+
+                return rUsedAmperes;
+            }
+            return 0;
+        }
+
+        // GC Compat
+        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC) {
+            if (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDirection, NetworkType.POWER)) {
+                EnergySource eSource = new EnergySourceAdjacent(tDirection);
+
+                float tSizeToReceive = aVoltage * EnergyConfigHandler.IC2_RATIO, tStored = ((IEnergyHandlerGC)tTileEntity).getEnergyStoredGC(eSource);
+                if (tSizeToReceive >= tStored || tSizeToReceive <= ((IEnergyHandlerGC)tTileEntity).getMaxEnergyStoredGC(eSource) - tStored) {
+                    float tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
+                    if (tReceived > 0) {
+                        tSizeToReceive -= tReceived;
+                        while (tSizeToReceive > 0) {
+                            tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
+                            if (tReceived < 1) break;
+                            tSizeToReceive -= tReceived;
+                        }
+                        return 1;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        // IC2 Compat
+        {
+            final TileEntity tIc2Acceptor = (tTileEntity instanceof IEnergyTile || EnergyNet.instance == null) ? tTileEntity :
+                EnergyNet.instance.getTileEntity(tTileEntity.getWorldObj(), tTileEntity.xCoord, tTileEntity.yCoord, tTileEntity.zCoord);
+
+            if (tIc2Acceptor instanceof IEnergySink && ((IEnergySink) tIc2Acceptor).acceptsEnergyFrom((TileEntity) baseMetaTile, tDirection)) {
+                long rUsedAmperes = 0;
+                while (aAmperage > rUsedAmperes && ((IEnergySink) tIc2Acceptor).getDemandedEnergy() > 0 && ((IEnergySink) tIc2Acceptor).injectEnergy(tDirection, aVoltage, aVoltage) <= aVoltage)
+                    rUsedAmperes++;
+                return rUsedAmperes;
+            }
+        }
+
+        // RF Compat
+        if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver) {
+            final IEnergyReceiver rfReceiver = (IEnergyReceiver) tTileEntity;
+            long rfOUT = aVoltage * GregTech_API.mEUtoRF / 100, rUsedAmperes = 0;
+            int rfOut = rfOUT > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) rfOUT;
+
+            if (rfReceiver.receiveEnergy(tDirection, rfOut, true) == rfOut) {
+                rfReceiver.receiveEnergy(tDirection, rfOut, false);
+                rUsedAmperes++;
+            }
+            else if (rfReceiver.receiveEnergy(tDirection, rfOut, true) > 0) {
+                if (mRestRF == 0) {
+                    int RFtrans = rfReceiver.receiveEnergy(tDirection, (int) rfOut, false);
+                    rUsedAmperes++;
+                    mRestRF = rfOut - RFtrans;
+                } else {
+                    int RFtrans = rfReceiver.receiveEnergy(tDirection, (int) mRestRF, false);
+                    mRestRF = mRestRF - RFtrans;
+                }
+            }
+            if (GregTech_API.mRFExplosions && rfReceiver.getMaxEnergyStored(tDirection) < rfOut * 600) {
+                if (rfOut > 32 * GregTech_API.mEUtoRF / 100) this.doExplosion(rfOut);
+            }
+            return rUsedAmperes;
+        }
+
+        return 0;
+    }
+
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
@@ -235,7 +340,10 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
-            {//amp handler
+            if (GT_Mod.gregtechproxy.ic2EnergySourceCompat) pullFromIc2EnergySources(aBaseMetaTileEntity);
+
+
+            { //amp handler
                 long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
                 int tickDiff = (int) (worldTick - lastWorldTick);
                 lastWorldTick = worldTick;
@@ -342,8 +450,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public boolean canConnect(byte aSide, TileEntity tTileEntity) {
-        final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
-        final GT_CoverBehavior coverBehavior = getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide);
+        final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
         final byte tSide = GT_Utility.getOppositeSide(aSide);
         final ForgeDirection tDir = ForgeDirection.getOrientation(tSide);
 
@@ -357,22 +465,45 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
         // ((tIsGregTechTileEntity && tIsTileEntityCable) && (tAlwaysLookConnected || tLetEnergyIn || tLetEnergyOut) ) --> Not needed
 
-        // IC2 Compat
-        if ((tTileEntity instanceof IEnergySink) && ((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) getBaseMetaTileEntity(), tDir))
+        // GC Compat
+        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC && (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDir, NetworkType.POWER)))
             return true;
 
         // AE2-p2p Compat
-        if (GT_Mod.gregtechproxy.mAE2Integration && tTileEntity instanceof IEnergySource &&
-            tTileEntity instanceof IPartHost && ((IPartHost)tTileEntity).getPart(tDir) instanceof PartP2PGTPower &&
-            ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) getBaseMetaTileEntity(), tDir))
-            return true;
+        if (GT_Mod.gregtechproxy.mAE2Integration) {
+            if (tTileEntity instanceof IEnergySource && tTileEntity instanceof IPartHost && ((IPartHost)tTileEntity).getPart(tDir) instanceof PartP2PGTPower && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) baseMetaTile, tDir))
+                return true;
+            if (tTileEntity instanceof appeng.tile.powersink.IC2 && ((appeng.tile.powersink.IC2)tTileEntity).acceptsEnergyFrom((TileEntity)baseMetaTile, tDir))
+                return true;
+        }
 
+        // IC2 Compat
+        {
+            final TileEntity ic2Energy;
+
+            if (tTileEntity instanceof IReactorChamber)
+                ic2Energy = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
+            else
+                ic2Energy = (tTileEntity == null || tTileEntity instanceof IEnergyTile || EnergyNet.instance == null) ? tTileEntity :
+                    EnergyNet.instance.getTileEntity(tTileEntity.getWorldObj(), tTileEntity.xCoord, tTileEntity.yCoord, tTileEntity.zCoord);
+
+            // IC2 Sink Compat
+            if ((ic2Energy instanceof IEnergySink) && ((IEnergySink) ic2Energy).acceptsEnergyFrom((TileEntity) baseMetaTile, tDir))
+                return true;
+
+            // IC2 Source Compat
+            if (GT_Mod.gregtechproxy.ic2EnergySourceCompat && (ic2Energy instanceof IEnergySource)) {
+                if (((IEnergySource) ic2Energy).emitsEnergyTo((TileEntity) baseMetaTile, tDir)) {
+                    return true;
+                }
+            }
+        }
         // RF Output Compat
         if (GregTech_API.mOutputRF && tTileEntity instanceof IEnergyReceiver && ((IEnergyReceiver) tTileEntity).canConnectEnergy(tDir))
             return true;
 
         // RF Input Compat
-        if (GregTech_API.mInputRF && (tTileEntity instanceof IEnergyEmitter && ((IEnergyEmitter) tTileEntity).emitsEnergyTo((TileEntity)getBaseMetaTileEntity(), tDir)))
+        if (GregTech_API.mInputRF && (tTileEntity instanceof IEnergyEmitter && ((IEnergyEmitter) tTileEntity).emitsEnergyTo((TileEntity)baseMetaTile, tDir)))
             return true;
 
 
