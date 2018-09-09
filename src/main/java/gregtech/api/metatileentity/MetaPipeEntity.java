@@ -744,7 +744,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
 		final byte tSide = GT_Utility.getOppositeSide(aSide);
 		final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
-		if (baseMetaTile == null) return 0;
+		if (baseMetaTile == null || !baseMetaTile.isServerSide()) return 0;
 
         final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
         final int coverId = baseMetaTile.getCoverIDAtSide(aSide),
