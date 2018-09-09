@@ -214,7 +214,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             if (i != aSide && isConnectedAtSide(i) && baseMetaTile.getCoverBehaviorAtSide(i).letsEnergyOut(i, baseMetaTile.getCoverIDAtSide(i), baseMetaTile.getCoverDataAtSide(i), baseMetaTile)) {
                 final TileEntity tTileEntity = baseMetaTile.getTileEntityAtSide(i);
 
-                if (aAlreadyPassedSet.add(tTileEntity)) {
+                if (tTileEntity != null && aAlreadyPassedSet.add(tTileEntity)) {
                     final byte tSide = GT_Utility.getOppositeSide(i);
                     final IGregTechTileEntity tBaseMetaTile = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity) : null;
                     final IMetaTileEntity tMeta = tBaseMetaTile != null ? tBaseMetaTile.getMetaTileEntity() : null;
@@ -243,7 +243,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     }
 
     private long insertEnergyInto(TileEntity tTileEntity, byte tSide, long aVoltage, long aAmperage) {
-        if (aAmperage == 0) return 0;
+        if (aAmperage == 0 || tTileEntity == null) return 0;
 
         final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
         final ForgeDirection tDirection = ForgeDirection.getOrientation(tSide);
