@@ -15,6 +15,18 @@ public enum CombType {
     ENERGY("energy", true, Materials._NULL, 80),
     LAPOTRON("lapotron", true, Materials._NULL, 60),
 
+    //Alloy Line
+    REDALLOY("redalloy", true, Materials.RedAlloy, 100),
+    REDSTONEALLOY("redstonealloy", true, Materials.RedstoneAlloy, 90),
+    CONDUCTIVEIRON("conductiveiron", true, Materials.ConductiveIron, 80),
+    VIBRANTALLOY("vibrantalloy", true, Materials.VibrantAlloy, 50),
+    ENERGETICALLOY("energeticalloy", true, Materials.EnergeticAlloy, 70),
+    ELECTRICALSTEEL("electricalsteel", true, Materials.ElectricalSteel, 90),
+    DARKSTEEL("darksteel", true, Materials.DarkSteel, 80),
+    PULSATINGIRON("pulsatingiron", true, Materials.PulsatingIron, 80),
+    STAINLESSSTEL("steainlesssteel", true, Materials.StainlessSteel, 75),
+    ENDERIUM("enderium", true, Materials.Enderium, 40),
+
     //Gem Line
     STONE("stone", true, Materials._NULL, 70),
     CERTUS("certus", true, Materials.CertusQuartz, 100),
@@ -62,6 +74,17 @@ public enum CombType {
             {0x144F5A, 0x2494A2},
             {0xC11F1F, 0xEBB9B9},
             {0x6478FF, 0x1414FF},
+            //alloy
+            {0xE60000, 0xB80000},
+            {0xB80000, 0xA50808},
+            {0xCEADA3, 0x817671},
+            {0x86A12D, 0xC4F2AE},
+            {0xFF9933, 0xFFAD5C},
+            {0x787878, 0xD8D8D8},
+            {0x252525, 0x443B44},
+            {0x6DD284, 0x006600},
+            {0x778899, 0xC8C8DC},
+            {0x2E8B57, 0x599087},
             //gems
             {0x808080, 0x999999},
             {0x57CFFB, 0xBBEEFF},
