@@ -5,11 +5,13 @@ import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
 import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
+import forestry.api.genetics.IAlleleFlowers;
 import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
 import forestry.core.genetics.alleles.AlleleHelper;
+import forestry.core.genetics.alleles.EnumAllele;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -41,6 +43,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.MEADOWS.getTemplate();
+            //AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
         }
 
         @Override
@@ -1048,6 +1051,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     private final static byte EXTRABEES = 1;
     private final static byte GENDUSTRY = 2;
     private final static byte MAGICBEES = 3;
+    private final static byte GREGTECH = 4;
+
 
     private IAllele[] template;
     private IBeeGenome genome;
@@ -1056,7 +1061,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
         String species = "species" + WordUtils.capitalize(lowercaseName);
 
-        String uid = "forestry." + species;
+        String uid = "gregtech." + species;
         String description = "for.description." + species;
         String name = "for.bees.species." + lowercaseName;
 
@@ -1072,17 +1077,46 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             bee.registerMutations();
         }
     }
+
+    private static IAlleleBeeEffect getEffect(byte modid, String name) {
+        String s;
+        switch(modid) {
+            case EXTRABEES: s = new StringBuilder().append("extrabees.effect.").append(name).toString();break;
+            case GENDUSTRY: s = new StringBuilder().append("gendustry.effect.").append(name).toString();break;
+            case MAGICBEES: s = new StringBuilder().append("magicbees.effect").append(name).toString();break;
+            case GREGTECH: s = new StringBuilder().append("gregtech.effect").append(name).toString();break;
+            default: s = new StringBuilder().append("forestry.effect").append(name).toString();break;
+
+        }
+        return (IAlleleBeeEffect) AlleleManager.alleleRegistry.getAllele(s);
+    }
+
+    private static IAlleleFlowers getFlowers(byte modid, String name) {
+        String s;
+        switch(modid) {
+            case EXTRABEES: s = new StringBuilder().append("extrabees.flowers.").append(name).toString();break;
+            case GENDUSTRY: s = new StringBuilder().append("gendustry.flowers.").append(name).toString();break;
+            case MAGICBEES: s = new StringBuilder().append("magicbees.flowers").append(name).toString();break;
+            case GREGTECH: s = new StringBuilder().append("gregtech.flowers").append(name).toString();break;
+            default: s = new StringBuilder().append("forestry.flowers").append(name).toString();break;
+
+        }
+        return (IAlleleFlowers) AlleleManager.alleleRegistry.getAllele(s);
+    }
+
     private static IAlleleBeeSpecies getSpecies(byte modid, String name) {
         String s;
         switch(modid) {
             case EXTRABEES: s = new StringBuilder().append("extrabees.species.").append(name).toString();break;
             case GENDUSTRY: s = new StringBuilder().append("gendustry.bee.").append(name).toString();break;
             case MAGICBEES: s = new StringBuilder().append("magicbees.species").append(name).toString();break;
+            case GREGTECH: s = new StringBuilder().append("gregtech.effect").append(name).toString();break;
             default: s = new StringBuilder().append("forestry.species").append(name).toString();break;
 
         }
         return (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(s);
     }
+
 
     protected abstract void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies);
 
