@@ -867,33 +867,32 @@ public enum OrePrefixes {
     }
 
     private static final LinkedHashMap<String, ObjMap<Integer, Boolean>>mCachedResults = new LinkedHashMap<String, ObjMap<Integer, Boolean>>();
-    
+
     public boolean contains(ItemStack aStack) {
         if (aStack == null){
             return false;
         }
-        ObjMap<Integer, Boolean> aCurrentSet;
-        if (mCachedResults.get(this.toString()) != null){
-            aCurrentSet = mCachedResults.get(this.toString());
-        }
 
-        else {
+        ObjMap<Integer, Boolean> aCurrentSet = mCachedResults.get(this.toString().toUpperCase());
+        if (aCurrentSet == null){
             aCurrentSet = new ObjMap<Integer, Boolean>((mPrefixedItems != null && mPrefixedItems.size() > 0 ? mPrefixedItems.size() : 1000), 0.5f);
-            mCachedResults.put(this.toString(), aCurrentSet);
+            mCachedResults.put(this.toString().toUpperCase(), aCurrentSet);
         }
 
-        if (aCurrentSet.get(aStack.hashCode()) != null){
-            return aCurrentSet.get(aStack.hashCode());
+        int mainHash = Objects.hashCode(aStack.getItem(), aStack.getItemDamage());
+        Boolean result = aCurrentSet.get(mainHash);
+        if (result != null){
+            return result;
         }
         else {
             for (ItemStack tStack : mPrefixedItems){
                 if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
-                    aCurrentSet.put(aStack.hashCode(), true);
+                    aCurrentSet.put(Objects.hashCode(tStack.getItem(), tStack.getItemDamage()), true);
                     return true;
                 }
             }
         }
-        aCurrentSet.put(aStack.hashCode(), false);
+        aCurrentSet.put(mainHash, false);
         return false;
     }
 
