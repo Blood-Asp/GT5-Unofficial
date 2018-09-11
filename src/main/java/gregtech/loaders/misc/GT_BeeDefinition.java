@@ -17,6 +17,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.BiomeDictionary;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
@@ -449,6 +450,69 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(PLATINUM.species, getSpecies(FORRESTRY,"Phantasmal"), 9);
             tMutation.requireResource("blockEnderium");
+        }
+    },
+    THAUMIMDUST(GT_BranchDefinition.THAUMIC, "ThaumiumDust", true, 0x7A007A, 0x5C005C) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.THAUMIUMDUST), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.EDENIC.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(EXTRABEES,"TCFire"), getSpecies(FORRESTRY,"Edenic"), 10);
+            tMutation.requireResource("blockThaumium");
+            tMutation.restrictBiomeType(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.FOREST);
+        }
+    },
+    THAUMIMSHARD(GT_BranchDefinition.THAUMIC, "ThaumiumShard", true, 0x9966FF, 0xAD85FF) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.THAUMIUMDUST), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.THAUMIUMSHARD), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.setHasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.GLACIAL.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(THAUMIMDUST.species, getSpecies(EXTRABEES,"TCWater"), 10);
+            tMutation.restrictBiomeType(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.FOREST);
+        }
+    },
+    AMBER(GT_BranchDefinition.THAUMIC, "Amber", true, 0xEE7700, 0x774B15) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.AMBER), 0.25f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.setHasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            template = BeeDefinition.COMMON.getTemplate();
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(THAUMIMDUST.species, STICKYRESIN.species, 10);
+            tMutation.requireResource("blockAmber");
         }
     },
 //gems

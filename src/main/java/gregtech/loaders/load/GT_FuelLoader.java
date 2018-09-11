@@ -26,8 +26,6 @@ public class GT_FuelLoader
         ItemList.sIndiumConcentrate = GT_Mod.gregtechproxy.addFluid("indiumconcentrate", "Indium Concentrate", null, 1, 295);//TODO CHECK NEW x3
         ItemList.sLeadZincSolution = GT_Mod.gregtechproxy.addFluid("leadzincsolution", "Lead-Zinc solution", null, 1, 295);
         ItemList.sRocketFuel = GT_Mod.gregtechproxy.addFluid("rocket_fuel", "Rocket Fuel", null, 1, 295);
-        //ItemList.sIron3Chloride = GT_Mod.gregtechproxy.addFluid("iron3chloride", "Iron III Chloride", Materials.IronIIIChloride, 1, 295);
-        //ItemList.sLifeEssence = GT_Mod.gregtechproxy.addFluid("lifeessence", "Life Essence", Materials.LifeEssence, 1, 295);
         new GT_Recipe(new ItemStack(Items.lava_bucket), new ItemStack(Blocks.obsidian), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Copper, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Tin, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Electrum, 1L), 30, 2);
 
         GT_Recipe.GT_Recipe_Map.sSmallNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.NaquadahEnriched, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Naquadah, 1L)}, null, null, null, 0, 0, 25000);
@@ -35,7 +33,6 @@ public class GT_FuelLoader
         GT_Recipe.GT_Recipe_Map.sHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.NaquadahEnriched, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 250000);
         GT_Recipe.GT_Recipe_Map.sExtremeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 500000);
         GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 1000000);
-        //GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{null}, new ItemStack[]{null}, null, new FluidStack[]{Materials.FluidNaquadahFuel.getFluid(1000L)}, new FluidStack[]{Materials.Naquadah.getFluid(1000L)}, 0, 0, 2000000);
 
         GT_Values.RA.addFuel(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 4), null, 4, 5);
         GT_Values.RA.addFuel(new ItemStack(Items.experience_bottle, 1), null, 10, 5);
