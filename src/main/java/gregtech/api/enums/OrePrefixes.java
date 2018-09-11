@@ -18,6 +18,8 @@ import java.util.*;
 
 import static gregtech.api.enums.GT_Values.*;
 
+import com.google.common.base.Objects;
+
 public enum OrePrefixes {
     @Deprecated pulp("Pulps", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),
     @Deprecated leaves("Leaves", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
