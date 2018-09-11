@@ -863,38 +863,49 @@ public enum OrePrefixes {
 
     public boolean add(ItemStack aStack) {
         if (aStack == null) return false;
-        if (!contains(aStack)) mPrefixedItems.add(aStack);
+        if (!contains(aStack)) {
+            mPrefixedItems.add(aStack);
+            // It's now in there... so update the cache
+            getSet(this.toString().toUpperCase()).put(Objects.hashCode(aStack.getItem(), aStack.getItemDamage()), true);
+        }
         while (mPrefixedItems.contains(null)) mPrefixedItems.remove(null);
         return true;
     }
 
     private static final LinkedHashMap<String, ObjMap<Integer, Boolean>>mCachedResults = new LinkedHashMap<String, ObjMap<Integer, Boolean>>();
 
+    private ObjMap<Integer, Boolean> getSet(final String prefix) {
+        ObjMap<Integer, Boolean> foundSet = mCachedResults.get(prefix);
+        if (foundSet == null){
+            foundSet = new ObjMap<Integer, Boolean>(512, 0.5f);
+            mCachedResults.put(prefix, foundSet);
+        }
+
+        return foundSet;
+    }
+
     public boolean contains(ItemStack aStack) {
-        if (aStack == null){
+        if (aStack == null) {
             return false;
         }
 
-        ObjMap<Integer, Boolean> aCurrentSet = mCachedResults.get(this.toString().toUpperCase());
-        if (aCurrentSet == null){
-            aCurrentSet = new ObjMap<Integer, Boolean>((mPrefixedItems != null && mPrefixedItems.size() > 0 ? mPrefixedItems.size() : 1000), 0.5f);
-            mCachedResults.put(this.toString().toUpperCase(), aCurrentSet);
-        }
+        final ObjMap<Integer, Boolean> aCurrentSet = getSet(this.toString().toUpperCase());
+        final Boolean result = aCurrentSet.get(Objects.hashCode(aStack.getItem(), aStack.getItemDamage()));
 
-        int mainHash = Objects.hashCode(aStack.getItem(), aStack.getItemDamage());
-        Boolean result = aCurrentSet.get(mainHash);
-        if (result != null){
+        if (result != null) {
             return result;
         }
-        else {
-            for (ItemStack tStack : mPrefixedItems){
-                if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
-                    aCurrentSet.put(Objects.hashCode(tStack.getItem(), tStack.getItemDamage()), true);
-                    return true;
-                }
+
+        return false;
+    }
+
+    public boolean containsUnCached(ItemStack aStack) {
+        // In case someone needs this
+        for (ItemStack tStack : mPrefixedItems){
+            if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
+                return true;
             }
         }
-        aCurrentSet.put(mainHash, false);
         return false;
     }
 
