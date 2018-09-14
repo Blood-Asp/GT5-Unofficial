@@ -29,7 +29,7 @@ public class GT_Bees {
 
     public GT_Bees() {
         if (Loader.isModLoaded("Forestry") && GT_Mod.gregtechproxy.mGTBees) {
-
+            setupGTAlleles();
             combs = new ItemComb();
             combs.initCombsRecipes();
             GT_BeeDefinition.initBees();
