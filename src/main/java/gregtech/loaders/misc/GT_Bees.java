@@ -1,14 +1,26 @@
 package gregtech.loaders.misc;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 import cpw.mods.fml.common.Loader;
 import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.apiculture.IAlleleBeeSpecies;
 import forestry.api.genetics.AlleleManager;
+import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleArea;
 import forestry.api.genetics.IAlleleFloat;
 import forestry.api.genetics.IAlleleInteger;
+import forestry.api.genetics.IGenome;
+import forestry.api.genetics.IMutationCondition;
 import forestry.core.genetics.alleles.Allele;
+import forestry.core.utils.StringUtil;
 import gregtech.GT_Mod;
 import gregtech.common.items.ItemComb;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.DimensionManager;
 
 public class GT_Bees {
 
@@ -24,6 +36,9 @@ public class GT_Bees {
     static IAlleleFloat noWork;
     static IAlleleFloat speedBlinding;
     static IAlleleFloat superSpeed;
+
+    static IAlleleInteger blinkLife;
+    static IAlleleInteger superLife;
 
     public static ItemComb combs;
 
@@ -50,6 +65,9 @@ public class GT_Bees {
         noWork = new AlleleFloat("speedUnproductive", 0, false);
         speedBlinding = (IAlleleFloat) AlleleManager.alleleRegistry.getAllele("magicbees.speedBlinding");
         superSpeed = new AlleleFloat("speedAccelerated", 4F, false);
+
+        blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.SPEED);
+        superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.SPEED);
 
 
     }
@@ -100,5 +118,55 @@ public class GT_Bees {
         public int[] getValue(){
             return this.value;
         }
+    }
+
+    public static class DimensionMutationCondition implements IMutationCondition {
+
+        int dimID;
+
+        public DimensionMutationCondition(int id) {
+            dimID = id;
+        }
+
+        @Override
+        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0,IGenome genome1) {
+            if(world.provider.dimensionId == dimID)return 1;
+            return 0;
+        }
+
+        @Override
+        public String getDescription() {
+            if (DimensionManager.getProvider(dimID)!=null) {
+                String dimName = DimensionManager.getProvider(dimID).getDimensionName().toLowerCase(Locale.ENGLISH);
+                return StringUtil.localizeAndFormat("mutation.condition.dim", dimName);
+            }
+            return "";
+        }
+
+    }
+
+    public static class BiomeIDMutationCondition implements IMutationCondition {
+
+        int biomeID;
+
+        public BiomeIDMutationCondition(int id) {
+            biomeID = id;
+        }
+
+        @Override
+        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0,IGenome genome1) {
+            if(world.getBiomeGenForCoords(x, z).biomeID == biomeID) return 1;
+            return 0;
+        }
+
+        @Override
+        public String getDescription() {
+            if (BiomeGenBase.getBiome(biomeID)!=null) {
+                String biomeName = BiomeGenBase.getBiome(biomeID).biomeName.toLowerCase(Locale.ENGLISH);
+                return StringUtil.localizeAndFormat("mutation.condition.biomeid", biomeName);
+            }
+            return "";
+        }
+
     }
 }

@@ -13,6 +13,7 @@ import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.genetics.alleles.AlleleHelper;
+import forestry.core.genetics.alleles.EnumAllele;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -73,7 +74,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Marshy"), CLAY.species, 7);
-            tMutation.requireResource("blockSlime");
+            tMutation.requireResource(GameRegistry.findBlock("TConstruct", "slime.gel"), 1);
             //tMutation.requireResource(GameRegistry.findBlock("minecraft", "sand"), 1);
         }
     },
@@ -126,6 +127,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.COAL), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.setNocturnal();
+
         }
 
         @Override
@@ -200,12 +203,14 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.ICY.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "slow"));
         }
 
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Icy"), getSpecies(FORRESTRY,"Glacial"), 10);
-            tMutation.requireResource("blockSnow");
+            tMutation.requireResource(GameRegistry.findBlock("minecraft", "snow"), 0);
+            tMutation.restrictTemperature(EnumTemperature.ICY);
         }
     },
     ENERGY(GT_BranchDefinition.IC2, "Energy", false, 0xC11F1F, 0xEBB9B9) {
@@ -221,12 +226,14 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.DEMONIC.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "power"));
         }
 
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(EXTRABEES,"volcanic"), 10);
             tMutation.requireResource("blockRuby");
+            tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(128));//Boneyard Biome
         }
     },
     LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", false, 0x6478FF, 0x1414FF) {
@@ -249,6 +256,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(LAPIS.species, ENERGY.species, 6);
             tMutation.requireResource("blockLapis");
+            tMutation.restrictTemperature(EnumTemperature.ICY);
+            tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(141));//moon dim
         }
     },
     //Alloy
@@ -269,6 +278,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(COPPER.species, REDSTONE.species, 10);
+            tMutation.requireResource("blockRedAlloy");
         }
     },
     REDSTONEALLOY(GT_BranchDefinition.GTALLOY, "RedStoneAlloy", false, 0xA50808, 0xE80000) {
@@ -310,6 +320,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONEALLOY.species, IRON.species, 8);
             tMutation.requireResource("blockConductiveIron");
+            //tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(-1));
+            //tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(50));
+
         }
     },
     VIBRANTALLOY(GT_BranchDefinition.GTALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
@@ -351,7 +364,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONEALLOY.species, getSpecies(FORRESTRY,"Demonic"), 9);
-            tMutation.requireResource("blockVibrantAlloy");
+            tMutation.requireResource("blockEnergeticAlloy");
         }
     },
     ELECTRICALSTEEL(GT_BranchDefinition.GTALLOY, "ElectricalSteel", false, 0x787878, 0xD8D8D8) {
@@ -411,7 +424,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDALLOY.species, getSpecies(FORRESTRY,"Ended"), 9);
-            tMutation.requireResource("blockPulatingIron");
+            tMutation.requireResource("blockPulsatingIron");
         }
     },
     STAINLESSSTEEL(GT_BranchDefinition.GTALLOY, "StainlessSteel", false, 0xC8C8DC, 0x778899) {
@@ -419,8 +432,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STEEL), 0.10f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STAINLESSSTEL), 0.15f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STAINLESSSTEL), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.HOT);
         }
@@ -434,30 +447,32 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(CHROME.species, STEEL.species, 3);
-            tMutation.requireResource("blockPulatingIron");
+            IBeeMutationCustom tMutation = registerMutation(CHROME.species, STEEL.species, 9);
+            tMutation.requireResource("blockStainlessSteel");
         }
     },
     ENDERIUM(GT_BranchDefinition.GTALLOY, "Enderium", false, 0x599087, 0x2E8B57) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ENDERIUM), 0.15f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENDERIUM), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.HOT);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            //template = BeeDefinition.CULTIVATED.getTemplate();
+            //AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FASTEST);
             AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, GT_Bees.speedBlinding);
             AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "teleport"));
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(PLATINUM.species, getSpecies(FORRESTRY,"Phantasmal"), 9);
+            IBeeMutationCustom tMutation = registerMutation(PLATINUM.species, getSpecies(FORRESTRY,"Phantasmal"), 3);
             tMutation.requireResource("blockEnderium");
         }
     },

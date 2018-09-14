@@ -91,7 +91,7 @@ public enum CombType {
             //alloy
             {0xE60000, 0xB80000},
             {0xB80000, 0xA50808},
-            {0xCEADA3, 0x817671},
+            {0x817671, 0xCEADA3},
             {0x86A12D, 0xC4F2AE},
             {0xFF9933, 0xFFAD5C},
             {0x787878, 0xD8D8D8},
