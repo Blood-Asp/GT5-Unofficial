@@ -18,6 +18,8 @@ import java.util.*;
 
 import static gregtech.api.enums.GT_Values.*;
 
+import com.google.common.base.Objects;
+
 public enum OrePrefixes {
     @Deprecated pulp("Pulps", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),
     @Deprecated leaves("Leaves", "", "", false, false, false, false, false, false, false, false, false, false, 0, -1, 64, -1),
@@ -861,39 +863,49 @@ public enum OrePrefixes {
 
     public boolean add(ItemStack aStack) {
         if (aStack == null) return false;
-        if (!contains(aStack)) mPrefixedItems.add(aStack);
+        if (!contains(aStack)) {
+            mPrefixedItems.add(aStack);
+            // It's now in there... so update the cache
+            getSet(this.toString().toUpperCase()).put(Objects.hashCode(aStack.getItem(), aStack.getItemDamage()), true);
+        }
         while (mPrefixedItems.contains(null)) mPrefixedItems.remove(null);
         return true;
     }
 
     private static final LinkedHashMap<String, ObjMap<Integer, Boolean>>mCachedResults = new LinkedHashMap<String, ObjMap<Integer, Boolean>>();
-    
+
+    private ObjMap<Integer, Boolean> getSet(final String prefix) {
+        ObjMap<Integer, Boolean> foundSet = mCachedResults.get(prefix);
+        if (foundSet == null){
+            foundSet = new ObjMap<Integer, Boolean>(512, 0.5f);
+            mCachedResults.put(prefix, foundSet);
+        }
+
+        return foundSet;
+    }
+
     public boolean contains(ItemStack aStack) {
-        if (aStack == null){
+        if (aStack == null) {
             return false;
         }
-        ObjMap<Integer, Boolean> aCurrentSet;
-        if (mCachedResults.get(this.toString()) != null){
-            aCurrentSet = mCachedResults.get(this.toString());
+
+        final ObjMap<Integer, Boolean> aCurrentSet = getSet(this.toString().toUpperCase());
+        final Boolean result = aCurrentSet.get(Objects.hashCode(aStack.getItem(), aStack.getItemDamage()));
+
+        if (result != null) {
+            return result;
         }
 
-        else {
-            aCurrentSet = new ObjMap<Integer, Boolean>((mPrefixedItems != null && mPrefixedItems.size() > 0 ? mPrefixedItems.size() : 1000), 0.5f);
-            mCachedResults.put(this.toString(), aCurrentSet);
-        }
+        return false;
+    }
 
-        if (aCurrentSet.get(aStack.hashCode()) != null){
-            return aCurrentSet.get(aStack.hashCode());
-        }
-        else {
-            for (ItemStack tStack : mPrefixedItems){
-                if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
-                    aCurrentSet.put(aStack.hashCode(), true);
-                    return true;
-                }
+    public boolean containsUnCached(ItemStack aStack) {
+        // In case someone needs this
+        for (ItemStack tStack : mPrefixedItems){
+            if (GT_Utility.areStacksEqual(aStack, tStack, !tStack.hasTagCompound())){
+                return true;
             }
         }
-        aCurrentSet.put(aStack.hashCode(), false);
         return false;
     }
 
