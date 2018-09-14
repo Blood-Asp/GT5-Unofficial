@@ -500,7 +500,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(THAUMIMDUST.species, getSpecies(EXTRABEES,"TCWater"), 10);
+            IBeeMutationCustom tMutation = registerMutation(THAUMIMDUST.species, getSpecies(MAGICBEES,"TCWater"), 10);
             tMutation.restrictBiomeType(BiomeDictionary.Type.MAGICAL, BiomeDictionary.Type.FOREST);
         }
     },
