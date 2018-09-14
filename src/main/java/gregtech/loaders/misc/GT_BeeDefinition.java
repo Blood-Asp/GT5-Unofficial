@@ -1,5 +1,6 @@
 package gregtech.loaders.misc;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.*;
 import forestry.api.core.EnumHumidity;
 import forestry.api.core.EnumTemperature;
@@ -73,6 +74,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Marshy"), CLAY.species, 7);
             tMutation.requireResource("blockSlime");
+            //tMutation.requireResource(GameRegistry.findBlock("minecraft", "sand"), 1);
         }
     },
     PEAT(GT_BranchDefinition.ORGANIC, "Peat", true, 0x906237, 0x58300B) {
@@ -250,7 +252,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         }
     },
     //Alloy
-    REDALLOY(GT_BranchDefinition.ALLOY, "RedAlloy", false, 0xE60000, 0xB80000) {
+    REDALLOY(GT_BranchDefinition.GTALLOY, "RedAlloy", false, 0xE60000, 0xB80000) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -269,7 +271,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(COPPER.species, REDSTONE.species, 10);
         }
     },
-    REDSTONEALLOY(GT_BranchDefinition.ALLOY, "RedStoneAlloy", false, 0xA50808, 0xE80000) {
+    REDSTONEALLOY(GT_BranchDefinition.GTALLOY, "RedStoneAlloy", false, 0xA50808, 0xE80000) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -289,7 +291,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockRedstoneAlloy");
         }
     },
-    CONDUCTIVEIRON(GT_BranchDefinition.ALLOY, "ConductiveIron", false, 0xCEADA3, 0x817671) {
+    CONDUCTIVEIRON(GT_BranchDefinition.GTALLOY, "ConductiveIron", false, 0xCEADA3, 0x817671) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -310,7 +312,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockConductiveIron");
         }
     },
-    VIBRANTALLOY(GT_BranchDefinition.ALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
+    VIBRANTALLOY(GT_BranchDefinition.GTALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -332,7 +334,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.restrictTemperature(EnumTemperature.HOT, EnumTemperature.HELLISH);
         }
     },
-    ENERGETICALLOY(GT_BranchDefinition.ALLOY, "EnergeticAlloy", false, 0xFF9933, 0xFFAD5C) {
+    ENERGETICALLOY(GT_BranchDefinition.GTALLOY, "EnergeticAlloy", false, 0xFF9933, 0xFFAD5C) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -352,7 +354,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockVibrantAlloy");
         }
     },
-    ELECTRICALSTEEL(GT_BranchDefinition.ALLOY, "ElectricalSteel", false, 0x787878, 0xD8D8D8) {
+    ELECTRICALSTEEL(GT_BranchDefinition.GTALLOY, "ElectricalSteel", false, 0x787878, 0xD8D8D8) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -372,7 +374,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockElectricalSteel");
         }
     },
-    DARKSTEEL(GT_BranchDefinition.ALLOY, "DarkSteel", false, 0x252525, 0x443B44) {
+    DARKSTEEL(GT_BranchDefinition.GTALLOY, "DarkSteel", false, 0x252525, 0x443B44) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -392,7 +394,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockDarkSteel");
         }
     },
-    PULSATINGIRON(GT_BranchDefinition.ALLOY, "PulsatingIron", false, 0x6DD284, 0x006600) {
+    PULSATINGIRON(GT_BranchDefinition.GTALLOY, "PulsatingIron", false, 0x6DD284, 0x006600) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -412,7 +414,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockPulatingIron");
         }
     },
-    STAINLESSSTEEL(GT_BranchDefinition.ALLOY, "StainlessSteel", false, 0xC8C8DC, 0x778899) {
+    STAINLESSSTEEL(GT_BranchDefinition.GTALLOY, "StainlessSteel", false, 0xC8C8DC, 0x778899) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
@@ -436,7 +438,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockPulatingIron");
         }
     },
-    ENDERIUM(GT_BranchDefinition.ALLOY, "Enderium", false, 0x599087, 0x2E8B57) {
+    ENDERIUM(GT_BranchDefinition.GTALLOY, "Enderium", false, 0x599087, 0x2E8B57) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);

@@ -33,7 +33,7 @@ public enum GT_BranchDefinition {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
         }
     },
-    ALLOY("Amalgamis") {
+    GTALLOY("Amalgamis") {
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.NONE);
