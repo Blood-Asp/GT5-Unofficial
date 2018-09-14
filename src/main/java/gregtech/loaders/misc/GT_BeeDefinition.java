@@ -12,7 +12,6 @@ import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.genetics.alleles.AlleleHelper;
-import forestry.core.genetics.alleles.EnumAllele;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -451,7 +450,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.CULTIVATED.getTemplate();
             AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, GT_Bees.speedBlinding);
-            //AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleHelper.getAllele(ExtraBeesEffect.TELEPORT.getUID()));
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "teleport"));
         }
 
         @Override
@@ -460,6 +459,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockEnderium");
         }
     },
+    //thaumic
     THAUMIMDUST(GT_BranchDefinition.THAUMIC, "ThaumiumDust", true, 0x7A007A, 0x5C005C) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
