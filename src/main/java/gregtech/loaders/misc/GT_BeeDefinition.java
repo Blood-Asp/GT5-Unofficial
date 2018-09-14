@@ -10,6 +10,7 @@ import forestry.apiculture.genetics.Bee;
 import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
+import forestry.apiculture.genetics.alleles.AlleleEffect;
 import forestry.core.genetics.alleles.AlleleHelper;
 import forestry.core.genetics.alleles.EnumAllele;
 import gregtech.api.GregTech_API;
@@ -185,7 +186,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
 
     //IC2
-    COOLANT(GT_BranchDefinition.IC2, "Coolant", true, 0x144F5A, 0x2494A2) {
+    COOLANT(GT_BranchDefinition.IC2, "Coolant", false, 0x144F5A, 0x2494A2) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 4), 0.30f);
@@ -206,7 +207,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockSnow");
         }
     },
-    ENERGY(GT_BranchDefinition.IC2, "Energy", true, 0xC11F1F, 0xEBB9B9) {
+    ENERGY(GT_BranchDefinition.IC2, "Energy", false, 0xC11F1F, 0xEBB9B9) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 12), 0.30f);
@@ -227,7 +228,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockRuby");
         }
     },
-    LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", true, 0x6478FF, 0x1414FF) {
+    LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", false, 0x6478FF, 0x1414FF) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.20f);
@@ -250,7 +251,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         }
     },
     //Alloy
-    REDALLOY(GT_BranchDefinition.ALLOY, "RedAlloy", true, 0xE60000, 0xB80000) {
+    REDALLOY(GT_BranchDefinition.ALLOY, "RedAlloy", false, 0xE60000, 0xB80000) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -269,7 +270,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(COPPER.species, REDSTONE.species, 10);
         }
     },
-    REDSTONEALLOY(GT_BranchDefinition.ALLOY, "RedStoneAlloy", true, 0xA50808, 0xE80000) {
+    REDSTONEALLOY(GT_BranchDefinition.ALLOY, "RedStoneAlloy", false, 0xA50808, 0xE80000) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -289,7 +290,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockRedstoneAlloy");
         }
     },
-    CONDUCTIVEIRON(GT_BranchDefinition.ALLOY, "ConductiveIron", true, 0xCEADA3, 0x817671) {
+    CONDUCTIVEIRON(GT_BranchDefinition.ALLOY, "ConductiveIron", false, 0xCEADA3, 0x817671) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -310,7 +311,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockConductiveIron");
         }
     },
-    VIBRANTALLOY(GT_BranchDefinition.ALLOY, "VibrantAlloy", true, 0x86A12D, 0xC4F2AE) {
+    VIBRANTALLOY(GT_BranchDefinition.ALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -332,7 +333,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.restrictTemperature(EnumTemperature.HOT, EnumTemperature.HELLISH);
         }
     },
-    ENERGETICALLOY(GT_BranchDefinition.ALLOY, "EnergeticAlloy", true, 0xFF9933, 0xFFAD5C) {
+    ENERGETICALLOY(GT_BranchDefinition.ALLOY, "EnergeticAlloy", false, 0xFF9933, 0xFFAD5C) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -352,7 +353,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockVibrantAlloy");
         }
     },
-    ELECTRICALSTEEL(GT_BranchDefinition.ALLOY, "ElectricalSteel", true, 0x787878, 0xD8D8D8) {
+    ELECTRICALSTEEL(GT_BranchDefinition.ALLOY, "ElectricalSteel", false, 0x787878, 0xD8D8D8) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -372,7 +373,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockElectricalSteel");
         }
     },
-    DARKSTEEL(GT_BranchDefinition.ALLOY, "DarkSteel", true, 0x252525, 0x443B44) {
+    DARKSTEEL(GT_BranchDefinition.ALLOY, "DarkSteel", false, 0x252525, 0x443B44) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -392,7 +393,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockDarkSteel");
         }
     },
-    PULSATINGIRON(GT_BranchDefinition.ALLOY, "PulsatingIron", true, 0x6DD284, 0x006600) {
+    PULSATINGIRON(GT_BranchDefinition.ALLOY, "PulsatingIron", false, 0x6DD284, 0x006600) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
@@ -412,7 +413,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockPulatingIron");
         }
     },
-    STAINLESSSTEEL(GT_BranchDefinition.ALLOY, "StainlessSteel", true, 0xC8C8DC, 0x778899) {
+    STAINLESSSTEEL(GT_BranchDefinition.ALLOY, "StainlessSteel", false, 0xC8C8DC, 0x778899) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
@@ -426,7 +427,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT,  AlleleEffect.effectIgnition);
         }
+
 
         @Override
         protected void registerMutations() {
@@ -434,7 +437,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockPulatingIron");
         }
     },
-    ENDERIUM(GT_BranchDefinition.ALLOY, "Enderium", true, 0x599087, 0x2E8B57) {
+    ENDERIUM(GT_BranchDefinition.ALLOY, "Enderium", false, 0x599087, 0x2E8B57) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
@@ -447,6 +450,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, GT_Bees.speedBlinding);
+            //AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleHelper.getAllele(ExtraBeesEffect.TELEPORT.getUID()));
         }
 
         @Override
