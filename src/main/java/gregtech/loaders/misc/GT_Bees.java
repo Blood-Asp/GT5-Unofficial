@@ -16,8 +16,8 @@ import forestry.api.genetics.IMutationCondition;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
 import gregtech.GT_Mod;
-import gregtech.common.items.ItemComb;
-import gregtech.common.items.ItemDrop;
+import gregtech.common.items.*;
+import gregtech.common.items.ItemPropolis;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeManager;
@@ -41,12 +41,17 @@ public class GT_Bees {
     static IAlleleInteger blinkLife;
     static IAlleleInteger superLife;
 
+    public static ItemPropolis propolis;
+    public static ItemPollen pollen;
     public static ItemDrop drop;
     public static ItemComb combs;
 
     public GT_Bees() {
         if (Loader.isModLoaded("Forestry") && GT_Mod.gregtechproxy.mGTBees) {
             setupGTAlleles();
+            propolis = new ItemPropolis();
+            propolis.initPropolisRecipes();
+            pollen = new ItemPollen();
             drop = new ItemDrop();
             drop.initDropsRecipes();
             combs = new ItemComb();
