@@ -1417,10 +1417,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     private static IAlleleFlowers getFlowers(byte modid, String name) {
         String s;
         switch(modid) {
-            case EXTRABEES: s = new StringBuilder().append("extrabees.flowers.").append(name).toString();break;
-            case GENDUSTRY: s = new StringBuilder().append("gendustry.flowers.").append(name).toString();break;
-            case MAGICBEES: s = new StringBuilder().append("magicbees.flowers").append(name).toString();break;
-            case GREGTECH: s = new StringBuilder().append("gregtech.flowers").append(name).toString();break;
+            case EXTRABEES: s = new StringBuilder().append("extrabees.flower.").append(name).toString();break;
+            case GENDUSTRY: s = new StringBuilder().append("gendustry.flower.").append(name).toString();break;
+            case MAGICBEES: s = new StringBuilder().append("magicbees.flower").append(name).toString();break;
+            case GREGTECH: s = new StringBuilder().append("gregtech.flower").append(name).toString();break;
             default: s = new StringBuilder().append("forestry.flowers").append(name).toString();break;
 
         }
