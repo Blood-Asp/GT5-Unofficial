@@ -19,6 +19,8 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.BiomeDictionary;
@@ -248,7 +250,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Icy"), getSpecies(FORRESTRY,"Glacial"), 10);
-            tMutation.requireResource(FluidRegistry.getFluid("ic2coolant").getBlock(), 0);
+            tMutation.requireResource(Block.getBlockFromItem(GT_ModHandler.getModItem("IC2", "fluidCoolant", 1).getItem()), 0);
             tMutation.restrictTemperature(EnumTemperature.ICY);
         }
     },
@@ -276,7 +278,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(EXTRABEES,"volcanic"), 10);
-            tMutation.requireResource(FluidRegistry.getFluid("ic2hotcoolant").getBlock(), 0);
+            tMutation.requireResource(Block.getBlockFromItem(GT_ModHandler.getModItem("IC2", "fluidHotCoolant", 1).getItem()), 0);
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(128));//Boneyard Biome
         }
     },
