@@ -865,4 +865,7 @@ for.bees.species.uranium=Uranium
 for.bees.species.plutonium=Plutonium
 for.bees.species.naquadah=Naquadah
 
+for.mutation.condition.biomeid=Required Biome
+for.mutation.condition.dim=Required Dimension
+
 itemGroup.GTtools=Prebuild Tools

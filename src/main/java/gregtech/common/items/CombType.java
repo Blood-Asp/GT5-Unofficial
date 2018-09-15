@@ -29,7 +29,7 @@ public enum CombType {
 
     //Thaumcraft Line
     THAUMIUMDUST("thaumiumdust", true, Materials.Thaumium, 100),
-    THAUMIUMSHARD("tahumiumshard", true, Materials._NULL, 85),
+    THAUMIUMSHARD("thaumiumshard", true, Materials._NULL, 85),
     AMBER("amber", true, Materials.Amber, 90),
     QUICKSILVER("quicksilver", true, Materials.Mercury, 90),
     SALISMUNDUS("salismundus", true, Materials._NULL, 75),
