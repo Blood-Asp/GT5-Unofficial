@@ -81,7 +81,7 @@ public class ItemPollen extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return DropType.values()[stack.getItemDamage()].getName();
+		return PollenType.values()[stack.getItemDamage()].getName();
 	}
 
 

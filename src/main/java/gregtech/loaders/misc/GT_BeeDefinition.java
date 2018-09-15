@@ -306,7 +306,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(LAPIS.species, ENERGY.species, 6);
             tMutation.requireResource("blockLapis");
             tMutation.restrictTemperature(EnumTemperature.ICY);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(28, "moon"));//moon dim
+            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(28, "Moon"));//moon dim
         }
     },
     //Alloy
@@ -680,7 +680,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIMSHARD.species, 8);
+            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIMSHARD.species, 7);
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(193, "Tainted Land"));//Tainted Land
         }
     },
