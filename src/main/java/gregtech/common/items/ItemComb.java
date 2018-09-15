@@ -15,6 +15,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.loaders.materialprocessing.ProcessingModSupport;
+import gregtech.loaders.misc.GT_Bees;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -112,7 +113,7 @@ public class ItemComb extends Item {
 
 		//ic2
 		tComb = getStackForType(CombType.COOLANT);
-		addSpecialCentHV(tComb, GT_ModHandler.getModItem("gendustry", "HoneyDrop", 1, 2002), 100, ItemList.FR_Wax.get(1, new Object[0]), 100);
+		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.COOLANT), 100, ItemList.FR_Wax.get(1, new Object[0]), 100);
 		tComb = getStackForType(CombType.ENERGY);
 		addSpecialCentHV(tComb, GT_ModHandler.getModItem("gendustry", "HoneyDrop", 1, 2003), 20, ItemList.IC2_Energium_Dust.get(1L), 20, ItemList.FR_RefractoryWax.get(1, new Object[0]), 50);
 		tComb = getStackForType(CombType.LAPOTRON);
