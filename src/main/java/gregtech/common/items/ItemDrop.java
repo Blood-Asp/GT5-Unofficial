@@ -95,7 +95,7 @@ public class ItemDrop extends Item {
 	public String getItemStackDisplayName(ItemStack stack) {
 		return DropType.values()[stack.getItemDamage()].getName();
 	}
-	public void initCombsRecipes() {
+	public void initDropsRecipes() {
 		ItemStack tDrop;
 
 		tDrop = getStackForType(DropType.COOLANT);
