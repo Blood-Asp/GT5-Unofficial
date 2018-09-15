@@ -66,8 +66,8 @@ public class GT_Bees {
         speedBlinding = (IAlleleFloat) AlleleManager.alleleRegistry.getAllele("magicbees.speedBlinding");
         superSpeed = new AlleleFloat("speedAccelerated", 4F, false);
 
-        blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.SPEED);
-        superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.SPEED);
+        blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.LIFESPAN);
+        superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.LIFESPAN);
 
 
     }
