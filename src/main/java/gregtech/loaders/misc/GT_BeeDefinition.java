@@ -44,8 +44,15 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.MEADOWS.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
+            //Exaples
+            //template = BeeDefinition.CULTIVATED.getTemplate();
+            //AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FASTEST);
+            //tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(-1));
+            //tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(50));
+            //tMutation.requireResource(Blocks.coal_block, 0);
             //AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_1);
+            //tMutation.requireResource(GameRegistry.findBlock("minecraft", "sand"), 1);
         }
 
         @Override
@@ -68,14 +75,15 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.MARSHY.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.MUSHROOMS);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
         }
 
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Marshy"), CLAY.species, 7);
             tMutation.requireResource(GameRegistry.findBlock("TConstruct", "slime.gel"), 1);
-            //tMutation.requireResource(GameRegistry.findBlock("minecraft", "sand"), 1);
         }
     },
     PEAT(GT_BranchDefinition.ORGANIC, "Peat", true, 0x906237, 0x58300B) {
@@ -91,7 +99,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.RURAL.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.WHEAT);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
         }
 
         @Override
@@ -111,7 +122,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.MEADOWS.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
         }
 
         @Override
@@ -133,13 +144,16 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.AUSTERE.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.CACTI);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectCreeper);
         }
 
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Industrious"), PEAT.species, 9);
-            //tMutation.requireResource(Blocks.coal_block, 0);
             tMutation.requireResource("blockCoal");
         }
     },
@@ -156,7 +170,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.MEADOWS.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.SLOWER);
         }
 
         @Override
@@ -180,7 +194,14 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.AGRARIAN.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectFertile);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TERRITORY, EnumAllele.Territory.LARGE);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.WHEAT);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
+
         }
 
         @Override
@@ -202,8 +223,12 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.ICY.getTemplate();
-            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "slow"));
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOW);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.SNOW);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectGlacial);
         }
 
         @Override
@@ -225,8 +250,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.DEMONIC.getTemplate();
-            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "power"));
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectIgnition);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.NETHER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.AVERAGE);
         }
 
         @Override
@@ -249,7 +279,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.ICY.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectIgnition);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.NETHER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.AVERAGE);
         }
 
         @Override
@@ -272,7 +308,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
@@ -292,7 +328,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
@@ -313,16 +349,14 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONEALLOY.species, IRON.species, 8);
             tMutation.requireResource("blockConductiveIron");
-            //tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(-1));
-            //tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(50));
-
         }
     },
     VIBRANTALLOY(GT_BranchDefinition.GTALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
@@ -337,7 +371,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.INDUSTRIOUS.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.NORMAL);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FAST);
         }
 
         @Override
@@ -358,7 +394,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
         @Override
@@ -378,7 +415,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
@@ -398,7 +435,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
         @Override
@@ -418,7 +456,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
         @Override
@@ -440,7 +479,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.CULTIVATED.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
             AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT,  AlleleEffect.effectIgnition);
         }
 
@@ -463,10 +503,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            //template = BeeDefinition.CULTIVATED.getTemplate();
-            //AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FASTEST);
             AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, GT_Bees.speedBlinding);
             AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "teleport"));
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
             AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
         }
 
@@ -488,8 +527,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.EDENIC.getTemplate();
-        }
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectExploration);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.UP_1);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.JUNGLE);
+          }
 
         @Override
         protected void registerMutations() {
@@ -510,7 +554,12 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.GLACIAL.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.UP_1);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.BOTH_1);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.FLOWER_PROVIDER, EnumAllele.Flowers.SNOW);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, AlleleEffect.effectGlacial);
         }
 
         @Override
@@ -531,7 +580,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override

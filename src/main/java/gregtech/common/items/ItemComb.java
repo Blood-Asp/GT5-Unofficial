@@ -118,6 +118,8 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.LAPOTRON);
 		addSpecialCentHV(tComb, GT_ModHandler.getModItem("gendustry", "HoneyDrop", 1, 2007), 20,  GT_ModHandler.getModItem("dreamcraft", "item.LapotronDust", 1, 0), 15, GT_ModHandler.getModItem("MagicBees", "wax", 1, 2), 40);
 
+		//Alloy
+		//tComb = getStackForType(CombType.REDALLOY);
 		//Gem Line
 		tComb = getStackForType(CombType.STONE);
 		addSpecialCentLV(tComb,GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1), 70,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.Salt,1),20,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.RockSalt,1),20);
