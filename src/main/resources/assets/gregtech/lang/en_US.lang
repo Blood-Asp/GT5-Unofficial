@@ -836,7 +836,7 @@ for.bees.species.mithril=Mithril
 for.bees.species.astralsilver=Astral Silver
 for.bees.species.thauminite=Thauminite
 for.bees.species.shadowmetal=Shadow Metal
-for.bees.species.devided=Unstable
+for.bees.species.divided=Unstable
 for.bees.species.sparkeling=Wither
 for.bees.species.redstone=Redstone
 for.bees.species.certus=Certus
@@ -866,6 +866,6 @@ for.bees.species.plutonium=Plutonium
 for.bees.species.naquadah=Naquadah
 
 for.mutation.condition.biomeid=Required Biome
-for.mutation.condition.dim=Required Dimension 
+for.mutation.condition.dim=Required Dimension
 
 itemGroup.GTtools=Prebuild Tools

@@ -142,7 +142,7 @@ public class GT_Bees {
 
         @Override
         public String getDescription() {
-            return StringUtil.localizeAndFormat("mutation.condition.dim") + dimName;
+            return StringUtil.localizeAndFormat("mutation.condition.dim") + " " + dimName;
         }
 
     }
@@ -150,9 +150,11 @@ public class GT_Bees {
     public static class BiomeIDMutationCondition implements IMutationCondition {
 
         int biomeID;
+        String biomeName;
 
-        public BiomeIDMutationCondition(int id) {
+        public BiomeIDMutationCondition(int id, String name) {
             biomeID = id;
+            biomeName = name;
         }
 
         @Override
@@ -164,8 +166,7 @@ public class GT_Bees {
         @Override
         public String getDescription() {
             if (BiomeGenBase.getBiome(biomeID)!=null) {
-                String biomeName = BiomeGenBase.getBiome(biomeID).biomeName.toLowerCase(Locale.ENGLISH);
-                return StringUtil.localizeAndFormat("mutation.condition.biomeid") + biomeName;
+                return StringUtil.localizeAndFormat("mutation.condition.biomeid") + " " + biomeName;
             }
             return "";
         }
