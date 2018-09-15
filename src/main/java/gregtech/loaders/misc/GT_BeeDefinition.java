@@ -20,11 +20,8 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;

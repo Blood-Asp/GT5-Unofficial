@@ -1,27 +1,17 @@
 package gregtech.loaders.misc;
 
-import java.util.Arrays;
-import java.util.Locale;
-
 import cpw.mods.fml.common.Loader;
 import forestry.api.apiculture.EnumBeeChromosome;
-import forestry.api.apiculture.IAlleleBeeSpecies;
-import forestry.api.genetics.AlleleManager;
-import forestry.api.genetics.IAllele;
-import forestry.api.genetics.IAlleleArea;
-import forestry.api.genetics.IAlleleFloat;
-import forestry.api.genetics.IAlleleInteger;
-import forestry.api.genetics.IGenome;
-import forestry.api.genetics.IMutationCondition;
+import forestry.api.genetics.*;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
 import gregtech.GT_Mod;
-import gregtech.common.items.*;
+import gregtech.common.items.ItemComb;
+import gregtech.common.items.ItemDrop;
+import gregtech.common.items.ItemPollen;
 import gregtech.common.items.ItemPropolis;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.DimensionManager;
 
 public class GT_Bees {
 
