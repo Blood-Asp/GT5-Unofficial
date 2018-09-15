@@ -123,9 +123,11 @@ public class GT_Bees {
     public static class DimensionMutationCondition implements IMutationCondition {
 
         int dimID;
+        String dimName;
 
-        public DimensionMutationCondition(int id) {
+        public DimensionMutationCondition(int id, String name) {
             dimID = id;
+            dimName = name;
         }
 
         @Override
@@ -136,11 +138,7 @@ public class GT_Bees {
 
         @Override
         public String getDescription() {
-            if (DimensionManager.getProvider(dimID)!=null) {
-                String dimName = DimensionManager.getProvider(dimID).getDimensionName().toLowerCase(Locale.ENGLISH);
-                return StringUtil.localizeAndFormat("mutation.condition.dim", dimName);
-            }
-            return "";
+            return StringUtil.localizeAndFormat("mutation.condition.dim", dimName);
         }
 
     }
