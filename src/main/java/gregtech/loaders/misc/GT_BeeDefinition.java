@@ -20,6 +20,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.common.items.CombType;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.text.WordUtils;
@@ -849,57 +850,81 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.REDSTONE), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDSTONE), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.RAREEARTH), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Industrious"), getSpecies(FORRESTRY,"Demonic"), 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Industrious"), getSpecies(FORRESTRY,"Demonic"), 10);
+            tMutation.requireResource("blockRedstone");
         }
     },
     LAPIS(GT_BranchDefinition.GEM, "Lapis", true, 0x1947D1, 0x476CDA) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(FORRESTRY,"Imperial"), 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(FORRESTRY,"Imperial"), 5);
+            tMutation.requireResource("blockLapis");
         }
     },
     CERTUS(GT_BranchDefinition.GEM, "CertusQuartz", true, 0x57CFFB, 0xBBEEFF) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.CERTUS), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CERTUS), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Hermitic"), LAPIS.species, 20);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Hermitic"), LAPIS.species, 10);
+            tMutation.requireResource("blockCertusQuartz");
+        }
+    },
+    FLUIX(GT_BranchDefinition.GEM, "FluixDust", true, 0xA375FF, 0xB591FF) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.FLUIX), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, LAPIS.species, 7);
+            tMutation.requireResource("blockFluix");
         }
     },
     RUBY(GT_BranchDefinition.GEM, "Ruby", true, 0xE6005C, 0xCC0052) {
@@ -907,18 +932,20 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.RUBY), 0.15f);
-            beeSpecies.setHumidity(EnumHumidity.NORMAL);
-            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.REDGARNET), 0.05f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.HOT);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, DIAMOND.species, 10);
+            tMutation.requireResource(GregTech_API.sBlockGem2, 11);
         }
     },
     SAPPHIRE(GT_BranchDefinition.GEM, "Sapphire", true, 0x0033CC, 0x00248F) {
