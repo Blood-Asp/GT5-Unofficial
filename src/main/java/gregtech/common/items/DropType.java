@@ -6,13 +6,13 @@ import gregtech.api.util.GT_LanguageManager;
 public enum DropType {
 
     OIL("oil",true),
-    MUTAGEN("smallmutagencatalyst",true),
+    MUTAGEN("small mutagen catalyst",true),
     COOLANT("coolant",true),
     HOT_COOLANT("hot coolant",true),
-    HYDRA("hydrablood",true),
-    SNOW_QUEEN("snowqueenblood",true),
+    HYDRA("hydra blood",true),
+    SNOW_QUEEN("snowqueen blood",true),
     OXYGEN("oxygen",true),
-    LAPIS("lapiscoolant",true);
+    LAPIS("lapis coolant",true);
 
     private static int[][] colours = new int[][]{
             {0x19191B, 0x303032},
