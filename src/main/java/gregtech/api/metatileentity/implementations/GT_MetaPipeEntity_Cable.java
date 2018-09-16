@@ -262,25 +262,27 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         }
 
         // GC Compat
-        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC) {
-            if (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDirection, NetworkType.POWER)) {
-                EnergySource eSource = new EnergySourceAdjacent(tDirection);
+        if (GregTech_API.mGalacticraft) {
+            if (tTileEntity instanceof IEnergyHandlerGC) {
+                if (!(tTileEntity instanceof IConnector) || ((IConnector) tTileEntity).canConnect(tDirection, NetworkType.POWER)) {
+                    EnergySource eSource = (EnergySource) GT_Utility.callConstructor("micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceAdjacent", 0, null, false, new Object[]{tDirection});
 
-                float tSizeToReceive = aVoltage * EnergyConfigHandler.IC2_RATIO, tStored = ((IEnergyHandlerGC)tTileEntity).getEnergyStoredGC(eSource);
-                if (tSizeToReceive >= tStored || tSizeToReceive <= ((IEnergyHandlerGC)tTileEntity).getMaxEnergyStoredGC(eSource) - tStored) {
-                    float tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
-                    if (tReceived > 0) {
-                        tSizeToReceive -= tReceived;
-                        while (tSizeToReceive > 0) {
-                            tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
-                            if (tReceived < 1) break;
+                    float tSizeToReceive = aVoltage * EnergyConfigHandler.IC2_RATIO, tStored = ((IEnergyHandlerGC) tTileEntity).getEnergyStoredGC(eSource);
+                    if (tSizeToReceive >= tStored || tSizeToReceive <= ((IEnergyHandlerGC) tTileEntity).getMaxEnergyStoredGC(eSource) - tStored) {
+                        float tReceived = ((IEnergyHandlerGC) tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
+                        if (tReceived > 0) {
                             tSizeToReceive -= tReceived;
+                            while (tSizeToReceive > 0) {
+                                tReceived = ((IEnergyHandlerGC) tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
+                                if (tReceived < 1) break;
+                                tSizeToReceive -= tReceived;
+                            }
+                            return 1;
                         }
-                        return 1;
                     }
                 }
+                return 0;
             }
-            return 0;
         }
 
         // IC2 Compat
@@ -398,8 +400,10 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         // ((tIsGregTechTileEntity && tIsTileEntityCable) && (tAlwaysLookConnected || tLetEnergyIn || tLetEnergyOut) ) --> Not needed
 
         // GC Compat
-        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC && (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDir, NetworkType.POWER)))
-            return true;
+        if (GregTech_API.mGalacticraft) {
+            if (tTileEntity instanceof IEnergyHandlerGC && (!(tTileEntity instanceof IConnector) || ((IConnector) tTileEntity).canConnect(tDir, NetworkType.POWER)))
+                return true;
+        }
 
         // AE2-p2p Compat
         if (GT_Mod.gregtechproxy.mAE2Integration) {
