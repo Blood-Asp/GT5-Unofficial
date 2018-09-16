@@ -24,7 +24,7 @@ public enum CombType {
     ELECTRICALSTEEL("electricalsteel", true, Materials.ElectricalSteel, 90),
     DARKSTEEL("darksteel", true, Materials.DarkSteel, 80),
     PULSATINGIRON("pulsatingiron", true, Materials.PulsatingIron, 80),
-    STAINLESSSTEL("steainlesssteel", true, Materials.StainlessSteel, 75),
+    STAINLESSSTEEL("stainlesssteel", true, Materials.StainlessSteel, 75),
     ENDERIUM("enderium", true, Materials.Enderium, 40),
 
     //Thaumcraft Line
@@ -38,7 +38,7 @@ public enum CombType {
     ASTRALSILVER("astralsilver", true, Materials.AstralSilver, 70),
     THAUMINITE("thauminite", true, Materials._NULL, 50),
     SHADOWMETAL("shadowmetal", true, Materials.Shadow, 50),
-    DIVIDED("devided", true, Materials.Unstable, 40),
+    DIVIDED("divided", true, Materials.Unstable, 40),
     SPARKELING("sparkeling", true, Materials.NetherStar, 40),
 
     //Gem Line
@@ -102,14 +102,14 @@ public enum CombType {
             //Thaumcraft
             {0x7A007A, 0x5C005C},
             {0x9966FF, 0xAD85FF},
-            {0xE60000, 0x774B15},
+            {0xEE7700, 0x774B15},
             {0xc7c7ea, 0xb5b3df},
             {0xF7ADDE, 0x592582},
             {0x904BB8, 0xE800FF},
             {0xF0E68C, 0xFFFFD2},
             {0xAFEEEE, 0xE6E6FF},
             {0x2E2D79, 0x7581E0},
-            {0x2E2D79, 0x7581E0},
+            {0x100322, 0x100342},
             {0xF0F0F0, 0xDCDCDC},
             {0x7A007A, 0xFFFFFF},
             //gems

@@ -8,7 +8,7 @@ public enum DropType {
     OIL("oil",true),
     MUTAGEN("smallmutagencatalyst",true),
     COOLANT("coolant",true),
-    HOT_COOLANT("hot_coolant",true),
+    HOT_COOLANT("hot coolant",true),
     HYDRA("hydrablood",true),
     SNOW_QUEEN("snowqueenblood",true),
     OXYGEN("oxygen",true),

@@ -488,7 +488,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STEEL), 0.10f);
-            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STAINLESSSTEL), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STAINLESSSTEEL), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.HOT);
@@ -766,7 +766,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource(GameRegistry.findBlock("thaumicbases", "thauminiteBlock"), 0);
         }
     },
-    SHADOWMETAL(GT_BranchDefinition.THAUMIC, "ShadowMetal", true, 0x2E2D79, 0x7581E0) {
+    SHADOWMETAL(GT_BranchDefinition.THAUMIC, "ShadowMetal", true, 0x100322, 0x100342) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("MagicBees", "comb", 1, 20), 0.20f);
