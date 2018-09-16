@@ -36,7 +36,7 @@ public enum CombType {
     TAINTED("tainted", true, Materials._NULL, 80),
     MITHRIL("mithril", true, Materials.Mithril, 70),
     ASTRALSILVER("astralsilver", true, Materials.AstralSilver, 70),
-    THAUMINITE("thauminte", true, Materials._NULL, 50),
+    THAUMINITE("thauminite", true, Materials._NULL, 50),
     SHADOWMETAL("shadowmetal", true, Materials.Shadow, 50),
     DIVIDED("devided", true, Materials.Unstable, 40),
     SPARKELING("sparkeling", true, Materials.NetherStar, 40),
