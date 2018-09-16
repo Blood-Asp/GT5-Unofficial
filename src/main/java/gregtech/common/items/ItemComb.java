@@ -115,12 +115,45 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.COOLANT);
 		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.COOLANT), 100, ItemList.FR_Wax.get(1, new Object[0]), 100);
 		tComb = getStackForType(CombType.ENERGY);
-		addSpecialCentHV(tComb, GT_ModHandler.getModItem("gendustry", "HoneyDrop", 1, 2003), 20, ItemList.IC2_Energium_Dust.get(1L), 20, ItemList.FR_RefractoryWax.get(1, new Object[0]), 50);
+		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.HOT_COOLANT), 20, ItemList.IC2_Energium_Dust.get(1L), 20, ItemList.FR_RefractoryWax.get(1, new Object[0]), 50);
 		tComb = getStackForType(CombType.LAPOTRON);
-		addSpecialCentHV(tComb, GT_ModHandler.getModItem("gendustry", "HoneyDrop", 1, 2007), 20,  GT_ModHandler.getModItem("dreamcraft", "item.LapotronDust", 1, 0), 15, GT_ModHandler.getModItem("MagicBees", "wax", 1, 2), 40);
+		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.LAPIS), 20,  GT_ModHandler.getModItem("dreamcraft", "item.LapotronDust", 1, 0), 15, GT_ModHandler.getModItem("MagicBees", "wax", 1, 2), 40);
 
 		//Alloy
-		//tComb = getStackForType(CombType.REDALLOY);
+		tComb = getStackForType(CombType.REDALLOY);
+		addProcessLV(tComb, Materials.RedAlloy, 100);
+		addProcessLV(tComb, Materials.Redstone, 75);
+		addProcessLV(tComb, Materials.Copper, 90);
+		tComb = getStackForType(CombType.REDSTONEALLOY);
+		addProcessLV(tComb, Materials.RedstoneAlloy, 100);
+		addProcessLV(tComb, Materials.Redstone, 90);
+		addProcessLV(tComb, Materials.Silicon, 75);
+		addProcessLV(tComb, Materials.Coal, 75);
+		tComb = getStackForType(CombType.CONDUCTIVEIRON);
+		addProcessMV(tComb, Materials.ConductiveIron, 100);
+		addProcessMV(tComb, Materials.RedstoneAlloy, 90);
+		addProcessMV(tComb, Materials.Silver, 65);
+		addProcessMV(tComb, Materials.Iron, 75);
+		tComb = getStackForType(CombType.VIBRANTALLOY);
+		addProcessHV(tComb, Materials.VibrantAlloy, 100);
+		addProcessHV(tComb, Materials.EnergeticAlloy, 90);
+		addProcessHV(tComb, Materials.EnderEye, 50);
+		addProcessHV(tComb, Materials.Chrome, 30);
+		tComb = getStackForType(CombType.ENERGETICALLOY);
+		addProcessHV(tComb, Materials.EnergeticAlloy, 100);
+		addProcessHV(tComb, Materials.ConductiveIron, 90);
+		addProcessHV(tComb, Materials.BlackSteel, 75);
+		addProcessHV(tComb, Materials.Gold, 75);
+		tComb = getStackForType(CombType.ELECTRICALSTEEL);
+		addProcessLV(tComb, Materials.ElectricalSteel, 100);
+		addProcessLV(tComb, Materials.Steel, 85);
+		addProcessLV(tComb, Materials.Silicon, 75);
+		addProcessLV(tComb, Materials.Coal, 75);
+		tComb = getStackForType(CombType.DARKSTEEL);
+		addProcessMV(tComb, Materials.DarkSteel, 100);
+		addProcessMV(tComb, Materials.ElectricalSteel, 85);
+		addProcessMV(tComb, Materials.Obsidian, 75);
+		addProcessMV(tComb, Materials.Coal, 75);
 		//Gem Line
 		tComb = getStackForType(CombType.STONE);
 		addSpecialCentLV(tComb,GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1), 70,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.Salt,1),20,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.RockSalt,1),20);
@@ -309,15 +342,51 @@ public class ItemComb extends Item {
 			RecipeManagers.centrifugeManager.addRecipe(40, tComb, ImmutableMap.of(GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 1), chance * 0.01f, ItemList.FR_Wax.get(1, new Object[0]), 0.3f));
 		}
 	}
-	
-	public void addProcessLV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance){
+	public void addProcessMV(ItemStack tComb, Materials aMaterial, int chance){
 		if(GT_Mod.gregtechproxy.mNerfedCombs){
-			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), Materials.Water.getFluid(1000), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 96, 24);
-			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+9)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 384);
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), GT_ModHandler.getDistilledWater(1000L), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 192, 96);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+9)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 1), 10000, (int) (aMaterial.getMass() * 128), 768);
 		}else{
-			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 128, 5);
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 256, 120);
+			}
+	}
+	public void addProcessHV(ItemStack tComb, Materials aMaterial, int chance){
+		if(GT_Mod.gregtechproxy.mNerfedCombs){
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), Materials.Mercury.getFluid(144), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 384, 384);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(24, tComb), Materials.GrowthMediumRaw.getFluid(Math.max(1, ((aMaterial.getMass()+18)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 1), 10000, (int) (aMaterial.getMass() * 128), 1536);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+9)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 1), 10000, (int) (aMaterial.getMass() * 128), 1536);
+		}else{
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 512, 480);
+		}
+	}
+	
+	public void addProcessLV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance) {
+		if (GT_Mod.gregtechproxy.mNerfedCombs) {
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), Materials.Water.getFluid(1000L), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 96, 24);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass() + 9) / 10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 384);
+		} else {
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1), ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{chance * 100, 3000}, 128, 5);
 			RecipeManagers.centrifugeManager.addRecipe(40, tComb, ImmutableMap.of(GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1), chance * 0.01f, ItemList.FR_Wax.get(1, new Object[0]), 0.3f));
 		}
+	}
+		public void addProcessMV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance){
+			if(GT_Mod.gregtechproxy.mNerfedCombs){
+				GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), GT_ModHandler.getDistilledWater(1000L), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 192, 96);
+				GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+9)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 768);
+			}else{
+				GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 256, 120);
+			}
+
+	}
+	public void addProcessHV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance){
+		if(GT_Mod.gregtechproxy.mNerfedCombs){
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), Materials.Mercury.getFluid(144L), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 384, 384);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(24, tComb), Materials.GrowthMediumRaw.getFluid(Math.max(1, ((aOutMaterial.getMass()+18)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 1536);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+9)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 1536);
+		}else{
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 512, 480);
+		}
+
 	}
 	
 }
