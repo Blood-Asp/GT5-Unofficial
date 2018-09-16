@@ -154,6 +154,39 @@ public class ItemComb extends Item {
 		addProcessMV(tComb, Materials.ElectricalSteel, 85);
 		addProcessMV(tComb, Materials.Obsidian, 75);
 		addProcessMV(tComb, Materials.Coal, 75);
+		tComb = getStackForType(CombType.PULSATINGIRON);
+		addProcessMV(tComb, Materials.PulsatingIron, 100);
+		addProcessHV(tComb, Materials.EnderPearl, 75);
+		addProcessHV(tComb, Materials.RedstoneAlloy, 85);
+		addProcessHV(tComb, Materials.Iron, 75);
+		tComb = getStackForType(CombType.STAINLESSSTEL);
+		addProcessMV(tComb, Materials.StainlessSteel, 100);
+		addProcessHV(tComb, Materials.Iron, 85);
+		addProcessHV(tComb, Materials.Chrome, 55);
+		addProcessHV(tComb, Materials.Manganese, 75);
+		addProcessHV(tComb, Materials.Nickel, 75);
+		tComb = getStackForType(CombType.ENDERIUM);
+		addProcessMV(tComb, Materials.Enderium, 100);
+		addProcessHV(tComb, Materials.EnderiumBase, 75);
+		addProcessHV(tComb, Materials.EnderPearl, 85);
+		addProcessHV(tComb, Materials.Thaumium, 65);
+
+		//Thaumic
+		tComb = getStackForType(CombType.THAUMIUMDUST);
+		addProcessMV(tComb, Materials.Thaumium, 100);
+		addProcessMV(tComb, Materials.Iron, 75);
+		tComb = getStackForType(CombType.THAUMIUMSHARD);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "propolis", 1, 1), GT_ModHandler.getModItem("MagicBees", "propolis", 1, 2), GT_ModHandler.getModItem("MagicBees", "propolis", 1, 3), GT_ModHandler.getModItem("MagicBees", "propolis", 1, 4), GT_ModHandler.getModItem("MagicBees", "propolis", 1, 5), GT_ModHandler.getModItem("MagicBees", "propolis", 1, 6), new int[] {2000, 2000, 2000, 2000, 2000, 2000 }, 128, 5);
+		tComb = getStackForType(CombType.AMBER);
+		addProcessLV(tComb, Materials.Amber, 100);
+		tComb = getStackForType(CombType.QUICKSILVER);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1, 5), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {1000}, 128, 5);
+		addProcessLV(tComb, Materials.Cinnabar, 85);
+		tComb = getStackForType(CombType.SALISMUNDUS);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1, 14), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {1000}, 256, 120);
+		tComb = getStackForType(CombType.TAINTED);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1, 11), GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1, 12), GT_ModHandler.getModItem("Thaumcraft", "blockTaintFibres", 1, 0),  GT_ModHandler.getModItem("Thaumcraft", "blockTaintFibres", 1, 1), GT_ModHandler.getModItem("Thaumcraft", "blockTaintFibres", 1, 2),  GT_ModHandler.getModItem("MagicBees", "wax", 1, 0), new int[] {1500, 1500, 1500, 1500, 1500, 5000}, 128, 5);
+
 		//Gem Line
 		tComb = getStackForType(CombType.STONE);
 		addSpecialCentLV(tComb,GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 1), 70,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.Salt,1),20,GT_OreDictUnificator.get(OrePrefixes.dust,Materials.RockSalt,1),20);

@@ -103,7 +103,7 @@ public enum CombType {
             {0x7A007A, 0x5C005C},
             {0x9966FF, 0xAD85FF},
             {0xE60000, 0x774B15},
-            {0x7A007A, 0x5C005C},
+            {0xc7c7ea, 0xb5b3df},
             {0xF7ADDE, 0x592582},
             {0x904BB8, 0xE800FF},
             {0xF0E68C, 0xFFFFD2},
