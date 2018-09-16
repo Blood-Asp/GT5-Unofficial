@@ -988,6 +988,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         return inputEnergyFrom(aSide, true);
     }
 
+    @Override
     public boolean inputEnergyFrom(byte aSide, boolean waitForActive) {
         if (aSide == 6) return true;
         if (isServerSide() && waitForActive) return ((aSide >= 0 && aSide < 6) && mActiveEUInputs[aSide]) && !mReleaseEnergy;

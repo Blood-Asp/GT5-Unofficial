@@ -3,6 +3,7 @@ package gregtech.api.interfaces.tileentity;
 import cofh.api.energy.IEnergyReceiver;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
@@ -35,13 +36,17 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
      * Sided Energy Input
      */
     public boolean inputEnergyFrom(byte aSide);
-    public boolean inputEnergyFrom(byte aSide, boolean waitForActive);
+    default public boolean inputEnergyFrom(byte aSide, boolean waitForActive) {
+        return inputEnergyFrom(aSide);
+    }
 
     /**
      * Sided Energy Output
      */
     public boolean outputsEnergyTo(byte aSide);
-    public boolean outputsEnergyTo(byte aSide, boolean waitForActive);
+    default public boolean outputsEnergyTo(byte aSide, boolean waitForActive) {
+        return outputsEnergyTo(aSide);
+    }
 
     /**
      * Utility for the Network
