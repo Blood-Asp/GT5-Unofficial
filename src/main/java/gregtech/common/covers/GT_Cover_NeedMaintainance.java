@@ -11,6 +11,7 @@ import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_LargeTurbine;
 
 public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
 
@@ -39,15 +40,14 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
                     needsRepair = true;
                 }
                 if(aCoverVariable == 10 || aCoverVariable == 11){
-                	if(multi.getRealInventory()[1]==null || multi.getRealInventory()[1].getItem()!=GT_MetaGenerated_Tool_01.INSTANCE && multi.getRealInventory()[1].getItemDamage()<170){needsRepair = true;}
-                	else{
-                		ItemStack tTurbine = multi.getRealInventory()[1];
-                		long tMax = GT_MetaGenerated_Tool.getToolMaxDamage(tTurbine);
-                		long tCur = GT_MetaGenerated_Tool.getToolDamage(tTurbine);
-                		if(tCur < tMax*2/10)
-                			needsRepair = true;
-                	}
-                	
+					if (mTileEntity instanceof GT_MetaTileEntity_LargeTurbine) {
+						GT_MetaTileEntity_LargeTurbine tLargeTurbine = (GT_MetaTileEntity_LargeTurbine) mTileEntity;
+						ItemStack tRotor = tLargeTurbine.getRealInventory()[1];
+						if (tRotor == null || !(tRotor.getItem() instanceof GT_MetaGenerated_Tool) || tRotor.getItemDamage() < 170 || tRotor.getItemDamage() > 176)
+							needsRepair = true; // prevent exceptions if no rotor
+						else if (GT_MetaGenerated_Tool.getToolDamage(tRotor) + tLargeTurbine.mMaxPotentialDamage >= GT_MetaGenerated_Tool.getToolMaxDamage(tRotor))
+							needsRepair = true;
+					}
                 }
             }
         }
