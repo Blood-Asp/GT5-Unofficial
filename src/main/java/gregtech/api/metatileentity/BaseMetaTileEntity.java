@@ -444,16 +444,29 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                             || (getCoverIDAtSide((byte) 5) == 0 && worldObj.getPrecipitationHeight(xCoord + 1, zCoord) - 1 < yCoord)) {
                                         if (GregTech_API.sMachineRainExplosions && worldObj.isRaining() && getBiome().rainfall > 0) {
                                             if (getRandomNumber(10) == 0) {
-                                                try{GT_Mod.instance.achievements.issueAchievement(this.getWorldObj().getPlayerEntityByName(mOwnerName), "badweather");}catch(Exception e){}
+                                                try{
+                                                    GT_Mod.instance.achievements.issueAchievement(this.getWorldObj().getPlayerEntityByName(mOwnerName), "badweather");
+                                                }catch(Exception e){
+
+                                                }
+                                                GT_Log.exp.println("Machine at: "+ this.getXCoord()+" | "+ this.getYCoord()+" | "+ this.getZCoord()+" DIMID: " +this.worldObj.provider.dimensionId +" explosion due to rain!");
                                                 doEnergyExplosion();
-                                            } else setOnFire();
+                                            } else {
+                                                GT_Log.exp.println("Machine at: "+ this.getXCoord()+" | "+ this.getYCoord()+" | "+ this.getZCoord()+" DIMID: " +this.worldObj.provider.dimensionId +"  set to Fire due to rain!");
+                                                setOnFire();
+                                            }
                                         }
                                         if (!hasValidMetaTileEntity()) {
                                             mRunningThroughTick = false;
                                             return;
                                         }
                                         if (GregTech_API.sMachineThunderExplosions && worldObj.isThundering() && getBiome().rainfall > 0 && getRandomNumber(3) == 0) {
-                                        	try{GT_Mod.instance.achievements.issueAchievement(this.getWorldObj().getPlayerEntityByName(mOwnerName), "badweather");}catch(Exception e){}
+                                        	try{
+                                        	    GT_Mod.instance.achievements.issueAchievement(this.getWorldObj().getPlayerEntityByName(mOwnerName), "badweather");
+                                        	}catch(Exception e){
+
+                                            }
+                                            GT_Log.exp.println("Machine at: "+ this.getXCoord()+" | "+ this.getYCoord()+" | "+ this.getZCoord()+" DIMID: " +this.worldObj.provider.dimensionId + " explosion due to Thunderstorm!");
                                             doEnergyExplosion();
                                         }
                                     }
@@ -1185,6 +1198,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     public void doEnergyExplosion() {
         if (getUniversalEnergyCapacity() > 0 && getUniversalEnergyStored() >= getUniversalEnergyCapacity() / 5) {
+            GT_Log.exp.println("Energy Explosion, injected "+getUniversalEnergyStored()+"EU >= "+Double.toString((getUniversalEnergyCapacity() / 5D))+"Capacity of the Machine!");
+
             doExplosion(oOutput * (getUniversalEnergyStored() >= getUniversalEnergyCapacity() ? 4 : getUniversalEnergyStored() >= getUniversalEnergyCapacity() / 2 ? 2 : 1));
             GT_Mod.instance.achievements.issueAchievement(this.getWorldObj().getPlayerEntityByName(mOwnerName), "electricproblems");
         }
@@ -1733,6 +1748,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (!canAccessData() || !mMetaTileEntity.isElectric() || !inputEnergyFrom(aSide) || aAmperage <= 0 || aVoltage <= 0 || getStoredEU() >= getEUCapacity() || mMetaTileEntity.maxAmperesIn() <= mAcceptedAmperes)
             return 0;
         if (aVoltage > getInputVoltage()) {
+            GT_Log.exp.println("Energy Explosion, injected "+aVoltage+"EU/t in a "+getInputVoltage()+"EU/t Machine!");
             doExplosion(aVoltage);
             return 0;
         }

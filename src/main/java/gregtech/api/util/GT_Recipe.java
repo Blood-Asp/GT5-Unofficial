@@ -1006,8 +1006,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                             || GT_Utility.areStacksEqual(tStack, new ItemStack(Items.fireworks, 1, W), true)
                             || GT_Utility.areStacksEqual(tStack, new ItemStack(Items.fire_charge, 1, W), true)
                             ) {
-                        if (aTileEntity instanceof IGregTechTileEntity)
+                        if (aTileEntity instanceof IGregTechTileEntity) {
+                            GT_Log.exp.println("Microwave Explosion due to TNT || EGG || FIREWORKCHARGE || FIREWORK || FIRE CHARGE");
                             ((IGregTechTileEntity) aTileEntity).doExplosion(aVoltage * 4);
+                        }
                         return null;
                     }
                     ItemData tData = GT_OreDictUnificator.getItemData(tStack);
@@ -1016,32 +1018,43 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                     if (tData != null) {
                         if (tData.mMaterial != null && tData.mMaterial.mMaterial != null) {
                             if (tData.mMaterial.mMaterial.contains(SubTag.METAL) || tData.mMaterial.mMaterial.contains(SubTag.EXPLOSIVE)) {
-                                if (aTileEntity instanceof IGregTechTileEntity)
+                                if (aTileEntity instanceof IGregTechTileEntity) {
+                                    GT_Log.exp.println("Microwave Explosion due to METAL insertion");
                                     ((IGregTechTileEntity) aTileEntity).doExplosion(aVoltage * 4);
+                                }
                                 return null;
                             }
                             if (tData.mMaterial.mMaterial.contains(SubTag.FLAMMABLE)) {
-                                if (aTileEntity instanceof IGregTechTileEntity)
+                                if (aTileEntity instanceof IGregTechTileEntity) {
+                                    GT_Log.exp.println("Microwave INFLAMMATION due to FLAMMABLE insertion");
                                     ((IGregTechTileEntity) aTileEntity).setOnFire();
+                                }
                                 return null;
                             }
                         }
                         for (MaterialStack tMaterial : tData.mByProducts)
                             if (tMaterial != null) {
                                 if (tMaterial.mMaterial.contains(SubTag.METAL) || tMaterial.mMaterial.contains(SubTag.EXPLOSIVE)) {
-                                    if (aTileEntity instanceof IGregTechTileEntity)
+                                    if (aTileEntity instanceof IGregTechTileEntity) {
+                                        GT_Log.exp.println("Microwave Explosion due to METAL insertion");
                                         ((IGregTechTileEntity) aTileEntity).doExplosion(aVoltage * 4);
+                                    }
                                     return null;
                                 }
                                 if (tMaterial.mMaterial.contains(SubTag.FLAMMABLE)) {
-                                    if (aTileEntity instanceof IGregTechTileEntity)
+                                    if (aTileEntity instanceof IGregTechTileEntity) {
                                         ((IGregTechTileEntity) aTileEntity).setOnFire();
+                                        GT_Log.exp.println("Microwave INFLAMMATION due to FLAMMABLE insertion");
+                                    }
                                     return null;
                                 }
                             }
                     }
                     if (TileEntityFurnace.getItemBurnTime(tStack) > 0) {
-                        if (aTileEntity instanceof IGregTechTileEntity) ((IGregTechTileEntity) aTileEntity).setOnFire();
+                        if (aTileEntity instanceof IGregTechTileEntity) {
+                            ((IGregTechTileEntity) aTileEntity).setOnFire();
+                            GT_Log.exp.println("Microwave INFLAMMATION due to BURNABLE insertion");
+                        }
                         return null;
                     }
 

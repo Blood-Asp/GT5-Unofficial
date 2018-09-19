@@ -257,11 +257,14 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             if (tTemperature > mHeatResistance) {
                 if (aBaseMetaTileEntity.getRandomNumber(100) == 0) {
                     // Poof
+                    GT_Log.exp.println("Set Pipe to Fire due to to low heat resistance at "+aBaseMetaTileEntity.getXCoord()+ " | "+aBaseMetaTileEntity.getYCoord()+ " | "+aBaseMetaTileEntity.getZCoord()+ " DIMID: "+aBaseMetaTileEntity.getWorld().provider.dimensionId);
                     aBaseMetaTileEntity.setToFire();
                     return true;
                 }
                 // Mmhmm, Fire
                 aBaseMetaTileEntity.setOnFire();
+                GT_Log.exp.println("Set Blocks around Pipe to Fire due to to low heat resistance at "+aBaseMetaTileEntity.getXCoord()+ " | "+aBaseMetaTileEntity.getYCoord()+ " | "+aBaseMetaTileEntity.getZCoord()+ " DIMID: "+aBaseMetaTileEntity.getWorld().provider.dimensionId);
+
             }
             if (!mGasProof && tFluid.getFluid().isGaseous(tFluid)) {
                 tFluid.amount -= 5;

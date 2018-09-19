@@ -107,8 +107,8 @@ dependencies {
     provided ("com.enderio:EnderIO:${config.enderio.version}:dev") {
         transitive = false
     }
-//    compile files("libs/Galacticraft-API-1.7-${config.gc.version}.jar")
-//    compile files("libs/GalacticraftCore-Dev-${config.gc.version}.jar")
+    compile files("libs/Galacticraft-API-1.7-${config.gc.version}.jar")
+    compile files("libs/GalacticraftCore-Dev-${config.gc.version}.jar")
     provided name: "Galacticraft-API", version: config.gc.version, ext: 'jar'
     provided name: "GalacticraftCore-Dev", version: config.gc.version, ext: 'jar'
     provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'

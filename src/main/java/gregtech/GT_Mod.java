@@ -203,6 +203,20 @@ public class GT_Mod implements IGT_Mod {
             } catch (Throwable e) {
             }
         }
+        if (tMainConfig.get(aTextGeneral, "LoggingExplosions", true).getBoolean(true)) {
+            GT_Log.mExplosionLog = new File(aEvent.getModConfigurationDirectory().getParentFile(), "logs/Explosion.log");
+            if (!GT_Log.mExplosionLog.exists()) {
+                try {
+                    GT_Log.mExplosionLog.createNewFile();
+                } catch (Throwable e) {
+                }
+            }
+            try {
+                GT_Log.exp = new PrintStream(GT_Log.mExplosionLog);
+            } catch (Throwable e) {
+            }
+        }
+
         if (tMainConfig.get(aTextGeneral, "LoggingPlayerActivity", true).getBoolean(true)) {
             GT_Log.mPlayerActivityLogFile = new File(aEvent.getModConfigurationDirectory().getParentFile(), "logs/PlayerActivity.log");
             if (!GT_Log.mPlayerActivityLogFile.exists()) {
