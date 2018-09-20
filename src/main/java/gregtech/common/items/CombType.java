@@ -63,28 +63,32 @@ public enum CombType {
     SLAG("slag", true, Materials._NULL, 50),
     COPPER("coppon", true, Materials.Copper, 100),
     TIN("tine", true, Materials.Tin, 100),
-    LEAD("plumbilia", true, Materials.Lead, 100),
-    IRON("ferru", true, Materials.Iron, 100),
-    STEEL("steeldust", true, Materials.Steel, 100),
-    NICKEL("nickeldust", true, Materials.Nickel, 100),
-    ZINC("galvania", true, Materials.Zinc, 100),
+    LEAD("lead", true, Materials.Lead, 100),
+    IRON("iron", true, Materials.Iron, 100),
+    STEEL("steel", true, Materials.Steel, 95),
+    NICKEL("nickel", true, Materials.Nickel, 100),
+    ZINC("zinc", true, Materials.Zinc, 100),
     SILVER("argentia", true, Materials.Silver, 100),
-    GOLD("aurelia", true, Materials.Gold, 100),
+    GOLD("gold", true, Materials.Gold, 100),
+    SULFUR("sulfur", true, Materials.Sulfur, 100),
+    GALLIUM ("gallium", true, Materials.Gallium, 75),
+    ARSENIC ("arsenic", true, Materials.Arsenic, 75),
 
     //Rare Metals Line
-    ALUMINIUM("bauxia", true, Materials.Aluminium, 60),
-    MANGANESE("pyrolusium", true, Materials.Manganese, 30),
+    BAUXITE("bauxite", true, Materials.Bauxite, 85),
+    ALUMINIUM("alluminium", true, Materials.Aluminium, 60),
+    MANGANESE("manganese", true, Materials.Manganese, 30),
     MAGNESIUM("magnesium", true, Materials.Magnesium, 75),
     TITANIUM("titanium", true, Materials.Ilmenite, 100),
     CHROME("chromium", true, Materials.Chrome, 50),
-    TUNGSTEN("scheelinium", true, Materials.Tungstate, 100),
-    PLATINUM("platina", true, Materials.Platinum, 40),
-    IRIDIUM("quantaria", true, Materials.Iridium, 20),
+    TUNGSTEN("tungsten", true, Materials.Tungstate, 100),
+    PLATINUM("platinum", true, Materials.Platinum, 40),
+    IRIDIUM("iridium", true, Materials.Iridium, 20),
 
     //Radioactive Line
-    URANIUM("urania", true, Materials.Uranium, 50),
+    URANIUM("uranium", true, Materials.Uranium, 50),
     PLUTONIUM("plutonium", true, Materials.Plutonium, 10),
-    NAQUADAH("stargatium", true, Materials.Naquadah, 10);
+    NAQUADAH("naquadah", true, Materials.Naquadah, 10);
 
     private static int[][] colours = new int[][]{
             //organic
@@ -148,7 +152,11 @@ public enum CombType {
             {0xF0DEF0, 0xF2E1F2},
             {0xC2C2D6, 0xCECEDE},
             {0xE6B800, 0xCFA600},
+            {0x6F6F01, 0x8B8B8B},
+            {0xC5C5E4, 0x8B8B8B},
+            {0x736C52, 0x292412},
             //Rare Metals
+            {0x6B3600, 0x8B8B8B},
             {0x008AB8, 0xD6D6FF},
             {0xD5D5D5, 0xAAAAAA},
             {0xF1D9D9, 0x8B8B8B},
