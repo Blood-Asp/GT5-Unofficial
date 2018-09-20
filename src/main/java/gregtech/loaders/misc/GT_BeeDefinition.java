@@ -1085,6 +1085,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             beeSpecies.setHumidity(EnumHumidity.DAMP);
             beeSpecies.setTemperature(EnumTemperature.WARM);
             beeSpecies.setNocturnal();
+            beeSpecies.hasEffect();
         }
 
         @Override
