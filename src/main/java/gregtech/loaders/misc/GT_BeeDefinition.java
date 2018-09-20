@@ -883,7 +883,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(FORRESTRY,"Imperial"), 5);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Demonic"), getSpecies(FORRESTRY,"Imperial"), 10);
             tMutation.requireResource("blockLapis");
         }
     },
@@ -927,7 +927,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockFluix");
         }
     },
-    RUBY(GT_BranchDefinition.GEM, "Ruby", true, 0xE6005C, 0xCC0052) {
+    RUBY(GT_BranchDefinition.GEM, "Ruby", false, 0xE6005C, 0xCC0052) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
@@ -944,86 +944,162 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, DIAMOND.species, 10);
-            tMutation.requireResource(GregTech_API.sBlockGem2, 11);
+        	IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, DIAMOND.species, 5);
+            tMutation.requireResource("blockRuby");
         }
     },
     SAPPHIRE(GT_BranchDefinition.GEM, "Sapphire", true, 0x0033CC, 0x00248F) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SAPPHIRE), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SAPPHIRE), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, LAPIS.species, 10);
+        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, LAPIS.species, 5);
+            tMutation.requireResource(GregTech_API.sBlockGem2, 13);
         }
     },
-    DIAMOND(GT_BranchDefinition.GEM, "Diamond", true, 0xCCFFFF, 0xA3CCCC) {
+    DIAMOND(GT_BranchDefinition.GEM, "Diamond", false, 0xCCFFFF, 0xA3CCCC) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.DIAMOND), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.DIAMOND), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
-            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.HOT);
+            beeSpecies.hasEffect();
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, COAL.species, 6);
+        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, COAL.species, 3);
+            tMutation.requireResource("blockDiamond");
         }
     },
     OLIVINE(GT_BranchDefinition.GEM, "Olivine", true, 0x248F24, 0xCCFFCC) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.OLIVINE), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.OLIVINE), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MAGNESIUM), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, getSpecies(FORRESTRY,"Ended"), 10);
+        	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, getSpecies(FORRESTRY,"Ended"), 5);
         }
     },
-    EMERALD(GT_BranchDefinition.GEM, "Emerald", true, 0x248F24, 0x2EB82E) {
+    EMERALD(GT_BranchDefinition.GEM, "Emerald", false, 0x248F24, 0x2EB82E) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
-            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.EMERALD), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.EMERALD), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ALUMINIUM), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.COLD);
+            beeSpecies.hasEffect();
         }
 
         @Override
         protected void setAlleles(IAllele[] template) {
-            template = BeeDefinition.COMMON.getTemplate();
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWER);
         }
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(OLIVINE.species, DIAMOND.species, 8);
+        	IBeeMutationCustom tMutation = registerMutation(OLIVINE.species, DIAMOND.species, 4);
+            tMutation.requireResource("blockEmerald");
         }
     },
+    REDGARNET(GT_BranchDefinition.GEM, "RedGarnet", false, 0xBD4C4C, 0xECCECE) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDGARNET), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.PYROPE), 0.05f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.WARM);
+            beeSpecies.hasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(DIAMOND.species, RUBY.species, 4);
+            tMutation.requireResource("blockGarnetRed");
+        }
+    },
+    YELLOWGARNET(GT_BranchDefinition.GEM, "YellowGarnet", false, 0xA3A341, 0xEDEDCE) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.YELLOWGARNET), 0.15f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.GROSSULAR), 0.05f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.WARM);
+            beeSpecies.hasEffect();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(EMERALD.species, REDGARNET.species, 3);
+            tMutation.requireResource("blockGarnetYellow");
+        }
+    },
+    FIRESTONR(GT_BranchDefinition.GEM, "Firestone", false, 0xC00000, 0xFF0000) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.FIRESTONE), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.WARM);
+            beeSpecies.setNocturnal();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, RUBY.species, 4);
+            tMutation.requireResource("blockFirestone");
+        }
+    },
+    //Metal Line
     COPPER(GT_BranchDefinition.METAL, "Copper", true, 0xFF6600, 0xE65C00) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {

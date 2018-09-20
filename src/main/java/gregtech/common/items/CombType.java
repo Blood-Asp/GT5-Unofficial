@@ -50,10 +50,14 @@ public enum CombType {
     LAPIS("lapis", true, Materials.Lapis, 100),
     RUBY("ruby", true, Materials.Ruby, 100),
     REDGARNET("redgarnet", true, Materials.GarnetRed,100),
+    YELLOWGARNET("yellowgarnet", true, Materials.GarnetYellow,100),
     SAPPHIRE("sapphire", true, Materials.Sapphire, 100),
     DIAMOND("diamond", true, Materials.Diamond, 100),
     OLIVINE("olivine", true, Materials.Olivine, 100),
     EMERALD("emerald", true, Materials.Emerald, 100),
+    PYROPE("pyrope", true, Materials.Pyrope, 100),
+    GROSSULAR("grassular", true, Materials.Grossular, 100),
+    FIRESTONE("firestone", true, Materials.Firestone, 100),
 
     //Metals Line
     SLAG("slag", true, Materials._NULL, 50),
@@ -70,6 +74,7 @@ public enum CombType {
     //Rare Metals Line
     ALUMINIUM("bauxia", true, Materials.Aluminium, 60),
     MANGANESE("pyrolusium", true, Materials.Manganese, 30),
+    MAGNESIUM("magnesium", true, Materials.Magnesium, 75),
     TITANIUM("titanium", true, Materials.Ilmenite, 100),
     CHROME("chromium", true, Materials.Chrome, 50),
     TUNGSTEN("scheelinium", true, Materials.Tungstate, 100),
@@ -124,10 +129,14 @@ public enum CombType {
             {0x555643, 0x343428},
             {0xE6005C, 0xCC0052},
             {0xBD4C4C, 0xECCECE},
+            {0xA3A341, 0xEDEDCE},
             {0x0033CC, 0x00248F},
             {0xCCFFFF, 0xA3CCCC},
             {0x248F24, 0xCCFFCC},
             {0x248F24, 0x2EB82E},
+            {0x763162, 0x8B8B8B},
+            {0x9B4E00, 0x8B8B8B},
+            {0xC00000, 0xFF0000},
             //Metals
             {0xD4D4D4, 0x58300B},
             {0xFF6600, 0xE65C00},
@@ -142,6 +151,7 @@ public enum CombType {
             //Rare Metals
             {0x008AB8, 0xD6D6FF},
             {0xD5D5D5, 0xAAAAAA},
+            {0xF1D9D9, 0x8B8B8B},
             {0xCC99FF, 0xDBB8FF},
             {0xEBA1EB, 0xF2C3F2},
             {0x62626D, 0x161620},
