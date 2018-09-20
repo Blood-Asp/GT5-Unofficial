@@ -84,11 +84,18 @@ public enum CombType {
     TUNGSTEN("tungsten", true, Materials.Tungstate, 100),
     PLATINUM("platinum", true, Materials.Platinum, 40),
     IRIDIUM("iridium", true, Materials.Iridium, 20),
+    MOLYBDENUM("molybdenum", true, Materials.Molybdenum, 20),
+    OSMIUM("osmium", true, Materials.Osmium, 15),
+    LITHIUM("lithium", true, Materials.Lithium, 75),
+    SALT("salt", true, Materials.Salt, 90),
+    ELECTROTINE("electrotine", true, Materials.Electrotine, 75),
+    ALMANDINE("almandine", true, Materials.Almandine, 85),
 
     //Radioactive Line
     URANIUM("uranium", true, Materials.Uranium, 50),
     PLUTONIUM("plutonium", true, Materials.Plutonium, 10),
-    NAQUADAH("naquadah", true, Materials.Naquadah, 10);
+    NAQUADAH("naquadah", true, Materials.Naquadah, 10),
+    NAQUADRIA("naquadria", true, Materials.Naquadria, 5);
 
     private static int[][] colours = new int[][]{
             //organic
@@ -165,10 +172,17 @@ public enum CombType {
             {0x62626D, 0x161620},
             {0xE6E6E6, 0xFFFFCC},
             {0xDADADA, 0xD1D1E0},
+            {0xAEAED4, 0x8B8B8B},
+            {0x2B2BDA, 0x8B8B8B},
+            {0xF0328C, 0xE1DCFF},
+            {0xF0C8C8, 0xFAFAFA},
+            {0x1E90FF, 0x3CB4C8},
+            {0xC60000, 0x8B8B8B},
             //Radioactive Line
             {0x19AF19, 0x169E16},
             {0x335C33, 0x6B8F00},
             {0x003300, 0x002400},
+            {0x000000, 0x002400},
     };
     public boolean showInList;
     public Materials material;
