@@ -780,7 +780,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if ((alwaysLookConnected || letsIn || letsOut))  {
             // Are we trying to connect to a pipe? let's do it!
             IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
-            if (getClass().isInstance(tPipe)) {
+            if (getClass().isInstance(tPipe) || (tPipe != null && tPipe.getClass().isInstance(this))) {
                 connectAtSide(aSide);
                 if (!((MetaPipeEntity) tPipe).isConnectedAtSide(tSide)) {
                     // Make sure pipes all get together -- connect back to us if we're connecting to a pipe
@@ -824,7 +824,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 		byte tSide = GT_Utility.getOppositeSide(aSide);
 		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
 		IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
-		if (this.getClass().isInstance(tPipe) && ((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
+		if ((this.getClass().isInstance(tPipe) || (tPipe != null && tPipe.getClass().isInstance(this))) && ((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
 			((MetaPipeEntity) tPipe).disconnect(tSide);
 	}
 
