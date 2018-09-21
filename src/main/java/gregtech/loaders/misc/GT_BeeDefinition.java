@@ -1075,7 +1075,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource("blockGarnetYellow");
         }
     },
-    FIRESTONR(GT_BranchDefinition.GEM, "Firestone", false, 0xC00000, 0xFF0000) {
+    FIRESTONE(GT_BranchDefinition.GEM, "Firestone", false, 0xC00000, 0xFF0000) {
         @Override
         protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
