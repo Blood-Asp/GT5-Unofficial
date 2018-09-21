@@ -192,18 +192,20 @@ public enum CombType {
             {0xC60000, 0x8B8B8B},
             //Radioactive Line
             {0x19AF19, 0x169E16},
-            {0x335C33, 0x6B8F00},
+            {0x570000, 0x240000},
             {0x003300, 0x002400},
             {0x000000, 0x002400},
             {0x003300, 0x002400},
-            {0x005000, 0x001E00},
+            {0x001E00, 0x005000},
             {0xE6FFE6, 0xFFFFFF},
             {0xE6E6FF, 0xC8C8C8},
             {0xFFF0F0, 0xFAFAFA},
             //Twilight
             {0x0D5A0D, 0x28874B},
-            {0xC5C5C5, 0x5C605E},
+            {0x5C605E, 0xC5C5C5},
             {0x872836, 0xB8132C},
+            {0xA7041C, 0x7C0618},
+            {0xD02001, 0x9C0018},
     };
     public boolean showInList;
     public Materials material;
