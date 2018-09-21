@@ -100,7 +100,14 @@ public enum CombType {
     THORIUM("thorium", true, Materials.Thorium, 75),
     LUTETIUM("lutetium", true, Materials.Lutetium, 10),
     AMERICUM("americum", true, Materials.Americium, 5),
-    NEUTRONIUM("neutronium", true, Materials.Neutronium, 2);
+    NEUTRONIUM("neutronium", true, Materials.Neutronium, 2),
+
+    //Twilight
+    NAGA("naga", true, Materials._NULL, 100),
+    LICH("lich", true, Materials._NULL, 90),
+    HYDRA("hydra", true, Materials._NULL, 80),
+    URGHAST("urghast", true, Materials._NULL, 70),
+    SNOWQUEEN("snowqueen", true, Materials._NULL, 60);
 
     private static int[][] colours = new int[][]{
             //organic
@@ -193,6 +200,10 @@ public enum CombType {
             {0xE6FFE6, 0xFFFFFF},
             {0xE6E6FF, 0xC8C8C8},
             {0xFFF0F0, 0xFAFAFA},
+            //Twilight
+            {0x0D5A0D, 0x28874B},
+            {0xC5C5C5, 0x5C605E},
+            {0x872836, 0xB8132C},
     };
     public boolean showInList;
     public Materials material;
