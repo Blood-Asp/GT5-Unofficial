@@ -1646,9 +1646,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
             beeSpecies.setNocturnal();
             beeSpecies.setHasEffect();
-            beeSpecies.setIsSecret();
+           beeSpecies.setIsSecret();
 
-        }
+       }
 
         @Override
         protected void setAlleles(IAllele[] template) {
