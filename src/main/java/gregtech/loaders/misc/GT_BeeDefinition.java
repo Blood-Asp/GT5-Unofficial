@@ -1,5 +1,6 @@
 package gregtech.loaders.misc;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.apiculture.*;
 import forestry.api.core.EnumHumidity;
@@ -8,7 +9,6 @@ import forestry.api.genetics.AlleleManager;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IAlleleFlowers;
 import forestry.apiculture.genetics.Bee;
-import forestry.apiculture.genetics.BeeDefinition;
 import forestry.apiculture.genetics.BeeVariation;
 import forestry.apiculture.genetics.IBeeDefinition;
 import forestry.apiculture.genetics.alleles.AlleleEffect;
@@ -18,9 +18,10 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.common.bees.GT_AlleleBeeSpecies;
+import gregtech.common.bees.GT_Bee_Mutation;
 import gregtech.common.items.CombType;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.text.WordUtils;
@@ -28,14 +29,12 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.util.Arrays;
 import java.util.Locale;
 
-//import forestry.apiculture.items.EnumHoneyComb;
-//import forestry.plugins.PluginApiculture;
-
 public enum GT_BeeDefinition implements IBeeDefinition {
+
     //organic
     CLAY(GT_BranchDefinition.ORGANIC, "Clay", true, 0xC8C8DA, 0x0000FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 0), 0.30f);
             beeSpecies.addProduct(new ItemStack(Items.clay_ball, 1), 0.15f);
             beeSpecies.addSpecialty(GT_ModHandler.getModItem("BiomesOPlenty", "mudball", 1, 0), 0.05f);
@@ -68,7 +67,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SLIMEBALL(GT_BranchDefinition.ORGANIC, "SlimeBall", true, 0x4E9E55, 0x00FF15) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 15), 0.30f);
             beeSpecies.addProduct(new ItemStack(Items.slime_ball, 1), 0.15f);
             beeSpecies.addProduct(GT_ModHandler.getModItem("TConstruct", "strangeFood", 1, 0), 0.10f);
@@ -89,12 +88,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Marshy"), CLAY.species, 7);
-            tMutation.requireResource(GameRegistry.findBlock("TConstruct", "slime.gel"), 1);
+        	if (Loader.isModLoaded("TConstruct"))
+                tMutation.requireResource(GameRegistry.findBlock("TConstruct", "slime.gel"), 1);
         }
     },
     PEAT(GT_BranchDefinition.ORGANIC, "Peat", true, 0x906237, 0x58300B) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LIGNIE), 0.30f);
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 0), 0.15f);
             beeSpecies.addSpecialty(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "peat", 1, 0), 0.15f);
@@ -119,7 +119,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     STICKYRESIN(GT_BranchDefinition.ORGANIC, "StickyResin", true, 0x2E8F5B, 0xDCC289) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 0), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STICKY), 0.15f);
             beeSpecies.addSpecialty(ItemList.IC2_Resin.get(1, new Object[0]), 0.15f);
@@ -141,7 +141,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     COAL(GT_BranchDefinition.ORGANIC, "Coal", true, 0x666666, 0x525252) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LIGNIE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.COAL), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -167,7 +167,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     OIL(GT_BranchDefinition.ORGANIC, "Oil", true, 0x4C4C4C, 0x333333) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 0), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.OIL), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -194,7 +194,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SANDWICH(GT_BranchDefinition.ORGANIC, "Sandwich", true, 0x32CD32, 0xDAA520) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 9), 0.15f);
             beeSpecies.addSpecialty(ItemList.Food_Sliced_Cucumber.get(1, new Object[0]), 0.05f);
             beeSpecies.addSpecialty(ItemList.Food_Sliced_Onion.get(1, new Object[0]), 0.05f);
@@ -227,7 +227,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //IC2
     COOLANT(GT_BranchDefinition.IC2, "Coolant", false, 0x144F5A, 0x2494A2) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 4), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.COOLANT), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
@@ -254,7 +254,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ENERGY(GT_BranchDefinition.IC2, "Energy", false, 0xC11F1F, 0xEBB9B9) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 12), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -282,7 +282,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     LAPOTRON(GT_BranchDefinition.IC2, "Lapotron", false, 0x6478FF, 0x1414FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENERGY), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LAPOTRON), 0.10f);
@@ -313,7 +313,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //Alloy
     REDALLOY(GT_BranchDefinition.GTALLOY, "RedAlloy", false, 0xE60000, 0xB80000) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDALLOY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -334,7 +334,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     REDSTONEALLOY(GT_BranchDefinition.GTALLOY, "RedStoneAlloy", false, 0xA50808, 0xE80000) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDSTONEALLOY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -355,7 +355,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     CONDUCTIVEIRON(GT_BranchDefinition.GTALLOY, "ConductiveIron", false, 0xCEADA3, 0x817671) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CONDUCTIVEIRON), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -377,7 +377,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     VIBRANTALLOY(GT_BranchDefinition.GTALLOY, "VibrantAlloy", false, 0x86A12D, 0xC4F2AE) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.VIBRANTALLOY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -402,7 +402,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ENERGETICALLOY(GT_BranchDefinition.GTALLOY, "EnergeticAlloy", false, 0xFF9933, 0xFFAD5C) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENERGETICALLOY), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -423,7 +423,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ELECTRICALSTEEL(GT_BranchDefinition.GTALLOY, "ElectricalSteel", false, 0x787878, 0xD8D8D8) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ELECTRICALSTEEL), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -444,7 +444,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     DARKSTEEL(GT_BranchDefinition.GTALLOY, "DarkSteel", false, 0x252525, 0x443B44) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.DARKSTEEL), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -465,7 +465,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     PULSATINGIRON(GT_BranchDefinition.GTALLOY, "PulsatingIron", false, 0x6DD284, 0x006600) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 7), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.PULSATINGIRON), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -486,7 +486,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     STAINLESSSTEEL(GT_BranchDefinition.GTALLOY, "StainlessSteel", false, 0xC8C8DC, 0x778899) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STEEL), 0.10f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STAINLESSSTEEL), 0.15f);
@@ -511,7 +511,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ENDERIUM(GT_BranchDefinition.GTALLOY, "Enderium", false, 0x599087, 0x2E8B57) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ENDERIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CHROME), 0.05f);
@@ -535,7 +535,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //thaumic
     THAUMIUMDUST(GT_BranchDefinition.THAUMIC, "ThaumiumDust", true, 0x7A007A, 0x5C005C) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.THAUMIUMDUST), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -561,7 +561,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     THAUMIMSHARD(GT_BranchDefinition.THAUMIC, "ThaumiumShard", true, 0x9966FF, 0xAD85FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.THAUMIUMDUST), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.THAUMIUMSHARD), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -587,7 +587,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     AMBER(GT_BranchDefinition.THAUMIC, "Amber", true, 0xEE7700, 0x774B15) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.AMBER), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -610,7 +610,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     QUICKSILVER(GT_BranchDefinition.THAUMIC, "Quicksilver", true, 0x7A007A, 0x5C005C) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.QUICKSILVER), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -633,7 +633,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SALISMUNDUS(GT_BranchDefinition.THAUMIC, "SalisMundus", true, 0xF7ADDE, 0x592582) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SALISMUNDUS), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -659,7 +659,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     TAINTED(GT_BranchDefinition.THAUMIC, "Tainted", true, 0x904BB8, 0xE800FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 3), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.TAINTED), 0.20f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -687,7 +687,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     MITHRIL(GT_BranchDefinition.THAUMIC, "Mithril", true, 0xF0E68C, 0xFFFFD2) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.PLATINUM), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MITHRIL), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -716,7 +716,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ASTRALSILVER(GT_BranchDefinition.THAUMIC, "AstralSilver", true, 0xAFEEEE, 0xE6E6FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SILVER), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ASTRALSILVER), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -743,7 +743,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     THAUMINITE(GT_BranchDefinition.THAUMIC, "Thauminite", true, 0x2E2D79, 0x7581E0) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("MagicBees", "comb", 1, 19), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.THAUMINITE), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -762,12 +762,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(MAGICBEES,"TCOrder"), THAUMIUMDUST.species, 8);
-            tMutation.requireResource(GameRegistry.findBlock("thaumicbases", "thauminiteBlock"), 0);
+            if (Loader.isModLoaded("thaumicbases"))
+                tMutation.requireResource(GameRegistry.findBlock("thaumicbases", "thauminiteBlock"), 0);
         }
     },
     SHADOWMETAL(GT_BranchDefinition.THAUMIC, "ShadowMetal", true, 0x100322, 0x100342) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("MagicBees", "comb", 1, 20), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SHADOWMETAL), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -788,12 +789,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(MAGICBEES,"TCChaos"), getSpecies(MAGICBEES,"TCVoid"), 6);
-            tMutation.requireResource(GameRegistry.findBlock("TaintedMagic", "BlockShadowmetal"), 0);
+            if (Loader.isModLoaded("TaintedMagic"))
+                tMutation.requireResource(GameRegistry.findBlock("TaintedMagic", "BlockShadowmetal"), 0);
         }
     },
     DIVIDED(GT_BranchDefinition.THAUMIC, "Unstable", true, 0xF0F0F0, 0xDCDCDC) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 61), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.DIVIDED), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -812,12 +814,13 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(DIAMOND.species, IRON.species, 3);
-            tMutation.requireResource(GameRegistry.findBlock("ExtraUtilities", "decorativeBlock1"), 5);
+            if (Loader.isModLoaded("ExtraUtilities"))
+                tMutation.requireResource(GameRegistry.findBlock("ExtraUtilities", "decorativeBlock1"), 5);
         }
     },
     SPARKELING(GT_BranchDefinition.THAUMIC, "NetherStar", true, 0x7A007A, 0xFFFFFF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("MagicBees", "miscResources", 1, 3), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SPARKELING), 0.125f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -845,7 +848,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 //gems
     REDSTONE(GT_BranchDefinition.GEM, "Redstone", true, 0x7D0F0F, 0xD11919) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDSTONE), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.RAREEARTH), 0.15f);
@@ -866,7 +869,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     LAPIS(GT_BranchDefinition.GEM, "Lapis", true, 0x1947D1, 0x476CDA) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LAPIS), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -886,7 +889,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     CERTUS(GT_BranchDefinition.GEM, "CertusQuartz", true, 0x57CFFB, 0xBBEEFF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.CERTUS), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -906,7 +909,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     FLUIX(GT_BranchDefinition.GEM, "FluixDust", true, 0xA375FF, 0xB591FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.FLUIX), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -926,7 +929,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     RUBY(GT_BranchDefinition.GEM, "Ruby", false, 0xE6005C, 0xCC0052) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.RUBY), 0.15f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.REDGARNET), 0.05f);
@@ -947,7 +950,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SAPPHIRE(GT_BranchDefinition.GEM, "Sapphire", true, 0x0033CC, 0x00248F) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SAPPHIRE), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -967,7 +970,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     DIAMOND(GT_BranchDefinition.GEM, "Diamond", false, 0xCCFFFF, 0xA3CCCC) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.DIAMOND), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -988,7 +991,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     OLIVINE(GT_BranchDefinition.GEM, "Olivine", true, 0x248F24, 0xCCFFCC) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.OLIVINE), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MAGNESIUM), 0.05f);
@@ -1008,7 +1011,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     EMERALD(GT_BranchDefinition.GEM, "Emerald", false, 0x248F24, 0x2EB82E) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.EMERALD), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ALUMINIUM), 0.05f);
@@ -1030,7 +1033,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     REDGARNET(GT_BranchDefinition.GEM, "RedGarnet", false, 0xBD4C4C, 0xECCECE) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDGARNET), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.PYROPE), 0.05f);
@@ -1053,7 +1056,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     YELLOWGARNET(GT_BranchDefinition.GEM, "YellowGarnet", false, 0xA3A341, 0xEDEDCE) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.YELLOWGARNET), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.GROSSULAR), 0.05f);
@@ -1076,7 +1079,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     FIRESTONR(GT_BranchDefinition.GEM, "Firestone", false, 0xC00000, 0xFF0000) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STONE), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.FIRESTONE), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
@@ -1100,7 +1103,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //Metal Line
     COPPER(GT_BranchDefinition.METAL, "Copper", true, 0xFF6600, 0xE65C00) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.COPPER), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.GOLD), 0.05f);
@@ -1121,7 +1124,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     TIN(GT_BranchDefinition.METAL, "Tin", true, 0xD4D4D4, 0xDDDDDD) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.TIN), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ZINC), 0.05f);
@@ -1142,7 +1145,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     LEAD(GT_BranchDefinition.METAL, "Lead", true, 0x666699, 0xA3A3CC) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LEAD), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SULFUR), 0.05f);
@@ -1163,7 +1166,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     IRON(GT_BranchDefinition.METAL, "Iron", true, 0xDA9147, 0xDE9C59) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.IRON), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.TIN), 0.05f);
@@ -1184,7 +1187,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     STEEL(GT_BranchDefinition.METAL, "Steel", true, 0x808080, 0x999999) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.STEEL), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.IRON), 0.05f);
@@ -1206,7 +1209,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     NICKEL(GT_BranchDefinition.METAL, "Nickel", true, 0x8585AD, 0x8585AD) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.NICKEL), 0.15f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.PLATINUM), 0.02f);
@@ -1226,7 +1229,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ZINC(GT_BranchDefinition.METAL, "Zinc", true, 0xF0DEF0, 0xF2E1F2) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ZINC), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.GALLIUM), 0.05f);
@@ -1247,7 +1250,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SILVER(GT_BranchDefinition.METAL, "Silver", true, 0xC2C2D6, 0xCECEDE) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SILVER), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SULFUR), 0.05f);
@@ -1268,7 +1271,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     GOLD(GT_BranchDefinition.METAL, "Gold", true, 0xEBC633, 0xEDCC47) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.GOLD), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.NICKEL), 0.05f);
@@ -1290,7 +1293,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ARSENIC(GT_BranchDefinition.METAL, "Arsenic", true, 0x736C52, 0x292412) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ARSENIC), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -1311,7 +1314,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //Rare Metals
     ALUMINIUM(GT_BranchDefinition.RAREMETAL, "Aluminium", true, 0xB8B8FF, 0xD6D6FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.ALUMINIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.BAUXITE), 0.05f);
@@ -1332,7 +1335,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     TITANIUM(GT_BranchDefinition.RAREMETAL, "Titanium", true, 0xCC99FF, 0xDBB8FF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.TITANIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ALMANDINE), 0.05f);
@@ -1353,7 +1356,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     CHROME(GT_BranchDefinition.RAREMETAL, "Chrome", true, 0xEBA1EB, 0xF2C3F2) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.CHROME), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MAGNESIUM), 0.05f);
@@ -1374,7 +1377,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     MANGANESE(GT_BranchDefinition.RAREMETAL, "Manganese", true, 0xD5D5D5, 0xAAAAAA) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.MANGANESE), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.IRON), 0.05f);
@@ -1395,7 +1398,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     TUNGSTEN(GT_BranchDefinition.RAREMETAL, "Tungsten", false, 0x5C5C8A, 0x7D7DA1) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.TUNGSTEN), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MOLYBDENUM), 0.05f);
@@ -1416,7 +1419,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     PLATINUM(GT_BranchDefinition.RAREMETAL, "Platinum", false, 0xE6E6E6, 0xFFFFCC) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.PLATINUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.IRIDIUM), 0.02f);
@@ -1437,7 +1440,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     IRIDIUM(GT_BranchDefinition.RAREMETAL, "Iridium", false, 0xDADADA, 0xD1D1E0) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.IRIDIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.OSMIUM), 0.05f);
@@ -1459,7 +1462,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     OSMIUM(GT_BranchDefinition.RAREMETAL, "Osmium", false, 0x2B2BDA, 0x8B8B8B) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.OSMIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.IRIDIUM), 0.05f);
@@ -1481,7 +1484,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     LITHIUM(GT_BranchDefinition.RAREMETAL, "Lithium", false, 0xF0328C, 0xE1DCFF) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LITHIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SALT), 0.05f);
@@ -1502,7 +1505,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     SALTY(GT_BranchDefinition.RAREMETAL, "Salt", true, 0xF0C8C8, 0xFAFAFA) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.LITHIUM), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.SALT), 0.05f);
@@ -1523,7 +1526,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     ELECTROTINE(GT_BranchDefinition.RAREMETAL, "Electrotine", false, 0x1E90FF, 0x3CB4C8) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.ELECTROTINE), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.REDSTONE), 0.05f);
@@ -1545,7 +1548,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     //radiactive
     URANIUM(GT_BranchDefinition.RADIOACTIVE, "Uranium", true, 0x19AF19, 0x169E16) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.URANIUM), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -1566,7 +1569,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     },
     PLUTONIUM(GT_BranchDefinition.RADIOACTIVE, "Plutonium", true, 0x335C33, 0x6B8F00) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LEAD), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.PLUTONIUM), 0.15f);
@@ -1587,9 +1590,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         	tMutation.requireResource(GregTech_API.sBlockMetal5, 13);
         }
     },
+
     NAQUADAH(GT_BranchDefinition.RADIOACTIVE, "Naquadah", false, 0x003300, 0x002400) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.NAQUADAH), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
@@ -1613,7 +1617,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
     NAQUADRIA(GT_BranchDefinition.RADIOACTIVE, "Naquadria", false, 0x000000, 0x002400) {
         @Override
-        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+        protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SLAG), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.NAQUADAH), 0.20f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.NAQUADRIA), 0.15f);
@@ -1631,12 +1635,12 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 1);
+            IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 1,10);
             tMutation.requireResource(GregTech_API.sBlockMetal4, 15);
         }
     };
     private final GT_BranchDefinition branch;
-    private final IAlleleBeeSpeciesCustom species;
+    private final GT_AlleleBeeSpecies species;
     private final static byte FORRESTRY = 0;
     private final static byte EXTRABEES = 1;
     private final static byte GENDUSTRY = 2;
@@ -1656,7 +1660,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         String name = "for.bees.species." + lowercaseName;
 
         this.branch = branch;
-        this.species = BeeManager.beeFactory.createSpecies(uid, dominant, "GTNH", name, description, branch.getBranch(), binomial, primary, secondary);
+        this.species = new GT_AlleleBeeSpecies(uid, dominant, name, "GTNH", description, branch.getBranch(), binomial, primary, secondary);
     }
 
     public static void initBees() {
@@ -1700,15 +1704,20 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             case EXTRABEES: s = new StringBuilder().append("extrabees.species.").append(name).toString();break;
             case GENDUSTRY: s = new StringBuilder().append("gendustry.bee.").append(name).toString();break;
             case MAGICBEES: s = new StringBuilder().append("magicbees.species").append(name).toString();break;
-            case GREGTECH: s = new StringBuilder().append("gregtech.effect").append(name).toString();break;
+            case GREGTECH: s = new StringBuilder().append("gregtech.species").append(name).toString();break;
             default: s = new StringBuilder().append("forestry.species").append(name).toString();break;
 
         }
-        return (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(s);
+        IAlleleBeeSpecies ret = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(s);
+        if (ret == null){
+            ret = NAQUADRIA.species;
+        }
+
+        return ret;
     }
 
 
-    protected abstract void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies);
+    protected abstract void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies);
 
     protected abstract void setAlleles(IAllele[] template);
 
@@ -1727,7 +1736,20 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     }
 
     protected final IBeeMutationCustom registerMutation(IAlleleBeeSpecies parent1, IAlleleBeeSpecies parent2, int chance) {
-        return BeeManager.beeMutationFactory.createMutation(parent1, parent2, getTemplate(), chance);
+        return new GT_Bee_Mutation(parent1,parent2,this.getTemplate(),chance,1);
+    }
+
+    /**
+     * Diese neue Funtion erlaubt Mutationsraten unter 1%. Setze dazu die Mutationsrate als Bruch mit chance / chanchedivider
+     * This new function allows Mutation percentages under 1%. Set them as a fraction with chance / chanchedivider
+     * @param parent1
+     * @param parent2
+     * @param chance
+     * @param chanchedivider
+     * @return
+     */
+    protected final IBeeMutationCustom registerMutation(IAlleleBeeSpecies parent1, IAlleleBeeSpecies parent2, int chance, int chanchedivider) {
+        return new GT_Bee_Mutation(parent1,parent2,this.getTemplate(),chance,chanchedivider);
     }
 
     @Override

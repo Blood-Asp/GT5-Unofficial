@@ -24,7 +24,6 @@ import net.minecraft.util.IIcon;
 
 import java.util.List;
 
-import static gregtech.api.enums.GT_Values.GT;
 import static gregtech.api.enums.GT_Values.MOD_ID;
 
 public class ItemComb extends Item {
