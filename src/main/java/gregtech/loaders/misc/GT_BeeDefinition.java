@@ -23,6 +23,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.BiomeDictionary;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
@@ -1539,7 +1540,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, GOLD.species, 5);
-            tMutation.requireResource("blockSalt");
+            tMutation.requireResource("blockElectrotine");
         }
     },
     //radiactive
@@ -1560,7 +1561,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Avenging"), PLATINUM.species, 5);
+        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Avenging"), PLATINUM.species, 2);
         	tMutation.requireResource(GregTech_API.sBlockMetal7, 14);
         }
     },
@@ -1583,7 +1584,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(URANIUM.species, EMERALD.species, 5);
+        	IBeeMutationCustom tMutation = registerMutation(URANIUM.species, EMERALD.species, 2);
         	tMutation.requireResource(GregTech_API.sBlockMetal5, 13);
         }
     },
@@ -1606,7 +1607,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 3);
+        	IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 1);
         	tMutation.requireResource(GregTech_API.sBlockMetal4, 12);
         }
     },
@@ -1631,8 +1632,124 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 1);
+            IBeeMutationCustom tMutation = registerMutation(PLUTONIUM.species, IRIDIUM.species, 1);//TODO 0,8%
             tMutation.requireResource(GregTech_API.sBlockMetal4, 15);
+        }
+    },
+    DOB(GT_BranchDefinition.RADIOACTIVE, "DOB", false, 0x003300, 0x002400) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.DOB), 0.75f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.hasEffect();
+            beeSpecies.setIsSecret();
+
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.FAST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(NAQUADAH.species, THAUMIMSHARD.species, 1);
+            tMutation.requireResource(GameRegistry.findBlock("AdvancedSolarPanel", "BlockAdvSolarPanel"), 2);
+            tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(9, "END Dimension"));//sky end biome
+        }
+    },
+    THORIUM(GT_BranchDefinition.RADIOACTIVE, "Thorium", false, 0x005000, 0x001E00) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.THORIUM), 0.75f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.COLD);
+            beeSpecies.setIsSecret();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(COAL.species, URANIUM.species, 2);
+            tMutation.requireResource(GregTech_API.sBlockMetal7, 5);
+        }
+    },
+    LUTETIUM(GT_BranchDefinition.RADIOACTIVE, "Lutetium", false, 0xE6FFE6, 0xFFFFFF) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.LUTETIUM), 0.15f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.hasEffect();
+            beeSpecies.setIsSecret();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(THORIUM.species, getSpecies(EXTRABEES,"rotten"), 1);
+            tMutation.requireResource(GregTech_API.sBlockMetal4, 3);
+        }
+    },
+    AMERICUM(GT_BranchDefinition.RADIOACTIVE, "Americum", false, 0xE6E6FF, 0xC8C8C8) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.AMERICUM), 0.05f);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
+            beeSpecies.setTemperature(EnumTemperature.NORMAL);
+            beeSpecies.hasEffect();
+            beeSpecies.setIsSecret();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(LUTETIUM.species, CHROME.species, 1);//TODO 0,75%
+            tMutation.requireResource(GregTech_API.sBlockMetal1, 2);
+        }
+    },
+    NEUTRONIUM(GT_BranchDefinition.RADIOACTIVE, "Neutronium", false, 0xFFF0F0, 0xFAFAFA) {
+        @Override
+        protected void setSpeciesProperties(IAlleleBeeSpeciesCustom beeSpecies) {
+            beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.NEUTRONIUM), 0.001f);
+            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setTemperature(EnumTemperature.HELLISH);
+            beeSpecies.hasEffect();
+            beeSpecies.setIsSecret();
+        }
+
+        @Override
+        protected void setAlleles(IAllele[] template) {
+            AlleleHelper.instance.set(template, EnumBeeChromosome.SPEED, EnumAllele.Speed.SLOWEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.LONGEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.NOCTURNAL, true);
+        }
+
+        @Override
+        protected void registerMutations() {
+            IBeeMutationCustom tMutation = registerMutation(NAQUADRIA.species, AMERICUM.species, 1);//TODO 0,5%
+            tMutation.requireResource(GregTech_API.sBlockMetal5, 2);
         }
     };
     private final GT_BranchDefinition branch;

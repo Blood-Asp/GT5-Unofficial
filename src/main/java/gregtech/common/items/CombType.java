@@ -95,7 +95,12 @@ public enum CombType {
     URANIUM("uranium", true, Materials.Uranium, 50),
     PLUTONIUM("plutonium", true, Materials.Plutonium, 10),
     NAQUADAH("naquadah", true, Materials.Naquadah, 10),
-    NAQUADRIA("naquadria", true, Materials.Naquadria, 5);
+    NAQUADRIA("naquadria", true, Materials.Naquadria, 5),
+    DOB("dob", true, Materials._NULL, 50),
+    THORIUM("thorium", true, Materials.Thorium, 75),
+    LUTETIUM("lutetium", true, Materials.Lutetium, 10),
+    AMERICUM("americum", true, Materials.Americium, 5),
+    NEUTRONIUM("neutronium", true, Materials.Neutronium, 2);
 
     private static int[][] colours = new int[][]{
             //organic
@@ -183,6 +188,11 @@ public enum CombType {
             {0x335C33, 0x6B8F00},
             {0x003300, 0x002400},
             {0x000000, 0x002400},
+            {0x003300, 0x002400},
+            {0x005000, 0x001E00},
+            {0xE6FFE6, 0xFFFFFF},
+            {0xE6E6FF, 0xC8C8C8},
+            {0xFFF0F0, 0xFAFAFA},
     };
     public boolean showInList;
     public Materials material;
