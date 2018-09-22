@@ -441,6 +441,42 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), GT_ModHandler.getModItem("dreamcraft", "item..CarminiteChip", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.CarminiteFragment",1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 512, 1920);
 		tComb = getStackForType(CombType.SNOWQUEEN);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBloodDrop", 1L, 0), GT_Bees.drop.getStackForType(DropType.SNOW_QUEEN), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 1000, 0, 0}, 512, 1920);
+
+		//Space Line
+		tComb = getStackForType(CombType.SPACE);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), ItemList.FR_RefractoryWax.get(1L), GT_Bees.drop.getStackForType(DropType.OXYGEN), GT_ModHandler.getModItem("dreamcraft", "item.CoinSpace", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 1500, 500, 0, 0}, 384, 480);
+		tComb = getStackForType(CombType.METEORICIRON);
+		addProcessHV(tComb,Materials.MeteoricIron,85);
+		addProcessHV(tComb,Materials.Iron,100);
+		tComb = getStackForType(CombType.DESH);
+		addProcessEV(tComb,Materials.Desh,75);
+		addProcessEV(tComb,Materials.Titanium,50);
+		tComb = getStackForType(CombType.LEDOX);
+		addProcessEV(tComb,Materials.Ledox,65);
+		addProcessEV(tComb,Materials.CallistoIce,55);
+		addProcessEV(tComb,Materials.Lead,85);
+		tComb = getStackForType(CombType.CALLISTOICE);
+		addProcessIV(tComb,Materials.CallistoIce,65);
+		addProcessIV(tComb,Materials.Ledox,75);
+		addProcessIV(tComb,Materials.Lead,100);
+		tComb = getStackForType(CombType.MYTRYL);
+		addProcessIV(tComb,Materials.Mytryl,55);
+		addProcessIV(tComb,Materials.Mithril,50);
+		tComb = getStackForType(CombType.QUANTIUM);
+		addProcessIV(tComb,Materials.Quantium,50);
+		addProcessIV(tComb,Materials.Osmium,60);
+		tComb = getStackForType(CombType.ORIHARUKON);
+		addProcessIV(tComb,Materials.Oriharukon,50);
+		addProcessIV(tComb,Materials.Lead,75);
+		tComb = getStackForType(CombType.MYSTERIOUSCRYSTAL);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.MysteriousCrystal, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Emerald, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 1000, 1500, 0, 0, 0}, 512, 30720);
+		addProcessLUV(tComb,Materials.Emerald,50);
+		tComb = getStackForType(CombType.BLACKPLUTONIUM);
+		addProcessLUV(tComb,Materials.BlackPlutonium,25);
+		addProcessLUV(tComb,Materials.Plutonium,50);
+		tComb = getStackForType(CombType.TRINIUM);
+		addProcessZPM(tComb,Materials.Trinium,35);
+		addProcessZPM(tComb,Materials.Iridium,45);
 	}
 	public void addSpecialCentLV(ItemStack tComb, ItemStack aOutput, int chance){
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 5000 }, 128, 5);
