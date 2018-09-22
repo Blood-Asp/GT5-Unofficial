@@ -107,7 +107,42 @@ public enum CombType {
     LICH("lich", true, Materials._NULL, 90),
     HYDRA("hydra", true, Materials._NULL, 80),
     URGHAST("urghast", true, Materials._NULL, 70),
-    SNOWQUEEN("snowqueen", true, Materials._NULL, 60);
+    SNOWQUEEN("snowqueen", true, Materials._NULL, 60),
+
+    //Space
+    SPACE("space", true, Materials._NULL, 100),
+    METEORICIRON("meteoriciron",true, Materials.MeteoricIron, 100),
+    DESH("desh",true, Materials.Desh, 90),
+    LEDOX("ledox",true, Materials.Ledox, 75),
+    CALLISTOICE("callistoice",true, Materials.CallistoIce, 75),
+    MYTRYL("mytryl",true, Materials.Mytryl, 65),
+    QUANTIUM("quantium",true, Materials.Quantium, 50),
+    ORIHARUKON("oriharukon",true, Materials.Oriharukon, 50),
+    MYTERIOUSCRYSTAL("mysteriouscrystal",true, Materials.MysteriousCrystal, 45),
+    BLACKPLUTONIUM("blackplutonium",true, Materials.Quantium, 25),
+    TRINIUM("trinium",true, Materials.Trinium, 25),
+
+    //Planet
+    MERCURY("mercury", true, Materials._NULL, 65),
+    VENUS("venus",true, Materials._NULL, 65),
+    MOON("moon",true, Materials._NULL, 90),
+    MARS("mars",true, Materials._NULL, 80),
+    JUPITER("jupiter",true, Materials._NULL, 75),
+    SATURN("saturn",true, Materials._NULL, 55),
+    URANUS("uranus",true, Materials._NULL, 45),
+    NEPTUN("neptun",true, Materials._NULL, 35),
+    PLUTO("pluto",true, Materials._NULL, 25),
+    HAUMEA("haumea",true, Materials._NULL, 20),
+    MAKEMAKE("makemake",true, Materials._NULL, 20),
+    CENTAURI("centauri",true, Materials._NULL, 15),
+    TCETI("tceti",true, Materials._NULL, 10),
+    BARNARDA("barnarda",true, Materials._NULL, 10),
+    VEGA("vega",true, Materials._NULL, 10),
+
+    //Infinity
+    COSMICNEUTRONIUM("cosmicneutronium",true, Materials._NULL, 5),
+    INFINITYCATALYST("infinitycatalyst",true, Materials._NULL, 2),
+    INFINITY("infinity",true, Materials._NULL, 1);
 
     private static int[][] colours = new int[][]{
             //organic
@@ -206,6 +241,38 @@ public enum CombType {
             {0x872836, 0xB8132C},
             {0x7C0618, 0xA7041C},
             {0x9C0018, 0xD02001},
+            //space
+            {0x003366, 0xC0C0C0},
+            {0x321928, 0x643250},
+            {0x323232, 0x282828},
+            {0x0000CD, 0x0074FF},
+            {0x0074FF, 0x1EB1FF},
+            {0xDAA520, 0xF26404},
+            {0x00FF00, 0x00D10B},
+            {0x228B22, 0x677D68},
+            {0x3CB371, 0x16856C},
+            {0x000000, 0x323232},
+            {0xB0E0E6, 0xC8C8D2},
+            //planets
+            {0x4A4033, 0xB5A288},
+            {0x120E07, 0x272010},
+            {0x373735, 0x7E7E78},
+            {0x220D05, 0x3A1505},
+            {0x734B2E, 0xD0CBC4},
+            {0xD2A472, 0xF8C37B},
+            {0x75C0C9, 0x84D8EC},
+            {0x334CFF, 0x576DFF},
+            {0x34271E, 0x69503D},
+            {0x1C1413, 0x392B28},
+            {0x301811, 0x120A07},
+            {0x2F2A14, 0xB06B32},
+            {0x46241A, 0x7B412F},
+            {0x0D5A0D, 0xE6C18D},
+            {0x1A2036, 0xB5C0DE},
+            //infinity
+            {0x484848, 0x323232},
+            {0xFFFFFF, 0xFFFFFF},
+            {0xFFFFFF, 0xFFFFFF},
     };
     public boolean showInList;
     public Materials material;
