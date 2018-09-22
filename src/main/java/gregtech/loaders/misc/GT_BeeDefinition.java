@@ -2046,7 +2046,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(46, "Oberon"));//Oberon Dim
         }
     },
-    MYTERIOUSCRYSTAL(GT_BranchDefinition.SPACE, "MysteriousCrystal", false, 0x3CB371, 0x16856C) {
+    MYSTERIOUSCRYSTAL(GT_BranchDefinition.SPACE, "MysteriousCrystal", false, 0x3CB371, 0x16856C) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SPACE), 0.42f);
