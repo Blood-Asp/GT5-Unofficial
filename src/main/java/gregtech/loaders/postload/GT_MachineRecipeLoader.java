@@ -2172,7 +2172,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Draconium, 2L)}, new FluidStack[]{
-                Materials.CosmicNeutronium.getMolten(2592),
+                Materials.Quantium.getMolten(2592),
                 Materials.SolderingAlloy.getMolten(5184),
                 Materials.Lubricant.getFluid(8000)}, ItemList.Electric_Motor_UEV.get(1, new Object[]{}), 1000, 400000);
 
