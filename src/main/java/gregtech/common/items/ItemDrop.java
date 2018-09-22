@@ -5,11 +5,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.Tabs;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_ModHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -88,12 +91,30 @@ public class ItemDrop extends Item {
 	public void initDropsRecipes() {
 		ItemStack tDrop;
 
+		tDrop = getStackForType(DropType.OIL);
+		addProcessLV(tDrop, Materials.OilHeavy.getFluid(100L), GT_ModHandler.getModItem("Forestry", "propolis", 1L, 0), 3000, 8);
 		tDrop = getStackForType(DropType.COOLANT);
-		//addRecipe(tDrop, aOutput, aOutput2, aChance, aEUt);
+		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("ic2coolant"), 100), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 0), 3000, 8);
+		tDrop = getStackForType(DropType.HOT_COOLANT);
+		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("ic2hotcoolant"), 100), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), 3000, 8);
+		tDrop = getStackForType(DropType.SNOW_QUEEN);
+		addProcessMV(tDrop, Materials.FierySteel.getFluid(200L), GT_ModHandler.getModItem("dreamcraft", "SnowQueenBloodDrop", 1L, 0), 1500, 48);
+		tDrop = getStackForType(DropType.LAPIS);
+		addProcessLV(tDrop,new FluidStack(FluidRegistry.getFluid("ic2coolant"), 200), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), 5000, 1200,2);
+		tDrop = getStackForType(DropType.HYDRA);
+		addProcessMV(tDrop, Materials.FierySteel.getFluid(50L), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), 3000, 8);
+		tDrop = getStackForType(DropType.OXYGEN);
+		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("liquidoxygen"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 250, 1200,8);
 	}
 
-	public void addRecipe(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
-		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 40, aEUt);
+	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 32, aEUt);
+	}
+	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aDuration, int aEUt) {
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
+	}
+	public void addProcessMV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 64, aEUt);
 	}
 
 }
