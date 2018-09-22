@@ -560,7 +560,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(192, "Magical Forest"));//magical forest
         }
     },
-    THAUMIMSHARD(GT_BranchDefinition.THAUMIC, "ThaumiumShard", true, 0x9966FF, 0xAD85FF) {
+    THAUMIUMSHARD(GT_BranchDefinition.THAUMIC, "ThaumiumShard", true, 0x9966FF, 0xAD85FF) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.THAUMIUMDUST), 0.30f);
@@ -654,7 +654,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIMSHARD.species, 8);
+            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIUMSHARD.species, 8);
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(192, "Magical Forest"));//magical forest
         }
     },
@@ -682,7 +682,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIMSHARD.species, 7);
+            IBeeMutationCustom tMutation = registerMutation(THAUMIUMDUST.species, THAUMIUMSHARD.species, 7);
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(193, "Tainted Land"));//Tainted Land
         }
     },
@@ -1662,7 +1662,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NAQUADAH.species, THAUMIMSHARD.species, 1);
+            IBeeMutationCustom tMutation = registerMutation(NAQUADAH.species, THAUMIUMSHARD.species, 1);
             tMutation.requireResource(GameRegistry.findBlock("AdvancedSolarPanel", "BlockAdvSolarPanel"), 2);
             tMutation.addMutationCondition(new GT_Bees.BiomeIDMutationCondition(9, "END Biome"));//sky end biome
         }
@@ -1868,7 +1868,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies(MAGICBEES,"Supernatural"), NAGA.species, 4);
+            IBeeMutationCustom tMutation = registerMutation(URGHAST.species, SALISMUNDUS.species, 4);
             tMutation.requireResource(GameRegistry.findBlock("thaumicbases", "blockSalisMundus"), 0);
             tMutation.restrictTemperature(EnumTemperature.ICY);
         }

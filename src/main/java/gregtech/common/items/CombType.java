@@ -76,7 +76,7 @@ public enum CombType {
 
     //Rare Metals Line
     BAUXITE("bauxite", true, Materials.Bauxite, 85),
-    ALUMINIUM("alluminium", true, Materials.Aluminium, 60),
+    ALUMINIUM("aluminium", true, Materials.Aluminium, 60),
     MANGANESE("manganese", true, Materials.Manganese, 30),
     MAGNESIUM("magnesium", true, Materials.Magnesium, 75),
     TITANIUM("titanium", true, Materials.Ilmenite, 100),
@@ -111,14 +111,14 @@ public enum CombType {
 
     private static int[][] colours = new int[][]{
             //organic
-            {0x906237, 0x58300B},
+            {0x58300B, 0x906237},
             {0x525252, 0x666666},
             {0x2E8F5B, 0xDCC289},
-            {0x4C4C4C, 0x333333},
+            {0x333333, 0x4C4C4C},
             //ic2
             {0x144F5A, 0x2494A2},
             {0xC11F1F, 0xEBB9B9},
-            {0x6478FF, 0x1414FF},
+            {0x1414FF, 0x6478FF},
             //alloy
             {0xE60000, 0xB80000},
             {0xB80000, 0xA50808},
@@ -127,13 +127,13 @@ public enum CombType {
             {0xFF9933, 0xFFAD5C},
             {0x787878, 0xD8D8D8},
             {0x252525, 0x443B44},
-            {0x6DD284, 0x006600},
+            {0x006600, 0x6DD284},
             {0x778899, 0xC8C8DC},
             {0x2E8B57, 0x599087},
             //Thaumcraft
             {0x7A007A, 0x5C005C},
             {0x9966FF, 0xAD85FF},
-            {0xEE7700, 0x774B15},
+            {0x774B15, 0xEE7700},
             {0xc7c7ea, 0xb5b3df},
             {0xF7ADDE, 0x592582},
             {0x904BB8, 0xE800FF},
@@ -172,7 +172,7 @@ public enum CombType {
             {0xC2C2D6, 0xCECEDE},
             {0xE6B800, 0xCFA600},
             {0x6F6F01, 0x8B8B8B},
-            {0xC5C5E4, 0x8B8B8B},
+            {0x8B8B8B, 0xC5C5E4},
             {0x736C52, 0x292412},
             //Rare Metals
             {0x6B3600, 0x8B8B8B},
@@ -193,9 +193,9 @@ public enum CombType {
             //Radioactive Line
             {0x19AF19, 0x169E16},
             {0x240000, 0x570000},
-            {0x003300, 0x002400},
+            {0x000000, 0x004400},
             {0x000000, 0x002400},
-            {0x003300, 0x002400},
+            {0x007700, 0x002400},
             {0x001E00, 0x005000},
             {0xE6FFE6, 0xFFFFFF},
             {0xE6E6FF, 0xC8C8C8},
@@ -204,8 +204,8 @@ public enum CombType {
             {0x0D5A0D, 0x28874B},
             {0x5C605E, 0xC5C5C5},
             {0x872836, 0xB8132C},
-            {0xA7041C, 0x7C0618},
-            {0xD02001, 0x9C0018},
+            {0x7C0618, 0xA7041C},
+            {0x9C0018, 0xD02001},
     };
     public boolean showInList;
     public Materials material;

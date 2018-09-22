@@ -325,10 +325,15 @@ public class ItemComb extends Item {
 		addProcessLV(tComb, Materials.Magnetite, Materials.Gold, 80);
 		tComb = getStackForType(CombType.SULFUR);
 		addProcessLV(tComb, Materials.Sulfur, 100);
+        addProcessLV(tComb, Materials.Pyrite, 90);
+        addProcessLV(tComb, Materials.Sphalerite, 80);
 		tComb = getStackForType(CombType.GALLIUM);
 		addProcessLV(tComb, Materials.Gallium, 80);
+        addProcessLV(tComb, Materials.Niobium, 75);
 		tComb = getStackForType(CombType.ARSENIC);
 		addProcessLV(tComb, Materials.Arsenic, 80);
+        addProcessLV(tComb, Materials.Bismuth, 70);
+        addProcessLV(tComb, Materials.Antimony, 70);
 
 	    // Rare Metals Line
 		tComb = getStackForType(CombType.BAUXITE);
@@ -344,27 +349,43 @@ public class ItemComb extends Item {
 		addProcessLV(tComb,Materials.Pyrolusite,100);
 		addProcessLV(tComb,Materials.Tantalite,100);
 		tComb = getStackForType(CombType.TITANIUM);
-		addProcessLV(tComb,Materials.Titanium,100);
-		addProcessLV(tComb,Materials.Ilmenite,100);
-		addProcessLV(tComb,Materials.Bauxite,100);
+		addProcessEV(tComb,Materials.Titanium,90);
+        addProcessEV(tComb,Materials.Ilmenite,80);
+        addProcessEV(tComb,Materials.Bauxite,75);
 		tComb = getStackForType(CombType.CHROME);
-		addProcessLV(tComb,Materials.Chrome,50);
-		addProcessLV(tComb,Materials.Ruby,100);
-		addProcessLV(tComb,Materials.Chromite,50);
-		addProcessLV(tComb,Materials.Redstone,100);
-		addProcessLV(tComb, Materials.Neodymium, 100);
-		addProcessLV(tComb, Materials.Bastnasite, 100);
+		addProcessHV(tComb,Materials.Chrome,50);
+        addProcessHV(tComb,Materials.Ruby,100);
+        addProcessHV(tComb,Materials.Chromite,50);
+        addProcessHV(tComb,Materials.Redstone,100);
+        addProcessHV(tComb, Materials.Neodymium, 80);
+        addProcessHV(tComb, Materials.Bastnasite, 80);
 		tComb = getStackForType(CombType.TUNGSTEN);
-		addProcessLV(tComb,Materials.Tungstate,100);
-		addProcessLV(tComb,Materials.Scheelite,100);
-		addProcessLV(tComb,Materials.Lithium,100);
+		addProcessIV(tComb,Materials.Tungstate,80);
+        addProcessIV(tComb,Materials.Scheelite,75);
+        addProcessIV(tComb,Materials.Lithium,75);
 		tComb = getStackForType(CombType.PLATINUM);
-		addProcessLV(tComb,Materials.Platinum,40);
-		addProcessLV(tComb,Materials.Cooperite,40);
-		addProcessLV(tComb,Materials.Palladium,40);
+		addProcessHV(tComb,Materials.Platinum,40);
+        addProcessHV(tComb,Materials.Cooperite,40);
+        addProcessHV(tComb,Materials.Palladium,40);
 		tComb = getStackForType(CombType.IRIDIUM);
-		addProcessLV(tComb,Materials.Iridium,20);
-		addProcessLV(tComb,Materials.Osmium,20);
+        addProcessIV(tComb,Materials.Iridium,20);
+        addProcessIV(tComb,Materials.Osmium,15);
+        tComb = getStackForType(CombType.OSMIUM);
+        addProcessIV(tComb,Materials.Osmium,25);
+        addProcessIV(tComb,Materials.Iridium,15);
+        tComb = getStackForType(CombType.LITHIUM);
+        addProcessMV(tComb,Materials.Lithium,85);
+        addProcessMV(tComb,Materials.Aluminium,75);
+        tComb = getStackForType(CombType.SALT);
+        addProcessMV(tComb,Materials.Salt,100);
+        addProcessMV(tComb,Materials.Sodium,75);
+        addProcessMV(tComb,Materials.RockSalt,75);
+        addProcessMV(tComb,Materials.Saltpeter,65);
+        addSpecialCentMV(tComb, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Salt, 1), 100, GT_ModHandler.getModItem("dreamcraft", "item.EdibleSalt", 1L, 0), 50);
+        tComb = getStackForType(CombType.ELECTROTINE);
+        addProcessHV(tComb,Materials.Electrotine,80);
+        addProcessHV(tComb,Materials.Electrum,75);
+        addProcessHV(tComb,Materials.Redstone,65);
 
 	    // Radioactive Line
 		tComb = getStackForType(CombType.URANIUM);
@@ -423,17 +444,24 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	ItemList.FR_Wax.get(1, new Object[0]), aOutput2, aOutput3, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 5000, chance2 * 100, chance3*100 }, 128, 5);
 		RecipeManagers.centrifugeManager.addRecipe(40, tComb, ImmutableMap.of(aOutput, chance * 0.01f, ItemList.FR_Wax.get(1, new Object[0]), 0.3f,aOutput2,chance2 * 0.01f,aOutput3,chance3*0.01f));
 	}
+    public void addSpecialCentMV(ItemStack tComb, ItemStack aOutput, int chance){
+        GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 7000 }, 160, 120);
+    }
+
+    public void addSpecialCentMV(ItemStack tComb, ItemStack aOutput, int chance, ItemStack aOutput2, int chance2){
+        GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	aOutput2, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, chance2 * 100}, 160, 120);
+    }
 
 	public void addSpecialCentHV(ItemStack tComb, ItemStack aOutput, int chance){
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 7000 }, 300, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 7000 }, 196, 480);
 		}
 
 	public void addSpecialCentHV(ItemStack tComb, ItemStack aOutput, int chance, ItemStack aOutput2, int chance2){
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	aOutput2, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, chance2 * 100}, 300, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	aOutput2, GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, chance2 * 100}, 196, 480);
 	}
 
 	public void addSpecialCentHV(ItemStack tComb, ItemStack aOutput, int chance, ItemStack aOutput2, int chance2, ItemStack aOutput3, int chance3){
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	aOutput2, aOutput3, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, chance2 * 100, chance3 * 100 }, 300, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	aOutput2, aOutput3, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, chance2 * 100, chance3 * 100 }, 196, 480);
 	}
 
 	public void addProcessLV(ItemStack tComb, Materials aMaterial, int chance){
