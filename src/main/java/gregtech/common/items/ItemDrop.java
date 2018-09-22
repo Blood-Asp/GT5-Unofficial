@@ -110,11 +110,11 @@ public class ItemDrop extends Item {
 
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 32, aEUt);
-		RecipeManagers.squeezerManager.addRecipe(40, new ItemStack[]{tDrop}, aOutput, aOutput2, 30);
+		RecipeManagers.squeezerManager.addRecipe(40, new ItemStack[]{tDrop}, aOutput, aOutput2, aChance);
 	}
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aDuration, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
-		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, aOutput, aOutput2, 30);
+		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, aOutput, aOutput2, aChance);
 	}
 	public void addProcessMV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 64, aEUt);
