@@ -61,7 +61,7 @@ public enum CombType {
 
     //Metals Line
     SLAG("slag", true, Materials._NULL, 50),
-    COPPER("coppon", true, Materials.Copper, 100),
+    COPPER("copper", true, Materials.Copper, 100),
     TIN("tin", true, Materials.Tin, 100),
     LEAD("lead", true, Materials.Lead, 100),
     IRON("iron", true, Materials.Iron, 100),
