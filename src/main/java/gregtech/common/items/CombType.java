@@ -118,7 +118,7 @@ public enum CombType {
     MYTRYL("mytryl",true, Materials.Mytryl, 65),
     QUANTIUM("quantium",true, Materials.Quantium, 50),
     ORIHARUKON("oriharukon",true, Materials.Oriharukon, 50),
-    MYTERIOUSCRYSTAL("mysteriouscrystal",true, Materials.MysteriousCrystal, 45),
+    MYSTERIOUSCRYSTAL("mysteriouscrystal",true, Materials.MysteriousCrystal, 45),
     BLACKPLUTONIUM("blackplutonium",true, Materials.Quantium, 25),
     TRINIUM("trinium",true, Materials.Trinium, 25),
 
