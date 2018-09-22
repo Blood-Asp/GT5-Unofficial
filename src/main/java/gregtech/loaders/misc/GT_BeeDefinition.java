@@ -2406,7 +2406,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, LEDOX.species, 25, 2);
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "item.Quantinum"), 0);
+            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Quantinum"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(30, "Asteriods"));//Asteriods Dim
         }
     },
