@@ -2050,7 +2050,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.SPACE), 0.42f);
-            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MYTERIOUSCRYSTAL), 0.10f);
+            beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.MYSTERIOUSCRYSTAL), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.ICY);
             beeSpecies.setNocturnal();

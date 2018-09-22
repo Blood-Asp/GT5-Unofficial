@@ -2161,6 +2161,21 @@ public class GT_MachineRecipeLoader implements Runnable {
                 Materials.SolderingAlloy.getMolten(2592),
                 Materials.Lubricant.getFluid(4000)}, ItemList.Electric_Motor_UHV.get(1, new Object[]{}), 800, 200000);
 
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Electric_Motor_UHV.get(1, new Object(){}),1152000,new ItemStack[]{
+                GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.SamariumMagnetic, 8L),
+                GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.CosmicNeutronium, 16L),
+                GT_OreDictUnificator.get(OrePrefixes.ring, Materials.CosmicNeutronium, 8L),
+                GT_OreDictUnificator.get(OrePrefixes.round, Materials.CosmicNeutronium, 32L),
+                GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Neutronium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Draconium, 2L)}, new FluidStack[]{
+                Materials.CosmicNeutronium.getMolten(2592),
+                Materials.SolderingAlloy.getMolten(5184),
+                Materials.Lubricant.getFluid(8000)}, ItemList.Electric_Motor_UEV.get(1, new Object[]{}), 1000, 400000);
+
 
 
 //      Pump

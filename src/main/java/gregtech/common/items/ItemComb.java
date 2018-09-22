@@ -477,6 +477,46 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.TRINIUM);
 		addProcessZPM(tComb,Materials.Trinium,35);
 		addProcessZPM(tComb,Materials.Iridium,45);
+
+		//Planet Line
+		tComb = getStackForType(CombType.MOON);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.MoonStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 120);
+		tComb = getStackForType(CombType.MARS);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.MarsStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 480);
+		tComb = getStackForType(CombType.JUPITER);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("dreamcraft", "item.IoStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.EuropaIceDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.EuropaStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.GanymedStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.CallistoStoneDust", 1L, 0), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.CallistoIce, 1L), new int[]{3000, 3000, 3000, 3000, 3000, 500}, 300, 480);
+		tComb = getStackForType(CombType.MERCURY);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.MercuryCoreDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.MercuryStoneDust", 1L, 0),  GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 1920);
+		tComb = getStackForType(CombType.VENUS);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.VenusStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 1920);
+		tComb = getStackForType(CombType.SATURN);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.EnceladusStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.TitanStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 7680);
+		tComb = getStackForType(CombType.URANUS);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.MirandaStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.OberonStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 7680);
+		tComb = getStackForType(CombType.NEPTUN);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.ProteusStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.TritonStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 7680);
+		tComb = getStackForType(CombType.PLUTO);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.PlutoStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.PlutoIceDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 30720);
+		tComb = getStackForType(CombType.HAUMEA);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.HaumeaStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 30720);
+		tComb = getStackForType(CombType.MAKEMAKE);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.MakeMakeStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 30720);
+		tComb = getStackForType(CombType.CENTAURI);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.CentauriASurfaceDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.CentauriAStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 122880);
+		tComb = getStackForType(CombType.TCETI);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.TCetiEStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 122880);
+		tComb = getStackForType(CombType.BARNARDA);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.BarnardaEStoneDust", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.BarnardaFStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 3000, 0, 0, 0}, 300, 122880);
+		tComb = getStackForType(CombType.VEGA);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.VegaBStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 122880);
+		//Infinity Line
+		tComb = getStackForType(CombType.COSMICNEUTRONIUM);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.CosmicNeutronium, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 50, 100, 0, 0, 0}, 12000, 500000);
+		tComb = getStackForType(CombType.INFINITYCATALYST);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 5, 100, 0, 0, 0}, 24000, 2000000);
+		tComb = getStackForType(CombType.INFINITY);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Infinity, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 1, 5, 0, 0, 0}, 48000, 8000000);
+
 	}
 	public void addSpecialCentLV(ItemStack tComb, ItemStack aOutput, int chance){
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, aOutput,	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 5000 }, 128, 5);
@@ -567,7 +607,7 @@ public class ItemComb extends Item {
 	}
 	public void addProcessZPM(ItemStack tComb, Materials aMaterial, int chance){
 		if(GT_Mod.gregtechproxy.mNerfedCombs){
-			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), FluidRegistry.getFluidStack("mutagen", 288), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), GT_Values.NI,288, 50000, true);
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), FluidRegistry.getFluidStack("mutagen", 288), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), GT_Values.NI,288, 500000, true);
 			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(24, tComb), Materials.GrowthMediumRaw.getFluid(Math.max(1, ((aMaterial.getMass()+450)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 1), 10000, (int) (aMaterial.getMass() * 128), 100000, true);
 			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+45)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 1), 10000, (int) (aMaterial.getMass() * 128), 100000, true);
 		}else{
@@ -635,7 +675,7 @@ public class ItemComb extends Item {
 	}
 	public void addProcessZPM(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance){
 		if(GT_Mod.gregtechproxy.mNerfedCombs){
-			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), FluidRegistry.getFluidStack("mutagen", 288), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), GT_Values.NI, 288, 50000, true);
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), FluidRegistry.getFluidStack("mutagen", 288), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), GT_Values.NI, 288, 500000, true);
 			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(24, tComb), Materials.GrowthMediumRaw.getFluid(Math.max(1, ((aOutMaterial.getMass()+450)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 100000, true);
 			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(16, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+45)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 1), 10000, (int) (aOutMaterial.getMass() * 128), 100000, true);
 		}else{
