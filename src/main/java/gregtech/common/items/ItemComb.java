@@ -353,6 +353,9 @@ public class ItemComb extends Item {
 		addProcessEV(tComb,Materials.Titanium,90);
         addProcessEV(tComb,Materials.Ilmenite,80);
         addProcessEV(tComb,Materials.Bauxite,75);
+		tComb = getStackForType(CombType.MAGNESIUM);
+		addProcessLV(tComb,Materials.Magnesium,100);
+		addProcessLV(tComb,Materials.Magnesite,80);
 		tComb = getStackForType(CombType.CHROME);
 		addProcessHV(tComb,Materials.Chrome,50);
         addProcessHV(tComb,Materials.Ruby,100);
