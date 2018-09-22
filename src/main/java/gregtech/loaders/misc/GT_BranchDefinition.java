@@ -108,7 +108,7 @@ public enum GT_BranchDefinition {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
         }
     },
-    SPACE("Cosmics") {
+    SPACE("Cosmicis") {
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.DOWN_2);
