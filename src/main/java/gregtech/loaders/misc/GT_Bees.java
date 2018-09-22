@@ -6,30 +6,32 @@ import forestry.api.genetics.*;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
 import gregtech.GT_Mod;
+import gregtech.common.bees.GT_AlleleHelper;
 import gregtech.common.items.ItemComb;
 import gregtech.common.items.ItemDrop;
 import gregtech.common.items.ItemPollen;
 import gregtech.common.items.ItemPropolis;
+import gregtech.loaders.misc.GT_BeeDefinition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class GT_Bees {
 
-    static IAlleleInteger noFertility;
-    static IAlleleInteger superFertility;
+    public static IAlleleInteger noFertility;
+    public static IAlleleInteger superFertility;
 
-    static IAlleleInteger noFlowering;
-    static IAlleleInteger superFlowering;
+    public static IAlleleInteger noFlowering;
+    public static IAlleleInteger superFlowering;
 
-    static IAlleleArea noTerritory;
-    static IAlleleArea superTerritory;
+    public static IAlleleArea noTerritory;
+    public static IAlleleArea superTerritory;
 
-    static IAlleleFloat noWork;
-    static IAlleleFloat speedBlinding;
-    static IAlleleFloat superSpeed;
+    public static IAlleleFloat noWork;
+    public static IAlleleFloat speedBlinding;
+    public static IAlleleFloat superSpeed;
 
-    static IAlleleInteger blinkLife;
-    static IAlleleInteger superLife;
+    public static IAlleleInteger blinkLife;
+    public static IAlleleInteger superLife;
 
     public static ItemPropolis propolis;
     public static ItemPollen pollen;
@@ -38,6 +40,7 @@ public class GT_Bees {
 
     public GT_Bees() {
         if (Loader.isModLoaded("Forestry") && GT_Mod.gregtechproxy.mGTBees) {
+            GT_AlleleHelper.initialisation();
             setupGTAlleles();
             propolis = new ItemPropolis();
             propolis.initPropolisRecipes();
@@ -62,8 +65,8 @@ public class GT_Bees {
         superTerritory = new AlleleArea("areaExploratory", 32, 16, false);
 
         noWork = new AlleleFloat("speedUnproductive", 0, false);
-        speedBlinding = (IAlleleFloat) AlleleManager.alleleRegistry.getAllele("magicbees.speedBlinding");
         superSpeed = new AlleleFloat("speedAccelerated", 4F, false);
+        speedBlinding = (IAlleleFloat) AlleleManager.alleleRegistry.getAllele("magicbees.speedBlinding") == null ? new AlleleFloat("speedBlinding", 2f, false) : (IAlleleFloat) AlleleManager.alleleRegistry.getAllele("magicbees.speedBlinding") ;
 
         blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.LIFESPAN);
         superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.LIFESPAN);

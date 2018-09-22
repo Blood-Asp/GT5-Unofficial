@@ -25,7 +25,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import java.util.List;
 
-import static gregtech.api.enums.GT_Values.GT;
 import static gregtech.api.enums.GT_Values.MOD_ID;
 import static gregtech.api.enums.GT_Values.MOD_ID_FR;
 
