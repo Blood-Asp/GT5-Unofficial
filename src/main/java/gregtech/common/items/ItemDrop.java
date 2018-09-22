@@ -4,6 +4,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.Tabs;
+import forestry.api.recipes.RecipeManagers;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_ModHandler;
@@ -109,9 +110,11 @@ public class ItemDrop extends Item {
 
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 32, aEUt);
+		RecipeManagers.squeezerManager.addRecipe(40, new ItemStack[]{tDrop}, aOutput, aOutput2, 30);
 	}
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aDuration, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
+		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, aOutput, aOutput2, 30);
 	}
 	public void addProcessMV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 64, aEUt);

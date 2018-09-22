@@ -96,7 +96,7 @@ public enum CombType {
     PLUTONIUM("plutonium", true, Materials.Plutonium, 10),
     NAQUADAH("naquadah", true, Materials.Naquadah, 10),
     NAQUADRIA("naquadria", true, Materials.Naquadria, 5),
-    DOB("dob", true, Materials._NULL, 50),
+    DOB("d-o-b", true, Materials._NULL, 50),
     THORIUM("thorium", true, Materials.Thorium, 75),
     LUTETIUM("lutetium", true, Materials.Lutetium, 10),
     AMERICUM("americum", true, Materials.Americium, 5),
