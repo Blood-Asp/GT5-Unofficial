@@ -2950,7 +2950,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
         String species = "species" + WordUtils.capitalize(lowercaseName);
 
-        String uid = "gendustry.bee." + species;
+        String uid = "gregtech.bee." + species;
         String description = "for.description." + species;
         String name = "for.bees.species." + lowercaseName;
 
