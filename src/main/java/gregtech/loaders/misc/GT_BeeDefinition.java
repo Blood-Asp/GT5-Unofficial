@@ -1716,7 +1716,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.requireResource(GregTech_API.sBlockMetal4, 3);
         }
     },
-    AMERICUM(GT_BranchDefinition.RADIOACTIVE, "Americum", false, 0xE6E6FF, 0xC8C8C8) {
+    AMERICIUM(GT_BranchDefinition.RADIOACTIVE, "Americium", false, 0xE6E6FF, 0xC8C8C8) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.AMERICUM), 0.05f);
@@ -1758,7 +1758,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NAQUADRIA.species, AMERICUM.species, 1,2);
+            IBeeMutationCustom tMutation = registerMutation(NAQUADRIA.species, AMERICIUM.species, 1,2);
             tMutation.requireResource(GregTech_API.sBlockMetal5, 2);
         }
     },
@@ -2520,7 +2520,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(46, "Oberon"));//Oberon Dim
         }
     },
-    NEPTUN(GT_BranchDefinition.PLANET, "Neptun", false, 0x334CFF, 0x576DFF) {
+    NEPTUNE(GT_BranchDefinition.PLANET, "Neptune", false, 0x334CFF, 0x576DFF) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.NEPTUN), 0.50f);
@@ -2561,7 +2561,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NEPTUN.species, COPPER.species, 7);
+            IBeeMutationCustom tMutation = registerMutation(NEPTUNE.species, COPPER.species, 7);
             tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "proteusblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(47, "Proteus"));//Proteus Dim
         }
@@ -2583,7 +2583,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NEPTUN.species, GOLD.species, 7);
+            IBeeMutationCustom tMutation = registerMutation(NEPTUNE.species, GOLD.species, 7);
             tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "tritonblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(48, "Triton"));//Triton Dim
         }
@@ -2607,7 +2607,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NEPTUN.species, PLUTONIUM.species, 5);
+            IBeeMutationCustom tMutation = registerMutation(NEPTUNE.species, PLUTONIUM.species, 5);
             tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "plutoblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(49, "Pluto"));//Pluto Dim
         }
@@ -2780,7 +2780,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(BARNARDA.species, AMERICUM.species, 3, 2);
+            IBeeMutationCustom tMutation = registerMutation(BARNARDA.species, AMERICIUM.species, 3, 2);
             tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaEgrunt"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(32, "Barnarda C"));//Barnarda C Dim
         }
@@ -2948,9 +2948,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
     GT_BeeDefinition(GT_BranchDefinition branch, String binomial, boolean dominant, int primary, int secondary) {
         String lowercaseName = this.toString().toLowerCase(Locale.ENGLISH);
-        String species = "species" + WordUtils.capitalize(lowercaseName);
+        String species = WordUtils.capitalize(lowercaseName);
 
-        String uid = "gregtech.bee." + species;
+        String uid = "gendustry.bee." + species;
         String description = "for.description." + species;
         String name = "for.bees.species." + lowercaseName;
 
