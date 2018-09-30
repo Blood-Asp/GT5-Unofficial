@@ -669,7 +669,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitUltimate") ||
                             GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitSuperconductor") ||
                             GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitInfinity") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitBio"))return true;;
+                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitBio"))return true;
                     // allow input all of this oredict circuits for assemblers
                     return getRecipeList().containsInput(aStack);
                 }
