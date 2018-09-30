@@ -8,6 +8,9 @@ import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import forestry.api.genetics.AlleleManager;
+import forestry.apiculture.genetics.Bee;
+import forestry.core.genetics.alleles.AlleleHelper;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
@@ -44,6 +47,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -72,6 +76,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import org.apache.commons.lang3.text.WordUtils;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
@@ -1312,6 +1317,86 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             tCount += tStack.stackSize * 64 / Math.max(1, tStack.getMaxStackSize());
                         }
                         if (this.mInventoryUnification) {
+
+                            if (tStack.getTagCompound()!= null && (tStack.getTagCompound().getTag("Mate")!= null || tStack.getTagCompound().getTag("Genome")!= null )) {
+
+                                String identifier = "";
+                                if(tStack.getTagCompound().getTag("Mate")!= null)
+                                    identifier = (tStack.getTagCompound().getCompoundTag("Mate")).getTagList("Chromosomes",10).getCompoundTagAt(0).getString("UID1");
+
+                                String identifier2 = identifier;
+
+                                if(tStack.getTagCompound().getTag("Genome")!= null)
+                                    identifier2 = (tStack.getTagCompound().getCompoundTag("Genome")).getTagList("Chromosomes",10).getCompoundTagAt(0).getString("UID1");
+
+                                if (identifier.contains("gendustry") || identifier2.contains("gendustry")) {
+
+                                    final NBTTagCompound NBTTAGCOMPOUND = (NBTTagCompound) tStack.getTagCompound().copy();
+
+                                    //MATE
+                                    final NBTTagCompound MATE = NBTTAGCOMPOUND.getCompoundTag("Mate");
+                                    final NBTTagList chromosomesMate = MATE.getTagList("Chromosomes",10);
+                                    final NBTTagCompound species = chromosomesMate.getCompoundTagAt(0);
+
+                                    String ident1 = species.getString("UID1");
+                                    final String[] split = ident1.split("[.]");
+                                    ident1="gregtech.bee.species"+WordUtils.capitalize(split[2].toLowerCase(Locale.ENGLISH));
+
+                                    if (AlleleManager.alleleRegistry.getAllele(ident1) == null)
+                                        return;
+
+                                    String ident2 = species.getString("UID0");
+                                    final String[] split2 = ident2.split("[.]");
+                                    ident2 = "gregtech.bee.species"+WordUtils.capitalize(split2[2].toLowerCase(Locale.ENGLISH));
+
+                                    final NBTTagCompound nuspeciesmate = new NBTTagCompound();
+                                    nuspeciesmate.setString("UID1", ident1);
+                                    nuspeciesmate.setString("UID0", ident2);
+                                    nuspeciesmate.setByte("Slot", (byte) 0);
+
+                                    //Genome
+                                    final NBTTagCompound genome = NBTTAGCOMPOUND.getCompoundTag("Genome");
+                                    final NBTTagList chromosomesGenome = genome.getTagList("Chromosomes", 10);
+                                    final NBTTagCompound speciesGenome = chromosomesGenome.getCompoundTagAt(0);
+
+                                    String ident1Genome = speciesGenome.getString("UID1");
+                                    final String[] splitGenome = ident1Genome.split("[.]");
+                                    ident1Genome="gregtech.bee.species"+WordUtils.capitalize(splitGenome[2].toLowerCase(Locale.ENGLISH));
+                                    String ident2Genome = speciesGenome.getString("UID0");
+                                    final String[] splitGenome2 = ident2Genome.split("[.]");
+                                    ident2Genome = "gregtech.bee.species"+WordUtils.capitalize(splitGenome2[2].toLowerCase(Locale.ENGLISH));
+
+                                    final NBTTagCompound nuspeciesgenome = new NBTTagCompound();
+                                    nuspeciesgenome.setString("UID1", ident1Genome);
+                                    nuspeciesgenome.setString("UID0", ident2Genome);
+                                    nuspeciesgenome.setByte("Slot", (byte) 0);
+
+
+                                    final NBTTagCompound nuMate2 = new NBTTagCompound();
+                                    final NBTTagList nuMate = new NBTTagList();
+                                    nuMate.appendTag(nuspeciesmate);
+                                    for (int j = 1; j < chromosomesMate.tagCount(); j++) {
+                                        nuMate.appendTag(chromosomesMate.getCompoundTagAt(j));
+                                    }
+                                    nuMate2.setTag("Chromosomes", nuMate);
+                                    NBTTAGCOMPOUND.removeTag("Mate");
+                                    NBTTAGCOMPOUND.setTag("Mate", nuMate2);
+
+                                    final NBTTagCompound nugenome2 = new NBTTagCompound();
+                                    final NBTTagList nuGenome = new NBTTagList();
+                                    nuGenome.appendTag(nuspeciesgenome);
+                                    for (int j = 1; j < chromosomesGenome.tagCount(); j++) {
+                                        nuGenome.appendTag(chromosomesGenome.getCompoundTagAt(j));
+                                    }
+                                    nugenome2.setTag("Chromosomes", nuGenome);
+                                    NBTTAGCOMPOUND.removeTag("Genome");
+                                    NBTTAGCOMPOUND.setTag("Genome", nugenome2);
+
+                                    tStack.setTagCompound(new NBTTagCompound());
+                                    tStack.setTagCompound(NBTTAGCOMPOUND);
+                                }
+                            }
+
                             GT_OreDictUnificator.setStack(true, tStack);
                         }
                     }
