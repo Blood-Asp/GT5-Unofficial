@@ -125,7 +125,10 @@ public class ItemComb extends Item {
 		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.HOT_COOLANT), 20, ItemList.IC2_Energium_Dust.get(1L), 20, ItemList.FR_RefractoryWax.get(1, new Object[0]), 50);
 		tComb = getStackForType(CombType.LAPOTRON);
 		addSpecialCentHV(tComb, GT_Bees.drop.getStackForType(DropType.LAPIS), 20,  GT_ModHandler.getModItem("dreamcraft", "item.LapotronDust", 1, 0), 15, GT_ModHandler.getModItem("MagicBees", "wax", 1, 2), 40);
-
+		tComb = getStackForType(CombType.PYROTHEUM);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny,Materials.Blizz,1), GT_OreDictUnificator.get(OrePrefixes.dustTiny,Materials.Pyrotheum,1), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{3000, 2500, 2000, 0, 0, 0}, 384, 480);
+		tComb = getStackForType(CombType.CRYOTHEUM);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny,Materials.Blaze,1), GT_OreDictUnificator.get(OrePrefixes.dustTiny,Materials.Cryotheum,1), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{3000, 2500, 2000, 0, 0, 0}, 384, 480);
 		//Alloy
 		tComb = getStackForType(CombType.REDALLOY);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_RefractoryWax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.RedAlloy, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 10000}, 128, 5);

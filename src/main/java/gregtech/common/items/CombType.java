@@ -16,6 +16,8 @@ public enum CombType {
     COOLANT("coolant", true, Materials._NULL, 100),
     ENERGY("energy", true, Materials._NULL, 80),
     LAPOTRON("lapotron", true, Materials._NULL, 60),
+    PYROTHEUM("pyrotheum", true, Materials.Pyrotheum, 50),
+    CRYOTHEUM("cryotheum", true, Materials.Pyrotheum, 50),
 
     //Alloy Line
     REDALLOY("redalloy", true, Materials.RedAlloy, 100),
@@ -158,6 +160,8 @@ public enum CombType {
             {0x144F5A, 0x2494A2},
             {0xC11F1F, 0xEBB9B9},
             {0x1414FF, 0x6478FF},
+            {0xffebc4, 0xe36400},
+            {0x2660ff, 0x5af7ff},
             //alloy
             {0xE60000, 0xB80000},
             {0xB80000, 0xA50808},
