@@ -658,23 +658,6 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
             case 2:
                 return (!mRequiresFluidForFiltering || getFillableStack() != null) && (((getInputAt(0) != null && getInputAt(1) != null) || (getInputAt(0) == null && getInputAt(1) == null ? getRecipeList().containsInput(aStack) : (getRecipeList().containsInput(aStack) && null != getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), aIndex == getInputSlot() ? new ItemStack[]{aStack, getInputAt(1)} : new ItemStack[]{getInputAt(0), aStack})))));
             default:
-                GT_Recipe_Map gt_recipe_map = getRecipeList();
-                if (GT_Recipe_Map.sCircuitAssemblerRecipes == gt_recipe_map || GT_Recipe_Map.sAssemblerRecipes == gt_recipe_map)   // assemblers IDs and circuit assembler IDs
-                {
-                    if (GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitBasic") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitGood") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitAdvanced") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitData") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitElite") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitUltimate") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitSuperconductor") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitInfinity") ||
-                            GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitBio"))// allow input all of this oredict circuits for assemblers
-                    {
-                        return true;
-                    }
-
-                }
                 return getRecipeList().containsInput(aStack);
         }
     }
