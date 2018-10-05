@@ -253,6 +253,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(COAL.species, CLAY.species, 10);
+            tMutation.restrictTemperature(EnumTemperature.HELLISH);
         }
     },
     APATITE(GT_BranchDefinition.ORGANIC, "Apatite", true, 0xc1c1f6, 0x676784) {
@@ -260,7 +261,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 9), 0.15f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.APATITE), 0.15f);
-            beeSpecies.setHumidity(EnumHumidity.DAMP);
+            beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.WARM);
         }
 
@@ -276,6 +277,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(ASH.species, COAL.species, 10);
+            tMutation.requireResource("blockApatite");
         }
     },
 
