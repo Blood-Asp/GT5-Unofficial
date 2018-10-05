@@ -23,7 +23,6 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
     protected double realOptFlow = 0;
     protected int storedFluid = 0;
     protected int counter = 0;
-	public long mMaxPotentialDamage = 10;
 
     public GT_MetaTileEntity_LargeTurbine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -146,8 +145,6 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
         int newPower = fluidIntoPower(tFluids, optFlow, baseEff);  // How much the turbine should be producing with this flow
         int difference = newPower - this.mEUt; // difference between current output and new output
-
-		mMaxPotentialDamage = (long) Math.min(newPower / damageFactorLow, Math.pow(newPower, damageFactorHigh)) + 10;
 
         // Magic numbers: can always change by at least 10 eu/t, but otherwise by at most 1 percent of the difference in power level (per tick)
         // This is how much the turbine can actually change during this tick
