@@ -16,9 +16,9 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
 
 	public boolean isRotor(ItemStack aRotor) {
 		if (aRotor == null || !(aRotor.getItem() instanceof GT_MetaGenerated_Tool) || aRotor.getItemDamage() < 170 || aRotor.getItemDamage() > 176)
-		return true;
+		{return true;}
 		else 
-		return false; 
+		{return false;} 
 	}
 
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
