@@ -9,6 +9,8 @@ public enum CombType {
     COAL("coal", true, Materials.Coal, 100),
     STICKY("stickyresin", true, Materials._NULL, 50),
     OIL("oil", true, Materials._NULL, 100),
+    APATITE("apatite", true, Materials.Apatite, 100),
+    ASH("ash", true, Materials.Ash, 100),
 
     //IC2 Line
     COOLANT("coolant", true, Materials._NULL, 100),
@@ -150,6 +152,8 @@ public enum CombType {
             {0x525252, 0x666666},
             {0x2E8F5B, 0xDCC289},
             {0x333333, 0x4C4C4C},
+            {0xc1c1f6, 0x676784},
+            {0x1e1a18, 0xc6c6c6},
             //ic2
             {0x144F5A, 0x2494A2},
             {0xC11F1F, 0xEBB9B9},

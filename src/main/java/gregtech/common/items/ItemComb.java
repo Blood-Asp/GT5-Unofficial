@@ -111,6 +111,12 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.OIL);
 		addSpecialCentLV(tComb, ItemList.Crop_Drop_OilBerry.get(1, new Object[0]), 70, GT_Bees.drop.getStackForType(DropType.OIL), 100);
 		addProcessLV(tComb, Materials.Oilsands, 100);
+		tComb = getStackForType(CombType.APATITE);
+		addProcessLV(tComb, Materials.Apatite, 100);
+		addProcessLV(tComb, Materials.Calcium, 80);
+		addProcessLV(tComb, Materials.Phosphate, 80);
+		tComb = getStackForType(CombType.ASH);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 5000, 5000}, 128, 5);
 
 		//ic2
 		tComb = getStackForType(CombType.COOLANT);
