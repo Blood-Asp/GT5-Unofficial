@@ -3717,7 +3717,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
             	//Dimethylbenzene
             	GT_Values.RA.addDistilleryRecipe(5, Materials.WoodTar.getFluid(200), Materials.Dimethylbenzene.getFluid(40), 100, 120, false);
-            	GT_Values.RA.addDistilleryRecipe(5, Materials.CharcoalByproducts.getFluid(200), Materials.Dimethylbenzene.getFluid(20), 100, 120, false);
+            	GT_Values.RA.addDistilleryRecipe(5, Materials.CharcoalByproducts.getGas(200), Materials.Dimethylbenzene.getFluid(20), 100, 120, false);
 
             	GT_Values.RA.addChemicalRecipe(Materials.Methane.getCells(1), GT_Utility.getIntegratedCircuit(11), Materials.Benzene.getFluid(1000), GT_Values.NF,Materials.Dimethylbenzene.getCells(1), 4000, 120);
             	GT_Values.RA.addChemicalRecipe(Materials.Benzene.getCells(1), GT_Utility.getIntegratedCircuit(12), Materials.Methane.getGas(1000), GT_Values.NF, Materials.Dimethylbenzene.getCells(1), 4000, 120);
