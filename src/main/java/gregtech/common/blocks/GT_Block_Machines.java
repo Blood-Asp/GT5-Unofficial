@@ -372,7 +372,22 @@ public class GT_Block_Machines
         }
         return mTemporaryTileEntity.get() == null ? new ArrayList() : ((IGregTechTileEntity) mTemporaryTileEntity.get()).getDrops();
     }
+    @Override
+    public boolean removedByPlayer(World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ, boolean aWillHarvest) {
+        if (aWillHarvest) {
+            return true; // This delays deletion of the block until after getDrops
+        } else {
+            return super.removedByPlayer(aWorld, aPlayer, aX, aY, aZ, false);
+        }
+    }
 
+    @Override
+    public void harvestBlock(World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ, int aMeta)
+    {
+        super.harvestBlock(aWorld, aPlayer, aX, aY, aZ, aMeta);
+        aWorld.setBlockToAir(aX, aY, aZ);
+    }
+    
     public int getComparatorInputOverride(World aWorld, int aX, int aY, int aZ, int aSide) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if (((tTileEntity instanceof IGregTechTileEntity))) {
