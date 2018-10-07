@@ -1,9 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.enums.GT_Values.W;
-
-import java.util.ArrayList;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -19,12 +15,15 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.ArrayList;
+
+import static gregtech.api.enums.GT_Values.W;
 
 public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_MultiBlockBase {
 	private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);
@@ -123,6 +122,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         if (isHasMiningPipes(maxPipes)) return;
 
         ItemStack pipes = getStackInSlot(1);
+        if(pipes != null && !pipes.isItemEqual(miningPipe)) return;
         for (ItemStack storedItem : getStoredInputs()) {
             if (!storedItem.isItemEqual(miningPipe)) continue;
 
