@@ -61,11 +61,11 @@ public class GT_MetaTileEntity_Macerator_Steel extends GT_MetaTileEntity_BasicMa
 		
 //        if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
 //                    return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
-
+        if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
+            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.getOutput(0) != null) mOutputItems[0] = tRecipe.getOutput(0);
         this.mEUt = (2 * tRecipe.mEUt);
         this.mMaxProgresstime = tRecipe.mDuration;
-        getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
 
