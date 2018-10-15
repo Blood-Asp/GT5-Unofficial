@@ -218,7 +218,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.LuV_Coil.set(addItem(tLastID = 145, "Ludicrous Voltage Coil", "Master Coil", o));
         ItemList.ZPM_Coil.set(addItem(tLastID = 146, "ZPM Voltage Coil", "Ultimate Coil", o));
         ItemList.UV_Coil.set(addItem(tLastID = 147, "Ultimate Voltage Coil", "Super Coil", o));
-        ItemList.UHV_Coil.set(addItem(tLastID = 148, "highly Ultimate Voltage Coil", "Infinite Coil", o));
+        ItemList.UHV_Coil.set(addItem(tLastID = 148, "Highly Ultimate Voltage Coil", "Infinite Coil", o));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
