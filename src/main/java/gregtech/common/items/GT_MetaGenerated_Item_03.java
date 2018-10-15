@@ -129,7 +129,8 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Chip_ULPIC.set(addItem(tLastID = 63, "Ultra Low Power IC", "Ultra Low Power Circuit", o));
 
         ItemList.Circuit_Wafer_LPIC.set(addItem(tLastID = 64, "LPIC Wafer", "Raw Circuit", o));
-        ItemList.Circuit_Chip_LPIC.set(addItem(tLastID = 65, "Low Power IC", "Low Power Circuit", o));/**
+        ItemList.Circuit_Chip_LPIC.set(addItem(tLastID = 65, "Low Power IC", "Low Power Circuit", o));
+        /**
          * Engraved Crystal Chip
          * Engraved Lapotron Chip
          * Crystal CPU
@@ -209,6 +210,15 @@ public class GT_MetaGenerated_Item_03
         GregTech_API.registerCover(ItemList.Cover_SolarPanel_UEV.get(1L, new Object[0]), new GT_RenderedTexture(Textures.BlockIcons.SOLARPANEL_UEV), new GT_Cover_SolarPanel(8388608));
         GregTech_API.registerCover(ItemList.Cover_SolarPanel_UIV.get(1L, new Object[0]), new GT_RenderedTexture(Textures.BlockIcons.SOLARPANEL_UIV), new GT_Cover_SolarPanel(33554432));
 
+        ItemList.LV_Coil.set(addItem(tLastID = 140, "Low Voltage Coil", "Basic Coil", o));
+        ItemList.MV_Coil.set(addItem(tLastID = 141, "Medium Voltage Coil", "Good Coil", o));
+        ItemList.HV_Coil.set(addItem(tLastID = 142, "High Voltage Coil", "Advanced Coil", o));
+        ItemList.EV_Coil.set(addItem(tLastID = 143, "Extreme Voltage Coil", "Extreme Coil", o));
+        ItemList.IV_Coil.set(addItem(tLastID = 144, "Insane Voltage Coil", "Elite Coil", o));
+        ItemList.LuV_Coil.set(addItem(tLastID = 145, "Ludicrous Voltage Coil", "Master Coil", o));
+        ItemList.ZPM_Coil.set(addItem(tLastID = 146, "ZPM Voltage Coil", "Ultimate Coil", o));
+        ItemList.UV_Coil.set(addItem(tLastID = 147, "Ultimate Voltage Coil", "Super Coil", o));
+        ItemList.UHV_Coil.set(addItem(tLastID = 148, "highly Ultimate Voltage Coil", "Infinite Coil", o));
     }
 
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
