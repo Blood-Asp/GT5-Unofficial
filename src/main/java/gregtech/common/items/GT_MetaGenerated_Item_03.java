@@ -124,7 +124,12 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Wafer_Simple_SoC.set(addItem(tLastID = 60, "Simple SoC Wafer", "Raw Primitive Circuit", o));
         ItemList.Circuit_Chip_Simple_SoC.set(addItem(tLastID = 61, "Simple SoC", "Simple System on a Chip", o));
-        /**
+
+        ItemList.Circuit_Wafer_ULPIC.set(addItem(tLastID = 62, "ULVPIC Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Chip_ULPIC.set(addItem(tLastID = 63, "Ultra Low Power IC", "Ultra Low Power Circuit", o));
+
+        ItemList.Circuit_Wafer_LPIC.set(addItem(tLastID = 64, "LPIC Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Chip_LPIC.set(addItem(tLastID = 65, "Low Power IC", "Low Power Circuit", o));/**
          * Engraved Crystal Chip
          * Engraved Lapotron Chip
          * Crystal CPU
