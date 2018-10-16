@@ -684,7 +684,7 @@ public enum ItemList implements IItemContainer {
     Circuit_Microprocessor, Circuit_Processor, Circuit_Computer, Circuit_Nanoprocessor, Circuit_Nanocomputer, Circuit_Elitenanocomputer, Circuit_Quantumprocessor, Circuit_Quantumcomputer, Circuit_Masterquantumcomputer,
     Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Ultimatecrystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip, Circuit_Bioprocessor, Circuit_Biomainframe,
     Machine_LV_CircuitAssembler, Machine_MV_CircuitAssembler, Machine_HV_CircuitAssembler, Machine_EV_CircuitAssembler, Machine_IV_CircuitAssembler, Machine_LuV_CircuitAssembler, Machine_ZPM_CircuitAssembler, Machine_UV_CircuitAssembler, Circuit_Integrated_Good, Machine_IV_LightningRod, Machine_HV_LightningRod, Machine_EV_LightningRod,
-    LV_Coil, MV_Coil, HV_Coil, EV_Coil, IV_Coil, LuV_Coil, ZPM_Coil, UV_Coil, UHV_Coil,
+    ULV_Coil, LV_Coil, MV_Coil, HV_Coil, EV_Coil, IV_Coil, LuV_Coil, ZPM_Coil, UV_Coil, UHV_Coil,
     Depleted_MNq_1, Depleted_MNq_2, Depleted_MNq_4,
     MNqCell_1, MNqCell_2, MNqCell_4,;
     public static final ItemList[]
