@@ -673,6 +673,8 @@ achievement.gt.metaitem.01.32617=Electric Pump UV tier
 achievement.gt.metaitem.01.32617.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32618=Electric Pump UHV tier
 achievement.gt.metaitem.01.32618.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32619=Electric Pump UEV tier
+achievement.gt.metaitem.01.32619.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32635=Conveyor Module LuV tier
 achievement.gt.metaitem.01.32635.desc=Pickup this item to see the recipe in NEI
@@ -682,6 +684,8 @@ achievement.gt.metaitem.01.32637=Conveyor Module UV tier
 achievement.gt.metaitem.01.32637.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32638=Conveyor Module UHV tier
 achievement.gt.metaitem.01.32638.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32639=Conveyor Module UEV tier
+achievement.gt.metaitem.01.32639.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32645=Electric Piston LuV tier
 achievement.gt.metaitem.01.32645.desc=Pickup this item to see the recipe in NEI
@@ -691,6 +695,8 @@ achievement.gt.metaitem.01.32647=Electric Piston UV tier
 achievement.gt.metaitem.01.32647.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32648=Electric Piston UHV tier
 achievement.gt.metaitem.01.32648.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32649=Electric Piston UEV tier
+achievement.gt.metaitem.01.32649.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32655=Robot Arm LuV tier
 achievement.gt.metaitem.01.32655.desc=Pickup this item to see the recipe in NEI
@@ -700,6 +706,8 @@ achievement.gt.metaitem.01.32657=Robot Arm UV tier
 achievement.gt.metaitem.01.32657.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32658=Robot Arm UHV tier
 achievement.gt.metaitem.01.32658.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32659=Robot Arm UEV tier
+achievement.gt.metaitem.01.32659.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32675=Field Generator tier VI
 achievement.gt.metaitem.01.32675.desc=Pickup this item to see the recipe in NEI
@@ -709,6 +717,8 @@ achievement.gt.metaitem.01.32677=Field Generator tier VIII
 achievement.gt.metaitem.01.32677.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32678=Field Generator tier IX
 achievement.gt.metaitem.01.32678.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32679=Field Generator tier X
+achievement.gt.metaitem.01.32679.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32685=Emitter LuV tier
 achievement.gt.metaitem.01.32685.desc=Pickup this item to see the recipe in NEI
@@ -718,6 +728,8 @@ achievement.gt.metaitem.01.32687=Emitter UV tier
 achievement.gt.metaitem.01.32687.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32688=Emitter UHV tier
 achievement.gt.metaitem.01.32688.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32689=Emitter UEV tier
+achievement.gt.metaitem.01.32689.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.metaitem.01.32695=Sensor LuV tier
 achievement.gt.metaitem.01.32695.desc=Pickup this item to see the recipe in NEI
@@ -727,6 +739,8 @@ achievement.gt.metaitem.01.32697=Sensor UV tier
 achievement.gt.metaitem.01.32697.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32698=Sensor UHV tier
 achievement.gt.metaitem.01.32698.desc=Pickup this item to see the recipe in NEI
+achievement.gt.metaitem.01.32699=Sensor UEV tier
+achievement.gt.metaitem.01.32699.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.blockmachines.fusioncomputer.tier.06=Fusion Computer Mark I
 achievement.gt.blockmachines.fusioncomputer.tier.06.desc=Pickup this item to see the recipe in NEI
