@@ -742,6 +742,15 @@ achievement.gt.metaitem.01.32698.desc=Pickup this item to see the recipe in NEI
 achievement.gt.metaitem.01.32699=Sensor UEV tier
 achievement.gt.metaitem.01.32699.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.blockmachines.hatch.energy.tier.06=LuV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.06.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.07=ZPM Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.07.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.08=UV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.08.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.09=UHV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.09.desc=Pickup this item to see the recipe in NEI
+
 achievement.gt.blockmachines.fusioncomputer.tier.06=Fusion Computer Mark I
 achievement.gt.blockmachines.fusioncomputer.tier.06.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.fusioncomputer.tier.07=Fusion Computer Mark II
