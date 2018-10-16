@@ -2735,7 +2735,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                         Materials.SolderingAlloy.getMolten(2880)},
                 ItemList.Hatch_Energy_UV.get(1, new Object[]{}), 800, 500000);
 
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_ZPM.get(1, new Object(){}),576000,new Object[]{
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_UV.get(1, new Object(){}),576000,new Object[]{
                         ItemList.Hull_MAX.get(1L, new Object(){}),
                         GT_OreDictUnificator.get(OrePrefixes.wire, Materials.SuperconductorUHV, 4L),
                         ItemList.Circuit_Chip_UHPIC.get(8L,  new Object(){}),
