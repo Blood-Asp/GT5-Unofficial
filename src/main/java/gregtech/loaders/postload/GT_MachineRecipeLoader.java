@@ -498,6 +498,11 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_IV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Elite), 2, GT_Values.NF, ItemList.FluidRegulator_IV.get(1L, new Object[0]), 800, 64);//TODO Check
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 2L), OrePrefixes.circuit.get(Materials.Good), 4, GT_Values.NF, ItemList.Schematic.get(1L, new Object[0]), 3200, 4);//TODO Check
         //GT_Values.RA.addAssemblerRecipe(ItemList.Cover_Shutter.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Basic), 2, GT_Values.NF, ItemList.FluidFilter.get(1L, new Object[0]), 800, 4);//TODO Check
+
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_HV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Gold, 1L), ItemList.Circuit_Chip_LPIC.get(2L), ItemList.HV_Coil.get(1L), ItemList.Reactor_Coolant_He_1.get(2L), ItemList.Electric_Pump_EV.get(1L)}, GT_Values.NF, ItemList.Hatch_Energy_HV.get(1L, new Object[0]), 200, 480);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_EV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Aluminium, 1L), ItemList.Circuit_Chip_PIC.get(2L), ItemList.EV_Coil.get(1L), ItemList.Reactor_Coolant_He_1.get(2L), ItemList.Electric_Pump_IV.get(1L)}, GT_Values.NF, ItemList.Hatch_Energy_EV.get(1L, new Object[0]), 200, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_IV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1L), ItemList.Circuit_Chip_HPIC.get(2L), ItemList.IV_Coil.get(1L), ItemList.Reactor_Coolant_He_3.get(2L), ItemList.Electric_Pump_LuV.get(1L)}, GT_Values.NF, ItemList.Hatch_Energy_IV.get(1L, new Object[0]), 200, 7680);
+
         //TODO CHECK RECIPES BELOW
         GT_Values.RA.addCentrifugeRecipe(ItemList.Cell_Empty.get(1, new Object[0]), null, Materials.Air.getGas(10000), Materials.Nitrogen.getGas(3900), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), null, null, null, null, null, null, 1600, 8);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Galena, 3), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Sphalerite, 1), Materials.SulfuricAcid.getFluid(4000), new FluidStack(ItemList.sIndiumConcentrate, 8000), null, 60, 150);
@@ -2689,6 +2694,59 @@ public class GT_MachineRecipeLoader implements Runnable {
                         Materials.SolderingAlloy.getMolten(9216)},
                 ItemList.Field_Generator_UEV.get(1, new Object[]{}), 1000, 400000);
 
+        //Energy Hatches Luv-UHV
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_IV.get(1, new Object(){}),72000,new Object[]{
+                        ItemList.Hull_LuV.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.wire, Materials.SuperconductorZPM, 1L),
+                        ItemList.Circuit_Chip_HPIC.get(4L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
+                ItemList.LuV_Coil.get(2L, new Object(){}),
+                ItemList.Reactor_Coolant_He_3.get(2L, new Object(){}),
+                ItemList.Electric_Pump_ZPM.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000),
+                        Materials.SolderingAlloy.getMolten(720)},
+                ItemList.Hatch_Energy_LuV.get(1, new Object[]{}), 400, 30720);
+
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_LuV.get(1, new Object(){}),144000,new Object[]{
+                        ItemList.Hull_ZPM.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.wire, Materials.SuperconductorUHV, 1L),
+                        ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
+                        ItemList.ZPM_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(2L, new Object(){}),
+                        ItemList.Electric_Pump_UV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 4000),
+                        Materials.SolderingAlloy.getMolten(1440)},
+                ItemList.Hatch_Energy_ZPM.get(1, new Object[]{}), 600, 122880);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_ZPM.get(1, new Object(){}),288000,new Object[]{
+                        ItemList.Hull_UV.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.wire, Materials.SuperconductorUHV, 2L),
+                        ItemList.Circuit_Chip_UHPIC.get(4L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
+                        ItemList.UV_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(4L, new Object(){}),
+                        ItemList.Electric_Pump_UHV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 8000),
+                        Materials.SolderingAlloy.getMolten(2880)},
+                ItemList.Hatch_Energy_UV.get(1, new Object[]{}), 800, 500000);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_ZPM.get(1, new Object(){}),576000,new Object[]{
+                        ItemList.Hull_MAX.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.wire, Materials.SuperconductorUHV, 4L),
+                        ItemList.Circuit_Chip_UHPIC.get(8L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 2},
+                        ItemList.UHV_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(8L, new Object(){}),
+                        ItemList.Electric_Pump_UEV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000),
+                        Materials.SolderingAlloy.getMolten(5760)},
+                ItemList.Hatch_Energy_MAX.get(1, new Object[]{}), 1000, 2000000);
 
         Object o = new Object[0];
 
@@ -2703,7 +2761,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 ItemList.Circuit_Wafer_SoC2.get(64, o),
                 ItemList.Circuit_Wafer_SoC2.get(64, o),
                 ItemList.Circuit_Parts_DiodeSMD.get(8, o),
-                GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32),},
+                GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32)},
                 new FluidStack[]{
                 Materials.SolderingAlloy.getMolten(2880), GregTech_API.mIC2Classic ? Materials.Water.getFluid(8000) : new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)},
                 ItemList.Energy_Module.get(1, o), 2000, 100000);
