@@ -2705,7 +2705,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_IV.get(1, new Object(){}),72000,new Object[]{
                         ItemList.Hull_LuV.get(1L, new Object(){}),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 2L),
-                        ItemList.Circuit_Chip_UHPIC.get(4L,  new Object(){}),
+                        ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
                 ItemList.LuV_Coil.get(2L, new Object(){}),
                 ItemList.Reactor_Coolant_He_3.get(2L, new Object(){}),
@@ -2719,7 +2719,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_LuV.get(1, new Object(){}),144000,new Object[]{
                         ItemList.Hull_ZPM.get(1L, new Object(){}),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 2L),
-                        ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
+                        ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
                         ItemList.ZPM_Coil.get(2L, new Object(){}),
                         ItemList.Reactor_Coolant_He_6.get(2L, new Object(){}),
@@ -2732,7 +2732,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_ZPM.get(1, new Object(){}),288000,new Object[]{
                         ItemList.Hull_UV.get(1L, new Object(){}),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUV, 2L),
-                        ItemList.Circuit_Chip_PPIC.get(2L,  new Object(){}),
+                        ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
                         ItemList.UV_Coil.get(2L, new Object(){}),
                         ItemList.Reactor_Coolant_He_6.get(4L, new Object(){}),
