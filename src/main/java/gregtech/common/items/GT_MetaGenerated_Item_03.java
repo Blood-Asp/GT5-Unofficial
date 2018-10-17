@@ -81,10 +81,14 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Silicon_Ingot.set(addItem(tLastID = 30, "Monocrystalline Silicon Boule", "Raw Circuit", o));
         ItemList.Circuit_Silicon_Ingot2.set(addItem(tLastID = 31, "Glowstone doped Monocrystalline Silicon Boule", "Raw Circuit", o));
         ItemList.Circuit_Silicon_Ingot3.set(addItem(tLastID = 32, "Naquadah doped Monocrystalline Silicon Boule", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Ingot4.set(addItem(tLastID = 150, "Europium doped Monocrystalline Silicon Boule", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Ingot5.set(addItem(tLastID = 152, "Naquadah doped Monocrystalline Silicon Boule", "Raw Circuit", o));
 
         ItemList.Circuit_Silicon_Wafer.set(addItem(tLastID = 33, "Wafer", "Raw Circuit", o));
         ItemList.Circuit_Silicon_Wafer2.set(addItem(tLastID = 34, "Glowstone doped Wafer", "Raw Circuit", o));
         ItemList.Circuit_Silicon_Wafer3.set(addItem(tLastID = 35, "Naquadah doped Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Wafer4.set(addItem(tLastID = 151, "Europium doped Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Silicon_Wafer5.set(addItem(tLastID = 153, "Naquadah doped Wafer", "Raw Circuit", o));
 
         ItemList.Circuit_Wafer_ILC.set(addItem(tLastID = 36, "Integrated Logic Circuit (Wafer)", "Raw Circuit", o));
         ItemList.Circuit_Chip_ILC.set(addItem(tLastID = 37, "Integrated Logic Circuit", "Integrated Circuit", o));
@@ -130,6 +134,12 @@ public class GT_MetaGenerated_Item_03
 
         ItemList.Circuit_Wafer_LPIC.set(addItem(tLastID = 64, "LPIC Wafer", "Raw Circuit", o));
         ItemList.Circuit_Chip_LPIC.set(addItem(tLastID = 65, "Low Power IC", "Low Power Circuit", o));
+
+        ItemList.Circuit_Wafer_PPIC.set(addItem(tLastID = 160, "PPIC Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Chip_PPIC.set(addItem(tLastID = 161, "Piko Power IC", "Piko Power Circuit", o));
+
+        ItemList.Circuit_Wafer_QPIC.set(addItem(tLastID = 162, "QPIC Wafer", "Raw Circuit", o));
+        ItemList.Circuit_Chip_QPIC.set(addItem(tLastID = 163, "Quantum Power IC", "Quantum Power Circuit", o));
         /**
          * Engraved Crystal Chip
          * Engraved Lapotron Chip
