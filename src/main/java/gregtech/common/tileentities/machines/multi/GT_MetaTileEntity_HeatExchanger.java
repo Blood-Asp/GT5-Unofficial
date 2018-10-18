@@ -11,6 +11,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -162,6 +163,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
                         addOutput(GT_ModHandler.getSteam(tGeneratedEU)); // Generate regular steam
                     }
                 } else {
+                    GT_Log.exp.println(this.mName+" had no more Distilled water!");
                     explodeMultiblock(); // Generate crater
                 }
             }

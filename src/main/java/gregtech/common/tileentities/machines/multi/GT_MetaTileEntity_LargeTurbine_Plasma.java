@@ -11,6 +11,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -193,8 +194,10 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
             this.mEfficiencyIncrease = 200;
             if(this.mDynamoHatches.size()>0){
                 for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
-                    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt)
+                    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt) {
+                        GT_Log.exp.println("Turbine "+this.mName+" DynHatch Explosion!");
                         explodeMultiblock();
+                    }
             }
             return true;
         }

@@ -8,6 +8,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -197,6 +198,7 @@ public abstract class GT_MetaTileEntity_Boiler
                         this.mHadNoWater = true;
                     } else {
                         if (this.mHadNoWater) {
+                            GT_Log.exp.println("Boiler "+this.mName+" had no Water!");
                             aBaseMetaTileEntity.doExplosion(2048L);
                             return;
                         }
