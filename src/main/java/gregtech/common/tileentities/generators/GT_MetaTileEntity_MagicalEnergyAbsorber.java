@@ -10,6 +10,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
@@ -99,6 +100,7 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
                     } else {
                         Block tEgg = mActiveSiphon.getBaseMetaTileEntity().getBlockOffset(0, 1, 0);
                         if (!getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(mActiveSiphon.getBaseMetaTileEntity().getXCoord(), mActiveSiphon.getBaseMetaTileEntity().getZCoord()).isChunkLoaded && (tEgg == Blocks.dragon_egg || tEgg.getUnlocalizedName().equals("tile.dragonEgg"))) {
+                            GT_Log.exp.println(this.mName+" Dragon Egg Exlosion!");
                             getBaseMetaTileEntity().doExplosion(Integer.MAX_VALUE);
                         } else {
                             mActiveSiphon = this;

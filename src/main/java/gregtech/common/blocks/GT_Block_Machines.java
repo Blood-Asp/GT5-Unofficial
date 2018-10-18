@@ -334,6 +334,7 @@ public class GT_Block_Machines
     public void onBlockExploded(World aWorld, int aX, int aY, int aZ, Explosion aExplosion) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof BaseMetaTileEntity)) {
+            GT_Log.exp.println("Explosion at :"+aX + " | " + aY+ " | "  + aZ +" DIMID: " + aWorld.provider.dimensionId+ " due to near explosion!");
             ((BaseMetaTileEntity) tTileEntity).doEnergyExplosion();
         }
         super.onBlockExploded(aWorld, aX, aY, aZ, aExplosion);
@@ -408,6 +409,7 @@ public class GT_Block_Machines
             TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
             if ((tTileEntity != null) && (chance < 1.0F)) {
                 if (((tTileEntity instanceof BaseMetaTileEntity)) && (GregTech_API.sMachineNonWrenchExplosions)) {
+                    GT_Log.exp.println("Explosion at :"+aX + " | " + aY+ " | "  + aZ +" DIMID: "+ aWorld.provider.dimensionId+ " due to NonWrench picking/Rain!");
                     ((BaseMetaTileEntity) tTileEntity).doEnergyExplosion();
                 }
             } else {
