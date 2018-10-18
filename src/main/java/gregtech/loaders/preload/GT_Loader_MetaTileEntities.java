@@ -1410,7 +1410,8 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         makeWires(Materials.Vanadiumtriindinid, 2260,  bEC ? 1L : 128L, bEC ? 2L : 256L, 2L, gregtech.api.enums.GT_Values.V[5], true, aBoolConst_0);
         makeWires(Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid, 2280, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[6], true, aBoolConst_0);
         makeWires(Materials.Tetranaquadahdiindiumhexaplatiumosminid, 2300, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[7], true, aBoolConst_0);
-        makeWires(Materials.Longasssuperconductornameforuvwire, 2500, 2L, 2L, 4L, gregtech.api.enums.GT_Values.V[8], true, aBoolConst_0);
+        makeWires(Materials.Longasssuperconductornameforuvwire, 2500, 2L, 2L, 8L, gregtech.api.enums.GT_Values.V[8], true, aBoolConst_0);
+        makeWires(Materials.Longasssuperconductornameforuhvwire, 2520, 2L, 2L, 8L, gregtech.api.enums.GT_Values.V[9], true, aBoolConst_0);
         makeWires(Materials.SuperconductorMV, 2320, 0L, 0L, 2L, gregtech.api.enums.GT_Values.V[2], aBoolConst_0, true);
         makeWires(Materials.SuperconductorHV, 2340, 0L, 0L, 2L, gregtech.api.enums.GT_Values.V[3], aBoolConst_0, true);
         makeWires(Materials.SuperconductorEV, 2360, 0L, 0L, 4L, gregtech.api.enums.GT_Values.V[4], aBoolConst_0, true);
