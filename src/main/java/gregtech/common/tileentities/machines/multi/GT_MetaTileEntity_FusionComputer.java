@@ -248,7 +248,10 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         if (tierOverclock() == 2) {
             return mStartEnergy < 160000000 ? 2 : 1;
         }
-        return mStartEnergy < 160000000 ? 4 : mStartEnergy < 320000000 ? 2 : 1;
+        if (this.tierOverclock() == 4) {
+			return (mStartEnergy < 160000000 ? 4 : (mStartEnergy < 320000000 ? 2 : 1));
+		}
+        return (mStartEnergy < 160000000) ? 8 : ((mStartEnergy < 320000000) ? 4 : (mStartEnergy < 640000000) ? 2 : 1);
     }
 
     @Override
@@ -442,7 +445,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     @Override
     public String[] getInfoData() {
-        String tier = tier() == 6 ? EnumChatFormatting.RED+"I"+EnumChatFormatting.RESET : tier() == 7 ? EnumChatFormatting.YELLOW+"II"+EnumChatFormatting.RESET : EnumChatFormatting.GRAY+"III"+EnumChatFormatting.RESET;
+        String tier = tier() == 6 ? EnumChatFormatting.RED+"I"+EnumChatFormatting.RESET : tier() == 7 ? EnumChatFormatting.YELLOW+"II"+EnumChatFormatting.RESET : tier() == 8 ? EnumChatFormatting.GRAY+"III"+EnumChatFormatting.RESET : "IV";
         float plasmaOut = 0;
         int powerRequired = 0;
         if (this.mLastRecipe != null) {
