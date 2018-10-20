@@ -2256,7 +2256,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Electric_Pump_UV.get(1, new Object(){}),576000,new Object[]{
                 ItemList.Electric_Motor_UHV.get(1, new Object(){}),
-                GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.CosmicNeutronium, 2L),
+                GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Neutronium, 2L),
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 4L),
                 GT_OreDictUnificator.get(OrePrefixes.screw, Materials.CosmicNeutronium, 16L),
                 new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.ring, (Materials.Rubber), 64L), GT_OreDictUnificator.get(OrePrefixes.ring, (Materials.StyreneButadieneRubber), 32L), GT_OreDictUnificator.get(OrePrefixes.ring, (Materials.Silicone), 32L)},
