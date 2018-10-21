@@ -507,6 +507,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_EV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Aluminium, 1L), ItemList.Circuit_Chip_PIC.get(2L), ItemList.EV_Coil.get(2L), ItemList.Reactor_Coolant_He_1.get(2L), ItemList.Electric_Pump_EV.get(1L)}, GT_Values.NF, ItemList.Hatch_Energy_EV.get(1L, new Object[0]), 200, 1920);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_IV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 1L), ItemList.Circuit_Chip_HPIC.get(2L), ItemList.IV_Coil.get(2L), ItemList.Reactor_Coolant_He_3.get(2L), ItemList.Electric_Pump_IV.get(1L)}, GT_Values.NF, ItemList.Hatch_Energy_IV.get(1L, new Object[0]), 200, 7680);
 
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_HV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Gold, 1L), ItemList.Circuit_Chip_LPIC.get(2L), ItemList.HV_Coil.get(2L), ItemList.Reactor_Coolant_He_1.get(2L), ItemList.Electric_Pump_HV.get(1L)}, GT_Values.NF, ItemList.Hatch_Dynamo_HV.get(1L, new Object[0]), 200, 480);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_EV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Aluminium, 1L), ItemList.Circuit_Chip_PIC.get(2L), ItemList.EV_Coil.get(2L), ItemList.Reactor_Coolant_He_1.get(2L), ItemList.Electric_Pump_EV.get(1L)}, GT_Values.NF, ItemList.Hatch_Dynamo_EV.get(1L, new Object[0]), 200, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_IV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Vanadiumtriindinid, 1L), ItemList.Circuit_Chip_HPIC.get(2L), ItemList.IV_Coil.get(2L), ItemList.Reactor_Coolant_He_3.get(2L), ItemList.Electric_Pump_IV.get(1L)}, GT_Values.NF, ItemList.Hatch_Dynamo_IV.get(1L, new Object[0]), 200, 7680);
+
         //TODO CHECK RECIPES BELOW
         GT_Values.RA.addCentrifugeRecipe(ItemList.Cell_Empty.get(1, new Object[0]), null, Materials.Air.getGas(10000), Materials.Nitrogen.getGas(3900), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), null, null, null, null, null, null, 1600, 8);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Galena, 3), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Sphalerite, 1), Materials.SulfuricAcid.getFluid(4000), new FluidStack(ItemList.sIndiumConcentrate, 8000), null, 60, 150);
@@ -2747,7 +2751,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Energy_UV.get(1, new Object(){}),576000,new Object[]{
                         ItemList.Hull_MAX.get(1L, new Object(){}),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),//TODO Need new recipe for UHV superconductor
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 2L),
                         ItemList.Circuit_Chip_QPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 2},
                         ItemList.UHV_Coil.get(2L, new Object(){}),
@@ -2757,6 +2761,60 @@ public class GT_MachineRecipeLoader implements Runnable {
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000),
                         Materials.SolderingAlloy.getMolten(5760)},
                 ItemList.Hatch_Energy_MAX.get(1, new Object[]{}), 1000, 2000000);
+
+        //Dynamo Hatches Luv-UHV
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Dynamo_IV.get(1, new Object(){}),72000,new Object[]{
+                        ItemList.Hull_LuV.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid, 2L),
+                        ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
+                        ItemList.LuV_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_3.get(2L, new Object(){}),
+                        ItemList.Electric_Pump_LuV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000),
+                        Materials.SolderingAlloy.getMolten(720)},
+                ItemList.Hatch_Dynamo_LuV.get(1, new Object[]{}), 400, 30720);
+
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Dynamo_LuV.get(1, new Object(){}),144000,new Object[]{
+                        ItemList.Hull_ZPM.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Tetranaquadahdiindiumhexaplatiumosminid, 4L),
+                        ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
+                        ItemList.ZPM_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(2L, new Object(){}),
+                        ItemList.Electric_Pump_ZPM.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 4000),
+                        Materials.SolderingAlloy.getMolten(1440)},
+                ItemList.Hatch_Dynamo_ZPM.get(1, new Object[]{}), 600, 122880);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Dynamo_ZPM.get(1, new Object(){}),288000,new Object[]{
+                        ItemList.Hull_UV.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuvwire, 4L),
+                        ItemList.Circuit_Chip_PPIC.get(2L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
+                        ItemList.UV_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(4L, new Object(){}),
+                        ItemList.Electric_Pump_UV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 8000),
+                        Materials.SolderingAlloy.getMolten(2880)},
+                ItemList.Hatch_Dynamo_UV.get(1, new Object[]{}), 800, 500000);
+
+        GT_Values.RA.addAssemblylineRecipe(ItemList.Hatch_Dynamo_UV.get(1, new Object(){}),576000,new Object[]{
+                        ItemList.Hull_MAX.get(1L, new Object(){}),
+                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Longasssuperconductornameforuhvwire, 8L),
+                        ItemList.Circuit_Chip_QPIC.get(2L,  new Object(){}),
+                        new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 2},
+                        ItemList.UHV_Coil.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(8L, new Object(){}),
+                        ItemList.Electric_Pump_UHV.get(1L, new Object(){})},
+                new FluidStack[]{
+                        new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000),
+                        Materials.SolderingAlloy.getMolten(5760)},
+                ItemList.Hatch_Dynamo_MAX.get(1, new Object[]{}), 1000, 2000000);
 
         Object o = new Object[0];
 

@@ -751,6 +751,15 @@ achievement.gt.blockmachines.hatch.energy.tier.08.desc=Pickup this item to see t
 achievement.gt.blockmachines.hatch.energy.tier.09=UHV Energy Hatch
 achievement.gt.blockmachines.hatch.energy.tier.09.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.blockmachines.hatch.dynamo.tier.06=LuV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.06.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.07=ZPM Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.07.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.08=UV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.08.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.09=UHV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.09.desc=Pickup this item to see the recipe in NEI
+
 achievement.gt.blockmachines.fusioncomputer.tier.06=Fusion Computer Mark I
 achievement.gt.blockmachines.fusioncomputer.tier.06.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.fusioncomputer.tier.07=Fusion Computer Mark II
