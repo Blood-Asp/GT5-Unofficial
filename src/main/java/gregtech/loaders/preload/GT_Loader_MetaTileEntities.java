@@ -315,7 +315,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Input_Bus_ULV.get(1L, new Object[0]), bitsd, new Object[]{"CX ", "MI ", 'M', ItemList.Hull_ULV, 'C', OrePrefixes.plate.get(Materials.Lead), 'I', OrePrefixes.pipeMedium.get(Materials.Tin), 'X', new ItemStack(Blocks.chest, 1, 0)});
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Input_Bus_LV.get(1L, new Object[0]), bitsd, new Object[]{"CX ", "MI ", 'M', ItemList.Hull_LV, 'C', ItemList.Conveyor_Module_LV,  'I', OrePrefixes.pipeMedium.get(Materials.Nickel), 'X', new ItemStack(Blocks.chest, 1, 0)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Input_Bus_MV.get(1L, new Object[0]), bitsd, new Object[]{"CX ", "MI ", 'M', ItemList.Hull_MV, 'C', ItemList.Conveyor_Module_MV,  'I', OrePrefixes.pipeMedium.get(Materials.Cobalt), 'X', GT_ModHandler.getModItem("IronChest", "BlockIronChest", 1L, 3)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Hatch_Input_Bus_MV.get(1L, new Object[0]), bitsd, new Object[]{"CX ", "MI ", 'M', ItemList.Hull_MV, 'C', ItemList.Conveyor_Module_MV,  'I', OrePrefixes.pipeMedium.get(Materials.Cobalt), 'X', new ItemStack(Blocks.chest, 1, 0)});
 
         ItemList.Hatch_Output_Bus_ULV.set(new GT_MetaTileEntity_Hatch_OutputBus(80, "hatch.output_bus.tier.00", "Output Bus (ULV)", 0).getStackForm(1L));
         ItemList.Hatch_Output_Bus_LV.set(new GT_MetaTileEntity_Hatch_OutputBus(81, "hatch.output_bus.tier.01", "Output Bus (LV)", 1).getStackForm(1L));
