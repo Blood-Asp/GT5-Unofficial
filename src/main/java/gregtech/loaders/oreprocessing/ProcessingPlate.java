@@ -202,7 +202,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                         GT_ModHandler.addAlloySmelterRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Glass, 3L), GT_ModHandler.getIC2Item("reinforcedGlass", 4L), 400, 4, false);
                     case "plateAlloyIridium":
                         GT_ModHandler.removeRecipeByOutput(aStack);
-                    case "plateIron": case "plateCopper": case "plateTin": case "plateBronze": case "plateGold": case "plateSteel": case "plateLead":
+                    case "plateIron": case "plateCopper": case "plateTin": case "plateBronze": case "plateGold": case "plateSteel ": case "plateLead": case "plateAluminium": case "plateStainlessSteel": case "plateTitanium": case "plateTungsten": case "plateTungstenSteel": case "plateIridium": case "plateChrome": case "plateOsmium": case "plateNeutronium":
                         GT_ModHandler.removeRecipeByOutput(aStack);
                 }
                 break;

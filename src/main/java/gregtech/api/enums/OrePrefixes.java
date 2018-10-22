@@ -773,7 +773,7 @@ public enum OrePrefixes {
                     gemExquisite.mDisabledItems.add(aMaterial);
                 }
                 //itemCasing
-                if (!enableUnusedDoubleIngots) itemCasing.mDisabledItems.add(aMaterial);
+                if (!enableUnusedItemCasing) itemCasing.mDisabledItems.add(aMaterial);
                 }
             }
         for (IMaterialHandler aRegistrator : Materials.mMaterialHandlers) {
