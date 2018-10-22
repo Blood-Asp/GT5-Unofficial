@@ -765,26 +765,15 @@ public enum OrePrefixes {
                         aMaterial == Materials.TungstenSteel))
                     stickLong.mDisabledItems.add(aMaterial);
 
-                if (!enableUnusedGems && ((aMaterial.mTypes & 0x04) == 0))
+                if (!enableUnusedGems && ((aMaterial.mTypes & 0x04) == 0)) {
                     gem.mDisabledItems.add(aMaterial);
                     gemChipped.mDisabledItems.add(aMaterial);
                     gemFlawless.mDisabledItems.add(aMaterial);
                     gemFlawed.mDisabledItems.add(aMaterial);
                     gemExquisite.mDisabledItems.add(aMaterial);
-
+                }
                 //itemCasing
-                if (!enableUnusedItemCasing && ((aMaterial.mTypes & 0x40) == 0) && !(aMaterial == Materials.Titanium || aMaterial == Materials.Chrome || aMaterial == Materials.Iron ||
-                    aMaterial == Materials.Tin || aMaterial == Materials.Osmium || aMaterial == Materials.Iridium || aMaterial == Materials.Neutronium ||
-                        aMaterial == Materials.Bronze || aMaterial == Materials.WroughtIron || aMaterial == Materials.Steel || aMaterial == Materials.StainlessSteel ||
-                        aMaterial == Materials.PigIron || aMaterial == Materials.TungstenSteel || aMaterial == Materials.HSSE || aMaterial == Materials.HSSG ||
-                        aMaterial == Materials.Aluminium || aMaterial == Materials.Copper || aMaterial == Materials.Neodymium || aMaterial == Materials.Europium ||
-                        aMaterial == Materials.Platinum || aMaterial == Materials.Gold || aMaterial == Materials.Uranium235 || aMaterial == Materials.Plutonium241 ||
-                        aMaterial == Materials.Americium || aMaterial == Materials.Neutronium || aMaterial == Materials.Bronze || aMaterial == Materials.Brass ||
-                        aMaterial == Materials.Electrum || aMaterial == Materials.NaquadahEnriched || aMaterial == Materials.CobaltBrass || aMaterial == Materials.IronMagnetic ||
-                        aMaterial == Materials.SteelMagnetic || aMaterial == Materials.NeodymiumMagnetic || aMaterial == Materials.Samarium || aMaterial == Materials.SamariumMagnetic || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.Diamond ||
-                        aMaterial == Materials.Wood || aMaterial == Materials.Plastic || aMaterial == Materials.Lead || aMaterial == Materials.SolderingAlloy || aMaterial == Materials.Lapis ||
-                        aMaterial == Materials.Lazurite || aMaterial == Materials.Sodalite|| aMaterial == Materials.PolyvinylChloride))
-                    itemCasing.mDisabledItems.add(aMaterial);
+                if (!enableUnusedDoubleIngots) itemCasing.mDisabledItems.add(aMaterial);
                 }
             }
         for (IMaterialHandler aRegistrator : Materials.mMaterialHandlers) {
