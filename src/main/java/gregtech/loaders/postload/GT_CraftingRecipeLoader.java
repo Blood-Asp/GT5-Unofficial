@@ -839,5 +839,5 @@ public class GT_CraftingRecipeLoader implements Runnable {
         }
 
         GT_ModHandler.addShapelessCraftingRecipe(Materials.Fireclay.getDust(2), new Object[]{Materials.Brick.getDust(1), Materials.Clay.getDust(1)});
-    }
+       }
 }

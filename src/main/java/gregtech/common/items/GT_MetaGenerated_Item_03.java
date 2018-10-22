@@ -11,7 +11,7 @@ public class GT_MetaGenerated_Item_03
     public static GT_MetaGenerated_Item_03 INSTANCE;
 
     public GT_MetaGenerated_Item_03() {
-        super("metaitem.03", new OrePrefixes[]{OrePrefixes.crateGtDust, OrePrefixes.crateGtIngot, OrePrefixes.crateGtGem, OrePrefixes.crateGtPlate});
+        super("metaitem.03", new OrePrefixes[]{OrePrefixes.crateGtDust, OrePrefixes.crateGtIngot, OrePrefixes.crateGtGem, OrePrefixes.crateGtPlate, OrePrefixes.itemCasing});
         INSTANCE = this;
         int tLastID = 0;
         Object[] o = new Object[0];
