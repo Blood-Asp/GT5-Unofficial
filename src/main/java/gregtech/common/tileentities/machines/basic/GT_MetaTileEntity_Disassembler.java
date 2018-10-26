@@ -32,17 +32,17 @@ public class GT_MetaTileEntity_Disassembler
     }
 
     public int checkRecipe() {
-        if ((getInputAt(0) != null) && (isOutputEmpty())) {
-        	if(GT_Utility.areStacksEqual(getInputAt(0), new ItemStack(Items.egg))){
-        		getInputAt(0).stackSize -= 1;
-                this.mEUt = (16 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
-                this.mMaxProgresstime = 2400;
-                this.mMaxProgresstime = this.mMaxProgresstime >> (mTier);
-                if (getBaseMetaTileEntity().getRandomNumber(100) < (this.mTier+1)) {
-                    this.mOutputItems[0] = ItemList.Circuit_Chip_Stemcell.get(1, new Object[0]);
-                    }
-        		return 2;
-        	}
+        //if ((getInputAt(0) != null) && (isOutputEmpty())) {
+        //	if(GT_Utility.areStacksEqual(getInputAt(0), new ItemStack(Items.egg))){
+        //		getInputAt(0).stackSize -= 1;
+          //      this.mEUt = (16 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
+            //    this.mMaxProgresstime = 2400;
+              //  this.mMaxProgresstime = this.mMaxProgresstime >> (mTier);
+                //if (getBaseMetaTileEntity().getRandomNumber(100) < (this.mTier+1)) {
+                  //  this.mOutputItems[0] = ItemList.Circuit_Chip_Stemcell.get(1, new Object[0]);
+                    //}
+        		//return 2;
+        	//}
             NBTTagCompound tNBT = getInputAt(0).getTagCompound();
             if (tNBT != null) {
                 tNBT = tNBT.getCompoundTag("GT.CraftingComponents");
@@ -77,7 +77,7 @@ public class GT_MetaTileEntity_Disassembler
                     return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                 }
             }
-        }
+
         return DID_NOT_FIND_RECIPE;
     }
 
@@ -103,6 +103,7 @@ public class GT_MetaTileEntity_Disassembler
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (aIndex == 4 && GT_Utility.areStacksEqual(aStack, new ItemStack(Items.egg))) || (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getTagCompound() != null) && (aStack.getTagCompound().getCompoundTag("GT.CraftingComponents") != null);
+        return //(aIndex == 4 && GT_Utility.areStacksEqual(aStack, new ItemStack(Items.egg))) ||
+                (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getTagCompound() != null) && (aStack.getTagCompound().getCompoundTag("GT.CraftingComponents") != null);
     }
 }
