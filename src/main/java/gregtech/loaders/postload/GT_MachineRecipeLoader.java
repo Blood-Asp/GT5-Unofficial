@@ -2943,6 +2943,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorLuV, 32),
             }, new FluidStack[]{
             		Materials.SolderingAlloy.getMolten(2880),
+                    Materials.VanadiumGallium.getMolten(1152L),
             }, ItemList.FusionComputer_LuV.get(1,o), 1000, 30000);
 
             GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Europium, 1), 288000, new Object[]{
@@ -2951,26 +2952,28 @@ public class GT_MachineRecipeLoader implements Runnable {
             		new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 1},
             		new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 1},
             		new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 1},
-            		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Europium, 4L),
-            		ItemList.Field_Generator_LuV.get(2,o),
-            		ItemList.Circuit_Wafer_HPIC.get(48,o),
+            		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Europium, 4L),
+            		ItemList.Field_Generator_ZPM.get(2,o),
+            		ItemList.Circuit_Wafer_PPIC.get(48,o),
             		GT_OreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorZPM, 32),
             }, new FluidStack[]{
             		Materials.SolderingAlloy.getMolten(2880),
+                    Materials.NiobiumTitanium.getMolten(1152L),
             }, ItemList.FusionComputer_ZPMV.get(1,o), 1000, 60000);
 
-            GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Americium, 1), 432000, new ItemStack[]{
+            GT_Values.RA.addAssemblylineRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Americium, 1), 432000, new Object[]{
             		ItemList.Casing_Fusion_Coil.get(1,o),
-            		ItemList.Circuit_Wetwaresupercomputer.get(1,o),
-            		ItemList.Circuit_Wetwaresupercomputer.get(1,o),
-            		ItemList.Circuit_Wetwaresupercomputer.get(1,o),
-            		ItemList.Circuit_Wetwaresupercomputer.get(1,o),
-            		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Americium, 4L),
-            		ItemList.Field_Generator_ZPM.get(2,o),
-            		ItemList.Circuit_Wafer_HPIC.get(64,o),
-            		GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 32),
+                    new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                    new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                    new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                    new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+            		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Americium, 4L),
+            		ItemList.Field_Generator_UV.get(2,o),
+            		ItemList.Circuit_Wafer_QPIC.get(64,o),
+            		GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUV, 32),
             }, new FluidStack[]{
             		Materials.SolderingAlloy.getMolten(2880),
+                    Materials.ElectrumFlux.getMolten(1152L),
             }, ItemList.FusionComputer_UV.get(1,o), 1000, 90000);
 
             if (GregTech_API.sThaumcraftCompat != null) {
