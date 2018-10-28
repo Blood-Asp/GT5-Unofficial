@@ -34,6 +34,12 @@ public class GT_FuelLoader
         GT_Recipe.GT_Recipe_Map.sExtremeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 500000);
         GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 1000000);
 
+        //BloodMagic
+        GT_Recipe.GT_Recipe_Map.sMagicFuels.addRecipe(true, new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","reinforcedSlate",1L)},  new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","blankSlate",1L)}, null, null, null, 0, 0, 100);
+        GT_Recipe.GT_Recipe_Map.sMagicFuels.addRecipe(true, new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","imbuedSlate",1L)},  new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","reinforcedSlate",1L)}, null, null, null, 0, 0, 400);
+        GT_Recipe.GT_Recipe_Map.sMagicFuels.addRecipe(true, new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","demonicSlate",1L)},  new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","imbuedSlate",1L)}, null, null, null, 0, 0, 1000);
+        GT_Recipe.GT_Recipe_Map.sMagicFuels.addRecipe(true, new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","bloodMagicBaseItems",1L,27)},  new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","demonicSlate",1L)}, null, null, null, 0, 0, 5000);
+        
         GT_Values.RA.addFuel(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 4), null, 4, 5);
         GT_Values.RA.addFuel(new ItemStack(Items.experience_bottle, 1), null, 10, 5);
         GT_Values.RA.addFuel(new ItemStack(Items.ghast_tear, 1), null, 50, 5);
