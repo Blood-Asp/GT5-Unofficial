@@ -373,7 +373,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
 
 	    ItemList.Hatch_DataAccess_EV.set(new GT_MetaTileEntity_Hatch_DataAccess(131, "hatch.dataaccess", "Data Access Hatch", 4).getStackForm(1L));
 	    ItemList.Hatch_DataAccess_LuV.set(new GT_MetaTileEntity_Hatch_DataAccess(132, "hatch.dataaccess.adv", "Advanced Data Access Hatch", 6).getStackForm(1L));
-        
+
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_EV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_EV, 'O', ItemList.Tool_DataStick , 'C' ,OrePrefixes.circuit.get(Materials.Elite)});
         GT_ModHandler.addCraftingRecipe(ItemList.Hatch_DataAccess_LuV.get(1L, new Object[0]), bitsd, new Object[]{"COC", "OMO", "COC", 'M', ItemList.Hull_LuV, 'O', ItemList.Tool_DataOrb , 'C' ,OrePrefixes.circuit.get(Materials.Ultimate)});
 
@@ -1331,7 +1331,14 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         		'P', OrePrefixes.pipeLarge.get(Materials.Polytetrafluoroethylene), 
         		'M', ItemList.Electric_Motor_HV,
         		'B', ItemList.Hull_HV});
-   }
+        ItemList.Machine_DigitalTransformer_EV.set(new GT_MetaTileEntity_Digital_Transformer(12183, "basicmachine.d_transformer.tier.04", "Extreme Digital Transformer", 4,"EV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_IV.set(new GT_MetaTileEntity_Digital_Transformer(12184, "basicmachine.d_transformer.tier.05", "Insane Digital Transformer", 5,"IV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_LuV.set(new GT_MetaTileEntity_Digital_Transformer(12185, "basicmachine.d_transformer.tier.06", "Ludicrous Digital Transformer", 6,"LuV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_ZPM.set(new GT_MetaTileEntity_Digital_Transformer(12186, "basicmachine.d_transformer.tier.07", "ZPM Digital Transformer", 7,"ZPM -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_UV.set(new GT_MetaTileEntity_Digital_Transformer(12187, "basicmachine.d_transformer.tier.08", "Ultimate Digital Transformer", 8,"UV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_UHV.set(new GT_MetaTileEntity_Digital_Transformer(12188, "basicmachine.d_transformer.tier.09", "Ultimate High Digital Transformer", 9,"UHV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+        ItemList.Machine_DigitalTransformer_UEV.set(new GT_MetaTileEntity_Digital_Transformer(12189, "basicmachine.d_transformer.tier.10", "Ultra Extreme Digital Transformer", 10,"UEV -> (ULV - MAX) (Use Soft Mallet to invert)").getStackForm(1L));
+    }
 
     private static void run4() {
     	long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
