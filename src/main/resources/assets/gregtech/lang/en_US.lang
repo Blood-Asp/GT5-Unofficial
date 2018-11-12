@@ -787,7 +787,7 @@ achievement.item.QuantumCircuit.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.blockmachines.multimachine.em.computer=Quantum Computer
 achievement.gt.blockmachines.multimachine.em.computer.desc=Pickup this item to see the recipe in NEI
-achievement.gt.blockmachines.multimachine.em.research.computer=Research station
+achievement.gt.blockmachines.multimachine.em.research=Research station
 achievement.gt.blockmachines.multimachine.em.research.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.multimachine.em.junction=Matter Junction
 achievement.gt.blockmachines.multimachine.em.junction.desc=Pickup this item to see the recipe in NEI
@@ -805,8 +805,8 @@ achievement.gt.blockcasingsTT.8=Hollow Casing
 achievement.gt.blockcasingsTT.8.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockcasingsTT.7=Molecular Coil
 achievement.gt.blockcasingsTT.7.desc=Pickup this item to see the recipe in NEI
-achievement.gt.blockmachines.multimachine.em.infuserr=Energy Infuser
-achievement.gt.blockmachines.multimachine.em.infuserr.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.multimachine.em.infuser=Energy Infuser
+achievement.gt.blockmachines.multimachine.em.infuser.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.hatch.holder.tier.09=Object Holder
 achievement.gt.blockmachines.hatch.holder.tier.09.desc=Pickup this item to see the recipe in NEI
 
