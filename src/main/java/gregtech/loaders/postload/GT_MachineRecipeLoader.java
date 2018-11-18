@@ -2214,10 +2214,11 @@ public class GT_MachineRecipeLoader implements Runnable {
         		GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Neutronium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Neutronium, 4L),
         		GT_OreDictUnificator.get(OrePrefixes.round, Materials.Neutronium, 16L),
-        		GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUV, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
+        		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
+                GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
                 GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Americium, 64L),
         		GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 2L)}, new FluidStack[]{
                 Materials.Naquadria.getMolten(1296),
