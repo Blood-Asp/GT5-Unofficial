@@ -221,22 +221,22 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
         byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 2, zDir);
         switch (tUsedMeta) {
             case 0:
-                this.mHeatingCapacity = 1800;
+                this.mHeatingCapacity = 1801;
                 break;
             case 1:
-                this.mHeatingCapacity = 2700;
+                this.mHeatingCapacity = 2701;
                 break;
             case 2:
-                this.mHeatingCapacity = 3600;
+                this.mHeatingCapacity = 3601;
                 break;
             case 3:
-                this.mHeatingCapacity = 4500;
+                this.mHeatingCapacity = 4501;
                 break;
             case 4:
-                this.mHeatingCapacity = 5400;
+                this.mHeatingCapacity = 5401;
                 break;
             case 5:
-                this.mHeatingCapacity = 7200;
+                this.mHeatingCapacity = 7201;
                 break;
             case 6:
                 this.mHeatingCapacity = 9001;
