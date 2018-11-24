@@ -3718,7 +3718,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             private void addPolybenzimidazoleRecipes() {
 
             	//Potassium Nitride
-            	GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.NitricAcid.getGas(1000), GT_Values.NF, Materials.PotassiumNitrade.getDust(1), 100, 30);
+            	GT_Values.RA.addChemicalRecipe(Materials.Potassium.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.NitricAcid.getFluid(1000), GT_Values.NF, Materials.PotassiumNitrade.getDust(1), 100, 30);
 
             	// Chrome Trioxide
             	GT_Values.RA.addChemicalRecipe(Materials.ChromiumDioxide.getDust(1), GT_Utility.getIntegratedCircuit(1), Materials.Oxygen.getGas(1000), GT_Values.NF, Materials.ChromiumTrioxide.getDust(1), GT_Values.NI,100, 60);
