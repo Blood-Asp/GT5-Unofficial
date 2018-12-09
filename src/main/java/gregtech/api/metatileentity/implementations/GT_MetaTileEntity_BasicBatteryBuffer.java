@@ -320,9 +320,9 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                 GT_Utility.formatNumbers(mStored) + " EU /",
                 GT_Utility.formatNumbers(mMax) + " EU",
                 "Average input:",
-                getBaseMetaTileEntity().getAverageElectricInput()+"",
+                GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput())+" EU/t",
                 "Average output:",
-                getBaseMetaTileEntity().getAverageElectricOutput()+""};
+                GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput())+" EU/t"};
     }
 
     @Override
