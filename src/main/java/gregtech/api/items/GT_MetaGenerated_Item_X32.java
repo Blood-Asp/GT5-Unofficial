@@ -52,14 +52,14 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
             if (tMaterial == null) continue;
             if (doesMaterialAllowGeneration(tPrefix, tMaterial)) {
                 ItemStack tStack = new ItemStack(this, 1, i);
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", getDefaultLocalization(tPrefix, tMaterial, i));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", GT_LanguageManager.i18nPlaceholder ? getDefaultLocalizationFormat(tPrefix, tMaterial, i) : getDefaultLocalization(tPrefix, tMaterial, i));
                 GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".tooltip", tMaterial.getToolTip(tPrefix.mMaterialAmount / M));
                 if (tPrefix.mIsUnificatable) {
                     GT_OreDictUnificator.set(tPrefix, tMaterial, tStack);
                 } else {
                     GT_OreDictUnificator.registerOre(tPrefix.get(tMaterial), tStack);
                 }
-                if ((tPrefix == OrePrefixes.stick || tPrefix == OrePrefixes.wireFine) && (tMaterial == Materials.Lead || tMaterial == Materials.Tin || tMaterial == Materials.SolderingAlloy)) {
+                if ((tPrefix == OrePrefixes.stick || tPrefix == OrePrefixes.wireFine || tPrefix == OrePrefixes.ingot) && (tMaterial == Materials.Lead || tMaterial == Materials.Tin || tMaterial == Materials.SolderingAlloy)) {
                     GregTech_API.sSolderingMetalList.add(tStack);
                 }
             }
@@ -101,6 +101,16 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
     }
 
     /**
+     * @param aPrefix   the OreDict Prefix
+     * @param aMaterial the Material
+     * @param aMetaData a Index from [0 - 31999]
+     * @return the Localized Name Format when default LangFiles are used.
+     */
+    public String getDefaultLocalizationFormat(OrePrefixes aPrefix, Materials aMaterial, int aMetaData) {
+        return aPrefix.getDefaultLocalNameFormatForItem(aMaterial);
+    }
+
+    /**
      * @param aMetaData a Index from [0 - 31999]
      * @param aMaterial the Material
      * @return an Icon Container for the Item Display.
@@ -120,6 +130,15 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
     }
 	
 	/* ---------- INTERNAL OVERRIDES ---------- */
+
+    @Override
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	int aDamage = getDamage(aStack);
+    	if (aDamage < 32000 && aDamage >= 0)
+    		return Materials.getLocalizedNameForItem(aName, aDamage % 1000);
+    	return aName;
+    }
 
     @Override
     public ItemStack getContainerItem(ItemStack aStack) {
@@ -142,12 +161,17 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
     @Override
     @SideOnly(Side.CLIENT)
     public final void getSubItems(Item var1, CreativeTabs aCreativeTab, List aList) {
-        for (int i = 0; i < 32000; i++)
-            if (doesMaterialAllowGeneration(mGeneratedPrefixList[i / 1000], GregTech_API.sGeneratedMaterials[i % 1000]) && doesShowInCreative(mGeneratedPrefixList[i / 1000], GregTech_API.sGeneratedMaterials[i % 1000], GregTech_API.sDoShowAllItemsInCreative)) {
-                ItemStack tStack = new ItemStack(this, 1, i);
-                isItemStackUsable(tStack);
-                aList.add(tStack);
+        for (int i = 0; i < 32000; i++) {
+            OrePrefixes aPrefix = mGeneratedPrefixList[i / 1000];
+            Materials aMaterial = GregTech_API.sGeneratedMaterials[i % 1000];
+            if (aPrefix != null && aMaterial != null) {
+                if (doesMaterialAllowGeneration(aPrefix, aMaterial) && doesShowInCreative(aPrefix, aMaterial, GregTech_API.sDoShowAllItemsInCreative)) {
+                    ItemStack tStack = new ItemStack(this, 1, i);
+                    isItemStackUsable(tStack);
+                    aList.add(tStack);
+                }
             }
+        }
         super.getSubItems(var1, aCreativeTab, aList);
     }
 

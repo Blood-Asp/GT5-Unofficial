@@ -24,15 +24,22 @@ public class GT_MetaTileEntity_TypeFilter
     public OrePrefixes mPrefix = OrePrefixes.ore;
 
     public GT_MetaTileEntity_TypeFilter(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 11, "Filtering incoming Items by Type");
+        super(aID, aName, aNameRegional, aTier, 11, new String[]{
+        		"Filters 1 Item Type",
+        		"Use Screwdriver to regulate output stack size",
+        		"Consumes 1 EU per moved Item"});
     }
 
     public GT_MetaTileEntity_TypeFilter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_TypeFilter(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
+
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_TypeFilter(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_TypeFilter(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
     public ITexture getOverlayIcon() {
@@ -63,7 +70,6 @@ public class GT_MetaTileEntity_TypeFilter
                                     i = OrePrefixes.values().length - 1;
                                 }
                             } while (OrePrefixes.values()[i].mPrefixedItems.isEmpty());
-
                         } else {
                             do {
                                 i++;
@@ -126,7 +132,9 @@ public class GT_MetaTileEntity_TypeFilter
                         tFix == OrePrefixes.orePoor ||
                         tFix == OrePrefixes.oreRedgranite ||
                         tFix == OrePrefixes.oreRich ||
-                        tFix == OrePrefixes.oreSmall) tAllowPrefix = true;
+                        tFix == OrePrefixes.oreSmall ||
+                        tFix == OrePrefixes.oreBasalt ||
+                        tFix == OrePrefixes.oreMarble) tAllowPrefix = true;
             }
         }
         return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && ((this.bNBTAllowed) || (!aStack.hasTagCompound())) && (tAllowPrefix != this.bInvertFilter);

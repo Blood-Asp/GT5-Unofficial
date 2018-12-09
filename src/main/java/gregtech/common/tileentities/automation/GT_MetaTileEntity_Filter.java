@@ -19,15 +19,22 @@ public class GT_MetaTileEntity_Filter
     public boolean bInvertFilter = false;
 
     public GT_MetaTileEntity_Filter(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 19, "Filtering incoming Items");
+        super(aID, aName, aNameRegional, aTier, 19, new String[]{
+        		"Filters up to 9 different Items",
+        		"Use Screwdriver to regulate output stack size",
+        		"Consumes 1EU per moved Item"});
     }
 
     public GT_MetaTileEntity_Filter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
+    
+    public GT_MetaTileEntity_Filter(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Filter(this.mName, this.mTier, this.mInventory.length, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Filter(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
     public ITexture getOverlayIcon() {

@@ -23,12 +23,16 @@ public class GT_MetaTileEntity_Furnace_Bronze
         super(aName, aDescription, aTextures, 1, 1, true);
     }
 
+    public GT_MetaTileEntity_Furnace_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, true);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeFurnace.png", "smelting");
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Furnace_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Furnace_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public int checkRecipe() {

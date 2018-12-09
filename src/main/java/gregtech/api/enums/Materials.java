@@ -1,15 +1,20 @@
 package gregtech.api.enums;
 
 import cpw.mods.fml.common.Loader;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 import gregtech.api.interfaces.IColorModulationContainer;
+import gregtech.api.interfaces.IMaterialHandler;
 import gregtech.api.interfaces.ISubTagContainer;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.loaders.materialprocessing.ProcessingConfig;
+import gregtech.loaders.materialprocessing.ProcessingModSupport;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -18,702 +23,1191 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.*;
 
 import static gregtech.api.enums.GT_Values.M;
-import static gregtech.api.enums.GT_Values.MOD_ID_TC;
 
-/**
- * This List contains every Material I know about, and is used to determine Recipes for the
- */
-public enum Materials implements IColorModulationContainer, ISubTagContainer {
+public class Materials implements IColorModulationContainer, ISubTagContainer {
+    private static Materials[] MATERIALS_ARRAY = new Materials[]{};
+    private static final Map<String, Materials> MATERIALS_MAP = new LinkedHashMap<String, Materials>();
+    public static final List<IMaterialHandler> mMaterialHandlers = new ArrayList<IMaterialHandler>();
+
+    /**
+     * This is for keeping compatibility with addons mods (Such as TinkersGregworks etc) that looped over the old materials enum
+     */
+    @Deprecated
+    public static Collection<Materials> VALUES = new LinkedHashSet<Materials>();
+
     /**
      * This is the Default Material returned in case no Material has been found or a NullPointer has been inserted at a location where it shouldn't happen.
-     * <p/>
-     * Mainly for preventing NullPointer Exceptions and providing Default Values.
      */
-    _NULL(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "NULL", 0, 0, 0, 0, false, false, 1, 1, 1, Dyes._NULL, Element._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 1))),
+    public static Materials _NULL = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0,	"NULL", "NULL", 0, 0, 0, 0, false, false, 1, 1, 1, Dyes._NULL, Element._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 1)));
 
     /**
      * Direct Elements
      */
-    Aluminium(19, TextureSet.SET_DULL, 10.0F, 128, 2, 1 | 2 | 8 | 32 | 64 | 128, 128, 200, 240, 0, "Aluminium", 0, 0, 933, 1700, true, false, 3, 1, 1, Dyes.dyeLightBlue, Element.Al, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VOLATUS, 1))),
-    Americium(103, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1 | 2 | 8 | 32, 200, 200, 200, 0, "Americium", 0, 0, 1449, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Am, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Antimony(58, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 8 | 32, 220, 220, 240, 0, "Antimony", 0, 0, 903, 0, false, false, 2, 1, 1, Dyes.dyeLightGray, Element.Sb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.AQUA, 1))),
-    Argon(24, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 0, 255, 0, 240, "Argon", 0, 0, 83, 0, false, true, 5, 1, 1, Dyes.dyeGreen, Element.Ar, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 2))),
-    Arsenic(39, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 2 | 8 | 16 | 32, 255, 255, 255, 0, "Arsenic", 0, 0, 1090, 0, false, false, 3, 1, 1, Dyes.dyeOrange, Element.As, Arrays.asList(new TC_AspectStack(TC_Aspects.VENENUM, 3))),
-    Barium(63, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8 | 32, 255, 255, 255, 0, "Barium", 0, 0, 1000, 0, false, false, 1, 1, 1, Dyes._NULL, Element.Ba, Arrays.asList(new TC_AspectStack(TC_Aspects.VINCULUM, 3))),
-    Beryllium(8, TextureSet.SET_METALLIC, 14.0F, 64, 2, 1 | 2 | 8 | 32 | 64, 100, 180, 100, 0, "Beryllium", 0, 0, 1560, 0, false, false, 6, 1, 1, Dyes.dyeGreen, Element.Be, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 1))),
-    Bismuth(90, TextureSet.SET_METALLIC, 6.0F, 64, 1, 1 | 2 | 8 | 32 | 64 | 128, 100, 160, 160, 0, "Bismuth", 0, 0, 544, 0, false, false, 2, 1, 1, Dyes.dyeCyan, Element.Bi, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Boron(9, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8 | 32, 250, 250, 250, 0, "Boron", 0, 0, 2349, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Element.B, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Caesium(62, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Caesium", 0, 0, 301, 0, false, false, 4, 1, 1, Dyes._NULL, Element.Cs, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Calcium(26, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 32, 255, 245, 245, 0, "Calcium", 0, 0, 1115, 0, false, false, 4, 1, 1, Dyes.dyePink, Element.Ca, Arrays.asList(new TC_AspectStack(TC_Aspects.SANO, 1), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-    Carbon(10, TextureSet.SET_DULL, 1.0F, 64, 2, 1 | 2 | 32 | 64 | 128, 20, 20, 20, 0, "Carbon", 0, 0, 3800, 0, false, false, 2, 1, 1, Dyes.dyeBlack, Element.C, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Cadmium(55, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 8 | 32, 50, 50, 60, 0, "Cadmium", 0, 0, 594, 0, false, false, 3, 1, 1, Dyes.dyeGray, Element.Cd, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VENENUM, 1))),
-    Cerium(65, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Cerium", 0, 0, 1068, 1068, true, false, 4, 1, 1, Dyes._NULL, Element.Ce, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Chlorine(23, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 255, 255, 0, "Chlorine", 0, 0, 171, 0, false, false, 2, 1, 1, Dyes.dyeCyan, Element.Cl, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.PANNUS, 1))),
-    Chrome(30, TextureSet.SET_SHINY, 11.0F, 256, 3, 1 | 2 | 8 | 32 | 64 | 128, 255, 230, 230, 0, "Chrome", 0, 0, 2180, 1700, true, false, 5, 1, 1, Dyes.dyePink, Element.Cr, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    Cobalt(33, TextureSet.SET_METALLIC, 8.0F, 512, 3, 1 | 2 | 8 | 32 | 64, 80, 80, 250, 0, "Cobalt", 0, 0, 1768, 0, false, false, 3, 1, 1, Dyes.dyeBlue, Element.Co, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Copper(35, TextureSet.SET_SHINY, 1.0F, 0, 1, 1 | 2 | 8 | 32 | 128, 255, 100, 0, 0, "Copper", 0, 0, 1357, 0, false, false, 3, 1, 1, Dyes.dyeOrange, Element.Cu, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PERMUTATIO, 1))),
-    Deuterium(2, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 255, 0, 240, "Deuterium", 0, 0, 14, 0, false, true, 10, 1, 1, Dyes.dyeYellow, Element.D, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 3))),
-    Dysprosium(73, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Dysprosium", 0, 0, 1680, 1680, true, false, 4, 1, 1, Dyes._NULL, Element.Dy, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3))),
-    Empty(0, TextureSet.SET_NONE, 1.0F, 0, 2, 256/*Only for Prefixes which need it*/, 255, 255, 255, 255, "Empty", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Element._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 2))),
-    Erbium(75, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Erbium", 0, 0, 1802, 1802, true, false, 4, 1, 1, Dyes._NULL, Element.Er, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Europium(70, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Europium", 0, 0, 1099, 1099, true, false, 4, 1, 1, Dyes._NULL, Element.Eu, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Fluorine(14, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 255, 255, 127, "Fluorine", 0, 0, 53, 0, false, true, 2, 1, 1, Dyes.dyeGreen, Element.F, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 2))),
-    Gadolinium(71, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Gadolinium", 0, 0, 1585, 1585, true, false, 4, 1, 1, Dyes._NULL, Element.Gd, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Gallium(37, TextureSet.SET_SHINY, 1.0F, 64, 2, 1 | 2 | 8 | 32, 220, 220, 255, 0, "Gallium", 0, 0, 302, 0, false, false, 5, 1, 1, Dyes.dyeLightGray, Element.Ga, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
-    Gold(86, TextureSet.SET_SHINY, 12.0F, 64, 2, 1 | 2 | 8 | 32 | 64 | 128, 255, 255, 30, 0, "Gold", 0, 0, 1337, 0, false, false, 4, 1, 1, Dyes.dyeYellow, Element.Au, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 2))),
-    Holmium(74, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Holmium", 0, 0, 1734, 1734, true, false, 4, 1, 1, Dyes._NULL, Element.Ho, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Hydrogen(1, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 0, 0, 255, 240, "Hydrogen", 1, 15, 14, 0, false, true, 2, 1, 1, Dyes.dyeBlue, Element.H, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 1))),
-    Helium(4, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 255, 0, 240, "Helium", 0, 0, 1, 0, false, true, 5, 1, 1, Dyes.dyeYellow, Element.He, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 2))),
-    Helium_3(5, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 255, 0, 240, "Helium-3", 0, 0, 1, 0, false, true, 10, 1, 1, Dyes.dyeYellow, Element.He_3, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 3))),
-    Indium(56, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 64, 0, 128, 0, "Indium", 0, 0, 429, 0, false, false, 4, 1, 1, Dyes.dyeGray, Element.In, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Iridium(84, TextureSet.SET_DULL, 6.0F, 5120, 4, 1 | 2 | 8 | 32 | 64 | 128, 240, 240, 245, 0, "Iridium", 0, 0, 2719, 0, false, false, 10, 1, 1, Dyes.dyeWhite, Element.Ir, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    Iron(32, TextureSet.SET_METALLIC, 6.0F, 256, 2, 1 | 2 | 8 | 32 | 64 | 128, 200, 200, 200, 0, "Iron", 0, 0, 1811, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Fe, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3))),
-    Lanthanum(64, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Lanthanum", 0, 0, 1193, 1193, true, false, 4, 1, 1, Dyes._NULL, Element.La, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Lead(89, TextureSet.SET_DULL, 8.0F, 64, 1, 1 | 2 | 8 | 32 | 64 | 128, 140, 100, 140, 0, "Lead", 0, 0, 600, 0, false, false, 3, 1, 1, Dyes.dyePurple, Element.Pb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 1))),
-    Lithium(6, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 2 | 8 | 32, 225, 220, 255, 0, "Lithium", 0, 0, 454, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, Element.Li, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 2))),
-    Lutetium(78, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Lutetium", 0, 0, 1925, 1925, true, false, 4, 1, 1, Dyes._NULL, Element.Lu, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Magic(-128, TextureSet.SET_SHINY, 8.0F, 5120, 5, 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128, 100, 0, 200, 0, "Magic", 5, 32, 5000, 0, false, false, 7, 1, 1, Dyes.dyePurple, Element.Ma, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 4))),
-    Magnesium(18, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 200, 200, 0, "Magnesium", 0, 0, 923, 0, false, false, 3, 1, 1, Dyes.dyePink, Element.Mg, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.SANO, 1))),
-    Manganese(31, TextureSet.SET_DULL, 7.0F, 512, 2, 1 | 2 | 8 | 32 | 64, 250, 250, 250, 0, "Manganese", 0, 0, 1519, 0, false, false, 3, 1, 1, Dyes.dyeWhite, Element.Mn, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3))),
-    Mercury(87, TextureSet.SET_SHINY, 1.0F, 0, 0, 16 | 32, 255, 220, 220, 0, "Mercury", 5, 32, 234, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Hg, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.VENENUM, 1))),
-    Molybdenum(48, TextureSet.SET_SHINY, 7.0F, 512, 2, 1 | 2 | 8 | 32 | 64, 180, 180, 220, 0, "Molybdenum", 0, 0, 2896, 0, false, false, 1, 1, 1, Dyes.dyeBlue, Element.Mo, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Neodymium(67, TextureSet.SET_METALLIC, 7.0F, 512, 2, 1 | 2 | 8 | 32 | 64 | 128, 100, 100, 100, 0, "Neodymium", 0, 0, 1297, 1297, true, false, 4, 1, 1, Dyes._NULL, Element.Nd, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 2))),
-    Neutronium(129, TextureSet.SET_DULL, 6.0F, 81920, 6, 1 | 2 | 8 | 32 | 64 | 128, 250, 250, 250, 0, "Neutronium", 0, 0, 10000, 0, false, false, 20, 1, 1, Dyes.dyeWhite, Element.Nt, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.ALIENIS, 2))),
-    Nickel(34, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 8 | 32 | 64 | 128, 200, 200, 250, 0, "Nickel", 0, 0, 1728, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, Element.Ni, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Niobium(47, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 190, 180, 200, 0, "Niobium", 0, 0, 2750, 2750, true, false, 5, 1, 1, Dyes._NULL, Element.Nb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
-    Nitrogen(12, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 0, 150, 200, 240, "Nitrogen", 0, 0, 63, 0, false, true, 2, 1, 1, Dyes.dyeCyan, Element.N, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 2))),
-    Osmium(83, TextureSet.SET_METALLIC, 16.0F, 1280, 4, 1 | 2 | 8 | 32 | 64 | 128, 50, 50, 255, 0, "Osmium", 0, 0, 3306, 0, false, false, 10, 1, 1, Dyes.dyeBlue, Element.Os, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1), new TC_AspectStack(TC_Aspects.NEBRISUM, 1))),
-    Oxygen(13, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 0, 100, 200, 240, "Oxygen", 0, 0, 54, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Element.O, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 1))),
-    Palladium(52, TextureSet.SET_SHINY, 8.0F, 512, 2, 1 | 2 | 8 | 32 | 64 | 128, 128, 128, 128, 0, "Palladium", 0, 0, 1828, 1828, false, false, 4, 1, 1, Dyes.dyeGray, Element.Pd, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3))),
-    Phosphor(21, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8 | 32, 255, 255, 0, 0, "Phosphor", 0, 0, 317, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.P, Arrays.asList(new TC_AspectStack(TC_Aspects.IGNIS, 2), new TC_AspectStack(TC_Aspects.POTENTIA, 1))),
-    Platinum(85, TextureSet.SET_SHINY, 12.0F, 64, 2, 1 | 2 | 8 | 32 | 64 | 128, 255, 255, 200, 0, "Platinum", 0, 0, 2041, 0, false, false, 6, 1, 1, Dyes.dyeOrange, Element.Pt, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.NEBRISUM, 1))),
-    Plutonium(100, TextureSet.SET_METALLIC, 6.0F, 512, 3, 1 | 2 | 8 | 32 | 64, 240, 50, 50, 0, "Plutonium 244", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2))),
-    Plutonium241(101, TextureSet.SET_SHINY, 6.0F, 512, 3, 1 | 2 | 8 | 32 | 64, 250, 70, 70, 0, "Plutonium 241", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu_241, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 3))),
-    Potassium(25, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 2 | 32, 250, 250, 250, 0, "Potassium", 0, 0, 336, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Element.K, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 1))),
-    Praseodymium(66, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Praseodymium", 0, 0, 1208, 1208, true, false, 4, 1, 1, Dyes._NULL, Element.Pr, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Promethium(68, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Promethium", 0, 0, 1315, 1315, true, false, 4, 1, 1, Dyes._NULL, Element.Pm, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Radon(93, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 255, 0, 255, 240, "Radon", 0, 0, 202, 0, false, true, 5, 1, 1, Dyes.dyePurple, Element.Rn, Arrays.asList(new TC_AspectStack(TC_Aspects.AER, 1), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Rubidium(43, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 240, 30, 30, 0, "Rubidium", 0, 0, 312, 0, false, false, 4, 1, 1, Dyes.dyeRed, Element.Rb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    Samarium(69, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Samarium", 0, 0, 1345, 1345, true, false, 4, 1, 1, Dyes._NULL, Element.Sm, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Scandium(27, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Scandium", 0, 0, 1814, 1814, true, false, 2, 1, 1, Dyes.dyeYellow, Element.Sc, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Silicon(20, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 60, 60, 80, 0, "Silicon", 0, 0, 1687, 1687, true, false, 1, 1, 1, Dyes.dyeBlack, Element.Si, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TENEBRAE, 1))),
-    Silver(54, TextureSet.SET_SHINY, 10.0F, 64, 2, 1 | 2 | 8 | 32 | 64 | 128, 220, 220, 255, 0, "Silver", 0, 0, 1234, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Ag, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 1))),
-    Sodium(17, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 32, 0, 0, 150, 0, "Sodium", 0, 0, 370, 0, false, false, 1, 1, 1, Dyes.dyeBlue, Element.Na, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.LUX, 1))),
-    Strontium(44, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8 | 32, 200, 200, 200, 0, "Strontium", 0, 0, 1050, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Element.Sr, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.STRONTIO, 1))),
-    Sulfur(22, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8 | 32, 200, 200, 0, 0, "Sulfur", 0, 0, 388, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.S, Arrays.asList(new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Tantalum(80, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Tantalum", 0, 0, 3290, 0, false, false, 4, 1, 1, Dyes._NULL, Element.Ta, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VINCULUM, 1))),
-    Tellurium(59, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Tellurium", 0, 0, 722, 0, false, false, 4, 1, 1, Dyes.dyeGray, Element.Te, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Terbium(72, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Terbium", 0, 0, 1629, 1629, true, false, 4, 1, 1, Dyes._NULL, Element.Tb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Thorium(96, TextureSet.SET_SHINY, 6.0F, 512, 2, 1 | 2 | 8 | 32 | 64, 0, 30, 0, 0, "Thorium", 0, 0, 2115, 0, false, false, 4, 1, 1, Dyes.dyeBlack, Element.Th, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Thulium(76, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Thulium", 0, 0, 1818, 1818, true, false, 4, 1, 1, Dyes._NULL, Element.Tm, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Tin(57, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 2 | 8 | 32 | 128, 220, 220, 220, 0, "Tin", 0, 0, 505, 505, false, false, 3, 1, 1, Dyes.dyeWhite, Element.Sn, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    Titanium(28, TextureSet.SET_METALLIC, 8.0F, 2560, 3, 1 | 2 | 8 | 32 | 64 | 128, 220, 160, 240, 0, "Titanium", 0, 0, 1941, 1500, true, false, 5, 1, 1, Dyes.dyePurple, Element.Ti, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-    Tritium(3, TextureSet.SET_METALLIC, 1.0F, 0, 2, 16 | 32, 255, 0, 0, 240, "Tritium", 0, 0, 14, 0, false, true, 10, 1, 1, Dyes.dyeRed, Element.T, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 4))),
-    Tungsten(81, TextureSet.SET_METALLIC, 8.0F, 5120, 3, 1 | 2 | 8 | 32 | 64 | 128, 50, 50, 50, 0, "Tungsten", 0, 0, 3695, 2500, true, false, 4, 1, 1, Dyes.dyeBlack, Element.W, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-    Uranium(98, TextureSet.SET_METALLIC, 6.0F, 512, 3, 1 | 2 | 8 | 32 | 64, 50, 240, 50, 0, "Uranium 238", 0, 0, 1405, 0, false, false, 4, 1, 1, Dyes.dyeGreen, Element.U, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Uranium235(97, TextureSet.SET_SHINY, 6.0F, 512, 3, 1 | 2 | 8 | 32 | 64, 70, 250, 70, 0, "Uranium 235", 0, 0, 1405, 0, false, false, 4, 1, 1, Dyes.dyeGreen, Element.U_235, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2))),
-    Vanadium(29, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 50, 50, 50, 0, "Vanadium", 0, 0, 2183, 2183, true, false, 2, 1, 1, Dyes.dyeBlack, Element.V, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Ytterbium(77, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 255, 255, 255, 0, "Ytterbium", 0, 0, 1097, 1097, true, false, 4, 1, 1, Dyes._NULL, Element.Yb, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Yttrium(45, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2 | 8 | 32, 220, 250, 220, 0, "Yttrium", 0, 0, 1799, 1799, true, false, 4, 1, 1, Dyes._NULL, Element.Y, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1))),
-    Zinc(36, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 2 | 8 | 32, 250, 240, 240, 0, "Zinc", 0, 0, 692, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Element.Zn, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.SANO, 1))),
+    public static Materials Aluminium = new Materials(19, TextureSet.SET_DULL, 	   10.0F, 128, 2, 1|2|8|32|64|128, 128, 200, 240, 0, "Aluminium", "Aluminium", 0, 0, 933, 1700, true, false, 3, 1, 1, Dyes.dyeLightBlue, Element.Al, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VOLATUS, 1)));
+    public static Materials Americium = new Materials(103, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1|2|32, 200, 200, 200, 0, "Americium", "Americium", 0, 0, 1449, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Am, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Antimony = new Materials(58, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1|2|32, 220, 220, 240, 0, "Antimony", "Antimony", 0, 0, 903, 0, false, false, 2, 1, 1, Dyes.dyeLightGray, Element.Sb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.AQUA, 1)));
+    public static Materials Argon = new Materials(24, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 0, 255, 0, 240, "Argon", "Argon", 0, 0, 83, 0, false, true, 5, 1, 1, Dyes.dyeGreen, Element.Ar, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 2)));
+    public static Materials Arsenic = new Materials(39, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|2|16|32, 255, 255, 255, 0, "Arsenic", "Arsenic", 0, 0, 1090, 0, false, false, 3, 1, 1, Dyes.dyeOrange, Element.As, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 3)));
+    public static Materials Barium = new Materials(63, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|32, 255, 255, 255, 0, "Barium", "Barium", 0, 0, 1000, 0, false, false, 1, 1, 1, Dyes._NULL, Element.Ba, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VINCULUM, 3)));
+    public static Materials Beryllium = new Materials(8, TextureSet.SET_METALLIC,  14.0F, 64, 2, 1|2|8|32|64, 100, 180, 100, 0, "Beryllium", "Beryllium", 0, 0, 1560, 0, false, false, 6, 1, 1, Dyes.dyeGreen, Element.Be, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 1)));
+    public static Materials Bismuth = new Materials(90, TextureSet.SET_METALLIC, 	6.0F, 64, 1, 1|2|8|32|64|128, 100, 160, 160, 0, "Bismuth", "Bismuth", 0, 0, 544, 0, false, false, 2, 1, 1, Dyes.dyeCyan, Element.Bi, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Boron = new Materials(9, TextureSet.SET_DULL, 			1.0F, 0, 2, 1|32, 210, 250, 210, 0, "Boron", "Boron", 0, 0, 2349, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Element.B, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Caesium = new Materials(62, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Caesium", "Caesium", 0, 0, 301, 0, false, false, 4, 1, 1, Dyes._NULL, Element.Cs, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Calcium = new Materials(26, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |32, 255, 245, 245, 0, "Calcium", "Calcium", 0, 0, 1115, 0, false, false, 4, 1, 1, Dyes.dyePink, Element.Ca, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1), new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials Carbon = new Materials(10, TextureSet.SET_DULL, 		1.0F, 64, 2, 1|2|16|32|64|128, 20, 20, 20, 0, "Carbon", "Carbon", 0, 0, 3800, 0, false, false, 2, 1, 1, Dyes.dyeBlack, Element.C, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials Cadmium = new Materials(55, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1|32, 50, 50, 60, 0, "Cadmium", "Cadmium", 0, 0, 594, 0, false, false, 3, 1, 1, Dyes.dyeGray, Element.Cd, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VENENUM, 1)));
+    public static Materials Cerium = new Materials(65, TextureSet.SET_METALLIC,		1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Cerium", "Cerium", 0, 0, 1068, 1068, true, false, 4, 1, 1, Dyes._NULL, Element.Ce, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Chlorine = new Materials(23, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 255, 255, 0, "Chlorine", "Chlorine", 0, 0, 171, 0, false, false, 2, 1, 1, Dyes.dyeCyan, Element.Cl, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.PANNUS, 1)));
+    public static Materials Chrome = new Materials(30, TextureSet.SET_SHINY, 	   11.0F, 256, 3, 1|2|8|32|64|128, 255, 230, 230, 0, "Chrome", "Chrome", 0, 0, 2180, 1700, true, false, 5, 1, 1, Dyes.dyePink, Element.Cr, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1)));
+    public static Materials Cobalt = new Materials(33, TextureSet.SET_METALLIC, 	8.0F, 512, 3, 1|2|32|64, 80, 80, 250, 0, "Cobalt", "Cobalt", 0, 0, 1768, 0, false, false, 3, 1, 1, Dyes.dyeBlue, Element.Co, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Copper = new Materials(35, TextureSet.SET_SHINY, 		1.0F, 0, 1, 1|2|8|32|128, 255, 100, 0, 0, "Copper", "Copper", 0, 0, 1357, 0, false, false, 3, 1, 1, Dyes.dyeOrange, Element.Cu, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PERMUTATIO, 1)));
+    public static Materials Deuterium = new Materials(2, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 255, 0, 240, "Deuterium", "Deuterium", 0, 0, 14, 0, false, true, 10, 1, 1, Dyes.dyeYellow, Element.D, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 3)));
+    public static Materials Dysprosium = new Materials(73, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Dysprosium", "Dysprosium", 0, 0, 1680, 1680, true, false, 4, 1, 1, Dyes._NULL, Element.Dy, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3)));
+    public static Materials Empty = new Materials(0, TextureSet.SET_NONE, 			1.0F, 0, 2, 256/*Only for Prefixes which need it*/, 255, 255, 255, 255, "Empty", "Empty", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Element._NULL, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 2)));
+    public static Materials Erbium = new Materials(75, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Erbium", "Erbium", 0, 0, 1802, 1802, true, false, 4, 1, 1, Dyes._NULL, Element.Er, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Europium = new Materials(70, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Europium", "Europium", 0, 0, 1099, 1099, true, false, 4, 1, 1, Dyes._NULL, Element.Eu, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Fluorine = new Materials(14, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 255, 255, 127, "Fluorine", "Fluorine", 0, 0, 53, 0, false, true, 2, 1, 1, Dyes.dyeGreen, Element.F, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 2)));
+    public static Materials Gadolinium = new Materials(71, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Gadolinium", "Gadolinium", 0, 0, 1585, 1585, true, false, 4, 1, 1, Dyes._NULL, Element.Gd, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Gallium = new Materials(37, TextureSet.SET_SHINY, 		1.0F, 64, 2, 1|2|32, 220, 220, 255, 0, "Gallium", "Gallium", 0, 0, 302, 0, false, false, 5, 1, 1, Dyes.dyeLightGray, Element.Ga, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1)));
+    public static Materials Gold = new Materials(86, TextureSet.SET_SHINY, 		   12.0F, 64, 2, 1|2|8|32|64|128, 255, 255, 30, 0, "Gold", "Gold", 0, 0, 1337, 0, false, false, 4, 1, 1, Dyes.dyeYellow, Element.Au, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 2)));
+    public static Materials Holmium = new Materials(74, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Holmium", "Holmium", 0, 0, 1734, 1734, true, false, 4, 1, 1, Dyes._NULL, Element.Ho, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Hydrogen = new Materials(1, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 0, 0, 255, 240, "Hydrogen", "Hydrogen", 1, 20, 14, 0, false, true, 2, 1, 1, Dyes.dyeBlue, Element.H, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1)));
+    public static Materials Helium = new Materials(4, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 255, 0, 240, "Helium", "Helium", 0, 0, 1, 0, false, true, 5, 1, 1, Dyes.dyeYellow, Element.He, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 2)));
+    public static Materials Helium_3 = new Materials(5, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 255, 0, 240, "Helium_3", "Helium-3", 0, 0, 1, 0, false, true, 10, 1, 1, Dyes.dyeYellow, Element.He_3, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 3)));
+    public static Materials Indium = new Materials(56, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 64, 0, 128, 0, "Indium", "Indium", 0, 0, 429, 0, false, false, 4, 1, 1, Dyes.dyeGray, Element.In, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Iridium = new Materials(84, TextureSet.SET_DULL, 		6.0F, 2560, 3, 1|2|8|32|64|128, 240, 240, 245, 0, "Iridium", "Iridium", 0, 0, 2719, 2719, true, false, 10, 1, 1, Dyes.dyeWhite, Element.Ir, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1)));
+    public static Materials Iron = new Materials(32, TextureSet.SET_METALLIC, 		6.0F, 256, 2, 1|2|8|32|64|128, 200, 200, 200, 0, "Iron", "Iron", 0, 0, 1811, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Fe, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3)));
+    public static Materials Lanthanum = new Materials(64, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Lanthanum", "Lanthanum", 0, 0, 1193, 1193, true, false, 4, 1, 1, Dyes._NULL, Element.La, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Lead = new Materials(89, TextureSet.SET_DULL, 			8.0F, 64, 1, 1|2|8|32|64|128, 140, 100, 140, 0, "Lead", "Lead", 0, 0, 600, 0, false, false, 3, 1, 1, Dyes.dyePurple, Element.Pb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 1)));
+    public static Materials Lithium = new Materials(6, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|2|8|32, 225, 220, 255, 0, "Lithium", "Lithium", 0, 0, 454, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, Element.Li, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Lutetium = new Materials(78, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Lutetium", "Lutetium", 0, 0, 1925, 1925, true, false, 4, 1, 1, Dyes._NULL, Element.Lu, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Magic = new Materials(-128, TextureSet.SET_SHINY, 		8.0F, 5120, 5, 1|2|4|16|32|64|128, 100, 0, 200, 0, "Magic", "Magic", 5, 32, 5000, 0, false, false, 7, 1, 1, Dyes.dyePurple, Element.Ma, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 4)));
+    public static Materials Magnesium = new Materials(18, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 200, 200, 0, "Magnesium", "Magnesium", 0, 0, 923, 0, false, false, 3, 1, 1, Dyes.dyePink, Element.Mg, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.SANO, 1)));
+    public static Materials Manganese = new Materials(31, TextureSet.SET_DULL, 		7.0F, 512, 2, 1|2|8|32|64, 250, 250, 250, 0, "Manganese", "Manganese", 0, 0, 1519, 0, false, false, 3, 1, 1, Dyes.dyeWhite, Element.Mn, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3)));
+    public static Materials Mercury = new Materials(87, TextureSet.SET_SHINY, 		1.0F, 0, 0, 16|32, 255, 220, 220, 0, "Mercury", "Mercury", 5, 32, 234, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Hg, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.VENENUM, 1)));
+    public static Materials Molybdenum = new Materials(48, TextureSet.SET_SHINY, 	7.0F, 512, 2, 1|2|8|32|64, 180, 180, 220, 0, "Molybdenum", "Molybdenum", 0, 0, 2896, 0, false, false, 1, 1, 1, Dyes.dyeBlue, Element.Mo, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Neodymium = new Materials(67, TextureSet.SET_METALLIC, 	7.0F, 512, 2, 1|2|8|32|64|128, 100, 100, 100, 0, "Neodymium", "Neodymium", 0, 0, 1297, 1297, true, false, 4, 1, 1, Dyes._NULL, Element.Nd, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 2)));
+    public static Materials Neutronium = new Materials(129, TextureSet.SET_DULL,   24.0F, 655360, 6, 1|2|32|64|128, 250, 250, 250, 0, "Neutronium", "Neutronium", 0, 0, 10000, 0, false, false, 20, 1, 1, Dyes.dyeWhite, Element.Nt, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.ALIENIS, 2)));
+    public static Materials Nickel = new Materials(34, TextureSet.SET_METALLIC, 	6.0F, 64, 2, 1|2|8|32|64|128, 200, 200, 250, 0, "Nickel", "Nickel", 0, 0, 1728, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, Element.Ni, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials Niobium = new Materials(47, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 190, 180, 200, 0, "Niobium", "Niobium", 0, 0, 2750, 2750, true, false, 5, 1, 1, Dyes._NULL, Element.Nb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1)));
+    public static Materials Nitrogen = new Materials(12, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 0, 150, 200, 240, "Nitrogen", "Nitrogen", 0, 0, 63, 0, false, true, 2, 1, 1, Dyes.dyeCyan, Element.N, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 2)));
+    public static Materials Osmium = new Materials(83, TextureSet.SET_METALLIC, 	16.0F, 1280, 4, 1|2|8|32|64|128, 50, 50, 255, 0, "Osmium", "Osmium", 0, 0, 3306, 3306, true, false, 10, 1, 1, Dyes.dyeBlue, Element.Os, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
+    public static Materials Oxygen = new Materials(13, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 0, 100, 200, 240, "Oxygen", "Oxygen", 0, 0, 54, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Element.O, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 1)));
+    public static Materials Palladium = new Materials(52, TextureSet.SET_SHINY, 	8.0F, 512, 2, 1|2|8|32|64|128, 128, 128, 128, 0, "Palladium", "Palladium", 0, 0, 1828, 1828, true, false, 4, 1, 1, Dyes.dyeGray, Element.Pd, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3)));
+    public static Materials Phosphor = new Materials(21, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|32, 255, 255, 0, 0, "Phosphor", "Phosphor", 0, 0, 317, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.P, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 2), new TC_AspectStack(TC_Aspects.POTENTIA, 1)));
+    public static Materials Platinum = new Materials(85, TextureSet.SET_SHINY, 		12.0F, 64, 2, 1|2|8|32|64|128, 255, 255, 200, 0, "Platinum", "Platinum", 0, 0, 2041, 0, false, false, 6, 1, 1, Dyes.dyeOrange, Element.Pt, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
+    public static Materials Plutonium = new Materials(100, TextureSet.SET_METALLIC, 6.0F, 512, 3, 1|2|8|32|64, 240, 50, 50, 0, "Plutonium", "Plutonium 239", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2)));
+    public static Materials Plutonium241 = new Materials(101, TextureSet.SET_SHINY, 6.0F, 512, 3, 1|2|32|64, 250, 70, 70, 0, "Plutonium241", "Plutonium 241", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu_241, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 3)));
+    public static Materials Potassium = new Materials(25, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1|2|32, 250, 250, 250, 0, "Potassium", "Potassium", 0, 0, 336, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Element.K, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 1)));
+    public static Materials Praseodymium =new Materials(66, TextureSet.SET_METALLIC,1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Praseodymium", "Praseodymium", 0, 0, 1208, 1208, true, false, 4, 1, 1, Dyes._NULL, Element.Pr, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Promethium = new Materials(68, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Promethium", "Promethium", 0, 0, 1315, 1315, true, false, 4, 1, 1, Dyes._NULL, Element.Pm, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Radon = new Materials(93, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 255, 0, 255, 240, "Radon", "Radon", 0, 0, 202, 0, false, true, 5, 1, 1, Dyes.dyePurple, Element.Rn, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 1), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Rubidium = new Materials(43, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 240, 30, 30, 0, "Rubidium", "Rubidium", 0, 0, 312, 0, false, false, 4, 1, 1, Dyes.dyeRed, Element.Rb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
+    public static Materials Samarium = new Materials(69, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Samarium", "Samarium", 0, 0, 1345, 1345, true, false, 4, 1, 1, Dyes._NULL, Element.Sm, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Scandium = new Materials(27, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Scandium", "Scandium", 0, 0, 1814, 1814, true, false, 2, 1, 1, Dyes.dyeYellow, Element.Sc, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Silicon = new Materials(20, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 60, 60, 80, 0, "Silicon", "Silicon", 0, 0, 1687, 1687, false, false, 1, 1, 1, Dyes.dyeBlack, Element.Si, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TENEBRAE, 1)));
+    public static Materials Silver = new Materials(54, TextureSet.SET_SHINY, 		10.0F, 64, 2, 1|2|8|32|64|128, 220, 220, 255, 0, "Silver", "Silver", 0, 0, 1234, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Element.Ag, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.LUCRUM, 1)));
+    public static Materials Sodium = new Materials(17, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |32, 0, 0, 150, 0, "Sodium", "Sodium", 0, 0, 370, 0, false, false, 1, 1, 1, Dyes.dyeBlue, Element.Na, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.LUX, 1)));
+    public static Materials Strontium = new Materials(44, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|32, 200, 200, 200, 0, "Strontium", "Strontium", 0, 0, 1050, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Element.Sr, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.STRONTIO, 1)));
+    public static Materials Sulfur = new Materials(22, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8|32, 200, 200, 0, 0, "Sulfur", "Sulfur", 0, 0, 388, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.S, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials Tantalum = new Materials(80, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Tantalum", "Tantalum", 0, 0, 3290, 0, false, false, 4, 1, 1, Dyes._NULL, Element.Ta, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VINCULUM, 1)));
+    public static Materials Tellurium = new Materials(59, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Tellurium", "Tellurium", 0, 0, 722, 0, false, false, 4, 1, 1, Dyes.dyeGray, Element.Te, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Terbium = new Materials(72, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Terbium", "Terbium", 0, 0, 1629, 1629, true, false, 4, 1, 1, Dyes._NULL, Element.Tb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Thorium = new Materials(96, TextureSet.SET_SHINY, 		6.0F, 512, 2, 1|2|8|32|64, 0, 30, 0, 0, "Thorium", "Thorium", 0, 0, 2115, 0, false, false, 4, 1, 1, Dyes.dyeBlack, Element.Th, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Thulium = new Materials(76, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Thulium", "Thulium", 0, 0, 1818, 1818, true, false, 4, 1, 1, Dyes._NULL, Element.Tm, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Tin = new Materials(57, TextureSet.SET_DULL, 			1.0F, 0, 1, 1|2|8|32|128, 220, 220, 220, 0, "Tin", "Tin", 0, 0, 505, 505, false, false, 3, 1, 1, Dyes.dyeWhite, Element.Sn, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
+    public static Materials Titanium = new Materials(28, TextureSet.SET_METALLIC, 	7.0F, 1600, 3, 1|2|8|32|64|128, 220, 160, 240, 0, "Titanium", "Titanium", 0, 0, 1941, 1940, true, false, 5, 1, 1, Dyes.dyePurple, Element.Ti, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials Tritium = new Materials(3, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 16|32, 255, 0, 0, 240, "Tritium", "Tritium", 0, 0, 14, 0, false, true, 10, 1, 1, Dyes.dyeRed, Element.T, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4)));
+    public static Materials Tungsten = new Materials(81, TextureSet.SET_METALLIC, 	7.0F, 2560, 3, 1|2|32|64|128, 50, 50, 50, 0, "Tungsten", "Tungsten", 0, 0, 3695, 3000, true, false, 4, 1, 1, Dyes.dyeBlack, Element.W, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials Uranium = new Materials(98, TextureSet.SET_METALLIC, 	6.0F, 512, 3, 1|2|8|32|64, 50, 240, 50, 0, "Uranium", "Uranium 238", 0, 0, 1405, 0, false, false, 4, 1, 1, Dyes.dyeGreen, Element.U, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Uranium235 = new Materials(97, TextureSet.SET_SHINY, 	6.0F, 512, 3, 1|2|8|32|64, 70, 250, 70, 0, "Uranium235", "Uranium 235", 0, 0, 1405, 0, false, false, 4, 1, 1, Dyes.dyeGreen, Element.U_235, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2)));
+    public static Materials Vanadium = new Materials(29, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 50, 50, 50, 0, "Vanadium", "Vanadium", 0, 0, 2183, 2183, true, false, 2, 1, 1, Dyes.dyeBlack, Element.V, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Ytterbium = new Materials(77, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 255, 255, 255, 0, "Ytterbium", "Ytterbium", 0, 0, 1097, 1097, true, false, 4, 1, 1, Dyes._NULL, Element.Yb, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Yttrium = new Materials(45, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1|2|32, 220, 250, 220, 0, "Yttrium", "Yttrium", 0, 0, 1799, 1799, true, false, 4, 1, 1, Dyes._NULL, Element.Y, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
+    public static Materials Zinc = new Materials(36, TextureSet.SET_METALLIC, 		1.0F, 0, 1, 1|2|8|32, 250, 240, 240, 0, "Zinc", "Zinc", 0, 0, 692, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Element.Zn, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.SANO, 1)));
 
     /**
      * The "Random Material" ones.
      */
-    Organic(-1, TextureSet.SET_LEAF, 1.0F, 0, 1, false),
-    AnyCopper(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false),
-    AnyBronze(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false),
-    AnyIron(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false),
-    Crystal(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false),
-    Quartz(-1, TextureSet.SET_QUARTZ, 1.0F, 0, 2, false),
-    Metal(-1, TextureSet.SET_METALLIC, 1.0F, 0, 2, false),
-    Unknown(-1, TextureSet.SET_DULL, 1.0F, 0, 2, false),
-    Cobblestone(-1, TextureSet.SET_DULL, 1.0F, 0, 1, false),
-    Brick(-1, TextureSet.SET_DULL, 1.0F, 0, 1, false),
-    BrickNether(-1, TextureSet.SET_DULL, 1.0F, 0, 1, false),
+    public static Materials Organic = new Materials(-1, TextureSet.SET_LEAF, 	1.0F, 0, 1, false, "Organic", "Organic");
+    public static Materials AnyBronze = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyBronze", "AnyBronze");
+    public static Materials AnyCopper = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyCopper", "AnyCopper");
+    public static Materials AnyIron = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 3, false, "AnyIron", "AnyIron");
+    public static Materials AnyRubber = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnyRubber", "AnyRubber");
+    public static Materials AnySyntheticRubber = new Materials(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, false, "AnySyntheticRubber", "AnySyntheticRubber");
+    public static Materials Crystal = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 3, false, "Crystal", "Crystal");
+    public static Materials Quartz = new Materials(-1, TextureSet.SET_QUARTZ, 	1.0F, 0, 2, false, "Quartz", "Quartz");
+    public static Materials Metal = new Materials(-1, TextureSet.SET_METALLIC, 	1.0F, 0, 2, false, "Metal", "Metal");
+    public static Materials Unknown = new Materials(-1, TextureSet.SET_DULL, 	1.0F, 0, 2, false, "Unknown", "Unknown");
+    public static Materials Cobblestone = new Materials(-1, TextureSet.SET_DULL,1.0F, 0, 1, false, "Cobblestone", "Cobblestone");
+    public static Materials BrickNether = new Materials(-1, TextureSet.SET_DULL,1.0F, 0, 1, false, "BrickNether", "BrickNether");
 
     /**
      * The "I don't care" Section, everything I don't want to do anything with right now, is right here. Just to make the Material Finder shut up about them.
      * But I do see potential uses in some of these Materials.
      */
-    TarPitch(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Tar Pitch", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Carborundum(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Carborundum", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Satinspar(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Satinspar", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Selenite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Selenite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PetrifiedWood(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Petrified Wood", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Jet(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 4 | 8, 255, 255, 255, 0, "Jet", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Microcline(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Microcline", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Serpentine(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Serpentine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Sylvite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Sylvite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Flux(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Flux", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Goshen(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Goshen", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Joshen(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Joshen", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Itarius(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Itarius", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Legendary(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Legendary", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    MutatedIron(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Mutated Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Witheria(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Witheria", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    RedstoneAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Redstone Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    OsmiumTetroxide(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Osmium Tetroxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    NitricAcid(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Nitric Acid", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    RubberTreeSap(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Rubber Tree Sap", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    AquaRegia(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Aqua Regia", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    SolutionBlueVitriol(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Blue Vitriol Solution", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    SolutionNickelSulfate(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Nickel Sulfate Solution", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Signalum(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Signalum", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Lumium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Lumium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PhasedIron(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Phased Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PhasedGold(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Phased Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Soularium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Soularium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Endium(770, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 2 | 8, 165, 220, 250, 0, "Endium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow),
-    Prismarine(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 4, 255, 255, 255, 0, "Prismarine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    GraveyardDirt(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Graveyard Dirt", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    DarkSteel(364, TextureSet.SET_DULL, 8.0F, 512, 3, 1 | 2 | 8 | 64, 80, 70, 80, 0, "Dark Steel", 0, 0, 1811, 0, false, false, 5, 1, 1, Dyes.dyePurple),
-    Terrasteel(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Terrasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    TerrasteelAlloyRaw(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Raw Terrasteel Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    TerrasteelAlloyStrengthened(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Strengthened Terrasteel Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    ConductiveIron(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    ElectricalSteel(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes._NULL),
-    EnergeticAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Energetic Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    VibrantAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Vibrant Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PulsatingIron(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Pulsating Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Rutile(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Rutile", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL), // TiO2
-    Teslatite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 60, 180, 200, 0, "Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Fluix(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 4, 255, 255, 255, 0, "Fluix", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Manasteel(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Manasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Tennantite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Tennantite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    DarkThaumium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Dark Thaumium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Alfium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Alfium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Ryu(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Ryu", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Mutation(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Mutation", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Aquamarine(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 4, 255, 255, 255, 0, "Aquamarine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Ender(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Ender", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    ElvenElementium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Elven Elementium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    EnrichedCopper(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Enriched Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    DiamondCopper(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Diamond Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    SodiumPeroxide(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Sodium Peroxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    IridiumSodiumOxide(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Iridium Sodium Oxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PlatinumGroupSludge(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Platinum Group Sluge", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Fairy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Fairy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Ludicrite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Ludicrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Pokefennium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Pokefennium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Draconium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Draconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    DraconiumAwakened(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Awakened Draconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    PurpleAlloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Purple Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    InfusedTeslatite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 100, 180, 255, 0, "Infused Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
+    public static Materials TarPitch = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "TarPitch", "Tar Pitch", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Serpentine = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Serpentine", "Serpentine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Flux = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1, 255, 255, 255, 0, "Flux", "Flux", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials RedstoneAlloy = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "RedstoneAlloy", "Redstone Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials OsmiumTetroxide = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 1, 255, 255, 255, 0, "OsmiumTetroxide", "Osmium Tetroxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials RubberTreeSap = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 0, 255, 255, 255, 0, "RubberTreeSap", "Rubber Tree Sap", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials AquaRegia = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 0, 255, 255, 255, 0, "AquaRegia", "Aqua Regia", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials SolutionBlueVitriol  = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "SolutionBlueVitriol", "Blue Vitriol Solution", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials SolutionNickelSulfate  = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "SolutionNickelSulfate", "Nickel Sulfate Solution", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Signalum = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Signalum", "Signalum", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Lumium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Lumium", "Lumium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials PhasedIron = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "PhasedIron", "Phased Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials PhasedGold = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "PhasedGold", "Phased Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Soularium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Soularium", "Soularium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Endium = new Materials(770, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|2, 165, 220, 250, 0, "Endium", "Endium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials Prismarine = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|4, 255, 255, 255, 0, "Prismarine", "Prismarine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials GraveyardDirt = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "GraveyardDirt", "Graveyard Dirt", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials DarkSteel = new Materials(364, TextureSet.SET_DULL, 	8.0F, 512, 3, 1|2|8 |64, 80, 70, 80, 0, "DarkSteel", "Dark Steel", 0, 0, 1811, 0, false, false, 5, 1, 1, Dyes.dyePurple);
+    public static Materials Terrasteel = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Terrasteel", "Terrasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials ConductiveIron = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1|2, 255, 255, 255, 0, "ConductiveIron", "Conductive Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials ElectricalSteel = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 1|2, 255, 255, 255, 0, "ElectricalSteel", "Electrical Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes._NULL);
+    public static Materials EnergeticAlloy = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1|2, 255, 255, 255, 0, "EnergeticAlloy", "Energetic Alloy", 0, 0, 1950, 1950, true, false, 3, 1, 1, Dyes._NULL);
+    public static Materials VibrantAlloy = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "VibrantAlloy", "Vibrant Alloy", 0, 0, 3300, 3300, true, false, 3, 1, 1, Dyes._NULL);
+    public static Materials PulsatingIron = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "PulsatingIron", "Pulsating Iron", 0, 0, 1600, 1600, true, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Teslatite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 60, 180, 200, 0, "Teslatite", "Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Fluix = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1|4, 255, 255, 255, 0, "Fluix", "Fluix", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Manasteel = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Manasteel", "Manasteel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Tennantite = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Tennantite", "Tennantite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials DarkThaumium = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "DarkThaumium", "Dark Thaumium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Alfium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Alfium", "Alfium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Ryu = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1, 255, 255, 255, 0, "Ryu", "Ryu", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Mutation = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Mutation", "Mutation", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Aquamarine = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|4, 255, 255, 255, 0, "Aquamarine", "Aquamarine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Ender = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1, 255, 255, 255, 0, "Ender", "Ender", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials ElvenElementium = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 1|2, 255, 255, 255, 0, "ElvenElementium", "Elven Elementium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials EnrichedCopper = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1|2, 255, 255, 255, 0, "EnrichedCopper", "Enriched Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials DiamondCopper = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "DiamondCopper", "Diamond Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials SodiumPeroxide = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "SodiumPeroxide", "Sodium Peroxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials IridiumSodiumOxide = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 1, 255, 255, 255, 0, "IridiumSodiumOxide", "Iridium Sodium Oxide", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials PlatinumGroupSludge = new Materials(241, TextureSet.SET_POWDER, 1.0F, 0, 2, 1, 0, 30, 0, 0, "PlatinumGroupSludge", "Platinum Group Sludge", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Fairy = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Fairy", "Fairy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Ludicrite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Ludicrite", "Ludicrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Pokefennium = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Pokefennium", "Pokefennium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Draconium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Draconium", "Draconium" , 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials DraconiumAwakened = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 1|2, 255, 255, 255, 0, "DraconiumAwakened", "Awakened Draconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials PurpleAlloy = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 0 , 100, 180, 255, 0, "PurpleAlloy", "Purple Alloy", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials InfusedTeslatite = new Materials(-1, TextureSet.SET_NONE,1.0F, 0, 2, 0 , 100, 180, 255, 0, "InfusedTeslatite", "Infused Teslatite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
 
     /**
      * Unknown Material Components. Dead End Section.
      */
-    Adamantium(319, TextureSet.SET_SHINY, 10.0F, 5120, 5, 1 | 2 | 8 | 64 | 128, 255, 255, 255, 0, "Adamantium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
-    Adamite(-1, TextureSet.SET_NONE, 1.0F, 0, 3, 1 | 8, 255, 255, 255, 0, "Adamite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
-    Adluorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Adluorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Agate(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Agate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Alduorite(485, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 8 | 16, 159, 180, 180, 0, "Alduorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Amber(514, TextureSet.SET_RUBY, 4.0F, 128, 2, 1 | 4 | 8 | 64, 255, 128, 0, 127, "Amber", 5, 3, -1, 0, false, true, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_AspectStack(TC_Aspects.VINCULUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    Ammonium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Ammonium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Amordrine(-1, TextureSet.SET_NONE, 6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 255, 255, 255, 0, "Amordrine", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Andesite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Andesite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Angmallen(958, TextureSet.SET_METALLIC, 10.0F, 128, 2, 1 | 2 | 8 | 16 | 64, 215, 225, 138, 0, "Angmallen", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Ardite(-1, TextureSet.SET_NONE, 6.0F, 64, 2, 1 | 2 | 8 | 64, 255, 0, 0, 0, "Ardite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Aredrite(-1, TextureSet.SET_NONE, 6.0F, 64, 2, 1 | 2 | 8 | 64, 255, 0, 0, 0, "Aredrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Atlarus(965, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 8 | 64, 255, 255, 255, 0, "Atlarus", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Bitumen(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Bitumen", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Black(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 0, 0, 0, 0, "Black", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack),
-    Blizz(851, TextureSet.SET_SHINY, 1.0F, 0, 2, 1, 220, 233, 255, 0, "Blizz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Blueschist(852, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Blueschist", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeLightBlue),
-    Bluestone(813, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Bluestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue),
-    Bloodstone(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Bloodstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
-    Blutonium(-1, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 8, 0, 0, 255, 0, "Blutonium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue),
-    Carmot(962, TextureSet.SET_METALLIC, 16.0F, 128, 1, 1 | 2 | 8 | 64, 217, 205, 140, 0, "Carmot", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Celenegil(964, TextureSet.SET_METALLIC, 10.0F, 4096, 2, 1 | 2 | 8 | 16 | 64, 148, 204, 72, 0, "Celenegil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    CertusQuartz(516, TextureSet.SET_QUARTZ, 5.0F, 32, 1, 1 | 4 | 8 | 64, 210, 210, 230, 0, "Certus Quartz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    Ceruclase(952, TextureSet.SET_METALLIC, 6.0F, 1280, 2, 1 | 2 | 8, 140, 189, 208, 0, "Ceruclase", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Citrine(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Citrine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    //ChargedCertusQuartz	( 517, TextureSet.SET_QUARTZ			,   5.0F,     32,  1, 1  |4|8      |64                      , 210, 210, 230,   0,	"Charged Certus Quartz"			,    0,       0,         -1,    0, F, F,   3,   1,   1, Dyes.dyeLightGray	, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    CobaltHexahydrate(853, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 16, 80, 80, 250, 0, "Cobalt Hexahydrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue),
-    ConstructionFoam(854, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 16, 128, 128, 128, 0, "Construction Foam", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray),
-    Chert(857, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Chert", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL),
-    Chimerite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Chimerite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Coral(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 128, 255, 0, "Coral", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    CrudeOil(858, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 10, 10, 10, 0, "Crude Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack),
-    Chrysocolla(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Chrysocolla", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    CrystalFlux(-1, TextureSet.SET_QUARTZ, 1.0F, 0, 3, 1 | 4, 100, 50, 100, 0, "Flux Crystal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Cyanite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Cyanite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan),
-    Dacite(859, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Dacite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeLightGray),
-    DarkIron(342, TextureSet.SET_DULL, 7.0F, 384, 3, 1 | 2 | 8 | 64, 55, 40, 60, 0, "Dark Iron", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyePurple),
-    DarkStone(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Dark Stone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack),
-    Demonite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Demonite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
-    Desh(884, TextureSet.SET_DULL, 1.0F, 1280, 3, 1 | 2 | 8 | 64 | 128, 40, 40, 40, 0, "Desh", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack),
-    Desichalkos(-1, TextureSet.SET_NONE, 6.0F, 1280, 3, 1 | 2 | 8 | 16 | 64, 255, 255, 255, 0, "Desichalkos", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Dilithium(515, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1 | 4 | 8 | 16, 255, 250, 250, 127, "Dilithium", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite),
-    Draconic(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Draconic", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed),
-    Drulloy(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 16, 255, 255, 255, 0, "Drulloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed),
-    Duranium(328, TextureSet.SET_METALLIC, 8.0F, 1280, 4, 1 | 2 | 64, 255, 255, 255, 0, "Duranium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
-    Eclogite(860, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Eclogite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    ElectrumFlux(320, TextureSet.SET_SHINY, 16.0F, 512, 3, 1 | 2 | 64, 255, 255, 120, 0, "Fluxed Electrum", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeYellow),
-    Emery(861, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Emery", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Enderium(321, TextureSet.SET_DULL, 8.0F, 256, 3, 1 | 2 | 64, 89, 145, 135, 0, "Enderium", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1))),
-    EnderiumBase(-1, TextureSet.SET_DULL, 8.0F, 256, 3, 1 | 2 | 64, 89, 145, 135, 0, "Enderium Base", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1))),
-    Energized(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Energized", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Epidote(862, TextureSet.SET_DULL, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Epidote", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL),
-    Eximite(959, TextureSet.SET_METALLIC, 5.0F, 2560, 3, 1 | 2 | 8 | 64, 124, 90, 150, 0, "Eximite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    FierySteel(346, TextureSet.SET_FIERY, 8.0F, 256, 3, 1 | 2 | 16 | 64 | 128, 64, 0, 0, 0, "Fiery Steel", 5, 2048, 1811, 1000, true, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 3), new TC_AspectStack(TC_Aspects.CORPUS, 3))),
-    Firestone(347, TextureSet.SET_QUARTZ, 6.0F, 1280, 3, 1 | 4 | 8 | 64, 200, 20, 0, 0, "Firestone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed),
-    Fluorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Fluorite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen),
-    FoolsRuby(512, TextureSet.SET_RUBY, 1.0F, 0, 2, 1 | 4 | 8, 255, 100, 100, 127, "Ruby", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 2))),
-    Force(521, TextureSet.SET_DIAMOND, 10.0F, 128, 3, 1 | 2 | 4 | 8 | 64 | 128, 255, 255, 0, 0, "Force", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 5))),
-    Forcicium(518, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1 | 4 | 8 | 16, 50, 50, 70, 0, "Forcicium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2))),
-    Forcillium(519, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1 | 4 | 8 | 16, 50, 50, 70, 0, "Forcillium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2))),
-    Gabbro(863, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Gabbro", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL),
-    Glowstone(811, TextureSet.SET_SHINY, 1.0F, 0, 1, 1 | 16, 255, 255, 0, 0, "Glowstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.LUX, 2), new TC_AspectStack(TC_Aspects.SENSUS, 1))),
-    Gneiss(864, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Gneiss", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL),
-    Graphite(865, TextureSet.SET_DULL, 5.0F, 32, 2, 1 | 8 | 16 | 64, 128, 128, 128, 0, "Graphite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Graphene(819, TextureSet.SET_DULL, 6.0F, 32, 1, 1 | 64, 128, 128, 128, 0, "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1))),
-    Greenschist(866, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Green Schist", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen),
-    Greenstone(867, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen),
-    Greywacke(868, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Greywacke", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray),
-    Haderoth(963, TextureSet.SET_METALLIC, 10.0F, 3200, 3, 1 | 2 | 8 | 16 | 64, 119, 52, 30, 0, "Haderoth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Hematite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Hematite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Hepatizon(957, TextureSet.SET_METALLIC, 12.0F, 128, 2, 1 | 2 | 8 | 16 | 64, 117, 94, 117, 0, "Hepatizon", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    HSLA(322, TextureSet.SET_METALLIC, 6.0F, 500, 2, 1 | 2 | 64 | 128, 128, 128, 128, 0, "HSLA Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.ORDO, 1))),
-    Ignatius(950, TextureSet.SET_METALLIC, 12.0F, 512, 2, 1 | 2 | 16, 255, 169, 83, 0, "Ignatius", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Infernal(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 0, 255, 255, 255, 0, "Infernal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Infuscolium(490, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 146, 33, 86, 0, "Infuscolium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    InfusedGold(323, TextureSet.SET_SHINY, 12.0F, 64, 3, 1 | 2 | 8 | 64 | 128, 255, 200, 60, 0, "Infused Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow),
-    InfusedAir(540, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 255, 255, 0, 0, "Aer", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.AER, 2))),
-    InfusedFire(541, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 255, 0, 0, 0, "Ignis", 5, 320, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.IGNIS, 2))),
-    InfusedEarth(542, TextureSet.SET_SHARDS, 8.0F, 256, 3, 1 | 4 | 8 | 64 | 128, 0, 255, 0, 0, "Terra", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.TERRA, 2))),
-    InfusedWater(543, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 0, 0, 255, 0, "Aqua", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.AQUA, 2))),
-    InfusedEntropy(544, TextureSet.SET_SHARDS, 32.0F, 64, 4, 1 | 4 | 8 | 64 | 128, 62, 62, 62, 0, "Perditio", 5, 320, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.PERDITIO, 2))),
-    InfusedOrder(545, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 252, 252, 252, 0, "Ordo", 5, 240, -1, 0, false, true, 3, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.ORDO, 2))),
-    InfusedVis(-1, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 255, 0, 255, 0, "Auram", 5, 240, -1, 0, false, true, 3, 1, 1, Dyes.dyePurple, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.AURAM, 2))),
-    InfusedDull(-1, TextureSet.SET_SHARDS, 32.0F, 64, 3, 1 | 4 | 8 | 64 | 128, 100, 100, 100, 0, "Vacuus", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 1), new TC_AspectStack(TC_Aspects.VACUOS, 2))),
-    Inolashite(954, TextureSet.SET_NONE, 8.0F, 2304, 3, 1 | 2 | 8 | 16 | 64, 148, 216, 187, 0, "Inolashite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Invisium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1, 255, 255, 255, 0, "Invisium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Jade(537, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 8, 0, 100, 0, 0, "Jade", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Jasper(511, TextureSet.SET_EMERALD, 1.0F, 0, 2, 1 | 4 | 8, 200, 80, 80, 100, "Jasper", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 2))),
-    Kalendrite(953, TextureSet.SET_METALLIC, 5.0F, 2560, 3, 1 | 2 | 16, 170, 91, 189, 0, "Kalendrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Komatiite(869, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Komatiite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Lava(700, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 255, 64, 0, 0, "Lava", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange),
-    Lemurite(486, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 16, 219, 219, 219, 0, "Lemurite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Limestone(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Limestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Lodestone(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Lodestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Luminite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 250, 250, 250, 0, "Luminite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite),
-    Magma(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 64, 0, 0, "Magma", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange),
-    Mawsitsit(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Mawsitsit", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Mercassium(-1, TextureSet.SET_NONE, 6.0F, 64, 1, 1 | 2 | 8 | 64, 255, 255, 255, 0, "Mercassium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    MeteoricIron(340, TextureSet.SET_METALLIC, 6.0F, 384, 2, 1 | 2 | 8 | 64, 100, 50, 80, 0, "Meteoric Iron", 0, 0, 1811, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    MeteoricSteel(341, TextureSet.SET_METALLIC, 6.0F, 768, 2, 1 | 2 | 64, 50, 25, 40, 0, "Meteoric Steel", 0, 0, 1811, 1000, true, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1), new TC_AspectStack(TC_Aspects.ORDO, 1))),
-    Meteorite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 80, 35, 60, 0, "Meteorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
-    Meutoite(487, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8 | 16, 95, 82, 105, 0, "Meutoite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Migmatite(872, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Migmatite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Mimichite(-1, TextureSet.SET_GEM_VERTICAL, 1.0F, 0, 1, 1 | 4 | 8, 255, 255, 255, 0, "Mimichite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Moonstone(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Moonstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.ALIENIS, 1))),
-    Naquadah(324, TextureSet.SET_METALLIC, 6.0F, 1280, 4, 1 | 2 | 8 | 16 | 64, 50, 50, 50, 0, "Naquadah", 0, 0, 3000, 3000, true, false, 10, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.RADIO, 1), new TC_AspectStack(TC_Aspects.NEBRISUM, 1))),
-    NaquadahAlloy(325, TextureSet.SET_METALLIC, 8.0F, 5120, 5, 1 | 2 | 64 | 128, 40, 40, 40, 0, "Naquadah Alloy", 0, 0, 3000, 3000, true, false, 10, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.NEBRISUM, 1))),
-    NaquadahEnriched(326, TextureSet.SET_METALLIC, 6.0F, 1280, 4, 1 | 2 | 8 | 16 | 64, 50, 50, 50, 0, "Enriched Naquadah", 0, 0, 3000, 3000, true, false, 15, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.RADIO, 2), new TC_AspectStack(TC_Aspects.NEBRISUM, 2))),
-    Naquadria(327, TextureSet.SET_SHINY, 1.0F, 512, 4, 1 | 2 | 8 | 64, 30, 30, 30, 0, "Naquadria", 0, 0, 3000, 3000, true, false, 20, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.RADIO, 3), new TC_AspectStack(TC_Aspects.NEBRISUM, 3))),
-    Nether(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Nether", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    NetherBrick(814, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 100, 0, 0, 0, "Nether Brick", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    NetherQuartz(522, TextureSet.SET_QUARTZ, 1.0F, 32, 1, 1 | 4 | 8 | 64, 230, 210, 210, 0, "Nether Quartz", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VITREUS, 1))),
-    NetherStar(506, TextureSet.SET_NETHERSTAR, 1.0F, 5120, 4, 1 | 4 | 64, 255, 255, 255, 0, "Nether Star", 5, 50000, -1, 0, false, false, 15, 1, 1, Dyes.dyeWhite),
-    Nikolite(812, TextureSet.SET_SHINY, 1.0F, 0, 1, 1 | 8, 60, 180, 200, 0, "Nikolite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan, Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 2))),
-    ObsidianFlux(-1, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 2, 80, 50, 100, 0, "Fluxed Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
-    Oilsands(878, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 10, 10, 10, 0, "Oilsands", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Onyx(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Onyx", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Orichalcum(966, TextureSet.SET_METALLIC, 4.5F, 3456, 3, 1 | 2 | 8 | 64, 84, 122, 56, 0, "Orichalcum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Osmonium(-1, TextureSet.SET_NONE, 6.0F, 64, 1, 1 | 2 | 8 | 64, 255, 255, 255, 0, "Osmonium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue),
-    Oureclase(961, TextureSet.SET_METALLIC, 6.0F, 1920, 3, 1 | 2 | 8 | 64, 183, 98, 21, 0, "Oureclase", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Painite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Painite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Peanutwood(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Peanut Wood", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Petroleum(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Petroleum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Pewter(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Pewter", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Phoenixite(-1, TextureSet.SET_NONE, 6.0F, 64, 1, 1 | 2 | 8 | 64, 255, 255, 255, 0, "Phoenixite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Potash(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Potash", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Prometheum(960, TextureSet.SET_METALLIC, 8.0F, 512, 1, 1 | 2 | 8 | 64, 90, 129, 86, 0, "Prometheum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Quartzite(523, TextureSet.SET_QUARTZ, 1.0F, 0, 1, 1 | 4 | 8, 210, 230, 210, 0, "Quartzite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite),
-    Quicklime(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Quicklime", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Randomite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Randomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    RefinedGlowstone(-326, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 2, 255, 255, 0, 0, "Refined Glowstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    RefinedObsidian(-327, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 2, 80, 50, 100, 0, "Refined Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
-    Rhyolite(875, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Rhyolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Rubracium(488, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8 | 16, 151, 45, 45, 0, "Rubracium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    RyuDragonRyder(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Ryu Dragon Ryder", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Sand(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Sanguinite(955, TextureSet.SET_METALLIC, 3.0F, 4480, 4, 1 | 2 | 8, 185, 0, 0, 0, "Sanguinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Siltstone(876, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Siltstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Spinel(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 0, "Spinel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Starconium(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 2 | 8, 255, 255, 255, 0, "Starconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Sugilite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Sugilite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Sunstone(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Sunstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.ALIENIS, 1))),
-    Tar(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 10, 10, 10, 0, "Tar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack),
-    Tartarite(956, TextureSet.SET_METALLIC, 20.0F, 7680, 5, 1 | 2 | 8 | 16, 255, 118, 60, 0, "Tartarite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Tapazite(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Tapazite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen),
-    Thyrium(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1 | 2 | 8, 255, 255, 255, 0, "Thyrium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Tourmaline(-1, TextureSet.SET_RUBY, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Tourmaline", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    Tritanium(329, TextureSet.SET_METALLIC, 6.0F, 2560, 4, 1 | 2 | 64, 255, 255, 255, 0, "Tritanium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 2))),
-    Turquoise(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Turquoise", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL),
-    UUAmplifier(721, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 96, 0, 128, 0, "UU-Amplifier", 0, 0, -1, 0, false, false, 10, 1, 1, Dyes.dyePink),
-    UUMatter(703, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 128, 0, 196, 0, "UU-Matter", 0, 0, -1, 0, false, false, 10, 1, 1, Dyes.dyePink),
-    Void(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 200, "Void", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.VACUOS, 1))),
-    Voidstone(-1, TextureSet.SET_NONE, 1.0F, 0, 1, 0, 255, 255, 255, 200, "Voidstone", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.VACUOS, 1))),
-    Vulcanite(489, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 255, 132, 72, 0, "Vulcanite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Vyroxeres(951, TextureSet.SET_METALLIC, 9.0F, 768, 3, 1 | 2 | 8 | 64, 85, 224, 1, 0, "Vyroxeres", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL),
-    Wimalite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 8, 255, 255, 255, 0, "Wimalite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow),
-    Yellorite(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 8, 255, 255, 255, 0, "Yellorite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow),
-    Yellorium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2, 255, 255, 255, 0, "Yellorium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow),
-    Zectium(-1, TextureSet.SET_NONE, 1.0F, 0, 2, 1 | 2 | 8, 255, 255, 255, 0, "Zectium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack),
+    public static Materials Adamantium = new Materials(319, TextureSet.SET_SHINY, 	10.0F, 5120, 5, 1|2|64|128, 255, 255, 255, 0, "Adamantium", "Adamantium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray);
+    public static Materials Adamite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 3, 1, 255, 255, 255, 0, "Adamite", "Adamite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray);
+    public static Materials Adluorite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1 | 8, 255, 255, 255, 0, "Adluorite", "Adluorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Agate = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 1, 255, 255, 255, 0, "Agate", "Agate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Alduorite = new Materials(485, TextureSet.SET_SHINY, 	1.0F, 0, 2, 1|16, 159, 180, 180, 0, "Alduorite", "Alduorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Amber = new Materials(514, TextureSet.SET_RUBY, 		4.0F, 128, 2, 1|4|8 |64, 255, 128, 0, 127, "Amber", "Amber", 5, 3, -1, 0, false, true, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VINCULUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
+    public static Materials Ammonium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Ammonium", "Ammonium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Amordrine = new Materials(-1, TextureSet.SET_NONE, 		6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 255, 255, 255, 0, "Amordrine", "Amordrine", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Andesite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Andesite", "Andesite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Angmallen = new Materials(958, TextureSet.SET_METALLIC, 10.0F, 128, 2, 1 | 2 | 8 | 16 | 64, 215, 225, 138, 0, "Angmallen", "Angmallen", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Ardite = new Materials(-1, TextureSet.SET_NONE, 		6.0F, 64, 2, 1|2|8 |64, 255, 0, 0, 0, "Ardite", "Ardite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Aredrite = new Materials(-1, TextureSet.SET_NONE, 		6.0F, 64, 2, 1|2|64, 255, 0, 0, 0, "Aredrite", "Aredrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Atlarus = new Materials(965, TextureSet.SET_METALLIC, 	6.0F, 64, 2, 1 | 2 | 8 | 64, 255, 255, 255, 0, "Atlarus", "Atlarus", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Bitumen = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1 |8 , 255, 255, 255, 0, "Bitumen", "Bitumen", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Black = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 0, 0, 0, 0, 0, "Black", "Black", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack);
+    public static Materials Blizz = new Materials(851, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1, 220, 233, 255, 0, "Blizz", "Blizz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Blueschist = new Materials(852, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Blueschist", "Blueschist", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeLightBlue);
+    public static Materials Bluestone = new Materials(-1/*813*/, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Bluestone", "Bluestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
+    public static Materials Bloodstone = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Bloodstone", "Bloodstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed);
+    public static Materials Blutonium = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 2, 1|2|8, 0, 0, 255, 0, "Blutonium", "Blutonium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue);
+    public static Materials Carmot = new Materials(962, TextureSet.SET_METALLIC, 	16.0F, 128, 1, 1 | 2 | 8 | 64, 217, 205, 140, 0, "Carmot", "Carmot", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Celenegil = new Materials(964, TextureSet.SET_METALLIC, 10.0F, 4096, 2, 1 | 2 | 8 | 16 | 64, 148, 204, 72, 0, "Celenegil", "Celenegil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials CertusQuartz = new Materials(516, TextureSet.SET_QUARTZ,5.0F, 32, 1, 1|4|8 |64, 210, 210, 230, 0, "CertusQuartz", "Certus Quartz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
+    public static Materials Ceruclase = new Materials(952, TextureSet.SET_METALLIC, 6.0F, 1280, 2, 1 | 2 | 8, 140, 189, 208, 0, "Ceruclase", "Ceruclase", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Citrine = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Citrine", "Citrine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials CobaltHexahydrate = new Materials(-1/*853*/, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 |16, 80, 80, 250, 0, "CobaltHexahydrate", "Cobalt Hexahydrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
+    public static Materials ConstructionFoam = new Materials(854, TextureSet.SET_DULL, 1.0F, 0, 2, 1 |16, 128, 128, 128, 0, "ConstructionFoam", "Construction Foam", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray);
+    public static Materials Chert = new Materials(857, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Chert", "Chert", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
+    public static Materials Chimerite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Chimerite", "Chimerite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Coral = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 1, 255, 128, 255, 0, "Coral", "Coral", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials CrudeOil = new Materials(-1/*858*/, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 10, 10, 10, 0, "CrudeOil", "Crude Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Chrysocolla = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Chrysocolla", "Chrysocolla", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials CrystalFlux = new Materials(-1, TextureSet.SET_QUARTZ, 	1.0F, 0, 3, 1|4, 100, 50, 100, 0, "CrystalFlux", "Flux Crystal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Cyanite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Cyanite", "Cyanite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan);
+    public static Materials Dacite = new Materials(859, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Dacite", "Dacite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeLightGray);
+    public static Materials DarkIron = new Materials(342, TextureSet.SET_DULL, 		7.0F, 384, 3, 1|2|64, 55, 40, 60, 0, "DarkIron", "Dark Iron", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyePurple);
+    public static Materials DarkStone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "DarkStone", "Dark Stone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack);
+    public static Materials Demonite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Demonite", "Demonite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed);
+    public static Materials Desh = new Materials(884, TextureSet.SET_DULL, 			1.0F, 1280, 3, 1|2|8 |64|128, 40, 40, 40, 0, "Desh", "Desh", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Desichalkos = new Materials(-1, TextureSet.SET_NONE, 	6.0F, 1280, 3, 1 | 2 | 8 | 16 | 64, 255, 255, 255, 0, "Desichalkos", "Desichalkos", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Dilithium = new Materials(515, TextureSet.SET_DIAMOND, 	1.0F, 0, 1, 1|4|16, 255, 250, 250, 127, "Dilithium", "Dilithium", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite);
+    public static Materials Draconic = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Draconic", "Draconic", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed);
+    public static Materials Drulloy = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|16 , 255, 255, 255, 0, "Drulloy", "Drulloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed);
+    public static Materials Duranium = new Materials(328, TextureSet.SET_METALLIC, 16.0F, 5120, 5, 1|2|64, 255, 255, 255, 0, "Duranium", "Duranium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray);
+    public static Materials Eclogite = new Materials(860, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Eclogite", "Eclogite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials ElectrumFlux = new Materials(320, TextureSet.SET_SHINY,16.0F, 512, 3, 1|2|64, 255, 255, 120, 0, "ElectrumFlux", "Fluxed Electrum", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Emery = new Materials(-1/*861*/, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Emery", "Emery", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Enderium = new Materials(321, TextureSet.SET_DULL, 		8.0F, 256, 3, 1|2|64, 89, 145, 135, 0, "Enderium", "Enderium", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
+    public static Materials EnderiumBase = new Materials(-1, TextureSet.SET_DULL, 	8.0F, 256, 3, 1|2|64, 89, 145, 135, 0, "EnderiumBase", "Enderium Base", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
+    public static Materials Energized = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 0, 255, 255, 255, 0, "Energized", "Energized", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Epidote = new Materials(862, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Epidote", "Epidote", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
+    public static Materials Eximite = new Materials(959, TextureSet.SET_METALLIC, 	5.0F, 2560, 3, 1 | 2 | 8 | 64, 124, 90, 150, 0, "Eximite", "Eximite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials FierySteel = new Materials(346, TextureSet.SET_FIERY, 	8.0F, 256, 3, 1|2 |16|64|128, 64, 0, 0, 0, "FierySteel", "Fiery Steel", 5, 2048, 1811, 1000, true, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 3), new TC_AspectStack(TC_Aspects.CORPUS, 3)));
+    public static Materials Firestone = new Materials(347, TextureSet.SET_QUARTZ, 	6.0F, 1280, 3, 1|4|8 |64, 200, 20, 0, 0, "Firestone", "Firestone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed);
+    public static Materials Fluorite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Fluorite", "Fluorite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen);
+    public static Materials FoolsRuby = new Materials(512, TextureSet.SET_RUBY, 	1.0F, 0, 2, 1|4|8, 255, 100, 100, 127, "FoolsRuby", "Ruby", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 2)));
+    public static Materials Force = new Materials(521, TextureSet.SET_DIAMOND, 	   10.0F, 128, 3, 1|2|4|8 |64|128, 255, 255, 0, 0, "Force", "Force", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 5)));
+    public static Materials Forcicium = new Materials(-1/*518*/, TextureSet.SET_DIAMOND, 	1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcicium", "Forcicium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Forcillium = new Materials(-1/*519*/, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcillium", "Forcillium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Gabbro = new Materials(863, TextureSet.SET_DULL, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Gabbro", "Gabbro", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
+    public static Materials Glowstone = new Materials(811, TextureSet.SET_SHINY, 	1.0F, 0, 1, 1 |16, 255, 255, 0, 0, "Glowstone", "Glowstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUX, 2), new TC_AspectStack(TC_Aspects.SENSUS, 1)));
+    public static Materials Gneiss = new Materials(864, TextureSet.SET_DULL, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Gneiss", "Gneiss", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
+    public static Materials Graphite = new Materials(865, TextureSet.SET_DULL, 		5.0F, 32, 2, 1 |8|16|64, 128, 128, 128, 0, "Graphite", "Graphite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials Graphene = new Materials(819, TextureSet.SET_DULL, 		6.0F, 32, 1, 1|64, 128, 128, 128, 0, "Graphene", "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1)));
+    public static Materials Greenschist = new Materials(866, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenschist", "Green Schist", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
+    public static Materials Greenstone = new Materials(-1/*867*/, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenstone", "Greenstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
+    public static Materials Greywacke = new Materials(868, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greywacke", "Greywacke", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray);
+    public static Materials Haderoth = new Materials(963, TextureSet.SET_METALLIC, 10.0F, 3200, 3, 1 | 2 | 8 | 16 | 64, 119, 52, 30, 0, "Haderoth", "Haderoth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Hematite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Hematite", "Hematite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Hepatizon = new Materials(957, TextureSet.SET_METALLIC,12.0F, 128, 2, 1 | 2 | 8 | 16 | 64, 117, 94, 117, 0, "Hepatizon", "Hepatizon", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials HSLA = new Materials(322, TextureSet.SET_METALLIC, 		6.0F, 500, 2, 1|2|64|128, 128, 128, 128, 0, "HSLA", "HSLA Steel", 0, 0, 1811, 1000, true, false, 3, 1, 1, Dyes._NULL, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.ORDO, 1)));
+    public static Materials Ignatius = new Materials(950, TextureSet.SET_METALLIC, 12.0F, 512, 2, 1 | 2 | 16, 255, 169, 83, 0, "Ignatius", "Ignatius", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Infernal = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 0, 255, 255, 255, 0, "Infernal", "Infernal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Infuscolium =new Materials(490, TextureSet.SET_METALLIC,6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 146, 33, 86, 0, "Infuscolium", "Infuscolium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials InfusedGold = new Materials(-1/*323*/, TextureSet.SET_SHINY, 12.0F, 64, 3, 1|2|8 |64|128, 255, 200, 60, 0, "InfusedGold", "Infused Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials InfusedAir = new Materials(540, TextureSet.SET_SHARDS, 	8.0F, 64, 3, 1|4|8 |64|128, 255, 255, 0, 0, "InfusedAir", "Aer", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.AER, 2)));
+    public static Materials InfusedFire = new Materials(541, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1|4|8 |64|128, 255, 0, 0, 0, "InfusedFire", "Ignis", 5, 320, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
+    public static Materials InfusedEarth = new Materials(542, TextureSet.SET_SHARDS,8.0F, 256, 3, 1|4|8 |64|128, 0, 255, 0, 0, "InfusedEarth", "Terra", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.TERRA, 2)));
+    public static Materials InfusedWater = new Materials(543, TextureSet.SET_SHARDS,8.0F, 64, 3, 1|4|8 |64|128, 0, 0, 255, 0, "InfusedWater", "Aqua", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.AQUA, 2)));
+    public static Materials InfusedEntropy=new Materials(544,TextureSet.SET_SHARDS,32.0F, 64, 4, 1|4|8 |64|128, 62, 62, 62, 0, "InfusedEntropy", "Perditio", 5, 320, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.PERDITIO, 2)));
+    public static Materials InfusedOrder = new Materials(545, TextureSet.SET_SHARDS,8.0F, 64, 3, 1|4|8 |64|128, 252, 252, 252, 0, "InfusedOrder", "Ordo", 5, 240, -1, 0, false, true, 3, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.ORDO, 2)));
+    public static Materials InfusedVis = new Materials(-1, TextureSet.SET_SHARDS, 	8.0F, 64, 3, 1|4|8 |64|128, 255, 0, 255, 0, "InfusedVis", "Auram", 5, 240, -1, 0, false, true, 3, 1, 1, Dyes.dyePurple, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.AURAM, 2)));
+    public static Materials InfusedDull = new Materials(-1, TextureSet.SET_SHARDS, 32.0F, 64, 3, 1|4|8 |64|128, 100, 100, 100, 0, "InfusedDull", "Vacuus", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.VACUOS, 2)));
+    public static Materials Inolashite = new Materials(954, TextureSet.SET_NONE, 	8.0F, 2304, 3, 1 | 2 | 8 | 16 | 64, 148, 216, 187, 0, "Inolashite", "Inolashite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Invisium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Invisium", "Invisium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Jade = new Materials(-1/*537*/, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1, 0, 100, 0, 0, "Jade", "Jade", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Jasper = new Materials(511, TextureSet.SET_EMERALD, 	1.0F, 0, 2, 1|4, 200, 80, 80, 100, "Jasper", "Jasper", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 2)));
+    public static Materials Kalendrite = new Materials(953, TextureSet.SET_METALLIC,5.0F, 2560, 3, 1 | 2 | 16, 170, 91, 189, 0, "Kalendrite", "Kalendrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Komatiite = new Materials(869, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Komatiite", "Komatiite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Lava = new Materials(700, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 64, 0, 0, "Lava", "Lava", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange);
+    public static Materials Lemurite = new Materials(486, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 | 16, 219, 219, 219, 0, "Lemurite", "Lemurite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Limestone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Limestone", "Limestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Lodestone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Lodestone", "Lodestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Luminite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 250, 250, 250, 0, "Luminite", "Luminite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
+    public static Materials Magma = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 0, 255, 64, 0, 0, "Magma", "Magma", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange);
+    public static Materials Mawsitsit = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Mawsitsit", "Mawsitsit", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Mercassium = new Materials(-1, TextureSet.SET_NONE, 	6.0F, 64, 1, 1|2|64, 255, 255, 255, 0, "Mercassium", "Mercassium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials MeteoricIron =new Materials(340,TextureSet.SET_METALLIC,6.0F, 384, 2, 1|2|8 |64, 100, 50, 80, 0, "MeteoricIron", "Meteoric Iron", 0, 0, 1811, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials MeteoricSteel=new Materials(341,TextureSet.SET_METALLIC,6.0F, 768, 2, 1|2|64, 50, 25, 40, 0, "MeteoricSteel", "Meteoric Steel", 0, 0, 1811, 1000, true, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1), new TC_AspectStack(TC_Aspects.ORDO, 1)));
+    public static Materials Meteorite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 80, 35, 60, 0, "Meteorite", "Meteorite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple);
+    public static Materials Meutoite = new Materials(487, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1 | 8 | 16, 95, 82, 105, 0, "Meutoite", "Meutoite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Migmatite = new Materials(872, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Migmatite", "Migmatite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Mimichite =new Materials(-1,TextureSet.SET_GEM_VERTICAL,1.0F, 0, 1, 1|4, 255, 255, 255, 0, "Mimichite", "Mimichite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Moonstone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1 |8 , 255, 255, 255, 0, "Moonstone", "Moonstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
+    public static Materials Naquadah = new Materials(324, TextureSet.SET_METALLIC, 	6.0F, 1280, 4, 1|2|8|16|64, 50, 50, 50, 0, "Naquadah", "Naquadah", 0, 0, 5400, 5400, true, false, 10, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.RADIO, 1), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
+    public static Materials NaquadahAlloy=new Materials(325,TextureSet.SET_METALLIC,8.0F, 5120, 5, 1|2|64|128, 40, 40, 40, 0, "NaquadahAlloy", "Naquadah Alloy", 0, 0, 7200, 7200, true, false, 10, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
+    public static Materials NaquadahEnriched=new Materials(326,TextureSet.SET_METALLIC,6.0F, 1280, 4, 1|2|8|16|64, 50, 50, 50, 0, "NaquadahEnriched", "Enriched Naquadah", 0, 0, 4500, 4500, true, false, 15, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3), new TC_AspectStack(TC_Aspects.RADIO, 2), new TC_AspectStack(TC_Aspects.NEBRISUM, 2)));
+    public static Materials Naquadria = new Materials(327, TextureSet.SET_SHINY, 	1.0F, 512, 4, 1|2|8|16|64, 30, 30, 30, 0, "Naquadria", "Naquadria", 0, 0, 9000, 9000, true, false, 20, 1, 1, Dyes.dyeBlack, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 4), new TC_AspectStack(TC_Aspects.RADIO, 3), new TC_AspectStack(TC_Aspects.NEBRISUM, 3)));
+    public static Materials Nether = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 0, 255, 255, 255, 0, "Nether", "Nether", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials NetherBrick = new Materials(814, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 100, 0, 0, 0, "NetherBrick", "Nether Brick", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials NetherQuartz = new Materials(522, TextureSet.SET_QUARTZ,1.0F, 32, 1, 1|4|8 |64, 230, 210, 210, 0, "NetherQuartz", "Nether Quartz", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
+    public static Materials NetherStar =new Materials(506,TextureSet.SET_NETHERSTAR,1.0F, 5120, 4, 1|4|64, 255, 255, 255, 0, "NetherStar", "Nether Star", 5, 50000, -1, 0, false, false, 15, 1, 1, Dyes.dyeWhite);
+    public static Materials Nikolite = new Materials(812, TextureSet.SET_SHINY, 	1.0F, 0, 1, 1, 60, 180, 200, 0, "Nikolite", "Nikolite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 2)));
+    public static Materials ObsidianFlux = new Materials(-1, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 80, 50, 100, 0, "ObsidianFlux", "Fluxed Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple);
+    public static Materials Oilsands = new Materials(878, TextureSet.SET_NONE, 		1.0F, 0, 1, 1|8 , 10, 10, 10, 0, "Oilsands", "Oilsands", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Onyx = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 1, 255, 255, 255, 0, "Onyx", "Onyx", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Orichalcum = new Materials(966, TextureSet.SET_METALLIC,4.5F, 3456, 3, 1 | 2 | 8 | 64, 84, 122, 56, 0, "Orichalcum", "Orichalcum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Osmonium = new Materials(-1, TextureSet.SET_NONE, 		6.0F, 64, 1, 1|2|64, 255, 255, 255, 0, "Osmonium", "Osmonium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue);
+    public static Materials Oureclase = new Materials(961, TextureSet.SET_METALLIC, 6.0F, 1920, 3, 1 | 2 | 8 | 64, 183, 98, 21, 0, "Oureclase", "Oureclase", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Painite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 0, 255, 255, 255, 0, "Painite", "Painite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Peanutwood = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 1, 0, 255, 255, 255, 0, "Peanutwood", "Peanut Wood", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Petroleum = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Petroleum", "Petroleum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Pewter = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 0, 255, 255, 255, 0, "Pewter", "Pewter", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Phoenixite = new Materials(-1, TextureSet.SET_NONE, 	6.0F, 64, 1, 1|2|64, 255, 255, 255, 0, "Phoenixite", "Phoenixite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Prometheum = new Materials(960, TextureSet.SET_METALLIC,8.0F, 512, 1, 1 | 2 | 8 | 64, 90, 129, 86, 0, "Prometheum", "Prometheum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Quartzite = new Materials(523, TextureSet.SET_QUARTZ, 	1.0F, 0, 1, 1|4|8 , 210, 230, 210, 0, "Quartzite", "Quartzite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Randomite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Randomite", "Randomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Rhyolite = new Materials(875, TextureSet.SET_DULL, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Rhyolite", "Rhyolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Rubracium = new Materials(488, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8 | 16, 151, 45, 45, 0, "Rubracium", "Rubracium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Sand = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 0, 255, 255, 255, 0, "Sand", "Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Sanguinite = new Materials(955, TextureSet.SET_METALLIC,3.0F, 4480, 4, 1 | 2 | 8, 185, 0, 0, 0, "Sanguinite", "Sanguinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Siltstone = new Materials(876, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Siltstone", "Siltstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Spinel = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 0, 255, 255, 255, 0, "Spinel", "Spinel", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Starconium = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 1, 1|2, 255, 255, 255, 0, "Starconium", "Starconium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Sugilite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Sugilite", "Sugilite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Sunstone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1 |8 , 255, 255, 255, 0, "Sunstone", "Sunstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
+    public static Materials Tar = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 0, 10, 10, 10, 0, "Tar", "Tar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Tartarite = new Materials(956, TextureSet.SET_METALLIC,20.0F, 7680, 5, 1 | 2 | 8 | 16, 255, 118, 60, 0, "Tartarite", "Tartarite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Tapazite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Tapazite", "Tapazite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen);
+    public static Materials Thyrium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1|2, 255, 255, 255, 0, "Thyrium", "Thyrium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Tourmaline = new Materials(-1, TextureSet.SET_RUBY, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Tourmaline", "Tourmaline", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials Tritanium = new Materials(329, TextureSet.SET_METALLIC,20.0F, 10240, 6, 1|2|64, 255, 255, 255, 0, "Tritanium", "Tritanium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 2)));
+    public static Materials Turquoise = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Turquoise", "Turquoise", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
+    public static Materials UUAmplifier = new Materials(721, TextureSet.SET_FLUID, 	1.0F, 0, 1, 16, 96, 0, 128, 0, "UUAmplifier", "UU-Amplifier", 0, 0, -1, 0, false, false, 10, 1, 1, Dyes.dyePink);
+    public static Materials UUMatter = new Materials(703, TextureSet.SET_FLUID, 	1.0F, 0, 1, 16, 128, 0, 196, 0, "UUMatter", "UU-Matter", 0, 0, -1, 0, false, false, 10, 1, 1, Dyes.dyePink);
+    public static Materials Void = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 0, 255, 255, 255, 200, "Void", "Void", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 1)));
+    public static Materials Voidstone = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 1, 0, 255, 255, 255, 200, "Voidstone", "Voidstone", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes._NULL, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.VACUOS, 1)));
+    public static Materials Vulcanite = new Materials(489, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 255, 132, 72, 0, "Vulcanite", "Vulcanite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Vyroxeres = new Materials(951, TextureSet.SET_METALLIC, 9.0F, 768, 3, 1 | 2 | 8 | 64, 85, 224, 1, 0, "Vyroxeres", "Vyroxeres", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Wimalite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 8 , 255, 255, 255, 0, "Wimalite", "Wimalite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials Yellorite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 8 , 255, 255, 255, 0, "Yellorite", "Yellorite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials Yellorium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Yellorium", "Yellorium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials Zectium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Zectium", "Zectium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack);
 
     /**
      * Circuitry, Batteries and other Technical things
      */
-    Primitive(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Primitive", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    Basic(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Basic", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 2))),
-    Good(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Good", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 3))),
-    Advanced(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Advanced", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 4))),
-    Data(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Data", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 5))),
-    Elite(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Elite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 6))),
-    Master(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Master", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 7))),
-    Ultimate(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Ultimate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 8))),
-    Superconductor(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Superconductor", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 8))),
-    Infinite(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Infinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray),
+    public static Materials Primitive = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Primitive", "Primitive", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1)));
+    public static Materials Basic = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Basic", "Basic", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 2)));
+    public static Materials Good = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Good", "Good", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 3)));
+    public static Materials Advanced = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Advanced", "Advanced", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 4)));
+    public static Materials Data = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Data", "Data", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 5)));
+    public static Materials Elite = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Elite", "Elite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 6)));
+    public static Materials Master = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Master", "Master", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 7)));
+    public static Materials Ultimate = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Ultimate", "Ultimate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 8)));
+    public static Materials Superconductor = new Materials(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Superconductor", "Superconductor", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 8)));
+    public static Materials Infinite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Infinite", "Infinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray);
 
     /**
      * Not possible to determine exact Components
      */
-    Antimatter(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Antimatter", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 9), new TC_AspectStack(TC_Aspects.PERFODIO, 8))),
-    BioFuel(705, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 128, 0, 0, "Biofuel", 0, 6, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange),
-    Biomass(704, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 0, 255, 0, 0, "Biomass", 3, 8, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen),
-    Cheese(894, TextureSet.SET_FINE, 1.0F, 0, 0, 1 | 8, 255, 255, 0, 0, "Cheese", 0, 0, 320, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Chili(895, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 200, 0, 0, 0, "Chili", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed),
-    Chocolate(886, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 190, 95, 0, 0, "Chocolate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
-    Cluster(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 127, "Cluster", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite),
-    CoalFuel(710, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 50, 50, 70, 0, "Coalfuel", 0, 16, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack),
-    Cocoa(887, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 190, 95, 0, 0, "Cocoa", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
-    Coffee(888, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 150, 75, 0, 0, "Coffee", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
-    Creosote(712, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 128, 64, 0, 0, "Creosote", 3, 8, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
-    Ethanol(706, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 128, 0, 0, "Ethanol", 0, 128, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple),
-    FishOil(711, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 196, 0, 0, "Fish Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.CORPUS, 2))),
-    Fuel(708, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 255, 0, 0, "Diesel", 0, 128, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Glue(726, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 200, 196, 0, 0, "Glue", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_AspectStack(TC_Aspects.LIMUS, 2))),
-    Gunpowder(800, TextureSet.SET_DULL, 1.0F, 0, 0, 1, 128, 128, 128, 0, "Gunpowder", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 4))),
-    FryingOilHot(727, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 200, 196, 0, 0, "Hot Frying Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    Honey(725, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 210, 200, 0, 0, "Honey", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Leather(-1, TextureSet.SET_ROUGH, 1.0F, 0, 0, 1, 150, 150, 80, 127, "Leather", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange),
-    LimePure(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Pure Lime", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime),
-    Lubricant(724, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 255, 196, 0, 0, "Lubricant", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    McGuffium239(999, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 200, 50, 150, 0, "Mc Guffium 239", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, Arrays.asList(new TC_AspectStack(TC_Aspects.ALIENIS, 8), new TC_AspectStack(TC_Aspects.PERMUTATIO, 8), new TC_AspectStack(TC_Aspects.SPIRITUS, 8), new TC_AspectStack(TC_Aspects.AURAM, 8), new TC_AspectStack(TC_Aspects.VITIUM, 8), new TC_AspectStack(TC_Aspects.RADIO, 8), new TC_AspectStack(TC_Aspects.MAGNETO, 8), new TC_AspectStack(TC_Aspects.ELECTRUM, 8), new TC_AspectStack(TC_Aspects.NEBRISUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 8))),
-    MeatRaw(892, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 255, 100, 100, 0, "Raw Meat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink),
-    MeatCooked(893, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 150, 60, 20, 0, "Cooked Meat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink),
-    Milk(885, TextureSet.SET_FINE, 1.0F, 0, 0, 1 | 16, 254, 254, 254, 0, "Milk", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.SANO, 2))),
-    Mud(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Mud", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown),
-    Oil(707, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 10, 10, 10, 0, "Oil", 3, 16, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack),
-    Paper(879, TextureSet.SET_PAPER, 1.0F, 0, 0, 1, 250, 250, 250, 0, "Paper", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.COGNITO, 1))),
-    Peat(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Peat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2))),
-    Quantum(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Quantum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite),
-    RareEarth(891, TextureSet.SET_FINE, 1.0F, 0, 0, 1, 128, 128, 100, 0, "Rare Earth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.LUCRUM, 1))),
-    Red(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 0, 0, 0, "Red", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed),
-    Reinforced(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "Reinforced", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray),
-    SeedOil(713, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 196, 255, 0, 0, "Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_AspectStack(TC_Aspects.GRANUM, 2))),
-    SeedOilHemp(722, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 196, 255, 0, 0, "Hemp Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_AspectStack(TC_Aspects.GRANUM, 2))),
-    SeedOilLin(723, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 196, 255, 0, 0, "Lin Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_AspectStack(TC_Aspects.GRANUM, 2))),
-    Stone(299, TextureSet.SET_ROUGH, 4.0F, 32, 1, 1 | 64 | 128, 205, 205, 205, 0, "Stone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1))),
-    TNT(-1, TextureSet.SET_NONE, 1.0F, 0, 0, 0, 255, 255, 255, 0, "TNT", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 7), new TC_AspectStack(TC_Aspects.IGNIS, 4))),
-    Unstable(-1, TextureSet.SET_NONE, 1.0F, 0, 4, 0, 255, 255, 255, 127, "Unstable", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 4))),
-    Unstableingot(-1, TextureSet.SET_NONE, 1.0F, 0, 4, 0, 255, 255, 255, 127, "Unstable", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 4))),
-    Wheat(881, TextureSet.SET_POWDER, 1.0F, 0, 0, 1, 255, 255, 196, 0, "Wheat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_AspectStack(TC_Aspects.MESSIS, 2))),
+    public static Materials Antimatter = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 0, 0, 255, 255, 255, 0, "Antimatter", "Antimatter", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 9), new TC_AspectStack(TC_Aspects.PERFODIO, 8)));
+    public static Materials BioFuel = new Materials(705, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 128, 0, 0, "BioFuel", "Biofuel", 0, 6, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange);
+    public static Materials Biomass = new Materials(704, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 0, 255, 0, 0, "Biomass", "Biomass", 3, 8, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
+    public static Materials CharcoalByproducts = new MaterialBuilder(675, TextureSet.SET_FLUID, "Charcoal Byproducts").addCell().setRGB(120, 68, 33).setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials Cheese = new Materials(894, TextureSet.SET_FINE, 		1.0F, 0, 0, 1, 255, 255, 0, 0, "Cheese", "Cheese", 0, 0, 320, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Chili = new Materials(895, TextureSet.SET_FINE, 		1.0F, 0, 0, 1, 200, 0, 0, 0, "Chili", "Chili", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed);
+    public static Materials Chocolate = new Materials(886, TextureSet.SET_FINE, 	1.0F, 0, 0, 1, 190, 95, 0, 0, "Chocolate", "Chocolate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown);
+    public static Materials Cluster = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 127, "Cluster", "Cluster", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite);
+    public static Materials CoalFuel = new Materials(710, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 50, 50, 70, 0, "CoalFuel", "Coalfuel", 0, 16, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Cocoa = new Materials(887, TextureSet.SET_FINE, 		1.0F, 0, 0, 1, 190, 95, 0, 0, "Cocoa", "Cocoa", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown);
+    public static Materials Coffee = new Materials(888, TextureSet.SET_FINE, 		1.0F, 0, 0, 1, 150, 75, 0, 0, "Coffee", "Coffee", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown);
+    public static Materials Creosote = new Materials(712, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 128, 64, 0, 0, "Creosote", "Creosote", 3, 8, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown);
+    public static Materials Ethanol = new Materials(706, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 128, 0, 0, "Ethanol", "Ethanol", 0, 148, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VENENUM, 1), new TC_AspectStack(TC_Aspects.AQUA, 1)));
+    public static Materials FermentedBiomass = new MaterialBuilder(691, TextureSet.SET_FLUID, "Fermented Biomass").addCell().addFluid().setRGB(68, 85, 0).setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials FishOil = new Materials(711, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 196, 0, 0, "FishOil", "Fish Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.CORPUS, 2)));
+    public static Materials Fuel = new Materials(708, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "Fuel", "Diesel", 0, 128, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Glue = new Materials(726, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 200, 196, 0, 0, "Glue", "Glue", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LIMUS, 2)));
+    public static Materials Gunpowder = new Materials(800, TextureSet.SET_DULL, 	1.0F, 0, 0, 1, 128, 128, 128, 0, "Gunpowder", "Gunpowder", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 4)));
+    public static Materials FryingOilHot = new Materials(727, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 200, 196, 0, 0, "FryingOilHot", "Hot Frying Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials Honey = new Materials(725, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 210, 200, 0, 0, "Honey", "Honey", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Leather = new Materials(-1, TextureSet.SET_ROUGH, 		1.0F, 0, 0, 1, 150, 150, 80, 127, "Leather", "Leather", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange);
+    public static Materials LimePure = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "LimePure", "Pure Lime", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime);
+    public static Materials Lubricant = new Materials(724, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 255, 196, 0, 0, "Lubricant", "Lubricant", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1)));
+    public static Materials McGuffium239 = new Materials(999, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 200, 50, 150, 0, "McGuffium239", "Mc Guffium 239", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.ALIENIS, 8), new TC_AspectStack(TC_Aspects.PERMUTATIO, 8), new TC_AspectStack(TC_Aspects.SPIRITUS, 8), new TC_AspectStack(TC_Aspects.AURAM, 8), new TC_AspectStack(TC_Aspects.VITIUM, 8), new TC_AspectStack(TC_Aspects.RADIO, 8), new TC_AspectStack(TC_Aspects.MAGNETO, 8), new TC_AspectStack(TC_Aspects.ELECTRUM, 8), new TC_AspectStack(TC_Aspects.NEBRISUM, 8), new TC_AspectStack(TC_Aspects.STRONTIO, 8)));
+    public static Materials MeatRaw = new Materials(892, TextureSet.SET_FINE, 		1.0F, 0, 0, 1, 255, 100, 100, 0, "MeatRaw", "Raw Meat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink);
+    public static Materials MeatCooked = new Materials(893, TextureSet.SET_FINE, 	1.0F, 0, 0, 1, 150, 60, 20, 0, "MeatCooked", "Cooked Meat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink);
+    public static Materials Milk = new Materials(885, TextureSet.SET_FINE, 			1.0F, 0, 0, 1 |16, 254, 254, 254, 0, "Milk", "Milk", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 2)));
+    public static Materials Mud = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Mud", "Mud", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown);
+    public static Materials Oil = new Materials(707, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 10, 10, 10, 0, "Oil", "Oil", 3, 16, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Paper = new Materials(879, TextureSet.SET_PAPER, 		1.0F, 0, 0, 1, 250, 250, 250, 0, "Paper", "Paper", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.COGNITIO, 1)));
+    public static Materials Peat = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "Peat", "Peat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
+    public static Materials Quantum = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 0, 0, 255, 255, 255, 0, "Quantum", "Quantum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite);
+    public static Materials RareEarth = new Materials(891, TextureSet.SET_FINE, 	1.0F, 0, 0, 1, 128, 128, 100, 0, "RareEarth", "Rare Earth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.LUCRUM, 1)));
+    public static Materials Red = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 0, 0, 0, "Red", "Red", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed);
+    public static Materials Reinforced = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 0, 0, 255, 255, 255, 0, "Reinforced", "Reinforced", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray);
+    public static Materials SeedOil = new Materials(713, TextureSet.SET_FLUID,		1.0F, 0, 0, 16, 196, 255, 0, 0, "SeedOil", "Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.GRANUM, 2)));
+    public static Materials SeedOilHemp = new Materials(722, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 196, 255, 0, 0, "SeedOilHemp", "Hemp Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.GRANUM, 2)));
+    public static Materials SeedOilLin = new Materials(723, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 196, 255, 0, 0, "SeedOilLin", "Lin Seed Oil", 3, 2, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.GRANUM, 2)));
+    public static Materials Stone = new Materials(299, TextureSet.SET_ROUGH, 		4.0F, 32, 1, 1|64|128, 205, 205, 205, 0, "Stone", "Stone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.TERRA, 1)));
+    public static Materials TNT = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 0, 0, 255, 255, 255, 0, "TNT", "TNT", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 7), new TC_AspectStack(TC_Aspects.IGNIS, 4)));
+    public static Materials Unstable = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 4, 0, 255, 255, 255, 127, "Unstable", "Unstable", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 4)));
+    public static Materials Unstableingot = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 4, 0, 255, 255, 255, 127, "Unstableingot", "Unstable", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PERDITIO, 4)));
+    public static Materials Vinegar = new MaterialBuilder(690, TextureSet.SET_FLUID, "Vinegar").setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials Wheat = new Materials(881, TextureSet.SET_POWDER, 		1.0F, 0, 0, 1, 255, 255, 196, 0, "Wheat", "Wheat", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 2)));
+    public static Materials WoodGas = new MaterialBuilder(660, TextureSet.SET_FLUID, "Wood Gas").addCell().addGas().setRGB(222, 205, 135).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(24).constructMaterial();
+    public static Materials WoodTar = new MaterialBuilder(662, TextureSet.SET_FLUID, "Wood Tar").addCell().addFluid().setRGB(40, 23, 11).setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials WoodVinegar = new MaterialBuilder(661, TextureSet.SET_FLUID, "Wood Vinegar").addCell().addFluid().setRGB(212, 85, 0).setColor(Dyes.dyeBrown).constructMaterial();
 
     /**
      * TODO: This
      */
-    AluminiumBrass(-1, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 64, 255, 255, 255, 0, "Aluminium Brass", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Osmiridium(317, TextureSet.SET_METALLIC, 8.0F, 3000, 4, 1 | 2 | 64 | 128, 100, 100, 255, 0, "Osmiridium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightBlue),
-    Sunnarium(318, TextureSet.SET_SHINY, 1.0F, 0, 1, 1 | 2, 255, 255, 0, 0, "Sunnarium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow),
-    Endstone(808, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 255, 255, 255, 0, "Endstone", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeYellow),
-    Netherrack(807, TextureSet.SET_DULL, 1.0F, 0, 0, 1, 200, 0, 0, 0, "Netherrack", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeRed),
-    SoulSand(-1, TextureSet.SET_DULL, 1.0F, 0, 0, 1, 255, 255, 255, 0, "Soulsand", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeBrown),
+    public static Materials AluminiumBrass = new Materials(-1, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1|2|64, 255, 255, 255, 0, "AluminiumBrass", "Aluminium Brass", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Osmiridium = new Materials(317, TextureSet.SET_METALLIC, 	7.0F, 1600, 3, 1|2|64|128, 100, 100, 255, 0, "Osmiridium", "Osmiridium", 0, 0, 3333, 2500, true, false, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Iridium, 3), new MaterialStack(Osmium, 1)));
+    public static Materials Sunnarium = new Materials(318, TextureSet.SET_SHINY, 		1.0F, 0, 1, 1|2, 255, 255, 0, 0, "Sunnarium", "Sunnarium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials Endstone = new Materials(808, TextureSet.SET_DULL, 			1.0F, 0, 1, 1, 255, 255, 255, 0, "Endstone", "Endstone", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeYellow);
+    public static Materials Netherrack = new Materials(807, TextureSet.SET_DULL, 		1.0F, 0, 0, 1, 200, 0, 0, 0, "Netherrack", "Netherrack", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeRed);
+    public static Materials SoulSand = new Materials(-1, TextureSet.SET_DULL, 			1.0F, 0, 0, 1, 255, 255, 255, 0, "Soulsand", "Soulsand", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeBrown);
 
     /**
      * First Degree Compounds
      */
-    Air(-1, TextureSet.SET_FLUID, 1.0F, 0, 2, 16 | 32, 169, 208, 245, 240, "Air", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 0, Arrays.asList(new MaterialStack(Nitrogen, 40), new MaterialStack(Oxygen, 11), new MaterialStack(Argon, 1))),
-    Almandine(820, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 8, 255, 0, 0, 0, "Almandine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Iron, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    Andradite(821, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 8, 150, 120, 0, 0, "Andradite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Iron, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    AnnealedCopper(345, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2 | 128, 255, 120, 20, 0, "Annealed Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1))),
-    Asbestos(946, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 230, 230, 230, 0, "Asbestos", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 9))), // Mg3Si2O5(OH)4
-    Ash(815, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 150, 150, 150, 0, "Ashes", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 1))),
-    BandedIron(917, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 145, 90, 90, 0, "Banded Iron", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 1, Arrays.asList(new MaterialStack(Iron, 2), new MaterialStack(Oxygen, 3))),
-    BatteryAlloy(315, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 2, 156, 124, 160, 0, "Battery Alloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Lead, 4), new MaterialStack(Antimony, 1))),
-    Bauxite(822, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 200, 100, 0, 0, "Bauxite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBrown, 1, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Aluminium, 16), new MaterialStack(Hydrogen, 10), new MaterialStack(Oxygen, 12))),
-    BlueTopaz(513, TextureSet.SET_GEM_HORIZONTAL, 7.0F, 256, 3, 1 | 4 | 8 | 64, 0, 0, 255, 127, "Blue Topaz", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Fluorine, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4))),
-    Bone(806, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 250, 250, 250, 0, "Bone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Calcium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MORTUUS, 2), new TC_AspectStack(TC_Aspects.CORPUS, 1))),
-    Brass(301, TextureSet.SET_METALLIC, 7.0F, 96, 1, 1 | 2 | 64 | 128, 255, 180, 0, 0, "Brass", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Zinc, 1), new MaterialStack(Copper, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Bronze(300, TextureSet.SET_METALLIC, 6.0F, 192, 2, 1 | 2 | 64 | 128, 255, 128, 0, 0, "Bronze", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Copper, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    BrownLimonite(930, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8, 200, 100, 0, 0, "Brown Limonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 2))), // FeO(OH)
-    Calcite(823, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 250, 230, 220, 0, "Calcite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3))),
-    Cassiterite(824, TextureSet.SET_METALLIC, 1.0F, 0, 1, 8, 220, 220, 220, 0, "Cassiterite", 0, 0, -1, 0, false, false, 4, 3, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Oxygen, 2))),
-    CassiteriteSand(937, TextureSet.SET_SAND, 1.0F, 0, 1, 8, 220, 220, 220, 0, "Cassiterite Sand", 0, 0, -1, 0, false, false, 4, 3, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Oxygen, 2))),
-    Celestine(913, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 200, 205, 240, 0, "Celestine", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 1, Arrays.asList(new MaterialStack(Strontium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4))),
-    Chalcopyrite(855, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 160, 120, 40, 0, "Chalcopyrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Iron, 1), new MaterialStack(Sulfur, 2))),
-    Chalk(856, TextureSet.SET_FINE, 1.0F, 0, 2, 1, 250, 250, 250, 0, "Chalk", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3))),
-    Charcoal(536, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 4, 100, 70, 70, 0, "Charcoal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2))),
-    Chromite(825, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8, 35, 20, 15, 0, "Chromite", 0, 0, 1700, 1700, true, false, 6, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Chrome, 2), new MaterialStack(Oxygen, 4))),
-    ChromiumDioxide(361, TextureSet.SET_DULL, 11.0F, 256, 3, 1 | 2, 230, 200, 200, 0, "Chromium Dioxide", 0, 0, 650, 650, false, false, 5, 3, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Chrome, 1), new MaterialStack(Oxygen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1))),
-    Cinnabar(826, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 8, 150, 0, 0, 0, "Cinnabar", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Mercury, 1), new MaterialStack(Sulfur, 1))),
-    Clay(805, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1, 200, 200, 220, 0, "Clay", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2))),
-    Coal(535, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 4 | 8, 70, 70, 70, 0, "Coal", 0, 0, -1, 0, false, false, 2, 2, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2))),
-    Cobaltite(827, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8, 80, 80, 250, 0, "Cobaltite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Cobalt, 1), new MaterialStack(Arsenic, 1), new MaterialStack(Sulfur, 1))),
-    Cooperite(828, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8, 255, 255, 200, 0, "Sheldonite", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Platinum, 3), new MaterialStack(Nickel, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Palladium, 1))),
-    Cupronickel(310, TextureSet.SET_METALLIC, 6.0F, 64, 1, 1 | 2 | 64, 227, 150, 128, 0, "Cupronickel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Nickel, 1))),
-    DarkAsh(816, TextureSet.SET_DULL, 1.0F, 0, 1, 1, 50, 50, 50, 0, "Dark Ashes", 0, 0, -1, 0, false, false, 1, 2, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.IGNIS, 1), new TC_AspectStack(TC_Aspects.PERDITIO, 1))),
-    DeepIron(829, TextureSet.SET_METALLIC, 6.0F, 384, 2, 1 | 2 | 8 | 64, 150, 140, 140, 0, "Deep Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    Diamond(500, TextureSet.SET_DIAMOND, 8.0F, 1280, 3, 1 | 4 | 8 | 64 | 128, 200, 255, 255, 127, "Diamond", 0, 0, -1, 0, false, true, 5, 64, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 4))),
-    Electrum(303, TextureSet.SET_SHINY, 12.0F, 64, 2, 1 | 2 | 8 | 64 | 128, 255, 255, 100, 0, "Electrum", 0, 0, -1, 0, false, false, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Gold, 1))),
-    Emerald(501, TextureSet.SET_EMERALD, 7.0F, 256, 2, 1 | 4 | 8 | 64, 80, 255, 80, 127, "Emerald", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Beryllium, 3), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 6), new MaterialStack(Oxygen, 18)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 5))),
-    FreshWater(-1, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 0, 0, 255, 0, "Fresh Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2))),
-    Galena(830, TextureSet.SET_DULL, 1.0F, 0, 3, 1 | 8, 100, 60, 100, 0, "Galena", 0, 0, -1, 0, false, false, 4, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Lead, 3), new MaterialStack(Silver, 3), new MaterialStack(Sulfur, 2))),
-    Garnierite(906, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1 | 8, 50, 200, 70, 0, "Garnierite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Nickel, 1), new MaterialStack(Oxygen, 1))),
-    Glyceryl(714, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 0, 150, 150, 0, "Glyceryl Trinitrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Nitrogen, 3), new MaterialStack(Oxygen, 9))),
-    GreenSapphire(504, TextureSet.SET_GEM_HORIZONTAL, 7.0F, 256, 2, 1 | 4 | 8 | 64, 100, 200, 130, 127, "Green Sapphire", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Grossular(831, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 8, 200, 100, 0, 0, "Grossular", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    HolyWater(729, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 0, 0, 255, 0, "Holy Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.AURAM, 1))),
-    Ice(702, TextureSet.SET_SHINY, 1.0F, 0, 0, 1 | 16, 200, 200, 255, 0, "Ice", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.GELUM, 2))),
-    Ilmenite(918, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1 | 8, 70, 55, 50, 0, "Ilmenite", 0, 0, -1, 0, false, false, 1, 2, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Titanium, 1), new MaterialStack(Oxygen, 3))),
-    Invar(302, TextureSet.SET_METALLIC, 6.0F, 256, 2, 1 | 2 | 64 | 128, 180, 180, 120, 0, "Invar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 2), new MaterialStack(Nickel, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.GELUM, 1))),
-    IronCompressed(-1, TextureSet.SET_METALLIC, 7.0F, 96, 1, 1 | 2 | 64 | 128, 128, 128, 128, 0, "Compressed Iron", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Iron, 1))),
-    Kanthal(312, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 64, 194, 210, 223, 0, "Kanthal", 0, 0, 1800, 1800, true, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Chrome, 1))),
-    Lazurite(524, TextureSet.SET_LAPIS, 1.0F, 0, 1, 1 | 4 | 8, 100, 120, 255, 0, "Lazurite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Aluminium, 6), new MaterialStack(Silicon, 6), new MaterialStack(Calcium, 8), new MaterialStack(Sodium, 8))),
-    Magnalium(313, TextureSet.SET_DULL, 6.0F, 256, 2, 1 | 2 | 64 | 128, 200, 190, 255, 0, "Magnalium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Aluminium, 2))),
-    Magnesite(908, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 250, 250, 180, 0, "Magnesite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3))),
-    Magnetite(870, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 30, 30, 30, 0, "Magnetite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 3), new MaterialStack(Oxygen, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    Methane(715, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 255, 255, 255, 0, "Methane", 1, 45, -1, 0, false, false, 3, 1, 1, Dyes.dyeMagenta, 1, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4))),
-    Molybdenite(942, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 25, 25, 25, 0, "Molybdenite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Molybdenum, 1), new MaterialStack(Sulfur, 2))), // MoS2 (also source of Re)
-    Nichrome(311, TextureSet.SET_METALLIC, 6.0F, 64, 2, 1 | 2 | 64, 205, 206, 246, 0, "Nichrome", 0, 0, 2700, 2700, true, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Nickel, 4), new MaterialStack(Chrome, 1))),
-    NiobiumNitride(359, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 2, 29, 41, 29, 0, "Niobium Nitride", 0, 0, 2573, 2573, true, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Niobium, 1), new MaterialStack(Nitrogen, 1))), // Anti-Reflective Material
-    NiobiumTitanium(360, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 2, 29, 29, 41, 0, "Niobium-Titanium", 0, 0, 2800, 2800, true, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Niobium, 1), new MaterialStack(Titanium, 1))),
-    NitroCarbon(716, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 0, 75, 100, 0, "Nitro-Carbon", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Carbon, 1))),
-    NitrogenDioxide(717, TextureSet.SET_FLUID, 1.0F, 0, 1, 16, 100, 175, 255, 0, "Nitrogen Dioxide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 2))),
-    Obsidian(804, TextureSet.SET_DULL, 1.0F, 0, 3, 1, 80, 50, 100, 0, "Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Iron, 1), new MaterialStack(Silicon, 2), new MaterialStack(Oxygen, 8))),
-    Phosphate(833, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8 | 16, 255, 255, 0, 0, "Phosphate", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Phosphor, 1), new MaterialStack(Oxygen, 4))),
-    PigIron(307, TextureSet.SET_METALLIC, 6.0F, 384, 2, 1 | 2 | 8 | 64, 200, 180, 180, 0, "Pig Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Iron, 1))),
-    Plastic(874, TextureSet.SET_DULL, 3.0F, 32, 1, 1 | 2 | 64 | 128, 200, 200, 200, 0, "Plastic", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2))),
-    Powellite(883, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 255, 255, 0, 0, "Powellite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4))),
-    Pumice(926, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 230, 185, 185, 0, "Pumice", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Stone, 1))),
-    Pyrite(834, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1 | 8, 150, 120, 40, 0, "Pyrite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Sulfur, 2))),
-    Pyrolusite(943, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 150, 150, 170, 0, "Pyrolusite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 1, Arrays.asList(new MaterialStack(Manganese, 1), new MaterialStack(Oxygen, 2))),
-    Pyrope(835, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 120, 50, 100, 0, "Pyrope", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    RockSalt(944, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 8, 240, 200, 200, 0, "Rock Salt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Chlorine, 1))),
-    Rubber(880, TextureSet.SET_SHINY, 1.5F, 16, 0, 1 | 2 | 64 | 128, 0, 0, 0, 0, "Rubber", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Carbon, 5), new MaterialStack(Hydrogen, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2))),
-    Ruby(502, TextureSet.SET_RUBY, 7.0F, 256, 2, 1 | 4 | 8 | 64, 255, 100, 100, 127, "Ruby", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Chrome, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4))),
-    Salt(817, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 8, 250, 250, 250, 0, "Salt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Chlorine, 1))),
-    Saltpeter(836, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 8, 230, 230, 230, 0, "Saltpeter", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 3))),
-    SaltWater(-1, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 0, 0, 255, 0, "Salt Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2))),
-    Sapphire(503, TextureSet.SET_GEM_VERTICAL, 7.0F, 256, 2, 1 | 4 | 8 | 64, 100, 100, 200, 127, "Sapphire", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Scheelite(910, TextureSet.SET_DULL, 1.0F, 0, 3, 1 | 8, 200, 140, 20, 0, "Scheelite", 0, 0, 2500, 2500, false, false, 4, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Calcium, 2), new MaterialStack(Oxygen, 4))),
-    SiliconDioxide(837, TextureSet.SET_QUARTZ, 1.0F, 0, 1, 1 | 16, 200, 200, 200, 0, "Silicon Dioxide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 1, Arrays.asList(new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 2))),
-    Snow(728, TextureSet.SET_FINE, 1.0F, 0, 0, 1 | 16, 250, 250, 250, 0, "Snow", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.GELUM, 1))),
-    Sodalite(525, TextureSet.SET_LAPIS, 1.0F, 0, 1, 1 | 4 | 8, 20, 20, 255, 0, "Sodalite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Sodium, 4), new MaterialStack(Chlorine, 1))),
-    SodiumPersulfate(718, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 255, 255, 255, 0, "Sodium Persulfate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4))),
-    SodiumSulfide(719, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 255, 255, 255, 0, "Sodium Sulfide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Sulfur, 1))),
-    SolderingAlloy(314, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 2, 220, 220, 230, 0, "Soldering Alloy", 0, 0, 400, 400, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 9), new MaterialStack(Antimony, 1))),
-    Spessartine(838, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 255, 100, 100, 0, "Spessartine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Manganese, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    Sphalerite(839, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 255, 255, 255, 0, "Sphalerite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Zinc, 1), new MaterialStack(Sulfur, 1))),
-    StainlessSteel(306, TextureSet.SET_SHINY, 7.0F, 480, 2, 1 | 2 | 64 | 128, 200, 200, 220, 0, "Stainless Steel", 0, 0, -1, 1700, true, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Iron, 6), new MaterialStack(Chrome, 1), new MaterialStack(Manganese, 1), new MaterialStack(Nickel, 1))),
-    Steel(305, TextureSet.SET_METALLIC, 6.0F, 512, 2, 1 | 2 | 64 | 128, 128, 128, 128, 0, "Steel", 0, 0, 1811, 1000, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 50), new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 1))),
-    Stibnite(945, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 70, 70, 70, 0, "Stibnite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Antimony, 2), new MaterialStack(Sulfur, 3))),
-    SulfuricAcid(720, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 255, 128, 0, 0, "Sulfuric Acid", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4))),
-    Tanzanite(508, TextureSet.SET_GEM_VERTICAL, 7.0F, 256, 2, 1 | 4 | 8 | 64, 64, 0, 200, 127, "Tanzanite", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Calcium, 2), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 13)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Tetrahedrite(840, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 200, 32, 0, 0, "Tetrahedrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Copper, 3), new MaterialStack(Antimony, 1), new MaterialStack(Sulfur, 3), new MaterialStack(Iron, 1))), //Cu3SbS3 + x(Fe,Zn)6Sb2S9
-    TinAlloy(363, TextureSet.SET_METALLIC, 6.5F, 96, 2, 1 | 2 | 64 | 128, 200, 200, 200, 0, "Tin Alloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Topaz(507, TextureSet.SET_GEM_HORIZONTAL, 7.0F, 256, 3, 1 | 4 | 8 | 64, 255, 128, 0, 127, "Topaz", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Fluorine, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4))),
-    Tungstate(841, TextureSet.SET_DULL, 1.0F, 0, 3, 1 | 8, 55, 50, 35, 0, "Tungstate", 0, 0, 2500, 2500, true, false, 4, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Lithium, 2), new MaterialStack(Oxygen, 4))),
-    Ultimet(344, TextureSet.SET_SHINY, 6.0F, 512, 3, 1 | 2 | 64 | 128, 180, 180, 230, 0, "Ultimet", 0, 0, 2700, 2700, true, false, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Cobalt, 5), new MaterialStack(Chrome, 2), new MaterialStack(Nickel, 1), new MaterialStack(Molybdenum, 1))), // 54% Cobalt, 26% Chromium, 9% Nickel, 5% Molybdenum, 3% Iron, 2% Tungsten, 0.8% Manganese, 0.3% Silicon, 0.08% Nitrogen and 0.06% Carbon
-    Uraninite(922, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1 | 8, 35, 35, 35, 0, "Uraninite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, 2, Arrays.asList(new MaterialStack(Uranium, 1), new MaterialStack(Oxygen, 2))),
-    Uvarovite(842, TextureSet.SET_DIAMOND, 1.0F, 0, 2, 1 | 8, 180, 255, 180, 0, "Uvarovite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Chrome, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12))),
-    VanadiumGallium(357, TextureSet.SET_SHINY, 1.0F, 0, 2, 1 | 2, 128, 128, 140, 0, "Vanadium-Gallium", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Vanadium, 3), new MaterialStack(Gallium, 1))),
-    Water(701, TextureSet.SET_FLUID, 1.0F, 0, 0, 16, 0, 0, 255, 0, "Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2))),
-    Wood(809, TextureSet.SET_WOOD, 2.0F, 16, 0, 1 | 2 | 64 | 128, 100, 50, 0, 0, "Wood", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 1), new MaterialStack(Hydrogen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2))),
-    WroughtIron(304, TextureSet.SET_METALLIC, 6.0F, 384, 2, 1 | 2 | 64 | 128, 200, 180, 180, 0, "Wrought Iron", 0, 0, 1811, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Iron, 1))),
-    Wulfenite(882, TextureSet.SET_DULL, 1.0F, 0, 3, 1 | 8, 255, 128, 0, 0, "Wulfenite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Lead, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4))),
-    YellowLimonite(931, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 200, 200, 0, 0, "Yellow Limonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 2))), // FeO(OH) + a bit Ni and Co
-    YttriumBariumCuprate(358, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 2, 80, 64, 70, 0, "Yttrium Barium Cuprate", 0, 0, 1200, 1200, true, false, 1, 1, 1, Dyes.dyeGray, 0, Arrays.asList(new MaterialStack(Yttrium, 1), new MaterialStack(Barium, 2), new MaterialStack(Copper, 3), new MaterialStack(Oxygen, 7))),
+    public static Materials Methane = new Materials(715, TextureSet.SET_FLUID, 			1.0F, 0, 1, 16, 255, 255, 255, 0, "Methane", "Methane", 1, 104, -1, 0, false, false, 3, 1, 1, Dyes.dyeMagenta, 1, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4)));
+    public static Materials CarbonDioxide = new Materials(497, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16|32, 169, 208, 245, 240, "CarbonDioxide", "Carbon Dioxide", 0, 0, 25, 1, false, true, 1, 1, 1, Dyes.dyeLightBlue, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 2))).setHasCorrespondingGas(true);
+    public static Materials NobleGases = new Materials(496, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 169, 208, 245, 240, "NobleGases", "Noble Gases", 0, 0, 4, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(CarbonDioxide, 21), new MaterialStack(Helium, 9), new MaterialStack(Methane, 3), new MaterialStack(Deuterium, 1))).setHasCorrespondingFluid(true).setLiquidTemperature(79);
+    public static Materials Air = new Materials(-1, TextureSet.SET_FLUID, 				1.0F, 0, 2, 16|32, 169, 208, 245, 240, "Air", "Air", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 0, Arrays.asList(new MaterialStack(Nitrogen, 40), new MaterialStack(Oxygen, 11), new MaterialStack(Argon, 1), new MaterialStack(NobleGases, 1)));
+    public static Materials LiquidAir = new Materials(495, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 169, 208, 245, 240, "LiquidAir", "Liquid Air", 0, 0, 4, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Nitrogen, 40), new MaterialStack(Oxygen, 11), new MaterialStack(Argon, 1), new MaterialStack(NobleGases, 1))).setHasCorrespondingFluid(true).setLiquidTemperature(79);
+    public static Materials Almandine = new Materials(820, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1 |8 , 255, 0, 0, 0, "Almandine", "Almandine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Iron, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials Andradite = new Materials(821, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1, 150, 120, 0, 0, "Andradite", "Andradite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Iron, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials AnnealedCopper = new Materials(345, TextureSet.SET_SHINY, 	1.0F, 0, 2, 1|2|128, 255, 120, 20, 0, "AnnealedCopper", "Annealed Copper", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1)));
+    public static Materials Asbestos = new Materials(946, TextureSet.SET_DULL, 			1.0F, 0, 1, 1, 230, 230, 230, 0, "Asbestos", "Asbestos", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 9))); // Mg3Si2O5(OH)4
+    public static Materials Ash = new Materials(815, TextureSet.SET_DULL, 				1.0F, 0, 1, 1, 150, 150, 150, 0, "Ash", "Ashes", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_AspectStack(TC_Aspects.PERDITIO, 1)));
+    public static Materials BandedIron = new Materials(917, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 145, 90, 90, 0, "BandedIron", "Banded Iron", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 1, Arrays.asList(new MaterialStack(Iron, 2), new MaterialStack(Oxygen, 3)));
+    public static Materials BatteryAlloy = new Materials(315, TextureSet.SET_DULL, 		1.0F, 0, 1, 1|2, 156, 124, 160, 0, "BatteryAlloy", "Battery Alloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Lead, 4), new MaterialStack(Antimony, 1)));
+    public static Materials BlueTopaz = new Materials(513,TextureSet.SET_GEM_HORIZONTAL,7.0F, 256, 3, 1|4|8 |64, 0, 0, 255, 127, "BlueTopaz", "Blue Topaz", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Fluorine, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4)));
+    public static Materials Bone = new Materials(806, TextureSet.SET_DULL, 				1.0F, 0, 1, 1, 250, 250, 250, 0, "Bone", "Bone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Calcium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MORTUUS, 2), new TC_AspectStack(TC_Aspects.CORPUS, 1)));
+    public static Materials Brass = new Materials(301, TextureSet.SET_METALLIC, 		7.0F, 96, 1, 1|2|64|128, 255, 180, 0, 0, "Brass", "Brass", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Zinc, 1), new MaterialStack(Copper, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Bronze = new Materials(300, TextureSet.SET_METALLIC, 		6.0F, 192, 2, 1|2|64|128, 255, 128, 0, 0, "Bronze", "Bronze", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Copper, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials BrownLimonite = new Materials(930, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 |8 , 200, 100, 0, 0, "BrownLimonite", "Brown Limonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 2))); // FeO(OH)
+    public static Materials Calcite = new Materials(823, TextureSet.SET_DULL, 			1.0F, 0, 1, 1 |8 , 250, 230, 220, 0, "Calcite", "Calcite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3)));
+    public static Materials Cassiterite = new Materials(824, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 8 , 220, 220, 220, 0, "Cassiterite", "Cassiterite", 0, 0, -1, 0, false, false, 4, 3, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials CassiteriteSand = new Materials(937, TextureSet.SET_SAND, 	1.0F, 0, 1, 8 , 220, 220, 220, 0, "CassiteriteSand", "Cassiterite Sand", 0, 0, -1, 0, false, false, 4, 3, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Chalcopyrite = new Materials(855, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8 , 160, 120, 40, 0, "Chalcopyrite", "Chalcopyrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Iron, 1), new MaterialStack(Sulfur, 2)));
+    //public static Materials Chalk = new Materials(856, TextureSet.SET_FINE, 			  1.0F, 0, 2, 1, 250, 250, 250, 0, "Chalk", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3)));
+    public static Materials Charcoal = new Materials(536, TextureSet.SET_FINE, 			1.0F, 0, 1, 1|4, 100, 70, 70, 0, "Charcoal", "Charcoal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
+    public static Materials Chromite = new Materials(825, TextureSet.SET_METALLIC, 		1.0F, 0, 1, 1|8, 35, 20, 15, 0, "Chromite", "Chromite", 0, 0, 1700, 1700, true, false, 6, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Chrome, 2), new MaterialStack(Oxygen, 4)));
+    public static Materials ChromiumDioxide  = new Materials(361, TextureSet.SET_DULL, 11.0F, 256, 3, 1|2, 230, 200, 200, 0, "ChromiumDioxide", "Chromium Dioxide", 0, 0, 650, 650, false, false, 5, 3, 1, Dyes.dyePink , 1, Arrays.asList(new MaterialStack(Chrome, 1), new MaterialStack(Oxygen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1)));
+    public static Materials Cinnabar = new Materials(826, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1 |8 , 150, 0, 0, 0, "Cinnabar", "Cinnabar", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Mercury, 1), new MaterialStack(Sulfur, 1)));
+    public static Materials Water = new Materials(701, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 0, 0, 255, 0, "Water", "Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2)));
+    public static Materials Clay = new Materials(805, TextureSet.SET_ROUGH,				1.0F, 0, 1, 1, 200, 200, 220, 0, "Clay", "Clay", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2), new MaterialStack(Water, 6)));
+    public static Materials Coal = new Materials(535, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1|4|8, 70, 70, 70, 0, "Coal", "Coal", 0, 0, -1, 0, false, false, 2, 2, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.POTENTIA, 2), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
+    public static Materials Cobaltite = new Materials(827, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1 |8 , 80, 80, 250, 0, "Cobaltite", "Cobaltite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Cobalt, 1), new MaterialStack(Arsenic, 1), new MaterialStack(Sulfur, 1)));
+    public static Materials Cooperite = new Materials(828, TextureSet.SET_METALLIC, 	1.0F, 0, 1, 1 |8 , 255, 255, 200, 0, "Cooperite", "Sheldonite", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Platinum, 3), new MaterialStack(Nickel, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Palladium, 1)));
+    public static Materials Cupronickel = new Materials(310, TextureSet.SET_METALLIC, 	6.0F, 64, 1, 1|2|64, 227, 150, 128, 0, "Cupronickel", "Cupronickel", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Nickel, 1)));
+    public static Materials DarkAsh = new Materials(816, TextureSet.SET_DULL, 			1.0F, 0, 1, 1, 50, 50, 50, 0, "DarkAsh", "Dark Ashes", 0, 0, -1, 0, false, false, 1, 2, 1, Dyes.dyeGray, Arrays.asList(new TC_AspectStack(TC_Aspects.IGNIS, 1), new TC_AspectStack(TC_Aspects.PERDITIO, 1)));
+    public static Materials DeepIron = new Materials(829, TextureSet.SET_METALLIC, 		6.0F, 384, 2, 1 | 2 | 8 | 64, 150, 140, 140, 0, "DeepIron", "Deep Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Materials.Iron, 1)), Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_Aspects.TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials Diamond = new Materials(500, TextureSet.SET_DIAMOND, 		8.0F, 1280, 3, 1|4|8 |64|128, 200, 255, 255, 127, "Diamond", "Diamond", 0, 0, -1, 0, false, true, 5, 64, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 4)));
+    public static Materials Electrum = new Materials(303, TextureSet.SET_SHINY, 	   12.0F, 64, 2, 1|2|64|128, 255, 255, 100, 0, "Electrum", "Electrum", 0, 0, -1, 0, false, false, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Gold, 1)));
+    public static Materials Emerald = new Materials(501, TextureSet.SET_EMERALD, 		7.0F, 256, 2, 1|4|8 |64, 80, 255, 80, 127, "Emerald", "Emerald", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Beryllium, 3), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 6), new MaterialStack(Oxygen, 18)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3), new TC_AspectStack(TC_Aspects.LUCRUM, 5)));
+    public static Materials FreshWater = new Materials(-1, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 0, 0, 255, 0, "FreshWater", "Fresh Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2)));
+    public static Materials Galena = new Materials(830, TextureSet.SET_DULL, 			1.0F, 0, 3, 1 |8 , 100, 60, 100, 0, "Galena", "Galena", 0, 0, -1, 0, false, false, 4, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Lead, 3), new MaterialStack(Silver, 3), new MaterialStack(Sulfur, 2)));
+    public static Materials Garnierite = new Materials(906, TextureSet.SET_METALLIC, 	1.0F, 0, 3, 1 |8 , 50, 200, 70, 0, "Garnierite", "Garnierite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Nickel, 1), new MaterialStack(Oxygen, 1)));
+    public static Materials Glyceryl = new Materials(714, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 0, 150, 150, 0, "Glyceryl", "Glyceryl Trinitrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Nitrogen, 3), new MaterialStack(Oxygen, 9)));
+    public static Materials GreenSapphire = new Materials(504, TextureSet.SET_GEM_HORIZONTAL, 7.0F, 256, 2, 1|4|8 |64, 100, 200, 130, 127, "GreenSapphire", "Green Sapphire", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Grossular = new Materials(831, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1 |8 , 200, 100, 0, 0, "Grossular", "Grossular", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials HolyWater = new Materials(729, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 0, 0, 255, 0, "HolyWater", "Holy Water", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AQUA, 2), new TC_AspectStack(TC_Aspects.AURAM, 1)));
+    public static Materials Ice = new Materials(702, TextureSet.SET_SHINY, 				1.0F, 0, 0, 1| 16, 200, 200, 255, 0, "Ice", "Ice", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.GELUM, 2)));
+    public static Materials Ilmenite = new Materials(918, TextureSet.SET_METALLIC, 		1.0F, 0, 3, 1 |8 , 70, 55, 50, 0, "Ilmenite", "Ilmenite", 0, 0, -1, 0, false, false, 1, 2, 1, Dyes.dyePurple, 0, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Titanium, 1), new MaterialStack(Oxygen, 3)));
+    public static Materials Rutile = new Materials(375, TextureSet.SET_GEM_HORIZONTAL, 	1.0F, 0, 2, 1, 212, 13, 92, 0, "Rutile", "Rutile", 0, 0, -1, 0, false, false, 1, 2, 1, Dyes.dyeRed, 0, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Bauxite = new Materials(822, TextureSet.SET_DULL, 			1.0F, 0, 1, 1 |8 , 200, 100, 0, 0, "Bauxite", "Bauxite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBrown, 1, Arrays.asList(new MaterialStack(Rutile, 2), new MaterialStack(Aluminium, 16), new MaterialStack(Hydrogen, 10), new MaterialStack(Oxygen, 11)));
+    public static Materials Titaniumtetrachloride =new Materials(376,TextureSet.SET_FLUID,1.0F, 0, 2, 16 , 212, 13, 92, 0, "Titaniumtetrachloride", "Titaniumtetrachloride", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 0, Arrays.asList(new MaterialStack(Titanium, 1), new MaterialStack(Chlorine, 4)));
+    public static Materials Magnesiumchloride = new Materials(377, TextureSet.SET_DULL, 1.0F, 0, 2, 1|16 , 212, 13, 92, 0, "Magnesiumchloride", "Magnesiumchloride", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 0, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Chlorine, 2)));
+    public static Materials Invar = new Materials(302, TextureSet.SET_METALLIC, 		6.0F, 256, 2, 1|2|64|128, 180, 180, 120, 0, "Invar", "Invar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 2), new MaterialStack(Nickel, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.GELUM, 1)));
+    public static Materials IronCompressed = new Materials(-1, TextureSet.SET_METALLIC, 7.0F, 96, 1, 1|2|64|128, 128, 128, 128, 0, "IronCompressed", "Compressed Iron", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Iron, 1)));
+    public static Materials Kanthal = new Materials(312, TextureSet.SET_METALLIC, 		6.0F, 64, 2, 1|2|64, 194, 210, 223, 0, "Kanthal", "Kanthal", 0, 0, 1800, 1800, true, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Chrome, 1)));
+    public static Materials Lazurite = new Materials(524, TextureSet.SET_LAPIS, 		1.0F, 0, 1, 1|4|8 , 100, 120, 255, 0, "Lazurite", "Lazurite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Aluminium, 6), new MaterialStack(Silicon, 6), new MaterialStack(Calcium, 8), new MaterialStack(Sodium, 8)));
+    public static Materials Magnalium = new Materials(313, TextureSet.SET_DULL, 		6.0F, 256, 2, 1|2|64|128, 200, 190, 255, 0, "Magnalium", "Magnalium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Aluminium, 2)));
+    public static Materials Magnesite = new Materials(908, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |8 , 250, 250, 180, 0, "Magnesite", "Magnesite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3)));
+    public static Materials Magnetite = new Materials(870, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |8 , 30, 30, 30, 0, "Magnetite", "Magnetite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 3), new MaterialStack(Oxygen, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials Molybdenite = new Materials(942, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1 |8 , 25, 25, 25, 0, "Molybdenite", "Molybdenite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Molybdenum, 1), new MaterialStack(Sulfur, 2))); // MoS2 (also source of Re)
+    public static Materials Nichrome = new Materials(311, TextureSet.SET_METALLIC, 		6.0F, 64, 2, 1|2|64, 205, 206, 246, 0, "Nichrome", "Nichrome", 0, 0, 2700, 2700, true, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Nickel, 4), new MaterialStack(Chrome, 1)));
+    public static Materials NiobiumNitride = new Materials(359, TextureSet.SET_DULL, 	1.0F, 0, 2, 1|2, 29, 41, 29, 0, "NiobiumNitride", "Niobium Nitride", 0, 0, 2573, 2573, true, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Niobium, 1), new MaterialStack(Nitrogen, 1))); // Anti-Reflective Material
+    public static Materials NiobiumTitanium = new Materials(360, TextureSet.SET_DULL, 	1.0F, 0, 2, 1|2, 29, 29, 41, 0, "NiobiumTitanium", "Niobium-Titanium", 0, 0, 4500, 4500, true, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Niobium, 1), new MaterialStack(Titanium, 1)));
+    public static Materials NitroCarbon = new Materials(716, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 0, 75, 100, 0, "NitroCarbon", "Nitro-Carbon", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Carbon, 1)));
+    public static Materials NitrogenDioxide = new Materials(717, TextureSet.SET_FLUID, 	1.0F, 0, 1, 16, 100, 175, 255, 0, "NitrogenDioxide", "Nitrogen Dioxide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Obsidian = new Materials(804, TextureSet.SET_DULL, 			1.0F, 0, 3, 1, 80, 50, 100, 0, "Obsidian", "Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Iron, 1), new MaterialStack(Silicon, 2), new MaterialStack(Oxygen, 8)));
+    public static Materials Phosphate = new Materials(833, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8|16, 255, 255, 0, 0, "Phosphate", "Phosphate", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Phosphor, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials PigIron = new Materials(307, TextureSet.SET_METALLIC, 		6.0F, 384, 2, 1|2|64, 200, 180, 180, 0, "PigIron", "Pig Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Iron, 1)));
+    public static Materials Plastic = new Materials(874, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 200, 200, 0, "Plastic", "Polyethylene", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Epoxid = new Materials(470, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 140, 20, 0, "Epoxid", "Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Polydimethylsiloxane = new MaterialBuilder(633, TextureSet.SET_FLUID, "Polydimethylsiloxane").addDustItems().setRGB(245, 245, 245).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Silicone = new Materials(471, TextureSet.SET_DULL, 			3.0F, 128, 1, 1|2|64|128, 220, 220, 220, 0, "Silicone", "Silicone Rubber", 0, 0, 900, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1), new MaterialStack(Silicon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Polycaprolactam = new Materials(472, TextureSet.SET_DULL, 	3.0F, 32, 1, 1|2|64|128, 50, 50, 50, 0, "Polycaprolactam", "Polycaprolactam", 0, 0, 500, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 11), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Polytetrafluoroethylene  = new Materials(473, TextureSet.SET_DULL, 3.0F, 32, 1, 1|2|64|128, 100, 100, 100, 0, "Polytetrafluoroethylene", "Polytetrafluoroethylene", 0, 0, 1400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Powellite = new Materials(883, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 255, 255, 0, 0, "Powellite", "Powellite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials Pumice = new Materials(926, TextureSet.SET_DULL, 			1.0F, 0, 2, 1, 230, 185, 185, 0, "Pumice", "Pumice", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Stone, 1)));
+    public static Materials Pyrite = new Materials(834, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1 |8 , 150, 120, 40, 0, "Pyrite", "Pyrite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Sulfur, 2)));
+    public static Materials Pyrolusite = new Materials(943, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 150, 150, 170, 0, "Pyrolusite", "Pyrolusite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 1, Arrays.asList(new MaterialStack(Manganese, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Pyrope = new Materials(835, TextureSet.SET_METALLIC, 		1.0F, 0, 2, 1 |8 , 120, 50, 100, 0, "Pyrope", "Pyrope", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials RockSalt = new Materials(944, TextureSet.SET_FINE, 			1.0F, 0, 1, 1 |8 , 240, 200, 200, 0, "RockSalt", "Rock Salt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Chlorine, 1)));
+    public static Materials Rubber = new Materials(880, TextureSet.SET_SHINY, 			1.5F, 32, 0, 1|2|64|128, 0, 0, 0, 0, "Rubber", "Rubber", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Carbon, 5), new MaterialStack(Hydrogen, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials RawRubber = new Materials(896, TextureSet.SET_DULL, 		1.0F, 0, 0, 1, 204, 199, 137, 0, "RawRubber", "Raw Rubber", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 5), new MaterialStack(Hydrogen, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials Ruby = new Materials(502, TextureSet.SET_RUBY, 				7.0F, 256, 2, 1|4|8 |64, 255, 100, 100, 127, "Ruby", "Ruby", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Chrome, 1), new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4)));
+    public static Materials Salt = new Materials(817, TextureSet.SET_FINE, 				1.0F, 0, 1, 1 |8 , 250, 250, 250, 0, "Salt", "Salt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Chlorine, 1)));
+    public static Materials Saltpeter = new Materials(836, TextureSet.SET_FINE, 		1.0F, 0, 1, 1 |8 , 230, 230, 230, 0, "Saltpeter", "Saltpeter", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 3)));
+    public static Materials SaltWater = new MaterialBuilder(692, TextureSet.SET_FLUID, "Salt Water").addCell().addFluid().setRGB(0, 0, 200).setColor(Dyes.dyeBlue).constructMaterial();
+    public static Materials Sapphire = new Materials(503, TextureSet.SET_GEM_VERTICAL, 	7.0F, 256, 2, 1|4|8 |64, 100, 100, 200, 127, "Sapphire", "Sapphire", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Scheelite = new Materials(910, TextureSet.SET_DULL, 		1.0F, 0, 3, 1 |8 , 200, 140, 20, 0, "Scheelite", "Scheelite", 0, 0, 2500, 2500, false, false, 4, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Calcium, 2), new MaterialStack(Oxygen, 4)));
+    public static Materials SiliconDioxide = new Materials(837, TextureSet.SET_QUARTZ, 	1.0F, 0, 1, 1 |16, 200, 200, 200, 0, "SiliconDioxide", "Silicon Dioxide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 1, Arrays.asList(new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Snow = new Materials(728, TextureSet.SET_FINE, 				1.0F, 0, 0, 1| 16, 250, 250, 250, 0, "Snow", "Snow", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.GELUM, 1)));
+    public static Materials Sodalite = new Materials(525, TextureSet.SET_LAPIS, 		1.0F, 0, 1, 1|4|8 , 20, 20, 255, 0, "Sodalite", "Sodalite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Sodium, 4), new MaterialStack(Chlorine, 1)));
+    public static Materials SodiumPersulfate = new Materials(718, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 255, 255, 255, 0, "SodiumPersulfate", "Sodium Persulfate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Sulfur, 2), new MaterialStack(Oxygen, 8)));
+    public static Materials SodiumSulfide = new Materials(719, TextureSet.SET_FLUID, 	1.0F, 0, 2, 1, 255, 230, 128, 0, "SodiumSulfide", "Sodium Sulfide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Sulfur, 1)));
+    public static Materials HydricSulfide = new Materials(460, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16, 255, 255, 255, 0, "HydricSulfide", "Hydrogen Sulfide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 0, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Sulfur, 1)));
+
+    public static Materials OilHeavy = new Materials(730, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 10, 10, 10, 0, "OilHeavy", "Heavy Oil", 3, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials OilMedium = new Materials(731, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 10, 10, 10, 0, "OilMedium", "Raw Oil", 3, 24, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials OilLight = new Materials(732, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 10, 10, 10, 0, "OilLight", "Light Oil", 3, 16, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+
+    public static Materials NatruralGas = new Materials(733, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "NatruralGas", "Natural Gas", 1, 15, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
+    public static Materials SulfuricGas = new Materials(734, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 255, 255, 255, 0, "SulfuricGas", "Sulfuric Gas", 1, 20, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite);
+    public static Materials Gas = new Materials(735, TextureSet.SET_FLUID, 				1.0F, 0, 1, 16, 255, 255, 255, 0, "Gas", "Refinery Gas", 1, 128, -1, 0, false, false, 3, 1, 1, Dyes.dyeWhite).setCanBeCracked(true);
+    public static Materials SulfuricNaphtha = new Materials(736, TextureSet.SET_FLUID, 	1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricNaphtha", "Sulfuric Naphtha", 1, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials SulfuricLightFuel = new Materials(737, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricLightFuel", "Sulfuric Light Fuel", 0, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+    public static Materials SulfuricHeavyFuel = new Materials(738, TextureSet.SET_FLUID,1.0F, 0, 0, 16, 255, 255, 0, 0, "SulfuricHeavyFuel", "Sulfuric Heavy Fuel", 3, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials Naphtha = new Materials(739, TextureSet.SET_FLUID, 			1.0F, 0, 0, 16, 255, 255, 0, 0, "Naphtha", "Naphtha", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow).setCanBeCracked(true);
+    public static Materials LightFuel = new Materials(740, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "LightFuel", "Light Fuel", 0, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow).setCanBeCracked(true);
+    public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
+    public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
+
+    public static Materials Chlorobenzene = new MaterialBuilder(605, TextureSet.SET_FLUID, "Chlorobenzene").addCell().addFluid().setRGB(0, 50, 65).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials DilutedHydrochloricAcid = new MaterialBuilder(606, TextureSet.SET_FLUID, "Diluted Hydrochloric Acid").setName("DilutedHydrochloricAcid_GT5U").addCell().addFluid().setRGB(153, 167, 163).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 1)).constructMaterial();
+    public static Materials Pyrochlore = new MaterialBuilder(607, TextureSet.SET_METALLIC, "Pyrochlore").addDustItems().addOreItems().setRGB(43, 17, 0).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Calcium, 2), new MaterialStack(Niobium, 2), new MaterialStack(Oxygen, 7)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials GrowthMediumRaw = new MaterialBuilder(608, TextureSet.SET_FLUID, "Raw Growth Medium").setName("GrowthMediumRaw").addCell().addFluid().setRGB(211, 141, 95).setColor(Dyes.dyeOrange).constructMaterial();
+    public static Materials GrowthMediumSterilized = new MaterialBuilder(609, TextureSet.SET_FLUID, "Sterilized Growth Medium").setName("GrowthMediumSterilized").addCell().addFluid().setRGB(222, 170, 135).setColor(Dyes.dyeOrange).constructMaterial();
+    public static Materials FerriteMixture = new MaterialBuilder(612, TextureSet.SET_METALLIC, "Ferrite Mixture").addDustItems().setRGB(180, 180, 180).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Nickel, 1), new MaterialStack(Zinc, 1), new MaterialStack(Iron, 4)).constructMaterial();
+    public static Materials NickelZincFerrite = new MaterialBuilder(613, TextureSet.SET_ROUGH, "Nickel-Zinc Ferrite").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setRGB(60, 60, 60).setColor(Dyes.dyeBlack).setBlastFurnaceRequired(true).setBlastFurnaceTemp(1500).setMaterialList(new MaterialStack(Nickel, 1), new MaterialStack(Zinc, 1), new MaterialStack(Iron, 4), new MaterialStack(Oxygen, 8)).constructMaterial();
+    public static Materials Massicot = new MaterialBuilder(614, TextureSet.SET_DULL, "Massicot").addDustItems().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Lead, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials ArsenicTrioxide = new MaterialBuilder(615, TextureSet.SET_SHINY, "Arsenic Trioxide").addDustItems().setRGB(255, 255, 255).setColor(Dyes.dyeGreen).setMaterialList(new MaterialStack(Arsenic, 2), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials CobaltOxide = new MaterialBuilder(616, TextureSet.SET_DULL, "Cobalt Oxide").addDustItems().setRGB(102, 128, 0).setColor(Dyes.dyeGreen).setMaterialList(new MaterialStack(Cobalt, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Zincite = new MaterialBuilder(617, TextureSet.SET_DULL, "Zincite").addDustItems().setRGB(255, 255, 245).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Zinc, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials AntimonyTrioxide = new MaterialBuilder(618, TextureSet.SET_DULL, "Antimony Trioxide").addDustItems().setRGB(230, 230, 240).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Antimony, 2), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials CupricOxide = new MaterialBuilder(619, TextureSet.SET_DULL, "Cupric Oxide").addDustItems().setRGB(15, 15, 15).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Copper, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ferrosilite = new MaterialBuilder(620, TextureSet.SET_DULL, "Ferrosilite").addDustItems().setRGB(151, 99, 42).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Iron, 1), new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Magnesia = new MaterialBuilder(621, TextureSet.SET_DULL, "Magnesia").addDustItems().setRGB(255, 225, 225).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Magnesium, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Quicklime = new MaterialBuilder(622, TextureSet.SET_DULL, "Quicklime").addDustItems().setRGB(240, 240, 240).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Calcium, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Potash = new MaterialBuilder(623, TextureSet.SET_DULL, "Potash").addDustItems().setRGB(120, 66, 55).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Potassium, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials SodaAsh = new MaterialBuilder(624, TextureSet.SET_DULL, "Soda Ash").addDustItems().setRGB(220, 220, 255).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Sodium, 2), new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Brick = new MaterialBuilder(625, TextureSet.SET_ROUGH, "Brick").addDustItems().setRGB(155, 86, 67).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Aluminium, 4), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)).constructMaterial();
+    public static Materials Fireclay = new MaterialBuilder(626, TextureSet.SET_ROUGH, "Fireclay").addDustItems().setRGB(173, 160, 155).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Brick, 1)).constructMaterial();
+    public static Materials BioDiesel = new MaterialBuilder(627, TextureSet.SET_FLUID, "Bio Diesel").addCell().addFluid().setRGB(255, 128, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(192).constructMaterial();
+    public static Materials NitrationMixture = new MaterialBuilder(628, TextureSet.SET_FLUID, "Nitration Mixture").addCell().setRGB(230, 226, 171).setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials Glycerol = new MaterialBuilder(629, TextureSet.SET_FLUID, "Glycerol").addCell().addFluid().setRGB(135, 222, 135).setColor(Dyes.dyeLime).setFuelType(MaterialBuilder.SEMIFLUID).setFuelType(164).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials SodiumBisulfate = new MaterialBuilder(630, TextureSet.SET_FLUID, "Sodium Bisulfate").addDustItems().setRGB(0, 68, 85).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Sodium, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4)).constructMaterial();
+    public static Materials PolyphenyleneSulfide = new MaterialBuilder(631, TextureSet.SET_DULL, "Polyphenylene Sulfide").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(170, 136, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 4), new MaterialStack(Sulfur, 1)).constructMaterial();
+    public static Materials Dichlorobenzene = new MaterialBuilder(632, TextureSet.SET_FLUID, "Dichlorobenzene").addCell().addFluid().setRGB(0, 68, 85).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 4), new MaterialStack(Chlorine, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Polystyrene = new MaterialBuilder(636, TextureSet.SET_DULL, "Polystyrene").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(190, 180, 170).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 8)).constructMaterial();
+    public static Materials Styrene = new MaterialBuilder(637, TextureSet.SET_FLUID, "Styrene").addCell().addFluid().setRGB(210, 200, 190).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 8), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Isoprene = new MaterialBuilder(638, TextureSet.SET_FLUID, "Isoprene").addCell().addFluid().setRGB(20, 20, 20).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 5), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Tetranitromethane = new MaterialBuilder(639, TextureSet.SET_FLUID, "Tetranitromethane").addCell().addFluid().setRGB(15, 40, 40).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Nitrogen, 4), new MaterialStack(Oxygen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ethenone = new MaterialBuilder(641, TextureSet.SET_FLUID, "Ethenone").addCell().addGas().setRGB(20, 20, 70).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ethane = new MaterialBuilder(642, TextureSet.SET_FLUID, "Ethane").addCell().addGas().setRGB(200, 200, 255).setColor(Dyes.dyeLightBlue).setFuelType(MaterialBuilder.GAS).setFuelPower(168).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Propane = new MaterialBuilder(643, TextureSet.SET_FLUID, "Propane").addCell().addGas().setRGB(250, 226, 80).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(232).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials RawStyreneButadieneRubber = new MaterialBuilder(634, TextureSet.SET_SHINY, "Raw Styrene-Butadiene Rubber").addDustItems().setRGB(84, 64, 61).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
+    public static Materials StyreneButadieneRubber = new MaterialBuilder(635, TextureSet.SET_SHINY, "Styrene-Butadiene Rubber").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(128).setToolQuality(1).setRGB(33, 26, 24).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
+    public static Materials Toluene = new MaterialBuilder(647, TextureSet.SET_FLUID, "Toluene").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(328).setMaterialList(new MaterialStack(Carbon, 7), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Epichlorohydrin = new MaterialBuilder(648, TextureSet.SET_FLUID, "Epichlorohydrin").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials PolyvinylChloride = new MaterialBuilder(649, TextureSet.SET_DULL, "Polyvinyl Chloride").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(215, 230, 230).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).constructMaterial();
+    public static Materials VinylChloride = new MaterialBuilder(650, TextureSet.SET_FLUID, "Vinyl Chloride").addCell().addGas().setRGB(225, 240, 240).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials SulfurDioxide = new MaterialBuilder(651, TextureSet.SET_FLUID, "Sulfur Dioxide").addCell().addGas().setRGB(200, 200, 25).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 2)).constructMaterial();
+    public static Materials SulfurTrioxide = new MaterialBuilder(652, TextureSet.SET_FLUID, "Sulfur Trioxide").addCell().addGas().setGasTemperature(344).setRGB(160, 160, 20).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials NitricAcid = new MaterialBuilder(653, TextureSet.SET_FLUID, "Nitric Acid").addCell().setRGB(230, 226, 171).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Dimethylhydrazine = new MaterialBuilder(654, TextureSet.SET_FLUID, "1,1-Dimethylhydrazine").addCell().addFluid().setRGB(0, 0, 85).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 8), new MaterialStack(Nitrogen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Chloramine = new MaterialBuilder(655, TextureSet.SET_FLUID, "Chloramine").addCell().addFluid().setRGB(63, 159, 128).setColor(Dyes.dyeCyan).setMaterialList(new MaterialStack(Nitrogen, 1), new MaterialStack(Hydrogen, 2), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Dimethylamine = new MaterialBuilder(656, TextureSet.SET_FLUID, "Dimethylamine").addCell().addGas().setRGB(85, 68, 105).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 7), new MaterialStack(Nitrogen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials DinitrogenTetroxide = new MaterialBuilder(657, TextureSet.SET_FLUID, "Dinitrogen Tetroxide").addCell().addGas().setRGB(0, 65, 132).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 2), new MaterialStack(Oxygen, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials NitricOxide = new MaterialBuilder(658, TextureSet.SET_FLUID, "Nitric Oxide").addCell().addGas().setRGB(125, 200, 240).setColor(Dyes.dyeCyan).setMaterialList(new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Ammonia = new MaterialBuilder(659, TextureSet.SET_FLUID, "Ammonia").addCell().addGas().setRGB(63, 52, 128).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 1), new MaterialStack(Hydrogen, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Dimethyldichlorosilane = new MaterialBuilder(663, TextureSet.SET_FLUID, "Dimethyldichlorosilane").addCell().addFluid().setRGB(68, 22, 80).setColor(Dyes.dyePurple).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Chlorine, 2), new MaterialStack(Silicon, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Chloromethane = new MaterialBuilder(664, TextureSet.SET_FLUID, "Chloromethane").addCell().addGas().setRGB(200, 44, 160).setColor(Dyes.dyeMagenta).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials PhosphorousPentoxide = new MaterialBuilder(665, TextureSet.SET_FLUID, "Phosphorous Pentoxide").addCell().addDustItems().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Phosphor, 4), new MaterialStack(Oxygen, 10)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Tetrafluoroethylene = new MaterialBuilder(666, TextureSet.SET_FLUID, "Tetrafluoroethylene").addCell().addGas().setRGB(125, 125, 125).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)).constructMaterial();
+    public static Materials HydrofluoricAcid = new MaterialBuilder(667, TextureSet.SET_FLUID, "Hydrofluoric Acid").setName("HydrofluoricAcid_GT5U").addCell().addFluid().setRGB(0, 136, 170).setColor(Dyes.dyeLightBlue).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Fluorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Chloroform = new MaterialBuilder(668, TextureSet.SET_FLUID, "Chloroform").addCell().addFluid().setRGB(137, 44, 160).setColor(Dyes.dyePurple).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 3)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials BisphenolA = new MaterialBuilder(669, TextureSet.SET_FLUID, "Bisphenol A").addCell().setRGB(212, 170, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 15), new MaterialStack(Hydrogen, 16), new MaterialStack(Oxygen, 2)).constructMaterial(); 
+    public static Materials AceticAcid = new MaterialBuilder(670, TextureSet.SET_FLUID, "Acetic Acid").addCell().addFluid().setRGB(200, 180, 160).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials CalciumAcetateSolution = new MaterialBuilder(671, TextureSet.SET_RUBY, "Calcium Acetate Solution").addCell().addFluid().setRGB(220, 200, 180).setColor(Dyes.dyeCyan).setMaterialList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 2), new MaterialStack(Oxygen, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Acetone = new MaterialBuilder(672, TextureSet.SET_FLUID, "Acetone").addCell().addFluid().setRGB(175, 175, 175).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Methanol = new MaterialBuilder(673, TextureSet.SET_FLUID, "Methanol").addCell().addFluid().setRGB(170, 136, 0).setColor(Dyes.dyeBrown).setFuelPower(32).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials CarbonMonoxide = new MaterialBuilder(674, TextureSet.SET_FLUID, "Carbon Monoxide").addCell().addGas().setRGB(14, 72, 128).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(24).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials MetalMixture = new MaterialBuilder(676, TextureSet.SET_METALLIC, "Metal Mixture").addDustItems().setRGB(80, 45, 22).setColor(Dyes.dyeBrown).constructMaterial();
+    public static Materials Ethylene = new MaterialBuilder(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Propene = new MaterialBuilder(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials VinylAcetate = new MaterialBuilder(679, TextureSet.SET_FLUID, "Vinyl Acetate").addCell().addFluid().setRGB(255, 179, 128).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials PolyvinylAcetate = new MaterialBuilder(680, TextureSet.SET_FLUID, "Polyvinyl Acetate").addCell().addFluid().setRGB(255, 153, 85).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).constructMaterial();
+    public static Materials MethylAcetate = new MaterialBuilder(681, TextureSet.SET_FLUID, "Methyl Acetate").addCell().addFluid().setRGB(238, 198, 175).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials AllylChloride = new MaterialBuilder(682, TextureSet.SET_FLUID, "Allyl Chloride").addCell().addFluid().setRGB(135, 222, 170).setColor(Dyes.dyeCyan).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials HydrochloricAcid = new MaterialBuilder(683, TextureSet.SET_FLUID, "Hydrochloric Acid").setName("HydrochloricAcid_GT5U").addCell().addFluid().setRGB(183, 200, 196).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 1)).constructMaterial();
+    public static Materials HypochlorousAcid = new MaterialBuilder(684, TextureSet.SET_FLUID, "Hypochlorous Acid").addCell().addFluid().setRGB(111, 138, 145).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials SodiumHydroxide = new MaterialBuilder(685, TextureSet.SET_DULL, "Sodium Hydroxide").setName("SodiumHydroxide_GT5U").addDustItems().setRGB(0, 51, 128).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Sodium, 1), new MaterialStack(Oxygen, 1), new MaterialStack(Hydrogen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Benzene = new MaterialBuilder(686, TextureSet.SET_FLUID, "Benzene").addCell().addFluid().setRGB(26, 26, 26).setColor(Dyes.dyeGray).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Phenol = new MaterialBuilder(687, TextureSet.SET_FLUID, "Phenol").addCell().addFluid().setRGB(120, 68, 33).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Cumene = new MaterialBuilder(688, TextureSet.SET_FLUID, "Cumene").addCell().addFluid().setRGB(85, 34, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 9), new MaterialStack(Hydrogen, 12)).constructMaterial();
+    public static Materials PhosphoricAcid = new MaterialBuilder(689, TextureSet.SET_FLUID, "Phosphoric Acid").setName("PhosphoricAcid_GT5U").addCell().addFluid().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Hydrogen, 3), new MaterialStack(Phosphor, 1), new MaterialStack(Oxygen, 4)).addElectrolyzerRecipe().constructMaterial();
+    
+    public static Materials SolderingAlloy = new Materials(314, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 220, 220, 230, 0, "SolderingAlloy", "Soldering Alloy", 0, 0, 400, 400, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 9), new MaterialStack(Antimony, 1)));
+    public static Materials GalliumArsenide = new Materials(980, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 160, 160, 160, 0, "GalliumArsenide", "Gallium Arsenide", 0, 0, -1, 1200, true, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Arsenic, 1), new MaterialStack(Gallium, 1)));
+    public static Materials IndiumGalliumPhosphide = new Materials(981, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 160, 140, 190, 0, "IndiumGalliumPhosphide", "Indium Gallium Phosphide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Indium, 1), new MaterialStack(Gallium, 1), new MaterialStack(Phosphor, 1)));
+    public static Materials Spessartine = new Materials(838, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 255, 100, 100, 0, "Spessartine", "Spessartine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Manganese, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials Sphalerite = new Materials(839, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8 , 255, 255, 255, 0, "Sphalerite", "Sphalerite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Zinc, 1), new MaterialStack(Sulfur, 1)));
+    public static Materials StainlessSteel = new Materials(306, TextureSet.SET_SHINY, 	7.0F, 480, 2, 1|2|64|128, 200, 200, 220, 0, "StainlessSteel", "Stainless Steel", 0, 0, -1, 1700, true, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Iron, 6), new MaterialStack(Chrome, 1), new MaterialStack(Manganese, 1), new MaterialStack(Nickel, 1)));
+    public static Materials Steel = new Materials(305, TextureSet.SET_METALLIC, 		6.0F, 512, 2, 1|2|64|128, 128, 128, 128, 0, "Steel", "Steel", 0, 0, 1811, 1000, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 50), new MaterialStack(Carbon, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ORDO, 1)));
+    public static Materials Stibnite = new Materials(945, TextureSet.SET_METALLIC, 		1.0F, 0, 2, 1 |8 , 70, 70, 70, 0, "Stibnite", "Stibnite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Antimony, 2), new MaterialStack(Sulfur, 3)));
+    public static Materials SulfuricAcid = new Materials(720, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16, 255, 128, 0, 0, "SulfuricAcid", "Sulfuric Acid", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Hydrogen, 2), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials Tanzanite = new Materials(508, TextureSet.SET_GEM_VERTICAL, 7.0F, 256, 2, 1|4|8 |64, 64, 0, 200, 127, "Tanzanite", "Tanzanite", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyePurple, 1, Arrays.asList(new MaterialStack(Calcium, 2), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 13)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Tetrahedrite = new Materials(840, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 200, 32, 0, 0, "Tetrahedrite", "Tetrahedrite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Copper, 3), new MaterialStack(Antimony, 1), new MaterialStack(Sulfur, 3), new MaterialStack(Iron, 1))); //Cu3SbS3 + x(Fe, Zn)6Sb2S9
+    public static Materials TinAlloy = new Materials(363, TextureSet.SET_METALLIC, 		6.5F, 96, 2, 1|2|64|128, 200, 200, 200, 0, "TinAlloy", "Tin Alloy", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 1), new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Topaz = new Materials(507, TextureSet.SET_GEM_HORIZONTAL, 	7.0F, 256, 3, 1|4|8 |64, 255, 128, 0, 127, "Topaz", "Topaz", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeOrange, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Fluorine, 2), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4)));
+    public static Materials Tungstate = new Materials(841, TextureSet.SET_DULL, 		1.0F, 0, 3, 1 |8 , 55, 50, 35, 0, "Tungstate", "Tungstate", 0, 0, 2500, 2500, true, false, 4, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Lithium, 2), new MaterialStack(Oxygen, 4)));
+    public static Materials Ultimet = new Materials(344, TextureSet.SET_SHINY, 			9.0F, 2048, 4, 1|2|64|128, 180, 180, 230, 0, "Ultimet", "Ultimet", 0, 0, 2700, 2700, true, false, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Cobalt, 5), new MaterialStack(Chrome, 2), new MaterialStack(Nickel, 1), new MaterialStack(Molybdenum, 1))); // 54% Cobalt, 26% Chromium, 9% Nickel, 5% Molybdenum, 3% Iron, 2% Tungsten, 0.8% Manganese, 0.3% Silicon, 0.08% Nitrogen and 0.06% Carbon
+    public static Materials Uraninite = new Materials(922, TextureSet.SET_METALLIC, 	1.0F, 0, 3, 1 |8 , 35, 35, 35, 0, "Uraninite", "Uraninite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, 2, Arrays.asList(new MaterialStack(Uranium, 1), new MaterialStack(Oxygen, 2)));
+    public static Materials Uvarovite = new Materials(842, TextureSet.SET_DIAMOND, 		1.0F, 0, 2, 1, 180, 255, 180, 0, "Uvarovite", "Uvarovite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Chrome, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
+    public static Materials VanadiumGallium = new Materials(357, TextureSet.SET_SHINY, 	1.0F, 0, 2, 1|2, 128, 128, 140, 0, "VanadiumGallium", "Vanadium-Gallium", 0, 0, 4500, 4500, true, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Vanadium, 3), new MaterialStack(Gallium, 1)));
+    public static Materials Wood = new Materials(809, TextureSet.SET_WOOD, 				2.0F, 16, 0, 1|2|64|128, 100, 50, 0, 0, "Wood", "Wood", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 1), new MaterialStack(Hydrogen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2)));
+    public static Materials WroughtIron = new Materials(304, TextureSet.SET_METALLIC, 	6.0F, 384, 2, 1|2|64|128, 200, 180, 180, 0, "WroughtIron", "Wrought Iron", 0, 0, 1811, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Iron, 1)));
+    public static Materials Wulfenite = new Materials(882, TextureSet.SET_DULL, 		1.0F, 0, 3, 1 |8 , 255, 128, 0, 0, "Wulfenite", "Wulfenite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Lead, 1), new MaterialStack(Molybdenum, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials YellowLimonite = new Materials(931, TextureSet.SET_METALLIC,1.0F, 0, 2, 1 |8 , 200, 200, 0, 0, "YellowLimonite", "Yellow Limonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Oxygen, 2))); // FeO(OH) + a bit Ni and Co
+    public static Materials YttriumBariumCuprate  = new Materials(358, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1|2, 80, 64, 70, 0, "YttriumBariumCuprate", "Yttrium Barium Cuprate", 0, 0, 4500, 4500, true, false, 1, 1, 1, Dyes.dyeGray, 0, Arrays.asList(new MaterialStack(Yttrium, 1), new MaterialStack(Barium, 2), new MaterialStack(Copper, 3), new MaterialStack(Oxygen, 7)));
 
     /**
      * Second Degree Compounds
      */
-    WoodSealed(889, TextureSet.SET_WOOD, 3.0F, 24, 0, 1 | 2 | 64 | 128, 80, 40, 0, 0, "Sealed Wood", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 0, Arrays.asList(new MaterialStack(Wood, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2), new TC_AspectStack(TC_Aspects.FABRICO, 1))),
-    LiveRoot(832, TextureSet.SET_WOOD, 1.0F, 0, 1, 1, 220, 200, 0, 0, "Liveroot", 5, 16, -1, 0, false, false, 2, 4, 3, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Wood, 3), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2), new TC_AspectStack(TC_Aspects.VICTUS, 2), new TC_AspectStack(TC_Aspects.PRAECANTIO, 1))),
-    IronWood(338, TextureSet.SET_WOOD, 6.0F, 384, 2, 1 | 2 | 64 | 128, 150, 140, 110, 0, "Ironwood", 5, 8, -1, 0, false, false, 2, 19, 18, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 9), new MaterialStack(LiveRoot, 9), new MaterialStack(Gold, 1))),
-    Glass(890, TextureSet.SET_GLASS, 1.0F, 4, 0, 1 | 4, 250, 250, 250, 220, "Glass", 0, 0, 1500, 0, false, true, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2))),
-    Perlite(925, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 30, 20, 30, 0, "Perlite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Obsidian, 2), new MaterialStack(Water, 1))),
-    Borax(941, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 8, 250, 250, 250, 0, "Borax", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Boron, 4), new MaterialStack(Water, 10), new MaterialStack(Oxygen, 7))),
-    Lignite(538, TextureSet.SET_LIGNITE, 1.0F, 0, 0, 1 | 4 | 8, 100, 70, 70, 0, "Lignite Coal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Water, 4), new MaterialStack(DarkAsh, 1))),
-    Olivine(505, TextureSet.SET_RUBY, 7.0F, 256, 2, 1 | 4 | 8 | 64, 150, 255, 150, 127, "Olivine", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeLime, 1, Arrays.asList(new MaterialStack(Magnesium, 2), new MaterialStack(Iron, 1), new MaterialStack(SiliconDioxide, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 2))),
-    Opal(510, TextureSet.SET_OPAL, 7.0F, 256, 2, 1 | 4 | 8 | 64, 0, 0, 255, 0, "Opal", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Amethyst(509, TextureSet.SET_FLINT, 7.0F, 256, 3, 1 | 4 | 8 | 64, 210, 50, 210, 127, "Amethyst", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(SiliconDioxide, 4), new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4))),
-    Redstone(810, TextureSet.SET_ROUGH, 1.0F, 0, 2, 1 | 8, 200, 0, 0, 0, "Redstone", 0, 0, 500, 0, false, false, 3, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Silicon, 1), new MaterialStack(Pyrite, 5), new MaterialStack(Ruby, 1), new MaterialStack(Mercury, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 2))),
-    Lapis(526, TextureSet.SET_LAPIS, 1.0F, 0, 1, 1 | 4 | 8, 70, 70, 220, 0, "Lapis", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(Lazurite, 12), new MaterialStack(Sodalite, 2), new MaterialStack(Pyrite, 1), new MaterialStack(Calcite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.SENSUS, 1))),
-    Blaze(801, TextureSet.SET_POWDER, 2.0F, 16, 1, 1 | 64, 255, 200, 0, 0, "Blaze", 0, 0, 6400, 0, false, false, 2, 3, 2, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(DarkAsh, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 2), new TC_AspectStack(TC_Aspects.IGNIS, 4))),
-    EnderPearl(532, TextureSet.SET_SHINY, 1.0F, 16, 1, 1 | 4, 108, 220, 200, 0, "Enderpearl", 0, 0, -1, 0, false, false, 1, 16, 10, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Beryllium, 1), new MaterialStack(Potassium, 4), new MaterialStack(Nitrogen, 5), new MaterialStack(Magic, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.ALIENIS, 4), new TC_AspectStack(TC_Aspects.ITER, 4), new TC_AspectStack(TC_Aspects.PRAECANTIO, 2))),
-    EnderEye(533, TextureSet.SET_SHINY, 1.0F, 16, 1, 1 | 4, 160, 250, 230, 0, "Endereye", 5, 10, -1, 0, false, false, 1, 2, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(EnderPearl, 1), new MaterialStack(Blaze, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.SENSUS, 4), new TC_AspectStack(TC_Aspects.ALIENIS, 4), new TC_AspectStack(TC_Aspects.ITER, 4), new TC_AspectStack(TC_Aspects.PRAECANTIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 2))),
-    Flint(802, TextureSet.SET_FLINT, 2.5F, 64, 1, 1 | 64, 0, 32, 64, 0, "Flint", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1))),
-    Diatomite(948, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 225, 225, 225, 0, "Diatomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Flint, 8), new MaterialStack(BandedIron, 1), new MaterialStack(Sapphire, 1))),
-    VolcanicAsh(940, TextureSet.SET_FLINT, 1.0F, 0, 0, 1, 60, 50, 50, 0, "Volcanic Ashes", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Flint, 6), new MaterialStack(Iron, 1), new MaterialStack(Magnesium, 1))),
-    Niter(531, TextureSet.SET_FLINT, 1.0F, 0, 1, 1 | 4 | 8, 255, 200, 200, 0, "Niter", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Saltpeter, 1))),
-    Pyrotheum(843, TextureSet.SET_FIERY, 1.0F, 0, 1, 1, 255, 128, 0, 0, "Pyrotheum", 2, 62, -1, 0, false, false, 2, 3, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Coal, 1), new MaterialStack(Redstone, 1), new MaterialStack(Blaze, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTIO, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1))),
-    HydratedCoal(818, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1, 70, 70, 100, 0, "Hydrated Coal", 0, 0, -1, 0, false, false, 1, 9, 8, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Coal, 8), new MaterialStack(Water, 1))),
-    Apatite(530, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1 | 4 | 8, 200, 200, 255, 0, "Apatite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Calcium, 5), new MaterialStack(Phosphate, 3), new MaterialStack(Chlorine, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MESSIS, 2))),
-    Alumite(-1, TextureSet.SET_METALLIC, 1.5F, 64, 0, 1 | 2 | 64, 255, 255, 255, 0, "Alumite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Aluminium, 5), new MaterialStack(Iron, 2), new MaterialStack(Obsidian, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.STRONTIO, 2))),
-    Manyullyn(-1, TextureSet.SET_METALLIC, 1.5F, 64, 0, 1 | 2 | 64, 255, 255, 255, 0, "Manyullyn", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Cobalt, 1), new MaterialStack(Aredrite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.STRONTIO, 2))),
-    ShadowIron(336, TextureSet.SET_METALLIC, 6.0F, 384, 2, 1 | 2 | 8 | 64, 120, 120, 120, 0, "Shadowiron", 0, 0, -1, 0, false, false, 3, 4, 3, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Iron, 3), new MaterialStack(Magic, 1))),
-    ShadowSteel(337, TextureSet.SET_METALLIC, 6.0F, 768, 2, 1 | 2 | 64, 90, 90, 90, 0, "Shadowsteel", 0, 0, -1, 1700, true, false, 4, 4, 3, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Steel, 3), new MaterialStack(Magic, 1))),
-    Steeleaf(339, TextureSet.SET_LEAF, 8.0F, 768, 3, 1 | 2 | 64 | 128, 50, 127, 50, 0, "Steeleaf", 5, 24, -1, 0, false, false, 4, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Steel, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.HERBA, 2), new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTIO, 1))),
-    Knightmetal(362, TextureSet.SET_METALLIC, 8.0F, 1024, 3, 1 | 2 | 64 | 128, 210, 240, 200, 0, "Knightmetal", 5, 24, -1, 0, false, false, 4, 1, 1, Dyes.dyeLime, 2, Arrays.asList(new MaterialStack(Steel, 2), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 1), new TC_AspectStack(TC_Aspects.METALLUM, 2))),
-    SterlingSilver(350, TextureSet.SET_SHINY, 13.0F, 128, 2, 1 | 2 | 64 | 128, 250, 220, 225, 0, "Sterling Silver", 0, 0, -1, 1700, true, false, 4, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Silver, 4))),
-    RoseGold(351, TextureSet.SET_SHINY, 14.0F, 128, 2, 1 | 2 | 64 | 128, 255, 230, 30, 0, "Rose Gold", 0, 0, -1, 1600, true, false, 4, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Gold, 4))),
-    BlackBronze(352, TextureSet.SET_DULL, 12.0F, 256, 2, 1 | 2 | 64 | 128, 100, 50, 125, 0, "Black Bronze", 0, 0, -1, 2000, true, false, 4, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Gold, 1), new MaterialStack(Silver, 1), new MaterialStack(Copper, 3))),
-    BismuthBronze(353, TextureSet.SET_DULL, 8.0F, 256, 2, 1 | 2 | 64 | 128, 100, 125, 125, 0, "Bismuth Bronze", 0, 0, -1, 1100, true, false, 4, 1, 1, Dyes.dyeCyan, 2, Arrays.asList(new MaterialStack(Bismuth, 1), new MaterialStack(Zinc, 1), new MaterialStack(Copper, 3))),
-    BlackSteel(334, TextureSet.SET_METALLIC, 6.5F, 768, 2, 1 | 2 | 64, 100, 100, 100, 0, "Black Steel", 0, 0, -1, 1200, true, false, 4, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Nickel, 1), new MaterialStack(BlackBronze, 1), new MaterialStack(Steel, 3))),
-    RedSteel(348, TextureSet.SET_METALLIC, 7.0F, 896, 2, 1 | 2 | 64, 140, 100, 100, 0, "Red Steel", 0, 0, -1, 1300, true, false, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(SterlingSilver, 1), new MaterialStack(BismuthBronze, 1), new MaterialStack(Steel, 2), new MaterialStack(BlackSteel, 4))),
-    BlueSteel(349, TextureSet.SET_METALLIC, 7.5F, 1024, 2, 1 | 2 | 64, 100, 100, 140, 0, "Blue Steel", 0, 0, -1, 1400, true, false, 4, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(RoseGold, 1), new MaterialStack(Brass, 1), new MaterialStack(Steel, 2), new MaterialStack(BlackSteel, 4))),
-    DamascusSteel(335, TextureSet.SET_METALLIC, 8.0F, 1280, 2, 1 | 2 | 64, 110, 110, 110, 0, "Damascus Steel", 0, 0, 2000, 1500, true, false, 4, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Steel, 1))),
-    TungstenSteel(316, TextureSet.SET_METALLIC, 10.0F, 5120, 4, 1 | 2 | 64 | 128, 100, 100, 160, 0, "Tungstensteel", 0, 0, -1, 3000, true, false, 4, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(Steel, 1), new MaterialStack(Tungsten, 1))),
-    NitroCoalFuel(-1, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 50, 70, 50, 0, "Nitro-Coalfuel", 0, 48, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Glyceryl, 1), new MaterialStack(CoalFuel, 4))),
-    NitroFuel(709, TextureSet.SET_FLUID, 1.0F, 0, 2, 16, 200, 255, 0, 0, "Nitro-Diesel", 0, 384, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime, 0, Arrays.asList(new MaterialStack(Glyceryl, 1), new MaterialStack(Fuel, 4))),
-    AstralSilver(333, TextureSet.SET_SHINY, 10.0F, 64, 2, 1 | 2 | 8 | 64, 230, 230, 255, 0, "Astral Silver", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Silver, 2), new MaterialStack(Magic, 1))),
-    Midasium(332, TextureSet.SET_SHINY, 12.0F, 64, 2, 1 | 2 | 8 | 64, 255, 200, 40, 0, "Midasium", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Gold, 2), new MaterialStack(Magic, 1))),
-    Mithril(331, TextureSet.SET_SHINY, 14.0F, 64, 3, 1 | 2 | 8 | 64, 255, 255, 210, 0, "Mithril", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Platinum, 2), new MaterialStack(Magic, 1))),
-    BlueAlloy(309, TextureSet.SET_DULL, 1.0F, 0, 0, 1 | 2, 100, 180, 255, 0, "Blue Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Nikolite, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 3))),
-    RedAlloy(308, TextureSet.SET_DULL, 1.0F, 0, 0, 1 | 2, 200, 0, 0, 0, "Red Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Metal, 1), new MaterialStack(Redstone, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 3))),
-    CobaltBrass(343, TextureSet.SET_METALLIC, 8.0F, 256, 2, 1 | 2 | 64 | 128, 180, 180, 160, 0, "Cobalt Brass", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Brass, 7), new MaterialStack(Aluminium, 1), new MaterialStack(Cobalt, 1))),
-    Phosphorus(534, TextureSet.SET_FLINT, 1.0F, 0, 2, 1 | 4 | 8 | 16, 255, 255, 0, 0, "Phosphorus", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Phosphate, 2))),
-    Basalt(844, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1, 30, 20, 20, 0, "Basalt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Olivine, 1), new MaterialStack(Calcite, 3), new MaterialStack(Flint, 8), new MaterialStack(DarkAsh, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.TENEBRAE, 1))),
-    GarnetRed(527, TextureSet.SET_RUBY, 7.0F, 128, 2, 1 | 4 | 8 | 64, 200, 80, 80, 127, "Red Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Pyrope, 3), new MaterialStack(Almandine, 5), new MaterialStack(Spessartine, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    GarnetYellow(528, TextureSet.SET_RUBY, 7.0F, 128, 2, 1 | 4 | 8 | 64, 200, 200, 80, 127, "Yellow Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Andradite, 5), new MaterialStack(Grossular, 8), new MaterialStack(Uvarovite, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3))),
-    Marble(845, TextureSet.SET_FINE, 1.0F, 0, 1, 1, 200, 200, 200, 0, "Marble", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Calcite, 7)), Arrays.asList(new TC_AspectStack(TC_Aspects.PERFODIO, 1))),
-    Sugar(803, TextureSet.SET_FINE, 1.0F, 0, 1, 1, 250, 250, 250, 0, "Sugar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Water, 5), new MaterialStack(Oxygen, 25)), Arrays.asList(new TC_AspectStack(TC_Aspects.HERBA, 1), new TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.AER, 1))),
-    Thaumium(330, TextureSet.SET_METALLIC, 12.0F, 256, 3, 1 | 2 | 64 | 128, 150, 100, 200, 0, "Thaumium", 0, 0, -1, 0, false, false, 5, 2, 1, Dyes.dyePurple, 0, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTIO, 1))),
-    Vinteum(529, TextureSet.SET_EMERALD, 10.0F, 128, 3, 1 | 4 | 8 | 64, 100, 200, 255, 0, "Vinteum", 5, 32, -1, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.PRAECANTIO, 1))),
-    Vis(-1, TextureSet.SET_SHINY, 1.0F, 0, 3, 0, 128, 0, 255, 0, "Vis", 5, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AURAM, 2), new TC_AspectStack(TC_Aspects.PRAECANTIO, 1))),
-    Redrock(846, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1, 255, 80, 50, 0, "Redrock", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Calcite, 2), new MaterialStack(Flint, 1), new MaterialStack(Clay, 1))),
-    PotassiumFeldspar(847, TextureSet.SET_FINE, 1.0F, 0, 1, 1, 120, 40, 40, 0, "Potassium Feldspar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 8))),
-    Biotite(848, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1, 20, 30, 20, 0, "Biotite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 3), new MaterialStack(Aluminium, 3), new MaterialStack(Fluorine, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 10))),
-    GraniteBlack(849, TextureSet.SET_ROUGH, 4.0F, 64, 3, 1 | 64 | 128, 10, 10, 10, 0, "Black Granite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 4), new MaterialStack(Biotite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-    GraniteRed(850, TextureSet.SET_ROUGH, 4.0F, 64, 3, 1 | 64 | 128, 255, 0, 128, 0, "Red Granite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeMagenta, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(PotassiumFeldspar, 1), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.TUTAMEN, 1))),
-    Chrysotile(912, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 110, 140, 110, 0, "Chrysotile", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Asbestos, 1))),
-    Realgar(555, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 140, 100, 100, 0, "Realgar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Arsenic, 4), new MaterialStack(Sulfur, 4))),
-    VanadiumMagnetite(923, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 35, 35, 60, 0, "Vanadium Magnetite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(Vanadium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))), // Mixture of Fe3O4 and V2O5
-    BasalticMineralSand(935, TextureSet.SET_SAND, 1.0F, 0, 1, 1 | 8, 40, 50, 40, 0, "Basaltic Mineral Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(Basalt, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    GraniticMineralSand(936, TextureSet.SET_SAND, 1.0F, 0, 1, 1 | 8, 40, 60, 60, 0, "Granitic Mineral Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(GraniteBlack, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    GarnetSand(938, TextureSet.SET_SAND, 1.0F, 0, 1, 1 | 8, 200, 100, 0, 0, "Garnet Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(GarnetRed, 1), new MaterialStack(GarnetYellow, 1))),
-    QuartzSand(939, TextureSet.SET_SAND, 1.0F, 0, 1, 1 | 8, 200, 200, 200, 0, "Quartz Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(CertusQuartz, 1), new MaterialStack(Quartzite, 1))),
-    Bastnasite(905, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 8, 200, 110, 45, 0, "Bastnasite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Cerium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Fluorine, 1), new MaterialStack(Oxygen, 3))), // (Ce, La, Y)CO3F
-    Pentlandite(909, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 165, 150, 5, 0, "Pentlandite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Nickel, 9), new MaterialStack(Sulfur, 8))), // (Fe,Ni)9S8
-    Spodumene(920, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 190, 170, 170, 0, "Spodumene", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Silicon, 2), new MaterialStack(Oxygen, 6))), // LiAl(SiO3)2
-    Pollucite(919, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 240, 210, 210, 0, "Pollucite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Caesium, 2), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 4), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 12))), // (Cs,Na)2Al2Si4O12 2H2O (also a source of Rb)
-    Tantalite(921, TextureSet.SET_METALLIC, 1.0F, 0, 3, 1 | 8, 145, 80, 40, 0, "Tantalite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Manganese, 1), new MaterialStack(Tantalum, 2), new MaterialStack(Oxygen, 6))), // (Fe, Mn)Ta2O6 (also source of Nb)
-    Lepidolite(907, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 8, 240, 50, 140, 0, "Lepidolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Lithium, 3), new MaterialStack(Aluminium, 4), new MaterialStack(Fluorine, 2), new MaterialStack(Oxygen, 10))), // K(Li,Al,Rb)3(Al,Si)4O10(F,OH)2
-    Glauconite(933, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 130, 180, 60, 0, "Glauconite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 2), new MaterialStack(Aluminium, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))), // (K,Na)(Fe3+,Al,Mg)2(Si,Al)4O10(OH)2
-    GlauconiteSand(949, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 130, 180, 60, 0, "Glauconite Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 2), new MaterialStack(Aluminium, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))), // (K,Na)(Fe3+,Al,Mg)2(Si,Al)4O10(OH)2
-    Vermiculite(932, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 200, 180, 15, 0, "Vermiculite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Iron, 3), new MaterialStack(Aluminium, 4), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Water, 4), new MaterialStack(Oxygen, 12))), // (Mg+2, Fe+2, Fe+3)3 [(AlSi)4O10] (OH)2 4H2O)
-    Bentonite(927, TextureSet.SET_ROUGH, 1.0F, 0, 2, 1 | 8, 245, 215, 210, 0, "Bentonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Magnesium, 6), new MaterialStack(Silicon, 12), new MaterialStack(Hydrogen, 6), new MaterialStack(Water, 5), new MaterialStack(Oxygen, 36))), // (Na,Ca)0.33(Al,Mg)2(Si4O10)(OH)2 nH2O
-    FullersEarth(928, TextureSet.SET_FINE, 1.0F, 0, 2, 1 | 8, 160, 160, 120, 0, "Fullers Earth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 1), new MaterialStack(Water, 4), new MaterialStack(Oxygen, 11))), // (Mg,Al)2Si4O10(OH) 4(H2O)
-    Pitchblende(873, TextureSet.SET_DULL, 1.0F, 0, 3, 1 | 8, 200, 210, 0, 0, "Pitchblende", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Uraninite, 3), new MaterialStack(Thorium, 1), new MaterialStack(Lead, 1))),
-    Monazite(520, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1 | 4 | 8, 50, 70, 50, 0, "Monazite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(RareEarth, 1), new MaterialStack(Phosphate, 1))), // Wikipedia: (Ce, La, Nd, Th, Sm, Gd)PO4 Monazite also smelt-extract to Helium, it is brown like the rare earth Item Monazite sand deposits are inevitably of the monazite-(Ce) composition. Typically, the lanthanides in such monazites contain about 45�48% cerium, about 24% lanthanum, about 17% neodymium, about 5% praseodymium, and minor quantities of samarium, gadolinium, and yttrium. Europium concentrations tend to be low, about 0.05% Thorium content of monazite is variable and sometimes can be up to 20�30%
-    Malachite(871, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 5, 95, 5, 0, "Malachite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Copper, 2), new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 5))), // Cu2CO3(OH)2
-    Mirabilite(900, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 240, 250, 210, 0, "Mirabilite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Sulfur, 1), new MaterialStack(Water, 10), new MaterialStack(Oxygen, 4))), // Na2SO4 10H2O
-    Mica(901, TextureSet.SET_FINE, 1.0F, 0, 1, 1 | 8, 195, 195, 205, 0, "Mica", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Fluorine, 2), new MaterialStack(Oxygen, 10))), // KAl2(AlSi3O10)(F,OH)2
-    Trona(903, TextureSet.SET_METALLIC, 1.0F, 0, 1, 1 | 8, 135, 135, 95, 0, "Trona", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 3), new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 1), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 6))), // Na3(CO3)(HCO3) 2H2O
-    Barite(904, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 230, 235, 255, 0, "Barite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Barium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4))),
-    Gypsum(934, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 230, 230, 250, 0, "Gypsum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 4))), // CaSO4 2H2O
-    Alunite(911, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 | 8, 225, 180, 65, 0, "Alunite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 14))), // KAl3(SO4)2(OH)6
-    Dolomite(914, TextureSet.SET_FLINT, 1.0F, 0, 1, 1 | 8, 225, 205, 205, 0, "Dolomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Magnesium, 1), new MaterialStack(Carbon, 2), new MaterialStack(Oxygen, 6))), // CaMg(CO3)2
-    Wollastonite(915, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 240, 240, 240, 0, "Wollastonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 3))), // CaSiO3
-    Zeolite(916, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 240, 230, 230, 0, "Zeolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Calcium, 4), new MaterialStack(Silicon, 27), new MaterialStack(Aluminium, 9), new MaterialStack(Water, 28), new MaterialStack(Oxygen, 72))), // NaCa4(Si27Al9)O72 28(H2O)
-    Kyanite(924, TextureSet.SET_FLINT, 1.0F, 0, 2, 1 | 8, 110, 110, 250, 0, "Kyanite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 5))), // Al2SiO5
-    Kaolinite(929, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 245, 235, 235, 0, "Kaolinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 9))), // Al2Si2O5(OH)4
-    Talc(902, TextureSet.SET_DULL, 1.0F, 0, 2, 1 | 8, 90, 180, 90, 0, "Talc", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))), // H2Mg3(SiO3)4
-    Soapstone(877, TextureSet.SET_DULL, 1.0F, 0, 1, 1 | 8, 95, 145, 95, 0, "Soapstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))), // H2Mg3(SiO3)4
-    Concrete(947, TextureSet.SET_ROUGH, 1.0F, 0, 1, 1, 100, 100, 100, 0, "Concrete", 0, 0, 300, 0, false, false, 0, 1, 1, Dyes.dyeGray, 0, Arrays.asList(new MaterialStack(Stone, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1))),
-    IronMagnetic(354, TextureSet.SET_MAGNETIC, 6.0F, 256, 2, 1 | 2 | 64 | 128, 200, 200, 200, 0, "Magnetic Iron", 0, 0, -1, 0, false, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    SteelMagnetic(355, TextureSet.SET_MAGNETIC, 6.0F, 512, 2, 1 | 2 | 64 | 128, 128, 128, 128, 0, "Magnetic Steel", 0, 0, 1000, 1000, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Steel, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.ORDO, 1), new TC_AspectStack(TC_Aspects.MAGNETO, 1))),
-    NeodymiumMagnetic(356, TextureSet.SET_MAGNETIC, 7.0F, 512, 2, 1 | 2 | 64 | 128, 100, 100, 100, 0, "Magnetic Neodymium", 0, 0, 1297, 1297, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Neodymium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.MAGNETO, 3))),
-
+    public static Materials WoodSealed = new Materials( 889, TextureSet.SET_WOOD, 		3.0F, 24, 0, 1|2|64|128, 80, 40, 0, 0, "WoodSealed", "Sealed Wood", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 0, Arrays.asList(new MaterialStack(Wood, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2), new TC_AspectStack(TC_Aspects.FABRICO, 1)));
+    public static Materials LiveRoot = new Materials(832, TextureSet.SET_WOOD, 			1.0F, 0, 1, 1, 220, 200, 0, 0, "LiveRoot", "Liveroot", 5, 16, -1, 0, false, false, 2, 4, 3, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Wood, 3), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.ARBOR, 2), new TC_AspectStack(TC_Aspects.VICTUS, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
+    public static Materials IronWood = new Materials(338, TextureSet.SET_WOOD, 			6.0F, 384, 2, 1|2|64|128, 150, 140, 110, 0, "IronWood", "Ironwood", 5, 8, -1, 0, false, false, 2, 19, 18, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Iron, 9), new MaterialStack(LiveRoot, 9), new MaterialStack(Gold, 1)));
+    public static Materials Glass = new Materials( 890, TextureSet.SET_GLASS, 			1.0F, 4, 0, 1|4, 250, 250, 250, 220, "Glass", "Glass", 0, 0, 1500, 0, false, true, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2)));
+    public static Materials BorosilicateGlass = new MaterialBuilder(611, TextureSet.SET_GLASS, "Borosilicate Glass").addDustItems().addMetalItems().setRGB(230, 243, 230).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Boron, 1), new MaterialStack(Glass, 7)).addCentrifugeRecipe().constructMaterial();
+    public static Materials Perlite = new Materials( 925, TextureSet.SET_DULL, 			1.0F, 0, 1, 1, 30, 20, 30, 0, "Perlite", "Perlite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Obsidian, 2), new MaterialStack(Water, 1)));
+    public static Materials Borax = new Materials( 941, TextureSet.SET_FINE, 			1.0F, 0, 1, 1, 250, 250, 250, 0, "Borax", "Borax", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Boron, 4), new MaterialStack(Oxygen, 7), new MaterialStack(Water, 10)));
+    public static Materials Lignite = new Materials( 538, TextureSet.SET_LIGNITE, 		1.0F, 0, 0, 1|4|8 , 100, 70, 70, 0, "Lignite", "Lignite Coal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Carbon, 3), new MaterialStack(Water, 1)));
+    public static Materials Olivine = new Materials( 505, TextureSet.SET_RUBY, 			7.0F, 256, 2, 1|4|8 |64, 150, 255, 150, 127, "Olivine", "Olivine", 0, 0, -1, 0, false, true, 5, 1, 1, Dyes.dyeLime, 1, Arrays.asList(new MaterialStack(Magnesium, 2), new MaterialStack(Iron, 1), new MaterialStack(SiliconDioxide, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 2)));
+    public static Materials Opal = new Materials( 510, TextureSet.SET_OPAL, 			7.0F, 256, 2, 1|4|8 |64, 0, 0, 255, 0, "Opal", "Opal", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeBlue, 1, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 5), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Amethyst = new Materials( 509, TextureSet.SET_FLINT, 		7.0F, 256, 3, 1|4|8 |64, 210, 50, 210, 127, "Amethyst", "Amethyst", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(SiliconDioxide, 4), new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 4)));
+    public static Materials Redstone = new Materials( 810, TextureSet.SET_ROUGH, 		1.0F, 0, 2, 1 |8 , 200, 0, 0, 0, "Redstone", "Redstone", 0, 0, 500, 0, false, false, 3, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Silicon, 1), new MaterialStack(Pyrite, 5), new MaterialStack(Ruby, 1), new MaterialStack(Mercury, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Lapis = new Materials( 526, TextureSet.SET_LAPIS, 			1.0F, 0, 1, 1|4|8 , 70, 70, 220, 0, "Lapis", "Lapis", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(Lazurite, 12), new MaterialStack(Sodalite, 2), new MaterialStack(Pyrite, 1), new MaterialStack(Calcite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.SENSUS, 1)));
+    public static Materials Blaze = new Materials( 801, TextureSet.SET_POWDER, 			2.0F, 16, 1, 1|64, 255, 200, 0, 0, "Blaze", "Blaze", 0, 0, 6400, 0, false, false, 2, 3, 2, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(DarkAsh, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTATIO, 2), new TC_AspectStack(TC_Aspects.IGNIS, 4)));
+    public static Materials EnderPearl = new Materials( 532, TextureSet.SET_SHINY, 		1.0F, 16, 1, 1|4, 108, 220, 200, 0, "EnderPearl", "Enderpearl", 0, 0, -1, 0, false, false, 1, 16, 10, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Beryllium, 1), new MaterialStack(Potassium, 4), new MaterialStack(Nitrogen, 5), new MaterialStack(Magic, 6)), Arrays.asList(new TC_AspectStack(TC_Aspects.ALIENIS, 4), new TC_AspectStack(TC_Aspects.ITER, 4), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 2)));
+    public static Materials EnderEye = new Materials( 533, TextureSet.SET_SHINY, 		1.0F, 16, 1, 1|4, 160, 250, 230, 0, "EnderEye", "Endereye", 5, 10, -1, 0, false, false, 1, 2, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(EnderPearl, 1), new MaterialStack(Blaze, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.SENSUS, 4), new TC_AspectStack(TC_Aspects.ALIENIS, 4), new TC_AspectStack(TC_Aspects.ITER, 4), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 3), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
+    public static Materials Flint = new Materials( 802, TextureSet.SET_FLINT, 			2.5F, 64, 1, 1|64, 0, 32, 64, 0, "Flint", "Flint", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
+    public static Materials Diatomite = new Materials( 948, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8 , 225, 225, 225, 0, "Diatomite", "Diatomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Flint, 8), new MaterialStack(BandedIron, 1), new MaterialStack(Sapphire, 1)));
+    public static Materials VolcanicAsh = new Materials( 940, TextureSet.SET_FLINT, 	1.0F, 0, 0, 1, 60, 50, 50, 0, "VolcanicAsh", "Volcanic Ashes", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Flint, 6), new MaterialStack(Iron, 1), new MaterialStack(Magnesium, 1)));
+    public static Materials Niter = new Materials( 531, TextureSet.SET_FLINT, 			1.0F, 0, 1, 1|4, 255, 200, 200, 0, "Niter", "Niter", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Saltpeter, 1)));
+    public static Materials Pyrotheum = new Materials( 843, TextureSet.SET_FIERY, 		1.0F, 0, 1, 1, 255, 128, 0, 0, "Pyrotheum", "Pyrotheum", 2, 62, -1, 0, false, false, 2, 3, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Coal, 1), new MaterialStack(Redstone, 1), new MaterialStack(Blaze, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.PRAECANTATIO, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
+    public static Materials HydratedCoal = new Materials( 818, TextureSet.SET_ROUGH, 	1.0F, 0, 1, 1, 70, 70, 100, 0, "HydratedCoal", "Hydrated Coal", 0, 0, -1, 0, false, false, 1, 9, 8, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Coal, 8), new MaterialStack(Water, 1)));
+    public static Materials Apatite = new Materials(530, TextureSet.SET_DIAMOND, 		1.0F, 0, 1, 1|4|8, 200, 200, 255, 0, "Apatite", "Apatite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Calcium, 5), new MaterialStack(Phosphate, 3), new MaterialStack(Chlorine, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MESSIS, 2)));
+    public static Materials Alumite = new Materials(-1, TextureSet.SET_METALLIC, 		1.5F, 64, 0, 1|2|64, 255, 255, 255, 0, "Alumite", "Alumite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Aluminium, 5), new MaterialStack(Iron, 2), new MaterialStack(Obsidian, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.STRONTIO, 2)));
+    public static Materials Manyullyn = new Materials(-1, TextureSet.SET_METALLIC, 		1.5F, 64, 0, 1|2|64, 255, 255, 255, 0, "Manyullyn", "Manyullyn", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Cobalt, 1), new MaterialStack(Aredrite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.STRONTIO, 2)));
+    public static Materials ShadowIron = new Materials(336, TextureSet.SET_METALLIC, 	6.0F, 384, 2, 1 | 2 | 8 | 64, 120, 120, 120, 0, "ShadowIron", "Shadowiron", 0, 0, -1, 0, false, false, 3, 4, 3, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Materials.Iron, 3), new MaterialStack(Materials.Magic, 1)));
+    public static Materials ShadowSteel = new Materials(337, TextureSet.SET_METALLIC, 	6.0F, 768, 2, 1 | 2 | 64, 90, 90, 90, 0, "ShadowSteel", "Shadowsteel", 0, 0, -1, 1700, true, false, 4, 4, 3, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Materials.Steel, 3), new MaterialStack(Materials.Magic, 1)));
+    public static Materials Steeleaf = new Materials(339, TextureSet.SET_LEAF, 			8.0F, 768, 3, 1|2|64|128, 50, 127, 50, 0, "Steeleaf", "Steeleaf", 5, 24, -1, 0, false, false, 4, 1, 1, Dyes.dyeGreen, 2, Arrays.asList(new MaterialStack(Steel, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.HERBA, 2), new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
+    public static Materials Knightmetal = new Materials(362, TextureSet.SET_METALLIC, 	8.0F, 1024, 3, 1|2|64|128, 210, 240, 200, 0, "Knightmetal", "Knightmetal", 5, 24, -1, 0, false, false, 4, 1, 1, Dyes.dyeLime, 2, Arrays.asList(new MaterialStack(Steel, 2), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.LUCRUM, 1), new TC_AspectStack(TC_Aspects.METALLUM, 2)));
+    public static Materials SterlingSilver = new Materials( 350, TextureSet.SET_SHINY, 13.0F, 128, 2, 1|2|64|128, 250, 220, 225, 0, "SterlingSilver", "Sterling Silver", 0, 0, -1, 1700, true, false, 4, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Silver, 4)));
+    public static Materials RoseGold = new Materials( 351, TextureSet.SET_SHINY, 	   14.0F, 128, 2, 1|2|64|128, 255, 230, 30, 0, "RoseGold", "Rose Gold", 0, 0, -1, 1600, true, false, 4, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Gold, 4)));
+    public static Materials BlackBronze = new Materials( 352, TextureSet.SET_DULL, 	   12.0F, 256, 2, 1|2|64|128, 100, 50, 125, 0, "BlackBronze", "Black Bronze", 0, 0, -1, 2000, true, false, 4, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Gold, 1), new MaterialStack(Silver, 1), new MaterialStack(Copper, 3)));
+    public static Materials BismuthBronze = new Materials( 353, TextureSet.SET_DULL, 	8.0F, 256, 2, 1|2|64|128, 100, 125, 125, 0, "BismuthBronze", "Bismuth Bronze", 0, 0, -1, 1100, true, false, 4, 1, 1, Dyes.dyeCyan, 2, Arrays.asList(new MaterialStack(Bismuth, 1), new MaterialStack(Zinc, 1), new MaterialStack(Copper, 3)));
+    public static Materials BlackSteel = new Materials( 334, TextureSet.SET_METALLIC, 	6.5F, 768, 2, 1|2|64, 100, 100, 100, 0, "BlackSteel", "Black Steel", 0, 0, -1, 1200, true, false, 4, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Nickel, 1), new MaterialStack(BlackBronze, 1), new MaterialStack(Steel, 3)));
+    public static Materials RedSteel = new Materials( 348, TextureSet.SET_METALLIC, 	7.0F, 896, 2, 1|2|64, 140, 100, 100, 0, "RedSteel", "Red Steel", 0, 0, -1, 1300, true, false, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(SterlingSilver, 1), new MaterialStack(BismuthBronze, 1), new MaterialStack(Steel, 2), new MaterialStack(BlackSteel, 4)));
+    public static Materials BlueSteel = new Materials( 349, TextureSet.SET_METALLIC, 	7.5F, 1024, 2, 1|2|64, 100, 100, 140, 0, "BlueSteel", "Blue Steel", 0, 0, -1, 1400, true, false, 4, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(RoseGold, 1), new MaterialStack(Brass, 1), new MaterialStack(Steel, 2), new MaterialStack(BlackSteel, 4)));
+    public static Materials DamascusSteel = new Materials( 335, TextureSet.SET_METALLIC,8.0F, 1280, 2, 1|2|64, 110, 110, 110, 0, "DamascusSteel", "Damascus Steel", 0, 0, 2000, 1500, true, false, 4, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Steel, 1)));
+    public static Materials TungstenSteel = new Materials( 316, TextureSet.SET_METALLIC,8.0F, 2560, 4, 1|2|64|128, 100, 100, 160, 0, "TungstenSteel", "Tungstensteel", 0, 0, -1, 3000, true, false, 4, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(Steel, 1), new MaterialStack(Tungsten, 1)));
+    public static Materials NitroCoalFuel = new Materials(-1, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16, 50, 70, 50, 0, "NitroCoalFuel", "Nitro-Coalfuel", 0, 48, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 0, Arrays.asList(new MaterialStack(Glyceryl, 1), new MaterialStack(CoalFuel, 4)));
+    public static Materials NitroFuel = new Materials( 709, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16, 200, 255, 0, 0, "NitroFuel", "Cetane-Boosted Diesel", 0, 512, -1, 0, false, false, 1, 1, 1, Dyes.dyeLime);
+    public static Materials AstralSilver = new Materials(333, TextureSet.SET_SHINY,    10.0F, 64, 2, 1 | 2 | 8 | 64, 230, 230, 255, 0, "AstralSilver", "Astral Silver", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Materials.Silver, 2), new MaterialStack(Materials.Magic, 1)));
+    public static Materials Midasium = new Materials(332, TextureSet.SET_SHINY, 	   12.0F, 64, 2, 1 | 2 | 8 | 64, 255, 200, 40, 0, "Midasium", "Midasium", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Materials.Gold, 2), new MaterialStack(Materials.Magic, 1)));
+    public static Materials Mithril = new Materials(331, TextureSet.SET_SHINY, 		   14.0F, 64, 3, 1|2|64, 255, 255, 210, 0, "Mithril", "Mithril", 0, 0, -1, 0, false, false, 4, 3, 2, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Materials.Platinum, 2), new MaterialStack(Materials.Magic, 1)));
+    public static Materials BlueAlloy = new Materials(309, TextureSet.SET_DULL, 		1.0F, 0, 0, 1|2, 100, 180, 255, 0, "BlueAlloy", "Blue Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Nikolite, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 3)));
+    public static Materials RedAlloy = new Materials( 308, TextureSet.SET_DULL, 		1.0F, 0, 0, 1|2, 200, 0, 0, 0, "RedAlloy", "Red Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Redstone, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 3)));
+    public static Materials CobaltBrass = new Materials( 343, TextureSet.SET_METALLIC, 	8.0F, 256, 2, 1|2|64|128, 180, 180, 160, 0, "CobaltBrass", "Cobalt Brass", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Brass, 7), new MaterialStack(Aluminium, 1), new MaterialStack(Cobalt, 1)));
+    public static Materials Phosphorus = new Materials( 534, TextureSet.SET_FLINT, 		1.0F, 0, 2, 1|4|8|16, 255, 255, 0, 0, "Phosphorus", "Phosphorus", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Phosphate, 2)));
+    public static Materials Basalt = new Materials( 844, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1, 30, 20, 20, 0, "Basalt", "Basalt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Olivine, 1), new MaterialStack(Calcite, 3), new MaterialStack(Flint, 8), new MaterialStack(DarkAsh, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.TENEBRAE, 1)));
+    public static Materials GarnetRed = new Materials( 527, TextureSet.SET_RUBY, 		7.0F, 128, 2, 1|4|8 |64, 200, 80, 80, 127, "GarnetRed", "Red Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Pyrope, 3), new MaterialStack(Almandine, 5), new MaterialStack(Spessartine, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials GarnetYellow = new Materials( 528, TextureSet.SET_RUBY, 	7.0F, 128, 2, 1|4|8 |64, 200, 200, 80, 127, "GarnetYellow", "Yellow Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Andradite, 5), new MaterialStack(Grossular, 8), new MaterialStack(Uvarovite, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Marble = new Materials( 845, TextureSet.SET_FINE, 			1.0F, 0, 1, 1, 200, 200, 200, 0, "Marble", "Marble", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Calcite, 7)), Arrays.asList(new TC_AspectStack(TC_Aspects.PERFODIO, 1)));
+    public static Materials Sugar = new Materials( 803, TextureSet.SET_FINE, 			1.0F, 0, 1, 1, 250, 250, 250, 0, "Sugar", "Sugar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Carbon, 12), new MaterialStack(Water, 11)), Arrays.asList(new TC_AspectStack(TC_Aspects.HERBA, 1), new TC_AspectStack(TC_Aspects.AQUA, 1), new TC_AspectStack(TC_Aspects.AER, 1)));
+    public static Materials Thaumium = new Materials(330, TextureSet.SET_METALLIC, 	   12.0F, 256, 3, 1|2|64|128, 150, 100, 200, 0, "Thaumium", "Thaumium", 0, 0, -1, 0, false, false, 5, 2, 1, Dyes.dyePurple, 0, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
+    public static Materials Vinteum = new Materials(529, TextureSet.SET_EMERALD, 	   10.0F, 128, 3, 1|4|8|64, 100, 200, 255, 0, "Vinteum", "Vinteum", 5, 32, -1, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
+    public static Materials Vis = new Materials(-1, TextureSet.SET_SHINY, 				1.0F, 0, 3, 0, 128, 0, 255, 0, "Vis", "Vis", 5, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AURAM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
+    public static Materials Redrock = new Materials(846, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1, 255, 80, 50, 0, "Redrock", "Redrock", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Calcite, 2), new MaterialStack(Flint, 1), new MaterialStack(Clay, 1)));
+    public static Materials PotassiumFeldspar = new Materials( 847, TextureSet.SET_FINE,1.0F, 0, 1, 1, 120, 40, 40, 0, "PotassiumFeldspar", "Potassium Feldspar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 8)));
+    public static Materials Biotite = new Materials( 848, TextureSet.SET_METALLIC, 		1.0F, 0, 1, 1, 20, 30, 20, 0, "Biotite", "Biotite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 3), new MaterialStack(Aluminium, 3), new MaterialStack(Fluorine, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 10)));
+    public static Materials GraniteBlack = new Materials( 849, TextureSet.SET_ROUGH, 	4.0F, 64, 3, 1|64|128, 10, 10, 10, 0, "GraniteBlack", "Black Granite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 4), new MaterialStack(Biotite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials GraniteRed = new Materials( 850, TextureSet.SET_ROUGH, 		4.0F, 64, 3, 1|64|128, 255, 0, 128, 0, "GraniteRed", "Red Granite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeMagenta, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(PotassiumFeldspar, 1), new MaterialStack(Oxygen, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials Chrysotile = new Materials( 912, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 110, 140, 110, 0, "Chrysotile", "Chrysotile", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Asbestos, 1)));
+    public static Materials Realgar = new Materials( 913, TextureSet.SET_DULL, 			1.0F, 0, 2, 1, 140, 100, 100, 0, "Realgar", "Realgar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Arsenic, 4), new MaterialStack(Sulfur, 4)));
+    public static Materials VanadiumMagnetite = new Materials( 923, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 |8 , 35, 35, 60, 0, "VanadiumMagnetite", "Vanadium Magnetite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(Vanadium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1))); // Mixture of Fe3O4 and V2O5
+    public static Materials BasalticMineralSand = new Materials( 935, TextureSet.SET_SAND, 1.0F, 0, 1, 1, 40, 50, 40, 0, "BasalticMineralSand", "Basaltic Mineral Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(Basalt, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials GraniticMineralSand = new Materials( 936, TextureSet.SET_SAND, 1.0F, 0, 1, 1, 40, 60, 60, 0, "GraniticMineralSand", "Granitic Mineral Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Magnetite, 1), new MaterialStack(GraniteBlack, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials GarnetSand = new Materials( 938, TextureSet.SET_SAND, 		1.0F, 0, 1, 1, 200, 100, 0, 0, "GarnetSand", "Garnet Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(GarnetRed, 1), new MaterialStack(GarnetYellow, 1)));
+    public static Materials QuartzSand = new Materials( 939, TextureSet.SET_SAND, 		1.0F, 0, 1, 1, 200, 200, 200, 0, "QuartzSand", "Quartz Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(CertusQuartz, 1), new MaterialStack(Quartzite, 1)));
+    public static Materials Bastnasite = new Materials( 905, TextureSet.SET_FINE, 		1.0F, 0, 2, 1 |8 , 200, 110, 45, 0, "Bastnasite", "Bastnasite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Cerium, 1), new MaterialStack(Carbon, 1), new MaterialStack(Fluorine, 1), new MaterialStack(Oxygen, 3))); // (Ce, La, Y)CO3F
+    public static Materials Pentlandite = new Materials( 909, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 165, 150, 5, 0, "Pentlandite", "Pentlandite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Nickel, 9), new MaterialStack(Sulfur, 8))); // (Fe, Ni)9S8
+    public static Materials Spodumene = new Materials( 920, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 190, 170, 170, 0, "Spodumene", "Spodumene", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Lithium, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Silicon, 2), new MaterialStack(Oxygen, 6))); // LiAl(SiO3)2
+    public static Materials Pollucite = new Materials( 919, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 240, 210, 210, 0, "Pollucite", "Pollucite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Caesium, 2), new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 4), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 12))); // (Cs, Na)2Al2Si4O12 2H2O (also a source of Rb)
+    public static Materials Tantalite = new Materials( 921, TextureSet.SET_METALLIC, 	1.0F, 0, 3, 1 |8 , 145, 80, 40, 0, "Tantalite", "Tantalite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Manganese, 1), new MaterialStack(Tantalum, 2), new MaterialStack(Oxygen, 6))); // (Fe, Mn)Ta2O6 (also source of Nb)
+    public static Materials Lepidolite = new Materials( 907, TextureSet.SET_FINE, 		1.0F, 0, 2, 1 |8 , 240, 50, 140, 0, "Lepidolite", "Lepidolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Lithium, 3), new MaterialStack(Aluminium, 4), new MaterialStack(Fluorine, 2), new MaterialStack(Oxygen, 10))); // K(Li, Al, Rb)3(Al, Si)4O10(F, OH)2
+    public static Materials Glauconite = new Materials( 933, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 130, 180, 60, 0, "Glauconite", "Glauconite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 2), new MaterialStack(Aluminium, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))); // (K, Na)(Fe3+, Al, Mg)2(Si, Al)4O10(OH)2
+    public static Materials GlauconiteSand = new Materials( 949, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 130, 180, 60, 0, "GlauconiteSand", "Glauconite Sand", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 2), new MaterialStack(Aluminium, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))); // (K, Na)(Fe3+, Al, Mg)2(Si, Al)4O10(OH)2
+    public static Materials Vermiculite = new Materials( 932, TextureSet.SET_METALLIC, 	1.0F, 0, 2, 1, 200, 180, 15, 0, "Vermiculite", "Vermiculite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Iron, 3), new MaterialStack(Aluminium, 4), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Water, 4), new MaterialStack(Oxygen, 12))); // (Mg+2, Fe+2, Fe+3)3 [(AlSi)4O10] (OH)2 4H2O)
+    public static Materials Bentonite = new Materials( 927, TextureSet.SET_ROUGH, 		1.0F, 0, 2, 1 |8 , 245, 215, 210, 0, "Bentonite", "Bentonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Magnesium, 6), new MaterialStack(Silicon, 12), new MaterialStack(Hydrogen, 6), new MaterialStack(Water, 5), new MaterialStack(Oxygen, 36))); // (Na, Ca)0.33(Al, Mg)2(Si4O10)(OH)2 nH2O
+    public static Materials FullersEarth = new Materials( 928, TextureSet.SET_FINE, 	1.0F, 0, 2, 1, 160, 160, 120, 0, "FullersEarth", "Fullers Earth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 1), new MaterialStack(Water, 4), new MaterialStack(Oxygen, 11))); // (Mg, Al)2Si4O10(OH) 4(H2O)
+    public static Materials Pitchblende = new Materials( 873, TextureSet.SET_DULL, 		1.0F, 0, 3, 1 |8 , 200, 210, 0, 0, "Pitchblende", "Pitchblende", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Uraninite, 3), new MaterialStack(Thorium, 1), new MaterialStack(Lead, 1)));
+    public static Materials Monazite = new Materials( 520, TextureSet.SET_DIAMOND, 		1.0F, 0, 1, 1|4|8 , 50, 70, 50, 0, "Monazite", "Monazite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(RareEarth, 1), new MaterialStack(Phosphate, 1))); // Wikipedia: (Ce, La, Nd, Th, Sm, Gd)PO4 Monazite also smelt-extract to Helium, it is brown like the rare earth Item Monazite sand deposits are inevitably of the monazite-(Ce) composition. Typically, the lanthanides in such monazites contain about 45ִ8% cerium, about 24% lanthanum, about 17% neodymium, about 5% praseodymium, and minor quantities of samarium, gadolinium, and yttrium. Europium concentrations tend to be low, about 0.05% Thorium content of monazite is variable and sometimes can be up to 20ֳ0%
+    public static Materials Malachite = new Materials( 871, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 5, 95, 5, 0, "Malachite", "Malachite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, 1, Arrays.asList(new MaterialStack(Copper, 2), new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 5))); // Cu2CO3(OH)2
+    public static Materials Mirabilite = new Materials( 900, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 240, 250, 210, 0, "Mirabilite", "Mirabilite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 2), new MaterialStack(Sulfur, 1), new MaterialStack(Water, 10), new MaterialStack(Oxygen, 4))); // Na2SO4 10H2O
+    public static Materials Mica = new Materials( 901, TextureSet.SET_FINE, 			1.0F, 0, 1, 1, 195, 195, 205, 0, "Mica", "Mica", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 3), new MaterialStack(Fluorine, 2), new MaterialStack(Oxygen, 10))); // KAl2(AlSi3O10)(F, OH)2
+    public static Materials Trona = new Materials( 903, TextureSet.SET_METALLIC, 		1.0F, 0, 1, 1, 135, 135, 95, 0, "Trona", "Trona", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 3), new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 1), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 6))); // Na3(CO3)(HCO3) 2H2O
+    public static Materials Barite = new Materials( 904, TextureSet.SET_DULL, 			1.0F, 0, 2, 1 |8 , 230, 235, 255, 0, "Barite", "Barite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Barium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials Gypsum = new Materials( 934, TextureSet.SET_DULL, 			1.0F, 0, 1, 1, 230, 230, 250, 0, "Gypsum", "Gypsum", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Sulfur, 1), new MaterialStack(Water, 2), new MaterialStack(Oxygen, 4))); // CaSO4 2H2O
+    public static Materials Alunite = new Materials( 911, TextureSet.SET_METALLIC,		1.0F, 0, 2, 1, 225, 180, 65, 0, "Alunite", "Alunite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 3), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 14))); // KAl3(SO4)2(OH)6
+    public static Materials Dolomite = new Materials( 914, TextureSet.SET_FLINT, 		1.0F, 0, 1, 1, 225, 205, 205, 0, "Dolomite", "Dolomite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Magnesium, 1), new MaterialStack(Carbon, 2), new MaterialStack(Oxygen, 6))); // CaMg(CO3)2
+    public static Materials Wollastonite = new Materials( 915, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 240, 240, 240, 0, "Wollastonite", "Wollastonite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Calcium, 1), new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 3))); // CaSiO3
+    public static Materials Zeolite = new Materials( 916, TextureSet.SET_DULL, 			1.0F, 0, 2, 1, 240, 230, 230, 0, "Zeolite", "Zeolite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Sodium, 1), new MaterialStack(Calcium, 4), new MaterialStack(Silicon, 27), new MaterialStack(Aluminium, 9), new MaterialStack(Water, 28), new MaterialStack(Oxygen, 72))); // NaCa4(Si27Al9)O72 28(H2O)
+    public static Materials Kyanite = new Materials( 924, TextureSet.SET_FLINT, 		1.0F, 0, 2, 1, 110, 110, 250, 0, "Kyanite", "Kyanite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 1), new MaterialStack(Oxygen, 5))); // Al2SiO5
+    public static Materials Kaolinite = new Materials( 929, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 245, 235, 235, 0, "Kaolinite", "Kaolinite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Silicon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 9))); // Al2Si2O5(OH)4
+    public static Materials Talc = new Materials( 902, TextureSet.SET_DULL, 			1.0F, 0, 2, 1 |8, 90, 180, 90, 0, "Talc", "Talc", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))); // H2Mg3(SiO3)4
+    public static Materials Soapstone = new Materials( 877, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8 , 95, 145, 95, 0, "Soapstone", "Soapstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL, 1, Arrays.asList(new MaterialStack(Magnesium, 3), new MaterialStack(Silicon, 4), new MaterialStack(Hydrogen, 2), new MaterialStack(Oxygen, 12))); // H2Mg3(SiO3)4
+    public static Materials Concrete = new Materials( 947, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1, 100, 100, 100, 0, "Concrete", "Concrete", 0, 0, 300, 0, false, false, 0, 1, 1, Dyes.dyeGray, 0, Arrays.asList(new MaterialStack(Stone, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TERRA, 1)));
+    public static Materials IronMagnetic = new Materials( 354, TextureSet.SET_MAGNETIC, 6.0F, 256, 2, 1|2|64|128, 200, 200, 200, 0, "IronMagnetic", "Magnetic Iron", 0, 0, -1, 0, false, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Iron, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials SteelMagnetic = new Materials( 355, TextureSet.SET_MAGNETIC,6.0F, 512, 2, 1|2|64|128, 128, 128, 128, 0, "SteelMagnetic", "Magnetic Steel", 0, 0, 1000, 1000, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Steel, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.ORDO, 1), new TC_AspectStack(TC_Aspects.MAGNETO, 1)));
+    public static Materials NeodymiumMagnetic=new Materials(356,TextureSet.SET_MAGNETIC,7.0F, 512, 2, 1|2|64|128, 100, 100, 100, 0, "NeodymiumMagnetic", "Magnetic Neodymium", 0, 0, 1297, 1297, true, false, 4, 51, 50, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Neodymium, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.MAGNETO, 3)));
+    public static Materials TungstenCarbide =new Materials(370,TextureSet.SET_METALLIC,14.0F, 1280, 4, 1|2|64|128, 51, 0, 102, 0, "TungstenCarbide", "Tungstencarbide", 0, 0, 2460, 2460, true, false, 4, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Tungsten, 1), new MaterialStack(Carbon, 1)));
+    public static Materials VanadiumSteel = new Materials( 371, TextureSet.SET_METALLIC,3.0F, 1920, 3, 1|2|64|128, 192, 192, 192, 0, "VanadiumSteel", "Vanadiumsteel", 0, 0, 1453, 1453, true, false, 4, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Vanadium, 1), new MaterialStack(Chrome, 1), new MaterialStack(Steel, 7)));
+    public static Materials HSSG = new Materials( 372, TextureSet.SET_METALLIC, 	   10.0F, 4000, 3, 1|2|64|128, 153, 153, 0, 0, "HSSG", "HSS-G", 0, 0, 4500, 4500, true, false, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(TungstenSteel, 5), new MaterialStack(Chrome, 1), new MaterialStack(Molybdenum, 2), new MaterialStack(Vanadium, 1)));
+    public static Materials HSSE = new Materials( 373, TextureSet.SET_METALLIC, 	   10.0F, 5120, 4, 1|2|64|128, 51, 102, 0, 0, "HSSE", "HSS-E", 0, 0, 5400, 5400, true, false, 4, 1, 1, Dyes.dyeBlue, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Cobalt, 1), new MaterialStack(Manganese, 1), new MaterialStack(Silicon, 1)));
+    public static Materials HSSS = new Materials( 374, TextureSet.SET_METALLIC, 	   14.0F, 3000, 4, 1|2|64|128, 102, 0, 51, 0, "HSSS", "HSS-S", 0, 0, 5400, 5400, true, false, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Iridium, 2), new MaterialStack(Osmium, 1)));
+    public static Materials DilutedSulfuricAcid = new MaterialBuilder(640, TextureSet.SET_FLUID, "Diluted Sulfuric Acid").addCell().addFluid().setRGB(192, 120, 32).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(SulfuricAcid, 1)).constructMaterial();
+    public static Materials EpoxidFiberReinforced = new Materials(610, TextureSet.SET_DULL,3.0F, 64, 1, 1|2|64|128, 160, 112, 16, 0, "EpoxidFiberReinforced", "Fiber-Reinforced Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Epoxid, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
+    public static Materials NitrousOxide = new MaterialBuilder(993, TextureSet.SET_FLUID, "Nitrous Oxide").addCell().addGas().setRGB(125, 200, 255).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials AntiKnock = new MaterialBuilder(994, TextureSet.SET_FLUID, "Ethyl Tert-Butyl Ether").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).constructMaterial();
+    public static Materials GasolineRegular = new MaterialBuilder(997, TextureSet.SET_FLUID, "Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(384).constructMaterial();
+    public static Materials GasolinePremium = new MaterialBuilder(998, TextureSet.SET_FLUID, "High Octane Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(768).constructMaterial();
+    
     /**
      * Materials which are renamed automatically
      */
-    @Deprecated IridiumAndSodiumOxide(IridiumSodiumOxide, false),
-    @Deprecated Palygorskite(FullersEarth, false),
-    @Deprecated Adamantine(Adamantium, true),
-    @Deprecated FzDarkIron(DarkIron, true),
-    @Deprecated FZDarkIron(DarkIron, true),
-    @Deprecated Ashes(Ash, false),
-    @Deprecated DarkAshes(DarkAsh, false),
-    @Deprecated Abyssal(Basalt, false),
-    @Deprecated Adamant(Adamantium, true),
-    @Deprecated AluminumBrass(AluminiumBrass, false),
-    @Deprecated Aluminum(Aluminium, false),
-    @Deprecated NaturalAluminum(Aluminium, false),
-    @Deprecated NaturalAluminium(Aluminium, false),
-    @Deprecated Americum(Americium, false),
-    @Deprecated Beryl(Emerald, false), // 30,200,200
-    @Deprecated BlackGranite(GraniteBlack, false),
-    @Deprecated CalciumCarbonate(Calcite, false),
-    @Deprecated CreosoteOil(Creosote, false),
-    @Deprecated Chromium(Chrome, false),
-    @Deprecated Diesel(Fuel, false),
-    @Deprecated Enderpearl(EnderPearl, false),
-    @Deprecated Endereye(EnderEye, false),
-    @Deprecated EyeOfEnder(EnderEye, false),
-    @Deprecated Eyeofender(EnderEye, false),
-    @Deprecated RawTerrasteelAlloy(TerrasteelAlloyRaw, false),
-    @Deprecated StrengthenedTerrasteelAlloy(TerrasteelAlloyStrengthened, false),
-    @Deprecated Flour(Wheat, false),
-    @Deprecated Meat(MeatRaw, false),
-    @Deprecated Garnet(GarnetRed, true),
-    @Deprecated Granite(GraniteBlack, false),
-    @Deprecated Goethite(BrownLimonite, false),
-    @Deprecated Kalium(Potassium, false),
-    @Deprecated Lapislazuli(Lapis, false),
-    @Deprecated LapisLazuli(Lapis, false),
-    @Deprecated Monazit(Monazite, false),
-    @Deprecated Natrium(Sodium, false),
-    @Deprecated Mythril(Mithril, false),
-    @Deprecated NitroDiesel(NitroFuel, false),
-    @Deprecated Naquadriah(Naquadria, false),
-    @Deprecated Obby(Obsidian, false),
-    @Deprecated Peridot(Olivine, true),
-    @Deprecated Phosphorite(Phosphorus, true),
-    @Deprecated Quarried(Marble, false),
-    @Deprecated Quicksilver(Mercury, true),
-    @Deprecated QuickSilver(Mercury, false),
-    @Deprecated RedRock(Redrock, false),
-    @Deprecated RefinedIron(Iron, false),
-    @Deprecated RedGranite(GraniteRed, false),
-    @Deprecated Sheldonite(Cooperite, false),
-    @Deprecated Soulsand(SoulSand, false),
-    @Deprecated SilverLead(Galena, false),
-    @Deprecated Titan(Titanium, false),
-    @Deprecated Uran(Uranium, false),
-    @Deprecated Wolframite(Tungstate, false),
-    @Deprecated Wolframium(Tungsten, false),
-    @Deprecated Wolfram(Tungsten, false),
-    @Deprecated WrougtIron(WroughtIron, false);
+    @Deprecated public static Materials IridiumAndSodiumOxide = new Materials(IridiumSodiumOxide, false);
+    @Deprecated public static Materials Palygorskite = new Materials(FullersEarth, false);
+    @Deprecated public static Materials Adamantine = new Materials(Adamantium, true);
+    @Deprecated public static Materials Ashes = new Materials(Ash, false);
+    @Deprecated public static Materials DarkAshes = new Materials(DarkAsh, false);
+    @Deprecated public static Materials Abyssal = new Materials(Basalt, false);
+    @Deprecated public static Materials Adamant = new Materials(Adamantium, true);
+    @Deprecated public static Materials AluminumBrass = new Materials(AluminiumBrass, false);
+    @Deprecated public static Materials Aluminum = new Materials(Aluminium, false);
+    @Deprecated public static Materials NaturalAluminum = new Materials(Aluminium, false);
+    @Deprecated public static Materials NaturalAluminium = new Materials(Aluminium, false);
+    @Deprecated public static Materials Americum = new Materials(Americium, false);
+    @Deprecated public static Materials Beryl = new Materials(Emerald, false);
+    @Deprecated public static Materials BlackGranite = new Materials(GraniteBlack, false);
+    @Deprecated public static Materials CalciumCarbonate = new Materials(Calcite, false);
+    @Deprecated public static Materials CrackedLightFuel = new Materials(LightFuel, false);
+    @Deprecated public static Materials CrackedHeavyFuel = new Materials(HeavyFuel, false);
+    @Deprecated public static Materials CreosoteOil = new Materials(Creosote, false);
+    @Deprecated public static Materials Chromium = new Materials(Chrome, false);
+    @Deprecated public static Materials Diesel = new Materials(Fuel, false);
+    @Deprecated public static Materials Enderpearl = new Materials(EnderPearl, false);
+    @Deprecated public static Materials Endereye = new Materials(EnderEye, false);
+    @Deprecated public static Materials EyeOfEnder = new Materials(EnderEye, false);
+    @Deprecated public static Materials Eyeofender = new Materials(EnderEye, false);
+    @Deprecated public static Materials Flour = new Materials(Wheat, false);
+    @Deprecated public static Materials Meat = new Materials(MeatRaw, false);
+    @Deprecated public static Materials Garnet = new Materials(GarnetRed, true);
+    @Deprecated public static Materials Granite = new Materials(GraniteBlack, false);
+    @Deprecated public static Materials Goethite = new Materials(BrownLimonite, false);
+    @Deprecated public static Materials Kalium = new Materials(Potassium, false);
+    @Deprecated public static Materials Lapislazuli = new Materials(Lapis, false);
+    @Deprecated public static Materials LapisLazuli = new Materials(Lapis, false);
+    @Deprecated public static Materials Monazit = new Materials(Monazite, false);
+    @Deprecated public static Materials Natrium = new Materials(Sodium, false);
+    @Deprecated public static Materials Mythril = new Materials(Mithril, false);
+    @Deprecated public static Materials NitroDiesel = new Materials(NitroFuel, false);
+    @Deprecated public static Materials Naquadriah = new Materials(Naquadria, false);
+    @Deprecated public static Materials Obby = new Materials(Obsidian, false);
+    @Deprecated public static Materials Peridot = new Materials(Olivine, true);
+    @Deprecated public static Materials Phosphorite = new Materials(Phosphorus, true);
+    @Deprecated public static Materials Quarried = new Materials(Marble, false);
+    @Deprecated public static Materials Quicksilver = new Materials(Mercury, true);
+    @Deprecated public static Materials QuickSilver = new Materials(Mercury, false);
+    @Deprecated public static Materials RedRock = new Materials(Redrock, false);
+    @Deprecated public static Materials RefinedIron = new Materials(Iron, false);
+    @Deprecated public static Materials RedGranite = new Materials(GraniteRed, false);
+    @Deprecated public static Materials Sheldonite = new Materials(Cooperite, false);
+    @Deprecated public static Materials Soulsand = new Materials(SoulSand, false);
+    @Deprecated public static Materials Titan = new Materials(Titanium, false);
+    @Deprecated public static Materials Uran = new Materials(Uranium, false);
+    @Deprecated public static Materials Wolframite = new Materials(Tungstate, false);
+    @Deprecated public static Materials Wolframium = new Materials(Tungsten, false);
+    @Deprecated public static Materials Wolfram = new Materials(Tungsten, false);
 
+    public final short[] mRGBa = new short[]{255, 255, 255, 0}, mMoltenRGBa = new short[]{255, 255, 255, 0};
+    public TextureSet mIconSet;
+    public int mMetaItemSubID;
+    public boolean mUnificatable;
+    public Materials mMaterialInto;
+    public List<MaterialStack> mMaterialList = new ArrayList<MaterialStack>();
+    public List<Materials> mOreByProducts = new ArrayList<Materials>(), mOreReRegistrations = new ArrayList<Materials>();
+    public List<TC_Aspects.TC_AspectStack> mAspects = new ArrayList<TC_Aspects.TC_AspectStack>();
+    public ArrayList<ItemStack> mMaterialItems = new ArrayList<ItemStack>();
+    public Collection<SubTag> mSubTags = new LinkedHashSet<SubTag>();
+    public Enchantment mEnchantmentTools = null, mEnchantmentArmors = null;
+    public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
+    public boolean mBlastFurnaceRequired = false, mTransparent = false;
+    public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
+    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null", mLocalizedName = "null";
+    public Dyes mColor = Dyes._NULL;
+    public short mMeltingPoint = 0, mBlastFurnaceTemp = 0, mGasTemp = 0;
+    public int mTypes = 0;
+    public int mDurability = 16, mFuelPower = 0, mFuelType = 0, mExtraData = 0, mOreValue = 0, mOreMultiplier = 1, mByProductMultiplier = 1, mSmeltingMultiplier = 1;
+    public int mDensityMultiplier = 1, mDensityDivider = 1;
+    public long mDensity = M;
+    public Element mElement = null;
+    public Materials mDirectSmelting = this, mOreReplacement = this, mMacerateInto = this, mSmeltInto = this, mArcSmeltInto = this, mHandleMaterial = this;
+    public byte mToolQuality = 0;
+    public boolean mHasParentMod = true, mHasPlasma = false, mHasGas = false, mCustomOre = false;
+    public Fluid mSolid = null, mFluid = null, mGas = null, mPlasma = null;
+
+    private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false;
+    private Fluid hydroCrackedFluid = null, steamCrackedFluid = null;
+    
     /**
-     * List of all Materials.
+     * This Fluid is used as standard Unit for Molten Materials. 1296 is a Molten Block, that means 144 is one Material Unit worth of fluid.
      */
-    public static final Collection<Materials> VALUES = new HashSet<Materials>(Arrays.asList(values()));
+    public Fluid mStandardMoltenFluid = null;
 
     static {
+        initSubTags();
+
+        Peanutwood				.setMaceratingInto(Wood				);
+        WoodSealed				.setMaceratingInto(Wood				);
+        NetherBrick				.setMaceratingInto(Netherrack		);
+
+        NeodymiumMagnetic		.setSmeltingInto(Neodymium			).setMaceratingInto(Neodymium		).setArcSmeltingInto(Neodymium			);
+        SteelMagnetic			.setSmeltingInto(Steel				).setMaceratingInto(Steel			).setArcSmeltingInto(Steel				);
+        Iron					.setSmeltingInto(Iron				).setMaceratingInto(Iron			).setArcSmeltingInto(WroughtIron		);
+        AnyIron					.setSmeltingInto(Iron				).setMaceratingInto(Iron			).setArcSmeltingInto(WroughtIron		);
+        PigIron					.setSmeltingInto(Iron				).setMaceratingInto(Iron			).setArcSmeltingInto(WroughtIron		);
+        WroughtIron				.setSmeltingInto(Iron				).setMaceratingInto(Iron			).setArcSmeltingInto(WroughtIron		);
+        IronMagnetic			.setSmeltingInto(Iron				).setMaceratingInto(Iron			).setArcSmeltingInto(WroughtIron		);
+        Copper					.setSmeltingInto(Copper				).setMaceratingInto(Copper			).setArcSmeltingInto(AnnealedCopper		);
+        AnyCopper				.setSmeltingInto(Copper				).setMaceratingInto(Copper			).setArcSmeltingInto(AnnealedCopper		);
+        AnnealedCopper			.setSmeltingInto(Copper				).setMaceratingInto(Copper			).setArcSmeltingInto(AnnealedCopper		);
+        Netherrack				.setSmeltingInto(NetherBrick		);
+        MeatRaw					.setSmeltingInto(MeatCooked			);
+        Sand					.setSmeltingInto(Glass				);
+        Ice						.setSmeltingInto(Water				);
+        Snow					.setSmeltingInto(Water				);
+
+        Mercury					.add(SubTag.SMELTING_TO_GEM);
+        Cinnabar				.setDirectSmelting(Mercury		).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT).add(SubTag.SMELTING_TO_GEM);
+        Tetrahedrite			.setDirectSmelting(Copper		).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Chalcopyrite			.setDirectSmelting(Copper		).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Malachite				.setDirectSmelting(Copper		).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        Pentlandite				.setDirectSmelting(Nickel		).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        Sphalerite				.setDirectSmelting(Zinc			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        Pyrite					.setDirectSmelting(Iron			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        BasalticMineralSand		.setDirectSmelting(Iron			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        GraniticMineralSand		.setDirectSmelting(Iron			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        YellowLimonite			.setDirectSmelting(Iron			).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
+        BrownLimonite			.setDirectSmelting(Iron			);
+        BandedIron				.setDirectSmelting(Iron			);
+        Magnetite				.setDirectSmelting(Iron			);
+        Cassiterite				.setDirectSmelting(Tin			);
+        CassiteriteSand			.setDirectSmelting(Tin			);
+        Chromite				.setDirectSmelting(Chrome		);
+        Garnierite				.setDirectSmelting(Nickel		);
+        Cobaltite				.setDirectSmelting(Cobalt		);
+        Stibnite				.setDirectSmelting(Antimony		);
+        Cooperite				.setDirectSmelting(Platinum		).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Pyrolusite				.setDirectSmelting(Manganese	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Magnesite				.setDirectSmelting(Magnesium	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Molybdenite				.setDirectSmelting(Molybdenum	).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        Galena 					.setDirectSmelting(Lead			).add(SubTag.DONT_ADD_DEFAULT_BBF_RECIPE);
+        
+        Amber					.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedAir				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedFire				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedEarth			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedWater			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedEntropy			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedOrder			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedVis				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        InfusedDull				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        Salt					.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        RockSalt				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        Scheelite				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        Tungstate				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        Cassiterite				.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        CassiteriteSand			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        NetherQuartz			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        CertusQuartz			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
+        Phosphorus				.setOreMultiplier( 3).setSmeltingMultiplier( 3);
+        Saltpeter				.setOreMultiplier( 4).setSmeltingMultiplier( 4);
+        Apatite					.setOreMultiplier( 4).setSmeltingMultiplier( 4).setByProductMultiplier(2);
+        Nikolite				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
+        Teslatite				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
+        Redstone				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
+        Glowstone				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
+        Lapis					.setOreMultiplier( 6).setSmeltingMultiplier( 6).setByProductMultiplier(4);
+        Sodalite				.setOreMultiplier( 6).setSmeltingMultiplier( 6).setByProductMultiplier(4);
+        Lazurite				.setOreMultiplier( 6).setSmeltingMultiplier( 6).setByProductMultiplier(4);
+        Monazite				.setOreMultiplier( 8).setSmeltingMultiplier( 8).setByProductMultiplier(2);
+
+        Plastic					.setEnchantmentForTools(Enchantment.knockback, 1);
+        PolyvinylChloride		.setEnchantmentForTools(Enchantment.knockback, 1);
+        Polystyrene				.setEnchantmentForTools(Enchantment.knockback, 1);
+        Rubber					.setEnchantmentForTools(Enchantment.knockback, 2);
+        StyreneButadieneRubber	.setEnchantmentForTools(Enchantment.knockback, 2);
+        InfusedAir				.setEnchantmentForTools(Enchantment.knockback, 2);
+
+        IronWood				.setEnchantmentForTools(Enchantment.fortune, 1);
+        Steeleaf				.setEnchantmentForTools(Enchantment.fortune, 2);
+        Midasium                .setEnchantmentForTools(Enchantment.fortune, 2);
+        Mithril					.setEnchantmentForTools(Enchantment.fortune, 3);
+        Vinteum					.setEnchantmentForTools(Enchantment.fortune, 1);
+        Thaumium				.setEnchantmentForTools(Enchantment.fortune, 2);
+        InfusedWater			.setEnchantmentForTools(Enchantment.fortune, 3);
+
+        Flint					.setEnchantmentForTools(Enchantment.fireAspect, 1);
+        DarkIron				.setEnchantmentForTools(Enchantment.fireAspect, 2);
+        Firestone				.setEnchantmentForTools(Enchantment.fireAspect, 3);
+        FierySteel				.setEnchantmentForTools(Enchantment.fireAspect, 3);
+        Pyrotheum				.setEnchantmentForTools(Enchantment.fireAspect, 3);
+        Blaze					.setEnchantmentForTools(Enchantment.fireAspect, 3);
+        InfusedFire				.setEnchantmentForTools(Enchantment.fireAspect, 3);
+
+        Force					.setEnchantmentForTools(Enchantment.silkTouch, 1);
+        Amber					.setEnchantmentForTools(Enchantment.silkTouch, 1);
+        EnderPearl				.setEnchantmentForTools(Enchantment.silkTouch, 1);
+        Enderium				.setEnchantmentForTools(Enchantment.silkTouch, 1);
+        NetherStar				.setEnchantmentForTools(Enchantment.silkTouch, 1);
+        InfusedOrder			.setEnchantmentForTools(Enchantment.silkTouch, 1);
+
+        BlackBronze				.setEnchantmentForTools(Enchantment.smite, 2);
+        Gold					.setEnchantmentForTools(Enchantment.smite, 3);
+        RoseGold				.setEnchantmentForTools(Enchantment.smite, 4);
+        Platinum				.setEnchantmentForTools(Enchantment.smite, 5);
+        InfusedVis				.setEnchantmentForTools(Enchantment.smite, 5);
+
+        Lead					.setEnchantmentForTools(Enchantment.baneOfArthropods, 2);
+        Nickel					.setEnchantmentForTools(Enchantment.baneOfArthropods, 2);
+        Invar					.setEnchantmentForTools(Enchantment.baneOfArthropods, 3);
+        Antimony				.setEnchantmentForTools(Enchantment.baneOfArthropods, 3);
+        BatteryAlloy			.setEnchantmentForTools(Enchantment.baneOfArthropods, 4);
+        Bismuth					.setEnchantmentForTools(Enchantment.baneOfArthropods, 4);
+        BismuthBronze			.setEnchantmentForTools(Enchantment.baneOfArthropods, 5);
+        InfusedEarth			.setEnchantmentForTools(Enchantment.baneOfArthropods, 5);
+
+        Iron					.setEnchantmentForTools(Enchantment.sharpness, 1);
+        Bronze					.setEnchantmentForTools(Enchantment.sharpness, 1);
+        Brass					.setEnchantmentForTools(Enchantment.sharpness, 2);
+        HSLA					.setEnchantmentForTools(Enchantment.sharpness, 2);
+        Steel					.setEnchantmentForTools(Enchantment.sharpness, 2);
+        WroughtIron				.setEnchantmentForTools(Enchantment.sharpness, 2);
+        StainlessSteel			.setEnchantmentForTools(Enchantment.sharpness, 3);
+        Knightmetal				.setEnchantmentForTools(Enchantment.sharpness, 3);
+        ShadowIron				.setEnchantmentForTools(Enchantment.sharpness, 3);
+        ShadowSteel				.setEnchantmentForTools(Enchantment.sharpness, 4);
+        BlackSteel				.setEnchantmentForTools(Enchantment.sharpness, 4);
+        RedSteel				.setEnchantmentForTools(Enchantment.sharpness, 4);
+        BlueSteel				.setEnchantmentForTools(Enchantment.sharpness, 5);
+        DamascusSteel			.setEnchantmentForTools(Enchantment.sharpness, 5);
+        InfusedEntropy			.setEnchantmentForTools(Enchantment.sharpness, 5);
+        TungstenCarbide			.setEnchantmentForTools(Enchantment.sharpness, 5);
+        HSSE					.setEnchantmentForTools(Enchantment.sharpness, 5);
+        HSSG					.setEnchantmentForTools(Enchantment.sharpness, 4);
+        HSSS					.setEnchantmentForTools(Enchantment.sharpness, 5);
+
+        InfusedAir				.setEnchantmentForArmors(Enchantment.respiration, 3);
+
+        InfusedFire				.setEnchantmentForArmors(Enchantment.featherFalling, 4);
+
+        Steeleaf				.setEnchantmentForArmors(Enchantment.protection, 2);
+        Knightmetal				.setEnchantmentForArmors(Enchantment.protection, 1);
+        InfusedEarth			.setEnchantmentForArmors(Enchantment.protection, 4);
+
+        InfusedEntropy			.setEnchantmentForArmors(Enchantment.thorns, 3);
+
+        InfusedWater			.setEnchantmentForArmors(Enchantment.aquaAffinity, 1);
+        IronWood				.setEnchantmentForArmors(Enchantment.aquaAffinity, 1);
+
+        InfusedOrder			.setEnchantmentForArmors(Enchantment.projectileProtection, 4);
+
+        InfusedDull				.setEnchantmentForArmors(Enchantment.blastProtection, 4);
+
+        InfusedVis				.setEnchantmentForArmors(Enchantment.protection, 4);
+
+        FryingOilHot			.setHeatDamage(1.0F);
+        Lava					.setHeatDamage(3.0F);
+        Firestone				.setHeatDamage(5.0F);
+        Pyrotheum				.setHeatDamage(5.0F);
+
+        Chalcopyrite			.addOreByProducts(Pyrite				, Cobalt				, Cadmium				, Gold			);
+        Sphalerite				.addOreByProducts(GarnetYellow			, Cadmium				, Gallium				, Zinc			);
+        MeteoricIron			.addOreByProducts(Iron					, Nickel				, Iridium				, Platinum		);
+        GlauconiteSand			.addOreByProducts(Sodium				, Aluminium				, Iron					);
+        Glauconite				.addOreByProducts(Sodium				, Aluminium				, Iron					);
+        Vermiculite				.addOreByProducts(Iron					, Aluminium				, Magnesium				);
+        FullersEarth			.addOreByProducts(Aluminium				, Silicon				, Magnesium				);
+        Bentonite				.addOreByProducts(Aluminium				, Calcium				, Magnesium				);
+        Uraninite				.addOreByProducts(Uranium				, Thorium				, Uranium235			);
+        Pitchblende				.addOreByProducts(Thorium				, Uranium				, Lead					);
+        Galena					.addOreByProducts(Sulfur				, Silver				, Lead					);
+        Lapis					.addOreByProducts(Lazurite				, Sodalite				, Pyrite				);
+        Pyrite					.addOreByProducts(Sulfur				, Phosphorus			, Iron					);
+        Copper					.addOreByProducts(Cobalt				, Gold					, Nickel				);
+        Nickel					.addOreByProducts(Cobalt				, Platinum				, Iron					);
+        GarnetRed				.addOreByProducts(Spessartine			, Pyrope				, Almandine				);
+        GarnetYellow			.addOreByProducts(Andradite				, Grossular				, Uvarovite				);
+        Cooperite				.addOreByProducts(Palladium				, Nickel				, Iridium				);
+        Cinnabar				.addOreByProducts(Redstone				, Sulfur				, Glowstone				);
+        Tantalite				.addOreByProducts(Manganese				, Niobium				, Tantalum				);
+        Pollucite				.addOreByProducts(Caesium				, Aluminium				, Rubidium				);
+        Chrysotile				.addOreByProducts(Asbestos				, Silicon				, Magnesium				);
+        Asbestos				.addOreByProducts(Asbestos				, Silicon				, Magnesium				);
+        Pentlandite				.addOreByProducts(Iron					, Sulfur				, Cobalt				);
+        Uranium					.addOreByProducts(Lead					, Uranium235			, Thorium				);
+        Scheelite				.addOreByProducts(Manganese				, Molybdenum			, Calcium				);
+        Tungstate				.addOreByProducts(Manganese				, Silver				, Lithium				);
+        Bauxite					.addOreByProducts(Grossular				, Rutile				, Gallium				);
+        QuartzSand				.addOreByProducts(CertusQuartz			, Quartzite				, Barite				);
+        Redstone				.addOreByProducts(Cinnabar				, RareEarth				, Glowstone				);
+        Monazite				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
+        Forcicium				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
+        Forcillium				.addOreByProducts(Thorium				, Neodymium				, RareEarth				);
+        Malachite				.addOreByProducts(Copper				, BrownLimonite			, Calcite				);
+        YellowLimonite			.addOreByProducts(Nickel				, BrownLimonite			, Cobalt				);
+        Lepidolite				.addOreByProducts(Lithium				, Caesium				, Boron					);
+        Andradite				.addOreByProducts(GarnetYellow			, Iron					, Boron					);
+        Pyrolusite				.addOreByProducts(Manganese				, Tantalite             , Niobium               );
+        Phosphorus				.addOreByProducts(Apatite				, Phosphate				, Pyrochlore            );
+        Apatite					.addOreByProducts(Phosphorus			, Phosphate             , Pyrochlore            );
+        Pyrochlore              .addOreByProducts(Apatite               , Calcite               , Niobium               );
+        Quartzite				.addOreByProducts(CertusQuartz			, Barite				);
+        CertusQuartz			.addOreByProducts(Quartzite				, Barite				);
+        BrownLimonite			.addOreByProducts(Malachite				, YellowLimonite		);
+        Neodymium				.addOreByProducts(Monazite				, RareEarth				);
+        Bastnasite				.addOreByProducts(Neodymium				, RareEarth				);
+        Glowstone				.addOreByProducts(Redstone				, Gold					);
+        Zinc					.addOreByProducts(Tin					, Gallium				);
+        Tungsten				.addOreByProducts(Manganese				, Molybdenum			);
+        Diatomite				.addOreByProducts(BandedIron			, Sapphire				);
+        Iron					.addOreByProducts(Nickel				, Tin					);
+        Gold					.addOreByProducts(Copper				, Nickel				);
+        Tin						.addOreByProducts(Iron					, Zinc					);
+        Antimony				.addOreByProducts(Zinc					, Iron					);
+        Silver					.addOreByProducts(Lead					, Sulfur				);
+        Lead					.addOreByProducts(Silver				, Sulfur				);
+        Thorium					.addOreByProducts(Uranium				, Lead					);
+        Plutonium				.addOreByProducts(Uranium				, Lead					);
+        Electrum				.addOreByProducts(Gold					, Silver				);
+        Bronze					.addOreByProducts(Copper				, Tin					);
+        Brass					.addOreByProducts(Copper				, Zinc					);
+        Coal					.addOreByProducts(Lignite				, Thorium				);
+        Ilmenite				.addOreByProducts(Iron					, Rutile				);
+        Manganese				.addOreByProducts(Chrome				, Iron					);
+        Sapphire				.addOreByProducts(Aluminium				, GreenSapphire			);
+        GreenSapphire			.addOreByProducts(Aluminium				, Sapphire				);
+        Platinum				.addOreByProducts(Nickel				, Iridium				);
+        Emerald					.addOreByProducts(Beryllium				, Aluminium				);
+        Olivine					.addOreByProducts(Pyrope				, Magnesium				);
+        Chrome					.addOreByProducts(Iron					, Magnesium				);
+        Chromite				.addOreByProducts(Iron					, Magnesium				);
+        Tetrahedrite			.addOreByProducts(Antimony				, Zinc					);
+        GarnetSand				.addOreByProducts(GarnetRed				, GarnetYellow			);
+        Magnetite				.addOreByProducts(Iron					, Gold					);
+        GraniticMineralSand		.addOreByProducts(GraniteBlack			, Magnetite				);
+        BasalticMineralSand		.addOreByProducts(Basalt				, Magnetite				);
+        Basalt					.addOreByProducts(Olivine				, DarkAsh				);
+        VanadiumMagnetite		.addOreByProducts(Magnetite				, Vanadium				);
+        Lazurite				.addOreByProducts(Sodalite				, Lapis					);
+        Sodalite				.addOreByProducts(Lazurite				, Lapis					);
+        Spodumene				.addOreByProducts(Aluminium				, Lithium				);
+        Ruby					.addOreByProducts(Chrome				, GarnetRed				);
+        Iridium					.addOreByProducts(Platinum				, Osmium				);
+        Pyrope					.addOreByProducts(GarnetRed				, Magnesium				);
+        Almandine				.addOreByProducts(GarnetRed				, Aluminium				);
+        Spessartine				.addOreByProducts(GarnetRed				, Manganese				);
+        Grossular				.addOreByProducts(GarnetYellow			, Calcium				);
+        Uvarovite				.addOreByProducts(GarnetYellow			, Chrome				);
+        Calcite					.addOreByProducts(Andradite				, Malachite				);
+        NaquadahEnriched		.addOreByProducts(Naquadah				, Naquadria				);
+        Salt					.addOreByProducts(RockSalt				, Borax					);
+        RockSalt				.addOreByProducts(Salt					, Borax					);
+        Naquadah				.addOreByProducts(NaquadahEnriched		);
+        Molybdenite				.addOreByProducts(Molybdenum			);
+        Stibnite				.addOreByProducts(Antimony				);
+        Garnierite				.addOreByProducts(Nickel				);
+        Lignite					.addOreByProducts(Coal					);
+        Diamond					.addOreByProducts(Graphite				);
+        Beryllium				.addOreByProducts(Emerald				);
+        Nikolite				.addOreByProducts(Diamond				);
+        Teslatite				.addOreByProducts(Diamond				);
+        Magnesite				.addOreByProducts(Magnesium				);
+        NetherQuartz			.addOreByProducts(Netherrack			);
+        PigIron					.addOreByProducts(Iron					);
+        DeepIron				.addOreByProducts(Iron					);
+        ShadowIron				.addOreByProducts(Iron					);
+        DarkIron				.addOreByProducts(Iron					);
+        MeteoricIron			.addOreByProducts(Iron					);
+        Steel					.addOreByProducts(Iron					);
+        HSLA					.addOreByProducts(Iron					);
+        Mithril					.addOreByProducts(Platinum				);
+        Midasium				.addOreByProducts(Gold					);
+        AstralSilver			.addOreByProducts(Silver				);
+        Graphite				.addOreByProducts(Carbon				);
+        Netherrack				.addOreByProducts(Sulfur				);
+        Flint					.addOreByProducts(Obsidian				);
+        Cobaltite				.addOreByProducts(Cobalt				);
+        Cobalt					.addOreByProducts(Cobaltite				);
+        Sulfur					.addOreByProducts(Sulfur				);
+        Saltpeter				.addOreByProducts(Saltpeter				);
+        Endstone				.addOreByProducts(Helium_3				);
+        Osmium					.addOreByProducts(Iridium				);
+        Magnesium				.addOreByProducts(Olivine				);
+        Aluminium				.addOreByProducts(Bauxite				);
+        Titanium				.addOreByProducts(Almandine				);
+        Obsidian				.addOreByProducts(Olivine				);
+        Ash						.addOreByProducts(Carbon				);
+        DarkAsh					.addOreByProducts(Carbon				);
+        Redrock					.addOreByProducts(Clay					);
+        Marble					.addOreByProducts(Calcite				);
+        Clay					.addOreByProducts(Clay					);
+        Cassiterite				.addOreByProducts(Tin					);
+        CassiteriteSand			.addOreByProducts(Tin					);
+        GraniteBlack			.addOreByProducts(Biotite				);
+        GraniteRed				.addOreByProducts(PotassiumFeldspar		);
+        Phosphate				.addOreByProducts(Phosphor				);
+        Phosphor				.addOreByProducts(Phosphate				);
+        Tanzanite				.addOreByProducts(Opal					);
+        Opal					.addOreByProducts(Tanzanite				);
+        Amethyst				.addOreByProducts(Amethyst				);
+        FoolsRuby				.addOreByProducts(Jasper				);
+        Amber					.addOreByProducts(Amber					);
+        Topaz					.addOreByProducts(BlueTopaz				);
+        BlueTopaz				.addOreByProducts(Topaz					);
+        Niter					.addOreByProducts(Saltpeter				);
+        Vinteum					.addOreByProducts(Vinteum				);
+        Force					.addOreByProducts(Force					);
+        Dilithium				.addOreByProducts(Dilithium				);
+        Neutronium				.addOreByProducts(Neutronium			);
+        Lithium					.addOreByProducts(Lithium				);
+        Silicon					.addOreByProducts(SiliconDioxide		);
+
+        Glue.mChemicalFormula = "No Horses were harmed for the Production";
+        UUAmplifier.mChemicalFormula = "Accelerates the Mass Fabricator";
+        LiveRoot.mChemicalFormula = "";
+        WoodSealed.mChemicalFormula = "";
+        Wood.mChemicalFormula = "";
+        FoolsRuby.mChemicalFormula = Ruby.mChemicalFormula;
+
+        Naquadah.mMoltenRGBa[0] = 0;
+        Naquadah.mMoltenRGBa[1] = 255;
+        Naquadah.mMoltenRGBa[2] = 0;
+        Naquadah.mMoltenRGBa[3] = 0;
+        NaquadahEnriched.mMoltenRGBa[0] = 64;
+        NaquadahEnriched.mMoltenRGBa[1] = 255;
+        NaquadahEnriched.mMoltenRGBa[2] = 64;
+        NaquadahEnriched.mMoltenRGBa[3] = 0;
+        Naquadria.mMoltenRGBa[0] = 128;
+        Naquadria.mMoltenRGBa[1] = 255;
+        Naquadria.mMoltenRGBa[2] = 128;
+        Naquadria.mMoltenRGBa[3] = 0;
+
+        NaquadahEnriched.mChemicalFormula = "Nq+";
+        Naquadah.mChemicalFormula = "Nq";
+        Naquadria.mChemicalFormula = "NqX";
+    }
+
+    private static void initSubTags() {
         SubTag.ELECTROMAGNETIC_SEPERATION_NEODYMIUM.addTo(Bastnasite, Monazite, Forcicium, Forcillium);
         SubTag.ELECTROMAGNETIC_SEPERATION_GOLD.addTo(Magnetite, VanadiumMagnetite, BasalticMineralSand, GraniticMineralSand);
         SubTag.ELECTROMAGNETIC_SEPERATION_IRON.addTo(YellowLimonite, BrownLimonite, Pyrite, BandedIron, Nickel, Vermiculite, Glauconite, GlauconiteSand, Pentlandite, Tin, Antimony, Ilmenite, Manganese, Chrome, Chromite, Andradite);
-        SubTag.BLASTFURNACE_CALCITE_DOUBLE.addTo(Pyrite, YellowLimonite, BasalticMineralSand, GraniticMineralSand);
-        SubTag.BLASTFURNACE_CALCITE_TRIPLE.addTo(Iron, PigIron, DeepIron, ShadowIron, WroughtIron, MeteoricIron, BrownLimonite);
+        SubTag.BLASTFURNACE_CALCITE_DOUBLE.addTo(Pyrite, BrownLimonite, YellowLimonite, BasalticMineralSand, GraniticMineralSand, Magnetite);
+        SubTag.BLASTFURNACE_CALCITE_TRIPLE.addTo(Iron, PigIron, DeepIron, ShadowIron, WroughtIron, MeteoricIron);
         SubTag.WASHING_MERCURY.addTo(Gold, Silver, Osmium, Mithril, Platinum, Midasium, Cooperite, AstralSilver);
         SubTag.WASHING_SODIUMPERSULFATE.addTo(Zinc, Nickel, Copper, Cobalt, Cobaltite, Tetrahedrite);
-        SubTag.METAL.addTo(AnyIron, AnyCopper, AnyBronze, Metal, Aluminium, Americium, Antimony, Beryllium, Bismuth, Caesium, Cerium, Chrome, Cobalt, Copper, Dysprosium, Erbium, Europium, Gadolinium, Gallium, Gold, Holmium, Indium, Iridium, Iron, Lanthanum, Lead, Lutetium, Magnesium, Manganese, Mercury, Niobium, Molybdenum, Neodymium, Neutronium, Nickel, Osmium, Palladium, Platinum, Plutonium, Plutonium241, Praseodymium, Promethium, Rubidium, Samarium, Scandium, Silicon, Silver, Tantalum, Tellurium, Terbium, Thorium, Thulium, Tin, Titanium, Tungsten, Uranium, Uranium235, Vanadium, Ytterbium, Yttrium, Zinc, Satinspar, Selenite, Microcline, Serpentine, Sylvite, Signalum, Lumium, PhasedIron, PhasedGold, DarkSteel, Terrasteel, TerrasteelAlloyRaw, TerrasteelAlloyStrengthened, TinAlloy, ConductiveIron, ElectricalSteel, EnergeticAlloy, VibrantAlloy, PulsatingIron, Manasteel, DarkThaumium, ElvenElementium, EnrichedCopper, DiamondCopper, Adamantium, Amordrine, Angmallen, Ardite, Aredrite, Atlarus, Blutonium, Carmot, Celenegil, Ceruclase, DarkIron, Desh, Desichalkos, Duranium, ElectrumFlux, Enderium, EnderiumBase, Eximite, FierySteel, Force, Haderoth, Hematite, Hepatizon, HSLA, Infuscolium, InfusedGold, Inolashite, Mercassium, MeteoricIron, MeteoricSteel, Naquadah, NaquadahAlloy, NaquadahEnriched, Naquadria, ObsidianFlux, Orichalcum, Osmonium, Oureclase, Phoenixite, Prometheum, RefinedGlowstone, RefinedObsidian, Sanguinite, Starconium, Tartarite, Thyrium, Tritanium, Vulcanite, Vyroxeres, Yellorium, Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron, Electrum, Invar, IronCompressed, Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron, YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel, TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal);
+        SubTag.METAL.addTo(AnyIron, AnyCopper, AnyBronze, Metal, Aluminium, Americium, Antimony, Beryllium, Bismuth, Caesium, Cerium, Chrome, Cobalt, Copper, Dysprosium, Erbium, Europium, Gadolinium, Gallium, Gold,
+                Holmium, Indium, Iridium, Iron, Lanthanum, Lead, Lutetium, Magnesium, Manganese, Mercury, Niobium, Molybdenum, Neodymium, Neutronium, Nickel, Osmium, Palladium, Platinum, Plutonium, Plutonium241,
+                Praseodymium, Promethium, Rubidium, Samarium, Scandium, Silicon, Silver, Tantalum, Tellurium, Terbium, Thorium, Thulium, Tin, Titanium, Tungsten, Uranium, Uranium235, Vanadium, Ytterbium, Yttrium,
+                Zinc, /**Satinspar, Selenite, Microcline, Sylvite, RefinedGlowstone, RefinedObsidian,**/ Serpentine, Signalum, Lumium, PhasedIron, PhasedGold, DarkSteel, Terrasteel, TinAlloy, ConductiveIron, ElectricalSteel, EnergeticAlloy, VibrantAlloy,
+                PulsatingIron, Manasteel, DarkThaumium, ElvenElementium, EnrichedCopper, DiamondCopper, Adamantium, Amordrine, Angmallen, Ardite, Aredrite, Atlarus, Blutonium, Carmot, Celenegil, Ceruclase, DarkIron,
+                Desh, Desichalkos, Duranium, ElectrumFlux, Enderium, EnderiumBase, Eximite, FierySteel, Force, Haderoth, Hematite, Hepatizon, HSLA, Infuscolium, InfusedGold, Inolashite, Mercassium, MeteoricIron,
+                MeteoricSteel, Naquadah, NaquadahAlloy, NaquadahEnriched, Naquadria, ObsidianFlux, Orichalcum, Osmonium, Oureclase, Phoenixite, Prometheum, Sanguinite, Starconium,
+                Tartarite, Thyrium, Tritanium, Vulcanite, Vyroxeres, Yellorium, Zectium, AluminiumBrass, Osmiridium, Sunnarium, AnnealedCopper, BatteryAlloy, Brass, Bronze, ChromiumDioxide, Cupronickel, DeepIron,
+                Electrum, Invar, IronCompressed, Kanthal, Magnalium, Nichrome, NiobiumNitride, NiobiumTitanium, PigIron, SolderingAlloy, StainlessSteel, Steel, Ultimet, VanadiumGallium, WroughtIron,
+                YttriumBariumCuprate, IronWood, Alumite, Manyullyn, ShadowIron, ShadowSteel, Steeleaf, SterlingSilver, RoseGold, BlackBronze, BismuthBronze, BlackSteel, RedSteel, BlueSteel, DamascusSteel,
+                TungstenSteel, AstralSilver, Midasium, Mithril, BlueAlloy, RedAlloy, CobaltBrass, Thaumium, IronMagnetic, SteelMagnetic, NeodymiumMagnetic, Knightmetal, HSSG, HSSE, HSSS, TungstenCarbide, Endium,
+                VanadiumSteel, Kalendrite, Ignatius);
 
         SubTag.FOOD.addTo(MeatRaw, MeatCooked, Ice, Water, Salt, Chili, Cocoa, Cheese, Coffee, Chocolate, Milk, Honey, FryingOilHot, FishOil, SeedOil, SeedOilLin, SeedOilHemp, Wheat, Sugar, FreshWater);
 
@@ -729,7 +1223,6 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         Snow.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
         Ice.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
         Water.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.NO_RECYCLING);
-        Silicon.add(SubTag.NO_RECYCLING);
         Sulfur.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE);
         Saltpeter.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE);
         Graphite.add(SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.NO_SMELTING);
@@ -741,7 +1234,11 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         Lignite.add(SubTag.FLAMMABLE, SubTag.NO_SMELTING, SubTag.NO_SMASHING, SubTag.MORTAR_GRINDABLE);
 
         Rubber.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
+        StyreneButadieneRubber.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
         Plastic.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
+        PolyvinylChloride.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
+        Polystyrene.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY);
+        Silicone.add(SubTag.FLAMMABLE, SubTag.NO_SMASHING, SubTag.BOUNCY, SubTag.STRETCHY);
 
         TNT.add(SubTag.FLAMMABLE, SubTag.EXPLOSIVE, SubTag.NO_SMELTING, SubTag.NO_SMASHING);
         Gunpowder.add(SubTag.FLAMMABLE, SubTag.EXPLOSIVE, SubTag.NO_SMELTING, SubTag.NO_SMASHING);
@@ -765,7 +1262,7 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         Teslatite.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.SMELTING_TO_FLUID);
         Netherrack.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.UNBURNABLE, SubTag.FLAMMABLE);
         Stone.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.NO_RECYCLING);
-        Brick.add(SubTag.STONE, SubTag.NO_SMASHING);
+        Brick.add(SubTag.STONE, SubTag.NO_SMASHING, SubTag.NO_SMELTING);
         NetherBrick.add(SubTag.STONE, SubTag.NO_SMASHING);
         Endstone.add(SubTag.STONE, SubTag.NO_SMASHING);
         Marble.add(SubTag.STONE, SubTag.NO_SMASHING);
@@ -832,7 +1329,6 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         NetherQuartz.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
         CertusQuartz.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
         Fluix.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
-        //ChargedCertusQuartz		.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.QUARTZ);
         Phosphorus.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.EXPLOSIVE);
         Phosphate.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.EXPLOSIVE);
         InfusedAir.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.MAGICAL, SubTag.UNBURNABLE);
@@ -873,426 +1369,228 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         AstralSilver.add(SubTag.MAGICAL);
         Midasium.add(SubTag.MAGICAL);
         Mithril.add(SubTag.MAGICAL);
-
-        Iron.mOreReRegistrations.add(AnyIron);
-        PigIron.mOreReRegistrations.add(AnyIron);
-        WroughtIron.mOreReRegistrations.add(AnyIron);
-
-        Copper.mOreReRegistrations.add(AnyCopper);
-        AnnealedCopper.mOreReRegistrations.add(AnyCopper);
-
-        Bronze.mOreReRegistrations.add(AnyBronze);
-
-        Peanutwood.setMaceratingInto(Wood);
-        WoodSealed.setMaceratingInto(Wood);
-        NetherBrick.setMaceratingInto(Netherrack);
-
-        NeodymiumMagnetic.setSmeltingInto(Neodymium).setMaceratingInto(Neodymium).setArcSmeltingInto(Neodymium);
-        SteelMagnetic.setSmeltingInto(Steel).setMaceratingInto(Steel).setArcSmeltingInto(Steel);
-        Iron.setSmeltingInto(Iron).setMaceratingInto(Iron).setArcSmeltingInto(WroughtIron);
-        AnyIron.setSmeltingInto(Iron).setMaceratingInto(Iron).setArcSmeltingInto(WroughtIron);
-        PigIron.setSmeltingInto(Iron).setMaceratingInto(Iron).setArcSmeltingInto(WroughtIron);
-        WroughtIron.setSmeltingInto(Iron).setMaceratingInto(Iron).setArcSmeltingInto(WroughtIron);
-        IronMagnetic.setSmeltingInto(Iron).setMaceratingInto(Iron).setArcSmeltingInto(WroughtIron);
-        Copper.setSmeltingInto(Copper).setMaceratingInto(Copper).setArcSmeltingInto(AnnealedCopper);
-        AnyCopper.setSmeltingInto(Copper).setMaceratingInto(Copper).setArcSmeltingInto(AnnealedCopper);
-        AnnealedCopper.setSmeltingInto(Copper).setMaceratingInto(Copper).setArcSmeltingInto(AnnealedCopper);
-        Netherrack.setSmeltingInto(NetherBrick);
-        MeatRaw.setSmeltingInto(MeatCooked);
-        Sand.setSmeltingInto(Glass);
-        Ice.setSmeltingInto(Water);
-        Snow.setSmeltingInto(Water);
-
-        Mercury.add(SubTag.SMELTING_TO_GEM);
-        Cinnabar.setDirectSmelting(Mercury).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT).add(SubTag.SMELTING_TO_GEM);
-        Celestine.setDirectSmelting(Strontium).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Tetrahedrite.setDirectSmelting(Copper).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Chalcopyrite.setDirectSmelting(Copper).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Malachite.setDirectSmelting(Copper).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Pentlandite.setDirectSmelting(Nickel).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Sphalerite.setDirectSmelting(Zinc).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        Pyrite.setDirectSmelting(Iron).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        BasalticMineralSand.setDirectSmelting(Iron).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        GraniticMineralSand.setDirectSmelting(Iron).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        YellowLimonite.setDirectSmelting(Iron).add(SubTag.INDUCTIONSMELTING_LOW_OUTPUT);
-        BrownLimonite.setDirectSmelting(Iron);
-        BandedIron.setDirectSmelting(Iron);
-        Cassiterite.setDirectSmelting(Tin);
-        CassiteriteSand.setDirectSmelting(Tin);
-        Chromite.setDirectSmelting(Chrome);
-        Garnierite.setDirectSmelting(Nickel);
-        Cobaltite.setDirectSmelting(Cobalt);
-        Stibnite.setDirectSmelting(Antimony);
-        Cooperite.setDirectSmelting(Platinum);
-        Pyrolusite.setDirectSmelting(Manganese);
-        Magnesite.setDirectSmelting(Magnesium);
-        Molybdenite.setDirectSmelting(Molybdenum);
-
-        Amber.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedAir.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedFire.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedEarth.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedWater.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedEntropy.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedOrder.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedVis.setOreMultiplier(2).setSmeltingMultiplier(2);
-        InfusedDull.setOreMultiplier(2).setSmeltingMultiplier(2);
-        Salt.setOreMultiplier(2).setSmeltingMultiplier(2);
-        RockSalt.setOreMultiplier(2).setSmeltingMultiplier(2);
-        Scheelite.setOreMultiplier(2).setSmeltingMultiplier(2);
-        Tungstate.setOreMultiplier(2).setSmeltingMultiplier(2);
-        Cassiterite.setOreMultiplier(2).setSmeltingMultiplier(2);
-        CassiteriteSand.setOreMultiplier(2).setSmeltingMultiplier(2);
-        NetherQuartz.setOreMultiplier(2).setSmeltingMultiplier(2);
-        CertusQuartz.setOreMultiplier(2).setSmeltingMultiplier(2);
-        //ChargedCertusQuartz		.setOreMultiplier( 2).setSmeltingMultiplier( 2);
-        Phosphorus.setOreMultiplier(3).setSmeltingMultiplier(3);
-        Saltpeter.setOreMultiplier(4).setSmeltingMultiplier(4);
-        Apatite.setOreMultiplier(4).setSmeltingMultiplier(4).setByProductMultiplier(2);
-        Nikolite.setOreMultiplier(5).setSmeltingMultiplier(5);
-        Teslatite.setOreMultiplier(5).setSmeltingMultiplier(5);
-        Redstone.setOreMultiplier(5).setSmeltingMultiplier(5);
-        Glowstone.setOreMultiplier(5).setSmeltingMultiplier(5);
-        Lapis.setOreMultiplier(6).setSmeltingMultiplier(6).setByProductMultiplier(4);
-        Sodalite.setOreMultiplier(6).setSmeltingMultiplier(6).setByProductMultiplier(4);
-        Lazurite.setOreMultiplier(6).setSmeltingMultiplier(6).setByProductMultiplier(4);
-        Monazite.setOreMultiplier(8).setSmeltingMultiplier(8).setByProductMultiplier(2);
-
-        Plastic.setEnchantmentForTools(Enchantment.knockback, 1);
-        Rubber.setEnchantmentForTools(Enchantment.knockback, 2);
-        InfusedAir.setEnchantmentForTools(Enchantment.knockback, 2);
-
-        IronWood.setEnchantmentForTools(Enchantment.fortune, 1);
-        Steeleaf.setEnchantmentForTools(Enchantment.fortune, 2);
-        Midasium.setEnchantmentForTools(Enchantment.fortune, 2);
-        Mithril.setEnchantmentForTools(Enchantment.fortune, 3);
-        Vinteum.setEnchantmentForTools(Enchantment.fortune, 1);
-        Thaumium.setEnchantmentForTools(Enchantment.fortune, 2);
-        DarkThaumium.setEnchantmentForTools(Enchantment.fortune, 3);
-        Magic.setEnchantmentForTools(Enchantment.fortune, 3);
-        InfusedWater.setEnchantmentForTools(Enchantment.fortune, 3);
-
-        Flint.setEnchantmentForTools(Enchantment.fireAspect, 1);
-        DarkIron.setEnchantmentForTools(Enchantment.fireAspect, 2);
-        Firestone.setEnchantmentForTools(Enchantment.fireAspect, 3);
-        FierySteel.setEnchantmentForTools(Enchantment.fireAspect, 3);
-        Pyrotheum.setEnchantmentForTools(Enchantment.fireAspect, 3);
-        Blaze.setEnchantmentForTools(Enchantment.fireAspect, 3);
-        InfusedFire.setEnchantmentForTools(Enchantment.fireAspect, 3);
-
-        Force.setEnchantmentForTools(Enchantment.silkTouch, 1);
-        Amber.setEnchantmentForTools(Enchantment.silkTouch, 1);
-        EnderPearl.setEnchantmentForTools(Enchantment.silkTouch, 1);
-        Enderium.setEnchantmentForTools(Enchantment.silkTouch, 1);
-        NetherStar.setEnchantmentForTools(Enchantment.silkTouch, 1);
-        InfusedOrder.setEnchantmentForTools(Enchantment.silkTouch, 1);
-
-        BlackBronze.setEnchantmentForTools(Enchantment.smite, 2);
-        Gold.setEnchantmentForTools(Enchantment.smite, 3);
-        RoseGold.setEnchantmentForTools(Enchantment.smite, 4);
-        Platinum.setEnchantmentForTools(Enchantment.smite, 5);
-        InfusedVis.setEnchantmentForTools(Enchantment.smite, 5);
-
-        Lead.setEnchantmentForTools(Enchantment.baneOfArthropods, 2);
-        Nickel.setEnchantmentForTools(Enchantment.baneOfArthropods, 2);
-        Invar.setEnchantmentForTools(Enchantment.baneOfArthropods, 3);
-        Antimony.setEnchantmentForTools(Enchantment.baneOfArthropods, 3);
-        BatteryAlloy.setEnchantmentForTools(Enchantment.baneOfArthropods, 4);
-        Bismuth.setEnchantmentForTools(Enchantment.baneOfArthropods, 4);
-        BismuthBronze.setEnchantmentForTools(Enchantment.baneOfArthropods, 5);
-        InfusedEarth.setEnchantmentForTools(Enchantment.baneOfArthropods, 5);
-
-        Iron.setEnchantmentForTools(Enchantment.sharpness, 1);
-        Bronze.setEnchantmentForTools(Enchantment.sharpness, 1);
-        Brass.setEnchantmentForTools(Enchantment.sharpness, 2);
-        HSLA.setEnchantmentForTools(Enchantment.sharpness, 2);
-        Steel.setEnchantmentForTools(Enchantment.sharpness, 2);
-        WroughtIron.setEnchantmentForTools(Enchantment.sharpness, 2);
-        StainlessSteel.setEnchantmentForTools(Enchantment.sharpness, 3);
-        Knightmetal.setEnchantmentForTools(Enchantment.sharpness, 3);
-        ShadowIron.setEnchantmentForTools(Enchantment.sharpness, 3);
-        ShadowSteel.setEnchantmentForTools(Enchantment.sharpness, 4);
-        BlackSteel.setEnchantmentForTools(Enchantment.sharpness, 4);
-        RedSteel.setEnchantmentForTools(Enchantment.sharpness, 4);
-        BlueSteel.setEnchantmentForTools(Enchantment.sharpness, 5);
-        DamascusSteel.setEnchantmentForTools(Enchantment.sharpness, 5);
-        InfusedEntropy.setEnchantmentForTools(Enchantment.sharpness, 5);
-
-        InfusedAir.setEnchantmentForArmors(Enchantment.respiration, 3);
-
-        InfusedFire.setEnchantmentForArmors(Enchantment.featherFalling, 4);
-
-        Steeleaf.setEnchantmentForArmors(Enchantment.protection, 2);
-        Knightmetal.setEnchantmentForArmors(Enchantment.protection, 1);
-        InfusedEarth.setEnchantmentForArmors(Enchantment.protection, 4);
-
-        InfusedEntropy.setEnchantmentForArmors(Enchantment.thorns, 3);
-
-        InfusedWater.setEnchantmentForArmors(Enchantment.aquaAffinity, 1);
-        IronWood.setEnchantmentForArmors(Enchantment.aquaAffinity, 1);
-
-        InfusedOrder.setEnchantmentForArmors(Enchantment.projectileProtection, 4);
-
-        InfusedDull.setEnchantmentForArmors(Enchantment.blastProtection, 4);
-
-        InfusedVis.setEnchantmentForArmors(Enchantment.protection, 4);
-
-		/*
-		Stone					.setSpecialEffect(SpecialToolEffect.Crushing, 1);
-		GraniteRed				.setSpecialEffect(SpecialToolEffect.Crushing, 2);
-		GraniteBlack			.setSpecialEffect(SpecialToolEffect.Crushing, 2);
-		Adamantium				.setSpecialEffect(SpecialToolEffect.Crushing, 3);
-
-		DeepIron				.setSpecialEffect(SpecialToolEffect.Magnetic, 1);
-		MeteoricIron			.setSpecialEffect(SpecialToolEffect.Magnetic, 2);
-		MeteoricSteel			.setSpecialEffect(SpecialToolEffect.Magnetic, 3);
-		IronMagnetic			.setSpecialEffect(SpecialToolEffect.Magnetic, 1);
-		SteelMagnetic			.setSpecialEffect(SpecialToolEffect.Magnetic, 2);
-		NeodymiumMagnetic		.setSpecialEffect(SpecialToolEffect.Magnetic, 3);
-		*/
-
-        FryingOilHot.setHeatDamage(1.0F);
-        Lava.setHeatDamage(3.0F);
-        Firestone.setHeatDamage(5.0F);
-        Pyrotheum.setHeatDamage(5.0F);
-
-        Chalcopyrite.addOreByProducts(Pyrite, Cobalt, Cadmium, Gold);
-        Sphalerite.addOreByProducts(GarnetYellow, Cadmium, Gallium, Zinc);
-        MeteoricIron.addOreByProducts(Iron, Nickel, Iridium, Platinum);
-        GlauconiteSand.addOreByProducts(Sodium, Aluminium, Iron);
-        Glauconite.addOreByProducts(Sodium, Aluminium, Iron);
-        Vermiculite.addOreByProducts(Iron, Aluminium, Magnesium);
-        FullersEarth.addOreByProducts(Aluminium, Silicon, Magnesium);
-        Bentonite.addOreByProducts(Aluminium, Calcium, Magnesium);
-        Uraninite.addOreByProducts(Uranium, Thorium, Plutonium);
-        Pitchblende.addOreByProducts(Thorium, Uranium, Lead);
-        Galena.addOreByProducts(Sulfur, Silver, Lead);
-        Lapis.addOreByProducts(Lazurite, Sodalite, Pyrite);
-        Pyrite.addOreByProducts(Sulfur, Phosphorus, Iron);
-        Copper.addOreByProducts(Cobalt, Gold, Nickel);
-        Nickel.addOreByProducts(Cobalt, Platinum, Iron);
-        GarnetRed.addOreByProducts(Spessartine, Pyrope, Almandine);
-        GarnetYellow.addOreByProducts(Andradite, Grossular, Uvarovite);
-        Cooperite.addOreByProducts(Palladium, Nickel, Iridium);
-        Cinnabar.addOreByProducts(Redstone, Sulfur, Glowstone);
-        Tantalite.addOreByProducts(Manganese, Niobium, Tantalum);
-        Pollucite.addOreByProducts(Caesium, Aluminium, Rubidium);
-        Chrysotile.addOreByProducts(Asbestos, Silicon, Magnesium);
-        Asbestos.addOreByProducts(Asbestos, Silicon, Magnesium);
-        Pentlandite.addOreByProducts(Iron, Sulfur, Cobalt);
-        Uranium.addOreByProducts(Lead, Plutonium, Thorium);
-        Scheelite.addOreByProducts(Manganese, Molybdenum, Calcium);
-        Tungstate.addOreByProducts(Manganese, Silver, Lithium);
-        Bauxite.addOreByProducts(Grossular, Titanium, Gallium);
-        QuartzSand.addOreByProducts(CertusQuartz, Quartzite, Barite);
-        Quartzite.addOreByProducts(CertusQuartz, Barite);
-        CertusQuartz.addOreByProducts(Quartzite, Barite);
-        //ChargedCertusQuartz		.addOreByProducts(CertusQuartz			, Quartzite				, Barite				);
-        Redstone.addOreByProducts(Cinnabar, RareEarth, Glowstone);
-        Monazite.addOreByProducts(Thorium, Neodymium, RareEarth);
-        Forcicium.addOreByProducts(Thorium, Neodymium, RareEarth);
-        Forcillium.addOreByProducts(Thorium, Neodymium, RareEarth);
-        Malachite.addOreByProducts(Copper, BrownLimonite, Calcite);
-        YellowLimonite.addOreByProducts(Nickel, BrownLimonite, Cobalt);
-        BrownLimonite.addOreByProducts(Malachite, YellowLimonite);
-        Neodymium.addOreByProducts(Monazite, RareEarth);
-        Bastnasite.addOreByProducts(Neodymium, RareEarth);
-        Glowstone.addOreByProducts(Redstone, Gold);
-        Zinc.addOreByProducts(Tin, Gallium);
-        Tungsten.addOreByProducts(Manganese, Molybdenum);
-        Diatomite.addOreByProducts(BandedIron, Sapphire);
-        Iron.addOreByProducts(Nickel, Tin);
-        Lepidolite.addOreByProducts(Lithium, Caesium);
-        Gold.addOreByProducts(Copper, Nickel);
-        Tin.addOreByProducts(Iron, Zinc);
-        Antimony.addOreByProducts(Zinc, Iron);
-        Silver.addOreByProducts(Lead, Sulfur);
-        Lead.addOreByProducts(Silver, Sulfur);
-        Thorium.addOreByProducts(Uranium, Lead);
-        Plutonium.addOreByProducts(Uranium, Lead);
-        Electrum.addOreByProducts(Gold, Silver);
-        Bronze.addOreByProducts(Copper, Tin);
-        Brass.addOreByProducts(Copper, Zinc);
-        Coal.addOreByProducts(Lignite, Thorium);
-        Ilmenite.addOreByProducts(Iron, Titanium);
-        Manganese.addOreByProducts(Chrome, Iron);
-        Sapphire.addOreByProducts(Aluminium, GreenSapphire);
-        GreenSapphire.addOreByProducts(Aluminium, Sapphire);
-        Platinum.addOreByProducts(Nickel, Iridium);
-        Emerald.addOreByProducts(Beryllium, Aluminium);
-        Olivine.addOreByProducts(Pyrope, Magnesium);
-        Chrome.addOreByProducts(Iron, Magnesium);
-        Chromite.addOreByProducts(Iron, Magnesium);
-        Tetrahedrite.addOreByProducts(Antimony, Zinc);
-        GarnetSand.addOreByProducts(GarnetRed, GarnetYellow);
-        Magnetite.addOreByProducts(Iron, Gold);
-        GraniticMineralSand.addOreByProducts(GraniteBlack, Magnetite);
-        BasalticMineralSand.addOreByProducts(Basalt, Magnetite);
-        Basalt.addOreByProducts(Olivine, DarkAsh);
-        Celestine.addOreByProducts(Strontium, Sulfur);
-        VanadiumMagnetite.addOreByProducts(Magnetite, Vanadium);
-        Lazurite.addOreByProducts(Sodalite, Lapis);
-        Sodalite.addOreByProducts(Lazurite, Lapis);
-        Spodumene.addOreByProducts(Aluminium, Lithium);
-        Ruby.addOreByProducts(Chrome, GarnetRed);
-        Phosphorus.addOreByProducts(Apatite, Phosphate);
-        Iridium.addOreByProducts(Platinum, Osmium);
-        Pyrope.addOreByProducts(GarnetRed, Magnesium);
-        Almandine.addOreByProducts(GarnetRed, Aluminium);
-        Spessartine.addOreByProducts(GarnetRed, Manganese);
-        Andradite.addOreByProducts(GarnetYellow, Iron);
-        Grossular.addOreByProducts(GarnetYellow, Calcium);
-        Uvarovite.addOreByProducts(GarnetYellow, Chrome);
-        Calcite.addOreByProducts(Andradite, Malachite);
-        NaquadahEnriched.addOreByProducts(Naquadah, Naquadria);
-        Naquadah.addOreByProducts(NaquadahEnriched);
-        Pyrolusite.addOreByProducts(Manganese);
-        Molybdenite.addOreByProducts(Molybdenum);
-        Stibnite.addOreByProducts(Antimony);
-        Garnierite.addOreByProducts(Nickel);
-        Lignite.addOreByProducts(Coal);
-        Diamond.addOreByProducts(Graphite);
-        Beryllium.addOreByProducts(Emerald);
-        Apatite.addOreByProducts(Phosphorus);
-        Nikolite.addOreByProducts(Diamond);
-        Teslatite.addOreByProducts(Diamond);
-        Magnesite.addOreByProducts(Magnesium);
-        NetherQuartz.addOreByProducts(Netherrack);
-        PigIron.addOreByProducts(Iron);
-        DeepIron.addOreByProducts(Iron);
-        ShadowIron.addOreByProducts(Iron);
-        DarkIron.addOreByProducts(Iron);
-        MeteoricIron.addOreByProducts(Iron);
-        Steel.addOreByProducts(Iron);
-        HSLA.addOreByProducts(Iron);
-        Mithril.addOreByProducts(Platinum);
-        Midasium.addOreByProducts(Gold);
-        AstralSilver.addOreByProducts(Silver);
-        Graphite.addOreByProducts(Carbon);
-        Netherrack.addOreByProducts(Sulfur);
-        Flint.addOreByProducts(Obsidian);
-        Cobaltite.addOreByProducts(Cobalt);
-        Cobalt.addOreByProducts(Cobaltite);
-        Sulfur.addOreByProducts(Sulfur);
-        Saltpeter.addOreByProducts(Saltpeter);
-        Endstone.addOreByProducts(Helium_3);
-        Osmium.addOreByProducts(Iridium);
-        Magnesium.addOreByProducts(Olivine);
-        Aluminium.addOreByProducts(Bauxite);
-        Titanium.addOreByProducts(Almandine);
-        Obsidian.addOreByProducts(Olivine);
-        Ash.addOreByProducts(Carbon);
-        DarkAsh.addOreByProducts(Carbon);
-        Redrock.addOreByProducts(Clay);
-        Marble.addOreByProducts(Calcite);
-        Clay.addOreByProducts(Clay);
-        Cassiterite.addOreByProducts(Tin);
-        CassiteriteSand.addOreByProducts(Tin);
-        GraniteBlack.addOreByProducts(Biotite);
-        GraniteRed.addOreByProducts(PotassiumFeldspar);
-        Phosphate.addOreByProducts(Phosphor);
-        Phosphor.addOreByProducts(Phosphate);
-        Jade.addOreByProducts(Jade);
-        Tanzanite.addOreByProducts(Opal);
-        Opal.addOreByProducts(Tanzanite);
-        Amethyst.addOreByProducts(Amethyst);
-        Jasper.addOreByProducts(FoolsRuby);
-        FoolsRuby.addOreByProducts(Jasper);
-        Amber.addOreByProducts(Amber);
-        Topaz.addOreByProducts(BlueTopaz);
-        BlueTopaz.addOreByProducts(Topaz);
-        Niter.addOreByProducts(Saltpeter);
-        Vinteum.addOreByProducts(Vinteum);
-        Force.addOreByProducts(Force);
-        Dilithium.addOreByProducts(Dilithium);
-        Neutronium.addOreByProducts(Neutronium);
-        Lithium.addOreByProducts(Lithium);
-        Silicon.addOreByProducts(SiliconDioxide);
-        Salt.addOreByProducts(RockSalt);
-        RockSalt.addOreByProducts(Salt);
-
-        Glue.mChemicalFormula = "No Horses were harmed for the Production";
-        UUAmplifier.mChemicalFormula = "Accelerates the Mass Fabricator";
-        LiveRoot.mChemicalFormula = "";
-        WoodSealed.mChemicalFormula = "";
-        Wood.mChemicalFormula = "";
-        FoolsRuby.mChemicalFormula = Ruby.mChemicalFormula;
-
-        // Naquadah is green when molten, so this reflects the Color change approciately
-        Naquadah.mMoltenRGBa[0] = 0;
-        Naquadah.mMoltenRGBa[1] = 255;
-        Naquadah.mMoltenRGBa[2] = 0;
-        Naquadah.mMoltenRGBa[3] = 0;
-        NaquadahEnriched.mMoltenRGBa[0] = 64;
-        NaquadahEnriched.mMoltenRGBa[1] = 255;
-        NaquadahEnriched.mMoltenRGBa[2] = 64;
-        NaquadahEnriched.mMoltenRGBa[3] = 0;
-        Naquadria.mMoltenRGBa[0] = 128;
-        Naquadria.mMoltenRGBa[1] = 255;
-        Naquadria.mMoltenRGBa[2] = 128;
-        Naquadria.mMoltenRGBa[3] = 0;
-
-        NaquadahEnriched.mChemicalFormula = "Nq+";
-        Naquadah.mChemicalFormula = "Nq";
-        Naquadria.mChemicalFormula = "NqX";
     }
 
-    /**
-     * This Array can be changed dynamically by a Tick Handler in order to get a glowing Effect on all GT Meta Items out of this Material.
-     */
-    public final short[] mRGBa = new short[]{255, 255, 255, 0}, mMoltenRGBa = new short[]{255, 255, 255, 0};
-    public final TextureSet mIconSet;
-    public final int mMetaItemSubID;
-    public final boolean mUnificatable;
-    public final Materials mMaterialInto;
-    public final List<MaterialStack> mMaterialList = new ArrayList<MaterialStack>();
-    public final List<Materials> mOreByProducts = new ArrayList<Materials>(), mOreReRegistrations = new ArrayList<Materials>();
-    public final List<TC_AspectStack> mAspects = new ArrayList<TC_AspectStack>();
-    private final ArrayList<ItemStack> mMaterialItems = new ArrayList<ItemStack>();
-    private final Collection<SubTag> mSubTags = new HashSet<SubTag>();
-    public Enchantment mEnchantmentTools = null, mEnchantmentArmors = null;
-    public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
-    public boolean mBlastFurnaceRequired = false;
-    public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
-    public String mChemicalFormula = "?", mDefaultLocalName = "null";
-    public Dyes mColor = Dyes._NULL;
-    public short mMeltingPoint = 0, mBlastFurnaceTemp = 0;
-    public int mTypes = 0, mDurability = 16, mFuelPower = 0, mFuelType = 0, mExtraData = 0, mOreValue = 0, mOreMultiplier = 1, mByProductMultiplier = 1, mSmeltingMultiplier = 1;
-    public long mDensity = M;
-    public Element mElement = null;
-    public Materials mDirectSmelting = this, mOreReplacement = this, mMacerateInto = this, mSmeltInto = this, mArcSmeltInto = this, mHandleMaterial = this;
-    public byte mToolQuality = 0;
-    public Fluid mSolid = null, mFluid = null, mGas = null, mPlasma = null;
-    /**
-     * This Fluid is used as standard Unit for Molten Materials. 1296 is a Molten Block, what means 144 is one Material Unit worth
-     */
-    public Fluid mStandardMoltenFluid = null;
-
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, boolean aUnificatable) {
-        mUnificatable = aUnificatable;
-        mMaterialInto = this;
-        mMetaItemSubID = aMetaItemSubID;
-        mToolQuality = (byte) aToolQuality;
-        mDurability = aToolDurability;
-        mToolSpeed = aToolSpeed;
-        mIconSet = aIconSet;
-        if (aMetaItemSubID >= 0) {
-            if (GregTech_API.sGeneratedMaterials[aMetaItemSubID] == null) {
-                GregTech_API.sGeneratedMaterials[aMetaItemSubID] = this;
-            } else {
-                throw new IllegalArgumentException("The Index " + aMetaItemSubID + " is already used!");
+    public static void init() {
+        new ProcessingConfig();
+        if (!GT_Mod.gregtechproxy.mEnableAllMaterials) new ProcessingModSupport();
+        for (IMaterialHandler aRegistrator : mMaterialHandlers) {
+            aRegistrator.onMaterialsInit(); //This is where addon mods can add/manipulate materials
+        }
+        initMaterialProperties(); //No more material addition or manipulation should be done past this point!
+        MATERIALS_ARRAY = MATERIALS_MAP.values().toArray(new Materials[MATERIALS_MAP.size()]); //Generate standard object array. This is a lot faster to loop over.
+        VALUES = Arrays.asList(MATERIALS_ARRAY);
+        if (!GT_Mod.gregtechproxy.mEnableAllComponents) OrePrefixes.initMaterialComponents();
+        for (Materials aMaterial : MATERIALS_ARRAY) {
+            if (aMaterial.mMetaItemSubID >= 0) {
+                if (aMaterial.mMetaItemSubID < 1000) {
+                    if (aMaterial.mHasParentMod) {
+                        if (GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] == null) {
+                            GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] = aMaterial;
+                        } else throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is already used!");
+                    }
+                } else throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is/over the maximum of 1000");
             }
+        }
+        // Fills empty spaces with materials, causes horrible load times.
+        /*for (int i = 0; i < GregTech_API.sGeneratedMaterials.length; i++) {
+            if (GregTech_API.sGeneratedMaterials[i] == null) {
+                GregTech_API.sGeneratedMaterials[i] = new Materials(i, TextureSet.SET_NONE, 1.0F, 0, 2, 1|2|4|8|16|32|64|128, 92, 0, 168, 0, "TestMat" + i, 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL, "testmat");
+            }
+        }*/
+    }
+
+    public static void initMaterialProperties() {
+        GT_Mod.gregtechproxy.mChangeHarvestLevels = GregTech_API.sMaterialProperties.get("harvestlevel", "ActivateHarvestLevelChange", false);
+        GT_Mod.gregtechproxy.mMaxHarvestLevel = Math.min(15, GregTech_API.sMaterialProperties.get("harvestlevel", "MaxHarvestLevel",7));
+        GT_Mod.gregtechproxy.mGraniteHavestLevel = GregTech_API.sMaterialProperties.get("harvestlevel", "GraniteHarvestLevel", 3);
+        StringBuilder aConfigPathSB = new StringBuilder();
+        for (Materials aMaterial : MATERIALS_MAP.values()) { /** The only place where MATERIALS_MAP should be used to loop over all materials. **/
+            if (aMaterial != null && aMaterial != Materials._NULL && aMaterial != Materials.Empty) {
+                aConfigPathSB.append("materials.").append(aMaterial.mConfigSection).append(".").append(aMaterial.mCustomOre ? aMaterial.mCustomID : aMaterial.mName);
+                String aConfigPath = aConfigPathSB.toString();
+                aMaterial.mMetaItemSubID = GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialID", aMaterial.mCustomOre ? -1 : aMaterial.mMetaItemSubID);
+                aMaterial.mDefaultLocalName = GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialName", aMaterial.mCustomOre ? "CustomOre" + aMaterial.mCustomID : aMaterial.mDefaultLocalName);
+                aMaterial.mMeltingPoint = (short) GregTech_API.sMaterialProperties.get(aConfigPath, "MeltingPoint", aMaterial.mMeltingPoint);
+                aMaterial.mBlastFurnaceRequired = GregTech_API.sMaterialProperties.get(aConfigPath, "BlastFurnaceRequired", aMaterial.mBlastFurnaceRequired);
+                aMaterial.mBlastFurnaceTemp = (short) GregTech_API.sMaterialProperties.get(aConfigPath, "BlastFurnaceTemp", aMaterial.mBlastFurnaceTemp);
+                if (GT_Mod.gregtechproxy.mTEMachineRecipes && aMaterial.mBlastFurnaceRequired && aMaterial.mBlastFurnaceTemp < 1500) GT_ModHandler.ThermalExpansion.addSmelterBlastOre(aMaterial);
+                aMaterial.mFuelPower = GregTech_API.sMaterialProperties.get(aConfigPath, "FuelPower", aMaterial.mFuelPower);
+                aMaterial.mFuelType = GregTech_API.sMaterialProperties.get(aConfigPath, "FuelType", aMaterial.mFuelType);
+                aMaterial.mOreValue = GregTech_API.sMaterialProperties.get(aConfigPath, "OreValue", aMaterial.mOreValue);
+                aMaterial.mDensityMultiplier = GregTech_API.sMaterialProperties.get(aConfigPath, "DensityMultiplier", aMaterial.mDensityMultiplier);
+                aMaterial.mDensityDivider = GregTech_API.sMaterialProperties.get(aConfigPath, "DensityDivider", aMaterial.mDensityDivider);
+                aMaterial.mDensity = (long) GregTech_API.sMaterialProperties.get(aConfigPath, "Density", (M * aMaterial.mDensityMultiplier) / aMaterial.mDensityDivider);
+                aMaterial.mDurability = GregTech_API.sMaterialProperties.get(aConfigPath, "ToolDurability", aMaterial.mDurability);
+                aMaterial.mToolSpeed = (float) GregTech_API.sMaterialProperties.get(aConfigPath, "ToolSpeed", aMaterial.mToolSpeed);
+                aMaterial.mToolQuality = (byte) GregTech_API.sMaterialProperties.get(aConfigPath, "ToolQuality", aMaterial.mToolQuality);
+                //aMaterial.mIconSet = TextureSet.valueOf(GregTech_API.sMaterialProperties.get(aConfigPath.toString(), "IconSet", aMaterial.mIconSet.mSetName));
+                aMaterial.mTransparent = GregTech_API.sMaterialProperties.get(aConfigPath, "Transparent", aMaterial.mTransparent);
+                String aColor = GregTech_API.sMaterialProperties.get(aConfigPath, "DyeColor", aMaterial.mColor == Dyes._NULL ? "None" : aMaterial.mColor.toString());
+                aMaterial.mColor = aColor.equals("None") ? Dyes._NULL : Dyes.get(aColor);
+                String[] aRGBA = GregTech_API.sMaterialProperties.get(aConfigPath, "MatRGBA", String.valueOf(aMaterial.mRGBa[0] + "," + aMaterial.mRGBa[1] + "," + aMaterial.mRGBa[2] + "," + aMaterial.mRGBa[3] + ",")).split(",");
+                aMaterial.mRGBa[0] = Short.parseShort(aRGBA[0]);
+                aMaterial.mRGBa[1] = Short.parseShort(aRGBA[1]);
+                aMaterial.mRGBa[2] = Short.parseShort(aRGBA[2]);
+                aMaterial.mRGBa[3] = Short.parseShort(aRGBA[3]);
+                aMaterial.mTypes = GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialTypes", aMaterial.mCustomOre ? 1|2|4|8|16|32|64|128 : aMaterial.mTypes);
+                aMaterial.mUnificatable = GregTech_API.sMaterialProperties.get(aConfigPath, "Unificatable", aMaterial.mUnificatable);
+                aMaterial.mChemicalFormula = GregTech_API.sMaterialProperties.get(aConfigPath, "ChemicalFormula", aMaterial.mChemicalFormula);
+                aMaterial.mGasTemp = (short) GregTech_API.sMaterialProperties.get(aConfigPath, "GasTemp", aMaterial.mGasTemp);
+                aMaterial.setOreMultiplier(GregTech_API.sMaterialProperties.get(aConfigPath, "OreMultiplier", aMaterial.mOreMultiplier));
+                aMaterial.setSmeltingMultiplier(GregTech_API.sMaterialProperties.get(aConfigPath, "OreSmeltingMultiplier", aMaterial.mSmeltingMultiplier));
+                aMaterial.setByProductMultiplier(GregTech_API.sMaterialProperties.get(aConfigPath, "OreByProductMultiplier", aMaterial.mByProductMultiplier));
+                aMaterial.setHeatDamage((float) GregTech_API.sMaterialProperties.get(aConfigPath, "HeatDamage", aMaterial.mHeatDamage));
+                aMaterial.mSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mSmeltInto.mName));
+                if (aMaterial.mSmeltInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mSmeltInto = Materials._NULL;
+                }
+                aMaterial.mMacerateInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialMacerateInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mMacerateInto.mName));
+                if (aMaterial.mMacerateInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialMacerateInto of Material:" + aMaterial.mName);
+                	aMaterial.mMacerateInto = Materials._NULL;
+                }
+                aMaterial.mArcSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialArcSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mArcSmeltInto.mName));
+                if (aMaterial.mArcSmeltInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialArcSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mArcSmeltInto = Materials._NULL;
+                }
+                aMaterial.mDirectSmelting = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialDirectSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mDirectSmelting.mName));
+                if (aMaterial.mDirectSmelting == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialDirectSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mDirectSmelting = Materials._NULL;
+                }
+                aMaterial.mHasParentMod = GregTech_API.sMaterialProperties.get(aConfigPath, "HasParentMod", aMaterial.mHasParentMod);
+                if (aMaterial.mHasPlasma = GregTech_API.sMaterialProperties.get(aConfigPath, "AddPlasma", aMaterial.mHasPlasma)) GT_Mod.gregtechproxy.addAutogeneratedPlasmaFluid(aMaterial);
+                if (aMaterial.mHasGas = GregTech_API.sMaterialProperties.get(aConfigPath, "AddGas", aMaterial.mHasGas)) GT_Mod.gregtechproxy.addFluid(aMaterial.mName.toLowerCase(), aMaterial.mDefaultLocalName, aMaterial, 2, aMaterial.mGasTemp);
+                aMaterial.mEnchantmentToolsLevel = (byte) GregTech_API.sMaterialProperties.get(aConfigPath, "EnchantmentLevel", aMaterial.mEnchantmentToolsLevel);
+                String aEnchantmentName = GregTech_API.sMaterialProperties.get(aConfigPath, "Enchantment", aMaterial.mEnchantmentTools != null ? aMaterial.mEnchantmentTools.getName() : "");
+                if (aMaterial.mEnchantmentTools != null && !aEnchantmentName.equals(aMaterial.mEnchantmentTools.getName())) {
+                    for (int i = 0; i < Enchantment.enchantmentsList.length; i++) {
+                        if (aEnchantmentName.equals(Enchantment.enchantmentsList[i].getName())) aMaterial.mEnchantmentTools = Enchantment.enchantmentsList[i];
+                    }
+                }
+                /**
+                 * Converts the pre-defined list of SubTags from a material into a list of SubTag names for setting/getting to/from the config.
+                 * It is then converted to a String[] and finally to a singular String for insertion into the config
+                 * If the config string is different from the default, we then want to clear the Materials SubTags and insert new ones from the config string.
+                 */
+                List<String> aSubTags = new ArrayList<>();
+                for (SubTag aTag : aMaterial.mSubTags) aSubTags.add(aTag.mName);
+                String aDefaultTagString = "," + aSubTags.toString().replace(" ", "").replace("[", "").replace("]", "");
+                String aConfigTagString = GregTech_API.sMaterialProperties.get(aConfigPath, "ListSubTags", aDefaultTagString);
+                if (!aConfigTagString.equals(aDefaultTagString)) {
+                    aMaterial.mSubTags.clear();
+                    if (aConfigTagString.length() > 0) {
+                        aSubTags = new ArrayList<>(Arrays.asList(aConfigTagString.split(",")));
+                        for (String aTagString : aSubTags) {
+                            SubTag aTag = SubTag.sSubTags.get(aTagString);
+                            if (aTag != null) aMaterial.mSubTags.add(aTag);
+                        }
+                    }
+                }
+                /** Same principal as SubTags **/
+                List<String> aOreByProducts = new ArrayList<>();
+                for (Materials aMat : aMaterial.mOreByProducts) aOreByProducts.add(aMat.mName);
+                String aDefaultMatByProString = "," + aOreByProducts.toString().replace(" ", "").replace("[", "").replace("]", "");
+                String aConfigMatByProString = GregTech_API.sMaterialProperties.get(aConfigPath, "ListMaterialByProducts", aDefaultMatByProString);
+                if (!aConfigMatByProString.equals(aDefaultMatByProString)) {
+                    aMaterial.mOreByProducts.clear();
+                    if (aConfigMatByProString.length() > 0) {
+                        aOreByProducts = new ArrayList<>(Arrays.asList(aConfigMatByProString.split(",")));
+                        for (String aMaterialString : aOreByProducts) {
+                            Materials aMat = MATERIALS_MAP.get(aMaterialString);
+                            if (aMat != null) aMaterial.mOreByProducts.add(aMat);
+                        }
+                    }
+                }
+                /** Same principal as SubTags **/
+                List<String> aOreReRegistrations = new ArrayList<>();
+                for (Materials aMat : aMaterial.mOreReRegistrations) aOreReRegistrations.add(aMat.mName);
+                String aDefaultMatReRegString = "," + aOreReRegistrations.toString().replace(" ", "").replace("[", "").replace("]", "");
+                String aConfigMatMatReRegString = GregTech_API.sMaterialProperties.get(aConfigPath, "ListMaterialReRegistrations", aDefaultMatReRegString);
+                if (!aConfigMatMatReRegString.equals(aDefaultMatReRegString)) {
+                    aMaterial.mOreReRegistrations.clear();
+                    if (aConfigMatMatReRegString.length() > 0) {
+                        aOreReRegistrations = new ArrayList<>(Arrays.asList(aConfigMatMatReRegString.split(",")));
+                        for (String aMaterialString : aOreReRegistrations) {
+                            Materials aMat = MATERIALS_MAP.get(aMaterialString);
+                            if (aMat != null) aMaterial.mOreReRegistrations.add(aMat);
+                        }
+                    }
+                }
+                /** Same principal as SubTags but with two values **/
+                List<String> aAspects = new ArrayList<>();
+                ArrayList<String> aAspectAmounts = new ArrayList<>();
+                for (TC_Aspects.TC_AspectStack aAspectStack : aMaterial.mAspects) {
+                    aAspects.add(aAspectStack.mAspect.toString());
+                    aAspectAmounts.add(String.valueOf(aAspectStack.mAmount));
+                }
+                String aDefaultAspectString = "," + aAspects.toString().replace(" ", "").replace("[", "").replace("]", "");
+                String aDefaultAspectAmountString = "," + aAspectAmounts.toString().replace(" ", "").replace("[", "").replace("]", "");
+                String aConfigAspectString = GregTech_API.sMaterialProperties.get(aConfigPath, "ListTCAspects", aDefaultAspectString);
+                String aConfigAspectAmountString = GregTech_API.sMaterialProperties.get(aConfigPath, "ListTCAspectAmounts", aDefaultAspectAmountString);
+                if (!aConfigAspectString.equals(aDefaultAspectString) || !aConfigAspectAmountString.equals(aDefaultAspectAmountString)) {
+                    aMaterial.mAspects.clear();
+                    if (aConfigAspectString.length() > 0) {
+                        aAspects = new ArrayList<>(Arrays.asList(aConfigAspectString.split(",")));
+                        for (int i = 0; i < aAspects.size(); i++) {
+                            String aAspectString = aAspects.get(i);
+                            long aAspectAmount = Long.parseLong(aAspectAmounts.get(i));
+                            TC_Aspects.TC_AspectStack aAspectStack = new TC_Aspects.TC_AspectStack(TC_Aspects.valueOf(aAspectString), aAspectAmount);
+                            if (aAspectStack != null) aMaterial.mAspects.add(aAspectStack);
+                        }
+                    }
+                }
+                /** Moved the harvest level changes from GT_Mod to have less things iterating over MATERIALS_ARRAY **/
+                if (GT_Mod.gregtechproxy.mChangeHarvestLevels && aMaterial.mToolQuality > 0 && aMaterial.mMetaItemSubID < GT_Mod.gregtechproxy.mHarvestLevel.length && aMaterial.mMetaItemSubID >= 0) {
+                    GT_Mod.gregtechproxy.mHarvestLevel[aMaterial.mMetaItemSubID] = GregTech_API.sMaterialProperties.get(aConfigPath, "HarvestLevel", aMaterial.mToolQuality);
+                }
+                /** Moved from GT_Proxy? (Not sure)**/
+                aMaterial.mHandleMaterial = (aMaterial == Desh ? aMaterial.mHandleMaterial : aMaterial == Diamond || aMaterial == Thaumium ? Wood : aMaterial.contains(SubTag.BURNING) ? Blaze : aMaterial.contains(SubTag.MAGICAL) && aMaterial.contains(SubTag.CRYSTAL) && Loader.isModLoaded(GT_Values.MOD_ID_TC) ? Thaumium : aMaterial.getMass() > Element.Tc.getMass() * 2 ? TungstenSteel : aMaterial.getMass() > Element.Tc.getMass() ? Steel : Wood);
+            }
+            aConfigPathSB.setLength(0);
         }
     }
 
-    private Materials(Materials aMaterialInto, boolean aReRegisterIntoThis) {
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, boolean aUnificatable, String aName, String aDefaultLocalName) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aUnificatable, aName, aDefaultLocalName, "ore", false, "null");
+    }
+
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, boolean aUnificatable, String aName, String aDefaultLocalName, String aConfigSection, boolean aCustomOre, String aCustomID) {
+        mMetaItemSubID = aMetaItemSubID;
+        mDefaultLocalName = aDefaultLocalName;
+        mName = aName;
+        MATERIALS_MAP.put(mName, this);
+        mCustomOre = aCustomOre;
+        mCustomID = aCustomID;
+        mConfigSection = aConfigSection;
+        mUnificatable = aUnificatable;
+        mDurability = aDurability;
+        mToolSpeed = aToolSpeed;
+        mToolQuality = (byte) aToolQuality;
+        mMaterialInto = this;
+        mIconSet = aIconSet;
+    }
+
+    public Materials(Materials aMaterialInto, boolean aReRegisterIntoThis) {
         mUnificatable = false;
         mDefaultLocalName = aMaterialInto.mDefaultLocalName;
+        mName = aMaterialInto.mName;
         mMaterialInto = aMaterialInto.mMaterialInto;
         if (aReRegisterIntoThis) mMaterialInto.mOreReRegistrations.add(this);
         mChemicalFormula = aMaterialInto.mChemicalFormula;
         mMetaItemSubID = -1;
         mIconSet = TextureSet.SET_NONE;
+    }
+
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor, "ore", false, "null");
+    }
+
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, String aConfigSection) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor, aConfigSection, false, "null");
     }
 
     /**
@@ -1306,49 +1604,47 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
      *                              32 = Plasma Cells
      *                              64 = Tool Heads
      *                              128 = Gears
+     *                              256 = Designates something as empty (only used for the Empty material)
      * @param aR,                   aG, aB Color of the Material 0-255 each.
      * @param aA                    transparency of the Material Texture. 0 = fully visible, 255 = Invisible.
-     * @param aLocalName            The Name used as Default for localization.
+     * @param aName                 The Name used as Default for localization.
      * @param aFuelType             Type of Generator to get Energy from this Material.
      * @param aFuelPower            EU generated. Will be multiplied by 1000, also additionally multiplied by 2 for Gems.
-     * @param aAmplificationValue   Amount of UUM amplifier gotten from this.
-     * @param aUUMEnergy            Amount of EU needed to shape the UUM into this Material.
      * @param aMeltingPoint         Used to determine the smelting Costs in Furnii.
      * @param aBlastFurnaceTemp     Used to determine the needed Heat capactiy Costs in Blast Furnii.
      * @param aBlastFurnaceRequired If this requires a Blast Furnace.
      * @param aColor                Vanilla MC Wool Color which comes the closest to this.
      */
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor) {
-        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, true);
-        mDefaultLocalName = aLocalName;
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, String aConfigSection, boolean aCustomOre, String aCustomID) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, true, aName, aDefaultLocalName, aConfigSection, aCustomOre, aCustomID);
         mMeltingPoint = (short) aMeltingPoint;
-        mBlastFurnaceTemp = (short) aBlastFurnaceTemp;
         mBlastFurnaceRequired = aBlastFurnaceRequired;
-        if (aTransparent) add(SubTag.TRANSPARENT);
+        mBlastFurnaceTemp = (short) aBlastFurnaceTemp;
+        mTransparent = aTransparent;
         mFuelPower = aFuelPower;
         mFuelType = aFuelType;
         mOreValue = aOreValue;
+        mDensityMultiplier = aDensityMultiplier;
+        mDensityDivider = aDensityDivider;
         mDensity = (M * aDensityMultiplier) / aDensityDivider;
-        mColor = aColor == null ? Dyes._NULL : aColor;
-        if (mColor != null) add(SubTag.HAS_COLOR);
+        mColor = aColor;
         mRGBa[0] = mMoltenRGBa[0] = (short) aR;
         mRGBa[1] = mMoltenRGBa[1] = (short) aG;
         mRGBa[2] = mMoltenRGBa[2] = (short) aB;
         mRGBa[3] = mMoltenRGBa[3] = (short) aA;
         mTypes = aTypes;
+        if (mColor != null) add(SubTag.HAS_COLOR);
+        if (mTransparent) add(SubTag.TRANSPARENT);
         if ((mTypes & 2) != 0) add(SubTag.SMELTING_TO_FLUID);
     }
 
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, List<TC_AspectStack> aAspects) {
-        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, aR, aG, aB, aA, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, List<TC_Aspects.TC_AspectStack> aAspects) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
         mAspects.addAll(aAspects);
     }
 
-    /**
-     * @param aElement The Element Enum represented by this Material
-     */
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, Element aElement, List<TC_AspectStack> aAspects) {
-        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, aR, aG, aB, aA, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, Element aElement, List<TC_Aspects.TC_AspectStack> aAspects) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
         mElement = aElement;
         mElement.mLinkedMaterials.add(this);
         if (aElement == Element._NULL) {
@@ -1360,12 +1656,12 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         mAspects.addAll(aAspects);
     }
 
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, int aExtraData, List<MaterialStack> aMaterialList) {
-        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, aR, aG, aB, aA, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor, aExtraData, aMaterialList, null);
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, int aExtraData, List<MaterialStack> aMaterialList) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor, aExtraData, aMaterialList, null);
     }
 
-    private Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aToolDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, int aExtraData, List<MaterialStack> aMaterialList, List<TC_AspectStack> aAspects) {
-        this(aMetaItemSubID, aIconSet, aToolSpeed, aToolDurability, aToolQuality, aTypes, aR, aG, aB, aA, aLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
+    public Materials(int aMetaItemSubID, TextureSet aIconSet, float aToolSpeed, int aDurability, int aToolQuality, int aTypes, int aR, int aG, int aB, int aA, String aName, String aDefaultLocalName, int aFuelType, int aFuelPower, int aMeltingPoint, int aBlastFurnaceTemp, boolean aBlastFurnaceRequired, boolean aTransparent, int aOreValue, int aDensityMultiplier, int aDensityDivider, Dyes aColor, int aExtraData, List<MaterialStack> aMaterialList, List<TC_Aspects.TC_AspectStack> aAspects) {
+        this(aMetaItemSubID, aIconSet, aToolSpeed, aDurability, aToolQuality, aTypes, aR, aG, aB, aA, aName, aDefaultLocalName, aFuelType, aFuelPower, aMeltingPoint, aBlastFurnaceTemp, aBlastFurnaceRequired, aTransparent, aOreValue, aDensityMultiplier, aDensityDivider, aColor);
         mExtraData = aExtraData;
         mMaterialList.addAll(aMaterialList);
         mChemicalFormula = "";
@@ -1378,43 +1674,56 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
             if (tMaterial.mMaterial.mMeltingPoint > 0)
                 tMeltingPoint += tMaterial.mMaterial.mMeltingPoint * tMaterial.mAmount;
             if (aAspects == null)
-                for (TC_AspectStack tAspect : tMaterial.mMaterial.mAspects) tAspect.addToAspectList(mAspects);
+                for (TC_Aspects.TC_AspectStack tAspect : tMaterial.mMaterial.mAspects) tAspect.addToAspectList(mAspects);
         }
 
         if (mMeltingPoint < 0) mMeltingPoint = (short) (tMeltingPoint / tAmountOfComponents);
 
         tAmountOfComponents *= aDensityMultiplier;
         tAmountOfComponents /= aDensityDivider;
-        if (aAspects == null) for (TC_AspectStack tAspect : mAspects)
+        if (aAspects == null) for (TC_Aspects.TC_AspectStack tAspect : mAspects)
             tAspect.mAmount = Math.max(1, tAspect.mAmount / Math.max(1, tAmountOfComponents));
         else mAspects.addAll(aAspects);
     }
 
+    /**
+     * This is for keeping compatibility with addons mods (Such as TinkersGregworks etc) that looped over the old materials enum
+     */
+    @Deprecated
+    public String name() {
+        return mName;
+    }
+
+    /**
+     * This is for keeping compatibility with addons mods (Such as TinkersGregworks etc) that looped over the old materials enum
+     */
+    @Deprecated
+    public static Materials valueOf(String aMaterialName) {
+        return getMaterialsMap().get(aMaterialName);
+    }
+
+    /**
+     * This is for keeping compatibility with addons mods (Such as TinkersGregworks etc) that looped over the old materials enum
+     */
+    public static Materials[] values() {
+        return MATERIALS_ARRAY;
+    }
+
+    /**
+     * This should only be used for getting a Material by its name as a String. Do not loop over this map, use values().
+     */
+    public static Map<String, Materials> getMaterialsMap() {
+        return MATERIALS_MAP;
+    }
+
     public static Materials get(String aMaterialName) {
-        Object tObject = GT_Utility.getFieldContent(Materials.class, aMaterialName, false, false);
-        if (tObject != null && tObject instanceof Materials) return (Materials) tObject;
-        return _NULL;
+        Materials aMaterial = getMaterialsMap().get(aMaterialName);
+        if (aMaterial != null) return aMaterial;
+        return Materials._NULL;
     }
 
     public static Materials getRealMaterial(String aMaterialName) {
         return get(aMaterialName).mMaterialInto;
-    }
-
-    /**
-     * Called in preInit with the Config to set Values.
-     *
-     * @param aConfiguration
-     */
-    public static void init(GT_Config aConfiguration) {
-        for (Materials tMaterial : VALUES) {
-            String tString = tMaterial.toString().toLowerCase();
-            tMaterial.mHeatDamage = (float) aConfiguration.get(ConfigCategories.Materials.heatdamage, tString, tMaterial.mHeatDamage);
-            if (tMaterial.mBlastFurnaceRequired)
-                tMaterial.mBlastFurnaceRequired = aConfiguration.get(ConfigCategories.Materials.blastfurnacerequirements, tString, true);
-            if (tMaterial.mBlastFurnaceRequired && aConfiguration.get(ConfigCategories.Materials.blastinductionsmelter, tString, tMaterial.mBlastFurnaceTemp < 1500))
-                GT_ModHandler.ThermalExpansion.addSmelterBlastOre(tMaterial);
-            tMaterial.mHandleMaterial = (tMaterial == Desh ? tMaterial.mHandleMaterial : tMaterial == Diamond || tMaterial == Thaumium ? Wood : tMaterial.contains(SubTag.BURNING) ? Blaze : tMaterial.contains(SubTag.MAGICAL) && tMaterial.contains(SubTag.CRYSTAL) && Loader.isModLoaded(MOD_ID_TC) ? Thaumium : tMaterial.getMass() > Element.Tc.getMass() * 2 ? TungstenSteel : tMaterial.getMass() > Element.Tc.getMass() ? Steel : Wood);
-        }
     }
 
     public boolean isRadioactive() {
@@ -1479,6 +1788,14 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         }
         return mChemicalFormula;
     }
+    
+    /**
+     * Adds a Class implementing IMaterialRegistrator to the master list
+     */
+    public static boolean add(IMaterialHandler aRegistrator) {
+        if (aRegistrator == null) return false;
+        return mMaterialHandlers.add(aRegistrator);
+    }
 
     /**
      * Adds an ItemStack to this Material.
@@ -1505,7 +1822,8 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
     public boolean remove(ItemStack aStack) {
         if (aStack == null) return false;
         boolean temp = false;
-        for (int i = 0; i < mMaterialItems.size(); i++)
+        int mMaterialItems_sS=mMaterialItems.size();
+        for (int i = 0; i < mMaterialItems_sS; i++)
             if (GT_Utility.areStacksEqual(aStack, mMaterialItems.get(i))) {
                 mMaterialItems.remove(i--);
                 temp = true;
@@ -1672,10 +1990,142 @@ public enum Materials implements IColorModulationContainer, ISubTagContainer {
         return new GT_FluidStack(mStandardMoltenFluid, (int) aAmount);
     }
 
+    public String getDefaultLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mDefaultLocalName).replace("%temp", "%s");
+    }
+
+    public String getLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
+    }
+
+    public static String getLocalizedNameForItem(String aFormat, int aMaterialID) {
+    	if (aMaterialID >= 0 && aMaterialID < 1000) {
+    		Materials aMaterial = GregTech_API.sGeneratedMaterials[aMaterialID];
+    		if (aMaterial != null)
+    			return aMaterial.getLocalizedNameForItem(aFormat);
+    	}
+    	return aFormat;
+    }
+
     @Override
     public short[] getRGBA() {
         return mRGBa;
     }
+
+    @Override
+    public String toString() {
+        return this.mName;
+    }
+
+    public static volatile int VERSION = 509;
     
-    public static volatile int VERSION = 508;
+    public static Collection<Materials> getAll(){
+    	return MATERIALS_MAP.values();
+    }
+    
+	public boolean hasCorrespondingFluid() {
+		return hasCorrespondingFluid;
+	}
+
+	public Materials setHasCorrespondingFluid(boolean hasCorrespondingFluid) {
+		this.hasCorrespondingFluid = hasCorrespondingFluid;
+		return this;
+	}
+
+	public boolean hasCorrespondingGas() {
+		return hasCorrespondingGas;
+	}
+
+	public Materials setHasCorrespondingGas(boolean hasCorrespondingGas) {
+		this.hasCorrespondingGas = hasCorrespondingGas;
+		return this;
+	}
+
+	public boolean canBeCracked() {
+		return canBeCracked;
+	}
+	
+	public Materials setCanBeCracked(boolean canBeCracked) {
+		this.canBeCracked = canBeCracked;
+		return this;
+	}
+		
+	public int getLiquidTemperature() {
+		return mMeltingPoint == 0 ? 295 : mMeltingPoint;
+	}
+
+	public Materials setLiquidTemperature(int liquidTemperature) {
+		this.mMeltingPoint = (short) liquidTemperature;
+		return this;
+	}
+
+	public Materials setHydroCrackedFluid(Fluid hydroCrackedFluid) {
+		this.hydroCrackedFluid = hydroCrackedFluid;
+		return this;
+	}
+	
+	public FluidStack getHydroCracked(int amount) {
+		if (hydroCrackedFluid == null) {
+			return null;
+		}
+		return new FluidStack(hydroCrackedFluid, amount);
+	}
+	
+	public Materials setSteamCrackedFluid(Fluid steamCrackedFluid) {
+		this.steamCrackedFluid = steamCrackedFluid;
+		return this;
+	}
+	
+	public FluidStack getSteamCracked(int amount) {
+		if (hydroCrackedFluid == null) {
+			return null;
+		}
+		return new FluidStack(steamCrackedFluid, amount);
+	}
+	
+	public int getGasTemperature() {
+		return mGasTemp == 0 ? 295 : mMeltingPoint;
+	}
+
+	public Materials setGasTemperature(int gasTemperature) {
+		this.mGasTemp = (short) gasTemperature;
+		return this;
+	}
+	
+	public ItemStack getCells(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.cell, this, amount);
+	}
+	
+	public ItemStack getDust(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dust, this, amount);
+	}
+
+	public ItemStack getDustSmall(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dustSmall, this, amount);
+	}
+
+	public ItemStack getDustTiny(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.dustTiny, this, amount);
+	}
+	
+	public ItemStack getGems(int amount){
+		return GT_OreDictUnificator.get(OrePrefixes.gem, this, amount);
+	}
+	
+    public ItemStack getIngots(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.ingot, this, amount);
+    }
+
+    public ItemStack getNuggets(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.nugget, this, amount);
+    }
+
+    public ItemStack getBlocks(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.block, this, amount);
+    }
+    
+    public ItemStack getPlates(int amount){
+    	return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
+    }
+
 }

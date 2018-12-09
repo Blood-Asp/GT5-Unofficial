@@ -13,14 +13,24 @@ import gregtech.api.util.GT_Recipe;
 public class GT_MetaTileEntity_GasTurbine
         extends GT_MetaTileEntity_BasicGenerator {
 
+    public static final int BASE_POLLUTION = 1;
+
     public int mEfficiency;
 
+
     public GT_MetaTileEntity_GasTurbine(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, "Requires flammable Gasses", new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, new String[]{
+                "Requires flammable Gasses",
+                "Causes " + (int) (20 * BASE_POLLUTION * Math.pow(2, aTier - 1)) + " Pollution per second"});
         onConfigLoad();
     }
 
     public GT_MetaTileEntity_GasTurbine(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
+    public GT_MetaTileEntity_GasTurbine(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         onConfigLoad();
     }
@@ -30,7 +40,7 @@ public class GT_MetaTileEntity_GasTurbine
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_GasTurbine(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_GasTurbine(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -42,7 +52,7 @@ public class GT_MetaTileEntity_GasTurbine
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "GasTurbine.efficiency.tier." + this.mTier, (100 - this.mTier * 10));
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "GasTurbine.efficiency.tier." + this.mTier, (100 - this.mTier * 5));
     }
 
 
@@ -88,5 +98,10 @@ public class GT_MetaTileEntity_GasTurbine
 
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.GAS_TURBINE_SIDE_ACTIVE)};
+    }
+
+    @Override
+    public int getPollution() {
+        return (int) (GT_MetaTileEntity_GasTurbine.BASE_POLLUTION * Math.pow(2, mTier - 1));
     }
 }

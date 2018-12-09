@@ -70,8 +70,13 @@ local.properties
 
 .idea/
 .idea_modules/
+classes/
 
 /out/
 gradle/wrapper/gradle-wrapper.properties
 gradlew
 gradlew.bat
+
+# Linux
+*~
+

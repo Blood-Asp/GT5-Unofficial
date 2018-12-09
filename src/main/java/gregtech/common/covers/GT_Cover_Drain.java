@@ -43,8 +43,8 @@ public class GT_Cover_Drain
                         tLiquid = ((IFluidBlock) tBlock).drain(aTileEntity.getWorld(), aTileEntity.getOffsetX(aSide, 1), aTileEntity.getOffsetY(aSide, 1), aTileEntity.getOffsetZ(aSide, 1), false);
                     }
                     if ((tLiquid != null) && (tLiquid.getFluid() != null) && ((aSide > 1) || ((aSide == 0) && (tLiquid.getFluid().getDensity() <= 0)) || ((aSide == 1) && (tLiquid.getFluid().getDensity() >= 0))) &&
-                            (((IFluidHandler) aTileEntity).fill(ForgeDirection.getOrientation(aSide), tLiquid, false) == tLiquid.amount)) {
-                        ((IFluidHandler) aTileEntity).fill(ForgeDirection.getOrientation(aSide), tLiquid, true);
+                            (((IFluidHandler) aTileEntity).fill(ForgeDirection.UNKNOWN, tLiquid, false) == tLiquid.amount)) {
+                        ((IFluidHandler) aTileEntity).fill(ForgeDirection.UNKNOWN, tLiquid, true);
                         aTileEntity.getWorld().setBlockToAir(aTileEntity.getXCoord() + ForgeDirection.getOrientation(aSide).offsetX, aTileEntity.getYCoord() + ForgeDirection.getOrientation(aSide).offsetY, aTileEntity.getZCoord() + ForgeDirection.getOrientation(aSide).offsetZ);
                     }
                 }
@@ -58,21 +58,20 @@ public class GT_Cover_Drain
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + 1) % 6;
+        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 6;
+        if(aCoverVariable <0){aCoverVariable = 5;}
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Import"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Import (conditional)"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Import (invert cond)"); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, "Keep Liquids Away"); break;
-            case 4: GT_Utility.sendChatToPlayer(aPlayer, "Keep Liquids Away (conditional)"); break;
-            case 5: GT_Utility.sendChatToPlayer(aPlayer, "Keep Liquids Away (invert cond)"); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("022", "Import")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("023", "Import (conditional)")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("024", "Import (invert cond)")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("025", "Keep Liquids Away")); break;
+            case 4: GT_Utility.sendChatToPlayer(aPlayer, trans("026", "Keep Liquids Away (conditional)")); break;
+            case 5: GT_Utility.sendChatToPlayer(aPlayer, trans("027", "Keep Liquids Away (invert cond)")); break;
         }
         return aCoverVariable;
     }
 
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
-        if ((aCoverVariable > 1) && ((aTileEntity instanceof IMachineProgress))) {
-        }
         return ((IMachineProgress) aTileEntity).isAllowedToWork() == aCoverVariable < 2;
     }
 

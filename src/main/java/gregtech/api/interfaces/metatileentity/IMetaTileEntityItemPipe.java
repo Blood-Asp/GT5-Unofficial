@@ -55,6 +55,7 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                     IGregTechTileEntity aBaseMetaTileEntity = aMetaTileEntity.getBaseMetaTileEntity();
                     aMap.put(aMetaTileEntity, aStep);
                     for (byte i = 0, j = 0; i < 6; i++) {
+                    	if (aMetaTileEntity instanceof IConnectable && !((IConnectable) aMetaTileEntity).isConnectedAtSide(i)) continue;
                         j = GT_Utility.getOppositeSide(i);
                         if (aSuckItems) {
                             if (aBaseMetaTileEntity.getCoverBehaviorAtSide(i).letsItemsIn(i, aBaseMetaTileEntity.getCoverIDAtSide(i), aBaseMetaTileEntity.getCoverDataAtSide(i), -2, aBaseMetaTileEntity)) {
@@ -65,9 +66,9 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                                         continue;
                                     }
                                 }
-                                if (tItemPipe != null && tItemPipe instanceof BaseMetaPipeEntity) {
+                                if (tItemPipe instanceof BaseMetaPipeEntity) {
                                     IMetaTileEntity tMetaTileEntity = tItemPipe.getMetaTileEntity();
-                                    if (tMetaTileEntity != null && tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSide(j).letsItemsOut(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSide(j), -2, tItemPipe)) {
+                                    if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSide(j).letsItemsOut(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSide(j), -2, tItemPipe)) {
                                         scanPipes((IMetaTileEntityItemPipe) tMetaTileEntity, aMap, aStep, aSuckItems, aIgnoreCapacity);
                                     }
                                 }
@@ -84,7 +85,7 @@ public interface IMetaTileEntityItemPipe extends IMetaTileEntity {
                                     }
                                     if (tItemPipe instanceof BaseMetaPipeEntity) {
                                         IMetaTileEntity tMetaTileEntity = tItemPipe.getMetaTileEntity();
-                                        if (tMetaTileEntity != null && tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSide(j).letsItemsIn(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSide(j), -2, tItemPipe)) {
+                                        if (tMetaTileEntity instanceof IMetaTileEntityItemPipe && tItemPipe.getCoverBehaviorAtSide(j).letsItemsIn(j, tItemPipe.getCoverIDAtSide(j), tItemPipe.getCoverDataAtSide(j), -2, tItemPipe)) {
                                             scanPipes((IMetaTileEntityItemPipe) tMetaTileEntity, aMap, aStep, aSuckItems, aIgnoreCapacity);
                                         }
                                     }

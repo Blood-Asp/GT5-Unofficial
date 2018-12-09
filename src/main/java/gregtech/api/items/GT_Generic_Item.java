@@ -95,10 +95,10 @@ public class GT_Generic_Item extends Item implements IProjectileItem {
             aList.add((aStack.getMaxDamage() - getDamage(aStack)) + " / " + aStack.getMaxDamage());
         if (mTooltip != null) aList.add(GT_LanguageManager.getTranslation(mTooltip));
         if (GT_ModHandler.isElectricItem(aStack)) aList.add("Tier: " + getTier(aStack));
-        addAdditionalToolTips(aList, aStack);
+        addAdditionalToolTips(aList, aStack, aPlayer);
     }
 
-    protected void addAdditionalToolTips(List aList, ItemStack aStack) {
+    protected void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         //
     }
 
@@ -154,5 +154,9 @@ public class GT_Generic_Item extends Item implements IProjectileItem {
         protected IProjectile getProjectileEntity(World aWorld, IPosition aPosition) {
             return null;
         }
+    }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Item_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 }

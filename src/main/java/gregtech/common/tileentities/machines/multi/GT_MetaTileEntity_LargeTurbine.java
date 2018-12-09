@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.machines.multi;
 
+import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
@@ -8,6 +9,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,6 +20,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     protected int baseEff = 0;
     protected int optFlow = 0;
+    protected double realOptFlow = 0;
+    protected int storedFluid = 0;
     protected int counter = 0;
 
     public GT_MetaTileEntity_LargeTurbine(int aID, String aName, String aNameRegional) {
@@ -30,6 +34,10 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return getMaxEfficiency(aStack) > 0;
+    }
+
+    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeTurbine.png");
     }
 
     @Override
@@ -82,10 +90,12 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             if ((tTileEntity != null) && (tTileEntity.getMetaTileEntity() != null)) {
                 if ((tTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Dynamo)) {
                     this.mDynamoHatches.add((GT_MetaTileEntity_Hatch_Dynamo) tTileEntity.getMetaTileEntity());
-                    ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).mMachineBlock = getCasingTextureIndex();
+                    ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).updateTexture(getCasingTextureIndex());
                 } else {
                     return false;
                 }
+            } else {
+                return false;
             }
         } else {
             return false;
@@ -116,6 +126,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
+    	if(aStack==null || !(aStack.getItem() instanceof GT_MetaGenerated_Tool)  || aStack.getItemDamage() < 170 || aStack.getItemDamage() >179)return false;
         ArrayList<FluidStack> tFluids = getStoredFluids();
         if (tFluids.size() > 0) {
             if (baseEff == 0 || optFlow == 0 || counter >= 1000 || this.getBaseMetaTileEntity().hasWorkJustBeenEnabled()
@@ -154,6 +165,10 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         } else {
             this.mMaxProgresstime = 1;
             this.mEfficiencyIncrease = (10);
+            if(this.mDynamoHatches.size()>0){
+            	if(this.mDynamoHatches.get(0).getBaseMetaTileEntity().getOutputVoltage() < (int)((long)mEUt * (long)mEfficiency / 10000L)){
+            	explodeMultiblock();}
+            }
             return true;
         }
     }
@@ -174,14 +189,35 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         }
         return 0;
     }
-
-    @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return true;
     }
+
+    @Override
+    public String[] getInfoData() {
+        String tRunning = mMaxProgresstime>0 ? "Turbine running":"Turbine stopped";
+        String tMaintainance = getIdealStatus() == getRepairStatus() ? "No Maintainance issues" : "Needs Maintainance" ;
+        int tDura = 0;
+
+        if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
+            tDura = (int) ((100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
+        }
+
+        return new String[]{
+                "Large Turbine",
+                tRunning,
+                "Current Output: "+mEUt+" EU/t",
+                "Optimal Flow: "+(int)realOptFlow+" L/t",
+                "Fuel Remaining: "+storedFluid+"L",
+                "Current Speed: "+(mEfficiency/100)+"%",
+                "Turbine Damage: "+tDura+"%",
+                tMaintainance};
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+
 }

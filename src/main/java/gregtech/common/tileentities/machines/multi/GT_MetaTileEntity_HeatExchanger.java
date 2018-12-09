@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBlockBase {
+
     private static boolean controller;
     public GT_MetaTileEntity_Hatch_Input mInputHotFluidHatch;
     public GT_MetaTileEntity_Hatch_Output mOutputColdFluidHatch;
@@ -35,7 +36,16 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     public String[] getDescription() {
-        return new String[]{"Controller Block for the Heat Exchanger", "Size: 3x3x4", "Controller (front middle at bottom)", "3x3x4 of Stable Titanium Casing (hollow, Min 24!)", "2 Titanium Pipe Casing Blocks inside the Hollow Casing", "1x Distillated Water Input (one of the Casings)", "min 1 Steam Output (one of the Casings)", "1x Maintenance Hatch (one of the Casings)", "1x Hot Fluid Input (botton Center)", "1x Cold Fluid Output (top Center)"};
+        return new String[]{
+                "Controller Block for the Heat Exchanger",
+                "Size(WxHxD): 3x4x3, Controller (Front middle at bottom)",
+                "3x3x4 of Stable Titanium Machine Casings (hollow, Min 24!)",
+                "2x Titanium Pipe Casing (Inside the Hollow Machine Casings)",
+                "1x Distillated Water Input (Any casing)",
+                "1x Steam Output (Any casing)",
+                "1x Hot Fluid Input (Bottom center)",
+                "1x Cold Fluid Output (Top Center)",
+                "1x Maintenance Hatch (Any casing)"};
     }
 
     @Override
@@ -52,13 +62,13 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[50], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER)};
+            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[50], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER)};
         }
         return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[50]};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeBoiler.png");
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeHeatExchanger.png");
     }
 
     public boolean isCorrectMachinePart(ItemStack aStack) {
@@ -99,7 +109,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
             superheated_threshold /= 4;
             do_lava = true;
         } else if (mInputHotFluidHatch.getFluid().isFluidEqual(FluidRegistry.getFluidStack("ic2hotcoolant", 1))) {
-            steam_output_multiplier = 0.5f;
+            steam_output_multiplier = 2f;
         } else {
             // If we're working with neither, fail out
             return false;
@@ -214,7 +224,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Output) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             mOutputColdFluidHatch = (GT_MetaTileEntity_Hatch_Output) aMetaTileEntity;
             return true;
         }
@@ -226,7 +236,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input) {
-            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).mMachineBlock = (byte) aBaseCasingIndex;
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             ((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity).mRecipeMap = getRecipeMap();
             mInputHotFluidHatch = (GT_MetaTileEntity_Hatch_Input) aMetaTileEntity;
             return true;
@@ -265,11 +275,6 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
-
-    public int getAmountOfOutputs() {
-        return 1;
-    }
-
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

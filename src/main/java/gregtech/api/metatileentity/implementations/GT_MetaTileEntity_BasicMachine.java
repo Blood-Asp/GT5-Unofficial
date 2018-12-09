@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
@@ -9,6 +10,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -18,6 +20,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -40,13 +43,14 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             DID_NOT_FIND_RECIPE = 0,
             FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS = 1,
             FOUND_AND_SUCCESSFULLY_USED_RECIPE = 2;
-    private static final int OTHER_SLOT_COUNT = 4;
+    public static final int OTHER_SLOT_COUNT = 4;
     public final ItemStack[] mOutputItems;
     public final int mInputSlotCount, mAmperage;
     public boolean mAllowInputFromOutputSide = false, mFluidTransfer = false, mItemTransfer = false, mHasBeenUpdated = false, mStuttering = false, mCharge = false, mDecharge = false;
     public int mMainFacing = -1, mProgresstime = 0, mMaxProgresstime = 0, mEUt = 0, mOutputBlocked = 0;
     public FluidStack mOutputFluid;
     public String mGUIName = "", mNEIName = "";
+    public GT_MetaTileEntity_MultiBlockBase mCleanroom;
     /**
      * Contains the Recipe which has been previously used, or null if there was no previous Recipe, which could have been buffered
      */
@@ -79,6 +83,15 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mNEIName = aNEIName;
     }
 
+    public GT_MetaTileEntity_BasicMachine(int aID, String aName, String aNameRegional, int aTier, int aAmperage, String[] aDescription, int aInputSlotCount, int aOutputSlotCount, String aGUIName, String aNEIName, ITexture... aOverlays) {
+        super(aID, aName, aNameRegional, aTier, OTHER_SLOT_COUNT + aInputSlotCount + aOutputSlotCount + 1, aDescription, aOverlays);
+        mInputSlotCount = Math.max(0, aInputSlotCount);
+        mOutputItems = new ItemStack[Math.max(0, aOutputSlotCount)];
+        mAmperage = aAmperage;
+        mGUIName = aGUIName;
+        mNEIName = aNEIName;
+    }
+
     public GT_MetaTileEntity_BasicMachine(String aName, int aTier, int aAmperage, String aDescription, ITexture[][][] aTextures, int aInputSlotCount, int aOutputSlotCount, String aGUIName, String aNEIName) {
         super(aName, aTier, OTHER_SLOT_COUNT + aInputSlotCount + aOutputSlotCount + 1, aDescription, aTextures);
         mInputSlotCount = Math.max(0, aInputSlotCount);
@@ -86,6 +99,30 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mAmperage = aAmperage;
         mGUIName = aGUIName;
         mNEIName = aNEIName;
+    }
+    
+    public GT_MetaTileEntity_BasicMachine(String aName, int aTier, int aAmperage, String[] aDescription, ITexture[][][] aTextures, int aInputSlotCount, int aOutputSlotCount, String aGUIName, String aNEIName) {
+        super(aName, aTier, OTHER_SLOT_COUNT + aInputSlotCount + aOutputSlotCount + 1, aDescription, aTextures);
+        mInputSlotCount = Math.max(0, aInputSlotCount);
+        mOutputItems = new ItemStack[Math.max(0, aOutputSlotCount)];
+        mAmperage = aAmperage;
+        mGUIName = aGUIName;
+        mNEIName = aNEIName;
+    }
+
+    protected boolean isValidMainFacing(byte aSide) {
+    	return aSide > 1;
+    }
+    
+    public boolean setMainFacing(byte aSide){
+    	if (!isValidMainFacing(aSide)) return false;
+    	mMainFacing = aSide;
+    	if(getBaseMetaTileEntity().getFrontFacing() == mMainFacing){
+    		getBaseMetaTileEntity().setFrontFacing(GT_Utility.getOppositeSide(aSide));
+    	}
+        onFacingChange();
+        onMachineBlockUpdate();
+    	return true;
     }
 
     @Override
@@ -323,7 +360,17 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
-        aBaseMetaTileEntity.openGUI(aPlayer);
+        if(!GT_Mod.gregtechproxy.mForceFreeFace) {
+        	aBaseMetaTileEntity.openGUI(aPlayer);
+        	return true;
+        }
+        for(byte i=0;i < 6; i++){
+        	if(aBaseMetaTileEntity.getAirAtSide(i)){
+        		aBaseMetaTileEntity.openGUI(aPlayer);
+        		return true;
+        	}        	
+        }
+        GT_Utility.sendChatToPlayer(aPlayer,"No free Side!");        
         return true;
     }
 
@@ -412,6 +459,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                         endProcess();
                     }
                     if (mProgresstime > 5) mStuttering = false;
+                    XSTR aXSTR = new XSTR();
+                    if(GT_Mod.gregtechproxy.mAprilFool && aXSTR.nextInt(5000)==0)GT_Utility.sendSoundToPlayers(aBaseMetaTileEntity.getWorld(), GregTech_API.sSoundList.get(5), 10.0F, -1.0F, aBaseMetaTileEntity.getXCoord(), aBaseMetaTileEntity.getYCoord(),aBaseMetaTileEntity.getZCoord());
                 } else {
                     if (!mStuttering) {
                         stutterProcess();
@@ -676,7 +725,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getFrontFacing() || aSide == mMainFacing) {
             mAllowInputFromOutputSide = !mAllowInputFromOutputSide;
-            GT_Utility.sendChatToPlayer(aPlayer, mAllowInputFromOutputSide ? "Input from Output Side allowed" : "Input from Output Side forbidden");
+            GT_Utility.sendChatToPlayer(aPlayer, mAllowInputFromOutputSide ? trans("095","Input from Output Side allowed") : trans("096","Input from Output Side forbidden"));
         }
     }
 
@@ -716,21 +765,49 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
      * @return see constants above
      */
     public int checkRecipe() {
+        return checkRecipe(false);
+    }
+
+    public static boolean isValidForLowGravity(GT_Recipe tRecipe, int dimId){
+        return //TODO check or get a better solution
+                DimensionManager.getProvider(dimId).getClass().getName().contains("Orbit") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("Space") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("Asteroids") ||
+                DimensionManager.getProvider(dimId).getClass().getName().endsWith("SS") ||
+                DimensionManager.getProvider(dimId).getClass().getName().contains("SpaceStation");
+    }
+
+
+    /**
+     *
+     * @param skipOC disables OverclockedNess calculation and check - if you do you must implement your own method...
+     * @return
+     */
+    public int checkRecipe(boolean skipOC){
         GT_Recipe_Map tMap = getRecipeList();
         if (tMap == null) return DID_NOT_FIND_RECIPE;
         GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
+
+        if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
+                !isValidForLowGravity(tRecipe,getBaseMetaTileEntity().getWorld().provider.dimensionId))
+            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.mCanBeBuffered) mLastRecipe = tRecipe;
         if (!canOutput(tRecipe)) {
             mOutputBlocked++;
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
+        if (tRecipe.mSpecialValue == -200 && (mCleanroom == null || mCleanroom.mEfficiency == 0))
+            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
-
         for (int i = 0; i < mOutputItems.length; i++)
             if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                 mOutputItems[i] = tRecipe.getOutput(i);
+        if (tRecipe.mSpecialValue == -200)
+            for (int i = 0; i < mOutputItems.length; i++)
+                if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
+                    mOutputItems[i] = null;
         mOutputFluid = tRecipe.getFluidOutput(0);
         calculateOverclockedNess(tRecipe);
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;

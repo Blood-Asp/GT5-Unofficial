@@ -1,13 +1,18 @@
 package gregtech.api.items;
 
+import ic2.api.item.IBoxable;
 import ic2.core.util.StackUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 
+import gregtech.common.items.GT_DepletetCell_Item;
+
 public class GT_RadioactiveCell_Item
-        extends GT_Generic_Item {
+        extends GT_Generic_Item  implements IBoxable{
     protected int cellCount;
     protected int maxDmg;
     protected int dura;
@@ -35,6 +40,11 @@ public class GT_RadioactiveCell_Item
             b += c;
         }
         return b;
+    }
+    
+    protected static int triangularNumber(int x)
+    {
+      return (x * x + x) / 2;
     }
 
     protected boolean outputPulseForStack(ItemStack aStack) {
@@ -129,9 +139,25 @@ public class GT_RadioactiveCell_Item
         setDamageForStack(stack, getDamageOfStack(stack) + Dmg);
     }
 
-    public void addAdditionalToolTips(List aList, ItemStack aStack) {
-        super.addAdditionalToolTips(aList, aStack);
+    public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
+        super.addAdditionalToolTips(aList, aStack, aPlayer);
         //aList.add("Time left: " + (this.maxDelay - getDurabilityOfStack(aStack)) + " secs");
-        aList.add("Durability: " + (this.maxDmg - getDurabilityOfStack(aStack)) + "/" + this.maxDmg);
+        int rDmg = getDurabilityOfStack(aStack) * 6 / this.maxDmg;
+        EnumChatFormatting color2;
+        switch (rDmg) {
+        case 0:
+        case 1: color2 = EnumChatFormatting.WHITE; break;
+        case 2:
+        case 3:
+        case 4: color2 = EnumChatFormatting.GRAY; break;
+        default: color2 = EnumChatFormatting.DARK_GRAY; break;
+        }
+        EnumChatFormatting color1 = this instanceof GT_DepletetCell_Item ? color2 = EnumChatFormatting.DARK_GRAY : EnumChatFormatting.WHITE;
+        aList.add(color1 + String.format(trans("001", "Durability: %s/%s"), "" + color2 + (this.maxDmg - getDurabilityOfStack(aStack)) + color1, "" + this.maxDmg));
     }
+
+	@Override
+	public boolean canBeStoredInToolbox(ItemStack itemstack) {
+		return true;
+	}
 }

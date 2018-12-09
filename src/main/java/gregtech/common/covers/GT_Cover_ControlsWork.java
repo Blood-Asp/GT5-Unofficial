@@ -53,15 +53,16 @@ public class GT_Cover_ControlsWork
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + 1) % 3;
+        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 3;
+        if(aCoverVariable <0){aCoverVariable = 2;}
         if (aCoverVariable == 0) {
-            GT_Utility.sendChatToPlayer(aPlayer, "Normal");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("003", "Normal"));
         }
         if (aCoverVariable == 1) {
-            GT_Utility.sendChatToPlayer(aPlayer, "Inverted");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("004", "Inverted"));
         }
         if (aCoverVariable == 2) {
-            GT_Utility.sendChatToPlayer(aPlayer, "No Work at all");
+            GT_Utility.sendChatToPlayer(aPlayer, trans("005", "No Work at all"));
         }
         return aCoverVariable;
     }

@@ -6,6 +6,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,15 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
         super(aID, aName, aNameRegional, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_BasicGenerator(int aID, String aName, String aNameRegional, int aTier, String[] aDescription, ITexture... aTextures) {
+        super(aID, aName, aNameRegional, aTier, 3, aDescription, aTextures);
+    }
+
     public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_BasicGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
@@ -49,7 +58,10 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, "Fuel Efficiency: " + getEfficiency() + "%"};
+        String[] desc = new String[mDescriptionArray.length + 1];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        desc[mDescriptionArray.length] = "Fuel Efficiency: " + getEfficiency() + "%";
+        return desc;
     }
 
     @Override
@@ -136,7 +148,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public long maxEUStore() {
-        return Math.max(getEUVar(), V[mTier] * 20 + getMinimumStoredEU());
+        return Math.max(getEUVar(), V[mTier] * 40 + getMinimumStoredEU());
     }
 
     @Override
@@ -188,9 +200,11 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
             } else {
                 int tFuelValue = getFuelValue(mFluid), tConsumed = consumedFluidPerOperation(mFluid);
                 if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount > tConsumed) {
-                    long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
-                    if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true))
+                    long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
+                    if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
+                        GT_Pollution.addPollution(getBaseMetaTileEntity(),10 * getPollution());
                         mFluid.amount -= tFluidAmountToUse * tConsumed;
+                    }
                 }
             }
             if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) == null) {
@@ -200,6 +214,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     if (aBaseMetaTileEntity.addStackToSlot(getOutputSlot(), tEmptyContainer)) {
                         aBaseMetaTileEntity.increaseStoredEnergyUnits(tFuelValue, true);
                         aBaseMetaTileEntity.decrStackSize(getInputSlot(), 1);
+                        GT_Pollution.addPollution(getBaseMetaTileEntity(),10 * getPollution());
                     }
                 }
             }
@@ -208,6 +223,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
         if (aBaseMetaTileEntity.isServerSide())
             aBaseMetaTileEntity.setActive(aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.getUniversalEnergyStored() >= maxEUOutput() + getMinimumStoredEU());
     }
+
+    public abstract int getPollution();
 
     public abstract GT_Recipe_Map getRecipes();
 

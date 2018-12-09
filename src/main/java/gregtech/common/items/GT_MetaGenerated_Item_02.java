@@ -23,9 +23,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 
-public class GT_MetaGenerated_Item_02
-        extends GT_MetaGenerated_Item_X32 {
+public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
     public static GT_MetaGenerated_Item_02 INSTANCE;
+    private final static String aTextCover = "Usable as Cover"; private final static String aTextForestry = "Forestry";
 
     public GT_MetaGenerated_Item_02() {
         super("metaitem.02", new OrePrefixes[]{OrePrefixes.toolHeadSword, OrePrefixes.toolHeadPickaxe, OrePrefixes.toolHeadShovel, OrePrefixes.toolHeadAxe, OrePrefixes.toolHeadHoe, OrePrefixes.toolHeadHammer, OrePrefixes.toolHeadFile, OrePrefixes.toolHeadSaw, OrePrefixes.toolHeadDrill, OrePrefixes.toolHeadChainsaw, OrePrefixes.toolHeadWrench, OrePrefixes.toolHeadUniversalSpade, OrePrefixes.toolHeadSense, OrePrefixes.toolHeadPlow, OrePrefixes.toolHeadArrow, OrePrefixes.toolHeadBuzzSaw, OrePrefixes.turbineBlade, null, null, OrePrefixes.wireFine, OrePrefixes.gearGtSmall, OrePrefixes.rotor, OrePrefixes.stickLong, OrePrefixes.springSmall, OrePrefixes.spring, OrePrefixes.arrowGtWood, OrePrefixes.arrowGtPlastic, OrePrefixes.gemChipped, OrePrefixes.gemFlawed, OrePrefixes.gemFlawless, OrePrefixes.gemExquisite, OrePrefixes.gearGt});
@@ -44,10 +44,12 @@ public class GT_MetaGenerated_Item_02
         ItemList.ThermosCan_Sweet_Tea.set(addItem(tLastID = 8, "Sweet Tea", "How about a Tea Party? In Boston?", new Object[]{SubTag.INVISIBLE, new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.ThermosCan_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.GELUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 2L)}));
         ItemList.ThermosCan_Ice_Tea.set(addItem(tLastID = 9, "Ice Tea", "Better than this purple Junk Drink from failed Potions", new Object[]{new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.ThermosCan_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.moveSlowdown.id, 300, 0, 50}), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.GELUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 2L)}));
 
+        ItemList.GelledToluene.set(addItem(tLastID = 10, "Gelled Toluene", "Raw Explosive", new Object[]{}));
+        
         ItemList.Bottle_Purple_Drink.set(addItem(tLastID = 100, "Purple Drink", "How about Lemonade. Or some Ice Tea? I got Purple Drink!", new Object[]{new GT_FoodStat(8, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.moveSlowdown.id, 400, 1, 90}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VINCULUM, 1L)}));
         ItemList.Bottle_Grape_Juice.set(addItem(tLastID = 101, "Grape Juice", "This has a cleaning effect on your internals.", new Object[]{new GT_FoodStat(4, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.hunger.id, 400, 1, 60}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
         ItemList.Bottle_Wine.set(addItem(tLastID = 102, "Wine", "Ordinary", new Object[]{new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.confusion.id, 400, 1, 60, Potion.heal.id, 0, 0, 60, Potion.poison.id, 200, 1, 5}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
-        ItemList.Bottle_Vinegar.set(addItem(tLastID = 103, "Vinegar", "Exquisite", new Object[]{SubTag.INVISIBLE, new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.confusion.id, 400, 1, 90, Potion.heal.id, 0, 1, 90, Potion.poison.id, 200, 2, 10, Potion.harm.id, 0, 2, 5}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
+        ItemList.Bottle_Vinegar.set(addItem(tLastID = 103, "Vinegar", "Exquisite", new Object[]{new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.confusion.id, 400, 1, 90, Potion.heal.id, 0, 1, 90, Potion.poison.id, 200, 2, 10, Potion.harm.id, 0, 2, 5}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
         ItemList.Bottle_Potato_Juice.set(addItem(tLastID = 104, "Potato Juice", "Ever seen Potato Juice in stores? No? That has a reason.", new Object[]{SubTag.INVISIBLE, new GT_FoodStat(3, 0.3F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L)}));
         ItemList.Bottle_Vodka.set(addItem(tLastID = 105, "Vodka", "Not to confuse with Water", new Object[]{SubTag.INVISIBLE, new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.confusion.id, 500, 0, 60, Potion.damageBoost.id, 500, 1, 60, Potion.poison.id, 200, 1, 5}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.TELUM, 1L)}));
         ItemList.Bottle_Leninade.set(addItem(tLastID = 106, "Leninade", "Let the Communism flow through you!", new Object[]{SubTag.INVISIBLE, new GT_FoodStat(2, 0.2F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.confusion.id, 500, 1, 90, Potion.damageBoost.id, 500, 2, 90, Potion.poison.id, 200, 2, 10, Potion.harm.id, 0, 2, 5}), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VENENUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.TELUM, 2L)}));
@@ -83,6 +85,8 @@ public class GT_MetaGenerated_Item_02
         ItemList.Bottle_Milk.set(addItem(tLastID = 136, "Milk", "Got Milk?", new Object[]{OrePrefixes.bottle.get(Materials.Milk), new GT_FoodStat(0, 0.0F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[0]).setMilk(), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
         ItemList.Bottle_Holy_Water.set(addItem(tLastID = 137, "Holy Water", "May the holy Planks be with you", new Object[]{OrePrefixes.bottle.get(Materials.HolyWater), new GT_FoodStat(0, 0.0F, EnumAction.drink, ItemList.Bottle_Empty.get(1L, new Object[0]), GregTech_API.sDrinksAlwaysDrinkable, false, false, new int[]{Potion.poison.id, 100, 1, 100}).setMilk(), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AURAM, 1L)}));
 
+        
+        
         ItemList.Food_Potato_On_Stick.set(addItem(tLastID = 200, "Potato on a Stick", "Totally looks like a Crab Claw", new Object[]{new GT_FoodStat(1, 0.3F, EnumAction.eat, new ItemStack(Items.stick, 1), false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
         ItemList.Food_Potato_On_Stick_Roasted.set(addItem(tLastID = 201, "Roasted Potato on a Stick", "Still looks like a Crab Claw", new Object[]{new GT_FoodStat(6, 0.6F, EnumAction.eat, new ItemStack(Items.stick, 1), false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1L)}));
         ItemList.Food_Raw_Fries.set(addItem(tLastID = 202, "Potato Strips", "It's Potato in Stripe Form", new Object[]{new GT_FoodStat(1, 0.3F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L)}));
@@ -143,97 +147,76 @@ public class GT_MetaGenerated_Item_02
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
             ItemList.DYE_ONLY_ITEMS[i].set(addItem(tLastID = 414 + i, Dyes.get(i).mName + " Dye", "", new Object[]{Dyes.get(i).name(), new TC_Aspects.TC_AspectStack(TC_Aspects.SENSUS, 1L)}));
         }
-        ItemList.Plank_Oak.set(addItem(tLastID = 470, "Oak Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Spruce.set(addItem(tLastID = 471, "Spruce Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Birch.set(addItem(tLastID = 472, "Birch Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Jungle.set(addItem(tLastID = 473, "Jungle Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Acacia.set(addItem(tLastID = 474, "Acacia Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_DarkOak.set(addItem(tLastID = 475, "Dark Oak Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Larch.set(addItem(tLastID = 476, "Larch Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Teak.set(addItem(tLastID = 477, "Teak Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Acacia_Green.set(addItem(tLastID = 478, "Green Acacia Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Lime.set(addItem(tLastID = 479, "Lime Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Chestnut.set(addItem(tLastID = 480, "Chestnut Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Wenge.set(addItem(tLastID = 481, "Wenge Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Baobab.set(addItem(tLastID = 482, "Baobab Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Sequoia.set(addItem(tLastID = 483, "Sequoia Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Kapok.set(addItem(tLastID = 484, "Kapok Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Ebony.set(addItem(tLastID = 485, "Ebony Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Mahagony.set(addItem(tLastID = 486, "Mahagony Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Balsa.set(addItem(tLastID = 487, "Balsa Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Willow.set(addItem(tLastID = 488, "Willow Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Walnut.set(addItem(tLastID = 489, "Walnut Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Greenheart.set(addItem(tLastID = 490, "Greenheart Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Cherry.set(addItem(tLastID = 491, "Cherry Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Mahoe.set(addItem(tLastID = 492, "Mahoe Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Poplar.set(addItem(tLastID = 493, "Poplar Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Palm.set(addItem(tLastID = 494, "Palm Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Papaya.set(addItem(tLastID = 495, "Papaya Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Pine.set(addItem(tLastID = 496, "Pine Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Plum.set(addItem(tLastID = 497, "Plum Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Maple.set(addItem(tLastID = 498, "Maple Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
-        ItemList.Plank_Citrus.set(addItem(tLastID = 499, "Citrus Plank", "Usable as Cover", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
-        setBurnValue(32000 + tLastID, 200);
+        ItemList.Plank_Oak.set(addItem(tLastID = 470, "Oak Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Spruce.set(addItem(tLastID = 471, "Spruce Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Birch.set(addItem(tLastID = 472, "Birch Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Jungle.set(addItem(tLastID = 473, "Jungle Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Acacia.set(addItem(tLastID = 474, "Acacia Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_DarkOak.set(addItem(tLastID = 475, "Dark Oak Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Larch.set(addItem(tLastID = 476, "Larch Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Teak.set(addItem(tLastID = 477, "Teak Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Acacia_Green.set(addItem(tLastID = 478, "Green Acacia Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Lime.set(addItem(tLastID = 479, "Lime Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Chestnut.set(addItem(tLastID = 480, "Chestnut Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Wenge.set(addItem(tLastID = 481, "Wenge Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Baobab.set(addItem(tLastID = 482, "Baobab Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Sequoia.set(addItem(tLastID = 483, "Sequoia Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Kapok.set(addItem(tLastID = 484, "Kapok Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Ebony.set(addItem(tLastID = 485, "Ebony Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Mahagony.set(addItem(tLastID = 486, "Mahagony Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Balsa.set(addItem(tLastID = 487, "Balsa Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Willow.set(addItem(tLastID = 488, "Willow Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Walnut.set(addItem(tLastID = 489, "Walnut Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Greenheart.set(addItem(tLastID = 490, "Greenheart Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Cherry.set(addItem(tLastID = 491, "Cherry Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Mahoe.set(addItem(tLastID = 492, "Mahoe Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Poplar.set(addItem(tLastID = 493, "Poplar Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Palm.set(addItem(tLastID = 494, "Palm Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Papaya.set(addItem(tLastID = 495, "Papaya Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Pine.set(addItem(tLastID = 496, "Pine Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Plum.set(addItem(tLastID = 497, "Plum Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Maple.set(addItem(tLastID = 498, "Maple Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
+        ItemList.Plank_Citrus.set(addItem(tLastID = 499, "Citrus Plank", aTextCover, new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
+        setBurnValue(32000 + tLastID, 75);
 
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Oak.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 0)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Spruce.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Birch.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 2)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Jungle.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 3)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Acacia.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 4)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_DarkOak.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), new ItemStack(Blocks.wooden_slab, 1, 5)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Larch.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 0)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Teak.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Acacia_Green.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 2)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Lime.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 3)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Chestnut.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 4)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Wenge.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 5)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Baobab.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 6)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Sequoia.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs1", 1L, 7)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Kapok.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 0)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Ebony.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Mahagony.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 2)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Balsa.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 3)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Willow.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 4)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Walnut.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 5)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Greenheart.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 6)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Cherry.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs2", 1L, 7)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Mahoe.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 0)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Poplar.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 1)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Palm.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 2)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Papaya.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 3)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Pine.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 4)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Plum.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 5)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Maple.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 6)});
-        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Citrus.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", Character.valueOf('P'), GT_ModHandler.getModItem("Forestry", "slabs3", 1L, 7)});
+        ItemList.SFMixture.set(addItem(tLastID = 270, "Super Fuel Binder", "Raw Material", new Object[]{}));
+        ItemList.MSFMixture.set(addItem(tLastID = 271, "Magic Super Fuel Binder", "Raw Material", new Object[]{}));
+        
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Oak.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 0)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Spruce.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Birch.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 2)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Jungle.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 3)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_Acacia.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 4)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Plank_DarkOak.get(2L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"s ", " P", 'P', new ItemStack(Blocks.wooden_slab, 1, 5)});
 
         GregTech_API.registerCover(ItemList.Plank_Oak.get(1L, new Object[0]), new GT_CopiedBlockTexture(Blocks.planks, 0, 0), null);
         GregTech_API.registerCover(ItemList.Plank_Spruce.get(1L, new Object[0]), new GT_CopiedBlockTexture(Blocks.planks, 0, 1), null);
@@ -241,30 +224,30 @@ public class GT_MetaGenerated_Item_02
         GregTech_API.registerCover(ItemList.Plank_Jungle.get(1L, new Object[0]), new GT_CopiedBlockTexture(Blocks.planks, 0, 3), null);
         GregTech_API.registerCover(ItemList.Plank_Acacia.get(1L, new Object[0]), new GT_CopiedBlockTexture(Blocks.planks, 0, 4), null);
         GregTech_API.registerCover(ItemList.Plank_DarkOak.get(1L, new Object[0]), new GT_CopiedBlockTexture(Blocks.planks, 0, 5), null);
-        GregTech_API.registerCover(ItemList.Plank_Larch.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 0, new ItemStack(Blocks.planks, 1, 0))), 0, 0), null);
-        GregTech_API.registerCover(ItemList.Plank_Teak.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 1, new ItemStack(Blocks.planks, 1, 0))), 0, 1), null);
-        GregTech_API.registerCover(ItemList.Plank_Acacia_Green.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 2, new ItemStack(Blocks.planks, 1, 0))), 0, 2), null);
-        GregTech_API.registerCover(ItemList.Plank_Lime.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 3, new ItemStack(Blocks.planks, 1, 0))), 0, 3), null);
-        GregTech_API.registerCover(ItemList.Plank_Chestnut.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 4, new ItemStack(Blocks.planks, 1, 0))), 0, 4), null);
-        GregTech_API.registerCover(ItemList.Plank_Wenge.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 5, new ItemStack(Blocks.planks, 1, 0))), 0, 5), null);
-        GregTech_API.registerCover(ItemList.Plank_Baobab.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 6, new ItemStack(Blocks.planks, 1, 0))), 0, 6), null);
-        GregTech_API.registerCover(ItemList.Plank_Sequoia.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 7, new ItemStack(Blocks.planks, 1, 0))), 0, 7), null);
-        GregTech_API.registerCover(ItemList.Plank_Kapok.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 8, new ItemStack(Blocks.planks, 1, 0))), 0, 8), null);
-        GregTech_API.registerCover(ItemList.Plank_Ebony.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 9, new ItemStack(Blocks.planks, 1, 0))), 0, 9), null);
-        GregTech_API.registerCover(ItemList.Plank_Mahagony.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 10, new ItemStack(Blocks.planks, 1, 0))), 0, 10), null);
-        GregTech_API.registerCover(ItemList.Plank_Balsa.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 11, new ItemStack(Blocks.planks, 1, 0))), 0, 11), null);
-        GregTech_API.registerCover(ItemList.Plank_Willow.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 12, new ItemStack(Blocks.planks, 1, 0))), 0, 12), null);
-        GregTech_API.registerCover(ItemList.Plank_Walnut.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 13, new ItemStack(Blocks.planks, 1, 0))), 0, 13), null);
-        GregTech_API.registerCover(ItemList.Plank_Greenheart.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 14, new ItemStack(Blocks.planks, 1, 0))), 0, 14), null);
-        GregTech_API.registerCover(ItemList.Plank_Cherry.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks", 1L, 15, new ItemStack(Blocks.planks, 1, 0))), 0, 15), null);
-        GregTech_API.registerCover(ItemList.Plank_Mahoe.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 0, new ItemStack(Blocks.planks, 1, 0))), 0, 0), null);
-        GregTech_API.registerCover(ItemList.Plank_Poplar.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 1, new ItemStack(Blocks.planks, 1, 0))), 0, 1), null);
-        GregTech_API.registerCover(ItemList.Plank_Palm.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 2, new ItemStack(Blocks.planks, 1, 0))), 0, 2), null);
-        GregTech_API.registerCover(ItemList.Plank_Papaya.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 3, new ItemStack(Blocks.planks, 1, 0))), 0, 3), null);
-        GregTech_API.registerCover(ItemList.Plank_Pine.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 4, new ItemStack(Blocks.planks, 1, 0))), 0, 4), null);
-        GregTech_API.registerCover(ItemList.Plank_Plum.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 5, new ItemStack(Blocks.planks, 1, 0))), 0, 5), null);
-        GregTech_API.registerCover(ItemList.Plank_Maple.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 6, new ItemStack(Blocks.planks, 1, 0))), 0, 6), null);
-        GregTech_API.registerCover(ItemList.Plank_Citrus.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem("Forestry", "planks2", 1L, 7, new ItemStack(Blocks.planks, 1, 0))), 0, 7), null);
+        GregTech_API.registerCover(ItemList.Plank_Larch.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 0, new ItemStack(Blocks.planks, 1, 0))), 0, 0), null);
+        GregTech_API.registerCover(ItemList.Plank_Teak.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 1, new ItemStack(Blocks.planks, 1, 0))), 0, 1), null);
+        GregTech_API.registerCover(ItemList.Plank_Acacia_Green.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 2, new ItemStack(Blocks.planks, 1, 0))), 0, 2), null);
+        GregTech_API.registerCover(ItemList.Plank_Lime.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 3, new ItemStack(Blocks.planks, 1, 0))), 0, 3), null);
+        GregTech_API.registerCover(ItemList.Plank_Chestnut.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 4, new ItemStack(Blocks.planks, 1, 0))), 0, 4), null);
+        GregTech_API.registerCover(ItemList.Plank_Wenge.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 5, new ItemStack(Blocks.planks, 1, 0))), 0, 5), null);
+        GregTech_API.registerCover(ItemList.Plank_Baobab.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 6, new ItemStack(Blocks.planks, 1, 0))), 0, 6), null);
+        GregTech_API.registerCover(ItemList.Plank_Sequoia.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 7, new ItemStack(Blocks.planks, 1, 0))), 0, 7), null);
+        GregTech_API.registerCover(ItemList.Plank_Kapok.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 8, new ItemStack(Blocks.planks, 1, 0))), 0, 8), null);
+        GregTech_API.registerCover(ItemList.Plank_Ebony.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 9, new ItemStack(Blocks.planks, 1, 0))), 0, 9), null);
+        GregTech_API.registerCover(ItemList.Plank_Mahagony.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 10, new ItemStack(Blocks.planks, 1, 0))), 0, 10), null);
+        GregTech_API.registerCover(ItemList.Plank_Balsa.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 11, new ItemStack(Blocks.planks, 1, 0))), 0, 11), null);
+        GregTech_API.registerCover(ItemList.Plank_Willow.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 12, new ItemStack(Blocks.planks, 1, 0))), 0, 12), null);
+        GregTech_API.registerCover(ItemList.Plank_Walnut.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 13, new ItemStack(Blocks.planks, 1, 0))), 0, 13), null);
+        GregTech_API.registerCover(ItemList.Plank_Greenheart.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 14, new ItemStack(Blocks.planks, 1, 0))), 0, 14), null);
+        GregTech_API.registerCover(ItemList.Plank_Cherry.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 15, new ItemStack(Blocks.planks, 1, 0))), 0, 15), null);
+        GregTech_API.registerCover(ItemList.Plank_Mahoe.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 16, new ItemStack(Blocks.planks, 1, 0))), 0, 0), null);
+        GregTech_API.registerCover(ItemList.Plank_Poplar.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 17, new ItemStack(Blocks.planks, 1, 0))), 0, 1), null);
+        GregTech_API.registerCover(ItemList.Plank_Palm.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 18, new ItemStack(Blocks.planks, 1, 0))), 0, 2), null);
+        GregTech_API.registerCover(ItemList.Plank_Papaya.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 19, new ItemStack(Blocks.planks, 1, 0))), 0, 3), null);
+        GregTech_API.registerCover(ItemList.Plank_Pine.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 20, new ItemStack(Blocks.planks, 1, 0))), 0, 4), null);
+        GregTech_API.registerCover(ItemList.Plank_Plum.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 21, new ItemStack(Blocks.planks, 1, 0))), 0, 5), null);
+        GregTech_API.registerCover(ItemList.Plank_Maple.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 22, new ItemStack(Blocks.planks, 1, 0))), 0, 6), null);
+        GregTech_API.registerCover(ItemList.Plank_Citrus.get(1L, new Object[0]), new GT_CopiedBlockTexture(GT_Utility.getBlockFromStack(GT_ModHandler.getModItem(aTextForestry, "planks", 1L, 23, new ItemStack(Blocks.planks, 1, 0))), 0, 7), null);
 
         ItemList.Crop_Drop_Plumbilia.set(addItem(tLastID = 500, "Plumbilia Leaf", "Source of Lead", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.ORDO, 1L)}));
         ItemList.Crop_Drop_Argentia.set(addItem(tLastID = 501, "Argentia Leaf", "Source of Silver", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 1L)}));
@@ -275,6 +258,8 @@ public class GT_MetaGenerated_Item_02
 
         ItemList.Crop_Drop_OilBerry.set(addItem(tLastID = 510, "Oil Berry", "Oil in Berry form", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)}));
         ItemList.Crop_Drop_BobsYerUncleRanks.set(addItem(tLastID = 511, "Bobs-Yer-Uncle-Berry", "Source of Emeralds", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 1L)}));
+        ItemList.Crop_Drop_UUMBerry.set(addItem(tLastID = 512, "UUM Berry", "UUM in Berry form", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)}));
+        ItemList.Crop_Drop_UUABerry.set(addItem(tLastID = 513, "UUA Berry", "UUA in Berry form", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)}));
 
         ItemList.Crop_Drop_MilkWart.set(addItem(tLastID = 520, "Milk Wart", "Source of Milk", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.SANO, 1L)}));
 
@@ -283,6 +268,20 @@ public class GT_MetaGenerated_Item_02
         ItemList.Crop_Drop_Tine.set(addItem(tLastID = 540, "Tine Twig", "Source of Tin", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 1L)}));
         setBurnValue(32000 + tLastID, 100);
 
+        ItemList.Crop_Drop_Bauxite.set(addItem(tLastID = 521, "Bauxia Leaf", "Source of Aluminium", new Object[]{}));
+        ItemList.Crop_Drop_Ilmenite.set(addItem(tLastID = 522, "Titania Leaf", "Source of Titanium", new Object[]{}));
+        ItemList.Crop_Drop_Pitchblende.set(addItem(tLastID = 523, "Reactoria Leaf", "Source of Uranium", new Object[]{}));
+        ItemList.Crop_Drop_Uraninite.set(addItem(tLastID = 524, "Uranium Leaf", "Source of Uranite", new Object[]{}));
+        ItemList.Crop_Drop_Thorium.set(addItem(tLastID = 526, "Thunder Leaf", "Source of Thorium", new Object[]{}));
+        ItemList.Crop_Drop_Nickel.set(addItem(tLastID = 527, "Nickelback Leaf", "Source of Nickel", new Object[]{}));
+        ItemList.Crop_Drop_Zinc.set(addItem(tLastID = 528, "Galvania Leaf", "Source of Zinc", new Object[]{}));
+        ItemList.Crop_Drop_Manganese.set(addItem(tLastID = 529, "Pyrolusium Leaf", "Source of Manganese", new Object[]{}));
+        ItemList.Crop_Drop_Scheelite.set(addItem(tLastID = 531, "Scheelinium Leaf", "Source of Tungsten", new Object[]{}));
+        ItemList.Crop_Drop_Platinum.set(addItem(tLastID = 532, "Platina Leaf", "Source of Platinum", new Object[]{}));
+        ItemList.Crop_Drop_Iridium.set(addItem(tLastID = 533, "Quantaria Leaf", "Source of Iridium", new Object[]{}));
+        ItemList.Crop_Drop_Osmium.set(addItem(tLastID = 534, "Quantaria Leaf", "Source of Osmium", new Object[]{}));
+        ItemList.Crop_Drop_Naquadah.set(addItem(tLastID = 535, "Stargatium Leaf", "Source of Naquadah", new Object[]{}));
+        
         ItemList.Crop_Drop_Chilly.set(addItem(tLastID = 550, "Chilly Pepper", "It is red and hot", new Object[]{"cropChilipepper", new GT_FoodStat(1, 0.3F, EnumAction.eat, null, false, true, false, new int[]{Potion.confusion.id, 200, 1, 40}), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Lemon.set(addItem(tLastID = 551, "Lemon", "Don't make Lemonade", new Object[]{"cropLemon", new GT_FoodStat(1, 0.3F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Tomato.set(addItem(tLastID = 552, "Tomato", "Solid Ketchup", new Object[]{"cropTomato", new GT_FoodStat(1, 0.2F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
@@ -290,6 +289,7 @@ public class GT_MetaGenerated_Item_02
         ItemList.Crop_Drop_Grapes.set(addItem(tLastID = 554, "Grapes", "Source of Wine", new Object[]{"cropGrape", new GT_FoodStat(2, 0.3F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Onion.set(addItem(tLastID = 555, "Onion", "Taking over the whole Taste", new Object[]{"cropOnion", new GT_FoodStat(2, 0.2F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
         ItemList.Crop_Drop_Cucumber.set(addItem(tLastID = 556, "Cucumber", "Not a Sea Cucumber!", new Object[]{"cropCucumber", new GT_FoodStat(1, 0.2F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
+        ItemList.Crop_Drop_Rape.set(addItem(tLastID = 557, "Rape", "Time to oil up!", new Object[]{new TC_Aspects.TC_AspectStack(TC_Aspects.MESSIS, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1L)}));
 
         ItemList.Food_Cheese.set(addItem(tLastID = 558, "Cheese", "Click the Cheese", new Object[]{"foodCheese", new GT_FoodStat(3, 0.6F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 2L)}));
         ItemList.Food_Dough.set(addItem(tLastID = 559, "Dough", "For making Breads", new Object[]{"foodDough", new GT_FoodStat(1, 0.1F, EnumAction.eat, null, false, true, false, new int[0]), new TC_Aspects.TC_AspectStack(TC_Aspects.HERBA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.FAMES, 1L)}));
@@ -328,9 +328,6 @@ public class GT_MetaGenerated_Item_02
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Plumbilia.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Lead, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Argentia.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Silver, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Indigo.get(1L, new Object[0]), ItemList.Dye_Indigo.get(1L, new Object[0]));
-        GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Ferru.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Iron, 1L));
-        GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Aurelia.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Gold, 1L));
-        GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_BobsYerUncleRanks.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Emerald, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_MilkWart.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Milk, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Coppon.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Copper, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Tine.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Tin, 1L));
@@ -344,6 +341,7 @@ public class GT_MetaGenerated_Item_02
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_OilBerry.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_BobsYerUncleRanks.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Tine.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Rape.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.red_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.yellow_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
 

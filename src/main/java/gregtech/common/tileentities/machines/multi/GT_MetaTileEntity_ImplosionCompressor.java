@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GT_MetaTileEntity_ImplosionCompressor
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -33,7 +32,16 @@ public class GT_MetaTileEntity_ImplosionCompressor
     }
 
     public String[] getDescription() {
-        return new String[]{"Controller Block for the Implosion Compressor", "Size: 3x3x3 (Hollow)", "Controller (front centered)", "1x Input (anywhere)", "1x Output (anywhere)", "1x Energy Hatch (anywhere)", "1x Maintenance Hatch (anywhere)", "1x Muffler Hatch (anywhere)", "Solid Steel Casings for the rest (16 at least!)"};
+        return new String[]{
+                "Controller Block for the Implosion Compressor",
+                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front centered)",
+                "1x Input Bus (Any casing)",
+                "1x Output Bus (Any casing)",
+                "1x Maintenance Hatch (Any casing)",
+                "1x Muffler Hatch (Any casing)",
+                "1x Energy Hatch (Any casing)",
+                "Solid Steel Machine Casings for the rest (16 at least!)",
+                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -61,19 +69,20 @@ public class GT_MetaTileEntity_ImplosionCompressor
 
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
-        for (int i = 0; i < tInputList.size() - 1; i++) {
-            for (int j = i + 1; j < tInputList.size(); j++) {
+        int tInputList_sS=tInputList.size();
+        for (int i = 0; i < tInputList_sS - 1; i++) {
+            for (int j = i + 1; j < tInputList_sS; j++) {
                 if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
                     if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
-                        tInputList.remove(j--);
+                        tInputList.remove(j--); tInputList_sS=tInputList.size();
                     } else {
-                        tInputList.remove(i--);
+                        tInputList.remove(i--); tInputList_sS=tInputList.size();
                         break;
                     }
                 }
             }
         }
-        ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
+        ItemStack[] tInputs = tInputList.toArray(new ItemStack[tInputList.size()]);
         if (tInputList.size() > 0) {
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sImplosionRecipes.findRecipe(getBaseMetaTileEntity(), false, 9223372036854775807L, null, tInputs);
             if ((tRecipe != null) && (tRecipe.isRecipeInputEqual(true, null, tInputs))) {
@@ -130,15 +139,11 @@ public class GT_MetaTileEntity_ImplosionCompressor
     }
 
     public int getPollutionPerTick(ItemStack aStack) {
-        return 1000;
+        return 100;
     }
 
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    public int getAmountOfOutputs() {
-        return 2;
     }
 
     public boolean explodesOnComponentBreak(ItemStack aStack) {

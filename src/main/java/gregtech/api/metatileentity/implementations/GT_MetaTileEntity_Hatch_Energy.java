@@ -11,10 +11,14 @@ import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Hatch_Energy extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Energy(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 0, "Energy Injector for Multiblocks");
+        super(aID, aName, aNameRegional, aTier, 0, new String[]{"Energy Injector for Multiblocks", "Accepts up to 2 Amps"});
     }
 
     public GT_MetaTileEntity_Hatch_Energy(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Hatch_Energy(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
@@ -80,7 +84,7 @@ public class GT_MetaTileEntity_Hatch_Energy extends GT_MetaTileEntity_Hatch {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_Energy(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Hatch_Energy(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

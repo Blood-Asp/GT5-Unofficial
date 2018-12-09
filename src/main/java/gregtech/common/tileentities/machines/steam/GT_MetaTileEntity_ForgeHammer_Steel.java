@@ -22,8 +22,12 @@ public class GT_MetaTileEntity_ForgeHammer_Steel
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_ForgeHammer_Steel(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_ForgeHammer_Steel(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_ForgeHammer_Steel(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -34,13 +38,8 @@ public class GT_MetaTileEntity_ForgeHammer_Steel
         GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sHammerRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[2], null, getAllInputs());
         if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
             this.mOutputItems[0] = tRecipe.getOutput(0);
-            if (tRecipe.mEUt <= 16) {
-                this.mEUt = (tRecipe.mEUt * 3);
-                this.mMaxProgresstime = tRecipe.mDuration;
-            } else {
-                this.mEUt = (tRecipe.mEUt * 3);
-                this.mMaxProgresstime = tRecipe.mDuration;
-            }
+            this.mEUt = (tRecipe.mEUt * 3);
+            this.mMaxProgresstime = tRecipe.mDuration;
             return 2;
         }
         return 0;

@@ -25,6 +25,10 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_QuantumChest(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     @Override
     public boolean isSimpleMachine() {
         return true;
@@ -47,7 +51,7 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumChest(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_QuantumChest(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override
@@ -56,44 +60,6 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
         aBaseMetaTileEntity.openGUI(aPlayer);
         return true;
     }
-
-//	  public void onRightclick(EntityPlayer aPlayer)
-//	  {
-//	    ItemStack tPlayerItem = aPlayer.inventory.getCurrentItem();
-//	    if (tPlayerItem == null)
-//	    {
-//	      if (this.mItemID > 0)
-//	      {
-//	        for (int i = 0; (this.mItemCount < getMaxItemCount()) && (i < aPlayer.field_71071_by.func_70302_i_()); i++)
-//	        {
-//	          if ((aPlayer.field_71071_by.func_70301_a(i) != null) && (aPlayer.field_71071_by.func_70301_a(i).field_77993_c == this.mItemID) && (aPlayer.field_71071_by.func_70301_a(i).func_77960_j() == this.mItemMeta) && (!aPlayer.field_71071_by.func_70301_a(i).func_77942_o()))
-//	          {
-//	            this.mItemCount += aPlayer.field_71071_by.func_70301_a(i).field_77994_a;
-//	            if (aPlayer.field_71071_by.func_70301_a(i).field_77994_a == 111)
-//	            {
-//	              this.mItemCount = (getMaxItemCount() + 192 - (this.mItemCount + (this.mInventory[0] == null ? 0 : this.mInventory[0].field_77994_a) + (this.mInventory[1] == null ? 0 : this.mInventory[1].field_77994_a) + (this.mInventory[2] == null ? 0 : this.mInventory[2].field_77994_a)));
-//	            }
-//	            else if (this.mItemCount > getMaxItemCount())
-//	            {
-//	              aPlayer.field_71071_by.func_70301_a(i).field_77994_a = (this.mItemCount - getMaxItemCount());
-//	              this.mItemCount = getMaxItemCount();
-//	            }
-//	            else
-//	            {
-//	              aPlayer.field_71071_by.func_70301_a(i).field_77994_a = 0;
-//	            }
-//	          }
-//	          if ((aPlayer.field_71071_by.func_70301_a(i) != null) && (aPlayer.field_71071_by.func_70301_a(i).field_77994_a <= 0)) {
-//	            aPlayer.field_71071_by.func_70299_a(i, null);
-//	          }
-//	        }
-//	        GT_Utility.sendChatToPlayer(aPlayer, this.mItemCount + (this.mInventory[0] == null ? 0 : this.mInventory[0].field_77994_a) + (this.mInventory[1] == null ? 0 : this.mInventory[1].field_77994_a) + (this.mInventory[2] == null ? 0 : this.mInventory[2].field_77994_a) + " of " + new ItemStack(this.mItemID, 1, this.mItemMeta).func_82833_r());
-//	      }
-//	    }
-//	    if (aPlayer.field_71069_bz != null) {
-//	      aPlayer.field_71069_bz.func_75142_b();
-//	    }
-//	  }
 
     @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -165,12 +131,12 @@ public class GT_MetaTileEntity_QuantumChest extends GT_MetaTileEntity_TieredMach
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-    	return aIndex==1;
+        return aIndex==1;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-    	return aIndex==0&&(mInventory[0]==null||GT_Utility.areStacksEqual(this.mInventory[0], aStack));
+        return aIndex==0&&(mInventory[0]==null||GT_Utility.areStacksEqual(this.mInventory[0], aStack));
     }
 
     @Override

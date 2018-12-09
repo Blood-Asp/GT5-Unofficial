@@ -3,8 +3,8 @@ package gregtech.api.enums;
 import gregtech.api.interfaces.ICondition;
 import gregtech.api.interfaces.ISubTagContainer;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -21,7 +21,7 @@ import java.util.HashSet;
  * Some SubTags are used for other things than Materials too. It is useful when I need an easy way to declare Stuff in Items.
  */
 public final class SubTag implements ICondition<ISubTagContainer> {
-    public static final ArrayList<SubTag> sSubTags = new ArrayList<SubTag>();
+    public static final HashMap<String, SubTag> sSubTags = new HashMap<String, SubTag>();
     private static long sSubtagID = 0;
     public final long mSubtagID;
     public final String mName;
@@ -30,6 +30,11 @@ public final class SubTag implements ICondition<ISubTagContainer> {
      * Iron, Pyrite, PigIron, DeepIron, ShadowIron, WroughtIron and MeteoricIron.
      */
     public static final SubTag BLASTFURNACE_CALCITE_DOUBLE = getNewSubTag("BLASTFURNACE_CALCITE_DOUBLE"), BLASTFURNACE_CALCITE_TRIPLE = getNewSubTag("BLASTFURNACE_CALCITE_TRIPLE");
+    /**
+     * Add this to a material with Direct Smelting to prevent the automatic generation of a Bricked/Bronze Blast Furnace recipe. Already listed are:
+     * Chalcopyrite, Tetrahedrite
+     */
+    public static final SubTag DONT_ADD_DEFAULT_BBF_RECIPE = getNewSubTag("DONT_ADD_DEFAULT_BBF_RECIPE");
     /**
      * Materials which are outputting less in an Induction Smelter. Already listed are:
      * Pyrite, Tetrahedrite, Sphalerite, Cinnabar
@@ -231,11 +236,11 @@ public final class SubTag implements ICondition<ISubTagContainer> {
     private SubTag(String aName) {
         mSubtagID = sSubtagID++;
         mName = aName;
-        sSubTags.add(this);
+        sSubTags.put(aName, this);
     }
 
     public static SubTag getNewSubTag(String aName) {
-        for (SubTag tSubTag : sSubTags) if (tSubTag.mName.equals(aName)) return tSubTag;
+        for (SubTag tSubTag : sSubTags.values()) if (tSubTag.mName.equals(aName)) return tSubTag;
         return new SubTag(aName);
     }
 

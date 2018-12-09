@@ -39,7 +39,6 @@ public class GT_CoolantCellIC_Item
     }
 
     public int alterHeat(IReactor aReactor, ItemStack aStack, int x, int y, int aHeat) {
-
         int tHeat = getHeatOfStack(aStack);
         if ((tHeat == 0) && (getControlTagOfStack(aStack) != 0)) {
             setControlTagOfStack(aStack, 0);

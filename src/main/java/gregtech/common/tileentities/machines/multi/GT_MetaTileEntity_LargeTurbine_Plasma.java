@@ -11,6 +11,7 @@ import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -28,19 +29,20 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE5) : Textures.BlockIcons.CASING_BLOCKS[57]};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TU_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TU5) : Textures.BlockIcons.CASING_BLOCKS[60]};
     }
 
 
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Large Plasma Generator",
-                "Size: 3x3x4 (Hollow)", "Controller (front centered)",
-                "1x Input Hatch (side centered)",
-                "1x Dynamo Hatch (back centered)",
-                "1x Maintenance Hatch (side centered)",
-                "Turbine Casings for the rest (24 at least!)",
-                "Needs a Turbine Item (inside controller GUI)"};
+                "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
+                "1x Plasma Input Hatch (Side centered)",
+                "1x Maintenance Hatch (Side centered)",
+                "1x Dynamo Hatch (Back centered)",
+                "Tungstensteel Turbine Casings for the rest (24 at least!)",
+                "Needs a Turbine Item (Inside controller GUI)",
+                "Output depending on Rotor: 6553-332595EU/t"};
     }
 
     public int getFuelValue(FluidStack aLiquid) {
@@ -65,12 +67,12 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
     @Override
     public byte getCasingMeta() {
-        return 9;
+        return 12;
     }
 
     @Override
     public byte getCasingTextureIndex() {
-        return 46;
+        return 60;
     }
 
     @Override
@@ -80,7 +82,8 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
     @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
-        aOptFlow *= 20;
+
+        aOptFlow *= 40;
         int tEU = 0;
 
         int actualOptimalFlow = 0;
@@ -89,17 +92,33 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
             actualOptimalFlow = (int) ((aOptFlow + fuelValue - 1) / fuelValue);
+            this.realOptFlow = actualOptimalFlow; // For scanner info
+
             int remainingFlow = (int) (actualOptimalFlow * 1.25f); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
             int flow = 0;
             int totalFlow = 0;
 
-            for (int i = 0; i < aFluids.size(); i++) {
+            int aFluids_sS=aFluids.size();
+            for (int i = 0; i < aFluids_sS; i++) {
                 if (aFluids.get(i).isFluidEqual(firstFuelType)) {
                     flow = aFluids.get(i).amount; // Get all (steam) in hatch
                     flow = Math.min(flow, Math.min(remainingFlow, (int) (actualOptimalFlow * 1.25f))); // try to use up to 125% of optimal flow w/o exceeding remainingFlow
                     depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
+                    this.storedFluid = aFluids.get(i).amount;
                     remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                     totalFlow += flow; // track total input used
+                }
+            }
+            String fn = FluidRegistry.getFluidName(firstFuelType);
+            String[] nameSegments = fn.split("\\.",2);
+            if (nameSegments.length==2){
+                String outputName=nameSegments[1];
+                FluidStack output = FluidRegistry.getFluidStack(outputName, totalFlow);
+                if (output==null){
+                    output = FluidRegistry.getFluidStack("molten."+outputName, totalFlow);
+                }
+                if (output!=null) {
+                    addOutput(output);
                 }
             }
 
@@ -107,13 +126,15 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
             if (totalFlow != actualOptimalFlow) {
                 float efficiency = 1.0f - Math.abs(((totalFlow - (float) actualOptimalFlow) / actualOptimalFlow));
+                if(totalFlow>actualOptimalFlow){efficiency = 1.0f;}
                 if (efficiency < 0)
                     efficiency = 0; // Can happen with really ludicrously poor inefficiency.
                 tEU *= efficiency;
-                tEU = Math.max(1, tEU * aBaseEff / 10000);
+                tEU = Math.max(1, (int)((long)tEU * (long)aBaseEff / 10000L));
             } else {
-                tEU = tEU * aBaseEff / 10000;
+                tEU = (int)((long)tEU * (long)aBaseEff / 10000L);
             }
+
             return tEU;
 
         }

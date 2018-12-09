@@ -12,6 +12,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
 import ic2.api.energy.tile.IEnergySource;
+import ic2.api.reactor.IReactorChamber;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,6 +33,10 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     }
 
     public GT_MetaTileEntity_Transformer(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 0, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Transformer(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
@@ -62,7 +67,7 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Transformer(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_Transformer(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override
@@ -142,6 +147,9 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
             for (byte i = 0; i < 6 && aBaseMetaTileEntity.getStoredEU() < aBaseMetaTileEntity.getEUCapacity(); i++)
                 if (aBaseMetaTileEntity.inputEnergyFrom(i)) {
                     TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(i);
+                    if (tTileEntity instanceof IReactorChamber) {
+                        tTileEntity = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
+                    }
                     if (tTileEntity instanceof IEnergySource && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, ForgeDirection.getOrientation(GT_Utility.getOppositeSide(i)))) {
                         long tEU = Math.min(maxEUInput(), (long) ((IEnergySource) tTileEntity).getOfferedEnergy());
                         ((IEnergySource) tTileEntity).drawEnergy(tEU);
@@ -197,5 +205,15 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
+    } 
+    
+    @Override
+    public boolean hasAlternativeModeText(){
+    	return true;
+    }
+    
+    @Override
+    public String getAlternativeModeText(){
+    	return (getBaseMetaTileEntity().isAllowedToWork() ? trans("145","Step Down, In: ") : trans("146","Step Up, In"))+maxEUInput()+trans("148","V@")+maxAmperesIn()+trans("147","Amp, Out: ")+maxEUOutput()+"V@"+maxAmperesOut()+trans("149","Amp");
     }
 }

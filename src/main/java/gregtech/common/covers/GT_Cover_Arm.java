@@ -21,7 +21,7 @@ public class GT_Cover_Arm
             return aCoverVariable;
         }
         TileEntity tTileEntity = aTileEntity.getTileEntityAtSide(aSide);
-        aTileEntity.decreaseStoredEnergyUnits(1L, true);
+        //aTileEntity.decreaseStoredEnergyUnits(1L, true);
         if (aTileEntity.getUniversalEnergyCapacity() >= 128L) {
             if (aTileEntity.isUniversalEnergyStored(256L)) {
                 aTileEntity.decreaseStoredEnergyUnits(4 * GT_Utility.moveOneItemStackIntoSlot(aCoverVariable > 0 ? aTileEntity : tTileEntity, aCoverVariable > 0 ? tTileEntity : aTileEntity, aCoverVariable > 0 ? aSide : GT_Utility.getOppositeSide(aSide), Math.abs(aCoverVariable) - 1, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1), true);
@@ -38,7 +38,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable -= 16;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? "Puts out into adjacent Slot #" : "Grabs in for own Slot #") + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         return aCoverVariable;
     }
 
@@ -48,7 +48,7 @@ public class GT_Cover_Arm
         } else {
             aCoverVariable--;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? "Puts out into adjacent Slot #" : "Grabs in for own Slot #") + (Math.abs(aCoverVariable) - 1));
+        GT_Utility.sendChatToPlayer(aPlayer, (aCoverVariable > 0 ? trans("001","Puts out into adjacent Slot #") : trans("002","Grabs in for own Slot #")) + (Math.abs(aCoverVariable) - 1));
         aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
         return true;
     }

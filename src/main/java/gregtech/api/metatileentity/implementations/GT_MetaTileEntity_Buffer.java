@@ -19,7 +19,15 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         super(aID, aName, aNameRegional, aTier, aInvSlotCount, aDescription);
     }
 
+    public GT_MetaTileEntity_Buffer(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String[] aDescription) {
+        super(aID, aName, aNameRegional, aTier, aInvSlotCount, aDescription);
+    }
+
     public GT_MetaTileEntity_Buffer(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Buffer(String aName, int aTier, int aInvSlotCount, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
@@ -204,11 +212,13 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getBackFacing()) {
-        	mTargetStackSize = (byte) ((mTargetStackSize + (aPlayer.isSneaking()? -1 : 1)) % 65);
+        	
+            mTargetStackSize = (byte) ((mTargetStackSize + (aPlayer.isSneaking()? -1 : 1)) % 65);
+            if(mTargetStackSize <0){mTargetStackSize = 64;}
             if (mTargetStackSize == 0) {
-                GT_Utility.sendChatToPlayer(aPlayer, "Do not regulate Item Stack Size");
+                GT_Utility.sendChatToPlayer(aPlayer, trans("098","Do not regulate Item Stack Size"));
             } else {
-                GT_Utility.sendChatToPlayer(aPlayer, "Regulate Item Stack Size to: " + mTargetStackSize);
+                GT_Utility.sendChatToPlayer(aPlayer, trans("099","Regulate Item Stack Size to: ") + mTargetStackSize);
             }
         }
     }
@@ -218,19 +228,28 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isUniversalEnergyStored(getMinimumStoredEU()) && (aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified() || aTimer % 200 == 0 || mSuccess > 0)) {
             mSuccess--;
             moveItems(aBaseMetaTileEntity, aTimer);
-            aBaseMetaTileEntity.setGenericRedstoneOutput(bInvert);
+            for(byte b = 0;b<6;b++)
+            	aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,bInvert ? (byte)15 : (byte)0);
             if (bRedstoneIfFull) {
-                aBaseMetaTileEntity.setGenericRedstoneOutput(!bInvert);
+                for(byte b = 0;b<6;b++)
+                    aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,bInvert ? (byte)0 : (byte)15);
                 for (int i = 0; i < mInventory.length; i++)
                     if (isValidSlot(i)) {
                         if (mInventory[i] == null) {
-                            aBaseMetaTileEntity.setGenericRedstoneOutput(bInvert);
+                            for(byte b = 0;b<6;b++)
+                                aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,bInvert ? (byte)15 : (byte)0);
                             aBaseMetaTileEntity.decreaseStoredEnergyUnits(1, true);
                             break;
                         }
                     }
             }
         }
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+    	for(byte b = 0;b<6;b++)
+            aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,(byte)0);
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
@@ -249,5 +268,10 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return aSide != aBaseMetaTileEntity.getBackFacing();
+    }
+    
+    @Override
+    public boolean allowGeneralRedstoneOutput(){
+    	return true;
     }
 }

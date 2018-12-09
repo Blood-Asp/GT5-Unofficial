@@ -2,8 +2,10 @@ package gregtech.api.items;
 
 import gregtech.api.GregTech_API;
 import ic2.core.util.StackUtil;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 import java.util.List;
@@ -47,9 +49,23 @@ public class GT_CoolantCell_Item
         }
     }
 
-    public void addAdditionalToolTips(List aList, ItemStack aStack) {
-        super.addAdditionalToolTips(aList, aStack);
-        aList.add("Stored Heat: " + getHeatOfStack(aStack));
+    public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
+        super.addAdditionalToolTips(aList, aStack, aPlayer);
+        int rHeat = getHeatOfStack(aStack) * 10 / this.heatStorage;
+        EnumChatFormatting color;
+        switch (rHeat) {
+        case 0: color = EnumChatFormatting.BLUE; break;
+        case 1:
+        case 2: color = EnumChatFormatting.GREEN; break;
+        case 3:
+        case 4:
+        case 5:
+        case 6: color = EnumChatFormatting.YELLOW; break;
+        case 7:
+        case 8: color = EnumChatFormatting.RED; break;
+        default: color = EnumChatFormatting.DARK_RED; break;
+        }
+        aList.add(EnumChatFormatting.WHITE + String.format(trans("000", "Stored Heat: %s"), "" + color + getHeatOfStack(aStack)));
         switch (getControlTagOfStack(aStack)) {
             case 1:
                 aList.add(StatCollector.translateToLocal("ic2.reactoritem.heatwarning.line1"));
@@ -66,5 +82,4 @@ public class GT_CoolantCell_Item
         NBTTagCompound nbtData = StackUtil.getOrCreateNbtData(stack);
         nbtData.setInteger("tag", tag);
     }
-
 }

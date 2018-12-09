@@ -34,7 +34,7 @@ public class ProcessingPlank implements gregtech.api.interfaces.IOreRecipeRegist
             GT_Values.RA.addAssemblerRecipe(GT_Utility.copyAmount(6L, new Object[]{aStack}), new ItemStack(Items.book, 3), new ItemStack(Blocks.bookshelf, 1), 400, 4);
 
             if (aStack.getItemDamage() == 32767) {
-                for (byte i = 0; i < 16; i = (byte) (i + 1)) {
+                for (byte i = 0; i < 64; i = (byte) (i + 1)) {
                     ItemStack tStack = GT_Utility.copyMetaData(i, new Object[]{aStack});
                     ItemStack tOutput = GT_ModHandler.getRecipeOutput(new ItemStack[]{tStack, tStack, tStack});
                     if ((tOutput != null) && (tOutput.stackSize >= 3)) {
@@ -42,6 +42,7 @@ public class ProcessingPlank implements gregtech.api.interfaces.IOreRecipeRegist
                         GT_ModHandler.removeRecipe(new ItemStack[]{tStack, tStack, tStack});
                         GT_ModHandler.addCraftingRecipe(GT_Utility.copyAmount(tOutput.stackSize / 3, new Object[]{tOutput}), new Object[]{"sP", Character.valueOf('P'), tStack});
                     }
+                    if((tStack == null) && (i >= 16)) break;
                 }
             } else {
                 ItemStack tOutput = GT_ModHandler.getRecipeOutput(new ItemStack[]{aStack, aStack, aStack});

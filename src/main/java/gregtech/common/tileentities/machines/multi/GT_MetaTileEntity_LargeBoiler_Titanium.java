@@ -18,6 +18,15 @@ public class GT_MetaTileEntity_LargeBoiler_Titanium
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Titanium(this.mName);
     }
+    
+    public String getCasingMaterial(){
+    	return "Titanium";
+    }
+
+	@Override
+	public String getCasingBlockType() {
+		return "Machine Casings";
+	}
 
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings4;
@@ -57,5 +66,10 @@ public class GT_MetaTileEntity_LargeBoiler_Titanium
 
     public int getEfficiencyIncrease() {
         return 8;
+    }
+
+    @Override
+    int runtimeBoost(int mTime) {
+        return mTime * 130 / 100;
     }
 }

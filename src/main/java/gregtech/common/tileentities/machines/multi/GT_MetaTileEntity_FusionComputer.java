@@ -9,7 +9,10 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.implementations.*;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
@@ -103,23 +106,20 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                 && (addIfInjector(xCenter - 6, yCenter - 1, zCenter + 1, aBaseMetaTileEntity)) && (addIfInjector(xCenter + 6, yCenter - 1, zCenter + 1, aBaseMetaTileEntity))
                 && (addIfInjector(xCenter - 6, yCenter - 1, zCenter - 1, aBaseMetaTileEntity)) && (addIfInjector(xCenter + 6, yCenter - 1, zCenter - 1, aBaseMetaTileEntity))
                 && (this.mEnergyHatches.size() >= 1) && (this.mOutputHatches.size() >= 1) && (this.mInputHatches.size() >= 2)) {
-            if (this.mEnergyHatches != null) {
-                for (int i = 0; i < this.mEnergyHatches.size(); i++) {
-                    if (this.mEnergyHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mEnergyHatches_sS = this.mEnergyHatches.size();
+            for (int i = 0; i < mEnergyHatches_sS; i++) {
+                if (this.mEnergyHatches.get(i).mTier < tier())
+                    return false;
             }
-            if (this.mOutputHatches != null) {
-                for (int i = 0; i < this.mOutputHatches.size(); i++) {
-                    if (this.mOutputHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mOutputHatches_sS = this.mOutputHatches.size();
+            for (int i = 0; i < mOutputHatches_sS; i++) {
+                if (this.mOutputHatches.get(i).mTier < tier())
+                    return false;
             }
-            if (this.mInputHatches != null) {
-                for (int i = 0; i < this.mInputHatches.size(); i++) {
-                    if (this.mInputHatches.get(i).mTier < tier())
-                        return false;
-                }
+            int mInputHatches_sS = this.mInputHatches.size();
+            for (int i = 0; i < mInputHatches_sS; i++) {
+                if (this.mInputHatches.get(i).mTier < tier())
+                    return false;
             }
             mWrench = true;
             mScrewdriver = true;
@@ -130,17 +130,6 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
             return true;
         }
         return false;
-    }
-
-    private boolean checkTier(byte tier, ArrayList<GT_MetaTileEntity_Hatch> list) {
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).mTier < tier) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private boolean checkCoils(int aX, int aY, int aZ) {
@@ -250,13 +239,14 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tFluidList = getStoredFluids();
-        for (int i = 0; i < tFluidList.size() - 1; i++) {
-            for (int j = i + 1; j < tFluidList.size(); j++) {
+        int tFluidList_sS=tFluidList.size();
+        for (int i = 0; i < tFluidList_sS - 1; i++) {
+            for (int j = i + 1; j < tFluidList_sS; j++) {
                 if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
                     if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
-                        tFluidList.remove(j--);
+                        tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
                     } else {
-                        tFluidList.remove(i--);
+                        tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
                         break;
                     }
                 }
@@ -265,20 +255,20 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         if (tFluidList.size() > 1) {
             FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sFusionRecipes.findRecipe(this.getBaseMetaTileEntity(), this.mLastRecipe, false, GT_Values.V[8], tFluids, new ItemStack[]{});
-            if (tRecipe == null && !mRunningOnLoad) {
+            if ((tRecipe == null && !mRunningOnLoad) || (maxEUStore() < tRecipe.mSpecialValue)) {
                 turnCasingActive(false);
                 this.mLastRecipe = null;
                 return false;
             }
             if (mRunningOnLoad || tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
-                this.mLastRecipe = tRecipe;
-                this.mEUt = (this.mLastRecipe.mEUt * overclock(this.mLastRecipe.mSpecialValue));
-                this.mMaxProgresstime = this.mLastRecipe.mDuration / overclock(this.mLastRecipe.mSpecialValue);
-                this.mEfficiencyIncrease = 10000;
-                this.mOutputFluids = this.mLastRecipe.mFluidOutputs;
-                turnCasingActive(true);
-                mRunningOnLoad = false;
-                return true;
+            this.mLastRecipe = tRecipe;
+            this.mEUt = (this.mLastRecipe.mEUt * overclock(this.mLastRecipe.mSpecialValue));
+            this.mMaxProgresstime = this.mLastRecipe.mDuration / overclock(this.mLastRecipe.mSpecialValue);
+            this.mEfficiencyIncrease = 10000;
+            this.mOutputFluids = this.mLastRecipe.mFluidOutputs;
+            turnCasingActive(true);
+            mRunningOnLoad = false;
+            return true;
             }
         }
         return false;
@@ -289,17 +279,17 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
     public boolean turnCasingActive(boolean status) {
         if (this.mEnergyHatches != null) {
             for (GT_MetaTileEntity_Hatch_Energy hatch : this.mEnergyHatches) {
-                hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.updateTexture(status ? 52 : 53);
             }
         }
         if (this.mOutputHatches != null) {
             for (GT_MetaTileEntity_Hatch_Output hatch : this.mOutputHatches) {
-                hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.updateTexture(status ? 52 : 53);
             }
         }
         if (this.mInputHatches != null) {
             for (GT_MetaTileEntity_Hatch_Input hatch : this.mInputHatches) {
-                hatch.mMachineBlock = status ? (byte) 52 : (byte) 53;
+                hatch.updateTexture(status ? 52 : 53);
             }
         }
         return true;
@@ -340,7 +330,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                         stopMachine();
                     }
                     if (getRepairStatus() > 0) {
-                        if (mMaxProgresstime > 0 && doRandomMaintenanceDamage()) {
+                        if (mMaxProgresstime > 0) {
                             this.getBaseMetaTileEntity().decreaseStoredEnergyUnits(mEUt, true);
                             if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
                                 if (mOutputItems != null)
@@ -353,7 +343,10 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                                 mMaxProgresstime = 0;
                                 mEfficiencyIncrease = 0;
                                 if (mOutputFluids != null && mOutputFluids.length > 0) {
-                                    GT_Mod.instance.achievements.issueAchivementHatchFluid(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), mOutputFluids[0]);
+                                    try {
+                                        GT_Mod.instance.achievements.issueAchivementHatchFluid(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), mOutputFluids[0]);
+                                    } catch (Exception e) {
+                                    }
                                 }
                                 this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
                                 if (aBaseMetaTileEntity.isAllowedToWork())
@@ -364,7 +357,11 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                                 turnCasingActive(mMaxProgresstime > 0);
                                 if (aBaseMetaTileEntity.isAllowedToWork()) {
                                     this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
-                                    if (checkRecipe(mInventory[1]) && aBaseMetaTileEntity.getStoredEU() >= this.mLastRecipe.mSpecialValue) {
+                                    if (checkRecipe(mInventory[1])) {
+                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue) {
+                                            mMaxProgresstime = 0;
+                                            turnCasingActive(false);
+                                        }
                                         aBaseMetaTileEntity.decreaseStoredEnergyUnits(this.mLastRecipe.mSpecialValue, true);
                                     }
                                 }
@@ -423,14 +420,32 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
-
-    @Override
-    public int getAmountOfOutputs() {
-        return 0;
-    }
-
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String tier = tier() == 6 ? "I" : tier() == 7 ? "II" : "III";
+        float plasmaOut = 0;
+        int powerRequired = 0;
+        if (this.mLastRecipe != null) {
+            powerRequired = this.mLastRecipe.mEUt;
+            if (this.mLastRecipe.getFluidOutput(0) != null) {
+                plasmaOut = (float)this.mLastRecipe.getFluidOutput(0).amount / (float)this.mLastRecipe.mDuration;
+            }
+        }
+
+        return new String[]{
+                "Fusion Reactor MK "+tier,
+                "EU Required: "+powerRequired+"EU/t",
+                "Stored EU: "+mEUStore+" / "+maxEUStore(),
+                "Plasma Output: "+plasmaOut+"L/t"};
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
     }
 }

@@ -25,21 +25,20 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.V;
 
 public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpecialElectricItem, IElectricItemManager, IFluidContainerItem {
     /* ---------- CONSTRUCTOR AND MEMBER VARIABLES ---------- */
-    private final HashMap<Short, ArrayList<IItemBehaviour<GT_MetaBase_Item>>> mItemBehaviors = new HashMap<Short, ArrayList<IItemBehaviour<GT_MetaBase_Item>>>();
+    private final ConcurrentHashMap<Short, ArrayList<IItemBehaviour<GT_MetaBase_Item>>> mItemBehaviors = new ConcurrentHashMap<Short, ArrayList<IItemBehaviour<GT_MetaBase_Item>>>();
 
     /**
      * Creates the Item using these Parameters.
      *
      * @param aUnlocalized         The Unlocalized Name of this Item.
-     * @param aGeneratedPrefixList The OreDict Prefixes you want to have generated.
      */
     public GT_MetaBase_Item(String aUnlocalized) {
         super(aUnlocalized, "Generated Item", null, false);
@@ -120,19 +119,18 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         use(aStack, 0, aPlayer);
         isItemStackUsable(aStack);
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));
-        if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
-            try {
-                if (tBehavior.onLeftClickEntity(this, aStack, aPlayer, aEntity)) {
-                    if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
-                    return true;
-                }
-                if (aStack.stackSize <= 0) {
-                    aPlayer.destroyCurrentEquippedItem();
-                    return false;
-                }
-            } catch (Throwable e) {
-                if (D1) e.printStackTrace(GT_Log.err);
+        try { if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
+            if (tBehavior.onLeftClickEntity(this, aStack, aPlayer, aEntity)) {
+                if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+                return true;
             }
+            if (aStack.stackSize <= 0) {
+                aPlayer.destroyCurrentEquippedItem();
+                return false;
+            }
+        } catch (Throwable e) {
+            if (D1) e.printStackTrace(GT_Log.err);
+        }
         return false;
     }
 
@@ -141,19 +139,18 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         use(aStack, 0, aPlayer);
         isItemStackUsable(aStack);
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));
-        if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
-            try {
-                if (tBehavior.onItemUse(this, aStack, aPlayer, aWorld, aX, aY, aZ, aSide, hitX, hitY, hitZ)) {
-                    if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
-                    return true;
-                }
-                if (aStack.stackSize <= 0) {
-                    aPlayer.destroyCurrentEquippedItem();
-                    return false;
-                }
-            } catch (Throwable e) {
-                if (D1) e.printStackTrace(GT_Log.err);
+        try { if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
+            if (tBehavior.onItemUse(this, aStack, aPlayer, aWorld, aX, aY, aZ, aSide, hitX, hitY, hitZ)) {
+                if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+                return true;
             }
+            if (aStack.stackSize <= 0) {
+                aPlayer.destroyCurrentEquippedItem();
+                return false;
+            }
+        } catch (Throwable e) {
+            if (D1) e.printStackTrace(GT_Log.err);
+        }
         return false;
     }
 
@@ -162,19 +159,18 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         use(aStack, 0, aPlayer);
         isItemStackUsable(aStack);
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));
-        if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
-            try {
-                if (tBehavior.onItemUseFirst(this, aStack, aPlayer, aWorld, aX, aY, aZ, aSide, hitX, hitY, hitZ)) {
-                    if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
-                    return true;
-                }
-                if (aStack.stackSize <= 0) {
-                    aPlayer.destroyCurrentEquippedItem();
-                    return false;
-                }
-            } catch (Throwable e) {
-                if (D1) e.printStackTrace(GT_Log.err);
+        try { if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
+            if (tBehavior.onItemUseFirst(this, aStack, aPlayer, aWorld, aX, aY, aZ, aSide, hitX, hitY, hitZ)) {
+                if (aStack.stackSize <= 0) aPlayer.destroyCurrentEquippedItem();
+                return true;
             }
+            if (aStack.stackSize <= 0) {
+                aPlayer.destroyCurrentEquippedItem();
+                return false;
+            }
+        } catch (Throwable e) {
+            if (D1) e.printStackTrace(GT_Log.err);
+        }
         return false;
     }
 
@@ -183,31 +179,32 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         use(aStack, 0, aPlayer);
         isItemStackUsable(aStack);
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));
-        if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
-            try {
-                aStack = tBehavior.onItemRightClick(this, aStack, aWorld, aPlayer);
-            } catch (Throwable e) {
-                if (D1) e.printStackTrace(GT_Log.err);
-            }
+        try { if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
+            aStack = tBehavior.onItemRightClick(this, aStack, aWorld, aPlayer);
+        } catch (Throwable e) {
+            if (D1) e.printStackTrace(GT_Log.err);
+        }
         return aStack;
     }
 
     @Override
     public final void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
-        String tKey = getUnlocalizedName(aStack) + ".tooltip", tString = GT_LanguageManager.getTranslation(tKey);
-        if (GT_Utility.isStringValid(tString) && !tKey.equals(tString)) aList.add(tString);
+        String tKey = getUnlocalizedName(aStack) + ".tooltip";
+        String[] tStrings = GT_LanguageManager.getTranslation(tKey).split("/n ");
+        for (String tString : tStrings)
+        	if (GT_Utility.isStringValid(tString) && !tKey.equals(tString)) aList.add(tString);
 
         Long[]
                 tStats = getElectricStats(aStack);
         if (tStats != null) {
             if (tStats[3] > 0) {
-                aList.add(EnumChatFormatting.AQUA + "Contains " + GT_Utility.formatNumbers(tStats[3]) + " EU   Tier: " + (tStats[2] >= 0 ? tStats[2] : 0) + EnumChatFormatting.GRAY);
+                aList.add(EnumChatFormatting.AQUA + String.format(trans("009", "Contains %s EU   Tier: %s"), GT_Utility.formatNumbers(tStats[3]), "" + (tStats[2] >= 0 ? tStats[2] : 0)) + EnumChatFormatting.GRAY);
             } else {
                 long tCharge = getRealCharge(aStack);
                 if (tStats[3] == -2 && tCharge <= 0) {
-                    aList.add(EnumChatFormatting.AQUA + "Empty. You should recycle it properly." + EnumChatFormatting.GRAY);
+                    aList.add(EnumChatFormatting.AQUA + trans("010", "Empty. You should recycle it properly.") + EnumChatFormatting.GRAY);
                 } else {
-                    aList.add(EnumChatFormatting.AQUA + "" + GT_Utility.formatNumbers(tCharge) + " / " + GT_Utility.formatNumbers(Math.abs(tStats[0])) + " EU - Voltage: " + V[(int) (tStats[2] >= 0 ? tStats[2] < V.length ? tStats[2] : V.length - 1 : 1)] + EnumChatFormatting.GRAY);
+                    aList.add(String.valueOf(EnumChatFormatting.AQUA) + String.format(trans("011", "%s / %s EU - Voltage: %s"), GT_Utility.formatNumbers(tCharge), GT_Utility.formatNumbers(Math.abs(tStats[0])), "" + V[(int) (tStats[2] >= 0 ? tStats[2] < V.length ? tStats[2] : V.length - 1 : 1)]) + EnumChatFormatting.GRAY);
                 }
             }
         }
@@ -215,15 +212,15 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         tStats = getFluidContainerStats(aStack);
         if (tStats != null && tStats[0] > 0) {
             FluidStack tFluid = getFluidContent(aStack);
-            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? "No Fluids Contained" : GT_Utility.getFluidName(tFluid, true))) + EnumChatFormatting.GRAY);
-            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? 0 : tFluid.amount) + "L / " + tStats[0] + "L") + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.BLUE + ((tFluid == null ? trans("012", "No Fluids Contained") : GT_Utility.getFluidName(tFluid, true))) + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.BLUE + String.format(trans("013", "%sL / %sL"), "" + (tFluid == null ? 0 : tFluid.amount), "" + tStats[0]) + EnumChatFormatting.GRAY);
         }
 
         ArrayList<IItemBehaviour<GT_MetaBase_Item>> tList = mItemBehaviors.get((short) getDamage(aStack));
         if (tList != null) for (IItemBehaviour<GT_MetaBase_Item> tBehavior : tList)
             aList = tBehavior.getAdditionalToolTips(this, aList, aStack);
 
-        addAdditionalToolTips(aList, aStack);
+        addAdditionalToolTips(aList, aStack, aPlayer);
     }
 
     @Override
@@ -259,7 +256,8 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         Long[] tStats = getElectricStats(aStack);
         if (tStats == null || tStats[2] > aTier || !(tStats[3] == -1 || tStats[3] == -3 || (tStats[3] < 0 && aCharge == Integer.MAX_VALUE)) || aStack.stackSize != 1)
             return 0;
-        long tChargeBefore = getRealCharge(aStack), tNewCharge = aCharge == Integer.MAX_VALUE ? Long.MAX_VALUE : Math.min(Math.abs(tStats[0]), tChargeBefore + (aIgnoreTransferLimit ? (long) aCharge : Math.min(tStats[1], (long) aCharge)));
+        long tTransfer = aIgnoreTransferLimit ? (long) aCharge : Math.min(tStats[1], (long) aCharge);
+        long tChargeBefore = getRealCharge(aStack), tNewCharge = aCharge == Integer.MAX_VALUE ? Long.MAX_VALUE : Math.min(Math.abs(tStats[0]), Long.MAX_VALUE - tTransfer >= tChargeBefore ? tChargeBefore + tTransfer : Long.MAX_VALUE);
         if (!aSimulate) setCharge(aStack, tNewCharge);
         return tNewCharge - tChargeBefore;
     }
@@ -294,7 +292,7 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
         chargeFromArmor(aStack, aPlayer);
         if (aPlayer instanceof EntityPlayer && ((EntityPlayer) aPlayer).capabilities.isCreativeMode) return true;
         double tTransfer = discharge(aStack, aAmount, Integer.MAX_VALUE, true, false, true);
-        if (tTransfer == aAmount) {
+        if (Math.abs(tTransfer - aAmount) < .0000001) {
             discharge(aStack, aAmount, Integer.MAX_VALUE, true, false, false);
             chargeFromArmor(aStack, aPlayer);
             return true;
@@ -560,9 +558,10 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
     @Override
     public int getItemStackLimit(ItemStack aStack) {
         Long[] tStats = getElectricStats(aStack);
-        if (tStats != null && (tStats[3] == -1 || tStats[3] == -3) && getRealCharge(aStack) > 0) return 1;
+        if (tStats != null && (tStats[3] == -1 || tStats[3] == -2 || tStats[3] == -3) && getRealCharge(aStack) > 0) return 1;
         tStats = getFluidContainerStats(aStack);
         if (tStats != null) return (int) (long) tStats[1];
+        if(getDamage(aStack)==32763)return 1;
         return 64;
     }
 

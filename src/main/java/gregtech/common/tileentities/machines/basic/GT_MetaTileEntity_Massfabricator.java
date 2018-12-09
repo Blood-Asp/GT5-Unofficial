@@ -10,7 +10,10 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
+
+import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Massfabricator
         extends GT_MetaTileEntity_BasicMachine {
@@ -27,8 +30,12 @@ public class GT_MetaTileEntity_Massfabricator
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
     }
 
+    public GT_MetaTileEntity_Massfabricator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
+        super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Massfabricator(this.mName, this.mTier, this.mDescription, this.mTextures, this.mGUIName, this.mNEIName);
+        return new GT_MetaTileEntity_Massfabricator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
     public void onConfigLoad(GT_Config aConfig) {
@@ -40,11 +47,21 @@ public class GT_MetaTileEntity_Massfabricator
         Materials.UUAmplifier.mChemicalFormula = ("Mass Fabricator Eff/Speed Bonus: x" + sUUASpeedBonus);
     }
 
+    @Override
+    public long maxAmperesIn() {
+        return 10;
+    }
+
+    @Override
+    public long maxEUStore() {
+        return V[mTier] * 512;
+    }
+
     public int checkRecipe() {
         FluidStack tFluid = getDrainableStack();
         if ((tFluid == null) || (tFluid.amount < getCapacity())) {
             this.mOutputFluid = Materials.UUMatter.getFluid(1L);
-            this.mEUt = ((int) gregtech.api.enums.GT_Values.V[this.mTier]);
+            this.mEUt =  (((int) gregtech.api.enums.GT_Values.V[1]) * (int)Math.pow(2, this.mTier + 2));
             this.mMaxProgresstime = (sDurationMultiplier / (1 << this.mTier - 1));
             if (((tFluid = getFillableStack()) != null) && (tFluid.amount >= sUUAperUUM) && (tFluid.isFluidEqual(Materials.UUAmplifier.getFluid(1L)))) {
                 tFluid.amount -= sUUAperUUM;
@@ -54,6 +71,11 @@ public class GT_MetaTileEntity_Massfabricator
             return (sRequiresUUA) || (ItemList.Circuit_Integrated.isStackEqual(getInputAt(0), true, true)) ? 1 : 2;
         }
         return 0;
+    }
+
+    @Override
+    public GT_Recipe.GT_Recipe_Map getRecipeList() {
+        return GT_Recipe.GT_Recipe_Map.sMassFabFakeRecipes;
     }
 
     public boolean isFluidInputAllowed(FluidStack aFluid) {

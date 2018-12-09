@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_LanguageManager;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -30,8 +32,8 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import static gregtech.api.enums.GT_Values.GT;
 import static gregtech.api.enums.GT_Values.V;
 
 /**
@@ -79,16 +81,16 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         } else {
             throw new IllegalArgumentException("MetaMachine-Slot Nr. " + aID + " is already occupied!");
         }
-        mName = aBasicName.replaceAll(" ", "_").toLowerCase();
+        mName = aBasicName.replaceAll(" ", "_").toLowerCase(Locale.ENGLISH);
         setBaseMetaTileEntity(GregTech_API.constructBaseMetaTileEntity());
         getBaseMetaTileEntity().setMetaTileID((short) aID);
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-        if (GT.isClientSide()) {
-            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
-        }
+//        if (GT.isClientSide()) {
+//            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
+//            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
+//        }
     }
 
     /**
@@ -161,6 +163,30 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         return false;
     }
 
+    @Override
+    public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if(!aPlayer.isSneaking()) return false;
+		byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
+		TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
+        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
+			// The tile entity we're facing is a cable, let's try to connect to it
+            return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onWireCutterRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
+        }
+        return false;
+		}
+		
+    @Override
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if(!aPlayer.isSneaking()) return false;
+        byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
+        TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
+        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
+            // The tile entity we're facing is a cable, let's try to connect to it
+            return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onSolderingToolRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
+        }
+        return false;
+    }
+        
     @Override
     public void onExplosion() {/*Do nothing*/}
 
@@ -861,5 +887,24 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     @Override
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
         //
+    }
+    
+    @Override
+    public boolean allowGeneralRedstoneOutput(){
+    	return false;
+    }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+    
+    @Override
+    public boolean hasAlternativeModeText(){
+    	return false;
+    }
+    
+    @Override
+    public String getAlternativeModeText(){
+    	return "";
     }
 }

@@ -8,12 +8,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Random;
 
@@ -29,12 +29,16 @@ public class GT_MetaTileEntity_Macerator_Bronze
         super(aName, aDescription, aTextures, 1, 1, false);
     }
 
+    public GT_MetaTileEntity_Macerator_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 1, 1, false);
+    }
+
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeMacerator.png", "ic2.macerator");
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeMacerator.png", GT_Recipe_Map.sMaceratorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Macerator_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Macerator_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -55,10 +59,11 @@ public class GT_MetaTileEntity_Macerator_Bronze
             mOutputBlocked++;
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
+        if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
+            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.getOutput(0) != null) mOutputItems[0] = tRecipe.getOutput(0);
-        this.mEUt = 2;
-        this.mMaxProgresstime = 800;
-        getInputAt(0).stackSize -= tRecipe.mInputs[0].stackSize;
+        this.mEUt = tRecipe.mEUt;
+        this.mMaxProgresstime = (tRecipe.mDuration * 2);
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
     }
 
@@ -66,7 +71,7 @@ public class GT_MetaTileEntity_Macerator_Bronze
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
             return false;
         }
-        return GT_ModHandler.getMaceratorOutput(GT_Utility.copyAmount(64L, new Object[]{aStack}), false, null) != null;
+        return GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, new Object[]{aStack}));
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {

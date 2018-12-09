@@ -37,9 +37,16 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         super(aName, aTier, aSlotCount, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_BasicBatteryBuffer(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, int aSlotCount) {
+        super(aName, aTier, aSlotCount, aDescription, aTextures);
+    }
+
     @Override
     public String[] getDescription() {
-        return new String[]{mDescription, mInventory.length + " Slots"};
+    	String[] desc = new String[mDescriptionArray.length + 1];
+    	System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    	desc[mDescriptionArray.length] = mInventory.length + " Slots";
+    	return desc;
     }
 
     @Override
@@ -59,7 +66,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_BasicBatteryBuffer(mName, mTier, mDescription, mTextures, mInventory.length);
+        return new GT_MetaTileEntity_BasicBatteryBuffer(mName, mTier, mDescriptionArray, mTextures, mInventory.length);
     }
 
     @Override
@@ -244,7 +251,8 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                     name.equals("gt.metaitem.01.32521") ||
                     name.equals("gt.metaitem.01.32530") ||
                     name.equals("gt.metaitem.01.32531")) {
-                return true;
+            	if(ic2.api.item.ElectricItem.manager.getCharge(aStack)==0){
+                return true;}
             }
         }
         return false;
@@ -255,15 +263,23 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         if (!GT_Utility.isStackValid(aStack)) {
             return false;
         }
-        if (GT_ModHandler.isElectricItem(aStack, this.mTier)) {
+        if (mInventory[aIndex]==null && GT_ModHandler.isElectricItem(aStack, this.mTier)) {
             return true;
         }
         return false;
     }
+    
+    @Override
+    public int getInventoryStackLimit() {
+        return 1;
+    }
 
     public long[] getStoredEnergy() {
+    	boolean scaleOverflow =false;
+    	boolean storedOverflow = false;
         long tScale = getBaseMetaTileEntity().getEUCapacity();
         long tStored = getBaseMetaTileEntity().getStoredEU();
+        long tStep = 0;
         if (mInventory != null) {
             for (ItemStack aStack : mInventory) {
                 if (GT_ModHandler.isElectricItem(aStack)) {
@@ -271,8 +287,11 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                     if (aStack.getItem() instanceof GT_MetaBase_Item) {
                         Long[] stats = ((GT_MetaBase_Item) aStack.getItem()).getElectricStats(aStack);
                         if (stats != null) {
+                        	if(stats[0]>Long.MAX_VALUE/2){scaleOverflow=true;}
                             tScale = tScale + stats[0];
-                            tStored = tStored + ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
+                            tStep = ((GT_MetaBase_Item) aStack.getItem()).getRealCharge(aStack);
+                            if(tStep > Long.MAX_VALUE/2){storedOverflow=true;}
+                            tStored = tStored + tStep;
                         }
                     } else if (aStack.getItem() instanceof IElectricItem) {
                         tStored = tStored + (long) ic2.api.item.ElectricItem.manager.getCharge(aStack);
@@ -282,6 +301,8 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
             }
 
         }
+        if(scaleOverflow){tScale=Long.MAX_VALUE;}
+        if(storedOverflow){tStored=Long.MAX_VALUE;}
         return new long[]{tStored, tScale};
     }
 
@@ -293,12 +314,15 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
             mStored = tmp[0];
             mMax = tmp[1];
         }
-
         return new String[]{
                 getLocalName(),
                 "Stored Items:",
                 GT_Utility.formatNumbers(mStored) + " EU /",
-                GT_Utility.formatNumbers(mMax) + " EU"};
+                GT_Utility.formatNumbers(mMax) + " EU",
+                "Average input:",
+                getBaseMetaTileEntity().getAverageElectricInput()+"",
+                "Average output:",
+                getBaseMetaTileEntity().getAverageElectricOutput()+""};
     }
 
     @Override

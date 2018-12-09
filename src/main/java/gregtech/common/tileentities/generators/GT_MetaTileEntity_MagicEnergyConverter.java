@@ -25,12 +25,17 @@ public class GT_MetaTileEntity_MagicEnergyConverter
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_MagicEnergyConverter(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_MagicEnergyConverter(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_MagicEnergyConverter(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -42,7 +47,7 @@ public class GT_MetaTileEntity_MagicEnergyConverter
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyConverter.efficiency.tier." + this.mTier, 100 - this.mTier * 10);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MagicEnergyConverter.efficiency.tier." + this.mTier, 100 - this.mTier * 5);
     }
 
 
@@ -89,4 +94,9 @@ public class GT_MetaTileEntity_MagicEnergyConverter
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
     }
+
+	@Override
+	public int getPollution() {
+		return 0;
+	}
 }

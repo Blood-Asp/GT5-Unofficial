@@ -24,12 +24,17 @@ public class GT_MetaTileEntity_SolidNaquadahReactor
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_SolidNaquadahReactor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return (aSide > 1) && (aSide != getBaseMetaTileEntity().getFrontFacing()) && (aSide != getBaseMetaTileEntity().getBackFacing());
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_SolidNaquadahReactor(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_SolidNaquadahReactor(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -45,7 +50,7 @@ public class GT_MetaTileEntity_SolidNaquadahReactor
     }
 
     public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 80);
+        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, 40 + mTier * 10);
     }
 
     public ITexture[] getFront(byte aColor) {
@@ -87,4 +92,9 @@ public class GT_MetaTileEntity_SolidNaquadahReactor
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_SIDE_ACTIVE)};
     }
+
+	@Override
+	public int getPollution() {
+		return 0;
+	}
 }

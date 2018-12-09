@@ -26,6 +26,10 @@ public class GT_Cover_SolarPanel
         return aCoverVariable;
     }
 
+    public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+    	return true;
+    }
+
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }

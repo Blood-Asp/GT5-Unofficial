@@ -6,6 +6,7 @@ import gregtech.api.interfaces.tileentity.IGregTechDeviceInformation;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,14 +30,14 @@ public class GT_SensorCard_Item
         setMaxStackSize(1);
     }
 
-    public void addAdditionalToolTips(List aList, ItemStack aStack) {
-        super.addAdditionalToolTips(aList, aStack);
+    public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
+        super.addAdditionalToolTips(aList, aStack, aPlayer);
         if (aStack != null) {
             NBTTagCompound tNBT = aStack.getTagCompound();
             if (tNBT == null) {
-                aList.add("Missing Coodinates!");
+                aList.add(trans("014", "Missing Coodinates!"));
             } else {
-                aList.add("Device at:");
+                aList.add(trans("015", "Device at:"));
                 aList.add(String.format("x: %d, y: %d, z: %d", new Object[]{Integer.valueOf(tNBT.getInteger("x")), Integer.valueOf(tNBT.getInteger("y")), Integer.valueOf(tNBT.getInteger("z"))}));
             }
         }
@@ -52,7 +53,7 @@ public class GT_SensorCard_Item
         ChunkCoordinates target = aCard.getTarget();
 
         TileEntity tTileEntity = world.getTileEntity(target.posX, target.posY, target.posZ);
-        if ((tTileEntity != null) && ((tTileEntity instanceof IGregTechDeviceInformation)) && (((IGregTechDeviceInformation) tTileEntity).isGivingInformation())) {
+        if (((tTileEntity instanceof IGregTechDeviceInformation)) && (((IGregTechDeviceInformation) tTileEntity).isGivingInformation())) {
             String[] tInfoData = ((IGregTechDeviceInformation) tTileEntity).getInfoData();
             for (int i = 0; i < tInfoData.length; i++) {
                 aCard.setString("mString" + i, tInfoData[i]);
@@ -77,7 +78,7 @@ public class GT_SensorCard_Item
     public List<PanelSetting> getSettingsList() {
         List<PanelSetting> rList = new ArrayList(30);
         for (int i = 0; i < 8; i++) {
-            rList.add(new PanelSetting("" + (i + 1), 1 << i, getCardType()));
+            rList.add(new PanelSetting(String.valueOf((i + 1)), 1 << i, getCardType()));
         }
         return rList;
     }

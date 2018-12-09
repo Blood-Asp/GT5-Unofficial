@@ -8,6 +8,7 @@ import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +26,7 @@ public class GT_FluidDisplayItem
         ItemList.Display_Fluid.set(this);
     }
 
-    protected void addAdditionalToolTips(List aList, ItemStack aStack) {
+    protected void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         NBTTagCompound aNBT = aStack.getTagCompound();
         if (GT_Values.D1) {
             Fluid tFluid = FluidRegistry.getFluid(aStack.getItemDamage());
@@ -36,10 +37,10 @@ public class GT_FluidDisplayItem
         if (aNBT != null) {
             long tToolTipAmount = aNBT.getLong("mFluidDisplayAmount");
             if (tToolTipAmount > 0L) {
-                aList.add(EnumChatFormatting.BLUE + "Amount: " + tToolTipAmount + EnumChatFormatting.GRAY);
+                aList.add(EnumChatFormatting.BLUE + String.format(trans("016", "Amount: %s L"), "" + tToolTipAmount) + EnumChatFormatting.GRAY);
             }
-            aList.add(EnumChatFormatting.RED + "Temperature: " + aNBT.getLong("mFluidDisplayHeat") + " K" + EnumChatFormatting.GRAY);
-            aList.add(EnumChatFormatting.GREEN + "State: " + (aNBT.getBoolean("mFluidState") ? "Gas" : "Liquid") + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.RED + String.format(trans("017", "Temperature: %s K"), "" + aNBT.getLong("mFluidDisplayHeat")) + EnumChatFormatting.GRAY);
+            aList.add(EnumChatFormatting.GREEN + String.format(trans("018", "State: %s"), aNBT.getBoolean("mFluidState") ? "Gas" : "Liquid") + EnumChatFormatting.GRAY);
         }
     }
 

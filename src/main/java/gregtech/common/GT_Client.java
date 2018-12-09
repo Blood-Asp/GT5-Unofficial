@@ -11,15 +11,16 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
-import gregtech.api.objects.GT_FluidStack;
+import gregtech.api.metatileentity.BaseTileEntity;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
@@ -30,10 +31,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.event.terraingen.BiomeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URL;
@@ -72,16 +76,15 @@ public class GT_Client extends GT_Proxy
     private final List mMoltenNegG;
     private final List mMoltenNegB;
     private final List mMoltenNegA = Arrays.asList(new Object[0]);
+    /**This is the place to def the value used below**/
+    private long afterSomeTime;
     private long mAnimationTick;
     private boolean mAnimationDirection;
-    private boolean isFirstClientPlayerTick;
-    private String mMessage;
+    
     public GT_Client() {
-        mCapeRenderer = new GT_CapeRenderer(mCapeList);
+    	mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
         mAnimationDirection = false;
-        isFirstClientPlayerTick = true;
-        mMessage = "";
         mPosR = Arrays.asList(new Materials[]{
                 /**Materials.ChargedCertusQuartz, **/Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
                 Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone
@@ -135,16 +138,120 @@ public class GT_Client extends GT_Proxy
         GL11.glLineWidth(2.0F);
         GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.5F);
         GL11.glBegin(1);
-        GL11.glVertex3d(0.5D, 0.0D, -0.25D);
-        GL11.glVertex3d(-0.5D, 0.0D, -0.25D);
-        GL11.glVertex3d(0.5D, 0.0D, 0.25D);
-        GL11.glVertex3d(-0.5D, 0.0D, 0.25D);
-        GL11.glVertex3d(0.25D, 0.0D, -0.5D);
-        GL11.glVertex3d(0.25D, 0.0D, 0.5D);
-        GL11.glVertex3d(-0.25D, 0.0D, -0.5D);
-        GL11.glVertex3d(-0.25D, 0.0D, 0.5D);
+        GL11.glVertex3d(+.50D, .0D, -.25D);
+        GL11.glVertex3d(-.50D, .0D, -.25D);
+        GL11.glVertex3d(+.50D, .0D, +.25D);
+        GL11.glVertex3d(-.50D, .0D, +.25D);
+        GL11.glVertex3d(+.25D, .0D, -.50D);
+        GL11.glVertex3d(+.25D, .0D, +.50D);
+        GL11.glVertex3d(-.25D, .0D, -.50D);
+        GL11.glVertex3d(-.25D, .0D, +.50D);
+        TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
+        if (tTile instanceof BaseMetaPipeEntity) {
+        	int[][] GridSwitchArr = new int[][]{
+            	{0, 5, 3, 1, 2, 4},
+            	{5, 0, 1, 3, 2, 4},
+            	{1, 3, 0, 5, 2, 4},
+            	{3, 1, 5, 0, 2, 4},
+            	{4, 2, 3, 1, 0, 5},
+            	{2, 4, 3, 1, 5, 0},
+            }; 
+        	int tConnections = ((BaseMetaPipeEntity) tTile).mConnections;
+        	for (byte i = 0; i < 6; i++) {
+        		if ((tConnections & (1 << i)) != 0) {
+        			switch (GridSwitchArr[aEvent.target.sideHit][i]) {
+        	        case 0:
+        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	break;
+        	        case 1:
+        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
+        				GL11.glVertex3d(+.25D, .0D, +.25D);
+        				GL11.glVertex3d(-.25D, .0D, +.25D);
+        				GL11.glVertex3d(+.25D, .0D, +.50D);
+        	        	break;
+        	        case 2:
+        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
+        				GL11.glVertex3d(-.25D, .0D, +.25D);
+        				GL11.glVertex3d(-.50D, .0D, +.25D);
+        				GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	break;
+        	        case 3:
+        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
+        				GL11.glVertex3d(+.25D, .0D, -.25D);
+        				GL11.glVertex3d(-.25D, .0D, -.25D);
+        				GL11.glVertex3d(+.25D, .0D, -.50D);
+        	        	break;
+        	        case 4:
+        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
+        				GL11.glVertex3d(+.25D, .0D, +.25D);
+        				GL11.glVertex3d(+.50D, .0D, +.25D);
+        				GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	break;
+        	        case 5:
+        	        	GL11.glVertex3d(+.50D, .0D, +.50D);
+        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.50D, .0D, +.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, +.50D);
+        	        	GL11.glVertex3d(+.50D, .0D, -.50D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
+        	        	GL11.glVertex3d(+.25D, .0D, -.50D);
+        	        	GL11.glVertex3d(-.50D, .0D, +.50D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.50D, .0D, +.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
+        	        	GL11.glVertex3d(-.50D, .0D, -.50D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
+        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
+        	        	break;
+        	        }
+        		}
+        	}
+        }
         GL11.glEnd();
         GL11.glPopMatrix();
+    }
+    
+    @SubscribeEvent
+    public void manipulateDensity(EntityViewRenderEvent.FogDensity event) {
+    	if(GT_Pollution.mPlayerPollution > (GT_Mod.gregtechproxy.mPollutionSmogLimit)){    	
+        event.density = (0.15f*(Math.min(GT_Pollution.mPlayerPollution/((float)GT_Mod.gregtechproxy.mPollutionSourRainLimit),1.0f)))+0.1f;
+        event.setCanceled(true);
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateColor(EntityViewRenderEvent.FogColors event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.red = 140f/255f;
+        event.green = 80f/255f;
+        event.blue = 40f/255f;
+    	}
+    }
+    
+    @SubscribeEvent
+    public void manipulateGrassColor(BiomeEvent.GetGrassColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0xD2691E;
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateWaterColor(BiomeEvent.GetWaterColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0x556B2F;
+    	}
+    }
+
+    @SubscribeEvent
+    public void manipulateFoliageColor(BiomeEvent.GetFoliageColor event) {
+    	if(GT_Pollution.mPlayerPollution > GT_Mod.gregtechproxy.mPollutionSmogLimit){
+        event.newColor = 0xCD853F;
+    	}
     }
 
     public boolean isServerSide() {
@@ -189,7 +296,6 @@ public class GT_Client extends GT_Proxy
             String tName = arr$[i$];
             mCapeList.add(tName.toLowerCase());
         }
-
         (new Thread(this)).start();
     }
 
@@ -204,9 +310,9 @@ public class GT_Client extends GT_Proxy
 
     public void onPostLoad() {
         super.onPostLoad();
-        label0:
-        for (int i = 1; i < GregTech_API.METATILEENTITIES.length; i++)
-            try {
+        try {
+            label0:
+            for (int i = 1; i < GregTech_API.METATILEENTITIES.length; i++)
                 do {
                     if (i >= GregTech_API.METATILEENTITIES.length)
                         continue label0;
@@ -214,9 +320,7 @@ public class GT_Client extends GT_Proxy
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
                     i++;
                 } while (true);
-            } catch (Throwable e) {
-                e.printStackTrace(GT_Log.err);
-            }
+        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
 
 //        super.onPostLoad();
@@ -232,9 +336,9 @@ public class GT_Client extends GT_Proxy
 
     public void run() {
         try {
-            GT_Log.out.println("GT_Mod: Downloading Cape List.");
+            GT_Log.out.println("Skip: GT_Mod: Downloading Cape List.");
             @SuppressWarnings("resource")
-            Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/capelist.txt").openStream());
+            Scanner tScanner = new Scanner(new URL("http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt").openStream());
             while (tScanner.hasNextLine()) {
                 String tName = tScanner.nextLine();
                 if (!this.mCapeList.contains(tName.toLowerCase())) {
@@ -243,33 +347,49 @@ public class GT_Client extends GT_Proxy
             }
         } catch (Throwable e) {
         }
-        try {
-            GT_Log.out.println("GT_Mod: Downloading News.");
+        /**try {
+            GT_Log.out.println("Skip: GT_Mod: Downloading News.");
             @SuppressWarnings("resource")
             Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/message.txt").openStream());
             while (tScanner.hasNextLine()) {
                 this.mMessage = (this.mMessage + tScanner.nextLine() + " ");
             }
         } catch (Throwable e) {
-        }
+        }**/
+    }
+    
+    @SubscribeEvent
+    public void receiveRenderSpecialsEvent(net.minecraftforge.client.event.RenderPlayerEvent.Specials.Pre aEvent) {
+        mCapeRenderer.receiveRenderSpecialsEvent(aEvent);
     }
 
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
-        if ((!aEvent.player.isDead) && (aEvent.phase == TickEvent.Phase.END) && (aEvent.side.isClient())) {
+        if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
+            afterSomeTime++;
+            if(afterSomeTime>=100L){
+                afterSomeTime=0;
+                StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
+                try {
+                    for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
+                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    }
+                }catch (Exception e){}
+            }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
-                if (((Integer) tEntry.getValue()).intValue() < 0) {
+                if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix
                     tList.add(tEntry.getKey());
                 } else {
-                    tEntry.setValue(Integer.valueOf(((Integer) tEntry.getValue()).intValue() - 1));
+                    tEntry.setValue(Integer.valueOf(tEntry.getValue().intValue() - 1));
                 }
             }
             GT_PlayedSound tKey;
             for (Iterator i$ = tList.iterator(); i$.hasNext(); GT_Utility.sPlayedSoundMap.remove(tKey)) {
                 tKey = (GT_PlayedSound) i$.next();
             }
-            if ((this.isFirstClientPlayerTick) && (aEvent.player == GT_Values.GT.getThePlayer())) {
+            if(GregTech_API.mServerStarted == false)GregTech_API.mServerStarted = true;
+            /*if ((this.isFirstClientPlayerTick) && (aEvent.player == GT_Values.GT.getThePlayer())) {
                 this.isFirstClientPlayerTick = false;
                 GT_FluidStack.fixAllThoseFuckingFluidIDs();
                 if ((this.mMessage.length() > 5) && (GregTech_API.sSpecialFile.get(ConfigCategories.news, this.mMessage, true))) {
@@ -291,7 +411,7 @@ public class GT_Client extends GT_Proxy
                     aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please get the recommended Version of IndustrialCraft here:"));
                     aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + (GT_Mod.MAX_IC2 < Integer.MAX_VALUE ? GT_Mod.MAX_IC2 : 624) + "/"));
                 }
-            }
+            }*/
         }
     }
 
@@ -302,14 +422,18 @@ public class GT_Client extends GT_Proxy
             TileEntity aTileEntity = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
             try {
                 Class.forName("codechicken.lib.vec.Rotation");
-                if (((aTileEntity instanceof BaseMetaPipeEntity)) && (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0) && ((GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet())) || (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList)) || (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList)))) {
+                if (((aTileEntity instanceof BaseMetaPipeEntity)) && (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0) && ((GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet())) || (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList)) || (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList)) || (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList))|| GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList))) {
                     drawGrid(aEvent);
                     return;
                 }
-                if ((((aTileEntity instanceof ITurnable)) || (ROTATABLE_VANILLA_BLOCKS.contains(aBlock)) || ((aTileEntity instanceof IWrenchable))) && (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))) {
+                if ((aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable) && GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList)) {
                     drawGrid(aEvent);
                     return;
                 }
+                if (aTileEntity instanceof BaseTileEntity && (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList) || GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList))) {
+                	drawGrid(aEvent);
+                	return;
+            	}
             } catch (Throwable e) {
                 if (GT_Values.D1) {
                     e.printStackTrace(GT_Log.err);
@@ -329,16 +453,17 @@ public class GT_Client extends GT_Proxy
     }
 
     @SubscribeEvent
-    public void receiveRenderSpecialsEvent(net.minecraftforge.client.event.RenderPlayerEvent.Specials.Pre aEvent) {
-        mCapeRenderer.receiveRenderSpecialsEvent(aEvent);
-    }
-
-    @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
+            if(changeDetected>0)changeDetected--;
+            int newHideValue=shouldHeldItemHideThings();
+            if(newHideValue!=hideValue){
+                hideValue=newHideValue;
+                changeDetected=5;
+            }
             mAnimationTick++;
             if (mAnimationTick % 50L == 0L)
-                mAnimationDirection = !mAnimationDirection;
+                {mAnimationDirection = !mAnimationDirection;}
             int tDirection = mAnimationDirection ? 1 : -1;
             for (Iterator i$ = mPosR.iterator(); i$.hasNext(); ) {
                 Materials tMaterial = (Materials) i$.next();
@@ -501,5 +626,38 @@ public class GT_Client extends GT_Proxy
             aWorld.playRecord(tString.substring(10, tString.length()), (int) aX, (int) aY, (int) aZ);
         else
             aWorld.playSound(aX, aY, aZ, tString, 3F, tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F, false);
+    }
+
+    public static int hideValue=0;
+    public static int changeDetected=0;
+
+    private static int shouldHeldItemHideThings() {
+        try {
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+            if (player == null) return 0;
+            ItemStack tCurrentItem = player.getCurrentEquippedItem();
+            if (tCurrentItem == null) return 0;
+            int[] ids = OreDictionary.getOreIDs(tCurrentItem);
+            int hide = 0;
+            for (int i : ids) {
+                if (OreDictionary.getOreName(i).equals("craftingToolSolderingIron")) {
+                    hide |= 0x1;
+                    break;
+                }
+            }
+            if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sHardHammerList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSoftHammerList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)
+            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sCrowbarList)
+            		|| GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
+            	hide |= 0x2;
+            }
+            return hide;
+        }catch(Exception e){
+            return 0;
+        }
     }
 }

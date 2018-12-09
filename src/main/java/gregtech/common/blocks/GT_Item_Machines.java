@@ -2,7 +2,13 @@ package gregtech.common.blocks;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.interfaces.metatileentity.IConnectable;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Frame;
+import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Item;
 import gregtech.api.util.GT_ItsNotMyFaultException;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
@@ -12,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
@@ -33,53 +38,52 @@ public class GT_Item_Machines
             if ((tDamage <= 0) || (tDamage >= GregTech_API.METATILEENTITIES.length)) {
                 return;
             }
-            if (tDamage == 0) {
-                aList.add("WARNING, THE EXISTENCE OF THIS ITEM IS A BUG");
-                aList.add("IF YOU GOT IT IN SURVIVAL THEN PLEASE REPORT IT");
-            } else {
-                TileEntity temp = GregTech_API.sBlockMachines.createTileEntity(aPlayer == null ? GT_Values.DW : aPlayer.worldObj, GregTech_API.METATILEENTITIES[tDamage] == null ? 0 : GregTech_API.METATILEENTITIES[tDamage].getTileEntityBaseType());
-                if (temp != null) {
-                    temp.setWorldObj(aPlayer == null ? GT_Values.DW : aPlayer.worldObj);
-                    temp.xCoord = 0;
-                    temp.yCoord = 0;
-                    temp.zCoord = 0;
-                    if ((temp instanceof IGregTechTileEntity)) {
-                        IGregTechTileEntity tTileEntity = (IGregTechTileEntity) temp;
-                        tTileEntity.setInitialValuesAsNBT(new NBTTagCompound(), (short) tDamage);
-                        if (tTileEntity.getDescription() != null) {
-                            int i = 0;
-                            for (String tDescription : tTileEntity.getDescription()) {
-                                if (GT_Utility.isStringValid(tDescription)) {
-                                    aList.add(GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished));
-                                }
-                            }
-                        }
-                        if (tTileEntity.getEUCapacity() > 0L) {
-                            if (tTileEntity.getInputVoltage() > 0L) {
-                                aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_IN", "Voltage IN: ", !GregTech_API.sPostloadFinished) + EnumChatFormatting.GREEN + tTileEntity.getInputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getInputVoltage())] + ")" + EnumChatFormatting.GRAY);
-                            }
-                            if (tTileEntity.getOutputVoltage() > 0L) {
-                                aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_OUT", "Voltage OUT: ", !GregTech_API.sPostloadFinished) + EnumChatFormatting.GREEN + tTileEntity.getOutputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getOutputVoltage())] + ")" + EnumChatFormatting.GRAY);
-                            }
-                            if (tTileEntity.getOutputAmperage() > 1L) {
-                                aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_AMOUNT", "Amperage: ", !GregTech_API.sPostloadFinished) + EnumChatFormatting.YELLOW + tTileEntity.getOutputAmperage() + EnumChatFormatting.GRAY);
-                            }
-                            aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_STORE", "Capacity: ", !GregTech_API.sPostloadFinished) + EnumChatFormatting.BLUE + tTileEntity.getEUCapacity() + EnumChatFormatting.GRAY);
-                        }
+
+            if (GregTech_API.METATILEENTITIES[tDamage] != null) {
+                IGregTechTileEntity tTileEntity = GregTech_API.METATILEENTITIES[tDamage].getBaseMetaTileEntity();
+                if (tTileEntity.getDescription() != null) {
+                    int i = 0;
+                    for (String tDescription : tTileEntity.getDescription()) {
+                        if (GT_Utility.isStringValid(tDescription)) {
+                        	if(tDescription.contains("%%%")){
+                        		String[] tString = tDescription.split("%%%");
+                        		if(tString.length>=2){
+                                                StringBuffer tBuffer = new StringBuffer();
+                        			Object tRep[] = new String[tString.length / 2];
+                        			for (int j = 0; j < tString.length; j++)
+                        				if (j % 2 == 0) tBuffer.append(tString[j]);
+                        				else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}
+                                                aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished), tRep));
+                        		}
+                        	}else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
+                            aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
+                        }else i++;
                     }
+                }
+                if (tTileEntity.getEUCapacity() > 0L) {
+                    if (tTileEntity.getInputVoltage() > 0L) {
+                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_IN", "Voltage IN: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getInputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getInputVoltage())] + ")" + EnumChatFormatting.GRAY);
+                    }
+                    if (tTileEntity.getOutputVoltage() > 0L) {
+                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_OUT", "Voltage OUT: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getOutputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getOutputVoltage())] + ")" + EnumChatFormatting.GRAY);
+                    }
+                    if (tTileEntity.getOutputAmperage() > 1L) {
+                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_AMOUNT", "Amperage: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.YELLOW + tTileEntity.getOutputAmperage() + EnumChatFormatting.GRAY);
+                    }
+                    aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_STORE", "Capacity: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.BLUE + tTileEntity.getEUCapacity() + EnumChatFormatting.GRAY);
                 }
             }
             NBTTagCompound aNBT = aStack.getTagCompound();
             if (aNBT != null) {
                 if (aNBT.getBoolean("mMuffler")) {
-                    aList.add(GT_LanguageManager.addStringLocalization("GT_TileEntity_MUFFLER", "has Muffler Upgrade", !GregTech_API.sPostloadFinished));
+                    aList.add(GT_LanguageManager.addStringLocalization("GT_TileEntity_MUFFLER", "has Muffler Upgrade", !GregTech_API.sPostloadFinished ));
                 }
                 if (aNBT.getBoolean("mSteamConverter")) {
-                    aList.add(GT_LanguageManager.addStringLocalization("GT_TileEntity_STEAMCONVERTER", "has Steam Upgrade", !GregTech_API.sPostloadFinished));
+                    aList.add(GT_LanguageManager.addStringLocalization("GT_TileEntity_STEAMCONVERTER", "has Steam Upgrade", !GregTech_API.sPostloadFinished ));
                 }
                 int tAmount = 0;
                 if ((tAmount = aNBT.getByte("mSteamTanks")) > 0) {
-                    aList.add(tAmount + " " + GT_LanguageManager.addStringLocalization("GT_TileEntity_STEAMTANKS", "Steam Tank Upgrades", !GregTech_API.sPostloadFinished));
+                    aList.add(tAmount + " " + GT_LanguageManager.addStringLocalization("GT_TileEntity_STEAMTANKS", "Steam Tank Upgrades", !GregTech_API.sPostloadFinished ));
                 }
             }
         } catch (Throwable e) {
@@ -100,6 +104,27 @@ public class GT_Item_Machines
             return getUnlocalizedName() + "." + GregTech_API.METATILEENTITIES[tDamage].getMetaName();
         }
         return "";
+    }
+
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	short tDamage = (short) getDamage(aStack);
+    	if (tDamage >= 0 && tDamage < GregTech_API.METATILEENTITIES.length && GregTech_API.METATILEENTITIES[tDamage] != null) {
+    		Materials aMaterial = null;
+    		if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaPipeEntity_Fluid) {
+    			aMaterial = ((GT_MetaPipeEntity_Fluid) GregTech_API.METATILEENTITIES[tDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaPipeEntity_Cable) {
+    			aMaterial = ((GT_MetaPipeEntity_Cable) GregTech_API.METATILEENTITIES[tDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaPipeEntity_Item) {
+    			aMaterial = ((GT_MetaPipeEntity_Item) GregTech_API.METATILEENTITIES[tDamage]).mMaterial;
+            } else if (GregTech_API.METATILEENTITIES[tDamage] instanceof GT_MetaPipeEntity_Frame) {
+    			aMaterial = ((GT_MetaPipeEntity_Frame) GregTech_API.METATILEENTITIES[tDamage]).mMaterial;
+            }
+    		if (aMaterial != null) {
+    			return aMaterial.getLocalizedNameForItem(aName);
+    		}
+        }
+    	return aName;
     }
 
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
@@ -133,6 +158,9 @@ public class GT_Item_Machines
                     tTileEntity.setOwnerName(aPlayer.getDisplayName());
                 }
                 tTileEntity.getMetaTileEntity().initDefaultModes(aStack.getTagCompound());
+                if (tTileEntity.getMetaTileEntity() instanceof IConnectable) {
+                	((IConnectable) tTileEntity.getMetaTileEntity()).connect(GT_Utility.getOppositeSide(side));
+                }
             }
         } else if (!aWorld.setBlock(aX, aY, aZ, this.field_150939_a, tDamage, 3)) {
             return false;

@@ -25,12 +25,17 @@ public class GT_MetaTileEntity_PlasmaGenerator
         onConfigLoad();
     }
 
+    public GT_MetaTileEntity_PlasmaGenerator(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
+        onConfigLoad();
+    }
+
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_PlasmaGenerator(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_PlasmaGenerator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public GT_Recipe.GT_Recipe_Map getRecipes() {
@@ -89,4 +94,9 @@ public class GT_MetaTileEntity_PlasmaGenerator
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW)};
     }
+
+	@Override
+	public int getPollution() {
+		return 0;
+	}
 }

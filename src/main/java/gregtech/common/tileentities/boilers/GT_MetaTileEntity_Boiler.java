@@ -1,5 +1,6 @@
 package gregtech.common.tileentities.boilers;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -7,6 +8,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -30,7 +32,15 @@ public abstract class GT_MetaTileEntity_Boiler
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String[] aDescription, ITexture... aTextures) {
+        super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
+    }
+
     public GT_MetaTileEntity_Boiler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 4, aDescription, aTextures);
+    }
+    
+    public GT_MetaTileEntity_Boiler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 4, aDescription, aTextures);
     }
 
@@ -228,7 +238,7 @@ public abstract class GT_MetaTileEntity_Boiler
                         aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1L));
                     }
                 } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Lignite)))) {
-                    this.mProcessingEnergy += 40;
+                    this.mProcessingEnergy += 120;
                     aBaseMetaTileEntity.decrStackSize(2, 1);
                     if (aBaseMetaTileEntity.getRandomNumber(8) == 0) {
                         aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
@@ -244,18 +254,24 @@ public abstract class GT_MetaTileEntity_Boiler
     }
 
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (aIndex == 1) || (aIndex == 3);
+        if (GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
+        return true;
+        else
+            return false;
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return aIndex == 2;
+        if(GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
+        return true;
+        else
+            return false;
     }
 
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
         if (aIndex == 1) {
             GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(Integer.valueOf(4)), 2, 1.0F, aX, aY, aZ);
             for (int l = 0; l < 8; l++) {
-                getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5D + Math.random(), aY, aZ - 0.5D + Math.random(), 0.0D, 0.0D, 0.0D);
+                getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5D + (new XSTR()).nextFloat(), aY, aZ - 0.5D + (new XSTR()).nextFloat(), 0.0D, 0.0D, 0.0D);
             }
         }
     }

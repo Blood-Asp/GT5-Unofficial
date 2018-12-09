@@ -25,8 +25,15 @@ public class GT_MetaTileEntity_Locker
         super(aName, aTier, 4, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_Locker(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 4, aDescription, aTextures);
+    }
+
     public String[] getDescription() {
-        return new String[]{this.mDescription, "Click with Screwdriver to change Style"};
+        String[] desc = new String[mDescriptionArray.length + 1];
+        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+        desc[mDescriptionArray.length] = "Click with Screwdriver to change Style";
+        return desc;
     }
 
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
@@ -50,7 +57,7 @@ public class GT_MetaTileEntity_Locker
     }
 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Locker(this.mName, this.mTier, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_Locker(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
     public boolean isSimpleMachine() {

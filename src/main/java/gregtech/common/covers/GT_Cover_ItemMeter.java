@@ -19,7 +19,7 @@ public class GT_Cover_ItemMeter
         int tAll = 0;
         int tFull = 0;
         for (int i : tSlots) {
-            if ((i > 0) && (i < aTileEntity.getSizeInventory())) {
+            if ((i >= 0) && (i < aTileEntity.getSizeInventory())) {
                 tAll += 64;
                 ItemStack tStack = aTileEntity.getStackInSlot(i);
                 if (tStack != null) {
@@ -28,20 +28,19 @@ public class GT_Cover_ItemMeter
             }
         }
         tAll /= 14;
-        if (tAll > 0) {
-            aTileEntity.setOutputRedstoneSignal(aSide, aCoverVariable != 1 ? 0 : tFull > 0 ? (byte) (tFull / tAll + 1) : (byte) (15 - (tFull > 0 ? tFull / tAll + 1 : 0)));
-        } else {
-            aTileEntity.setOutputRedstoneSignal(aSide, (byte) (aCoverVariable != 1 ? 0 : 15));
-        }
+        if(tAll > 0)
+            aTileEntity.setOutputRedstoneSignal(aSide, aCoverVariable == 1 ? (byte)(15 - (tFull <= 0 ? 0 : tFull / tAll + 1)) : tFull <= 0 ? 0 : (byte)(tFull / tAll + 1));
+        else
+            aTileEntity.setOutputRedstoneSignal(aSide, ((byte)(aCoverVariable == 1 ? 15 : 0)));
         return aCoverVariable;
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + 1) % (2 + aTileEntity.getSizeInventory());
+        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % (1 + aTileEntity.getSizeInventory());
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Normal"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Inverted"); break;
-            default: GT_Utility.sendChatToPlayer(aPlayer, "Slot: " + (aCoverVariable - 2)); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("051", "Normal")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("052", "Inverted")); break;
+            default: GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (aCoverVariable - 2)); break;
         }
         return aCoverVariable;
     }

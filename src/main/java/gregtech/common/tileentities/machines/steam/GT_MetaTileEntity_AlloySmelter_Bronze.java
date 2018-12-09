@@ -22,8 +22,12 @@ public class GT_MetaTileEntity_AlloySmelter_Bronze
         super(aName, aDescription, aTextures, 2, 1, true);
     }
 
+    public GT_MetaTileEntity_AlloySmelter_Bronze(String aName, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aDescription, aTextures, 2, 1, true);
+    }
+
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_AlloySmelter_Bronze(this.mName, this.mDescription, this.mTextures);
+        return new GT_MetaTileEntity_AlloySmelter_Bronze(this.mName, this.mDescriptionArray, this.mTextures);
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -34,13 +38,8 @@ public class GT_MetaTileEntity_AlloySmelter_Bronze
         GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sAlloySmelterRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[1], null, getAllInputs());
         if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
             this.mOutputItems[0] = tRecipe.getOutput(0);
-            if (tRecipe.mEUt <= 16) {
-                this.mEUt = tRecipe.mEUt;
-                this.mMaxProgresstime = (tRecipe.mDuration * 2);
-            } else {
-                this.mEUt = tRecipe.mEUt;
-                this.mMaxProgresstime = (tRecipe.mDuration * 2);
-            }
+            this.mEUt = tRecipe.mEUt;
+            this.mMaxProgresstime = (tRecipe.mDuration * 2);
             return 2;
         }
         return 0;

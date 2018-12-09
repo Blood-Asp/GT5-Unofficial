@@ -19,6 +19,10 @@ public class GT_MetaTileEntity_QuantumTank
         super(aName, aTier, 3, aDescription, aTextures);
     }
 
+    public GT_MetaTileEntity_QuantumTank(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, 3, aDescription, aTextures);
+    }
+
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         return new ITexture[0][0][0];
@@ -122,7 +126,7 @@ public class GT_MetaTileEntity_QuantumTank
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override

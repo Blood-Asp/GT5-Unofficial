@@ -3,10 +3,13 @@ package gregtech.common.covers;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
 public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
@@ -32,6 +35,20 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
                 if ((aCoverVariable == 6 || aCoverVariable == 7) && (ideal - real > 3)) {
                     needsRepair = true;
                 }
+                if ((aCoverVariable == 8 || aCoverVariable == 9) && (ideal - real > 4)) {
+                    needsRepair = true;
+                }
+                if(aCoverVariable == 10 || aCoverVariable == 11){
+                	if(multi.getRealInventory()[1]==null || multi.getRealInventory()[1].getItem()!=GT_MetaGenerated_Tool_01.INSTANCE && multi.getRealInventory()[1].getItemDamage()<170){needsRepair = true;}
+                	else{
+                		ItemStack tTurbine = multi.getRealInventory()[1];
+                		long tMax = GT_MetaGenerated_Tool.getToolMaxDamage(tTurbine);
+                		long tCur = GT_MetaGenerated_Tool.getToolDamage(tTurbine);
+                		if(tCur < tMax*2/10)
+                			needsRepair = true;
+                	}
+                	
+                }
             }
         }
         if (aCoverVariable % 2 == 0) {
@@ -44,18 +61,21 @@ public class GT_Cover_NeedMaintainance extends GT_CoverBehavior {
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        aCoverVariable = (aCoverVariable + 1) % 10;
+        aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
+        if(aCoverVariable <0){aCoverVariable = 11;}
         switch(aCoverVariable) {
-            case 0: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 1 Maintenance Needed"); break;
-            case 1: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 1 Maintenance Needed(inverted)"); break;
-            case 2: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 2 Maintenance Needed"); break;
-            case 3: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 2 Maintenance Needed(inverted)"); break;
-            case 4: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 3 Maintenance Needed"); break;
-            case 5: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 3 Maintenance Needed(inverted)"); break;
-            case 6: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 4 Maintenance Needed"); break;
-            case 7: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 4 Maintenance Needed(inverted)"); break;
-            case 8: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 5 Maintenance Needed"); break;
-            case 9: GT_Utility.sendChatToPlayer(aPlayer, "Emit if 5 Maintenance Needed(inverted)"); break;
+            case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("056", "Emit if 1 Maintenance Needed")); break;
+            case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("057", "Emit if 1 Maintenance Needed(inverted)")); break;
+            case 2: GT_Utility.sendChatToPlayer(aPlayer, trans("058", "Emit if 2 Maintenance Needed")); break;
+            case 3: GT_Utility.sendChatToPlayer(aPlayer, trans("059", "Emit if 2 Maintenance Needed(inverted)")); break;
+            case 4: GT_Utility.sendChatToPlayer(aPlayer, trans("060", "Emit if 3 Maintenance Needed")); break;
+            case 5: GT_Utility.sendChatToPlayer(aPlayer, trans("061", "Emit if 3 Maintenance Needed(inverted)")); break;
+            case 6: GT_Utility.sendChatToPlayer(aPlayer, trans("062", "Emit if 4 Maintenance Needed")); break;
+            case 7: GT_Utility.sendChatToPlayer(aPlayer, trans("063", "Emit if 4 Maintenance Needed(inverted)")); break;
+            case 8: GT_Utility.sendChatToPlayer(aPlayer, trans("064", "Emit if 5 Maintenance Needed")); break;
+            case 9: GT_Utility.sendChatToPlayer(aPlayer, trans("065", "Emit if 5 Maintenance Needed(inverted)")); break;
+            case 10: GT_Utility.sendChatToPlayer(aPlayer, trans("066", "Emit if rotor needs maintenance")); break;
+            case 11: GT_Utility.sendChatToPlayer(aPlayer, trans("067", "Emit if rotor needs maintenance(inverted)")); break;
         }
         return aCoverVariable;
     }

@@ -32,7 +32,7 @@ public class GT_Network
 
     public GT_Network() {
         this.mChannel = NetworkRegistry.INSTANCE.newChannel("GregTech", new ChannelHandler[]{this, new HandlerShared()});
-        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores()};
+        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores(), new GT_Packet_Pollution()};
     }
 
     protected void encode(ChannelHandlerContext aContext, GT_Packet aPacket, List<Object> aOutput)
@@ -47,6 +47,12 @@ public class GT_Network
     }
 
     public void sendToPlayer(GT_Packet aPacket, EntityPlayerMP aPlayer) {
+    	if(aPacket==null){
+    		System.out.println("packet null");return;
+    	}
+    	if(aPlayer==null){
+    		System.out.println("player null");return;
+    	}
         ((FMLEmbeddedChannel) this.mChannel.get(Side.SERVER)).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
         ((FMLEmbeddedChannel) this.mChannel.get(Side.SERVER)).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(aPlayer);
         ((FMLEmbeddedChannel) this.mChannel.get(Side.SERVER)).writeAndFlush(aPacket);

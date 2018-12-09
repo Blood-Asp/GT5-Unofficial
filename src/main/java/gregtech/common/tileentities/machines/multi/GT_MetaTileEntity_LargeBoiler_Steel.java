@@ -18,6 +18,15 @@ public class GT_MetaTileEntity_LargeBoiler_Steel
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Steel(this.mName);
     }
+    
+    public String getCasingMaterial(){
+    	return "Steel";
+    }
+
+	@Override
+	public String getCasingBlockType() {
+		return "Machine Casings";
+	}
 
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings2;
@@ -57,5 +66,10 @@ public class GT_MetaTileEntity_LargeBoiler_Steel
 
     public int getEfficiencyIncrease() {
         return 12;
+    }
+
+    @Override
+    int runtimeBoost(int mTime) {
+        return mTime * 150 / 100;
     }
 }

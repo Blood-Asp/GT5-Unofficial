@@ -25,7 +25,8 @@ public enum ConfigCategories {
         disabledrecipes,
         recipereplacements,
         storageblockcrafting,
-        storageblockdecrafting;
+        storageblockdecrafting, 
+        crops;
     }
 
     public enum Machines {
@@ -59,6 +60,7 @@ public enum ConfigCategories {
         hammerdoubleplate,
         hammertripleplate,
         hammerquadrupleplate,
-        hammerquintupleplate;
+        hammerquintupleplate,
+		scoop;
     }
 }

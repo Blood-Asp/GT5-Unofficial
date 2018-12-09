@@ -1,7 +1,7 @@
 package gregtech.api.items;
 
 
-import gregtech.api.enums.ItemList;
+import gregtech.api.GregTech_API;
 import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import ic2.core.IC2Potion;
@@ -19,8 +19,10 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     public final float sEnergy;
     public final int sRadiation;
     public final float sHeat;
+    public final ItemStack sDepleted;
+    public final boolean sMox;
 
-    public GT_RadioactiveCellIC_Item(String aUnlocalized, String aEnglish, int aCellcount, int maxDamage, float aEnergy, int aRadiation, float aHeat) {
+    public GT_RadioactiveCellIC_Item(String aUnlocalized, String aEnglish, int aCellcount, int maxDamage, float aEnergy, int aRadiation, float aHeat, ItemStack aDepleted, boolean aMox) {
         super(aUnlocalized, aEnglish, aCellcount);
         setMaxStackSize(64);
         this.maxDmg = maxDamage;
@@ -28,6 +30,8 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
         this.sEnergy = aEnergy;
         this.sRadiation = aRadiation;
         this.sHeat = aHeat;
+        this.sDepleted = aDepleted;
+        this.sMox = aMox;
 
     }
 
@@ -50,12 +54,16 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
                 for (int i = 0; i < pulses; i++) {
                     acceptUraniumPulse(reactor, yourStack, yourStack, x, y, x, y, heatrun);
                 }
-                pulses += checkPulseable(reactor, x - 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x + 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y - 1, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y + 1, yourStack, x, y, heatrun);
+                checkPulseable(reactor, x - 1, y, yourStack, x, y, heatrun);checkPulseable(reactor, x + 1, y, yourStack, x, y, heatrun);checkPulseable(reactor, x, y - 1, yourStack, x, y, heatrun);checkPulseable(reactor, x, y + 1, yourStack, x, y, heatrun);
             } else {
                 pulses += checkPulseable(reactor, x - 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x + 1, y, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y - 1, yourStack, x, y, heatrun) + checkPulseable(reactor, x, y + 1, yourStack, x, y, heatrun);
 
-                int heat = sumUp(pulses) * 4;
+//                int heat = sumUp(pulses) * 4;
 
+                int heat = triangularNumber(pulses) * 4;
+                
+                heat = getFinalHeat(reactor, yourStack, x, y, heat);
+                
                 ArrayList<ItemStackCoord> heatAcceptors = new ArrayList();
                 checkHeatAcceptor(reactor, x - 1, y, heatAcceptors);
                 checkHeatAcceptor(reactor, x + 1, y, heatAcceptors);
@@ -76,19 +84,22 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
             }
         }
         if (getDamageOfStack(yourStack) >= getMaxDamageEx() - 1) {
-            switch (this.numberOfCells) {
-                case 1:
-                    reactor.setItemAt(x, y, ItemList.Depleted_Thorium_1.get(1, new Object[0]));
-                    break;
-                case 2:
-                    reactor.setItemAt(x, y, ItemList.Depleted_Thorium_2.get(1, new Object[0]));
-                    break;
-                case 4:
-                    reactor.setItemAt(x, y, ItemList.Depleted_Thorium_4.get(1, new Object[0]));
-            }
+        	reactor.setItemAt(x, y, sDepleted.copy());
         } else if (heatrun) {
             damageItemStack(yourStack, 1);
         }
+    }
+    
+    protected int getFinalHeat(IReactor reactor, ItemStack stack, int x, int y, int heat)
+    {
+      if (sMox&&reactor.isFluidCooled())
+      {
+        float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
+        if (breedereffectiveness > 0.5D) {
+          heat *= 2;
+        }
+      }
+      return heat;
     }
 
     private void checkHeatAcceptor(IReactor reactor, int x, int y, ArrayList<ItemStackCoord> heatAcceptors) {
@@ -100,8 +111,13 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     }
 
     public boolean acceptUraniumPulse(IReactor reactor, ItemStack yourStack, ItemStack pulsingStack, int youX, int youY, int pulseX, int pulseY, boolean heatrun) {
-        if (!heatrun) {
-            reactor.addOutput((float) (1.0F * this.sEnergy));
+    	if (!heatrun) {
+        	if(sMox){
+        	      float breedereffectiveness = (float)reactor.getHeat() / (float)reactor.getMaxHeat();
+        	      float ReaktorOutput = 1.5F * breedereffectiveness + 1.0F;
+        	      reactor.addOutput(ReaktorOutput * this.sEnergy);
+        	}else{
+            reactor.addOutput((float) (1.0F * this.sEnergy));}
         }
         return true;
     }
@@ -129,7 +145,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
     public void onUpdate(ItemStack stack, World world, Entity entity, int slotIndex, boolean isCurrentItem) {
         if (this.sRadiation > 0 && (entity instanceof EntityLivingBase)) {
             EntityLivingBase entityLiving = (EntityLivingBase) entity;
-            if (!ItemArmorHazmat.hasCompleteHazmat(entityLiving)) {
+            if (!GregTech_API.mIC2Classic&&!ItemArmorHazmat.hasCompleteHazmat(entityLiving)) {
                 IC2Potion.radiation.applyTo(entityLiving, sRadiation * 20, sRadiation * 10);
             }
         }
