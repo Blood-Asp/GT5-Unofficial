@@ -1272,7 +1272,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         		List<ItemStack> tList;
         		if (objs.length >= 2 && !(tList = GT_OreDictUnificator.getOres(objs[0])).isEmpty()) {
         			try {
-        				int tAmount = (int) objs[1];
+        				int tAmount = ((Number) objs[1]).intValue();
             			List<ItemStack> uList = new ArrayList<>();
             			for (ItemStack tStack : tList) {
             				ItemStack uStack = GT_Utility.copyAmount(tAmount, tStack); 
