@@ -30,7 +30,7 @@ public class ProcessingItem implements gregtech.api.interfaces.IOreRecipeRegistr
                 case "itemMagnesium":
                     GT_OreDictUnificator.addItemData(aStack, new ItemData(Materials.Magnesium, 3628800L, new MaterialStack[0]));
                 case "itemPhosphorite":
-                    GT_OreDictUnificator.addItemData(aStack, new ItemData(Materials.Phosphorus, 3628800L, new MaterialStack[0]));
+                    GT_OreDictUnificator.addItemData(aStack, new ItemData(Materials.TricalciumPhosphate, 3628800L, new MaterialStack[0]));
                 case "itemSulfur":
                     GT_OreDictUnificator.addItemData(aStack, new ItemData(Materials.Sulfur, 3628800L, new MaterialStack[0]));
                 case "itemAluminum":

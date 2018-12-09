@@ -210,7 +210,7 @@ public class ItemComb extends Item {
 		addProcessLV(tComb, Materials.Talc, 90);
 		addProcessLV(tComb, Materials.Apatite, 80);
 		addProcessLV(tComb, Materials.Phosphate, 75);
-		addProcessLV(tComb, Materials.Phosphorus, 75);
+		addProcessLV(tComb, Materials.TricalciumPhosphate, 75);
 		tComb = getStackForType(CombType.CERTUS);
 		addProcessLV(tComb, Materials.CertusQuartz, 100);
 		addProcessLV(tComb, Materials.Quartzite, 80);
