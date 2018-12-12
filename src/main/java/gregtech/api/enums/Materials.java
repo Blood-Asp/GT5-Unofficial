@@ -896,6 +896,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Wolfram                 = new Materials(Tungsten, false);
     */
     @Deprecated public static Materials Nikolite                = new Materials(Electrotine, false);
+    @Deprecated public static Materials Phosphor                = new Materials(Phosphorus, false);
 
 
     public final short[] mRGBa = new short[]{255, 255, 255, 0}, mMoltenRGBa = new short[]{255, 255, 255, 0};
