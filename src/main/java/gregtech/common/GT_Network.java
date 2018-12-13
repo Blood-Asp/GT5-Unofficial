@@ -6,7 +6,6 @@ import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.net.*;
@@ -33,13 +32,10 @@ public class GT_Network
         implements IGT_NetworkHandler {
     private final EnumMap<Side, FMLEmbeddedChannel> mChannel;
     private final GT_Packet[] mSubChannels;
-    public final SimpleNetworkWrapper networkWrapper;
 
     public GT_Network() {
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("gregtech_network_wrapper");
-        networkWrapper.registerMessage(MessageSetFlaskCapacity.Handler.class, MessageSetFlaskCapacity.class, 0, Side.SERVER);
         this.mChannel = NetworkRegistry.INSTANCE.newChannel("GregTech", new ChannelHandler[]{this, new HandlerShared()});
-        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores(), new GT_Packet_Pollution()};
+        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores(), new GT_Packet_Pollution(), new MessageSetFlaskCapacity()};
     }
 
     protected void encode(ChannelHandlerContext aContext, GT_Packet aPacket, List<Object> aOutput)
