@@ -2539,7 +2539,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
                 ItemList.LuV_Coil.get(2L, new Object(){}),
-                ItemList.Reactor_Coolant_He_3.get(2L, new Object(){}),
+                ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
+                ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
                 ItemList.Electric_Pump_LuV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000),
@@ -2553,7 +2554,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
                         ItemList.ZPM_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(2L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
                         ItemList.Electric_Pump_ZPM.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 4000),
@@ -2566,7 +2568,10 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_PPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
                         ItemList.UV_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(4L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
                         ItemList.Electric_Pump_UV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 8000),
