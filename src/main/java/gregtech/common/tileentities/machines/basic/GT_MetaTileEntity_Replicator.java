@@ -27,6 +27,8 @@ public class GT_MetaTileEntity_Replicator
         //ex.
         //MASS_OVERRIDES.put(Materials.get("cake"),Materials.get("cake").getMass());
         //MASS_OVERRIDES.put(Materials.get("otherCake"),1235234L);
+        //MASS_OVERRIDES.put(Materials.Kalendrite,1235234L);
+        //MASS_OVERRIDES.put(Materials.Kalendrite,Materials.Kalendrite*2);
     }
 
     public GT_MetaTileEntity_Replicator(int aID, String aName, String aNameRegional, int aTier) {
