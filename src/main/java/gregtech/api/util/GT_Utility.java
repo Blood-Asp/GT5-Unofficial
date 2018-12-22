@@ -6,10 +6,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.SubTag;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.*;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
@@ -2331,4 +2328,13 @@ public class GT_Utility {
         }
         return new String(chars);
     }
+
+    public static boolean isPartOfMaterials(ItemStack aStack, Materials aMaterials){
+        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mMaterial.mMaterial.equals(aMaterials) : false;
+    }
+
+    public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
+        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix) : false;
+    }
+
 }
