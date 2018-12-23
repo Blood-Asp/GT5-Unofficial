@@ -153,7 +153,7 @@ public class GT_MetaTileEntity_Boiler_Bronze
                         GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.block.get(Materials.Lignite)) ||
                         GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.block.get(Materials.Charcoal))||
                         GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.block.get(Materials.Diamond)) ||
-                        
+
                          //if its either a Railcraft Coke Block or a custom GTNH compressed Coal/charcoal/lignite/coke block
                         (
                          Block.getBlockFromItem(this.mInventory[2].getItem()) != null && //check if the block exists
@@ -177,6 +177,13 @@ public class GT_MetaTileEntity_Boiler_Bronze
                         aBaseMetaTileEntity.decrStackSize(2, 1);
                         aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dust, (GT_Utility.isPartOfMaterials(this.mInventory[2],Materials.Lignite) || GT_Utility.isPartOfMaterials(this.mInventory[2],Materials.Coal) || Block.getBlockFromItem(this.mInventory[2].getItem()).getUnlocalizedName().toLowerCase().contains("coal") || Block.getBlockFromItem(this.mInventory[2].getItem()).getUnlocalizedName().toLowerCase().contains("lignite") ) ? Materials.DarkAsh : Materials.Ash, 1L));
                     }
+                    //enables every other fuel with at least 2000 burntime as a fuel, i.e. peat, Magic/Solid Super Fuel, Coal Singularities, Nitor, while bucket of creosite should be blocked same goes for lava
+                }else if ((TileEntityFurnace.getItemBurnTime(this.mInventory[2])) >= 2000 && !(this.mInventory[2].getUnlocalizedName().toLowerCase().contains("bucket") || this.mInventory[2].getUnlocalizedName().toLowerCase().contains("cell"))){
+                    this.mProcessingEnergy += (TileEntityFurnace.getItemBurnTime(this.mInventory[2]) / 10);
+                    aBaseMetaTileEntity.decrStackSize(2, 1);
+                    //adds tiny pile of ash for burntime under 10k, small pile for under 100k and pile for bigger values
+                    if (XSTR.XSTR_INSTANCE.nextInt(2) == 0)
+                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get( (TileEntityFurnace.getItemBurnTime(this.mInventory[2]) >= 10000 ? TileEntityFurnace.getItemBurnTime(this.mInventory[2]) >= 100000 ? OrePrefixes.dust : OrePrefixes.dustSmall : OrePrefixes.dustTiny), Materials.Ash, 1L));
                 }
             }
             if ((this.mTemperature < (500*aMultiplier)) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
