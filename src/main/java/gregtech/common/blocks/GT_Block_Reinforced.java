@@ -55,9 +55,9 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Solid Super Fuel");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Magic Solid Super Fuel");
         ItemList.Block_BronzePlate.set(new ItemStack(this.setHardness(60.0f).setResistance(150.0f), 1, 0));
-        ItemList.Block_IridiumTungstensteel.set(new ItemStack(this.setHardness(200.0f).setResistance(600.0f), 1, 1));
+        ItemList.Block_IridiumTungstensteel.set(new ItemStack(this.setHardness(400.0f).setResistance(600.0f), 1, 1));
         ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(40.0f).setResistance(100.0f), 1, 2));
-        ItemList.Block_TungstenSteelReinforced.set(new ItemStack(this.setHardness(100.0f).setResistance(400.0f), 1, 3));
+        ItemList.Block_TungstenSteelReinforced.set(new ItemStack(this.setHardness(250.0f).setResistance(400.0f), 1, 3));
         ItemList.Block_BrittleCharcoal.set(new ItemStack(this.setHardness(0.5f).setResistance(8.0f), 1, 4));
         ItemList.Block_Powderbarrel.set(new ItemStack(this.setHardness(2.5f).setResistance(2.0f), 1, 5));
         ItemList.Block_SSFUEL.set(new ItemStack(this.setHardness(2.5f).setResistance(2.0f), 1, 6));
