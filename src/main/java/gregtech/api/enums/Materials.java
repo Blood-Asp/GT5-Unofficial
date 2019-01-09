@@ -340,7 +340,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Elite                   = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Elite"                   ,   "Elite"                         ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 6)));
     public static Materials Master                  = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Master"                  ,   "Master"                        ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 7)));
     public static Materials Ultimate                = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Ultimate"                ,   "Ultimate"                      ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 8)));
-    public static Materials Superconductor          = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Superconductor"          ,   "Superconductor"                ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 9)));
     public static Materials Infinite                = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Infinite"                ,   "Infinite"                      ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 10)));
     public static Materials Bio                     = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Bio"                     ,   "Bio"                           ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 11)));
     public static Materials Nano                    = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Nano"                     ,   "Bio"                           ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 12)));
@@ -831,16 +830,17 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials SuperconductorLuV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 153, 76,   0,   0,   "SuperconductorLuV"  ,   "Superconductor LuV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeBrown      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 28)));
     public static Materials SuperconductorZPM     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                ,  10, 10,  10,   0,   "SuperconductorZPM"  ,   "Superconductor ZPM"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeBlack      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 32)));
     public static Materials SuperconductorUV      = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 224,210,   7,   0,   "SuperconductorUV"   ,   "Superconductor UV"       ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeYellow     , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 48)));
-    public static Materials SuperconductorUHV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "SuperconductorUHV"  ,   "Superconductor UHV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeWhite      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 64)));
+    public static Materials SuperconductorUHV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Superconductor"  ,   "Superconductor UHV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeWhite      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 64)));
 
     /**
      * Materials which are renamed automatically
      */
-/*  @Deprecated public static Materials Duralium                = new Materials(Duralumin,false);
-//  @Deprecated public static Materials Dural                   = new Materials(Duralumin,false);
-//  @Deprecated public static Materials Duralum                 = new Materials(Duralumin,false);
-//  @Deprecated public static Materials Duraluminium            = new Materials(Duralumin,false);
-//  @Deprecated public static Materials Duraluminum             = new Materials(Duralumin,false);
+    /*
+    @Deprecated public static Materials Duralium                = new Materials(Duralumin,false);
+    @Deprecated public static Materials Dural                   = new Materials(Duralumin,false);
+    @Deprecated public static Materials Duralum                 = new Materials(Duralumin,false);
+    @Deprecated public static Materials Duraluminium            = new Materials(Duralumin,false);
+    @Deprecated public static Materials Duraluminum             = new Materials(Duralumin,false);
     @Deprecated public static Materials IridiumAndSodiumOxide   = new Materials(IridiumSodiumOxide, false);
     @Deprecated public static Materials Palygorskite            = new Materials(FullersEarth, false);
     @Deprecated public static Materials Adamantine              = new Materials(Adamantium, true);
@@ -895,6 +895,9 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Wolframium              = new Materials(Tungsten, false);
     @Deprecated public static Materials Wolfram                 = new Materials(Tungsten, false);
     */
+
+    //Superconductor re-routed for mod compability. Circuits are re-routed into SuperconductorUHV aswell, internal name is now Superconductor while translated name is SuperconductorUHV
+    @Deprecated public static Materials Superconductor          = new Materials(SuperconductorUHV,true);// new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  0, 0                         , 255, 255, 255,   0,   "Superconductor"          ,   "Superconductor"                ,    0,       0,         -1,    0, false, false,   1,   1,   1, Dyes.dyeLightGray   , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 9)));
     @Deprecated public static Materials Nikolite                = new Materials(Electrotine, false);
     @Deprecated public static Materials Phosphor                = new Materials(Phosphorus, false);
 
