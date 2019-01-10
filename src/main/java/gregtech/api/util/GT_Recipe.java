@@ -1666,7 +1666,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                         if (this != null && this.mInputs != null && this.mInputs[i] != null)
                             inputStacks.add(new FixedPositionedStack(this.mInputs[i].copy(), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
                         else {
-                            if (this.mOutputs != null && this.mOutputs[0] != null)
+                            if (this.mOutputs != null && this.mOutputs.length > 0 && this.mOutputs[0] != null)
                                 GT_Log.out.println("recipe " + this.toString() + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
                             else
                                 GT_Log.out.println("recipe " + this.toString() + " has errored!");
@@ -1681,7 +1681,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                         if (this != null && this.mFluidInputs != null && this.mFluidInputs[i] != null)
                             inputStacks.add(new FixedPositionedStack(GT_Utility.getFluidDisplayStack(this.mFluidInputs[i], true), 48 - j % 3 * 18, (j >= 3 ? 5 : 23)));
                         else {
-                            if (this.mOutputs != null && this.mOutputs[0] != null)
+                            if (this.mOutputs != null && this.mOutputs.length > 0 && this.mOutputs[0] != null)
                                 GT_Log.out.println("recipe " + this.toString() + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
                             else
                                 GT_Log.out.println("recipe " + this.toString() + " has errored!");
