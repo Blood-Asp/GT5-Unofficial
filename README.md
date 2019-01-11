@@ -31,6 +31,7 @@ Please do! However, please take a note of current issues and what is currently b
 [Tinkers Gregworks](https://github.com/Vexatos/TinkersGregworks) Tinkers Construct Tools made with GT materials.<br />
 [GalacticGreg](https://forum.industrial-craft.net/thread/11039-gregtech-addon-addon-galacticgreg-1-9-gregtech-oregen-on-galacticraft-planets/)  GregTech Worldgen on Galacticraft Planets (Directly integrated into GT5.09.23+)<br />
 [TecTech](https://github.com/Technus/TecTech)<br />
+[bartworks](https://github.com/bartimaeusnek/bartworks) A partial GT2 port and additional Machinery<br />
 
 ## Modpacks
 
