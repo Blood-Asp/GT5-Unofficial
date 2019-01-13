@@ -47,7 +47,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH);
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Bronzeplate Reinforced Block");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Iridium-Tungstensteel Reinforced Block");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Iridium Reinforced Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Plascrete Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Tungstensteel Reinforced Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".4.name", "Brittle Charcoal");
