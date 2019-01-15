@@ -354,20 +354,20 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Plumbilia.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Lead, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Argentia.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Silver, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Indigo.get(1L, new Object[0]), ItemList.Dye_Indigo.get(1L, new Object[0]));
-        GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_MilkWart.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Milk, 1L));
+        GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_MilkWart.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Milk, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Coppon.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Copper, 1L));
         GT_ModHandler.addExtractionRecipe(ItemList.Crop_Drop_Tine.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Tin, 1L));
 
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Coppon.get(4L, new Object[0]), new ItemStack(Blocks.wool, 1, 1));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Plumbilia.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Argentia.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Indigo.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Ferru.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Aurelia.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_OilBerry.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_BobsYerUncleRanks.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Plumbilia.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Argentia.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Indigo.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Ferru.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Aurelia.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_OilBerry.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_BobsYerUncleRanks.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Tine.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
-        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Rape.get(8L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
+        GT_ModHandler.addCompressionRecipe(ItemList.Crop_Drop_Rape.get(4L, new Object[0]), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.red_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
         GT_ModHandler.addCompressionRecipe(new ItemStack(Blocks.yellow_flower, 8, 32767), ItemList.IC2_PlantballCompressed.get(1L, new Object[0]));
 
