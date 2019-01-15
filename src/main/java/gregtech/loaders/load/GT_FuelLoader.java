@@ -33,6 +33,7 @@ public class GT_FuelLoader
         GT_Recipe.GT_Recipe_Map.sHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.NaquadahEnriched, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 250000);
         GT_Recipe.GT_Recipe_Map.sExtremeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 500000);
         GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Naquadria, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stickLong,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 1000000);
+        GT_Recipe.GT_Recipe_Map.sFluidNaquadahReactorFuels.addRecipe(true, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NaquadahEnriched, 1L)}, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.cell,  Materials.Naquadah, 1L)}, null, null, null, 0, 0, 1400000);
 
         //BloodMagic
         GT_Recipe.GT_Recipe_Map.sMagicFuels.addRecipe(true, new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","reinforcedSlate",1L)},  new ItemStack[]{GT_ModHandler.getModItem("AWWayofTime","blankSlate",1L)}, null, null, null, 0, 0, 400);
