@@ -2701,62 +2701,32 @@ if(Loader.isModLoaded("Railcraft")){
                         });
             }
         //Digital Transformers
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12154), ItemList.Cover_Screen.get(1L), GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Titanium, 2L), ItemList.EV_Coil.get(1L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Machine_DigitalTransformer_EV.get(1L, new Object[0]), 200, 1920);
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12155), ItemList.Cover_Screen.get(1L), GT_OreDictUnificator.get(OrePrefixes.spring, Materials.TungstenSteel, 2L), ItemList.IV_Coil.get(1L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Machine_DigitalTransformer_IV.get(1L, new Object[0]), 200, 7680);
-
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Machine_DigitalTransformer_IV.get(1, new Object(){}),72000,new Object[]{
-                        GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12156),
-                        ItemList.Cover_Screen.get(1L),
-                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Chrome, 2L),
-                        ItemList.LuV_Coil.get(1L),
-                        new Object[]{OrePrefixes.circuit.get(Materials.Master), 2}
-                },
-                new FluidStack[]{
-                        Materials.SolderingAlloy.getMolten(1440)},
-                ItemList.Machine_DigitalTransformer_LuV.get(1, new Object[]{}), 400, 30720);
-
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Machine_DigitalTransformer_LuV.get(1, new Object(){}),144000,new Object[]{
-                        GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12157),
-                        ItemList.Cover_Screen.get(4L),
-                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Iridium, 2L),
-                        ItemList.ZPM_Coil.get(1L),
-                        new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2}
-                },
-                new FluidStack[]{
-                        Materials.SolderingAlloy.getMolten(2880)},
-                ItemList.Machine_DigitalTransformer_ZPM.get(1, new Object[]{}), 500, 122880);
-
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Machine_DigitalTransformer_ZPM.get(1, new Object(){}), 288000,new Object[]{
-                        GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12158),
-                        ItemList.Cover_Screen.get(8L),
-                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Osmium, 2L),
-                        ItemList.UV_Coil.get(1L),
-                        new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2}
-                },
-                new FluidStack[]{
-                        Materials.SolderingAlloy.getMolten(5760)},
-                ItemList.Machine_DigitalTransformer_UV.get(1, new Object[]{}), 600, 500000);
-
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Machine_DigitalTransformer_UV.get(1, new Object(){}), 576000,new Object[]{
-                        GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12159),
-                        ItemList.Cover_Screen.get(16L),
-                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Osmium, 2L),
-                        ItemList.UHV_Coil.get(1L),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 2),
-                },
-                new FluidStack[]{
-                        Materials.SolderingAlloy.getMolten(11520)},
-                ItemList.Machine_DigitalTransformer_UHV.get(1L), 1000, 2000000);
-        GT_Values.RA.addAssemblylineRecipe(ItemList.Machine_DigitalTransformer_UHV.get(1, new Object(){}), 1152000,new Object[]{
-                        GT_ModHandler.getModItem("gregtech","gt.blockmachines", 1L, 12160),
-                        ItemList.Cover_Screen.get(32L),
-                        GT_OreDictUnificator.get(OrePrefixes.spring, Materials.Osmium, 2L),
-                        ItemList.UHV_Coil.get(4L),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Bio), 2),
-                },
-                new FluidStack[]{
-                        Materials.SolderingAlloy.getMolten(23040)},
-                ItemList.Machine_DigitalTransformer_UEV.get(1L), 2000, 8000000);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_LV_ULV.get(8L),
+                ItemList.Transformer_MV_LV.get(4L),
+                ItemList.Transformer_HV_MV.get(2L),
+                ItemList.Transformer_EV_HV.get(1L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Data), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_EV.get(1L), 50, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_IV_EV.get(1L),
+                ItemList.Machine_DigitalTransformer_EV.get(2L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Elite), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_IV.get(1L), 50, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_LuV_IV.get(1L),
+                ItemList.Machine_DigitalTransformer_IV.get(2L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Master), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_LuV.get(1L), 50, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_ZPM_LuV.get(1L),
+                ItemList.Machine_DigitalTransformer_LuV.get(2L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Ultimate), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_ZPM.get(1L), 50, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_UV_ZPM.get(1L),
+                ItemList.Machine_DigitalTransformer_ZPM.get(2L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Superconductor), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_UV.get(1L), 50, 1920);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{
+                ItemList.Transformer_MAX_UV.get(1L),
+                ItemList.Machine_DigitalTransformer_UV.get(2L),
+                ItemList.Cover_Screen.get(1L)}, OrePrefixes.circuit.get(Materials.Infinite), 4, GT_Values.NF, ItemList.Machine_DigitalTransformer_MAX.get(1L), 50, 1920);
 	}
 	
 	private void addChemicalRecipesSimple(){
