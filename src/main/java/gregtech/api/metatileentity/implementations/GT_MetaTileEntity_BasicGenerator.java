@@ -202,11 +202,11 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                 } else {
                     if (mInventory[getStackDisplaySlot()] == null)
                         mInventory[getStackDisplaySlot()] = new ItemStack(Blocks.fire, 1);
-                    mInventory[getStackDisplaySlot()].setStackDisplayName("Generating: " + (aBaseMetaTileEntity.getUniversalEnergyStored() - getMinimumStoredEU()) + " EU");
+                    mInventory[getStackDisplaySlot()].setStackDisplayName("Draining internal buffer: " + (aBaseMetaTileEntity.getUniversalEnergyStored() - getMinimumStoredEU()) + " EU");
                 }
             } else {
                 long tFuelValue = getFuelValue(mFluid), tConsumed = consumedFluidPerOperation(mFluid);
-                if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount > tConsumed) {
+                if (tFuelValue > 0 && tConsumed > 0 && mFluid.amount >= tConsumed) {
                     long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUStore() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);
 					//long tFluidAmountToUse = Math.min(mFluid.amount / tConsumed, (maxEUOutput() * 20 + getMinimumStoredEU() - aBaseMetaTileEntity.getUniversalEnergyStored()) / tFuelValue);//TODO CHECK
                     if (tFluidAmountToUse > 0 && aBaseMetaTileEntity.increaseStoredEnergyUnits(tFluidAmountToUse * tFuelValue, true)) {
@@ -215,8 +215,9 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     }
                 }
             }
-            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) == null) {
+            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) != null) {
                 long tFuelValue = getFuelValue(mInventory[getInputSlot()]);
+                //System.out.println(" tFuelValue : " + tFuelValue );
                 if (tFuelValue > 0) {
                     ItemStack tEmptyContainer = getEmptyContainer(mInventory[getInputSlot()]);
                     if (aBaseMetaTileEntity.addStackToSlot(getOutputSlot(), tEmptyContainer)) {
@@ -243,6 +244,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     }
 
     public int getFuelValue(FluidStack aLiquid) {
+        //System.out.println("Fluid stack check");
         if (aLiquid == null || getRecipes() == null) return 0;
         FluidStack tLiquid;
         Collection<GT_Recipe> tRecipeList = getRecipes().mRecipeList;
@@ -259,6 +261,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     }
 
     public int getFuelValue(ItemStack aStack) {
+        //System.out.println("Item stack check");
         if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return 0;
         GT_Recipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, aStack);
         if (tFuel != null){
