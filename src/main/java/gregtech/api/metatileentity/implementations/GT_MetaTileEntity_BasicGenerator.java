@@ -153,8 +153,8 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     @Override
     public boolean doesFillContainers() {
-        //return getBaseMetaTileEntity().isAllowedToWork();
-        return false;
+        return getBaseMetaTileEntity().isAllowedToWork();
+        //return false;
     }
 
     @Override
