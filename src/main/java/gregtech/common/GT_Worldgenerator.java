@@ -328,6 +328,21 @@ implements IWorldGenerator {
             long startTime = System.nanoTime();
             int oreveinMaxSize;
 
+            // Do GT_Stones and GT_small_ores oregen for this chunk
+            try {
+                for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
+                    /*
+                    if (debugWorldGen) GT_Log.out.println(
+                        "tWorldGen.mWorldGenName="+tWorldGen.mWorldGenName
+                    );
+                    */
+                    tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, this.mChunkGenerator, this.mChunkProvider);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace(GT_Log.err);
+            }
+            long leftOverTime = System.nanoTime();
+
             // Determine bounding box on how far out to check for oreveins affecting this chunk
             // For now, manually reducing oreveinMaxSize when not in the Underdark for performance
             if(this.mWorld.provider.getDimensionName().equals("Underdark") ) {
@@ -347,8 +362,7 @@ implements IWorldGenerator {
                     // Determine if this X/Z is an orevein seed
                     if ( ( (Math.abs(x)%3) == 1) && ( (Math.abs(z)%3) == 1 ) ) {
                         if (debugWorldGen) GT_Log.out.println(
-                            
-"Adding seed x="+x+
+                            "Adding seed x="+x+
                             " z="+z
                         );
                         seedList.add( new NearbySeeds(x,z) );
@@ -359,8 +373,7 @@ implements IWorldGenerator {
             // Now process each oreseed vs this requested chunk
             for( ; seedList.size() != 0; seedList.remove(0) ) {
                 if (debugWorldGen) GT_Log.out.println(
-                    
-"Processing seed x="+seedList.get(0).mX+
+                    "Processing seed x="+seedList.get(0).mX+
                     " z="+seedList.get(0).mZ 
                 );
                 worldGenFindVein( seedList.get(0).mX, seedList.get(0).mZ );
@@ -368,22 +381,6 @@ implements IWorldGenerator {
 
             long oregenTime = System.nanoTime();
 
-            // Do leftover worldgen for this chunk (GT_Stones and GT_small_ores)
-            try {
-                for (GT_Worldgen tWorldGen : GregTech_API.sWorldgenList) {
-                    /*
-                    if (debugWorldGen) GT_Log.out.println(
-                        "tWorldGen.mWorldGenName="+tWorldGen.mWorldGenName
-                    );
-                    */
-                    tWorldGen.executeWorldgen(this.mWorld, this.mRandom, this.mBiome, this.mDimensionType, this.mX*16, this.mZ*16, this.mChunkGenerator, this.mChunkProvider);
-                }
-            } catch (Throwable e) {
-                e.printStackTrace(GT_Log.err);
-            }
-
-            long leftOverTime = System.nanoTime();
-            
             //Asteroid Worldgen
             int tDimensionType = this.mWorld.provider.dimensionId;
             //String tDimensionName = this.mWorld.provider.getDimensionName();
@@ -499,8 +496,8 @@ implements IWorldGenerator {
             long duration = (endTime - startTime);
             if (debugWorldGen) {
                 GT_Log.out.println(
-                    " Oregen took " + (oregenTime-startTime)+
-                    " Leftover gen took " + (leftOverTime - oregenTime ) +
+                    " Oregen took " + (oregenTime-leftOverTime)+
+                    " Leftover gen took " + (leftOverTime - startTime) +
                     " Worldgen took " + duration + 
                     " nanoseconds"
                     );
