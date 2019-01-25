@@ -203,7 +203,7 @@ public class GT_Worldgen_Stone
                                         }
                                         ((GT_TileEntity_Ores)tTileEntity).overrideOreBlockMaterial(this.mBlock, (byte) this.mBlockMeta);
                                     }
-                                } else if (((this.mAllowToGenerateinVoid) && (aWorld.getBlock(iX, iY, iZ).isAir(aWorld, iX, iY, iZ))) || ((tTargetedBlock != null) && ((tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.end_stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.netherrack)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockGranites)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockStones))))) {
+                                } else if (((this.mAllowToGenerateinVoid) && (aWorld.getBlock(iX, iY, iZ).isAir(aWorld, iX, iY, iZ))) || ((tTargetedBlock != null) && ((tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stained_hardened_clay)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.cobblestone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.end_stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.netherrack)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockGranites)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockStones))))) {
                                     aWorld.setBlock(iX, iY, iZ, this.mBlock, this.mBlockMeta, 0);
                                 }
                             }
