@@ -130,6 +130,14 @@ public class GT_Values {
      */
     public static int oreveinMaxPlacementAttempts;
     /**
+     * Whether or not to place small ores as placer ores for an orevein
+     */
+    public static boolean oreveinPlacerOres;
+    /** 
+     * Multiplier to control how many placer ores get generated.
+     */
+    public static int oreveinPlacerOresMultiplier;
+    /**
      * How wide to look for oreveins that affect a requested chunk. Trying to use oreveins larger than this will not work correctly. Increasing the size will cause additional worldgenerator lag.
      * Disabled for now, using 64 in Deep Dark, 32 elsewhere
      */

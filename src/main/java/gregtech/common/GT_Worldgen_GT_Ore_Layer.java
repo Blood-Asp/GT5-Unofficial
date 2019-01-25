@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.oreveinPlacerOres;
+import static gregtech.api.enums.GT_Values.oreveinPlacerOresMultiplier;
 
 public class GT_Worldgen_GT_Ore_Layer
         extends GT_Worldgen {
@@ -60,12 +62,12 @@ public class GT_Worldgen_GT_Ore_Layer
         //this.mAsteroid = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Asteroid", aAsteroid);
         this.mMinY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MinHeight", aMinY));
         short mMaxY = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "MaxHeight", aMaxY));
-        if (mMaxY < (this.mMinY + 7))    {
+        if (mMaxY < (this.mMinY + 9))    {
             GT_Log.out.println(
                     "Oremix " + this.mWorldGenName +
                     " has invalid Min/Max heights!"
                 );
-            mMaxY = (short) (this.mMinY + 7);
+            mMaxY = (short) (this.mMinY + 9);
         }
         this.mMaxY = mMaxY;
         this.mWeight = ((short) GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "RandomWeight", aWeight));
@@ -183,6 +185,7 @@ public class GT_Worldgen_GT_Ore_Layer
 
          // To allow for early exit due to no ore placed in the bottom layer (probably because we are in the sky), unroll 1 pass through the loop
         // Now we do bottom-level-first oregen, and work our way upwards.
+        // Layer -1 Secondary and Sporadic
         int level = tMinY - 1; //Dunno why, but the first layer is actually played one below tMinY.  Go figure.
             for (int tX = wX; tX < eX; tX++) {
                 int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
@@ -193,7 +196,7 @@ public class GT_Worldgen_GT_Ore_Layer
                             placeCount[1]++;
                         }
                     }
-                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
@@ -205,7 +208,8 @@ public class GT_Worldgen_GT_Ore_Layer
             );
             return NO_ORE_IN_BOTTOM_LAYER;  // Exit early, didn't place anything in the bottom layer
         }
-        for (level = tMinY; level < (tMinY-1+3); level++) {
+        // Layers 0 & 1 Secondary and Sporadic
+        for (level = tMinY; level < (tMinY+2); level++) {
             for (int tX = wX; tX < eX; tX++) {
                 int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
                 for (int tZ = nZ; tZ < sZ; tZ++) {
@@ -215,71 +219,152 @@ public class GT_Worldgen_GT_Ore_Layer
                             placeCount[1]++;
                         }
                     }
-                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
             }
         }
-        // Low Middle layer is between + sporadic
-        // level should be = tMinY-1+3 from end of for loop
+        // Layer 2 is Secondary, in-between, and sporadic
             for (int tX = wX; tX < eX; tX++) {
                 int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
-                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
+                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are reduce by 1/2 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
                             placeCount[2]++;
                         }
                     }
-                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+                    else if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSecondaryMeta > 0) ) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSecondaryMeta, false, isUnderdark)) {
+                            placeCount[1]++;
+                        }
+                    }
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
             }
-        // High Middle layer is between + primary + sporadic
         level++; // Increment level to next layer
+        // Layer 3 is In-between, and sporadic
             for (int tX = wX; tX < eX; tX++) {
                 int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
-                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are only 1 per vertical column, reduce by 1/2 to compensate
+                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are reduce by 1/2 to compensate
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
+                            placeCount[2]++;
+                        }
+                    }
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
+                            placeCount[3]++;
+                    }
+                }
+            }
+        level++; // Increment level to next layer
+        // Layer 4 is In-between, Primary and sporadic
+            for (int tX = wX; tX < eX; tX++) {
+                int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
+                for (int tZ = nZ; tZ < sZ; tZ++) {
+                    int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
+                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are reduce by 1/2 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
                             placeCount[2]++;
                         }
                     }
                     else if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
-                            placeCount[0]++;
+                            placeCount[1]++;
                         }
                     }
-                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
             }
-        // Top two layers are primary + sporadic
         level++; // Increment level to next layer
-        for( ; level < (tMinY + 6); level++){ // should do two layers
+        // Layer 5 is In-between, Primary and sporadic
+            for (int tX = wX; tX < eX; tX++) {
+                int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
+                for (int tZ = nZ; tZ < sZ; tZ++) {
+                    int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
+                    if ((aRandom.nextInt(2) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mBetweenMeta > 0) ) {  // Between are reduce by 1/2 to compensate
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mBetweenMeta, false, isUnderdark)) {
+                            placeCount[2]++;
+                        }
+                    }
+                    else if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
+                            placeCount[1]++;
+                        }
+                    }
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
+                            placeCount[3]++;
+                    }
+                }
+            }
+        level++; // Increment level to next layer
+        // Layer 6 is Primary and sporadic
             for (int tX = wX; tX < eX; tX++) {
                 int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
                 for (int tZ = nZ; tZ < sZ; tZ++) {
                     int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
                     if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
-                            placeCount[0]++;
+                            placeCount[1]++;
                         }
                     }
-                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are only 1 per vertical column normally, reduce by 1/7 to compensate
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
                         if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
                             placeCount[3]++;
                     }
                 }
             }
-        }    
+        level++; // Increment level to next layer
+        // Layer 7 is Primary and sporadic
+            for (int tX = wX; tX < eX; tX++) {
+                int placeX = Math.max(1, Math.max(MathHelper.abs_int(wXVein - tX), MathHelper.abs_int(eXVein - tX))/localDensity);
+                for (int tZ = nZ; tZ < sZ; tZ++) {
+                    int placeZ = Math.max(1, Math.max(MathHelper.abs_int(sZVein - tZ), MathHelper.abs_int(nZVein - tZ))/localDensity);
+                    if ( ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mPrimaryMeta > 0) ) {
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mPrimaryMeta, false, isUnderdark)) {
+                            placeCount[1]++;
+                        }
+                    }
+                    else if ((aRandom.nextInt(7) == 0) && ((aRandom.nextInt(placeZ) == 0) || (aRandom.nextInt(placeX) == 0)) && (this.mSporadicMeta > 0) ) {  // Sporadics are reduce by 1/7 to compensate
+                        if (GT_TileEntity_Ores.setOreBlock(aWorld, tX, level, tZ, this.mSporadicMeta, false, isUnderdark))
+                            placeCount[3]++;
+                    }
+                }
+            }
+        //Place small ores for the vein
+        if( oreveinPlacerOres ) {
+            int nSmallOres = (eX-wX)*(sZ-nZ)*this.mDensity/10 * oreveinPlacerOresMultiplier;
+            //Small ores are placed in the whole chunk in which the vein appears.
+            for( int nSmallOresCount = 0; nSmallOresCount < nSmallOres; nSmallOresCount++) {
+                int tX = aRandom.nextInt(16) + aChunkX + 2;
+                int tZ = aRandom.nextInt(16) + aChunkZ + 2;
+                int tY = aRandom.nextInt(160) + 10; // Y height can vary from 10 to 170 for small ores.
+                if (this.mPrimaryMeta > 0 ) GT_TileEntity_Ores.setOreBlock(aWorld, tX, tY, tZ, this.mPrimaryMeta, true, isUnderdark);
+                tX = aRandom.nextInt(16) + aChunkX + 2;
+                tZ = aRandom.nextInt(16) + aChunkZ + 2;
+                tY = aRandom.nextInt(160) + 10; // Y height can vary from 10 to 170 for small ores.
+                if (this.mSecondaryMeta > 0 ) GT_TileEntity_Ores.setOreBlock(aWorld, tX, tY, tZ, this.mSecondaryMeta, true, isUnderdark);
+                tX = aRandom.nextInt(16) + aChunkX + 2;
+                tZ = aRandom.nextInt(16) + aChunkZ + 2;
+                tY = aRandom.nextInt(160) + 10; // Y height can vary from 10 to 170 for small ores.
+                if (this.mBetweenMeta > 0 ) GT_TileEntity_Ores.setOreBlock(aWorld, tX, tY, tZ, this.mBetweenMeta, true, isUnderdark);
+                tX = aRandom.nextInt(16) + aChunkX + 2;
+                tZ = aRandom.nextInt(16) + aChunkZ + 2;
+                tY = aRandom.nextInt(190) + 10; // Y height can vary from 10 to 200 for small ores.
+                if (this.mSporadicMeta > 0 ) GT_TileEntity_Ores.setOreBlock(aWorld, tX, tY, tZ, this.mSporadicMeta, true, isUnderdark);
+            }
+        }
         if (debugOrevein) {
             GT_Log.out.println(
                             " wXVein" + wXVein +
