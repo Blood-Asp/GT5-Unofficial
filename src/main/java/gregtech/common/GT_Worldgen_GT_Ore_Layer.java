@@ -45,7 +45,7 @@ public class GT_Worldgen_GT_Ore_Layer
     public static final int NO_OVERLAP=3;
     public static final int ORE_PLACED=4;
     public static final int NO_OVERLAP_AIR_BLOCK=5;
-    
+
     //public final boolean mMoon;
     //public final boolean mMars;
     //public final boolean mAsteroid;
@@ -134,8 +134,11 @@ public class GT_Worldgen_GT_Ore_Layer
         // Limit Orevein to only blocks present in current chunk
         int wX = Math.max( wXVein, aChunkX + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int eX = Math.min( eXVein, aChunkX + 2 + 16);
+
+        // Get a block at the center of the chunk and the bottom of the orevein.
+        Block tBlock = aWorld.getBlock(aChunkX + 7, tMinY, aChunkZ + 9);
+
         if (wX >= eX) {  //No overlap between orevein and this chunk exists in X
-            Block tBlock = aWorld.getBlock(aChunkX + 7, tMinY, aChunkZ + 9);
             if (tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.stone) ||
                 tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.netherrack) ||
                 tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.end_stone) ||
@@ -155,7 +158,6 @@ public class GT_Worldgen_GT_Ore_Layer
         int nZ = Math.max(nZVein, aChunkZ + 2);  // Bias placement by 2 blocks to prevent worldgen cascade.
         int sZ = Math.min(sZVein, aChunkZ + 2 + 16);
         if (nZ >= sZ) { //No overlap between orevein and this chunk exists in Z
-            Block tBlock = aWorld.getBlock(aChunkX + 7, tMinY, aChunkZ + 9);
             if (tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.stone) ||
                 tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.netherrack) ||
                 tBlock.isReplaceableOreGen(aWorld, aChunkX+7, tMinY, aChunkZ + 9, Blocks.end_stone) ||
