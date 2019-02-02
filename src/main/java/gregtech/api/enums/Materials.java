@@ -832,11 +832,6 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials SuperconductorUV      = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 224,210,   7,   0,   "SuperconductorUV"   ,   "Superconductor UV"       ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeYellow     , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 48)));
     public static Materials SuperconductorUHV     = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Superconductor"     ,   "Superconductor UHV"      ,     0,       0,     -1,  -1,  false,  false,  1,   1,   1, Dyes.dyeWhite      , Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 64)));
 
-    //GT++ materials
-    public static Materials Curium                = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Curium"            ,    "Curium"                  ,     0,       0,     -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cu   , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 10)));
-    public static Materials Californium           = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Californium"       ,    "Californium"             ,     0,       0,     -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cu   , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 10)));
-    public static Materials Flerovium             = new Materials( 984, TextureSet.SET_SHINY      ,   1.0F,      0,  0, 1|2  |8      |64|128                , 255,255, 255,   0,   "Flerovium "        ,    "Flerovium "              ,     0,       0,     -1,    -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cu   , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 10)));
-
     /**
      * Materials which are renamed automatically
      */
