@@ -438,7 +438,7 @@ public class ItemComb extends Item {
 		addProcessLUV(tComb,Materials.Americium,25);
 		addProcessLUV(tComb,Materials.Lutetium,45);
 		tComb = getStackForType(CombType.NEUTRONIUM);
-		addProcessZPM(tComb,Materials.Neutronium,15);
+		addProcessUV(tComb,Materials.Neutronium,15);
 		addProcessZPM(tComb,Materials.Americium,35);
 
 		// Twilight
@@ -522,11 +522,11 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.VegaBStoneDust", 1L, 0), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 0, 0, 0, 0}, 300, 122880);
 		//Infinity Line
 		tComb = getStackForType(CombType.COSMICNEUTRONIUM);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.CosmicNeutronium, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 50, 100, 0, 0, 0}, 12000, 500000);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.CosmicNeutronium, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 50, 100, 0, 0, 0}, 12000, 2000000);
 		tComb = getStackForType(CombType.INFINITYCATALYST);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 5, 100, 0, 0, 0}, 24000, 2000000);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Neutronium, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 5, 100, 0, 0, 0}, 48000, 8000000);
 		tComb = getStackForType(CombType.INFINITY);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Infinity, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 1, 5, 0, 0, 0}, 48000, 8000000);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Infinity, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.InfinityCatalyst, 1L), GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[]{5000, 1, 5, 0, 0, 0}, 96000, 24000000);
 
 	}
 	public void addSpecialCentLV(ItemStack tComb, ItemStack aOutput, int chance){
@@ -618,6 +618,14 @@ public class ItemComb extends Item {
 			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 320, 122880);
 		}
 	}
+	public void addProcessUV(ItemStack tComb, Materials aMaterial, int chance){
+		if(GT_Mod.gregtechproxy.mNerfedCombs){
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial, 1), FluidRegistry.getFluidStack("mutagen", 576), aMaterial.mOreByProducts.isEmpty() ? null : aMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), GT_Values.NI,320, 2000000, true);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+54)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 10000, (int) (aMaterial.getMass() * 128), 100000, true);
+		}else{
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 352, 500000);
+		}
+	}
 
 	public void addProcessLV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance) {
 		if (GT_Mod.gregtechproxy.mNerfedCombs) {
@@ -677,6 +685,15 @@ public class ItemComb extends Item {
 			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+45)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 10000, (int) (aOutMaterial.getMass() * 128), 100000, true);
 		}else{
 			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 320, 122880, true);
+		}
+
+	}
+	public void addProcessUV(ItemStack tComb, Materials aInMaterial, Materials aOutMaterial, int chance){
+		if(GT_Mod.gregtechproxy.mNerfedCombs){
+			GT_Values.RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), FluidRegistry.getFluidStack("mutagen", 576), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), GT_Values.NI, 320, 2000000, true);
+			GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, tComb), Materials.UUMatter.getFluid(Math.max(1, ((aOutMaterial.getMass()+54)/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), 10000, (int) (aOutMaterial.getMass() * 128), 100000, true);
+		}else{
+			GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dustTiny, aOutMaterial, 1),	ItemList.FR_Wax.get(1, new Object[0]), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] { chance * 100, 3000 }, 352, 500000, true);
 		}
 
 	}

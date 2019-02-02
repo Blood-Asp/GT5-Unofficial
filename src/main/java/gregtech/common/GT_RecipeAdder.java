@@ -723,7 +723,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         if ((aDuration = GregTech_API.sRecipeFile.get("amplifier", aAmplifierItem, aDuration)) <= 0) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map.sAmplifiers.addRecipe(true, new ItemStack[]{aAmplifierItem}, null, null, null, new FluidStack[]{Materials.UUAmplifier.getFluid(aAmplifierAmountOutputted)}, aDuration, 32, 0);
+        GT_Recipe.GT_Recipe_Map.sAmplifiers.addRecipe(true, new ItemStack[]{aAmplifierItem}, null, null, null, new FluidStack[]{Materials.UUAmplifier.getFluid(aAmplifierAmountOutputted)}, aDuration, 30, 0);
         return true;
     }
 
