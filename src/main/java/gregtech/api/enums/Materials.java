@@ -126,6 +126,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Yttrium                 = new Materials(  45, TextureSet.SET_METALLIC          ,   1.0F,      0,  2, 1|2  |8   |32             , 220, 250, 220,   0,   "Yttrium"                 ,   "Yttrium"                       ,    0,       0,       1799, 1799,  true, false,   4,   1,   1, Dyes._NULL          , Element.Y         , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
     public static Materials Zinc                    = new Materials(  36, TextureSet.SET_METALLIC          ,   1.0F,      0,  1, 1|2  |8   |32             , 250, 240, 240,   0,   "Zinc"                    ,   "Zinc"                          ,    0,       0,        692,    0, false, false,   2,   1,   1, Dyes.dyeWhite       , Element.Zn        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.SANO, 1)));
 
+    //GT++ materials
+    public static Materials Curium                  = new Materials( -1, TextureSet.SET_SHINY              ,   1.0F,      0,  0, 0                         , 255,255, 255,   0,   "Curium"                   ,    "Curium"                       ,     0,       0,        -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cm         , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
+    public static Materials Californium             = new Materials( -1, TextureSet.SET_SHINY              ,   1.0F,      0,  0, 0                         , 255,255, 255,   0,   "Californium"              ,    "Californium"                  ,     0,       0,        -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cf         , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
+    public static Materials Flerovium               = new Materials( 984, TextureSet.SET_SHINY             ,   1.0F,      0,  0, 1|2  |8      |64|128      , 255,255, 255,   0,   "Flerovium "               ,    "Flerovium "                   ,     0,       0,        -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Fl         , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
+
     /**
      * The "Random Material" ones.
      */

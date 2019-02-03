@@ -42,11 +42,6 @@ public class GTNH_ExtraMaterials implements IMaterialHandler {
     public static Materials SolutionBlueVitriol     = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  2, 0                         , 255, 255, 255,   0,   "SolutionBlueVitriol"     ,   "Blue Vitriol Solution"         ,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes._NULL          );
     public static Materials SolutionNickelSulfate   = new Materials(  -1, TextureSet.SET_NONE              ,   1.0F,      0,  2, 0                         , 255, 255, 255,   0,   "SolutionNickelSulfate"   ,   "Nickel Sulfate Solution"       ,    0,       0,         -1,    0, false, false,   3,   1,   1, Dyes._NULL          );
 
-    //GT++ materials
-    public static Materials Curium                = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Curium"            ,    "Curium"                  ,     0,       0,     -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cm   , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
-    public static Materials Californium           = new Materials( -1, TextureSet.SET_SHINY       ,   1.0F,      0,  0, 0                , 255,255, 255,   0,   "Californium"       ,    "Californium"             ,     0,       0,     -1,  -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Cf   , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
-    public static Materials Flerovium             = new Materials( 984, TextureSet.SET_SHINY      ,   1.0F,      0,  0, 1|2  |8      |64|128                , 255,255, 255,   0,   "Flerovium "        ,    "Flerovium "              ,     0,       0,     -1,    -1,  false,  false,  1 ,  1,   1, Dyes.dyeWhite      , Element.Fl   , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2)));
-
     private static void initSubTags() {
         SubTag.METAL.addTo(Signalum, Lumium, EnrichedCopper, DiamondCopper);
         SubTag.NO_SMASHING.addTo(TarPitch);
