@@ -1375,6 +1375,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addFusionReactorRecipe(Materials.Tungsten.getMolten(16), Materials.Helium.getGas(16), Materials.Osmium.getMolten(16), 256, 24578, 150000000); //FT1 - utility
         GT_Values.RA.addFusionReactorRecipe(Materials.Manganese.getMolten(16), Materials.Hydrogen.getGas(16), Materials.Iron.getMolten(16), 64, 8192, 120000000); //FT1 - utility
+        GT_Values.RA.addFusionReactorRecipe(Materials.Magnesium.getMolten(128), Materials.Oxygen.getGas(128), Materials.Calcium.getPlasma(16), 128, 8192, 120000000); //
         GT_Values.RA.addFusionReactorRecipe(Materials.Mercury.getFluid(16), Materials.Magnesium.getMolten(16), Materials.Uranium.getMolten(16), 64, 49152, 240000000); //FT2 - utility
         GT_Values.RA.addFusionReactorRecipe(Materials.Gold.getMolten(16), Materials.Aluminium.getMolten(16), Materials.Uranium.getMolten(16), 64, 49152, 240000000); //FT2 - utility
         GT_Values.RA.addFusionReactorRecipe(Materials.Uranium.getMolten(16), Materials.Helium.getGas(16), Materials.Plutonium.getMolten(16), 128, 49152, 480000000); //FT2+ - utility
@@ -1401,9 +1402,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         //GT_Values.RA.addFusionReactorRecipe(Materials.Neutronium.getMolten(144), Materials.Neutronium.getMolten(144), Materials.Neutronium.getPlasma(72), 64, 130000, 640000000);//FT3+ - yes it is a bit troll XD
 
         //MK4
-        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Helium.getGas(1000), Materials.Curium.getFluid(144), 96, 98304, 500000000);
-        GT_Values.RA.addFusionReactorRecipe(Materials.Curium.getMolten(144), Materials.Helium.getPlasma(1000), Materials.Californium.getFluid(144), 128, 196608, 750000000);
-        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Calcium.getMolten(1000), Materials.Flerovium.getFluid(144), 160, 196608, 1000000000);
+        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Helium.getGas(1000), Materials.Curium.getMolten(144), 96, 98304, 500000000);
+        GT_Values.RA.addFusionReactorRecipe(Materials.Curium.getMolten(144), Materials.Helium.getPlasma(144), Materials.Californium.getMolten(144), 128, 196608, 750000000);
+        GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Calcium.getPlasma(144), Materials.Flerovium.getMolten(144), 160, 196608, 1000000000);
 
 
 
