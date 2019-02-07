@@ -226,6 +226,8 @@ public class GT_NEI_DefaultHandler
 				drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
 			} else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
 				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
+			} else if (tSpecial == -201) {
+				drawText(10, 123, trans("161","Scan for Assembly Line"), -16777216);
 			} else if (tSpecial == -300) {
 				drawText(10, 123, trans("216","Deprecated Recipe"), -16777216);
 			} else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
