@@ -236,6 +236,8 @@ public class GT_NEI_AssLineHandler
                 drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
             } else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
                 drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
+            } else if (tSpecial == -201) {
+                drawText(10, 123, trans("206","Scan for Assembly Line/TT Research Station"), -16777216);
             } else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
                 drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
             }
