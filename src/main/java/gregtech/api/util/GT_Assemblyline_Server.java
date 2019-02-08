@@ -50,7 +50,10 @@ public class GT_Assemblyline_Server {
 			if (entry.getKey().contains("name")) {
 				int i = Integer.parseInt(entry.getKey().substring("gt.metaitem.01.".length(), entry.getKey().length()-".name".length()));
 				i=i%1000;
-				lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
+				if (GregTech_API.sGeneratedMaterials[i] != null)
+					lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
+				else
+					lServerNames.put(entry.getKey(), null);
 			}
 		}
 		for (Map.Entry<String, String> entry : internal3.entrySet()) {
@@ -67,7 +70,7 @@ public class GT_Assemblyline_Server {
 					!entry.getKey().contains("_small")&&
 					!entry.getKey().contains("_tiny")
 					)
-						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-".name".length())));	
+						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-".name".length())));
 					else if (entry.getKey().contains("_huge")||entry.getKey().contains("_tiny"))
 						lServerNames.put(entry.getKey(), entry.getValue().replace("material", entry.getKey().substring("gt.blockmachines.gt_pipe_".length(), entry.getKey().length()-"_tiny.name".length())));	
 					else if (entry.getKey().contains("_large")||entry.getKey().contains("_small"))
@@ -86,7 +89,10 @@ public class GT_Assemblyline_Server {
 			if (entry.getKey().contains("blockores")) {
 				int i = Integer.parseInt(entry.getKey().substring("gt.blockores.".length(), entry.getKey().length()-".name".length()));
 				i=i%1000;
-				lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
+				if (GregTech_API.sGeneratedMaterials[i] != null)
+					lServerNames.put(entry.getKey(), entry.getValue().replace("material",GregTech_API.sGeneratedMaterials[i].toString()));
+				else
+					lServerNames.put(entry.getKey(), null);
 			}
 			else if(entry.getKey().contains("blockmetal")) {
 				Materials[] mMats = null;
