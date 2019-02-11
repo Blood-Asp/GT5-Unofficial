@@ -162,7 +162,6 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mDuration = aDuration;
         mSpecialValue = aSpecialValue;
         mEUt = aEUt;
-
 //		checkCellBalance();
     }
 

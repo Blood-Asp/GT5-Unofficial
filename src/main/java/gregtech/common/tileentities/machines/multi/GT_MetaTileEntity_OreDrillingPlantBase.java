@@ -46,7 +46,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
         fillMineListIfEmpty(xDrill, yDrill, zDrill, xPipe, zPipe, yHead);
         if (oreBlockPositions.isEmpty()) {
-            switch (tryLowerPipe()) {
+            switch (tryLowerPipeState()) {
                 case 2: mMaxProgresstime = 0; return false;
                 case 3: workState = STATE_UPWARD; return true;
                 case 1: workState = STATE_AT_BOTTOM; return true;
