@@ -83,7 +83,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
 
     protected boolean tryPickPipe() {
         if (yHead == yDrill)
-            return false;
+            return isPickingPipes = false;
         if (tryOutputPipe()){
             if (checkBlockAndMeta(xPipe, yHead + 1, zPipe, miningPipeBlock, W))
                 getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead + 1, zPipe, miningPipeTipBlock);
