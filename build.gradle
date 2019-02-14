@@ -69,6 +69,11 @@ repositories {
         name 'tterrag Repo'
         url "http://maven.tterrag.com/"
 	}
+	//Curseforge
+	maven {
+		name = "CurseForge"
+		url = "https://minecraft.curseforge.com/api/maven"
+	}
 
 }
 
@@ -93,14 +98,13 @@ dependencies {
     compileOnly ("appeng:appliedenergistics2:rv3-beta-6:dev") {
         exclude module: '*'
     }	
-    compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2.version}:dev"	
-	
-	
-    provided "com.enderio.core:EnderCore:${config.enderiocore.version}:dev"
-    provided ("com.enderio:EnderIO:${config.enderio.version}:dev") {
+    compileOnly "net.industrial-craft:industrialcraft-2:${config.ic2.version}:dev"		
+    compileOnly "com.enderio.core:EnderCore:${config.enderiocore.version}:dev"
+    compileOnly ("com.enderio:EnderIO:${config.enderio.version}:dev") {
         transitive = false
     }
-    provided name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
+	compileOnly "nuclear-control-2:IC2NuclearControl:2.4.3a:dev"
+    //compileOnly name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
 }
 
 processResources
