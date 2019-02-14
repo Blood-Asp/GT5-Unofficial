@@ -48,7 +48,7 @@ public class GT_SensorCard_Item
         return update(aPanel.getWorldObj(), aCard, aMaxRange);
     }
 
-    @Override
+    
     public CardState update(World world, ICardWrapper aCard, int aMaxRange) {
         ChunkCoordinates target = aCard.getTarget();
 

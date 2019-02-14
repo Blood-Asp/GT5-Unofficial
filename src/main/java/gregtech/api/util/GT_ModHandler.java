@@ -600,9 +600,20 @@ public class GT_ModHandler {
         return true;
     }
     
+    private static Method mRecipeIE;
     public static boolean addImmersiveEngineeringRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aChance2, ItemStack aOutput3, int aChance3){
     	if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
-    		blusunrize.immersiveengineering.common.IERecipes.addCrusherRecipe(aOutput1, aInput, 6000, aOutput2, 0.15f);
+    		//Get IE Recipe Handler
+			try {				
+				if (mRecipeIE == null) {
+					 mRecipeIE = Class.forName("blusunrize.immersiveengineering.common.IERecipes").getDeclaredMethod("addCrusherRecipe", ItemStack.class, ItemStack.class, int.class, ItemStack.class, float.class);
+				}				
+				return (boolean) mRecipeIE.invoke(null, aOutput1, aInput, 6000, aOutput2, 0.15f);
+			}
+			catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				 GT_Log.err.println("WARNING: Bad Reflection into Immersive Engineering Crusher recipe handler.");
+				return false;
+			}
     	}
     	return true;
     }
@@ -621,60 +632,59 @@ public class GT_ModHandler {
 		return true;
 	}
 
-	public static boolean registerMagneticraftSifterRecipe(final ItemStack in, final ItemStack out, final ItemStack extra,
-			final float prob) {
-		//Get Magnetiraft Recipe Handler
-				Class cls;
-				try {
-					cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
-					//Get registerCrusherRecipe method from class.
-					Method mCrusher = cls.getDeclaredMethod("registerSifterRecipe", ItemStack.class, ItemStack.class,
-							ItemStack.class, float.class);
-					//Invoke Method
-					return (boolean) mCrusher.invoke(null, in, out, extra, prob);
-
-				}
-				catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Sifter handler.");
-					return false;
-				}
-	}
-
-	public static boolean registerMagneticraftCrusherRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
-			final float prob1, final ItemStack out2, final float prob2) {
-		//Get Magnetiraft Recipe Handler
-		Class cls;
-		try {
-			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
-			//Get registerCrusherRecipe method from class.
-			Method mCrusher = cls.getDeclaredMethod("registerCrusherRecipe", ItemStack.class, ItemStack.class,
-					ItemStack.class, float.class, ItemStack.class, float.class);
-			//Invoke Method
-			return (boolean) mCrusher.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-
+    /**
+     * A static instance of the Magneticraft recipe handler to improve reflective access
+     */
+    private static Class mRecipeMag;
+    
+    private static Method mRecipeMagSifter;
+	public static boolean registerMagneticraftSifterRecipe(final ItemStack in, final ItemStack out, final ItemStack extra, final float prob) {
+		try {			
+			if (mRecipeMag == null) {
+				mRecipeMag = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+			}			
+			if (mRecipeMagSifter == null) {
+				mRecipeMagSifter = mRecipeMag.getDeclaredMethod("registerSifterRecipe", ItemStack.class, ItemStack.class, ItemStack.class, float.class);
+			}				
+			return (boolean) mRecipeMagSifter.invoke(null, in, out, extra, prob);
 		}
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Crusher handler.");
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Sifter recipe handler.");
+			return false;
+		}
+		
+	}
+
+    private static Method mRecipeMagCrusher;
+	public static boolean registerMagneticraftCrusherRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1, final float prob1, final ItemStack out2, final float prob2) {
+		try {			
+			if (mRecipeMag == null) {
+				mRecipeMag = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+			}			
+			if (mRecipeMagCrusher == null) {
+				mRecipeMagCrusher = mRecipeMag.getDeclaredMethod("registerCrusherRecipe", ItemStack.class, ItemStack.class, ItemStack.class, float.class, ItemStack.class, float.class);
+			}				
+			return (boolean) mRecipeMagCrusher.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
+		}
+		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Crusher recipe handler.");
 			return false;
 		}
 	}
 
-	public static boolean registerMagneticraftGrinderRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,
-			final float prob1, final ItemStack out2, final float prob2) {
-		//Get Magnetiraft Recipe Handler
-		Class cls;
-		try {
-			cls = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
-
-			//Get registerGrinderRecipe method from class.
-			Method mGrinder = cls.getDeclaredMethod("registerGrinderRecipe", ItemStack.class, ItemStack.class,
-					ItemStack.class, float.class, ItemStack.class, float.class);
-			//Invoke Method
-			return (boolean) mGrinder.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
-
+    private static Method mRecipeMagGrinder;
+	public static boolean registerMagneticraftGrinderRecipe(final ItemStack in, final ItemStack out0, final ItemStack out1,	final float prob1, final ItemStack out2, final float prob2) {
+		try {			
+			if (mRecipeMag == null) {
+				mRecipeMag = Class.forName("com.cout970.magneticraft.api.access.MgRecipeRegister");
+			}			
+			if (mRecipeMagGrinder == null) {
+				mRecipeMagGrinder = mRecipeMag.getDeclaredMethod("registerGrinderRecipe", ItemStack.class, ItemStack.class, ItemStack.class, float.class, ItemStack.class, float.class);
+			}				
+			return (boolean) mRecipeMagGrinder.invoke(null, in, out0, out1,(float)((float)prob1/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent), out2,(float)((float)prob2/GT_Mod.gregtechproxy.mMagneticraftBonusOutputPercent));
 		}
 		catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Grinder handler.");
+			 GT_Log.err.println("WARNING: Bad Reflection into Magneticraft Grinder recipe handler.");
 			return false;
 		}
 	}

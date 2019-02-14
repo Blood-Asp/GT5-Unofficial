@@ -1,18 +1,44 @@
 package gregtech.loaders.postload;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+
 import bloodasp.galacticgreg.GT_Worldgenerator_Space;
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Log;
 import gregtech.common.GT_Worldgen_GT_Ore_Layer;
 import gregtech.common.GT_Worldgen_GT_Ore_SmallPieces;
 import gregtech.common.GT_Worldgen_Stone;
 import gregtech.common.GT_Worldgenerator;
 
-public class GT_Worldgenloader
-        implements Runnable {
+public class GT_Worldgenloader implements Runnable {
+	
+	public static final Class mSupportIE;
+	
+	//We should use reflection here, since it won't amount to any performance loss.
+	static {
+		Class aTemp;		
+		if (GregTech_API.mImmersiveEngineering) {
+			try {
+				aTemp = Class.forName("blusunrize.immersiveengineering.api.tool.ExcavatorHandler");
+			} catch (ClassNotFoundException e) {
+				GT_Log.err.println("Could not access blusunrize.immersiveengineering.api.tool.ExcavatorHandler");
+				GT_Log.err.print(e);
+				aTemp = null;
+			}
+			mSupportIE = aTemp;
+		}
+		else {
+			mSupportIE = null;
+		}	
+	}
+	
     public void run() {
         boolean tPFAA = (GregTech_API.sWorldgenFile.get(ConfigCategories.general, "AutoDetectPFAA", true)) && (Loader.isModLoaded("PFAAGeologica"));
 
@@ -104,9 +130,21 @@ public class GT_Worldgenloader
         for (int j = GregTech_API.sWorldgenFile.get("worldgen", "AmountOfCustomSmallOreSlots", 16); i < j; i++) {
             new GT_Worldgen_GT_Ore_SmallPieces("ore.small.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, false, false, false, false, false, false, Materials._NULL);
         }
-        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
-            blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList.clear();
-            blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
+        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes && mSupportIE != null) {        	
+        	try {
+				Field aMineralList = mSupportIE.getDeclaredField("mineralList");
+				Field aMineralCache = mSupportIE.getDeclaredField("mineralCache");	
+				aMineralList.setAccessible(true);
+				aMineralCache.setAccessible(true);
+				Map aEmpty = new HashMap();
+				aMineralList.set(null, aEmpty);
+				aMineralCache.set(null, aEmpty);				
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				//blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList.clear();
+		        //blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralCache.clear();
+				GT_Log.err.println("Could not clear Mineral list & cache of IE Excavator.");
+				GT_Log.err.print(e);
+			}           
         }
 
         new GT_Worldgen_GT_Ore_Layer("ore.mix.naquadah", true, 10, 60, 10, 5, 32, false, false, true, false, true, true, Materials.Naquadah, Materials.Naquadah, Materials.Naquadah, Materials.NaquadahEnriched);
@@ -136,7 +174,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.quartz", true, 40, 80, 60, 3, 16, !tPFAA, tPFAA, false, true, true, true, Materials.Quartzite, Materials.Barite, Materials.CertusQuartz, Materials.CertusQuartz);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.diamond", true, 5, 20, 40, 2, 16, !tPFAA, false, false, true, true, true, Materials.Graphite, Materials.Graphite, Materials.Diamond, Materials.Coal);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.olivine", true, 10, 40, 60, 3, 16, !tPFAA, false, true, true, true, true, Materials.Bentonite, Materials.Magnesite, Materials.Olivine, Materials.Glauconite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.apatite", true, 40, 60, 60, 3, 16, !tPFAA, false, false, false, false, false, Materials.Apatite, Materials.Apatite, Materials.TricalciumPhosphate, Materials.Pyrochlore);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.apatite", true, 40, 60, 60, 3, 16, !tPFAA, false, false, false, false, false, Materials.Apatite, Materials.Apatite, Materials.Phosphorus, Materials.Pyrochlore);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.galena", true, 30, 60, 40, 5, 16, !tPFAA, false, false, true, true, true, Materials.Galena, Materials.Galena, Materials.Silver, Materials.Lead);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.lapis", true, 20, 50, 40, 5, 16, !tPFAA, false, true, true, true, true, Materials.Lazurite, Materials.Sodalite, Materials.Lapis, Materials.Calcite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.beryllium", true, 5, 30, 30, 3, 16, !tPFAA, false, true, true, true, true, Materials.Beryllium, Materials.Beryllium, Materials.Emerald, Materials.Thorium);
@@ -147,8 +185,14 @@ public class GT_Worldgenloader
             new GT_Worldgen_GT_Ore_Layer("ore.mix.custom." + (i < 10 ? "0" : "") + i, false, 0, 0, 0, 0, 0, false, false, false, false, false, false, Materials._NULL, Materials._NULL, Materials._NULL, Materials._NULL);
         }
         
-        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
-            blusunrize.immersiveengineering.api.tool.ExcavatorHandler.recalculateChances(true);
+        if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes && mSupportIE != null) {
+        	try {
+				mSupportIE.getDeclaredMethod("recalculateChances", boolean.class).invoke(null, true);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException e) {
+				GT_Log.err.println("Could not recalculate chances for IE Excavator.");
+				GT_Log.err.print(e);
+			}
         }
     }
 }

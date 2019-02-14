@@ -4,13 +4,17 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Log;
 import gregtech.api.world.GT_Worldgen;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import gregtech.loaders.misc.GT_Achievements;
+import gregtech.loaders.postload.GT_Worldgenloader;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,6 +40,8 @@ public class GT_Worldgen_GT_Ore_Layer
     public final boolean mMars;
     public final boolean mAsteroid;
     public final String aTextWorldgen = "worldgen.";
+    
+    private static Method mAddMaterialIE;
 
     public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
         super(aName, sList, aDefault);
@@ -68,10 +74,23 @@ public class GT_Worldgen_GT_Ore_Layer
             GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[(mBetweenMeta % 1000)], aMinY, aMaxY, aWeight, aOverworld, aNether, aEnd);
             GT_Achievements.registerOre(GregTech_API.sGeneratedMaterials[(mSporadicMeta % 1000)], aMinY, aMaxY, aWeight, aOverworld, aNether, aEnd);
             sWeight += this.mWeight;
-            if(GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes){
-            	blusunrize.immersiveengineering.api.tool.ExcavatorHandler.addMineral(aName.substring(8, 9).toUpperCase()+aName.substring(9), aWeight, 0.2f, new String[]{"ore"+aPrimary.mName,"ore"+aSecondary.mName,"ore"+aBetween.mName,"ore"+aSporadic.mName}, new float[]{.4f,.4f,.15f,.05f});
-            }
-            
+			if (GregTech_API.mImmersiveEngineering && GT_Mod.gregtechproxy.mImmersiveEngineeringRecipes) {
+				try {
+					if (mAddMaterialIE == null) {
+						mAddMaterialIE = GT_Worldgenloader.mSupportIE.getDeclaredMethod("addMineral", String.class,
+								int.class, float.class, String[].class, float[].class);
+					}
+					mAddMaterialIE
+							.invoke(null, aName.substring(8, 9).toUpperCase() + aName.substring(9), aWeight, 0.2f,
+									new String[] { "ore" + aPrimary.mName, "ore" + aSecondary.mName,
+											"ore" + aBetween.mName, "ore" + aSporadic.mName },
+									new float[] { .4f, .4f, .15f, .05f });
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					GT_Log.err.println("Could not add Mineral to list for IE Excavator.");
+					GT_Log.err.print(e);
+				}
+			}            
         }
     }
 
