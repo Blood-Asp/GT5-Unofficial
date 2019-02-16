@@ -225,7 +225,7 @@ public class GT_NEI_DefaultHandler
 			} else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
 				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
             } else if (tSpecial == -201) {
-                drawText(10, 123, trans("206","Scan for Assembly Line/TT Research Station"), -16777216);
+                drawText(10, 123, trans("206","Scan for Assembly Line"), -16777216);
             } else if (tSpecial == -300 && GT_Mod.gregtechproxy.mEnableCleanroom) {
                 drawText(10, 123, trans("160","Needs Cleanroom & LowGrav"), -16777216);
             } else if (tSpecial == -400) {
