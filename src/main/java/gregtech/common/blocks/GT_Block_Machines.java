@@ -60,15 +60,8 @@ public class GT_Block_Machines
     }
 
     public String getHarvestTool(int aMeta) {
-        switch (aMeta / 4) {
-            case 0:
-                return "wrench";
-            case 1:
-                return "wrench";
-            case 2:
-                return "cutter";
-            case 3:
-                return "axe";
+        if (aMeta >= 8 && aMeta <= 11) {
+            return "cutter";
         }
         return "wrench";
     }

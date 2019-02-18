@@ -1,8 +1,11 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -215,7 +218,10 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                     }
                 }
             }
-            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) != null) {
+
+            boolean naqOverride = GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]) != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cell && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cellMolten && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cellPlasma && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial.mMaterial.equals(Materials.NaquadahEnriched) || GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial.mMaterial.equals(Materials.Naquadria);
+
+            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && ((GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) != null) || naqOverride)) {
                 long tFuelValue = getFuelValue(mInventory[getInputSlot()]);
                 //System.out.println(" tFuelValue : " + tFuelValue );
                 if (tFuelValue > 0) {
