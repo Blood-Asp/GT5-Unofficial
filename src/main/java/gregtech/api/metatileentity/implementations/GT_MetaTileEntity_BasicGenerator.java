@@ -1,10 +1,11 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.Materials;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -14,6 +15,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.Collection;
 
@@ -219,9 +222,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                 }
             }
 
-            boolean naqOverride = GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]) != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cell && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cellMolten && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mPrefix != OrePrefixes.cellPlasma && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial != null && GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial.mMaterial.equals(Materials.NaquadahEnriched) || GT_OreDictUnificator.getAssociation(mInventory[getInputSlot()]).mMaterial.mMaterial.equals(Materials.Naquadria);
-
-            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && ((GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) != null) || naqOverride)) {
+            if (mInventory[getInputSlot()] != null && aBaseMetaTileEntity.getUniversalEnergyStored() < (maxEUOutput() * 20 + getMinimumStoredEU()) && ((GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true) != null) || solidFuelOverride(mInventory[getInputSlot()]))) {
                 long tFuelValue = getFuelValue(mInventory[getInputSlot()]);
                 //System.out.println(" tFuelValue : " + tFuelValue );
                 if (tFuelValue > 0) {
@@ -238,7 +239,26 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
         if (aBaseMetaTileEntity.isServerSide())
             aBaseMetaTileEntity.setActive(aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.getUniversalEnergyStored() >= maxEUOutput() + getMinimumStoredEU());
     }
-    
+
+    /**
+     * @param stack the fuel stack
+     * @return if the stack is a solid fuel
+     */
+    public boolean solidFuelOverride(ItemStack stack) {
+        //this could be used for a coal generator for example aswell...
+        ItemData association = GT_OreDictUnificator.getAssociation(stack);
+        //if it is a gregtech Item, make sure its not a VOLUMETRIC_FLASK, cell, motlen cell or plasma cell, else do vanilla checks
+        return association != null ? !OrePrefixes.cell.equals(association.mPrefix) &&
+                !OrePrefixes.cellMolten.equals(association.mPrefix) &&
+                !OrePrefixes.cellPlasma.equals(association.mPrefix) &&
+                !GT_Utility.areStacksEqual(ItemList.VOLUMETRIC_FLASK.get(1L), stack, true) :
+                stack != null && //when the stack is null its not a solid
+                stack.getItem() != null && //when the item in the stack is null its not a solid
+                !(stack.getItem() instanceof IFluidContainerItem) && //when the item is a fluid container its not a solid...
+                !(stack.getItem() instanceof IFluidHandler) &&  //when the item is a fluid handler its not a solid...
+                !stack.getItem().getUnlocalizedName().contains("bucket"); //since we cant really check for buckets...
+    }
+
     public abstract int getPollution();
 
     public abstract GT_Recipe_Map getRecipes();
