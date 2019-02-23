@@ -12,25 +12,21 @@ import gregtech.api.util.GT_Recipe;
 
 public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGenerator {
 
-    public int mEfficiency;
-    public GT_Recipe.GT_Recipe_Map mRecipeMap = null;
+    private int mEfficiency;
 
     public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
         if (aTier > 8 || aTier < 4) {
-            new Exception("Tier without Recipe Map!");
+            new Exception("Tier without Recipe Map!").printStackTrace();
         }
-        onConfigLoad();
-    }
-
-    public GT_MetaTileEntity_NaquadahReactor(int aID, String aName, String[] aDescription, String aNameRegional, GT_Recipe.GT_Recipe_Map mRecipeMap, int aTier) {
-        super(aID, aName, aNameRegional, aTier, aDescription, new ITexture[0]);
-        this.mRecipeMap=mRecipeMap;
         onConfigLoad();
     }
 
     public GT_MetaTileEntity_NaquadahReactor(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+        if (aTier > 8 || aTier < 4) {
+            new Exception("Tier without Recipe Map!").printStackTrace();
+        }
         onConfigLoad();
     }
 
@@ -66,7 +62,7 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
                 break;
             }
             default:{
-                ret = mRecipeMap;
+                ret = null;
                 break;
             }
 
@@ -75,31 +71,19 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
     }
 
     public int getCapacity() {
-        return mRecipeMap != null ? mRecipeMap.mMinimalInputFluids>0 ? 8000*(mTier+1) : 0 : 0 ;
+        return getRecipes() != null ? getRecipes().mMinimalInputFluids>0 ? 8000*(mTier+1) : 0 : 0 ;
     }
 
     public int getEfficiency() {
-        return mEfficiency;
+        return mEfficiency == 0 ? onConfigLoad() : mEfficiency;
     }
 
     private int getBaseEff(){
-        int ret;
-        switch (this.mTier){
-            case 4: {
-                ret = 80;
-                break;
-            }
-            default: {
-                ret = 100 + (50*(mTier-5));
-                break;
-            }
-
-        }
-        return ret;
+        return mTier == 4 ? 80 : 100 + (50*(mTier-5));
     }
 
-    public void onConfigLoad() {
-        this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, getBaseEff());
+    public int onConfigLoad() {
+       return this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + this.mTier, getBaseEff());
     }
 
     public ITexture[] getFront(byte aColor) {
