@@ -504,17 +504,104 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         getBaseMetaTileEntity().doExplosion(V[8]);
     }
 
-    public boolean addEnergyOutput(long aEU) {
-        if (aEU <= 0) return true;
-        for (GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                if (tHatch.getBaseMetaTileEntity().increaseStoredEnergyUnits(aEU, false)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+   /**
+     * Injects energy into the Multiblock Dynamos, will delegate to {@link #addEnergyOutputMultipleDynamos(long)}.
+     * Default behaviour still allows power injection to Dynamos of different voltages.
+     * Modified by: Alkalus
+     * 02/03/2019
+     * @param aEU - Total EU to be injected
+     * @return - Was all Energy injected into Dynamos?
+     */
+	public boolean addEnergyOutput(long aEU) {
+		if (aEU <= 0) {
+			return true;
+		}
+		//Allows Clean Vanilla support for Multi Amp Dynamos in all cases.
+		if (mDynamoHatches.size() > 0) {
+			return addEnergyOutputMultipleDynamos(aEU, true);
+		}
+		return false;
+	}
+    
+    /**
+     * Used to support Multiple Tiered Dynamos, which may allow more than one Amp of power.
+     * @param aEU - Total EU produced, to be split into the Dynamos
+     * @param aAllowMixedVoltageDynamos - Can this machine provide power to Dynamos of multiple voltages?
+     * @return - Was power added to the Dynamos?
+     * @author Alkalus
+     */
+	public boolean addEnergyOutputMultipleDynamos(long aEU, boolean aAllowMixedVoltageDynamos) {
+
+		int injected = 0;
+
+		// Quick check we can output the EU
+		long totalOutput = 0;
+		
+		long aFirstVoltageFound = -1;
+		boolean aFoundMixedDynamos = false;
+
+		for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : mDynamoHatches) {
+			if (isValidMetaTileEntity(aDynamo)) {
+				long aVoltage = aDynamo.maxEUOutput();
+				// Return if not valid for charging Dynamo
+				if (aDynamo == null || isValidMetaTileEntity(aDynamo) || aEU <= 0) {
+					return false;
+				}
+				long aTotal = aDynamo.maxAmperesOut() * aVoltage;
+				// Check against voltage to check when hatch mixing
+				if (aFirstVoltageFound == -1) {
+					aFirstVoltageFound = aVoltage;
+				}
+				else {
+					// Found Mixed Voltages
+					if (aFirstVoltageFound != aVoltage) {
+						aFoundMixedDynamos = true;
+					}
+				}				
+				totalOutput += aTotal;
+			}
+		}
+
+		// Explode if Overcharging Total Dynamo Capacity or Mixed Dynamos are found, but not allowed
+		if (totalOutput < aEU || (aFoundMixedDynamos && !aAllowMixedVoltageDynamos)) {
+			explodeMultiblock();
+			return false;
+		}
+
+		// Power left to inject to all Dynamos
+		long leftToInject;
+
+		// Explode if Overcharging Dynamo
+		long aVoltage;
+
+		// Gets capped at Dynamo's Max Amps Out, but this may be less (IE 2A into 4A Dynamo)
+		// If 0, we know we have < 1A to inject, so we special case it
+		int aAmpsToInject;
+
+		// Counts any half Amps
+		int aRemainder;
+
+		// Inject Power into all Dynamos
+		for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : mDynamoHatches) {
+			if (isValidMetaTileEntity(aDynamo)) {
+
+				// Handle power
+				leftToInject = aEU - injected;
+				aVoltage = aDynamo.maxEUOutput();
+				aAmpsToInject = (int) (leftToInject / aVoltage);
+				aRemainder = (int) (leftToInject - (aAmpsToInject * aVoltage));
+
+				// Hard Case one as a minimum, to catch the remainder
+				long powerGain;
+				for (int i = 0; i < Math.min(aDynamo.maxAmperesOut(), aAmpsToInject > 0 ? aAmpsToInject : 1); i++) {
+					powerGain = aAmpsToInject > 0 ? aVoltage : aRemainder;
+					aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(powerGain, false);
+					injected += powerGain;
+				}
+			}
+		}
+		return injected > 0;
+	}
 
     public long getMaxInputVoltage() {
         long rVoltage = 0;
