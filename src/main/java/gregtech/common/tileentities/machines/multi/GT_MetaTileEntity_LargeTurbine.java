@@ -220,38 +220,4 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         return true;
     }
 
-    /**
-     * Used to support Dynamos which may allow more than one Amp of power.
-     * @param aEU - Total EU produced, to be split into the Dynamo
-     * @return - Was power added to the Dynamo?
-     * @author Alkalus
-     */
-	public boolean addEnergyOutput(long aEU) {
-		GT_MetaTileEntity_Hatch_Dynamo aDynamo = mDynamoHatches.get(0);
-		int aVoltage = (int) aDynamo.maxEUOutput();
-
-		// Return if not valid for charging Dynamo
-		if (aDynamo == null || aEU <= 0) {
-			return false;
-		}
-
-		// Explode if Overcharging Dynamo
-		if (aEU > (aDynamo.maxAmperesOut() * aVoltage)) {
-			explodeMultiblock();
-			return false;
-		} else {
-			int injected = 0;
-			int aAmpsToInject = (int) (aEU / aVoltage);
-			int aRemainder = (int) (aEU - (aAmpsToInject * aVoltage));
-			for (int i = 0; i < aAmpsToInject; i++) {
-				aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aVoltage, false);
-				injected += aVoltage;
-			}
-			if (aRemainder > 0) {
-				aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aRemainder, false);
-				injected += aRemainder;
-			}
-			return injected > 0;
-		}
-	}
 }
