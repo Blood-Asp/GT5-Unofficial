@@ -330,7 +330,8 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
         // Now distribute
         for (MutableTriple<IFluidHandler, ForgeDirection, Integer> tEntry: tTanks) {
-            if (availableCapacity > tAmount) tEntry.right = (int) Math.floor(tEntry.right * tAmount / availableCapacity);
+            if (availableCapacity > tAmount) tEntry.right = (int) Math.floor(tEntry.right * tAmount / availableCapacity); // Distribue fluids based on percentage available space at destination
+            if (tEntry.right == 0) tEntry.right = (int)Math.min(1, tAmount); // If the percent is not enough to give at least 1L, try to give 1L
             if (tEntry.right <= 0) continue;
 
             int tFilledAmount = tEntry.left.fill(tEntry.middle, drainFromIndex(tEntry.right, false, index), false);
