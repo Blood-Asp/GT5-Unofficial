@@ -466,6 +466,11 @@ public interface IGT_RecipeAdder {
 
     public boolean addCutterRecipe(ItemStack aInput, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, boolean aCleanroom);
 
+    public boolean addCutterRecipe(ItemStack aInput, ItemStack aCircuit, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt);
+
+    public boolean addCutterRecipe(ItemStack aInput,  ItemStack aCircuit, ItemStack aOutput1, ItemStack aOutput2, int aDuration, int aEUt, boolean aCleanroom);
+
+    public boolean addCutterRecipe(ItemStack[] aInputs, ItemStack[] aOutputs, int aDuration, int aEUt, int aSpecial);
     /**
      * Adds a Boxing Recipe
      */
