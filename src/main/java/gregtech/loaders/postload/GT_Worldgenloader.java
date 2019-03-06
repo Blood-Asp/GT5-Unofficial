@@ -139,7 +139,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.netherquartz", true, 40, 80, 80, 4, 24, false, true, false, Materials.NetherQuartz, Materials.NetherQuartz, Materials.NetherQuartz, Materials.Quartzite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.sulfur", true, 5, 20, 100, 4, 24, false, true, false, Materials.Sulfur, Materials.Sulfur, Materials.Pyrite, Materials.Sphalerite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.copper", true, 5, 60, 80, 3, 24, true, true, true, Materials.Chalcopyrite, Materials.Iron, Materials.Pyrite, Materials.Copper);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.bauxite", true, 10, 80, 80, 3, 24, false, false, false, Materials.Bauxite, Materials.Bauxite, Materials.Aluminium, Materials.Ilmenite);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.bauxite", true, 10, 80, 80, 3, 24, false, false, false, Materials.Bauxite, Materials.Ilmenite, Materials.Aluminium, Materials.Ilmenite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.salts", true, 50, 70, 50, 2, 24, true, false, false, Materials.RockSalt, Materials.Salt, Materials.Lepidolite, Materials.Spodumene);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.redstone", true, 5, 40, 60, 2, 24, true, true, false, Materials.Redstone, Materials.Redstone, Materials.Ruby, Materials.Cinnabar);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.soapstone", true, 20, 50, 40, 2, 16, true, false, false, Materials.Soapstone, Materials.Talc, Materials.Glauconite, Materials.Pentlandite);
@@ -173,7 +173,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.terraaer", true, 5, 35, 16, 2, 16, false, false, false, Materials.InfusedEarth, Materials.InfusedAir, Materials.Amber, Materials.Cinnabar);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.perditioordo", true, 5, 35, 16, 2, 16, false, false, false, Materials.InfusedEntropy, Materials.InfusedOrder, Materials.Amber, Materials.Cinnabar);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.coppertin", true, 80, 200, 80, 3, 24, true, false, false, Materials.Chalcopyrite, Materials.Vermiculite, Materials.Cassiterite, Materials.Alunite);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.titaniumchrome", true, 10, 70, 16, 2, 16, false, false, false, Materials.Titanium, Materials.Chromite, Materials.Uvarovite, Materials.Perlite);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.titaniumchrome", true, 10, 70, 16, 2, 16, false, false, false, Materials.Ilmenite, Materials.Chromite, Materials.Uvarovite, Materials.Perlite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.mineralsand", true, 50, 60, 80, 3, 24, true, false, false, Materials.BasalticMineralSand, Materials.GraniticMineralSand, Materials.FullersEarth, Materials.Gypsum);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.garnettin", true, 50, 60, 80, 3, 24, true, false, false, Materials.CassiteriteSand, Materials.GarnetSand, Materials.Asbestos, Materials.Diatomite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.kaolinitezeolite", true, 50, 70, 60, 4, 16, true, false, false, Materials.Kaolinite, Materials.Zeolite, Materials.FullersEarth, Materials.GlauconiteSand);
@@ -218,7 +218,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.powelitelitiumgiant", true, 150, 160, 100, 10, 32, false, false, false, Materials.Powellite, Materials.Lithium, Materials.Powellite, Materials.Lithium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.adamantiumaluminiumgiant", true, 155, 165, 100, 10, 32, false, false, false, Materials.Adamantium, Materials.Aluminium, Materials.Adamantium, Materials.Aluminium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.molybdengiant", true, 160, 170, 100, 10, 32, false, false, false, Materials.Molybdenite, Materials.Molybdenum, Materials.Molybdenite, Materials.Molybdenum);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.chrometitangiant", true, 165, 175, 100, 10, 32, false, false, false, Materials.Chromite, Materials.Titanium, Materials.Chromite, Materials.Titanium);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.chrometitangiant", true, 165, 175, 100, 10, 32, false, false, false, Materials.Chromite, Materials.Ilmenite, Materials.Chromite, Materials.Ilmenite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.uvarovitegiant", true, 170, 180, 100, 10, 32, false, false, false, Materials.Uvarovite, Materials.Perlite, Materials.Uvarovite, Materials.Perlite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.zinctitangiant", true, 175, 185, 100, 10, 32, false, false, false, Materials.Sphalerite, Materials.Ilmenite, Materials.Sphalerite, Materials.Ilmenite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.rubynickelgiant", true, 180, 190, 100, 10, 32, false, false, false, Materials.Ruby, Materials.Pentlandite, Materials.Ruby, Materials.Pentlandite);
