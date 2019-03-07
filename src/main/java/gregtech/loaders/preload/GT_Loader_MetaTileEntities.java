@@ -1372,7 +1372,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         makeWires(Materials.SuperconductorLuV, 2400, 0L, 0L, 8L, gregtech.api.enums.GT_Values.V[6], aBoolConst_0, true);
         makeWires(Materials.SuperconductorZPM, 2420, 0L, 0L, 8L, gregtech.api.enums.GT_Values.V[7], aBoolConst_0, true);
         makeWires(Materials.SuperconductorUV, 2440, 0L, 0L, 16L, gregtech.api.enums.GT_Values.V[8], aBoolConst_0, true);
-        makeWires(Materials.SuperconductorUHV, 2540, 0L, 0L, 24L, gregtech.api.enums.GT_Values.V[9], aBoolConst_0, true);
+        //makeWires(Materials.SuperconductorUHV, 2540, 0L, 0L, 24L, gregtech.api.enums.GT_Values.V[9], aBoolConst_0, true);
 
         makeWires(Materials.Ichorium, 2600, 2L, 2L, 12L, GT_Values.V[9], false, true);
 
