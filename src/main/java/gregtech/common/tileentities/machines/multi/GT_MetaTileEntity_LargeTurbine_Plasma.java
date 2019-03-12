@@ -192,6 +192,8 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         } else {
             this.mMaxProgresstime = 20;
             this.mEfficiencyIncrease = 200;
+            // Overvoltage is handled inside the MultiBlockBase when pushing out to dynamos.  no need to do it here.
+            /*
             if(this.mDynamoHatches.size()>0){
                 for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
                     if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt) {
@@ -199,6 +201,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                         explodeMultiblock();
                     }
             }
+            */
             return true;
         }
     }

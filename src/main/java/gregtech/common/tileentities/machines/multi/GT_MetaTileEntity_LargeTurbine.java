@@ -175,6 +175,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         } else {
             this.mMaxProgresstime = 1;
             this.mEfficiencyIncrease = 10;
+            // Overvoltage is handled inside the MultiBlockBase when pushing out to dynamos.  no need to do it here.
+            /*
             if(this.mDynamoHatches.size()>0){
                 for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
             	    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt) {
@@ -182,6 +184,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                         explodeMultiblock();
                     }
             }
+            */
             return true;
         }
     }
