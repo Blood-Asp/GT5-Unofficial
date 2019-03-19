@@ -219,7 +219,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.powelitelitiumgiant", true, 150, 160, 100, 10, 32, false, false, false, Materials.Powellite, Materials.Lithium, Materials.Powellite, Materials.Lithium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.adamantiumaluminiumgiant", true, 155, 165, 100, 10, 32, false, false, false, Materials.Adamantium, Materials.Aluminium, Materials.Adamantium, Materials.Aluminium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.molybdengiant", true, 160, 170, 100, 10, 32, false, false, false, Materials.Molybdenite, Materials.Molybdenum, Materials.Molybdenite, Materials.Molybdenum);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.chrometitangiant", true, 165, 175, 100, 10, 32, false, false, false, Materials.Chromite, Materials.Ilmenite, Materials.Chromite, Materials.Ilmenite);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.chrometitangiant", true, 165, 175, 100, 10, 32, false, false, false, Materials.Chromite, Materials.Titanium, Materials.Chromite, Materials.Titanium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.uvarovitegiant", true, 170, 180, 100, 10, 32, false, false, false, Materials.Uvarovite, Materials.Perlite, Materials.Uvarovite, Materials.Perlite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.zinctitangiant", true, 175, 185, 100, 10, 32, false, false, false, Materials.Sphalerite, Materials.Ilmenite, Materials.Sphalerite, Materials.Ilmenite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.rubynickelgiant", true, 180, 190, 100, 10, 32, false, false, false, Materials.Ruby, Materials.Pentlandite, Materials.Ruby, Materials.Pentlandite);
