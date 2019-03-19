@@ -104,7 +104,7 @@ public class GT_Worldgenloader
         
         //TODO: GTNH Custom Small Ores 
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.osmium",true,10,30,8,false, false, false, Materials.Osmium);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.titanium",true,40,180,8,false, false, false, Materials.Titanium);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.titanium",true,10,180,32,false, false, false, Materials.Titanium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.meteoriciron",true,50,70,8,false, false, false, Materials.MeteoricIron);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.firestone",true,5,15,2,false, false, false, Materials.Firestone);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.neutronium",true,5,15,8,false, false, false, Materials.Neutronium);
