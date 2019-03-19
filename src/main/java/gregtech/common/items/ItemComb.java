@@ -288,6 +288,7 @@ public class ItemComb extends Item {
 		addSpecialCentLV(tComb, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Tin, 1), 60);
 		addProcessLV(tComb, Materials.Tin, 100);
 		addProcessLV(tComb, Materials.Cassiterite, 85);
+		addProcessLV(tComb, Materials.CassiteriteSand, 65);
 		tComb = getStackForType(CombType.LEAD);
 		addSpecialCentLV(tComb, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Lead, 1), 45);
 		addProcessLV(tComb, Materials.Lead, 100);
