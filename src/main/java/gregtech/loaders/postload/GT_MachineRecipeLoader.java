@@ -2682,7 +2682,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             		new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 1},
             		new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 1},
             		new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 1},
-            		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Naquadria, 4L),
+            		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.NaquadahAlloy, 4L),
             		GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmiridium, 4L),
             		ItemList.Field_Generator_LuV.get(2,o),
             		ItemList.Circuit_Wafer_UHPIC.get(32,o),
