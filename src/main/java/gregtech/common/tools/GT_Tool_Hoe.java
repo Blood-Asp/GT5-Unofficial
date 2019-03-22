@@ -74,7 +74,7 @@ public class GT_Tool_Hoe
 
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
         String tTool = aBlock.getHarvestTool(aMetaData);
-        return ((tTool != null) && (tTool.equals("hoe"))) || (aBlock.getMaterial() == Material.gourd);
+        return (tTool == null || (tTool.equals("hoe"))) || (aBlock.getMaterial() == Material.gourd);
     }
 
     public ItemStack getBrokenItem(ItemStack aStack) {
