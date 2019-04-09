@@ -2,6 +2,7 @@ package gregtech.api.metatileentity.implementations;
 
 import cofh.api.energy.IEnergyReceiver;
 import com.google.common.collect.Sets;
+import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Dyes;
@@ -17,6 +18,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_GC_Compat;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
@@ -29,12 +31,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.reactor.IReactorChamber;
-import micdoodle8.mods.galacticraft.api.power.EnergySource;
-import micdoodle8.mods.galacticraft.api.power.EnergySource.EnergySourceAdjacent;
-import micdoodle8.mods.galacticraft.api.power.IEnergyHandlerGC;
-import micdoodle8.mods.galacticraft.api.transmission.NetworkType;
-import micdoodle8.mods.galacticraft.api.transmission.tile.IConnector;
-import micdoodle8.mods.galacticraft.core.energy.EnergyConfigHandler;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -242,6 +239,8 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         return rUsedAmperes;
     }
 
+
+
     private long insertEnergyInto(TileEntity tTileEntity, byte tSide, long aVoltage, long aAmperage) {
         if (aAmperage == 0 || tTileEntity == null) return 0;
 
@@ -264,26 +263,10 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
             return 0;
         }
 
-        // GC Compat
-        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC) {
-            if (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDirection, NetworkType.POWER)) {
-                EnergySource eSource = new EnergySourceAdjacent(tDirection);
-
-                float tSizeToReceive = aVoltage * EnergyConfigHandler.IC2_RATIO, tStored = ((IEnergyHandlerGC)tTileEntity).getEnergyStoredGC(eSource);
-                if (tSizeToReceive >= tStored || tSizeToReceive <= ((IEnergyHandlerGC)tTileEntity).getMaxEnergyStoredGC(eSource) - tStored) {
-                    float tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
-                    if (tReceived > 0) {
-                        tSizeToReceive -= tReceived;
-                        while (tSizeToReceive > 0) {
-                            tReceived = ((IEnergyHandlerGC)tTileEntity).receiveEnergyGC(eSource, tSizeToReceive, false);
-                            if (tReceived < 1) break;
-                            tSizeToReceive -= tReceived;
-                        }
-                        return 1;
-                    }
-                }
-            }
-            return 0;
+        if (Loader.isModLoaded("GalacticraftCore")) {
+            long gc = GT_GC_Compat.insertEnergyInto(tTileEntity, aVoltage, tDirection);
+            if (gc != 2)
+                return gc;
         }
 
         // IC2 Compat
@@ -464,9 +447,7 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         if (coverBehavior instanceof GT_Cover_SolarPanel) return true;
 
         // ((tIsGregTechTileEntity && tIsTileEntityCable) && (tAlwaysLookConnected || tLetEnergyIn || tLetEnergyOut) ) --> Not needed
-
-        // GC Compat
-        if (GregTech_API.mGalacticraft && tTileEntity instanceof IEnergyHandlerGC && (!(tTileEntity instanceof IConnector) || ((IConnector)tTileEntity).canConnect(tDir, NetworkType.POWER)))
+        if (Loader.isModLoaded("GalacticraftCore") && GT_GC_Compat.canConnect(tTileEntity,tDir))
             return true;
 
         // AE2-p2p Compat

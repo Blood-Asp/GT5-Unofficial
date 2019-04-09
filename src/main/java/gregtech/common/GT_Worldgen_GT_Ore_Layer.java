@@ -51,6 +51,28 @@ public class GT_Worldgen_GT_Ore_Layer
     //public final boolean mAsteroid;
     public final String aTextWorldgen = "worldgen.";
 
+    @Deprecated
+    public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, boolean aMoon, boolean aMars, boolean aAsteroid, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
+        super(aName, sList, aDefault);
+        this.mOverworld =  false;
+        this.mNether = false;
+        this.mEnd = false;
+        this.mEndAsteroid =  false;
+        this.mMinY = (short) aMinY;
+        this.mMaxY = (short) aMaxY;
+        this.mWeight = (short)aWeight;
+        this.mDensity = (short) aDensity;
+        this.mSize = (short) Math.max(1, aSize);
+        this.mPrimaryMeta = (short) aPrimary.mMetaItemSubID;
+        this.mSecondaryMeta = (short) aSecondary.mMetaItemSubID;
+        this.mBetweenMeta = (short) aBetween.mMetaItemSubID;
+        this.mSporadicMeta = (short) aSporadic.mMetaItemSubID;
+        this.mRestrictBiome = "None";
+        if (mEnabled)
+            sWeight += this.mWeight;
+    }
+
+
     public GT_Worldgen_GT_Ore_Layer(String aName, boolean aDefault, int aMinY, int aMaxY, int aWeight, int aDensity, int aSize, boolean aOverworld, boolean aNether, boolean aEnd, Materials aPrimary, Materials aSecondary, Materials aBetween, Materials aSporadic) {
         super(aName, sList, aDefault);
         this.mOverworld = GregTech_API.sWorldgenFile.get(aTextWorldgen + this.mWorldGenName, "Overworld", aOverworld);
