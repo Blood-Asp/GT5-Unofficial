@@ -43,7 +43,7 @@ public enum CombType {
     THAUMINITE("thauminite", true, Materials._NULL, 50),
     SHADOWMETAL("shadowmetal", true, Materials.Shadow, 50),
     DIVIDED("divided", true, Materials.Unstable, 40),
-    SPARKELING("sparkeling", true, Materials.NetherStar, 40),
+    SPARKELING("sparkling", true, Materials.NetherStar, 40),
 
     //Gem Line
     STONE("stone", true, Materials._NULL, 70),
