@@ -29,7 +29,8 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
     }
 
     private boolean registerStandardOreRecipes(OrePrefixes aPrefix, Materials aMaterial, ItemStack aOreStack, int aMultiplier) {
-        if ((aOreStack == null) || (aMaterial == null)) return false;
+        if ((aOreStack == null) || (aMaterial == null))
+            return false;
         GT_ModHandler.addValuableOre(GT_Utility.getBlockFromStack(aOreStack), aOreStack.getItemDamage(), aMaterial.mOreValue);
         Materials tMaterial = aMaterial.mOreReplacement;
         Materials tPrimaryByMaterial = null;
@@ -71,8 +72,10 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
             gregtech.api.util.GT_Recipe.GT_Recipe_Map.sByProductList.addFakeRecipe(false, new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.ore, aMaterial, aOreStack, 1L)}, (ItemStack[]) tByProductStacks.toArray(new ItemStack[tByProductStacks.size()]), null, null, null, null, 0, 0, 0);
         }
 
-        if (tPrimaryByMaterial == null) tPrimaryByMaterial = tMaterial;
-        if (tPrimaryByProduct == null) tPrimaryByProduct = tDust;
+        if (tPrimaryByMaterial == null)
+            tPrimaryByMaterial = tMaterial;
+        if (tPrimaryByProduct == null)
+            tPrimaryByProduct = tDust;
         boolean tHasSmelting = false;
 
         if (tSmeltInto != null) {

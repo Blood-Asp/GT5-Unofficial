@@ -41,6 +41,7 @@ public class GT_MetaTileEntity_ImplosionCompressor
                 "1x Muffler Hatch (Any casing)",
                 "1x Energy Hatch (Any casing)",
                 "Solid Steel Machine Casings for the rest (16 at least!)",
+                "Casings can be replaced with Explosion Warning Signs",
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 

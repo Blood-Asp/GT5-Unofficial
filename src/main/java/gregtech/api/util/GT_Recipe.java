@@ -275,7 +275,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
     public static void reInit() {
         GT_Log.out.println("GT_Mod: Re-Unificating Recipes.");
-        for (GT_Recipe_Map tMapEntry : GT_Recipe_Map.sMappings) tMapEntry.reInit();
+        for (GT_Recipe_Map tMapEntry : GT_Recipe_Map.sMappings)
+            tMapEntry.reInit();
     }
 
     // -----

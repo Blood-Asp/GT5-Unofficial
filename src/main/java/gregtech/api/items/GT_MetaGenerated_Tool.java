@@ -462,9 +462,18 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
 
     @Override
     public float getDigSpeed(ItemStack aStack, Block aBlock, int aMetaData) {
-        if (!isItemStackUsable(aStack)) return 0.0F;
+
+        if (!isItemStackUsable(aStack))
+            return 0.0F;
+
         IToolStats tStats = getToolStats(aStack);
-        if (tStats == null || Math.max(0, getHarvestLevel(aStack, "")) < aBlock.getHarvestLevel(aMetaData)) return 0.0F;
+
+        if (tStats == null || Math.max(0, getHarvestLevel(aStack, "")) < aBlock.getHarvestLevel(aMetaData))
+            return 0.0F;
+
+        if (aBlock.getHarvestLevel(aMetaData) == 0 && !tStats.isMinableBlock(aBlock, (byte) aMetaData))
+            return Math.min(Math.max(Float.MIN_NORMAL, ((tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed) /2)),1.0F);
+
         return tStats.isMinableBlock(aBlock, (byte) aMetaData) ? Math.max(Float.MIN_NORMAL, tStats.getSpeedMultiplier() * getPrimaryMaterial(aStack).mToolSpeed) : 0.0F;
     }
 
