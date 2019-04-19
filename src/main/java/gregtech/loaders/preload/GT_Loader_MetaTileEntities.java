@@ -62,6 +62,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_FrostProof.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Aluminium), 'F', OrePrefixes.frameGt.get(Materials.Aluminium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_CleanStainlessSteel.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.StainlessSteel), 'F', OrePrefixes.frameGt.get(Materials.StainlessSteel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_RobustTungstenSteel.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.TungstenSteel), 'F', OrePrefixes.frameGt.get(Materials.TungstenSteel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Casing_RobustHSSG.get(2L, new Object[0]),bits,new Object[]{"PhP", "EFE", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.HSSG), 'E',OrePrefixes.plate.get(Materials.Europium),'F', ItemList.Casing_RobustTungstenSteel});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_MiningOsmiridium.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Osmiridium), 'F', OrePrefixes.frameGt.get(Materials.Osmiridium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Turbine.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.Magnalium), 'F', OrePrefixes.frameGt.get(Materials.BlueSteel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_Turbine1.get(2L, new Object[0]), bits, new Object[]{"PhP", "PFP", aTextPlateWrench, 'P', OrePrefixes.plate.get(Materials.StainlessSteel), 'F', ItemList.Casing_Turbine});
@@ -1179,6 +1180,11 @@ public class GT_Loader_MetaTileEntities implements Runnable {
 
         ItemList.Processing_Array.set(new GT_MetaTileEntity_ProcessingArray(1199, "multimachine.processingarray", "Processing Array").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Processing_Array.get(1L, new Object[0]), bitsd, new Object[]{"CTC", "FMF", "CBC", 'M', ItemList.Hull_EV, 'B', OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.Elite), 'F', ItemList.Robot_Arm_EV, 'T', ItemList.Energy_LapotronicOrb});
+
+       if(GT_Mod.gregtechproxy.mEnableAdvProcessingArray) {
+            ItemList.Advanced_Processing_Array.set(new GT_MetaTileEntity_AdvancedProcessingArray(1188, "multimachine.advancedprocessingarray", "Advanced Processing Array").getStackForm(1L));
+            GT_ModHandler.addCraftingRecipe(ItemList.Advanced_Processing_Array.get(1L, new Object[0]), bitsd, new Object[]{"RRR", "CPC", "CPC", 'R', ItemList.Robot_Arm_LuV, 'C', OrePrefixes.circuit.get(Materials.Master), 'P', ItemList.Processing_Array});
+       }
 
         ItemList.Distillation_Tower.set(new GT_MetaTileEntity_DistillationTower(1126, "multimachine.distillationtower", "Distillation Tower").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Distillation_Tower.get(1L, new Object[0]), bitsd, new Object[]{"CBC", "FMF", "CBC", 'M', ItemList.Hull_EV, 'B', OrePrefixes.pipeLarge.get(Materials.StainlessSteel), 'C', OrePrefixes.circuit.get(Materials.Data), 'F', ItemList.Electric_Pump_EV});
