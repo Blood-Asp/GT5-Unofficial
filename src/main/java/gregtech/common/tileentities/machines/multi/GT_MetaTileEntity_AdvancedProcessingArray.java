@@ -310,7 +310,7 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
                                 if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings8) {
                                     return false;
                                 }
-                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0) {
+                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
                                     return false;
                                 }
                                 tAmount++;
@@ -328,7 +328,7 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
                                 if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings8) {
                                     return false;
                                 }
-                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 0) {
+                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != 2) {
                                     return false;
                                 }
                                 tAmount++;
