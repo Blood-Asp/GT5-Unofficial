@@ -670,7 +670,7 @@ public class GT_Mod implements IGT_Mod {
             }
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
-        if (Loader.isModLoaded("forestry"))
+        if (Loader.isModLoaded("Forestry"))
             new GT_Bees();
 		
 		//Disable Low Grav regardless of config if Cleanroom is disabled.
@@ -789,7 +789,7 @@ public class GT_Mod implements IGT_Mod {
             }
         }
         
-        if (Loader.isModLoaded("forestry")) {
+        if (Loader.isModLoaded("Forestry")) {
             GT_Forestry_Compat.transferCentrifugeRecipes();
             GT_Forestry_Compat.transferSqueezerRecipes();
         }
@@ -896,7 +896,7 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
         GT_Log.out.println("GT_Mod: Adding Fake Recipes for NEI");
         
-        if (Loader.isModLoaded("forestry"))
+        if (Loader.isModLoaded("Forestry"))
             GT_Forestry_Compat.populateFakeNeiRecipes();
         
         if (ItemList.IC2_Crop_Seeds.get(1L) != null) {
