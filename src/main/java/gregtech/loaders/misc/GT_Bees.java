@@ -15,6 +15,8 @@ import gregtech.loaders.misc.GT_BeeDefinition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_FR;
+
 public class GT_Bees {
 
     public static IAlleleInteger noFertility;
@@ -39,7 +41,7 @@ public class GT_Bees {
     public static ItemComb combs;
 
     public GT_Bees() {
-        if (Loader.isModLoaded("Forestry") && GT_Mod.gregtechproxy.mGTBees) {
+        if (Loader.isModLoaded(MOD_ID_FR) && GT_Mod.gregtechproxy.mGTBees) {
             GT_AlleleHelper.initialisation();
             setupGTAlleles();
             propolis = new ItemPropolis();

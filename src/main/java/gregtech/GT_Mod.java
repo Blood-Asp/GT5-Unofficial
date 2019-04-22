@@ -62,6 +62,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_FR;
+
 @Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false,
         dependencies =  " required-after:IC2;" +
                         " after:dreamcraft;"+
@@ -670,7 +672,7 @@ public class GT_Mod implements IGT_Mod {
             }
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
 
-        if (Loader.isModLoaded("forestry"))
+        if (Loader.isModLoaded(MOD_ID_FR))
             new GT_Bees();
 		
 		//Disable Low Grav regardless of config if Cleanroom is disabled.
@@ -789,7 +791,7 @@ public class GT_Mod implements IGT_Mod {
             }
         }
         
-        if (Loader.isModLoaded("forestry")) {
+        if (Loader.isModLoaded(MOD_ID_FR)) {
             GT_Forestry_Compat.transferCentrifugeRecipes();
             GT_Forestry_Compat.transferSqueezerRecipes();
         }
@@ -896,7 +898,7 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
         GT_Log.out.println("GT_Mod: Adding Fake Recipes for NEI");
         
-        if (Loader.isModLoaded("forestry"))
+        if (Loader.isModLoaded(MOD_ID_FR))
             GT_Forestry_Compat.populateFakeNeiRecipes();
         
         if (ItemList.IC2_Crop_Seeds.get(1L) != null) {

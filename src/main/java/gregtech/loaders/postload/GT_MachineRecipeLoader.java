@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_FR;
+
 public class GT_MachineRecipeLoader implements Runnable {
     private final MaterialStack[][] mAlloySmelterList = {
             {new MaterialStack(Materials.Tetrahedrite, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 3L)},
@@ -1910,7 +1912,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 8), GT_Values.NF, 1, EnumCube.COKE_BLOCK.getItem(8), Materials.Creosote.getFluid(32000), 2560, 64);
             GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 8), Materials.Nitrogen.getGas(1000), 2, EnumCube.COKE_BLOCK.getItem(8), Materials.Creosote.getFluid(32000), 1280, 96);
         }
-        if(Loader.isModLoaded("Forestry")) {
+        if(Loader.isModLoaded(MOD_ID_FR)) {
             GT_Values.RA.addPyrolyseRecipe(GT_ModHandler.getModItem(aTextForestry, "fertilizerBio", 4L), Materials.Water.getFluid(4000), 1, GT_Values.NI, Materials.Biomass.getFluid(5000), 900, 10);
             GT_Values.RA.addPyrolyseRecipe(GT_ModHandler.getModItem(aTextForestry, "mulch", 32L), Materials.Water.getFluid(4000), 1, GT_Values.NI, Materials.Biomass.getFluid(5000), 900, 10);
         }
