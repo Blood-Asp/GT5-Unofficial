@@ -1081,6 +1081,25 @@ public class GT_Loader_MetaTileEntities implements Runnable {
 
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_LV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_LV, 'E', ItemList.Electric_Motor_LV, 'C', OrePrefixes.circuit.get(Materials.Basic), 'W', OrePrefixes.cableGt01.get(Materials.Tin), 'S', ItemList.Sensor_LV});
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_MV_Miner.get(1L), bitsd, new Object[]{"EEE", aTextWireHull, "CSC", 'M', ItemList.Hull_MV, 'E', ItemList.Electric_Motor_MV, 'C', OrePrefixes.circuit.get(Materials.Good), 'W', OrePrefixes.cableGt01.get(Materials.Copper), 'S', ItemList.Sensor_MV});
+
+        ItemList.Machine_LV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(681,"basicmachine.organicreplicator.tier.01","Basic Organic Replicator",1).getStackForm(1L));
+        ItemList.Machine_MV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(682,"basicmachine.organicreplicator.tier.02","Advanced Organic Replicator",2).getStackForm(1L));
+        ItemList.Machine_HV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(683,"basicmachine.organicreplicator.tier.03","Advanced Organic Replicator II",3).getStackForm(1L));
+        ItemList.Machine_EV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(684,"basicmachine.organicreplicator.tier.04","Advanced Organic Replicator III",4).getStackForm(1L));
+        ItemList.Machine_IV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(685,"basicmachine.organicreplicator.tier.05","Advanced Organic Replicator IV",5).getStackForm(1L));
+        ItemList.Machine_LuV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(686,"basicmachine.organicreplicator.tier.06","Advanced Organic Replicator V",6).getStackForm(1L));
+        ItemList.Machine_ZPM_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(687,"basicmachine.organicreplicator.tier.07","Advanced Organic Replicator VI",7).getStackForm(1L));
+        ItemList.Machine_UV_OrganicReplicator.set(new GT_MetaTileEntity_OrganicReplicator(688,"basicmachine.organicreplicator.tier.08","Advanced Organic Replicator VII",8).getStackForm(1L));
+
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_LV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_LV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Basic),'F',ItemList.Field_Generator_LV,'W',OrePrefixes.cableGt01.get(Materials.Tin)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_MV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_MV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Good),'F',ItemList.Field_Generator_MV,'W',OrePrefixes.cableGt01.get(Materials.Copper)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_HV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_HV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Advanced),'F',ItemList.Field_Generator_HV,'W',OrePrefixes.cableGt01.get(Materials.Gold)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_EV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_EV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Data),'F',ItemList.Field_Generator_EV,'W',OrePrefixes.cableGt01.get(Materials.Aluminium)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_IV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_IV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Elite),'F',ItemList.Field_Generator_IV,'W',OrePrefixes.cableGt01.get(Materials.Tungsten)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_LuV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_LuV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Master),'F',ItemList.Field_Generator_LuV,'W',OrePrefixes.cableGt01.get(Materials.VanadiumGallium)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_ZPM_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_ZPM,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Ultimate),'F',ItemList.Field_Generator_ZPM,'W',OrePrefixes.cableGt01.get(Materials.Naquadah)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Machine_UV_OrganicReplicator.get(1L),bitsd,new Object[]{"CRC","WFW","CMC",'M',ItemList.Hull_UV,'R',Ic2Items.crop,'C',OrePrefixes.circuit.get(Materials.Superconductor),'F',ItemList.Field_Generator_UV,'W',OrePrefixes.cableGt01.get(Materials.NaquadahAlloy)});
+
     }
 
     private static void run3() {
