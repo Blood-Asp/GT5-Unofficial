@@ -26,6 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
@@ -429,76 +430,29 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             aCleanroom = false;
         }
 
-        if (aOutput1 == null) {
+        if (!GT_Utility.isStackValid(aOutput1)) {
             return false;
         }
 
         boolean ret = false;
 
+        for (int oreID : OreDictionary.getOreIDs(aOutput1)) {
+            if (OreDictionary.getOreName(oreID).contains("circuit")){
+                return this.addAssemblerRecipeNonOD(aInputs, aFluidInput, aOutput1, aDuration, aEUt, aCleanroom);
+            }
+        }
+
         for (int i = 0; i < aInputs.length; ++i) {
-            if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitGood")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitData")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitElite")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitMaster")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitUltimate")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Superconductor, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitSuperconductor")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitInfinite")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitBio")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
+            for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
+                String odName = OreDictionary.getOreName(oreID);
+                if (odName.contains("circuit")) {
+                    for (ItemStack tStack : GT_OreDictUnificator.getOres(odName)) {
+                        if (!GT_Utility.isStackValid(tStack))
+                            continue;
+                        aInputs[i] = new ItemStack(tStack.getItem(),aInputs[i].stackSize,tStack.getItemDamage());
+                        GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
+                        ret = true;
+                    }
                 }
             }
         }
@@ -511,7 +465,29 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return ret;
     }
 
-    public boolean addWiremillRecipe(ItemStack aInput, ItemStack aOutput, int aDuration, int aEUt) {
+    public boolean addAssemblerRecipeNonOD(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt, boolean aCleanroom) {
+        if (areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
+            return false;
+        }
+
+        if ((aDuration = GregTech_API.sRecipeFile.get("assembling", aOutput1, aDuration)) <= 0) {
+            return false;
+        }
+
+        if (!GT_Mod.gregtechproxy.mEnableCleanroom){
+            aCleanroom = false;
+        }
+
+        if (!GT_Utility.isStackValid(aOutput1)) {
+            return false;
+        }
+
+        GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput1}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
+        return true;
+    }
+
+
+        public boolean addWiremillRecipe(ItemStack aInput, ItemStack aOutput, int aDuration, int aEUt) {
         if ((aInput == null) || (aOutput == null)) {
             return false;
         }
@@ -1314,7 +1290,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
 
     public boolean addCircuitAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput, int aDuration, int aEUt, boolean aCleanroom) {
 
-        if (areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
+        if (this.areItemsAndFluidsBothNull(aInputs, new FluidStack[]{aFluidInput})) {
             return false;
         }
 
@@ -1326,76 +1302,29 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             aCleanroom = false;
         }
 
-        if (aOutput == null) {
+        if (!GT_Utility.isStackValid(aOutput)) {
             return false;
         }
 
         boolean ret = false;
 
+        for (int oreID : OreDictionary.getOreIDs(aOutput)) {
+            if (OreDictionary.getOreName(oreID).contains("circuit")){
+                return this.addCircuitAssemblerRecipeNonOredicted(aInputs, aFluidInput, aOutput, aDuration, aEUt, aCleanroom);
+            }
+        }
+
         for (int i = 0; i < aInputs.length; ++i) {
-            if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitGood")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitData")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitElite")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitMaster")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitUltimate")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Superconductor, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitSuperconductor")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitInfinite")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
-                }
-            } else if (GT_Utility.areStacksEqual(aInputs[i], GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1L))) {
-                for (ItemStack tStack : GT_OreDictUnificator.getOres("circuitBio")) {
-                    if (!GT_Utility.isStackValid(tStack))
-                        continue;
-                    aInputs[i] = tStack;
-                    GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
-                    ret = true;
+            for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
+                String odName = OreDictionary.getOreName(oreID);
+                if (odName.contains("circuit")) {
+                    for (ItemStack tStack : GT_OreDictUnificator.getOres(odName)) {
+                        if (!GT_Utility.isStackValid(tStack))
+                            continue;
+                        aInputs[i] = new ItemStack(tStack.getItem(),aInputs[i].stackSize,tStack.getItemDamage());
+                        GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes.addRecipe(true, aInputs, new ItemStack[]{aOutput}, null, new FluidStack[]{aFluidInput}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
+                        ret = true;
+                    }
                 }
             }
         }
