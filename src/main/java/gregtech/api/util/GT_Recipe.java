@@ -10,6 +10,7 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
 import gregtech.nei.GT_NEI_DefaultHandler.FixedPositionedStack;
+import ic2.core.Ic2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
 
@@ -335,6 +335,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         return isRecipeInputEqual(aDecreaseStacksizeBySuccess, false, aFluidInputs, aInputs);
     }
 
+    public static boolean GTppRecipeHelper;
+
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
         int amt;
@@ -365,6 +367,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 boolean temp = true;
                 for (ItemStack aStack : aInputs) {
                     if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                        if (GTppRecipeHelper) {//remove once the fix is out
+                            if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
+                                if (!GT_Utility.areStacksEqual(aStack, tStack, false))
+                                    continue;
+                            }
+                        }
                         if (aDontCheckStackSizes) {
                             temp = false;
                             break;
@@ -410,6 +418,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                         amt = tStack.stackSize;
                         for (ItemStack aStack : aInputs) {
                             if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                                if (GTppRecipeHelper) {
+                                    if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
+                                        if (!GT_Utility.areStacksEqual(aStack, tStack, false))
+                                            continue;
+                                    }
+                                }
                                 if (aDontCheckStackSizes){
                                     aStack.stackSize -= amt;
                                     break;
