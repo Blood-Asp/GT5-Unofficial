@@ -31,7 +31,6 @@ import net.minecraft.nbt.NBTTagString;
 
 public class GT_MetaTileEntity_Scanner
         extends GT_MetaTileEntity_BasicMachine {
-
     public GT_MetaTileEntity_Scanner(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Scans Crops and other things.", 1, 1, "Scanner.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_SCANNER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_SCANNER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_SCANNER)});
     }
@@ -147,41 +146,6 @@ public class GT_MetaTileEntity_Scanner
                     this.mEUt = (32 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
                     return 2;
                 }
-
-                if ((aStack.getItem().getUnlocalizedName().contains("Schematic")||aStack.getItem().getUnlocalizedName().contains("schematic"))&&!aStack.getItem().getUnlocalizedName().contains("Schematics")){
-                    String sTier ="";
-
-                    if (aStack.getItem().getIdFromItem(aStack.getItem()) == GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem().getIdFromItem(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem())) {
-                        if (aStack.getItemDamage()==0 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).copy().toString()))
-                            sTier = "100";
-                        else if (aStack.getItemDamage()==1 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 1).copy().toString()))
-                            sTier = "2";
-                    }
-
-                    else if (aStack.getItem().getIdFromItem(aStack.getItem()) == GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).getItem().getIdFromItem(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).getItem())) {
-                        if(aStack.getItemDamage()==0 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 0).copy().toString()))
-                            sTier = "3";
-                        else if(aStack.getItemDamage()==1 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 1).copy().toString()))
-                            sTier = "101";
-                        else if(aStack.getItemDamage()==2 && aStack.toString().equals(GT_ModHandler.getModItem("GalacticraftMars", "item.schematic", 1L, 2).copy().toString()))
-                            sTier = "102";
-                    }
-
-                    else if (aStack.getUnlocalizedName().matches(".*\\d+.*"))
-                        sTier = aStack.getUnlocalizedName().split("(?<=\\D)(?=\\d)")[1].substring(0, 1);
-                    else
-                        sTier = "1";
-
-                    getSpecialSlot().stackSize -= 1;
-                    aStack.stackSize -= 1;
-
-                    this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{getSpecialSlot()});
-                    this.mOutputItems[0].setTagCompound(GT_Utility.getNBTContainingShort(new NBTTagCompound(), "rocket_tier", Short.parseShort(sTier) ));
-
-                    this.mMaxProgresstime = (500 / (1 << this.mTier - 1));
-                    this.mEUt = (2 * (1 << this.mTier - 1) * (1 << this.mTier - 1));
-                }
-
             }
             if (getSpecialSlot() == null && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) {
                 if (GT_Utility.ItemNBT.getBookTitle(aStack).equals("Raw Prospection Data")) {
