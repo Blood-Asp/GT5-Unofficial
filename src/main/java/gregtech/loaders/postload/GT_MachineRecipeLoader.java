@@ -1428,7 +1428,7 @@ public class GT_MachineRecipeLoader implements Runnable {
             //GT_Values.RA.addPulveriserRecipe(GT_ModHandler.getModItem("GalacticraftMars", "tile.asteroidsBlock", 1L, 2), new ItemStack[]{GT_ModHandler.getModItem("GalacticraftMars", "tile.asteroidsBlock", 1L, 0)}, null, 400, 2);
             //GT_Values.RA.addCentrifugeRecipe(GT_ModHandler.getModItem("GalacticraftMars", "tile.asteroidsBlock", 1L, 0), null, null, Materials.Nitrogen.getGas(33), new ItemStack(Blocks.sand,1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminium, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Nickel, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Iron, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gallium, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 1), new int[]{5000,400,400,100,100,100}, 400, 8);
 
-            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("GalacticraftCore", "item.heavyPlating", 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.MeteoricIron, 2L), Materials.TungstenSteel.getMolten(36L), ItemList.Ingot_Heavy2.get(1L), 300, 1920);
+            GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("GalacticraftCore", "item.heavyPlating", 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.MeteoricIron, 2L), Materials.TungstenSteel.getMolten(48L), ItemList.Ingot_Heavy2.get(1L), 300, 1920);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("GalacticraftMars", "item.null", 1L, 3), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Desh, 4L), Materials.Iridium.getMolten(72L), ItemList.Ingot_Heavy3.get(1L), 300, 7680);
             GT_Values.RA.addImplosionRecipe(ItemList.Ingot_Heavy1.get(1L), 8, GT_ModHandler.getModItem("GalacticraftCore", "item.heavyPlating", 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.StainlessSteel, 2L));
             GT_Values.RA.addImplosionRecipe(ItemList.Ingot_Heavy2.get(1L), 16, GT_ModHandler.getModItem("GalacticraftMars", "item.null", 1L, 3), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.TungstenSteel, 3L));
@@ -2817,7 +2817,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                                         new ItemStack[]{
                                                 new ItemStack(Blocks.beacon),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1L),
-                                                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Thaumium, 1L),
+                                                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 1L),
                                                 ItemList.Sensor_MV.get(2L),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1L),
                                                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Thaumium, 1L),
@@ -2849,10 +2849,10 @@ public class GT_MachineRecipeLoader implements Runnable {
                                         new ItemStack[]{
                                                 new ItemStack(Blocks.beacon),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1L),
-                                                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Thaumium, 1L),
+                                                GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Thaumium, 1L),
                                                 ItemList.Sensor_HV.get(2L),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1L),
-                                                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 1L),
+                                                GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Titanium, 1L),
                                                 ItemList.Sensor_HV.get(2L)
                                         },
                                         ItemList.MagicEnergyConverter_MV.get(1L),
@@ -2881,10 +2881,10 @@ public class GT_MachineRecipeLoader implements Runnable {
                                         new ItemStack[]{
                                                 new ItemStack(Blocks.beacon),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1L),
-                                                GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Thaumium, 1L),
+                                                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Thaumium, 1L),
                                                 ItemList.Field_Generator_MV.get(1L),
                                                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1L),
-                                                GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Osmium, 1L),
+                                                GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 1L),
                                                 ItemList.Field_Generator_MV.get(1L)
                                         },
                                         ItemList.MagicEnergyConverter_HV.get(1L),
