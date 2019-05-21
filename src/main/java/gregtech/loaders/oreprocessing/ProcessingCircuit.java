@@ -20,6 +20,9 @@ public class ProcessingCircuit implements gregtech.api.interfaces.IOreRecipeRegi
             case "Elite":
             case "Master":
             case "Ultimate":
+            case "Superconductor":
+            case "Infinite":
+            case "Bio":
                 if (!gregtech.api.util.GT_OreDictUnificator.isBlacklisted(aStack)&&!aModName.equals("gregtech"))
                     GT_ModHandler.removeRecipeByOutput(aStack);
                 break;
