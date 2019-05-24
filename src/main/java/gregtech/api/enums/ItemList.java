@@ -538,6 +538,7 @@ public enum ItemList implements IItemContainer {
     //Generator_Naquadah_Mark_VI,
     Machine_Bronze_Boiler,
     Machine_Bronze_Boiler_Solar,
+    Machine_HP_Solar,
     Machine_Bronze_CraftingTable,
     Machine_Bronze_Furnace,
     Machine_Bronze_Macerator,
