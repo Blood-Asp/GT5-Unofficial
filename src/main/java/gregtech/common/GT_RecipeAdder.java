@@ -1267,7 +1267,8 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             				ItemStack uStack = GT_Utility.copyAmount(tAmount, tStack); 
             				if (GT_Utility.isStackValid(uStack)) {
             					uList.add(uStack);
-            					if (tInputs[i] == null) tInputs[i] = uStack;
+            					if (tInputs[i] == null)
+            					    tInputs[i] = uStack;
             				}
             			}
             			tAlts[i] = uList.toArray(new ItemStack[uList.size()]);
