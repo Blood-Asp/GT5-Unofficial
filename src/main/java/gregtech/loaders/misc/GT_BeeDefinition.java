@@ -26,6 +26,7 @@ import gregtech.common.bees.GT_Bee_Mutation;
 import gregtech.common.items.CombType;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.BiomeDictionary;
 import org.apache.commons.lang3.text.WordUtils;
@@ -67,7 +68,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY, "Industrious"), getSpecies(FORRESTRY, "Diligent"), 10);
-            tMutation.requireResource("blockClay");
+            tMutation.requireResource(Blocks.clay,0); //blockStainedHardenedClay
         }
     },
     SLIMEBALL(GT_BranchDefinition.ORGANIC, "SlimeBall", true, 0x4E9E55, 0x00FF15) {
