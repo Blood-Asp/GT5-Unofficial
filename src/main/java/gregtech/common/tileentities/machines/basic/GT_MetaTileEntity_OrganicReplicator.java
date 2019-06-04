@@ -23,7 +23,7 @@ public class GT_MetaTileEntity_OrganicReplicator extends GT_MetaTileEntity_Basic
     private static float UUMatterMultiplier = 2;
 
     public GT_MetaTileEntity_OrganicReplicator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, new String[]{"Copies seeds with efficiency: "+Math.min((aTier+5)*10,100)+"%","Uses UUMatter for each seed","The better crop the more UUMatter it needs"}, 1, 1, "OrganicReplicator.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("OVERLAY_BOTTOM")));
+        super(aID, aName, aNameRegional, aTier, 1, new String[]{"Copies seeds with efficiency: "+Math.min((aTier+5)*10,100)+"%","Uses UUMatter for each seed","The better crop the more UUMatter it needs","Can replicate only scanned seeds"}, 1, 1, "OrganicReplicator.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/organic_replicator/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("OVERLAY_BOTTOM")));
     }
 
     public GT_MetaTileEntity_OrganicReplicator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -53,11 +53,14 @@ public class GT_MetaTileEntity_OrganicReplicator extends GT_MetaTileEntity_Basic
                 int aResistance = ItemCropSeed.getResistanceFromStack(aStack);
                 CropCard v= Crops.instance.getCropCard(aStack);
                 int aCropTier = v.tier();
+                int UUMConsume =  Math.round((aCropTier*4+aGain+aGrowth+aResistance)*UUMatterMultiplier);
+                if(UUMConsume>tFluid.amount)
+                    return 0;
                 this.mEUt = ((int) gregtech.api.enums.GT_Values.V[this.mTier]);
                 this.mMaxProgresstime = (aCropTier+1)*EUMultiplier/ (1 << this.mTier - 1);
                 //setFillableStack(new FluidStack(getFillableStack().fluid,Math.round(getFillableStack().amount-(aCropTier*4+aGain+aGrowth+aResistance)*UUMatterMultiplier)));
                 FluidStack f = tFluid;
-                f.amount = ((int) (f.amount - (aCropTier*4+aGain+aGrowth+aResistance)*UUMatterMultiplier));
+                f.amount = ((int) (f.amount - UUMConsume));
                 this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{aStack});
                 this.mOutputItems[0].setTagCompound(tNBT);
                 if(getBaseMetaTileEntity().getRandomNumber(100) > efficiency){
