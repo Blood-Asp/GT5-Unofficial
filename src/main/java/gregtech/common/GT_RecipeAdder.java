@@ -27,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
 public class GT_RecipeAdder implements IGT_RecipeAdder {
@@ -443,6 +442,10 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         }
 
         for (int i = 0; i < aInputs.length; ++i) {
+            if (!GT_Utility.isStackValid(aInputs[i])) {
+                GT_FML_LOGGER.debug("GT_RecipeAdder: Invalid input for (" + aOutput1.toString() + ")");
+                continue;
+            }
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
                 if (odName.contains("circuit")) {
