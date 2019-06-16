@@ -364,9 +364,11 @@ public class GT_Utility {
     public static boolean isConnectableNonInventoryPipe(Object aTileEntity, int aSide) {
         if (aTileEntity == null) return false;
         checkAvailabilities();
-        if (TE_CHECK) if (aTileEntity instanceof IItemDuct) return true;
-        if (BC_CHECK) if (aTileEntity instanceof buildcraft.api.transport.IPipeTile)
+        if (TE_CHECK && aTileEntity instanceof IItemDuct) return true;
+        if (BC_CHECK && aTileEntity instanceof buildcraft.api.transport.IPipeTile)
             return ((buildcraft.api.transport.IPipeTile) aTileEntity).isPipeConnected(ForgeDirection.getOrientation(aSide));
+        if (GregTech_API.mTranslocator && aTileEntity instanceof codechicken.translocator.TileItemTranslocator) return true;
+
         return false;
     }
     /**
@@ -526,6 +528,17 @@ public class GT_Utility {
     public static byte moveOneItemStack(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce) {
         if (aTileEntity1 instanceof IInventory)
             return moveOneItemStack((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
+        return 0;
+    }
+
+    public  static  byte moveSomeItemStacks(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce, byte aTimes) {
+        byte movedItems = 0;
+        if (aTileEntity1 instanceof IInventory){
+            for (byte i = 0; i < aTimes; i++) {
+                movedItems += moveOneItemStack((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
+            }
+            return movedItems;
+        }
         return 0;
     }
 

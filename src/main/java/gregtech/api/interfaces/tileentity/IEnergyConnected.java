@@ -35,16 +35,13 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
      * Sided Energy Input
      */
     public boolean inputEnergyFrom(byte aSide);
+    public boolean inputEnergyFrom(byte aSide, boolean waitForActive);
 
     /**
      * Sided Energy Output
      */
     public boolean outputsEnergyTo(byte aSide);
-
-    /**
-     * Are we ready for energy state?
-     */
-    public boolean energyStateReady();
+    public boolean outputsEnergyTo(byte aSide, boolean waitForActive);
 
     /**
      * Utility for the Network
@@ -67,10 +64,6 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                             if (tColor >= 0 && tColor != aEmitter.getColorization()) continue;
                         }
                         rUsedAmperes += ((IEnergyConnected) tTileEntity).injectEnergyUnits(j, aVoltage, aAmperage - rUsedAmperes);
-//				} else if (tTileEntity instanceof IEnergySink) {
-//	        		if (((IEnergySink)tTileEntity).acceptsEnergyFrom((TileEntity)aEmitter, ForgeDirection.getOrientation(j))) {
-//	        			while (aAmperage > rUsedAmperes && ((IEnergySink)tTileEntity).demandedEnergyUnits() > 0 && ((IEnergySink)tTileEntity).injectEnergyUnits(ForgeDirection.getOrientation(j), aVoltage) < aVoltage) rUsedAmperes++;
-//	        		}
                     } else if (tTileEntity instanceof IEnergySink) {
                         if (((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) aEmitter, ForgeDirection.getOrientation(j))) {
                             while (aAmperage > rUsedAmperes && ((IEnergySink) tTileEntity).getDemandedEnergy() > 0 && ((IEnergySink) tTileEntity).injectEnergy(ForgeDirection.getOrientation(j), aVoltage, aVoltage) < aVoltage)

@@ -68,8 +68,8 @@ public class GregTech_API {
     /**
      * A List of all registered MetaTileEntities
      * <p/>
-     * 0 	-  749  are used by GregTech.
-     * 750	-  999  are reserved for Alkalus.
+     * 0    -  749  are used by GregTech.
+     * 750  -  999  are reserved for Alkalus.
      * 1000 -  2047 are used by GregTech.
      * 2048 -  2559 are reserved for OvermindDL.
      * 2560 -  3071 are reserved for Immibis.
@@ -87,11 +87,13 @@ public class GregTech_API {
      * 11264 - 12000 are reserved for Quantum64.
      * 12001 - 12500 are reserved for RedMage17.
      * 12501 - 13000 are reserved for bartimaeusnek.
-     * 13001 - 14999 are currently free.
+     * 13001 - 13100 are reserved for Techlone
+     * 13101 - 14999 are currently free.
      * 15000 - 16999 are reserved for TecTech.
-     * 17000 - 31000 are currently free.
-     * 31001 - 32000 are reserved for Alkalus.
+     * 17000 - 29999 are currently free.
+     * 30000 - 31999 are reserved for Alkalus.
      * 32001 - 32766 are currently free.
+     
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's
@@ -186,7 +188,7 @@ public class GregTech_API {
 
     public static Block sBlockOres1, sBlockOresUb1, sBlockOresUb2, sBlockOresUb3, sBlockOresGC, sBlockGem, sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
     public static Block sBlockGranites, sBlockConcretes, sBlockStones;
-    public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5, sBlockCasings8;
+    public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5,sBlockCasings8;
     /**
      * Getting assigned by the Config
      */
@@ -202,6 +204,9 @@ public class GregTech_API {
     public static boolean mMagneticraft = false;
     public static boolean mImmersiveEngineering = false;
     public static boolean mGTPlusPlus = false;
+    public static boolean mTranslocator = false;
+    public static boolean mTConstruct = false;
+    public static boolean mGalacticraft = false;
 
     public static boolean mUseOnlyGoodSolderingMaterials = false;
 

@@ -4,9 +4,9 @@ package gregtech.common.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GT_Values;
-import gregtech.common.GT_Network;
 import gregtech.common.items.GT_VolumetricFlask;
 import gregtech.common.net.MessageSetFlaskCapacity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -115,7 +115,7 @@ public final class GT_GUIContainerVolumetricFlask extends GuiContainer {
     protected void actionPerformed(GuiButton btn) {
         try {
             if (btn == apply) {
-                ((GT_Network) GT_Values.NW).networkWrapper.sendToServer(new MessageSetFlaskCapacity(Integer.parseInt(amount.getText())));
+                GT_Values.NW.sendToServer(new MessageSetFlaskCapacity(Integer.parseInt(amount.getText()), Minecraft.getMinecraft().thePlayer));
                 mc.thePlayer.closeScreen();
             }
 
