@@ -303,7 +303,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             if (mTimeStatistics.length > 0)
                 mTimeStatistics[mTimeStatisticsIndex = (mTimeStatisticsIndex + 1) % mTimeStatistics.length] = (int) tTime;
             if (tTime > 0 && tTime > (GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING*1000000) && mTickTimer > 1000 && getMetaTileEntity().doTickProfilingMessageDuringThisTick() && mLagWarningCount++ < 10)
-                GT_FML_LOGGER.warn("WARNING: Possible Lag Source at [%s,%s,%s] in Dimension %s with %s ns caused by an instance of %s", xCoord, yCoord, zCoord, worldObj.provider.dimensionId, tTime, getMetaTileEntity().getClass());
+                GT_FML_LOGGER.warn("WARNING: Possible Lag Source at ["+xCoord+","+yCoord+","+zCoord+"] in Dimension "+worldObj.provider.dimensionId+" with "+tTime+" ns caused by an instance of "+getMetaTileEntity().getClass());
         }
 
         mWorkUpdate = mInventoryChanged = false;
@@ -1204,7 +1204,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                 && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this))
             return true;
 
-        if (!isFill && mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) 
+        if (!isFill && mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal())
                 && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()),aFluid, this))
             return true;
 
@@ -1241,17 +1241,17 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public boolean canDrain(ForgeDirection aSide, Fluid aFluid) {
-        if (mTickTimer > 5 && canAccessData() && canMoveFluidOnSide(aSide, aFluid, false)) 
+        if (mTickTimer > 5 && canAccessData() && canMoveFluidOnSide(aSide, aFluid, false))
             return mMetaTileEntity.canDrain(aSide, aFluid);
         return false;
     }
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection aSide) {
-        if (canAccessData() 
+        if (canAccessData()
             && (aSide == ForgeDirection.UNKNOWN 
                 || (mMetaTileEntity.isLiquidInput((byte) aSide.ordinal())
-                    && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this)) 
+                    && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this))
                 || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this))
                     // Doesn't need to be connected to get Tank Info -- otherwise things can't connect
                )
