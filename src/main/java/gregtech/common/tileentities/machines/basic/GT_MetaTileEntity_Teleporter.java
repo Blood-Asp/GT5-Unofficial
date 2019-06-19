@@ -234,7 +234,10 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     }
 
     public boolean hasDimensionalTeleportCapability() {
-        return (this.mDebug) || (this.hasEgg) || (mFluid != null && mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 10);
+        if (sInterDimensionalTeleportAllowed == true) {
+            return (this.mDebug) || (this.hasEgg) || (mFluid != null && mFluid.isFluidEqual(Materials.Nitrogen.getPlasma(1)) && mFluid.amount >= 10);
+        }
+        return false;
     }
 
     public boolean isDimensionalTeleportAvailable() {
