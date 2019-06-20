@@ -21,7 +21,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_InputBus(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, getSlots(aTier), new String[]{
                 "Item Input for Multiblocks",
-                "Shift + right click with screwdriver to turn Sort mode on/off",
+                "Shift + right click with screwdriver to toggle automatic item shuffling",
                 "Capacity: " + getSlots(aTier) + " stack" + (getSlots(aTier) >= 2 ? "s" : "")});
     }
 
@@ -121,9 +121,8 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     protected void fillStacksIntoFirstSlots() {
         if (disableSort) {
             for (int i = 0; i < mInventory.length; i++)
-                for (int j = i + 1; j < mInventory.length; j++)
-                    if (mInventory[j] != null && mInventory[j].stackSize <= 0 && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
-                        GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+                if (mInventory[i] != null && mInventory[i].stackSize <= 0)
+                    mInventory[i] = null;
         } else {
             for (int i = 0; i < mInventory.length; i++)
                 for (int j = i + 1; j < mInventory.length; j++)
@@ -146,11 +145,9 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
 
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
-            return;
         if (aPlayer.isSneaking()) {
             disableSort = !disableSort;
-            GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Sort mode: " + (disableSort ? "Disabled" : "Enabled")));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Automatic Item Shuffling: " + (disableSort ? "Disabled" : "Enabled")));
         }
     }
 
