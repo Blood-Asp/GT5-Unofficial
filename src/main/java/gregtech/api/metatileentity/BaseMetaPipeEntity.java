@@ -20,6 +20,7 @@ import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.covers.GT_Cover_Fluidfilter;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -34,6 +35,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
@@ -76,6 +78,18 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             aNBT.setByte("mColor", mColor);
             aNBT.setByte("mStrongRedstone", mStrongRedstone);
             aNBT.setBoolean("mWorks", !mWorks);
+
+            for(int i=0;i < mCoverData.length; i++) {
+                if (GregTech_API.getCoverBehavior(mCoverSides[i]) instanceof GT_Cover_Fluidfilter) {
+                    final int fluidId = mCoverData[i] >>> 3;
+                    final Fluid fluid = FluidRegistry.getFluid(fluidId);
+                    if(fluid != null) {
+                        final String fluidName = FluidRegistry.getFluidName(fluid);
+                        aNBT.setString(String.format("fluidFilter%d", i), fluidName);
+                    }
+                }
+            }
+
         } catch (Throwable e) {
             GT_Log.err.println("Encountered CRITICAL ERROR while saving MetaTileEntity, the Chunk whould've been corrupted by now, but I prevented that. Please report immediately to GregTech Intergalactical!!!");
             e.printStackTrace(GT_Log.err);
@@ -134,7 +148,16 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             if (mCoverSides.length != 6) mCoverSides = new int[]{0, 0, 0, 0, 0, 0};
             if (mSidedRedstone.length != 6) mSidedRedstone = new byte[]{0, 0, 0, 0, 0, 0};
 
-            for (byte i = 0; i < 6; i++) mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
+            for (byte i = 0; i < 6; i++) {
+                mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
+                if(mCoverBehaviors[i] instanceof GT_Cover_Fluidfilter) {
+                    final String filterKey = String.format("fluidFilter%d", i);
+                    if (aNBT.hasKey(filterKey)) {
+                        mCoverData[i] = (mCoverData[i] & 7) | (FluidRegistry.getFluidID(aNBT.getString(filterKey)) << 3);
+                    }
+                }
+            }
+
 
             if (mID != 0 && createNewMetatileEntity(mID)) {
                 NBTTagList tItemList = aNBT.getTagList("Inventory", 10);
