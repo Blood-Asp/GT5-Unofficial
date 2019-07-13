@@ -995,6 +995,11 @@ public class GT_Mod implements IGT_Mod {
     }
 
     @Mod.EventHandler
+    public void onServerAboutToStart(FMLServerAboutToStartEvent aEvent){
+        gregtechproxy.onServerAboutToStart();
+    }
+
+    @Mod.EventHandler
     public void onServerStarting(FMLServerStartingEvent aEvent) {
         try {
             for (Runnable tRunnable : GregTech_API.sBeforeGTServerstart) {
