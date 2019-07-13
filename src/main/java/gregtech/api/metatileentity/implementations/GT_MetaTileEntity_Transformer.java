@@ -6,14 +6,18 @@ import cofh.api.energy.IEnergyStorage;
 import crazypants.enderio.machine.capbank.TileCapBank;
 import crazypants.enderio.machine.capbank.network.ICapBankNetwork;
 import crazypants.enderio.power.IPowerContainer;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Proxy;
 import ic2.api.energy.tile.IEnergySource;
+import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorChamber;
+import ic2.core.block.reactor.tileentity.TileEntityNuclearReactorElectric;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -150,6 +154,9 @@ public class GT_MetaTileEntity_Transformer extends GT_MetaTileEntity_TieredMachi
                     TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(i);
                     if (tTileEntity instanceof IReactorChamber) {
                         tTileEntity = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
+                    }
+                    if(tTileEntity instanceof IReactor && !GT_Mod.gregtechproxy.reactorsDone.add((IReactor) tTileEntity)){
+                        continue;
                     }
                     if (tTileEntity instanceof IEnergySource && !(tTileEntity instanceof IPartHost) && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, ForgeDirection.getOrientation(GT_Utility.getOppositeSide(i)))) {
                         long tEU = Math.min(maxEUInput(), (long) ((IEnergySource) tTileEntity).getOfferedEnergy());
