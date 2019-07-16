@@ -2115,6 +2115,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         this.addProcess(tCrop,Materials.Titanium,100, true);
         this.addProcess(tCrop,Materials.Ilmenite,100, false);
         this.addProcess(tCrop,Materials.Bauxite,100, false);
+        this.addProcess(tCrop,Materials.Rutile,100, false);
 		tCrop = ItemList.Crop_Drop_Scheelite.get(1);
         this.addProcess(tCrop,Materials.Scheelite,100, true);
         this.addProcess(tCrop,Materials.Tungstate,100, false);
