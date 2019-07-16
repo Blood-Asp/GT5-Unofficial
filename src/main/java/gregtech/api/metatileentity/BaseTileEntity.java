@@ -461,10 +461,6 @@ public abstract class BaseTileEntity extends TileEntity implements IHasWorldObje
     protected void createIc2Sink() {
         if(ic2EnergySink == null && isServerSide() && shouldJoinIc2Enet()) {
             ic2EnergySink = new TileIC2EnergySink((IGregTechTileEntity)this);
-            ic2EnergySink.xCoord = xCoord;
-            ic2EnergySink.yCoord = yCoord;
-            ic2EnergySink.zCoord = zCoord;
-            ic2EnergySink.setWorldObj(worldObj);
         }
     }
 

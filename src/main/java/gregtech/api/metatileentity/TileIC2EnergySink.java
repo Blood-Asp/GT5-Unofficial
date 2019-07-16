@@ -22,6 +22,10 @@ public class TileIC2EnergySink extends TileEntity implements IEnergySink {
         if (metaTile instanceof IMetaTileEntityCable) {
             cableMeta = (GT_MetaPipeEntity_Cable) metaTile;
         }
+        setWorldObj(meta.getWorld());
+        xCoord = meta.getXCoord();
+        yCoord = meta.getYCoord();
+        zCoord = meta.getZCoord();
     }
     /*
      *
