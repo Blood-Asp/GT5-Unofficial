@@ -378,6 +378,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             oRedstone = mRedstone;
                             issueBlockUpdate();
                         }
+                        if(mTickTimer == 10) joinEnet();
 
                         if (xCoord != oX || yCoord != oY || zCoord != oZ) {
                             oX = xCoord;
@@ -416,6 +417,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                     }
                                 }
                             }
+
 
                             if (mMetaTileEntity.isEnetOutput() && oOutput > 0) {
                                 long tOutputVoltage = Math.max(oOutput, oOutput + (1 << GT_Utility.getTier(oOutput))), tUsableAmperage = Math.min(getOutputAmperage(), (getStoredEU() - mMetaTileEntity.getMinimumStoredEU()) / tOutputVoltage);
@@ -746,6 +748,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             if (!mHasEnoughEnergy)
                 tList.add(EnumChatFormatting.RED+"ATTENTION: This Device needs more power."+EnumChatFormatting.RESET);
         }
+        if(joinedIc2Enet)
+            tList.add("Joined IC2 ENet");
         return mMetaTileEntity.getSpecialDebugInfo(this, aPlayer, aLogLevel, tList);
     }
 
@@ -816,6 +820,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mFacing = aFacing;
             mMetaTileEntity.onFacingChange();
             onMachineBlockUpdate();
+            doEnetUpdate();
         }
     }
 
@@ -875,6 +880,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public void invalidate() {
         tileEntityInvalid = false;
+        leaveEnet();
         if (canAccessData()) {
             mMetaTileEntity.onRemoval();
             mMetaTileEntity.setBaseMetaTileEntity(null);
@@ -1355,7 +1361,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
-                        } 
+                        }
+                        doEnetUpdate();
                         return true;
                     }
                     
@@ -1365,6 +1372,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             //logic handled internally
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
+                        doEnetUpdate();
                         return true;
                     }
 

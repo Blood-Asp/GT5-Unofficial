@@ -273,6 +273,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                                 for (byte i = 0; i < 6; i++)
                                     mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
                                 issueBlockUpdate();
+                                joinEnet();
                             }
 
                             if (xCoord != oX || yCoord != oY || zCoord != oZ) {
@@ -433,6 +434,9 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             }
             tList.add("Is" + (mMetaTileEntity.isAccessAllowed(aPlayer) ? " " : EnumChatFormatting.RED+" not "+EnumChatFormatting.RESET) + "accessible for you");
         }
+        if(joinedIc2Enet)
+            tList.add("Joined IC2 ENet");
+
         return mMetaTileEntity.getSpecialDebugInfo(this, aPlayer, aLogLevel, tList);
     }
 
@@ -498,7 +502,9 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public void setFrontFacing(byte aFacing) {/*Do nothing*/}
+    public void setFrontFacing(byte aFacing) {
+        doEnetUpdate();
+    }
 
     @Override
     public int getSizeInventory() {
@@ -556,6 +562,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
             mMetaTileEntity.onRemoval();
             mMetaTileEntity.setBaseMetaTileEntity(null);
         }
+        leaveEnet();
         super.invalidate();
     }
 
@@ -864,6 +871,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                         //logic handled internally
                         GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                     }
+                    doEnetUpdate();
                     return true;
                 }
 
@@ -876,6 +884,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                         GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                         GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
                     }
+                    doEnetUpdate();
                     return true;
                 }
 
