@@ -156,34 +156,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         return (int) mAmperage * 64;
     }
 
-    private void pullFromIc2EnergySources(IGregTechTileEntity aBaseMetaTileEntity) {
-        if(!GT_Mod.gregtechproxy.ic2EnergySourceCompat) return;
-
-        for( byte aSide = 0 ; aSide < 6 ; aSide++) if(isConnectedAtSide(aSide)) {
-            final TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(aSide);
-            final TileEntity tEmitter;
-            if (tTileEntity instanceof IReactorChamber)
-                tEmitter = (TileEntity) ((IReactorChamber) tTileEntity).getReactor();
-            else tEmitter = (tTileEntity == null || tTileEntity instanceof IEnergyTile || EnergyNet.instance == null) ? tTileEntity :
-                EnergyNet.instance.getTileEntity(tTileEntity.getWorldObj(), tTileEntity.xCoord, tTileEntity.yCoord, tTileEntity.zCoord);
-
-            if (tEmitter instanceof IEnergySource) {
-                final GT_CoverBehavior coverBehavior = aBaseMetaTileEntity.getCoverBehaviorAtSide(aSide);
-                final int coverId = aBaseMetaTileEntity.getCoverIDAtSide(aSide),
-                    coverData = aBaseMetaTileEntity.getCoverDataAtSide(aSide);
-                final ForgeDirection tDirection = ForgeDirection.getOrientation(GT_Utility.getOppositeSide(aSide));
-
-                if (((IEnergySource) tEmitter).emitsEnergyTo((TileEntity) aBaseMetaTileEntity, tDirection) &&
-                    coverBehavior.letsEnergyIn(aSide, coverId, coverData, aBaseMetaTileEntity)) {
-                    final long tEU = (long) ((IEnergySource) tEmitter).getOfferedEnergy();
-
-                    if (transferElectricity(aSide, tEU, 1, Sets.newHashSet((TileEntity) aBaseMetaTileEntity)) > 0)
-                        ((IEnergySource) tEmitter).drawEnergy(tEU);
-                }
-            }
-        }
-    }
-
     @Override
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
     	if (!isConnectedAtSide(aSide) && aSide != 6)
@@ -324,8 +296,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
-            if (GT_Mod.gregtechproxy.ic2EnergySourceCompat) pullFromIc2EnergySources(aBaseMetaTileEntity);
-
 
             { //amp handler
                 long worldTick = aBaseMetaTileEntity.getWorld().getTotalWorldTime();
@@ -603,5 +573,24 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     		AxisAlignedBB aabb = getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
     		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
     	}
+    }
+
+    @Override
+    public boolean shouldJoinIc2Enet() {
+        if (!GT_Mod.gregtechproxy.ic2EnergySourceCompat) return false;
+
+        if (mConnections != 0) {
+            final IGregTechTileEntity baseMeta = getBaseMetaTileEntity();
+            for( byte aSide = 0 ; aSide < 6 ; aSide++) if(isConnectedAtSide(aSide)) {
+                final TileEntity tTileEntity = baseMeta.getTileEntityAtSide(aSide);
+                final TileEntity tEmitter = (tTileEntity == null || tTileEntity instanceof IEnergyTile || EnergyNet.instance == null) ? tTileEntity :
+                    EnergyNet.instance.getTileEntity(tTileEntity.getWorldObj(), tTileEntity.xCoord, tTileEntity.yCoord, tTileEntity.zCoord);
+
+                if (tEmitter instanceof IEnergyEmitter)
+                    return true;
+
+            }
+        }
+        return false;
     }
 }

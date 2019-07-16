@@ -43,7 +43,7 @@ import static gregtech.api.enums.GT_Values.V;
  * Call the Constructor like the following example inside the Load Phase, to register it.
  * "new GT_MetaTileEntity_E_Furnace(54, "GT_E_Furnace", "Automatic E-Furnace");"
  */
-public abstract class MetaTileEntity implements IMetaTileEntity {
+public abstract class  MetaTileEntity implements IMetaTileEntity {
     /**
      * Only assigned for the MetaTileEntity in the List! Also only used to get the localized Name for the ItemStack and for getInvName.
      */
@@ -86,10 +86,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-//        if (GT.isClientSide()) {
-//            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-//            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
-//        }
     }
 
     /**
@@ -936,4 +932,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public String getAlternativeModeText(){
     	return "";
     }
+
+    public boolean shouldJoinIc2Enet() { return false; }
 }
