@@ -459,7 +459,7 @@ public abstract class BaseTileEntity extends TileEntity implements IHasWorldObje
     public IMetaTileEntity getMetaTileEntity() { return null; }
 
     protected void createIc2Sink() {
-        if(ic2EnergySink == null && FMLCommonHandler.instance().getEffectiveSide().isServer() && shouldJoinIc2Enet()) {
+        if(ic2EnergySink == null && isServerSide() && shouldJoinIc2Enet()) {
             ic2EnergySink = new TileIC2EnergySink((IGregTechTileEntity)this);
             ic2EnergySink.xCoord = xCoord;
             ic2EnergySink.yCoord = yCoord;
@@ -485,7 +485,7 @@ public abstract class BaseTileEntity extends TileEntity implements IHasWorldObje
     }
 
     protected void leaveEnet() {
-        if (joinedIc2Enet && ic2EnergySink != null && FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+        if (joinedIc2Enet && ic2EnergySink != null && isServerSide()) {
             joinedIc2Enet = false;
             MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(ic2EnergySink));
         }

@@ -84,23 +84,6 @@ public class TileIC2EnergySink extends TileEntity implements IEnergySink {
         if(cableMeta != null) {
             usedAmps = ((IMetaTileEntityCable) metaTile).transferElectricity((byte) directionFrom.ordinal(), Math.min(euPerAmp, cableMeta.mVoltage), amps, Sets.newHashSet((TileEntity) myMeta));
 
-            // [23:17:00] [Client thread/INFO]: [CHAT] §9(§aAOE §aSafe §aMode §ais §aenabled§9) §cOperation §cCanceled §cbecause §ca §ctile §centity §cwas §cdetected
-            //[23:17:01] [Server thread/ERROR] [FML]: Exception caught during firing event cpw.mods.fml.common.gameevent.TickEvent$WorldTickEvent@1b066533:
-            //java.lang.NullPointerException
-            //	at gregtech.api.metatileentity.TileIC2EnergySink.injectEnergy(TileIC2EnergySink.java:83) ~[TileIC2EnergySink.class:?]
-            //	at ic2.core.energy.EnergyNetLocal.processChanges(EnergyNetLocal.java:704) ~[EnergyNetLocal.class:?]
-            //	at ic2.core.energy.EnergyNetLocal.onTickEnd(EnergyNetLocal.java:389) ~[EnergyNetLocal.class:?]
-            //	at ic2.core.energy.EnergyNetGlobal.onTickEnd(EnergyNetGlobal.java:69) ~[EnergyNetGlobal.class:?]
-            //	at ic2.core.TickHandler.onWorldTick(TickHandler.java:79) ~[TickHandler.class:?]
-            //	at cpw.mods.fml.common.eventhandler.ASMEventHandler_85_TickHandler_onWorldTick_WorldTickEvent.invoke(.dynamic) ~[?:?]
-            //	at cpw.mods.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:54) ~[ASMEventHandler.class:?]
-            //	at cpw.mods.fml.common.eventhandler.EventBus.post(EventBus.java:140) ~[EventBus.class:?]
-            //	at cpw.mods.fml.common.FMLCommonHandler.onPostWorldTick(FMLCommonHandler.java:255) ~[FMLCommonHandler.class:?]
-            //	at net.minecraft.server.MinecraftServer.func_71190_q(MinecraftServer.java:645) ~[MinecraftServer.class:?]
-            //	at net.minecraft.server.MinecraftServer.func_71217_p(MinecraftServer.java:547) ~[MinecraftServer.class:?]
-            //	at net.minecraft.server.integrated.IntegratedServer.func_71217_p(IntegratedServer.java:111) ~[bsx.class:?]
-            //	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:396) [MinecraftServer.class:?]
-            //	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:685) [?:?]
         }
         else
             usedAmps = myMeta.injectEnergyUnits((byte) directionFrom.ordinal(), Math.min(euPerAmp, myMeta.getInputVoltage()), amps);
