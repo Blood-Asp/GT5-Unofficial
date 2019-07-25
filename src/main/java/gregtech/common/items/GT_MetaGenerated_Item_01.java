@@ -186,7 +186,11 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Shape_Mold_Rod_Long.set(addItem(tLastID = 323, "Mold (Long Rod)", "Mold for making Long Rods", new Object[0]));
         ItemList.Shape_Mold_Rotor.set(addItem(tLastID = 324, "Mold (Rotor)", "Mold for making a Rotor", new Object[0]));
         ItemList.Shape_Mold_Turbine_Blade.set(addItem(tLastID = 325, "Mold (Turbine Blade)", "Mold for making a Turbine Blade", new Object[0]));
-
+        ItemList.Shape_Mold_Pipe_Tiny.set(addItem(tLastID = 326, "Mold (Tiny Pipe)", "Mold for making tiny Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Small.set(addItem(tLastID = 327, "Mold (Small Pipe)", "Mold for making small Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Medium.set(addItem(tLastID = 328, "Mold (Normal Pipe)", "Mold for making Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Large.set(addItem(tLastID = 329, "Mold (Large Pipe)", "Mold for making large Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Huge.set(addItem(tLastID = 330, "Mold (Huge Pipe)", "Mold for making full Block Pipes", new Object[0]));
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass)});
 
         //GT_ModHandler.addCraftingRecipe(ItemList.Shape_Mold_Credit.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"h  ", aTextShape, aTextEmptyRow, 'P', ItemList.Shape_Empty});
