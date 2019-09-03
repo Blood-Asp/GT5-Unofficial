@@ -109,6 +109,21 @@ public class GT_Loader_Item_Block_And_Fluid
 
         ItemList.Reactor_Coolant_NaK_6.set(GregTech_API.constructCoolantCellItem("360k_NaK_Coolantcell", "360k NaK Coolantcell", 360000));
         GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_NaK_6.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PCP", "PDP", "PCP", 'C', ItemList.Reactor_Coolant_NaK_3, 'P', OrePrefixes.plate.get(Materials.Tin), 'D', OrePrefixes.plateDense.get(Materials.Copper)});
+        
+        ItemList.Reactor_Coolant_Sp_1.set(GregTech_API.constructCoolantCellItem("180k_Space_Coolantcell", "180k Sp Coolant Cell", 180000));
+        
+        ItemList.Reactor_Coolant_Sp_2.set(GregTech_API.constructCoolantCellItem("360k_Space_Coolantcell", "360k Sp Coolant Cell", 360000));
+        GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_Sp_2.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"CPC", 'C', ItemList.Reactor_Coolant_Sp_1, 'P', OrePrefixes.plateTriple.get(Materials.TungstenSteel)});
+
+        ItemList.Reactor_Coolant_Sp_3.set(GregTech_API.constructCoolantCellItem("540k_Space_Coolantcell", "540k Sp Coolant Cell", 540000));
+        GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_Sp_3.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PPP", "CCC", "PPP", 'C', ItemList.Reactor_Coolant_Sp_1, 'P', OrePrefixes.plate.get(Materials.TungstenSteel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_Sp_3.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PPP", "BPC", "PPP", 'C', ItemList.Reactor_Coolant_Sp_1, 'B', ItemList.Reactor_Coolant_Sp_2, 'P', OrePrefixes.plate.get(Materials.TungstenSteel)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_Sp_3.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PPP", "CPB", "PPP", 'C', ItemList.Reactor_Coolant_Sp_1, 'B', ItemList.Reactor_Coolant_Sp_2, 'P', OrePrefixes.plate.get(Materials.TungstenSteel)});
+
+        ItemList.Reactor_Coolant_Sp_6.set(GregTech_API.constructCoolantCellItem("1080k_Space_Coolantcell", "1080k Sp Coolant Cell", 1080000));
+        GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_Sp_6.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PCP", "PDP", "PCP", 'C', ItemList.Reactor_Coolant_Sp_3, 'P', OrePrefixes.plate.get(Materials.TungstenSteel), 'D', OrePrefixes.plateDense.get(Materials.ElectrumFlux)});
+
+        
         if (!GregTech_API.mIC2Classic) {
             ItemList.neutroniumHeatCapacitor.set(GregTech_API.constructCoolantCellItem("neutroniumHeatCapacitor", "1G Neutronium Heat Capacitor", 1000000000));
 
