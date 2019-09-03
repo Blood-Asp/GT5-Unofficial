@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import cpw.mods.fml.common.Loader;
 import gregtech.api.enums.*;
 import gregtech.api.gui.GT_Container_BasicMachine;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
@@ -10,7 +9,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_ModHandler.RecipeBits;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,7 +23,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.Locale;
 import java.util.Random;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.GT_Values.ticksBetweenSounds;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -31,78 +34,70 @@ import static gregtech.api.enums.GT_Values.*;
  * Extend this class to make a simple Machine
  */
 public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_BasicMachine {
-    private final GT_Recipe.GT_Recipe_Map mRecipes;
+    private final GT_Recipe_Map mRecipes;
     private final int mTankCapacity, mSpecialEffect;
     private final String mSound;
     private final boolean mSharedTank, mRequiresFluidForFiltering;
     private final byte mGUIParameterA, mGUIParameterB;
-    public GT_MetaTileEntity_BasicMachine_GT_Recipe(int aID, String aName, String aNameRegional, int aTier, String aDescription, GT_Recipe.GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aGUIParameterA, int aGUIParameterB, String aGUIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect, String aOverlays, Object[] aRecipe) {
-        super(aID, aName, aNameRegional, aTier, aRecipes.mAmperage, aDescription, aInputSlots, aOutputSlots, aGUIName, aRecipes.mNEIName, new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM")));
-        this.mSharedTank = aSharedTank;
-        this.mTankCapacity = aTankCapacity;
-        this.mSpecialEffect = aSpecialEffect;
-        this.mRequiresFluidForFiltering = aRequiresFluidForFiltering;
-        this.mRecipes = aRecipes;
-        this.mSound = aSound;
-        this.mGUIParameterA = (byte) aGUIParameterA;
-        this.mGUIParameterB = (byte) aGUIParameterB;
+    public GT_MetaTileEntity_BasicMachine_GT_Recipe(int aID, String aName, String aNameRegional, int aTier, String aDescription, GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aGUIParameterA, int aGUIParameterB, String aGUIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect, String aOverlays, Object[] aRecipe) {
+        super(aID, aName, aNameRegional, aTier, aRecipes.mAmperage, aDescription, aInputSlots, aOutputSlots, aGUIName, aRecipes.mNEIName, new ITexture[]{new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/" + aOverlays.toLowerCase(Locale.ENGLISH) + "/OVERLAY_BOTTOM"))});
+        mSharedTank = aSharedTank;
+        mTankCapacity = aTankCapacity;
+        mSpecialEffect = aSpecialEffect;
+        mRequiresFluidForFiltering = aRequiresFluidForFiltering;
+        mRecipes = aRecipes;
+        mSound = aSound;
+        mGUIParameterA = (byte) aGUIParameterA;
+        mGUIParameterB = (byte) aGUIParameterB;
 
 
         //TODO: CHECK
         if (aRecipe != null) {
             for (int i = 3; i < aRecipe.length; i++) {
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CIRCUIT) {
-                    aRecipe[i] = Tier.ELECTRIC[this.mTier].mManagingObject;
+                if (aRecipe[i] == X.CIRCUIT) {
+                    aRecipe[i] = Tier.ELECTRIC[mTier].mManagingObject;
                     continue;
                 }
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.BETTER_CIRCUIT) {
-                    aRecipe[i] = Tier.ELECTRIC[this.mTier].mBetterManagingObject;
+                if (aRecipe[i] == X.BETTER_CIRCUIT) {
+                    aRecipe[i] = Tier.ELECTRIC[mTier].mBetterManagingObject;
                     continue;
                 }
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.HULL) {
-                    aRecipe[i] = Tier.ELECTRIC[this.mTier].mHullObject;
+                if (aRecipe[i] == X.HULL) {
+                    aRecipe[i] = Tier.ELECTRIC[mTier].mHullObject;
                     continue;
                 }
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE) {
-                    aRecipe[i] = Tier.ELECTRIC[this.mTier].mConductingObject;
+                if (aRecipe[i] == X.WIRE) {
+                    aRecipe[i] = Tier.ELECTRIC[mTier].mConductingObject;
                     continue;
                 }
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.WIRE4) {
-                    aRecipe[i] = Tier.ELECTRIC[this.mTier].mLargerConductingObject;
+                if (aRecipe[i] == X.WIRE4) {
+                    aRecipe[i] = Tier.ELECTRIC[mTier].mLargerConductingObject;
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.GLASS) {
-                    switch (this.mTier) {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                            aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
-                            break;
-                        case 4:
-                        case 5:
+                if (aRecipe[i] == X.GLASS) {
+                    switch (mTier) {
                         case 6:
                         case 7:
                         case 8:
-                            if (Loader.isModLoaded("bartworks")) {
-                                aRecipe[i] = "blockGlass"+VN[aTier];
-                                break;
-                            }
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
+                        	aRecipe[i] = Ic2Items.reinforcedGlass;
+                        	break;
                         default:
-                            if (Loader.isModLoaded("bartworks")) {
-                                aRecipe[i] = "blockGlass"+VN[8];
-                                break;
-                            } else {
-                                aRecipe[i] = Ic2Items.reinforcedGlass;
-                                break;
-                            }
+                            aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
+                            break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PLATE) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.PLATE) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.Steel);
@@ -125,6 +120,9 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.HSSE);
                             break;
+                        case 8:
+                            aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
+                            break;
                         default:
                             aRecipe[i] = OrePrefixes.plate.get(Materials.Neutronium);
                             break;
@@ -132,8 +130,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PIPE) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.PIPE) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.Bronze);
@@ -160,14 +158,14 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.pipeLarge.get(Materials.Ultimate);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.pipeHuge.get(Materials.Ultimate);
+                            aRecipe[i] = OrePrefixes.pipeMedium.get(Materials.Ultimate);
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.COIL_HEATING) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.COIL_HEATING) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.AnyCopper);
@@ -193,9 +191,6 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 8:
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.NaquadahAlloy);
                             break;
-                        case 9:
-                            aRecipe[i] = OrePrefixes.wireGt04.get(Materials.NaquadahAlloy);
-                            break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.NaquadahAlloy);
                             break;
@@ -203,8 +198,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.COIL_HEATING_DOUBLE) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.COIL_HEATING_DOUBLE) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.AnyCopper);
@@ -230,9 +225,6 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 8:
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.NaquadahAlloy);
                             break;
-                        case 9:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.NaquadahAlloy);
-                            break;
                         default:
                             aRecipe[i] = OrePrefixes.wireGt16.get(Materials.NaquadahAlloy);
                             break;
@@ -240,8 +232,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.STICK_DISTILLATION) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.STICK_DISTILLATION) {
+                    switch (mTier) {
                         default:
                             aRecipe[i] = OrePrefixes.stick.get(Materials.Blaze);
                             break;
@@ -249,8 +241,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.STICK_MAGNETIC) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.STICK_MAGNETIC) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.stick.get(Materials.IronMagnetic);
@@ -274,8 +266,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.STICK_ELECTROMAGNETIC) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.STICK_ELECTROMAGNETIC) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.stick.get(Materials.AnyIron);
@@ -294,10 +286,10 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.COIL_ELECTRIC) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.COIL_ELECTRIC) {
+                    switch (mTier) {
                         case 0:
-                            aRecipe[i] = OrePrefixes.wireGt01.get(Materials.Lead);
+                            aRecipe[i] = OrePrefixes.wireGt01.get(Materials.Tin);
                             break;
                         case 1:
                             aRecipe[i] = OrePrefixes.wireGt02.get(Materials.Tin);
@@ -312,23 +304,23 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                             aRecipe[i] = OrePrefixes.wireGt08.get(Materials.AnnealedCopper);
                             break;
                         case 5:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.AnnealedCopper);
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.AnnealedCopper);
                             break;
                         case 6:
                             aRecipe[i] = OrePrefixes.wireGt04.get(Materials.YttriumBariumCuprate);
                             break;
                         case 7:
-                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.Iridium);
+                            aRecipe[i] = OrePrefixes.wireGt08.get(Materials.SuperconductorUHV);
                             break;
                         default:
-                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.Osmium);
+                            aRecipe[i] = OrePrefixes.wireGt16.get(Materials.SuperconductorUHV);
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROBOT_ARM) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.ROBOT_ARM) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Robot_Arm_LV;
@@ -351,21 +343,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Robot_Arm_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Robot_Arm_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Robot_Arm_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Robot_Arm_UEV;
+                            aRecipe[i] = ItemList.Robot_Arm_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PUMP) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.PUMP) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Electric_Pump_LV;
@@ -388,21 +374,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Electric_Pump_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Electric_Pump_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Electric_Pump_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Electric_Pump_UEV;
+                            aRecipe[i] = ItemList.Electric_Pump_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.ROTOR) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.ROTOR) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = OrePrefixes.rotor.get(Materials.Tin);
@@ -432,8 +412,8 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.MOTOR) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.MOTOR) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Electric_Motor_LV;
@@ -456,21 +436,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Electric_Motor_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Electric_Motor_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Electric_Motor_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Electric_Motor_UEV;
+                            aRecipe[i] = ItemList.Electric_Motor_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.PISTON) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.PISTON) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Electric_Piston_LV;
@@ -493,21 +467,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Electric_Piston_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Electric_Piston_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Electric_Piston_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Electric_Piston_UEV;
+                            aRecipe[i] = ItemList.Electric_Piston_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.CONVEYOR) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.CONVEYOR) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Conveyor_Module_LV;
@@ -530,21 +498,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Conveyor_Module_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Conveyor_Module_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Conveyor_Module_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Conveyor_Module_UEV;
+                            aRecipe[i] = ItemList.Conveyor_Module_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.EMITTER) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.EMITTER) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Emitter_LV;
@@ -567,21 +529,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Emitter_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Emitter_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Emitter_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Emitter_UEV;
+                            aRecipe[i] = ItemList.Emitter_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.SENSOR) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.SENSOR) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Sensor_LV;
@@ -604,21 +560,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Sensor_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Sensor_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Sensor_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Sensor_UEV;
+                            aRecipe[i] = ItemList.Sensor_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] == GT_MetaTileEntity_BasicMachine_GT_Recipe.X.FIELD_GENERATOR) {
-                    switch (this.mTier) {
+                if (aRecipe[i] == X.FIELD_GENERATOR) {
+                    switch (mTier) {
                         case 0:
                         case 1:
                             aRecipe[i] = ItemList.Field_Generator_LV;
@@ -641,56 +591,50 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 7:
                             aRecipe[i] = ItemList.Field_Generator_ZPM;
                             break;
-                        case 8:
-                            aRecipe[i] = ItemList.Field_Generator_UV;
-                            break;
-                        case 9:
-                            aRecipe[i] = ItemList.Field_Generator_UHV;
-                            break;
                         default:
-                            aRecipe[i] = ItemList.Field_Generator_UEV;
+                            aRecipe[i] = ItemList.Field_Generator_UV;
                             break;
                     }
                     continue;
                 }
 
-                if (aRecipe[i] instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe.X)
+                if (aRecipe[i] instanceof X)
                     throw new IllegalArgumentException("MISSING TIER MAPPING FOR: " + aRecipe[i] + " AT TIER " + mTier);
             }
 
-            if (!GT_ModHandler.addCraftingRecipe(getStackForm(1), GT_ModHandler.RecipeBits.DISMANTLEABLE | GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, aRecipe)) {
+            if (!GT_ModHandler.addCraftingRecipe(getStackForm(1), RecipeBits.DISMANTLEABLE | RecipeBits.BUFFERED | RecipeBits.NOT_REMOVABLE | RecipeBits.REVERSIBLE, aRecipe)) {
                 throw new IllegalArgumentException("INVALID CRAFTING RECIPE FOR: " + getStackForm(1).getDisplayName());
             }
         }
     }
 
-    public GT_MetaTileEntity_BasicMachine_GT_Recipe(String aName, int aTier, String aDescription, GT_Recipe.GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aAmperage, int aGUIParameterA, int aGUIParameterB, ITexture[][][] aTextures, String aGUIName, String aNEIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect) {
+    public GT_MetaTileEntity_BasicMachine_GT_Recipe(String aName, int aTier, String aDescription, GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aAmperage, int aGUIParameterA, int aGUIParameterB, ITexture[][][] aTextures, String aGUIName, String aNEIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect) {
         super(aName, aTier, aAmperage, aDescription, aTextures, aInputSlots, aOutputSlots, aGUIName, aNEIName);
-        this.mSharedTank = aSharedTank;
-        this.mTankCapacity = aTankCapacity;
-        this.mSpecialEffect = aSpecialEffect;
-        this.mRequiresFluidForFiltering = aRequiresFluidForFiltering;
-        this.mRecipes = aRecipes;
-        this.mSound = aSound;
-        this.mGUIParameterA = (byte) aGUIParameterA;
-        this.mGUIParameterB = (byte) aGUIParameterB;
+        mSharedTank = aSharedTank;
+        mTankCapacity = aTankCapacity;
+        mSpecialEffect = aSpecialEffect;
+        mRequiresFluidForFiltering = aRequiresFluidForFiltering;
+        mRecipes = aRecipes;
+        mSound = aSound;
+        mGUIParameterA = (byte) aGUIParameterA;
+        mGUIParameterB = (byte) aGUIParameterB;
     }
 
-    public GT_MetaTileEntity_BasicMachine_GT_Recipe(String aName, int aTier, String[] aDescription, GT_Recipe.GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aAmperage, int aGUIParameterA, int aGUIParameterB, ITexture[][][] aTextures, String aGUIName, String aNEIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect) {
+    public GT_MetaTileEntity_BasicMachine_GT_Recipe(String aName, int aTier, String[] aDescription, GT_Recipe_Map aRecipes, int aInputSlots, int aOutputSlots, int aTankCapacity, int aAmperage, int aGUIParameterA, int aGUIParameterB, ITexture[][][] aTextures, String aGUIName, String aNEIName, String aSound, boolean aSharedTank, boolean aRequiresFluidForFiltering, int aSpecialEffect) {
         super(aName, aTier, aAmperage, aDescription, aTextures, aInputSlots, aOutputSlots, aGUIName, aNEIName);
-        this.mSharedTank = aSharedTank;
-        this.mTankCapacity = aTankCapacity;
-        this.mSpecialEffect = aSpecialEffect;
-        this.mRequiresFluidForFiltering = aRequiresFluidForFiltering;
-        this.mRecipes = aRecipes;
-        this.mSound = aSound;
-        this.mGUIParameterA = (byte) aGUIParameterA;
-        this.mGUIParameterB = (byte) aGUIParameterB;
+        mSharedTank = aSharedTank;
+        mTankCapacity = aTankCapacity;
+        mSpecialEffect = aSpecialEffect;
+        mRequiresFluidForFiltering = aRequiresFluidForFiltering;
+        mRecipes = aRecipes;
+        mSound = aSound;
+        mGUIParameterA = (byte) aGUIParameterA;
+        mGUIParameterB = (byte) aGUIParameterB;
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_BasicMachine_GT_Recipe(this.mName, this.mTier, this.mDescriptionArray, this.mRecipes, this.mInputSlotCount, this.mOutputItems == null ? 0 : this.mOutputItems.length, this.mTankCapacity, this.mAmperage, this.mGUIParameterA, this.mGUIParameterB, this.mTextures, this.mGUIName, this.mNEIName, this.mSound, this.mSharedTank, this.mRequiresFluidForFiltering, this.mSpecialEffect);
+        return new GT_MetaTileEntity_BasicMachine_GT_Recipe(mName, mTier, mDescriptionArray, mRecipes, mInputSlotCount, mOutputItems == null ? 0 : mOutputItems.length, mTankCapacity, mAmperage, mGUIParameterA, mGUIParameterB, mTextures, mGUIName, mNEIName, mSound, mSharedTank, mRequiresFluidForFiltering, mSpecialEffect);
     }
 
     @Override
@@ -700,22 +644,22 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, this.getLocalName(), this.mGUIName, GT_Utility.isStringValid(this.mNEIName) ? this.mNEIName : this.getRecipeList() != null ? this.getRecipeList().mUnlocalizedName : "", this.mGUIParameterA, this.mGUIParameterB);
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), mGUIName, GT_Utility.isStringValid(mNEIName) ? mNEIName : getRecipeList() != null ? getRecipeList().mUnlocalizedName : "", mGUIParameterA, mGUIParameterB);
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) return false;
-        if (this.mInventory[aIndex] != null) return true;
-        switch (this.mInputSlotCount) {
+        if (mInventory[aIndex] != null) return true;
+        switch (mInputSlotCount) {
             case 0:
                 return false;
             case 1:
-                return this.getFillableStack() == null ? !this.mRequiresFluidForFiltering && this.getRecipeList().containsInput(aStack) : null != this.getRecipeList().findRecipe(this.getBaseMetaTileEntity(), this.mLastRecipe, true, V[this.mTier], new FluidStack[]{this.getFillableStack()}, this.getSpecialSlot(), new ItemStack[]{aStack});
+                return getFillableStack() == null ? !mRequiresFluidForFiltering && getRecipeList().containsInput(aStack) : null != getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), new ItemStack[]{aStack});
             case 2:
-                return (!this.mRequiresFluidForFiltering || this.getFillableStack() != null) && (((this.getInputAt(0) != null && this.getInputAt(1) != null) || (this.getInputAt(0) == null && this.getInputAt(1) == null ? this.getRecipeList().containsInput(aStack) : (this.getRecipeList().containsInput(aStack) && null != this.getRecipeList().findRecipe(this.getBaseMetaTileEntity(), this.mLastRecipe, true, V[this.mTier], new FluidStack[]{this.getFillableStack()}, this.getSpecialSlot(), aIndex == this.getInputSlot() ? new ItemStack[]{aStack, this.getInputAt(1)} : new ItemStack[]{this.getInputAt(0), aStack})))));
+                return (!mRequiresFluidForFiltering || getFillableStack() != null) && (((getInputAt(0) != null && getInputAt(1) != null) || (getInputAt(0) == null && getInputAt(1) == null ? getRecipeList().containsInput(aStack) : (getRecipeList().containsInput(aStack) && null != getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), aIndex == getInputSlot() ? new ItemStack[]{aStack, getInputAt(1)} : new ItemStack[]{getInputAt(0), aStack})))));
             default:{
-                int tID = this.getBaseMetaTileEntity().getMetaTileID();
+                int tID = getBaseMetaTileEntity().getMetaTileID();
                 if (tID >= 211 && tID <= 218 || tID >= 1180 && tID <= 1187 || tID >= 10780 && tID <= 10786) {//assembler lv-iv; circuit asseblers lv - uv; assemblers luv-uev
                     if (GT_Utility.isStackValid(aStack))
                         for (int oreID : OreDictionary.getOreIDs(aStack)) {
@@ -723,7 +667,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                                 return true;
                         }
                 }
-                return this.getRecipeList().containsInput(aStack);
+                return getRecipeList().containsInput(aStack);
             }
 
         }
@@ -734,7 +678,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isClientSide() && aBaseMetaTileEntity.isActive()) {
-            switch (this.mSpecialEffect) {
+            switch (mSpecialEffect) {
                 case 0:
                     break;
                 case 1:
@@ -748,27 +692,27 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
     }
 
     @Override
-    public GT_Recipe.GT_Recipe_Map getRecipeList() {
-        return this.mRecipes;
+    public GT_Recipe_Map getRecipeList() {
+        return mRecipes;
     }
 
     @Override
     public int getCapacity() {
-        return this.mTankCapacity;
+        return mTankCapacity;
     }
 
     @Override
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
-        if (aIndex == 1 && GT_Utility.isStringValid(this.mSound)) GT_Utility.doSoundAtClient(this.mSound, 100, 1.0F, aX, aY, aZ);
+        if (aIndex == 1 && GT_Utility.isStringValid(mSound)) GT_Utility.doSoundAtClient(mSound, 100, 1.0F, aX, aY, aZ);
     }
 
     @Override
     public void startProcess() {
-        BaseMetaTileEntity myMetaTileEntity = ((BaseMetaTileEntity) this.getBaseMetaTileEntity());
+        BaseMetaTileEntity myMetaTileEntity = ((BaseMetaTileEntity)getBaseMetaTileEntity());
         // Added to throttle sounds. To reduce lag, this is on the server side so BlockUpdate packets aren't sent.
         if (myMetaTileEntity.mTickTimer > (myMetaTileEntity.mLastSoundTick+ticksBetweenSounds)) {
-            if (GT_Utility.isStringValid(this.mSound)) this.sendLoopStart((byte) 1);
+            if (GT_Utility.isStringValid(mSound)) sendLoopStart((byte) 1);
             // Does not have overflow protection, but they are longs.
             myMetaTileEntity.mLastSoundTick = myMetaTileEntity.mTickTimer;
         }
@@ -776,18 +720,18 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
 
     @Override
     public FluidStack getFillableStack() {
-        return this.mSharedTank ? this.getDrainableStack() : super.getFillableStack();
+        return mSharedTank ? getDrainableStack() : super.getFillableStack();
     }
 
     @Override
     public FluidStack setFillableStack(FluidStack aFluid) {
-        return this.mSharedTank ? this.setDrainableStack(aFluid) : super.setFillableStack(aFluid);
+        return mSharedTank ? setDrainableStack(aFluid) : super.setFillableStack(aFluid);
     }
 
     @Override
     protected boolean displaysOutputFluid() {
-        return !this.mSharedTank;
+        return !mSharedTank;
     }
 
-    public enum X {PUMP, WIRE, WIRE4, HULL, PIPE, GLASS, PLATE, MOTOR, ROTOR, SENSOR, PISTON, CIRCUIT, EMITTER, CONVEYOR, ROBOT_ARM, COIL_HEATING, COIL_ELECTRIC, STICK_MAGNETIC, STICK_DISTILLATION, BETTER_CIRCUIT, FIELD_GENERATOR, COIL_HEATING_DOUBLE, STICK_ELECTROMAGNETIC}
+    public static enum X {PUMP, WIRE, WIRE4, HULL, PIPE, GLASS, PLATE, MOTOR, ROTOR, SENSOR, PISTON, CIRCUIT, EMITTER, CONVEYOR, ROBOT_ARM, COIL_HEATING, COIL_ELECTRIC, STICK_MAGNETIC, STICK_DISTILLATION, BETTER_CIRCUIT, FIELD_GENERATOR, COIL_HEATING_DOUBLE, STICK_ELECTROMAGNETIC}
 }
