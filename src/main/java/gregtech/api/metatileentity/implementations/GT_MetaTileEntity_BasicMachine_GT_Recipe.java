@@ -78,18 +78,20 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         else
                            aRecipe[i] = "blockGlass"+VN[mTier];              
                         continue;              
-                    } else
-                    switch (mTier) {
-                        case 6:
-                        case 7:
-                        case 8:
-                            aRecipe[i] = Ic2Items.reinforcedGlass;
-                            break;
-                        default:
-                            aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
-                            break;
+                    } 
+                    else {
+                        switch (mTier) {
+                            case 6:
+                            case 7:
+                            case 8:
+                                aRecipe[i] = Ic2Items.reinforcedGlass;
+                                break;
+                            default:
+                                aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
+                                break;
+                        }
+                        continue;
                     }
-                    continue;
                 }
 
                 if (aRecipe[i] == X.PLATE) {
