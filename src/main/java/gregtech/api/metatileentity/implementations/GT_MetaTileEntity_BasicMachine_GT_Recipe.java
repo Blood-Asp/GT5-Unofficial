@@ -72,6 +72,13 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                 }
 
                 if (aRecipe[i] == X.GLASS) {
+                    if (Loader.isModLoaded("bartworks"){
+                        if (mTier>=8)
+                           aRecipe[i] = "blockGlass"+VN[8];
+                        else
+                           aRecipe[i] = "blockGlass"+VN[mTier];              
+                        continue;              
+                    } else
                     switch (mTier) {
                         case 6:
                         case 7:
