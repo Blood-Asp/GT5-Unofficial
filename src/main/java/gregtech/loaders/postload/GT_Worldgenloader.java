@@ -186,7 +186,7 @@ public class GT_Worldgenloader
         new GT_Worldgen_GT_Ore_Layer("ore.mix.saltpeterelectrotine", true, 5, 45, 40, 3, 16, false, true, false, Materials.Saltpeter, Materials.Diatomite, Materials.Electrotine, Materials.Alunite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.desh", true, 5, 40, 30, 2, 16, false, false, false, Materials.Desh, Materials.Desh, Materials.Scheelite, Materials.Tungstate);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.draconium", true, 20, 40, 40, 1, 16, false, false, false, Materials.Draconium, Materials.Electrotine, Materials.Jade, Materials.Vinteum);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.quantium", true, 5, 25, 30,33, 24, false, false, false, Materials.Quantium, Materials.Amethyst, Materials.Rutile, Materials.Ardite);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.quantium", true, 5, 25, 30,3, 24, false, false, false, Materials.Quantium, Materials.Amethyst, Materials.Rutile, Materials.Ardite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.callistoice", true, 40, 60, 40, 2, 16, false, false, false, Materials.CallistoIce, Materials.Topaz, Materials.BlueTopaz, Materials.Alduorite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.mytryl", true, 10, 30, 40, 2, 16, false, false, false, Materials.Mytryl, Materials.Jasper, Materials.Ceruclase, Materials.Vulcanite);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.ledox", true, 55, 65, 30, 2, 24, false, false, false, Materials.Ledox, Materials.Opal, Materials.Orichalcum, Materials.Rubracium);
