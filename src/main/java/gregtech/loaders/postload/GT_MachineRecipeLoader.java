@@ -572,12 +572,14 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addCentrifugeRecipe(ItemList.Cell_Empty.get(1), null, Materials.Air.getGas(10000), Materials.Nitrogen.getGas(3900), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), null, null, null, null, null, null, 1600, 8);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Galena, 3), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Sphalerite, 1), Materials.SulfuricAcid.getFluid(4000), new FluidStack(ItemList.sIndiumConcentrate, 8000), null, 60, 150);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminium, 4), GT_Utility.getIntegratedCircuit(1), new FluidStack(ItemList.sIndiumConcentrate, 8000), new FluidStack(ItemList.sLeadZincSolution, 8000), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Indium, 1), 50, 600);
-        GT_Values.RA.addElectrolyzerRecipe(null, null, new FluidStack(ItemList.sLeadZincSolution, 8000), Materials.Water.getFluid(2000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lead, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silver, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sulfur, 3), null, null, null, 300, 192);
+        GT_Values.RA.addElectrolyzerRecipe(GT_Values.NI, GT_Values.NI, new FluidStack(ItemList.sLeadZincSolution, 8000), Materials.Water.getFluid(2000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lead, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silver, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sulfur, 3), null, null, null, 300, 192);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Pentlandite, 1), GT_Utility.getIntegratedCircuit(1), new FluidStack(ItemList.sNitricAcid, 1000), new FluidStack(ItemList.sNickelSulfate, 2000), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.PlatinumGroupSludge, 1), 50, 30);
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Chalcopyrite, 1), GT_Utility.getIntegratedCircuit(1), new FluidStack(ItemList.sNitricAcid, 1000), new FluidStack(ItemList.sBlueVitriol, 2000), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.PlatinumGroupSludge, 1), 50, 30);
-        GT_Values.RA.addElectrolyzerRecipe(ItemList.Cell_Empty.get(1), null, new FluidStack(ItemList.sBlueVitriol, 2000), Materials.SulfuricAcid.getFluid(1000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 1), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), null, null, null, null, null, 900, 30);
-        GT_Values.RA.addElectrolyzerRecipe(ItemList.Cell_Empty.get(1), null, new FluidStack(ItemList.sNickelSulfate, 2000), Materials.SulfuricAcid.getFluid(1000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Nickel, 1), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), null, null, null, null, null, 900, 30);
+        GT_Values.RA.addElectrolyzerRecipe(ItemList.Cell_Empty.get(1), null, new FluidStack(ItemList.sBlueVitriol, 2000), Materials.SulfuricAcid.getFluid(1000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Copper, 1), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, null, 900, 30);
+        GT_Values.RA.addElectrolyzerRecipe(ItemList.Cell_Empty.get(1), null, new FluidStack(ItemList.sNickelSulfate, 2000), Materials.SulfuricAcid.getFluid(1000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Nickel, 1), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, null, 900, 30);
         GT_Values.RA.addCentrifugeRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.PlatinumGroupSludge, 1), null, null, null, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SiliconDioxide, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gold, 1), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Platinum, 1), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Palladium, 3), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Iridium, 3), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Osmium, 3), new int[]{10000, 10000, 10000, 9500, 9000, 8500}, 900, 30);
+
+        GT_Values.RA.addElectrolyzerRecipe(ItemList.Cell_Empty.get(11), GT_Utility.getIntegratedCircuit(1), Materials.Glycerol.getFluid(14000), GT_Values.NF, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 3), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 8), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 3), GT_Values.NI, GT_Values.NI, GT_Values.NI, null, 300, 90);
 
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Iron, 1), ItemList.Cell_Empty.get(3),  Materials.HydrochloricAcid.getFluid(3000), Materials.IronIIIChloride.getFluid(1000),GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Hydrogen, 3), 400, 30);
         //GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Salt, 1), null, Materials.SulfuricAcid.getFluid(1000), new FluidStack(ItemList.sHydrochloricAcid, 1000), null, 200, 30);
@@ -1576,7 +1578,11 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Oxygen, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidOxygen, 1L), 1200, 480);
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Nitrogen, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidNitrogen, 1L), 1200, 480);
         GT_Values.RA.addVacuumFreezerRecipe(GT_ModHandler.getIC2Item("airCell", 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.LiquidAir, 1L), 28, 480);
-       
+		GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_Sp_1.getWildcard(1L), ItemList.Reactor_Coolant_Sp_1.get(1L), 1800);
+        GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_Sp_2.getWildcard(1L), ItemList.Reactor_Coolant_Sp_2.get(1L), 3600);
+        GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_Sp_3.getWildcard(1L), ItemList.Reactor_Coolant_Sp_3.get(1L), 5400);
+        GT_Values.RA.addVacuumFreezerRecipe(ItemList.Reactor_Coolant_Sp_6.getWildcard(1L), ItemList.Reactor_Coolant_Sp_6.get(1L), 10800);
+        
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Pentacadmiummagnesiumhexaoxid, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Pentacadmiummagnesiumhexaoxid, 1L), 750, 480);
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Titaniumonabariumdecacoppereikosaoxid, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Titaniumonabariumdecacoppereikosaoxid, 1L), 750, 480);
         GT_Values.RA.addVacuumFreezerRecipe(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Uraniumtriplatinid, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Uraniumtriplatinid, 1L), 2000, 1920);
@@ -2117,6 +2123,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         this.addProcess(tCrop,Materials.Titanium,100, true);
         this.addProcess(tCrop,Materials.Ilmenite,100, false);
         this.addProcess(tCrop,Materials.Bauxite,100, false);
+        this.addProcess(tCrop,Materials.Rutile,100, false);
 		tCrop = ItemList.Crop_Drop_Scheelite.get(1);
         this.addProcess(tCrop,Materials.Scheelite,100, true);
         this.addProcess(tCrop,Materials.Tungstate,100, false);
@@ -2563,8 +2570,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
                 ItemList.LuV_Coil.get(2L, new Object(){}),
-                ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
-                ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
+                new ItemStack[]{ItemList.Reactor_Coolant_He_3.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_3.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_1.get(1, new Object(){})},
+                new ItemStack[]{ItemList.Reactor_Coolant_He_3.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_3.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_1.get(1, new Object(){})},
                 ItemList.Electric_Pump_LuV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000),
@@ -2578,8 +2585,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
                         ItemList.ZPM_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
                         ItemList.Electric_Pump_ZPM.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 4000),
@@ -2592,10 +2599,10 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_PPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
                         ItemList.UV_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
                         ItemList.Electric_Pump_UV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 8000),
@@ -2609,8 +2616,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_UHPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Master), 2},
                         ItemList.LuV_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_3.get(1L, new Object(){}),
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_3.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_3.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_1.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_3.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_3.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_1.get(1, new Object(){})},
                         ItemList.Electric_Pump_LuV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 2000),
@@ -2624,8 +2631,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_NPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Ultimate), 2},
                         ItemList.ZPM_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
                         ItemList.Electric_Pump_ZPM.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 4000),
@@ -2638,10 +2645,10 @@ public class GT_MachineRecipeLoader implements Runnable {
                         ItemList.Circuit_Chip_PPIC.get(2L,  new Object(){}),
                         new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 2},
                         ItemList.UV_Coil.get(2L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
-                        ItemList.Reactor_Coolant_He_6.get(1L, new Object(){}),
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
+                        new ItemStack[]{ItemList.Reactor_Coolant_He_6.get(1, new Object(){}), ItemList.Reactor_Coolant_NaK_6.get(1, new Object(){}), ItemList.Reactor_Coolant_Sp_2.get(1, new Object(){})},
                         ItemList.Electric_Pump_UV.get(1L, new Object(){})},
                 new FluidStack[]{
                         new FluidStack(FluidRegistry.getFluid("ic2coolant"), 8000),
