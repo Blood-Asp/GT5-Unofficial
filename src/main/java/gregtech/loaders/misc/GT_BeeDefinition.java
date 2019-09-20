@@ -19,6 +19,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.bees.GT_AlleleBeeSpecies;
@@ -132,7 +133,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 0), 0.30f);
             beeSpecies.addSpecialty(GT_Bees.combs.getStackForType(CombType.STICKY), 0.15f);
-            beeSpecies.addSpecialty(ItemList.IC2_Resin.get(1, new Object[0]), 0.15f);
+            beeSpecies.addSpecialty(ItemList.IC2_Resin.get(1), 0.15f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.NORMAL);
         }
@@ -206,10 +207,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 9), 0.15f);
-            beeSpecies.addSpecialty(ItemList.Food_Sliced_Cucumber.get(1, new Object[0]), 0.05f);
-            beeSpecies.addSpecialty(ItemList.Food_Sliced_Onion.get(1, new Object[0]), 0.05f);
-            beeSpecies.addSpecialty(ItemList.Food_Sliced_Tomato.get(1, new Object[0]), 0.05f);
-            beeSpecies.addSpecialty(ItemList.Food_Sliced_Cheese.get(1, new Object[0]), 0.05f);
+            beeSpecies.addSpecialty(ItemList.Food_Sliced_Cucumber.get(1), 0.05f);
+            beeSpecies.addSpecialty(ItemList.Food_Sliced_Onion.get(1), 0.05f);
+            beeSpecies.addSpecialty(ItemList.Food_Sliced_Tomato.get(1), 0.05f);
+            beeSpecies.addSpecialty(ItemList.Food_Sliced_Cheese.get(1), 0.05f);
             beeSpecies.addSpecialty(new ItemStack(Items.cooked_porkchop, 1, 0), 0.05f);
             beeSpecies.addSpecialty(new ItemStack(Items.cooked_beef, 1, 0), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
@@ -288,8 +289,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             beeSpecies.addProduct(GT_ModHandler.getModItem("ExtraBees", "honeyComb", 1, 9), 0.15f);
             beeSpecies.addSpecialty(GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1), 0.2f);
             beeSpecies.addSpecialty(GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1), 0.2f);
-            beeSpecies.addSpecialty(ItemList.FR_Fertilizer.get(1, new Object[0]), 0.3f);
-            beeSpecies.addSpecialty(ItemList.IC2_Fertilizer.get(1, new Object[0]), 0.3f);
+            beeSpecies.addSpecialty(ItemList.FR_Fertilizer.get(1), 0.3f);
+            beeSpecies.addSpecialty(ItemList.IC2_Fertilizer.get(1), 0.3f);
             beeSpecies.setHumidity(EnumHumidity.DAMP);
             beeSpecies.setTemperature(EnumTemperature.WARM);
         }
@@ -3134,7 +3135,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         String uid = "gregtech.bee.species" + species;
         String description = "for.description." + species;
         String name = "for.bees.species." + lowercaseName;
-
+        GT_LanguageManager.addStringLocalization("for.bees.species." + lowercaseName,species,true);
 
         this.branch = branch;
         this.species = new GT_AlleleBeeSpecies(uid, dominant, name, "GTNH", description, branch.getBranch(), binomial, primary, secondary);
@@ -3152,11 +3153,11 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     protected static IAlleleBeeEffect getEffect(byte modid, String name) {
         String s;
         switch(modid) {
-            case EXTRABEES: s = new StringBuilder().append("extrabees.effect.").append(name).toString();break;
-            case GENDUSTRY: s = new StringBuilder().append("gendustry.effect.").append(name).toString();break;
-            case MAGICBEES: s = new StringBuilder().append("magicbees.effect").append(name).toString();break;
-            case GREGTECH: s = new StringBuilder().append("gregtech.effect").append(name).toString();break;
-            default: s = new StringBuilder().append("forestry.effect").append(name).toString();break;
+            case EXTRABEES: s = "extrabees.effect." + name;break;
+            case GENDUSTRY: s = "gendustry.effect." + name;break;
+            case MAGICBEES: s = "magicbees.effect" + name;break;
+            case GREGTECH: s = "gregtech.effect" + name;break;
+            default: s = "forestry.effect" + name;break;
 
         }
         return (IAlleleBeeEffect) AlleleManager.alleleRegistry.getAllele(s);
@@ -3165,11 +3166,11 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     protected static IAlleleFlowers getFlowers(byte modid, String name) {
         String s;
         switch(modid) {
-            case EXTRABEES: s = new StringBuilder().append("extrabees.flower.").append(name).toString();break;
-            case GENDUSTRY: s = new StringBuilder().append("gendustry.flower.").append(name).toString();break;
-            case MAGICBEES: s = new StringBuilder().append("magicbees.flower").append(name).toString();break;
-            case GREGTECH: s = new StringBuilder().append("gregtech.flower").append(name).toString();break;
-            default: s = new StringBuilder().append("forestry.flowers").append(name).toString();break;
+            case EXTRABEES: s = "extrabees.flower." + name;break;
+            case GENDUSTRY: s = "gendustry.flower." + name;break;
+            case MAGICBEES: s = "magicbees.flower" + name;break;
+            case GREGTECH: s = "gregtech.flower" + name;break;
+            default: s = "forestry.flowers" + name;break;
 
         }
         return (IAlleleFlowers) AlleleManager.alleleRegistry.getAllele(s);
@@ -3178,11 +3179,11 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     protected static IAlleleBeeSpecies getSpecies(byte modid, String name) {
         String s;
         switch(modid) {
-            case EXTRABEES: s = new StringBuilder().append("extrabees.species.").append(name).toString();break;
-            case GENDUSTRY: s = new StringBuilder().append("gendustry.bee.").append(name).toString();break;
-            case MAGICBEES: s = new StringBuilder().append("magicbees.species").append(name).toString();break;
-            case GREGTECH: s = new StringBuilder().append("gregtech.species").append(name).toString();break;
-            default: s = new StringBuilder().append("forestry.species").append(name).toString();break;
+            case EXTRABEES: s = "extrabees.species." + name;break;
+            case GENDUSTRY: s = "gendustry.bee." + name;break;
+            case MAGICBEES: s = "magicbees.species" + name;break;
+            case GREGTECH: s = "gregtech.species" + name;break;
+            default: s = "forestry.species" + name;break;
 
         }
         IAlleleBeeSpecies ret = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(s);
@@ -3213,7 +3214,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     }
 
     protected final IBeeMutationCustom registerMutation(IAlleleBeeSpecies parent1, IAlleleBeeSpecies parent2, int chance) {
-        return new GT_Bee_Mutation(parent1,parent2,this.getTemplate(),chance,1);
+        return new GT_Bee_Mutation(parent1,parent2,this.getTemplate(),chance,1f);
     }
 
     /**
@@ -3225,7 +3226,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
      * @param chancedivider
      * @return
      */
-    protected final IBeeMutationCustom registerMutation(IAlleleBeeSpecies parent1, IAlleleBeeSpecies parent2, int chance, int chancedivider) {
+    protected final IBeeMutationCustom registerMutation(IAlleleBeeSpecies parent1, IAlleleBeeSpecies parent2, int chance, float chancedivider) {
         return new GT_Bee_Mutation(parent1,parent2,this.getTemplate(),chance,chancedivider);
     }
 

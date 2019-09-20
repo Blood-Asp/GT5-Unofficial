@@ -2106,6 +2106,8 @@ public class GT_MachineRecipeLoader implements Runnable {
 		tCrop = ItemList.Crop_Drop_Aurelia.get(1);
         this.addProcess(tCrop, Materials.Gold, 100, true);
         this.addProcess(tCrop, Materials.Magnetite, Materials.Gold, 100, false);
+        tCrop = ItemList.Crop_Drop_Mica.get(1);
+        this.addProcess(tCrop,Materials.Mica,75, true);
 
 	    // Rare Metals Line
 		tCrop = ItemList.Crop_Drop_Bauxite.get(1);
