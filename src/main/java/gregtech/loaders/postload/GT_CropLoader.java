@@ -380,6 +380,12 @@ public class GT_CropLoader
                     "Yellow",
                     "Oil"
             }, ItemList.Crop_Drop_Rape.get(1), null);
+            new GT_BaseCrop(179, "Micadia", "bartimaeusnek", null, 9, 3, 0, 2, 3, 2, 0, 3, 0, 0, new String[] {
+                    "Metal",
+                    "Pine",
+                    "Mica",
+                    "Bush"
+            }, Materials.Mica, ItemList.Crop_Drop_Mica.get(1L), null);
         } catch (Throwable e) {
             GT_Log.err.println("GT_Mod: Failed to register Crops to IC2.");
             e.printStackTrace(GT_Log.err);
