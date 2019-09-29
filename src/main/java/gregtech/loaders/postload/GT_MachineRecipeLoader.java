@@ -10,6 +10,7 @@ import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
+import gregtech.common.items.GT_VolumetricFlask;
 import ic2.api.recipe.ILiquidHeatExchangerManager;
 import ic2.api.recipe.Recipes;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
@@ -1849,7 +1850,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 8L), new ItemStack(Items.flint, 1), ItemList.IC2_Compressed_Coal_Ball.get(1L), 400, 4);
 
         if(Loader.isModLoaded("IC2NuclearControl")) {
-            GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(1L), ItemList.NC_SensorCard.get(1L), GT_ModHandler.getIC2Item("electronicCircuit", 4L), 200, 30);
+            GT_Values.RA.addAssemblerRecipe(ItemList.NC_SensorCard.get(1L), GT_Values.NI, GT_ModHandler.getIC2Item("electronicCircuit", 2L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 0),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 1),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2), GT_ModHandler.getModItem("IC2NuclearControl", "ItemMultipleSensorLocationCard", 1L, 2),  GT_ModHandler.getIC2Item("electronicCircuit", 1L), 200, 30);
