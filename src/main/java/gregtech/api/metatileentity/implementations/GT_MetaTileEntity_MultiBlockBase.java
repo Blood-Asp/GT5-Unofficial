@@ -566,7 +566,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         //Isnt too low EUt check?
         int aAmpsToInject;
         int aRemainder;
-
+        int ampsOnCurrentHatch;
         //xEUt *= 4;//this is effect of everclocking
         for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : mDynamoHatches) {
             if (isValidMetaTileEntity(aDynamo)) {
@@ -574,11 +574,14 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 aVoltage = aDynamo.maxEUOutput();
                 aAmpsToInject = (int) (leftToInject / aVoltage);
                 aRemainder = (int) (leftToInject - (aAmpsToInject * aVoltage));
-                long powerGain;
-                for (int i = 0; i < Math.min(aDynamo.maxAmperesOut(), aAmpsToInject > 0 ? aAmpsToInject : 1); i++) {
-                    powerGain = aAmpsToInject > 0 ? aVoltage : aRemainder;
-                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(powerGain, false);
-                    injected += powerGain;
+                ampsOnCurrentHatch=Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
+                for (int i = 0; i < ampsOnCurrentHatch; i++) {
+                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aVoltage, false);
+                }
+                injected+=aVoltage*ampsOnCurrentHatch;
+                if(aRemainder>0 && ampsOnCurrentHatch<aDynamo.maxAmperesOut()){
+                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aRemainder, false);
+                    injected+=aRemainder;
                 }
             }
         }
