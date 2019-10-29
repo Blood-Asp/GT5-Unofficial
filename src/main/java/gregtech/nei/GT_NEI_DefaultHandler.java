@@ -211,7 +211,7 @@ public class GT_NEI_DefaultHandler
 				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
                     byte tier=GT_Utility.getTier(tEUt / this.mRecipeMap.mAmperage);
                     if(tier<0||tier>=16){
-                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
+                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", 0xffFF0000);
 //add here gt logger
                     }else{
                         drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU ("+GT_Values.VN[tier]+")", -16777216);
