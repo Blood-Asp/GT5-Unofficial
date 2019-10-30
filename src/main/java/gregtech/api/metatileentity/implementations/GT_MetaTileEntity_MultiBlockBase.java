@@ -435,7 +435,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                     NBTTagCompound tNBT = mInventory[1].getTagCompound();
                     if (tNBT != null) {
                         NBTTagCompound tNBT2 = tNBT.getCompoundTag("GT.CraftingComponents");//tNBT2 dont use out if
-                        if (!tNBT.getBoolean("mDis")) {
+                        /*if (!tNBT.getBoolean("mDis")) {
                             tNBT2 = new NBTTagCompound();
                             Materials tMaterial = GT_MetaGenerated_Tool.getPrimaryMaterial(mInventory[1]);
                             ItemStack tTurbine = GT_OreDictUnificator.get(OrePrefixes.turbineBlade, tMaterial, 1);
@@ -487,7 +487,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                             tNBT.setBoolean("mDis", true);
                             mInventory[1].setTagCompound(tNBT);
 
-                        }
+                        }*/
                     }
                     ((GT_MetaGenerated_Tool) mInventory[1].getItem()).doDamage(mInventory[1], (long)getDamageToComponent(mInventory[1]) * (long) Math.min(mEUt / this.damageFactorLow, Math.pow(mEUt, this.damageFactorHigh)));
                     if (mInventory[1].stackSize == 0) mInventory[1] = null;
