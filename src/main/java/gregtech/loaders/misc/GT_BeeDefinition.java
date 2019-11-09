@@ -1042,7 +1042,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Hermitic"), LAPIS.species, 10);
-            tMutation.requireResource("blockCertusQuartz");
+            tMutation.requireResource(GameRegistry.findBlock("appliedenergistics2", "tile.BlockQuartz"), 0);
         }
     },
     FLUIX(GT_BranchDefinition.GEM, "FluixDust", true, 0xA375FF, 0xB591FF) {
@@ -1062,7 +1062,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, LAPIS.species, 7);
-            tMutation.requireResource("blockFluix");
+            tMutation.requireResource(GameRegistry.findBlock("appliedenergistics2", "tile.BlockFluix"), 0);
         }
     },
     RUBY(GT_BranchDefinition.GEM, "Ruby", false, 0xE6005C, 0xCC0052) {
@@ -1103,7 +1103,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, LAPIS.species, 5);
-            tMutation.requireResource(GregTech_API.sBlockGem2, 13);
+            tMutation.requireResource(GregTech_API.sBlockGem2, 12);
         }
     },
     DIAMOND(GT_BranchDefinition.GEM, "Diamond", false, 0xCCFFFF, 0xA3CCCC) {
