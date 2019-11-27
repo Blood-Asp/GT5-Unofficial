@@ -12,9 +12,11 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,6 +30,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private final ArrayList<ChunkPosition> oreBlockPositions = new ArrayList<>();
     protected int mTier=1;
 
+    private int chunkRadiusConfig = getRadiusInChunks();
+
     public GT_MetaTileEntity_OreDrillingPlantBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -37,8 +41,35 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     }
 
     @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("chunkRadiusConfig", chunkRadiusConfig);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        chunkRadiusConfig = aNBT.getInteger("chunkRadiusConfig");
+    }
+
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "OreDrillingPlant.png");
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        if (aPlayer.isSneaking()) {
+            if (chunkRadiusConfig > 1) {
+                chunkRadiusConfig--;
+            }
+        } else {
+            if (chunkRadiusConfig < getRadiusInChunks()) {
+                chunkRadiusConfig++;
+            }
+        }
+        GT_Utility.sendChatToPlayer(aPlayer, "Set to mine in a " + (chunkRadiusConfig << 4) + " radius");//TODO Add translation support
     }
 
     @Override
@@ -156,7 +187,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         tryAddOreBlockToMineList(xPipe, yHead - 1, zPipe);
         if (yHead == yDrill) return; //skip controller block layer
 
-        int radius = getRadiusInChunks() << 4;
+        int radius = chunkRadiusConfig << 4;
         for (int xOff = -radius; xOff <= radius; xOff++)
             for (int zOff = -radius; zOff <= radius; zOff++)
                 tryAddOreBlockToMineList(xDrill + xOff, yHead, zDrill + zOff);
@@ -195,7 +226,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x Output Bus (Any bottom layer casing)",
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Radius is " + (getRadiusInChunks() << 4) + " blocks",
+                "Use Screwdriver to configure block radius",
+                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
                 "Fortune bonus of " + mTier * 5};
     }
 }

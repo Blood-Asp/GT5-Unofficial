@@ -13,6 +13,7 @@ import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.GT_Block_Ores_Abstract;
 import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,9 +36,25 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     final static int[] SPEED = new int[]{160, 160, 80, 40, 20}; //Miner cycle time per tier
     final static int[] ENERGY = new int[]{8, 8, 32, 128, 512}; //Miner energy consumption per tier
 
+    private int radiusConfig = RADIUS[mTier]; //Miner configured radius
+
     public GT_MetaTileEntity_Miner(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, new String[]{"Digging ore instead of you", ENERGY[aTier] + " EU/t, " + SPEED[aTier] / 20 + " sec per block",
-                "Work area " + (RADIUS[aTier] * 2 + 1) + "x" + (RADIUS[aTier] * 2 + 1), "Fortune bonus of " + aTier * 2}, 2, 2, "Miner.png", "", new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")), new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
+        super(aID, aName, aNameRegional, aTier, 1,
+                new String[]{
+                        "Digging ore instead of you",
+                        "Use Screwdriver to regulate work area",
+                        ENERGY[aTier] + " EU/t, " + SPEED[aTier] / 20 + " sec per block",
+                        "Maximum work area " + (RADIUS[aTier] * 2 + 1) + "x" + (RADIUS[aTier] * 2 + 1),
+                        "Fortune bonus of " + aTier * 2},
+                2, 2, "Miner.png", "",
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE_ACTIVE")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_SIDE")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT_ACTIVE")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_FRONT")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP_ACTIVE")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_TOP")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM_ACTIVE")),
+                new GT_RenderedTexture(new Textures.BlockIcons.CustomIcon("basicmachines/miner/OVERLAY_BOTTOM")));
 }
 
     public GT_MetaTileEntity_Miner(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -65,6 +82,23 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
             }
         }
         return true;
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        if (aSide != getBaseMetaTileEntity().getFrontFacing() && aSide != mMainFacing) {
+            if (aPlayer.isSneaking()) {
+                if (radiusConfig > 1) {
+                    radiusConfig--;
+                }
+            } else {
+                if (radiusConfig < RADIUS[mTier]) {
+                    radiusConfig++;
+                }
+            }
+            GT_Utility.sendChatToPlayer(aPlayer, "Work area set to " + (radiusConfig * 2 + 1) + "x" + (radiusConfig * 2 + 1));//TODO Add translation support
+        }
     }
 
     @Override
@@ -107,12 +141,12 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     moveOneDown(aBaseMetaTileEntity);
                     return;
                 }
-                if (drillZ > RADIUS[mTier]) {
+                if (drillZ > radiusConfig) {
                     moveOneDown(aBaseMetaTileEntity);
                     return;
                 }
-                while (drillZ <= RADIUS[mTier]) {
-                    while (drillX <= RADIUS[mTier]) {
+                while (drillZ <= radiusConfig) {
+                    while (drillX <= radiusConfig) {
                         Block block = aBaseMetaTileEntity.getBlockOffset(drillX, drillY, drillZ);
                         int blockMeta = aBaseMetaTileEntity.getMetaIDOffset(drillX, drillY, drillZ);
                         if (block instanceof GT_Block_Ores_Abstract) {
@@ -130,7 +164,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                         }
                         drillX++;
                     }
-                    drillX = -RADIUS[mTier];
+                    drillX = -radiusConfig;
                     drillZ++;
                 }
             }
@@ -141,6 +175,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     public long maxEUStore() {
         return mTier == 1 ? 4096 : V[mTier] * 64;
     }
+
     public boolean moveOneDown(IGregTechTileEntity aBaseMetaTileEntity) {
         int xCoord = aBaseMetaTileEntity.getXCoord();
         int zCoord = aBaseMetaTileEntity.getZCoord();
@@ -201,6 +236,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         aNBT.setInteger("drillX", drillX);
         aNBT.setInteger("drillY", drillY);
         aNBT.setInteger("drillZ", drillZ);
+        aNBT.setInteger("radiusConfig", radiusConfig);
     }
 
     @Override
@@ -210,6 +246,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         drillX = aNBT.getInteger("drillX");
         drillY = aNBT.getInteger("drillY");
         drillZ = aNBT.getInteger("drillZ");
+        radiusConfig = aNBT.getInteger("radiusConfig");
     }
 
     private FakePlayer mFakePlayer = null;
