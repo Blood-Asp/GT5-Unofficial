@@ -22,6 +22,9 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static gregtech.api.enums.GT_Values.VN;
 
@@ -32,11 +35,11 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     private int chunkRadiusConfig = getRadiusInChunks();
 
-    public GT_MetaTileEntity_OreDrillingPlantBase(int aID, String aName, String aNameRegional) {
+    GT_MetaTileEntity_OreDrillingPlantBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_OreDrillingPlantBase(String aName) {
+    GT_MetaTileEntity_OreDrillingPlantBase(String aName) {
         super(aName);
     }
 
@@ -61,13 +64,17 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
         if (aPlayer.isSneaking()) {
-            if (chunkRadiusConfig > 1) {
+            if (chunkRadiusConfig > 0) {
                 chunkRadiusConfig--;
             }
+            if (chunkRadiusConfig == 0)
+                chunkRadiusConfig = getRadiusInChunks();
         } else {
-            if (chunkRadiusConfig < getRadiusInChunks()) {
+            if (chunkRadiusConfig <= getRadiusInChunks()) {
                 chunkRadiusConfig++;
             }
+            if (chunkRadiusConfig > getRadiusInChunks())
+                chunkRadiusConfig = 1;
         }
         GT_Utility.sendChatToPlayer(aPlayer, "Set to mine in a " + (chunkRadiusConfig << 4) + " radius");//TODO Add translation support
     }
@@ -101,7 +108,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             return false;
         }
         if (oreBlock != null && oreBlock != Blocks.air) {
-            ArrayList<ItemStack> oreBlockDrops = getBlockDrops(oreBlock, oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+            Collection<ItemStack> oreBlockDrops = getBlockDrops(oreBlock, oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
             getBaseMetaTileEntity().getWorld().setBlockToAir(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
             mOutputItems = getOutputByDrops(oreBlockDrops);
         }
@@ -124,30 +131,26 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
     }
 
-    private ItemStack[] getOutputByDrops(ArrayList<ItemStack> oreBlockDrops) {
+    private ItemStack[] getOutputByDrops(Collection<ItemStack> oreBlockDrops) {
         long voltage = getMaxInputVoltage();
-        ArrayList<ItemStack> outputItems = new ArrayList<>();
-        while (!oreBlockDrops.isEmpty()) {
-            ItemStack currentItem = oreBlockDrops.remove(0).copy();
+        Collection<ItemStack> outputItems = new HashSet<>();
+        oreBlockDrops.forEach(currentItem -> {
             if (!doUseMaceratorRecipe(currentItem)) {
-                multiplyStackSize(currentItem);
-                outputItems.add(currentItem);
-                continue;
+                outputItems.add(multiplyStackSize(currentItem));
+                return;
             }
-
             GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.findRecipe(getBaseMetaTileEntity(), false, voltage, null, currentItem);
             if (tRecipe == null) {
                 outputItems.add(currentItem);
-                continue;
+                return;
             }
-
             for (int i = 0; i < tRecipe.mOutputs.length; i++) {
                 ItemStack recipeOutput = tRecipe.mOutputs[i].copy();
                 if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                     multiplyStackSize(recipeOutput);
                 outputItems.add(recipeOutput);
             }
-        }
+        });
         return outputItems.toArray(new ItemStack[0]);
     }
 
@@ -160,17 +163,17 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 && itemData.mMaterial.mMaterial != Materials.Oilsands;
     }
 
-    private void multiplyStackSize(ItemStack itemStack) {
+    private ItemStack multiplyStackSize(ItemStack itemStack) {
         itemStack.stackSize *= getBaseMetaTileEntity().getRandomNumber(4) + 1;
+        return itemStack;
     }
 
-    private ArrayList<ItemStack> getBlockDrops(final Block oreBlock, int posX, int posY, int posZ) {
+    private Collection<ItemStack> getBlockDrops(final Block oreBlock, int posX, int posY, int posZ) {
         final int blockMeta = getBaseMetaTileEntity().getMetaID(posX, posY, posZ);
         if (oreBlock.canSilkHarvest(getBaseMetaTileEntity().getWorld(), null, posX, posY, posZ, blockMeta)) {
-            return new ArrayList<ItemStack>() {{
-                add(new ItemStack(oreBlock, 1, blockMeta));
-            }};
-        } else return oreBlock.getDrops(getBaseMetaTileEntity().getWorld(), posX, posY, posZ, blockMeta, mTier*5+1);
+            return Collections.singleton(new ItemStack(oreBlock, 1, blockMeta));
+        } else
+            return oreBlock.getDrops(getBaseMetaTileEntity().getWorld(), posX, posY, posZ, blockMeta, mTier + 3);
     }
 
     private boolean tryConsumeDrillingFluid() {
@@ -182,12 +185,15 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     }
 
     private void fillMineListIfEmpty(int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead) {
-        if (!oreBlockPositions.isEmpty()) return;
+        if (!oreBlockPositions.isEmpty())
+            return;
 
         tryAddOreBlockToMineList(xPipe, yHead - 1, zPipe);
-        if (yHead == yDrill) return; //skip controller block layer
+        if (yHead == yDrill)
+            return; //skip controller block layer
 
-        int radius = chunkRadiusConfig << 4;
+        int radius = Math.min(Math.max(chunkRadiusConfig << 4, 1), getRadiusInChunks());
+
         for (int xOff = -radius; xOff <= radius; xOff++)
             for (int zOff = -radius; zOff <= radius; zOff++)
                 tryAddOreBlockToMineList(xDrill + xOff, yHead, zDrill + zOff);
@@ -197,10 +203,11 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         Block block = getBaseMetaTileEntity().getBlock(x, y, z);
         int blockMeta = getBaseMetaTileEntity().getMetaID(x, y, z);
         ChunkPosition blockPos = new ChunkPosition(x, y, z);
-        if (oreBlockPositions.contains(blockPos)) return;
+        if (oreBlockPositions.contains(blockPos))
+            return;
         if (block instanceof GT_Block_Ores_Abstract) {
             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
-            if (tTileEntity != null && tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
+            if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                 oreBlockPositions.add(blockPos);
         } else {
             ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(block, 1, blockMeta));
@@ -228,6 +235,6 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
                 "Use Screwdriver to configure block radius",
                 "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
-                "Fortune bonus of " + mTier * 5};
+                "Fortune bonus of " + (mTier + 3)};
     }
 }

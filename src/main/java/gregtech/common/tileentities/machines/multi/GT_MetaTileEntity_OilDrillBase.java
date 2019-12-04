@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.lang.Math; //Java was written by idiots
 
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.GT_Values.debugDriller;
@@ -79,13 +78,17 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
         if (aPlayer.isSneaking()) {
-            if (chunkRangeConfig > 1) {
+            if (chunkRangeConfig > 0) {
                 chunkRangeConfig--;
             }
+            if (chunkRangeConfig == 0)
+                chunkRangeConfig = getRangeInChunks();
         } else {
-            if (chunkRangeConfig < getRangeInChunks()) {
+            if (chunkRangeConfig <= getRangeInChunks()) {
                 chunkRangeConfig++;
             }
+            if (chunkRangeConfig > getRangeInChunks())
+                chunkRangeConfig = 1;
         }
         GT_Utility.sendChatToPlayer(aPlayer, "Set to work on " + chunkRangeConfig + "x" + chunkRangeConfig + " chunks");//TODO Add translation support
     }
