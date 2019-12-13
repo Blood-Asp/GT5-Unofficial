@@ -1,8 +1,19 @@
 package gregtech.api.metatileentity.implementations;
 
+import static gregtech.api.enums.GT_Values.D1;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.tuple.MutableTriple;
+
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
@@ -10,13 +21,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.objects.XSTR;
+import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
 import gregtech.common.covers.GT_Cover_Drain;
-import gregtech.common.covers.GT_Cover_FluidRegulator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,12 +40,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import org.apache.commons.lang3.tuple.MutableTriple;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static gregtech.api.enums.GT_Values.D1;
 
 public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     public final float mThickNess;
@@ -392,8 +396,21 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         if (coverBehavior instanceof GT_Cover_Drain) return true;
 
         // Tinker Construct Faucets return a null tank info, so check the class
-        if (GregTech_API.mTConstruct && tTileEntity instanceof tconstruct.smeltery.logic.FaucetLogic) return true;
-
+        if (GregTech_API.mTConstruct) {
+        	try {
+        		Class aTinkerFaucet = Class.forName("tconstruct.smeltery.logic.FaucetLogic");
+        		if (aTinkerFaucet != null) {
+        			if (aTinkerFaucet.isInstance(tTileEntity)) {
+        				return true;
+        			}               	
+        		}
+        	}
+        	catch (Throwable t) {
+        		
+        	}
+        }
+        
+        
         final IFluidHandler fTileEntity = (tTileEntity instanceof IFluidHandler) ? (IFluidHandler) tTileEntity : null;
 
         if (fTileEntity != null) {
@@ -402,8 +419,19 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                 if (tInfo.length > 0) return true;
 
                 // Translocators return a TankInfo, but it's of 0 length - so check the class if we see this pattern
-                if (GregTech_API.mTranslocator  && tTileEntity instanceof codechicken.translocator.TileLiquidTranslocator) return true;
-                if (gTileEntity != null && gTileEntity.getCoverBehaviorAtSide(tSide) instanceof GT_Cover_FluidRegulator) return true;
+                if (GregTech_API.mTranslocator) {
+                	try {
+                		Class aCodeChickenTranslocator = Class.forName("codechicken.translocator.TileLiquidTranslocator");
+                		if (aCodeChickenTranslocator != null) {
+                			if (aCodeChickenTranslocator.isInstance(tTileEntity)) {
+                				return true;
+                			}               	
+                		}
+                	}
+                	catch (Throwable t) {
+                		
+                	}
+                }
 
             }
         }
