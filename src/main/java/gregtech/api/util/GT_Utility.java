@@ -2122,6 +2122,34 @@ public class GT_Utility {
             
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
+
+            String tOilsPosStr = "X: " + (aX/16/8)*16 + " Z: " + (aZ/16/8)*16;
+            int xOff = aX/16 - (aX/16/8)*8;
+            xOff = (xOff > 7) ? 7 : xOff;
+            int xOffRemain = 7 - xOff;
+            int yOff = aY/16 - (aY/16/8)*8;
+            yOff = (yOff > 7) ? 7 : yOff;
+            int yOffRemain = 7 - yOff;
+            
+            for( ; xOff > 0; xOff-- ) {
+                tOilsPosStr.concat("........\n");
+            }
+            for( ; yOff > 0; yOff-- ) {
+                tOilsPosStr.concat(".");
+            }
+            
+            tOilsPosStr.concat("P");
+            
+            for( ; yOffRemain > 0; yOffRemain-- ) {
+                tOilsPosStr.concat(".");
+            }
+            for( ; xOffRemain > 0; xOffRemain-- ) {
+                tOilsPosStr.concat("........\n");
+            }
+            tOilsPosStr.concat( "        X: " + (aX/16/8 + 1)*8*16 + " Z: " + (aZ/16/8 + 1)*8*16 ); // +1 oilfied to find bottomright of [5]
+
+            tNBT.setString("prospection_oils_pos", tOilsPosStr);
+
             tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
 
             setNBT(aStack, tNBT);
@@ -2153,6 +2181,7 @@ public class GT_Utility {
                 String tMiddleOresStr = tNBT.getString("prospection_middle");
                 String tFarOresStr = tNBT.getString("prospection_far");
                 String tOilsStr = tNBT.getString("prospection_oils");
+                String tOilsPosStr = tNBT.getString("prospection_oils_pos");
 
                 String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
                 String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
@@ -2183,14 +2212,18 @@ public class GT_Utility {
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 324 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 576 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
                         + "\n"
-                        + "[5] - Prospector";
+                        + "[5] - Prospector in this 8x8 chunk area";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
+                tPageText = "Corners of [5] are \n" +
+                            tOilsPosStr;
+                tNBTList.appendTag(new NBTTagString(tPageText));
+                
                 tNBT.setString("author", tPos.replace("\n"," "));
                 tNBT.setTag("pages", tNBTList);
                 setNBT(aStack, tNBT);

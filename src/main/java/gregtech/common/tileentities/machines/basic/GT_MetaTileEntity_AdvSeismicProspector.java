@@ -77,7 +77,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
                 "Near < " + near,
                 "Middle < " + middle,
                 "Far >= " + middle,
-                "Oil prospecting area 3x3 oilfields"};
+                "Oil prospecting area 3x3 oilfields, each is 8x8 chunks"};
     }
 
     protected GT_MetaTileEntity_AdvSeismicProspector(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures,
