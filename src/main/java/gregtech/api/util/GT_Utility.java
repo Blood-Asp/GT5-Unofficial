@@ -2123,30 +2123,32 @@ public class GT_Utility {
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
 
-            String tOilsPosStr = "X: " + (aX/16/8)*16 + " Z: " + (aZ/16/8)*16;
-            int xOff = aX/16 - (aX/16/8)*8;
-            xOff = (xOff > 7) ? 7 : xOff;
+            String tOilsPosStr = "X: " + (aX/16/8)*16*8 + " Z: " + (aZ/16/8)*16*8 + "\n";
+            int xOff = aX - (aX/16/8)*16*8;
+            xOff = xOff/16;
             int xOffRemain = 7 - xOff;
-            int yOff = aY/16 - (aY/16/8)*8;
-            yOff = (yOff > 7) ? 7 : yOff;
-            int yOffRemain = 7 - yOff;
             
+            int zOff = aZ - (aZ/16/8)*16*8;
+            zOff = zOff/16;
+            int zOffRemain = 7 - zOff;
+            
+            for( ; zOff > 0; zOff-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
             for( ; xOff > 0; xOff-- ) {
-                tOilsPosStr.concat("........\n");
-            }
-            for( ; yOff > 0; yOff-- ) {
-                tOilsPosStr.concat(".");
+                tOilsPosStr = tOilsPosStr.concat("-");
             }
             
-            tOilsPosStr.concat("P");
+            tOilsPosStr = tOilsPosStr.concat("P");
             
-            for( ; yOffRemain > 0; yOffRemain-- ) {
-                tOilsPosStr.concat(".");
-            }
             for( ; xOffRemain > 0; xOffRemain-- ) {
-                tOilsPosStr.concat("........\n");
+                tOilsPosStr = tOilsPosStr.concat("-");
             }
-            tOilsPosStr.concat( "        X: " + (aX/16/8 + 1)*8*16 + " Z: " + (aZ/16/8 + 1)*8*16 ); // +1 oilfied to find bottomright of [5]
+            tOilsPosStr = tOilsPosStr.concat("\n");
+            for( ; zOffRemain > 0; zOffRemain-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
+            tOilsPosStr = tOilsPosStr.concat( "            X: " + (aX/16/8 + 1)*8*16 + " Z: " + (aZ/16/8 + 1)*8*16 ); // +1 oilfied to find bottomright of [5]
 
             tNBT.setString("prospection_oils_pos", tOilsPosStr);
 
@@ -2212,16 +2214,18 @@ public class GT_Utility {
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 576 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 576 chunks"
+                        + "(9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
                         + "\n"
-                        + "[5] - Prospector in this 8x8 chunk area";
+                        + "[5] - Prospector in this 8x8 area";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
                 tPageText = "Corners of [5] are \n" +
-                            tOilsPosStr;
+                            tOilsPosStr + "\n" +
+                            "P - Prospector in 8x8 field";
                 tNBTList.appendTag(new NBTTagString(tPageText));
                 
                 tNBT.setString("author", tPos.replace("\n"," "));
