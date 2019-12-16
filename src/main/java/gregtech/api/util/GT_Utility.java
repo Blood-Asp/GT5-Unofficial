@@ -2096,10 +2096,8 @@ public class GT_Utility {
                 ItemStack aStack,
                 int aX, short aY, int aZ, int aDim,
                 ArrayList<String> aOils,
-                ArrayList<String> aNearOres,
-                ArrayList<String> aMiddleOres,
-                ArrayList<String> aFarOres,
-                int aNear, int aMiddle, int aRadius) {
+                ArrayList<String> aOres,
+                int aRadius) {
 
             setBookTitle(aStack, "Raw Prospection Data");
 
@@ -2109,9 +2107,8 @@ public class GT_Utility {
             tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);
 
             // ores
-            tNBT.setString("prospection_near", joinListToString(aNearOres));
-            tNBT.setString("prospection_middle", joinListToString(aMiddleOres));
-            tNBT.setString("prospection_far", joinListToString(aFarOres));
+            Collections.sort(aOres);
+            tNBT.setString("prospection_ores", joinListToString(aOres));
 
             // oils
             ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
@@ -2122,13 +2119,12 @@ public class GT_Utility {
             
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
-
-            String tOilsPosStr = "X: " + (aX/16/8)*16*8 + " Z: " + (aZ/16/8)*16*8 + "\n";
-            int xOff = aX - (aX/16/8)*16*8;
+            String tOilsPosStr = "X: " + Math.floorDiv(aX, 16*8)*16*8 + " Z: " + Math.floorDiv(aZ, 16*8)*16*8 + "\n";
+            int xOff = aX - Math.floorDiv(aX, 16*8)*16*8;
             xOff = xOff/16;
             int xOffRemain = 7 - xOff;
             
-            int zOff = aZ - (aZ/16/8)*16*8;
+            int zOff = aZ - Math.floorDiv(aZ, 16*8)*16*8;
             zOff = zOff/16;
             int zOffRemain = 7 - zOff;
             
@@ -2148,11 +2144,11 @@ public class GT_Utility {
             for( ; zOffRemain > 0; zOffRemain-- ) {
                 tOilsPosStr = tOilsPosStr.concat("--------\n");
             }
-            tOilsPosStr = tOilsPosStr.concat( "            X: " + (aX/16/8 + 1)*8*16 + " Z: " + (aZ/16/8 + 1)*8*16 ); // +1 oilfied to find bottomright of [5]
+            tOilsPosStr = tOilsPosStr.concat( "            X: " + (Math.floorDiv(aX, 16*8) + 1)*16*8 + " Z: " + (Math.floorDiv(aZ, 16*8) + 1)*16*8 ); // +1 oilfied to find bottomright of [5]
 
             tNBT.setString("prospection_oils_pos", tOilsPosStr);
 
-            tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
+            tNBT.setString("prospection_radius", String.valueOf(aRadius));
 
             setNBT(aStack, tNBT);
         }
@@ -2177,38 +2173,28 @@ public class GT_Utility {
                 setNBT(aStack, tNBT);
             } else { // advanced prospection data
                 String tPos = tNBT.getString("prospection_pos");
-                String[] tBounds = tNBT.getString("prospection_bounds").split("\\|");
+                String tRadius = tNBT.getString("prospection_radius");
 
-                String tNearOresStr = tNBT.getString("prospection_near");
-                String tMiddleOresStr = tNBT.getString("prospection_middle");
-                String tFarOresStr = tNBT.getString("prospection_far");
+                String tOresStr = tNBT.getString("prospection_ores");
                 String tOilsStr = tNBT.getString("prospection_oils");
                 String tOilsPosStr = tNBT.getString("prospection_oils_pos");
 
-                String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
-                String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
-                String[] tFarOres = tFarOresStr.isEmpty() ? null : tFarOresStr.split("\\|");
+                String[] tOres = tOresStr.isEmpty() ? null : tOresStr.split("\\|");
                 String[] tOils = tOilsStr.isEmpty() ? null : tOilsStr.split("\\|");
 
                 NBTTagList tNBTList = new NBTTagList();
 
                 String tPageText = "Prospector report\n"
                     + tPos + "\n\n"
-                    + "Ores found:\n"
-                    + "Close <" + tBounds[0] + " blocks: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
-                    + "Mid <" + tBounds[1] + " blocks: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
-                    + "Far <" + tBounds[2] + " blocks: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
                     + "Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
-                    + "Lists sorted by volume\n"
-                    + "Location is center of chunk with ore";
+                    + "Ores within " + tRadius + " blocks\n\n"
+                    + "Location is center of orevein\n\n"
+                    + "Check NEI to confirm orevein type";
                 tNBTList.appendTag(new NBTTagString(tPageText));
   
-                if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 7, tNearOres);
-                if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 7, tMiddleOres);
-                if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 7, tFarOres);
+                if (tOres != null)
+                    fillBookWithList(tNBTList, "Ores Found %s\n\n", "\n", 7, tOres);
+
                 
                if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
