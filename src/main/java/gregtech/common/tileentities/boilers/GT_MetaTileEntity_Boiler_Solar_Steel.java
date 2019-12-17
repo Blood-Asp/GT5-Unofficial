@@ -14,22 +14,22 @@ public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boil
     public GT_MetaTileEntity_Boiler_Solar_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         basicOutput = 450;
-        basicMaxOuput = 120;
-        basicTemperatureMod = 3;
+        basicMaxOuput = 150;
+        basicLossTimerLimit = 75; // Cools down slower than normal boiler
     }
 
     public GT_MetaTileEntity_Boiler_Solar_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         basicOutput = 450;
-        basicMaxOuput = 120;
-        basicTemperatureMod = 3;
+        basicMaxOuput = 150;
+        basicLossTimerLimit = 75;
     }
 
     public GT_MetaTileEntity_Boiler_Solar_Steel(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
         basicOutput = 450;
-        basicMaxOuput = 120;
-        basicTemperatureMod = 3;
+        basicMaxOuput = 150;
+        basicLossTimerLimit = 75;
     }
 
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
@@ -66,10 +66,6 @@ public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boil
 
     public int getCapacity() {
         return 32000;
-    }
-
-    public int maxProgresstime() {
-        return 1500;
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

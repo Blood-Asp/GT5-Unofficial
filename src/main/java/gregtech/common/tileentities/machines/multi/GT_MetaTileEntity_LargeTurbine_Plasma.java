@@ -42,6 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
                 "1x Plasma Input Hatch (Side centered)",
                 "1x Maintenance Hatch (Side centered)",
+                "1x Output Hatch (Side centered, optional)",
                 "1x Dynamo Hatch (Back centered)",
                 "Tungstensteel Turbine Casings for the rest (24 at least!)",
                 "Needs a Turbine Item (Inside controller GUI)"};
