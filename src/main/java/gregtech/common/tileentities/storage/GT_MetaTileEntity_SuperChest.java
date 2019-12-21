@@ -1,8 +1,20 @@
 package gregtech.common.tileentities.storage;
 
+import appeng.api.AEApi;
+import appeng.api.config.Actionable;
+import appeng.api.networking.security.BaseActionSource;
+import appeng.api.storage.IExternalStorageHandler;
+import appeng.api.storage.IMEInventory;
+import appeng.api.storage.StorageChannel;
+import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IItemList;
+import appeng.me.storage.MEMonitorIInventory;
+import appeng.util.inv.IMEAdaptor;
+import appeng.util.item.AEItemStack;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
 import gregtech.api.objects.GT_RenderedTexture;
@@ -13,9 +25,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachineBlock {
+public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachineBlock  implements IMEInventory<IAEItemStack> {
     public int mItemCount = 0;
     public ItemStack mItemStack = null;
     public GT_MetaTileEntity_SuperChest(int aID, String aName, String aNameRegional, int aTier) {
@@ -246,5 +260,90 @@ public class GT_MetaTileEntity_SuperChest extends GT_MetaTileEntity_TieredMachin
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         return new ITexture[0][0][0];
+    }
+    @Override
+    public IAEItemStack injectItems(final IAEItemStack input, final Actionable mode, final BaseActionSource src ) {
+        final ItemStack inputStack = input.getItemStack();
+        if (inputStack == null)
+            return null;
+        if (mItemStack != null) {
+            if (GT_Utility.areStacksEqual(mItemStack, inputStack)) {
+                if (input.getStackSize() + mItemCount > getMaxItemCount())
+                    return createOverflowStack(input.getStackSize() + mItemCount, mode);
+                else
+                    mItemCount += input.getStackSize();
+                return null;
+            } else
+                return input;
+        } else {
+            if (mode == Actionable.MODULATE)
+                mItemStack = inputStack.copy();
+            if (input.getStackSize() > getMaxItemCount())
+                return createOverflowStack(input.getStackSize(), mode);
+            else if (mode == Actionable.MODULATE)
+                mItemCount = (int) input.getStackSize();
+            return null;
+        }
+    }
+
+    private IAEItemStack createOverflowStack(long size, Actionable mode) {
+        final IAEItemStack overflow = AEItemStack.create(mItemStack);
+        overflow.setStackSize(size - getMaxItemCount());
+        if (mode == appeng.api.config.Actionable.MODULATE)
+            mItemCount = getMaxItemCount();
+        return overflow;
+    }
+
+    @Override
+    public IAEItemStack extractItems( final IAEItemStack request, final Actionable mode, final BaseActionSource src ) {
+        if (request.equals(mItemStack)) {
+            if (request.getStackSize() >= mItemCount) {
+                AEItemStack result = AEItemStack.create(mItemStack);
+                result.setStackSize(mItemCount);
+                if (mode == appeng.api.config.Actionable.MODULATE)
+                    mItemCount = 0;
+                return result;
+            } else {
+                if (mode == appeng.api.config.Actionable.MODULATE)
+                    mItemCount -= (int) request.getStackSize();
+                return request.copy();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public StorageChannel getChannel()
+    {
+        return StorageChannel.ITEMS;
+    }
+
+    @Override
+    public IItemList<IAEItemStack> getAvailableItems(final IItemList<IAEItemStack> out )
+    {
+        if (mItemStack != null) {
+            AEItemStack s = AEItemStack.create(mItemStack);
+            s.setStackSize(mItemCount);
+            out.add(s);
+        }
+        return out;
+    }
+
+    static class AEHandler implements IExternalStorageHandler
+    {
+        @Override
+        public boolean canHandle(final TileEntity te, final ForgeDirection d, final StorageChannel chan, final BaseActionSource mySrc )
+        {
+            return chan == StorageChannel.ITEMS && te instanceof BaseMetaTileEntity && ((BaseMetaTileEntity)te).getMetaTileEntity() instanceof GT_MetaTileEntity_SuperChest;
+        }
+        public IMEInventory getInventory(final TileEntity te, final ForgeDirection d, final StorageChannel chan, final BaseActionSource src ) {
+            if (chan == StorageChannel.ITEMS) {
+                return new MEMonitorIInventory( new IMEAdaptor( (GT_MetaTileEntity_SuperChest)(((BaseMetaTileEntity)te).getMetaTileEntity()), src));
+            }
+            return null;
+        }
+    }
+    public static void registerAEIntegration() {
+        AEApi.instance().registries().externalStorage().addExternalStorageInterface( new GT_MetaTileEntity_SuperChest.AEHandler() );
     }
 }
