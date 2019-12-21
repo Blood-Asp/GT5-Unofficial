@@ -378,6 +378,7 @@ public class ItemComb extends Item {
 		addProcessIV(tComb,Materials.Tungstate,80);
         addProcessIV(tComb,Materials.Scheelite,75);
         addProcessIV(tComb,Materials.Lithium,75);
+		addProcessIV(tComb,Materials.Tungsten,50);
 		tComb = getStackForType(CombType.PLATINUM);
 		addProcessHV(tComb,Materials.Platinum,40);
         addProcessHV(tComb,Materials.Cooperite,40);
