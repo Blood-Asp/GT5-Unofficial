@@ -23,6 +23,7 @@ import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import gregtech.common.items.armor.components.LoadArmorComponents;
 import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperChest;
 import gregtech.loaders.load.GT_CoverBehaviorLoader;
@@ -813,10 +814,8 @@ public class GT_Mod implements IGT_Mod {
             GT_Forestry_Compat.transferCentrifugeRecipes();
             GT_Forestry_Compat.transferSqueezerRecipes();
         }
-        if (Loader.isModLoaded(MOD_ID_AE)) {
-            GT_MetaTileEntity_QuantumChest.registerAEIntegration();
-            GT_MetaTileEntity_SuperChest.registerAEIntegration();
-        }
+        if (Loader.isModLoaded(MOD_ID_AE))
+            GT_MetaTileEntity_DigitalChestBase.registerAEIntegration();
         String tName = "";
         if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.disabledrecipes, aTextIC2 + (tName = "blastfurnace"), true)) {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item(tName, 1L));
