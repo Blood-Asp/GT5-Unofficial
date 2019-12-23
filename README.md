@@ -3,11 +3,11 @@ GT5-Unofficial
 
 ## About
 
-GT5-Unofficial is a decompiled and modified version of GT5.07.07. The goal of the mod is to maintain and extend the end game of GT5.
+GT5-Unofficial is a decompiled and modified version of GT5.07.07. The goal of the mod is to maintain and extend the end game of GT5. This version has been heavily modified for use with the GTNH modpack.
 
 ## Downloads
 
-Builds can be found on the [IC2 Forums](http://forum.industrial-craft.net/index.php?page=Thread&threadID=11488).
+Builds can be found on the [GTNH Jenkins Server](http://jenkins.usrv.eu:8080/job/Gregtech-5-Unofficial/).
 
 ## Installation
 
