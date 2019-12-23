@@ -1,21 +1,11 @@
 package gregtech.common.tileentities.storage;
 
-import appeng.api.AEApi;
-import appeng.api.config.Actionable;
-import appeng.api.networking.security.BaseActionSource;
-import appeng.api.storage.IExternalStorageHandler;
-import appeng.api.storage.IMEInventory;
-import appeng.api.storage.StorageChannel;
-import appeng.api.storage.data.IAEItemStack;
-import appeng.api.storage.data.IItemList;
-import appeng.me.storage.MEMonitorIInventory;
-import appeng.util.inv.IMEAdaptor;
-import appeng.util.item.AEItemStack;
+import cpw.mods.fml.common.Optional;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
+import gregtech.api.objects.AE2DigitalChestHandler;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_QuantumChest;
@@ -24,11 +14,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements IMEInventory<IAEItemStack> {
+@Optional.Interface(iface = "appeng.api.storage.IMEInventory", modid = "appliedenergistics2")
+public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements appeng.api.storage.IMEInventory<appeng.api.storage.data.IAEItemStack> {
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks");
     }
@@ -168,33 +157,19 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return aIndex==1;
+        return aIndex == 1;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return aIndex==0&&(mInventory[0]==null||GT_Utility.areStacksEqual(mInventory[0], aStack));
+        return aIndex == 0 && (mInventory[0] == null || GT_Utility.areStacksEqual(mInventory[0], aStack));
     }
-    abstract protected String chestName();
-    @Override
-    public String[] getInfoData() {
 
-        if (getItemStack() == null) {
-            return new String[]{
-                    EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
-                    "Stored Items:",
-                    EnumChatFormatting.GOLD+ "No Items"+ EnumChatFormatting.RESET,
-                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET+" "+
-                            EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
-            };
-        }
-        return new String[]{
-                EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
-                "Stored Items:",
-                EnumChatFormatting.GOLD + getItemStack().getDisplayName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(getItemCount()) + EnumChatFormatting.RESET+" "+
-                        EnumChatFormatting.YELLOW + Integer.toString(getMaxItemCount())+ EnumChatFormatting.RESET
-        };
+    abstract protected String chestName();
+
+    @Optional.Method(modid = "appliedenergistics2")
+    public static void registerAEIntegration() {
+        appeng.api.AEApi.instance().registries().externalStorage().addExternalStorageInterface(new AE2DigitalChestHandler());
     }
 
     @Override
@@ -229,8 +204,30 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         return new ITexture[0][0][0];
     }
+
     @Override
-    public IAEItemStack injectItems(final IAEItemStack input, final Actionable mode, final BaseActionSource src ) {
+    public String[] getInfoData() {
+
+        if (getItemStack() == null) {
+            return new String[]{
+                    EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
+                    "Stored Items:",
+                    EnumChatFormatting.GOLD + "No Items" + EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET + " " +
+                            EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+            };
+        }
+        return new String[]{
+                EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
+                "Stored Items:",
+                EnumChatFormatting.GOLD + getItemStack().getDisplayName() + EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(getItemCount()) + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+        };
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    public appeng.api.storage.data.IAEItemStack injectItems(final appeng.api.storage.data.IAEItemStack input, final appeng.api.config.Actionable mode, final appeng.api.networking.security.BaseActionSource src) {
         final ItemStack inputStack = input.getItemStack();
         if (inputStack == null)
             return null;
@@ -240,40 +237,41 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
                 if (input.getStackSize() + getItemCount() > getMaxItemCount())
                     return createOverflowStack(input.getStackSize() + getItemCount(), mode);
                 else
-                    setItemCount(getItemCount() + (int)input.getStackSize());
+                    setItemCount(getItemCount() + (int) input.getStackSize());
                 return null;
             } else
                 return input;
         } else {
-            if (mode != Actionable.SIMULATE)
+            if (mode != appeng.api.config.Actionable.SIMULATE)
                 setItemStack(inputStack.copy());
             if (input.getStackSize() > getMaxItemCount())
                 return createOverflowStack(input.getStackSize(), mode);
-            else if (mode != Actionable.SIMULATE)
-                setItemCount((int)input.getStackSize());
+            else if (mode != appeng.api.config.Actionable.SIMULATE)
+                setItemCount((int) input.getStackSize());
             return null;
         }
     }
 
-    private IAEItemStack createOverflowStack(long size, Actionable mode) {
-        final IAEItemStack overflow = AEItemStack.create(getItemStack());
+    @Optional.Method(modid = "appliedenergistics2")
+    private appeng.api.storage.data.IAEItemStack createOverflowStack(long size, appeng.api.config.Actionable mode) {
+        final appeng.api.storage.data.IAEItemStack overflow = appeng.util.item.AEItemStack.create(getItemStack());
         overflow.setStackSize(size - getMaxItemCount());
-        if (mode != Actionable.SIMULATE)
+        if (mode != appeng.api.config.Actionable.SIMULATE)
             setItemCount(getMaxItemCount());
         return overflow;
     }
 
-    @Override
-    public IAEItemStack extractItems( final IAEItemStack request, final Actionable mode, final BaseActionSource src ) {
+    @Optional.Method(modid = "appliedenergistics2")
+    public appeng.api.storage.data.IAEItemStack extractItems(final appeng.api.storage.data.IAEItemStack request, final appeng.api.config.Actionable mode, final appeng.api.networking.security.BaseActionSource src) {
         if (request.equals(getItemStack())) {
             if (request.getStackSize() >= getItemCount()) {
-                AEItemStack result = AEItemStack.create(getItemStack());
+                appeng.util.item.AEItemStack result = appeng.util.item.AEItemStack.create(getItemStack());
                 result.setStackSize(getItemCount());
-                if (mode != Actionable.SIMULATE)
+                if (mode != appeng.api.config.Actionable.SIMULATE)
                     setItemCount(0);
                 return result;
             } else {
-                if (mode != Actionable.SIMULATE)
+                if (mode != appeng.api.config.Actionable.SIMULATE)
                     setItemCount(getItemCount() - (int) request.getStackSize());
                 return request.copy();
             }
@@ -281,39 +279,19 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return null;
     }
 
-    @Override
-    public StorageChannel getChannel()
-    {
-        return StorageChannel.ITEMS;
+    @Optional.Method(modid = "appliedenergistics2")
+    public appeng.api.storage.StorageChannel getChannel() {
+        return appeng.api.storage.StorageChannel.ITEMS;
     }
 
-    @Override
-    public IItemList<IAEItemStack> getAvailableItems(final IItemList<IAEItemStack> out )
-    {
+    @Optional.Method(modid = "appliedenergistics2")
+    public appeng.api.storage.data.IItemList<appeng.api.storage.data.IAEItemStack> getAvailableItems(final appeng.api.storage.data.IItemList<appeng.api.storage.data.IAEItemStack> out) {
         ItemStack storedStack = getItemStack();
         if (storedStack != null) {
-            AEItemStack s = AEItemStack.create(storedStack);
+            appeng.util.item.AEItemStack s = appeng.util.item.AEItemStack.create(storedStack);
             s.setStackSize(getItemCount());
             out.add(s);
         }
         return out;
-    }
-
-    static class AEHandler implements IExternalStorageHandler
-    {
-        @Override
-        public boolean canHandle(final TileEntity te, final ForgeDirection d, final StorageChannel chan, final BaseActionSource mySrc )
-        {
-            return chan == StorageChannel.ITEMS && te instanceof BaseMetaTileEntity && ((BaseMetaTileEntity)te).getMetaTileEntity() instanceof GT_MetaTileEntity_DigitalChestBase;
-        }
-        public IMEInventory getInventory(final TileEntity te, final ForgeDirection d, final StorageChannel chan, final BaseActionSource src ) {
-            if (chan == StorageChannel.ITEMS) {
-                return new MEMonitorIInventory( new IMEAdaptor( (GT_MetaTileEntity_DigitalChestBase)(((BaseMetaTileEntity)te).getMetaTileEntity()), src));
-            }
-            return null;
-        }
-    }
-    public static void registerAEIntegration() {
-        AEApi.instance().registries().externalStorage().addExternalStorageInterface( new GT_MetaTileEntity_DigitalChestBase.AEHandler() );
     }
 }
