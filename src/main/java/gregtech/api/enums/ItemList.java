@@ -1,6 +1,7 @@
 package gregtech.api.enums;
 
 import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -9,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import static gregtech.api.enums.GT_Values.W;
+import java.util.Locale;
+
+import static gregtech.api.enums.GT_Values.*;
 
 /**
  * Class containing all non-OreDict Items of GregTech.
@@ -750,8 +753,28 @@ public enum ItemList implements IItemContainer {
     @Override
     public ItemStack getWithName(long aAmount, String aDisplayName, Object... aReplacements) {
         ItemStack rStack = get(1, aReplacements);
-        if (GT_Utility.isStackInvalid(rStack)) return null;
-        rStack.setStackDisplayName(aDisplayName);
+        if (GT_Utility.isStackInvalid(rStack)) return NI;
+
+        // Construct a translation key from UnlocalizedName and sanitized DisplayName
+        StringBuilder tKeyBuilder = new StringBuilder(rStack.getUnlocalizedName()).append(".with.");
+
+        final String[] tWords = aDisplayName.split("\\W");
+
+        if (tWords.length > 0) {
+            // CamelCase alphanumeric words from aDisplayName
+            for (String tWord : tWords){
+                if (tWord.length() > 0) tKeyBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
+                if (tWord.length() > 1) tKeyBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
+            }
+        } else {
+            // No alphanumeric words, so use hash of aDisplayName
+            tKeyBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
+        }
+
+        tKeyBuilder.append(".name");
+        final String tKey = tKeyBuilder.toString();
+
+        rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
     }
 
