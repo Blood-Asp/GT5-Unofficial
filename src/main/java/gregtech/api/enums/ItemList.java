@@ -755,24 +755,20 @@ public enum ItemList implements IItemContainer {
         ItemStack rStack = get(1, aReplacements);
         if (GT_Utility.isStackInvalid(rStack)) return NI;
 
-        // Construct a translation key from UnlocalizedName and sanitized DisplayName
-        StringBuilder tKeyBuilder = new StringBuilder(rStack.getUnlocalizedName()).append(".with.");
-
-        final String[] tWords = aDisplayName.split("\\W");
-
-        if (tWords.length > 0) {
-            // CamelCase alphanumeric words from aDisplayName
-            for (String tWord : tWords){
-                if (tWord.length() > 0) tKeyBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
-                if (tWord.length() > 1) tKeyBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
-            }
-        } else {
-            // No alphanumeric words, so use hash of aDisplayName
-            tKeyBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
+        // CamelCase alphanumeric words from aDisplayName
+        StringBuilder tCamelCasedDisplayNameBuilder = new StringBuilder();
+        final String[] tDisplayNameWords = aDisplayName.split("\\W");
+        for (String tWord : tDisplayNameWords){
+            if (tWord.length() > 0) tCamelCasedDisplayNameBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
+            if (tWord.length() > 1) tCamelCasedDisplayNameBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
+        }
+        if (tCamelCasedDisplayNameBuilder.length() == 0) {
+            // CamelCased DisplayName is empty, so use hash of aDisplayName
+            tCamelCasedDisplayNameBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
         }
 
-        tKeyBuilder.append(".name");
-        final String tKey = tKeyBuilder.toString();
+        // Construct a translation key from UnlocalizedName and CamelCased DisplayName
+        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder.toString() + ".name";
 
         rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
