@@ -192,7 +192,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (yHead == yDrill)
             return; //skip controller block layer
 
-        int radius = Math.min(Math.max(chunkRadiusConfig << 4, 1), getRadiusInChunks());
+        int radius = Math.min(Math.max(chunkRadiusConfig, 1), getRadiusInChunks());
 
         for (int xOff = -radius; xOff <= radius; xOff++)
             for (int zOff = -radius; zOff <= radius; zOff++)
