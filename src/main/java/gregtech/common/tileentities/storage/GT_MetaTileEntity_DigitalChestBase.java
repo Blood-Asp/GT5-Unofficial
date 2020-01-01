@@ -236,8 +236,10 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             if (GT_Utility.areStacksEqual(storedStack, inputStack)) {
                 if (input.getStackSize() + getItemCount() > getMaxItemCount())
                     return createOverflowStack(input.getStackSize() + getItemCount(), mode);
-                else
-                    setItemCount(getItemCount() + (int) input.getStackSize());
+                else {
+                    if (mode != appeng.api.config.Actionable.SIMULATE)
+                        setItemCount(getItemCount() + (int) input.getStackSize());
+                }
                 return null;
             } else
                 return input;
