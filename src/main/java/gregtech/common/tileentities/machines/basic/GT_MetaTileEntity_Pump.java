@@ -90,7 +90,8 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         this.wasPumping = aNBT.getBoolean("wasPumping");
-        this.radiusConfig = aNBT.getInteger("radiusConfig");
+        if (aNBT.hasKey("radiusConfig"))
+            this.radiusConfig = aNBT.getInteger("radiusConfig");
         this.mPrimaryPumpedBlock = Block.getBlockFromName(aNBT.getString("mPumpedBlock1"));
         this.mSecondaryPumpedBlock = Block.getBlockFromName(aNBT.getString("mPumpedBlock2"));
 
