@@ -262,7 +262,8 @@ public class GT_Assemblyline_Server {
 									Materials.HSSE,
 									Materials.HSSS,
 									Materials.Steeleaf,
-									Materials.Ichorium
+									Materials.Ichorium,
+									Materials.Firestone
 							};
 							break;
 					}
