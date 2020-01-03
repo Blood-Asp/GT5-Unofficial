@@ -31,6 +31,8 @@ GT5U.MS.multismelting=Multi smelting
 
 GT5U.machines.tier=Tier
 GT5U.machines.workarea=Work Area
+GT5U.machines.workareaset=Work Area set to
+GT5U.machines.radius=radius
 GT5U.machines.blocks=Blocks
 GT5U.machines.chunks=Chunks
 GT5U.machines.miner=Miner

@@ -83,7 +83,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             if (chunkRadiusConfig > getRadiusInChunks())
                 chunkRadiusConfig = 1;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + StatCollector.translateToLocal("GT5U.machines.workareaset"));//TODO Add translation support
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + StatCollector.translateToLocal("GT5U.machines.radius"));//TODO Add translation support
     }
 
     @Override
