@@ -86,9 +86,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     @Override
     protected boolean workingDownward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
-        if (mChunkLoadingEnabled)
-            return super.workingDownward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
-        if (yHead != oldYHead) oreBlockPositions.clear();
+        if (yHead != oldYHead)
+            oreBlockPositions.clear();
 
         if (mWorkChunkNeedsReload && mChunkLoadingEnabled) { // ask to load machine itself
             GT_ChunkManager.requestChunkLoad((TileEntity) getBaseMetaTileEntity(), null);
