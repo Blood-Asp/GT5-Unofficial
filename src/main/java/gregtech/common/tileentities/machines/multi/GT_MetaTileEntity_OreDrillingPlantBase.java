@@ -330,6 +330,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x Maintenance Hatch (Any bottom layer casing)",
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
                 "Use Screwdriver to configure block radius",
+                "Use Soldering iron to turn off chunk mode",
                 "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
                 "Fortune bonus of " + (mTier + 3)};
     }
