@@ -778,6 +778,7 @@ public class GT_ModHandler {
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) GT_Utility.removeSimpleIC2MachineRecipe(aInput, getOreWashingRecipeList(), null);
         if (!GregTech_API.sRecipeFile.get(ConfigCategories.Machines.orewashing, aInput, true)) return false;
         RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getWater(1000L), 500, 16);
+        RA.addOreWasherRecipe(aInput, (ItemStack)aOutput[0], (ItemStack)aOutput[1], (ItemStack)aOutput[2], GT_ModHandler.getDistilledWater(200L), 300, 16);
         if (GT_Mod.gregtechproxy.mAddGTRecipesToIC2Machines) {
             NBTTagCompound tNBT = new NBTTagCompound();
             tNBT.setInteger("amount", aWaterAmount);
