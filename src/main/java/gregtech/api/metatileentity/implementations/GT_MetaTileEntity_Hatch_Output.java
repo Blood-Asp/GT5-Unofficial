@@ -10,9 +10,9 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
 
 public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
 	private String lockedFluidName = null;
@@ -207,7 +207,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
             	playerThatLockedfluid = aPlayer;
             	if (mFluid == null) {
                     this.setLockedFluidName(null);
-            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in (or use fluid cell to lock)");
             	} else {
             		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
             		inBrackets = this.getDrainableStack().getLocalizedName();
@@ -218,7 +218,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
             	playerThatLockedfluid = aPlayer;
             	if (mFluid == null) {
                     this.setLockedFluidName(null);
-            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in");
+            		inBrackets = trans("115.3","currently none, will be locked to the next that is put in (or use fluid cell to lock)");
             	} else {
             		this.setLockedFluidName(this.getDrainableStack().getUnlocalizedName());
             		inBrackets = this.getDrainableStack().getLocalizedName();
@@ -227,7 +227,41 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
                 break;
         }
     }
-    
+    private boolean tryToLockHatch(EntityPlayer aPlayer, byte aSide) {
+        if (!getBaseMetaTileEntity().getCoverBehaviorAtSide(aSide).isGUIClickable(aSide, getBaseMetaTileEntity().getCoverIDAtSide(aSide), getBaseMetaTileEntity().getCoverDataAtSide(aSide), getBaseMetaTileEntity()))
+            return false;
+        if (!isFluidLocked())
+            return false;
+        ItemStack tCurrentItem = aPlayer.inventory.getCurrentItem();
+        if (tCurrentItem == null)
+            return false;
+        FluidStack tFluid = FluidContainerRegistry.getFluidForFilledItem(tCurrentItem);
+        if (tFluid == null && tCurrentItem.getItem() instanceof IFluidContainerItem)
+            tFluid = ((IFluidContainerItem)tCurrentItem.getItem()).getFluid(tCurrentItem);
+        if (tFluid != null) {
+            if (getLockedFluidName() != null && !getLockedFluidName().equals(tFluid.getUnlocalizedName())) {
+                GT_Utility.sendChatToPlayer(aPlayer, String.format("%s %s", trans("151.3",
+                        "Hatch is locked to a different fluid. To change the locking, empty it and made it locked to the next fluid with a screwdriver. Currently locked to")
+                        , StatCollector.translateToLocal(getLockedFluidName())));
+            }
+            else {
+                setLockedFluidName(tFluid.getUnlocalizedName());
+                if (mMode == 8)
+                    GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.1", "Outputs items and 1 specific Fluid"), tFluid.getLocalizedName()));
+                else
+                    GT_Utility.sendChatToPlayer(aPlayer, String.format("%s (%s)", trans("151.2", "Outputs 1 specific Fluid"), tFluid.getLocalizedName()));
+            }
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, byte aSide, float aX, float aY, float aZ) {
+        if (tryToLockHatch(aPlayer, aSide))
+            return true;
+        return super.onRightclick(aBaseMetaTileEntity, aPlayer, aSide, aX, aY, aZ);
+    }
+
     public String trans(String aKey, String aEnglish){
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
