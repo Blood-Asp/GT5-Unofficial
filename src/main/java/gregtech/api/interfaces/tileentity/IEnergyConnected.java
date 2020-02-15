@@ -3,7 +3,6 @@ package gregtech.api.interfaces.tileentity;
 import cofh.api.energy.IEnergyReceiver;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
