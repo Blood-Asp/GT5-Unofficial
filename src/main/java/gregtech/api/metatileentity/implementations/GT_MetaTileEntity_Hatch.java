@@ -43,19 +43,30 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        int textureIndex=actualTexture|(mTexturePage<<7);//Shift seven since one page is 128 textures!
-        int texturePointer=(byte)(actualTexture&0x7F);//just to be sure, from my testing the 8th bit cannot be set clientside
-        return aSide != aFacing ?
-                textureIndex > 0 ?
-                        new ITexture[]{Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]} :
-                        new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]} :
-                textureIndex > 0 ?
-                        aActive ?
-                                getTexturesActive(Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]) :
-                                getTexturesInactive(Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]) :
-                        aActive ?
-                                getTexturesActive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]) :
-                                getTexturesInactive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]);
+        int textureIndex = actualTexture | (mTexturePage << 7);//Shift seven since one page is 128 textures!
+        int texturePointer = (byte) (actualTexture & 0x7F);//just to be sure, from my testing the 8th bit cannot be set clientside
+        try {
+            if (aSide != aFacing) {
+                if (textureIndex > 0)
+                    return new ITexture[]{Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]};
+                else
+                    return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]};
+            } else {
+                if (textureIndex > 0) {
+                    if (aActive)
+                        return getTexturesActive(Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]);
+                    else
+                        return getTexturesInactive(Textures.BlockIcons.casingTexturePages[mTexturePage][texturePointer]);
+                } else {
+                    if (aActive)
+                        return getTexturesActive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]);
+                    else
+                        return getTexturesInactive(Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]);
+                }
+            }
+        } catch (NullPointerException npe) {
+            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[0][0]};
+        }
     }
 
     @Override
