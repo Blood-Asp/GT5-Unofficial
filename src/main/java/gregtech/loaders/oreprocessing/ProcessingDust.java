@@ -159,7 +159,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     case "Diamond":
                         GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), 32, ItemList.IC2_Industrial_Diamond.get(3L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 16L));
                         break;
-                    case "Opal": case "Olivine": case "Emerald": case "Ruby": case "Sapphire": case "GreenSapphire": case "Topaz": case "BlueTopaz": case "Tanzanite":
+                    case "Opal": case "Olivine": case "Emerald": case "Ruby": case "Sapphire": case "GreenSapphire": case "Topaz": case "BlueTopaz": case "Tanzanite": case "Amethyst":
                         GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), 24, GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 3L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 12L));
                         break;
                     case "FoolsRuby": case "GarnetRed": case "GarnetYellow": case "Jasper": case "Amber": case "Monazite": case "Forcicium": case "Forcillium": case "Force":
