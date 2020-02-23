@@ -8,7 +8,9 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class GT_Command extends CommandBase {
 
@@ -38,38 +40,19 @@ public final class GT_Command extends CommandBase {
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] ss) {
         List<String> l = new ArrayList<>();
-        if (ss.length == 0 || ss.length == 1 && (ss[0].trim().isEmpty() || "toggle".startsWith(ss[0]) || "chunks".startsWith(ss[0]))) {
-            if ("toggle".startsWith(ss[0]))
-                l.add("toggle");
-            else if ("chunks".startsWith(ss[0]))
-                l.add("chunks");
-            else {
-                l.add("toggle");
-                l.add("chunks");
-            }
-        } else if (ss[0].equals("toggle")) {
-            if (ss.length == 1 || ss[1].trim().isEmpty()) {
-                l.add("D1");
-                l.add("D2");
-                l.add("debugCleanroom");
-                l.add("debugDriller");
-                l.add("debugWorldGen");
-                l.add("debugOrevein");
-                l.add("debugSmallOres");
-                l.add("debugStones");
-                l.add("debugChunkloaders");
-            } else if (ss[1].startsWith("D")) {
-                l.add("D1");
-                l.add("D2");
-            } else if (ss[1].startsWith("d")) {
-                l.add("debugCleanroom");
-                l.add("debugDriller");
-                l.add("debugWorldGen");
-                l.add("debugOrevein");
-                l.add("debugSmallOres");
-                l.add("debugStones");
-                l.add("debugChunkloaders");
-            }
+        Stream<String> keywords = Arrays.stream(new String[]{"toggle", "chunks"});
+        String test = ss.length == 0 ? "" : ss[0].trim();
+        if (ss.length == 0 || ss.length == 1 && (test.isEmpty() || keywords.anyMatch(s -> s.startsWith(test)))) {
+            keywords.forEach(s -> {
+                if (test.isEmpty() || s.startsWith(test))
+                    l.add(s);
+            });
+        } else if (test.equals("toggle")) {
+            String test1 = ss.length == 1 ? "" : ss[1].trim();
+            Arrays.stream(new String[]{"D1", "D2", "debugCleanroom", "debugDriller", "debugWorldGen", "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders"}).forEach(s -> {
+                if (test1.isEmpty() || s.startsWith(test1))
+                    l.add(s);
+            });
         }
         return l;
     }
