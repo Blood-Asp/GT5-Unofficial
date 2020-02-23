@@ -139,8 +139,6 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
     }
 
     public static void printTickets() {
-        if (!GT_Values.debugChunkloaders)
-            return;
         GT_Log.out.println("GT_ChunkManager: Start forced chunks dump:");
         instance.registeredTickets.forEach((machine, ticket) -> {
             GT_Log.out.print("GT_ChunkManager: Chunks forced by the machine at (" + machine.xCoord + ", " + machine.yCoord + ", " + machine.zCoord + ")");
@@ -156,23 +154,5 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
             }
         });
         GT_Log.out.println("GT_ChunkManager: End forced chunks dump:");
-    }
-    public static class DebugCommand extends CommandBase {
-        @Override
-        public String getCommandName() {
-            return "gt5u:dump_chunks";
-        }
-        @Override
-        public int getRequiredPermissionLevel() {
-            return 0;
-        }
-        @Override
-        public String getCommandUsage(ICommandSender sender) {
-            return "/" + getCommandName();
-        }
-        @Override
-        public void processCommand(ICommandSender sender, String[] args) {
-            printTickets();
-        }
     }
 }
