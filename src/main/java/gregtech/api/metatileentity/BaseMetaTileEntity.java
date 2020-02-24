@@ -39,6 +39,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.NW;
@@ -69,6 +70,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public long mLastSoundTick = 0;
     private long mLastCheckTick = 0;
     private String mOwnerName = "";
+    private UUID mOwnerUuid = GT_Utility.defaultUuid;
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
 
     private static final Field ENTITY_ITEM_HEALTH_FIELD;
@@ -116,6 +118,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             aNBT.setByte("mStrongRedstone", mStrongRedstone);
             aNBT.setShort("mFacing", mFacing);
             aNBT.setString("mOwnerName", mOwnerName);
+            aNBT.setString("mOwnerUuid", mOwnerUuid == null ? "" : mOwnerUuid.toString());
             aNBT.setBoolean("mLockUpgrade", mLockUpgrade);
             aNBT.setBoolean("mMuffler", mMuffler);
             aNBT.setBoolean("mSteamConverter", mSteamConverter);
@@ -181,6 +184,11 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mStrongRedstone = aNBT.getByte("mStrongRedstone");
             mFacing = oFacing = (byte) aNBT.getShort("mFacing");
             mOwnerName = aNBT.getString("mOwnerName");
+            try {
+                mOwnerUuid = UUID.fromString(aNBT.getString("mOwnerUuid"));
+            } catch (IllegalArgumentException e){
+                mOwnerUuid = null;
+            }
             mLockUpgrade = aNBT.getBoolean("mLockUpgrade");
             mMuffler = aNBT.getBoolean("mMuffler");
             mSteamConverter = aNBT.getBoolean("mSteamConverter");
@@ -541,7 +549,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                                 oTexturePage = (hasValidMetaTileEntity() && mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) ? ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage() : 0,
                                                 oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0,
                                                 oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)),
-                                                oColor = mColor), 
+                                                oColor = mColor),
                                         xCoord, zCoord);
                                 mSendClientData = false;
                             }
@@ -1191,8 +1199,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public boolean playerOwnsThis(EntityPlayer aPlayer, boolean aCheckPrecicely) {
         if (!canAccessData()) return false;
         if (aCheckPrecicely || privateAccess() || (mOwnerName.length() == 0))
-            if ((mOwnerName.length() == 0) && isServerSide()) setOwnerName(aPlayer.getDisplayName());
-            else if (privateAccess() && !aPlayer.getDisplayName().equals("Player") && !mOwnerName.equals("Player") && !mOwnerName.equals(aPlayer.getDisplayName()))
+            if ((mOwnerName.length() == 0) && isServerSide()) {
+                setOwnerName(aPlayer.getDisplayName());
+                setOwnerUuid(aPlayer.getUniqueID());
+            } else if (privateAccess() && !aPlayer.getDisplayName().equals("Player") && !mOwnerName.equals("Player") && !mOwnerName.equals(aPlayer.getDisplayName()))
                 return false;
         return true;
     }
@@ -1244,7 +1254,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mMetaTileEntity.doExplosion(aAmount);
         }
     }
-    
+
     public void dropItems(ItemStack tItem){
     	if(tItem==null)return;
         EntityItem tItemEntity = new EntityItem(this.worldObj, this.xCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, this.yCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, this.zCoord + XSTR_INSTANCE.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
@@ -1261,7 +1271,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 ENTITY_ITEM_HEALTH_FIELD.setInt(tItemEntity, 99999999);
 		} catch (Exception ignored) {}
         this.worldObj.spawnEntityInWorld(tItemEntity);
-        tItem.stackSize = 0;                       	
+        tItem.stackSize = 0;
     }
 
     @Override
@@ -1365,7 +1375,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         doEnetUpdate();
                         return true;
                     }
-                    
+
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)) {
                     	byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
                         if (mMetaTileEntity.onWireCutterRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
@@ -1421,6 +1431,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         if (isUpgradable() && !mLockUpgrade) {
                             mLockUpgrade = true;
                             setOwnerName(aPlayer.getDisplayName());
+                            setOwnerUuid(aPlayer.getUniqueID());
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(3), 1.0F, -1, xCoord, yCoord, zCoord);
                             if (!aPlayer.capabilities.isCreativeMode) aPlayer.inventory.getCurrentItem().stackSize--;
                         }
@@ -1527,7 +1538,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public byte getOutputRedstoneSignal(byte aSide) {
         return getCoverBehaviorAtSide(aSide).manipulatesSidedRedstoneOutput(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this) ? mSidedRedstone[aSide] : getGeneralRS(aSide);
     }
-    
+
     public byte getGeneralRS(byte aSide){
     	if(mMetaTileEntity==null)return 0;
     	return mMetaTileEntity.allowGeneralRedstoneOutput() ? mSidedRedstone[aSide] : 0;
@@ -1724,6 +1735,16 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public String setOwnerName(String aName) {
         if (GT_Utility.isStringInvalid(aName)) return mOwnerName = "Player";
         return mOwnerName = aName;
+    }
+
+    @Override
+    public UUID getOwnerUuid() {
+        return mOwnerUuid;
+    }
+
+    @Override
+    public void setOwnerUuid(UUID uuid) {
+        mOwnerUuid = uuid;
     }
 
     @Override

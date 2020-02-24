@@ -156,6 +156,7 @@ public class GT_Item_Machines
                 tTileEntity.setInitialValuesAsNBT(tTileEntity.isServerSide() ? aStack.getTagCompound() : null, tDamage);
                 if (aPlayer != null) {
                     tTileEntity.setOwnerName(aPlayer.getDisplayName());
+                    tTileEntity.setOwnerUuid(aPlayer.getUniqueID());
                 }
                 tTileEntity.getMetaTileEntity().initDefaultModes(aStack.getTagCompound());
                 final byte aSide = GT_Utility.getOppositeSide(side);
