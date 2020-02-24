@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A simple compound Interface for all my TileEntities.
@@ -92,16 +91,6 @@ public interface IGregTechTileEntity extends ITexturedTileEntity, IGearEnergyTil
      * gets the Name of the Machines Owner or "Player" if not set.
      */
     public String getOwnerName();
-
-    /**
-     * Gets the UniqueID of the Machines Owner.
-     */
-    public UUID getOwnerUuid();
-
-    /**
-     * Sets the UniqueID of the Machines Owner.
-     */
-    public void setOwnerUuid(UUID uuid);
 
     /**
      * Sets initial Values from NBT
