@@ -6,6 +6,7 @@ import static gregtech.api.enums.GT_Values.NW;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
@@ -1173,6 +1174,16 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public String setOwnerName(String aName) {
         return "Player";
+    }
+
+    @Override
+    public UUID getOwnerUuid() {
+        return GT_Utility.defaultUuid;
+    }
+
+    @Override
+    public void setOwnerUuid(UUID uuid) {
+
     }
 
     @Override
