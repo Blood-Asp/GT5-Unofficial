@@ -4,15 +4,17 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.lang.Math; //Java was written by idiots
 
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.GT_Values.debugDriller;
@@ -26,6 +28,8 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     private ArrayList<Chunk> mOilFieldChunks = new ArrayList<Chunk>();
     private int mOilId = 0;
 
+    private int chunkRangeConfig = getRangeInChunks();
+
     public GT_MetaTileEntity_OilDrillBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -38,12 +42,15 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setInteger("mOilId", mOilId);
+        aNBT.setInteger("chunkRangeConfig", chunkRangeConfig);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         mOilId = aNBT.getInteger("mOilId");
+        if (aNBT.hasKey("chunkRangeConfig"))
+            chunkRangeConfig = aNBT.getInteger("chunkRangeConfig");
     }
 
     protected String[] getDescriptionInternal(String tierSuffix) {
@@ -57,7 +64,8 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 "1x Output Hatch (One of base casings)",
                 "1x Maintenance Hatch (One of base casings)",
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Working on " + getRangeInChunks() + " * " + getRangeInChunks() + " chunks",
+                "Working on " + getRangeInChunks() + "x" + getRangeInChunks() + " chunks",
+                "Use Screwdriver to configure range",
                 "Use Programmed Circuits to ignore near exhausted oil field"};
     }
 
@@ -68,6 +76,25 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     }
 
     protected abstract int getRangeInChunks();
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        if (aPlayer.isSneaking()) {
+            if (chunkRangeConfig > 0) {
+                chunkRangeConfig--;
+            }
+            if (chunkRangeConfig == 0)
+                chunkRangeConfig = getRangeInChunks();
+        } else {
+            if (chunkRangeConfig <= getRangeInChunks()) {
+                chunkRangeConfig++;
+            }
+            if (chunkRangeConfig > getRangeInChunks())
+                chunkRangeConfig = 1;
+        }
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + chunkRangeConfig + "x" + chunkRangeConfig + StatCollector.translateToLocal("GT5U.machines.chunks"));//TODO Add translation support
+    }
 
     @Override
     protected boolean checkHatches() {
@@ -82,7 +109,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         this.mEUt = -7 << (tier << 1);//(1/4) A of current tier when at bottom (7/8) A of current tier while mining
         this.mMaxProgresstime = Math.max(1,
                 (workState == STATE_AT_BOTTOM ?
-                        (64 * (getRangeInChunks() * getRangeInChunks()))>>(getMinTier()-1)  :
+                        (64 * (chunkRangeConfig * chunkRangeConfig))>>(getMinTier()-1)  :
                         120
                 ) >> tier);
     }
@@ -123,7 +150,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 
         if (mOilFieldChunks.isEmpty()) {
             Chunk tChunk = getBaseMetaTileEntity().getWorld().getChunkFromBlockCoords(getBaseMetaTileEntity().getXCoord(), getBaseMetaTileEntity().getZCoord());
-            int range = getRangeInChunks();
+            int range = chunkRangeConfig;
             int xChunk = Math.floorDiv(tChunk.xPosition,range) * range; //Java was written by idiots.  For negative values, / returns rounded towards zero. Fucking morons.
             int zChunk = Math.floorDiv(tChunk.zPosition,range) * range;
             if (debugDriller) {
@@ -205,5 +232,14 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             mOilFieldChunks.remove( tChunk );
         }
         return tOil.amount == 0 ? null : tOil;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                EnumChatFormatting.BLUE+StatCollector.translateToLocal("GT5U.machines.oilfluidpump")+EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + (chunkRangeConfig)+ " x " + (chunkRangeConfig) + 
+                EnumChatFormatting.RESET+" " + StatCollector.translateToLocal("GT5U.machines.chunks")
+        };
     }
 }

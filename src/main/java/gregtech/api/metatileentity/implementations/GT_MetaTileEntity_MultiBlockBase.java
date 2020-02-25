@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_Container_MultiMachine;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -19,7 +17,6 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
@@ -435,7 +432,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                     NBTTagCompound tNBT = mInventory[1].getTagCompound();
                     if (tNBT != null) {
                         NBTTagCompound tNBT2 = tNBT.getCompoundTag("GT.CraftingComponents");//tNBT2 dont use out if
-                        if (!tNBT.getBoolean("mDis")) {
+                        /*if (!tNBT.getBoolean("mDis")) {
                             tNBT2 = new NBTTagCompound();
                             Materials tMaterial = GT_MetaGenerated_Tool.getPrimaryMaterial(mInventory[1]);
                             ItemStack tTurbine = GT_OreDictUnificator.get(OrePrefixes.turbineBlade, tMaterial, 1);
@@ -487,7 +484,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                             tNBT.setBoolean("mDis", true);
                             mInventory[1].setTagCompound(tNBT);
 
-                        }
+                        }*/
                     }
                     ((GT_MetaGenerated_Tool) mInventory[1].getItem()).doDamage(mInventory[1], (long)getDamageToComponent(mInventory[1]) * (long) Math.min(mEUt / this.damageFactorLow, Math.pow(mEUt, this.damageFactorHigh)));
                     if (mInventory[1].stackSize == 0) mInventory[1] = null;
@@ -566,7 +563,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         //Isnt too low EUt check?
         int aAmpsToInject;
         int aRemainder;
-
+        int ampsOnCurrentHatch;
         //xEUt *= 4;//this is effect of everclocking
         for (GT_MetaTileEntity_Hatch_Dynamo aDynamo : mDynamoHatches) {
             if (isValidMetaTileEntity(aDynamo)) {
@@ -574,11 +571,14 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 aVoltage = aDynamo.maxEUOutput();
                 aAmpsToInject = (int) (leftToInject / aVoltage);
                 aRemainder = (int) (leftToInject - (aAmpsToInject * aVoltage));
-                long powerGain;
-                for (int i = 0; i < Math.min(aDynamo.maxAmperesOut(), aAmpsToInject > 0 ? aAmpsToInject : 1); i++) {
-                    powerGain = aAmpsToInject > 0 ? aVoltage : aRemainder;
-                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(powerGain, false);
-                    injected += powerGain;
+                ampsOnCurrentHatch= (int) Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
+                for (int i = 0; i < ampsOnCurrentHatch; i++) {
+                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aVoltage, false);
+                }
+                injected+=aVoltage*ampsOnCurrentHatch;
+                if(aRemainder>0 && ampsOnCurrentHatch<aDynamo.maxAmperesOut()){
+                    aDynamo.getBaseMetaTileEntity().increaseStoredEnergyUnits(aRemainder, false);
+                    injected+=aRemainder;
                 }
             }
         }

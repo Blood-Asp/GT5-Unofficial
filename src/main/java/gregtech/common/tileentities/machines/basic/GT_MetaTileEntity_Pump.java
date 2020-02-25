@@ -18,6 +18,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -25,12 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.V;
@@ -48,26 +45,31 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         return (16 * ((long) Math.pow(4, aTier)));
     }
 
-    public ArrayDeque<ChunkPosition> mPumpList = new ArrayDeque<ChunkPosition>();
+    public ArrayDeque<ChunkPosition> mPumpList = new ArrayDeque<>();
     public boolean wasPumping = false;
     public int mPumpTimer = 0;
     public int mPumpCountBelow = 0;
     public Block mPrimaryPumpedBlock = null;
     public Block mSecondaryPumpedBlock = null;
 
+    private int radiusConfig; //Pump configured radius
+
     public GT_MetaTileEntity_Pump(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3,
                 new String[]{"The best way to empty Oceans! Outputs on top",
-                        "Pumping Area: " + (GT_MetaTileEntity_Pump.getMaxDistanceForTier((byte)aTier) * 2 + 1) + "x" + 
-                                           (GT_MetaTileEntity_Pump.getMaxDistanceForTier((byte)aTier) * 2 + 1)});
+                        "Maximum pumping area: " + (getMaxDistanceForTier((byte) aTier) * 2 + 1) + "x" + (getMaxDistanceForTier((byte) aTier) * 2 + 1),
+                        "Use Screwdriver to regulate pumping area"});
+        radiusConfig = getMaxDistanceForTier(mTier);
     }
 
     public GT_MetaTileEntity_Pump(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
+        radiusConfig = getMaxDistanceForTier(mTier);
     }
 
     public GT_MetaTileEntity_Pump(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 3, aDescription, aTextures);
+        radiusConfig = getMaxDistanceForTier(mTier);
     }
 
     @Override
@@ -84,17 +86,48 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         aNBT.setString("mPumpedBlock1", this.mPrimaryPumpedBlock == null ? "" : Block.blockRegistry.getNameForObject(this.mPrimaryPumpedBlock));
         aNBT.setString("mPumpedBlock2", this.mSecondaryPumpedBlock == null ? "" : Block.blockRegistry.getNameForObject(this.mSecondaryPumpedBlock));
         aNBT.setBoolean("wasPumping", wasPumping);
+        aNBT.setInteger("radiusConfig", radiusConfig);
     }
 
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         this.wasPumping = aNBT.getBoolean("wasPumping");
+        if (aNBT.hasKey("radiusConfig"))
+            this.radiusConfig = aNBT.getInteger("radiusConfig");
         this.mPrimaryPumpedBlock = Block.getBlockFromName(aNBT.getString("mPumpedBlock1"));
         this.mSecondaryPumpedBlock = Block.getBlockFromName(aNBT.getString("mPumpedBlock2"));
 
         if (D1) {
             GT_Log.out.println("PUMP: NBT:Load - WasPumping - " + this.wasPumping + "(" + aNBT.getString("mPumpedBlock1") + ") " + this.mPrimaryPumpedBlock);
         }
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        aNBT.setInteger("radiusConfig", radiusConfig);
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        int max = getMaxPumpableDistance();
+        if (aPlayer.isSneaking()) {
+            if (radiusConfig >= 0) {
+                radiusConfig--;
+            }
+            if (radiusConfig < 0)
+                radiusConfig = max;
+        } else {
+            if (radiusConfig <= max) {
+                radiusConfig++;
+            }
+            if (radiusConfig > max)
+                radiusConfig = 0;
+        }
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (radiusConfig * 2 + 1) + "x" + (radiusConfig * 2 + 1));//TODO Add translation support
+        
+        clearQueue(false);
 
     }
 
@@ -351,11 +384,11 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     }
 
     private void rebuildPumpQueue(int aX, int yStart, int aZ, int yEnd) {
-        int mDist = this.getMaxPumpableDistance();
+        int mDist = this.radiusConfig;
         doTickProfilingInThisTick = false;
-        ArrayDeque<ChunkPosition> fluidsToSearch = new ArrayDeque<ChunkPosition>();
-        ArrayDeque<ChunkPosition> fluidsFound = new ArrayDeque<ChunkPosition>();
-        Set<ChunkPosition> checked = new HashSet<ChunkPosition>();
+        ArrayDeque<ChunkPosition> fluidsToSearch = new ArrayDeque<>();
+        ArrayDeque<ChunkPosition> fluidsFound = new ArrayDeque<>();
+        Set<ChunkPosition> checked = new HashSet<>();
         this.clearQueue(false);
 
         for (int aY = yStart ; this.mPumpList.isEmpty() && aY >= yEnd ; aY--) {
@@ -364,22 +397,23 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             fluidsToSearch.add(new ChunkPosition(aX, aY, aZ));
 
             while (!fluidsToSearch.isEmpty()) {
-                Iterator<ChunkPosition> i$ = fluidsToSearch.iterator();
-                while(i$.hasNext()) {
-                    ChunkPosition tPos = i$.next();
-
+                for (ChunkPosition tPos : fluidsToSearch) {
                     // Look all around
-                    if (tPos.chunkPosX < aX + mDist) queueFluid(tPos.chunkPosX + 1, tPos.chunkPosY, tPos.chunkPosZ,     fluidsFound, checked);
-                    if (tPos.chunkPosX > aX - mDist) queueFluid(tPos.chunkPosX - 1, tPos.chunkPosY, tPos.chunkPosZ,     fluidsFound, checked);
-                    if (tPos.chunkPosZ < aZ + mDist) queueFluid(tPos.chunkPosX,     tPos.chunkPosY, tPos.chunkPosZ + 1, fluidsFound, checked);
-                    if (tPos.chunkPosZ > aZ - mDist) queueFluid(tPos.chunkPosX,     tPos.chunkPosY, tPos.chunkPosZ - 1, fluidsFound, checked);
+                    if (tPos.chunkPosX < aX + mDist)
+                        queueFluid(tPos.chunkPosX + 1, tPos.chunkPosY, tPos.chunkPosZ, fluidsFound, checked);
+                    if (tPos.chunkPosX > aX - mDist)
+                        queueFluid(tPos.chunkPosX - 1, tPos.chunkPosY, tPos.chunkPosZ, fluidsFound, checked);
+                    if (tPos.chunkPosZ < aZ + mDist)
+                        queueFluid(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ + 1, fluidsFound, checked);
+                    if (tPos.chunkPosZ > aZ - mDist)
+                        queueFluid(tPos.chunkPosX, tPos.chunkPosY, tPos.chunkPosZ - 1, fluidsFound, checked);
 
                     // And then look up
                     queueFluid(tPos.chunkPosX, tPos.chunkPosY + 1, tPos.chunkPosZ, this.mPumpList, checked);
                 }
                 this.mPumpList.addAll(fluidsFound);
                 fluidsToSearch = fluidsFound;
-                fluidsFound = new ArrayDeque<ChunkPosition>();
+                fluidsFound = new ArrayDeque<>();
             }
 
             // Make sure we don't have the pipe location in the queue
@@ -486,7 +520,10 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ArrayList<String> getSpecialDebugInfo(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, int aLogLevel, ArrayList<String> aList) {
-        aList.addAll(Arrays.asList("Primary pumping fluid:   " + (this.mPrimaryPumpedBlock != null ? this.mPrimaryPumpedBlock.getLocalizedName() : "None"),
+        aList.addAll(Arrays.asList(  EnumChatFormatting.BLUE+StatCollector.translateToLocal("GT5U.machines.pump")+EnumChatFormatting.RESET,
+                                     StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + (radiusConfig * 2 + 1)+ 
+                                         EnumChatFormatting.RESET+" " + StatCollector.translateToLocal("GT5U.machines.blocks"),
+                                    "Primary pumping fluid:   " + (this.mPrimaryPumpedBlock != null ? this.mPrimaryPumpedBlock.getLocalizedName() : "None"),
                                    "Secondary pumping fluid: " + (this.mSecondaryPumpedBlock != null ? this.mSecondaryPumpedBlock.getLocalizedName() : "None"),
                                    "Pumps below: " + mPumpCountBelow,
                                    "Queue size: " + mPumpList.size(),
@@ -612,5 +649,14 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         mFakePlayer.setWorld(aBaseTile.getWorld());
         mFakePlayer.setPosition(aBaseTile.getXCoord(), aBaseTile.getYCoord(), aBaseTile.getZCoord());
         return mFakePlayer;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                EnumChatFormatting.BLUE+StatCollector.translateToLocal("GT5U.machines.pump")+EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + (radiusConfig * 2 + 1)+ 
+                EnumChatFormatting.RESET+" " + StatCollector.translateToLocal("GT5U.machines.blocks")
+        };
     }
 }

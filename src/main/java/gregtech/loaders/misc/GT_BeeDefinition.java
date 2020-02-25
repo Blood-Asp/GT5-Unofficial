@@ -26,10 +26,9 @@ import gregtech.common.bees.GT_AlleleBeeSpecies;
 import gregtech.common.bees.GT_Bee_Mutation;
 import gregtech.common.items.CombType;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BiomeDictionary;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
@@ -1041,8 +1040,9 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-        	IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Hermitic"), LAPIS.species, 10);
-            tMutation.requireResource("blockCertusQuartz");
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY, "Hermitic"), LAPIS.species, 10);
+            if (Loader.isModLoaded("appliedenergistics2"))
+                tMutation.requireResource(GameRegistry.findBlock("appliedenergistics2", "tile.BlockQuartz"), 0);
         }
     },
     FLUIX(GT_BranchDefinition.GEM, "FluixDust", true, 0xA375FF, 0xB591FF) {
@@ -1062,7 +1062,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(REDSTONE.species, LAPIS.species, 7);
-            tMutation.requireResource("blockFluix");
+            if (Loader.isModLoaded("appliedenergistics2"))
+                tMutation.requireResource(GameRegistry.findBlock("appliedenergistics2", "tile.BlockFluix"), 0);
         }
     },
     RUBY(GT_BranchDefinition.GEM, "Ruby", false, 0xE6005C, 0xCC0052) {
@@ -1103,7 +1104,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
         	IBeeMutationCustom tMutation = registerMutation(CERTUS.species, LAPIS.species, 5);
-            tMutation.requireResource(GregTech_API.sBlockGem2, 13);
+            tMutation.requireResource(GregTech_API.sBlockGem2, 12);
         }
     },
     DIAMOND(GT_BranchDefinition.GEM, "Diamond", false, 0xCCFFFF, 0xA3CCCC) {
@@ -2092,7 +2093,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(CALLISTO.species, LEAD.species, 7);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Ledox"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Ledox"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(35, "Europa"));//Europa Dim
         }
     },
@@ -2115,7 +2116,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(CALLISTO.species, getSpecies(EXTRABEES,"freezing"), 7);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.CallistoColdIce"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.CallistoColdIce"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(45, "Callisto"));//Callisto Dim
         }
     },
@@ -2138,7 +2139,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(IO.species, MITHRIL.species, 6);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Mytryl"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Mytryl"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(36, "IO"));//IO Dim
         }
     },
@@ -2161,7 +2162,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(VENUS.species, OSMIUM.species, 6);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Quantinum"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Quantinum"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(39, "Venus"));//Venus Dim
         }
     },
@@ -2183,7 +2184,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(LEAD.species, OBERON.species, 5);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "metalsblock"), 6);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "metalsblock"), 6);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(46, "Oberon"));//Oberon Dim
         }
     },
@@ -2206,7 +2207,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(ENCELADUS.species, EMERALD.species, 3);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.MysteriousCrystal"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.MysteriousCrystal"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(41, "Enceladus"));//Enceladus Dim
         }
     },
@@ -2229,7 +2230,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(PLUTO.species, PLUTONIUM.species, 2);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.BlackPlutonium"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.BlackPlutonium"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(49, "Pluto"));//Pluto Dim
         }
     },
@@ -2275,7 +2276,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, TUNGSTEN.species, 25, 2);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "mercuryblocks"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "mercuryblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(37, "Mercury"));//Mercury Dim
         }
     },
@@ -2297,7 +2298,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, MITHRIL.species, 25, 2);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "venusblocks"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "venusblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(39, "Venus"));//Venus Dim
         }
     },
@@ -2306,7 +2307,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.MOON), 0.50f);
             if (Loader.isModLoaded("dreamcraft"))
-            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.MoonStoneDust", 1, 0), 0.10f);
+                beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.MoonStoneDust", 1, 0), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.NORMAL);
             beeSpecies.setTemperature(EnumTemperature.COLD);
             beeSpecies.setNocturnal();
@@ -2355,7 +2356,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.MARS), 0.25f);
             if (Loader.isModLoaded("dreamcraft"))
-            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.PhobosStoneDust", 1, 0), 0.10f);
+                beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.PhobosStoneDust", 1, 0), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.HOT);
             beeSpecies.setNocturnal();
@@ -2493,7 +2494,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, IRON.species, 15);
             tMutation.restrictTemperature(EnumTemperature.ICY);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "europagrunt"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "europagrunt"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(35, "Europa"));//Europa Dim
         }
     },
@@ -2515,7 +2516,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, TITANIUM.species, 15);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "ganymedeblocks"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "ganymedeblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(43, "Ganymede"));//Ganymede Dim
         }
     },
@@ -2539,7 +2540,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, getSpecies(EXTRABEES, "artic"), 15);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "callistoblocks"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "callistoblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(45, "Callisto"));//Callisto Dim
         }
     },
@@ -2564,7 +2565,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(JUPITER.species, LEDOX.species, 25, 2);
             if (Loader.isModLoaded("dreamcraft"))
-            tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Quantinum"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("dreamcraft", "tile.Quantinum"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(30, "Asteriods"));//Asteriods Dim
         }
     },
@@ -2588,7 +2589,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(SATURN.species, CHROME.species, 25, 2);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "enceladusblocks"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "enceladusblocks"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(41, "Enceladus"));//Enceladus Dim
         }
     },
@@ -2864,7 +2865,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(CENTAURI.species, INFINITYCATALYST.species, 3);
             if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "acentauribbgrunt"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "acentauribbgrunt"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(31, "aCentauri"));//aCentauri Dim
         }
     },
@@ -2955,9 +2956,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(BARNARDA.species, AMERICIUM.species, 3, 2);
-            if (Loader.isModLoaded("GalaxySpace"))
+            if (Loader.isModLoaded("GalaxySpace")) {
                 tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaEgrunt"), 0);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(32, "Barnarda C"));//Barnarda C Dim
+                tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(32, "Barnarda C"));//Barnarda C Dim
+            }
         }
     },
     BARNARDAE(GT_BranchDefinition.PLANET, "BarnardaE", false, 0x0D5A0D, 0x4c1f0a) {
@@ -2977,9 +2979,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(BARNARDA.species, DIVIDED.species, 3, 2);
-            if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaEgrunt"), 0);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(81, "Barnard E"));//"Barnard E Dim
+            if (Loader.isModLoaded("GalaxySpace")) {
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaEgrunt"), 0);
+                tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(81, "Barnard E"));//"Barnard E Dim
+            }
         }
     },
     BARNARDAF(GT_BranchDefinition.PLANET, "BarnardaF", false, 0x0D5A0D, 0x1e0b49) {
@@ -2999,9 +3002,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(BARNARDA.species, NEUTRONIUM.species, 3, 2);
-            if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaFgrunt"), 0);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(82, "Barnard F"));//"Barnard F Dim
+            if (Loader.isModLoaded("GalaxySpace")) {
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "barnardaFgrunt"), 0);
+                tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(82, "Barnard F"));//"Barnard F Dim
+            }
         }
     },
     VEGA(GT_BranchDefinition.PLANET, "Vega", false, 0x1A2036, 0xB5C0DE) {
@@ -3022,16 +3026,18 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(MAKEMAKE.species, NAQUADAH.species, 2);
-            if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "vegabgrunt"), 0);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(33, "Kuiper Belt"));//Kuiper Belt Dim
+            if (Loader.isModLoaded("GalaxySpace")) {
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "vegabgrunt"), 0);
+                tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(33, "Kuiper Belt"));//Kuiper Belt Dim
+            }
         }
     },
     VEGAB(GT_BranchDefinition.PLANET, "VegaB", false, 0x1A2036, 0x81e261) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.VEGA), 0.50f);
-            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.VegaBStoneDust", 1, 0), 0.10f);
+            if (Loader.isModLoaded("dreamcraft"))
+                beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.VegaBStoneDust", 1, 0), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.COLD);
         }
@@ -3044,9 +3050,10 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(VEGA.species, NAQUADRIA.species, 2);
-            if (Loader.isModLoaded("GalaxySpace"))
-            tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "vegabgrunt"), 0);
-            tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(84, "VegaB"));//VegaB Dim
+            if (Loader.isModLoaded("GalaxySpace")) {
+                tMutation.requireResource(GameRegistry.findBlock("GalaxySpace", "vegabgrunt"), 0);
+                tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(84, "VegaB"));//VegaB Dim
+            }
         }
     },
     //Infinity Line
@@ -3069,7 +3076,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(NEUTRONIUM.species, BARNARDAF.species, 7,10);
             if (Loader.isModLoaded("Avaritia"))
-            tMutation.requireResource(GameRegistry.findBlock("Avaritia", "Resource_Block"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("Avaritia", "Resource_Block"), 0);
         }
     },
     INFINITYCATALYST(GT_BranchDefinition.PLANET, "InfinityCatalyst", false, 0xFFFFFF, 0xFFFFFF) {
@@ -3113,7 +3120,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         protected void registerMutations() {
             IBeeMutationCustom tMutation = registerMutation(INFINITYCATALYST.species, COSMICNEUTRONIUM.species, 1, 100);
             if (Loader.isModLoaded("avaritiaddons"))
-            tMutation.requireResource(GameRegistry.findBlock("avaritiaddons", "InfinityChest"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("avaritiaddons", "InfinityChest"), 0);
         }
     };
     private final GT_BranchDefinition branch;

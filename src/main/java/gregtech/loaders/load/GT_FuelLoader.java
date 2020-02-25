@@ -1,8 +1,6 @@
 package gregtech.loaders.load;
 
-import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
-import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -14,7 +12,6 @@ import gregtech.api.util.GT_Recipe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class GT_FuelLoader
         implements Runnable {

@@ -147,7 +147,7 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_RefractoryWax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.VibrantAlloy, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 7000}, 384, 480);
 		addProcessHV(tComb, Materials.Chrome, 50);
 		tComb = getStackForType(CombType.ENERGETICALLOY);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_RefractoryWax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.VibrantAlloy, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 8000}, 384, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_RefractoryWax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.EnergeticAlloy, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 8000}, 384, 480);
 		addProcessHV(tComb, Materials.Gold, 60);
 		tComb = getStackForType(CombType.ELECTRICALSTEEL);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_RefractoryWax.get(1, new Object[0]),GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.ElectricalSteel, 1), GT_Values.NI, GT_Values.NI, GT_Values.NI, GT_Values.NI, new int[] {5000, 10000}, 128, 5);
@@ -378,6 +378,7 @@ public class ItemComb extends Item {
 		addProcessIV(tComb,Materials.Tungstate,80);
         addProcessIV(tComb,Materials.Scheelite,75);
         addProcessIV(tComb,Materials.Lithium,75);
+		addProcessIV(tComb,Materials.Tungsten,50);
 		tComb = getStackForType(CombType.PLATINUM);
 		addProcessHV(tComb,Materials.Platinum,40);
         addProcessHV(tComb,Materials.Cooperite,40);

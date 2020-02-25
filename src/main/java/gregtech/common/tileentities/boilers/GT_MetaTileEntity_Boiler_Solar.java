@@ -8,13 +8,16 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
+
 
 public class GT_MetaTileEntity_Boiler_Solar
         extends GT_MetaTileEntity_Boiler {
@@ -89,9 +92,44 @@ public class GT_MetaTileEntity_Boiler_Solar
         this.mRunTime = aNBT.getInteger("mRunTime");
     }
 
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+                "Heat Capacity: " + EnumChatFormatting.GREEN +  GT_Utility.formatNumbers(this.mTemperature * 100 / maxProgresstime()) + " % " + EnumChatFormatting.RESET
+                + "    Hot time: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.mRunTime*25/20)+EnumChatFormatting.RESET+" s",
+                "Min output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicMaxOuput*20/25)+EnumChatFormatting.RESET+ " L/s"
+                + "    Max output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicOutput*20/25)+EnumChatFormatting.RESET+" L/s",
+                "Current Output: " + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCalcificationOutput()*20/25) +EnumChatFormatting.RESET+" L/s"};
+    }
+
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+
     protected int basicOutput = 150;
     protected int basicMaxOuput = 50;
-    protected int basicTemperatureMod = 1;
+    protected int basicTemperatureMod = 5;
+    protected int basicLossTimerLimit = 45;
+
+    // Calcification start time is 43200*25/20=54,000s or 15 hours of game time.
+    static final int CALCIFICATION_TIME = 43200;
+    
+    public int getCalcificationOutput() { // Returns how much output the boiler can do.
+        if (this.mTemperature < 100 ) {
+            return 0;
+        }
+        if (this.mRunTime > CALCIFICATION_TIME) {
+            // Calcification takes about 2/3 CALCIFICATION_TIME to completely calcify on basic solar. For HP solar, it takes about 2x CALCIFICATION_TIME
+            return Math.max(this.basicMaxOuput, this.basicOutput - ((this.mRunTime - CALCIFICATION_TIME) / (CALCIFICATION_TIME/150))); // Every 288*25 ticks, or 6 minutes, lose 1 L output.
+        } else {
+            return this.basicOutput;
+        }
+    }
+
+    public int getBasicOutput() {
+        return this.basicOutput;
+    }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if ((aBaseMetaTileEntity.isServerSide()) && (aTick > 20L)) {
@@ -99,7 +137,7 @@ public class GT_MetaTileEntity_Boiler_Solar
                 this.mTemperature = 20;
                 this.mLossTimer = 0;
             }
-            if (++this.mLossTimer > 45) {
+            if (++this.mLossTimer > basicLossTimerLimit) {
                 this.mTemperature -= basicTemperatureMod;
                 this.mLossTimer = 0;
             }
@@ -116,7 +154,7 @@ public class GT_MetaTileEntity_Boiler_Solar
                     }
                 }
             }
-            if (aTick % 25L == 0L) {
+            if (aTick % 25L == 0L) { // Every 25 ticks since 1L of water = 150L of steam. So for 120L, have to use 25 instead of 20.
                 if (this.mTemperature > 100) {
                     if ((this.mFluid == null) || (!GT_ModHandler.isWater(this.mFluid)) || (this.mFluid.amount <= 0)) {
                         this.mHadNoWater = true;
@@ -126,12 +164,11 @@ public class GT_MetaTileEntity_Boiler_Solar
                             aBaseMetaTileEntity.doExplosion(2048L);
                             return;
                         }
-                        this.mFluid.amount -= basicTemperatureMod;
+                        this.mFluid.amount -= (basicOutput/150);
                         mRunTime += 1;
-                        int tOutput = basicOutput;
-                        if (mRunTime > 10000) {
-                            tOutput = Math.max(basicMaxOuput, basicOutput - ((mRunTime - 10000) / 100));
-                        }
+
+                        int tOutput = getCalcificationOutput();
+
                         if (this.mSteam == null) {
                             this.mSteam = GT_ModHandler.getSteam(tOutput);
                         } else if (GT_ModHandler.isSteam(this.mSteam)) {
@@ -153,7 +190,7 @@ public class GT_MetaTileEntity_Boiler_Solar
                 boolean bRain = aBaseMetaTileEntity.getWorld().isRaining() && aBaseMetaTileEntity.getBiome().rainfall > 0.0F;
                 mProcessingEnergy += bRain && aBaseMetaTileEntity.getWorld().skylightSubtracted >= 4 || !aBaseMetaTileEntity.getSkyAtSide((byte) 1) ? 0 : !bRain && aBaseMetaTileEntity.getWorld().isDaytime() ? 8*basicTemperatureMod : basicTemperatureMod;
             }
-            if ((this.mTemperature < 500) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
+            if ((this.mTemperature < maxProgresstime()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
                 this.mProcessingEnergy -= basicTemperatureMod;
                 this.mTemperature += basicTemperatureMod;
             }

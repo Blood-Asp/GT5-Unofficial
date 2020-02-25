@@ -44,15 +44,15 @@ public class GT_MetaTileEntity_AssemblyLine
     public String[] getDescription() {
         return new String[]{"Assembling Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Steel Machine Casing(or Maintenance or Input Hatch),",
-                "Input Bus (Last Output Bus), Steel Machine Casing",
-                "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
-                "UpMiddle: Grate Machine Casing,",
-                "    Assembler Machine Casing,",
-                "    Grate Machine Casing (or Controller or Data Access Hatch)",
-                "Top: Steel Casing(or Energy Hatch)",
-                "Up to 16 repeating slices, last is Output Bus",
-                "Optional 1x Data Access Hatch next to the Controller"};
+                "From Bottom to Top, Left to Right",
+                "Layer 1 - Solid Steel Machine Casing, Input Bus (last is Output Bus), Solid Steel Machine Casing",
+                "        - Casings can be replaced by Maint or Input Hatch",
+                "Layer 2 - Reinforced Glass, Assembling Line Casing, Reinforced Glass",
+                "Layer 3 - Grate Machine Casing, Assembler Machine Casing, Grate Machine Casing",
+                "Layer 4 - Empty, Solid Steel Machine Casing, Empty - Casing can be replaced by Energy Hatch",
+                "Up to 16 repeating slices, First replaces 1 Grate with Assembly Line,",
+                "Last has Output Bus instead of Input Bus",
+                "Optional - Replace 1x Grate with Data Access Hatch next to the Controller"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -86,7 +86,7 @@ public class GT_MetaTileEntity_AssemblyLine
             if(GT_Values.D1)
                 GT_FML_LOGGER.info("Stick accepted, " + tDataStickList.size() + " Data Sticks found");
 
-        ItemStack[] tStack = new ItemStack[15];
+        ItemStack tStack[] = new ItemStack[15];
         FluidStack[] tFluids = new FluidStack[4];
         boolean findRecipe = false;
         nextDS:for (ItemStack tDataStick : tDataStickList){
@@ -144,7 +144,7 @@ public class GT_MetaTileEntity_AssemblyLine
                     continue nextDS;
                 }
                 FluidStack fluidInHatch = mInputHatches.get(i).mFluid;
-                if (!GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
+                if (fluidInHatch == null || !GT_Utility.areFluidsEqual(fluidInHatch, tFluids[i], true) || fluidInHatch.amount < tFluids[i].amount) {
                     if(GT_Values.D1)
                         GT_FML_LOGGER.info(i+" not accepted");
                     continue nextDS;
@@ -171,17 +171,11 @@ public class GT_MetaTileEntity_AssemblyLine
                 continue;
             mEUt = tTag.getInteger("eu");
 
-            if (Math.abs(this.mEUt) > this.getMaxInputVoltage()) {
-                if(GT_Values.D1)
-                    GT_FML_LOGGER.info("Found avaiable recipe, but Voltage too low!");
-                return false;
-            }
             if(GT_Values.D1)GT_FML_LOGGER.info("Find avaiable recipe");
                 findRecipe = true;
             break;
         }
-        if (!findRecipe)
-            return false;
+        if (!findRecipe) return false;
 
         if(GT_Values.D1)GT_FML_LOGGER.info("All checked start consuming inputs");
         for (int i = 0; i < 15; i++) {

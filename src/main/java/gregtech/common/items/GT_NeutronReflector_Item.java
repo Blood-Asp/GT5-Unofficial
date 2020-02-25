@@ -1,8 +1,6 @@
 package gregtech.common.items;
 
-import gregtech.api.GregTech_API;
 import gregtech.api.items.GT_Generic_Item;
-import gregtech.api.items.GT_RadioactiveCellIC_Item;
 import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import net.minecraft.item.ItemStack;

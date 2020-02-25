@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IHasWorldObjectAndCoords;

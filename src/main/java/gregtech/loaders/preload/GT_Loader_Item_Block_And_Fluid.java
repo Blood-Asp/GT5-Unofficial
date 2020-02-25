@@ -1,7 +1,6 @@
 package gregtech.loaders.preload;
 
 import codechicken.nei.api.API;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
@@ -379,6 +378,7 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.HSSS,
                 Materials.Steeleaf,
                 Materials.Ichorium,
+                Materials.Firestone,
         }, OrePrefixes.block, gregtech.api.enums.Textures.BlockIcons.STORAGE_BLOCKS8);
 
         GregTech_API.sBlockGem1 = new GT_Block_Metal("gt.blockgem1", new Materials[]{

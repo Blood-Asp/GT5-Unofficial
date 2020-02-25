@@ -2,8 +2,6 @@ package gregtech.api.enums;
 
 import gregtech.api.interfaces.IMaterialHandler;
 
-import java.util.Arrays;
-
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
 public class GTNH_ExtraMaterials implements IMaterialHandler {

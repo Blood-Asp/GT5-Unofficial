@@ -95,6 +95,7 @@ public class GT_Utility {
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
     public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new /*Concurrent*/HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
+    public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
@@ -1974,7 +1975,7 @@ public class GT_Utility {
 
     public static FakePlayer getFakePlayer(IGregTechTileEntity aBaseMetaTileEntity) {
         if (aBaseMetaTileEntity.getWorld() instanceof WorldServer) {
-            return FakePlayerFactory.get((WorldServer) aBaseMetaTileEntity.getWorld(), new GameProfile(null, aBaseMetaTileEntity.getOwnerName()));
+            return FakePlayerFactory.get((WorldServer) aBaseMetaTileEntity.getWorld(), new GameProfile(aBaseMetaTileEntity.getOwnerUuid(), aBaseMetaTileEntity.getOwnerName()));
         }
         return null;
     }
@@ -2096,10 +2097,8 @@ public class GT_Utility {
                 ItemStack aStack,
                 int aX, short aY, int aZ, int aDim,
                 ArrayList<String> aOils,
-                ArrayList<String> aNearOres,
-                ArrayList<String> aMiddleOres,
-                ArrayList<String> aFarOres,
-                int aNear, int aMiddle, int aRadius) {
+                ArrayList<String> aOres,
+                int aRadius) {
 
             setBookTitle(aStack, "Raw Prospection Data");
 
@@ -2109,9 +2108,8 @@ public class GT_Utility {
             tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);
 
             // ores
-            tNBT.setString("prospection_near", joinListToString(aNearOres));
-            tNBT.setString("prospection_middle", joinListToString(aMiddleOres));
-            tNBT.setString("prospection_far", joinListToString(aFarOres));
+            Collections.sort(aOres);
+            tNBT.setString("prospection_ores", joinListToString(aOres));
 
             // oils
             ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
@@ -2122,7 +2120,36 @@ public class GT_Utility {
             
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
-            tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
+            String tOilsPosStr = "X: " + Math.floorDiv(aX, 16*8)*16*8 + " Z: " + Math.floorDiv(aZ, 16*8)*16*8 + "\n";
+            int xOff = aX - Math.floorDiv(aX, 16*8)*16*8;
+            xOff = xOff/16;
+            int xOffRemain = 7 - xOff;
+            
+            int zOff = aZ - Math.floorDiv(aZ, 16*8)*16*8;
+            zOff = zOff/16;
+            int zOffRemain = 7 - zOff;
+            
+            for( ; zOff > 0; zOff-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
+            for( ; xOff > 0; xOff-- ) {
+                tOilsPosStr = tOilsPosStr.concat("-");
+            }
+            
+            tOilsPosStr = tOilsPosStr.concat("P");
+            
+            for( ; xOffRemain > 0; xOffRemain-- ) {
+                tOilsPosStr = tOilsPosStr.concat("-");
+            }
+            tOilsPosStr = tOilsPosStr.concat("\n");
+            for( ; zOffRemain > 0; zOffRemain-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
+            tOilsPosStr = tOilsPosStr.concat( "            X: " + (Math.floorDiv(aX, 16*8) + 1)*16*8 + " Z: " + (Math.floorDiv(aZ, 16*8) + 1)*16*8 ); // +1 oilfied to find bottomright of [5]
+
+            tNBT.setString("prospection_oils_pos", tOilsPosStr);
+
+            tNBT.setString("prospection_radius", String.valueOf(aRadius));
 
             setNBT(aStack, tNBT);
         }
@@ -2147,50 +2174,47 @@ public class GT_Utility {
                 setNBT(aStack, tNBT);
             } else { // advanced prospection data
                 String tPos = tNBT.getString("prospection_pos");
-                String[] tBounds = tNBT.getString("prospection_bounds").split("\\|");
+                String tRadius = tNBT.getString("prospection_radius");
 
-                String tNearOresStr = tNBT.getString("prospection_near");
-                String tMiddleOresStr = tNBT.getString("prospection_middle");
-                String tFarOresStr = tNBT.getString("prospection_far");
+                String tOresStr = tNBT.getString("prospection_ores");
                 String tOilsStr = tNBT.getString("prospection_oils");
+                String tOilsPosStr = tNBT.getString("prospection_oils_pos");
 
-                String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
-                String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
-                String[] tFarOres = tFarOresStr.isEmpty() ? null : tFarOresStr.split("\\|");
+                String[] tOres = tOresStr.isEmpty() ? null : tOresStr.split("\\|");
                 String[] tOils = tOilsStr.isEmpty() ? null : tOilsStr.split("\\|");
 
                 NBTTagList tNBTList = new NBTTagList();
 
                 String tPageText = "Prospector report\n"
                     + tPos + "\n\n"
-                    + "Ores found:\n"
-                    + "Close <" + tBounds[0] + " blocks: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
-                    + "Mid <" + tBounds[1] + " blocks: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
-                    + "Far <" + tBounds[2] + " blocks: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
                     + "Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
-                    + "Lists sorted by volume\n"
-                    + "Location is center of chunk with ore";
+                    + "Ores within " + tRadius + " blocks\n\n"
+                    + "Location is center of orevein\n\n"
+                    + "Check NEI to confirm orevein type";
                 tNBTList.appendTag(new NBTTagString(tPageText));
   
-                if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 7, tNearOres);
-                if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 7, tMiddleOres);
-                if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 7, tFarOres);
+                if (tOres != null)
+                    fillBookWithList(tNBTList, "Ores Found %s\n\n", "\n", 7, tOres);
+
                 
                if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 324 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 576 chunks"
+                        + "(9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
                         + "\n"
-                        + "[5] - Prospector";
+                        + "[5] - Prospector in this 8x8 area";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
+                tPageText = "Corners of [5] are \n" +
+                            tOilsPosStr + "\n" +
+                            "P - Prospector in 8x8 field";
+                tNBTList.appendTag(new NBTTagString(tPageText));
+                
                 tNBT.setString("author", tPos.replace("\n"," "));
                 tNBT.setTag("pages", tNBTList);
                 setNBT(aStack, tNBT);
