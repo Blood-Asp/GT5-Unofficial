@@ -171,6 +171,18 @@ public class GT_Values {
      */
     public static boolean debugStones = false;
     /**
+     * Debug parameter for single block pump
+     */
+    public static boolean debugBlockPump = false;
+    /**
+     * Debug parameter for single block miner
+     */
+    public static boolean debugBlockMiner = false;
+    /**
+     * Debug parameter for entity cramming reduction
+     */
+    public static boolean debugEntityCramming = false;
+    /**
      * Number of ticks between sending sound packets to clients for electric machines. Default is 1.5 seconds. Trying to mitigate lag and FPS drops.
      */
     public static int ticksBetweenSounds = 30;
