@@ -1280,7 +1280,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                         } else if (((tEntity instanceof EntityLivingBase)) && (this.mMaxEqualEntitiesAtOneSpot > 0) && (!(tEntity instanceof EntityPlayer))
                                 && (tEntity.canBePushed()) && (((EntityLivingBase) tEntity).getHealth() > 0.0F)) {
                             List tList = tEntity.worldObj.getEntitiesWithinAABBExcludingEntity(tEntity,
-                                    tEntity.boundingBox.expand(0.40000000298023224D, 0.0D, 0.40000000298023224D));
+                                    tEntity.boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
                             Class tClass = tEntity.getClass();
                             int tEntityCount = 1;
                             if (tList != null) {
