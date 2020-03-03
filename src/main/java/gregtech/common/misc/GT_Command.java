@@ -29,6 +29,9 @@ public final class GT_Command extends CommandBase {
         sender.addChatMessage(new ChatComponentText("\"toggle D2\" - toggles general.Debug2 (D2)"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugCleanroom\" - toggles cleanroom debug log"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugDriller\" - toggles oil drill debug log"));
+        sender.addChatMessage(new ChatComponentText("\"toggle debugBlockPump\" - Possible issues with pumps"));
+        sender.addChatMessage(new ChatComponentText("\"toggle debugBlockMiner\" - Possible issues with miners"));
+        sender.addChatMessage(new ChatComponentText("\"toggle debugEntityCramming\" - How long it takes and how many entities it finds"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugWorldGen\" - toggles generic worldgen debug"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugOrevein\" - toggles worldgen ore vein debug"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugSmallOres\" - toggles worldgen small vein debug"));
@@ -49,7 +52,8 @@ public final class GT_Command extends CommandBase {
             });
         } else if (test.equals("toggle")) {
             String test1 = ss.length == 1 ? "" : ss[1].trim();
-            Arrays.stream(new String[]{"D1", "D2", "debugCleanroom", "debugDriller", "debugWorldGen", "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders"}).forEach(s -> {
+            Arrays.stream(new String[]{"D1", "D2", "debugCleanroom", "debugDriller", "debugBlockPump", "debugBlockMiner", "debugWorldGen", "debugEntityCramming",
+                                       "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders"}).forEach(s -> {
                 if (test1.isEmpty() || s.startsWith(test1))
                     l.add(s);
             });

@@ -88,6 +88,9 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
 
+import static gregtech.api.enums.GT_Values.debugEntityCramming;
+
+
 public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private static final EnumSet<OreGenEvent.GenerateMinable.EventType> PREVENTED_ORES = EnumSet.of(OreGenEvent.GenerateMinable.EventType.COAL,
             OreGenEvent.GenerateMinable.EventType.IRON, OreGenEvent.GenerateMinable.EventType.GOLD,
@@ -1264,6 +1267,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
             if ((aEvent.world.getTotalWorldTime() % 100L == 0L) && ((this.mItemDespawnTime != 6000) || (this.mMaxEqualEntitiesAtOneSpot > 0))) {
+                long startTime = System.nanoTime();
+                double oldX=0, oldY=0, oldZ=0;
+                if (debugEntityCramming && (aEvent.world.loadedEntityList.size()!=0)) {
+                    GT_Log.out.println("CRAM: Entity list size " + aEvent.world.loadedEntityList.size());
+                }
                 for (int i = 0; i < aEvent.world.loadedEntityList.size(); i++) {
                     if ((aEvent.world.loadedEntityList.get(i) instanceof Entity)) {
                         Entity tEntity = (Entity) aEvent.world.loadedEntityList.get(i);
@@ -1283,10 +1291,25 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                 }
                             }
                             if (tEntityCount > this.mMaxEqualEntitiesAtOneSpot) {
+                                if (debugEntityCramming) {
+                                    // Cheeseball way of not receiving a bunch of spam caused by 1 location
+                                    // obviously fails if there are crammed entities in more than one spot.
+                                    if( tEntity.posX != oldX
+                                      && tEntity.posY != oldY
+                                      && tEntity.posZ != oldZ ) {
+                                        GT_Log.out.println("CRAM: Excess entities: " + tEntityCount + " at X " + tEntity.posX + " Y " + tEntity.posY + " Z " + tEntity.posZ);
+                                        oldX = tEntity.posX;
+                                        oldY = tEntity.posY;
+                                        oldZ = tEntity.posZ;
+                                    }
+                                }
                                 tEntity.attackEntityFrom(DamageSource.inWall, tEntityCount - this.mMaxEqualEntitiesAtOneSpot);
                             }
                         }
                     }
+                }
+                if(debugEntityCramming && (aEvent.world.loadedEntityList.size()!=0)) {
+                    GT_Log.out.println("CRAM: Time spent checking " + (System.nanoTime() - startTime )/1000 + " microseconds" );
                 }
             }
 

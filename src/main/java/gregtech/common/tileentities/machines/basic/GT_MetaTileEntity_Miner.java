@@ -7,6 +7,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import java.util.ArrayList;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.debugBlockMiner;
 
 public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     private static final ItemStack MINING_PIPE = GT_ModHandler.getIC2Item("miningPipe", 0);
@@ -45,7 +47,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 new String[]{
                         "Digging ore instead of you",
                         "Use Screwdriver to regulate work area",
-                        ENERGY[aTier] + " EU/t, " + SPEED[aTier] / 20 + " sec per block",
+                        ENERGY[aTier] + " EU/t, " + SPEED[aTier] / 20 + " sec per block, no stuttering",
                         "Maximum work area " + (RADIUS[aTier] * 2 + 1) + "x" + (RADIUS[aTier] * 2 + 1),
                         "Fortune bonus of " + aTier},
                 2, 2, "Miner.png", "",
@@ -125,12 +127,26 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                             break miningPipe;
                         }
                     }
+                    if (debugBlockMiner) {
+                        GT_Log.out.println("MINER: Pipe found in input");
+                    }
                     return;
                 }
                 aBaseMetaTileEntity.decreaseStoredEnergyUnits(ENERGY[mTier], true);
                 mMaxProgresstime = SPEED[mTier];
             } else {
                 mMaxProgresstime = 0;
+                 if (debugBlockMiner) {
+                    if (!aBaseMetaTileEntity.isAllowedToWork()) {
+                        GT_Log.out.println("MINER: Disabled");
+                    }
+                    if (!aBaseMetaTileEntity.isUniversalEnergyStored(ENERGY[mTier] * (SPEED[mTier] - mProgresstime))) {
+                        GT_Log.out.println("MINER: Not enough energy yet, want " + (ENERGY[mTier] * SPEED[mTier]) + " have " + aBaseMetaTileEntity.getUniversalEnergyStored());
+                    }
+                    if (!hasFreeSpace()) {
+                        GT_Log.out.println("MINER: No free space");
+                    }
+                }
                 return;
             }
             if (mProgresstime == SPEED[mTier] - 1) {
@@ -138,6 +154,9 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     if (drillY == 0) {
                         aBaseMetaTileEntity.disableWorking();
                         isPickingPipes = false;
+                        if (debugBlockMiner) {
+                            GT_Log.out.println("MINER: Completed picking pipes");
+                        }
                     } else if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_TIP_BLOCK || aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_BLOCK) {
                         mOutputItems[0] = MINING_PIPE.copy();
                         mOutputItems[0].stackSize = 1;
@@ -162,12 +181,22 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                             TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(drillX, drillY, drillZ);
                             if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural) {
                                 mineBlock(aBaseMetaTileEntity, drillX, drillY, drillZ);
+                                if (debugBlockMiner) {
+                                    GT_Log.out.println("MINER: Mining GT ore block at " + drillX + " " + drillY + " " + drillZ);
+                                }
                                 return;
+                            } else {
+                                if (debugBlockMiner) {
+                                    GT_Log.out.println("MINER: Not natural ore, will not mine");
+                                }
                             }
                         } else {
                             ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(block, 1, blockMeta));
                             if (association != null && association.mPrefix.toString().startsWith("ore")) {
                                 mineBlock(aBaseMetaTileEntity, drillX, drillY, drillZ);
+                                if (debugBlockMiner) {
+                                    GT_Log.out.println("MINER: Mining oredict ore block at " + drillX + " " + drillY + " " + drillZ);
+                                }
                                 return;
                             }
                         }
@@ -193,6 +222,9 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 || GT_Utility.getBlockHardnessAt(aBaseMetaTileEntity.getWorld(), xCoord, yCoord + drillY - 1, zCoord) < 0
                 || !GT_Utility.setBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), xCoord, yCoord + drillY - 1, zCoord, MINING_PIPE_TIP_BLOCK, 0, true)) {
             isPickingPipes = true;
+            if (debugBlockMiner) {
+                GT_Log.out.println("MINER: Hit bottom? Hit block with -1 hardness? Unable to set mining pipe tip?");
+            }
             return false;
         }
         if (aBaseMetaTileEntity.getBlockOffset(0, drillY, 0) == MINING_PIPE_TIP_BLOCK) {
@@ -215,6 +247,9 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         }
         if (aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) != Blocks.air) {
             mineBlock(aBaseMetaTileEntity, 0, drillY - 1, 0);
+            if (debugBlockMiner) {
+                GT_Log.out.println("MINER: Removed block to replace with pipe" );
+            }
         }
         aBaseMetaTileEntity.getWorld().setBlock(xCoord, yCoord + drillY - 1, zCoord, MINING_PIPE_TIP_BLOCK);
         drillY--;
