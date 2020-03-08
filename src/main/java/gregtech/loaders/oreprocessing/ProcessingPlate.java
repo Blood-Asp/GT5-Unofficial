@@ -82,6 +82,9 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                     case "Basalt":
                         GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.BASALT_SMOOTH), null);
                         break;
+                    case "Marble":
+                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.MARBLE_SMOOTH), null);
+                        break;
                     case "Concrete":
                         GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.CONCRETE_LIGHT_SMOOTH), null);
                         break;
