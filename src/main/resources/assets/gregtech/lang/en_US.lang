@@ -37,6 +37,7 @@ GT5U.machines.blocks=Blocks
 GT5U.machines.chunks=Chunks
 GT5U.machines.miner=Miner
 GT5U.machines.pump=Pump
+GT5U.machines.separatebus=Input busses are separated
 GT5U.machines.pumpareaset=Pumping area set to
 GT5U.machines.oilfluidpump=Oil/Fluid Pump
 GT5U.machines.minermulti=Multiblock Miner
