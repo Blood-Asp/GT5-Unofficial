@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     private GT_Recipe mLastRecipe;
     private int tTier = 0;
     private int mMult = 0;
-    private boolean mseparate = false;
+    private boolean mSeparate = false;
 
     public GT_MetaTileEntity_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -259,12 +259,13 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         
         ArrayList<FluidStack> tFluidList = getStoredFluids();
         FluidStack[] tFluids = (FluidStack[]) tFluidList.toArray(new FluidStack[tFluidList.size()]);
-        if (mseparate) {
+        if (mSeparate) {
         	ArrayList<ItemStack> tInputList = new ArrayList<ItemStack>();
         	for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
         		for (int i = tHatch.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
-					if (tHatch.getBaseMetaTileEntity().getStackInSlot(i) != null)
-						tInputList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(i));
+        			IGregTechTileEntity tInpuBus = tHatch.getBaseMetaTileEntity();
+					if (tInpuBus.getStackInSlot(i) != null)
+						tInputList.add(tInpuBus.getStackInSlot(i));
 				}
         		ItemStack[] tInputs = (ItemStack[]) tInputList.toArray(new ItemStack[tInputList.size()]);
         		if (processRecipe(tInputs, tFluids, map))
@@ -408,19 +409,19 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
     	super.saveNBTData(aNBT);
-    	aNBT.setBoolean("mseparate", mseparate);
+    	aNBT.setBoolean("mSeparate", mSeparate);
     }
     
     @Override
 	public void loadNBTData(final NBTTagCompound aNBT) {
     	super.loadNBTData(aNBT);
-    	mseparate = aNBT.getBoolean("mseparate");
+    	mSeparate = aNBT.getBoolean("mSeparate");
     }
     
     @Override
 	public final void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	mseparate = !mseparate;
-    	GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.separatebus") +" "+mseparate);
+    	mSeparate = !mSeparate;
+    	GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.separatebus") +" "+mSeparate);
     }
 
     public int getMaxEfficiency(ItemStack aStack) {
