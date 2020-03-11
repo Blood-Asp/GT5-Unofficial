@@ -262,8 +262,8 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
         if (mSeparate) {
         	ArrayList<ItemStack> tInputList = new ArrayList<ItemStack>();
         	for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
-        		for (int i = tHatch.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
-        			IGregTechTileEntity tInpuBus = tHatch.getBaseMetaTileEntity();
+        		IGregTechTileEntity tInpuBus = tHatch.getBaseMetaTileEntity();
+        		for (int i = tInpuBus.getSizeInventory() - 1; i >= 0; i--) {
 					if (tInpuBus.getStackInSlot(i) != null)
 						tInputList.add(tInpuBus.getStackInSlot(i));
 				}
