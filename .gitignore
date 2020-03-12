@@ -93,3 +93,4 @@ libs/
 *.log
 *.jar
 *.errored
+/build/
