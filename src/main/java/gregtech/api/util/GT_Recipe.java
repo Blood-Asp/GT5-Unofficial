@@ -79,8 +79,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     private String[] neiDesc = null;
     
     private GT_Recipe(GT_Recipe aRecipe) {
-        mInputs = GT_Utility.copyStackArray(aRecipe.mInputs);
-        mOutputs = GT_Utility.copyStackArray(aRecipe.mOutputs);
+        mInputs = GT_Utility.copyStackArray((Object[]) aRecipe.mInputs);
+        mOutputs = GT_Utility.copyStackArray((Object[]) aRecipe.mOutputs);
         mSpecialItems = aRecipe.mSpecialItems;
         mChances = aRecipe.mChances;
         mFluidInputs = GT_Utility.copyFluidArray(aRecipe.mFluidInputs);
