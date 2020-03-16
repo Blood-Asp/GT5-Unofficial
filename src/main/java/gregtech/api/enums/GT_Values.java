@@ -17,6 +17,7 @@ import java.util.Locale;
  * <p/>
  * Go to "Window > Preferences > Java > Editor > Content Assist > Favorites" to set static importable Constant Classes such as this one as AutoCompleteable.
  */
+@SuppressWarnings("ALL")
 public class GT_Values {
     // unused: A, C, D, G, H, I, J, K, N, O, Q, R, S, T
 
@@ -32,7 +33,18 @@ public class GT_Values {
     /**
      * The first 32 Bits
      */
-    public static final int[] B = new int[]{1 << 0, 1 << 1, 1 << 2, 1 << 3, 1 << 4, 1 << 5, 1 << 6, 1 << 7, 1 << 8, 1 << 9, 1 << 10, 1 << 11, 1 << 12, 1 << 13, 1 << 14, 1 << 15, 1 << 16, 1 << 17, 1 << 18, 1 << 19, 1 << 20, 1 << 21, 1 << 22, 1 << 23, 1 << 24, 1 << 25, 1 << 26, 1 << 27, 1 << 28, 1 << 29, 1 << 30, 1 << 31};
+    public static final int[] B = new int[]{
+            1 << 0, 1 << 1, 1 << 2,
+            1 << 3, 1 << 4, 1 << 5,
+            1 << 6, 1 << 7, 1 << 8,
+            1 << 9, 1 << 10, 1 << 11,
+            1 << 12, 1 << 13, 1 << 14,
+            1 << 15, 1 << 16, 1 << 17,
+            1 << 18, 1 << 19, 1 << 20,
+            1 << 21, 1 << 22, 1 << 23,
+            1 << 24, 1 << 25, 1 << 26,
+            1 << 27, 1 << 28, 1 << 29,
+            1 << 30, 1 << 31};
 
     /**
      * Renamed from "MATERIAL_UNIT" to just "M"
@@ -63,7 +75,14 @@ public class GT_Values {
     /**
      * The Voltage Tiers. Use this Array instead of the old named Voltage Variables
      */
-    public static final long[] V = new long[]{8L, 32L, 128L, 512L, 2048L, 8192L, 32768L, 131072L, 524288L, 2097152L, 8388608L, 33554432L, 134217728L, 536870912L, 1073741824L, Integer.MAX_VALUE-7};
+    public static final long[] V =
+            new long[]{
+                    8L, 32L, 128L,
+                    512L, 2048L, 8192L,
+                    32768L, 131072L, 524288L,
+                    2097152L, 8388608L, 33554432L,
+                    134217728L, 536870912L, 1073741824L,
+                    Integer.MAX_VALUE - 7};
     //TODO:Adding that in coremod!!!
     //TODO:tier 14,15 wires and transformers only (not even cables !!!)
     //TODO:tier 12,13 the above + batteries, battery buffers, (maybe cables,12 also works for machines)
@@ -77,16 +96,36 @@ public class GT_Values {
      * keeping Voltage*Amps < Integer.MAX_VALUE-7 for machines (and tier logic 4x EUt 2/ time)
      * AMV[4]= max amps at tier 4
      */
-    public static final long[] AatV = new long[]{268435455,67108863,16777215,4194303,1048575,262143,65535,16383,4095,1023,255,63,15,3,1,1};
+    public static final long[] AatV =
+            new long[]{
+                    268435455, 67108863, 16777215,
+                    4194303, 1048575, 262143,
+                    65535, 16383, 4095,
+                    1023, 255, 63,
+                    15, 3, 1,
+                    1};
     /**
      * The short Names for the Voltages
      */
-    public static final String[] VN = new String[]{"ULV", "LV", "MV", "HV", "EV", "IV", "LuV", "ZPM", "UV", "UHV", "UEV", "UIV", "UMV", "UXV", "OpV", "MAX"};
+    public static final String[] VN =
+            new String[]{"ULV", "LV", "MV",
+                    "HV", "EV", "IV",
+                    "LuV", "ZPM", "UV",
+                    "UHV", "UEV", "UIV",
+                    "UMV", "UXV", "OpV",
+                    "MAX"};
 
     /**
      * The long Names for the Voltages
      */
-    public static final String[] VOLTAGE_NAMES = new String[]{"Ultra Low Voltage", "Low Voltage", "Medium Voltage", "High Voltage", "Extreme Voltage", "Insane Voltage", "Ludicrous Voltage", "ZPM Voltage", "Ultimate Voltage", "Ultimate High Voltage", "Ultimate Extreme Voltage", "Ultimate Insane Voltage", "Ultimate Mega Voltage", "Ultimate Extended Mega Voltage", "Overpowered Voltage", "Maximum Voltage"};
+    public static final String[] VOLTAGE_NAMES =
+            new String[]{
+                    "Ultra Low Voltage", "Low Voltage", "Medium Voltage",
+                    "High Voltage", "Extreme Voltage", "Insane Voltage",
+                    "Ludicrous Voltage", "ZPM Voltage", "Ultimate Voltage",
+                    "Ultimate High Voltage", "Ultimate Extreme Voltage", "Ultimate Insane Voltage",
+                    "Ultimate Mega Voltage", "Ultimate Extended Mega Voltage", "Overpowered Voltage",
+                    "Maximum Voltage"};
     /**
      * This way it is possible to have a Call Hierarchy of NullPointers in ItemStack based Functions, and also because most of the time I don't know what kind of Data Type the "null" stands for
      */
@@ -99,12 +138,50 @@ public class GT_Values {
      * MOD ID Strings, since they are very common Parameters.
      */
     public static final String
-            MOD_ID = "gregtech", MOD_ID_IC2 = "IC2", MOD_ID_NC = "IC2NuclearControl", MOD_ID_TC = "Thaumcraft", MOD_ID_TF = "TwilightForest", MOD_ID_RC = "Railcraft", MOD_ID_TE = "ThermalExpansion", MOD_ID_AE = "appliedenergistics2", MOD_ID_TFC = "terrafirmacraft", MOD_ID_PFAA = "PFAAGeologica", MOD_ID_FR = "Forestry", MOD_ID_HaC = "harvestcraft", MOD_ID_APC = "AppleCore", MOD_ID_MaCr = "magicalcrops", MOD_ID_GaEn = "ganysend", MOD_ID_GaSu = "ganyssurface", MOD_ID_GaNe = "ganysnether", MOD_ID_BC_SILICON = "BuildCraft|Silicon", MOD_ID_BC_TRANSPORT = "BuildCraft|Transport", MOD_ID_BC_FACTORY = "BuildCraft|Factory", MOD_ID_BC_ENERGY = "BuildCraft|Energy", MOD_ID_BC_BUILDERS = "BuildCraft|Builders", MOD_ID_BC_CORE = "BuildCraft|Core", MOD_ID_GC_CORE = "GalacticraftCore", MOD_ID_GC_MARS = "GalacticraftMars", MOD_ID_GC_PLANETS = "GalacticraftPlanets";
+            MOD_ID = "gregtech",
+            MOD_ID_IC2 = "IC2",
+            MOD_ID_NC = "IC2NuclearControl",
+            MOD_ID_TC = "Thaumcraft",
+            MOD_ID_TF = "TwilightForest",
+            MOD_ID_RC = "Railcraft",
+            MOD_ID_TE = "ThermalExpansion",
+            MOD_ID_AE = "appliedenergistics2",
+            MOD_ID_TFC = "terrafirmacraft",
+            MOD_ID_PFAA = "PFAAGeologica",
+            MOD_ID_FR = "Forestry",
+            MOD_ID_HaC = "harvestcraft",
+            MOD_ID_APC = "AppleCore",
+            MOD_ID_MaCr = "magicalcrops",
+            MOD_ID_GaEn = "ganysend",
+            MOD_ID_GaSu = "ganyssurface",
+            MOD_ID_GaNe = "ganysnether",
+            MOD_ID_BC_SILICON = "BuildCraft|Silicon",
+            MOD_ID_BC_TRANSPORT = "BuildCraft|Transport",
+            MOD_ID_BC_FACTORY = "BuildCraft|Factory",
+            MOD_ID_BC_ENERGY = "BuildCraft|Energy",
+            MOD_ID_BC_BUILDERS = "BuildCraft|Builders",
+            MOD_ID_BC_CORE = "BuildCraft|Core",
+            MOD_ID_GC_CORE = "GalacticraftCore",
+            MOD_ID_GC_MARS = "GalacticraftMars",
+            MOD_ID_GC_PLANETS = "GalacticraftPlanets";
     /**
      * File Paths and Resource Paths
      */
     public static final String
-            TEX_DIR = "textures/", TEX_DIR_GUI = TEX_DIR + "gui/", TEX_DIR_ITEM = TEX_DIR + "items/", TEX_DIR_BLOCK = TEX_DIR + "blocks/", TEX_DIR_ENTITY = TEX_DIR + "entity/", TEX_DIR_ASPECTS = TEX_DIR + "aspects/", RES_PATH = MOD_ID + ":" + TEX_DIR, RES_PATH_GUI = MOD_ID + ":" + TEX_DIR_GUI, RES_PATH_ITEM = MOD_ID + ":", RES_PATH_BLOCK = MOD_ID + ":", RES_PATH_ENTITY = MOD_ID + ":" + TEX_DIR_ENTITY, RES_PATH_ASPECTS = MOD_ID + ":" + TEX_DIR_ASPECTS, RES_PATH_IC2 = MOD_ID_IC2.toLowerCase(Locale.ENGLISH) + ":", RES_PATH_MODEL = MOD_ID + ":" + TEX_DIR + "models/";
+            TEX_DIR = "textures/",
+            TEX_DIR_GUI = TEX_DIR + "gui/",
+            TEX_DIR_ITEM = TEX_DIR + "items/",
+            TEX_DIR_BLOCK = TEX_DIR + "blocks/",
+            TEX_DIR_ENTITY = TEX_DIR + "entity/",
+            TEX_DIR_ASPECTS = TEX_DIR + "aspects/",
+            RES_PATH = MOD_ID + ":" + TEX_DIR,
+            RES_PATH_GUI = MOD_ID + ":" + TEX_DIR_GUI,
+            RES_PATH_ITEM = MOD_ID + ":",
+            RES_PATH_BLOCK = MOD_ID + ":",
+            RES_PATH_ENTITY = MOD_ID + ":" + TEX_DIR_ENTITY,
+            RES_PATH_ASPECTS = MOD_ID + ":" + TEX_DIR_ASPECTS,
+            RES_PATH_IC2 = MOD_ID_IC2.toLowerCase(Locale.ENGLISH) + ":",
+            RES_PATH_MODEL = MOD_ID + ":" + TEX_DIR + "models/";
     /**
      * The Mod Object itself. That is the GT_Mod-Object. It's needed to open GUI's and similar.
      */
