@@ -2054,19 +2054,18 @@ public static Materials Shadow                  = new Materials( 368, TextureSet
     }
 
     private static void fillGeneratedMaterialsMap() {
-        synchronized (GregTech_API.sGeneratedMaterials) {
-            getAll().parallelStream().filter(aMaterial -> aMaterial.mMetaItemSubID >= 0).forEach(aMaterial -> {
-                        if (aMaterial.mMetaItemSubID < 1000) {
-                            if (aMaterial.mHasParentMod) {
-                                if (GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] == null) {
-                                    GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] = aMaterial;
-                                } else
-                                    throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is already used!");
-                            }
+        for (Materials aMaterial : MATERIALS_ARRAY) {
+            if (aMaterial.mMetaItemSubID >= 0) {
+                if (aMaterial.mMetaItemSubID < 1000) {
+                    if (aMaterial.mHasParentMod) {
+                        if (GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] == null) {
+                            GregTech_API.sGeneratedMaterials[aMaterial.mMetaItemSubID] = aMaterial;
                         } else
-                            throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is/over the maximum of 1000");
+                            throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is already used!");
                     }
-            );
+                } else
+                    throw new IllegalArgumentException("The Material Index " + aMaterial.mMetaItemSubID + " for " + aMaterial.mName + " is/over the maximum of 1000");
+            }
         }
     }
 
