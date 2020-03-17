@@ -17,8 +17,12 @@ import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
  */
 public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machine {
 
-    public final String mName, mNEI;
-    public final byte mProgressBarDirection, mProgressBarAmount;
+    public final String
+            mName,
+            mNEI;
+    public final byte
+            mProgressBarDirection,
+            mProgressBarAmount;
 
     public GT_GUIContainer_BasicMachine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, String aName, String aTextureFile, String aNEI) {
         this(aInventoryPlayer, aTileEntity, aName, aTextureFile, aNEI, (byte) 0, (byte) 1);
@@ -34,8 +38,8 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
-    	super.drawScreen(par1, par2, par3);
-    	drawTooltip(par1, par2);
+        super.drawScreen(par1, par2, par3);
+        drawTooltip(par1, par2);
     }
 
     @Override
@@ -48,7 +52,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
         int yStart = (height - ySize) / 2;
         int x = x2 - xStart;
         int y = y2 - yStart + 5;
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         if (y >= 67 && y <= 84) {
             if (x >= 7 && x <= 24) {
                 list.add("Fluid Auto-Output");
