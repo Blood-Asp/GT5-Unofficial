@@ -283,7 +283,7 @@ public enum Element {
     /**
      * Links to every pure Material containing just this Element.
      */
-    public ArrayList<Materials> mLinkedMaterials = new ArrayList<Materials>();
+    public ArrayList<Materials> mLinkedMaterials = new ArrayList<>();
 
     /**
      * @param aProtons         Amount of Protons. Antiprotons if negative.
@@ -292,7 +292,7 @@ public enum Element {
      * @param aDecayTo         String representing the Elements it decays to. Separated by an '&' Character.
      * @param aName            Name of the Element
      */
-    private Element(long aProtons, long aNeutrons, long aAdditionalMass, long aHalfLifeSeconds, String aDecayTo, String aName, boolean aIsIsotope) {
+    Element(long aProtons, long aNeutrons, long aAdditionalMass, long aHalfLifeSeconds, String aDecayTo, String aName, boolean aIsIsotope) {
         mProtons = aProtons;
         mNeutrons = aNeutrons;
         mAdditionalMass = aAdditionalMass;
@@ -304,7 +304,8 @@ public enum Element {
 
     public static Element get(String aMaterialName) {
         Object tObject = GT_Utility.getFieldContent(Element.class, aMaterialName, false, false);
-        if (tObject != null && tObject instanceof Element) return (Element) tObject;
+        if (tObject instanceof Element)
+            return (Element) tObject;
         return _NULL;
     }
 

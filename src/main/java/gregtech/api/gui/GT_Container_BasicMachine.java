@@ -10,8 +10,6 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import java.util.Iterator;
-
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
  * <p/>
@@ -19,7 +17,10 @@ import java.util.Iterator;
  */
 public class GT_Container_BasicMachine extends GT_Container_BasicTank {
 
-    public boolean mFluidTransfer = false, mItemTransfer = false, mStuttering = false;
+    public boolean
+            mFluidTransfer = false,
+            mItemTransfer = false,
+            mStuttering = false;
 
     public GT_Container_BasicMachine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
@@ -201,9 +202,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         mItemTransfer = ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer;
         mStuttering = ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mStuttering;
 
-        Iterator var2 = this.crafters.iterator();
-        while (var2.hasNext()) {
-            ICrafting var1 = (ICrafting) var2.next();
+        for (Object crafter : this.crafters) {
+            ICrafting var1 = (ICrafting) crafter;
             var1.sendProgressBarUpdate(this, 102, mFluidTransfer ? 1 : 0);
             var1.sendProgressBarUpdate(this, 103, mItemTransfer ? 1 : 0);
             var1.sendProgressBarUpdate(this, 104, mStuttering ? 1 : 0);

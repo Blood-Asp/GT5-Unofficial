@@ -7,15 +7,15 @@ public interface IIconContainer {
     /**
      * @return A regular Icon.
      */
-    public IIcon getIcon();
+    IIcon getIcon();
 
     /**
      * @return Icon of the Overlay (or null if there is no Icon)
      */
-    public IIcon getOverlayIcon();
+    IIcon getOverlayIcon();
 
     /**
      * @return the Default Texture File for this Icon.
      */
-    public ResourceLocation getTextureFile();
+    ResourceLocation getTextureFile();
 }
