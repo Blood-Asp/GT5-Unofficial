@@ -7,25 +7,25 @@ public interface IFibreConnected extends IColoredTileEntity, IHasWorldObjectAndC
     /**
      * If this Blocks accepts Fibre from this Side
      */
-    public void inputFibreFrom(byte aSide);
+    void inputFibreFrom(byte aSide);
 
     /**
      * If this Blocks emits Fibre to this Side
      */
-    public void outputsFibreTo(byte aSide);
+    void outputsFibreTo(byte aSide);
 
     /**
      * Sets the Signal this Blocks outputs to this Fibre Color
      */
-    public void setFibreOutput(byte aSide, byte aColor, byte aRedstoneStrength);
+    void setFibreOutput(byte aSide, byte aColor, byte aRedstoneStrength);
 
     /**
      * Gets the Signal this Blocks outputs to this Fibre Color
      */
-    public byte getFibreOutput(byte aSide, byte aColor);
+    byte getFibreOutput(byte aSide, byte aColor);
 
     /**
      * Gets the Signal this Blocks receives from this Fibre Color
      */
-    public byte getFibreInput(byte aSide, byte aColor);
+    byte getFibreInput(byte aSide, byte aColor);
 }

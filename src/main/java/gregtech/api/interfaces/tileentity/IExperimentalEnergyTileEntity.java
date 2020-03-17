@@ -25,22 +25,22 @@ public interface IExperimentalEnergyTileEntity extends IColoredTileEntity, IHasW
      * @param aSide 0 - 5 = Vanilla Directions of YOUR Block the Energy gets inserted to. 6 = No specific Side (don't do Side checks for this Side)
      * @return amount of used Amperes. 0 if not accepted anything.
      */
-    public long injectEnergy(SubTag aEnergyType, byte aSide, long aPrimary, long aSecondary);
+    long injectEnergy(SubTag aEnergyType, byte aSide, long aPrimary, long aSecondary);
 
     /**
      * Sided Energy Input
      */
-    public boolean inputEnergyFrom(SubTag aEnergyType, byte aSide);
+    boolean inputEnergyFrom(SubTag aEnergyType, byte aSide);
 
     /**
      * Sided Energy Output
      */
-    public boolean outputsEnergyTo(SubTag aEnergyType, byte aSide);
+    boolean outputsEnergyTo(SubTag aEnergyType, byte aSide);
 
     /**
      * Utility for the Network
      */
-    public static class Util {
+    class Util {
         public static int RF_PER_EU = 4;
         private static boolean RF_ENERGY = false, IC_ENERGY = false, CHECK_ALL = true;
 
