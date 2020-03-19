@@ -39,14 +39,14 @@ public enum Dyes implements IColorModulationContainer {
     CONSTRUCTION_FOAM(-1, 64, 64, 64, "Construction Foam"),
     MACHINE_METAL(-1, 210, 220, 255, "Machine Metal");
 
-    public static final Dyes VALUES[] = {dyeBlack, dyeRed, dyeGreen, dyeBrown, dyeBlue, dyePurple, dyeCyan, dyeLightGray, dyeGray, dyePink, dyeLime, dyeYellow, dyeLightBlue, dyeMagenta, dyeOrange, dyeWhite};
+    public static final Dyes[] VALUES = {dyeBlack, dyeRed, dyeGreen, dyeBrown, dyeBlue, dyePurple, dyeCyan, dyeLightGray, dyeGray, dyePink, dyeLime, dyeYellow, dyeLightBlue, dyeMagenta, dyeOrange, dyeWhite};
 
     public final byte mIndex;
     public final String mName;
     public final short[] mRGBa;
     private final ArrayList<Fluid> mFluidDyes = new GT_ArrayList<Fluid>(false, 1);
 
-    private Dyes(int aIndex, int aR, int aG, int aB, String aName) {
+    Dyes(int aIndex, int aR, int aG, int aB, String aName) {
         mIndex = (byte) aIndex;
         mName = aName;
         mRGBa = new short[]{(short) aR, (short) aG, (short) aB, 0};

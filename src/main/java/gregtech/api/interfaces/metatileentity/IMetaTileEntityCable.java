@@ -7,9 +7,9 @@ import java.util.HashSet;
 
 public interface IMetaTileEntityCable extends IMetaTileEntity {
     @Deprecated
-    public long transferElectricity(byte aSide, long aVoltage, long aAmperage, ArrayList<TileEntity> aAlreadyPassedTileEntityList);
+    long transferElectricity(byte aSide, long aVoltage, long aAmperage, ArrayList<TileEntity> aAlreadyPassedTileEntityList);
 
-    default public long transferElectricity(byte aSide, long aVoltage, long aAmperage, HashSet<TileEntity> aAlreadyPassedSet) {
+    default long transferElectricity(byte aSide, long aVoltage, long aAmperage, HashSet<TileEntity> aAlreadyPassedSet) {
         return transferElectricity(aSide, aVoltage, aAmperage, new ArrayList<>(aAlreadyPassedSet));
     }
 }

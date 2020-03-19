@@ -8,8 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 
-import java.util.Iterator;
-
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
  * <p/>
@@ -17,8 +15,29 @@ import java.util.Iterator;
  */
 public class GT_ContainerMetaTile_Machine extends GT_Container {
 
-    public int mActive = 0, mMaxProgressTime = 0, mProgressTime = 0, mEnergy = 0, mSteam = 0, mSteamStorage = 0, mStorage = 0, mOutput = 0, mInput = 0, mID = 0, mDisplayErrorCode = 0;
-    private int oActive = 0, oMaxProgressTime = 0, oProgressTime = 0, oEnergy = 0, oSteam = 0, oSteamStorage = 0, oStorage = 0, oOutput = 0, oInput = 0, oID = 0, oDisplayErrorCode = 0, mTimer = 0;
+    public int mActive = 0,
+            mMaxProgressTime = 0,
+            mProgressTime = 0,
+            mEnergy = 0,
+            mSteam = 0,
+            mSteamStorage = 0,
+            mStorage = 0,
+            mOutput = 0,
+            mInput = 0,
+            mID = 0,
+            mDisplayErrorCode = 0;
+    private int oActive = 0,
+            oMaxProgressTime = 0,
+            oProgressTime = 0,
+            oEnergy = 0,
+            oSteam = 0,
+            oSteamStorage = 0,
+            oStorage = 0,
+            oOutput = 0,
+            oInput = 0,
+            oID = 0,
+            oDisplayErrorCode = 0,
+            mTimer = 0;
 
 
     public GT_ContainerMetaTile_Machine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
@@ -28,19 +47,22 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
 
         if (mTileEntity != null && mTileEntity.getMetaTileEntity() != null) {
             addSlots(aInventoryPlayer);
-            if (doesBindPlayerInventory()) bindPlayerInventory(aInventoryPlayer);
+            if (doesBindPlayerInventory())
+                bindPlayerInventory(aInventoryPlayer);
             detectAndSendChanges();
         } else {
             aInventoryPlayer.player.openContainer = aInventoryPlayer.player.inventoryContainer;
         }
     }
+
     public GT_ContainerMetaTile_Machine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, boolean doesBindInventory) {
         super(aInventoryPlayer, aTileEntity);
         mTileEntity = aTileEntity;
 
         if (mTileEntity != null && mTileEntity.getMetaTileEntity() != null) {
             addSlots(aInventoryPlayer);
-            if (doesBindPlayerInventory() && doesBindInventory) bindPlayerInventory(aInventoryPlayer);
+            if (doesBindPlayerInventory() && doesBindInventory)
+                bindPlayerInventory(aInventoryPlayer);
             detectAndSendChanges();
         } else {
             aInventoryPlayer.player.openContainer = aInventoryPlayer.player.inventoryContainer;
@@ -50,7 +72,8 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        if (mTileEntity.isClientSide() || mTileEntity.getMetaTileEntity() == null) return;
+        if (mTileEntity.isClientSide() || mTileEntity.getMetaTileEntity() == null)
+            return;
         mStorage = (int) Math.min(Integer.MAX_VALUE, mTileEntity.getEUCapacity());
         mEnergy = (int) Math.min(Integer.MAX_VALUE, mTileEntity.getStoredEU());
         mSteamStorage = (int) Math.min(Integer.MAX_VALUE, mTileEntity.getSteamCapacity());
@@ -63,9 +86,8 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
         mActive = mTileEntity.isActive() ? 1 : 0;
         mTimer++;
 
-        Iterator var2 = this.crafters.iterator();
-        while (var2.hasNext()) {
-            ICrafting var1 = (ICrafting) var2.next();
+        for (Object crafter : this.crafters) {
+            ICrafting var1 = (ICrafting) crafter;
             if (mTimer % 500 == 10 || oEnergy != mEnergy) {
                 var1.sendProgressBarUpdate(this, 0, mEnergy & 65535);
                 var1.sendProgressBarUpdate(this, 1, mEnergy >>> 16);
@@ -183,8 +205,8 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
     public boolean canInteractWith(EntityPlayer player) {
         return mTileEntity.isUseableByPlayer(player);
     }
-    
-    public String trans(String aKey, String aEnglish){
-    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+
+    public String trans(String aKey, String aEnglish) {
+        return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_" + aKey, aEnglish, false);
     }
 }

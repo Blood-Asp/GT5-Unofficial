@@ -389,7 +389,7 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     void onColorChangeClient(byte aColor);
 
     int getLightOpacity();
-    
+
     boolean allowGeneralRedstoneOutput();
 
     void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider);
@@ -402,9 +402,9 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * The onCreated Function of the Item Class redirects here
      */
     void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer);
-    
+
     boolean hasAlternativeModeText();
-    
+
     String getAlternativeModeText();
 
     boolean shouldJoinIc2Enet();

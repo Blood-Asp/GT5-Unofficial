@@ -4,13 +4,46 @@ import gregtech.api.interfaces.IIconContainer;
 
 public class TextureSet {
     public static final TextureSet
-            SET_NONE = new TextureSet("NONE"), SET_DULL = new TextureSet("DULL"), SET_RUBY = new TextureSet("RUBY"), SET_OPAL = new TextureSet("OPAL"), SET_LEAF = new TextureSet("LEAF"), SET_WOOD = new TextureSet("WOOD"), SET_SAND = new TextureSet("SAND"), SET_FINE = new TextureSet("FINE"), SET_FIERY = new TextureSet("FIERY"), SET_FLUID = new TextureSet("FLUID"), SET_ROUGH = new TextureSet("ROUGH"), SET_PAPER = new TextureSet("PAPER"), SET_GLASS = new TextureSet("GLASS"), SET_FLINT = new TextureSet("FLINT"), SET_LAPIS = new TextureSet("LAPIS"), SET_SHINY = new TextureSet("SHINY"), SET_SHARDS = new TextureSet("SHARDS"), SET_POWDER = new TextureSet("POWDER"), SET_QUARTZ = new TextureSet("QUARTZ"), SET_EMERALD = new TextureSet("EMERALD"), SET_DIAMOND = new TextureSet("DIAMOND"), SET_LIGNITE = new TextureSet("LIGNITE"), SET_MAGNETIC = new TextureSet("MAGNETIC"), SET_METALLIC = new TextureSet("METALLIC"), SET_NETHERSTAR = new TextureSet("NETHERSTAR"), SET_GEM_VERTICAL = new TextureSet("GEM_VERTICAL"), SET_GEM_HORIZONTAL = new TextureSet("GEM_HORIZONTAL");
+            SET_NONE = new TextureSet("NONE"),
+            SET_DULL = new TextureSet("DULL"),
+            SET_RUBY = new TextureSet("RUBY"),
+            SET_OPAL = new TextureSet("OPAL"),
+            SET_LEAF = new TextureSet("LEAF"),
+            SET_WOOD = new TextureSet("WOOD"),
+            SET_SAND = new TextureSet("SAND"),
+            SET_FINE = new TextureSet("FINE"),
+            SET_FIERY = new TextureSet("FIERY"),
+            SET_FLUID = new TextureSet("FLUID"),
+            SET_ROUGH = new TextureSet("ROUGH"),
+            SET_PAPER = new TextureSet("PAPER"),
+            SET_GLASS = new TextureSet("GLASS"),
+            SET_FLINT = new TextureSet("FLINT"),
+            SET_LAPIS = new TextureSet("LAPIS"),
+            SET_SHINY = new TextureSet("SHINY"),
+            SET_SHARDS = new TextureSet("SHARDS"),
+            SET_POWDER = new TextureSet("POWDER"),
+            SET_QUARTZ = new TextureSet("QUARTZ"),
+            SET_EMERALD = new TextureSet("EMERALD"),
+            SET_DIAMOND = new TextureSet("DIAMOND"),
+            SET_LIGNITE = new TextureSet("LIGNITE"),
+            SET_MAGNETIC = new TextureSet("MAGNETIC"),
+            SET_METALLIC = new TextureSet("METALLIC"),
+            SET_NETHERSTAR = new TextureSet("NETHERSTAR"),
+            SET_GEM_VERTICAL = new TextureSet("GEM_VERTICAL"),
+            SET_GEM_HORIZONTAL = new TextureSet("GEM_HORIZONTAL");
 
     /**
      * For the Indices of OrePrefixes you need to look into the OrePrefix Enum.
      */
     public static final short
-            INDEX_wire = 69, INDEX_foil = 70, INDEX_block1 = 71, INDEX_block2 = 72, INDEX_block3 = 73, INDEX_block4 = 74, INDEX_block5 = 75, INDEX_block6 = 76;
+            INDEX_wire = 69,
+            INDEX_foil = 70,
+            INDEX_block1 = 71,
+            INDEX_block2 = 72,
+            INDEX_block3 = 73,
+            INDEX_block4 = 74,
+            INDEX_block5 = 75,
+            INDEX_block6 = 76;
 
     public final IIconContainer[] mTextures = new IIconContainer[128];
     public final String mSetName;
