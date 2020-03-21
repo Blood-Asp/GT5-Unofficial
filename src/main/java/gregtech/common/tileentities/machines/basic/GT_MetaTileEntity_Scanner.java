@@ -165,6 +165,8 @@ public class GT_MetaTileEntity_Scanner
                 }
 
                 if ((aStack.getItem().getUnlocalizedName().contains("Schematic") || aStack.getItem().getUnlocalizedName().contains("schematic")) && !aStack.getItem().getUnlocalizedName().contains("Schematics")) {
+                    if (mTier < 3)
+                        return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                     String sTier = "";
 
                     if (aStack.getItem().getIdFromItem(aStack.getItem()) == GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem().getIdFromItem(GT_ModHandler.getModItem("GalacticraftCore", "item.schematic", 1L, 0).getItem())) {
