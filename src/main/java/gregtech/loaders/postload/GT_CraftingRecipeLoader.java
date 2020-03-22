@@ -658,6 +658,10 @@ public class GT_CraftingRecipeLoader implements Runnable {
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("pullingUpgrade", 1L));
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("pullingUpgrade", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PHP", "WEW", 'W', OrePrefixes.cableGt01.get(Materials.Copper), 'P', new ItemStack(Blocks.sticky_piston), 'R', new ItemStack(Blocks.hopper), 'E', OrePrefixes.circuit.get(Materials.Basic)});
             GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("cutter", 1L));
+            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("itemBatChargeRE", 1L));
+            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("itemBatChargeAdv", 1L));
+            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("itemBatChargeCrystal", 1L));
+            GT_ModHandler.removeRecipeByOutput(GT_ModHandler.getIC2Item("itemBatChargeLamaCrystal", 1L));
 
         } else {
             GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("glassFiberCableItem", 1L), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"GGG", "EDE", "GGG", 'G', new ItemStack(Blocks.glass, 1, 32767), 'D', OrePrefixes.dust.get(Materials.Silver), 'E', ItemList.IC2_Energium_Dust.get(1L)});
