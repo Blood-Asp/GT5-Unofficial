@@ -780,6 +780,8 @@ public enum ItemList implements IItemContainer {
     Casing_CleanStainlessSteel,
     Casing_StableTitanium,
     Casing_Firebox_Titanium,
+    Casing_MiningNeutronium,
+    Casing_MiningBlackPlutonium,
 
     Hull_ULV,
     Hull_LV,
@@ -1486,6 +1488,8 @@ public enum ItemList implements IItemContainer {
     OreDrill2,
     OreDrill3,
     OreDrill4,
+    OreDrill5,
+    OreDrill6,
     PyrolyseOven,
     OilCracker,
     Crop_Drop_UUMBerry,
