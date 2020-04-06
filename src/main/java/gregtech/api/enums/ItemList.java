@@ -1114,6 +1114,9 @@ public enum ItemList implements IItemContainer {
     Machine_HV_Printer,
     Machine_EV_Printer,
     Machine_IV_Printer,
+    Machine_LuV_Printer,
+    Machine_ZPM_Printer,
+    Machine_UV_Printer,
 
     Machine_LV_Recycler,
     Machine_MV_Recycler,
@@ -1168,6 +1171,9 @@ public enum ItemList implements IItemContainer {
     Machine_HV_Boxinator,
     Machine_EV_Boxinator,
     Machine_IV_Boxinator,
+    Machine_LuV_Boxinator,
+    Machine_ZPM_Boxinator,
+    Machine_UV_Boxinator,
 
     Machine_LV_Unboxinator,
     Machine_MV_Unboxinator,
