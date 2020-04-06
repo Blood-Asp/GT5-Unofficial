@@ -27,7 +27,7 @@ import static gregtech.GT_Mod.GT_FML_LOGGER;
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
 
-    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
+    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<>();
 
     public GT_MetaTileEntity_AssemblyLine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
