@@ -15,6 +15,7 @@ import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
+import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
@@ -1130,7 +1131,16 @@ public class GT_Utility {
     }
 
     /**
-     * Initializes a new texture page.
+     * Initializes new empty texture page for casings
+     * page 0 is old CASING_BLOCKS
+     *
+     * Then casings should be registered like this:
+     * for (byte i = MIN_USED_META; i < MAX_USED_META; i = (byte) (i + 1)) {
+     *     Textures.BlockIcons.casingTexturePages[PAGE][i+START_INDEX] = new GT_CopiedBlockTexture(this, 6, i);
+     * }
+     *
+     * @param page 0 to 127
+     * @return true if it made empty page, false if one already existed...
      */
     public static boolean addTexturePage(byte page){
         if(Textures.BlockIcons.casingTexturePages[page]==null){
@@ -1138,6 +1148,68 @@ public class GT_Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return texture id from page and index, for use when determining hatches, but can also be precomputed from:
+     * (page<<7)+index
+     * @param page 0 to 127 page
+     * @param index 0 to 127 texture index
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(byte page,byte index){
+        if(page>=0 && index>=0){
+            return (page<<7)+index;
+        }
+        throw new RuntimeException("Index out of range: ["+page+"]["+index+"]");
+    }
+
+    /**
+     * Return texture id from page and index, for use when determining hatches, but can also be precomputed from:
+     * (page<<7)+index
+     * @param page 0 to 127 page
+     * @param startIndex 0 to 127 start texture index
+     * @param blockMeta meta of the block
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(byte page,byte startIndex,byte blockMeta){
+        if(page>=0 && startIndex>=0 && blockMeta>=0 && (startIndex+blockMeta)<=127){
+            return (page<<7)+(startIndex+blockMeta);
+        }
+        throw new RuntimeException("Index out of range: ["+page+"]["+startIndex+"+"+blockMeta+"="+(startIndex+blockMeta)+"]");
+    }
+
+    /**
+     * Return texture id from item stack, unoptimized but readable?
+     * @return casing texture 0 to 16383
+     */
+    @Deprecated
+    public static int getTextureId(ItemStack stack){
+        return getTextureId(Block.getBlockFromItem(stack.getItem()),(byte)stack.getItemDamage());
+    }
+
+    /**
+     * Return texture id from item stack, unoptimized but readable?
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(Block blockFromBlock,byte metaFromBlock){
+        for (int page = 0; page < Textures.BlockIcons.casingTexturePages.length; page++) {
+            ITexture[] casingTexturePage = Textures.BlockIcons.casingTexturePages[page];
+            if(casingTexturePage!=null){
+                for (int index = 0; index < casingTexturePage.length; index++) {
+                    ITexture iTexture = casingTexturePage[index];
+                    if(iTexture instanceof GT_CopiedBlockTexture){
+                        Block block = ((GT_CopiedBlockTexture) iTexture).getBlock();
+                        byte meta = ((GT_CopiedBlockTexture) iTexture).getMeta();
+                        if(meta==metaFromBlock && blockFromBlock==block){
+                            return (page<<7)+index;
+                        }
+                    }
+                }
+            }
+        }
+        throw new RuntimeException("Probably missing mapping or different texture class used for: "+
+                blockFromBlock.getUnlocalizedName()+" meta:"+metaFromBlock);
     }
 
     /**

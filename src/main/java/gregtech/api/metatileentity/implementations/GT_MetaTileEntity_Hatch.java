@@ -6,8 +6,14 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * Handles texture changes internally. No special calls are necessary other than updateTexture in add***ToMachineList.
+ */
 public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTank {
-    @Deprecated //Use texture changing method
+    /**
+     * Uses new texture changing methods to avoid limitations of byte as texture index...
+     */
+    @Deprecated
     public byte mMachineBlock = 0;
     private byte mTexturePage = 0;
     private byte actualTexture = 0;
@@ -88,21 +94,23 @@ public abstract class GT_MetaTileEntity_Hatch extends GT_MetaTileEntity_BasicTan
     }
 
     /**
-     * 
-     * @param textureIndex
-     * Index between 0-127.
-     * Add 128 per page, if texture index is not on first page.
-     * 
+     * Sets texture with page and index, called on add to machine list
+     * @param id (page<<7)+index of the texture
      */
-    
-    public final void updateTexture(int textureIndex){
-        onValueUpdate((byte) textureIndex);
-        onTexturePageUpdate((byte) (textureIndex>>7));
+    public final void updateTexture(int id){
+        onValueUpdate((byte) id);
+        onTexturePageUpdate((byte) (id>>7));
     }
 
-    public final void updateTexture(byte texturePage, byte machineBlock){
-        onValueUpdate(machineBlock);
-        onTexturePageUpdate(texturePage);
+    /**
+     * Sets texture with page and index, rather unusable, but kept FFS
+     * @param page page of texure
+     * @param index index of texure
+     */
+    @Deprecated
+    public final void updateTexture(byte page, byte index){
+        onValueUpdate(index);
+        onTexturePageUpdate(page);
     }
 
     @Override

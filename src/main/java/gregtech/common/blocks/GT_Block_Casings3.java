@@ -12,7 +12,7 @@ public class GT_Block_Casings3
     public GT_Block_Casings3() {
         super(GT_Item_Casings3.class, "gt.blockcasings3", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.CASING_BLOCKS[(i + 32)] = new GT_CopiedBlockTexture(this, 6, i);
+            Textures.BlockIcons.casingTexturePages[0][(i + 32)] = new GT_CopiedBlockTexture(this, 6, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Yellow Stripes Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Yellow Stripes Block");

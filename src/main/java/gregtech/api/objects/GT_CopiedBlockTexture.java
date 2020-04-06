@@ -91,4 +91,12 @@ public class GT_CopiedBlockTexture implements ITexture {
     public boolean isValidTexture() {
         return mBlock != null;
     }
+
+    public Block getBlock() {
+        return mBlock;
+    }
+
+    public byte getMeta() {
+        return mMeta;
+    }
 }

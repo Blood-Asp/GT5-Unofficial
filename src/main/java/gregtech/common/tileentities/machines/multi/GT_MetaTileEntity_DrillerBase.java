@@ -72,8 +72,8 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing)
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[casingTextureIndex],new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL)};
-        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[casingTextureIndex]};
+            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(casingTextureIndex),new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL)};
+        return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(casingTextureIndex)};
     }
 
     @Override

@@ -14,7 +14,6 @@ public class GT_Block_Casings5
         extends GT_Block_Casings_Abstract {
     public GT_Block_Casings5() {
         super(GT_Item_Casings5.class, "gt.blockcasings5", GT_Material_Casings.INSTANCE);
-        GT_Utility.addTexturePage((byte) 1);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
             Textures.BlockIcons.casingTexturePages[1][i] = new GT_CopiedBlockTexture(this, 6, i);
         }
