@@ -9,7 +9,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -69,94 +71,13 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "AdvancedProcessingArray.png");
     }
 
-    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        if (mInventory[1] == null) return null;
-        String tmp = mInventory[1].getUnlocalizedName().replaceAll("gt\\.blockmachines\\.basicmachine\\.", "");
-        if (tmp.startsWith("centrifuge")) {
-            return GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes;
-        } else if (tmp.startsWith("electrolyzer")) {
-            return GT_Recipe.GT_Recipe_Map.sElectrolyzerRecipes;
-        } else if (tmp.startsWith("alloysmelter")) {
-            return GT_Recipe.GT_Recipe_Map.sAlloySmelterRecipes;
-        } else if (tmp.startsWith("assembler")) {
-            return GT_Recipe.GT_Recipe_Map.sAssemblerRecipes;
-        } else if (tmp.startsWith("compressor")) {
-            return GT_Recipe.GT_Recipe_Map.sCompressorRecipes;
-        } else if (tmp.startsWith("extractor")) {
-            return GT_Recipe.GT_Recipe_Map.sExtractorRecipes;
-        } else if (tmp.startsWith("macerator")) {
-            return GT_Recipe.GT_Recipe_Map.sMaceratorRecipes;
-        } else if (tmp.startsWith("recycler")) {
-            return GT_Recipe.GT_Recipe_Map.sRecyclerRecipes;
-        } else if (tmp.startsWith("thermalcentrifuge")) {
-            return GT_Recipe.GT_Recipe_Map.sThermalCentrifugeRecipes;
-        } else if (tmp.startsWith("orewasher")) {
-            return GT_Recipe.GT_Recipe_Map.sOreWasherRecipes;
-        } else if (tmp.startsWith("chemicalreactor")) {
-            return GT_Recipe.GT_Recipe_Map.sChemicalRecipes;
-        } else if (tmp.startsWith("chemicalbath")) {
-            return GT_Recipe.GT_Recipe_Map.sChemicalBathRecipes;
-        } else if (tmp.startsWith("electromagneticseparator")) {
-            return GT_Recipe.GT_Recipe_Map.sElectroMagneticSeparatorRecipes;
-        } else if (tmp.startsWith("autoclave")) {
-            return GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes;
-        } else if (tmp.startsWith("mixer")) {
-            return GT_Recipe.GT_Recipe_Map.sMixerRecipes;
-        } else if (tmp.startsWith("hammer")) {
-            return GT_Recipe.GT_Recipe_Map.sHammerRecipes;
-        } else if (tmp.startsWith("sifter")) {
-            return GT_Recipe.GT_Recipe_Map.sSifterRecipes;
-        } else if (tmp.startsWith("extruder")) {
-            return GT_Recipe.GT_Recipe_Map.sExtruderRecipes;
-        } else if (tmp.startsWith("laserengraver")) {
-            return GT_Recipe.GT_Recipe_Map.sLaserEngraverRecipes;
-        } else if (tmp.startsWith("bender")) {
-            return GT_Recipe.GT_Recipe_Map.sBenderRecipes;
-        } else if (tmp.startsWith("wiremill")) {
-            return GT_Recipe.GT_Recipe_Map.sWiremillRecipes;
-        } else if (tmp.startsWith("arcfurnace")) {
-            return GT_Recipe.GT_Recipe_Map.sArcFurnaceRecipes;
-        } else if (tmp.startsWith("brewery")) {
-            return GT_Recipe.GT_Recipe_Map.sBrewingRecipes;
-        } else if (tmp.startsWith("canner")) {
-            return GT_Recipe.GT_Recipe_Map.sCannerRecipes;
-        } else if (tmp.startsWith("cutter")) {
-            return GT_Recipe.GT_Recipe_Map.sCutterRecipes;
-        } else if (tmp.startsWith("fermenter")) {
-            return GT_Recipe.GT_Recipe_Map.sFermentingRecipes;
-        } else if (tmp.startsWith("fluidextractor")) {
-            return GT_Recipe.GT_Recipe_Map.sFluidExtractionRecipes;
-        } else if (tmp.startsWith("fluidsolidifier")) {
-            return GT_Recipe.GT_Recipe_Map.sFluidSolidficationRecipes;
-        } else if (tmp.startsWith("lathe")) {
-            return GT_Recipe.GT_Recipe_Map.sLatheRecipes;
-        } else if (tmp.startsWith("boxinator")) {
-            return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
-        } else if (tmp.startsWith("unboxinator")) {
-            return GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes;
-        } else if (tmp.startsWith("polarizer")) {
-            return GT_Recipe.GT_Recipe_Map.sPolarizerRecipes;
-        } else if(tmp.startsWith("press")){
-            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
-        } else if (tmp.startsWith("plasmaarcfurnace")) {
-            return GT_Recipe.GT_Recipe_Map.sPlasmaArcFurnaceRecipes;
-        } else if (tmp.startsWith("printer")) {
-            return GT_Recipe.GT_Recipe_Map.sPrinterRecipes;
-        } else if (tmp.startsWith("press")) {
-            return GT_Recipe.GT_Recipe_Map.sPressRecipes;
-        } else if (tmp.startsWith("fluidcanner")) {
-            return GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes;
-        } else if (tmp.startsWith("fluidheater")) {
-            return GT_Recipe.GT_Recipe_Map.sFluidHeaterRecipes;
-        } else if (tmp.startsWith("distillery")) {
-            return GT_Recipe.GT_Recipe_Map.sDistilleryRecipes;
-        } else if (tmp.startsWith("slicer")) {
-            return GT_Recipe.GT_Recipe_Map.sSlicerRecipes;
-        } else if (tmp.startsWith("amplifier")) {
-            return GT_Recipe.GT_Recipe_Map.sAmplifiers;
-        } else if (tmp.startsWith("circuitassembler")) {
-            return GT_Recipe.GT_Recipe_Map.sCircuitAssemblerRecipes;
-        }
+    public GT_Recipe_Map getRecipeMap() {
+    	if (isCorrectMachinePart(mInventory[1])) {
+    		GT_Recipe_Map aTemp = GT_ProcessingArray_Manager.getRecipeMapForMeta(mInventory[1].getItemDamage());
+            if (aTemp != null) {
+            	return aTemp;
+            }
+    	}        
         return null;
     }
 
