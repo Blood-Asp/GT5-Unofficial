@@ -1,6 +1,7 @@
 package gregtech.api.enums;
 
 import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -9,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import static gregtech.api.enums.GT_Values.W;
+import java.util.Locale;
+
+import static gregtech.api.enums.GT_Values.*;
 
 /**
  * Class containing all non-OreDict Items of GregTech.
@@ -750,8 +753,24 @@ public enum ItemList implements IItemContainer {
     @Override
     public ItemStack getWithName(long aAmount, String aDisplayName, Object... aReplacements) {
         ItemStack rStack = get(1, aReplacements);
-        if (GT_Utility.isStackInvalid(rStack)) return null;
-        rStack.setStackDisplayName(aDisplayName);
+        if (GT_Utility.isStackInvalid(rStack)) return NI;
+
+        // CamelCase alphanumeric words from aDisplayName
+        StringBuilder tCamelCasedDisplayNameBuilder = new StringBuilder();
+        final String[] tDisplayNameWords = aDisplayName.split("\\W");
+        for (String tWord : tDisplayNameWords){
+            if (tWord.length() > 0) tCamelCasedDisplayNameBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
+            if (tWord.length() > 1) tCamelCasedDisplayNameBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
+        }
+        if (tCamelCasedDisplayNameBuilder.length() == 0) {
+            // CamelCased DisplayName is empty, so use hash of aDisplayName
+            tCamelCasedDisplayNameBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
+        }
+
+        // Construct a translation key from UnlocalizedName and CamelCased DisplayName
+        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder.toString() + ".name";
+
+        rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
     }
 
