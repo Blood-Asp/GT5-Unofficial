@@ -1467,11 +1467,14 @@ public class Textures {
          */
         public static ITexture[][] casingTexturePages = new ITexture[128][];//page holder so we don't make an short long array
 
-        public static ITexture getCasingTextureForIndex(int index){
-            return casingTexturePages[(index>>7)&0x7f][index&0x7f];
+        public static ITexture getCasingTextureForId(int id){
+            return casingTexturePages[(id>>7)&0x7f][id&0x7f];
         }
-        public static void setCasingTextureForIndex(int index,ITexture iTexture){
-            casingTexturePages[(index>>7)&0x7f][index&0x7f]=iTexture;
+        public static void setCasingTextureForId(int id,ITexture iTexture){
+            casingTexturePages[(id>>7)&0x7f][id&0x7f]=iTexture;
+        }
+        public static void setCasingTexture(byte page,byte index,ITexture iTexture){
+            casingTexturePages[page][index]=iTexture;
         }
 
         static {
