@@ -99,16 +99,16 @@ public class GT_ProcessingArrayRecipeLoader {
         registerMapBetweenRange(291, 295, GT_Recipe.GT_Recipe_Map.sLatheRecipes);
 
         // Boxinator
-        registerMapBetweenRange(401, 411, GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes);
+        registerMapBetweenRange(401, 408, GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes);
 
         // Unboxinator
-        registerMapBetweenRange(411, 421, GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes);
+        registerMapBetweenRange(411, 418, GT_Recipe.GT_Recipe_Map.sUnboxinatorRecipes);
 
         // Polarizer
         registerMapBetweenRange(551, 555, GT_Recipe.GT_Recipe_Map.sPolarizerRecipes);
 
         // Printer
-        registerMapBetweenRange(321, 325, GT_Recipe.GT_Recipe_Map.sPrinterRecipes);
+        registerMapBetweenRange(321, 328, GT_Recipe.GT_Recipe_Map.sPrinterRecipes);
 
         // Fluid Canner
         registerMapBetweenRange(431, 435, GT_Recipe.GT_Recipe_Map.sFluidCannerRecipes);

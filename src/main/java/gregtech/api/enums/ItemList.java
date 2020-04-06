@@ -1114,6 +1114,9 @@ public enum ItemList implements IItemContainer {
     Machine_HV_Printer,
     Machine_EV_Printer,
     Machine_IV_Printer,
+    Machine_LuV_Printer,
+    Machine_ZPM_Printer,
+    Machine_UV_Printer,
 
     Machine_LV_Recycler,
     Machine_MV_Recycler,
