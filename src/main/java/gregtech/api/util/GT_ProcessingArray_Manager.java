@@ -18,7 +18,9 @@ public class GT_ProcessingArray_Manager {
 		}	
 		String aMapNameKey = aMap.mUnlocalizedName;		
 		mMetaKeyMap.put(aMeta, aMapNameKey);
-		mRecipeCache.put(aMapNameKey, aMap);	
+		if (!mRecipeCache.containsKey(aMapNameKey)) {
+			mRecipeCache.put(aMapNameKey, aMap);			
+		}	
 		return true;
 	}
 	
