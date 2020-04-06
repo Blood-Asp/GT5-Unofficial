@@ -88,7 +88,8 @@ public class GregTech_API {
      * 12001 - 12500 are reserved for RedMage17.
      * 12501 - 13000 are reserved for bartimaeusnek.
      * 13001 - 13100 are reserved for Techlone
-     * 13101 - 14999 are currently free.
+     * 13101 - 13500 are reserved for kekzdealer
+     * 13501 - 14999 are currently free.
      * 15000 - 16999 are reserved for TecTech.
      * 17000 - 29999 are currently free.
      * 30000 - 31999 are reserved for Alkalus.
