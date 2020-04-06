@@ -126,6 +126,6 @@ public class GT_MetaTileEntity_Digital_Transformer extends GT_MetaTileEntity_Tra
 
     @Override
     public long maxEUStore() {
-        return 512L + V[mTier + 1] * 64L;
+        return 512L + V[mTier] * 256L;
     }
 }
