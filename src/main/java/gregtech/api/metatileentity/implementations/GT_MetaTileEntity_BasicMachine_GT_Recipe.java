@@ -21,6 +21,8 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Locale;
 import java.util.Random;
 
+import cpw.mods.fml.common.Loader;
+
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.W;
 
@@ -72,13 +74,13 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                 }
 
                 if (aRecipe[i] == X.GLASS) {
-                    if (Loader.isModLoaded("bartworks"){
+                    if (Loader.isModLoaded("bartworks")){
                         if (mTier>=8)
-                           aRecipe[i] = "blockGlass"+VN[8];
+                           aRecipe[i] = "blockGlass"+GT_Values.VN[8];
                         else if (mTier < 3)
-                           aRecipe[i] = "blockGlass"+VN[3];
+                           aRecipe[i] = "blockGlass"+GT_Values.VN[3];
                         else
-                            aRecipe[i] = "blockGlass"+VN[mTier];
+                            aRecipe[i] = "blockGlass"+GT_Values.VN[mTier];
                         continue;              
                     } 
                     else {
