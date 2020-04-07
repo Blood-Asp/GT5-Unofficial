@@ -15,7 +15,7 @@ public class GT_Block_Casings8
     //WATCH OUT FOR TEXTURE ID's
     public GT_Block_Casings8() {
         super(GT_Item_Casings8.class, "gt.blockcasings8", GT_Material_Casings.INSTANCE);
-        for (int i = 0; i < 1; i = (i + 1)) {
+        for (int i = 0; i < 4; i = (i + 1)) {
             Textures.BlockIcons.casingTexturePages[1][i+48] = new GT_CopiedBlockTexture(this, 6, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Chemically Inert Machine Casing");
