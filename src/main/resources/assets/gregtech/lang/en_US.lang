@@ -824,6 +824,11 @@ achievement.gt.blockmachines.multimachine.em.infuser.desc=Pickup this item to se
 achievement.gt.blockmachines.hatch.holder.tier.09=Object Holder
 achievement.gt.blockmachines.hatch.holder.tier.09.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.blockmachines.multimachine.oredrill5=Ore Drill Plant V
+achievement.gt.blockmachines.multimachine.oredrill5.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.multimachine.oredrill6=Ore Drill Plant VI
+achievement.gt.blockmachines.multimachine.oredrill6.desc=Pickup this item to see the recipe in NEI
+
 achievement.item.StargateShieldingFoil=Stargate-Radiation-Containment-Plate
 achievement.item.StargateShieldingFoil.desc=Pickup this item to see the recipe in NEI
 achievement.item.StargateChevron=Stargate Chevron
