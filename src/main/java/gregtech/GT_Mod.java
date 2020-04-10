@@ -767,9 +767,6 @@ public class GT_Mod implements IGT_Mod {
         new GT_CoverLoader().run();
         new GT_AE2EnergyTunnelLoader().run();
 
-        if (Loader.isModLoaded("bartworks") && Loader.isModLoaded("ExtraUtilities"))
-            GT_BW_VoidminerLoader.initDeepDark();
-
         LoadArmorComponents.init();
 
         GT_RecipeRegistrator.registerUsagesForMaterials(null, false, new ItemStack(Blocks.planks, 1), new ItemStack(Blocks.cobblestone, 1), new ItemStack(Blocks.stone, 1), new ItemStack(Items.leather, 1));
@@ -974,7 +971,7 @@ public class GT_Mod implements IGT_Mod {
                 }
             }
         }
-        Materials.getMaterialsMap().values().parallelStream().forEach(tMaterial -> {
+        Materials.getMaterialsMap().values().stream().forEach(tMaterial -> {
             if ((tMaterial.mElement != null) && (!tMaterial.mElement.mIsIsotope) && (tMaterial != Materials.Magic) && (tMaterial.getMass() > 0L)) {
                 ItemStack tOutput = ItemList.Tool_DataOrb.get(1L);
                 Behaviour_DataOrb.setDataTitle(tOutput, "Elemental-Scan");
@@ -1010,6 +1007,9 @@ public class GT_Mod implements IGT_Mod {
                 GregTech_API.mInputRF = false;
             }
         }
+
+        if (Loader.isModLoaded("bartworks"))
+            GT_BW_VoidminerLoader.initDeepDark();
 
         addSolidFakeLargeBoilerFuels();
 
