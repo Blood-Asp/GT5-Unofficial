@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static gregtech.api.enums.GT_Values.MOD_ID_FR;
-import static gregtech.api.util.GT_BartWorks_Compat.getBartWorksMaterialByID;
+import static gregtech.api.util.GT_BartWorks_Compat.getBartWorksMaterialByIGNName;
 
 public class GT_MachineRecipeLoader implements Runnable {
     private final MaterialStack[][] mAlloySmelterList = {
@@ -1927,7 +1927,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Hull_EV.get(1L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Titanium, 4L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 4L), ItemList.Electric_Motor_EV.get(4L), ItemList.Electric_Pump_EV.get(4L), ItemList.Conveyor_Module_EV.get(4L), GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Tungsten, 4L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getFluid(72), ItemList.OreDrill1.get(1L), 400, 1920);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.OreDrill1.get(1L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 4L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4L), ItemList.Electric_Motor_IV.get(4L), ItemList.Electric_Pump_IV.get(4L), ItemList.Conveyor_Module_IV.get(4L), GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Iridium, 4L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getFluid(144), ItemList.OreDrill2.get(1L), 400, 7680);
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.OreDrill2.get(1L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 4L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4L), ItemList.Electric_Motor_LuV.get(4L), ItemList.Electric_Pump_LuV.get(4L), ItemList.Conveyor_Module_LuV.get(4L), GT_OreDictUnificator.get(OrePrefixes.gearGt, Loader.isModLoaded("bartworks") ? getBartWorksMaterialByID(88) : Materials.Chrome, 4L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getFluid(288), ItemList.OreDrill3.get(1L), 400, 30720);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.OreDrill2.get(1L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 4L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 4L), ItemList.Electric_Motor_LuV.get(4L), ItemList.Electric_Pump_LuV.get(4L), ItemList.Conveyor_Module_LuV.get(4L), GT_OreDictUnificator.get(OrePrefixes.gearGt, Loader.isModLoaded("bartworks") ? getBartWorksMaterialByIGNName("Rhodium-Plated Palladium") : Materials.Chrome, 4L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getFluid(288), ItemList.OreDrill3.get(1L), 400, 30720);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.OreDrill3.get(1L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Tritanium, 4L), GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 4L), ItemList.Electric_Motor_ZPM.get(4L), ItemList.Electric_Pump_ZPM.get(4L), ItemList.Conveyor_Module_ZPM.get(4L), GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.MysteriousCrystal, 4L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getFluid(576), ItemList.OreDrill4.get(1L), 400, 122880);
 
         GT_ModHandler.removeRecipe(new ItemStack(Items.lava_bucket), ItemList.Cell_Empty.get(1L));

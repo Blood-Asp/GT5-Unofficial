@@ -879,13 +879,13 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
 
                         if (bw) {
                             if (aMaterial == Materials.Osmium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByID(69);
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Rarest Metal Residue");
                             else if (aMaterial == Materials.Iridium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByID(70);
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Iridium Metal Residue");
                             else if (aMaterial == Materials.Platinum)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByID(47);
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Platinum Metallic Powder");
                             else if (aMaterial == Materials.Palladium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByID(53);
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Palladium Metallic Powder");
                         }
 
                         aItemEntity.setEntityItemStack(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, aItemEntity.getEntityItem().stackSize));

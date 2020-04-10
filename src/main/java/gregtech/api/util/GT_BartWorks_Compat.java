@@ -14,19 +14,23 @@ public class GT_BartWorks_Compat {
     public static Materials getBartWorksMaterialByVarName(String name) {
         Materials materials = Materials._NULL;
         try {
-            materials = new WerkstoffAPI().getWerkstoff(name).getBridgeMaterial();
+            materials = WerkstoffAPI.getWerkstoff(name).getBridgeMaterial();
         } catch (NoSuchFieldException | IllegalAccessException exception) {
             exception.printStackTrace();
         }
         return materials;
     }
 
-    public static Materials getBartWorksMaterialByIGNName(String name) {
-        Optional<Werkstoff> material = Werkstoff.werkstoffHashSet.stream().filter(e -> e.getDefaultName().equals(name)).findFirst();
+    public static Materials getBartWorksMaterialByODName(String name) {
+        Optional<Werkstoff> material = Werkstoff.werkstoffHashSet.stream().filter(e -> e.getVarName().equals(name)).findFirst();
         if (material.isPresent()) {
             return material.get().getBridgeMaterial();
         }
         return Materials._NULL;
+    }
+
+    public static Materials getBartWorksMaterialByIGNName(String name) {
+        return Optional.ofNullable(Optional.ofNullable(Werkstoff.werkstoffNameHashMap.get(name)).orElse(Werkstoff.default_null_Werkstoff).getBridgeMaterial()).orElse(Materials._NULL);
     }
 
     public static Materials getBartWorksMaterialByID(int id) {
