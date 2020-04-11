@@ -841,7 +841,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             }
 
             // Unification happens here in case the Input isn't already unificated.
-            if (aNotUnificated) aInputs = GT_OreDictUnificator.getStackArray(true, aInputs);
+            if (aNotUnificated) aInputs = GT_OreDictUnificator.getStackArray(true, (Object[]) aInputs);
 
             // Check the Recipe which has been used last time in order to not have to search for it again, if possible.
             if (aRecipe != null)

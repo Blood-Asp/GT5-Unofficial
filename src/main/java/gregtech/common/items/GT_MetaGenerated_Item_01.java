@@ -861,6 +861,8 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), 600, 24);
     }
 
+    private static boolean bw = Loader.isModLoaded("bartworks");
+
     public boolean onEntityItemUpdate(EntityItem aItemEntity) {
         int aDamage = aItemEntity.getEntityItem().getItemDamage();
         if ((aDamage < 32000) && (aDamage >= 0) && (!aItemEntity.worldObj.isRemote)) {
@@ -874,11 +876,23 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
+
+                        if (bw) {
+                            if (aMaterial == Materials.Osmium)
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Rarest Metal Residue");
+                            else if (aMaterial == Materials.Iridium)
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Iridium Metal Residue");
+                            else if (aMaterial == Materials.Platinum)
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Platinum Metallic Powder");
+                            else if (aMaterial == Materials.Palladium)
+                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Palladium Metallic Powder");
+                        }
+
                         aItemEntity.setEntityItemStack(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, aItemEntity.getEntityItem().stackSize));
                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
                         return true;
                     }
-                }else if (aPrefix == OrePrefixes.crushed) {
+                } else if (aPrefix == OrePrefixes.crushed) {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
@@ -886,7 +900,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
                         return true;
                     }
-                }else if(aPrefix == OrePrefixes.dust && aMaterial == Materials.Wheat){
+                } else if(aPrefix == OrePrefixes.dust && aMaterial == Materials.Wheat) {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
