@@ -20,6 +20,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private final World mWorld;
     private final Set<ChunkPosition> mVisited;
 
+    // Hopefully large enough for most multi-block machines
     private static final int MAX_UPDATE_DEPTH = 128;
 
     public GT_Runnable_MachineBlockUpdate(World aWorld, int aX, int aY, int aZ) {
@@ -35,9 +36,12 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     private boolean shouldUpdate(TileEntity aTileEntity) {
-        // Stop recursion on cables and pipes
-        if (aTileEntity == null || !(aTileEntity instanceof IGregTechTileEntity))
+        if (aTileEntity == null)
           return false;
+
+        // Stop recursion on GregTech cables, item pipes, and fluid pipes
+        if (!(aTileEntity instanceof IGregTechTileEntity))
+          return true;
         IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
         return
             !(tMetaTileEntity instanceof GT_MetaPipeEntity_Cable) &&
