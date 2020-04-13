@@ -31,49 +31,45 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         mVisited = new HashSet<ChunkPosition>(80);
     }
 
-    private boolean shouldVisit(int aX, int aY, int aZ) {
-        return !mVisited.contains(new ChunkPosition(aX, aY, aZ));
-    }
-
-    private boolean shouldUpdate(TileEntity aTileEntity) {
+    private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
         if (aTileEntity == null)
-          return false;
+            return false;
 
-        // Stop recursion on GregTech cables, item pipes, and fluid pipes
-        if (!(aTileEntity instanceof IGregTechTileEntity))
-          return true;
-        IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
-        return
-            !(tMetaTileEntity instanceof GT_MetaPipeEntity_Cable) &&
-            !(tMetaTileEntity instanceof GT_MetaPipeEntity_Fluid) &&
-            !(tMetaTileEntity instanceof GT_MetaPipeEntity_Item);
+        if (aTileEntity instanceof IGregTechTileEntity) {
+            // Stop recursion on GregTech cables, item pipes, and fluid pipes
+            IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
+            if ((tMetaTileEntity instanceof GT_MetaPipeEntity_Cable) ||
+                (tMetaTileEntity instanceof GT_MetaPipeEntity_Fluid) ||
+                (tMetaTileEntity instanceof GT_MetaPipeEntity_Item))
+                return false;
+        }
+
+        return (aTileEntity instanceof IMachineBlockUpdateable) ||
+            GregTech_API.isMachineBlock(mWorld.getBlock(aX, aY, aZ), mWorld.getBlockMetadata(aX, aY, aZ));
     }
 
-    private void stepToUpdateMachine(World aWorld, int aX, int aY, int aZ) {
-        mVisited.add(new ChunkPosition(aX, aY, aZ));
-        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
-        if (!shouldUpdate(tTileEntity) || mVisited.size() > MAX_UPDATE_DEPTH)
+    private void stepToUpdateMachine(int aX, int aY, int aZ) {
+        if (!mVisited.add(new ChunkPosition(aX, aY, aZ)) || mVisited.size() > MAX_UPDATE_DEPTH)
             return;
 
-        if (tTileEntity instanceof IMachineBlockUpdateable)
+        TileEntity tTileEntity = mWorld.getTileEntity(aX, aY, aZ);
+        if (tTileEntity != null && tTileEntity instanceof IMachineBlockUpdateable)
             ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
 
-        if (mVisited.size() < 5 ||
-            (tTileEntity instanceof IMachineBlockUpdateable) ||
-            GregTech_API.isMachineBlock(aWorld.getBlock(aX, aY, aZ), aWorld.getBlockMetadata(aX, aY, aZ))) {
-            if (shouldVisit(aX + 1, aY, aZ)) stepToUpdateMachine(aWorld, aX + 1, aY, aZ);
-            if (shouldVisit(aX - 1, aY, aZ)) stepToUpdateMachine(aWorld, aX - 1, aY, aZ);
-            if (shouldVisit(aX, aY + 1, aZ)) stepToUpdateMachine(aWorld, aX, aY + 1, aZ);
-            if (shouldVisit(aX, aY - 1, aZ)) stepToUpdateMachine(aWorld, aX, aY - 1, aZ);
-            if (shouldVisit(aX, aY, aZ + 1)) stepToUpdateMachine(aWorld, aX, aY, aZ + 1);
-            if (shouldVisit(aX, aY, aZ - 1)) stepToUpdateMachine(aWorld, aX, aY, aZ - 1);
+        if (mVisited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
+            stepToUpdateMachine(aX + 1, aY, aZ);
+            stepToUpdateMachine(aX - 1, aY, aZ);
+            stepToUpdateMachine(aX, aY + 1, aZ);
+            stepToUpdateMachine(aX, aY - 1, aZ);
+            stepToUpdateMachine(aX, aY, aZ + 1);
+            stepToUpdateMachine(aX, aY, aZ - 1);
         }
     }
 
     @Override
     public void run() {
         try {
-            stepToUpdateMachine(mWorld, mX, mY, mZ);
+            stepToUpdateMachine(mX, mY, mZ);
         } catch (Throwable e) {/**/}
     }
 }
