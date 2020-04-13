@@ -20,9 +20,6 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private final World mWorld;
     private final Set<ChunkPosition> mVisited;
 
-    // Hopefully large enough for most multi-block machines
-    private static final int MAX_UPDATE_DEPTH = 128;
-
     public GT_Runnable_MachineBlockUpdate(World aWorld, int aX, int aY, int aZ) {
         mWorld = aWorld;
         mX = aX;
@@ -32,9 +29,6 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
-        if (aTileEntity == null)
-            return false;
-
         if (aTileEntity instanceof IGregTechTileEntity) {
             // Stop recursion on GregTech cables, item pipes, and fluid pipes
             IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
@@ -49,11 +43,11 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     private void stepToUpdateMachine(int aX, int aY, int aZ) {
-        if (!mVisited.add(new ChunkPosition(aX, aY, aZ)) || mVisited.size() > MAX_UPDATE_DEPTH)
+        if (!mVisited.add(new ChunkPosition(aX, aY, aZ)))
             return;
 
         TileEntity tTileEntity = mWorld.getTileEntity(aX, aY, aZ);
-        if (tTileEntity != null && tTileEntity instanceof IMachineBlockUpdateable)
+        if (tTileEntity instanceof IMachineBlockUpdateable)
             ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
 
         if (mVisited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
