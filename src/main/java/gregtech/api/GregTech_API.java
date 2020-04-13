@@ -389,9 +389,15 @@ public class GregTech_API {
      * @param aZ     is the Z-Coord of the update causing Block
      */
     public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ) {
-        if (!aWorld.isRemote)
-            new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ).run();
-        return true;
+        if (!aWorld.isRemote && !GT_Runnable_MachineBlockUpdate.getINSTANCETHREAD().isAlive()) {
+            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
+            GT_Runnable_MachineBlockUpdate.getINSTANCETHREAD().start();
+            return true;
+        } else if (!aWorld.isRemote && !GT_Runnable_MachineBlockUpdate.isAllowedToRun()){
+            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
+            return true;
+        }
+        return false;
     }
 
     /**
