@@ -1,7 +1,6 @@
 package gregtech.api.threads;
 
 import gregtech.api.GregTech_API;
-
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
@@ -28,7 +27,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     //Threading
     private static boolean allowedToRun; //makes if this thread is idle
     private static final Queue<Coordinates> toUpdate = new ConcurrentLinkedQueue<>(); //blocks added while this thread ran
-    private static final Thread INSTANCETHREAD = new Thread(new GT_Runnable_MachineBlockUpdate()); //Instance of this thread
+    private static final Thread INSTANCETHREAD = new Thread(new GT_Runnable_MachineBlockUpdate(), "Machine Block Updates"); //Instance of this thread
 
     //This class should never be initiated outside of this class!
     private GT_Runnable_MachineBlockUpdate() {
@@ -116,18 +115,35 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         return INSTANCETHREAD;
     }
 
-    private static void stepToUpdateMachine(World aWorld, int aX, int aY, int aZ, ArrayList<ChunkPosition> aList) {
-        aList.add(new ChunkPosition(aX, aY, aZ));
-        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+    private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
+        if (aTileEntity instanceof IGregTechTileEntity) {
+            // Stop recursion on GregTech cables, item pipes, and fluid pipes
+            IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
+            if ((tMetaTileEntity instanceof GT_MetaPipeEntity_Cable) ||
+                (tMetaTileEntity instanceof GT_MetaPipeEntity_Fluid) ||
+                (tMetaTileEntity instanceof GT_MetaPipeEntity_Item))
+                return false;
+        }
+
+        return (aTileEntity instanceof IMachineBlockUpdateable) ||
+            GregTech_API.isMachineBlock(mWorld.getBlock(aX, aY, aZ), mWorld.getBlockMetadata(aX, aY, aZ));
+    }
+
+    private void stepToUpdateMachine(int aX, int aY, int aZ) {
+        if (!mVisited.add(new ChunkPosition(aX, aY, aZ)))
+            return;
+
+        TileEntity tTileEntity = mWorld.getTileEntity(aX, aY, aZ);
         if (tTileEntity instanceof IMachineBlockUpdateable)
             ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
-        if (aList.size() < 5 || (tTileEntity instanceof IMachineBlockUpdateable) || GregTech_API.isMachineBlock(aWorld.getBlock(aX, aY, aZ), aWorld.getBlockMetadata(aX, aY, aZ))) {
-            if (!aList.contains(new ChunkPosition(aX + 1, aY, aZ))) stepToUpdateMachine(aWorld, aX + 1, aY, aZ, aList);
-            if (!aList.contains(new ChunkPosition(aX - 1, aY, aZ))) stepToUpdateMachine(aWorld, aX - 1, aY, aZ, aList);
-            if (!aList.contains(new ChunkPosition(aX, aY + 1, aZ))) stepToUpdateMachine(aWorld, aX, aY + 1, aZ, aList);
-            if (!aList.contains(new ChunkPosition(aX, aY - 1, aZ))) stepToUpdateMachine(aWorld, aX, aY - 1, aZ, aList);
-            if (!aList.contains(new ChunkPosition(aX, aY, aZ + 1))) stepToUpdateMachine(aWorld, aX, aY, aZ + 1, aList);
-            if (!aList.contains(new ChunkPosition(aX, aY, aZ - 1))) stepToUpdateMachine(aWorld, aX, aY, aZ - 1, aList);
+
+        if (mVisited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
+            stepToUpdateMachine(aX + 1, aY, aZ);
+            stepToUpdateMachine(aX - 1, aY, aZ);
+            stepToUpdateMachine(aX, aY + 1, aZ);
+            stepToUpdateMachine(aX, aY - 1, aZ);
+            stepToUpdateMachine(aX, aY, aZ + 1);
+            stepToUpdateMachine(aX, aY, aZ - 1);
         }
 
     }

@@ -12,6 +12,7 @@ import gregtech.api.enums.*;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.XSTR;
+import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
 import gregtech.common.GT_Network;
@@ -1312,6 +1313,7 @@ public class GT_Mod implements IGT_Mod {
                 e.printStackTrace(GT_Log.err);
             }
         }
+        GT_Runnable_MachineBlockUpdate.getINSTANCETHREAD().interrupt();
     }
 
     private void addSolidFakeLargeBoilerFuels() {
