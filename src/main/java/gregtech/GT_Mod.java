@@ -1188,6 +1188,8 @@ public class GT_Mod implements IGT_Mod {
         }
 
         aEvent.registerServerCommand(new GT_Command());
+        //Sets a new Machine Block Update Thread everytime a world is loaded
+        GT_Runnable_MachineBlockUpdate.initThread();
     }
 
     public boolean isServerSide() {
@@ -1313,6 +1315,7 @@ public class GT_Mod implements IGT_Mod {
                 e.printStackTrace(GT_Log.err);
             }
         }
+        //Interrupt IDLE Threads to close down cleanly
         GT_Runnable_MachineBlockUpdate.getINSTANCETHREAD().interrupt();
     }
 

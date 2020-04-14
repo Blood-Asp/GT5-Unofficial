@@ -27,7 +27,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     //Threading
     private static boolean allowedToRun; //makes if this thread is idle
     private static final Queue<Coordinates> toUpdate = new ConcurrentLinkedQueue<>(); //blocks added while this thread ran
-    private static final Thread INSTANCETHREAD = new Thread(new GT_Runnable_MachineBlockUpdate(), "Machine Block Updates"); //Instance of this thread
+    private static Thread INSTANCETHREAD; //Instance of this thread
 
     //This class should never be initiated outside of this class!
     private GT_Runnable_MachineBlockUpdate() {
@@ -62,15 +62,15 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
      *  Never call this Method without checking if the thead is NOT allowed to run!
      */
     private static void setMachineUpdateValuesUnsafe(World aWorld, int aX, int aY, int aZ){
-        GT_Runnable_MachineBlockUpdate.setmZ(aZ);
-        GT_Runnable_MachineBlockUpdate.setmY(aY);
-        GT_Runnable_MachineBlockUpdate.setmX(aX);
-        GT_Runnable_MachineBlockUpdate.setmWorld(aWorld);
-        GT_Runnable_MachineBlockUpdate.resetVisited();
-        GT_Runnable_MachineBlockUpdate.setAllowedToRun(true);
+        setmZ(aZ);
+        setmY(aY);
+        setmX(aX);
+        setmWorld(aWorld);
+        resetVisited();
+        setAllowedToRun(true);
         synchronized (toUpdate) {
-            if (GT_Runnable_MachineBlockUpdate.INSTANCETHREAD.getState() == Thread.State.WAITING)
-                GT_Runnable_MachineBlockUpdate.toUpdate.notify();
+            if (getINSTANCETHREAD().getState() == Thread.State.WAITING)
+                toUpdate.notify();
         }
     }
 
@@ -85,12 +85,12 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         }
     }
 
-    private static class Coordinates {
+    public static class Coordinates {
 
-        private final int mX;
-        private final int mY;
-        private final int mZ;
-        private final World mWorld;
+        protected final int mX;
+        protected final int mY;
+        protected final int mZ;
+        protected final World mWorld;
 
         public Coordinates(int mX, int mY, int mZ, World mWorld) {
             this.mX = mX;
@@ -115,7 +115,12 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         GT_Runnable_MachineBlockUpdate.allowedToRun = unlocked;
     }
 
-    public static Thread getINSTANCETHREAD() {
+    public static synchronized void initThread() {
+        GT_Runnable_MachineBlockUpdate.INSTANCETHREAD = new Thread(new GT_Runnable_MachineBlockUpdate(), "GT Machine Block Updates");
+        GT_Runnable_MachineBlockUpdate.INSTANCETHREAD.start();
+    }
+
+    public static synchronized Thread getINSTANCETHREAD() {
         return INSTANCETHREAD;
     }
 
