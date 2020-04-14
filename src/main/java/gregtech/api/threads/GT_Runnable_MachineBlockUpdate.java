@@ -68,9 +68,9 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         GT_Runnable_MachineBlockUpdate.setmWorld(aWorld);
         GT_Runnable_MachineBlockUpdate.resetVisited();
         GT_Runnable_MachineBlockUpdate.setAllowedToRun(true);
-        synchronized (GT_Runnable_MachineBlockUpdate.INSTANCETHREAD) {
+        synchronized (toUpdate) {
             if (GT_Runnable_MachineBlockUpdate.INSTANCETHREAD.getState() == Thread.State.WAITING)
-                GT_Runnable_MachineBlockUpdate.INSTANCETHREAD.notify();
+                GT_Runnable_MachineBlockUpdate.toUpdate.notify();
         }
     }
 
@@ -168,12 +168,10 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                     if (coordinates != null) {
                         coordinates.update();
                     } else {
-                        synchronized(INSTANCETHREAD) {
-                            try {
-                                INSTANCETHREAD.wait();
-                            } catch (InterruptedException ignored) {
-                                return;
-                            }
+                        try {
+                            toUpdate.wait();
+                        } catch (InterruptedException ignored) {
+                            return;
                         }
                     }
                 }
