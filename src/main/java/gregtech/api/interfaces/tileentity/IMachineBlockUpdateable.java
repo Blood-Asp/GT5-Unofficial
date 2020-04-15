@@ -13,4 +13,11 @@ public interface IMachineBlockUpdateable {
      * RP-Frames could for example cause Problems when you instacheck the Machine Parts.
      */
     void onMachineBlockUpdate();
+
+    /**
+     * Should recurse?
+     */
+    default boolean isMachineBlockUpdateRecursive(){
+        return true;
+    }
 }
