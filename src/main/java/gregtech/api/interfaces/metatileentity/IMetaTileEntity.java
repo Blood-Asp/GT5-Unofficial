@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGearEnergyTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
 import net.minecraft.block.Block;
@@ -31,7 +32,7 @@ import java.util.List;
  * <p/>
  * Don't implement this yourself and expect it to work. Extend @MetaTileEntity itself.
  */
-public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHandler, IGearEnergyTileEntity {
+public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHandler, IGearEnergyTileEntity, IMachineBlockUpdateable {
     /**
      * This determines the BaseMetaTileEntity belonging to this MetaTileEntity by using the Meta ID of the Block itself.
      * <p/>
@@ -234,11 +235,6 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     boolean isAccessAllowed(EntityPlayer aPlayer);
 
     /**
-     * When a Machine Update occurs
-     */
-    void onMachineBlockUpdate();
-
-    /**
      * a Player rightclicks the Machine
      * Sneaky rightclicks are not getting passed to this!
      *
@@ -408,4 +404,22 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     String getAlternativeModeText();
 
     boolean shouldJoinIc2Enet();
+
+    /**
+     * The Machine Update, which is called when the Machine needs an Update of its Parts.
+     * I suggest to wait 1-5 seconds before actually checking the Machine Parts.
+     * RP-Frames could for example cause Problems when you instacheck the Machine Parts.
+     *
+     * just do stuff since we are already in meta tile...
+     */
+    @Override
+    void onMachineBlockUpdate();
+
+    /**
+     * just return in should recurse since we are already in meta tile...
+     */
+    @Override
+    default boolean isMachineBlockUpdateRecursive(){
+        return true;
+    }
 }

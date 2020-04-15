@@ -97,4 +97,9 @@ public class GT_MetaPipeEntity_Frame extends MetaPipeEntity {
 
     @Override
     public void disconnect(byte aSide) {/* Do nothing*/}
+
+    @Override
+    public boolean isMachineBlockUpdateRecursive() {
+        return true;
+    }
 }

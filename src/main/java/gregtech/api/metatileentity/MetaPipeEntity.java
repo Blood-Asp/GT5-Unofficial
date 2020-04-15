@@ -840,4 +840,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     public boolean shouldJoinIc2Enet() { return false; }
 
+    @Override
+    public boolean isMachineBlockUpdateRecursive() {
+        return false;
+    }
 }

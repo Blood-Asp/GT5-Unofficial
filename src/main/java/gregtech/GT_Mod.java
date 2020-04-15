@@ -1189,7 +1189,7 @@ public class GT_Mod implements IGT_Mod {
 
         aEvent.registerServerCommand(new GT_Command());
         //Sets a new Machine Block Update Thread everytime a world is loaded
-        GT_Runnable_MachineBlockUpdate.initThread();
+        GT_Runnable_MachineBlockUpdate.initExecutorService();
     }
 
     public boolean isServerSide() {
@@ -1232,7 +1232,6 @@ public class GT_Mod implements IGT_Mod {
 
     @Mod.EventHandler
     public void onServerStopping(FMLServerStoppingEvent aEvent) {
-
         for (Runnable tRunnable : GregTech_API.sBeforeGTServerstop) {
             try {
                 tRunnable.run();
@@ -1316,7 +1315,7 @@ public class GT_Mod implements IGT_Mod {
             }
         }
         //Interrupt IDLE Threads to close down cleanly
-        GT_Runnable_MachineBlockUpdate.getINSTANCETHREAD().interrupt();
+        GT_Runnable_MachineBlockUpdate.shutdownExecutorService();
     }
 
     private void addSolidFakeLargeBoilerFuels() {

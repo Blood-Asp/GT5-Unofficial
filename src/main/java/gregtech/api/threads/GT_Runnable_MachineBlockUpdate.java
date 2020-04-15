@@ -1,96 +1,113 @@
 package gregtech.api.threads;
 
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
-import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
-import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
-import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
-import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 public class GT_Runnable_MachineBlockUpdate implements Runnable {
-
-    private static int mX;
-    private static int mY;
-    private static int mZ;
-    private static World mWorld;
-    private static final Set<ChunkPosition> mVisited = new HashSet<>(80);
+    //used by runner thread
+    private int x, y, z;
+    private World world;
+    private final Set<ChunkPosition> visited = new HashSet<>(80);
 
     //Threading
-    private static boolean allowedToRun; //makes if this thread is idle
-    private static final Queue<Coordinates> toUpdate = new ConcurrentLinkedQueue<>(); //blocks added while this thread ran
-    private static Thread INSTANCETHREAD; //Instance of this thread
+    private static final ThreadFactory THREAD_FACTORY= r -> {
+        Thread thread=new Thread(r);
+        thread.setName("GT_MachineBlockUpdate");
+        return thread;
+    };
+    private static ExecutorService EXECUTOR_SERVICE;
 
     //This class should never be initiated outside of this class!
-    private GT_Runnable_MachineBlockUpdate() {
-    }
-
-    public static synchronized void setmX(int mX) {
-        GT_Runnable_MachineBlockUpdate.mX = mX;
-    }
-
-    public static synchronized void setmY(int mY) {
-        GT_Runnable_MachineBlockUpdate.mY = mY;
-    }
-
-    public static synchronized void setmZ(int mZ) {
-        GT_Runnable_MachineBlockUpdate.mZ = mZ;
-    }
-
-    public static synchronized void setmWorld(World mWorld) {
-        GT_Runnable_MachineBlockUpdate.mWorld = mWorld;
+    private GT_Runnable_MachineBlockUpdate(World aWorld, int aX, int aY, int aZ) {
+        this.world = aWorld;
+        this.x = aX;
+        this.y = aY;
+        this.z = aZ;
     }
 
     /**
-     * Clears the mVisited HashSet
+     * If the thread is idle, sets new values and remove the idle flag, otherwise, queue the cooridinates.
      */
-    public static synchronized void resetVisited() {
-        synchronized (GT_Runnable_MachineBlockUpdate.mVisited) {
-            GT_Runnable_MachineBlockUpdate.mVisited.clear();
+    public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
+        EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld,aX,aY,aZ));
+    }
+
+    public static void initExecutorService() {
+        EXECUTOR_SERVICE =  Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),THREAD_FACTORY);
+        //Executors.newSingleThreadExecutor(THREAD_FACTORY);
+        //Executors.newCachedThreadPool(THREAD_FACTORY);
+        //Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),THREAD_FACTORY);
+    }
+
+    public static void shutdownExecutorService() {
+        try {
+            EXECUTOR_SERVICE.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            GT_Mod.GT_FML_LOGGER.error("Well this interruption got interrupted...", e);
+        }
+        //terminates executor permanently
+        EXECUTOR_SERVICE.shutdownNow();
+    }
+
+    private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
+        //no check on IGregTechTileEntity as it should call the underlying meta tile isMachineBlockUpdateRecursive
+        //if (aTileEntity instanceof IGregTechTileEntity) {
+        //    return ((IGregTechTileEntity) aTileEntity).isMachineBlockUpdateRecursive();
+        //}
+        return (aTileEntity instanceof IMachineBlockUpdateable &&
+                ((IMachineBlockUpdateable) aTileEntity).isMachineBlockUpdateRecursive()) ||
+                GregTech_API.isMachineBlock(world.getBlock(aX, aY, aZ), world.getBlockMetadata(aX, aY, aZ));
+    }
+
+    private void causeUpdate(TileEntity tileEntity){
+        //no check for IGregTechTileEntity as it should call the underlying meta tile onMachineBlockUpdate
+        if (tileEntity instanceof IMachineBlockUpdateable) {
+            ((IMachineBlockUpdateable) tileEntity).onMachineBlockUpdate();
         }
     }
 
-    /**
-     *  Never call this Method without checking if the thead is NOT allowed to run!
-     */
-    private static void setMachineUpdateValuesUnsafe(World aWorld, int aX, int aY, int aZ){
-        setmZ(aZ);
-        setmY(aY);
-        setmX(aX);
-        setmWorld(aWorld);
-        resetVisited();
-        setAllowedToRun(true);
-        synchronized (toUpdate) {
-            if (getINSTANCETHREAD().getState() == Thread.State.WAITING)
-                toUpdate.notify();
+    private void stepToUpdateMachine(int aX, int aY, int aZ) {
+        if (!visited.add(new ChunkPosition(aX, aY, aZ)))
+            return;
+        TileEntity tTileEntity = world.getTileEntity(aX, aY, aZ);
+
+        causeUpdate(tTileEntity);
+
+        if (visited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
+            stepToUpdateMachine(aX + 1, aY, aZ);
+            stepToUpdateMachine(aX - 1, aY, aZ);
+            stepToUpdateMachine(aX, aY + 1, aZ);
+            stepToUpdateMachine(aX, aY - 1, aZ);
+            stepToUpdateMachine(aX, aY, aZ + 1);
+            stepToUpdateMachine(aX, aY, aZ - 1);
         }
     }
 
-    /**
-     * If the thread is idleing, sets new values and remove the idle flag, otherwise, queue the cooridinates.
-     */
-    public static synchronized void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
-        if (GT_Runnable_MachineBlockUpdate.isAllowedToRun()) {
-            toUpdate.add(new Coordinates(aX, aY, aZ, aWorld));
-        } else {
-            GT_Runnable_MachineBlockUpdate.setMachineUpdateValuesUnsafe(aWorld, aX, aY, aZ);
+    @Override
+    public void run() {
+        try {
+            stepToUpdateMachine(x, y, z);
+        } catch (Exception e) {
+            GT_Mod.GT_FML_LOGGER.error("Well this update was broken... " + new Coordinates(x,y,z,world), e);
         }
     }
 
     public static class Coordinates {
-
-        protected final int mX;
-        protected final int mY;
-        protected final int mZ;
-        protected final World mWorld;
+        public final int mX;
+        public final int mY;
+        public final int mZ;
+        public final World mWorld;
 
         public Coordinates(int mX, int mY, int mZ, World mWorld) {
             this.mX = mX;
@@ -99,88 +116,14 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
             this.mWorld = mWorld;
         }
 
-        /**
-         * Updated the Main Update Thread while its Idle
-         */
-        public void update() {
-            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(this.mWorld,this.mX,this.mY,this.mZ);
-        }
-    }
-
-    public static synchronized boolean isAllowedToRun() {
-        return allowedToRun;
-    }
-
-    public static synchronized void setAllowedToRun(boolean unlocked) {
-        GT_Runnable_MachineBlockUpdate.allowedToRun = unlocked;
-    }
-
-    public static synchronized void initThread() {
-        GT_Runnable_MachineBlockUpdate.INSTANCETHREAD = new Thread(new GT_Runnable_MachineBlockUpdate(), "GT Machine Block Updates");
-        GT_Runnable_MachineBlockUpdate.INSTANCETHREAD.start();
-    }
-
-    public static synchronized Thread getINSTANCETHREAD() {
-        return INSTANCETHREAD;
-    }
-
-    private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
-        if (aTileEntity instanceof IGregTechTileEntity) {
-            // Stop recursion on GregTech cables, item pipes, and fluid pipes
-            IMetaTileEntity tMetaTileEntity = ((IGregTechTileEntity) aTileEntity).getMetaTileEntity();
-            if ((tMetaTileEntity instanceof GT_MetaPipeEntity_Cable) ||
-                (tMetaTileEntity instanceof GT_MetaPipeEntity_Fluid) ||
-                (tMetaTileEntity instanceof GT_MetaPipeEntity_Item))
-                return false;
-        }
-
-        return (aTileEntity instanceof IMachineBlockUpdateable) ||
-            GregTech_API.isMachineBlock(mWorld.getBlock(aX, aY, aZ), mWorld.getBlockMetadata(aX, aY, aZ));
-    }
-
-    private void stepToUpdateMachine(int aX, int aY, int aZ) {
-        if (!mVisited.add(new ChunkPosition(aX, aY, aZ)))
-            return;
-
-        TileEntity tTileEntity = mWorld.getTileEntity(aX, aY, aZ);
-        if (tTileEntity instanceof IMachineBlockUpdateable)
-            ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
-
-        if (mVisited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
-            stepToUpdateMachine(aX + 1, aY, aZ);
-            stepToUpdateMachine(aX - 1, aY, aZ);
-            stepToUpdateMachine(aX, aY + 1, aZ);
-            stepToUpdateMachine(aX, aY - 1, aZ);
-            stepToUpdateMachine(aX, aY, aZ + 1);
-            stepToUpdateMachine(aX, aY, aZ - 1);
-        }
-
-    }
-
-    @Override
-    public void run() {
-        for(;;) { //infinite loop
-            if (isAllowedToRun()) {//Are we ready to work?
-                try {
-                    stepToUpdateMachine(mX, mY, mZ);
-                } catch (Throwable e) {/**/}
-                setAllowedToRun(false); //Work is finished, wait for new Coords.
-            } else {
-                //Checkes if the Update Queue has members
-                //DO NOT USE OPTIONALS HERE!
-                synchronized (toUpdate) {
-                    Coordinates coordinates = toUpdate.poll();
-                    if (coordinates != null) {
-                        coordinates.update();
-                    } else {
-                        try {
-                            toUpdate.wait();
-                        } catch (InterruptedException ignored) {
-                            return;
-                        }
-                    }
-                }
-            }
+        @Override
+        public String toString() {
+            return "Coordinates{" +
+                    "mX=" + mX +
+                    ", mY=" + mY +
+                    ", mZ=" + mZ +
+                    ", mWorld=" + mWorld.getProviderName()+ " @dimId " + mWorld.provider.dimensionId +
+                    '}';
         }
     }
 }
