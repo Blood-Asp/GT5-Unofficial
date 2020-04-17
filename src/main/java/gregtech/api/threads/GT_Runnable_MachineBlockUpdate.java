@@ -35,7 +35,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         this.y = aY;
         this.z = aZ;
     }
-    
+
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
         EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
     }
@@ -48,8 +48,9 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     public static void shutdownExecutorService() {
-        EXECUTOR_SERVICE.shutdown(); // Disable new tasks from being submitted
         try {
+            GT_Mod.GT_FML_LOGGER.info("Shutting down Machine block update executor service");
+            EXECUTOR_SERVICE.shutdown(); // Disable new tasks from being submitted
             // Wait a while for existing tasks to terminate
             if (!EXECUTOR_SERVICE.awaitTermination(60, TimeUnit.SECONDS)) {
                 EXECUTOR_SERVICE.shutdownNow(); // Cancel currently executing tasks
@@ -64,6 +65,8 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
             EXECUTOR_SERVICE.shutdownNow();
             // Preserve interrupt status
             Thread.currentThread().interrupt();
+        }finally {
+            GT_Mod.GT_FML_LOGGER.info("Leaving... GT_Runnable_MachineBlockUpdate.shutdownExecutorService");
         }
     }
 
