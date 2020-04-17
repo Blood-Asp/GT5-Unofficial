@@ -135,4 +135,25 @@ public interface IGregTechTileEntity extends ITexturedTileEntity, IGearEnergyTil
     AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ);
 
     void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity collider);
+
+    /**
+     * Checks validity of meta tile and delegates to it
+     */
+    @Override
+    default void onMachineBlockUpdate(){
+        if(!isDead() && getMetaTileEntity()!=null &&
+                getMetaTileEntity().getBaseMetaTileEntity()==this){
+            getMetaTileEntity().onMachineBlockUpdate();
+        }
+    }
+
+    /**
+     * Checks validity of meta tile and delegates to it
+     */
+    @Override
+    default boolean isMachineBlockUpdateRecursive() {
+        return !isDead() && getMetaTileEntity()!=null &&
+                getMetaTileEntity().getBaseMetaTileEntity()==this &&
+                getMetaTileEntity().isMachineBlockUpdateRecursive();
+    }
 }

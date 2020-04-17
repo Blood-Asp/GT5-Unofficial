@@ -913,9 +913,20 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         return stack;
     }
 
+    /**
+     * Checks validity of meta tile and delegates to it
+     */
     @Override
     public void onMachineBlockUpdate() {
         if (canAccessData()) mMetaTileEntity.onMachineBlockUpdate();
+    }
+
+    /**
+     * Checks validity of meta tile and delegates to it
+     */
+    @Override
+    public boolean isMachineBlockUpdateRecursive() {
+        return canAccessData() && mMetaTileEntity.isMachineBlockUpdateRecursive();
     }
 
     @Override
