@@ -21,8 +21,8 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private final Set<ChunkPosition> visited = new HashSet<>(80);
 
     //Threading
-    private static final ThreadFactory THREAD_FACTORY= r -> {
-        Thread thread=new Thread(r);
+    private static final ThreadFactory THREAD_FACTORY = r -> {
+        Thread thread = new Thread(r);
         thread.setName("GT_MachineBlockUpdate");
         return thread;
     };
@@ -40,24 +40,34 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
      * If the thread is idle, sets new values and remove the idle flag, otherwise, queue the cooridinates.
      */
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
-        EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld,aX,aY,aZ));
+        EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
     }
 
     public static void initExecutorService() {
-        EXECUTOR_SERVICE =  Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),THREAD_FACTORY);
+        EXECUTOR_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), THREAD_FACTORY);
         //Executors.newSingleThreadExecutor(THREAD_FACTORY);
         //Executors.newCachedThreadPool(THREAD_FACTORY);
         //Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),THREAD_FACTORY);
     }
 
     public static void shutdownExecutorService() {
+        EXECUTOR_SERVICE.shutdown(); // Disable new tasks from being submitted
         try {
-            EXECUTOR_SERVICE.awaitTermination(60, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            GT_Mod.GT_FML_LOGGER.error("Well this interruption got interrupted...", e);
+            // Wait a while for existing tasks to terminate
+            if (!EXECUTOR_SERVICE.awaitTermination(60, TimeUnit.SECONDS)) {
+                EXECUTOR_SERVICE.shutdownNow(); // Cancel currently executing tasks
+                // Wait a while for tasks to respond to being cancelled
+                if (!EXECUTOR_SERVICE.awaitTermination(60, TimeUnit.SECONDS)) {
+                    GT_Mod.GT_FML_LOGGER.error("Well this didn't terminated well... GT_Runnable_MachineBlockUpdate.shutdownExecutorService");
+                }
+            }
+        } catch (InterruptedException ie) {
+            GT_Mod.GT_FML_LOGGER.error("Well this interruption got interrupted...", ie);
+            // (Re-)Cancel if current thread also interrupted
+            EXECUTOR_SERVICE.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
         }
-        //terminates executor permanently
-        EXECUTOR_SERVICE.shutdownNow();
     }
 
     private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
@@ -70,7 +80,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                 GregTech_API.isMachineBlock(world.getBlock(aX, aY, aZ), world.getBlockMetadata(aX, aY, aZ));
     }
 
-    private void causeUpdate(TileEntity tileEntity){
+    private void causeUpdate(TileEntity tileEntity) {
         //no check for IGregTechTileEntity as it should call the underlying meta tile onMachineBlockUpdate
         if (tileEntity instanceof IMachineBlockUpdateable) {
             ((IMachineBlockUpdateable) tileEntity).onMachineBlockUpdate();
@@ -99,7 +109,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         try {
             stepToUpdateMachine(x, y, z);
         } catch (Exception e) {
-            GT_Mod.GT_FML_LOGGER.error("Well this update was broken... " + new Coordinates(x,y,z,world), e);
+            GT_Mod.GT_FML_LOGGER.error("Well this update was broken... " + new Coordinates(x, y, z, world), e);
         }
     }
 
@@ -122,7 +132,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                     "mX=" + mX +
                     ", mY=" + mY +
                     ", mZ=" + mZ +
-                    ", mWorld=" + mWorld.getProviderName()+ " @dimId " + mWorld.provider.dimensionId +
+                    ", mWorld=" + mWorld.getProviderName() + " @dimId " + mWorld.provider.dimensionId +
                     '}';
         }
     }
