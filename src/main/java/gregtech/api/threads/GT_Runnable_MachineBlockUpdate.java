@@ -65,6 +65,10 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
             EXECUTOR_SERVICE.shutdownNow();
             // Preserve interrupt status
             Thread.currentThread().interrupt();
+        }catch (Exception e){
+            GT_Mod.GT_FML_LOGGER.error("Well this didn't terminated well...",e);
+            // (Re-)Cancel in case
+            EXECUTOR_SERVICE.shutdownNow();
         }finally {
             GT_Mod.GT_FML_LOGGER.info("Leaving... GT_Runnable_MachineBlockUpdate.shutdownExecutorService");
         }
