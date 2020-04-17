@@ -35,10 +35,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         this.y = aY;
         this.z = aZ;
     }
-
-    /**
-     * If the thread is idle, sets new values and remove the idle flag, otherwise, queue the cooridinates.
-     */
+    
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
         EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
     }
