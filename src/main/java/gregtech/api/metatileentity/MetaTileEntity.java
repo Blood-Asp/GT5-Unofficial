@@ -85,7 +85,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         getBaseMetaTileEntity().setMetaTileID((short) aID);
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
-
     }
 
     /**

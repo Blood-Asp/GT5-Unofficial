@@ -12,6 +12,7 @@ import gregtech.api.enums.*;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.XSTR;
+import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
 import gregtech.common.GT_Network;
@@ -1187,6 +1188,8 @@ public class GT_Mod implements IGT_Mod {
         }
 
         aEvent.registerServerCommand(new GT_Command());
+        //Sets a new Machine Block Update Thread everytime a world is loaded
+        GT_Runnable_MachineBlockUpdate.initExecutorService();
     }
 
     public boolean isServerSide() {
@@ -1229,7 +1232,6 @@ public class GT_Mod implements IGT_Mod {
 
     @Mod.EventHandler
     public void onServerStopping(FMLServerStoppingEvent aEvent) {
-
         for (Runnable tRunnable : GregTech_API.sBeforeGTServerstop) {
             try {
                 tRunnable.run();
@@ -1312,6 +1314,8 @@ public class GT_Mod implements IGT_Mod {
                 e.printStackTrace(GT_Log.err);
             }
         }
+        //Interrupt IDLE Threads to close down cleanly
+        GT_Runnable_MachineBlockUpdate.shutdownExecutorService();
     }
 
     private void addSolidFakeLargeBoilerFuels() {
