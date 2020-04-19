@@ -169,7 +169,7 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable ignored) {
         }
         try {
-            getLastPercent = alexiilMinecraftDisplayer.getMethod("getLastPercent");
+            getLastPercent = alexiilMinecraftDisplayer.getDeclaredMethod("getLastPercent");
         } catch (Throwable ignored) {
         }
 
@@ -178,7 +178,7 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable ignored) {
         }
         try {
-            displayProgress = alexiilProgressDisplayer.getMethod("displayProgress", String.class, float.class);
+            displayProgress = alexiilProgressDisplayer.getDeclaredMethod("displayProgress", String.class, float.class);
         } catch (Throwable ignored) {
         }
         //end CLS
