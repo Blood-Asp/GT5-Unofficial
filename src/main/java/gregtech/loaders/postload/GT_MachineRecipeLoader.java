@@ -793,6 +793,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.redstone_torch, 2, 32767), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Redstone, 1L), Materials.Concrete.getMolten(144L), new ItemStack(Items.repeater, 1, 0), 80, 10);
         GT_Values.RA.addAssemblerRecipe(new ItemStack(Items.leather, 1, 32767), new ItemStack(Items.lead, 1, 32767), Materials.Glue.getFluid(72L), new ItemStack(Items.name_tag, 1, 0), 100, 8);
+        GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getModItem("dreamcraft", "item.ArtificialLeather", 1L, 0), new ItemStack(Items.lead, 1, 32767), Materials.Glue.getFluid(72L), new ItemStack(Items.name_tag, 1, 0), 100, 8);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 8L), new ItemStack(Items.compass, 1, 32767), GT_Values.NF, new ItemStack(Items.map, 1, 0), 100, 8);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Tantalum, 1L), GT_OreDictUnificator.get(OrePrefixes.foil, Materials.Manganese, 1L), Materials.Plastic.getMolten(144L), ItemList.Battery_RE_ULV_Tantalum.get(8L), 100, 4);
         //GT_Values.RA.addAssemblerRecipe(ItemList.Circuit_Elite.get(2L), ItemList.Circuit_Parts_Crystal_Chip_Elite.get(18L), GT_Values.NF, ItemList.Tool_DataOrb.get(1L), 512, 256);
@@ -831,8 +832,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StyreneButadieneRubber, 2L), GT_ModHandler.getIC2Item("carbonMesh", 2L), GT_Utility.getIntegratedCircuit(2)}, Materials.Glue.getFluid(200L), ItemList.Duct_Tape.get(1L), 100, 480);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Silicone, 1L), GT_ModHandler.getIC2Item("carbonMesh", 1L), GT_Utility.getIntegratedCircuit(3)}, Materials.Glue.getFluid(100L), ItemList.Duct_Tape.get(1L), 100, 1920);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 3L), new ItemStack(Items.leather, 1, 32767), Materials.Glue.getFluid(20L), new ItemStack(Items.book, 1, 0), 32, 8);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 3L), GT_ModHandler.getModItem("dreamcraft", "item.ArtificialLeather", 1L, 0), Materials.Glue.getFluid(20L), new ItemStack(Items.book, 1, 0), 32, 8);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 3L), GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.Paper, 1L), Materials.Glue.getFluid(20L), new ItemStack(Items.book, 1, 0), 32, 8);
         GT_Values.RA.addAssemblerRecipe(ItemList.Paper_Printed_Pages.get(1L), new ItemStack(Items.leather, 1, 32767), Materials.Glue.getFluid(20L), new ItemStack(Items.written_book, 1, 0), 32, 8);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Paper_Printed_Pages.get(1L), GT_ModHandler.getModItem("dreamcraft", "item.ArtificialLeather", 1L, 0), Materials.Glue.getFluid(20L), new ItemStack(Items.written_book, 1, 0), 32, 8);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.itemCasing, Materials.Tin, 4L), new ItemStack(Blocks.glass_pane, 1, 32767), GT_Values.NF, ItemList.Cell_Universal_Fluid.get(1L), 128, 8);
         GT_Values.RA.addAssemblerRecipe(ItemList.Food_Baked_Cake.get(1L), new ItemStack(Items.egg, 1, 0), Materials.Milk.getFluid(3000L), new ItemStack(Items.cake, 1, 0), 100, 8);
         GT_Values.RA.addAssemblerRecipe(ItemList.Food_Sliced_Bun.get(2L), ItemList.Circuit_Integrated.getWithDamage(0L, 2L), GT_Values.NF, ItemList.Food_Sliced_Buns.get(1L), 100, 4);
