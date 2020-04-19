@@ -60,12 +60,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import static gregtech.api.enums.GT_Values.MOD_ID_AE;
 import static gregtech.api.enums.GT_Values.MOD_ID_FR;
@@ -120,17 +119,7 @@ public class GT_Mod implements IGT_Mod {
     private final String aTextGeneral = "general";
     private final String aTextIC2 = "ic2_";
     public static final Logger GT_FML_LOGGER = LogManager.getLogger("GregTech GTNH");
-    //CLS
-    private static String latestMaterial;
-    private static float lastPercent;
 
-    private static Class alexiilMinecraftDisplayer;
-    private static Field isReplacingVanillaMaterials;
-    private static Method getLastPercent;
-
-    private static Class alexiilProgressDisplayer;
-    private static Method displayProgress;
-    //end CLS
 
     static {
         if ((509 != GregTech_API.VERSION) || (509 != GT_ModHandler.VERSION) || (509 != GT_OreDictUnificator.VERSION) || (509 != GT_Recipe.VERSION) || (509 != GT_Utility.VERSION) || (509 != GT_RecipeRegistrator.VERSION) || (509 != Element.VERSION) || (509 != Materials.VERSION) || (509 != OrePrefixes.VERSION)) {
@@ -158,30 +147,6 @@ public class GT_Mod implements IGT_Mod {
 
         Textures.BlockIcons.VOID.name();
         Textures.ItemIcons.VOID.name();
-
-        //CLS
-        try {
-            alexiilMinecraftDisplayer = Class.forName("alexiil.mods.load.MinecraftDisplayer");
-        } catch (Throwable ignored) {
-        }
-        try {
-            isReplacingVanillaMaterials = alexiilMinecraftDisplayer.getField("isReplacingVanillaMaterials");
-        } catch (Throwable ignored) {
-        }
-        try {
-            getLastPercent = alexiilMinecraftDisplayer.getMethod("getLastPercent");
-        } catch (Throwable ignored) {
-        }
-
-        try {
-            alexiilProgressDisplayer = Class.forName("alexiil.mods.load.ProgressDisplayer");
-        } catch (Throwable ignored) {
-        }
-        try {
-            displayProgress = alexiilProgressDisplayer.getMethod("displayProgress", String.class, float.class);
-        } catch (Throwable ignored) {
-        }
-        //end CLS
     }
 
     public static int calculateTotalGTVersion(int minorVersion) {
@@ -835,106 +800,20 @@ public class GT_Mod implements IGT_Mod {
         GT_FML_LOGGER.info("Replacing Vanilla Materials in recipes, please wait.");
 
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", replaceVanillaItemsSet.size());
-        //CLS
-        int sizeStep = 0;
-        int sizeStep2 = 0;
-        int originalSizeStep = 0;
-        int size = 0;
-        int counter = 0;
-        if (Loader.isModLoaded("betterloadingscreen")) {
-            originalSizeStep = sizeStep;
-            counter = replaceVanillaItemsSet.size();
-            //alexiil.mods.load.MinecraftDisplayer.isReplacingVanillaMaterials = true;
-            //isReplacingVanillaMaterials.setAccessible(true);
+        if (GT_Values.cls_enabled){
             try {
-                isReplacingVanillaMaterials.set(null, true);
-            } catch (Throwable ignored) {
-            }
-            if (replaceVanillaItemsSet.size() >= 100) {
-                sizeStep = replaceVanillaItemsSet.size()/100-1;
-                sizeStep2 = 1;
-            } else {
-                sizeStep = 100/replaceVanillaItemsSet.size();
-                sizeStep2 = sizeStep;
+                GT_CLS_Compat.doActualRegistrationCLS(progressBar,replaceVanillaItemsSet);
+                GT_CLS_Compat.pushToDisplayProgress();
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                GT_Mod.GT_FML_LOGGER.catching(e);
             }
         }
-        //end CLS
-        for (Materials m : replaceVanillaItemsSet) {
-            //CLS
-            if (Loader.isModLoaded("betterloadingscreen")) {
-                counter--;
-                sizeStep--;
-                //displayProgress.setAccessible(true);
-                if (counter == 1) {
-                    try {
-                        //alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, ((float)95)/100);
-                        displayProgress.invoke(null, m.mDefaultLocalName, ((float)95)/100);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }                
-                } else if (counter == 0) {
-                    latestMaterial = m.mDefaultLocalName;
-                    try {
-                        //alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, (float)1);
-                        displayProgress.invoke(null, m.mDefaultLocalName, (float)1);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        //alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, ((float)size)/100);
-                        displayProgress.invoke(null, m.mDefaultLocalName, ((float)size)/100);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-                if( sizeStep == 0 && replaceVanillaItemsSet.size() >= 100) {
-                    sizeStep = originalSizeStep;
-                    //size+=10;
-                    size+=sizeStep2;
-                } else {
-                    size+=sizeStep2;
-                }
-            }
-            //end CLS
-            progressBar.step(m.mDefaultLocalName);
-            //GT_FML_LOGGER.info("Replacing Vanilla Recipes for: " + m.mDefaultLocalName);
-            String platename = OrePrefixes.plate.get(m).toString();
-            boolean noSmash = !m.contains(SubTag.NO_SMASHING);
-            if ((m.mTypes & 2) != 0)
-                GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getIngots(1));
-            if ((m.mTypes & 4) != 0)
-                GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getGems(1));
-            if (m.getBlocks(1) != null)
-                GT_RecipeRegistrator.registerUsagesForMaterials(null, noSmash, m.getBlocks(1));
+        else {
+            replaceVanillaItemsSet.forEach(m -> {
+                progressBar.step(m.mDefaultLocalName);
+                doActualRegistration(m);
+            });
         }
-        //CLS
-        if (Loader.isModLoaded("betterloadingscreen")) {
-            try {
-                //alexiil.mods.load.MinecraftDisplayer.isReplacingVanillaMaterials = false;
-                //isReplacingVanillaMaterials.setAccessible(true);
-                try {
-                    isReplacingVanillaMaterials.set(null, false);
-                } catch (Throwable ignored) {
-                }
-                //displayProgress.setAccessible(true);
-                //getLastPercent.setAccessible(true);
-
-                try {
-                    lastPercent = (float) getLastPercent.invoke(null);
-                } catch (Throwable ignored) {
-                }
-
-                try {
-                    //alexiil.mods.load.ProgressDisplayer.displayProgress("Post Initialization: loading GregTech", alexiil.mods.load.MinecraftDisplayer.getLastPercent());
-                    displayProgress.invoke(null, "Post Initialization: loading GregTech", lastPercent);
-                } catch (Throwable ignored) {
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-        //end CLS
         ProgressManager.pop(progressBar);
         GT_FML_LOGGER.info("Congratulations, you have been waiting long enough (" + (System.currentTimeMillis() - ms) / 1000 + "s / " + (System.currentTimeMillis() - ms) + "ms). Have a Cake.");
         //Add default IC2 recipe to GT
@@ -1180,6 +1059,17 @@ public class GT_Mod implements IGT_Mod {
                 super.displayAllReleventItems(aList);
             }
         };
+    }
+
+    public static void doActualRegistration(Materials m){
+        String platename = OrePrefixes.plate.get(m).toString();
+        boolean noSmash = !m.contains(SubTag.NO_SMASHING);
+        if ((m.mTypes & 2) != 0)
+            GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getIngots(1));
+        if ((m.mTypes & 4) != 0)
+            GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getGems(1));
+        if (m.getBlocks(1) != null)
+            GT_RecipeRegistrator.registerUsagesForMaterials(null, noSmash, m.getBlocks(1));
     }
 
     @Mod.EventHandler
