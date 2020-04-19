@@ -9,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,7 +22,6 @@ public class GT_CLS_Compat {
     private static Method displayProgress;
 
     private static Field isReplacingVanillaMaterials;
-    private static Field isNice;
     private static Field isRegisteringGTmaterials;
 
     static {
@@ -40,7 +38,6 @@ public class GT_CLS_Compat {
                 getLastPercent = e.getMethod("getLastPercent");
                 isReplacingVanillaMaterials = e.getField("isReplacingVanillaMaterials");
                 isRegisteringGTmaterials = e.getField("isRegisteringGTmaterials");
-                isNice = e.getField("isNice");
             } catch (NoSuchMethodException | NoSuchFieldException ex) {
                 GT_Mod.GT_FML_LOGGER.catching(ex);
             }
@@ -59,31 +56,22 @@ public class GT_CLS_Compat {
     public static void stepMaterialsCLS(Collection<GT_Proxy.OreDictEventContainer> mEvents, ProgressManager.ProgressBar progressBar) throws IllegalAccessException, InvocationTargetException {
         int sizeStep = GT_CLS_Compat.setStepSize(mEvents);
         int size = 0;
-        GT_Proxy.OreDictEventContainer tEvent;
-        boolean hasSetNice = false;
-
-        for (Iterator<GT_Proxy.OreDictEventContainer> i$ = mEvents.iterator(); i$.hasNext(); GT_Proxy.registerRecipes(tEvent)) {
-            tEvent = i$.next();
+        for (GT_Proxy.OreDictEventContainer tEvent : mEvents) {
             sizeStep--;
 
             String materialName = tEvent.mMaterial == null ? "" : tEvent.mMaterial.toString();
 
             displayProgress.invoke(null, materialName, ((float) size) / 100);
 
-            if (size == 70 && !hasSetNice) {
-                hasSetNice = true;
-                isNice.set(null, true);
-            } else if (size != 70) {
-                isNice.set(null, false);
-            }
-
             if (sizeStep == 0) {
-                GT_Mod.GT_FML_LOGGER.info("Baking : " + size + "%", new Object[0]);
+                if (size % 5 == 0)
+                    GT_Mod.GT_FML_LOGGER.info("Baking: " + size + "%");
                 sizeStep = mEvents.size() / 100 - 1;
                 size++;
             }
 
             progressBar.step(materialName);
+            GT_Proxy.registerRecipes(tEvent);
         }
         ProgressManager.pop(progressBar);
         isRegisteringGTmaterials.set(null, false);
