@@ -58,7 +58,10 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Parts_GlassFiber.set(addItem(tLastID = 21, "Glass Fiber", Materials.BorosilicateGlass.mChemicalFormula, o));
         ItemList.Circuit_Parts_PetriDish.set(addItem(tLastID = 22, "Petri Dish", "For cultivating cells", o));
         ItemList.Circuit_Parts_Reinforced_Glass_Tube.set(addItem(tLastID = 23, "Reinforced Glass Tube", "", o));
-//
+        ItemList.Circuit_Parts_ResistorASMD.set(addItem(tLastID = 24, "Advanced SMD Resistor", "Advanced Electronic Component", o));
+        ItemList.Circuit_Parts_DiodeASMD.set(addItem(tLastID = 25, "Advanced SMD Diode", "Advanced Electronic Component", o));
+        ItemList.Circuit_Parts_TransistorASMD.set(addItem(tLastID = 26, "Advanced SMD Transistor", "Advanced Electronic Component", o));
+        ItemList.Circuit_Parts_CapacitorASMD.set(addItem(tLastID = 27, "Advanced SMD Capacitor", "Advanced Electronic Component", o));
 
         /**
          * ICs
