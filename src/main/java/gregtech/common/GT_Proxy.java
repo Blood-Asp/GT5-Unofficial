@@ -1933,19 +1933,73 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", mEvents.size());
         int sizeStep = mEvents.size()/20-1;
         int size = 5;
+        //CLS
+        boolean hasSetNice = false;
+        if (Loader.isModLoaded("betterloadingscreen")) {
+            try {
+                alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = true;
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            sizeStep = mEvents.size()/100-1;
+            size = 0;
+            hasSetNice = false;
+        }
+        //end CLS
         OreDictEventContainer tEvent;
         for (Iterator i$ = this.mEvents.iterator(); i$.hasNext(); registerRecipes(tEvent)) {
             tEvent = (OreDictEventContainer) i$.next();
             sizeStep--;
-            progressBar.step(tEvent.mMaterial == null ? "" : tEvent.mMaterial.toString());
-            if( sizeStep == 0 )
-                {
-                    GT_FML_LOGGER.info("Baking : " + size + "%", new Object[0]);
+            //CLS
+            if (Loader.isModLoaded("betterloadingscreen")) {
+                if (!(tEvent.mMaterial == null)) {
+                    try {
+                        alexiil.mods.load.ProgressDisplayer.displayProgress(tEvent.mMaterial.toString(), ((float)size)/100);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                    if (size == 70 && !hasSetNice) {
+                        hasSetNice = true;
+                        try {
+                            alexiil.mods.load.MinecraftDisplayer.isNice = true;
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
+                        GT_FML_LOGGER.info("nice");
+                    } else if (size != 70) {
+                        try{
+                            alexiil.mods.load.MinecraftDisplayer.isNice = false;
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+            //end CLS
+            if( sizeStep == 0 ) {
+                GT_FML_LOGGER.info("Baking : " + size + "%", new Object[0]);
+                //CLS
+                if (Loader.isModLoaded("betterloadingscreen")) {
+                    sizeStep = mEvents.size()/100-1;
+                    size++;
+                } else {
+                //end CLS
                     sizeStep = mEvents.size()/20-1;
                     size += 5;
                 }
+            }
+            progressBar.step(tEvent.mMaterial == null ? "" : tEvent.mMaterial.toString());
         }
         ProgressManager.pop(progressBar);
+        //CLS
+        if (Loader.isModLoaded("betterloadingscreen")) {
+            try {
+                alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = false;
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+        //end CLS
     }
 
     public static final HashMap<Integer,HashMap<ChunkCoordIntPair,int []>> dimensionWiseChunkData = new HashMap<>(16);//stores chunk data that is loaded/saved
