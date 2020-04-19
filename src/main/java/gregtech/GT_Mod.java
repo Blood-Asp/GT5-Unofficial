@@ -799,59 +799,7 @@ public class GT_Mod implements IGT_Mod {
         GT_FML_LOGGER.info("Replacing Vanilla Materials in recipes, please wait.");
 
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", replaceVanillaItemsSet.size());
-        //CLS
-        int sizeStep = 0;
-        int sizeStep2 = 0;
-        int originalSizeStep = 0;
-        int size = 0;
-        int counter = 0;
-        if (Loader.isModLoaded("betterloadingscreen")) {
-            originalSizeStep = sizeStep;
-            counter = replaceVanillaItemsSet.size();
-            alexiil.mods.load.MinecraftDisplayer.isReplacingVanillaMaterials = true;
-            if (replaceVanillaItemsSet.size() >= 100) {
-                sizeStep = replaceVanillaItemsSet.size()/100-1;
-                sizeStep2 = 1;
-            } else {
-                sizeStep = 100/replaceVanillaItemsSet.size();
-                sizeStep2 = sizeStep;
-            }
-        }
-        //end CLS
         for (Materials m : replaceVanillaItemsSet) {
-            //CLS
-            if (Loader.isModLoaded("betterloadingscreen")) {
-                counter--;
-                sizeStep--;
-                if (counter == 1) {
-                    try {
-                        alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, ((float)95)/100);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }                
-                } else if (counter == 0) {
-                    latestMaterial = m.mDefaultLocalName;
-                    try {
-                        alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, (float)1);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        alexiil.mods.load.ProgressDisplayer.displayProgress(m.mDefaultLocalName, ((float)size)/100);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-                if( sizeStep == 0 && replaceVanillaItemsSet.size() >= 100) {
-                    sizeStep = originalSizeStep;
-                    //size+=10;
-                    size+=sizeStep2;
-                } else {
-                    size+=sizeStep2;
-                }
-            }
-            //end CLS
             progressBar.step(m.mDefaultLocalName);
             //GT_FML_LOGGER.info("Replacing Vanilla Recipes for: " + m.mDefaultLocalName);
             String platename = OrePrefixes.plate.get(m).toString();
@@ -863,16 +811,6 @@ public class GT_Mod implements IGT_Mod {
             if (m.getBlocks(1) != null)
                 GT_RecipeRegistrator.registerUsagesForMaterials(null, noSmash, m.getBlocks(1));
         }
-        //CLS
-        if (Loader.isModLoaded("betterloadingscreen")) {
-            try {
-                alexiil.mods.load.MinecraftDisplayer.isReplacingVanillaMaterials = false;
-                alexiil.mods.load.ProgressDisplayer.displayProgress("Post Initialization: loading GregTech", alexiil.mods.load.MinecraftDisplayer.getLastPercent());
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-        //end CLS
         ProgressManager.pop(progressBar);
         GT_FML_LOGGER.info("Congratulations, you have been waiting long enough (" + (System.currentTimeMillis() - ms) / 1000 + "s / " + (System.currentTimeMillis() - ms) + "ms). Have a Cake.");
         //Add default IC2 recipe to GT
