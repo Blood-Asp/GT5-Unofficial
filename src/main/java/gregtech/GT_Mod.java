@@ -178,7 +178,7 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable ignored) {
         }
         try {
-            displayProgress = alexiilProgressDisplayer.getMethod("displayProgress");
+            displayProgress = alexiilProgressDisplayer.getMethod("displayProgress", String.class, float.class);
         } catch (Throwable ignored) {
         }
         //end CLS
