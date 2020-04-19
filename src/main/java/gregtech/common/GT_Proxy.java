@@ -87,6 +87,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.text.DateFormat;
 import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
@@ -224,6 +226,19 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean ic2EnergySourceCompat = true;
     public boolean costlyCableConnection = false;
 
+    //CLS
+    private static Field isNice;
+
+    private static Class alexiilMinecraftDisplayer;
+    private static Field isRegisteringGTmaterials;
+    //private static Method getLastPercent;
+
+    private static Class alexiilProgressDisplayer;
+    private static Method displayProgress;
+
+
+    //end CLS
+
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
         MinecraftForge.EVENT_BUS.register(this);
@@ -242,6 +257,27 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+
+        //CLS
+        System.out.println("Uing reflection on CLS");
+        try {
+            alexiilMinecraftDisplayer = Class.forName("alexiil.mods.load.MinecraftDisplayer");
+        } catch  (Throwable e) { System.out.println("bruh momento1"); e.printStackTrace(GT_Log.err); }
+        try {
+            isRegisteringGTmaterials = alexiilMinecraftDisplayer.getField("isRegisteringGTmaterials");
+        } catch (Throwable e) {System.out.println("bruh momento2");e.printStackTrace(GT_Log.err);}
+        try {
+            isNice = alexiilMinecraftDisplayer.getField("isNice");
+        } catch  (Throwable e) {System.out.println("bruh momento3");e.printStackTrace(GT_Log.err);}
+
+        try {
+            alexiilProgressDisplayer = Class.forName("alexiil.mods.load.ProgressDisplayer");
+        } catch (Throwable e) {System.out.println("bruh momento4");e.printStackTrace(GT_Log.err);}
+        try {
+            //hmm errors here
+            displayProgress = alexiilProgressDisplayer.getDeclaredMethod("displayProgress", String.class, float.class);
+        } catch (Throwable e) {System.out.println("bruh momento5");e.printStackTrace(GT_Log.err);}
+        //end CLS
     }
 
     private static final void registerRecipes(OreDictEventContainer aOre) {
@@ -1936,8 +1972,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         //CLS
         boolean hasSetNice = false;
         if (Loader.isModLoaded("betterloadingscreen")) {
+            //isRegisteringGTmaterials.setAccessible(true);
+            //isNice.setAccessible(true);
+            //displayProgress.setAccessible(true);
             try {
-                alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = true;
+                //alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = true;
+                isRegisteringGTmaterials.set(null, true);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -1947,6 +1987,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
         //end CLS
         OreDictEventContainer tEvent;
+
         for (Iterator i$ = this.mEvents.iterator(); i$.hasNext(); registerRecipes(tEvent)) {
             tEvent = (OreDictEventContainer) i$.next();
             sizeStep--;
@@ -1954,21 +1995,24 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             if (Loader.isModLoaded("betterloadingscreen")) {
                 if (!(tEvent.mMaterial == null)) {
                     try {
-                        alexiil.mods.load.ProgressDisplayer.displayProgress(tEvent.mMaterial.toString(), ((float)size)/100);
+                        //alexiil.mods.load.ProgressDisplayer.displayProgress(tEvent.mMaterial.toString(), ((float)size)/100);
+                        displayProgress.invoke(null, tEvent.mMaterial.toString(), ((float)size)/100);
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }
                     if (size == 70 && !hasSetNice) {
                         hasSetNice = true;
                         try {
-                            alexiil.mods.load.MinecraftDisplayer.isNice = true;
+                            //alexiil.mods.load.MinecraftDisplayer.isNice = true;
+                            isNice.set(null, true);
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
                         GT_FML_LOGGER.info("nice");
                     } else if (size != 70) {
                         try{
-                            alexiil.mods.load.MinecraftDisplayer.isNice = false;
+                            //alexiil.mods.load.MinecraftDisplayer.isNice = false;
+                            isNice.set(null, false);
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -1994,7 +2038,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         //CLS
         if (Loader.isModLoaded("betterloadingscreen")) {
             try {
-                alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = false;
+                //alexiil.mods.load.MinecraftDisplayer.isRegisteringGTmaterials = false;
+                isRegisteringGTmaterials.set(null, false);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
