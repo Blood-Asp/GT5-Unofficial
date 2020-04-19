@@ -21,6 +21,7 @@ public class GT_MetaTileEntity_Replicator
         extends GT_MetaTileEntity_BasicMachine {
     private static int sHeaviestElementMass = 0;
     public static final HashMap<Materials,Long> MASS_OVERRIDES =new HashMap<>();
+
     static{
         //put overrides here
         //ex.
@@ -46,13 +47,19 @@ public class GT_MetaTileEntity_Replicator
         return new GT_MetaTileEntity_Replicator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
+    public static final double EXPONENT = GregTech_API.sOPStuff.get("Replicator","Nerf Exponent", 1.333D);
+
+    public static long cubicFluidMultiplier(long amount){
+        return (long) Math.pow(amount, EXPONENT);
+    }
+
     public int checkRecipe() {
         FluidStack tFluid = getFillableStack();
         if ((tFluid != null) && (tFluid.isFluidEqual(Materials.UUMatter.getFluid(1L)))) {
             ItemStack tDataOrb = getSpecialSlot();
             if ((ItemList.Tool_DataOrb.isStackEqual(tDataOrb, false, true)) && (Behaviour_DataOrb.getDataTitle(tDataOrb).equals("Elemental-Scan"))) {
                 Materials tMaterial = Element.get(Behaviour_DataOrb.getDataName(tDataOrb)).mLinkedMaterials.get(0);
-                long tMass = MASS_OVERRIDES.getOrDefault(tMaterial,tMaterial.getMass());
+                long tMass = cubicFluidMultiplier(MASS_OVERRIDES.getOrDefault(tMaterial,tMaterial.getMass()));
                 if ((tFluid.amount >= tMass) && (tMass > 0L)) {
 
                     this.mEUt = GT_Utility.safeInt(gregtech.api.enums.GT_Values.V[this.mTier],1);
@@ -104,7 +111,9 @@ public class GT_MetaTileEntity_Replicator
 
     public int getCapacity() {
         if ((sHeaviestElementMass == 0) && (GregTech_API.sPostloadFinished)) {
-            sHeaviestElementMass = Materials.getMaterialsMap().values().stream().mapToInt(material -> (int)material.getMass()).max().orElseThrow(NoSuchElementException::new);
+            sHeaviestElementMass = Materials.getMaterialsMap().values().stream().mapToInt(material -> (int) cubicFluidMultiplier((int)material.getMass())).max().orElseThrow(NoSuchElementException::new);
+            //Make the Number nicer =)
+            sHeaviestElementMass = 1000 * (sHeaviestElementMass / 1000 + 1);
         }
         return sHeaviestElementMass;
     }
