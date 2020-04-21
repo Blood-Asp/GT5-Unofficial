@@ -2682,7 +2682,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 ItemList.Field_Generator_LuV.get(2),
                 ItemList.Circuit_Wafer_SoC2.get(64),
                 ItemList.Circuit_Wafer_SoC2.get(64),
-                ItemList.Circuit_Parts_DiodeSMD.get(8),
+                ItemList.Circuit_Parts_DiodeASMD.get(8),
                 GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 32)},
                 new FluidStack[]{
                 Materials.SolderingAlloy.getMolten(2880), new FluidStack(FluidRegistry.getFluid("ic2coolant"), 16000)},
@@ -2698,7 +2698,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 ItemList.Field_Generator_ZPM.get(2),
                 ItemList.Circuit_Wafer_HPIC.get(64),
                 ItemList.Circuit_Wafer_HPIC.get(64),
-                ItemList.Circuit_Parts_DiodeSMD.get(16),
+                ItemList.Circuit_Parts_DiodeASMD.get(16),
                 GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.NaquadahAlloy, 32),},
                 new FluidStack[]{
                 Materials.SolderingAlloy.getMolten(2880),
