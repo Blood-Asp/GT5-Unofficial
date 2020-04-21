@@ -305,7 +305,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Aluminium, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Silver, 4L), ItemList.Large_Fluid_Cell_Aluminium.get(1L, new Object[0]), 200, 64);
 
-        ItemList.Large_Fluid_Cell_StainlessSteel.set(addItem(tLastID = 408, "Large StainlessSteel Fluid Cell", "", new Object[]{new ItemData(Materials.StainlessSteel, OrePrefixes.plateDouble.mMaterialAmount * 4L, new MaterialStack(Materials.Electrum, OrePrefixes.ring.mMaterialAmount * 4L)), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}));
+        ItemList.Large_Fluid_Cell_StainlessSteel.set(addItem(tLastID = 408, "Large Stainless Steel Fluid Cell", "", new Object[]{new ItemData(Materials.StainlessSteel, OrePrefixes.plateDouble.mMaterialAmount * 4L, new MaterialStack(Materials.Electrum, OrePrefixes.ring.mMaterialAmount * 4L)), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}));
         setFluidContainerStats(32000 + tLastID, 64000L, 64L);
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.StainlessSteel, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Electrum, 4L), ItemList.Large_Fluid_Cell_StainlessSteel.get(1L, new Object[0]), 200, 120);
