@@ -1883,7 +1883,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
                 Tetraindiumditindibariumtitaniumheptacoppertetrakaidekaoxid,
                 Tetranaquadahdiindiumhexaplatiumosminid,
                 Longasssuperconductornameforuvwire,
-                Longasssuperconductornameforuhvwire);
+                Longasssuperconductornameforuhvwire,
+                Quantium,
+                RedstoneAlloy,
+                Bedrockium);
 
         SubTag.FOOD.addTo(MeatRaw,
                 MeatCooked,
