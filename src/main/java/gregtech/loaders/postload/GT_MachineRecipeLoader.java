@@ -946,10 +946,10 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addChemicalRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 1L), GT_Utility.getIntegratedCircuit(1), Materials.Naphtha.getFluid(576), Materials.Polycaprolactam.getMolten(1296), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Potassium, 1), 640);
         GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Polycaprolactam, 1L), new ItemStack(Items.string, 32), 80, 48);
 
-        GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.RedstoneAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 2L), 100, 4);
-        GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.RedstoneAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1L),  50, 4);
+        //GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.RedstoneAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 2L), 100, 4);
+        //GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.RedstoneAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedstoneAlloy, 1L),  50, 4);
 
-        GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Bedrockium, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Bedrockium, 2L), 100, 4);
+        //GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Bedrockium, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Bedrockium, 2L), 100, 4);
 
         GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.EnergeticAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.EnergeticAlloy, 4L), 200, 16);
         GT_Values.RA.addWiremillRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.EnergeticAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.EnergeticAlloy, 8L), 400, 30);
