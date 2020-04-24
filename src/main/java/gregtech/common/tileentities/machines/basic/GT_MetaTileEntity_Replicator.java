@@ -47,7 +47,7 @@ public class GT_MetaTileEntity_Replicator
         return new GT_MetaTileEntity_Replicator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
-    public static final double EXPONENT = GregTech_API.sOPStuff.get("Replicator","Nerf Exponent", 1.333D);
+    public static final double EXPONENT = GregTech_API.sOPStuff.get("Replicator","Nerf Exponent", 1.2D);
 
     public static long cubicFluidMultiplier(long amount){
         return (long) Math.pow(amount, EXPONENT);
