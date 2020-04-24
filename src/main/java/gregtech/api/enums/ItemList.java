@@ -1604,7 +1604,6 @@ public enum ItemList implements IItemContainer {
 
     Circuit_Parts_Resistor,
     Circuit_Parts_ResistorSMD,
-    Circuit_Parts_ResistorASMD,
     Circuit_Parts_Glass_Tube,
     Circuit_Parts_Reinforced_Glass_Tube,
     Circuit_Parts_Vacuum_Tube,
@@ -1612,15 +1611,17 @@ public enum ItemList implements IItemContainer {
     Circuit_Parts_Coil,
     Circuit_Parts_Diode,
     Circuit_Parts_DiodeSMD,
-    Circuit_Parts_DiodeASMD,
     Circuit_Parts_Transistor,
     Circuit_Parts_TransistorSMD,
-    Circuit_Parts_TransistorASMD,
     Circuit_Parts_Capacitor,
     Circuit_Parts_CapacitorSMD,
-    Circuit_Parts_CapacitorASMD,
     Circuit_Parts_GlassFiber,
     Circuit_Parts_PetriDish,
+
+    Circuit_Parts_ResistorASMD,
+    Circuit_Parts_DiodeASMD,
+    Circuit_Parts_TransistorASMD,
+    Circuit_Parts_CapacitorASMD,
 
     Circuit_Silicon_Ingot,
     Circuit_Silicon_Ingot2,
