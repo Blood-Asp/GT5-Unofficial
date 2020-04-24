@@ -9,6 +9,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.genetics.AlleleManager;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
@@ -21,11 +22,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Pollution;
-import gregtech.api.objects.GT_Fluid;
-import gregtech.api.objects.GT_FluidStack;
-import gregtech.api.objects.GT_UO_DimensionList;
-import gregtech.api.objects.ItemData;
-import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.objects.*;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.gui.GT_ContainerVolumetricFlask;
@@ -81,10 +78,9 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.commons.lang3.text.WordUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -244,22 +240,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
     }
 
-    private static final void registerRecipes(OreDictEventContainer aOre) {
-        if ((aOre.mEvent.Ore == null) || (aOre.mEvent.Ore.getItem() == null)) {
-            return;
-        }
-        if (aOre.mEvent.Ore.stackSize != 1) {
-            aOre.mEvent.Ore.stackSize = 1;
-        }
-        if (aOre.mPrefix != null) {
-            if (!aOre.mPrefix.isIgnored(aOre.mMaterial)) {
-                aOre.mPrefix.processOre(aOre.mMaterial == null ? Materials._NULL : aOre.mMaterial, aOre.mEvent.Name, aOre.mModID,
-                        GT_Utility.copyAmount(1L, aOre.mEvent.Ore));
-            }
-        } else {
-//			GT_FML_LOGGER.info("Thingy Name: "+ aOre.mEvent.Name+ " !!!Unknown 'Thingy' detected!!! This Object seems to probably not follow a valid OreDictionary Convention, or I missed a Convention. Please report to GregTech Intergalactical for additional compatiblity. This is not an Error, an Issue nor a Lag Source, it is just an Information, which you should pass to me.");
-        }
-    }
 
     public void onPreLoad() {
         GT_Log.out.println("GT_Mod: Preload-Phase started!");
@@ -1221,6 +1201,23 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             e.printStackTrace(GT_Log.err);
         }
     }
+
+    public static void stepMaterialsVanilla(Collection<GT_Proxy.OreDictEventContainer> mEvents, ProgressManager.ProgressBar progressBar){
+        int size = 5;
+        int sizeStep = mEvents.size() / 20 - 1;
+        GT_Proxy.OreDictEventContainer tEvent;
+        for (Iterator<GT_Proxy.OreDictEventContainer> i$ = mEvents.iterator(); i$.hasNext(); GT_Proxy.registerRecipes(tEvent)) {
+            tEvent = i$.next();
+            sizeStep--;
+            if(sizeStep == 0) {
+                GT_Mod.GT_FML_LOGGER.info("Baking : " + size + "%", new Object[0]);
+                sizeStep = mEvents.size()/20-1;
+                size += 5;
+            }
+            progressBar.step(tEvent.mMaterial == null ? "" : tEvent.mMaterial.toString());
+        }
+        ProgressManager.pop(progressBar);
+    }
     
     @SubscribeEvent
     public void onLivingUpdate(LivingUpdateEvent aEvent) {
@@ -1314,6 +1311,22 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             }
 
             GT_Pollution.onWorldTick(aEvent);
+        }
+    }
+
+    public static void registerRecipes(GT_Proxy.OreDictEventContainer aOre) {
+        if ((aOre.mEvent.Ore == null) || (aOre.mEvent.Ore.getItem() == null)) {
+            return;
+        }
+        if (aOre.mEvent.Ore.stackSize != 1) {
+            aOre.mEvent.Ore.stackSize = 1;
+        }
+        if (aOre.mPrefix != null) {
+            if (!aOre.mPrefix.isIgnored(aOre.mMaterial)) {
+                aOre.mPrefix.processOre(aOre.mMaterial == null ? Materials._NULL : aOre.mMaterial, aOre.mEvent.Name, aOre.mModID, GT_Utility.copyAmount(1L, aOre.mEvent.Ore));
+            }
+        } else {
+//			GT_FML_LOGGER.info("Thingy Name: "+ aOre.mEvent.Name+ " !!!Unknown 'Thingy' detected!!! This Object seems to probably not follow a valid OreDictionary Convention, or I missed a Convention. Please report to GregTech Intergalactical for additional compatiblity. This is not an Error, an Issue nor a Lag Source, it is just an Information, which you should pass to me.");
         }
     }
 
@@ -1926,26 +1939,20 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_Recipe.reInit();
     }
 
+    @SuppressWarnings("deprecation")
     public void activateOreDictHandler() {
-        final Logger GT_FML_LOGGER = LogManager.getLogger("GregTech GTNH");
-        
         this.mOreDictActivated = true;
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", mEvents.size());
-        int sizeStep = mEvents.size()/20-1;
-        int size = 5;
-        OreDictEventContainer tEvent;
-        for (Iterator i$ = this.mEvents.iterator(); i$.hasNext(); registerRecipes(tEvent)) {
-            tEvent = (OreDictEventContainer) i$.next();
-            sizeStep--;
-            progressBar.step(tEvent.mMaterial == null ? "" : tEvent.mMaterial.toString());
-            if( sizeStep == 0 )
-                {
-                    GT_FML_LOGGER.info("Baking : " + size + "%", new Object[0]);
-                    sizeStep = mEvents.size()/20-1;
-                    size += 5;
-                }
+        if (Loader.isModLoaded("betterloadingscreen")){
+            GT_Values.cls_enabled = true;
+            try {
+                GT_CLS_Compat.stepMaterialsCLS(mEvents, progressBar);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                GT_Mod.GT_FML_LOGGER.catching(e);
+            }
         }
-        ProgressManager.pop(progressBar);
+        else
+            GT_Proxy.stepMaterialsVanilla(this.mEvents,progressBar);
     }
 
     public static final HashMap<Integer,HashMap<ChunkCoordIntPair,int []>> dimensionWiseChunkData = new HashMap<>(16);//stores chunk data that is loaded/saved

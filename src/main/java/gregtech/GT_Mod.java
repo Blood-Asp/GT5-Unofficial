@@ -60,6 +60,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -799,17 +800,19 @@ public class GT_Mod implements IGT_Mod {
         GT_FML_LOGGER.info("Replacing Vanilla Materials in recipes, please wait.");
 
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", replaceVanillaItemsSet.size());
-        for (Materials m : replaceVanillaItemsSet) {
-            progressBar.step(m.mDefaultLocalName);
-            //GT_FML_LOGGER.info("Replacing Vanilla Recipes for: " + m.mDefaultLocalName);
-            String platename = OrePrefixes.plate.get(m).toString();
-            boolean noSmash = !m.contains(SubTag.NO_SMASHING);
-            if ((m.mTypes & 2) != 0)
-                GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getIngots(1));
-            if ((m.mTypes & 4) != 0)
-                GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getGems(1));
-            if (m.getBlocks(1) != null)
-                GT_RecipeRegistrator.registerUsagesForMaterials(null, noSmash, m.getBlocks(1));
+        if (GT_Values.cls_enabled){
+            try {
+                GT_CLS_Compat.doActualRegistrationCLS(progressBar,replaceVanillaItemsSet);
+                GT_CLS_Compat.pushToDisplayProgress();
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                GT_Mod.GT_FML_LOGGER.catching(e);
+            }
+        }
+        else {
+            replaceVanillaItemsSet.forEach(m -> {
+                progressBar.step(m.mDefaultLocalName);
+                doActualRegistration(m);
+            });
         }
         ProgressManager.pop(progressBar);
         GT_FML_LOGGER.info("Congratulations, you have been waiting long enough (" + (System.currentTimeMillis() - ms) / 1000 + "s / " + (System.currentTimeMillis() - ms) + "ms). Have a Cake.");
@@ -1056,6 +1059,17 @@ public class GT_Mod implements IGT_Mod {
                 super.displayAllReleventItems(aList);
             }
         };
+    }
+
+    public static void doActualRegistration(Materials m){
+        String platename = OrePrefixes.plate.get(m).toString();
+        boolean noSmash = !m.contains(SubTag.NO_SMASHING);
+        if ((m.mTypes & 2) != 0)
+            GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getIngots(1));
+        if ((m.mTypes & 4) != 0)
+            GT_RecipeRegistrator.registerUsagesForMaterials(platename, noSmash, m.getGems(1));
+        if (m.getBlocks(1) != null)
+            GT_RecipeRegistrator.registerUsagesForMaterials(null, noSmash, m.getBlocks(1));
     }
 
     @Mod.EventHandler

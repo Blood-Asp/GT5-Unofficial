@@ -286,4 +286,5 @@ public class GT_Values {
     public static boolean alwaysReloadChunkloaders = false;
 
     public static boolean debugChunkloaders = false;
+    public static boolean cls_enabled;
 }
