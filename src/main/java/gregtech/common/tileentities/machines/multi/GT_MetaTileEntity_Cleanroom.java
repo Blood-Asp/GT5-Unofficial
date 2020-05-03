@@ -71,7 +71,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		int mGlassCount = 0;
 		boolean doorState = false;
 		this.mUpdate = 100;
-		
+
 		if (debugCleanroom) {
 			GT_Log.out.println(
 							"Cleanroom: Checking machine"
@@ -83,13 +83,25 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 			if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
 				if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
 					x = i;
+					break;
+				} else {
+					if (debugCleanroom) {
+						GT_Log.out.println("Cleanroom: Unable to detect room X edge?");
+					}
+					return false;
+				}
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			Block tBlock = aBaseMetaTileEntity.getBlockOffset(0, 0, i);
+			int tMeta = aBaseMetaTileEntity.getMetaIDOffset(0, 0, i);
+			if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
+				if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
 					z = i;
 					break;
 				} else {
 					if (debugCleanroom) {
-						GT_Log.out.println(
-							"Cleanroom: Unable to detect room edge?"
-						);
+						GT_Log.out.println("Cleanroom: Unable to detect room Z edge?");
 					}
 					return false;
 				}
@@ -147,7 +159,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 							if ((!this.addMaintenanceToMachineList(tTileEntity, 82)) && (!this.addEnergyInputToMachineList(tTileEntity, 82))) {
 								if (tBlock instanceof ic2.core.block.BlockIC2Door) {
 									if ((tMeta & 8) == 0) {
-										doorState = (Math.abs(dX) > Math.abs(dZ) == ((tMeta & 1) != 0)) != ((tMeta & 4) != 0);
+										if (Math.abs(dY) < y) //x - side
+											doorState = (tMeta & 0x5) == 0x4 || (tMeta & 0x5) == 0x1;
+										else if (Math.abs(dX) < x) //y-side, corners ignored.
+											doorState = (tMeta & 0x5) == 0x5 || (tMeta & 0x5) == 0x0;
 									}
 									mDoorCount++;
 								} else {
