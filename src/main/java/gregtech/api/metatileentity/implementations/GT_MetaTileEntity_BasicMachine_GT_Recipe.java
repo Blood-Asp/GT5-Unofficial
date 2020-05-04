@@ -85,18 +85,17 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                         case 6:
                         case 7:
                         case 8:
-                            if (Loader.isModLoaded("bartworks")) {
+                            if (Loader.isModLoaded("bartworks")) {//todo remove via provider pattern on all enums?
                                 aRecipe[i] = "blockGlass"+VN[aTier];
                                 break;
                             }
                         default:
-                            if (Loader.isModLoaded("bartworks")) {
+                            if (Loader.isModLoaded("bartworks")) {//todo remove via provider pattern on all enums?
                                 aRecipe[i] = "blockGlass"+VN[8];
-                                break;
                             } else {
                                 aRecipe[i] = Ic2Items.reinforcedGlass;
-                                break;
                             }
+                            break;
                     }
                     continue;
                 }
