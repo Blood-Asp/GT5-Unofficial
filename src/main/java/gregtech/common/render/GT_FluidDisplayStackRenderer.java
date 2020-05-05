@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
 public class GT_FluidDisplayStackRenderer implements IItemRenderer {
-    private static final float smallTextScale = 0.5f;
 
     public GT_FluidDisplayStackRenderer() {
         MinecraftForgeClient.registerItemRenderer(ItemList.Display_Fluid.getItem(), this);
@@ -41,25 +40,14 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
         if (item == null || item.getItem() == null || !(item.getItem() instanceof GT_FluidDisplayItem))
             return;
 
-        Tessellator tess = Tessellator.instance;
-        GL11.glPushMatrix();
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-
-        int l = item.getItem().getColorFromItemStack(item, 0);
-        float f3 = (float)(l >> 16 & 255) / 255.0F;
-        float f4 = (float)(l >> 8 & 255) / 255.0F;
-        float f = (float)(l & 255) / 255.0F;
-        GL11.glColor4f(f3, f4, f, 1.0F);
-
-        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
 
         IIcon icon = item.getItem().getIconFromDamage(item.getItemDamage());
-        tess.startDrawingQuads();
 
+        Tessellator tess = Tessellator.instance;
+        tess.startDrawingQuads();
         // draw a simple rectangle for the inventory icon
         final float x_min = icon.getMinU();
         final float x_max = icon.getMaxU();
@@ -70,12 +58,6 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
         tess.addVertexWithUV(16,  0, 0, x_max, y_min);
         tess.addVertexWithUV( 0,  0, 0, x_min, y_min);
         tess.draw();
-
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_ALPHA_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
-
-        GL11.glPopMatrix();
 
         if(item.getTagCompound() == null)
             return;
@@ -91,22 +73,20 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
                 int exp = (int) (Math.log(fluidAmount) / Math.log(1000));
                 double shortAmount = fluidAmount / Math.pow(1000, exp);
                 if ( shortAmount >= 100) {
-                    amountString = String.format("%.0f%cL", shortAmount, "kMGT".charAt(exp - 1));
+                    amountString = String.format("%.0f%cL", shortAmount, "kMGTPE".charAt(exp - 1)); //heard it here first, PetaLiters
                 } else if ( shortAmount >= 10) {
-                    amountString = String.format("%.1f%cL", shortAmount, "kMGT".charAt(exp - 1));
+                    amountString = String.format("%.1f%cL", shortAmount, "kMGTPE".charAt(exp - 1));
                 } else {
-                    amountString = String.format("%.2f%cL", shortAmount, "kMGT".charAt(exp - 1));
+                    amountString = String.format("%.2f%cL", shortAmount, "kMGTPE".charAt(exp - 1));
                 }
             }
 
             FontRenderer fontRender = Minecraft.getMinecraft().fontRenderer;
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            float smallTextScale = fontRender.getUnicodeFlag() ? 3F/4F : 1F/2F;
             GL11.glDisable(GL11.GL_BLEND);
-            GL11.glScalef(smallTextScale, smallTextScale, smallTextScale); //TODO: how to make this pretty at all scales?
-            fontRender.drawString( amountString, 0, 16*2 - fontRender.FONT_HEIGHT + 1, 0xFFFFFF, true);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GL11.glScalef(smallTextScale, smallTextScale, 1.0f);
+
+            fontRender.drawString( amountString, 0, (int) (16/smallTextScale) - fontRender.FONT_HEIGHT + 1, 0xFFFFFF, true);
         }
     }
 }
