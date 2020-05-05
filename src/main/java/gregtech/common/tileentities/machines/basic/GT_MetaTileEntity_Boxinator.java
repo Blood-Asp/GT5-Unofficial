@@ -77,6 +77,7 @@ public class GT_MetaTileEntity_Boxinator
                         //In case recipe is too OP for that machine
                         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+                        return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                     }
                 }
                 return DID_NOT_FIND_RECIPE;
