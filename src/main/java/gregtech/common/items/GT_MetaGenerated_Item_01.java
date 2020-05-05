@@ -25,8 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
     public static GT_MetaGenerated_Item_01 INSTANCE;
@@ -861,7 +860,11 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), 600, 24);
     }
 
-    private static boolean bw = Loader.isModLoaded("bartworks");
+    private static final Map<Materials,Materials> cauldronRemap =new HashMap<>();
+
+    public static void registerCauldronCleaningFor(Materials in,Materials out){
+        cauldronRemap.put(in,out);
+    }
 
     public boolean onEntityItemUpdate(EntityItem aItemEntity) {
         int aDamage = aItemEntity.getEntityItem().getItemDamage();
@@ -877,16 +880,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
 
-                        if (bw) {
-                            if (aMaterial == Materials.Osmium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Rarest Metal Residue");
-                            else if (aMaterial == Materials.Iridium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Iridium Metal Residue");
-                            else if (aMaterial == Materials.Platinum)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Platinum Metallic Powder");
-                            else if (aMaterial == Materials.Palladium)
-                                aMaterial = GT_BartWorks_Compat.getBartWorksMaterialByIGNName("Palladium Metallic Powder");
-                        }
+                        aMaterial= cauldronRemap.getOrDefault(aMaterial,aMaterial);
 
                         aItemEntity.setEntityItemStack(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, aItemEntity.getEntityItem().stackSize));
                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);

@@ -1012,9 +1012,6 @@ public class GT_Mod implements IGT_Mod {
             }
         }
 
-        if (Loader.isModLoaded("bartworks"))
-            GT_BW_VoidminerLoader.initDeepDark();
-
         addSolidFakeLargeBoilerFuels();
 
         achievements = new GT_Achievements();
