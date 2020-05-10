@@ -912,13 +912,15 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                     return true;
                 }
 
-                byte cSide = tSide;
-                if (getCoverIDAtSide(aSide) != 0) cSide = aSide;
+                byte coverSide = aSide;
+                if (getCoverIDAtSide(aSide) == 0) coverSide = tSide;
 
-                if (getCoverIDAtSide(cSide) == 0) {
+                if (getCoverIDAtSide(coverSide) == 0) {
                     if (GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
-                        if (GregTech_API.getCoverBehavior(tCurrentItem).isCoverPlaceable(cSide, new GT_ItemStack(tCurrentItem), this) && mMetaTileEntity.allowCoverOnSide(cSide, new GT_ItemStack(tCurrentItem))) {
-                            setCoverItemAtSide(cSide, tCurrentItem);
+                        if (GregTech_API.getCoverBehavior(tCurrentItem).isCoverPlaceable(coverSide, new GT_ItemStack(tCurrentItem), this) &&
+                            mMetaTileEntity.allowCoverOnSide(coverSide, new GT_ItemStack(tCurrentItem)))
+                        {
+                            setCoverItemAtSide(coverSide, tCurrentItem);
                             if (!aPlayer.capabilities.isCreativeMode) tCurrentItem.stackSize--;
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
@@ -928,13 +930,13 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sCrowbarList)) {
                         if (GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer)) {
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(0), 1.0F, -1, xCoord, yCoord, zCoord);
-                            dropCover(cSide, aSide, false);
+                            dropCover(coverSide, aSide, false);
                         }
                         return true;
                     }
                 }
             }
-            else if (aPlayer.isSneaking()) { //Sneak click, no tool -> open cover config if possible.
+            else if (aPlayer.isSneaking()) { //Sneak click, no tool -> open cover config or turn back.
                 aSide = (getCoverIDAtSide(aSide) == 0) ? GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ) : aSide;
                 return getCoverIDAtSide(aSide) > 0 && getCoverBehaviorAtSide(aSide).onCoverShiftRightclick(aSide, getCoverIDAtSide(aSide), getCoverDataAtSide(aSide), this, aPlayer);
             }

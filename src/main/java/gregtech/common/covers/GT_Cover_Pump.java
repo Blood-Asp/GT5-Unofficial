@@ -161,7 +161,6 @@ public class GT_Cover_Pump
         private final byte side;
         private final int coverID;
         private int coverVariable;
-        private final ICoverable tile;
 
         private final static int startX = 10;
         private final static int startY = 25;
@@ -169,11 +168,10 @@ public class GT_Cover_Pump
         private final static int spaceY = 18;
 
         public GT_PumpGUICover(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
-            super(176, 107, GT_Utility.intToStack(aCoverID));
+            super(aTileEntity, 176, 107, GT_Utility.intToStack(aCoverID));
             this.side = aSide;
             this.coverID = aCoverID;
             this.coverVariable = aCoverVariable;
-            this.tile = aTileEntity;
 
             GT_GuiIconButton b;
             b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.EXPORT).setTooltipText(trans("006","Export"));

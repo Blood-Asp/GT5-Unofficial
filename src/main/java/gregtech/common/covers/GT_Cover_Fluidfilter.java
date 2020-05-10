@@ -168,8 +168,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
         private final byte side;
         private final int coverID;
         private int coverVariable;
-        private final ICoverable tile;
-        private GT_GuiFakeItemButton fluidFilterButton;
+        private final GT_GuiFakeItemButton fluidFilterButton;
         protected String fluidFilterName;
 
         private final static int startX = 10;
@@ -179,11 +178,10 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
 
         public GT_FluidFilterGUICover(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity)
         {
-            super(176, 107, GT_Utility.intToStack(aCoverID));
+            super(aTileEntity, 176, 107, GT_Utility.intToStack(aCoverID));
             this.side = aSide;
             this.coverID = aCoverID;
             this.coverVariable = aCoverVariable;
-            this.tile = aTileEntity;
 
             GT_GuiIconButton b;
             b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.EXPORT).setTooltipText(trans("232","Filter Input"));

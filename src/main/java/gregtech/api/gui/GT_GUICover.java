@@ -2,17 +2,21 @@ package gregtech.api.gui;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.gui.widgets.GT_GuiFakeItemButton;
+import gregtech.api.gui.widgets.GT_GuiIntegerTextBox;
 import gregtech.api.gui.widgets.GT_GuiTooltip;
 import gregtech.api.gui.widgets.GT_GuiTooltipManager;
 import gregtech.api.gui.widgets.GT_GuiTooltipManager.GT_IToolTipRenderer;
 import gregtech.api.interfaces.IGuiScreen;
+import gregtech.api.interfaces.tileentity.ICoverable;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -30,14 +34,14 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
     private GuiButton selectedButton;
     public String header;
     public GT_GuiFakeItemButton headerIcon;
+    public final ICoverable tile;
 
 
     protected List<IGuiElement> elements = new ArrayList<>();
+    protected List<GT_GuiIntegerTextBox> textBoxes = new ArrayList<>();
 
-    public GT_GUICover() {
-    }
-
-    public GT_GUICover(int width, int height, ItemStack cover) {
+    public GT_GUICover(ICoverable tile, int width, int height, ItemStack cover) {
+        this.tile = tile;
         this.gui_width = width;
         this.gui_height = height;
         this.header = (cover != null) ? cover.getDisplayName() : "";
@@ -50,16 +54,34 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
         guiTop = (this.height - this.gui_height) / 2;
 
         for (IGuiElement element : elements) {
-            element.onInit();
-
             if (element instanceof GuiButton)
                 buttonList.add(element);
+            if (element instanceof GT_GuiIntegerTextBox)
+                textBoxes.add((GT_GuiIntegerTextBox) element);
         }
 
         onInitGui(guiLeft, guiTop, gui_width, gui_height);
+
+        for (IGuiElement element : elements) {
+            element.onInit();
+        }
     }
 
     protected abstract void onInitGui(int guiLeft, int guiTop, int gui_width, int gui_height);
+
+    public void onMouseWheel(int x, int y, int delta) {
+    }
+
+    @Override
+    public void handleMouseInput() {
+        int delta = Mouse.getEventDWheel();
+        if (delta != 0) {
+            int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+            int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+            onMouseWheel(i, j, delta);
+        }
+        super.handleMouseInput();
+    }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float parTicks) {
@@ -115,25 +137,89 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
         return false;
     }
 
-    public void keyTyped(char p_73869_1_, int p_73869_2_) {
-        if (p_73869_2_ == this.mc.gameSettings.keyBindInventory.getKeyCode()) {
-            this.mc.displayGuiScreen((GuiScreen) null);
-            this.mc.setIngameFocus();
-            return;
-        }
-        super.keyTyped(p_73869_1_, p_73869_2_);
+    public void closeScreen() {
+        this.mc.displayGuiScreen((GuiScreen) null);
+        this.mc.setIngameFocus();
     }
 
     @Override
-    public void addElement(IGuiElement element) {
-        if (elements.contains(element))
+    public void updateScreen() {
+        super.updateScreen();
+        if (!tile.isUseableByPlayer(mc.thePlayer)) {
+            closeScreen();
             return;
-        elements.add(element);
+        }
+        for (GuiTextField f : textBoxes) {
+            f.updateCursorCounter();
+        }
     }
+
+    public void mouseClicked(int x, int y, int button) {
+        for (GT_GuiIntegerTextBox tBox : textBoxes) {
+            boolean hadFocus = tBox.isFocused();
+            tBox.mouseClicked(x,y,button);
+            if (tBox.isFocused() && button == 1) //rightclick -> lcear it
+                tBox.setText("0");
+            else if (hadFocus && !tBox.isFocused())
+                applyTextBox(tBox);
+        }
+        super.mouseClicked(x, y, button);
+    }
+
     @Override
-    public boolean removeElement(IGuiElement element) {
-        return elements.remove(element);
+    public void keyTyped(char c, int key) {
+        GT_GuiIntegerTextBox focusedTextBox = null;
+        for (GT_GuiIntegerTextBox textBox : textBoxes) {
+            if (textBox.isFocused())
+                focusedTextBox = textBox;
+        }
+
+        if (key == 1) { //esc
+            if(focusedTextBox != null) {
+                resetTextBox(focusedTextBox);
+                setFocusedTextBox(null);
+                return;
+            } else {
+                closeScreen();
+            }
+        }
+
+        if (c == '\t') { //tab
+            for (int i = 0; i < textBoxes.size(); i++) {
+                GT_GuiIntegerTextBox box = textBoxes.get(i);
+                if (box.isFocused()) {
+                    applyTextBox(box);
+                    setFocusedTextBox(((i+1) < textBoxes.size()) ? textBoxes.get(i+1) : null);
+                    return;
+                }
+            }
+        }
+
+        if (focusedTextBox != null && focusedTextBox.textboxKeyTyped(c, key)){
+            return;
+        }
+
+        if (key == 28 && focusedTextBox != null) { // enter
+            applyTextBox(focusedTextBox);
+            setFocusedTextBox(null);
+            return;
+        }
+
+        if (key == this.mc.gameSettings.keyBindInventory.getKeyCode()) {
+            if (focusedTextBox != null) {
+                applyTextBox(focusedTextBox);
+                setFocusedTextBox(null);
+                return;
+            }
+            closeScreen();
+            return;
+        }
+        super.keyTyped(c, key);
     }
+
+    /**
+     * Button
+     */
 
     public void actionPerformed(GuiButton button) {
         selectedButton = button;
@@ -148,8 +234,20 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
 
     }
 
-    public RenderItem getItemRenderer() {
-        return itemRender;
+    /**
+     * TextBoxes
+     */
+    private void setFocusedTextBox(GT_GuiIntegerTextBox boxToFocus) {
+        for (GT_GuiIntegerTextBox textBox : textBoxes) {
+            textBox.setFocused(textBox.equals(boxToFocus));
+        }
+    }
+    public void applyTextBox(GT_GuiIntegerTextBox box) {
+
+    }
+
+    public void resetTextBox(GT_GuiIntegerTextBox box) {
+
     }
 
     /**
@@ -190,5 +288,20 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
     @Override
     public int getYSize() {
         return gui_height;
+    }
+
+    public RenderItem getItemRenderer() {
+        return itemRender;
+    }
+
+    @Override
+    public void addElement(IGuiElement element) {
+        if (elements.contains(element))
+            return;
+        elements.add(element);
+    }
+    @Override
+    public boolean removeElement(IGuiElement element) {
+        return elements.remove(element);
     }
 }

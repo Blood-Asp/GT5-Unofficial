@@ -130,7 +130,21 @@ public class GT_Client extends GT_Proxy
         });
     }
 
+
+    private static boolean checkedForChicken = false;
     private static void drawGrid(DrawBlockHighlightEvent aEvent, boolean showCoverConnections) {
+        if (!checkedForChicken) {
+            try {
+                Class.forName("codechicken.lib.vec.Rotation");
+            } catch (Throwable e) {
+                if (GT_Values.D1) {
+                    e.printStackTrace(GT_Log.err);
+                }
+                return;
+            }
+            checkedForChicken = true;
+        }
+
         GL11.glPushMatrix();
         GL11.glTranslated(-(aEvent.player.lastTickPosX + (aEvent.player.posX - aEvent.player.lastTickPosX) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosY + (aEvent.player.posY - aEvent.player.lastTickPosY) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosZ + (aEvent.player.posZ - aEvent.player.lastTickPosZ) * (double) aEvent.partialTicks));
         GL11.glTranslated((float) aEvent.target.blockX + 0.5F, (float) aEvent.target.blockY + 0.5F, (float) aEvent.target.blockZ + 0.5F);
@@ -227,6 +241,10 @@ public class GT_Client extends GT_Proxy
         }
         GL11.glEnd();
         GL11.glPopMatrix();
+    }
+
+    private static void drawGrid(DrawBlockHighlightEvent aEvent) {
+        drawGrid(aEvent, false);
     }
 
     //TODO less bad
@@ -453,52 +471,44 @@ public class GT_Client extends GT_Proxy
 
     @SubscribeEvent
     public void onDrawBlockHighlight(DrawBlockHighlightEvent aEvent) {
+        Block aBlock = aEvent.player.worldObj.getBlock(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
         TileEntity aTileEntity = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
-        if (aTileEntity == null)
-            return;
-        try {
-            Class.forName("codechicken.lib.vec.Rotation");//Whats this do, need to check every frame?
-        } catch (Throwable e) {
-            if (GT_Values.D1) {
-                e.printStackTrace(GT_Log.err);
-            }
+
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))
+        {
+            if (aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable)
+                drawGrid(aEvent, false);
             return;
         }
 
-        if (GT_Utility.isStackValid(aEvent.currentItem)) {
-            Block aBlock = aEvent.player.worldObj.getBlock(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
-            if (((aTileEntity instanceof BaseMetaPipeEntity)) && (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0) && (
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet()) ||
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList) ||
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList) ||
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList)||
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList) ))
-            {
+        if (!(aTileEntity instanceof ICoverable))
+            return;
+
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList) ||
+            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList) )
+        {
+            if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
                 drawGrid(aEvent, false);
-                return;
-            }
-            if ((aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable) &&
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))
-            {
-                drawGrid(aEvent, false);
-                return;
-            }
-            if (aTileEntity instanceof BaseTileEntity && (
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList) ||
-                    GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList)))
-            {
-                drawGrid(aEvent, false);
-                return;
-            }
-        } else if (aEvent.currentItem == null && aEvent.player.isSneaking()) {
-            if (aTileEntity instanceof ICoverable && ((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0 ){
-                for (byte i = 0; i < 6; i++) {
-                    if(((ICoverable) aTileEntity).getCoverIDAtSide(i) > 0) {
+            return;
+        }
+
+        if ((aEvent.currentItem == null && aEvent.player.isSneaking()) ||
+            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList) ||
+            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList))
+        {
+            if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
+                for (byte i = 0; i < 6; i++)
+                    if (((ICoverable) aTileEntity).getCoverIDAtSide(i) > 0) {
                         drawGrid(aEvent, true);
                         return;
                     }
-                }
-            }
+            return;
+        }
+
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet()))
+        {
+            if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
+                drawGrid(aEvent, true);
         }
     }
 
