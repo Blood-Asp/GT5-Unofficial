@@ -1,8 +1,11 @@
 package gregtech.api.util;
 
+import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.net.GT_Packet_TileEntityCoverGUI;
 import gregtech.api.objects.GT_ItemStack;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
@@ -44,6 +47,25 @@ public abstract class GT_CoverBehavior {
      */
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         return aCoverVariable;
+    }
+
+    /**
+     * Called when someone shift-rightclicks this Cover with no tool. Doesn't call @onCoverRightclick in this Case.
+     */
+    public boolean onCoverShiftRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer) {
+        if(hasCoverGUI() && aPlayer instanceof EntityPlayerMP) {
+            GT_Values.NW.sendToPlayer(new GT_Packet_TileEntityCoverGUI(aSide, aCoverID, aCoverVariable, aTileEntity, (EntityPlayerMP) aPlayer), (EntityPlayerMP) aPlayer);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasCoverGUI() {
+        return false;
+    }
+
+    public Object getClientGUI(byte aSide, int aCoverID, int coverData, ICoverable aTileEntity) {
+        return null;
     }
 
     /**
