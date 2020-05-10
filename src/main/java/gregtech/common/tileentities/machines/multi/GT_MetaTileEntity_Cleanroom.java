@@ -126,11 +126,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		for (int dX = -x; dX <= x; dX++) {
 			for (int dZ = -z; dZ <= z; dZ++) {
 				for (int dY = 0; dY >= y; dY--) {
-					if (dX == -x || dX == x || dY == -y || dY == y || dZ == -z || dZ == z) {
+					if (dX == -x || dX == x || dY == 0 || dY == y || dZ == -z || dZ == z) {
 						Block tBlock = aBaseMetaTileEntity.getBlockOffset(dX, dY, dZ);
 						int tMeta = aBaseMetaTileEntity.getMetaIDOffset(dX, dY, dZ);
-						if (y == 0) {
-							if (dX == -x || dX == x || dZ == -z || dZ == z) {
+						if (dY == 0) {											// TOP
+							if (dX == -x || dX == x || dZ == -z || dZ == z) { 	// Top Border
 								if (tBlock != GregTech_API.sBlockReinforced || tMeta != 2) {
 									if (debugCleanroom) {
 										GT_Log.out.println(
@@ -139,8 +139,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 									}
 									return false;
 								}
-							} else if (dX == 0 && dZ == 0) {
-							} else {
+							} else if (dX != 0 || dZ != 0) {					 // Top Inner exclude center
 								if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
 									if (debugCleanroom) {
 										GT_Log.out.println(
@@ -209,7 +208,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 					IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 					if (tTileEntity != null) {
 						IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
-						if (aMetaTileEntity != null && aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe) {
+						if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe) {
 							if (debugCleanroom) {
 								GT_Log.out.println(
 									"Cleanroom: Machine detected, adding pointer back to cleanroom"
