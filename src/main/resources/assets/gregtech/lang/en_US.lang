@@ -989,9 +989,13 @@ for.bees.species.vegab=VegaB
 for.bees.species.cosmicneutronium=Cosmic Neutronium
 for.bees.species.infinitycatalyst=Infinity Catalyst
 for.bees.species.infinity=Infinity
-for.bees.species.enddust=End-Dust
+for.bees.species.enddust=End Dust
+for.bees.species.stardust=Stardust
 for.bees.species.ectoplasma=Ectoplasma
 for.bees.species.arcaneshard=Arcaneshard
+for.bees.species.dragonessence=Dragon Essence
+for.bees.species.enderman=Enderman
+for.bees.species.silverfish=Silverfish
 
 for.mutation.condition.biomeid=Required Biome
 for.mutation.condition.dim=Required Dimension

@@ -12,7 +12,8 @@ public enum DropType {
     HYDRA("hydra blood",true),
     SNOW_QUEEN("snowqueen blood",true),
     OXYGEN("oxygen",true),
-    LAPIS("lapis coolant",true);
+    LAPIS("lapis coolant",true),
+    ENDERGOO("ender goo",true);
 
     private static int[][] colours = new int[][]{
             {0x19191B, 0x303032},
@@ -23,6 +24,7 @@ public enum DropType {
             {0xD02001, 0x9C0018},
             {0x003366, 0x0066BB},
             {0x1727b1, 0x008ce3},
+            {0xA005E7, 0x161616},
     };
     public boolean showInList;
     public Materials material;

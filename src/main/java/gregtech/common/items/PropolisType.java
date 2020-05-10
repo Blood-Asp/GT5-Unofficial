@@ -7,12 +7,20 @@ public enum PropolisType {
 
 	End("End",true),
     Ectoplasma("Ectoplasma",true),
-    Arcaneshard("Arcaneshard",true);
+    Arcaneshard("Arcaneshard",true),
+    Stardust("Stardust",true),
+    Dragonessence("Dragonessence",true),
+    Enderman("Enderman",true),
+	Silverfish("Silverfish", true);
 
     private static int[] colours = new int[]{
         0xCC00FA,
         0xDCB0E5,
-        0x9010AD
+        0x9010AD,
+        0xffff00,
+        0xFFA12B,
+        0x161616,
+        0x000000
     };
 
     public boolean showInList;

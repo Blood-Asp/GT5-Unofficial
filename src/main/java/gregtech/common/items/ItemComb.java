@@ -18,6 +18,7 @@ import gregtech.loaders.materialprocessing.ProcessingModSupport;
 import gregtech.loaders.misc.GT_Bees;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -459,12 +460,19 @@ public class ItemComb extends Item {
 
 		// HEE
 		tComb = getStackForType(CombType.ENDDUST);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.End), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1500,}, 384, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.End),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1500, 1000}, 384, 480);
+		tComb = getStackForType(CombType.STARDUST);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Stardust),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1500, 1000}, 384, 480);
 		tComb = getStackForType(CombType.ECTOPLASMA);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Ectoplasma), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1000,}, 480, 1920);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Ectoplasma),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2500, 1000, 1500}, 512, 1920);
 		tComb = getStackForType(CombType.ARCANESHARD);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Arcaneshard), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1000,}, 480, 1920);
-
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Arcaneshard), GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2500, 1000,1500}, 512, 1920);
+		tComb = getStackForType(CombType.DRAGONESSENCE);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Dragonessence), GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{3000, 750, 2000}, 640, 7680);
+		tComb = getStackForType(CombType.ENDERMAN);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Enderman), GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{3000, 750, 2000}, 640, 7680);
+		tComb = getStackForType(CombType.ARCANESHARD);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Blocks.monster_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
 		//Space Line
 		tComb = getStackForType(CombType.SPACE);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), ItemList.FR_RefractoryWax.get(1L), GT_Bees.drop.getStackForType(DropType.OXYGEN), GT_ModHandler.getModItem("dreamcraft", "item.CoinSpace", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 1500, 500, 0, 0}, 384, 480);

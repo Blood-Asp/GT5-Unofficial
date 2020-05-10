@@ -113,11 +113,6 @@ public enum CombType {
     URGHAST("urghast", true, Materials._NULL, 70,0x7C0618, 0xA7041C),
     SNOWQUEEN("snowqueen", true, Materials._NULL, 60,0x9C0018, 0xD02001),
 
-    //Twilight
-    ENDDUST("enddust", true, Materials._NULL, 50,0x003A7D, 0xCC00FA),
-    ECTOPLASMA("ectoplasma", true, Materials._NULL, 35,0x381C40, 0xDCB0E5),
-    ARCANESHARD("arcaneshard", true, Materials._NULL, 35,0x333D82, 0x9010AD),
-
     //Space
     SPACE("space", true, Materials._NULL, 100,0x003366, 0xC0C0C0),
     METEORICIRON("meteoriciron",true, Materials.MeteoricIron, 100,0x321928, 0x643250),
@@ -151,7 +146,17 @@ public enum CombType {
     //Infinity
     COSMICNEUTRONIUM("cosmicneutronium",true, Materials._NULL, 5,0x484848, 0x323232),
     INFINITYCATALYST("infinitycatalyst",true, Materials._NULL, 2,0xFFFFFF, 0xFFFFFF),
-    INFINITY("infinity",true, Materials._NULL, 1,0xFFFFFF, 0xFFFFFF);
+    INFINITY("infinity",true, Materials._NULL, 1,0xFFFFFF, 0xFFFFFF),
+
+    //HEE
+    ENDDUST("enddust", true, Materials._NULL, 50,0x003A7D, 0xCC00FA),
+    ECTOPLASMA("ectoplasma", true, Materials._NULL, 35,0x381C40, 0xDCB0E5),
+    ARCANESHARD("arcaneshard", true, Materials._NULL, 35,0x333D82, 0x9010AD),
+    STARDUST("stardust", true, Materials._NULL, 60,0xDCBE13, 0xffff00),
+    DRAGONESSENCE("dragonessence", true, Materials._NULL, 30,0xffff00, 0xFFA12B),
+    ENDERMAN("enderman", true, Materials._NULL, 25,0x6200e7, 0x161616),
+    SILVERFISH("silverfish", true, Materials._NULL, 25,0x0000000, 0xEE053D);
+
     public boolean showInList;
     public Materials material;
     public int chance;

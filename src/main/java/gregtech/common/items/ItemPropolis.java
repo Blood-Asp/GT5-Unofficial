@@ -12,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -74,16 +73,29 @@ public class ItemPropolis extends Item {
 		ItemStack tPropolis;
 
 		tPropolis = getStackForType(PropolisType.End);
-		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 1, 0), FluidRegistry.getFluidStack("endergoo",100), 5000, 50, 480);
+		addProcessHV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 1, 0));
+		tPropolis = getStackForType(PropolisType.Stardust);
+		addProcessHV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "stardust", 1, 0));
 		tPropolis = getStackForType(PropolisType.Ectoplasma);
-		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.EctoplasmaChip", 1, 0),  FluidRegistry.getFluidStack("endergoo",150), 1500, 100, 1920);
+		addProcessEV(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.EctoplasmaChip", 1, 0));
 		tPropolis = getStackForType(PropolisType.Arcaneshard);
-		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.ArcaneShardChip", 1, 0), FluidRegistry.getFluidStack("endergoo",150), 1500, 100, 1920);
+		addProcessEV(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.ArcaneShardChip", 1, 0));
+		tPropolis = getStackForType(PropolisType.Dragonessence);
+		addProcessIV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "essence", 16, 0));
+		tPropolis = getStackForType(PropolisType.Enderman);
+		addProcessIV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "enderman_head", 1, 0));
+		tPropolis = getStackForType(PropolisType.Silverfish);
+		addProcessEV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "silverfish_blood", 1, 0));
 		//addRecipe(tDrop, aOutput, aOutput2, aChance, aDuration, aEUt);
 	}
 
-	public void addRecipe(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aDuration, int aEUt) {
-		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
+	public void addProcessHV(ItemStack tPropolis, ItemStack aOutput2) {
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, aOutput2, FluidRegistry.getFluidStack("endergoo",100), 5000, 50, 480);
 	}
-
+	public void addProcessEV(ItemStack tPropolis, ItemStack aOutput2) {
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, aOutput2, FluidRegistry.getFluidStack("endergoo",200), 2500, 100, 1920);
+	}
+	public void addProcessIV(ItemStack tPropolis, ItemStack aOutput2) {
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, aOutput2, FluidRegistry.getFluidStack("endergoo",300), 1500, 150, 7680);
+	}
 }
