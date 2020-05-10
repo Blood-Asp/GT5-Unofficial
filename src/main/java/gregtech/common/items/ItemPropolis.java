@@ -5,11 +5,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.core.Tabs;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.util.GT_ModHandler;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
@@ -71,12 +73,17 @@ public class ItemPropolis extends Item {
 	public void initPropolisRecipes() {
 		ItemStack tPropolis;
 
-		tPropolis = getStackForType(PropolisType.Zoko);
-		//addRecipe(tDrop, aOutput, aOutput2, aChance, aEUt);
+		tPropolis = getStackForType(PropolisType.End);
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 1, 0), FluidRegistry.getFluidStack("endergoo",100), 5000, 50, 480);
+		tPropolis = getStackForType(PropolisType.Ectoplasma);
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.EctoplasmaChip", 1, 0),  FluidRegistry.getFluidStack("endergoo",150), 1500, 100, 1920);
+		tPropolis = getStackForType(PropolisType.Arcaneshard);
+		GT_Values.RA.addFluidExtractionRecipe(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.ArcaneShardChip", 1, 0), FluidRegistry.getFluidStack("endergoo",150), 1500, 100, 1920);
+		//addRecipe(tDrop, aOutput, aOutput2, aChance, aDuration, aEUt);
 	}
 
-	public void addRecipe(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
-		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 40, aEUt);
+	public void addRecipe(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aDuration, int aEUt) {
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
 	}
 
 }

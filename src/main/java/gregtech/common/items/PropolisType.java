@@ -5,10 +5,14 @@ import gregtech.api.util.GT_LanguageManager;
 
 public enum PropolisType {
 
-	Zoko("zoko",true);
+	End("End",true),
+    Ectoplasma("Ectoplasma",true),
+    Arcaneshard("Arcaneshard",true);
 
     private static int[] colours = new int[]{
-    	0x3A9898
+        0xCC00FA,
+        0xDCB0E5,
+        0x9010AD
     };
 
     public boolean showInList;

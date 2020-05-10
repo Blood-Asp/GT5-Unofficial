@@ -447,15 +447,23 @@ public class ItemComb extends Item {
 
 		// Twilight
 		tComb = getStackForType(CombType.NAGA);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 4), GT_ModHandler.getModItem("dreamcraft", "item.NagaScaleChip", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.NagaScaleFragment", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 256, 120);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 4), GT_ModHandler.getModItem("dreamcraft", "item.NagaScaleChip", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.NagaScaleFragment", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 256, 120);
 		tComb = getStackForType(CombType.LICH);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 5), GT_ModHandler.getModItem("dreamcraft", "item.LichBoneChip", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.LichBoneFragment", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 384, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 5), GT_ModHandler.getModItem("dreamcraft", "item.LichBoneChip", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.LichBoneFragment", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 384, 480);
 		tComb = getStackForType(CombType.HYDRA);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 1), GT_ModHandler.getModItem("dreamcraft", "item.FieryBloodDrop", 1L, 0), GT_Bees.drop.getStackForType(DropType.HYDRA), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 1000, 0, 0}, 384, 480);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 1), GT_ModHandler.getModItem("dreamcraft", "item.FieryBloodDrop", 1L, 0), GT_Bees.drop.getStackForType(DropType.HYDRA), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 1000, 0, 0}, 384, 480);
 		tComb = getStackForType(CombType.URGHAST);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), GT_ModHandler.getModItem("dreamcraft", "item..CarminiteChip", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.CarminiteFragment",1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 512, 1920);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), GT_ModHandler.getModItem("dreamcraft", "item..CarminiteChip", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.CarminiteFragment",1L, 0), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 800, 0, 0}, 512, 1920);
 		tComb = getStackForType(CombType.SNOWQUEEN);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1, new Object[0]), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBloodDrop", 1L, 0), GT_Bees.drop.getStackForType(DropType.SNOW_QUEEN), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 1000, 0, 0}, 512, 1920);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), GT_ModHandler.getModItem("dreamcraft", "item.SnowQueenBloodDrop", 1L, 0), GT_Bees.drop.getStackForType(DropType.SNOW_QUEEN), GT_Values.NI, GT_Values.NI, new int[]{3000, 500, 3300, 1000, 0, 0}, 512, 1920);
+
+		// HEE
+		tComb = getStackForType(CombType.ENDDUST);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.End), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1500,}, 384, 480);
+		tComb = getStackForType(CombType.ECTOPLASMA);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Ectoplasma), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1000,}, 480, 1920);
+		tComb = getStackForType(CombType.ARCANESHARD);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Arcaneshard), GT_Values.NI, GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{2000, 1000,}, 480, 1920);
 
 		//Space Line
 		tComb = getStackForType(CombType.SPACE);

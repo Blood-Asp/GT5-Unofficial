@@ -113,6 +113,11 @@ public enum CombType {
     URGHAST("urghast", true, Materials._NULL, 70,0x7C0618, 0xA7041C),
     SNOWQUEEN("snowqueen", true, Materials._NULL, 60,0x9C0018, 0xD02001),
 
+    //Twilight
+    ENDDUST("enddust", true, Materials._NULL, 50,0x003A7D, 0xCC00FA),
+    ECTOPLASMA("ectoplasma", true, Materials._NULL, 35,0x381C40, 0xDCB0E5),
+    ARCANESHARD("arcaneshard", true, Materials._NULL, 35,0x333D82, 0x9010AD),
+
     //Space
     SPACE("space", true, Materials._NULL, 100,0x003366, 0xC0C0C0),
     METEORICIRON("meteoriciron",true, Materials.MeteoricIron, 100,0x321928, 0x643250),

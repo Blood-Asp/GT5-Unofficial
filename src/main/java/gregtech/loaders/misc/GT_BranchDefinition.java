@@ -110,6 +110,18 @@ public enum GT_BranchDefinition {
             AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING, EnumAllele.Flowering.FASTER);
         }
     },
+    HEE("Finis Expansiones") {
+        @Override
+        protected void setBranchProperties(IAllele[] alleles) {
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.TEMPERATURE_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.HUMIDITY_TOLERANCE, EnumAllele.Tolerance.BOTH_2);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.NOCTURNAL, true);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWER_PROVIDER, getFlowers(EXTRABEES, "rock"));
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORT);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.FLOWERING,  EnumAllele.Flowering.SLOW);
+            AlleleHelper.instance.set(alleles, EnumBeeChromosome.SPEED, EnumAllele.Speed.FASTEST);
+        }
+    },
     SPACE("Cosmicis") {
         @Override
         protected void setBranchProperties(IAllele[] alleles) {
