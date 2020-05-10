@@ -11,7 +11,8 @@ public enum PropolisType {
     Stardust("Stardust",true),
     Dragonessence("Dragonessence",true),
     Enderman("Enderman",true),
-	Silverfish("Silverfish", true);
+	Silverfish("Silverfish", true),
+    Endium("Endium", true);
 
     private static int[] colours = new int[]{
         0xCC00FA,
@@ -20,7 +21,8 @@ public enum PropolisType {
         0xffff00,
         0xFFA12B,
         0x161616,
-        0x000000
+        0x000000,
+        0xa0ffff
     };
 
     public boolean showInList;

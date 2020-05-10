@@ -155,7 +155,8 @@ public enum CombType {
     STARDUST("stardust", true, Materials._NULL, 60,0xDCBE13, 0xffff00),
     DRAGONESSENCE("dragonessence", true, Materials._NULL, 30,0xffff00, 0xFFA12B),
     ENDERMAN("enderman", true, Materials._NULL, 25,0x6200e7, 0x161616),
-    SILVERFISH("silverfish", true, Materials._NULL, 25,0x0000000, 0xEE053D);
+    SILVERFISH("silverfish", true, Materials._NULL, 25,0x0000000, 0xEE053D),
+    ENDIUM("endium", true, Materials.HeeEndium, 50,0x2F5A6C, 0xa0ffff);
 
     public boolean showInList;
     public Materials material;
