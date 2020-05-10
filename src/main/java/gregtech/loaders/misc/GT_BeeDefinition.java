@@ -2182,7 +2182,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(ECTOPLASMA.species, ARCANESHARDS.species,  4);
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
-                tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "essence_altar>"), 1);
+                tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "essence_altar"), 1);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(1, "End"));//End Dim
 
 
@@ -2243,7 +2243,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             IBeeMutationCustom tMutation = registerMutation(ECTOPLASMA.species, STARDUST.species,  5);
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
-                tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "ender_goo>"), 0);
+                tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "ender_goo"), 0);
             tMutation.addMutationCondition(new GT_Bees.DimensionMutationCondition(1, "End"));//End Dim
 
 
