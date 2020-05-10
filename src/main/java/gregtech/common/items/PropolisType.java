@@ -18,10 +18,10 @@ public enum PropolisType {
         0xCC00FA,
         0xDCB0E5,
         0x9010AD,
-        0xffff00,
-        0xFFA12B,
+        0xFFFF00,
+        0x911ECE,
         0x161616,
-        0x000000,
+        0xEE053D,
         0xa0ffff
     };
 

@@ -153,10 +153,11 @@ public enum CombType {
     ECTOPLASMA("ectoplasma", true, Materials._NULL, 35,0x381C40, 0xDCB0E5),
     ARCANESHARD("arcaneshard", true, Materials._NULL, 35,0x333D82, 0x9010AD),
     STARDUST("stardust", true, Materials._NULL, 60,0xDCBE13, 0xffff00),
-    DRAGONESSENCE("dragonessence", true, Materials._NULL, 30,0xffff00, 0xFFA12B),
+    DRAGONESSENCE("dragonessence", true, Materials._NULL, 30,0x911ECE, 0xFFA12B),
     ENDERMAN("enderman", true, Materials._NULL, 25,0x6200e7, 0x161616),
     SILVERFISH("silverfish", true, Materials._NULL, 25,0x0000000, 0xEE053D),
-    ENDIUM("endium", true, Materials.HeeEndium, 50,0x2F5A6C, 0xa0ffff);
+    ENDIUM("endium", true, Materials.HeeEndium, 50,0x2F5A6C, 0xa0ffff),
+    RUNE("rune", true, Materials._NULL, 10,0x0104D9, 0xE31010);
 
     public boolean showInList;
     public Materials material;

@@ -2033,7 +2033,8 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"End"), STAINLESSSTEEL.species,  8);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Ended"), STAINLESSSTEEL.species,  8);
+
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
             tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "end_powder_ore"), 0);
@@ -2062,7 +2063,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"End"), THAUMIUMDUST.species,  8);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Ended"), THAUMIUMDUST.species,  8);
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
                 tMutation.requireResource("blockHeeEndium");
@@ -2091,7 +2092,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"End"), ZINC.species,  8);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Ended"), ZINC.species,  8);
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
                 tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "stardust_ore"), 0);
@@ -2119,7 +2120,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"End"), ENDDUST.species,  5);
+            IBeeMutationCustom tMutation = registerMutation(getSpecies(FORRESTRY,"Ended"), ENDDUST.species,  5);
             tMutation.restrictHumidity(EnumHumidity.ARID);
             if (Loader.isModLoaded("HardcoreEnderExpansion"))
             tMutation.requireResource(GameRegistry.findBlock("HardcoreEnderExpansion", "spooky_log"), 0);
@@ -2159,7 +2160,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         }
     },
 
-    DRAGONESSENCE(GT_BranchDefinition.HEE, "Dragonessence", true, 0xFFA12B, 0xffff00) {
+    DRAGONESSENCE(GT_BranchDefinition.HEE, "Dragonessence", true, 0xFFA12B, 0x911ECE) {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_ModHandler.getModItem(GT_Values.MOD_ID_FR, "beeCombs", 1, 8), 0.30f);
@@ -3330,6 +3331,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setAlleles(IAllele[] template) {
             AlleleHelper.instance.set(template, EnumBeeChromosome.LIFESPAN, EnumAllele.Lifespan.SHORTEST);
+            AlleleHelper.instance.set(template, EnumBeeChromosome.EFFECT, getEffect(EXTRABEES, "blindness"));
         }
 
         @Override

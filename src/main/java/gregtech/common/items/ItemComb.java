@@ -475,6 +475,9 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Blocks.monster_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
 		tComb = getStackForType(CombType.ENDIUM);
 		addProcessHV(tComb,Materials.HeeEndium,50);
+		tComb = getStackForType(CombType.RUNE);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Blocks.monster_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
+
 		//Space Line
 		tComb = getStackForType(CombType.SPACE);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, ItemList.FR_Wax.get(1L), ItemList.FR_RefractoryWax.get(1L), GT_Bees.drop.getStackForType(DropType.OXYGEN), GT_ModHandler.getModItem("dreamcraft", "item.CoinSpace", 1L, 0), GT_Values.NI, GT_Values.NI, new int[]{5000, 3000, 1500, 500, 0, 0}, 384, 480);

@@ -111,8 +111,8 @@ public class ItemDrop extends Item {
 		tDrop = getStackForType(DropType.OXYGEN);
 		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("liquidoxygen"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 250, 1200,8);
 		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, new FluidStack(FluidRegistry.getFluid("ic2coolant"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 30);
-		addProcessHV(tDrop, new FluidStack(FluidRegistry.getFluid("endergoo"), 500), GT_Values.NI ,1000);
 		tDrop = getStackForType(DropType.ENDERGOO);
+		addProcessHV(tDrop, new FluidStack(FluidRegistry.getFluid("endergoo"), 500), GT_Values.NI ,1000);
 	}
 
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
