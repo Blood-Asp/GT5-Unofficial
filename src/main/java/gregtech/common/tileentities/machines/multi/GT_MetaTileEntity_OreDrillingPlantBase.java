@@ -318,6 +318,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
+        int d = getRadiusInChunks() * 2 - 1;
         return new String[]{
                 "Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""),
                 "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
@@ -331,7 +332,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
                 "Use Screwdriver to configure block radius",
                 "Use Soldering iron to turn off chunk mode",
-                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
+                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks in block mode",
+                "Or " + getRadiusInChunks() + " chunks in chunk mode (" + d +"x" + d + " chunks)",
                 "Fortune bonus of " + (mTier + 3)};
     }
 
