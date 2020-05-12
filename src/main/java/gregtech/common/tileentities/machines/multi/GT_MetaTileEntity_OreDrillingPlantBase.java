@@ -83,7 +83,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             if (chunkRadiusConfig > getRadiusInChunks())
                 chunkRadiusConfig = 1;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + " " + StatCollector.translateToLocal("GT5U.machines.radius"));//TODO Add translation support
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + " " + StatCollector.translateToLocal("GT5U.machines.radius"));
     }
 
     @Override
@@ -134,7 +134,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             return super.workingAtBottom(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
 
         if (mCurrentChunk == null) {
-            createInitialWorkingChunk(xDrill, zDrill);
+            createInitialWorkingChunk();
             return true;
         }
 
@@ -155,10 +155,13 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         return processOreList();
     }
 
-    private void createInitialWorkingChunk(int xDrill, int zDrill) {
-        final int centerX = xDrill >> 4;
-        final int centerZ = zDrill >> 4;
-        mCurrentChunk = new ChunkCoordIntPair(centerX - chunkRadiusConfig, centerZ - chunkRadiusConfig);
+    private void createInitialWorkingChunk() {
+        final int centerX = getXDrill() >> 4;
+        final int centerZ = getZDrill() >> 4;
+        // use corner closest to the drill as mining area center
+        final int leftRight = (getXDrill() - (centerX << 4)) < 8 ? 0 : 1;
+        final int topBottom = (getZDrill() - (centerZ << 4)) < 8 ? 0 : 1;
+        mCurrentChunk = new ChunkCoordIntPair(centerX - chunkRadiusConfig + leftRight, centerZ - chunkRadiusConfig + topBottom);
         GT_ChunkManager.requestChunkLoad((TileEntity)getBaseMetaTileEntity(), mCurrentChunk);
         mWorkChunkNeedsReload = false;
     }
@@ -172,26 +175,42 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             GT_ChunkManager.releaseTicket((TileEntity)getBaseMetaTileEntity());
         return result;
     }
+
     private boolean moveToNextChunk(int centerX, int centerZ){
         if (mCurrentChunk == null)
             return false;
+        // use corner closest to the drill as mining area center
+        final int left = centerX - chunkRadiusConfig + ((getXDrill() - (centerX << 4)) < 8 ? 0 : 1);
+        final int right = left + chunkRadiusConfig * 2;
+        final int bottom = centerZ + chunkRadiusConfig + ((getZDrill() - (centerZ << 4)) < 8 ? 0 : 1);
+
         int nextChunkX = mCurrentChunk.chunkXPos + 1;
         int nextChunkZ = mCurrentChunk.chunkZPos;
-        if (nextChunkX > (centerX + chunkRadiusConfig)){
-            nextChunkX = centerX - chunkRadiusConfig;
+
+        // step to the next chunk
+        if (nextChunkX >= right) {
+            nextChunkX = left;
             ++nextChunkZ;
         }
-        if (nextChunkZ > (centerZ + chunkRadiusConfig)) {
+        // skip center chunk - dug in workingDownward()
+        if (nextChunkX == centerX && nextChunkZ == centerZ) {
+            ++nextChunkX;
+
+            if (nextChunkX >= right) {
+                nextChunkX = left;
+                ++nextChunkZ;
+            }
+        }
+
+        if (nextChunkZ >= bottom) {
             mCurrentChunk = null;
             return false;
         }
-        // skip center chunk - dug in workingDownward()
-        if (nextChunkX == centerX && nextChunkZ == centerZ)
-            ++nextChunkX;
         mCurrentChunk = new ChunkCoordIntPair(nextChunkX, nextChunkZ);
         GT_ChunkManager.requestChunkLoad((TileEntity)getBaseMetaTileEntity(), new ChunkCoordIntPair(nextChunkX, nextChunkZ));
         return true;
     }
+    
     @Override
     protected boolean checkHatches(){
         return !mMaintenanceHatches.isEmpty() && !mInputHatches.isEmpty() && !mOutputBusses.isEmpty() && !mEnergyHatches.isEmpty();
@@ -318,7 +337,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        int d = getRadiusInChunks() * 2 + 1;
+        int d = getRadiusInChunks() * 2;
         return new String[]{
                 "Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""),
                 "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
@@ -332,14 +351,14 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
                 "Use Screwdriver to configure block radius",
                 "Use Soldering iron to turn off chunk mode",
-                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks in block mode",
-                "Or " + getRadiusInChunks() + " chunks in chunk mode (" + d +"x" + d + " chunks)",
+                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
+                "In chunk mode working area center is the chunk corner nearest to the drill",
                 "Fortune bonus of " + (mTier + 3)};
     }
 
     @Override
     public String[] getInfoData() {
-        final int diameter = chunkRadiusConfig * 2 + (mChunkLoadingEnabled ? 1 : 0);
+        final int diameter = chunkRadiusConfig * 2;
         return new String[]{
                 EnumChatFormatting.BLUE+StatCollector.translateToLocal("GT5U.machines.minermulti")+EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + diameter + "x" + diameter +
