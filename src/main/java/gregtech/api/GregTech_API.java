@@ -389,7 +389,7 @@ public class GregTech_API {
      * @param aZ     is the Z-Coord of the update causing Block
      */
     public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ) {
-        if (!aWorld.isRemote) {
+        if (aWorld != null && !aWorld.isRemote) { //World might be null during Worldgen
             GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
             return true;
         }
