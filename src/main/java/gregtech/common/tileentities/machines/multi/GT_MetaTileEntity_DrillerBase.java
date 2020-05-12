@@ -44,6 +44,8 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private ForgeDirection back;
 
     private int xDrill, yDrill, zDrill, xPipe, zPipe, yHead;
+    protected int getXDrill() { return xDrill; }
+    protected int getZDrill() { return zDrill; }
     protected int workState;
     protected static final int STATE_DOWNWARD = 0, STATE_AT_BOTTOM = 1, STATE_UPWARD = 2;
 
