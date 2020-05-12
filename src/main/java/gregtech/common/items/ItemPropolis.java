@@ -91,6 +91,8 @@ public class ItemPropolis extends Item {
 		addProcessEV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "silverfish_blood", 1, 0));
 		tPropolis = getStackForType(PropolisType.Endium);
 		addProcessHV(tPropolis, GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.HeeEndium, 1));
+		tPropolis = getStackForType(PropolisType.Fireessence);
+		addProcessIV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "essence", 16, 1));
 
 		//addRecipe(tDrop, aOutput, aOutput2, aChance, aDuration, aEUt);
 	}

@@ -479,6 +479,8 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfPowerFragment", 1L, 0),   GT_ModHandler.getModItem("dreamcraft", "item.RuneOfAgilityFragment", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.RuneOfVigorFragment", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.RuneOfDefenseFragment", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfMagicFragment", 1L, 0), new int[]{2500, 500, 500, 500, 500, 500}, 640, 7680);
 		tComb = getStackForType(CombType.RUNEII);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfVoidFragment", 1L, 0),  GT_Values.NI, GT_Values.NI, GT_Values.NI,  GT_Values.NI, new int[]{5000, 250}, 640, 7680);
+		tComb = getStackForType(CombType.FIREESSENSE);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Fireessence), GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{3000, 750, 2000}, 640, 7680);
 
 		//Space Line
 		tComb = getStackForType(CombType.SPACE);
