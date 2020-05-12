@@ -157,7 +157,8 @@ public enum CombType {
     ENDERMAN("enderman", true, Materials._NULL, 25,0x6200e7, 0x161616),
     SILVERFISH("silverfish", true, Materials._NULL, 25,0x0000000, 0xEE053D),
     ENDIUM("endium", true, Materials.HeeEndium, 50,0x2F5A6C, 0xa0ffff),
-    RUNE("rune", true, Materials._NULL, 10,0x0104D9, 0xE31010);
+    RUNEI("rune1", true, Materials._NULL, 10,0x0104D9, 0xE31010),
+    RUNEII("rune2", true, Materials._NULL, 10,0xE31010, 0x0104D9);
 
     public boolean showInList;
     public Materials material;

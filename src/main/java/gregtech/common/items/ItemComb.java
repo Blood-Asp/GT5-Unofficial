@@ -18,7 +18,6 @@ import gregtech.loaders.materialprocessing.ProcessingModSupport;
 import gregtech.loaders.misc.GT_Bees;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -476,8 +475,10 @@ public class ItemComb extends Item {
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Items.spawn_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
 		tComb = getStackForType(CombType.ENDIUM);
 		addProcessHV(tComb,Materials.HeeEndium,50);
-		tComb = getStackForType(CombType.RUNE);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Blocks.monster_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
+		tComb = getStackForType(CombType.RUNEI);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfPowerFragment", 1L, 0),   GT_ModHandler.getModItem("dreamcraft", "item.RuneOfAgilityFragment", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.RuneOfVigorFragment", 1L, 0),  GT_ModHandler.getModItem("dreamcraft", "item.RuneOfDefenseFragment", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfMagicFragment", 1L, 0), new int[]{2500, 500, 500, 500, 500, 500}, 640, 7680);
+		tComb = getStackForType(CombType.RUNEII);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_ModHandler.getModItem("dreamcraft", "item.RuneOfVoidFragment", 1L, 0),  GT_Values.NI, GT_Values.NI, GT_Values.NI,  GT_Values.NI, new int[]{5000, 250}, 640, 7680);
 
 		//Space Line
 		tComb = getStackForType(CombType.SPACE);
