@@ -1825,7 +1825,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(COAL.species, URANIUM.species, 2);
+            IMutationCustom tMutation = registerMutation(COAL.species, URANIUM.species, 2).setIsSecret();
             tMutation.requireResource(GregTech_API.sBlockMetal7, 5);
         }
     },
@@ -1847,7 +1847,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(THORIUM.species, getSpecies(EXTRABEES,"rotten"), 1);
+            IMutationCustom tMutation = registerMutation(THORIUM.species, getSpecies(EXTRABEES,"rotten"), 1).setIsSecret();
             tMutation.requireResource(GregTech_API.sBlockMetal4, 3);
         }
     },
@@ -1869,7 +1869,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(LUTETIUM.species, CHROME.species, 3, 4);
+            IMutationCustom tMutation = registerMutation(LUTETIUM.species, CHROME.species, 3, 4).setIsSecret();
             tMutation.requireResource(GregTech_API.sBlockMetal1, 2);
         }
     },
@@ -1891,7 +1891,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(NAQUADRIA.species, AMERICIUM.species, 1,2);
+            IMutationCustom tMutation = registerMutation(NAQUADRIA.species, AMERICIUM.species, 1,2).setIsSecret();
             tMutation.requireResource(GregTech_API.sBlockMetal5, 2);
         }
     },
@@ -3392,7 +3392,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
 
         @Override
         protected void registerMutations() {
-            IBeeMutationCustom tMutation = registerMutation(DOB.species, COSMICNEUTRONIUM.species, 3, 10);
+            IMutationCustom tMutation = registerMutation(DOB.species, COSMICNEUTRONIUM.species, 3, 10).setIsSecret();
             if (Loader.isModLoaded("Avaritia"))
                 tMutation.requireResource(GameRegistry.findBlock("Avaritia", "Resource_Block"), 1);
         }
