@@ -83,7 +83,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             if (chunkRadiusConfig > getRadiusInChunks())
                 chunkRadiusConfig = 1;
         }
-        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + StatCollector.translateToLocal("GT5U.machines.radius"));//TODO Add translation support
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (chunkRadiusConfig << 4) + " " + StatCollector.translateToLocal("GT5U.machines.radius"));//TODO Add translation support
     }
 
     @Override
@@ -130,7 +130,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     }
     @Override
     protected boolean workingAtBottom(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
-        if (!mChunkLoadingEnabled || chunkRadiusConfig == 1)
+        if (!mChunkLoadingEnabled)
             return super.workingAtBottom(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
 
         if (mCurrentChunk == null) {
@@ -158,14 +158,14 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private void createInitialWorkingChunk(int xDrill, int zDrill) {
         final int centerX = xDrill >> 4;
         final int centerZ = zDrill >> 4;
-        mCurrentChunk = new ChunkCoordIntPair(centerX - chunkRadiusConfig + 1, centerZ - chunkRadiusConfig + 1);
+        mCurrentChunk = new ChunkCoordIntPair(centerX - chunkRadiusConfig, centerZ - chunkRadiusConfig);
         GT_ChunkManager.requestChunkLoad((TileEntity)getBaseMetaTileEntity(), mCurrentChunk);
         mWorkChunkNeedsReload = false;
     }
 
     @Override
     protected boolean workingUpward(ItemStack aStack, int xDrill, int yDrill, int zDrill, int xPipe, int zPipe, int yHead, int oldYHead) {
-        if (!mChunkLoadingEnabled || chunkRadiusConfig == 1 || oreBlockPositions.isEmpty())
+        if (!mChunkLoadingEnabled || oreBlockPositions.isEmpty())
             return super.workingUpward(aStack, xDrill, yDrill, zDrill, xPipe, zPipe, yHead, oldYHead);
         boolean result = processOreList();
         if (oreBlockPositions.isEmpty())
@@ -177,11 +177,11 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
             return false;
         int nextChunkX = mCurrentChunk.chunkXPos + 1;
         int nextChunkZ = mCurrentChunk.chunkZPos;
-        if (nextChunkX >= (centerX + chunkRadiusConfig)){
-            nextChunkX = centerX - chunkRadiusConfig + 1;
+        if (nextChunkX > (centerX + chunkRadiusConfig)){
+            nextChunkX = centerX - chunkRadiusConfig;
             ++nextChunkZ;
         }
-        if (nextChunkZ >= (centerZ + chunkRadiusConfig)) {
+        if (nextChunkZ > (centerZ + chunkRadiusConfig)) {
             mCurrentChunk = null;
             return false;
         }
@@ -318,7 +318,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        int d = getRadiusInChunks() * 2 - 1;
+        int d = getRadiusInChunks() * 2 + 1;
         return new String[]{
                 "Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""),
                 "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
@@ -339,9 +339,10 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     @Override
     public String[] getInfoData() {
+        final int diameter = chunkRadiusConfig * 2 + (mChunkLoadingEnabled ? 1 : 0);
         return new String[]{
                 EnumChatFormatting.BLUE+StatCollector.translateToLocal("GT5U.machines.minermulti")+EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + (chunkRadiusConfig * 2 + 1)+ 
+                StatCollector.translateToLocal("GT5U.machines.workarea")+": " + EnumChatFormatting.GREEN + diameter + "x" + diameter +
                 EnumChatFormatting.RESET+" " + StatCollector.translateToLocal("GT5U.machines.chunks")
         };
     }
