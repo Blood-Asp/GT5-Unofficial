@@ -19,6 +19,7 @@ import gregtech.loaders.misc.GT_Bees;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -472,7 +473,7 @@ public class ItemComb extends Item {
 		tComb = getStackForType(CombType.ENDERMAN);
 		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Enderman), GT_Bees.drop.getStackForType(DropType.ENDERGOO), GT_Values.NI,  GT_Values.NI, GT_Values.NI, new int[]{3000, 750, 2000}, 640, 7680);
 		tComb = getStackForType(CombType.SILVERFISH);
-		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Blocks.monster_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
+		GT_Values.RA.addCentrifugeRecipe(tComb, GT_Values.NI, GT_Values.NF, GT_Values.NF, GT_ModHandler.getModItem("MagicBees", "wax", 1L, 0), GT_Bees.propolis.getStackForType(PropolisType.Silverfish),  GT_Bees.drop.getStackForType(DropType.ENDERGOO), new ItemStack(Items.spawn_egg, 1,60), GT_Values.NI,  GT_Values.NI, new int[]{2500, 1000, 2000, 1500}, 512, 1920);
 		tComb = getStackForType(CombType.ENDIUM);
 		addProcessHV(tComb,Materials.HeeEndium,50);
 		tComb = getStackForType(CombType.RUNE);
