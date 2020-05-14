@@ -11,7 +11,6 @@ import gregtech.common.items.ItemComb;
 import gregtech.common.items.ItemDrop;
 import gregtech.common.items.ItemPollen;
 import gregtech.common.items.ItemPropolis;
-import gregtech.loaders.misc.GT_BeeDefinition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -72,7 +71,6 @@ public class GT_Bees {
 
         blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.LIFESPAN);
         superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.LIFESPAN);
-
 
     }
 
