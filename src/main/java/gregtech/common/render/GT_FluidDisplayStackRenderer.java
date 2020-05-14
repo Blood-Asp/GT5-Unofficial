@@ -29,7 +29,7 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
     }
 
     @Override
-    public boolean shouldUseRenderHelper (ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
     {
         //not sure what this does.
         return false;
@@ -59,8 +59,11 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
         tess.addVertexWithUV( 0,  0, 0, x_min, y_min);
         tess.draw();
 
-        if(item.getTagCompound() == null)
+        if(item.getTagCompound() == null) {
+            GL11.glDisable(GL11.GL_BLEND);
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
             return;
+        }
 
         // Render Fluid amount text
         long fluidAmount = item.getTagCompound().getLong("mFluidDisplayAmount");
@@ -87,6 +90,8 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
             GL11.glScalef(smallTextScale, smallTextScale, 1.0f);
 
             fontRender.drawString( amountString, 0, (int) (16/smallTextScale) - fontRender.FONT_HEIGHT + 1, 0xFFFFFF, true);
+            GL11.glScalef(1f, 1f, 1f);
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
         }
     }
 }
