@@ -16,6 +16,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -383,10 +384,27 @@ public class GT_NEI_DefaultHandler
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
+			List<PositionedStack> maybeIn; 
+			List<PositionedStack> maybeOut;
 			
-            if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
-            	mInputs = aRecipe.getInputPositionedStacks();
-            	mOutputs = aRecipe.getOutputPositionedStacks();
+			try {
+                maybeIn = aRecipe.getInputPositionedStacks();
+            } catch(NullPointerException npe) {
+			    maybeIn = null;
+			    GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe.toString());
+                npe.printStackTrace(GT_Log.err);
+            }
+			try {
+                maybeOut = aRecipe.getOutputPositionedStacks();
+            } catch (NullPointerException npe) {
+			    maybeOut = null;
+                GT_Log.err.println("CachedDefaultRecipe - Invalid OutputPositionedStacks " + aRecipe.toString());
+                npe.printStackTrace(GT_Log.err);
+            }
+			
+            if ( maybeIn != null && maybeOut != null) {
+            	mInputs = maybeIn;
+            	mOutputs = maybeOut;
             	return;
             }
 
