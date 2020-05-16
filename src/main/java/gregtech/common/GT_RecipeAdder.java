@@ -992,11 +992,8 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return true;
     }
 
-    public boolean addAutoclaveSpaceRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
-        return addAutoclaveSpaceRecipe(aInput, aFluid, aOutput, aChance, aDuration, aEUt);
-    }
     public boolean addAutoclaveSpaceRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt) {
-        return addAutoclaveSpaceRecipe(aInput, null, aFluid, aOutput, aChance, aDuration, aEUt, false);
+        return addAutoclaveSpaceRecipe(aInput, null, aFluid, aOutput, aChance, aDuration, aEUt,false);
     }
     public boolean addAutoclaveSpaceRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
         if ((aInput == null) || (aFluid == null) || (aOutput == null)) {
