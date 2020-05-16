@@ -1,5 +1,6 @@
 package gregtech.common.items;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -112,6 +113,7 @@ public class ItemDrop extends Item {
 		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("liquidoxygen"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 250, 1200,8);
 		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, new FluidStack(FluidRegistry.getFluid("ic2coolant"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 30);
 		tDrop = getStackForType(DropType.ENDERGOO);
+		if ( Loader.isModLoaded("HardcoreEnderExpansion"))
 		addProcessHV(tDrop, new FluidStack(FluidRegistry.getFluid("endergoo"), 500), GT_Values.NI ,1000);
 	}
 
