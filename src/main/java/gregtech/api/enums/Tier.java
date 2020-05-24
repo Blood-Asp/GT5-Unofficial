@@ -41,15 +41,24 @@ public class Tier {
             new Tier(SubTag.ENERGY_STEAM, 3, 512, 1, 1, 1, Materials.Titanium, OrePrefixes.frameGt.get(Materials.Titanium), OrePrefixes.pipeMedium.get(Materials.Titanium), OrePrefixes.pipeHuge.get(Materials.Titanium), OrePrefixes.pipeMedium.get(Materials.Titanium), OrePrefixes.pipeLarge.get(Materials.Titanium)),
             new Tier(SubTag.ENERGY_STEAM, 4, 2048, 1, 1, 1, Materials.TungstenSteel, OrePrefixes.frameGt.get(Materials.TungstenSteel), OrePrefixes.pipeMedium.get(Materials.TungstenSteel), OrePrefixes.pipeHuge.get(Materials.TungstenSteel), OrePrefixes.pipeMedium.get(Materials.TungstenSteel), OrePrefixes.pipeLarge.get(Materials.TungstenSteel)),
             new Tier(SubTag.ENERGY_STEAM, 5, 8192, 1, 1, 1, Materials.Iridium, OrePrefixes.frameGt.get(Materials.Iridium), OrePrefixes.pipeMedium.get(Materials.Iridium), OrePrefixes.pipeHuge.get(Materials.Iridium), OrePrefixes.pipeMedium.get(Materials.Iridium), OrePrefixes.pipeLarge.get(Materials.Iridium)),
-            new Tier(SubTag.ENERGY_STEAM, 9, Integer.MAX_VALUE-7, 1, 1, 1, Materials.Neutronium, OrePrefixes.frameGt.get(Materials.Neutronium), OrePrefixes.pipeMedium.get(Materials.Neutronium), OrePrefixes.pipeHuge.get(Materials.Neutronium), OrePrefixes.pipeMedium.get(Materials.Neutronium), OrePrefixes.pipeLarge.get(Materials.Neutronium)),
+            new Tier(SubTag.ENERGY_STEAM, 9, Integer.MAX_VALUE - 7, 1, 1, 1, Materials.Neutronium, OrePrefixes.frameGt.get(Materials.Neutronium), OrePrefixes.pipeMedium.get(Materials.Neutronium), OrePrefixes.pipeHuge.get(Materials.Neutronium), OrePrefixes.pipeMedium.get(Materials.Neutronium), OrePrefixes.pipeLarge.get(Materials.Neutronium)),
     };
     /**
      * Used for Crafting Recipes
      */
-    public final Object mHullObject, mConductingObject, mLargerConductingObject, mManagingObject, mBetterManagingObject;
+    public final Object
+            mHullObject,
+            mConductingObject,
+            mLargerConductingObject,
+            mManagingObject,
+            mBetterManagingObject;
     private final SubTag mType;
     private final byte mRank;
-    private final long mPrimaryValue, mSecondaryValue, mSpeedMultiplier, mEnergyCostMultiplier;
+    private final long
+            mPrimaryValue,
+            mSecondaryValue,
+            mSpeedMultiplier,
+            mEnergyCostMultiplier;
     private final Materials mMaterial;
 
     public Tier(SubTag aType, int aRank, long aPrimaryValue, long aSecondaryValue, long aSpeedMultiplier, long aEnergyCostMultiplier, Materials aMaterial, Object aHullObject, Object aConductingObject, Object aLargerConductingObject, Object aManagingObject, Object aBetterManagingObject) {

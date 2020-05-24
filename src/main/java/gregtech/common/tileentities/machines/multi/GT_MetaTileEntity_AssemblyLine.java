@@ -27,7 +27,7 @@ import static gregtech.GT_Mod.GT_FML_LOGGER;
 public class GT_MetaTileEntity_AssemblyLine
         extends GT_MetaTileEntity_MultiBlockBase {
 
-    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
+    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<>();
 
     public GT_MetaTileEntity_AssemblyLine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -44,22 +44,22 @@ public class GT_MetaTileEntity_AssemblyLine
     public String[] getDescription() {
         return new String[]{"Assembling Line",
                 "Size: 3x(5-16)x4, variable length",
-                "Bottom: Steel Machine Casing(or Maintenance or Input Hatch),",
-                "Input Bus (Last Output Bus), Steel Machine Casing",
-                "Middle: Reinforced Glass, Assembly Line, Reinforced Glass",
-                "UpMiddle: Grate Machine Casing,",
-                "    Assembler Machine Casing,",
-                "    Grate Machine Casing (or Controller or Data Access Hatch)",
-                "Top: Steel Casing(or Energy Hatch)",
-                "Up to 16 repeating slices, last is Output Bus",
-                "Optional 1x Data Access Hatch next to the Controller"};
+                "From Bottom to Top, Left to Right",
+                "Layer 1 - Solid Steel Machine Casing, Input Bus (last is Output Bus), Solid Steel Machine Casing",
+                "        - Casings can be replaced by Maint or Input Hatch",
+                "Layer 2 - Reinforced Glass, Assembling Line Casing, Reinforced Glass",
+                "Layer 3 - Grate Machine Casing, Assembler Machine Casing, Grate Machine Casing",
+                "Layer 4 - Empty, Solid Steel Machine Casing, Empty - Casing can be replaced by Energy Hatch",
+                "Up to 16 repeating slices, First replaces 1 Grate with Assembly Line,",
+                "Last has Output Bus instead of Input Bus",
+                "Optional - Replace 1x Grate with Data Access Hatch next to the Controller"};
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)};
+            return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][16], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE)};
         }
-        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[16]};
+        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][16]};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {

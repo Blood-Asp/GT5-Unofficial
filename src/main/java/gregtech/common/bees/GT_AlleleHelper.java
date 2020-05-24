@@ -9,6 +9,8 @@ import forestry.core.config.Constants;
 import forestry.core.genetics.alleles.*;
 import forestry.core.utils.vect.IVect;
 import forestry.plugins.PluginManager;
+import gregtech.GT_Mod;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public class GT_AlleleHelper extends AlleleHelper {
 
     private static final String modId = Constants.ID;
 
-    private final Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
+    private Map<Class, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
 
     public void init() {
         if (PluginManager.Module.APICULTURE.isEnabled()) {
@@ -114,20 +116,28 @@ public class GT_AlleleHelper extends AlleleHelper {
     }
 
     public static void initialisation(){
-        AlleleHelper.instance = new GT_AlleleHelper();
-        AlleleHelper.instance.init();
+        GT_AlleleHelper helper = new GT_AlleleHelper();
+
+        try {
+            helper.alleleMaps = (Map<Class, Map<?, ? extends IAllele>>) FieldUtils.readField(FieldUtils.getField(AlleleHelper.class,"alleleMaps",true),AlleleHelper.instance,true);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        AlleleHelper.instance = helper;
+        //AlleleHelper.instance.init();
     }
-
-
 
     @Override
     public <T extends Enum<T> & IChromosomeType> void set(IAllele[] alleles, T chromosomeType, IAllele allele) {
 
         if (allele == null) {
+            GT_Mod.GT_FML_LOGGER.info("Allele is null!");
             return;
         }
 
         if (!chromosomeType.getAlleleClass().isInstance(allele)) {
+            GT_Mod.GT_FML_LOGGER.info("chromosomeType is not an instance of allele!"+allele.getName());
             return;
         }
 

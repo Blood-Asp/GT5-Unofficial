@@ -2,7 +2,6 @@ package gregtech.api.metatileentity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IConnectable;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -838,4 +837,11 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
 	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
 	public boolean getGT6StyleConnection() { return false; }
+
+    public boolean shouldJoinIc2Enet() { return false; }
+
+    @Override
+    public boolean isMachineBlockUpdateRecursive() {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 package gregtech.common.items;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -111,7 +112,9 @@ public class ItemDrop extends Item {
 		tDrop = getStackForType(DropType.OXYGEN);
 		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("liquidoxygen"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 250, 1200,8);
 		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, new FluidStack(FluidRegistry.getFluid("ic2coolant"), 100), GT_ModHandler.getModItem("ExtraBees", "propolis", 1L, 2), 30);
-
+		tDrop = getStackForType(DropType.ENDERGOO);
+		if ( Loader.isModLoaded("HardcoreEnderExpansion"))
+		addProcessHV(tDrop, new FluidStack(FluidRegistry.getFluid("endergoo"), 500), GT_Values.NI ,1000);
 	}
 
 	public void addProcessLV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
@@ -121,7 +124,9 @@ public class ItemDrop extends Item {
 		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, aDuration, aEUt);
 	}
 	public void addProcessMV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance, int aEUt) {
-		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 64, aEUt);
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 128, aEUt);
 	}
-
+	public void addProcessHV(ItemStack tDrop, FluidStack aOutput, ItemStack aOutput2, int aChance) {
+		GT_Values.RA.addFluidExtractionRecipe(tDrop, aOutput2, aOutput, aChance, 480, 480);
+	}
 }

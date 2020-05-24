@@ -25,8 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
     public static GT_MetaGenerated_Item_01 INSTANCE;
@@ -186,7 +185,11 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         ItemList.Shape_Mold_Rod_Long.set(addItem(tLastID = 323, "Mold (Long Rod)", "Mold for making Long Rods", new Object[0]));
         ItemList.Shape_Mold_Rotor.set(addItem(tLastID = 324, "Mold (Rotor)", "Mold for making a Rotor", new Object[0]));
         ItemList.Shape_Mold_Turbine_Blade.set(addItem(tLastID = 325, "Mold (Turbine Blade)", "Mold for making a Turbine Blade", new Object[0]));
-
+        ItemList.Shape_Mold_Pipe_Tiny.set(addItem(tLastID = 326, "Mold (Tiny Pipe)", "Mold for making tiny Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Small.set(addItem(tLastID = 327, "Mold (Small Pipe)", "Mold for making small Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Medium.set(addItem(tLastID = 328, "Mold (Normal Pipe)", "Mold for making Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Large.set(addItem(tLastID = 329, "Mold (Large Pipe)", "Mold for making large Pipes", new Object[0]));
+        ItemList.Shape_Mold_Pipe_Huge.set(addItem(tLastID = 330, "Mold (Huge Pipe)", "Mold for making full Block Pipes", new Object[0]));
         GT_ModHandler.removeRecipe(new ItemStack[]{new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass), null, new ItemStack(Blocks.glass)});
 
         //GT_ModHandler.addCraftingRecipe(ItemList.Shape_Mold_Credit.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"h  ", aTextShape, aTextEmptyRow, 'P', ItemList.Shape_Empty});
@@ -301,7 +304,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Aluminium, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Silver, 4L), ItemList.Large_Fluid_Cell_Aluminium.get(1L, new Object[0]), 200, 64);
 
-        ItemList.Large_Fluid_Cell_StainlessSteel.set(addItem(tLastID = 408, "Large StainlessSteel Fluid Cell", "", new Object[]{new ItemData(Materials.StainlessSteel, OrePrefixes.plateDouble.mMaterialAmount * 4L, new MaterialStack(Materials.Electrum, OrePrefixes.ring.mMaterialAmount * 4L)), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}));
+        ItemList.Large_Fluid_Cell_StainlessSteel.set(addItem(tLastID = 408, "Large Stainless Steel Fluid Cell", "", new Object[]{new ItemData(Materials.StainlessSteel, OrePrefixes.plateDouble.mMaterialAmount * 4L, new MaterialStack(Materials.Electrum, OrePrefixes.ring.mMaterialAmount * 4L)), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 6L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}));
         setFluidContainerStats(32000 + tLastID, 64000L, 64L);
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.StainlessSteel, 4L), GT_OreDictUnificator.get(OrePrefixes.ring, Materials.Electrum, 4L), ItemList.Large_Fluid_Cell_StainlessSteel.get(1L, new Object[0]), 200, 120);
@@ -347,10 +350,10 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         addItemBehavior(32472, tBehaviour);
         addItemBehavior(32473, tBehaviour);
 
-        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Phosphor, 1L), ItemList.Tool_Matches.get(1L, new Object[0]), 16, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.Phosphorus, 1L), ItemList.Tool_Matches.get(1L, new Object[0]), 16, 16);
-        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 4L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Phosphor, 1L), ItemList.Tool_Matches.get(4L, new Object[0]), 64, 16);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 1L), GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.TricalciumPhosphate, 1L), ItemList.Tool_Matches.get(1L, new Object[0]), 16, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 4L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Phosphorus, 1L), ItemList.Tool_Matches.get(4L, new Object[0]), 64, 16);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Wood, 4L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.TricalciumPhosphate, 1L), ItemList.Tool_Matches.get(4L, new Object[0]), 64, 16);
         GT_Values.RA.addBoxingRecipe(ItemList.Tool_Matches.get(16L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.Paper, 1L), ItemList.Tool_MatchBox_Full.get(1L, new Object[0]), 64, 16);
         GT_Values.RA.addUnboxingRecipe(ItemList.Tool_MatchBox_Full.get(1L, new Object[0]), ItemList.Tool_Matches.get(16L, new Object[0]), null, 32, 16);
 
@@ -857,6 +860,12 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L, new Object[0]), 600, 24);
     }
 
+    private static final Map<Materials,Materials> cauldronRemap =new HashMap<>();
+
+    public static void registerCauldronCleaningFor(Materials in,Materials out){
+        cauldronRemap.put(in,out);
+    }
+
     public boolean onEntityItemUpdate(EntityItem aItemEntity) {
         int aDamage = aItemEntity.getEntityItem().getItemDamage();
         if ((aDamage < 32000) && (aDamage >= 0) && (!aItemEntity.worldObj.isRemote)) {
@@ -870,11 +879,14 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
+
+                        aMaterial= cauldronRemap.getOrDefault(aMaterial,aMaterial);
+
                         aItemEntity.setEntityItemStack(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, aItemEntity.getEntityItem().stackSize));
                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
                         return true;
                     }
-                }else if (aPrefix == OrePrefixes.crushed) {
+                } else if (aPrefix == OrePrefixes.crushed) {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {
@@ -882,7 +894,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
                         aItemEntity.worldObj.setBlockMetadataWithNotify(tX, tY, tZ, tMetaData - 1, 3);
                         return true;
                     }
-                }else if(aPrefix == OrePrefixes.dust && aMaterial == Materials.Wheat){
+                } else if(aPrefix == OrePrefixes.dust && aMaterial == Materials.Wheat) {
                     Block tBlock = aItemEntity.worldObj.getBlock(tX, tY, tZ);
                     byte tMetaData = (byte) aItemEntity.worldObj.getBlockMetadata(tX, tY, tZ);
                     if ((tBlock == Blocks.cauldron) && (tMetaData > 0)) {

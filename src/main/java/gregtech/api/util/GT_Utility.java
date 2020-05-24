@@ -6,10 +6,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.SubTag;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.*;
 import gregtech.api.events.BlockScanningEvent;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
@@ -18,6 +15,7 @@ import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.net.GT_Packet_Sound;
+import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
@@ -98,6 +96,7 @@ public class GT_Utility {
     public static boolean TE_CHECK = false, BC_CHECK = false, CHECK_ALL = true, RF_CHECK = false;
     public static Map<GT_PlayedSound, Integer> sPlayedSoundMap = new /*Concurrent*/HashMap<GT_PlayedSound, Integer>();
     private static int sBookCount = 0;
+    public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
@@ -784,9 +783,9 @@ public class GT_Utility {
         } catch (Exception e) {
             System.err.println(e);
         }
-        ItemStack rStack = ItemList.Display_Fluid.getWithDamage(aUseStackSize ? aFluid.amount / 1000 : 1, tmp);
+        ItemStack rStack = ItemList.Display_Fluid.getWithDamage(1, tmp);
         NBTTagCompound tNBT = new NBTTagCompound();
-        tNBT.setLong("mFluidDisplayAmount", aFluid.amount);
+        tNBT.setLong("mFluidDisplayAmount", aUseStackSize ? aFluid.amount : 0);
         tNBT.setLong("mFluidDisplayHeat", aFluid.getFluid().getTemperature(aFluid));
         tNBT.setBoolean("mFluidState", aFluid.getFluid().isGaseous(aFluid));
         rStack.setTagCompound(tNBT);
@@ -1131,7 +1130,16 @@ public class GT_Utility {
     }
 
     /**
-     * Initializes a new texture page.
+     * Initializes new empty texture page for casings
+     * page 0 is old CASING_BLOCKS
+     *
+     * Then casings should be registered like this:
+     * for (byte i = MIN_USED_META; i < MAX_USED_META; i = (byte) (i + 1)) {
+     *     Textures.BlockIcons.casingTexturePages[PAGE][i+START_INDEX] = new GT_CopiedBlockTexture(this, 6, i);
+     * }
+     *
+     * @param page 0 to 127
+     * @return true if it made empty page, false if one already existed...
      */
     public static boolean addTexturePage(byte page){
         if(Textures.BlockIcons.casingTexturePages[page]==null){
@@ -1139,6 +1147,68 @@ public class GT_Utility {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return texture id from page and index, for use when determining hatches, but can also be precomputed from:
+     * (page<<7)+index
+     * @param page 0 to 127 page
+     * @param index 0 to 127 texture index
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(byte page,byte index){
+        if(page>=0 && index>=0){
+            return (page<<7)+index;
+        }
+        throw new RuntimeException("Index out of range: ["+page+"]["+index+"]");
+    }
+
+    /**
+     * Return texture id from page and index, for use when determining hatches, but can also be precomputed from:
+     * (page<<7)+index
+     * @param page 0 to 127 page
+     * @param startIndex 0 to 127 start texture index
+     * @param blockMeta meta of the block
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(byte page,byte startIndex,byte blockMeta){
+        if(page>=0 && startIndex>=0 && blockMeta>=0 && (startIndex+blockMeta)<=127){
+            return (page<<7)+(startIndex+blockMeta);
+        }
+        throw new RuntimeException("Index out of range: ["+page+"]["+startIndex+"+"+blockMeta+"="+(startIndex+blockMeta)+"]");
+    }
+
+    /**
+     * Return texture id from item stack, unoptimized but readable?
+     * @return casing texture 0 to 16383
+     */
+    @Deprecated
+    public static int getTextureId(ItemStack stack){
+        return getTextureId(Block.getBlockFromItem(stack.getItem()),(byte)stack.getItemDamage());
+    }
+
+    /**
+     * Return texture id from item stack, unoptimized but readable?
+     * @return casing texture 0 to 16383
+     */
+    public static int getTextureId(Block blockFromBlock,byte metaFromBlock){
+        for (int page = 0; page < Textures.BlockIcons.casingTexturePages.length; page++) {
+            ITexture[] casingTexturePage = Textures.BlockIcons.casingTexturePages[page];
+            if(casingTexturePage!=null){
+                for (int index = 0; index < casingTexturePage.length; index++) {
+                    ITexture iTexture = casingTexturePage[index];
+                    if(iTexture instanceof GT_CopiedBlockTexture){
+                        Block block = ((GT_CopiedBlockTexture) iTexture).getBlock();
+                        byte meta = ((GT_CopiedBlockTexture) iTexture).getMeta();
+                        if(meta==metaFromBlock && blockFromBlock==block){
+                            return (page<<7)+index;
+                        }
+                    }
+                }
+            }
+        }
+        throw new RuntimeException("Probably missing mapping or different texture class used for: "+
+                blockFromBlock.getUnlocalizedName()+" meta:"+metaFromBlock);
     }
 
     /**
@@ -1977,7 +2047,7 @@ public class GT_Utility {
 
     public static FakePlayer getFakePlayer(IGregTechTileEntity aBaseMetaTileEntity) {
         if (aBaseMetaTileEntity.getWorld() instanceof WorldServer) {
-            return FakePlayerFactory.get((WorldServer) aBaseMetaTileEntity.getWorld(), new GameProfile(null, aBaseMetaTileEntity.getOwnerName()));
+            return FakePlayerFactory.get((WorldServer) aBaseMetaTileEntity.getWorld(), new GameProfile(aBaseMetaTileEntity.getOwnerUuid(), aBaseMetaTileEntity.getOwnerName()));
         }
         return null;
     }
@@ -2099,10 +2169,8 @@ public class GT_Utility {
                 ItemStack aStack,
                 int aX, short aY, int aZ, int aDim,
                 ArrayList<String> aOils,
-                ArrayList<String> aNearOres,
-                ArrayList<String> aMiddleOres,
-                ArrayList<String> aFarOres,
-                int aNear, int aMiddle, int aRadius) {
+                ArrayList<String> aOres,
+                int aRadius) {
 
             setBookTitle(aStack, "Raw Prospection Data");
 
@@ -2112,9 +2180,8 @@ public class GT_Utility {
             tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);
 
             // ores
-            tNBT.setString("prospection_near", joinListToString(aNearOres));
-            tNBT.setString("prospection_middle", joinListToString(aMiddleOres));
-            tNBT.setString("prospection_far", joinListToString(aFarOres));
+            Collections.sort(aOres);
+            tNBT.setString("prospection_ores", joinListToString(aOres));
 
             // oils
             ArrayList<String> tOilsTransformed = new ArrayList<String>(aOils.size());
@@ -2125,7 +2192,36 @@ public class GT_Utility {
             
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
-            tNBT.setString("prospection_bounds", aNear + "|" + aMiddle + "|" + aRadius);
+            String tOilsPosStr = "X: " + Math.floorDiv(aX, 16*8)*16*8 + " Z: " + Math.floorDiv(aZ, 16*8)*16*8 + "\n";
+            int xOff = aX - Math.floorDiv(aX, 16*8)*16*8;
+            xOff = xOff/16;
+            int xOffRemain = 7 - xOff;
+            
+            int zOff = aZ - Math.floorDiv(aZ, 16*8)*16*8;
+            zOff = zOff/16;
+            int zOffRemain = 7 - zOff;
+            
+            for( ; zOff > 0; zOff-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
+            for( ; xOff > 0; xOff-- ) {
+                tOilsPosStr = tOilsPosStr.concat("-");
+            }
+            
+            tOilsPosStr = tOilsPosStr.concat("P");
+            
+            for( ; xOffRemain > 0; xOffRemain-- ) {
+                tOilsPosStr = tOilsPosStr.concat("-");
+            }
+            tOilsPosStr = tOilsPosStr.concat("\n");
+            for( ; zOffRemain > 0; zOffRemain-- ) {
+                tOilsPosStr = tOilsPosStr.concat("--------\n");
+            }
+            tOilsPosStr = tOilsPosStr.concat( "            X: " + (Math.floorDiv(aX, 16*8) + 1)*16*8 + " Z: " + (Math.floorDiv(aZ, 16*8) + 1)*16*8 ); // +1 oilfied to find bottomright of [5]
+
+            tNBT.setString("prospection_oils_pos", tOilsPosStr);
+
+            tNBT.setString("prospection_radius", String.valueOf(aRadius));
 
             setNBT(aStack, tNBT);
         }
@@ -2150,50 +2246,47 @@ public class GT_Utility {
                 setNBT(aStack, tNBT);
             } else { // advanced prospection data
                 String tPos = tNBT.getString("prospection_pos");
-                String[] tBounds = tNBT.getString("prospection_bounds").split("\\|");
+                String tRadius = tNBT.getString("prospection_radius");
 
-                String tNearOresStr = tNBT.getString("prospection_near");
-                String tMiddleOresStr = tNBT.getString("prospection_middle");
-                String tFarOresStr = tNBT.getString("prospection_far");
+                String tOresStr = tNBT.getString("prospection_ores");
                 String tOilsStr = tNBT.getString("prospection_oils");
+                String tOilsPosStr = tNBT.getString("prospection_oils_pos");
 
-                String[] tNearOres = tNearOresStr.isEmpty() ? null : tNearOresStr.split("\\|");
-                String[] tMiddleOres = tMiddleOresStr.isEmpty() ? null : tMiddleOresStr.split("\\|");
-                String[] tFarOres = tFarOresStr.isEmpty() ? null : tFarOresStr.split("\\|");
+                String[] tOres = tOresStr.isEmpty() ? null : tOresStr.split("\\|");
                 String[] tOils = tOilsStr.isEmpty() ? null : tOilsStr.split("\\|");
 
                 NBTTagList tNBTList = new NBTTagList();
 
                 String tPageText = "Prospector report\n"
                     + tPos + "\n\n"
-                    + "Ores found:\n"
-                    + "Close <" + tBounds[0] + " blocks: " + (tNearOres != null ? tNearOres.length : 0) + "\n"
-                    + "Mid <" + tBounds[1] + " blocks: " + (tMiddleOres != null ? tMiddleOres.length : 0) + "\n"
-                    + "Far <" + tBounds[2] + " blocks: " + (tFarOres != null ? tFarOres.length : 0) + "\n"
                     + "Oils: " + (tOils != null ? tOils.length : 0) + "\n\n"
-                    + "Lists sorted by volume\n"
-                    + "Location is center of chunk with ore";
+                    + "Ores within " + tRadius + " blocks\n\n"
+                    + "Location is center of orevein\n\n"
+                    + "Check NEI to confirm orevein type";
                 tNBTList.appendTag(new NBTTagString(tPageText));
   
-                if (tNearOres != null)
-                    fillBookWithList(tNBTList, "Close Range Ores%s\n\n", "\n", 7, tNearOres);
-                if (tMiddleOres != null)
-                    fillBookWithList(tNBTList, "Mid Range Ores%s\n\n", "\n", 7, tMiddleOres);
-                if (tFarOres != null)
-                    fillBookWithList(tNBTList, "Far Range Ores%s\n\n", "\n", 7, tFarOres);
+                if (tOres != null)
+                    fillBookWithList(tNBTList, "Ores Found %s\n\n", "\n", 7, tOres);
+
                 
                if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
                 tPageText = "Oil notes\n\n"
-                        + "Prospects from NW to SE 324 chunks (9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
+                        + "Prospects from NW to SE 576 chunks"
+                        + "(9 8x8 oilfields)\n around and gives min-max amount" + "\n\n"
                         + "[1][2][3]" + "\n"
                         + "[4][5][6]" + "\n"
                         + "[7][8][9]" + "\n"
                         + "\n"
-                        + "[5] - Prospector";
+                        + "[5] - Prospector in this 8x8 area";
                 tNBTList.appendTag(new NBTTagString(tPageText));
 
+                tPageText = "Corners of [5] are \n" +
+                            tOilsPosStr + "\n" +
+                            "P - Prospector in 8x8 field";
+                tNBTList.appendTag(new NBTTagString(tPageText));
+                
                 tNBT.setString("author", tPos.replace("\n"," "));
                 tNBT.setTag("pages", tNBTList);
                 setNBT(aStack, tNBT);
@@ -2331,4 +2424,13 @@ public class GT_Utility {
         }
         return new String(chars);
     }
+
+    public static boolean isPartOfMaterials(ItemStack aStack, Materials aMaterials){
+        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mMaterial.mMaterial.equals(aMaterials) : false;
+    }
+
+    public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
+        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix) : false;
+    }
+
 }

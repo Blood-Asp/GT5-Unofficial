@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGearEnergyTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
 import net.minecraft.block.Block;
@@ -31,7 +32,7 @@ import java.util.List;
  * <p/>
  * Don't implement this yourself and expect it to work. Extend @MetaTileEntity itself.
  */
-public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHandler, IGearEnergyTileEntity {
+public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHandler, IGearEnergyTileEntity, IMachineBlockUpdateable {
     /**
      * This determines the BaseMetaTileEntity belonging to this MetaTileEntity by using the Meta ID of the Block itself.
      * <p/>
@@ -47,10 +48,10 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * 9 = BaseMetaPipeEntity, Cutter lvl 1 to dismantle
      * 10 = BaseMetaPipeEntity, Cutter lvl 2 to dismantle
      * 11 = BaseMetaPipeEntity, Cutter lvl 3 to dismantle
-     * 12 = BaseMetaPipeEntity, Axe lvl 0 to dismantle
-     * 13 = BaseMetaPipeEntity, Axe lvl 1 to dismantle
-     * 14 = BaseMetaPipeEntity, Axe lvl 2 to dismantle
-     * 15 = BaseMetaPipeEntity, Axe lvl 3 to dismantle
+     * 12 = GT++
+     * 13 = GT++
+     * 14 = GT++
+     * 15 = GT++
      */
     byte getTileEntityBaseType();
 
@@ -234,11 +235,6 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     boolean isAccessAllowed(EntityPlayer aPlayer);
 
     /**
-     * When a Machine Update occurs
-     */
-    void onMachineBlockUpdate();
-
-    /**
      * a Player rightclicks the Machine
      * Sneaky rightclicks are not getting passed to this!
      *
@@ -389,7 +385,7 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
     void onColorChangeClient(byte aColor);
 
     int getLightOpacity();
-    
+
     boolean allowGeneralRedstoneOutput();
 
     void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider);
@@ -402,8 +398,28 @@ public interface IMetaTileEntity extends ISidedInventory, IFluidTank, IFluidHand
      * The onCreated Function of the Item Class redirects here
      */
     void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer);
-    
+
     boolean hasAlternativeModeText();
-    
+
     String getAlternativeModeText();
+
+    boolean shouldJoinIc2Enet();
+
+    /**
+     * The Machine Update, which is called when the Machine needs an Update of its Parts.
+     * I suggest to wait 1-5 seconds before actually checking the Machine Parts.
+     * RP-Frames could for example cause Problems when you instacheck the Machine Parts.
+     *
+     * just do stuff since we are already in meta tile...
+     */
+    @Override
+    void onMachineBlockUpdate();
+
+    /**
+     * just return in should recurse since we are already in meta tile...
+     */
+    @Override
+    default boolean isMachineBlockUpdateRecursive(){
+        return true;
+    }
 }

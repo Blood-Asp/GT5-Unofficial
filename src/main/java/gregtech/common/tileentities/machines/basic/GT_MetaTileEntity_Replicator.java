@@ -14,15 +14,25 @@ import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 public class GT_MetaTileEntity_Replicator
         extends GT_MetaTileEntity_BasicMachine {
     private static int sHeaviestElementMass = 0;
+    public static final HashMap<Materials,Long> MASS_OVERRIDES =new HashMap<>();
+
+    static{
+        //put overrides here
+        //ex.
+        //MASS_OVERRIDES.put(Materials.get("cake"),Materials.get("cake").getMass());
+        //MASS_OVERRIDES.put(Materials.get("otherCake"),1235234L);
+        //MASS_OVERRIDES.put(Materials.Kalendrite,1235234L);
+        //MASS_OVERRIDES.put(Materials.Kalendrite,Materials.Kalendrite.getMass()*2);
+    }
 
     public GT_MetaTileEntity_Replicator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "Producing Elemental Matter", 1, 1, "Replicator.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR)});
+        super(aID, aName, aNameRegional, aTier, 1, "Producing Elemental Matter", 1, 1, "Replicator.png", "", new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR));
     }
 
     public GT_MetaTileEntity_Replicator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -37,13 +47,19 @@ public class GT_MetaTileEntity_Replicator
         return new GT_MetaTileEntity_Replicator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
+    public static final double EXPONENT = GregTech_API.sOPStuff.get("Replicator","Nerf Exponent", 1.2D);
+
+    public static long cubicFluidMultiplier(long amount){
+        return (long) Math.pow(amount, EXPONENT);
+    }
+
     public int checkRecipe() {
         FluidStack tFluid = getFillableStack();
         if ((tFluid != null) && (tFluid.isFluidEqual(Materials.UUMatter.getFluid(1L)))) {
             ItemStack tDataOrb = getSpecialSlot();
             if ((ItemList.Tool_DataOrb.isStackEqual(tDataOrb, false, true)) && (Behaviour_DataOrb.getDataTitle(tDataOrb).equals("Elemental-Scan"))) {
-                Materials tMaterial = (Materials) Element.get(Behaviour_DataOrb.getDataName(tDataOrb)).mLinkedMaterials.get(0);
-                long tMass = tMaterial.getMass();
+                Materials tMaterial = Element.get(Behaviour_DataOrb.getDataName(tDataOrb)).mLinkedMaterials.get(0);
+                long tMass = cubicFluidMultiplier(MASS_OVERRIDES.getOrDefault(tMaterial,tMaterial.getMass()));
                 if ((tFluid.amount >= tMass) && (tMass > 0L)) {
 
                     this.mEUt = GT_Utility.safeInt(gregtech.api.enums.GT_Values.V[this.mTier],1);
@@ -56,26 +72,22 @@ public class GT_MetaTileEntity_Replicator
                         if ((this.mOutputItems[0] = GT_OreDictUnificator.get(OrePrefixes.cell, tMaterial, 1L)) != null) {
                             if ((this.mOutputFluid = GT_Utility.getFluidForFilledItem(this.mOutputItems[0], true)) == null) {
                                 if (ItemList.Cell_Empty.isStackEqual(getInputAt(0))) {
-                                    if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
+                                    if (canOutput(this.mOutputItems[0])) {
                                         getInputAt(0).stackSize -= 1;
-                                        FluidStack
-                                                tmp231_230 = tFluid;
-                                        tmp231_230.amount = ((int) (tmp231_230.amount - tMass));
+                                        tFluid.amount = ((int) (tFluid.amount - tMass));
                                         return 2;
                                     }
                                 }
                             } else {
                                 this.mOutputItems[0] = null;
                                 if ((getDrainableStack() == null) || ((getDrainableStack().isFluidEqual(this.mOutputFluid)) && (getDrainableStack().amount < 16000))) {
-                                    FluidStack tmp287_286 = tFluid;
-                                    tmp287_286.amount = ((int) (tmp287_286.amount - tMass));
+                                    tFluid.amount = ((int) (tFluid.amount - tMass));
                                     return 2;
                                 }
                             }
                         }
-                    } else if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
-                        FluidStack tmp322_321 = tFluid;
-                        tmp322_321.amount = ((int) (tmp322_321.amount - tMass));
+                    } else if (canOutput(this.mOutputItems[0])) {
+                        tFluid.amount = ((int) (tFluid.amount - tMass));
                         return 2;
                     }
                 }
@@ -99,10 +111,9 @@ public class GT_MetaTileEntity_Replicator
 
     public int getCapacity() {
         if ((sHeaviestElementMass == 0) && (GregTech_API.sPostloadFinished)) {
-            Materials tMaterial;
-            for (Iterator i$ = Arrays.asList(Materials.values()).iterator(); i$.hasNext(); sHeaviestElementMass = Math.max(sHeaviestElementMass, (int) tMaterial.getMass())) {
-                tMaterial = (Materials) i$.next();
-            }
+            sHeaviestElementMass = Materials.getMaterialsMap().values().stream().mapToInt(material -> (int) cubicFluidMultiplier((int)material.getMass())).max().orElseThrow(NoSuchElementException::new);
+            //Make the Number nicer =)
+            sHeaviestElementMass = 1000 * (sHeaviestElementMass / 1000 + 1);
         }
         return sHeaviestElementMass;
     }

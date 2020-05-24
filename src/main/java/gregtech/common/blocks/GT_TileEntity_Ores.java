@@ -10,7 +10,6 @@ import gregtech.api.interfaces.tileentity.ITexturedTileEntity;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -200,6 +199,9 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
             return rList;
         }
         Materials aMaterial = GregTech_API.sGeneratedMaterials[(this.mMetaData % 1000)];
+
+        // Everyone gets a free small fortune boost
+        aFortune += 1;
         if (!this.mNatural) {
             aFortune = 0;
         }

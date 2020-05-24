@@ -33,7 +33,7 @@ public class GT_MetaPipeEntity_Frame extends MetaPipeEntity {
 
     @Override
     public byte getTileEntityBaseType() {
-        return mMaterial == null ? 4 : (byte) ((mMaterial.contains(SubTag.WOOD) ? 12 : 4) + Math.max(0, Math.min(3, mMaterial.mToolQuality)));
+        return (byte) (mMaterial == null ? 4 : (byte) (4) + Math.max(0, Math.min(3, mMaterial.mToolQuality)));
     }
 
     @Override
@@ -97,4 +97,9 @@ public class GT_MetaPipeEntity_Frame extends MetaPipeEntity {
 
     @Override
     public void disconnect(byte aSide) {/* Do nothing*/}
+
+    @Override
+    public boolean isMachineBlockUpdateRecursive() {
+        return true;
+    }
 }

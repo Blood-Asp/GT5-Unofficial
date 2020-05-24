@@ -1,7 +1,6 @@
 package gregtech.loaders.preload;
 
 import codechicken.nei.api.API;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
@@ -83,6 +82,8 @@ public class GT_Loader_Item_Block_And_Fluid
         ItemList.Rotor_EV.set(GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.StainlessSteel, 1L));
         ItemList.Rotor_IV.set(GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.TungstenSteel, 1L));
 
+        ItemList.VOLUMETRIC_FLASK.set(new GT_VolumetricFlask("Volumetric_Flask", "Volumetric flask", 1000));
+
         Item tItem = (Item) GT_Utility.callConstructor("gregtech.common.items.GT_SensorCard_Item", 0, null, false, new Object[]{"sensorcard", "GregTech Sensor Card"});
         ItemList.NC_SensorCard.set(tItem == null ? new GT_Generic_Item("sensorcard", "GregTech Sensor Card", "Nuclear Control not installed", false) : tItem);
 
@@ -107,6 +108,16 @@ public class GT_Loader_Item_Block_And_Fluid
 
         ItemList.Reactor_Coolant_NaK_6.set(GregTech_API.constructCoolantCellItem("360k_NaK_Coolantcell", "360k NaK Coolantcell", 360000));
         GT_ModHandler.addCraftingRecipe(ItemList.Reactor_Coolant_NaK_6.get(1L, new Object[0]), GT_ModHandler.RecipeBits.BUFFERED | GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"PCP", "PDP", "PCP", 'C', ItemList.Reactor_Coolant_NaK_3, 'P', OrePrefixes.plate.get(Materials.Tin), 'D', OrePrefixes.plateDense.get(Materials.Copper)});
+        
+        ItemList.Reactor_Coolant_Sp_1.set(GregTech_API.constructCoolantCellItem("180k_Space_Coolantcell", "180k Sp Coolant Cell", 180000));
+        
+        ItemList.Reactor_Coolant_Sp_2.set(GregTech_API.constructCoolantCellItem("360k_Space_Coolantcell", "360k Sp Coolant Cell", 360000));
+        
+        ItemList.Reactor_Coolant_Sp_3.set(GregTech_API.constructCoolantCellItem("540k_Space_Coolantcell", "540k Sp Coolant Cell", 540000));
+        
+        ItemList.Reactor_Coolant_Sp_6.set(GregTech_API.constructCoolantCellItem("1080k_Space_Coolantcell", "1080k Sp Coolant Cell", 1080000));
+        
+        
         if (!GregTech_API.mIC2Classic) {
             ItemList.neutroniumHeatCapacitor.set(GregTech_API.constructCoolantCellItem("neutroniumHeatCapacitor", "1G Neutronium Heat Capacitor", 1000000000));
 
@@ -212,11 +223,11 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockConcretes = new GT_Block_Concretes();
         GregTech_API.sBlockStones = new GT_Block_Stones();
         GregTech_API.sBlockOres1 = new GT_Block_Ores();
-        if (Loader.isModLoaded("UndergroundBiomes")) {
-            GregTech_API.sBlockOresUb1 = new GT_Block_Ores_UB1();
-            GregTech_API.sBlockOresUb2 = new GT_Block_Ores_UB2();
-            GregTech_API.sBlockOresUb3 = new GT_Block_Ores_UB3();
-        }
+//        if (Loader.isModLoaded("UndergroundBiomes")) {
+//            GregTech_API.sBlockOresUb1 = new GT_Block_Ores_UB1();
+//            GregTech_API.sBlockOresUb2 = new GT_Block_Ores_UB2();
+//            GregTech_API.sBlockOresUb3 = new GT_Block_Ores_UB3();
+//        }
         //if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
         //    GregTech_API.sBlockOresGC = new GT_Block_Ores_GC();
         //}
@@ -367,6 +378,7 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.HSSS,
                 Materials.Steeleaf,
                 Materials.Ichorium,
+                Materials.Firestone,
         }, OrePrefixes.block, gregtech.api.enums.Textures.BlockIcons.STORAGE_BLOCKS8);
 
         GregTech_API.sBlockGem1 = new GT_Block_Metal("gt.blockgem1", new Materials[]{
@@ -397,7 +409,7 @@ public class GT_Loader_Item_Block_And_Fluid
                 Materials.Opal,
                 Materials.InfusedOrder,
                 Materials.InfusedEntropy,
-                Materials.Phosphorus,
+                Materials.TricalciumPhosphate,
                 Materials.Quartzite,
                 Materials.GarnetRed,
                 Materials.Ruby,

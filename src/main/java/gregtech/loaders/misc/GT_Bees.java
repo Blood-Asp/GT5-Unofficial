@@ -11,9 +11,10 @@ import gregtech.common.items.ItemComb;
 import gregtech.common.items.ItemDrop;
 import gregtech.common.items.ItemPollen;
 import gregtech.common.items.ItemPropolis;
-import gregtech.loaders.misc.GT_BeeDefinition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+
+import static gregtech.api.enums.GT_Values.MOD_ID_FR;
 
 public class GT_Bees {
 
@@ -39,7 +40,7 @@ public class GT_Bees {
     public static ItemComb combs;
 
     public GT_Bees() {
-        if (Loader.isModLoaded("Forestry") && GT_Mod.gregtechproxy.mGTBees) {
+        if (Loader.isModLoaded(MOD_ID_FR) && GT_Mod.gregtechproxy.mGTBees) {
             GT_AlleleHelper.initialisation();
             setupGTAlleles();
             propolis = new ItemPropolis();
@@ -70,7 +71,6 @@ public class GT_Bees {
 
         blinkLife = new AlleleInteger("lifeBlink", 2, false, EnumBeeChromosome.LIFESPAN);
         superLife = new AlleleInteger("lifeEon", 600, false, EnumBeeChromosome.LIFESPAN);
-
 
     }
 

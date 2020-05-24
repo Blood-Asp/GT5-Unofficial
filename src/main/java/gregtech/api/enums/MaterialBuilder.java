@@ -7,7 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MaterialBuilder {
-	public static final int DIESEL = 0, GAS = 1, THERMAL = 2, SEMIFLUID = 3, PLASMA = 4, MAGIC = 5;
+	public static final int
+			DIESEL = 0,
+			GAS = 1,
+			THERMAL = 2,
+			SEMIFLUID = 3,
+			PLASMA = 4,
+			MAGIC = 5;
 
 	private int metaItemSubID;
 	private TextureSet iconSet;
@@ -29,8 +35,8 @@ public class MaterialBuilder {
 	private int densityDivider = 1;
 	private Dyes color = Dyes._NULL;
 	private int extraData = 0;
-	private List<MaterialStack> materialList = new ArrayList<MaterialStack>();
-	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<TC_Aspects.TC_AspectStack>();
+	private List<MaterialStack> materialList = new ArrayList<>();
+	private List<TC_Aspects.TC_AspectStack> aspects = new ArrayList<>();
 	private boolean hasCorrespondingFluid = false;
 	private boolean hasCorrespondingGas = false;
 	private boolean canBeCracked = false;
@@ -112,7 +118,6 @@ public class MaterialBuilder {
 		this.hasCorrespondingGas = true;
 		return this;
 	}
-
 
 	public MaterialBuilder setRGBA(int r, int g, int b, int a){
 		this.r = r;

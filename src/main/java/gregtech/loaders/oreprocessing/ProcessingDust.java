@@ -3,10 +3,7 @@ package gregtech.loaders.oreprocessing;
 import gregtech.GT_Mod;
 import gregtech.api.enums.*;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_RecipeRegistrator;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -52,7 +49,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     if ((!OrePrefixes.block.isIgnored(aMaterial)) && (null == GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 1L))) {
                         GT_ModHandler.addCompressionRecipe(GT_Utility.copyAmount(9L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L));
                     }
-                    if (((OrePrefixes.block.isIgnored(aMaterial)) || (null == GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L))) && (aMaterial != Materials.GraniteRed) && (aMaterial != Materials.GraniteBlack) && (aMaterial != Materials.Glass) && (aMaterial != Materials.Obsidian) && (aMaterial != Materials.Glowstone) && (aMaterial != Materials.Paper)) {
+                    if (((OrePrefixes.block.isIgnored(aMaterial)) || (null == GT_OreDictUnificator.get(OrePrefixes.block, aMaterial, 1L))) && (aMaterial != Materials.GraniteRed) && (aMaterial != Materials.GraniteBlack) && (aMaterial != Materials.Basalt) && (aMaterial != Materials.Marble) && (aMaterial != Materials.Glass) && (aMaterial != Materials.Obsidian) && (aMaterial != Materials.Glowstone) && (aMaterial != Materials.Paper)) {
                         GT_ModHandler.addCompressionRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 1L));
                     }
                 }
@@ -147,6 +144,9 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     //case "YellowLimonite": case "BrownLimonite": case "BandedIron":
                     //    GT_ModHandler.addSmeltingRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L));
                     //    break;
+                    case "Oilsands":
+                        GT_Recipe.GT_Recipe_Map.sCentrifugeRecipes.addRecipe(true,new ItemStack[]{GT_Utility.copyAmount(1L, new Object[]{aStack})},null,null,null,new FluidStack[]{Materials.OilHeavy.getFluid(1000)},660,8,0);
+                        break;
                     case "Coal":
                         if (GT_Mod.gregtechproxy.mTEMachineRecipes)
                             GT_ModHandler.addLiquidTransposerFillRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), Materials.Water.getFluid(125L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.HydratedCoal, 1L), 125);
@@ -159,7 +159,7 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     case "Diamond":
                         GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), 32, ItemList.IC2_Industrial_Diamond.get(3L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 16L));
                         break;
-                    case "Opal": case "Olivine": case "Emerald": case "Ruby": case "Sapphire": case "GreenSapphire": case "Topaz": case "BlueTopaz": case "Tanzanite":
+                    case "Opal": case "Olivine": case "Emerald": case "Ruby": case "Sapphire": case "GreenSapphire": case "Topaz": case "BlueTopaz": case "Tanzanite": case "Amethyst":
                         GT_Values.RA.addImplosionRecipe(GT_Utility.copyAmount(4L, new Object[]{aStack}), 24, GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 3L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 12L));
                         break;
                     case "FoolsRuby": case "GarnetRed": case "GarnetYellow": case "Jasper": case "Amber": case "Monazite": case "Forcicium": case "Forcillium": case "Force":

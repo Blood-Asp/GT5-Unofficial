@@ -67,9 +67,9 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[11], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)};
+            return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][11], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)};
         }
-        return new ITexture[]{Textures.BlockIcons.CASING_BLOCKS[11]};
+        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][11]};
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -242,10 +242,10 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
                 this.mHeatingCapacity = 9001;
                 break;
             case 7:
-                this.mHeatingCapacity = 12001;
+                this.mHeatingCapacity = 9901;
                 break;
             case 8:
-                this.mHeatingCapacity = 15001;
+                this.mHeatingCapacity = 10801;
                 break;
             default:
                 return false;

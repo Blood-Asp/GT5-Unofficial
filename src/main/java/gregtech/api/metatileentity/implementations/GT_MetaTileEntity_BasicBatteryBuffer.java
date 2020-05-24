@@ -240,6 +240,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
                     mChargeableCount++;
                 }
         }
+        count++;
     }
 
     @Override
@@ -269,7 +270,7 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
         }
         return false;
     }
-    
+
     @Override
     public int getInventoryStackLimit() {
         return 1;
@@ -309,19 +310,22 @@ public class GT_MetaTileEntity_BasicBatteryBuffer extends GT_MetaTileEntity_Tier
 
     @Override
     public String[] getInfoData() {
-        count++;
-        if (mMax == 0 || count % 20 == 0) {
+        if (mMax == 0 || (count > 20)) {
             long[] tmp = getStoredEnergy();
             mStored = tmp[0];
             mMax = tmp[1];
+            count = 0;
         }
 
         return new String[]{
                 EnumChatFormatting.BLUE+getLocalName()+EnumChatFormatting.RESET,
                 "Stored Items:",
                 EnumChatFormatting.GREEN+GT_Utility.formatNumbers(mStored) +EnumChatFormatting.RESET+ " EU / "+
-                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU"
-        };
+                EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(mMax) +EnumChatFormatting.RESET+ " EU",
+                "Average input:",
+                GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput())+" EU/t",
+                "Average output:",
+                GT_Utility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput())+" EU/t"};
     }
 
     @Override

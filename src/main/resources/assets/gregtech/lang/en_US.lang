@@ -30,6 +30,20 @@ GT5U.EBF.heat=Heat capacity
 GT5U.MS.multismelting=Multi smelting
 
 GT5U.machines.tier=Tier
+GT5U.machines.workarea=Work Area
+GT5U.machines.workareaset=Work Area set to
+GT5U.machines.radius=radius
+GT5U.machines.blocks=Blocks
+GT5U.machines.chunks=Chunks
+GT5U.machines.miner=Miner
+GT5U.machines.pump=Pump
+GT5U.machines.separatebus=Input busses are separated
+GT5U.machines.pumpareaset=Pumping area set to
+GT5U.machines.oilfluidpump=Oil/Fluid Pump
+GT5U.machines.minermulti=Multiblock Miner
+
+
+
 
 GT5U.multiblock.pollution=Pollution reduced to
 GT5U.multiblock.energy=Stored Energy
@@ -202,8 +216,8 @@ achievement.Olivine=Find Olivine Ore
 achievement.Olivine.desc=Height: 10-40, Chance: 60,  Twilight-Forest/Makemake/Haumea/BarnardE//
 achievement.Apatite=Find Apatite Ore
 achievement.Apatite.desc=Height: 40-60, Chance: 60, Overworld/Twilight-Forest/Tceti//
-achievement.Phosphorus=Find Phosphorus Ore
-achievement.Phosphorus.desc=Height: 40-60, Chance: 60, Overworld/Twilight-Forest/Tceti//
+achievement.TricalciumPhosphate=Find TricalciumPhosphate Ore
+achievement.TricalciumPhosphate.desc=Height: 40-60, Chance: 60, Overworld/Twilight-Forest/Tceti//
 achievement.Phosphate=Find Phosphate Ore
 achievement.Phosphate.desc=Height: 40-60, Chance: 60, Overworld/Twilight-Forest/Tceti//
 achievement.Galena=Find Galena Ore
@@ -242,8 +256,6 @@ achievement.InfusedOrder=Find Order Infused Ore
 achievement.InfusedOrder.desc=Height: 5-35, Chance: 16, Twilight-Forest//
 achievement.Amber=Find Amber Ore
 achievement.Amber.desc=Height: 5-35, Chance: 16, Twilight-Forest//
-achievement.Cinnabar=Find Cinnabar Ore
-achievement.Cinnabar.desc=Height: 5-35, Chance: 16, Twilight-Forest//
 achievement.Uvarovite=Find Uvarovite Ore
 achievement.Uvarovite.desc=Height: 10-200, Chance: 16, Moon/Ganymed/Asteroids/Callisto/Mercury/Titan/Miranda/Proteus/Pluto/Tceti//
 achievement.Chromite=Find Chromite Ore
@@ -561,7 +573,7 @@ achievement.filterregulate=Filter and Regulate
 achievement.filterregulate.desc=Get an Item Filter
 achievement.steampower=Steampower
 achievement.steampower.desc=Craft a Basic Steam Turbine
-achievement.batterys=Batterys
+achievement.batterys=Batteries
 achievement.batterys.desc=Craft a Battery Buffer
 achievement.badweather=Bad Weather
 achievement.badweather.desc=Forget to build a Roof above your Machines
@@ -569,7 +581,7 @@ achievement.electricproblems=Electric Problems
 achievement.electricproblems.desc=Lose a Machine due to Overvoltage
 achievement.ebf=Electric Blast Furnace
 achievement.ebf.desc=Craft an Electric Blast Furnace
-achievement.energyhatch=You need 2 of them (3 if you did not fully fixed it)
+achievement.energyhatch=You need 2 of them (3 if the EBF has maintenance issues)
 achievement.energyhatch.desc=Craft a LV Energy Hatch
 achievement.gtaluminium=Aluminium
 achievement.gtaluminium.desc=Produce an Aluminium Ingot
@@ -977,8 +989,26 @@ for.bees.species.vegab=VegaB
 for.bees.species.cosmicneutronium=Cosmic Neutronium
 for.bees.species.infinitycatalyst=Infinity Catalyst
 for.bees.species.infinity=Infinity
+for.bees.species.enddust=End Dust
+for.bees.species.stardust=Stardust
+for.bees.species.ectoplasma=Ectoplasma
+for.bees.species.arcaneshard=Arcaneshard
+for.bees.species.dragonessence=Dragon Essence
+for.bees.species.enderman=Enderman
+for.bees.species.silverfish=Silverfish
 
 for.mutation.condition.biomeid=Required Biome
 for.mutation.condition.dim=Required Dimension
 
 itemGroup.GTtools=Prebuild Tools
+
+gregtech.fertilitySterile=Sterile
+gregtech.fertilityMultiply=Multiply
+gregtech.floweringNonpollinating=Non pollinating
+gregtech.floweringNaturalistic=Naturalistic
+gregtech.areaLethargic=Lethargic
+gregtech.areaExploratory=Exploratory
+gregtech.speedUnproductive=Unproductive
+gregtech.speedAccelerated=Accelerated
+gregtech.lifeBlink=Blink 
+gregtech.lifeEon=Eon

@@ -16,6 +16,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -209,8 +210,13 @@ public class GT_NEI_DefaultHandler
 				drawText(10, 73, trans("152","Total: ") + ((long)tDuration * tEUt) + " EU", -16777216);
 				drawText(10, 83, trans("153","Usage: ") + tEUt + " EU/t", -16777216);
 				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-					drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
-					drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
+                    byte tier=GT_Utility.getTier(tEUt / this.mRecipeMap.mAmperage);
+                    if(tier<0||tier>=16){
+                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", 0xffFF0000);
+//add here gt logger
+                    }else{
+                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU ("+GT_Values.VN[tier]+")", -16777216);
+                    }drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
 				} else {
 					drawText(10, 93, trans("156","Voltage: unspecified"), -16777216);
 					drawText(10, 103, trans("157","Amperage: unspecified"), -16777216);
@@ -224,6 +230,8 @@ public class GT_NEI_DefaultHandler
 				drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
 			} else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
 				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
+            } else if (tSpecial == -201) {
+                drawText(10, 123, trans("206","Scan for Assembly Line"), -16777216);
             } else if (tSpecial == -300 && GT_Mod.gregtechproxy.mEnableCleanroom) {
                 drawText(10, 123, trans("160","Needs Cleanroom & LowGrav"), -16777216);
             } else if (tSpecial == -400) {
@@ -376,10 +384,27 @@ public class GT_NEI_DefaultHandler
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
+			List<PositionedStack> maybeIn; 
+			List<PositionedStack> maybeOut;
 			
-            if (aRecipe.getInputPositionedStacks() != null && aRecipe.getOutputPositionedStacks() != null) {
-            	mInputs = aRecipe.getInputPositionedStacks();
-            	mOutputs = aRecipe.getOutputPositionedStacks();
+			try {
+                maybeIn = aRecipe.getInputPositionedStacks();
+            } catch(NullPointerException npe) {
+			    maybeIn = null;
+			    GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe.toString());
+                npe.printStackTrace(GT_Log.err);
+            }
+			try {
+                maybeOut = aRecipe.getOutputPositionedStacks();
+            } catch (NullPointerException npe) {
+			    maybeOut = null;
+                GT_Log.err.println("CachedDefaultRecipe - Invalid OutputPositionedStacks " + aRecipe.toString());
+                npe.printStackTrace(GT_Log.err);
+            }
+			
+            if ( maybeIn != null && maybeOut != null) {
+            	mInputs = maybeIn;
+            	mOutputs = maybeOut;
             	return;
             }
 

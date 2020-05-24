@@ -49,14 +49,16 @@ import static gregtech.api.enums.GT_Values.*;
  *
  * @author Gregorius Techneticies
  */
+@SuppressWarnings("ALL")
 public class GregTech_API {
+
     @Deprecated
     public static final long MATERIAL_UNIT = M, FLUID_MATERIAL_UNIT = L;
     /**
      * Fixes the HashMap Mappings for ItemStacks once the Server started
      */
-    public static final Collection<Map<GT_ItemStack, ?>> sItemStackMappings = new ArrayList<Map<GT_ItemStack, ?>>();
-    public static final Collection<Map<Fluid, ?>> sFluidMappings = new ArrayList<Map<Fluid, ?>>();
+    public static final Collection<Map<GT_ItemStack, ?>> sItemStackMappings = new ArrayList<>();
+    public static final Collection<Map<Fluid, ?>> sFluidMappings = new ArrayList<>();
     /**
      * The MetaTileEntity-ID-List-Length
      */
@@ -64,7 +66,10 @@ public class GregTech_API {
     /**
      * My Creative Tab
      */
-    public static final CreativeTabs TAB_GREGTECH = new GT_CreativeTab("Main", "Main"), TAB_GREGTECH_MATERIALS = new GT_CreativeTab("Materials", "Materials"), TAB_GREGTECH_ORES = new GT_CreativeTab("Ores", "Ores");
+    public static final CreativeTabs
+            TAB_GREGTECH = new GT_CreativeTab("Main", "Main"),
+            TAB_GREGTECH_MATERIALS = new GT_CreativeTab("Materials", "Materials"),
+            TAB_GREGTECH_ORES = new GT_CreativeTab("Ores", "Ores");
     /**
      * A List of all registered MetaTileEntities
      * <p/>
@@ -94,53 +99,68 @@ public class GregTech_API {
     /**
      * The Icon List for Covers
      */
-    public static final Map<GT_ItemStack, ITexture> sCovers = new ConcurrentHashMap<GT_ItemStack, ITexture>();
+    public static final Map<GT_ItemStack, ITexture> sCovers = new ConcurrentHashMap<>();
     /**
      * The List of Cover Behaviors for the Covers
      */
-    public static final Map<GT_ItemStack, GT_CoverBehavior> sCoverBehaviors = new ConcurrentHashMap<GT_ItemStack, GT_CoverBehavior>();
+    public static final Map<GT_ItemStack, GT_CoverBehavior> sCoverBehaviors = new ConcurrentHashMap<>();
     /**
      * The List of Circuit Behaviors for the Redstone Circuit Block
      */
-    public static final Map<Integer, GT_CircuitryBehavior> sCircuitryBehaviors = new ConcurrentHashMap<Integer, GT_CircuitryBehavior>();
+    public static final Map<Integer, GT_CircuitryBehavior> sCircuitryBehaviors = new ConcurrentHashMap<>();
     /**
      * The List of Blocks, which can conduct Machine Block Updates
      */
-    public static final Map<Block, Integer> sMachineIDs = new ConcurrentHashMap<Block, Integer>();
+    public static final Map<Block, Integer> sMachineIDs = new ConcurrentHashMap<>();
     /**
      * The Redstone Frequencies
      */
-    public static final Map<Integer, Byte> sWirelessRedstone = new ConcurrentHashMap<Integer, Byte>();
+    public static final Map<Integer, Byte> sWirelessRedstone = new ConcurrentHashMap<>();
     /**
      * The IDSU Frequencies
      */
-    public static final Map<Integer, Integer> sIDSUList = new ConcurrentHashMap<Integer, Integer>();
+    public static final Map<Integer, Integer> sIDSUList = new ConcurrentHashMap<>();
     /**
      * A List of all Books, which were created using @GT_Utility.getWrittenBook the original Title is the Key Value
      */
-    public static final Map<String, ItemStack> sBookList = new ConcurrentHashMap<String, ItemStack>();
+    public static final Map<String, ItemStack> sBookList = new ConcurrentHashMap<>();
     /**
      * The List of all Sounds used in GT, indices are in the static Block at the bottom
      */
-    public static final Map<Integer, String> sSoundList = new ConcurrentHashMap<Integer, String>();
+    public static final Map<Integer, String> sSoundList = new ConcurrentHashMap<>();
     /**
      * The List of Tools, which can be used. Accepts regular damageable Items and Electric Items
      */
-    public static final GT_HashSet<GT_ItemStack> sToolList = new GT_HashSet<GT_ItemStack>(), sCrowbarList = new GT_HashSet<GT_ItemStack>(), sScrewdriverList = new GT_HashSet<GT_ItemStack>(), sWrenchList = new GT_HashSet<GT_ItemStack>(), sSoftHammerList = new GT_HashSet<GT_ItemStack>(), sHardHammerList = new GT_HashSet<GT_ItemStack>(), sWireCutterList = new GT_HashSet<GT_ItemStack>(), sSolderingToolList = new GT_HashSet<GT_ItemStack>(), sSolderingMetalList = new GT_HashSet<GT_ItemStack>();
+    public static final GT_HashSet<GT_ItemStack>
+            sToolList = new GT_HashSet<>(),
+            sCrowbarList = new GT_HashSet<>(),
+            sScrewdriverList = new GT_HashSet<>(),
+            sWrenchList = new GT_HashSet<>(),
+            sSoftHammerList = new GT_HashSet<>(),
+            sHardHammerList = new GT_HashSet<>(),
+            sWireCutterList = new GT_HashSet<>(),
+            sSolderingToolList = new GT_HashSet<>(),
+            sSolderingMetalList = new GT_HashSet<>();
     /**
      * The List of Hazmat Armors
      */
-    public static final GT_HashSet<GT_ItemStack> sGasHazmatList = new GT_HashSet<GT_ItemStack>(), sBioHazmatList = new GT_HashSet<GT_ItemStack>(), sFrostHazmatList = new GT_HashSet<GT_ItemStack>(), sHeatHazmatList = new GT_HashSet<GT_ItemStack>(), sRadioHazmatList = new GT_HashSet<GT_ItemStack>(), sElectroHazmatList = new GT_HashSet<GT_ItemStack>();
+    public static final GT_HashSet<GT_ItemStack>
+            sGasHazmatList = new GT_HashSet<>(),
+            sBioHazmatList = new GT_HashSet<>(),
+            sFrostHazmatList = new GT_HashSet<>(),
+            sHeatHazmatList = new GT_HashSet<>(),
+            sRadioHazmatList = new GT_HashSet<>(),
+            sElectroHazmatList = new GT_HashSet<>();
     /**
      * The List of Dimensions, which are Whitelisted for the Teleporter. This list should not contain other Planets.
      * Mystcraft Dimensions and other Dimensional Things should be allowed.
      * Mystcraft and Twilight Forest are automatically considered a Dimension, without being in this List.
      */
-    public static final Collection<Integer> sDimensionalList = new HashSet<Integer>();
+    public static final Collection<Integer> sDimensionalList = new HashSet<>();
     /**
      * Lists of all the active World generation Features, these are getting Initialized in Postload!
      */
-    public static final List<GT_Worldgen> sWorldgenList = new ArrayList<GT_Worldgen>();
+    public static final List<GT_Worldgen> sWorldgenList = new ArrayList<>();
     /**
      * A List containing all the Materials, which are somehow in use by GT and therefor receive a specific Set of Items.
      */
@@ -148,11 +168,14 @@ public class GregTech_API {
     /**
      * This is the generic Cover behavior. Used for the default Covers, which have no Behavior.
      */
-    public static final GT_CoverBehavior sDefaultBehavior = new GT_Cover_Default(), sNoBehavior = new GT_Cover_None();
+    public static final GT_CoverBehavior
+            sDefaultBehavior = new GT_Cover_Default(),
+            sNoBehavior = new GT_Cover_None();
     /**
      * For the API Version check
      */
     public static volatile int VERSION = 509;
+
     @Deprecated
     public static IGT_RecipeAdder sRecipeAdder;
     /**
@@ -162,49 +185,117 @@ public class GregTech_API {
     /**
      * These Lists are getting executed at their respective timings. Useful if you have to do things right before/after I do them, without having to control the load order. Add your "Commands" in the Constructor or in a static Code Block of your Mods Main Class. These are not Threaded, I just use a native Java Interface for their execution. Implement just the Method run() and everything should work
      */
-    public static List<Runnable> sBeforeGTPreload = new ArrayList<Runnable>(), sAfterGTPreload = new ArrayList<Runnable>(), sBeforeGTLoad = new ArrayList<Runnable>(), sAfterGTLoad = new ArrayList<Runnable>(), sBeforeGTPostload = new ArrayList<Runnable>(), sAfterGTPostload = new ArrayList<Runnable>(), sBeforeGTServerstart = new ArrayList<Runnable>(), sAfterGTServerstart = new ArrayList<Runnable>(), sBeforeGTServerstop = new ArrayList<Runnable>(), sAfterGTServerstop = new ArrayList<Runnable>(), sGTBlockIconload = new ArrayList<Runnable>(), sGTItemIconload = new ArrayList<Runnable>();
+    public static List<Runnable>
+            sBeforeGTPreload = new ArrayList<>(),
+            sAfterGTPreload = new ArrayList<>(),
+            sBeforeGTLoad = new ArrayList<>(),
+            sAfterGTLoad = new ArrayList<>(),
+            sBeforeGTPostload = new ArrayList<>(),
+            sAfterGTPostload = new ArrayList<>(),
+            sBeforeGTServerstart = new ArrayList<>(),
+            sAfterGTServerstart = new ArrayList<>(),
+            sBeforeGTServerstop = new ArrayList<>(),
+            sAfterGTServerstop = new ArrayList<>(),
+            sGTBlockIconload = new ArrayList<>(),
+            sGTItemIconload = new ArrayList<>();
     /**
      * The Icon Registers from Blocks and Items. They will get set right before the corresponding Icon Load Phase as executed in the Runnable List above.
      */
     @SideOnly(Side.CLIENT)
-    public static IIconRegister sBlockIcons, sItemIcons;
+    public static IIconRegister
+            sBlockIcons,
+            sItemIcons;
     /**
      * The Configuration Objects
      */
-    public static GT_Config sRecipeFile = null, sMachineFile = null, sWorldgenFile = null, sModularArmor = null, sMaterialProperties = null, sMaterialComponents = null, sUnification = null, sSpecialFile = null, sClientDataFile, sOPStuff = null;
-    public static int TICKS_FOR_LAG_AVERAGING = 25, MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
+    public static GT_Config
+            sRecipeFile = null,
+            sMachineFile = null,
+            sWorldgenFile = null,
+            sModularArmor = null,
+            sMaterialProperties = null,
+            sMaterialComponents = null,
+            sUnification = null,
+            sSpecialFile = null,
+            sClientDataFile,
+            sOPStuff = null;
+    public static int
+            TICKS_FOR_LAG_AVERAGING = 25,
+            MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = 100;
     /**
      * Initialized by the Block creation.
      */
     public static Block sBlockMachines;
 
-    public static Block sBlockOres1, sBlockOresUb1, sBlockOresUb2, sBlockOresUb3, /*sBlockGem,*/ sBlockMetal1, sBlockMetal2, sBlockMetal3, sBlockMetal4, sBlockMetal5, sBlockMetal6, sBlockMetal7, sBlockMetal8, sBlockGem1, sBlockGem2, sBlockGem3, sBlockReinforced;
-    public static Block sBlockGranites, sBlockConcretes, sBlockStones;
-    public static Block sBlockCasings1, sBlockCasings2, sBlockCasings3, sBlockCasings4, sBlockCasings5, sBlockCasings6, sBlockCasings8;
+    public static Block
+            sBlockOres1,
+            sBlockOresUb1,
+            sBlockOresUb2,
+            sBlockOresUb3,
+    /*sBlockGem,*/
+    sBlockMetal1,
+            sBlockMetal2,
+            sBlockMetal3,
+            sBlockMetal4,
+            sBlockMetal5,
+            sBlockMetal6,
+            sBlockMetal7,
+            sBlockMetal8,
+            sBlockGem1,
+            sBlockGem2,
+            sBlockGem3,
+            sBlockReinforced;
+    public static Block
+            sBlockGranites,
+            sBlockConcretes,
+            sBlockStones;
+    public static Block
+            sBlockCasings1,
+            sBlockCasings2,
+            sBlockCasings3,
+            sBlockCasings4,
+            sBlockCasings5,
+            sBlockCasings6,
+            sBlockCasings8;
     /**
      * Getting assigned by the Config
      */
-    public static boolean sTimber = true, sDrinksAlwaysDrinkable = false, sMultiThreadedSounds = false, sDoShowAllItemsInCreative = false, sColoredGUI = true, sConstantEnergy = true, sMachineExplosions = true, sMachineFlammable = true, sMachineNonWrenchExplosions = true, sMachineRainExplosions = true, sMachineThunderExplosions = true, sMachineFireExplosions = true, sMachineWireFire = true;
-    public static boolean mOutputRF = false;
-    public static boolean mInputRF = false;
-    public static boolean meIOLoaded = false;
-    public static int mEUtoRF = 360;
-    public static int mRFtoEU = 20;
-    public static boolean mRFExplosions = true;
-    public static boolean mServerStarted = false;
-    public static boolean mIC2Classic = false;
-    public static boolean mMagneticraft = false;
-    public static boolean mImmersiveEngineering = false;
-    public static boolean mGTPlusPlus = false;
-    public static boolean mTranslocator = false;
-    public static boolean mTConstruct = false;
-    public static boolean mGalacticraft = false;
+    public static boolean
+            sTimber = true,
+            sDrinksAlwaysDrinkable = false,
+            sMultiThreadedSounds = false,
+            sDoShowAllItemsInCreative = false,
+            sColoredGUI = true,
+            sConstantEnergy = true,
+            sMachineExplosions = true,
+            sMachineFlammable = true,
+            sMachineNonWrenchExplosions = true,
+            sMachineRainExplosions = true,
+            sMachineThunderExplosions = true,
+            sMachineFireExplosions = true,
+            sMachineWireFire = true,
+            mOutputRF = false,
+            mInputRF = false,
+            meIOLoaded = false,
+            mRFExplosions = true,
+            mServerStarted = false,
+            mIC2Classic = false,
+            mMagneticraft = false,
+            mImmersiveEngineering = false,
+            mGTPlusPlus = false,
+            mTranslocator = false,
+            mTConstruct = false,
+            mGalacticraft = false;
+    public static int
+            mEUtoRF = 360,
+            mRFtoEU = 20;
+
 
     /**
      * Option to not use MACHINE_METAL mixing into colors
      */
-    public static boolean  sUseMachineMetal = false;
-    
+    public static boolean sUseMachineMetal = false;
+
 
     public static boolean mUseOnlyGoodSolderingMaterials = false;
 
@@ -212,7 +303,14 @@ public class GregTech_API {
     /**
      * Getting assigned by the Mod loading
      */
-    public static boolean sUnificationEntriesRegistered = false, sPreloadStarted = false, sPreloadFinished = false, sLoadStarted = false, sLoadFinished = false, sPostloadStarted = false, sPostloadFinished = false;
+    public static boolean
+            sUnificationEntriesRegistered = false,
+            sPreloadStarted = false,
+            sPreloadFinished = false,
+            sLoadStarted = false,
+            sLoadFinished = false,
+            sPostloadStarted = false,
+            sPostloadFinished = false;
     private static Class sBaseMetaTileEntityClass = null;
 
     /**
@@ -291,9 +389,11 @@ public class GregTech_API {
      * @param aZ     is the Z-Coord of the update causing Block
      */
     public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ) {
-        if (!aWorld.isRemote)
-            new Thread(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ), "Machine Block Updating").start();
-        return true;
+        if (aWorld != null && !aWorld.isRemote) { //World might be null during Worldgen
+            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -305,7 +405,8 @@ public class GregTech_API {
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock)) return false;
+        if (GT_Utility.isBlockInvalid(aBlock))
+            return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
         sMachineIDs.put(aBlock, aMeta);
@@ -316,7 +417,8 @@ public class GregTech_API {
      * Like above but with boolean Parameters instead of a BitMask
      */
     public static boolean registerMachineBlock(Block aBlock, boolean... aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock) || aMeta == null || aMeta.length == 0) return false;
+        if (GT_Utility.isBlockInvalid(aBlock) || aMeta == null || aMeta.length == 0)
+            return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
         int rMeta = 0;
@@ -329,7 +431,8 @@ public class GregTech_API {
      * if this Block is a Machine Update Conducting Block
      */
     public static boolean isMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock)) return false;
+        if (GT_Utility.isBlockInvalid(aBlock))
+            return false;
         return (sMachineIDs.containsKey(aBlock) && (sMachineIDs.get(aBlock) & B[aMeta]) != 0);
     }
 
@@ -489,7 +592,8 @@ public class GregTech_API {
     public static void registerCover(ItemStack aStack, ITexture aCover, GT_CoverBehavior aBehavior) {
         if (!sCovers.containsKey(new GT_ItemStack(aStack)))
             sCovers.put(new GT_ItemStack(aStack), aCover == null || !aCover.isValidTexture() ? Textures.BlockIcons.ERROR_RENDERING[0] : aCover);
-        if (aBehavior != null) sCoverBehaviors.put(new GT_ItemStack(aStack), aBehavior);
+        if (aBehavior != null)
+            sCoverBehaviors.put(new GT_ItemStack(aStack), aBehavior);
     }
 
     public static void registerCoverBehavior(ItemStack aStack, GT_CoverBehavior aBehavior) {
@@ -502,16 +606,19 @@ public class GregTech_API {
      * @param aBehavior can be null
      */
     public static void registerCover(Collection<ItemStack> aStackList, ITexture aCover, GT_CoverBehavior aBehavior) {
-        if (aCover.isValidTexture()) for (ItemStack tStack : aStackList) registerCover(tStack, aCover, aBehavior);
+        if (aCover.isValidTexture())
+            aStackList.forEach(tStack -> GregTech_API.registerCover(tStack, aCover, aBehavior));
     }
 
     /**
      * returns a Cover behavior, guaranteed to not return null after preload
      */
     public static GT_CoverBehavior getCoverBehavior(ItemStack aStack) {
-        if (aStack == null || aStack.getItem() == null) return sNoBehavior;
+        if (aStack == null || aStack.getItem() == null)
+            return sNoBehavior;
         GT_CoverBehavior rCover = sCoverBehaviors.get(new GT_ItemStack(aStack));
-        if (rCover == null) return sDefaultBehavior;
+        if (rCover == null)
+            return sDefaultBehavior;
         return rCover;
     }
 
@@ -519,7 +626,8 @@ public class GregTech_API {
      * returns a Cover behavior, guaranteed to not return null
      */
     public static GT_CoverBehavior getCoverBehavior(int aStack) {
-        if (aStack == 0) return sNoBehavior;
+        if (aStack == 0)
+            return sNoBehavior;
         return getCoverBehavior(GT_Utility.intToStack(aStack));
     }
 

@@ -1,5 +1,6 @@
 package gregtech.api.enums;
 
+import com.google.common.base.Objects;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
 import gregtech.api.interfaces.ICondition;
@@ -17,8 +18,6 @@ import net.minecraft.item.ItemStack;
 import java.util.*;
 
 import static gregtech.api.enums.GT_Values.*;
-
-import com.google.common.base.Objects;
 
 public enum OrePrefixes {
     @Deprecated pulp("Pulps", "", "", false, false, false, false, false, false, false, false, false, false, B[0] | B[1] | B[2] | B[3], -1, 64, -1),
@@ -354,14 +353,20 @@ public enum OrePrefixes {
         nugget.addFamiliarPrefix(ingot);
 
         for (OrePrefixes tPrefix1 : values())
-            if (tPrefix1.name().startsWith("ore")) for (OrePrefixes tPrefix2 : values())
-                if (tPrefix2.name().startsWith("ore")) tPrefix1.addFamiliarPrefix(tPrefix2);
+            if (tPrefix1.name().startsWith("ore"))
+                for (OrePrefixes tPrefix2 : values())
+                    if (tPrefix2.name().startsWith("ore"))
+                        tPrefix1.addFamiliarPrefix(tPrefix2);
         for (OrePrefixes tPrefix1 : values())
-            if (tPrefix1.name().startsWith("pipe")) for (OrePrefixes tPrefix2 : values())
-                if (tPrefix2.name().startsWith("pipe")) tPrefix1.addFamiliarPrefix(tPrefix2);
+            if (tPrefix1.name().startsWith("pipe"))
+                for (OrePrefixes tPrefix2 : values())
+                    if (tPrefix2.name().startsWith("pipe"))
+                        tPrefix1.addFamiliarPrefix(tPrefix2);
         for (OrePrefixes tPrefix1 : values())
-            if (tPrefix1.name().startsWith("wireGt")) for (OrePrefixes tPrefix2 : values())
-                if (tPrefix2.name().startsWith("wireGt")) tPrefix1.addFamiliarPrefix(tPrefix2);
+            if (tPrefix1.name().startsWith("wireGt"))
+                for (OrePrefixes tPrefix2 : values())
+                    if (tPrefix2.name().startsWith("wireGt"))
+                        tPrefix1.addFamiliarPrefix(tPrefix2);
         for (OrePrefixes tPrefix1 : values())
             if (tPrefix1.name().startsWith("cableGt")) for (OrePrefixes tPrefix2 : values())
                 if (tPrefix2.name().startsWith("cableGt")) tPrefix1.addFamiliarPrefix(tPrefix2);
@@ -437,6 +442,8 @@ public enum OrePrefixes {
         plate.mGeneratedItems.add(Materials.Concrete);
         plate.mGeneratedItems.add(Materials.GraniteRed);
         plate.mGeneratedItems.add(Materials.GraniteBlack);
+        plate.mGeneratedItems.add(Materials.Basalt);
+        plate.mGeneratedItems.add(Materials.Marble);
         plate.mGeneratedItems.add(Materials.Glowstone);
         plate.mGeneratedItems.add(Materials.Electrotine);
         plate.mGeneratedItems.add(Materials.Obsidian);
@@ -569,7 +576,8 @@ public enum OrePrefixes {
      * Yes this Value can be changed to add Bits for the MetaGenerated-Item-Check.
      */
     public int mMaterialGenerationBits = 0;
-    private OrePrefixes(String aRegularLocalName, String aLocalizedMaterialPre, String aLocalizedMaterialPost, boolean aIsUnificatable, boolean aIsMaterialBased, boolean aIsSelfReferencing, boolean aIsContainer, boolean aDontUnificateActively, boolean aIsUsedForBlocks, boolean aAllowNormalRecycling, boolean aGenerateDefaultItem, boolean aIsEnchantable, boolean aIsUsedForOreProcessing, int aMaterialGenerationBits, long aMaterialAmount, int aDefaultStackSize, int aTextureindex) {
+
+    OrePrefixes(String aRegularLocalName, String aLocalizedMaterialPre, String aLocalizedMaterialPost, boolean aIsUnificatable, boolean aIsMaterialBased, boolean aIsSelfReferencing, boolean aIsContainer, boolean aDontUnificateActively, boolean aIsUsedForBlocks, boolean aAllowNormalRecycling, boolean aGenerateDefaultItem, boolean aIsEnchantable, boolean aIsUsedForOreProcessing, int aMaterialGenerationBits, long aMaterialAmount, int aDefaultStackSize, int aTextureindex) {
         mIsUnificatable = aIsUnificatable;
         mIsMaterialBased = aIsMaterialBased;
         mIsSelfReferencing = aIsSelfReferencing;
@@ -717,7 +725,8 @@ public enum OrePrefixes {
                         aMaterial == Materials.Plastic || aMaterial == Materials.Silicone || aMaterial == Materials.PolyvinylChloride || aMaterial == Materials.PolyphenyleneSulfide ||
                 		aMaterial == Materials.Nichrome || aMaterial == Materials.BlackSteel || aMaterial == Materials.Titanium || aMaterial == Materials.TungstenSteel || 
                 		aMaterial == Materials.Tungsten || aMaterial == Materials.HSSG || aMaterial == Materials.NaquadahAlloy || aMaterial == Materials.Duranium || 
-                		aMaterial == Materials.Europium))
+                		aMaterial == Materials.Europium || aMaterial == Materials.Bedrockium))
+
                     foil.mDisabledItems.add(aMaterial);
                 //Fine Wire
                 if (!enableUnusedFineWires && !(aMaterial == Materials.Steel || aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Platinum || aMaterial == Materials.Osmium ||
@@ -802,8 +811,8 @@ public enum OrePrefixes {
         }
     }
 
-    public void enableComponent(Materials aMaterial) {
-        if (this.mDisabledItems.contains(aMaterial)) this.mDisabledItems.remove(aMaterial);
+    public static boolean isInstanceOf(String aName, OrePrefixes aPrefix) {
+        return aName != null && aName.startsWith(aPrefix.toString());
     }
 
     public void disableComponent(Materials aMaterial) {
@@ -861,8 +870,8 @@ public enum OrePrefixes {
         return Materials.getRealMaterial(aOre.replaceFirst(aPrefix.toString(), ""));
     }
 
-    public static boolean isInstanceOf(String aName, OrePrefixes aPrefix) {
-        return aName == null ? false : aName.startsWith(aPrefix.toString());
+    public void enableComponent(Materials aMaterial) {
+        this.mDisabledItems.remove(aMaterial);
     }
 
     public boolean add(ItemStack aStack) {

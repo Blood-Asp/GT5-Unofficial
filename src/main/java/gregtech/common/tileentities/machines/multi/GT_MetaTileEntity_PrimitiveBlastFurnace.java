@@ -25,7 +25,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
     public static final int INPUT_SLOTS = 3, OUTPUT_SLOTS = 3;
 
     public int mMaxProgresstime = 0;
-    public int mUpdate = 5;
+    public volatile int mUpdate = 5;
     public int mProgresstime = 0;
     public boolean mMachine = false;
 

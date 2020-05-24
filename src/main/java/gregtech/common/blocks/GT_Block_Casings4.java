@@ -21,7 +21,7 @@ public class GT_Block_Casings4
     public GT_Block_Casings4() {
         super(GT_Item_Casings4.class, "gt.blockcasings4", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.CASING_BLOCKS[(i + 48)] = new GT_CopiedBlockTexture(this, 6, i);
+            Textures.BlockIcons.casingTexturePages[0][(i + 48)] = new GT_CopiedBlockTexture(this, 6, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Robust Tungstensteel Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Clean Stainless Steel Machine Casing");

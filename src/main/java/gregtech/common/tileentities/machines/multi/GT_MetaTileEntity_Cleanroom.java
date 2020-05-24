@@ -8,7 +8,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
@@ -40,7 +40,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 "Controller Block for the Cleanroom",
                 "Min(WxHxD): 3x4x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
                 "Controller (Top center)",
-                "Top besides contoller and edges: Filter Casings",
+                "Top besides contoller and edges: Filter Machine Casing",
                 "1 Reinforced Door (keep closed for 100% efficency)",
 				"1x LV or 1x MV Energy Hatch, 1x Maintainance Hatch",
 				"Up to 10 Machine Hull Item & Energy transfer through walls",
@@ -71,7 +71,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		int mGlassCount = 0;
 		boolean doorState = false;
 		this.mUpdate = 100;
-		
+
 		if (debugCleanroom) {
 			GT_Log.out.println(
 							"Cleanroom: Checking machine"
@@ -83,13 +83,25 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 			if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
 				if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
 					x = i;
+					break;
+				} else {
+					if (debugCleanroom) {
+						GT_Log.out.println("Cleanroom: Unable to detect room X edge?");
+					}
+					return false;
+				}
+			}
+		}
+		for (int i = 1; i < 8; i++) {
+			Block tBlock = aBaseMetaTileEntity.getBlockOffset(0, 0, i);
+			int tMeta = aBaseMetaTileEntity.getMetaIDOffset(0, 0, i);
+			if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
+				if (tBlock == GregTech_API.sBlockReinforced || tMeta == 2) {
 					z = i;
 					break;
 				} else {
 					if (debugCleanroom) {
-						GT_Log.out.println(
-							"Cleanroom: Unable to detect room edge?"
-						);
+						GT_Log.out.println("Cleanroom: Unable to detect room Z edge?");
 					}
 					return false;
 				}
@@ -114,11 +126,11 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		for (int dX = -x; dX <= x; dX++) {
 			for (int dZ = -z; dZ <= z; dZ++) {
 				for (int dY = 0; dY >= y; dY--) {
-					if (dX == -x || dX == x || dY == -y || dY == y || dZ == -z || dZ == z) {
+					if (dX == -x || dX == x || dY == 0 || dY == y || dZ == -z || dZ == z) {
 						Block tBlock = aBaseMetaTileEntity.getBlockOffset(dX, dY, dZ);
 						int tMeta = aBaseMetaTileEntity.getMetaIDOffset(dX, dY, dZ);
-						if (y == 0) {
-							if (dX == -x || dX == x || dZ == -z || dZ == z) {
+						if (dY == 0) {											// TOP
+							if (dX == -x || dX == x || dZ == -z || dZ == z) { 	// Top Border
 								if (tBlock != GregTech_API.sBlockReinforced || tMeta != 2) {
 									if (debugCleanroom) {
 										GT_Log.out.println(
@@ -127,8 +139,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 									}
 									return false;
 								}
-							} else if (dX == 0 && dZ == 0) {
-							} else {
+							} else if (dX != 0 || dZ != 0) {					 // Top Inner exclude center
 								if (tBlock != GregTech_API.sBlockCasings3 || tMeta != 11) {
 									if (debugCleanroom) {
 										GT_Log.out.println(
@@ -147,7 +158,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 							if ((!this.addMaintenanceToMachineList(tTileEntity, 82)) && (!this.addEnergyInputToMachineList(tTileEntity, 82))) {
 								if (tBlock instanceof ic2.core.block.BlockIC2Door) {
 									if ((tMeta & 8) == 0) {
-										doorState = (Math.abs(dX) > Math.abs(dZ) == ((tMeta & 1) != 0)) != ((tMeta & 4) != 0);
+										if (Math.abs(dY) < y) //x - side
+											doorState = (tMeta & 0x5) == 0x4 || (tMeta & 0x5) == 0x1;
+										else if (Math.abs(dX) < x) //y-side, corners ignored.
+											doorState = (tMeta & 0x5) == 0x5 || (tMeta & 0x5) == 0x0;
 									}
 									mDoorCount++;
 								} else {
@@ -194,13 +208,13 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 					IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
 					if (tTileEntity != null) {
 						IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
-						if (aMetaTileEntity != null && aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine_GT_Recipe) {
+						if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine) {
 							if (debugCleanroom) {
 								GT_Log.out.println(
 									"Cleanroom: Machine detected, adding pointer back to cleanroom"
 								);
 							}
-							((GT_MetaTileEntity_BasicMachine_GT_Recipe) aMetaTileEntity).mCleanroom = this;
+							((GT_MetaTileEntity_BasicMachine) aMetaTileEntity).mCleanroom = this;
 						}
 					}
 				}

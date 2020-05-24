@@ -55,7 +55,12 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Round.get(0L, new Object[0]), aMaterial.getMolten(18L), GT_OreDictUnificator.get(OrePrefixes.round, aMaterial, 1L), 50, 2 * tVoltageMultiplier);
                         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Rod_Long.get(0L, new Object[0]), aMaterial.getMolten(144L), GT_OreDictUnificator.get(OrePrefixes.stickLong, aMaterial, 1L), 300, 8 * tVoltageMultiplier);
                         GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Turbine_Blade.get(0L, new Object[0]), aMaterial.getMolten(864L), GT_OreDictUnificator.get(OrePrefixes.turbineBlade, aMaterial, 1L), 400, 8 * tVoltageMultiplier);
-                     }
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Tiny.get(0L, new Object[0]), aMaterial.getMolten(72L), GT_OreDictUnificator.get(OrePrefixes.pipeTiny, aMaterial, 1L), 20, 8 * tVoltageMultiplier);
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Small.get(0L, new Object[0]), aMaterial.getMolten(144L), GT_OreDictUnificator.get(OrePrefixes.pipeSmall, aMaterial, 1L), 40, 8 * tVoltageMultiplier);
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Medium.get(0L, new Object[0]), aMaterial.getMolten(432L), GT_OreDictUnificator.get(OrePrefixes.pipeMedium, aMaterial, 1L), 80, 8 * tVoltageMultiplier);
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Large.get(0L, new Object[0]), aMaterial.getMolten(864L), GT_OreDictUnificator.get(OrePrefixes.pipeLarge, aMaterial, 1L), 160, 8 * tVoltageMultiplier);
+                        GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Pipe_Huge.get(0L, new Object[0]), aMaterial.getMolten(1728L), GT_OreDictUnificator.get(OrePrefixes.pipeHuge, aMaterial, 1L), 320, 8 * tVoltageMultiplier);
+                }
                 if (tAmount * 2 <= 64)
                     GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), ItemList.Shape_Extruder_Rod.get(0L, new Object[0]), GT_OreDictUnificator.get(OrePrefixes.stick, aMaterial.mSmeltInto, tAmount * 2), (int) Math.max(aMaterialMass * 2L * tAmount, tAmount), 6 * tVoltageMultiplier);
                 if (tAmount * 2 <= 64)

@@ -25,6 +25,9 @@ import java.util.List;
 
 public class GT_Item_Machines
         extends ItemBlock {
+
+    private static final String[] directionNames = {"Bottom", "Top", "North", "South", "West", "East"};
+
     public GT_Item_Machines(Block par1) {
         super(par1);
         setMaxDamage(0);
@@ -85,9 +88,26 @@ public class GT_Item_Machines
                 if ((tAmount = aNBT.getByte("mSteamTanks")) > 0) {
                     aList.add(tAmount + " " + GT_LanguageManager.addStringLocalization("GT_TileEntity_STEAMTANKS", "Steam Tank Upgrades", !GregTech_API.sPostloadFinished ));
                 }
+
+                addInstalledCoversInformation(aNBT, aList);
             }
         } catch (Throwable e) {
             e.printStackTrace(GT_Log.err);
+        }
+    }
+
+    private void addInstalledCoversInformation(NBTTagCompound aNBT, List<String> aList) {
+        if (aNBT.hasKey("mCoverSides")){
+            int[] mCoverSides = aNBT.getIntArray("mCoverSides");
+            if (mCoverSides != null && mCoverSides.length == 6) {
+                for (byte i = 0; i < 6; i++) {
+                    int coverId = mCoverSides[i];
+                    ItemStack coverStack = GT_Utility.intToStack(coverId);
+                    if (coverStack != null) {
+                        aList.add(String.format("Cover on %s side: %s", directionNames[i], coverStack.getDisplayName()));
+                    }
+                }
+            }
         }
     }
 
@@ -156,6 +176,7 @@ public class GT_Item_Machines
                 tTileEntity.setInitialValuesAsNBT(tTileEntity.isServerSide() ? aStack.getTagCompound() : null, tDamage);
                 if (aPlayer != null) {
                     tTileEntity.setOwnerName(aPlayer.getDisplayName());
+                    tTileEntity.setOwnerUuid(aPlayer.getUniqueID());
                 }
                 tTileEntity.getMetaTileEntity().initDefaultModes(aStack.getTagCompound());
                 final byte aSide = GT_Utility.getOppositeSide(side);

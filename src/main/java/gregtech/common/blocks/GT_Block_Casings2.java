@@ -18,10 +18,12 @@ public class GT_Block_Casings2
         super(GT_Item_Casings2.class, "gt.blockcasings2", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
         	if (i != 6){
-        		Textures.BlockIcons.CASING_BLOCKS[(i + 16)] = new GT_CopiedBlockTexture(this, 6, i);
+        		Textures.BlockIcons.casingTexturePages[0][(i + 16)] = new GT_CopiedBlockTexture(this, 6, i);
         	}
          }
-        
+        //Special handler for Pyrolyse Oven Casing on hatches...
+        Textures.BlockIcons.casingTexturePages[0][22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.MACHINE_METAL.mRGBa);
+
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Solid Steel Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Frost Proof Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Bronze Gear Box Casing");
@@ -55,8 +57,6 @@ public class GT_Block_Casings2
         ItemList.Casing_Pipe_Titanium.set(new ItemStack(this, 1, 14));
         ItemList.Casing_Pipe_TungstenSteel.set(new ItemStack(this, 1, 15));
         
-        //Special handler for Pyrolyse Oven Casing
-        Textures.BlockIcons.CASING_BLOCKS[22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.MACHINE_METAL.mRGBa);
 }
 
     public IIcon getIcon(int aSide, int aMeta) {

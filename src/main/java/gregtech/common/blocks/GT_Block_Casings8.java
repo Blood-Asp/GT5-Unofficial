@@ -15,14 +15,18 @@ public class GT_Block_Casings8
     //WATCH OUT FOR TEXTURE ID's
     public GT_Block_Casings8() {
         super(GT_Item_Casings8.class, "gt.blockcasings8", GT_Material_Casings.INSTANCE);
-        for (int i = 0; i < 1; i = (i + 1)) {
+        for (int i = 0; i < 4; i = (i + 1)) {
             Textures.BlockIcons.casingTexturePages[1][i+48] = new GT_CopiedBlockTexture(this, 6, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Chemically Inert Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "PTFE Pipe Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Mining Neutronium Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Mining Black Plutonium Casing");
 
         ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 1));
+        ItemList.Casing_MiningNeutronium.set(new ItemStack(this, 1, 2));
+        ItemList.Casing_MiningBlackPlutonium.set(new ItemStack(this, 1, 3));
     }
 
     @Override
@@ -33,6 +37,10 @@ public class GT_Block_Casings8
             return Textures.BlockIcons.MACHINE_CASING_CHEMICALLY_INERT.getIcon();
         case 1:
             return Textures.BlockIcons.MACHINE_CASING_PIPE_POLYTETRAFLUOROETHYLENE.getIcon();
+        case 2:
+            return Textures.BlockIcons.MACHINE_CASING_MINING_NEUTRONIUM.getIcon();
+        case 3:
+            return Textures.BlockIcons.MACHINE_CASING_MINING_BLACKPLUTONIUM.getIcon();
         }
         return Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL.getIcon();
     }

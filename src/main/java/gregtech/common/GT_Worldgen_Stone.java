@@ -67,7 +67,7 @@ public class GT_Worldgen_Stone
                 if( !validStoneSeeds.containsKey(hash) ) {
                     // Determine if RNG says to add stone at this chunk
                     stoneRNG.setSeed((long)aWorld.getSeed() ^  hash + Math.abs(mBlockMeta) + Math.abs(mSize) + ((GregTech_API.sBlockGranites==mBlock)?(32768):(0)));  //Don't judge me. Want different values for different block types
-                    if ( (this.mProbability <= 1) || (stoneRNG.nextInt(this.mProbability*2) == 0) ) { // Decreased probability of stones by factor of 2
+                    if ( (this.mProbability <= 1) || (stoneRNG.nextInt(this.mProbability) == 0) ) { 
                         // Add stone at this chunk
                         validStoneSeeds.put( hash, new StoneSeeds(true) );
                         // Add to generation list
@@ -203,7 +203,7 @@ public class GT_Worldgen_Stone
                                         }
                                         ((GT_TileEntity_Ores)tTileEntity).overrideOreBlockMaterial(this.mBlock, (byte) this.mBlockMeta);
                                     }
-                                } else if (((this.mAllowToGenerateinVoid) && (aWorld.getBlock(iX, iY, iZ).isAir(aWorld, iX, iY, iZ))) || ((tTargetedBlock != null) && ((tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.end_stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.netherrack)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockGranites)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockStones))))) {
+                                } else if (((this.mAllowToGenerateinVoid) && (aWorld.getBlock(iX, iY, iZ).isAir(aWorld, iX, iY, iZ))) || ((tTargetedBlock != null) && ((tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.stained_hardened_clay)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.cobblestone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.end_stone)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, Blocks.netherrack)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockGranites)) || (tTargetedBlock.isReplaceableOreGen(aWorld, iX, iY, iZ, GregTech_API.sBlockStones))))) {
                                     aWorld.setBlock(iX, iY, iZ, this.mBlock, this.mBlockMeta, 0);
                                 }
                             }

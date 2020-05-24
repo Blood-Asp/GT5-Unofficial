@@ -9,7 +9,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
@@ -175,6 +174,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         } else {
             this.mMaxProgresstime = 1;
             this.mEfficiencyIncrease = 10;
+            // Overvoltage is handled inside the MultiBlockBase when pushing out to dynamos.  no need to do it here.
+            /*
             if(this.mDynamoHatches.size()>0){
                 for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
             	    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt) {
@@ -182,6 +183,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
                         explodeMultiblock();
                     }
             }
+            */
             return true;
         }
     }

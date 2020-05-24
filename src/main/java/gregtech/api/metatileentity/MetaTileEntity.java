@@ -85,11 +85,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         getBaseMetaTileEntity().setMetaTileID((short) aID);
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
-
-//        if (GT.isClientSide()) {
-//            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-//            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
-//        }
     }
 
     /**
@@ -936,4 +931,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public String getAlternativeModeText(){
     	return "";
     }
+
+    public boolean shouldJoinIc2Enet() { return false; }
 }

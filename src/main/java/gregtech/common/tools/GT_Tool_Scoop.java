@@ -78,7 +78,7 @@ public class GT_Tool_Scoop
 
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
         String tTool = aBlock.getHarvestTool(aMetaData);
-        return ((tTool != null) && (tTool.equals("scoop"))) || (aBlock.getMaterial() == sBeeHiveMaterial);
+        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("scoop"))) || (aBlock.getMaterial() == sBeeHiveMaterial);
     }
 
     public ItemStack getBrokenItem(ItemStack aStack) {
