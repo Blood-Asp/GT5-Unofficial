@@ -32,12 +32,14 @@ import static ic2.core.util.LiquidUtil.*;
 
 public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContainerItem {
     private final int maxCapacity;
+    private final String unlocalFlaskName;
     @SideOnly(Side.CLIENT)
     public IIcon iconWindow;
 
     public GT_VolumetricFlask(String unlocalized, String english, int maxCapacity) {
         super(unlocalized, english, null);
         this.maxCapacity = maxCapacity;
+        unlocalFlaskName = unlocalized;
         setMaxStackSize(16);
         setNoRepair();
         if (Loader.isModLoaded("NotEnoughItems")) {
@@ -122,7 +124,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
     @Override
     public void registerIcons(IIconRegister aIconRegister) {
         super.registerIcons(aIconRegister);
-        iconWindow = aIconRegister.registerIcon(RES_PATH_ITEM + "gt.Volumetric_Flask.window");
+        iconWindow = aIconRegister.registerIcon(RES_PATH_ITEM + "gt."+unlocalFlaskName+".window");
     }
 
     public void setCapacity(ItemStack stack, int capacity) {
