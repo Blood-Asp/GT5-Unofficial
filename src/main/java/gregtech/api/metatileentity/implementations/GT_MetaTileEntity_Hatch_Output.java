@@ -126,7 +126,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
 
     @Override
     public boolean canTankBeFilled() {
-        return true;
+        return false;
     }
 
     @Override
