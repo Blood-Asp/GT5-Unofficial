@@ -518,7 +518,6 @@ public abstract class GT_MetaBase_Item extends GT_Generic_Item implements ISpeci
                 return tFluid;
             }
             if(doDrain) {
-                GT_Log.out.println("FUCKTHECELLS - Draining " + aStack.getDisplayName() + " and setting to " + tStack.getDisplayName());
                 aStack.setItemDamage(tStack.getItemDamage());
                 aStack.func_150996_a(tStack.getItem());
             }
