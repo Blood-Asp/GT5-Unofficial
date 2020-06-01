@@ -24,11 +24,11 @@ public class GT_Cover_ItemMeter
 
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         int[] tSlots;
-        if ((aCoverVariable & 0x2) > 0) {
-            tSlots = aTileEntity.getAccessibleSlotsFromSide(aSide);
-        } else {
+        if ((aCoverVariable >> 1) > 0)
             tSlots = new int[]{(aCoverVariable >> 1) - 1};
-        }
+        else
+            tSlots = aTileEntity.getAccessibleSlotsFromSide(aSide);
+
         int tMax = 0;
         int tUsed = 0;
         for (int i : tSlots) {
