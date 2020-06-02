@@ -20,12 +20,12 @@ import net.minecraftforge.fluids.Fluid;
 public class GT_Cover_Arm
         extends GT_CoverBehavior {
     public final int mTickRate;
-
-    //msb unused, 2nd : direction (1=export)
-    //right 15 bits: internalSlot, next 15 bits adjSlot, 0 = all, slot = -1
+    //msb converted, 2nd : direction (1=export)
+    //right 14 bits: internalSlot, next 14 bits adjSlot, 0 = all, slot = -1
     protected final static int EXPORT_MASK = 0x40000000;
-    protected final static int SLOT_ID_MASK = 0x7FFF;
+    protected final static int SLOT_ID_MASK = 0x3FFF;
     protected final static int SLOT_ID_MIN = 0;
+    protected final static int CONVERTED_BIT = 0x80000000;
 
     public GT_Cover_Arm(int aTickRate) {
         this.mTickRate = aTickRate;
@@ -34,6 +34,13 @@ public class GT_Cover_Arm
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((((aTileEntity instanceof IMachineProgress)) && (!((IMachineProgress) aTileEntity).isAllowedToWork()))) {
             return aCoverVariable;
+        }
+
+        //Convert from ver. 5.09.33.50, check if 3 last bits are equal
+        if ((aCoverVariable >>> 29) == 0) {
+            aCoverVariable = CONVERTED_BIT | (((aCoverVariable+1) & SLOT_ID_MASK) << 14) | EXPORT_MASK;
+        } else if ((aCoverVariable >>> 29) == 7) {
+            aCoverVariable = CONVERTED_BIT | Math.min(Math.abs(aCoverVariable-1), SLOT_ID_MASK);
         }
 
         boolean usePower = false;
@@ -52,11 +59,11 @@ public class GT_Cover_Arm
             fromTile = (TileEntity) aTileEntity;
             toTile = aTileEntity.getTileEntityAtSide(aSide);
             fromSlot = aCoverVariable & SLOT_ID_MASK;
-            toSlot = (aCoverVariable>>15) & SLOT_ID_MASK;
+            toSlot = (aCoverVariable>>14) & SLOT_ID_MASK;
         } else {
             fromTile = aTileEntity.getTileEntityAtSide(aSide);
             toTile = (TileEntity) aTileEntity;
-            fromSlot = (aCoverVariable>>15) & SLOT_ID_MASK;
+            fromSlot = (aCoverVariable>>14) & SLOT_ID_MASK;
             toSlot = aCoverVariable & SLOT_ID_MASK;
         }
 
@@ -119,35 +126,35 @@ public class GT_Cover_Arm
 
     private void sendMessageToPlayer(EntityPlayer aPlayer, int var) {
         if ((var & EXPORT_MASK) != 0)
-            GT_Utility.sendChatToPlayer(aPlayer, trans("001","Puts out into adjacent Slot #") + (((var >> 15) & SLOT_ID_MASK) - 1));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("001","Puts out into adjacent Slot #") + (((var >> 14) & SLOT_ID_MASK) - 1));
         else
             GT_Utility.sendChatToPlayer(aPlayer, trans("002","Grabs in for own Slot #") + ((var & SLOT_ID_MASK) - 1));
     }
 
     private int getNewVar(int var, int step) {
         int intSlot = (var & SLOT_ID_MASK);
-        int adjSlot = (var >> 15) & SLOT_ID_MASK;
+        int adjSlot = (var >> 14) & SLOT_ID_MASK;
         if ((var & EXPORT_MASK) == 0) {
             int x = (intSlot + step);
             if (x > SLOT_ID_MASK )
                 return createVar(0, SLOT_ID_MASK, 0);
             else if (x < 1)
-                return createVar(- step - intSlot + 1, 0, 1);
+                return createVar(-step - intSlot + 1, 0, EXPORT_MASK);
             else
                 return createVar(0, x, 0);
         } else {
             int x = (adjSlot - step);
-            if (x > SLOT_ID_MASK )
-                return createVar(SLOT_ID_MASK, 0, 1);
+            if (x > SLOT_ID_MASK)
+                return createVar(SLOT_ID_MASK, 0, EXPORT_MASK);
             else if (x < 1)
-                return createVar(0, + step - adjSlot + 1, 0);
+                return createVar(0, +step - adjSlot + 1, 0);
             else
-                return createVar(x, 0, 1);
+                return createVar(x, 0, EXPORT_MASK);
         }
     }
 
     private int createVar(int adjSlot, int intSlot, int export){
-        return ((export & 0x1) << 30) | ((adjSlot & SLOT_ID_MASK) << 15) | (intSlot & SLOT_ID_MASK);
+        return  CONVERTED_BIT | export | ((adjSlot & SLOT_ID_MASK) << 14) | (intSlot & SLOT_ID_MASK);
     }
 
     public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
@@ -231,7 +238,7 @@ public class GT_Cover_Arm
 
             export = (coverVariable & EXPORT_MASK) > 0;
             internalSlotID = (coverVariable & SLOT_ID_MASK);
-            adjacentSlotID = (coverVariable >> 15) & SLOT_ID_MASK;
+            adjacentSlotID = (coverVariable >> 14) & SLOT_ID_MASK;
 
             new GT_GuiIconButton(this, 0, startX + spaceX * 0, startY + spaceY * 0, GT_GuiIcon.EXPORT).setTooltipText(trans("006", "Export"));
             new GT_GuiIconButton(this, 1, startX + spaceX * 1, startY + spaceY * 0, GT_GuiIcon.IMPORT).setTooltipText(trans("007", "Import"));
@@ -387,7 +394,7 @@ public class GT_Cover_Arm
         }
 
         private int getNewCoverVariable() {
-            return (export ? EXPORT_MASK : 0) | ((adjacentSlotID & SLOT_ID_MASK) << 15) | (internalSlotID & SLOT_ID_MASK);
+            return (export ? EXPORT_MASK : 0) | ((adjacentSlotID & SLOT_ID_MASK) << 14) | (internalSlotID & SLOT_ID_MASK) | CONVERTED_BIT;
         }
 
         private boolean buttonClickable(int id) {
