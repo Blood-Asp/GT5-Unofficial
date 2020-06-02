@@ -19,13 +19,24 @@ import net.minecraftforge.fluids.Fluid;
 public class GT_Cover_ItemMeter
         extends GT_CoverBehavior {
 
-    // left bit (normal/invert)
-    // >> 1: 0=all items, else slot-1
+    // format:
+    private static final int SLOT_MASK = 0x3FFFFFF; // 0 = all, 1 = 0 ...
+    private static final int CONVERTED_BIT = 0x80000000;
+    private static final int INVERT_BIT = 0x40000000;
 
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
+        //Convert from ver. 5.09.33.50
+        if ((CONVERTED_BIT & aCoverVariable) == 0)
+            if (aCoverVariable == 0)
+                aCoverVariable = CONVERTED_BIT;
+            else if (aCoverVariable == 1)
+                aCoverVariable = CONVERTED_BIT | INVERT_BIT;
+            else if (aCoverVariable > 1)
+                aCoverVariable = CONVERTED_BIT | Math.min((aCoverVariable - 2), SLOT_MASK);
+
         int[] tSlots;
-        if ((aCoverVariable >> 1) > 0)
-            tSlots = new int[]{(aCoverVariable >> 1) - 1};
+        if ((aCoverVariable & SLOT_MASK) > 0)
+            tSlots = new int[]{(aCoverVariable & SLOT_MASK) - 1};
         else
             tSlots = aTileEntity.getAccessibleSlotsFromSide(aSide);
 
@@ -40,7 +51,7 @@ public class GT_Cover_ItemMeter
             }
         }
 
-        boolean inverted = (aCoverVariable & 0x1)>0;
+        boolean inverted = (aCoverVariable & INVERT_BIT) == INVERT_BIT;
         if(tUsed==0)//nothing
             aTileEntity.setOutputRedstoneSignal(aSide, (byte)(inverted ? 15 : 0));
         else if(tUsed >= tMax)//full
@@ -52,32 +63,25 @@ public class GT_Cover_ItemMeter
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aPlayer.isSneaking()) {
-            if ((0x1 & aCoverVariable)>0) {
-                aCoverVariable = aCoverVariable & ~0x1;
+            if ((aCoverVariable & INVERT_BIT) == INVERT_BIT) {
+                aCoverVariable = aCoverVariable & ~INVERT_BIT;
                 GT_Utility.sendChatToPlayer(aPlayer, trans("NORMAL","Normal"));
             }
             else {
-                aCoverVariable = aCoverVariable | 0x1;
+                aCoverVariable = aCoverVariable | INVERT_BIT;
                 GT_Utility.sendChatToPlayer(aPlayer, trans("INVERTED","Inverted"));
             }
             return aCoverVariable;
         }
 
-        int val = aCoverVariable >> 1;
-        int lsb = aCoverVariable & 0x1;
+        int slot = (aCoverVariable & SLOT_MASK) + 1;
+        if (slot > aTileEntity.getSizeInventory() || slot > SLOT_MASK)
+            slot = 0;
 
-        if (val < 0)
-            aCoverVariable = lsb;
-        else
-            aCoverVariable = ((val + 1) << 1) | lsb;
-
-        if ((aCoverVariable >> 1) > aTileEntity.getSizeInventory())
-            aCoverVariable = lsb;
-
-        if ((aCoverVariable >> 1) == 0)
+        if (slot == 0)
             GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + trans("ALL", "All"));
         else
-            GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + ((aCoverVariable >> 1) - 1));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (slot - 1));
 
         //aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % (aTileEntity.getSizeInventory() + 2);
         //switch(aCoverVariable) {
@@ -85,7 +89,7 @@ public class GT_Cover_ItemMeter
         //    case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("052", "Inverted")); break;
         //    default: GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (aCoverVariable >> 1)); break;
         //}
-        return aCoverVariable;
+        return CONVERTED_BIT | (aCoverVariable & INVERT_BIT) | slot;
     }
 
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
@@ -168,7 +172,7 @@ public class GT_Cover_ItemMeter
             intSlotIcon = new GT_GuiFakeItemButton(this, startX + spaceX * 8-4, startY + spaceY * 1, GT_GuiIcon.SLOT_GRAY);
 
             if (tile instanceof TileEntity && !super.tile.isDead())
-                maxSlot = tile.getSizeInventory() - 1;
+                maxSlot = Math.min(tile.getSizeInventory() - 1, SLOT_MASK-1);
             else
                 maxSlot = -1;
 
@@ -197,9 +201,9 @@ public class GT_Cover_ItemMeter
         @Override
         public void buttonClicked(GuiButton btn) {
             if (isInverted())
-                coverVariable = (coverVariable & ~0x1);
+                coverVariable = (coverVariable & ~INVERT_BIT);
             else
-                coverVariable = (coverVariable | 0x1);
+                coverVariable = (coverVariable | INVERT_BIT);
 
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
             update();
@@ -252,10 +256,10 @@ public class GT_Cover_ItemMeter
         public void applyTextBox(GT_GuiIntegerTextBox box) {
             int val = parseTextBox(box);
 
-            if (val < 0)
-                coverVariable = coverVariable & 0x1;
-            else
-                coverVariable = ((val+1) << 1) | (coverVariable & 0x1);
+            if (val >= 0)
+                coverVariable = val + 1;
+
+            coverVariable = coverVariable | CONVERTED_BIT | (coverVariable & INVERT_BIT);
 
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
             update();
@@ -292,13 +296,13 @@ public class GT_Cover_ItemMeter
         }
 
         private boolean isInverted() {
-            return ((coverVariable & 0x1) > 0);
+            return ((coverVariable & INVERT_BIT) == 0);
         }
 
         private int getSlot() {
-            if ((coverVariable & ~0x1) == 0)
+            if ((coverVariable & SLOT_MASK) == 0)
                 return -1;
-            return (coverVariable >> 1) - 1;
+            return (coverVariable & SLOT_MASK) - 1;
         }
     }
 }
