@@ -82,13 +82,6 @@ public class GT_Cover_ItemMeter
             GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + trans("ALL", "All"));
         else
             GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (slot - 1));
-
-        //aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % (aTileEntity.getSizeInventory() + 2);
-        //switch(aCoverVariable) {
-        //    case 0: GT_Utility.sendChatToPlayer(aPlayer, trans("051", "Normal")); break;
-        //    case 1: GT_Utility.sendChatToPlayer(aPlayer, trans("052", "Inverted")); break;
-        //    default: GT_Utility.sendChatToPlayer(aPlayer, trans("053", "Slot: ") + (aCoverVariable >> 1)); break;
-        //}
         return CONVERTED_BIT | (aCoverVariable & INVERT_BIT) | slot;
     }
 

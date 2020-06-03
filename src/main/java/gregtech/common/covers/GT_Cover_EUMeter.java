@@ -180,17 +180,17 @@ public class GT_Cover_EUMeter
 
             GuiButton b;
             b = new GT_GuiIconCheckButton(this, 0, startX + spaceX*0, startY+spaceY*1, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("031", "Normal Universal Storage"));
+                    .setTooltipText(trans("256", "Universal Storage"));
             b = new GT_GuiIconCheckButton(this, 1, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("033", "Normal Electricity Storage"));
+                    .setTooltipText(trans("257", "Electricity Storage"));
             b = new GT_GuiIconCheckButton(this, 2, startX + spaceX*0, startY+spaceY*2, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("035", "Normal Steam Storage"));
+                    .setTooltipText(trans("258", "Steam Storage"));
             b = new GT_GuiIconCheckButton(this, 3, startX + spaceX*4, startY+spaceY*1, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("037", "Normal Average Electric Input"));
+                    .setTooltipText(trans("259", "Average Electric Input"));
             b = new GT_GuiIconCheckButton(this, 4, startX + spaceX*4, startY+spaceY*2, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("039", "Normal Average Electric Output"));
+                    .setTooltipText(trans("260", "Average Electric Output"));
             b = new GT_GuiIconCheckButton(this, 5, startX + spaceX*4, startY+spaceY*0, GT_GuiIcon.CHECKMARK, null)
-                    .setTooltipText(trans("041", "Normal Electricity Storage(Including Batteries)"));
+                    .setTooltipText(trans("261", "Electricity Storage(Including Batteries)"));
             b = new GT_GuiIconCheckButton(this, 6, startX + spaceX*0, startY+spaceY*3+4, GT_GuiIcon.REDSTONE_ON, GT_GuiIcon.REDSTONE_OFF);
         }
 
