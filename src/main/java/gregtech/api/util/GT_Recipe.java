@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static gregtech.api.enums.GT_Values.*;
 
@@ -1838,15 +1839,19 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         }
 
         public GT_Recipe addFakeRecipe(boolean aCheckForCollisions, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+            AtomicInteger ai = new AtomicInteger();
             Optional.ofNullable(GT_OreDictUnificator.getAssociation(aOutputs[0]))
                     .map(itemData -> itemData.mMaterial)
                     .map(materialsStack -> materialsStack.mMaterial)
                     .map(materials -> materials.mElement)
                     .map(Element::getMass)
                     .ifPresent(e ->
-                        aFluidInputs[0].amount = (int) GT_MetaTileEntity_Replicator.cubicFluidMultiplier(e)
+                            {
+                                aFluidInputs[0].amount = (int) GT_MetaTileEntity_Replicator.cubicFluidMultiplier(e);
+                                ai.set(GT_Utility.safeInt(aFluidInputs[0].amount * 512L, 1));
+                            }
                     );
-            return addFakeRecipe(aCheckForCollisions, new GT_Recipe(false, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue));
+            return addFakeRecipe(aCheckForCollisions, new GT_Recipe(false, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, ai.get(), aEUt, aSpecialValue));
         }
 
     }
