@@ -45,14 +45,14 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     public static void setDisabled() {
-        GT_Runnable_MachineBlockUpdate.isEnabled = false;
+        GT_Runnable_MachineBlockUpdate.isEnabled = true;
     }
 
     public static void setEnabled(boolean isEnabled) {
         GT_Runnable_MachineBlockUpdate.isEnabled = isEnabled;
     }
 
-    private static boolean isEnabled = false;
+    private static boolean isEnabled = true;
 
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
         if (isEnabled)
