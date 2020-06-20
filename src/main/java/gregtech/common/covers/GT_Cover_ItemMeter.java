@@ -176,12 +176,12 @@ public class GT_Cover_ItemMeter
         @Override
         public void drawExtras(int mouseX, int mouseY, float parTicks) {
             super.drawExtras(mouseX, mouseY, parTicks);
-            if ((coverVariable & 0x1) > 0)
+            if (isInverted())
                 this.getFontRenderer().drawString(INVERTED,  startX + spaceX*3, 4+startY+spaceY*0, 0xFF555555);
             else
                 this.getFontRenderer().drawString(NORMAL,  startX + spaceX*3, 4+startY+spaceY*0, 0xFF555555);
 
-            this.getFontRenderer().drawString(trans("254", "Internal slot#"),     startX + spaceX*3, 4+startY+spaceY*1, 0xFF555555);
+            this.getFontRenderer().drawString(trans("254", "Detect slot#"),     startX + spaceX*3, 4+startY+spaceY*1, 0xFF555555);
         }
 
         @Override
@@ -247,12 +247,14 @@ public class GT_Cover_ItemMeter
 
         @Override
         public void applyTextBox(GT_GuiIntegerTextBox box) {
-            int val = parseTextBox(box);
+            int val = parseTextBox(box)+1;
 
-            if (val >= 0)
-                coverVariable = val + 1;
+            if (val > SLOT_MASK)
+                val = SLOT_MASK;
+            else if (val < 0)
+                val = 0;
 
-            coverVariable = coverVariable | CONVERTED_BIT | (coverVariable & INVERT_BIT);
+            coverVariable = val | CONVERTED_BIT | (coverVariable & INVERT_BIT);
 
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
             update();
@@ -289,12 +291,10 @@ public class GT_Cover_ItemMeter
         }
 
         private boolean isInverted() {
-            return ((coverVariable & INVERT_BIT) == 0);
+            return ((coverVariable & INVERT_BIT) != 0);
         }
 
         private int getSlot() {
-            if ((coverVariable & SLOT_MASK) == 0)
-                return -1;
             return (coverVariable & SLOT_MASK) - 1;
         }
     }
