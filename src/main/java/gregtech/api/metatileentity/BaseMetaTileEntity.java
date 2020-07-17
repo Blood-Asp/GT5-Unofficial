@@ -1725,15 +1725,19 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public long getAverageElectricInput() {
         long rEU = 0;
-        for (long tEU : mAverageEUInput) rEU += tEU;
-        return rEU / mAverageEUInput.length;
+        for (int i = 0; i < mAverageEUInput.length; ++i)
+            if (i != mAverageEUInputIndex)
+                rEU += mAverageEUInput[i];
+        return rEU / (mAverageEUInput.length - 1);
     }
 
     @Override
     public long getAverageElectricOutput() {
         long rEU = 0;
-        for (long tEU : mAverageEUOutput) rEU += tEU;
-        return rEU / mAverageEUOutput.length;
+        for (int i = 0; i < mAverageEUOutput.length; ++i)
+            if (i != mAverageEUOutputIndex)
+                rEU += mAverageEUOutput[i];
+        return rEU / (mAverageEUOutput.length - 1);
     }
 
     @Override
