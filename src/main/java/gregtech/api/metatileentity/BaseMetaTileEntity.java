@@ -545,7 +545,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 NW.sendPacketToAllPlayersInRange(worldObj,
                                         new GT_Packet_TileEntity(xCoord, (short) yCoord, zCoord, mID,
                                                 mCoverSides[0], mCoverSides[1], mCoverSides[2], mCoverSides[3], mCoverSides[4], mCoverSides[5],
-                                                oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)),
+                                                oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0) | (mWorks ? 64 : 0) ),
                                                 oTexturePage = (hasValidMetaTileEntity() && mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) ? ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage() : 0,
                                                 oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0,
                                                 oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)),
@@ -556,7 +556,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         }
 
                         if (mTickTimer > 10) {
-                            byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0));
+                            byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)| (mWorks ? 64 : 0));
                             if (tData != oTextureData) sendBlockEvent((byte) 0, oTextureData = tData);
 
                             tData = mMetaTileEntity.getUpdateData();
@@ -681,6 +681,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     mActive = ((aValue & 8) != 0);
                     mRedstone = ((aValue & 16) != 0);
 				    //mLockUpgrade	= ((aValue&32) != 0);
+                    mWorks =  ((aValue & 64) != 0);
                     break;
                 case 1:
                     if (hasValidMetaTileEntity()) {
@@ -1724,15 +1725,19 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public long getAverageElectricInput() {
         long rEU = 0;
-        for (long tEU : mAverageEUInput) rEU += tEU;
-        return rEU / mAverageEUInput.length;
+        for (int i = 0; i < mAverageEUInput.length; ++i)
+            if (i != mAverageEUInputIndex)
+                rEU += mAverageEUInput[i];
+        return rEU / (mAverageEUInput.length - 1);
     }
 
     @Override
     public long getAverageElectricOutput() {
         long rEU = 0;
-        for (long tEU : mAverageEUOutput) rEU += tEU;
-        return rEU / mAverageEUOutput.length;
+        for (int i = 0; i < mAverageEUOutput.length; ++i)
+            if (i != mAverageEUOutputIndex)
+                rEU += mAverageEUOutput[i];
+        return rEU / (mAverageEUOutput.length - 1);
     }
 
     @Override
