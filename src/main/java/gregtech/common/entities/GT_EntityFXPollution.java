@@ -1,6 +1,5 @@
 package gregtech.common.entities;
 
-import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 
@@ -56,10 +55,5 @@ public class GT_EntityFXPollution extends EntityFX {
                 this.motionZ *= 0.7D;
             }
         }
-    }
-
-
-    public float getSize(float tickDelta) {
-        return this.particleScale * MathHelper.clamp(((float)this.particleAge + tickDelta) / (float)this.particleMaxAge * 32.0F, 0.0F, 1.0F);
     }
 }
