@@ -2760,15 +2760,14 @@ public class GT_MachineRecipeLoader implements Runnable {
                 new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
                 new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
                 new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
-                GT_ModHandler.getModItem("dreamcraft", "PicoWafer", 32, 0),
-                ItemList.Robot_Arm_UEV.get(1),
-                ItemList.Emitter_UEV.get(1),
-                ItemList.Sensor_UEV.get(1),
-                ItemList.Field_Generator_UEV.get(1),
+                GT_ModHandler.getModItem("dreamcraft", "item.PicoWafer", 32, 0),
+                ItemList.Robot_Arm_UEV.get(4),
+                ItemList.Emitter_UEV.get(4),
+                ItemList.Sensor_UEV.get(4),
         }, new FluidStack[]{
-                new FluidStack(FluidRegistry.getFluid("oganesson"), 2880),
-                Materials.Infinity.getMolten(2880L),
-                Materials.Cheese.getMolten(2880L),
+                new FluidStack(FluidRegistry.getFluid("oganesson"), 50000),
+                Materials.Infinity.getMolten(9216L),
+                Materials.Cheese.getMolten(232000L),
         }, ItemList.Block_BedrockiumCompressed.get(1), 10000, 5000000);
 
         if (GregTech_API.sThaumcraftCompat != null) {
