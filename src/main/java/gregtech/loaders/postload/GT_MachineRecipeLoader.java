@@ -2752,6 +2752,25 @@ public class GT_MachineRecipeLoader implements Runnable {
                     Materials.ElectrumFlux.getMolten(1152L),
             }, ItemList.FusionComputer_UV.get(1), 1000, 90000);
 
+        GT_Values.RA.addAssemblylineRecipe(GT_ModHandler.getModItem("dreamcraft", "item.HeavyDutyPlateTier8", 1, 0), 576000, new Object[]{
+                GT_ModHandler.getModItem("ExtraUtilities", "cobblestone_compressed", 1, 7),
+                GT_ModHandler.getModItem("IC2", "blockMachine2", 1, 0),
+                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Infinity, 4L),
+                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
+                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
+                GT_ModHandler.getModItem("dreamcraft", "PicoWafer", 32, 0),
+                ItemList.Robot_Arm_UEV.get(1),
+                ItemList.Emitter_UEV.get(1),
+                ItemList.Sensor_UEV.get(1),
+                ItemList.Field_Generator_UEV.get(1),
+        }, new FluidStack[]{
+                new FluidStack(FluidRegistry.getFluid("oganesson"), 2880),
+                Materials.Infinity.getMolten(2880L),
+                Materials.Cheese.getMolten(2880L),
+        }, ItemList.Block_BedrockiumCompressed.get(1), 10000, 5000000);
+
         if (GregTech_API.sThaumcraftCompat != null) {
                 String tKey = "GT_WOOD_TO_CHARCOAL";
                 GT_LanguageManager.addStringLocalization(GT_MachineRecipeLoader.aTextTCGTPage + tKey, "You have discovered a way of making charcoal magically instead of using regular ovens for this purpose.<BR><BR>To create charcoal from wood you first need an air-free environment, some vacuus essentia is needed for that, then you need to incinerate the wood using ignis essentia and wait until all the water inside the wood is burned away.<BR><BR>This method however doesn't create creosote oil as byproduct.");
