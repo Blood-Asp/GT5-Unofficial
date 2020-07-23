@@ -2752,23 +2752,6 @@ public class GT_MachineRecipeLoader implements Runnable {
                     Materials.ElectrumFlux.getMolten(1152L),
             }, ItemList.FusionComputer_UV.get(1), 1000, 90000);
 
-        GT_Values.RA.addAssemblylineRecipe(GT_ModHandler.getModItem("dreamcraft", "item.HeavyDutyPlateTier8", 1, 0), 576000, new Object[]{
-                GT_ModHandler.getModItem("ExtraUtilities", "cobblestone_compressed", 1, 7),
-                GT_ModHandler.getModItem("IC2", "blockMachine2", 1, 0),
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.Infinity, 4L),
-                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
-                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
-                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
-                new Object[]{OrePrefixes.circuit.get(Materials.Piko), 1},
-                GT_ModHandler.getModItem("dreamcraft", "item.PicoWafer", 32, 0),
-                ItemList.Robot_Arm_UEV.get(4),
-                ItemList.Emitter_UEV.get(4),
-                ItemList.Sensor_UEV.get(4),
-        }, new FluidStack[]{
-                new FluidStack(FluidRegistry.getFluid("oganesson"), 50000),
-                Materials.Infinity.getMolten(9216L),
-                Materials.Cheese.getMolten(232000L),
-        }, ItemList.Block_BedrockiumCompressed.get(1), 10000, 5000000);
 
         if (GregTech_API.sThaumcraftCompat != null) {
                 String tKey = "GT_WOOD_TO_CHARCOAL";
