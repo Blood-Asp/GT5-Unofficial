@@ -484,13 +484,16 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidSmelterRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextForestry, "phosphor", 1L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Phosphorus, 1L), Materials.Lava.getFluid(800L), 1000, 256, 128);
 
         GT_Values.RA.addAutoclaveRecipe(ItemList.IC2_Energium_Dust.get(9L), Materials.EnergeticAlloy.getMolten(288), ItemList.IC2_EnergyCrystal.get(1L), 10000, 600, 256);
+        GT_Values.RA.addAutoclaveRecipe(ItemList.IC2_Energium_Dust.get(9L), Materials.ConductiveIron.getMolten(576), ItemList.IC2_EnergyCrystal.get(1L), 10000, 1200, 256);
         GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 0), Materials.Water.getFluid(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 10), 8000, 2000, 24);
         GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 600), Materials.Water.getFluid(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 11), 8000, 2000, 24);
         GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 1200), Materials.Water.getFluid(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 12), 8000, 2000, 24);
-        GT_Values.RA.addAutoclaveRecipe(ItemList.IC2_Energium_Dust.get(9L), Materials.ConductiveIron.getMolten(576), ItemList.IC2_EnergyCrystal.get(1L), 10000, 1200, 256);
-        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 0), GT_ModHandler.getDistilledWater(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 10), 9000, 1000, 24);
-        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 600), GT_ModHandler.getDistilledWater(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 11), 9000, 1000, 24);
-        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 1200), GT_ModHandler.getDistilledWater(200L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 12), 9000, 1000, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 0), GT_ModHandler.getDistilledWater(100L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 10), 9000, 1000, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 600), GT_ModHandler.getDistilledWater(100L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 11), 9000, 1000, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 1200), GT_ModHandler.getDistilledWater(100L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 12), 9000, 1000, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 0), Materials.Void.getMolten(36L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 10), 10000, 500, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 600), Materials.Void.getMolten(36L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 11), 10000, 500, 24);
+        GT_Values.RA.addAutoclaveRecipe(GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, "item.ItemCrystalSeed", 1L, 1200), Materials.Void.getMolten(36L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextAE, GT_MachineRecipeLoader.aTextAEMM, 1L, 12), 10000, 500, 24);
         GT_Values.RA.addAutoclaveRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), Materials.Polybenzimidazole.getMolten(72L), GT_ModHandler.getIC2Item("carbonFiber", 128L), 10000, 300, 1920);
         GT_Values.RA.addAutoclaveRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), Materials.Epoxid.getMolten(144L), GT_ModHandler.getIC2Item("carbonFiber", 64L), 10000, 300, 480);
         GT_Values.RA.addAutoclaveRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 64), Materials.Polytetrafluoroethylene.getMolten(288L), GT_ModHandler.getIC2Item("carbonFiber", 32L), 10000, 400, 120);
@@ -1423,7 +1426,7 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_ModHandler.removeRecipeByOutput(ItemList.IC2_Fertilizer.get(1L));
         GT_Values.RA.addImplosionRecipe(ItemList.IC2_Compressed_Coal_Chunk.get(1L), 8, ItemList.IC2_Industrial_Diamond.get(1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 4L));
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4L), GT_OreDictUnificator.get(OrePrefixes.plateAlloy, Materials.Advanced, 4L), GT_OreDictUnificator.get(OrePrefixes.gemExquisite, Materials.Diamond, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Ingot_IridiumAlloy.get(1L), 200, 7680);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iridium, 4L), GT_OreDictUnificator.get(OrePrefixes.plateAlloy, Materials.Advanced, 4L), GT_OreDictUnificator.get(OrePrefixes.gemExquisite, Materials.Diamond, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Ingot_IridiumAlloy.get(1L), 1200, 7680);
         GT_Values.RA.addImplosionRecipe(ItemList.Ingot_IridiumAlloy.get(1L), 8, GT_OreDictUnificator.get(OrePrefixes.plateAlloy, Materials.Iridium, 1L), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 4L));
 
         if (Loader.isModLoaded("GalacticraftMars")) {
@@ -2187,8 +2190,9 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addChemicalRecipe(Materials.HydricSulfide.getCells(1), GT_Values.NI, Materials.Water.getFluid(1000), Materials.DilutedSulfuricAcid.getFluid(750), Materials.Empty.getCells(1), 60);
             GT_Values.RA.addChemicalRecipe(Materials.Water.getCells(1), GT_Values.NI, Materials.HydricSulfide.getGas(1000), Materials.DilutedSulfuricAcid.getFluid(750), Materials.Empty.getCells(1), 60);
        //}
-        GT_Values.RA.addAutoclaveRecipe(Materials.SiliconDioxide.getDust(1), Materials.Water.getFluid(200L), 		Materials.Quartzite.getGems(1), 750,  2000, 24);
-        GT_Values.RA.addAutoclaveRecipe(Materials.SiliconDioxide.getDust(1), GT_ModHandler.getDistilledWater(200L), Materials.Quartzite.getGems(1), 1000, 1500, 24);
+        GT_Values.RA.addAutoclaveRecipe(Materials.SiliconDioxide.getDust(1), Materials.Water.getFluid(200L), Materials.Quartzite.getGems(1), 750,  2000, 24);
+        GT_Values.RA.addAutoclaveRecipe(Materials.SiliconDioxide.getDust(1), GT_ModHandler.getDistilledWater(100L), Materials.Quartzite.getGems(1), 1000, 1500, 24);
+        GT_Values.RA.addAutoclaveRecipe(Materials.SiliconDioxide.getDust(1), Materials.Void.getMolten(36L), Materials.Quartzite.getGems(1), 10000, 1000, 24);
 
         this.addRecipesMay2017OilRefining();
         this.addPyrometallurgicalRecipes();
