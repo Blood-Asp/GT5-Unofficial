@@ -137,7 +137,11 @@ public class GT_MetaTileEntity_Boiler_Bronze
                         (GT_Utility.isPartOfMaterials(this.mInventory[2],Materials.Charcoal) && !GT_Utility.isPartOfOrePrefix(this.mInventory[2],OrePrefixes.block)) ||
                         (GT_Utility.isPartOfMaterials(this.mInventory[2],Materials.Lignite) && !GT_Utility.isPartOfOrePrefix(this.mInventory[2],OrePrefixes.block)) ||
                         (GT_Utility.isPartOfMaterials(this.mInventory[2],Materials.Diamond) && !GT_Utility.isPartOfOrePrefix(this.mInventory[2],OrePrefixes.block)) ||
-                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCoke")
+                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCoke") ||
+                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCactusCharcoal") ||
+                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCactusCoke") ||
+                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelSugarCharcoal") ||
+                        GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelSugarCoke")
                 ) {
                     if ((TileEntityFurnace.getItemBurnTime(this.mInventory[2])/10) > 0) {
                         this.mProcessingEnergy += (TileEntityFurnace.getItemBurnTime(this.mInventory[2])/10);
