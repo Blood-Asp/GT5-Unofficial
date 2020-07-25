@@ -1474,6 +1474,7 @@ public enum ItemList implements IItemContainer {
     Block_TungstenSteelReinforced,
     Block_NaquadahPlate,
     Block_NeutroniumPlate,
+    Block_BedrockiumCompressed,
 
     Honeycomb,
     Charcoal_Pile,

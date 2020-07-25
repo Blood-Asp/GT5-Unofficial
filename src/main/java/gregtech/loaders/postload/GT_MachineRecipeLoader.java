@@ -2758,6 +2758,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                     Materials.ElectrumFlux.getMolten(1152L),
             }, ItemList.FusionComputer_UV.get(1), 1000, 90000);
 
+
         if (GregTech_API.sThaumcraftCompat != null) {
                 String tKey = "GT_WOOD_TO_CHARCOAL";
                 GT_LanguageManager.addStringLocalization(GT_MachineRecipeLoader.aTextTCGTPage + tKey, "You have discovered a way of making charcoal magically instead of using regular ovens for this purpose.<BR><BR>To create charcoal from wood you first need an air-free environment, some vacuus essentia is needed for that, then you need to incinerate the wood using ignis essentia and wait until all the water inside the wood is burned away.<BR><BR>This method however doesn't create creosote oil as byproduct.");

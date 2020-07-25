@@ -351,6 +351,7 @@ public class Textures {
         BLOCK_TITANIUMPREIN,
         BLOCK_NAQUADAHPREIN,
         BLOCK_NEUTRONIUMPREIN,
+        BLOCK_DEEP_DARK_RAW,
         BLOCK_IRREIN,
         BLOCK_PLASCRETE,
         BLOCK_TSREIN,
