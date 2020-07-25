@@ -110,7 +110,6 @@ public class ProcessingDust implements gregtech.api.interfaces.IOreRecipeRegistr
                     GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_Utility.getIntegratedCircuit(2), GT_ModHandler.getDistilledWater(100L), GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 1L), 9000, 1500, 24, false);
                     GT_Values.RA.addAutoclaveRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_Utility.getIntegratedCircuit(3), Materials.Void.getMolten(36L), GT_OreDictUnificator.get(OrePrefixes.gem, aMaterial, 1L), 10000, 1200, 24, false);
                 }
-                }
 
                 switch (aMaterial.mName) {
                     case "NULL":
