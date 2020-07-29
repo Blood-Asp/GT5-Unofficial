@@ -559,10 +559,12 @@ public class GT_Utility {
 
             for (int i = 0; i < tGrabSlots.length; i++) {
             	byte tMovedItemCount = 0;
-                for (int j = 0; j < tPutSlots.length; j++) {
-                    if (listContainsItem(aFilter, aTileEntity1.getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
-                        if (isAllowedToTakeFromSlot(aTileEntity1, tGrabSlots[i], aGrabFrom, aTileEntity1.getStackInSlot(tGrabSlots[i]))) {
-                            if (isAllowedToPutIntoSlot((IInventory) aTileEntity2, tPutSlots[j], aPutTo, aTileEntity1.getStackInSlot(tGrabSlots[i]), aMaxTargetStackSize)) {
+
+                if (listContainsItem(aFilter, aTileEntity1.getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
+                    ItemStack tGrabStack = aTileEntity1.getStackInSlot(tGrabSlots[i]);
+                    for (int j = 0; j < tPutSlots.length; j++) {
+                        if (isAllowedToTakeFromSlot(aTileEntity1, tGrabSlots[i], aGrabFrom, tGrabStack)) {
+                             if (isAllowedToPutIntoSlot((IInventory) aTileEntity2, tPutSlots[j], aPutTo, tGrabStack, aMaxTargetStackSize)) {
                                 tMovedItemCount += moveStackFromSlotAToSlotB(aTileEntity1, (IInventory) aTileEntity2, tGrabSlots[i], tPutSlots[j], aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItemCount), aMinMoveAtOnce);
                                  if (tMovedItemCount >= aMaxMoveAtOnce) {
                                      return tMovedItemCount;
