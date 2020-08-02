@@ -104,7 +104,13 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         	{1, 0, 2, 3},
         	{1, 0, 2, 3}
         };
-        if (aSide >= 0 && aSide < 6) for (byte i = 0; i < 4; i++) if (isInputDisabledAtSide(sRestrictionArray[aSide][i])) tMask |= 1 << i;
+        if (aSide >= 0 && aSide < 6) {
+            for (byte i = 0; i < 4; i++) if (isInputDisabledAtSide(sRestrictionArray[aSide][i])) tMask |= 1 << i;
+            //Full block size renderer flips side 5 and 2  textures, flip restrictor textures to compensate
+            if (tThickNess >= 0.99F && (aSide == 5 || aSide == 2))
+                if (tMask > 3 && tMask < 12)
+                    tMask = (byte) (tMask ^ 12);
+        }
         return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColorIndex) : new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), getRestrictorTexture(tMask)};
     }
 
