@@ -83,17 +83,17 @@ public class GT_MetaTileEntity_TypeFilter
                     }
                 }
             }
-            this.mRotationIndex = 0;
+            this.mRotationIndex = -1;
         }
     }
 
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
-        if ((getBaseMetaTileEntity().isServerSide()) && (aTick % 8L == 0L)) {
+        if ((getBaseMetaTileEntity().isServerSide()) && ((aTick % 8L == 0L) || mRotationIndex == -1)) {
             if (this.mPrefix.mPrefixedItems.isEmpty()) {
                 this.mInventory[9] = null;
             } else {
-                this.mInventory[9] = GT_Utility.copyAmount(1L, new Object[]{this.mPrefix.mPrefixedItems.get(this.mRotationIndex = (this.mRotationIndex + 1) % this.mPrefix.mPrefixedItems.size())});
+                this.mInventory[9] = GT_Utility.copyAmount(1L, this.mPrefix.mPrefixedItems.get(this.mRotationIndex = (this.mRotationIndex + 1) % this.mPrefix.mPrefixedItems.size()));
                 if (this.mInventory[9].getItemDamage() == 32767) {
                     this.mInventory[9].setItemDamage(0);
                 }
