@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import static gregtech.api.enums.GT_Values.V;
 
 public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredMachineBlock {
-    public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = true;
+    public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
     public GT_MetaTileEntity_Buffer(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String aDescription) {
@@ -257,18 +257,15 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if( bStockingMode ) {
-            int tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1);
-            if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-                mSuccess = 50;
-                aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
-            }
-        } else {
-            int tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize);
-            if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-                mSuccess = 50;
-                aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
-            }
+        int tCost;
+        if( bStockingMode )
+            tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1);
+        else
+            tCost = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize);
+
+        if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+            mSuccess = 50;
+            aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
         }
     }
 

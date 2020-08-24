@@ -67,7 +67,7 @@ public class GT_Container_ChestBuffer
             if (aSlotIndex == 30) {
                 ((GT_MetaTileEntity_ChestBuffer) this.mTileEntity.getMetaTileEntity()).bStockingMode = (!((GT_MetaTileEntity_ChestBuffer) this.mTileEntity.getMetaTileEntity()).bStockingMode);
                 if (((GT_MetaTileEntity_ChestBuffer) this.mTileEntity.getMetaTileEntity()).bStockingMode) {
-                    GT_Utility.sendChatToPlayer(aPlayer, trans("217","Stocking mode. Keeps this many items in destination input slots."));
+                    GT_Utility.sendChatToPlayer(aPlayer, trans("217","Stocking mode. Keeps this many items in destination input slots. This mode can be server unfriendly."));
                 } else {
                     GT_Utility.sendChatToPlayer(aPlayer, trans("218", "Transfer size mode. Add exactly this many items in destination input slots as long as there is room."));
                 }
