@@ -62,7 +62,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mHasEnoughEnergy = true, mRunningThroughTick = false, mInputDisabled = false, mOutputDisabled = false, mMuffler = false, mLockUpgrade = false, mActive = false, mRedstone = false, mWorkUpdate = false, mSteamConverter = false, mInventoryChanged = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false, oRedstone = false;
-    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
+    private byte mColor = 0, oColor = 0, oStrongRedstone = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
     public long mTickTimer = 0;
@@ -586,7 +586,27 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         }
 
                         if (mNeedsBlockUpdate) {
-                            worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockOffset(0, 0, 0));
+                            Block thisBlock = getBlockOffset(0, 0, 0);
+                            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+                                int x1 = xCoord + dir.offsetX, y1 = yCoord + dir.offsetY, z1 = zCoord + dir.offsetZ;
+
+                                if (worldObj.blockExists(x1, y1, z1)) {
+                                    worldObj.notifyBlockOfNeighborChange(x1, y1, z1, thisBlock);
+
+                                    //update if it was / is strong powered.
+                                    if (((((mStrongRedstone | oStrongRedstone) >>> dir.ordinal()) & 1) != 0 ) && getBlock(x1, y1, z1).isNormalCube()) {
+                                        int skipUpdateSide = dir.getOpposite().ordinal(); //Don't update this block.
+
+                                        for (ForgeDirection dir2 : ForgeDirection.VALID_DIRECTIONS) {
+                                            int x2 = x1 + dir2.offsetX, y2 = y1 + dir2.offsetY, z2 = z1 + dir2.offsetZ;
+                                            if (dir2.ordinal() != skipUpdateSide && worldObj.blockExists(x2, y2, z2))
+                                                worldObj.notifyBlockOfNeighborChange(x2, y2, z2, thisBlock);
+
+                                        }
+                                    }
+                                }
+                            }
+                            oStrongRedstone = mStrongRedstone;
                             mNeedsBlockUpdate = false;
                         }
                     }
@@ -1399,6 +1419,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
+                            issueBlockUpdate();
                         }
                         doEnetUpdate();
                         return true;
