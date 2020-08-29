@@ -586,26 +586,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         }
 
                         if (mNeedsBlockUpdate) {
-                            Block thisBlock = getBlockOffset(0, 0, 0);
-                            for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-                                int x1 = xCoord + dir.offsetX, y1 = yCoord + dir.offsetY, z1 = zCoord + dir.offsetZ;
-
-                                if (worldObj.blockExists(x1, y1, z1)) {
-                                    worldObj.notifyBlockOfNeighborChange(x1, y1, z1, thisBlock);
-
-                                    //update if it was / is strong powered.
-                                    if (((((mStrongRedstone | oStrongRedstone) >>> dir.ordinal()) & 1) != 0 ) && getBlock(x1, y1, z1).isNormalCube()) {
-                                        int skipUpdateSide = dir.getOpposite().ordinal(); //Don't update this block.
-
-                                        for (ForgeDirection dir2 : ForgeDirection.VALID_DIRECTIONS) {
-                                            int x2 = x1 + dir2.offsetX, y2 = y1 + dir2.offsetY, z2 = z1 + dir2.offsetZ;
-                                            if (dir2.ordinal() != skipUpdateSide && worldObj.blockExists(x2, y2, z2))
-                                                worldObj.notifyBlockOfNeighborChange(x2, y2, z2, thisBlock);
-
-                                        }
-                                    }
-                                }
-                            }
+                            updateNeighbours(mStrongRedstone, oStrongRedstone);
                             oStrongRedstone = mStrongRedstone;
                             mNeedsBlockUpdate = false;
                         }
