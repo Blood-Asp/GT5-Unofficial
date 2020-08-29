@@ -54,7 +54,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mInventoryChanged = false, mWorkUpdate = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false;
     private boolean mCheckConnections = false;
-    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, mLagWarningCount = 0;
+    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, mLagWarningCount = 0;
     private int oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0;
     private short mID = 0;
     private long mTickTimer = 0;
@@ -308,11 +308,12 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                                 if (tData != oRedstoneData) sendBlockEvent((byte) 3, oRedstoneData = tData);
                             }
 
-                        if (mNeedsBlockUpdate) {
-                            worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockOffset(0, 0, 0));
-                            mNeedsBlockUpdate = false;
+                            if (mNeedsBlockUpdate) {
+                                updateNeighbours(mStrongRedstone, oStrongRedstone);
+                                oStrongRedstone = mStrongRedstone;
+                                mNeedsBlockUpdate = false;
+                            }
                         }
-                    }
                 default:
                     tCode = -1;
                     break;
@@ -907,6 +908,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                         mStrongRedstone ^= (1 << tSide);
                         GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                         GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
+                        issueBlockUpdate();
                     }
                     doEnetUpdate();
                     return true;
