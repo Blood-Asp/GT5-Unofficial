@@ -112,7 +112,7 @@ dependencies {
     provided name: "Galacticraft-API", version: config.gc.version, ext: 'jar'
     provided name: "GalacticraftCore-Dev", version: config.gc.version, ext: 'jar'
     provided name: 'CoFHLib', version: config.cofhlib.version, ext: 'jar'
-    provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
+//    provided name: 'CoFHCore', version: config.cofhcore.version, ext: 'jar'
     provided name: 'Railcraft', version: config.railcraft.version, ext: 'jar'
     provided name: 'IC2NuclearControl', version: config.nc.version, ext: 'jar'
 
