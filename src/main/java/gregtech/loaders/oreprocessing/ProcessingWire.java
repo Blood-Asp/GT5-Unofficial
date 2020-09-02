@@ -18,7 +18,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
     private Materials[] dielectrics = {Materials.PolyvinylChloride, Materials.Polydimethylsiloxane};
     private Materials[] rubbers = {Materials.Rubber, Materials.StyreneButadieneRubber, Materials.Silicone};
     private Materials[] syntheticRubbers = {Materials.StyreneButadieneRubber, Materials.Silicone};
-
+    static private TunnelType tt = TunnelType.ME;
     public ProcessingWire() {
         OrePrefixes.wireGt01.add(this);
         OrePrefixes.wireGt02.add(this);
@@ -29,6 +29,16 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
     }
 
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
+        if (GT_Mod.gregtechproxy.mAE2Integration) {
+            if (tt == TunnelType.ME) {
+                try {
+                    tt = TunnelType.valueOf("GT_POWER");
+                } catch (IllegalArgumentException ignored) {
+                    tt = TunnelType.IC2_POWER;
+                }
+            }
+        }
+
         int cableWidth;
         OrePrefixes correspondingCable;
         switch (aPrefix) {
@@ -83,7 +93,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
                 GT_ModHandler.addShapelessCraftingRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), new Object[]{OrePrefixes.wireGt12.get(aMaterial), OrePrefixes.wireGt04.get(aMaterial)});
 
                 if (GT_Mod.gregtechproxy.mAE2Integration) {
-                    Api.INSTANCE.registries().p2pTunnel().addNewAttunement(aStack, TunnelType.IC2_POWER);
+                    Api.INSTANCE.registries().p2pTunnel().addNewAttunement(aStack, tt);
                 }
                 break;
             default:
@@ -173,8 +183,8 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
         }
         GT_Values.RA.addUnboxingRecipe(GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), GT_Utility.copyAmount(1L, new Object[]{aStack}), null, 100, 8);
         if (GT_Mod.gregtechproxy.mAE2Integration) {
-            Api.INSTANCE.registries().p2pTunnel().addNewAttunement(aStack, TunnelType.IC2_POWER);
-            Api.INSTANCE.registries().p2pTunnel().addNewAttunement(GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), TunnelType.IC2_POWER);
+            Api.INSTANCE.registries().p2pTunnel().addNewAttunement(aStack, tt);
+            Api.INSTANCE.registries().p2pTunnel().addNewAttunement(GT_OreDictUnificator.get(correspondingCable, aMaterial, 1L), tt);
         }
     }
 }

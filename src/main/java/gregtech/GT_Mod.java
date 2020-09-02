@@ -767,8 +767,7 @@ public class GT_Mod implements IGT_Mod {
         new GT_CropLoader().run();
         new GT_Worldgenloader().run();
         new GT_CoverLoader().run();
-        new GT_AE2EnergyTunnelLoader().run();
-      
+
         LoadArmorComponents.init();
 
         GT_RecipeRegistrator.registerUsagesForMaterials(null, false, new ItemStack(Blocks.planks, 1), new ItemStack(Blocks.cobblestone, 1), new ItemStack(Blocks.stone, 1), new ItemStack(Items.leather, 1));

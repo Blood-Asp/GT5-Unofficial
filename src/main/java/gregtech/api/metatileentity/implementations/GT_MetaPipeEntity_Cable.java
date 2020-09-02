@@ -24,7 +24,6 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
 import gregtech.common.covers.GT_Cover_SolarPanel;
-import gregtech.loaders.postload.PartP2PGTPower;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
@@ -423,8 +422,6 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
         // AE2-p2p Compat
         if (GT_Mod.gregtechproxy.mAE2Integration) {
-            if (tTileEntity instanceof IEnergySource && tTileEntity instanceof IPartHost && ((IPartHost)tTileEntity).getPart(tDir) instanceof PartP2PGTPower && ((IEnergySource) tTileEntity).emitsEnergyTo((TileEntity) baseMetaTile, tDir))
-                return true;
             if (tTileEntity instanceof appeng.tile.powersink.IC2 && ((appeng.tile.powersink.IC2)tTileEntity).acceptsEnergyFrom((TileEntity)baseMetaTile, tDir))
                 return true;
         }
