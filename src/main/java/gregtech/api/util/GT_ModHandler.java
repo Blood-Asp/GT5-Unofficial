@@ -122,6 +122,7 @@ public class GT_ModHandler {
     public static List<Integer> sSingleNonBlockDamagableRecipeList_warntOutput = new ArrayList<Integer>(50);
     public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<Integer>(50);
     public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<IRecipe>(1000);
+    private static HashMap<GT_ItemStack, ItemStack> smeltingRecipeCache = new LinkedHashMap<>();
 
     static {
         sNativeRecipeClasses.add(ShapedRecipes.class.getName());
@@ -1566,7 +1567,13 @@ public class GT_ModHandler {
      */
     public static ItemStack getSmeltingOutput(ItemStack aInput, boolean aRemoveInput, ItemStack aOutputSlot) {
         if (aInput == null || aInput.stackSize < 1) return null;
-        ItemStack rStack = GT_OreDictUnificator.get(FurnaceRecipes.smelting().getSmeltingResult(aInput));
+        GT_ItemStack gtInput = new GT_ItemStack(aInput);
+        ItemStack rStack = smeltingRecipeCache.get(gtInput);
+        if (rStack == null) {
+            rStack = GT_OreDictUnificator.get(FurnaceRecipes.smelting().getSmeltingResult(aInput));
+            if (rStack != null)
+                smeltingRecipeCache.put(gtInput, rStack);
+        }
         if (rStack != null && (aOutputSlot == null || (GT_Utility.areStacksEqual(rStack, aOutputSlot) && rStack.stackSize + aOutputSlot.stackSize <= aOutputSlot.getMaxStackSize()))) {
             if (aRemoveInput) aInput.stackSize--;
             return rStack;
