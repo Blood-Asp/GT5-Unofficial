@@ -88,6 +88,17 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
+            
+            if (aOptFlow < fuelValue) {
+                // turbine too weak and/or fuel too powerful
+                // at least consume 1L
+                this.realOptFlow = 1;
+                // wastes the extra fuel and generate aOptFlow directly
+                depleteInput(new FluidStack(firstFuelType, 1));
+                this.storedFluid += 1;
+                return GT_Utility.safeInt((long)aOptFlow * (long)aBaseEff / 10000L);
+            }
+            
             actualOptimalFlow = GT_Utility.safeInt((long)aOptFlow / fuelValue);
             this.realOptFlow = actualOptimalFlow;
 
