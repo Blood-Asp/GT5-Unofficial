@@ -82,15 +82,48 @@ public class GT_MetaTileEntity_MultiFurnace
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (!tInputList.isEmpty()) {
             int mVolatage=GT_Utility.safeInt(getMaxInputVoltage());
-
-            int j = 0;
-            this.mOutputItems = new ItemStack[8 * this.mLevel];
-            for (int i = 0; (i < 256) && (j < this.mOutputItems.length); i++) {
-                if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
-                    j++;
+            int tMaxParrallel = 8 * this.mLevel;
+            int tCurrenParrallel = 0;
+            ItemStack tSmeltStack = tInputList.get(0);
+            ItemStack tOutputStack = GT_ModHandler.getSmeltingOutput(tSmeltStack,false,null);
+            if (tOutputStack == null)
+                    return false;
+            for (int i = 0;i<tInputList.size();i++)
+            {
+                ItemStack item = tInputList.get(i);
+                if (tSmeltStack.isItemEqual(item))
+                {
+                    if (item.stackSize<(tMaxParrallel-tCurrenParrallel))
+                    {
+                        tCurrenParrallel += item.stackSize;
+                        item.stackSize = 0;
+                    }
+                    else
+                    {
+                        item.stackSize = (tCurrenParrallel + item.stackSize) - tMaxParrallel;
+                        tCurrenParrallel = tMaxParrallel;
+                        break;
+                    }
                 }
             }
-            if (j > 0) {
+//            this.mOutputItems = new ItemStack[8 * this.mLevel];
+//            for (int i = 0; (i < 256) && (j < this.mOutputItems.length); i++) {
+//                if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
+//                    j++;
+//                }
+//            }
+            this.mOutputItems = new ItemStack[(tCurrenParrallel/64)+1];
+            for (int i = 0; i<this.mOutputItems.length;i++)
+            {
+                ItemStack tNewStack = tOutputStack.copy();
+                int size = tCurrenParrallel>64 ? 64 : tCurrenParrallel;
+                tNewStack.stackSize = size;
+                tCurrenParrallel -= size;
+                this.mOutputItems[i] = tNewStack;
+            }
+
+
+            if (this.mOutputItems != null && this.mOutputItems.length > 0) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;
                 calculateOverclockedNessMulti(4, 512, 1, mVolatage);
