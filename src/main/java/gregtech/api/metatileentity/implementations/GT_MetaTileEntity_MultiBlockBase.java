@@ -617,8 +617,17 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             while (tempEUt <= V[mTier - 1] * mAmperage) {
                 tempEUt <<= 2;//this actually controls overclocking
                 //xEUt *= 4;//this is effect of everclocking
+                int oldTime = mMaxProgresstime;
                 mMaxProgresstime >>= ocTimeShift;//this is effect of overclocking
-                xEUt = mMaxProgresstime==0 ? xEUt >> ocTimeShift : xEUt << 2;//U know, if the time is less than 1 tick make the machine use less power
+                if (mMaxProgresstime <1)
+                {
+                    xEUt *= oldTime * (perfectOC ? 1:2);
+                    break;
+                }
+                else
+                {
+                    xEUt <<= ocTimeShift;
+                }
             }
             if(xEUt > Integer.MAX_VALUE - 1) {
                 mEUt = Integer.MAX_VALUE - 1;
