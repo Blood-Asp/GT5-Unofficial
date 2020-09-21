@@ -1,17 +1,20 @@
 package gregtech.api.util;
 
 import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
-import gregtech.api.items.GT_MetaGenerated_Tool;
+import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.util.List;
+
 public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_CraftingRecipe {
-    public final boolean mDismantleable, mRemovableByGT, mKeepingNBT;
+    public final boolean /*mDismantleable,*/ mRemovableByGT, mKeepingNBT;
     private final Enchantment[] mEnchantmentsAdded;
     private final int[] mEnchantmentLevelsAdded;
 
@@ -21,7 +24,22 @@ public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_Craft
         mEnchantmentLevelsAdded = aEnchantmentLevelsAdded;
         mRemovableByGT = aRemovableByGT;
         mKeepingNBT = aKeepingNBT;
-        mDismantleable = aDismantleAble;
+//        mDismantleable = aDismantleAble;
+        if (aDismantleAble){
+            for (Object o : aRecipe) {
+                String toPrint = o.toString();
+                if (o instanceof ItemStack)
+                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName((ItemStack)o));
+                else if (o instanceof List)
+                    toPrint = String.join(", ", ((List<String>) o));
+                else if (o instanceof Item)
+                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Item)o)));
+                else if (o instanceof Block)
+                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Block)o)));
+                System.out.println(toPrint);
+            }
+        }
+        //TODO: Register Dissassembler "Recipe"
     }
 
     @Override
@@ -66,20 +84,20 @@ public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_Craft
             }
 
             // Saving Ingredients inside the Item.
-            if (mDismantleable) {
-                NBTTagCompound rNBT = rStack.getTagCompound(), tNBT = new NBTTagCompound();
-                if (rNBT == null) rNBT = new NBTTagCompound();
-                for (int i = 0; i < 9; i++) {
-                    ItemStack tStack = aGrid.getStackInSlot(i);
-                    if (tStack != null && GT_Utility.getContainerItem(tStack, true) == null && !(tStack.getItem() instanceof GT_MetaGenerated_Tool)) {
-                        tStack = GT_Utility.copyAmount(1, tStack);
-                        GT_ModHandler.dischargeElectricItem(tStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false, true);
-                        tNBT.setTag("Ingredient." + i, tStack.writeToNBT(new NBTTagCompound()));
-                    }
-                }
-                rNBT.setTag("GT.CraftingComponents", tNBT);
-                rStack.setTagCompound(rNBT);
-            }
+//            if (mDismantleable) {
+//                NBTTagCompound rNBT = rStack.getTagCompound(), tNBT = new NBTTagCompound();
+//                if (rNBT == null) rNBT = new NBTTagCompound();
+//                for (int i = 0; i < 9; i++) {
+//                    ItemStack tStack = aGrid.getStackInSlot(i);
+//                    if (tStack != null && GT_Utility.getContainerItem(tStack, true) == null && !(tStack.getItem() instanceof GT_MetaGenerated_Tool)) {
+//                        tStack = GT_Utility.copyAmount(1, tStack);
+//                        GT_ModHandler.dischargeElectricItem(tStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false, true);
+//                        tNBT.setTag("Ingredient." + i, tStack.writeToNBT(new NBTTagCompound()));
+//                    }
+//                }
+//                rNBT.setTag("GT.CraftingComponents", tNBT);
+//                rStack.setTagCompound(rNBT);
+//            }
 
             // Add Enchantments
             for (int i = 0; i < mEnchantmentsAdded.length; i++)
