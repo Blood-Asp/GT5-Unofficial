@@ -112,6 +112,7 @@ public class GT_MetaTileEntity_MultiFurnace
 //                    j++;
 //                }
 //            }
+            tCurrenParrallel *= tOutputStack.stackSize;
             this.mOutputItems = new ItemStack[(tCurrenParrallel/64)+1];
             for (int i = 0; i<this.mOutputItems.length;i++)
             {
