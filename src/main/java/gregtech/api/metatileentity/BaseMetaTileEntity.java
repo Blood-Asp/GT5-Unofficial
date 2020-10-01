@@ -448,10 +448,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
                                 if (getRandomNumber(1000) == 0) {
                                     if ((getCoverIDAtSide((byte) 1) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord) - 2 < yCoord)
-                                            || (getCoverIDAtSide((byte) 2) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord - 1) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 3) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord + 1) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 4) == 0 && worldObj.getPrecipitationHeight(xCoord - 1, zCoord) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 5) == 0 && worldObj.getPrecipitationHeight(xCoord + 1, zCoord) - 1 < yCoord)) {
+                                            || (getCoverIDAtSide((byte) 2) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord - 1) - 1 < yCoord && worldObj.getPrecipitationHeight(xCoord, zCoord - 1) > -1)
+                                            || (getCoverIDAtSide((byte) 3) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord + 1) - 1 < yCoord && worldObj.getPrecipitationHeight(xCoord, zCoord + 1) > -1)
+                                            || (getCoverIDAtSide((byte) 4) == 0 && worldObj.getPrecipitationHeight(xCoord - 1, zCoord) - 1 < yCoord && worldObj.getPrecipitationHeight(xCoord - 1, zCoord) > -1)
+                                            || (getCoverIDAtSide((byte) 5) == 0 && worldObj.getPrecipitationHeight(xCoord + 1, zCoord) - 1 < yCoord) && worldObj.getPrecipitationHeight(xCoord + 1, zCoord) > -1) {
                                         if (GregTech_API.sMachineRainExplosions && worldObj.isRaining() && getBiome().rainfall > 0) {
                                             if (getRandomNumber(10) == 0) {
                                                 try{
