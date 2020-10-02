@@ -549,11 +549,14 @@ public class GT_MachineRecipeLoader implements Runnable {
              nbtFlask.setInteger("Capacity", 576);
              flask.setTagCompound(nbtFlask);
              GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(5), flask, 10, 30);
+	     nbtFlask.setInteger("Capacity", 720);
+             flask.setTagCompound(nbtFlask);
+             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(6), flask, 10, 30);
              // make the 1000L recipe actualy in
              ItemStack flask500 = flask.copy();
              nbtFlask.setInteger("Capacity", 1000);
              flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(flask500, GT_Utility.getIntegratedCircuit(6), flask, 10, 30);
+             GT_Values.RA.addAssemblerRecipe(flask500, GT_Utility.getIntegratedCircuit(24), flask, 10, 30);
          }
 //        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_HV.get(1L), GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.Brass, 1L), ItemList.Conveyor_Module_HV.get(1L), new ItemStack(Blocks.chest, 1, 0), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Hatch_Input_Bus_HV.get(1L), 200, 480);
 //        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_EV.get(1L), GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.Electrum, 1L), ItemList.Conveyor_Module_EV.get(1L), new ItemStack(Blocks.chest, 1, 0), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.Hatch_Input_Bus_EV.get(1L), 200, 1920);
