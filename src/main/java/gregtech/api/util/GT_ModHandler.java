@@ -1,5 +1,7 @@
 package gregtech.api.util;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
@@ -122,6 +124,7 @@ public class GT_ModHandler {
     public static List<Integer> sSingleNonBlockDamagableRecipeList_warntOutput = new ArrayList<Integer>(50);
     public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<Integer>(50);
     public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<IRecipe>(1000);
+    private static Cache<GT_ItemStack, ItemStack> sSmeltingRecipeCache = CacheBuilder.newBuilder().maximumSize(1000).build();
 
     static {
         sNativeRecipeClasses.add(ShapedRecipes.class.getName());
@@ -1565,8 +1568,14 @@ public class GT_ModHandler {
      * Used in my own Furnace.
      */
     public static ItemStack getSmeltingOutput(ItemStack aInput, boolean aRemoveInput, ItemStack aOutputSlot) {
-        if (aInput == null || aInput.stackSize < 1) return null;
-        ItemStack rStack = GT_OreDictUnificator.get(FurnaceRecipes.smelting().getSmeltingResult(aInput));
+        if (aInput == null || aInput.stackSize < 1)
+            return null;
+        ItemStack rStack = null;
+        try {
+            rStack = sSmeltingRecipeCache.get(new GT_ItemStack(aInput), () -> GT_OreDictUnificator.get(FurnaceRecipes.smelting().getSmeltingResult(aInput)));
+        } catch (Exception ignored){
+        }
+
         if (rStack != null && (aOutputSlot == null || (GT_Utility.areStacksEqual(rStack, aOutputSlot) && rStack.stackSize + aOutputSlot.stackSize <= aOutputSlot.getMaxStackSize()))) {
             if (aRemoveInput) aInput.stackSize--;
             return rStack;
