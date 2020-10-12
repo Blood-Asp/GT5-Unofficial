@@ -20,7 +20,7 @@ import net.minecraft.util.StatCollector;
 @Optional.Interface(iface = "appeng.api.storage.IMEInventory", modid = "appliedenergistics2")
 public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements appeng.api.storage.IMEInventory<appeng.api.storage.data.IAEItemStack> {
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks Use screwdrive to enable void items on over flow");
+        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks Use a screwdriver to enable voiding items on overflow");
     }
 
     public GT_MetaTileEntity_DigitalChestBase(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
