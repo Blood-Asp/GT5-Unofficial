@@ -91,14 +91,11 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             ItemStack stack = getItemStack();
             if ((mInventory[0] != null) && ((count < getMaxItemCount())|| mVoidOverflow ) && GT_Utility.areStacksEqual(mInventory[0], stack)) {
                 count += mInventory[0].stackSize;
-                if (count > getMaxItemCount()) {
-                    if (mVoidOverflow)
-                        mInventory[0] = null;
-                    else
-                        mInventory[0].stackSize = (count - getMaxItemCount());
-                    count = getMaxItemCount();
-                } else {
+                if (count <= getMaxItemCount() || mVoidOverflow ) {
                     mInventory[0] = null;
+                } else {
+                    mInventory[0].stackSize = (count - getMaxItemCount());
+                    count = getMaxItemCount();
                 }
             }
             if (mInventory[1] == null && stack != null) {
