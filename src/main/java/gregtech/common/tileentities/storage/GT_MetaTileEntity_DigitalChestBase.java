@@ -118,7 +118,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
                 mInventory[2] = null;
             }
         }
-    }}
+    }
 
     abstract protected int getItemCount();
     abstract public void setItemCount(int aCount);
