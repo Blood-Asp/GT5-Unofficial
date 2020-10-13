@@ -18,8 +18,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import static gregtech.api.enums.GT_Values.debugCleanroom;
+import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
+    private int mHeight = -1;
 
     public GT_MetaTileEntity_Cleanroom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -46,17 +48,20 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 				"Up to 10 Machine Hull Item & Energy transfer through walls",
 				"Remaining Blocks: Plascrete, 20 min",
 				GT_Values.cleanroomGlass+"% of the Plascrete can be Reinforced Glass (min 20 Plascrete still apply)",
-				"Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency",
+				"Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency when not overclocked",
 				"An energy hatch accepts up to 2A, so you can use 2A LV or 1A MV",
 				"2 LV batteries + 1 LV generator or 1 MV generator",
+				"Time required to reach full efficiency is propotional to the height of empty space within.",
 				"Make sure your Energy Hatch matches!"};
     }
 
 	@Override
 	public boolean checkRecipe(ItemStack aStack) {
 		mEfficiencyIncrease = 100;
-		mMaxProgresstime = 100;
-		mEUt = -4;
+		// use the standard overclock mechanism to determine duration and estimate a maximum consumption
+		calculateOverclockedNessMulti(40, 45 * Math.min(1, mHeight - 1), 1, getMaxInputVoltage());
+		// negate it to trigger the special energy consumption function. divide by 10 to get the actual final consumption.
+		mEUt /= -10;
 		return true;
 	}
 
@@ -230,6 +235,8 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         }
 
         float ratio = (((float)mPlascreteCount)/100f)* GT_Values.cleanroomGlass;
+
+        this.mHeight = -y;
 
         return mPlascreteCount>=20 && mGlassCount < (int) Math.floor(ratio);
     }
