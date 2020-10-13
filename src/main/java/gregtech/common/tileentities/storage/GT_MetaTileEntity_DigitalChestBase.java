@@ -15,11 +15,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 @Optional.Interface(iface = "appeng.api.storage.IMEInventory", modid = "appliedenergistics2")
 public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements appeng.api.storage.IMEInventory<appeng.api.storage.data.IAEItemStack> {
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks");
+        super(aID, aName, aNameRegional, aTier, 3, "This Chest stores " + CommonSizeCompute(aTier) + " Blocks Use a screwdriver to enable voiding items on overflow");
     }
 
     public GT_MetaTileEntity_DigitalChestBase(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -56,6 +57,14 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         aBaseMetaTileEntity.openGUI(aPlayer);
         return true;
     }
+    
+    protected boolean mVoidOverflow = false;
+
+    @Override
+    public final void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        mVoidOverflow = !mVoidOverflow;
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal(mVoidOverflow ? "GT5U.machines.voidoveflow.enabled" : "GT5U.machines.voidoveflow.disabled"));
+    }
 
     @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -80,13 +89,13 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             }
             int count = getItemCount();
             ItemStack stack = getItemStack();
-            if ((mInventory[0] != null) && (count < getMaxItemCount()) && GT_Utility.areStacksEqual(mInventory[0], stack)) {
+            if ((mInventory[0] != null) && ((count < getMaxItemCount())|| mVoidOverflow ) && GT_Utility.areStacksEqual(mInventory[0], stack)) {
                 count += mInventory[0].stackSize;
-                if (count > getMaxItemCount()) {
+                if (count <= getMaxItemCount() || mVoidOverflow ) {
+                    mInventory[0] = null;
+                } else {
                     mInventory[0].stackSize = (count - getMaxItemCount());
                     count = getMaxItemCount();
-                } else {
-                    mInventory[0] = null;
                 }
             }
             if (mInventory[1] == null && stack != null) {
@@ -182,6 +191,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         aNBT.setInteger("mItemCount", getItemCount());
         if (getItemStack() != null)
             aNBT.setTag("mItemStack", getItemStack().writeToNBT(new NBTTagCompound()));
+        aNBT.setBoolean("mVoidOverflow", mVoidOverflow);
     }
 
     @Override
@@ -190,6 +200,8 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             setItemCount(aNBT.getInteger("mItemCount"));
         if (aNBT.hasKey("mItemStack"))
             setItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound) aNBT.getTag("mItemStack")));
+        mVoidOverflow = aNBT.getBoolean("mVoidOverflow");
+        
     }
 
     @Override
@@ -235,7 +247,18 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         if (storedStack != null) {
             if (GT_Utility.areStacksEqual(storedStack, inputStack)) {
                 if (input.getStackSize() + getItemCount() > getMaxItemCount())
-                    return createOverflowStack(input.getStackSize() + getItemCount(), mode);
+                {
+                    if (mVoidOverflow)
+                    {
+                        if (mode != appeng.api.config.Actionable.SIMULATE)
+                            setItemCount(getMaxItemCount());
+                        return null;
+                    }
+                    else
+                    {
+                        return createOverflowStack(input.getStackSize() + getItemCount(), mode);
+                    }
+                }
                 else {
                     if (mode != appeng.api.config.Actionable.SIMULATE)
                         setItemCount(getItemCount() + (int) input.getStackSize());
