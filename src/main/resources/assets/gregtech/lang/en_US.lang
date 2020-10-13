@@ -41,7 +41,8 @@ GT5U.machines.separatebus=Input busses are separated
 GT5U.machines.pumpareaset=Pumping area set to
 GT5U.machines.oilfluidpump=Oil/Fluid Pump
 GT5U.machines.minermulti=Multiblock Miner
-GT5U.machines.voidoveflow=Void Over Flow
+GT5U.machines.voidoveflow.enabled=Overflow voiding enabled
+GT5U.machines.voidoveflow.disabled=Overflow voiding disabled
 
 
 
