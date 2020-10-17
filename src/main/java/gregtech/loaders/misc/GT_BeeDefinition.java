@@ -2725,7 +2725,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.IoStoneDust", 1, 0), 0.05f);
             beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.EuropaStoneDust", 1, 0), 0.05f);
             beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.EuropaIceDust", 1, 0), 0.05f);
-            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.GanymedStoneDust", 1, 0), 0.05f);
+            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.GanymedeStoneDust", 1, 0), 0.05f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.HOT);
             beeSpecies.setNocturnal();
@@ -2797,7 +2797,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
         @Override
         protected void setSpeciesProperties(GT_AlleleBeeSpecies beeSpecies) {
             beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.JUPITER), 0.25f);
-            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.GanymedStoneDust", 1, 0), 0.10f);
+            beeSpecies.addSpecialty(GT_ModHandler.getModItem("dreamcraft", "item.GanymedeStoneDust", 1, 0), 0.10f);
             beeSpecies.setHumidity(EnumHumidity.ARID);
             beeSpecies.setTemperature(EnumTemperature.COLD);
         }
