@@ -267,4 +267,25 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         	GT_Utility.sendChatToPlayer(playerThatLockedfluid, String.format(trans("151.4","Sucessfully locked Fluid to %s"), mFluid.getLocalizedName()));
     	}
     }
+    
+    @Override
+    public int fill(ForgeDirection aSide, FluidStack aFluid, boolean doFill) {
+        return 0;
+    }
+    
+    @Override
+    public FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
+        if (ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()) == aSide) {
+            return super.drain(aSide, aFluid, doDrain);
+        }
+        return null;
+    }
+    
+    @Override
+    public FluidStack drain(ForgeDirection aSide, int maxDrain, boolean doDrain) {
+        if (ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()) == aSide) {
+            return super.drain(aSide, maxDrain, doDrain);
+        }
+        return null;
+    }
 }
