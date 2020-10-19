@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -32,6 +33,7 @@ import static gregtech.api.enums.GT_Values.*;
 public class GT_OreDictUnificator {
     private static final /*ConcurrentHash*/Map<String, ItemStack> sName2StackMap = new /*ConcurrentHash*/HashMap<String, ItemStack>();
     private static final /*ConcurrentHash*/Map<GT_ItemStack, ItemData> sItemStack2DataMap = new /*ConcurrentHash*/HashMap<GT_ItemStack, ItemData>();
+    private static final /*ConcurrentHash*/Map<GT_ItemStack, List<ItemStack>> sUnificationTable = new /*ConcurrentHash*/HashMap<GT_ItemStack, List<ItemStack>>();
     private static final GT_HashSet<GT_ItemStack> sNoUnificationList = new GT_HashSet<GT_ItemStack>();
     public static volatile int VERSION = 509;
     private static int isRegisteringOre = 0, isAddingOre = 0;
@@ -39,6 +41,7 @@ public class GT_OreDictUnificator {
 
     static {
         GregTech_API.sItemStackMappings.add(sItemStack2DataMap);
+        GregTech_API.sItemStackMappings.add(sUnificationTable);
     }
 
     /**
@@ -135,7 +138,11 @@ public class GT_OreDictUnificator {
     }
 
     public static ItemStack get(boolean aUseBlackList, ItemStack aStack) {
-        if (GT_Utility.isStackInvalid(aStack)) return null;
+        return get(aUseBlackList, aStack, false);
+    }
+
+    private static ItemStack get(boolean aUseBlackList, ItemStack aStack, boolean aOnUnificationTableCreation) {
+    	if (GT_Utility.isStackInvalid(aStack)) return null;
         ItemData tPrefixMaterial = getAssociation(aStack);
         ItemStack rStack = null;
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData() || (aUseBlackList && tPrefixMaterial.mBlackListed))
@@ -144,13 +151,49 @@ public class GT_OreDictUnificator {
             tPrefixMaterial.mBlackListed = true;
             return GT_Utility.copy(aStack);
         }
-        if (tPrefixMaterial.mUnificationTarget == null)
-            tPrefixMaterial.mUnificationTarget = sName2StackMap.get(tPrefixMaterial.toString());
+        if (tPrefixMaterial.mUnificationTarget == null) {
+        	tPrefixMaterial.mUnificationTarget = sName2StackMap.get(tPrefixMaterial.toString());
+        	if (!aOnUnificationTableCreation) sUnificationTable.clear();
+        }
         rStack = tPrefixMaterial.mUnificationTarget;
         if (GT_Utility.isStackInvalid(rStack)) return GT_Utility.copy(aStack);
         assert rStack != null;
         rStack.setTagCompound(aStack.getTagCompound());
         return GT_Utility.copyAmount(aStack.stackSize, rStack);
+    }
+
+    public static List<ItemStack> getNonUnifiedStacks(Object obj) {
+    	synchronized (sUnificationTable) {
+    		if (sUnificationTable.isEmpty() && !sItemStack2DataMap.isEmpty()) {
+            	for (GT_ItemStack tGTStack0 : sItemStack2DataMap.keySet()) {
+            		ItemStack tStack0 = tGTStack0.toStack();
+            		ItemStack tStack1 = get(false, tStack0, true);
+            		if (tStack0 != null && tStack1 != null && !GT_Utility.areStacksEqual(tStack0, tStack1)) {
+            			GT_ItemStack tGTStack1 = new GT_ItemStack(tStack1);
+            			List<ItemStack> list = sUnificationTable.get(tGTStack1);
+            			if (list == null) sUnificationTable.put(tGTStack1, list = new ArrayList<ItemStack>());
+            			if (!list.contains(tStack0)) list.add(tStack0);
+            		}
+            	}
+        	}
+    	}
+    	ItemStack[] aStacks = {};
+    	if (obj instanceof ItemStack) aStacks = new ItemStack[]{(ItemStack) obj};
+    	else if (obj instanceof ItemStack[]) aStacks = (ItemStack[]) obj;
+    	else if (obj instanceof List) aStacks = (ItemStack[]) ((List)obj).toArray(new ItemStack[0]);
+    	List<ItemStack> rList = new ArrayList<ItemStack>();
+    	for (ItemStack aStack : aStacks) {
+    		rList.add(aStack);
+    		List<ItemStack> tList = sUnificationTable.get(new GT_ItemStack(aStack));
+    		if (tList != null) {
+    			for (ItemStack tStack : tList) {
+            		ItemStack tStack1 = GT_Utility.copyAmount(aStack.stackSize, tStack);
+            		tStack1.setTagCompound(aStack.getTagCompound());
+            		rList.add(tStack1);
+            	}
+    		}
+    	}
+    	return rList;
     }
 
     public static void addItemData(ItemStack aStack, ItemData aData) {
@@ -250,6 +293,7 @@ public class GT_OreDictUnificator {
 
     public static void resetUnificationEntries() {
         for (ItemData tPrefixMaterial : sItemStack2DataMap.values()) tPrefixMaterial.mUnificationTarget = null;
+        sUnificationTable.clear();
     }
 
     public static ItemStack getGem(MaterialStack aMaterial) {

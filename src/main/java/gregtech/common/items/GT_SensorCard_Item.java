@@ -35,20 +35,18 @@ public class GT_SensorCard_Item
         if (aStack != null) {
             NBTTagCompound tNBT = aStack.getTagCompound();
             if (tNBT == null) {
-                aList.add("Missing Coodinates!");
+                aList.add(trans("014", "Missing Coodinates!"));
             } else {
-                aList.add("Device at:");
+                aList.add(trans("015", "Device at:"));
                 aList.add(String.format("x: %d, y: %d, z: %d", new Object[]{Integer.valueOf(tNBT.getInteger("x")), Integer.valueOf(tNBT.getInteger("y")), Integer.valueOf(tNBT.getInteger("z"))}));
             }
         }
     }
 
-    @Override
     public CardState update(TileEntity aPanel, ICardWrapper aCard, int aMaxRange) {
         return update(aPanel.getWorldObj(), aCard, aMaxRange);
     }
 
-    @Override
     public CardState update(World world, ICardWrapper aCard, int aMaxRange) {
         ChunkCoordinates target = aCard.getTarget();
 

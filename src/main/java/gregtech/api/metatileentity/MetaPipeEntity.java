@@ -2,11 +2,16 @@ package gregtech.api.metatileentity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
+import gregtech.api.interfaces.metatileentity.IConnectable;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IColoredTileEntity;
+import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -19,6 +24,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -45,7 +51,7 @@ import static gregtech.api.enums.GT_Values.V;
  * Call the Constructor like the following example inside the Load Phase, to register it.
  * "new GT_MetaTileEntity_E_Furnace(54, "GT_E_Furnace", "Automatic E-Furnace");"
  */
-public abstract class MetaPipeEntity implements IMetaTileEntity {
+public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     /**
      * The Inventory of the MetaTileEntity. Amount of Slots can be larger than 256. HAYO!
      */
@@ -54,6 +60,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
      * This variable tells, which directions the Block is connected to. It is a Bitmask.
      */
     public byte mConnections = 0;
+    protected boolean mCheckConnections = false;
     /**
      * Only assigned for the MetaTileEntity in the List! Also only used to get the localized Name for the ItemStack and for getInvName.
      */
@@ -77,6 +84,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
      * }
      */
     public MetaPipeEntity(int aID, String aBasicName, String aRegionalName, int aInvSlotCount) {
+        this(aID, aBasicName, aRegionalName, aInvSlotCount, true);
+    }
+
+    public MetaPipeEntity(int aID, String aBasicName, String aRegionalName, int aInvSlotCount, boolean aAddInfo) {
         if (GregTech_API.sPostloadStarted || !GregTech_API.sPreloadStarted)
             throw new IllegalAccessError("This Constructor has to be called in the load Phase");
         if (GregTech_API.METATILEENTITIES[aID] == null) {
@@ -90,10 +101,15 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
         mInventory = new ItemStack[aInvSlotCount];
 
-        if (GT.isClientSide()) {
-            ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
-            tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
+        if (aAddInfo) {
+            addInfo(aID);
         }
+    }
+
+    protected final void addInfo(int aID) {
+    	if (GT.isServerSide()) return;
+    	ItemStack tStack = new ItemStack(GregTech_API.sBlockMachines, 1, aID);
+        tStack.getItem().addInformation(tStack, null, new ArrayList<String>(), true);
     }
 
     /**
@@ -163,7 +179,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
         if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
             tCovered = true;
         }
-        if((mConnections & (byte)(Math.pow(2, aSide))) != 0){
+        if(isConnectedAtSide(aSide)){
         	tCovered = true;
         }
         //System.out.println("Cover: "+mBaseMetaTileEntity.getCoverIDAtSide(aSide));
@@ -200,6 +216,16 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
 
     @Override
     public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        return false;
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        return false;
+    }
+
+    @Override
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         return false;
     }
 
@@ -305,12 +331,12 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
 
     @Override
     public boolean isLiquidInput(byte aSide) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isLiquidOutput(byte aSide) {
-        return true;
+        return false;
     }
 
     /**
@@ -614,12 +640,16 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
 
     @Override
     public void onColorChangeServer(byte aColor) {
-        //
+        setCheckConnections();
     }
 
     @Override
     public void onColorChangeClient(byte aColor) {
-        //
+        // Do nothing apparently
+    }
+
+    public void setCheckConnections() {
+        mCheckConnections = true;
     }
 
     public long injectEnergyUnits(byte aSide, long aVoltage, long aAmperage) {
@@ -689,4 +719,104 @@ public abstract class MetaPipeEntity implements IMetaTileEntity {
 	public String getAlternativeModeText() {
 		return "";
 	}
+
+	public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+
+    private boolean connectableColor(TileEntity tTileEntity) {
+        // Determine if two entities are connectable based on their colorization:
+        //  Uncolored can connect to anything
+        //  If both are colored they must be the same color to connect.
+        if (tTileEntity instanceof IColoredTileEntity) {
+            if (getBaseMetaTileEntity().getColorization() >= 0) {
+                byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
+                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
+            }
+        }
+
+        return true;
+    }
+
+	@Override
+	public int connect(byte aSide) {
+		if (aSide >= 6) return 0;
+
+		final byte tSide = GT_Utility.getOppositeSide(aSide);
+		final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
+		if (baseMetaTile == null || !baseMetaTile.isServerSide()) return 0;
+
+        final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
+        final int coverId = baseMetaTile.getCoverIDAtSide(aSide),
+                  coverData = baseMetaTile.getCoverDataAtSide(aSide);
+
+        boolean alwaysLookConnected = coverBehavior.alwaysLookConnected(aSide, coverId, coverData, baseMetaTile);
+        boolean letsIn = letsIn(coverBehavior, aSide, coverId, coverData, baseMetaTile);
+        boolean letsOut = letsOut(coverBehavior, aSide, coverId, coverData, baseMetaTile);
+
+        // Careful - tTileEntity might be null, and that's ok -- so handle it
+        TileEntity tTileEntity = baseMetaTile.getTileEntityAtSide(aSide);
+        if (!connectableColor(tTileEntity)) return 0;
+
+        if ((alwaysLookConnected || letsIn || letsOut))  {
+            // Are we trying to connect to a pipe? let's do it!
+            IMetaTileEntity tPipe = tTileEntity instanceof IGregTechTileEntity ? ((IGregTechTileEntity) tTileEntity).getMetaTileEntity() : null;
+            if (getClass().isInstance(tPipe) || (tPipe != null && tPipe.getClass().isInstance(this))) {
+                connectAtSide(aSide);
+                if (!((MetaPipeEntity) tPipe).isConnectedAtSide(tSide)) {
+                    // Make sure pipes all get together -- connect back to us if we're connecting to a pipe
+                    ((MetaPipeEntity) tPipe).connect(tSide);
+                }
+                return 1;
+            }
+            else if((getGT6StyleConnection() && baseMetaTile.getAirAtSide(aSide)) || canConnect(aSide, tTileEntity)) {
+                // Allow open connections to Air, if the GT6 style pipe/cables are enabled, so that it'll connect to the next block placed down next to it
+                connectAtSide(aSide);
+                return 1;
+            }
+            if (!baseMetaTile.getWorld().getChunkProvider().chunkExists(baseMetaTile.getOffsetX(aSide, 1) >> 4, baseMetaTile.getOffsetZ(aSide, 1) >> 4)) {
+                // Target chunk unloaded
+                return -1;
+            }
+
+        }
+    	return 0;
+	}
+
+    protected void checkConnections() {
+        // Verify connections around us.  If GT6 style cables are not enabled then revert to old behavior and try
+        // connecting to everything around us
+        for (byte aSide = 0; aSide < 6; aSide++) {
+            if ((!getGT6StyleConnection() || isConnectedAtSide(aSide)) && connect(aSide) == 0) {
+                disconnect(aSide);
+            }
+        }
+        mCheckConnections = false;
+    }
+
+	private void connectAtSide(byte aSide) {
+        mConnections |= (1 << aSide);
+    }
+
+	@Override
+	public void disconnect(byte aSide) {
+		if (aSide >= 6) return;
+		mConnections &= ~(1 << aSide);
+		byte tSide = GT_Utility.getOppositeSide(aSide);
+		IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSide(aSide);
+		IMetaTileEntity tPipe = tTileEntity == null ? null : tTileEntity.getMetaTileEntity(); 
+		if ((this.getClass().isInstance(tPipe) || (tPipe != null && tPipe.getClass().isInstance(this))) && ((MetaPipeEntity) tPipe).isConnectedAtSide(tSide))
+			((MetaPipeEntity) tPipe).disconnect(tSide);
+	}
+
+	public boolean isConnectedAtSide(int aSide) {
+		return (mConnections & (1 << aSide)) != 0;
+	}
+
+
+	public boolean letsIn(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
+    public boolean letsOut(GT_CoverBehavior coverBehavior, byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) { return false; }
+
+	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
+	public boolean getGT6StyleConnection() { return false; }
 }

@@ -52,7 +52,7 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
             if (tMaterial == null) continue;
             if (doesMaterialAllowGeneration(tPrefix, tMaterial)) {
                 ItemStack tStack = new ItemStack(this, 1, i);
-                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", getDefaultLocalization(tPrefix, tMaterial, i));
+                GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", GT_LanguageManager.i18nPlaceholder ? getDefaultLocalizationFormat(tPrefix, tMaterial, i) : getDefaultLocalization(tPrefix, tMaterial, i));
                 GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".tooltip", tMaterial.getToolTip(tPrefix.mMaterialAmount / M));
                 if (tPrefix.mIsUnificatable) {
                     GT_OreDictUnificator.set(tPrefix, tMaterial, tStack);
@@ -101,6 +101,16 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
     }
 
     /**
+     * @param aPrefix   the OreDict Prefix
+     * @param aMaterial the Material
+     * @param aMetaData a Index from [0 - 31999]
+     * @return the Localized Name Format when default LangFiles are used.
+     */
+    public String getDefaultLocalizationFormat(OrePrefixes aPrefix, Materials aMaterial, int aMetaData) {
+        return aPrefix.getDefaultLocalNameFormatForItem(aMaterial);
+    }
+
+    /**
      * @param aMetaData a Index from [0 - 31999]
      * @param aMaterial the Material
      * @return an Icon Container for the Item Display.
@@ -120,6 +130,15 @@ public abstract class GT_MetaGenerated_Item_X32 extends GT_MetaGenerated_Item {
     }
 	
 	/* ---------- INTERNAL OVERRIDES ---------- */
+
+    @Override
+    public String getItemStackDisplayName(ItemStack aStack) {
+    	String aName = super.getItemStackDisplayName(aStack);
+    	int aDamage = getDamage(aStack);
+    	if (aDamage < 32000 && aDamage >= 0)
+    		return Materials.getLocalizedNameForItem(aName, aDamage % 1000);
+    	return aName;
+    }
 
     @Override
     public ItemStack getContainerItem(ItemStack aStack) {

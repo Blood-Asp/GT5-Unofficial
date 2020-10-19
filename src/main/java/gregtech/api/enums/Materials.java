@@ -9,6 +9,7 @@ import gregtech.api.interfaces.IMaterialHandler;
 import gregtech.api.interfaces.ISubTagContainer;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.MaterialStack;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -93,7 +94,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Osmium = new Materials(83, TextureSet.SET_METALLIC, 	16.0F, 1280, 4, 1|2|8|32|64|128, 50, 50, 255, 0, "Osmium", "Osmium", 0, 0, 3306, 3306, true, false, 10, 1, 1, Dyes.dyeBlue, Element.Os, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.MACHINA, 1), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
     public static Materials Oxygen = new Materials(13, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 0, 100, 200, 240, "Oxygen", "Oxygen", 0, 0, 54, 0, false, true, 1, 1, 1, Dyes.dyeWhite, Element.O, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.AER, 1)));
     public static Materials Palladium = new Materials(52, TextureSet.SET_SHINY, 	8.0F, 512, 2, 1|2|8|32|64|128, 128, 128, 128, 0, "Palladium", "Palladium", 0, 0, 1828, 1828, true, false, 4, 1, 1, Dyes.dyeGray, Element.Pd, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 3)));
-    public static Materials Phosphor = new Materials(21, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|32, 255, 255, 0, 0, "Phosphor", "Phosphor", 0, 0, 317, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.P, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 2), new TC_AspectStack(TC_Aspects.POTENTIA, 1)));
+    public static Materials Phosphorus = new Materials(21, TextureSet.SET_DULL, 		1.0F, 0, 2, 1|32, 255, 255, 0, 0, "Phosphorus", "Phosphorus", 0, 0, 317, 0, false, false, 2, 1, 1, Dyes.dyeYellow, Element.P, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 2), new TC_AspectStack(TC_Aspects.POTENTIA, 1)));
     public static Materials Platinum = new Materials(85, TextureSet.SET_SHINY, 		12.0F, 64, 2, 1|2|8|32|64|128, 255, 255, 200, 0, "Platinum", "Platinum", 0, 0, 2041, 0, false, false, 6, 1, 1, Dyes.dyeOrange, Element.Pt, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.NEBRISUM, 1)));
     public static Materials Plutonium = new Materials(100, TextureSet.SET_METALLIC, 6.0F, 512, 3, 1|2|8|32|64, 240, 50, 50, 0, "Plutonium", "Plutonium 239", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 2)));
     public static Materials Plutonium241 = new Materials(101, TextureSet.SET_SHINY, 6.0F, 512, 3, 1|2|32|64, 250, 70, 70, 0, "Plutonium241", "Plutonium 241", 0, 0, 912, 0, false, false, 6, 1, 1, Dyes.dyeLime, Element.Pu_241, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 3)));
@@ -213,7 +214,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Black = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 2, 0, 0, 0, 0, 0, "Black", "Black", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlack);
     public static Materials Blizz = new Materials(851, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1, 220, 233, 255, 0, "Blizz", "Blizz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
     public static Materials Blueschist = new Materials(852, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Blueschist", "Blueschist", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeLightBlue);
-    public static Materials Bluestone = new Materials(813, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Bluestone", "Bluestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
+    public static Materials Bluestone = new Materials(-1/*813*/, TextureSet.SET_DULL, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Bluestone", "Bluestone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
     public static Materials Bloodstone = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Bloodstone", "Bloodstone", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed);
     public static Materials Blutonium = new Materials(-1, TextureSet.SET_SHINY, 	1.0F, 0, 2, 1|2|8, 0, 0, 255, 0, "Blutonium", "Blutonium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeBlue);
     public static Materials Carmot = new Materials(962, TextureSet.SET_METALLIC, 	16.0F, 128, 1, 1 | 2 | 8 | 64, 217, 205, 140, 0, "Carmot", "Carmot", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
@@ -221,12 +222,12 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials CertusQuartz = new Materials(516, TextureSet.SET_QUARTZ,5.0F, 32, 1, 1|4|8 |64, 210, 210, 230, 0, "CertusQuartz", "Certus Quartz", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VITREUS, 1)));
     public static Materials Ceruclase = new Materials(952, TextureSet.SET_METALLIC, 6.0F, 1280, 2, 1 | 2 | 8, 140, 189, 208, 0, "Ceruclase", "Ceruclase", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Citrine = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Citrine", "Citrine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
-    public static Materials CobaltHexahydrate = new Materials(853, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 |16, 80, 80, 250, 0, "CobaltHexahydrate", "Cobalt Hexahydrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
+    public static Materials CobaltHexahydrate = new Materials(-1/*853*/, TextureSet.SET_METALLIC, 1.0F, 0, 2, 1 |16, 80, 80, 250, 0, "CobaltHexahydrate", "Cobalt Hexahydrate", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlue);
     public static Materials ConstructionFoam = new Materials(854, TextureSet.SET_DULL, 1.0F, 0, 2, 1 |16, 128, 128, 128, 0, "ConstructionFoam", "Construction Foam", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray);
     public static Materials Chert = new Materials(857, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Chert", "Chert", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
     public static Materials Chimerite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Chimerite", "Chimerite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
     public static Materials Coral = new Materials(-1, TextureSet.SET_NONE, 			1.0F, 0, 1, 1, 255, 128, 255, 0, "Coral", "Coral", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
-    public static Materials CrudeOil = new Materials(858, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 10, 10, 10, 0, "CrudeOil", "Crude Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
+    public static Materials CrudeOil = new Materials(-1/*858*/, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 10, 10, 10, 0, "CrudeOil", "Crude Oil", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack);
     public static Materials Chrysocolla = new Materials(-1, TextureSet.SET_NONE, 	1.0F, 0, 2, 1, 255, 255, 255, 0, "Chrysocolla", "Chrysocolla", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
     public static Materials CrystalFlux = new Materials(-1, TextureSet.SET_QUARTZ, 	1.0F, 0, 3, 1|4, 100, 50, 100, 0, "CrystalFlux", "Flux Crystal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Cyanite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Cyanite", "Cyanite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeCyan);
@@ -242,7 +243,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Duranium = new Materials(328, TextureSet.SET_METALLIC, 16.0F, 5120, 5, 1|2|64, 255, 255, 255, 0, "Duranium", "Duranium", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray);
     public static Materials Eclogite = new Materials(860, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Eclogite", "Eclogite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials ElectrumFlux = new Materials(320, TextureSet.SET_SHINY,16.0F, 512, 3, 1|2|64, 255, 255, 120, 0, "ElectrumFlux", "Fluxed Electrum", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeYellow);
-    public static Materials Emery = new Materials(861, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Emery", "Emery", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
+    public static Materials Emery = new Materials(-1/*861*/, TextureSet.SET_DULL, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Emery", "Emery", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Enderium = new Materials(321, TextureSet.SET_DULL, 		8.0F, 256, 3, 1|2|64, 89, 145, 135, 0, "Enderium", "Enderium", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
     public static Materials EnderiumBase = new Materials(-1, TextureSet.SET_DULL, 	8.0F, 256, 3, 1|2|64, 89, 145, 135, 0, "EnderiumBase", "Enderium Base", 0, 0, 3000, 3000, true, false, 1, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.ALIENIS, 1)));
     public static Materials Energized = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 0, 255, 255, 255, 0, "Energized", "Energized", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
@@ -253,15 +254,15 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Fluorite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Fluorite", "Fluorite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen);
     public static Materials FoolsRuby = new Materials(512, TextureSet.SET_RUBY, 	1.0F, 0, 2, 1|4|8, 255, 100, 100, 127, "FoolsRuby", "Ruby", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 2), new TC_AspectStack(TC_Aspects.VITREUS, 2)));
     public static Materials Force = new Materials(521, TextureSet.SET_DIAMOND, 	   10.0F, 128, 3, 1|2|4|8 |64|128, 255, 255, 0, 0, "Force", "Force", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 5)));
-    public static Materials Forcicium = new Materials(518, TextureSet.SET_DIAMOND, 	1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcicium", "Forcicium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
-    public static Materials Forcillium = new Materials(519, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcillium", "Forcillium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Forcicium = new Materials(-1/*518*/, TextureSet.SET_DIAMOND, 	1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcicium", "Forcicium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
+    public static Materials Forcillium = new Materials(-1/*519*/, TextureSet.SET_DIAMOND, 1.0F, 0, 1, 1|4|16, 50, 50, 70, 0, "Forcillium", "Forcillium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.POTENTIA, 2)));
     public static Materials Gabbro = new Materials(863, TextureSet.SET_DULL, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Gabbro", "Gabbro", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
     public static Materials Glowstone = new Materials(811, TextureSet.SET_SHINY, 	1.0F, 0, 1, 1 |16, 255, 255, 0, 0, "Glowstone", "Glowstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUX, 2), new TC_AspectStack(TC_Aspects.SENSUS, 1)));
     public static Materials Gneiss = new Materials(864, TextureSet.SET_DULL, 		1.0F, 0, 1, 1, 255, 255, 255, 0, "Gneiss", "Gneiss", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes._NULL);
     public static Materials Graphite = new Materials(865, TextureSet.SET_DULL, 		5.0F, 32, 2, 1 |8|16|64, 128, 128, 128, 0, "Graphite", "Graphite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
     public static Materials Graphene = new Materials(819, TextureSet.SET_DULL, 		6.0F, 32, 1, 1|64, 128, 128, 128, 0, "Graphene", "Graphene", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.ELECTRUM, 1)));
     public static Materials Greenschist = new Materials(866, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenschist", "Green Schist", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
-    public static Materials Greenstone = new Materials(867, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenstone", "Greenstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
+    public static Materials Greenstone = new Materials(-1/*867*/, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greenstone", "Greenstone", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGreen);
     public static Materials Greywacke = new Materials(868, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Greywacke", "Greywacke", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray);
     public static Materials Haderoth = new Materials(963, TextureSet.SET_METALLIC, 10.0F, 3200, 3, 1 | 2 | 8 | 16 | 64, 119, 52, 30, 0, "Haderoth", "Haderoth", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Hematite = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1|2, 255, 255, 255, 0, "Hematite", "Hematite", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
@@ -270,7 +271,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Ignatius = new Materials(950, TextureSet.SET_METALLIC, 12.0F, 512, 2, 1 | 2 | 16, 255, 169, 83, 0, "Ignatius", "Ignatius", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Infernal = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 0, 255, 255, 255, 0, "Infernal", "Infernal", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Infuscolium =new Materials(490, TextureSet.SET_METALLIC,6.0F, 64, 2, 1 | 2 | 8 | 16 | 64, 146, 33, 86, 0, "Infuscolium", "Infuscolium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
-    public static Materials InfusedGold = new Materials(323, TextureSet.SET_SHINY, 12.0F, 64, 3, 1|2|8 |64|128, 255, 200, 60, 0, "InfusedGold", "Infused Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
+    public static Materials InfusedGold = new Materials(-1/*323*/, TextureSet.SET_SHINY, 12.0F, 64, 3, 1|2|8 |64|128, 255, 200, 60, 0, "InfusedGold", "Infused Gold", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow);
     public static Materials InfusedAir = new Materials(540, TextureSet.SET_SHARDS, 	8.0F, 64, 3, 1|4|8 |64|128, 255, 255, 0, 0, "InfusedAir", "Aer", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeYellow, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.AER, 2)));
     public static Materials InfusedFire = new Materials(541, TextureSet.SET_SHARDS, 8.0F, 64, 3, 1|4|8 |64|128, 255, 0, 0, 0, "InfusedFire", "Ignis", 5, 320, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.IGNIS, 2)));
     public static Materials InfusedEarth = new Materials(542, TextureSet.SET_SHARDS,8.0F, 256, 3, 1|4|8 |64|128, 0, 255, 0, 0, "InfusedEarth", "Terra", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.TERRA, 2)));
@@ -281,7 +282,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials InfusedDull = new Materials(-1, TextureSet.SET_SHARDS, 32.0F, 64, 3, 1|4|8 |64|128, 100, 100, 100, 0, "InfusedDull", "Vacuus", 5, 160, -1, 0, false, true, 3, 1, 1, Dyes.dyeLightGray, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.PRAECANTATIO, 1), new TC_AspectStack(TC_Aspects.VACUOS, 2)));
     public static Materials Inolashite = new Materials(954, TextureSet.SET_NONE, 	8.0F, 2304, 3, 1 | 2 | 8 | 16 | 64, 148, 216, 187, 0, "Inolashite", "Inolashite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Invisium = new Materials(-1, TextureSet.SET_NONE, 		1.0F, 0, 2, 1, 255, 255, 255, 0, "Invisium", "Invisium", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes._NULL);
-    public static Materials Jade = new Materials(537, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1, 0, 100, 0, 0, "Jade", "Jade", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
+    public static Materials Jade = new Materials(-1/*537*/, TextureSet.SET_SHINY, 		1.0F, 0, 2, 1, 0, 100, 0, 0, "Jade", "Jade", 0, 0, -1, 0, false, false, 5, 1, 1, Dyes.dyeGreen, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 6), new TC_AspectStack(TC_Aspects.VITREUS, 3)));
     public static Materials Jasper = new Materials(511, TextureSet.SET_EMERALD, 	1.0F, 0, 2, 1|4, 200, 80, 80, 100, "Jasper", "Jasper", 0, 0, -1, 0, false, true, 3, 1, 1, Dyes.dyeRed, Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 4), new TC_AspectStack(TC_Aspects.VITREUS, 2)));
     public static Materials Kalendrite = new Materials(953, TextureSet.SET_METALLIC,5.0F, 2560, 3, 1 | 2 | 16, 170, 91, 189, 0, "Kalendrite", "Kalendrite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes._NULL);
     public static Materials Komatiite = new Materials(869, TextureSet.SET_DULL, 	1.0F, 0, 1, 1, 255, 255, 255, 0, "Komatiite", "Komatiite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
@@ -429,7 +430,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
      * First Degree Compounds
      */
     public static Materials Methane = new Materials(715, TextureSet.SET_FLUID, 			1.0F, 0, 1, 16, 255, 255, 255, 0, "Methane", "Methane", 1, 104, -1, 0, false, false, 3, 1, 1, Dyes.dyeMagenta, 1, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4)));
-    public static Materials CarbonDioxide = new Materials(497, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16|32, 169, 208, 245, 240, "CarbonDioxide", "Carbon Dioxide", 0, 0, 25, 1, false, true, 1, 1, 1, Dyes.dyeLightBlue, 1, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 2))).setHasCorrespondingGas(true);
+    public static Materials CarbonDioxide = new Materials(497, TextureSet.SET_FLUID, 	1.0F, 0, 2, 16|32, 169, 208, 245, 240, "CarbonDioxide", "Carbon Dioxide", 0, 0, 25, 1, false, true, 1, 1, 1, Dyes.dyeLightBlue, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 2))).setHasCorrespondingGas(true);
     public static Materials NobleGases = new Materials(496, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 169, 208, 245, 240, "NobleGases", "Noble Gases", 0, 0, 4, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(CarbonDioxide, 21), new MaterialStack(Helium, 9), new MaterialStack(Methane, 3), new MaterialStack(Deuterium, 1))).setHasCorrespondingFluid(true).setLiquidTemperature(79);
     public static Materials Air = new Materials(-1, TextureSet.SET_FLUID, 				1.0F, 0, 2, 16|32, 169, 208, 245, 240, "Air", "Air", 0, 0, -1, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 0, Arrays.asList(new MaterialStack(Nitrogen, 40), new MaterialStack(Oxygen, 11), new MaterialStack(Argon, 1), new MaterialStack(NobleGases, 1)));
     public static Materials LiquidAir = new Materials(495, TextureSet.SET_FLUID, 		1.0F, 0, 2, 16|32, 169, 208, 245, 240, "LiquidAir", "Liquid Air", 0, 0, 4, 0, false, true, 1, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Nitrogen, 40), new MaterialStack(Oxygen, 11), new MaterialStack(Argon, 1), new MaterialStack(NobleGases, 1))).setHasCorrespondingFluid(true).setLiquidTemperature(79);
@@ -492,7 +493,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials NitroCarbon = new Materials(716, TextureSet.SET_FLUID, 		1.0F, 0, 1, 16, 0, 75, 100, 0, "NitroCarbon", "Nitro-Carbon", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Carbon, 1)));
     public static Materials NitrogenDioxide = new Materials(717, TextureSet.SET_FLUID, 	1.0F, 0, 1, 16, 100, 175, 255, 0, "NitrogenDioxide", "Nitrogen Dioxide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeCyan, 1, Arrays.asList(new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 2)));
     public static Materials Obsidian = new Materials(804, TextureSet.SET_DULL, 			1.0F, 0, 3, 1, 80, 50, 100, 0, "Obsidian", "Obsidian", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack, 1, Arrays.asList(new MaterialStack(Magnesium, 1), new MaterialStack(Iron, 1), new MaterialStack(Silicon, 2), new MaterialStack(Oxygen, 8)));
-    public static Materials Phosphate = new Materials(833, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8|16, 255, 255, 0, 0, "Phosphate", "Phosphate", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Phosphor, 1), new MaterialStack(Oxygen, 4)));
+    public static Materials Phosphate = new Materials(833, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8|16, 255, 255, 0, 0, "Phosphate", "Phosphate", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Phosphorus, 1), new MaterialStack(Oxygen, 4)));
     public static Materials PigIron = new Materials(307, TextureSet.SET_METALLIC, 		6.0F, 384, 2, 1|2|64, 200, 180, 180, 0, "PigIron", "Pig Iron", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyePink, 2, Arrays.asList(new MaterialStack(Iron, 1)));
     public static Materials Plastic = new Materials(874, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 200, 200, 0, "Plastic", "Polyethylene", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 2)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
     public static Materials Epoxid = new Materials(470, TextureSet.SET_DULL, 			3.0F, 32, 1, 1|2|64|128, 200, 140, 20, 0, "Epoxid", "Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeWhite, 0, Arrays.asList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
@@ -536,6 +537,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HeavyFuel = new Materials(741, TextureSet.SET_FLUID, 		1.0F, 0, 0, 16, 255, 255, 0, 0, "HeavyFuel", "Heavy Fuel", 3, 192, -1, 0, false, false, 1, 1, 1, Dyes.dyeBlack).setCanBeCracked(true);
     public static Materials LPG = new Materials(742, TextureSet.SET_FLUID, 				1.0F, 0, 0, 16, 255, 255, 0, 0, "LPG", "LPG", 1, 256, -1, 0, false, false, 1, 1, 1, Dyes.dyeYellow);
 
+    public static Materials Chlorobenzene = new MaterialBuilder(605, TextureSet.SET_FLUID, "Chlorobenzene").addCell().addFluid().setRGB(0, 50, 65).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials DilutedHydrochloricAcid = new MaterialBuilder(606, TextureSet.SET_FLUID, "Diluted Hydrochloric Acid").setName("DilutedHydrochloricAcid_GT5U").addCell().addFluid().setRGB(153, 167, 163).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 1)).constructMaterial();
     public static Materials Pyrochlore = new MaterialBuilder(607, TextureSet.SET_METALLIC, "Pyrochlore").addDustItems().addOreItems().setRGB(43, 17, 0).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Calcium, 2), new MaterialStack(Niobium, 2), new MaterialStack(Oxygen, 7)).addElectrolyzerRecipe().constructMaterial();
     public static Materials GrowthMediumRaw = new MaterialBuilder(608, TextureSet.SET_FLUID, "Raw Growth Medium").setName("GrowthMediumRaw").addCell().addFluid().setRGB(211, 141, 95).setColor(Dyes.dyeOrange).constructMaterial();
@@ -569,15 +571,15 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Ethane = new MaterialBuilder(642, TextureSet.SET_FLUID, "Ethane").addCell().addGas().setRGB(200, 200, 255).setColor(Dyes.dyeLightBlue).setFuelType(MaterialBuilder.GAS).setFuelPower(168).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Propane = new MaterialBuilder(643, TextureSet.SET_FLUID, "Propane").addCell().addGas().setRGB(250, 226, 80).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(232).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
     public static Materials Butane = new MaterialBuilder(644, TextureSet.SET_FLUID, "Butane").addCell().addGas().setRGB(182, 55, 30).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(296).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 10)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
-    public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(256).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
-    public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.GAS).setFuelPower(206).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Butene = new MaterialBuilder(645, TextureSet.SET_FLUID, "Butene").addCell().addGas().setRGB(207, 80, 5).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Butadiene = new MaterialBuilder(646, TextureSet.SET_FLUID, "Butadiene").addCell().addGas().setRGB(232, 105, 0).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
     public static Materials RawStyreneButadieneRubber = new MaterialBuilder(634, TextureSet.SET_SHINY, "Raw Styrene-Butadiene Rubber").addDustItems().setRGB(84, 64, 61).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
     public static Materials StyreneButadieneRubber = new MaterialBuilder(635, TextureSet.SET_SHINY, "Styrene-Butadiene Rubber").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(128).setToolQuality(1).setRGB(33, 26, 24).setColor(Dyes.dyeBlack).setMaterialList(new MaterialStack(Styrene, 1), new MaterialStack(Butadiene, 3)).constructMaterial();
     public static Materials Toluene = new MaterialBuilder(647, TextureSet.SET_FLUID, "Toluene").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(328).setMaterialList(new MaterialStack(Carbon, 7), new MaterialStack(Hydrogen, 8)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Epichlorohydrin = new MaterialBuilder(648, TextureSet.SET_FLUID, "Epichlorohydrin").addCell().setRGB(80, 29, 5).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 5), new MaterialStack(Chlorine, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials PolyvinylChloride = new MaterialBuilder(649, TextureSet.SET_DULL, "Polyvinyl Chloride").addDustItems().addMetalItems().addToolHeadItems().addGearItems().setToolSpeed(3.0f).setDurability(32).setToolQuality(1).setRGB(215, 230, 230).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).constructMaterial();
     public static Materials VinylChloride = new MaterialBuilder(650, TextureSet.SET_FLUID, "Vinyl Chloride").addCell().addGas().setRGB(225, 240, 240).setColor(Dyes.dyeLightGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials SulfurDioxide = new MaterialBuilder(651, TextureSet.SET_FLUID, "Sulfur Dioxide").addCell().addGas().setRGB(200, 200, 25).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials SulfurDioxide = new MaterialBuilder(651, TextureSet.SET_FLUID, "Sulfur Dioxide").addCell().addGas().setRGB(200, 200, 25).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 2)).constructMaterial();
     public static Materials SulfurTrioxide = new MaterialBuilder(652, TextureSet.SET_FLUID, "Sulfur Trioxide").addCell().addGas().setGasTemperature(344).setRGB(160, 160, 20).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Sulfur, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
     public static Materials NitricAcid = new MaterialBuilder(653, TextureSet.SET_FLUID, "Nitric Acid").addCell().setRGB(230, 226, 171).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Nitrogen, 1), new MaterialStack(Oxygen, 3)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Dimethylhydrazine = new MaterialBuilder(654, TextureSet.SET_FLUID, "1,1-Dimethylhydrazine").addCell().addFluid().setRGB(0, 0, 85).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 8), new MaterialStack(Nitrogen, 2)).addElectrolyzerRecipe().constructMaterial();
@@ -588,19 +590,19 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Ammonia = new MaterialBuilder(659, TextureSet.SET_FLUID, "Ammonia").addCell().addGas().setRGB(63, 52, 128).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 1), new MaterialStack(Hydrogen, 3)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Dimethyldichlorosilane = new MaterialBuilder(663, TextureSet.SET_FLUID, "Dimethyldichlorosilane").addCell().addFluid().setRGB(68, 22, 80).setColor(Dyes.dyePurple).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 6), new MaterialStack(Chlorine, 2), new MaterialStack(Silicon, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Chloromethane = new MaterialBuilder(664, TextureSet.SET_FLUID, "Chloromethane").addCell().addGas().setRGB(200, 44, 160).setColor(Dyes.dyeMagenta).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 3), new MaterialStack(Chlorine, 1)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials PhosphorousPentoxide = new MaterialBuilder(665, TextureSet.SET_FLUID, "Phosphorous Pentoxide").addCell().addDustItems().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Phosphor, 4), new MaterialStack(Oxygen, 10)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Tetrafluoroethylene = new MaterialBuilder(666, TextureSet.SET_FLUID, "Tetrafluoroethylene").addCell().addGas().setRGB(125, 125, 125).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials PhosphorousPentoxide = new MaterialBuilder(665, TextureSet.SET_FLUID, "Phosphorous Pentoxide").addCell().addDustItems().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Phosphorus, 4), new MaterialStack(Oxygen, 10)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Tetrafluoroethylene = new MaterialBuilder(666, TextureSet.SET_FLUID, "Tetrafluoroethylene").addCell().addGas().setRGB(125, 125, 125).setColor(Dyes.dyeGray).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Fluorine, 4)).constructMaterial();
     public static Materials HydrofluoricAcid = new MaterialBuilder(667, TextureSet.SET_FLUID, "Hydrofluoric Acid").setName("HydrofluoricAcid_GT5U").addCell().addFluid().setRGB(0, 136, 170).setColor(Dyes.dyeLightBlue).setMaterialList(new MaterialStack(Hydrogen, 1), new MaterialStack(Fluorine, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Chloroform = new MaterialBuilder(668, TextureSet.SET_FLUID, "Chloroform").addCell().addFluid().setRGB(137, 44, 160).setColor(Dyes.dyePurple).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 1), new MaterialStack(Chlorine, 3)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials BisphenolA = new MaterialBuilder(669, TextureSet.SET_FLUID, "Bisphenol A").addCell().setRGB(212, 170, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 15), new MaterialStack(Hydrogen, 16), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial(); 
+    public static Materials BisphenolA = new MaterialBuilder(669, TextureSet.SET_FLUID, "Bisphenol A").addCell().setRGB(212, 170, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 15), new MaterialStack(Hydrogen, 16), new MaterialStack(Oxygen, 2)).constructMaterial(); 
     public static Materials AceticAcid = new MaterialBuilder(670, TextureSet.SET_FLUID, "Acetic Acid").addCell().addFluid().setRGB(200, 180, 160).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
     public static Materials CalciumAcetateSolution = new MaterialBuilder(671, TextureSet.SET_RUBY, "Calcium Acetate Solution").addCell().addFluid().setRGB(220, 200, 180).setColor(Dyes.dyeCyan).setMaterialList(new MaterialStack(Calcium, 1), new MaterialStack(Carbon, 2), new MaterialStack(Oxygen, 4), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Acetone = new MaterialBuilder(672, TextureSet.SET_FLUID, "Acetone").addCell().addFluid().setRGB(175, 175, 175).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Methanol = new MaterialBuilder(673, TextureSet.SET_FLUID, "Methanol").addCell().addFluid().setRGB(170, 136, 0).setColor(Dyes.dyeBrown).setFuelPower(84).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Methanol = new MaterialBuilder(673, TextureSet.SET_FLUID, "Methanol").addCell().addFluid().setRGB(170, 136, 0).setColor(Dyes.dyeBrown).setFuelPower(32).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Hydrogen, 4), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials CarbonMonoxide = new MaterialBuilder(674, TextureSet.SET_FLUID, "Carbon Monoxide").addCell().addGas().setRGB(14, 72, 128).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(24).setMaterialList(new MaterialStack(Carbon, 1), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials MetalMixture = new MaterialBuilder(676, TextureSet.SET_METALLIC, "Metal Mixture").addDustItems().setRGB(80, 45, 22).setColor(Dyes.dyeBrown).constructMaterial();
-    public static Materials Ethylene = new MaterialBuilder(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setFuelType(MaterialBuilder.GAS).setFuelPower(128).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
-    public static Materials Propene = new MaterialBuilder(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setFuelType(MaterialBuilder.GAS).setFuelPower(192).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().setCanBeCracked(true).constructMaterial();
+    public static Materials Ethylene = new MaterialBuilder(677, TextureSet.SET_FLUID, "Ethylene").addCell().addGas().setRGB(225, 225, 225).setColor(Dyes.dyeWhite).setMaterialList(new MaterialStack(Carbon, 2), new MaterialStack(Hydrogen, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Propene = new MaterialBuilder(678, TextureSet.SET_FLUID, "Propene").addCell().addGas().setRGB(255, 221, 85).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
     public static Materials VinylAcetate = new MaterialBuilder(679, TextureSet.SET_FLUID, "Vinyl Acetate").addCell().addFluid().setRGB(255, 179, 128).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
     public static Materials PolyvinylAcetate = new MaterialBuilder(680, TextureSet.SET_FLUID, "Polyvinyl Acetate").addCell().addFluid().setRGB(255, 153, 85).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 4), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).constructMaterial();
     public static Materials MethylAcetate = new MaterialBuilder(681, TextureSet.SET_FLUID, "Methyl Acetate").addCell().addFluid().setRGB(238, 198, 175).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(Carbon, 3), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 2)).addElectrolyzerRecipe().constructMaterial();
@@ -610,12 +612,12 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials SodiumHydroxide = new MaterialBuilder(685, TextureSet.SET_DULL, "Sodium Hydroxide").setName("SodiumHydroxide_GT5U").addDustItems().setRGB(0, 51, 128).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Sodium, 1), new MaterialStack(Oxygen, 1), new MaterialStack(Hydrogen, 1)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Benzene = new MaterialBuilder(686, TextureSet.SET_FLUID, "Benzene").addCell().addFluid().setRGB(26, 26, 26).setColor(Dyes.dyeGray).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 6)).addElectrolyzerRecipe().constructMaterial();
     public static Materials Phenol = new MaterialBuilder(687, TextureSet.SET_FLUID, "Phenol").addCell().addFluid().setRGB(120, 68, 33).setColor(Dyes.dyeBrown).setFuelType(MaterialBuilder.GAS).setFuelPower(288).setMaterialList(new MaterialStack(Carbon, 6), new MaterialStack(Hydrogen, 6), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials Cumene = new MaterialBuilder(688, TextureSet.SET_FLUID, "Cumene").addCell().addFluid().setRGB(85, 34, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 9), new MaterialStack(Hydrogen, 12)).addElectrolyzerRecipe().constructMaterial();
-    public static Materials PhosphoricAcid = new MaterialBuilder(689, TextureSet.SET_FLUID, "Phosphoric Acid").setName("PhosphoricAcid_GT5U").addCell().addFluid().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Hydrogen, 3), new MaterialStack(Phosphor, 1), new MaterialStack(Oxygen, 4)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials Cumene = new MaterialBuilder(688, TextureSet.SET_FLUID, "Cumene").addCell().addFluid().setRGB(85, 34, 0).setColor(Dyes.dyeBrown).setMaterialList(new MaterialStack(Carbon, 9), new MaterialStack(Hydrogen, 12)).constructMaterial();
+    public static Materials PhosphoricAcid = new MaterialBuilder(689, TextureSet.SET_FLUID, "Phosphoric Acid").setName("PhosphoricAcid_GT5U").addCell().addFluid().setRGB(220, 220, 0).setColor(Dyes.dyeYellow).setMaterialList(new MaterialStack(Hydrogen, 3), new MaterialStack(Phosphorus, 1), new MaterialStack(Oxygen, 4)).addElectrolyzerRecipe().constructMaterial();
     
     public static Materials SolderingAlloy = new Materials(314, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 220, 220, 230, 0, "SolderingAlloy", "Soldering Alloy", 0, 0, 400, 400, false, false, 1, 1, 1, Dyes.dyeWhite, 2, Arrays.asList(new MaterialStack(Tin, 9), new MaterialStack(Antimony, 1)));
     public static Materials GalliumArsenide = new Materials(980, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 160, 160, 160, 0, "GalliumArsenide", "Gallium Arsenide", 0, 0, -1, 1200, true, false, 1, 1, 1, Dyes.dyeGray, 2, Arrays.asList(new MaterialStack(Arsenic, 1), new MaterialStack(Gallium, 1)));
-    public static Materials IndiumGalliumPhosphide = new Materials(981, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 160, 140, 190, 0, "IndiumGalliumPhosphide", "Indium Gallium Phosphide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Indium, 1), new MaterialStack(Gallium, 1), new MaterialStack(Phosphor, 1)));
+    public static Materials IndiumGalliumPhosphide = new Materials(981, TextureSet.SET_DULL, 	1.0F, 0, 1, 1|2, 160, 140, 190, 0, "IndiumGalliumPhosphide", "Indium Gallium Phosphide", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeLightGray, 2, Arrays.asList(new MaterialStack(Indium, 1), new MaterialStack(Gallium, 1), new MaterialStack(Phosphorus, 1)));
     public static Materials Spessartine = new Materials(838, TextureSet.SET_DULL, 		1.0F, 0, 2, 1 |8 , 255, 100, 100, 0, "Spessartine", "Spessartine", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeRed, 1, Arrays.asList(new MaterialStack(Aluminium, 2), new MaterialStack(Manganese, 3), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 12)));
     public static Materials Sphalerite = new Materials(839, TextureSet.SET_DULL, 		1.0F, 0, 1, 1 |8 , 255, 255, 255, 0, "Sphalerite", "Sphalerite", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeYellow, 1, Arrays.asList(new MaterialStack(Zinc, 1), new MaterialStack(Sulfur, 1)));
     public static Materials StainlessSteel = new Materials(306, TextureSet.SET_SHINY, 	7.0F, 480, 2, 1|2|64|128, 200, 200, 220, 0, "StainlessSteel", "Stainless Steel", 0, 0, -1, 1700, true, false, 1, 1, 1, Dyes.dyeWhite, 1, Arrays.asList(new MaterialStack(Iron, 6), new MaterialStack(Chrome, 1), new MaterialStack(Manganese, 1), new MaterialStack(Nickel, 1)));
@@ -686,7 +688,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials BlueAlloy = new Materials(309, TextureSet.SET_DULL, 		1.0F, 0, 0, 1|2, 100, 180, 255, 0, "BlueAlloy", "Blue Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Silver, 1), new MaterialStack(Nikolite, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.ELECTRUM, 3)));
     public static Materials RedAlloy = new Materials( 308, TextureSet.SET_DULL, 		1.0F, 0, 0, 1|2, 200, 0, 0, 0, "RedAlloy", "Red Alloy", 0, 0, -1, 0, false, false, 3, 5, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Copper, 1), new MaterialStack(Redstone, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.MACHINA, 3)));
     public static Materials CobaltBrass = new Materials( 343, TextureSet.SET_METALLIC, 	8.0F, 256, 2, 1|2|64|128, 180, 180, 160, 0, "CobaltBrass", "Cobalt Brass", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeOrange, 2, Arrays.asList(new MaterialStack(Brass, 7), new MaterialStack(Aluminium, 1), new MaterialStack(Cobalt, 1)));
-    public static Materials Phosphorus = new Materials( 534, TextureSet.SET_FLINT, 		1.0F, 0, 2, 1|4|8|16, 255, 255, 0, 0, "Phosphorus", "Phosphorus", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Phosphate, 2)));
+    public static Materials TricalciumPhosphate = new Materials( 534, TextureSet.SET_FLINT, 		1.0F, 0, 2, 1|4|8|16, 255, 255, 0, 0, "TricalciumPhosphate", "Tricalcium Phosphate", 0, 0, -1, 0, false, false, 3, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Calcium, 3), new MaterialStack(Phosphate, 2)));
     public static Materials Basalt = new Materials( 844, TextureSet.SET_ROUGH, 			1.0F, 0, 1, 1, 30, 20, 20, 0, "Basalt", "Basalt", 0, 0, -1, 0, false, false, 2, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(Olivine, 1), new MaterialStack(Calcite, 3), new MaterialStack(Flint, 8), new MaterialStack(DarkAsh, 4)), Arrays.asList(new TC_AspectStack(TC_Aspects.TENEBRAE, 1)));
     public static Materials GarnetRed = new Materials( 527, TextureSet.SET_RUBY, 		7.0F, 128, 2, 1|4|8 |64, 200, 80, 80, 127, "GarnetRed", "Red Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Pyrope, 3), new MaterialStack(Almandine, 5), new MaterialStack(Spessartine, 8)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3)));
     public static Materials GarnetYellow = new Materials( 528, TextureSet.SET_RUBY, 	7.0F, 128, 2, 1|4|8 |64, 200, 200, 80, 127, "GarnetYellow", "Yellow Garnet", 0, 0, -1, 0, false, true, 4, 1, 1, Dyes.dyeYellow, 2, Arrays.asList(new MaterialStack(Andradite, 5), new MaterialStack(Grossular, 8), new MaterialStack(Uvarovite, 3)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 3)));
@@ -695,7 +697,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Thaumium = new Materials(330, TextureSet.SET_METALLIC, 	   12.0F, 256, 3, 1|2|64|128, 150, 100, 200, 0, "Thaumium", "Thaumium", 0, 0, -1, 0, false, false, 5, 2, 1, Dyes.dyePurple, 0, Arrays.asList(new MaterialStack(Iron, 1), new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
     public static Materials Vinteum = new Materials(529, TextureSet.SET_EMERALD, 	   10.0F, 128, 3, 1|4|8|64, 100, 200, 255, 0, "Vinteum", "Vinteum", 5, 32, -1, 0, false, false, 4, 1, 1, Dyes.dyeLightBlue, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.VITREUS, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
     public static Materials Vis = new Materials(-1, TextureSet.SET_SHINY, 				1.0F, 0, 3, 0, 128, 0, 255, 0, "Vis", "Vis", 5, 32, -1, 0, false, false, 1, 1, 1, Dyes.dyePurple, 2, Arrays.asList(new MaterialStack(Magic, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.AURAM, 2), new TC_AspectStack(TC_Aspects.PRAECANTATIO, 1)));
-    public static Materials Redrock = new Materials( 846, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1, 255, 80, 50, 0, "Redrock", "Redrock", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Calcite, 2), new MaterialStack(Flint, 1), new MaterialStack(Clay, 1)));
+    public static Materials Redrock = new Materials(846, TextureSet.SET_ROUGH, 		1.0F, 0, 1, 1, 255, 80, 50, 0, "Redrock", "Redrock", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(Calcite, 2), new MaterialStack(Flint, 1), new MaterialStack(Clay, 1)));
     public static Materials PotassiumFeldspar = new Materials( 847, TextureSet.SET_FINE,1.0F, 0, 1, 1, 120, 40, 40, 0, "PotassiumFeldspar", "Potassium Feldspar", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyePink, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Aluminium, 1), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 8)));
     public static Materials Biotite = new Materials( 848, TextureSet.SET_METALLIC, 		1.0F, 0, 1, 1, 20, 30, 20, 0, "Biotite", "Biotite", 0, 0, -1, 0, false, false, 1, 1, 1, Dyes.dyeGray, 1, Arrays.asList(new MaterialStack(Potassium, 1), new MaterialStack(Magnesium, 3), new MaterialStack(Aluminium, 3), new MaterialStack(Fluorine, 2), new MaterialStack(Silicon, 3), new MaterialStack(Oxygen, 10)));
     public static Materials GraniteBlack = new Materials( 849, TextureSet.SET_ROUGH, 	4.0F, 64, 3, 1|64|128, 10, 10, 10, 0, "GraniteBlack", "Black Granite", 0, 0, -1, 0, false, false, 0, 1, 1, Dyes.dyeBlack, 2, Arrays.asList(new MaterialStack(SiliconDioxide, 4), new MaterialStack(Biotite, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
@@ -745,7 +747,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials HSSS = new Materials( 374, TextureSet.SET_METALLIC, 	   14.0F, 3000, 4, 1|2|64|128, 102, 0, 51, 0, "HSSS", "HSS-S", 0, 0, 5400, 5400, true, false, 4, 1, 1, Dyes.dyeRed, 2, Arrays.asList(new MaterialStack(HSSG, 6), new MaterialStack(Iridium, 2), new MaterialStack(Osmium, 1)));
     public static Materials DilutedSulfuricAcid = new MaterialBuilder(640, TextureSet.SET_FLUID, "Diluted Sulfuric Acid").addCell().addFluid().setRGB(192, 120, 32).setColor(Dyes.dyeOrange).setMaterialList(new MaterialStack(SulfuricAcid, 1)).constructMaterial();
     public static Materials EpoxidFiberReinforced = new Materials(610, TextureSet.SET_DULL,3.0F, 64, 1, 1|2|64|128, 160, 112, 16, 0, "EpoxidFiberReinforced", "Fiber-Reinforced Epoxy Resin", 0, 0, 400, 0, false, false, 1, 1, 1, Dyes.dyeBrown, 2, Arrays.asList(new MaterialStack(Epoxid, 1)), Arrays.asList(new TC_AspectStack(TC_Aspects.MOTUS, 2)));
-
+    public static Materials NitrousOxide = new MaterialBuilder(993, TextureSet.SET_FLUID, "Nitrous Oxide").addCell().addGas().setRGB(125, 200, 255).setColor(Dyes.dyeBlue).setMaterialList(new MaterialStack(Nitrogen, 2), new MaterialStack(Oxygen, 1)).addElectrolyzerRecipe().constructMaterial();
+    public static Materials AntiKnock = new MaterialBuilder(994, TextureSet.SET_FLUID, "Ethyl Tert-Butyl Ether").addCell().addFluid().setRGB(255, 255, 255).setColor(Dyes.dyeWhite).constructMaterial();
+    public static Materials GasolineRegular = new MaterialBuilder(997, TextureSet.SET_FLUID, "Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(384).constructMaterial();
+    public static Materials GasolinePremium = new MaterialBuilder(998, TextureSet.SET_FLUID, "High Octane Gasoline").addCell().addFluid().setRGB(255,165,0).setColor(Dyes.dyeOrange).setFuelType(MaterialBuilder.DIESEL).setFuelPower(768).constructMaterial();
     
     /**
      * Materials which are renamed automatically
@@ -789,7 +794,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Naquadriah = new Materials(Naquadria, false);
     @Deprecated public static Materials Obby = new Materials(Obsidian, false);
     @Deprecated public static Materials Peridot = new Materials(Olivine, true);
-    @Deprecated public static Materials Phosphorite = new Materials(Phosphorus, true);
+    @Deprecated public static Materials Phosphorite = new Materials(TricalciumPhosphate, true);
     @Deprecated public static Materials Quarried = new Materials(Marble, false);
     @Deprecated public static Materials Quicksilver = new Materials(Mercury, true);
     @Deprecated public static Materials QuickSilver = new Materials(Mercury, false);
@@ -803,6 +808,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     @Deprecated public static Materials Wolframite = new Materials(Tungstate, false);
     @Deprecated public static Materials Wolframium = new Materials(Tungsten, false);
     @Deprecated public static Materials Wolfram = new Materials(Tungsten, false);
+    @Deprecated public static Materials Phosphor = new Materials(Phosphorus, false);
 
     public final short[] mRGBa = new short[]{255, 255, 255, 0}, mMoltenRGBa = new short[]{255, 255, 255, 0};
     public TextureSet mIconSet;
@@ -818,7 +824,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public byte mEnchantmentToolsLevel = 0, mEnchantmentArmorsLevel = 0;
     public boolean mBlastFurnaceRequired = false, mTransparent = false;
     public float mToolSpeed = 1.0F, mHeatDamage = 0.0F;
-    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null";
+    public String mChemicalFormula = "?", mName = "null", mDefaultLocalName = "null", mCustomID = "null", mConfigSection = "null", mLocalizedName = "null";
     public Dyes mColor = Dyes._NULL;
     public short mMeltingPoint = 0, mBlastFurnaceTemp = 0, mGasTemp = 0;
     public int mTypes = 0;
@@ -832,7 +838,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public Fluid mSolid = null, mFluid = null, mGas = null, mPlasma = null;
 
     private boolean hasCorrespondingFluid = false, hasCorrespondingGas = false, canBeCracked = false;
-    private Fluid[] hydroCrackedFluids = new Fluid[3], steamCrackedFluids = new Fluid[3];
+    private Fluid hydroCrackedFluid = null, steamCrackedFluid = null;
     
     /**
      * This Fluid is used as standard Unit for Molten Materials. 1296 is a Molten Block, that means 144 is one Material Unit worth of fluid.
@@ -905,7 +911,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         CassiteriteSand			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
         NetherQuartz			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
         CertusQuartz			.setOreMultiplier( 2).setSmeltingMultiplier( 2);
-        Phosphorus				.setOreMultiplier( 3).setSmeltingMultiplier( 3);
+        TricalciumPhosphate		.setOreMultiplier( 3).setSmeltingMultiplier( 3);
         Saltpeter				.setOreMultiplier( 4).setSmeltingMultiplier( 4);
         Apatite					.setOreMultiplier( 4).setSmeltingMultiplier( 4).setByProductMultiplier(2);
         Nikolite				.setOreMultiplier( 5).setSmeltingMultiplier( 5);
@@ -1018,7 +1024,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Pitchblende				.addOreByProducts(Thorium				, Uranium				, Lead					);
         Galena					.addOreByProducts(Sulfur				, Silver				, Lead					);
         Lapis					.addOreByProducts(Lazurite				, Sodalite				, Pyrite				);
-        Pyrite					.addOreByProducts(Sulfur				, Phosphorus			, Iron					);
+        Pyrite					.addOreByProducts(Sulfur				, TricalciumPhosphate	, Iron					);
         Copper					.addOreByProducts(Cobalt				, Gold					, Nickel				);
         Nickel					.addOreByProducts(Cobalt				, Platinum				, Iron					);
         GarnetRed				.addOreByProducts(Spessartine			, Pyrope				, Almandine				);
@@ -1044,8 +1050,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Lepidolite				.addOreByProducts(Lithium				, Caesium				, Boron					);
         Andradite				.addOreByProducts(GarnetYellow			, Iron					, Boron					);
         Pyrolusite				.addOreByProducts(Manganese				, Tantalite             , Niobium               );
-        Phosphorus				.addOreByProducts(Apatite				, Phosphate				, Pyrochlore            );
-        Apatite					.addOreByProducts(Phosphorus			, Phosphate             , Pyrochlore            );
+        TricalciumPhosphate		.addOreByProducts(Apatite				, Phosphate				, Pyrochlore            );
+        Apatite					.addOreByProducts(TricalciumPhosphate	, Phosphate             , Pyrochlore            );
         Pyrochlore              .addOreByProducts(Apatite               , Calcite               , Niobium               );
         Quartzite				.addOreByProducts(CertusQuartz			, Barite				);
         CertusQuartz			.addOreByProducts(Quartzite				, Barite				);
@@ -1141,8 +1147,8 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         CassiteriteSand			.addOreByProducts(Tin					);
         GraniteBlack			.addOreByProducts(Biotite				);
         GraniteRed				.addOreByProducts(PotassiumFeldspar		);
-        Phosphate				.addOreByProducts(Phosphor				);
-        Phosphor				.addOreByProducts(Phosphate				);
+        Phosphate				.addOreByProducts(Phosphorus			);
+        Phosphorus				.addOreByProducts(Phosphate				);
         Tanzanite				.addOreByProducts(Opal					);
         Opal					.addOreByProducts(Tanzanite				);
         Amethyst				.addOreByProducts(Amethyst				);
@@ -1324,7 +1330,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         NetherQuartz.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
         CertusQuartz.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
         Fluix.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.CRYSTALLISABLE, SubTag.QUARTZ);
-        Phosphorus.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.EXPLOSIVE);
+        TricalciumPhosphate.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.EXPLOSIVE);
         Phosphate.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.FLAMMABLE, SubTag.EXPLOSIVE);
         InfusedAir.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.MAGICAL, SubTag.UNBURNABLE);
         InfusedFire.add(SubTag.CRYSTAL, SubTag.NO_SMASHING, SubTag.NO_SMELTING, SubTag.MAGICAL, SubTag.UNBURNABLE);
@@ -1436,10 +1442,26 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
                 aMaterial.setSmeltingMultiplier(GregTech_API.sMaterialProperties.get(aConfigPath, "OreSmeltingMultiplier", aMaterial.mSmeltingMultiplier));
                 aMaterial.setByProductMultiplier(GregTech_API.sMaterialProperties.get(aConfigPath, "OreByProductMultiplier", aMaterial.mByProductMultiplier));
                 aMaterial.setHeatDamage((float) GregTech_API.sMaterialProperties.get(aConfigPath, "HeatDamage", aMaterial.mHeatDamage));
-                aMaterial.mSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialSmeltInto", aMaterial.mSmeltInto.mName));
-                aMaterial.mMacerateInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialMacerateInto", aMaterial.mMacerateInto.mName));
-                aMaterial.mArcSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialArcSmeltInto", aMaterial.mArcSmeltInto.mName));
-                aMaterial.mDirectSmelting = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialDirectSmeltInto", aMaterial.mDirectSmelting.mName));
+                aMaterial.mSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mSmeltInto.mName));
+                if (aMaterial.mSmeltInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mSmeltInto = Materials._NULL;
+                }
+                aMaterial.mMacerateInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialMacerateInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mMacerateInto.mName));
+                if (aMaterial.mMacerateInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialMacerateInto of Material:" + aMaterial.mName);
+                	aMaterial.mMacerateInto = Materials._NULL;
+                }
+                aMaterial.mArcSmeltInto = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialArcSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mArcSmeltInto.mName));
+                if (aMaterial.mArcSmeltInto == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialArcSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mArcSmeltInto = Materials._NULL;
+                }
+                aMaterial.mDirectSmelting = MATERIALS_MAP.get(GregTech_API.sMaterialProperties.get(aConfigPath, "MaterialDirectSmeltInto", aMaterial.mCustomOre ? "CustomMat" + aMaterial.mCustomID : aMaterial.mDirectSmelting.mName));
+                if (aMaterial.mDirectSmelting == null) {
+                	GT_Log.err.print("GregTech failed to load the property MaterialDirectSmeltInto of Material:" + aMaterial.mName);
+                	aMaterial.mDirectSmelting = Materials._NULL;
+                }
                 aMaterial.mHasParentMod = GregTech_API.sMaterialProperties.get(aConfigPath, "HasParentMod", aMaterial.mHasParentMod);
                 if (aMaterial.mHasPlasma = GregTech_API.sMaterialProperties.get(aConfigPath, "AddPlasma", aMaterial.mHasPlasma)) GT_Mod.gregtechproxy.addAutogeneratedPlasmaFluid(aMaterial);
                 if (aMaterial.mHasGas = GregTech_API.sMaterialProperties.get(aConfigPath, "AddGas", aMaterial.mHasGas)) GT_Mod.gregtechproxy.addFluid(aMaterial.mName.toLowerCase(), aMaterial.mDefaultLocalName, aMaterial, 2, aMaterial.mGasTemp);
@@ -1969,6 +1991,23 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         return new GT_FluidStack(mStandardMoltenFluid, (int) aAmount);
     }
 
+    public String getDefaultLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mDefaultLocalName).replace("%temp", "%s");
+    }
+
+    public String getLocalizedNameForItem(String aFormat) {
+    	return String.format(aFormat.replace("%s", "%temp").replace("%material", "%s"), this.mLocalizedName).replace("%temp", "%s");
+    }
+
+    public static String getLocalizedNameForItem(String aFormat, int aMaterialID) {
+    	if (aMaterialID >= 0 && aMaterialID < 1000) {
+    		Materials aMaterial = GregTech_API.sGeneratedMaterials[aMaterialID];
+    		if (aMaterial != null)
+    			return aMaterial.getLocalizedNameForItem(aFormat);
+    	}
+    	return aFormat;
+    }
+
     @Override
     public short[] getRGBA() {
         return mRGBa;
@@ -2021,56 +2060,28 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
 		return this;
 	}
 
-	public Materials setHydroCrackedFluids(Fluid[] hydroCrackedFluids) {
-		this.hydroCrackedFluids = hydroCrackedFluids;
+	public Materials setHydroCrackedFluid(Fluid hydroCrackedFluid) {
+		this.hydroCrackedFluid = hydroCrackedFluid;
 		return this;
 	}
 	
-	public FluidStack getLightlyHydroCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
+	public FluidStack getHydroCracked(int amount) {
+		if (hydroCrackedFluid == null) {
 			return null;
 		}
-		return new FluidStack(hydroCrackedFluids[0], amount);
+		return new FluidStack(hydroCrackedFluid, amount);
 	}
 	
-	public FluidStack getModeratelyHydroCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
-			return null;
-		}
-		return new FluidStack(hydroCrackedFluids[1], amount);
-	}
-	
-	public FluidStack getSeverelyHydroCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
-			return null;
-		}
-		return new FluidStack(hydroCrackedFluids[2], amount);
-	}
-	
-	public Materials setSteamCrackedFluids(Fluid[] steamCrackedFluids) {
-		this.steamCrackedFluids = steamCrackedFluids;
+	public Materials setSteamCrackedFluid(Fluid steamCrackedFluid) {
+		this.steamCrackedFluid = steamCrackedFluid;
 		return this;
 	}
 	
-	public FluidStack getLightlySteamCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
+	public FluidStack getSteamCracked(int amount) {
+		if (hydroCrackedFluid == null) {
 			return null;
 		}
-		return new FluidStack(steamCrackedFluids[0], amount);
-	}
-	
-	public FluidStack getModeratelySteamCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
-			return null;
-		}
-		return new FluidStack(steamCrackedFluids[1], amount);
-	}
-	
-	public FluidStack getSeverelySteamCracked(int amount) {
-		if (hydroCrackedFluids[0] == null) {
-			return null;
-		}
-		return new FluidStack(steamCrackedFluids[2], amount);
+		return new FluidStack(steamCrackedFluid, amount);
 	}
 	
 	public int getGasTemperature() {

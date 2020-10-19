@@ -155,4 +155,8 @@ public class GT_Generic_Item extends Item implements IProjectileItem {
             return null;
         }
     }
+    
+    public String trans(String aKey, String aEnglish){
+    	return GT_LanguageManager.addStringLocalization("Item_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
 }

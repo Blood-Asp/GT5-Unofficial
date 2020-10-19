@@ -330,7 +330,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                         stopMachine();
                     }
                     if (getRepairStatus() > 0) {
-                        if (mMaxProgresstime > 0 && doRandomMaintenanceDamage()) {
+                        if (mMaxProgresstime > 0) {
                             this.getBaseMetaTileEntity().decreaseStoredEnergyUnits(mEUt, true);
                             if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
                                 if (mOutputItems != null)

@@ -87,6 +87,13 @@ public class GT_Block_Machines
         }
     }
 
+    public void onNeighborBlockChange(World aWorld, int aX, int aY, int aZ, Block aBlock) {
+        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
+        if ((tTileEntity instanceof BaseMetaPipeEntity)) {
+            ((BaseMetaPipeEntity) tTileEntity).onNeighborBlockChange(aX, aY, aZ);
+        }
+    }
+
     public void onBlockAdded(World aWorld, int aX, int aY, int aZ) {
         super.onBlockAdded(aWorld, aX, aY, aZ);
         if (GregTech_API.isMachineBlock(this, aWorld.getBlockMetadata(aX, aY, aZ))) {
@@ -290,7 +297,7 @@ public class GT_Block_Machines
         if(aPlayer.isSneaking()){
         	ItemStack tCurrentItem = aPlayer.inventory.getCurrentItem();
         	if(tCurrentItem!=null){
-        		if(!GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList) && !GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList)){
+        		if(!GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList) && !GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList) && !GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList) && !GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)){
         			return false;
         		}
         	}else {return false;}
@@ -363,6 +370,22 @@ public class GT_Block_Machines
             return ((IGregTechTileEntity) tTileEntity).getDrops();
         }
         return mTemporaryTileEntity.get() == null ? new ArrayList() : ((IGregTechTileEntity) mTemporaryTileEntity.get()).getDrops();
+    }
+
+    @Override
+    public boolean removedByPlayer(World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ, boolean aWillHarvest) {
+        if (aWillHarvest) {
+            return true; // This delays deletion of the block until after getDrops
+        } else {
+            return super.removedByPlayer(aWorld, aPlayer, aX, aY, aZ, false);
+        }
+    }
+
+    @Override
+    public void harvestBlock(World aWorld, EntityPlayer aPlayer, int aX, int aY, int aZ, int aMeta)
+    {
+        super.harvestBlock(aWorld, aPlayer, aX, aY, aZ, aMeta);
+        aWorld.setBlockToAir(aX, aY, aZ);
     }
 
     public int getComparatorInputOverride(World aWorld, int aX, int aY, int aZ, int aSide) {

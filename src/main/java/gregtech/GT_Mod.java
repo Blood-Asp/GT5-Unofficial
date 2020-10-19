@@ -59,7 +59,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false, dependencies = "required-after:IC2; after:Forestry; after:PFAAGeologica; after:Thaumcraft; after:Railcraft; after:appliedenergistics2; after:ThermalExpansion; after:TwilightForest; after:harvestcraft; after:magicalcrops; after:BuildCraft|Transport; after:BuildCraft|Silicon; after:BuildCraft|Factory; after:BuildCraft|Energy; after:BuildCraft|Core; after:BuildCraft|Builders; after:GalacticraftCore; after:GalacticraftMars; after:GalacticraftPlanets; after:ThermalExpansion|Transport; after:ThermalExpansion|Energy; after:ThermalExpansion|Factory; after:RedPowerCore; after:RedPowerBase; after:RedPowerMachine; after:RedPowerCompat; after:RedPowerWiring; after:RedPowerLogic; after:RedPowerLighting; after:RedPowerWorld; after:RedPowerControl; after:UndergroundBiomes;")
+@Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false, dependencies = "required-after:IC2; after:Forestry; after:PFAAGeologica; after:Thaumcraft; after:Railcraft; after:appliedenergistics2; after:ThermalExpansion; after:TwilightForest; after:harvestcraft; after:magicalcrops; after:BuildCraft|Transport; after:BuildCraft|Silicon; after:BuildCraft|Factory; after:BuildCraft|Energy; after:BuildCraft|Core; after:BuildCraft|Builders; after:GalacticraftCore; after:GalacticraftMars; after:GalacticraftPlanets; after:ThermalExpansion|Transport; after:ThermalExpansion|Energy; after:ThermalExpansion|Factory; after:RedPowerCore; after:RedPowerBase; after:RedPowerMachine; after:RedPowerCompat; after:RedPowerWiring; after:RedPowerLogic; after:RedPowerLighting; after:RedPowerWorld; after:RedPowerControl; after:UndergroundBiomes; after:TConstruct;  after:Translocator;")
 public class GT_Mod implements IGT_Mod {
     public static final int VERSION = 509, SUBVERSION = 31;
     public static final int TOTAL_VERSION = calculateTotalGTVersion(VERSION, SUBVERSION);
@@ -133,7 +133,10 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.mIC2Classic = Loader.isModLoaded("IC2-Classic-Spmod");
         GregTech_API.mMagneticraft = Loader.isModLoaded("Magneticraft");
         GregTech_API.mImmersiveEngineering = Loader.isModLoaded("ImmersiveEngineering");
-        GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");        
+        GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");
+        GregTech_API.mTranslocator = Loader.isModLoaded("Translocator");
+        GregTech_API.mTConstruct = Loader.isModLoaded("TConstruct");
+        GregTech_API.mGalacticraft = Loader.isModLoaded("GalacticraftCore");
         GT_Log.mLogFile = new File(aEvent.getModConfigurationDirectory().getParentFile(), "logs/GregTech.log");
         if (!GT_Log.mLogFile.exists()) {
             try {
@@ -180,6 +183,9 @@ public class GT_Mod implements IGT_Mod {
         } catch (Throwable e) {
         }
         gregtechproxy.onPreLoad();
+        GT_Log.out.println("GT_Mod: Are you there Translocator? " + GregTech_API.mTranslocator);
+        GT_Log.out.println("GT_Mod: Are you there TConstruct? " + GregTech_API.mTConstruct);
+        GT_Log.out.println("GT_Mod: Are you there GalacticraftCore? " + GregTech_API.mGalacticraft);
 
         GT_Log.out.println("GT_Mod: Setting Configs");
         GT_Values.D1 = tMainConfig.get(aTextGeneral, "Debug", false).getBoolean(false);
@@ -220,11 +226,15 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);
         gregtechproxy.mFlintChance = tMainConfig.get(aTextGeneral, "FlintAndSteelChance", 30).getInt(30);
         gregtechproxy.mItemDespawnTime = tMainConfig.get(aTextGeneral, "ItemDespawnTime", 6000).getInt(6000);
+        gregtechproxy.mNerfStorageBlocks = tMainConfig.get(aTextGeneral,"NerfStorageBlocks",true).getBoolean(true);
+        gregtechproxy.mAllowSmallBoilerAutomation = tMainConfig.get(aTextGeneral,"AllowSmallBoilerAutomation",false).getBoolean(false);
+        gregtechproxy.mHardMachineCasings= tMainConfig.get(aTextGeneral,"HardMachineCasings",true).getBoolean(true);
         gregtechproxy.mDisableVanillaOres = tMainConfig.get(aTextGeneral, "DisableVanillaOres", true).getBoolean(true);
         gregtechproxy.mNerfDustCrafting = tMainConfig.get(aTextGeneral, "NerfDustCrafting", true).getBoolean(true);
         gregtechproxy.mIncreaseDungeonLoot = tMainConfig.get(aTextGeneral, "IncreaseDungeonLoot", true).getBoolean(true);
         gregtechproxy.mAxeWhenAdventure = tMainConfig.get(aTextGeneral, "AdventureModeStartingAxe", true).getBoolean(true);
         gregtechproxy.mHardcoreCables = tMainConfig.get(aTextGeneral, "HardCoreCableLoss", false).getBoolean(false);
+        gregtechproxy.mSmallLavaBoilerEfficiencyLoss = tMainConfig.get(aTextGeneral, "SmallLavaBoilerEfficiencyLoss", true).getBoolean(true);
         gregtechproxy.mSurvivalIntoAdventure = tMainConfig.get(aTextGeneral, "forceAdventureMode", false).getBoolean(false);
         gregtechproxy.mHungerEffect = tMainConfig.get(aTextGeneral, "AFK_Hunger", false).getBoolean(false);
         gregtechproxy.mHardRock = tMainConfig.get(aTextGeneral, "harderstone", false).getBoolean(false);
@@ -263,6 +273,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mAprilFool = GregTech_API.sSpecialFile.get(ConfigCategories.general, "AprilFool", now.get(Calendar.MONTH) == Calendar.APRIL && now.get(Calendar.DAY_OF_MONTH) == 1);
         gregtechproxy.mCropNeedBlock = tMainConfig.get("general", "CropNeedBlockBelow", true).getBoolean(true);
         gregtechproxy.mDisableOldChemicalRecipes = tMainConfig.get("general", "DisableOldChemicalRecipes", false).getBoolean(false);
+        gregtechproxy.mMoreComplicatedChemicalRecipes = tMainConfig.get("general", "MoreComplicatedChemicalRecipes", false).getBoolean(false);
         gregtechproxy.mAMHInteraction = tMainConfig.get("general", "AllowAutoMaintenanceHatchInteraction", false).getBoolean(false);
         GregTech_API.mOutputRF = GregTech_API.sOPStuff.get(ConfigCategories.general, "OutputRF", true);
         GregTech_API.mInputRF = GregTech_API.sOPStuff.get(ConfigCategories.general, "InputRF", false);
@@ -280,6 +291,12 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.enableBasaltOres = GregTech_API.sWorldgenFile.get("general", "enableBasaltOres", gregtechproxy.enableBasaltOres);
         gregtechproxy.enableGCOres = GregTech_API.sWorldgenFile.get("general", "enableGCOres", gregtechproxy.enableGCOres);
         gregtechproxy.enableUBOres = GregTech_API.sWorldgenFile.get("general", "enableUBOres", gregtechproxy.enableUBOres);
+        gregtechproxy.gt6Pipe = tMainConfig.get("general", "GT6StyledPipesConnection", true).getBoolean(true);
+        gregtechproxy.gt6Cable = tMainConfig.get("general", "GT6StyledWiresConnection", true).getBoolean(true);
+        gregtechproxy.ic2EnergySourceCompat = tMainConfig.get("general", "Ic2EnergySourceCompat", true).getBoolean(true);
+        gregtechproxy.costlyCableConnection = tMainConfig.get("general", "CableConnectionRequiresSolderingMaterial", false).getBoolean(false);
+        gregtechproxy.mHardRadonRecipe = tMainConfig.get("general","HardRadonRecipe",false).getBoolean(false);
+        GT_LanguageManager.i18nPlaceholder = tMainConfig.get("general", "UsePlaceholderForMaterialNamesInLangFile", true).getBoolean(true);
 
         Materials[] tDisableOres = new Materials[]{Materials.Chrome, Materials.Naquadria, Materials.Silicon, Materials.Cobalt, Materials.Cadmium, Materials.Indium, Materials.Tungsten,
         		Materials.Adamantium, Materials.Mithril, Materials.DarkIron, Materials.Rutile, Materials.Alduorite, Materials.Magnesium, Materials.Nikolite};
@@ -307,6 +324,10 @@ public class GT_Mod implements IGT_Mod {
                 tPrefix.mDefaultStackSize = ((byte) Math.min(64, Math.max(16, tMainConfig.get("features", "MaxOtherBlockStackSize", 64).getInt())));
             }
         }
+        
+        new Enchantment_EnderDamage();
+        new Enchantment_Radioactivity();
+        
         //GT_Config.troll = (Calendar.getInstance().get(2) + 1 == 4) && (Calendar.getInstance().get(5) >= 1) && (Calendar.getInstance().get(5) <= 2);
         Materials.init();
 
@@ -316,6 +337,10 @@ public class GT_Mod implements IGT_Mod {
         GT_Log.out.println("GT_Mod: Generating Lang-File");
         GT_LanguageManager.sEnglishFile = new Configuration(new File(aEvent.getModConfigurationDirectory().getParentFile(), "GregTech.lang"));
         GT_LanguageManager.sEnglishFile.load();
+        for (Materials aMaterial : Materials.values()) {
+        	if (aMaterial != null)
+        		aMaterial.mLocalizedName = GT_LanguageManager.addStringLocalization("Material." + aMaterial.mName.toLowerCase(), aMaterial.mDefaultLocalName);
+        }
 
         GT_Log.out.println("GT_Mod: Removing all original Scrapbox Drops.");
         try {
@@ -436,9 +461,6 @@ public class GT_Mod implements IGT_Mod {
         }
         }else{System.out.println("noMaterial "+reEnable);}
         }else{System.out.println("noPrefix "+reEnable);}}
-        
-        new Enchantment_EnderDamage();
-        new Enchantment_Radioactivity();
 
         new GT_Loader_OreProcessing().run();
         new GT_Loader_OreDictionary().run();
@@ -542,7 +564,11 @@ public class GT_Mod implements IGT_Mod {
             for (Runnable tRunnable : GregTech_API.sAfterGTPreload) {
                 tRunnable.run();
             }
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+        } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
+        }
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer())
+            GT_Assemblyline_Server.fillMap(aEvent);
     }
 
     @Mod.EventHandler
@@ -853,7 +879,9 @@ public class GT_Mod implements IGT_Mod {
                     GT_Recipe.GT_Recipe_Map.sReplicatorFakeRecipes.addFakeRecipe(false, null, ISmat0, ISmat1, new FluidStack[]{Materials.UUMatter.getFluid(tMaterial.getMass())}, null, (int) (tMaterial.getMass() * 512L), 32, 0);
                 }
             }
+
         }
+        GT_Recipe.GT_Recipe_Map.sOrganicReplicatorFakeRecipes.addFakeRecipe(false,(new ItemStack[]{ItemList.IC2_Crop_Seeds.getWithName(1,"Instance seeds to duplicate(does not get consumed in progress)",new Object[0])}),(new ItemStack[]{ItemList.IC2_Crop_Seeds.getWithName(1,"Duplicated seeds; Chance equals efficiency")}),null, (new FluidStack[]{Materials.UUMatter.getFluid(1L)}),null,200,32,0);
         if (!GT_MetaTileEntity_Massfabricator.sRequiresUUA) GT_Recipe.GT_Recipe_Map.sMassFabFakeRecipes.addFakeRecipe(false, null, null, null, null, new FluidStack[]{Materials.UUMatter.getFluid(1L)}, GT_MetaTileEntity_Massfabricator.sDurationMultiplier, 256, 0);
         GT_Recipe.GT_Recipe_Map.sMassFabFakeRecipes.addFakeRecipe(false, null, null, null, new FluidStack[]{Materials.UUAmplifier.getFluid(GT_MetaTileEntity_Massfabricator.sUUAperUUM)}, new FluidStack[]{Materials.UUMatter.getFluid(1L)}, GT_MetaTileEntity_Massfabricator.sDurationMultiplier / GT_MetaTileEntity_Massfabricator.sUUASpeedBonus, 256, 0);
         GT_Recipe.GT_Recipe_Map.sRockBreakerFakeRecipes.addFakeRecipe(false, new ItemStack[]{ItemList.Display_ITS_FREE.getWithName(0L, "Place Lava on Side", new Object[0])}, new ItemStack[]{new ItemStack(Blocks.cobblestone, 1)}, null, null, null, 16, 32, 0);
@@ -1174,7 +1202,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 1),
         		GT_OreDictUnificator.get(OrePrefixes.crushed, Materials.Coal, 1),
-        		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1),
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Lignite, 1),
         		GT_OreDictUnificator.get(OrePrefixes.block, Materials.Lignite, 1),
@@ -1190,7 +1217,6 @@ public class GT_Mod implements IGT_Mod {
         		GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sulfur, 1),
         		GT_OreDictUnificator.get(ItemList.Block_SSFUEL.get(1, new Object[0])),
         		GT_OreDictUnificator.get(ItemList.Block_MSSFUEL.get(1, new Object[0])),
-        		GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Lava, 1),
         		GT_OreDictUnificator.get(OrePrefixes.rod, Materials.Blaze, 1));
         if (Loader.isModLoaded("Thaumcraft")) {
         	GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipe(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1));

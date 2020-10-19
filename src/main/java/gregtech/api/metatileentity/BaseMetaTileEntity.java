@@ -969,15 +969,25 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public boolean inputEnergyFrom(byte aSide) {
+        return inputEnergyFrom(aSide, true);
+    }
+
+    @Override
+    public boolean inputEnergyFrom(byte aSide, boolean waitForActive) {
         if (aSide == 6) return true;
-        if (isServerSide()) return (aSide >= 0 && aSide < 6 ? mActiveEUInputs[aSide] : false) && !mReleaseEnergy;
+        if (isServerSide() && waitForActive) return ((aSide >= 0 && aSide < 6) && mActiveEUInputs[aSide]) && !mReleaseEnergy;
         return isEnergyInputSide(aSide);
     }
 
     @Override
     public boolean outputsEnergyTo(byte aSide) {
+        return outputsEnergyTo(aSide, true);
+    }
+
+    @Override
+    public boolean outputsEnergyTo(byte aSide, boolean waitForActive) {
         if (aSide == 6) return true;
-        if (isServerSide()) return (aSide >= 0 && aSide < 6 ? mActiveEUOutputs[aSide] : false) || mReleaseEnergy;
+        if (isServerSide() && waitForActive) return ((aSide >= 0 && aSide < 6) && mActiveEUOutputs[aSide]) || mReleaseEnergy;
         return isEnergyOutputSide(aSide);
     }
 
@@ -1306,10 +1316,22 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
                     if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)) {
                         byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-                        if (GT_ModHandler.useSolderingIron(tCurrentItem, aPlayer)) {
+                        if (mMetaTileEntity.onSolderingToolRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
+                            //logic handled internally
+                            GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 1.0F, -1, xCoord, yCoord, zCoord);
+                        } else if (GT_ModHandler.useSolderingIron(tCurrentItem, aPlayer)) {
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
+                        } 
+                        return true;
+                    }
+                    
+                    if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)) {
+                    	byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
+                        if (mMetaTileEntity.onWireCutterRightClick(aSide, tSide, aPlayer, aX, aY, aZ)) {
+                            //logic handled internally
+                            GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         return true;
                     }
@@ -1736,42 +1758,96 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public int fill(ForgeDirection aSide, FluidStack aFluid, boolean doFill) {
-        if (mTickTimer > 5 && canAccessData() && (mRunningThroughTick || !mInputDisabled) && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid == null ? null : aFluid.getFluid(), this))))
+        if (mTickTimer > 5 && canAccessData() &&
+            (mRunningThroughTick || !mInputDisabled) &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid == null ? null : aFluid.getFluid(), this)
+                )
+            )
+        )
             return mMetaTileEntity.fill(aSide, aFluid, doFill);
         return 0;
     }
 
     @Override
     public FluidStack drain(ForgeDirection aSide, int maxDrain, boolean doDrain) {
-        if (mTickTimer > 5 && canAccessData() && (mRunningThroughTick || !mOutputDisabled) && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this))))
+        if (mTickTimer > 5 && canAccessData() &&
+            (mRunningThroughTick || !mOutputDisabled) &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), mMetaTileEntity.getFluid() == null ? null : mMetaTileEntity.getFluid().getFluid(), this)
+                )
+            )
+        )
             return mMetaTileEntity.drain(aSide, maxDrain, doDrain);
         return null;
     }
 
     @Override
     public FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
-        if (mTickTimer > 5 && canAccessData() && (mRunningThroughTick || !mOutputDisabled) && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid == null ? null : aFluid.getFluid(), this))))
+        if (mTickTimer > 5 && canAccessData() &&
+            (mRunningThroughTick || !mOutputDisabled) &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid == null ? null : aFluid.getFluid(), this)
+                )
+            )
+        )
             return mMetaTileEntity.drain(aSide, aFluid, doDrain);
         return null;
     }
 
     @Override
     public boolean canFill(ForgeDirection aSide, Fluid aFluid) {
-        if (mTickTimer > 5 && canAccessData() && (mRunningThroughTick || !mInputDisabled) && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this))))
+        if (mTickTimer > 5 && canAccessData() &&
+            (mRunningThroughTick || !mInputDisabled) &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this)
+                )
+            )
+        )
             return mMetaTileEntity.canFill(aSide, aFluid);
         return false;
     }
 
     @Override
     public boolean canDrain(ForgeDirection aSide, Fluid aFluid) {
-        if (mTickTimer > 5 && canAccessData() && (mRunningThroughTick || !mOutputDisabled) && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this))))
+        if (mTickTimer > 5 && canAccessData() &&
+            (mRunningThroughTick || !mOutputDisabled) &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) &&
+                        getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), aFluid, this)
+                )
+            )
+        )
             return mMetaTileEntity.canDrain(aSide, aFluid);
         return false;
     }
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection aSide) {
-        if (canAccessData() && (aSide == ForgeDirection.UNKNOWN || (mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this)) || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) && getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this))))
+        if (canAccessData() &&
+            (
+                aSide == ForgeDirection.UNKNOWN ||
+                (
+                    mMetaTileEntity.isLiquidInput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidIn((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this)) || (mMetaTileEntity.isLiquidOutput((byte) aSide.ordinal()) &&
+                    getCoverBehaviorAtSide((byte) aSide.ordinal()).letsFluidOut((byte) aSide.ordinal(), getCoverIDAtSide((byte) aSide.ordinal()), getCoverDataAtSide((byte) aSide.ordinal()), null, this)
+                )
+            )
+        )
             return mMetaTileEntity.getTankInfo(aSide);
         return new FluidTankInfo[]{};
     }
@@ -1908,8 +1984,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public byte setColorization(byte aColor) {
         if (aColor > 15 || aColor < -1) aColor = -1;
+        mColor = (byte) (aColor + 1);
         if (canAccessData()) mMetaTileEntity.onColorChangeServer(aColor);
-        return mColor = (byte) (aColor + 1);
+        return mColor;
     }
 
     @Override
@@ -2008,4 +2085,5 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     	}
     	return slotIndex + indexShift;
     }
+
 }

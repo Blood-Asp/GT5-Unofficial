@@ -475,8 +475,13 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public ItemStack mOutput;
         public int mDuration;
         public int mEUt;
+        public ItemStack[][] mOreDictAlt;
 
         public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt) {
+        	this(aResearchItem, aResearchTime, aInputs, aFluidInputs, aOutput, aDuration, aEUt, new ItemStack[aInputs.length][]);
+        }
+
+        public GT_Recipe_AssemblyLine(ItemStack aResearchItem, int aResearchTime, ItemStack[] aInputs, FluidStack[] aFluidInputs, ItemStack aOutput, int aDuration, int aEUt, ItemStack[][] aAlt) {
             mResearchItem = aResearchItem;
             mResearchTime = aResearchTime;
             mInputs = aInputs;
@@ -484,6 +489,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             mOutput = aOutput;
             mDuration = aDuration;
             mEUt = aEUt;
+            mOreDictAlt = aAlt;
         }
 
     }
@@ -506,7 +512,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map sRockBreakerFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(3), "gt.recipe.rockbreaker", "Rock Breaker", null, RES_PATH_GUI + "basicmachines/RockBreaker", 1, 1, 0, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sByProductList = new GT_Recipe_Map(new HashSet<GT_Recipe>(1000), "gt.recipe.byproductlist", "Ore Byproduct List", null, RES_PATH_GUI + "basicmachines/Default", 1, 6, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sReplicatorFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(100), "gt.recipe.replicator", "Replicator", null, RES_PATH_GUI + "basicmachines/Replicator", 0, 1, 0, 1, 1, E, 1, E, true, true);
-        //public static final GT_Recipe_Map sAssemblylineFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(30), "gt.recipe.scanner", "Scanner", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 1, 0, 1, E, 1, E, true, true);
+        public static final GT_Recipe_Map sOrganicReplicatorFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(1),"gt.recipe.organicreplicator","Organic Replicator", null,RES_PATH_GUI + "basicmachines/OrganicReplicator",1,1,1,1,1,E,1,E,true,true);
+        //public static final GT_Recipe_Map sAssemblylineFakeRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(30), "gt.recipe.scanner", "Scanner", null, RES_PATH_GUI + "basicmachines/Default", 1, 1, 1, 0, 1, E, 1, E, true, true); 
         public static final GT_Recipe_Map sAssemblylineVisualRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(30), "gt.recipe.fakeAssemblylineProcess", "Assemblyline Process", null, RES_PATH_GUI + "FakeAssemblyline", 1, 1, 1, 0, 1, E, 1, E, true, false);
         public static final GT_Recipe_Map sPlasmaArcFurnaceRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(10000), "gt.recipe.plasmaarcfurnace", "Plasma Arc Furnace", null, RES_PATH_GUI + "basicmachines/PlasmaArcFurnace", 1, 4, 1, 1, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sArcFurnaceRecipes = new GT_Recipe_Map(new HashSet<GT_Recipe>(10000), "gt.recipe.arcfurnace", "Arc Furnace", null, RES_PATH_GUI + "basicmachines/ArcFurnace", 1, 4, 1, 1, 3, E, 1, E, true, true);
@@ -670,6 +677,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         }
         public GT_Recipe addFakeRecipe(boolean aCheckForCollisions, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue,boolean hidden) {
             return addFakeRecipe(aCheckForCollisions, new GT_Recipe(false, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue),hidden);
+        }
+
+        public GT_Recipe addFakeRecipe(boolean aCheckForCollisions, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue, ItemStack[][] aAlt ,boolean hidden) {
+            return addFakeRecipe(aCheckForCollisions, new GT_Recipe_WithAlt(false, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue, aAlt),hidden);
         }
 
         /**
@@ -1651,5 +1662,32 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 			}
 
     	}
+    }
+
+    public static class GT_Recipe_WithAlt extends GT_Recipe {
+
+    	ItemStack[][] mOreDictAlt;
+
+		public GT_Recipe_WithAlt(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue, ItemStack[][] aAlt) {
+			super(aOptimize, aInputs, aOutputs, aSpecialItems, aChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
+			mOreDictAlt = aAlt;
+		}
+
+		
+		public Object getAltRepresentativeInput(int aIndex) {
+	        if (aIndex < 0) return null;
+	        if (aIndex < mOreDictAlt.length) {
+	        	if (mOreDictAlt[aIndex] != null && mOreDictAlt[aIndex].length > 0) {
+	        		ItemStack[] rStacks = new ItemStack[mOreDictAlt[aIndex].length];
+	        		for (int i = 0; i < mOreDictAlt[aIndex].length; i++) {
+	        			rStacks[i] = GT_Utility.copy(mOreDictAlt[aIndex][i]);
+	        		}
+	        		return rStacks;
+	        	}
+	        }
+	        if (aIndex >= mInputs.length) return null;
+	        return GT_Utility.copy(mInputs[aIndex]);
+	    }
+    	
     }
 }

@@ -83,6 +83,15 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mNEIName = aNEIName;
     }
 
+    public GT_MetaTileEntity_BasicMachine(int aID, String aName, String aNameRegional, int aTier, int aAmperage, String[] aDescription, int aInputSlotCount, int aOutputSlotCount, String aGUIName, String aNEIName, ITexture... aOverlays) {
+        super(aID, aName, aNameRegional, aTier, OTHER_SLOT_COUNT + aInputSlotCount + aOutputSlotCount + 1, aDescription, aOverlays);
+        mInputSlotCount = Math.max(0, aInputSlotCount);
+        mOutputItems = new ItemStack[Math.max(0, aOutputSlotCount)];
+        mAmperage = aAmperage;
+        mGUIName = aGUIName;
+        mNEIName = aNEIName;
+    }
+
     public GT_MetaTileEntity_BasicMachine(String aName, int aTier, int aAmperage, String aDescription, ITexture[][][] aTextures, int aInputSlotCount, int aOutputSlotCount, String aGUIName, String aNEIName) {
         super(aName, aTier, OTHER_SLOT_COUNT + aInputSlotCount + aOutputSlotCount + 1, aDescription, aTextures);
         mInputSlotCount = Math.max(0, aInputSlotCount);
@@ -100,11 +109,16 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mGUIName = aGUIName;
         mNEIName = aNEIName;
     }
+
+    protected boolean isValidMainFacing(byte aSide) {
+    	return aSide > 1;
+    }
     
-    public boolean setMainFacing(byte aDirection){
-    	mMainFacing = aDirection;
+    public boolean setMainFacing(byte aSide){
+    	if (!isValidMainFacing(aSide)) return false;
+    	mMainFacing = aSide;
     	if(getBaseMetaTileEntity().getFrontFacing() == mMainFacing){
-    		getBaseMetaTileEntity().setFrontFacing(GT_Utility.getOppositeSide(aDirection));
+    		getBaseMetaTileEntity().setFrontFacing(GT_Utility.getOppositeSide(aSide));
     	}
         onFacingChange();
         onMachineBlockUpdate();

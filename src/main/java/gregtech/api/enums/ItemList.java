@@ -1,6 +1,7 @@
 package gregtech.api.enums;
 
 import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -9,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-import static gregtech.api.enums.GT_Values.W;
+import java.util.Locale;
+
+import static gregtech.api.enums.GT_Values.*;
 
 /**
  * Class containing all non-OreDict Items of GregTech.
@@ -169,6 +172,7 @@ public enum ItemList implements IItemContainer {
     Shape_Extruder_File,
     Shape_Extruder_Saw,
     Shape_Extruder_Gear,
+    Shape_Extruder_Gear_Small,
     Crate_Empty,
     Credit_Copper,
     Credit_Iron,
@@ -538,7 +542,7 @@ public enum ItemList implements IItemContainer {
     Casing_ULV, Casing_LV, Casing_MV, Casing_HV, Casing_EV, Casing_IV, Casing_LuV, Casing_ZPM, Casing_UV, Casing_MAX, Casing_BronzePlatedBricks, Casing_HeatProof, Casing_Coil_Cupronickel_Deprecated, Casing_Coil_Kanthal_Deprecated, Casing_Coil_Nichrome_Deprecated, Casing_Coil_Superconductor,
     Casing_SolidSteel, Casing_FrostProof, Casing_Gearbox_Bronze, Casing_Gearbox_Steel, Casing_Gearbox_Titanium, Casing_Gearbox_TungstenSteel, Casing_Processor, Casing_DataDrive, Casing_ContainmentField, Casing_Assembler, Casing_Pump, Casing_Motor, Casing_Pipe_Bronze, Casing_Pipe_Steel, Casing_Pipe_Titanium, Casing_Pipe_TungstenSteel, Casing_Pipe_Polytetrafluoroethylene,
     Casing_Stripes_A, Casing_Stripes_B, Casing_RadioactiveHazard, Casing_BioHazard, Casing_ExplosionHazard, Casing_FireHazard, Casing_AcidHazard, Casing_MagicHazard, Casing_FrostHazard, Casing_NoiseHazard, Casing_Grate, Casing_Vent, Casing_RadiationProof, Casing_Firebox_Bronze, Casing_Firebox_Steel, Casing_Firebox_TungstenSteel, Casing_Chemically_Inert,
-    Casing_MiningOsmiridium, Casing_RobustTungstenSteel, Casing_CleanStainlessSteel, Casing_StableTitanium, Casing_Firebox_Titanium,
+    Casing_MiningOsmiridium, Casing_RobustTungstenSteel, Casing_CleanStainlessSteel, Casing_StableTitanium, Casing_Firebox_Titanium, Casing_RobustHSSG,
     Hull_ULV, Hull_LV, Hull_MV, Hull_HV, Hull_EV, Hull_IV, Hull_LuV, Hull_ZPM, Hull_UV, Hull_MAX,
     CompressedFireclay, Firebrick, Casing_Firebricks,
     
@@ -617,6 +621,7 @@ public enum ItemList implements IItemContainer {
     Machine_LV_Hammer, Machine_MV_Hammer, Machine_HV_Hammer, Machine_EV_Hammer, Machine_IV_Hammer, Machine_LuV_Hammer, Machine_ZPM_Hammer, Machine_UV_Hammer,
     Machine_LV_FluidHeater, Machine_MV_FluidHeater, Machine_HV_FluidHeater, Machine_EV_FluidHeater, Machine_IV_FluidHeater, Machine_LuV_FluidHeater, Machine_ZPM_FluidHeater, Machine_UV_FluidHeater,
     Machine_LV_Miner, Machine_MV_Miner,
+    Machine_LV_OrganicReplicator, Machine_MV_OrganicReplicator, Machine_HV_OrganicReplicator, Machine_EV_OrganicReplicator, Machine_IV_OrganicReplicator, Machine_LuV_OrganicReplicator, Machine_ZPM_OrganicReplicator, Machine_UV_OrganicReplicator,
 
     Neutron_Reflector,
     Reactor_Coolant_He_1, Reactor_Coolant_He_3, Reactor_Coolant_He_6, Reactor_Coolant_NaK_1, Reactor_Coolant_NaK_3, Reactor_Coolant_NaK_6,
@@ -627,7 +632,7 @@ public enum ItemList implements IItemContainer {
     MagicEnergyConverter_LV, MagicEnergyConverter_MV, MagicEnergyConverter_HV,
     MagicEnergyAbsorber_LV, MagicEnergyAbsorber_MV, MagicEnergyAbsorber_HV, MagicEnergyAbsorber_EV,
     Depleted_Thorium_1, Depleted_Thorium_2, Depleted_Thorium_4,
-    Processing_Array, Distillation_Tower, Energy_LapotronicOrb2,
+    Processing_Array,  Advanced_Processing_Array, Distillation_Tower, Energy_LapotronicOrb2,
     Energy_Module, Energy_Cluster,
     ZPM2, Quantum_Tank_LV, Quantum_Tank_MV, Quantum_Tank_HV, Quantum_Tank_EV, Quantum_Tank_IV, Quantum_Chest_LV, Quantum_Chest_MV, Quantum_Chest_HV, Quantum_Chest_EV, Quantum_Chest_IV,
 
@@ -649,13 +654,16 @@ public enum ItemList implements IItemContainer {
     FluidRegulator_LV, FluidRegulator_MV, FluidRegulator_HV, FluidRegulator_EV, FluidRegulator_IV, FluidRegulator_LuV, FluidRegulator_ZPM, FluidRegulator_UV, FluidFilter, CuringOven, Machine_Multi_Assemblyline, Machine_Multi_DieselEngine, QuantumEye, QuantumStar, Gravistar, Block_SSFUEL, Block_MSSFUEL, SFMixture, MSFMixture, Depleted_Naquadah_1, Depleted_Naquadah_2, Depleted_Naquadah_4, NaquadahCell_1, NaquadahCell_2, NaquadahCell_4, Hatch_AutoMaintenance,
     Machine_Multi_Cleanroom, Circuit_Board_Coated, Circuit_Board_Phenolic, Circuit_Board_Epoxy, Circuit_Board_Fiberglass, Circuit_Board_Multifiberglass, Circuit_Board_Wetware, Circuit_Board_Plastic,
     Circuit_Parts_Resistor, Circuit_Parts_ResistorSMD, Circuit_Parts_Glass_Tube, Circuit_Parts_Vacuum_Tube, Circuit_Parts_Coil, Circuit_Parts_Diode, Circuit_Parts_DiodeSMD, Circuit_Parts_Transistor, Circuit_Parts_TransistorSMD, Circuit_Parts_Capacitor, Circuit_Parts_CapacitorSMD, Circuit_Parts_GlassFiber, Circuit_Parts_PetriDish,
-    Circuit_Silicon_Ingot, Circuit_Silicon_Ingot2, Circuit_Silicon_Ingot3, Circuit_Silicon_Wafer, Circuit_Silicon_Wafer2, Circuit_Silicon_Wafer3, Circuit_Wafer_ILC, Circuit_Chip_ILC, Circuit_Wafer_Ram, Circuit_Chip_Ram, 
-    Circuit_Wafer_NAND, Circuit_Chip_NAND, Circuit_Wafer_NOR, Circuit_Chip_NOR, Circuit_Wafer_CPU, Circuit_Chip_CPU, Circuit_Wafer_SoC, Circuit_Chip_SoC, Circuit_Wafer_SoC2, Circuit_Chip_SoC2, Circuit_Wafer_PIC, Circuit_Chip_PIC, 
-    Circuit_Wafer_HPIC, Circuit_Chip_HPIC, Circuit_Wafer_NanoCPU, Circuit_Chip_NanoCPU, Circuit_Wafer_QuantumCPU, Circuit_Chip_QuantumCPU, 
+    Circuit_Silicon_Ingot, Circuit_Silicon_Ingot2, Circuit_Silicon_Ingot3, Circuit_Silicon_Wafer, Circuit_Silicon_Wafer2, Circuit_Silicon_Wafer3, Circuit_Wafer_ILC, Circuit_Chip_ILC, Circuit_Wafer_Ram, Circuit_Chip_Ram,
+    Circuit_Wafer_NAND, Circuit_Chip_NAND, Circuit_Wafer_NOR, Circuit_Chip_NOR, Circuit_Wafer_CPU, Circuit_Chip_CPU, Circuit_Wafer_SoC, Circuit_Chip_SoC, Circuit_Wafer_SoC2, Circuit_Chip_SoC2, Circuit_Wafer_PIC, Circuit_Chip_PIC,
+    Circuit_Wafer_HPIC, Circuit_Chip_HPIC, Circuit_Wafer_NanoCPU, Circuit_Chip_NanoCPU, Circuit_Wafer_QuantumCPU, Circuit_Chip_QuantumCPU,
     Circuit_Chip_CrystalCPU, Circuit_Chip_CrystalSoC, Circuit_Chip_NeuroCPU, Circuit_Chip_Stemcell,
     Circuit_Microprocessor, Circuit_Processor, Circuit_Computer, Circuit_Nanoprocessor, Circuit_Nanocomputer, Circuit_Elitenanocomputer, Circuit_Quantumprocessor, Circuit_Quantumcomputer, Circuit_Masterquantumcomputer, 
     Circuit_Quantummainframe, Circuit_Crystalprocessor, Circuit_Crystalcomputer, Circuit_Ultimatecrystalcomputer, Circuit_Crystalmainframe, Circuit_Neuroprocessor, Circuit_Wetwarecomputer, Circuit_Wetwaresupercomputer, Circuit_Wetwaremainframe, Circuit_Parts_RawCrystalChip,
-    Machine_LV_CircuitAssembler, Machine_MV_CircuitAssembler, Machine_HV_CircuitAssembler, Machine_EV_CircuitAssembler, Machine_IV_CircuitAssembler, Machine_LuV_CircuitAssembler, Machine_ZPM_CircuitAssembler, Machine_UV_CircuitAssembler, Circuit_Integrated_Good, Machine_IV_LightningRod, Machine_HV_LightningRod, Machine_EV_LightningRod;
+    Machine_LV_CircuitAssembler, Machine_MV_CircuitAssembler, Machine_HV_CircuitAssembler, Machine_EV_CircuitAssembler, Machine_IV_CircuitAssembler, Machine_LuV_CircuitAssembler, Machine_ZPM_CircuitAssembler, Machine_UV_CircuitAssembler, Circuit_Integrated_Good, Machine_IV_LightningRod, Machine_HV_LightningRod, Machine_EV_LightningRod,
+    VOLUMETRIC_FLASK, Machine_DigitalTransformer_EV, Machine_DigitalTransformer_IV, Machine_DigitalTransformer_LuV, Machine_DigitalTransformer_ZPM, Machine_DigitalTransformer_UV, Machine_DigitalTransformer_MAX
+
+    ;
 
     public static final ItemList[]
             DYE_ONLY_ITEMS = {Color_00, Color_01, Color_02, Color_03, Color_04, Color_05, Color_06, Color_07, Color_08, Color_09, Color_10, Color_11, Color_12, Color_13, Color_14, Color_15}, SPRAY_CAN_DYES = {Spray_Color_00, Spray_Color_01, Spray_Color_02, Spray_Color_03, Spray_Color_04, Spray_Color_05, Spray_Color_06, Spray_Color_07, Spray_Color_08, Spray_Color_09, Spray_Color_10, Spray_Color_11, Spray_Color_12, Spray_Color_13, Spray_Color_14, Spray_Color_15}, SPRAY_CAN_DYES_USED = {Spray_Color_Used_00, Spray_Color_Used_01, Spray_Color_Used_02, Spray_Color_Used_03, Spray_Color_Used_04, Spray_Color_Used_05, Spray_Color_Used_06, Spray_Color_Used_07, Spray_Color_Used_08, Spray_Color_Used_09, Spray_Color_Used_10, Spray_Color_Used_11, Spray_Color_Used_12, Spray_Color_Used_13, Spray_Color_Used_14, Spray_Color_Used_15}, TRANSFORMERS = {Transformer_LV_ULV, Transformer_MV_LV, Transformer_HV_MV, Transformer_EV_HV, Transformer_IV_EV, Transformer_LuV_IV, Transformer_ZPM_LuV, Transformer_UV_ZPM, Transformer_MAX_UV}, MACHINE_HULLS = {Hull_ULV, Hull_LV, Hull_MV, Hull_HV, Hull_EV, Hull_IV, Hull_LuV, Hull_ZPM, Hull_UV, Hull_MAX}, HATCHES_DYNAMO = {Hatch_Dynamo_ULV, Hatch_Dynamo_LV, Hatch_Dynamo_MV, Hatch_Dynamo_HV, Hatch_Dynamo_EV, Hatch_Dynamo_IV, Hatch_Dynamo_LuV, Hatch_Dynamo_ZPM, Hatch_Dynamo_UV, Hatch_Dynamo_MAX}, HATCHES_ENERGY = {Hatch_Energy_ULV, Hatch_Energy_LV, Hatch_Energy_MV, Hatch_Energy_HV, Hatch_Energy_EV, Hatch_Energy_IV, Hatch_Energy_LuV, Hatch_Energy_ZPM, Hatch_Energy_UV, Hatch_Energy_MAX}, HATCHES_INPUT = {Hatch_Input_ULV, Hatch_Input_LV, Hatch_Input_MV, Hatch_Input_HV, Hatch_Input_EV, Hatch_Input_IV, Hatch_Input_LuV, Hatch_Input_ZPM, Hatch_Input_UV, Hatch_Input_MAX}, HATCHES_INPUT_BUS = {Hatch_Input_Bus_ULV, Hatch_Input_Bus_LV, Hatch_Input_Bus_MV, Hatch_Input_Bus_HV, Hatch_Input_Bus_EV, Hatch_Input_Bus_IV, Hatch_Input_Bus_LuV, Hatch_Input_Bus_ZPM, Hatch_Input_Bus_UV, Hatch_Input_Bus_MAX}, HATCHES_OUTPUT = {Hatch_Output_ULV, Hatch_Output_LV, Hatch_Output_MV, Hatch_Output_HV, Hatch_Output_EV, Hatch_Output_IV, Hatch_Output_LuV, Hatch_Output_ZPM, Hatch_Output_UV, Hatch_Output_MAX}, HATCHES_OUTPUT_BUS = {Hatch_Output_Bus_ULV, Hatch_Output_Bus_LV, Hatch_Output_Bus_MV, Hatch_Output_Bus_HV, Hatch_Output_Bus_EV, Hatch_Output_Bus_IV, Hatch_Output_Bus_LuV, Hatch_Output_Bus_ZPM, Hatch_Output_Bus_UV, Hatch_Output_Bus_MAX}, HATCHES_MUFFLER = {Hatch_Muffler_LV, Hatch_Muffler_LV, Hatch_Muffler_MV, Hatch_Muffler_HV, Hatch_Muffler_EV, Hatch_Muffler_IV, Hatch_Muffler_LuV, Hatch_Muffler_ZPM, Hatch_Muffler_UV, Hatch_Muffler_MAX};
@@ -745,8 +753,24 @@ public enum ItemList implements IItemContainer {
     @Override
     public ItemStack getWithName(long aAmount, String aDisplayName, Object... aReplacements) {
         ItemStack rStack = get(1, aReplacements);
-        if (GT_Utility.isStackInvalid(rStack)) return null;
-        rStack.setStackDisplayName(aDisplayName);
+        if (GT_Utility.isStackInvalid(rStack)) return NI;
+
+        // CamelCase alphanumeric words from aDisplayName
+        StringBuilder tCamelCasedDisplayNameBuilder = new StringBuilder();
+        final String[] tDisplayNameWords = aDisplayName.split("\\W");
+        for (String tWord : tDisplayNameWords){
+            if (tWord.length() > 0) tCamelCasedDisplayNameBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
+            if (tWord.length() > 1) tCamelCasedDisplayNameBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
+        }
+        if (tCamelCasedDisplayNameBuilder.length() == 0) {
+            // CamelCased DisplayName is empty, so use hash of aDisplayName
+            tCamelCasedDisplayNameBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
+        }
+
+        // Construct a translation key from UnlocalizedName and CamelCased DisplayName
+        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder.toString() + ".name";
+
+        rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
     }
 

@@ -10,11 +10,19 @@ import net.minecraftforge.fluids.Fluid;
 
 public class GT_Cover_Conveyor
         extends GT_CoverBehavior {
+
     public final int mTickRate;
+    public final byte stacksByOperation;
 
     public GT_Cover_Conveyor(int aTickRate) {
         this.mTickRate = aTickRate;
+        this.stacksByOperation = 1;
     }
+
+    public GT_Cover_Conveyor(int aTickRate, byte aStacksByOperation) {
+            this.mTickRate = aTickRate;
+            this.stacksByOperation = aStacksByOperation;
+        }
 
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aCoverVariable % 6 > 1) && ((aTileEntity instanceof IMachineProgress))) {

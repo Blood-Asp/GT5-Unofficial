@@ -11,6 +11,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_ModHandler.RecipeBits;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GT_OreDictUnificator;
 import ic2.core.Ic2Items;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -19,6 +20,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Locale;
 import java.util.Random;
+
+import cpw.mods.fml.common.Loader;
 
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.W;
@@ -71,17 +74,28 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                 }
 
                 if (aRecipe[i] == X.GLASS) {
-                    switch (mTier) {
-                        case 6:
-                        case 7:
-                        case 8:
-                            aRecipe[i] = Ic2Items.reinforcedGlass;
-                            break;
-                        default:
-                            aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
-                            break;
+                    if (Loader.isModLoaded("bartworks")){
+                        if (mTier>=8)
+                           aRecipe[i] = "blockGlass"+GT_Values.VN[8];
+                        else if (mTier < 3)
+                           aRecipe[i] = "blockGlass"+GT_Values.VN[3];
+                        else
+                            aRecipe[i] = "blockGlass"+GT_Values.VN[mTier];
+                        continue;              
+                    } 
+                    else {
+                        switch (mTier) {
+                            case 6:
+                            case 7:
+                            case 8:
+                                aRecipe[i] = Ic2Items.reinforcedGlass;
+                                break;
+                            default:
+                                aRecipe[i] = new ItemStack(Blocks.glass, 1, W);
+                                break;
+                        }
+                        continue;
                     }
-                    continue;
                 }
 
                 if (aRecipe[i] == X.PLATE) {
@@ -647,6 +661,11 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
             case 2:
                 return (!mRequiresFluidForFiltering || getFillableStack() != null) && (((getInputAt(0) != null && getInputAt(1) != null) || (getInputAt(0) == null && getInputAt(1) == null ? getRecipeList().containsInput(aStack) : (getRecipeList().containsInput(aStack) && null != getRecipeList().findRecipe(getBaseMetaTileEntity(), mLastRecipe, true, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), aIndex == getInputSlot() ? new ItemStack[]{aStack, getInputAt(1)} : new ItemStack[]{getInputAt(0), aStack})))));
             default:
+                int tID = getBaseMetaTileEntity().getMetaTileID();
+                if (tID >= 211 && tID <= 218) {// assemblers IDs
+                    if (GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitBasic")) return true; // allow input all LV-circuits for assemblers
+                    if (GT_OreDictUnificator.isItemStackInstanceOf(aStack, "circuitAdvanced")) return true; // allow input all HV-circuits for assemblers
+                }
                 return getRecipeList().containsInput(aStack);
         }
     }
