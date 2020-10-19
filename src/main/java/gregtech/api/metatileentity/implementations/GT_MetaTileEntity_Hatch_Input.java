@@ -9,7 +9,9 @@ import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
+
 
 public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
     public GT_Recipe_Map mRecipeMap = null;
@@ -122,4 +124,22 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
     public int getTankPressure() {
         return -100;
     }
+    
+    @Override
+    public int fill(ForgeDirection aSide, FluidStack aFluid, boolean doFill) {
+        if (ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()) == aSide) {
+            return super.fill(aSide, aFluid, doFill);
+        }
+        return 0;
+    }
+    
+    @Override
+    public FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
+        return null;
+    }
+    
+    @Override
+    public FluidStack drain(ForgeDirection aSide, int maxDrain, boolean doDrain) {
+        return null;
+    }    
 }
