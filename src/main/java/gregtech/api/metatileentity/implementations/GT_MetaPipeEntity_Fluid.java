@@ -404,7 +404,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         final GT_CoverBehavior coverBehavior = baseMetaTile.getCoverBehaviorAtSide(aSide);
         final IGregTechTileEntity gTileEntity = (tTileEntity instanceof IGregTechTileEntity) ? (IGregTechTileEntity) tTileEntity : null;
 
-        if (coverBehavior instanceof GT_Cover_Drain || isTConstructFaucet(tTileEntity))
+        if (coverBehavior instanceof GT_Cover_Drain || (GregTech_API.mTConstruct && isTConstructFaucet(tTileEntity)))
             return true;
 
         final IFluidHandler fTileEntity = (tTileEntity instanceof IFluidHandler) ? (IFluidHandler) tTileEntity : null;
@@ -413,7 +413,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
             FluidTankInfo[] tInfo = fTileEntity.getTankInfo(ForgeDirection.getOrientation(tSide));
             if (tInfo != null) {
                 return tInfo.length > 0
-                        || isTranslocator(tTileEntity)
+                        || (GregTech_API.mTranslocator && isTranslocator(tTileEntity))
                         || gTileEntity != null && gTileEntity.getCoverBehaviorAtSide(tSide) instanceof GT_Cover_FluidRegulator;
 
             }
@@ -424,13 +424,13 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     @Optional.Method(modid = "TConstruct")
     private boolean isTConstructFaucet(TileEntity tTileEntity){
         // Tinker Construct Faucets return a null tank info, so check the class
-        return GregTech_API.mTConstruct && tTileEntity instanceof tconstruct.smeltery.logic.FaucetLogic;
+        return tTileEntity instanceof tconstruct.smeltery.logic.FaucetLogic;
     }
 
     @Optional.Method(modid = "Translocator")
     private boolean isTranslocator(TileEntity tTileEntity){
         // Translocators return a TankInfo, but it's of 0 length - so check the class if we see this pattern
-        return GregTech_API.mTranslocator  && tTileEntity instanceof codechicken.translocator.TileLiquidTranslocator;
+        return tTileEntity instanceof codechicken.translocator.TileLiquidTranslocator;
     }
 
     @Override
