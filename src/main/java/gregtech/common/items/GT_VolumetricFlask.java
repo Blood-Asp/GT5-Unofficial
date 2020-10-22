@@ -2,6 +2,7 @@
 package gregtech.common.items;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GT_Values;
@@ -43,15 +44,15 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         setMaxStackSize(16);
         setNoRepair();
         if (Loader.isModLoaded("NotEnoughItems")) {
-            for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-                if (fluid != null) {
-                    ItemStack stack = new ItemStack(this);
-                    setCapacity(stack, getMaxCapacity());
-                    fill(stack, new FluidStack(fluid, Integer.MAX_VALUE), true);
-                    codechicken.nei.api.API.hideItem(stack);
-                }
-            }
+            hideItemInNEI();
         }
+    }
+
+    @Optional.Method(modid = "NotEnoughItems")
+    private void hideItemInNEI() {
+        codechicken.nei.api.API.addItemFilter(
+                () -> aStack -> aStack.getItem() == this && this.getFluid(aStack) != null
+        );
     }
 
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
