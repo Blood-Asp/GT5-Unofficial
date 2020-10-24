@@ -43,16 +43,6 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         unlocalFlaskName = unlocalized;
         setMaxStackSize(16);
         setNoRepair();
-        if (Loader.isModLoaded("NotEnoughItems")) {
-            hideItemInNEI();
-        }
-    }
-
-    @Optional.Method(modid = "NotEnoughItems")
-    private void hideItemInNEI() {
-        codechicken.nei.api.API.addItemFilter(
-                () -> aStack -> aStack.getItem() == this && this.getFluid(aStack) != null
-        );
     }
 
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
