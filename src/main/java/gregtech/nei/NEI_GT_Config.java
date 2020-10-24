@@ -17,7 +17,7 @@ public class NEI_GT_Config
                 new GT_NEI_DefaultHandler(tMap);
             }
         }
-        if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             ALH = new GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes);
             codechicken.nei.api.API.addItemListEntry(ItemList.VOLUMETRIC_FLASK.get(1));
         }
