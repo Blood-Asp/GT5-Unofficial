@@ -2,6 +2,7 @@ package gregtech.api.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.GT_Mod;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.util.GT_Utility;
@@ -255,6 +256,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                             }
                             return null;
                         }
+                        if (GT_Mod.gregtechproxy.mHardCoreInputTanks) return null;
                         ItemStack tOutput = GT_Utility.fillFluidContainer(tMachine.getFillableStack(), tStack, false, true);
                         if (tOutput != null && aPlayer.inventory.addItemStackToInventory(tOutput)) {
                             tFluid = GT_Utility.getFluidForFilledItem(tOutput, true);
