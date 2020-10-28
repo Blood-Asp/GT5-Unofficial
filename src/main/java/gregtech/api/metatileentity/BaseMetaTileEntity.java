@@ -1239,6 +1239,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (mColor > 0) tNBT.setByte("mColor", mColor);
         if (mOtherUpgrades > 0) tNBT.setByte("mOtherUpgrades", mOtherUpgrades);
         if (mStrongRedstone > 0) tNBT.setByte("mStrongRedstone", mStrongRedstone);
+	if (mStoredEnergy > 0) tNBT.setLong("mStoredEnergy", mStoredEnergy);
+	tNBT.setBoolean("mWorks", !mWorks);
         for (byte i = 0; i < mCoverSides.length; i++) {
             if (mCoverSides[i] != 0) {
                 tNBT.setIntArray("mCoverData", mCoverData);
