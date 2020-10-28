@@ -132,19 +132,14 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
 
     public Packet getDescriptionPacket() {
         if (!this.worldObj.isRemote) {
-            /**
-             * mBlocked == true means every surrounding block is solid, so this ore is hidden and no need to display it to client
-             * here we check if surrounding has changed. if yes then send a packet and update the state, otherwise do nothing.
-             */
-            if (this.mBlocked != (
+            if (!(this.mBlocked = (
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord + 1, this.yCoord, this.zCoord) &&
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord - 1, this.yCoord, this.zCoord) &&
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord) &&
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord, this.yCoord - 1, this.zCoord) &&
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord, this.yCoord, this.zCoord + 1) &&
                     GT_Utility.isOpaqueBlock(this.worldObj, this.xCoord, this.yCoord, this.zCoord - 1)
-            )) {
-                this.mBlocked = !this.mBlocked;
+            ))) {
                 GT_Values.NW.sendPacketToAllPlayersInRange(this.worldObj, new GT_Packet_Ores(this.xCoord, (short) this.yCoord, this.zCoord, this.mMetaData), this.xCoord, this.zCoord);
             }
         }
