@@ -59,6 +59,11 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
         mFluid = FluidStack.loadFluidStackFromNBT(aNBT.getCompoundTag("mFluid"));
     }
 
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        if (mFluid != null) aNBT.setTag("mFluid", mFluid.writeToNBT(new NBTTagCompound()));
+    }
+
     public abstract boolean doesFillContainers();
 
     public abstract boolean doesEmptyContainers();
