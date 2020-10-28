@@ -168,7 +168,7 @@ public class GT_RecipeRegistrator {
         aMaterialAmount /= aStack.stackSize;
         if(aMaterial==Materials.Naquadah||aMaterial==Materials.NaquadahEnriched)return;
 
-        boolean tHide = (aStack.getItem() == Item.getItemFromBlock(GregTech_API.sBlockMachines) || (aStack.getItem() instanceof GT_MetaGenerated_Item_X32 && !aData.hasValidPrefixData()))&&(GT_Mod.gregtechproxy.mHideRecyclingRecipes);
+        boolean tHide = (aStack.getItem() == Item.getItemFromBlock(GregTech_API.sBlockMachines))&&(GT_Mod.gregtechproxy.mHideRecyclingRecipes);
         if (aAllowAlloySmelter)
             GT_ModHandler.addSmeltingAndAlloySmeltingRecipe(GT_Utility.copyAmount(1, aStack), GT_OreDictUnificator.getIngot(aMaterial.mSmeltInto, aMaterialAmount),tHide);
         else
