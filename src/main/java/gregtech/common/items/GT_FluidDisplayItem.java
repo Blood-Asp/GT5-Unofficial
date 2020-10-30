@@ -50,7 +50,8 @@ public class GT_FluidDisplayItem
 
     public IIcon getIconFromDamage(int aMeta) {
         Fluid tFluid = FluidRegistry.getFluid(aMeta);
-        return tFluid == null ? FluidRegistry.WATER.getStillIcon() : tFluid.getStillIcon();
+        if (tFluid == null || tFluid.getStillIcon() == null) return FluidRegistry.WATER.getStillIcon();
+        return tFluid.getStillIcon();
     }
 
     @SideOnly(Side.CLIENT)
