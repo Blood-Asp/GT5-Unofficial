@@ -307,6 +307,7 @@ public class GT_Client extends GT_Proxy
         new GT_Renderer_Entity_Arrow(GT_Entity_Arrow.class, "arrow");
         new GT_Renderer_Entity_Arrow(GT_Entity_Arrow_Potion.class, "arrow_potions");
         new GT_FlaskRenderer();
+        new GT_FluidDisplayStackRenderer();
     }
 
     public void onPostLoad() {
