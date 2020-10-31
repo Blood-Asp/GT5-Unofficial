@@ -440,8 +440,6 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         aNBT.setBoolean("mItemTransfer", mItemTransfer);
         aNBT.setBoolean("mAllowInputFromOutputSide", mAllowInputFromOutputSide);
         aNBT.setInteger("mOldMainFacing", mMainFacing);
-        if (mOutputFluid != null) aNBT.setTag("mOutputFluid", mOutputFluid.writeToNBT(new NBTTagCompound()));
-        if (mFluidOut != null) aNBT.setTag("mFluidOut", mFluidOut.writeToNBT(new NBTTagCompound()));
     }
 
     @Override
