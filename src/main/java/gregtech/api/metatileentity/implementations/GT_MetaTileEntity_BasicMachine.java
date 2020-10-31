@@ -8,6 +8,7 @@ import gregtech.api.gui.GT_Container_BasicMachine;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
@@ -48,6 +49,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public final int mInputSlotCount, mAmperage;
     public boolean mAllowInputFromOutputSide = false, mFluidTransfer = false, mItemTransfer = false, mHasBeenUpdated = false, mStuttering = false, mCharge = false, mDecharge = false;
     public int mMainFacing = -1, mProgresstime = 0, mMaxProgresstime = 0, mEUt = 0, mOutputBlocked = 0;
+    private int mOldMainFacing = -1;
     public FluidStack mOutputFluid;
     public String mGUIName = "", mNEIName = "";
     public GT_MetaTileEntity_MultiBlockBase mCleanroom;
@@ -116,7 +118,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     
     public boolean setMainFacing(byte aSide){
     	if (!isValidMainFacing(aSide)) return false;
+        mOldMainFacing = mMainFacing;
     	mMainFacing = aSide;
+        if (getBaseMetaTileEntity() instanceof BaseMetaTileEntity) {
+            ((BaseMetaTileEntity)getBaseMetaTileEntity()).rotateCovers(mOldMainFacing, mMainFacing);
+            getBaseMetaTileEntity().issueClientUpdate();
+        }
     	if(getBaseMetaTileEntity().getFrontFacing() == mMainFacing){
     		getBaseMetaTileEntity().setFrontFacing(GT_Utility.getOppositeSide(aSide));
     	}
@@ -417,12 +424,22 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mAllowInputFromOutputSide = aNBT.getBoolean("mAllowInputFromOutputSide");
         mEUt = aNBT.getInteger("mEUt");
         mMainFacing = aNBT.getInteger("mMainFacing");
+        if (aNBT.hasKey("mOldMainFacing")) mOldMainFacing = aNBT.getInteger("mOldMainFacing");
         mProgresstime = aNBT.getInteger("mProgresstime");
         mMaxProgresstime = aNBT.getInteger("mMaxProgresstime");
         mOutputFluid = FluidStack.loadFluidStackFromNBT(aNBT.getCompoundTag("mOutputFluid"));
         mFluidOut = FluidStack.loadFluidStackFromNBT(aNBT.getCompoundTag("mFluidOut"));
 
         for (int i = 0; i < mOutputItems.length; i++) mOutputItems[i] = GT_Utility.loadItem(aNBT, "mOutputItem" + i);
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        aNBT.setBoolean("mFluidTransfer", mFluidTransfer);
+        aNBT.setBoolean("mItemTransfer", mItemTransfer);
+        aNBT.setBoolean("mAllowInputFromOutputSide", mAllowInputFromOutputSide);
+        aNBT.setInteger("mOldMainFacing", mMainFacing);
     }
 
     @Override
@@ -536,6 +553,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             mMainFacing = getBaseMetaTileEntity().getFrontFacing();
         }
         if (mMainFacing >= 2 && !mHasBeenUpdated) {
+            if (mOldMainFacing >= 0) {
+                if (getBaseMetaTileEntity() instanceof BaseMetaTileEntity) {
+                    ((BaseMetaTileEntity)getBaseMetaTileEntity()).rotateCovers(mOldMainFacing, mMainFacing);
+                }
+            }
             mHasBeenUpdated = true;
             getBaseMetaTileEntity().setFrontFacing(getBaseMetaTileEntity().getBackFacing());
         }
