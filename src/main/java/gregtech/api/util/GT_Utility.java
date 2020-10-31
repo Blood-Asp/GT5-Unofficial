@@ -2424,4 +2424,36 @@ public class GT_Utility {
         }
     }
 
+    private static char[] UNICODE_SUBSCRIPT_DIGITS = {'\u2080', '\u2081', '\u2082', '\u2083', '\u2084', '\u2085', '\u2086', '\u2087', '\u2088', '\u2089'};
+    private static String UNICODE_SUBSCRIPT_MINUS = "\u208B";
+    
+    /**
+     * Converts an integer into a subscript string, such as might be used in a chemical formula, using unicode characters.
+     */
+    public static String makeSubscript(int aValue) {
+        String sign = "";
+        StringBuilder result = new StringBuilder(11);
+        int tValue = aValue;
+        if (tValue == Integer.MIN_VALUE) {
+            // Because of two's complement representation, this value has to be treated specially.
+            // Carefully not a hardcoded string, in case this function is changed to handle a different-size number.
+            sign = UNICODE_SUBSCRIPT_MINUS;
+            result.append(UNICODE_SUBSCRIPT_DIGITS[-(tValue % 10)]);
+            tValue = -(tValue / 10);
+        }
+        if (tValue < 0) {
+            sign = UNICODE_SUBSCRIPT_MINUS;
+            tValue = -tValue;
+        }
+        if (tValue == 0) {
+            result.append(UNICODE_SUBSCRIPT_DIGITS[0]);
+        }
+        while (tValue > 0) {
+            result.insert(0, UNICODE_SUBSCRIPT_DIGITS[tValue % 10]);
+            tValue /= 10;
+        }
+        result.insert(0, sign);
+        return result.toString();
+    }
+
 }
