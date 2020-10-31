@@ -1248,24 +1248,6 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 break;
             }
         }
-        try {
-            if (hasValidMetaTileEntity()) {
-                NBTTagList tItemList = new NBTTagList();
-                for (int i = 0; i < mMetaTileEntity.getRealInventory().length; i++) {
-                    ItemStack tStack = mMetaTileEntity.getRealInventory()[i];
-                    if (tStack != null) {
-                        NBTTagCompound tTag = new NBTTagCompound();
-                        tTag.setInteger("IntSlot", i);
-                        tStack.writeToNBT(tTag);
-                        tItemList.appendTag(tTag);
-                    }
-                }
-                tNBT.setTag("Inventory", tItemList);
-            }
-        } catch (Throwable e) {
-            GT_Log.err.println("Encountered CRITICAL ERROR while saving MetaTileEntity, the Chunk whould've been corrupted by now, but I prevented that. Please report immidietly to GregTech Intergalactical!!!");
-            e.printStackTrace(GT_Log.err);
-        }
         if (hasValidMetaTileEntity()) mMetaTileEntity.setItemNBT(tNBT);
         if (!tNBT.hasNoTags()) rStack.setTagCompound(tNBT);
         return new ArrayList<ItemStack>(Arrays.asList(rStack));
