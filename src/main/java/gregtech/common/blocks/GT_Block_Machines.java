@@ -344,6 +344,21 @@ public class GT_Block_Machines
             IGregTechTileEntity tGregTechTileEntity = (IGregTechTileEntity) tTileEntity;
             Random tRandom = new XSTR();
             mTemporaryTileEntity.set(tGregTechTileEntity);
+            for (int i = 0; i < tGregTechTileEntity.getSizeInventory(); i++) {
+                ItemStack tItem = tGregTechTileEntity.getStackInSlot(i);
+                if ((tItem != null) && (tItem.stackSize > 0) && (tGregTechTileEntity.isValidSlot(i))) {
+                    EntityItem tItemEntity = new EntityItem(aWorld, aX + tRandom.nextFloat() * 0.8F + 0.1F, aY + tRandom.nextFloat() * 0.8F + 0.1F, aZ + tRandom.nextFloat() * 0.8F + 0.1F, new ItemStack(tItem.getItem(), tItem.stackSize, tItem.getItemDamage()));
+                    if (tItem.hasTagCompound()) {
+                        tItemEntity.getEntityItem().setTagCompound((NBTTagCompound) tItem.getTagCompound().copy());
+                    }
+                    tItemEntity.motionX = (tRandom.nextGaussian() * 0.0500000007450581D);
+                    tItemEntity.motionY = (tRandom.nextGaussian() * 0.0500000007450581D + 0.2000000029802322D);
+                    tItemEntity.motionZ = (tRandom.nextGaussian() * 0.0500000007450581D);
+                    aWorld.spawnEntityInWorld(tItemEntity);
+                    tItem.stackSize = 0;
+                    tGregTechTileEntity.setInventorySlotContents(i, null);
+                }
+            }
         }
         super.breakBlock(aWorld, aX, aY, aZ, par5, par6);
         aWorld.removeTileEntity(aX, aY, aZ);
