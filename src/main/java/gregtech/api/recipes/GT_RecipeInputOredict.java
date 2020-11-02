@@ -1,6 +1,8 @@
 package gregtech.api.recipes;
 
+import gregtech.api.util.GT_OreDictUnificator;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -30,4 +32,21 @@ public class GT_RecipeInputOredict extends GT_RecipeInput {
         }
         return false;
     }
+    
+    @Override
+    public List<ItemStack> getInputStacks() {
+        List<ItemStack> result = GT_OreDictUnificator.getOres(mOredictName);
+        for (int i = 0; i < result.size(); i++) {
+            ItemStack tItemStack = result.get(i).copy();
+            tItemStack.stackSize = mCount;
+            result.set(i, tItemStack);
+        }
+        return result;
+    }
+    
+    @Override
+    public String getInputDescription() {
+        return mCount + " " + mOredictName;
+    }
+    
 }

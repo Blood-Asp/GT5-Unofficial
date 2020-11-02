@@ -133,4 +133,23 @@ public class GT_MachineRecipe {
         return this;
     }
     
+    public String[] getNeiDesc() {
+        return neiDesc;
+    }
+    
+    /**
+     * Validates the recipe by making sure the duration and EU/t have been set, it has input items and/or fluid as well
+     * as output items and/or fluid, unless it is a fake recipe (fake recipes are always considered valid).
+     * Because of the chained setters, some details could accidentally be omitted, and this method should be used before
+     * adding a recipe to a list or map.
+     */
+    public boolean isValidRecipe() {
+        if (mFakeRecipe) return true;
+        if (mDuration <= 0) return false;
+        if (mEUt <= 0) return false;
+        if (mInputs.length == 0 && mFluidInputs.length == 0) return false;
+        if (mOutputs.length == 0 && mFluidOutputs.length == 0) return false;
+        return true;
+    }
+    
 }

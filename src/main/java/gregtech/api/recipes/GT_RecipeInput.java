@@ -1,5 +1,7 @@
 package gregtech.api.recipes;
 
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -37,6 +39,14 @@ public class GT_RecipeInput {
             }
         }
         return true;
+    }
+ 
+    public List<ItemStack> getInputStacks() {
+        return Collections.singletonList(mItemStack.copy());
+    }
+ 
+    public String getInputDescription() {
+        return mItemStack.stackSize + " " + mItemStack.getDisplayName();
     }
  
 }
