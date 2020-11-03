@@ -27,9 +27,9 @@ public class GT_RecipeInput {
         return inputMatches(aItemStack, true);
     }
     
-    public boolean inputMatches(ItemStack aItemStack, boolean aCheckCount) {
+    public boolean inputMatches(ItemStack aItemStack, boolean aIgnoreCount) {
         if (aItemStack == null) return false;
-        if (aCheckCount && aItemStack.stackSize < mItemStack.stackSize) return false;
+        if (!aIgnoreCount && aItemStack.stackSize < mItemStack.stackSize) return false;
         if (mUseMeta && aItemStack.getItemDamage() != mItemStack.getItemDamage()) return false;
         // Now check for NBT tags specified in recipe input. Extra tags specified on provided item but not in recipe can be ignored.
         if (mItemStack.stackTagCompound != null) {
