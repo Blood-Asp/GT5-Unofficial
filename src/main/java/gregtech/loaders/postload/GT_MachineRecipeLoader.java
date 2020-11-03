@@ -903,6 +903,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Gold, 2L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Apatite, 2L)}, Materials.Glass.getMolten(576L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextForestry, "thermionicTubes", 4L, 10), 200, 30);
         GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Gold, 2L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Lapis, 2L)}, Materials.Glass.getMolten(576L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextForestry, "thermionicTubes", 4L, 11), 200, 30);
         GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Gold, 2L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.EnderEye, 2L)}, Materials.Glass.getMolten(576L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextForestry, "thermionicTubes", 4L, 12), 200, 30);
+        GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_OreDictUnificator.get(OrePrefixes.bolt, Materials.Gold, 2L), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Uranium, 2L)}, Materials.Glass.getMolten(576L), GT_ModHandler.getModItem(GT_MachineRecipeLoader.aTextForestry, "thermionicTubes", 4L, 13), 200, 30);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 2L), new ItemStack(Items.iron_door, 1), ItemList.Cover_Shutter.get(2L), 800, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iron, 2L), new ItemStack(Items.iron_door, 1), ItemList.Cover_Shutter.get(2L), 800, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.WroughtIron, 2L), new ItemStack(Items.iron_door, 1), ItemList.Cover_Shutter.get(2L), 800, 16);
@@ -2613,7 +2614,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblylineRecipe(ItemList.Field_Generator_LuV.get(1, new Object(){}),144000,new Object[]{
         		GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 1L),
         		GT_OreDictUnificator.get(OrePrefixes.plate, Materials.NaquadahAlloy, 6L),
-        		ItemList.QuantumStar.get(1, new Object(){}),
+        		ItemList.QuantumStar.get(2, new Object(){}),
         		ItemList.Emitter_ZPM.get(4, new Object(){}),
                 new Object[]{OrePrefixes.circuit.get(Materials.Superconductor), 4},
         		GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Europium, 64L),
