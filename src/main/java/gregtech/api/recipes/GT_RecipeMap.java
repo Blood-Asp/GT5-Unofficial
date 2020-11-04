@@ -16,10 +16,8 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.nei.GT_NEI_DefaultHandler;
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.L;
 import static gregtech.api.enums.GT_Values.W;
 

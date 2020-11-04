@@ -16,6 +16,7 @@ import gregtech.api.objects.MaterialStack;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.*;
 import gregtech.common.GT_DummyWorld;
+import gregtech.common.GT_MachineRecipeAdder;
 import gregtech.common.GT_Network;
 import gregtech.common.GT_Proxy;
 import gregtech.common.GT_RecipeAdder;
@@ -95,7 +96,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.GT = this;
         GT_Values.DW = new GT_DummyWorld();
         GT_Values.NW = new GT_Network();
-        GregTech_API.sRecipeAdder = GT_Values.RA = new GT_RecipeAdder();
+        GregTech_API.sRecipeAdder = GT_Values.RA = new GT_MachineRecipeAdder();
 
         Textures.BlockIcons.VOID.name();
         Textures.ItemIcons.VOID.name();

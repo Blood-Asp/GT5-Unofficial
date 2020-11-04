@@ -30,6 +30,7 @@ public class GT_RecipeInput {
     public boolean inputMatches(ItemStack aItemStack, boolean aIgnoreCount) {
         if (aItemStack == null) return false;
         if (!aIgnoreCount && aItemStack.stackSize < mItemStack.stackSize) return false;
+        if (aItemStack.getItem() != mItemStack.getItem()) return false;
         if (mUseMeta && aItemStack.getItemDamage() != mItemStack.getItemDamage()) return false;
         // Now check for NBT tags specified in recipe input. Extra tags specified on provided item but not in recipe can be ignored.
         if (mItemStack.stackTagCompound != null) {
@@ -49,6 +50,10 @@ public class GT_RecipeInput {
         return Collections.singletonList(mItemStack.copy());
     }
  
+    /**
+     * Gets a description of this input, probably for an assembly line instruction book
+     * @return a description of the item or items that can be used as input for the current recipe.
+     */
     public String getInputDescription() {
         return mItemStack.stackSize + " " + mItemStack.getDisplayName();
     }
