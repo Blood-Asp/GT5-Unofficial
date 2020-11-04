@@ -105,4 +105,12 @@ public class GT_RecipeOutput {
     public float getChance() {
         return mChance;
     }
+    
+    public int getCount() {
+        return mItemStack.stackSize;
+    }
+    
+    public void setCount(int aCount) {
+        mItemStack.stackSize = aCount;
+    }
 }

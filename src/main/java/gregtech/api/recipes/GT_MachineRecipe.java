@@ -1,6 +1,12 @@
 package gregtech.api.recipes;
 
+import codechicken.nei.PositionedStack;
 import gregtech.api.objects.GT_FluidStack;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
+import java.util.ArrayList;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 
@@ -8,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
  * Heavily modified version of GT_Recipe, which will eventually allow oredicted input and output as well as checking NBT tags,
  * and loading of XML (or maybe other format) recipes.
  */
-public class GT_MachineRecipe {
+public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
     public GT_RecipeInput[] mInputs;
     public GT_RecipeOutput[] mOutputs;
     public FluidStack[] mFluidInputs;
@@ -55,6 +61,8 @@ public class GT_MachineRecipe {
      */
     private String[] neiDesc = null;
     
+    private boolean mOptimized = false;
+    
     /**
      * The main constructor with inputs and outputs.  Other details can be added with chainable setters.
      */
@@ -69,8 +77,33 @@ public class GT_MachineRecipe {
         if (mFluidInputs == null) mFluidInputs = new FluidStack[0];
         if (mFluidOutputs == null) mFluidOutputs = new FluidStack[0];
         
+        mInputs = GT_Utility.getArrayListWithoutTrailingNulls(mInputs).toArray(new GT_RecipeInput[0]);
+        mOutputs = GT_Utility.getArrayListWithoutTrailingNulls(mOutputs).toArray(new GT_RecipeOutput[0]);
+        mFluidInputs = GT_Utility.getArrayListWithoutNulls(mFluidInputs).toArray(new FluidStack[0]);
+        mFluidOutputs = GT_Utility.getArrayListWithoutNulls(mFluidOutputs).toArray(new FluidStack[0]);
+        
         for (int i = 0; i < mFluidInputs.length; i++) mFluidInputs[i] = new GT_FluidStack(mFluidInputs[i]);
         for (int i = 0; i < mFluidOutputs.length; i++) mFluidOutputs[i] = new GT_FluidStack(mFluidOutputs[i]);
+    }
+    
+    private static GT_RecipeInput[] wrapInputs(ItemStack[] aInputs) {
+        GT_RecipeInput[] tInputs = new GT_RecipeInput[aInputs.length];
+        for (int i = 0; i < aInputs.length; i++) {
+            tInputs[i] = new GT_RecipeInput(aInputs[i]);
+        }
+        return tInputs;
+    }
+    
+    private static GT_RecipeOutput[] wrapOutputs(ItemStack[] aOutputs) {
+        GT_RecipeOutput[] tOutputs = new GT_RecipeOutput[aOutputs.length];
+        for (int i = 0; i < aOutputs.length; i++) {
+            tOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
+        }
+        return tOutputs;
+    }
+    
+    public GT_MachineRecipe(ItemStack[] aInputs, ItemStack[] aOutputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs) {
+        this(wrapInputs(aInputs), wrapOutputs(aOutputs), aFluidInputs, aFluidOutputs);
     }
     
     public GT_MachineRecipe setSpecialItems(Object aSpecialItems) {
@@ -138,6 +171,22 @@ public class GT_MachineRecipe {
     }
     
     /**
+     * Overriding this method and getOutputPositionedStacks allows for custom NEI stack placement
+     * @return A list of input stacks
+     */
+    public ArrayList<PositionedStack> getInputPositionedStacks(){
+    	return null;
+    }
+
+    /**
+     * Overriding this method and getInputPositionedStacks allows for custom NEI stack placement
+     * @return A list of output stacks
+     */
+    public ArrayList<PositionedStack> getOutputPositionedStacks(){
+    	return null;
+    }
+
+    /**
      * Validates the recipe by making sure the duration and EU/t have been set, it has input items and/or fluid as well
      * as output items and/or fluid, unless it is a fake recipe (fake recipes are always considered valid).
      * Because of the chained setters, some details could accidentally be omitted, and this method should be used before
@@ -150,6 +199,200 @@ public class GT_MachineRecipe {
         if (mInputs.length == 0 && mFluidInputs.length == 0) return false;
         if (mOutputs.length == 0 && mFluidOutputs.length == 0) return false;
         return true;
+    }
+    
+    // Copied from StackOverflow
+    private static int gcd(int a, int b) { return b==0 ? a : gcd(b, a%b); }
+    
+    public GT_MachineRecipe optimize() {
+        assert(isValidRecipe());
+        if (!mFakeRecipe && !mOptimized) { // fake recipes probably aren't worth optimizing
+            int tDivisor = mDuration;
+            if (tDivisor >= 32) {
+                for (int i = 0; i < mInputs.length && tDivisor > 1; i++) {
+                    tDivisor = gcd(tDivisor, mInputs[i].getCount());
+                }
+                for (int i = 0; i < mOutputs.length && tDivisor > 1; i++) {
+                    tDivisor = gcd(tDivisor, mOutputs[i].getCount());
+                }
+                for (int i = 0; i < mFluidInputs.length && tDivisor > 1; i++) {
+                    tDivisor = gcd(tDivisor, mFluidInputs[i].amount);
+                }
+                for (int i = 0; i < mFluidOutputs.length && tDivisor > 1; i++) {
+                    tDivisor = gcd(tDivisor, mFluidOutputs[i].amount);
+                }
+            }
+            if (tDivisor > 1) {
+                for (GT_RecipeInput tInput : mInputs) {
+                    tInput.setCount(tInput.getCount() / tDivisor);
+                }
+                for (GT_RecipeOutput tOutput : mOutputs) {
+                    tOutput.setCount(tOutput.getCount() / tDivisor);
+                }
+                for (FluidStack tFluidInput : mFluidInputs) {
+                    tFluidInput.amount /= tDivisor;
+                }
+                for (FluidStack tFluidOutput : mFluidOutputs) {
+                    tFluidOutput.amount /= tDivisor;
+                }
+            }
+            mOptimized = true;
+        }
+        return this;
+    }
+    
+    public GT_MachineRecipe copy() {
+        GT_MachineRecipe rRecipe = new GT_MachineRecipe(mInputs, mOutputs, mFluidInputs, mFluidOutputs);
+        rRecipe.mCanBeBuffered = this.mCanBeBuffered;
+        rRecipe.mDuration = this.mDuration;
+        rRecipe.mEUt = this.mEUt;
+        rRecipe.mEnableCondition = this.mEnableCondition;
+        rRecipe.mEnabled = this.mEnabled;
+        rRecipe.mFakeRecipe = this.mFakeRecipe;
+        rRecipe.mHidden = this.mHidden;
+        rRecipe.mInvertCondition = this.mInvertCondition;
+        rRecipe.mNeedsEmptyOutput = this.mNeedsEmptyOutput;
+        rRecipe.mOptimized = this.mOptimized;
+        rRecipe.mSpecialItems = this.mSpecialItems;
+        rRecipe.mSpecialValue = this.mSpecialValue;
+        rRecipe.neiDesc = this.neiDesc;
+        
+        return rRecipe;
+    }
+    
+    public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+        return isRecipeInputEqual(aDecreaseStacksizeBySuccess, false, aFluidInputs, aInputs);
+    }
+
+    public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aIgnoreCounts, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+        if (mFluidInputs.length > 0 && aFluidInputs == null) {
+            return false;
+        }
+        int amt;
+        for (FluidStack tFluid : mFluidInputs) {
+            if (tFluid != null) {
+                boolean temp = true;
+                amt = tFluid.amount;
+                for (FluidStack aFluid : aFluidInputs) {
+                    if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
+                        if (aIgnoreCounts) {
+                            temp = false;
+                            break;
+                        }
+                        amt -= aFluid.amount;
+                        if (amt < 1) {
+                            temp = false;
+                            break;
+                        }
+                    }
+                }
+                if (temp) {
+                    return false;
+                }
+            }
+        }
+
+        if (mInputs.length > 0 && aInputs == null) {
+            return false;
+        }
+        
+        for (GT_RecipeInput tInput : mInputs) {
+            if (tInput != null) {
+                boolean temp = true;
+                for (ItemStack tStack : aInputs) {
+                    if (tInput.inputMatches(tStack, aIgnoreCounts)) {
+                        temp = false;
+                        break;
+                    }
+                }
+                if (temp) {
+                    return false;
+                }
+            }
+        }
+        if (aDecreaseStacksizeBySuccess) {
+            if (aFluidInputs != null) {
+                for (FluidStack tFluid : mFluidInputs) {
+                    if (tFluid != null) {
+                        amt = tFluid.amount;
+                        for (FluidStack aFluid : aFluidInputs) {
+                            if (aFluid != null && aFluid.isFluidEqual(tFluid)) {
+                                if (aIgnoreCounts) {
+                                    aFluid.amount -= amt;
+                                    break;
+                                }
+                                if (aFluid.amount < amt) {
+                                    amt -= aFluid.amount;
+                                    aFluid.amount = 0;
+                                } else {
+                                    aFluid.amount -= amt;
+                                    amt = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (aInputs != null) {
+                for (GT_RecipeInput tInput : mInputs) {
+                    if (tInput != null) {
+                        amt = tInput.getCount();
+                        for (ItemStack aStack : aInputs) {
+                            if (tInput.inputMatches(aStack, aIgnoreCounts)) {
+                                if (aIgnoreCounts) {
+                                    aStack.stackSize -= amt;
+                                    break;
+                                }
+                                if (aStack.stackSize < amt) {
+                                    amt -= aStack.stackSize;
+                                    aStack.stackSize = 0;
+                                } else {
+                                    aStack.stackSize -= amt;
+                                    amt = 0;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(GT_MachineRecipe aRecipe) {
+        // first lowest tier recipes
+        // then fastest
+        // then with lowest special value
+        // then dry recipes
+        // then with fewer inputs
+        // and finally by earlier fluid id or item id, to keep ordering consistent
+        // at least when modlist stays the same.
+        if (this.mEUt != aRecipe.mEUt) {
+            return this.mEUt - aRecipe.mEUt;
+        } else if (this.mDuration != aRecipe.mDuration) {
+            return this.mDuration - aRecipe.mDuration;
+        } else if (this.mSpecialValue != aRecipe.mSpecialValue) {
+            return this.mSpecialValue - aRecipe.mSpecialValue;
+        } else if (this.mFluidInputs.length != aRecipe.mFluidInputs.length) {
+            return this.mFluidInputs.length - aRecipe.mFluidInputs.length;
+        } else if (this.mInputs.length != aRecipe.mInputs.length) {
+            return this.mInputs.length - aRecipe.mInputs.length;
+        }
+        for (int i = 0; i < mFluidInputs.length; i++) {
+            if (this.mFluidInputs[i].getFluidID() != aRecipe.mFluidInputs[i].getFluidID()) {
+                return this.mFluidInputs[i].getFluidID() - aRecipe.mFluidInputs[i].getFluidID();
+            }
+        }
+        for (int i = 0; i < mInputs.length; i++) {
+            if (Item.getIdFromItem(this.mInputs[i].getInputStacks().get(0).getItem()) != Item.getIdFromItem(aRecipe.mInputs[i].getInputStacks().get(0).getItem())) {
+                return Item.getIdFromItem(this.mInputs[i].getInputStacks().get(0).getItem()) - Item.getIdFromItem(aRecipe.mInputs[i].getInputStacks().get(0).getItem());
+            }
+        }
+        return 0;
     }
     
 }

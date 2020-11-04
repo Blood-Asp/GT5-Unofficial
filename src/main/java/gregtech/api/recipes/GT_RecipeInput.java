@@ -41,6 +41,10 @@ public class GT_RecipeInput {
         return true;
     }
  
+    /**
+     * Gets a list of item stacks represented by this recipe input, possibly for display in NEI.
+     * @return either a singleton list of the item stack or list of interchangeable item stacks usable as input for the current recipe.
+     */
     public List<ItemStack> getInputStacks() {
         return Collections.singletonList(mItemStack.copy());
     }
@@ -48,5 +52,12 @@ public class GT_RecipeInput {
     public String getInputDescription() {
         return mItemStack.stackSize + " " + mItemStack.getDisplayName();
     }
- 
+
+    public int getCount() {
+        return mItemStack.stackSize;
+    }
+    
+    public void setCount(int aCount) {
+        mItemStack.stackSize = aCount;
+    }
 }

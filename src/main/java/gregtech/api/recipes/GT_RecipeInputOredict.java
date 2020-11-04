@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeInputOredict extends GT_RecipeInput {
 
     private final String mOredictName;
-    private final int mCount;
+    private int mCount;
 
     public GT_RecipeInputOredict(String aOredictName, int aCount) {
         super(null, false);
@@ -29,18 +29,28 @@ public class GT_RecipeInputOredict extends GT_RecipeInput {
     
     @Override
     public List<ItemStack> getInputStacks() {
-        List<ItemStack> result = GT_OreDictUnificator.getOres(mOredictName);
-        for (int i = 0; i < result.size(); i++) {
-            ItemStack tItemStack = result.get(i).copy();
+        List<ItemStack> rList = GT_OreDictUnificator.getOres(mOredictName);
+        for (int i = 0; i < rList.size(); i++) {
+            ItemStack tItemStack = rList.get(i).copy();
             tItemStack.stackSize = mCount;
-            result.set(i, tItemStack);
+            rList.set(i, tItemStack);
         }
-        return result;
+        return rList;
     }
     
     @Override
     public String getInputDescription() {
         return mCount + " " + mOredictName;
+    }
+    
+    @Override
+    public int getCount() {
+        return mCount;
+    }
+    
+    @Override
+    public void setCount(int aCount) {
+        mCount = aCount;
     }
     
 }
