@@ -12,6 +12,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -771,7 +772,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         return rList;
     }
 
-    public GT_Recipe_Map getRecipeMap() {
+    public GT_RecipeMap getRecipeMap() {
         return null;
     }
 

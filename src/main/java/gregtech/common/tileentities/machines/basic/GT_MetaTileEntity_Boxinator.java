@@ -7,6 +7,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -30,8 +31,8 @@ public class GT_MetaTileEntity_Boxinator
         return new GT_MetaTileEntity_Boxinator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
-    public GT_Recipe.GT_Recipe_Map getRecipeList() {
-        return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
+    public GT_RecipeMap getRecipeList() {
+        return GT_RecipeMap.sBoxinatorRecipes;
     }
 
     public int checkRecipe() {

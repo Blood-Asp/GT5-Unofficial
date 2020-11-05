@@ -2,6 +2,7 @@ package gregtech.nei;
 
 import codechicken.nei.api.IConfigureNEI;
 import cpw.mods.fml.common.FMLCommonHandler;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 
 public class NEI_GT_Config
@@ -11,7 +12,7 @@ public class NEI_GT_Config
 
     public void loadConfig() {
         sIsAdded = false;
-        for (GT_Recipe.GT_Recipe_Map tMap : GT_Recipe.GT_Recipe_Map.sMappings) {
+        for (GT_RecipeMap tMap : GT_RecipeMap.sMappings) {
             if (tMap.mNEIAllowed) {
                 new GT_NEI_DefaultHandler(tMap);
             }

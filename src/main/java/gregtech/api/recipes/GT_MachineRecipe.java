@@ -5,6 +5,7 @@ import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -77,8 +78,8 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         if (mFluidInputs == null) mFluidInputs = new FluidStack[0];
         if (mFluidOutputs == null) mFluidOutputs = new FluidStack[0];
         
-        mInputs = GT_Utility.getArrayListWithoutTrailingNulls(mInputs).toArray(new GT_RecipeInput[0]);
-        mOutputs = GT_Utility.getArrayListWithoutTrailingNulls(mOutputs).toArray(new GT_RecipeOutput[0]);
+        mInputs = GT_Utility.getArrayListWithoutNulls(mInputs).toArray(new GT_RecipeInput[0]);
+        mOutputs = GT_Utility.getArrayListWithoutNulls(mOutputs).toArray(new GT_RecipeOutput[0]);
         mFluidInputs = GT_Utility.getArrayListWithoutNulls(mFluidInputs).toArray(new FluidStack[0]);
         mFluidOutputs = GT_Utility.getArrayListWithoutNulls(mFluidOutputs).toArray(new FluidStack[0]);
         
@@ -86,20 +87,43 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         for (int i = 0; i < mFluidOutputs.length; i++) mFluidOutputs[i] = new GT_FluidStack(mFluidOutputs[i]);
     }
     
-    private static GT_RecipeInput[] wrapInputs(ItemStack[] aInputs) {
-        GT_RecipeInput[] tInputs = new GT_RecipeInput[aInputs.length];
-        for (int i = 0; i < aInputs.length; i++) {
-            tInputs[i] = new GT_RecipeInput(aInputs[i]);
+    public static GT_RecipeInput[] wrapInputs(ItemStack[] aInputs) {
+        if (aInputs == null) {
+            return new GT_RecipeInput[0];
         }
-        return tInputs;
+        GT_RecipeInput[] rInputs = new GT_RecipeInput[aInputs.length];
+        for (int i = 0; i < aInputs.length; i++) {
+            if (aInputs[i] != null) {
+                rInputs[i] = new GT_RecipeInput(aInputs[i]);
+            }
+        }
+        return rInputs;
     }
     
-    private static GT_RecipeOutput[] wrapOutputs(ItemStack[] aOutputs) {
-        GT_RecipeOutput[] tOutputs = new GT_RecipeOutput[aOutputs.length];
-        for (int i = 0; i < aOutputs.length; i++) {
-            tOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
+    public static GT_RecipeOutput[] wrapOutputs(ItemStack[] aOutputs) {
+        if (aOutputs == null) {
+            return new GT_RecipeOutput[0];
         }
-        return tOutputs;
+        GT_RecipeOutput[] rOutputs = new GT_RecipeOutput[aOutputs.length];
+        for (int i = 0; i < aOutputs.length; i++) {
+            if (aOutputs[i] != null) {
+                rOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
+            }
+        }
+        return rOutputs;
+    }
+    
+    public static ItemStack[] unwrapOutputs(GT_RecipeOutput[] aOutputs) {
+        if (aOutputs == null) {
+            return new ItemStack[0];
+        }
+        ItemStack[] rOutputs = new ItemStack[aOutputs.length];
+        for (int i = 0; i < aOutputs.length; i++) {
+            if (aOutputs[i] != null) {
+                rOutputs[i] = aOutputs[i].getShownOutput();
+            }
+        }
+        return rOutputs;
     }
     
     public GT_MachineRecipe(ItemStack[] aInputs, ItemStack[] aOutputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs) {
@@ -170,6 +194,34 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         return neiDesc;
     }
     
+    public List<ItemStack> getRepresentativeInput(int aIndex) {
+        if (aIndex < 0 || aIndex >= mInputs.length || mInputs[aIndex] == null) {
+            return null;
+        }
+        return mInputs[aIndex].getInputStacks();
+    }
+    
+    public FluidStack getFluidOutput(int aIndex) {
+        if (aIndex < 0 || aIndex >= mFluidOutputs.length || mFluidOutputs[aIndex] == null) {
+            return null;
+        }
+        return mFluidOutputs[aIndex].copy();
+    }
+
+    public ItemStack getOutput(int aIndex) {
+        if (aIndex < 0 || aIndex >= mOutputs.length || mOutputs[aIndex] == null) {
+            return null;
+        }
+        return mOutputs[aIndex].getShownOutput().copy();
+    }
+    
+    public int getOutputChance(int aIndex) {
+        if (aIndex < 0 || aIndex >= mOutputs.length || mOutputs[aIndex] == null) {
+            return 0;
+        }
+        return (int) (mOutputs[aIndex].getChance() * 10000);
+    }
+    
     /**
      * Overriding this method and getOutputPositionedStacks allows for custom NEI stack placement
      * @return A list of input stacks
@@ -221,19 +273,19 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
                 for (int i = 0; i < mFluidOutputs.length && tDivisor > 1; i++) {
                     tDivisor = gcd(tDivisor, mFluidOutputs[i].amount);
                 }
-            }
-            if (tDivisor > 1) {
-                for (GT_RecipeInput tInput : mInputs) {
-                    tInput.setCount(tInput.getCount() / tDivisor);
-                }
-                for (GT_RecipeOutput tOutput : mOutputs) {
-                    tOutput.setCount(tOutput.getCount() / tDivisor);
-                }
-                for (FluidStack tFluidInput : mFluidInputs) {
-                    tFluidInput.amount /= tDivisor;
-                }
-                for (FluidStack tFluidOutput : mFluidOutputs) {
-                    tFluidOutput.amount /= tDivisor;
+                if (tDivisor > 1) {
+                    for (GT_RecipeInput tInput : mInputs) {
+                        tInput.setCount(tInput.getCount() / tDivisor);
+                    }
+                    for (GT_RecipeOutput tOutput : mOutputs) {
+                        tOutput.setCount(tOutput.getCount() / tDivisor);
+                    }
+                    for (FluidStack tFluidInput : mFluidInputs) {
+                        tFluidInput.amount /= tDivisor;
+                    }
+                    for (FluidStack tFluidOutput : mFluidOutputs) {
+                        tFluidOutput.amount /= tDivisor;
+                    }
                 }
             }
             mOptimized = true;

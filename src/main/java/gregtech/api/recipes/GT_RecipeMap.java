@@ -67,7 +67,7 @@ public class GT_RecipeMap {
     public static final GT_RecipeMap sArcFurnaceRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(10000)).setNames("gt.recipe.arcfurnace", "Arc Furnace").setNEIGUIPathBasic("ArcFurnace").setOutputSlots(4).setMinimalInputFluids(1).setAmperage(3);
     public static final GT_RecipeMap sPrinterRecipes = new GT_RecipeMapPrinter(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.printer", "Printer").setNEIGUIPathBasic("Printer").setMinimalInputFluids(1);
     public static final GT_RecipeMap sSifterRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.sifter", "Sifter").setNEIGUIPathBasic("Sifter").setOutputSlots(9);
-    public static final GT_RecipeMap sPressRecipes = new GT_RecipeMapFormingPress(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.press", "Forming Press").setNEIGUIPathBasic("FormingPress").setInputSlots(2).setMinimalInputItems(2);
+    public static final GT_RecipeMap sPressRecipes = new GT_RecipeMapFormingPress(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.press", "Forming Press").setNEIGUIPathBasic("Press").setInputSlots(2).setMinimalInputItems(2);
     public static final GT_RecipeMap sLaserEngraverRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.laserengraver", "Precision Laser Engraver").setNEIGUIPathBasic("LaserEngraver").setInputSlots(2).setMinimalInputItems(2);
     public static final GT_RecipeMap sMixerRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(100)).setNames("gt.recipe.mixer", "Mixer").setNEIGUIPathBasic("Mixer").setInputSlots(4).setMinimalTotalInputs(2);
     public static final GT_RecipeMap sAutoclaveRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(200)).setNames("gt.recipe.autoclave", "Autoclave").setNEIGUIPathBasic("Autoclave").setMinimalInputFluids(1);
@@ -266,27 +266,18 @@ public class GT_RecipeMap {
     }
  
     public GT_MachineRecipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
-        GT_RecipeInput[] tInputs = new GT_RecipeInput[0];
-        if (aInputs != null) {
-            tInputs = new GT_RecipeInput[aInputs.length];
-        }
-        for (int i = 0; i < tInputs.length; i++) {
-            tInputs[i] = new GT_RecipeInput(aInputs[i]);
-        }
-        GT_RecipeOutput[] tOutputs = new GT_RecipeOutput[0];
-        if (aOutputs != null) {
-            tOutputs = new GT_RecipeOutput[aOutputs.length];
-        }
+        GT_RecipeInput[] tInputs = GT_MachineRecipe.wrapInputs(aInputs);
+        GT_RecipeOutput[] tOutputs = GT_MachineRecipe.wrapOutputs(aOutputs);
         if (aOutputChances != null) {
             for (int i = 0; i < aOutputChances.length && i < tOutputs.length; i++) {
-                tOutputs[i] = new GT_RecipeOutput(aOutputs[i], aOutputChances[i] / 10000f);
+                if (aOutputs[i] != null) {
+                    tOutputs[i] = new GT_RecipeOutput(aOutputs[i], aOutputChances[i] / 10000f);
+                }
             }
             for (int i = aOutputChances.length; i < tOutputs.length; i++) {
-                tOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
-            }
-        } else {
-            for (int i = 0; i < tOutputs.length; i++) {
-                tOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
+                if (aOutputs[i] != null) {
+                    tOutputs[i] = new GT_RecipeOutput(aOutputs[i]);
+                }
             }
         }
         GT_MachineRecipe tRecipe = new GT_MachineRecipe(tInputs, tOutputs, aFluidInputs, aFluidOutputs);

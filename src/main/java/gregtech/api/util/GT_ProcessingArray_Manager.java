@@ -1,15 +1,14 @@
 package gregtech.api.util;
 
+import gregtech.api.recipes.GT_RecipeMap;
 import java.util.HashMap;
-
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 
 public class GT_ProcessingArray_Manager {
 
 	private static final HashMap<Integer, String> mMetaKeyMap = new HashMap<Integer, String>();
-	private static final HashMap<String, GT_Recipe_Map> mRecipeCache = new HashMap<String, GT_Recipe_Map>();
+	private static final HashMap<String, GT_RecipeMap> mRecipeCache = new HashMap<String, GT_RecipeMap>();
 	
-	public static boolean registerRecipeMapForMeta(int aMeta, GT_Recipe_Map aMap) {
+	public static boolean registerRecipeMapForMeta(int aMeta, GT_RecipeMap aMap) {
 		if (aMeta < 0 || aMeta > Short.MAX_VALUE || aMap == null) {
 			return false;
 		}	
@@ -24,7 +23,7 @@ public class GT_ProcessingArray_Manager {
 		return true;
 	}
 	
-	public static GT_Recipe_Map getRecipeMapForMeta(int aMeta) {
+	public static GT_RecipeMap getRecipeMapForMeta(int aMeta) {
 		return mRecipeCache.get(mMetaKeyMap.get(aMeta));
 	}
 	

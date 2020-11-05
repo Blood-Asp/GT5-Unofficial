@@ -9,6 +9,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.recipes.GT_MachineRecipe;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -28,7 +30,7 @@ import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Basi
 
 public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity_MultiBlockBase {
 
-    GT_Recipe mLastRecipe;
+    GT_MachineRecipe mLastRecipe;
 
     public GT_MetaTileEntity_AdvancedProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -71,9 +73,10 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "AdvancedProcessingArray.png");
     }
 
-    public GT_Recipe_Map getRecipeMap() {
+    @Override
+    public GT_RecipeMap getRecipeMap() {
     	if (isCorrectMachinePart(mInventory[1])) {
-    		GT_Recipe_Map aTemp = GT_ProcessingArray_Manager.getRecipeMapForMeta(mInventory[1].getItemDamage());
+    		GT_RecipeMap aTemp = GT_ProcessingArray_Manager.getRecipeMapForMeta(mInventory[1].getItemDamage());
             if (aTemp != null) {
             	return aTemp;
             }
@@ -97,7 +100,7 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
         if (!isCorrectMachinePart(mInventory[1])) {
             return false;
         }
-        GT_Recipe.GT_Recipe_Map map = getRecipeMap();
+        GT_RecipeMap map = getRecipeMap();
         if (map == null) return false;
         ArrayList<ItemStack> tInputList = getStoredInputs();
         int tTier = 0;
@@ -127,7 +130,7 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
 
         FluidStack[] tFluids = (FluidStack[]) tFluidList.toArray(new FluidStack[tFluidList.size()]);
         if (tInputList.size() > 0 || tFluids.length > 0) {
-            GT_Recipe tRecipe = map.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+            GT_MachineRecipe tRecipe = map.findRecipe(getBaseMetaTileEntity(), mLastRecipe, gregtech.api.enums.GT_Values.V[tTier], tFluids, null, tInputs);
             if (tRecipe != null) {
                 if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
                         !isValidForLowGravity(tRecipe,getBaseMetaTileEntity().getWorld().provider.dimensionId))
@@ -171,8 +174,7 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
                 for (int f = 0; f < tOut.length; f++) {
                     if (tRecipe.mOutputs[f] != null && tOut[f] != null) {
                         for (int g = 0; g < i; g++) {
-                            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(f))
-                                tOut[f].stackSize += tRecipe.mOutputs[f].stackSize;
+                            tOut[f].stackSize += tRecipe.mOutputs[f].getActualOutput(getBaseMetaTileEntity().getWorld().rand).stackSize;
                         }
                     }
                 }
