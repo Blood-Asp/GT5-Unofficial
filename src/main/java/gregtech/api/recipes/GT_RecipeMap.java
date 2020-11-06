@@ -56,7 +56,7 @@ public class GT_RecipeMap {
     public static final GT_RecipeMap sExtractorRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(30)).setNames("gt.recipe.extractor", "Extractor").setNEIGUIPathBasic("Extractor");
     public static final GT_RecipeMap sRecyclerRecipes = new GT_RecipeMapRecycler(new HashSet<GT_MachineRecipe>(0)).setNames("ic.recipe.recycler", "Recycler").setNEIName("ic2.recycler").setNEIGUIPathBasic("Recycler").setNEIAllowed(false);
     public static final GT_RecipeMap sFurnaceRecipes = new GT_RecipeMapFurnace(new HashSet<GT_MachineRecipe>(0)).setNames("mc.recipe.furnace", "Furnace").setNEIName("smelting").setNEIGUIPathBasic("E_Furnace").setNEIAllowed(false);
-    public static final GT_RecipeMap sMicrowaveRecipes = new GT_RecipeMapMicrowave(new HashSet<GT_MachineRecipe>(0)).setNames("gt.recipe.microwave", "Microwave").setNEIName("smelting").setNEIGUIPathBasic("E_Furance").setNEIAllowed(false);
+    public static final GT_RecipeMap sMicrowaveRecipes = new GT_RecipeMapMicrowave(new HashSet<GT_MachineRecipe>(0)).setNames("gt.recipe.microwave", "Microwave").setNEIName("smelting").setNEIGUIPathBasic("E_Furnace").setNEIAllowed(false);
     
     public static final GT_RecipeMap sScannerFakeRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(300)).setNames("gt.recipe.scanner", "Scanner").setNEIGUIPathBasic("Scanner");
     public static final GT_RecipeMap sRockBreakerFakeRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(3)).setNames("gt.recipe.rockbreaker", "Rock Breaker").setNEIGUIPathBasic("RockBreaker").setMinimalInputItems(0);
@@ -105,7 +105,7 @@ public class GT_RecipeMap {
     public static final GT_RecipeMap sCircuitAssemblerRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(300)).setNames("gt.recipe.circuitassembler", "Circuit Assembler").setNEIGUIPathBasic("CircuitAssembler").setInputSlots(6).setMinimalInputItems(3).setMinimalInputFluids(1);
     public static final GT_RecipeMap sCannerRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(300)).setNames("gt.recipe.canner", "Canning Machine").setNEIGUIPathBasic("Canner").setInputSlots(2).setMinimalInputItems(2);
     public static final GT_RecipeMap sLatheRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(400)).setNames("gt.recipe.lathe", "Lathe").setNEIGUIPathBasic("Lathe").setOutputSlots(2);
-    public static final GT_RecipeMap sCutterRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(200)).setNames("gt.recipe.cuttingsaw", "Cutting Saw").setNEIGUIPathBasic("Cutter").setOutputSlots(2).setMinimalInputFluids(2);
+    public static final GT_RecipeMap sCutterRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(200)).setNames("gt.recipe.cuttingsaw", "Cutting Saw").setNEIGUIPathBasic("Cutter").setOutputSlots(2).setMinimalInputFluids(1);
     public static final GT_RecipeMap sSlicerRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(200)).setNames("gt.recipe.slicer", "Slicer").setNEIGUIPathBasic("Slicer").setInputSlots(2).setMinimalInputItems(2);
     public static final GT_RecipeMap sExtruderRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(1000)).setNames("gt.recipe.extruder", "Extruder").setNEIGUIPathBasic("Extruder").setInputSlots(2).setMinimalInputItems(2);
     public static final GT_RecipeMap sHammerRecipes = new GT_RecipeMap(new HashSet<GT_MachineRecipe>(200)).setNames("gt.recipe.hammer", "Hammer").setNEIGUIPathBasic("Hammer");

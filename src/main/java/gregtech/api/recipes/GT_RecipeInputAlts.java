@@ -1,5 +1,6 @@
 package gregtech.api.recipes;
 
+import gregtech.api.util.GT_Utility;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.item.ItemStack;
@@ -32,11 +33,8 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
             return false;
         }
         for (ItemStack tItemStack : mItems) {
-            if (tItemStack.getItem() == aItemStack.getItem()) {
+            if (GT_Utility.areStacksEqual(tItemStack, aItemStack)) {
                 if (!aIgnoreCount && aItemStack.stackSize < tItemStack.stackSize) {
-                    return false;
-                }
-                if (tItemStack.getItemDamage() != aItemStack.getItemDamage()) {
                     return false;
                 }
                 if (tItemStack.stackTagCompound != null) {
