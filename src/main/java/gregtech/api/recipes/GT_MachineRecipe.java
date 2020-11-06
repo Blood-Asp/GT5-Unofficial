@@ -2,13 +2,14 @@ package gregtech.api.recipes;
 
 import codechicken.nei.PositionedStack;
 import gregtech.api.objects.GT_FluidStack;
-import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+
 
 
 /**
@@ -219,7 +220,7 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         if (aIndex < 0 || aIndex >= mOutputs.length || mOutputs[aIndex] == null) {
             return 0;
         }
-        return (int) (mOutputs[aIndex].getChance() * 10000);
+        return mOutputs[aIndex].getChance();
     }
     
     /**
@@ -445,6 +446,11 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
             }
         }
         return 0;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("Inputs: %s, Fluid Inputs: %s, Outputs: %s, Fluid Outputs: %s", Arrays.toString(mInputs), Arrays.toString(mFluidInputs), Arrays.toString(mOutputs), Arrays.toString(mFluidOutputs));
     }
     
 }

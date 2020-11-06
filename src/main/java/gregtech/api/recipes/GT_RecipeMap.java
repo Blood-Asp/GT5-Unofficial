@@ -16,6 +16,7 @@ import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
 import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -160,6 +161,8 @@ public class GT_RecipeMap {
     
     public GT_RecipeMap(Collection<GT_MachineRecipe> aRecipeList) {
         mRecipeList = aRecipeList;
+        GregTech_API.sFluidMappings.add(mRecipeFluidMap);
+        GregTech_API.sItemStackMappings.add(mRecipeItemMap);
         sMappings.add(this);
     }
     
@@ -294,7 +297,7 @@ public class GT_RecipeMap {
     public GT_MachineRecipe addRecipe(int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
         return addRecipe(false, new ItemStack[0], new ItemStack[0], null, aOutputChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
     }
-
+    
     public GT_MachineRecipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
         return addRecipe(aOptimize, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
     }
@@ -333,6 +336,18 @@ public class GT_RecipeMap {
 
     public GT_MachineRecipe addFakeRecipe(boolean aCheckForCollisions, GT_MachineRecipe aRecipe, boolean hidden) {
         return addRecipe(aRecipe, aCheckForCollisions, true, hidden);
+    }
+
+    public GT_MachineRecipe addFakeRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+        return addRecipe(aOptimize, aInputs, aOutputs, aSpecial, aOutputChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue).setFakeRecipe(true);
+    }    
+    
+    public GT_MachineRecipe addFakeRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+        return addFakeRecipe(aOptimize, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
+    }
+
+    public GT_MachineRecipe addFakeRecipe(int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+        return addFakeRecipe(false, new ItemStack[0], new ItemStack[0], null, aOutputChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
     }
 
     public GT_MachineRecipe add(GT_MachineRecipe aRecipe) {
@@ -405,7 +420,7 @@ public class GT_RecipeMap {
         int tFluidCount = 0;
         int tItemCount = 0;
         if (GregTech_API.sPostloadFinished) {
-            if (mMinimalInputFluids > 0) {
+            if (mMinimalInputFluids > 0 || mMinimalTotalInputs > 0) {
                 if (aFluids == null) {
                     return null;
                 }
@@ -418,7 +433,7 @@ public class GT_RecipeMap {
                     return null;
                 }
             }
-            if (mMinimalInputItems > 0) {
+            if (mMinimalInputItems > 0 || mMinimalTotalInputs > 0) {
                 if (aInputs == null) {
                     return null;
                 }
@@ -518,6 +533,13 @@ public class GT_RecipeMap {
      */
     public boolean containsInput(Fluid aFluid) {
         return aFluid != null && mRecipeFluidMap.containsKey(aFluid);
+    }
+
+    public static void reInitAll() {
+        GT_Log.out.println("GT_Mod: Re-Unificating Recipes.");
+        for (GT_RecipeMap tMapEntry : GT_RecipeMap.sMappings) {
+            tMapEntry.reInit();
+        }
     }
 
     public void reInit() {

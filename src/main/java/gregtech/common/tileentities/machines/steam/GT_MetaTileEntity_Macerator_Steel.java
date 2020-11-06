@@ -11,7 +11,6 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.recipes.GT_MachineRecipe;
 import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,7 +35,7 @@ public class GT_MetaTileEntity_Macerator_Steel
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelMacerator.png", GT_Recipe_Map.sMaceratorRecipes.mUnlocalizedName);
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "SteelMacerator.png", GT_RecipeMap.sMaceratorRecipes.mUnlocalizedName);
     }
 
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -73,7 +72,7 @@ public class GT_MetaTileEntity_Macerator_Steel
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
             return false;
         }
-        return GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, new Object[]{aStack}));
+        return GT_RecipeMap.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, new Object[]{aStack}));
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {

@@ -8,6 +8,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 
 public class GT_MetaTileEntity_MagicEnergyConverter
@@ -38,8 +39,8 @@ public class GT_MetaTileEntity_MagicEnergyConverter
         return new GT_MetaTileEntity_MagicEnergyConverter(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
-    public GT_Recipe.GT_Recipe_Map getRecipes() {
-        return GT_Recipe.GT_Recipe_Map.sMagicFuels;
+    public GT_RecipeMap getRecipes() {
+        return GT_RecipeMap.sMagicFuels;
     }
 
     public int getCapacity() {

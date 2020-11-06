@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeOutput {
     
     private final ItemStack mItemStack;
-    private final float mChance;
+    private final int mChance;
     
     public GT_RecipeOutput(Block aBlock) {
         this(new ItemStack(aBlock, 1));
@@ -71,21 +71,22 @@ public class GT_RecipeOutput {
     
     public GT_RecipeOutput(ItemStack aItemStack, float aChance) {
         mItemStack = aItemStack;
-        mChance = Math.min(1.0f, Math.max(aChance, 0.0f));
+        mChance = Math.min(10000, Math.max((int)(aChance * 10000), 0));
     }
     
     /**
      * Get the actual output, considering chances.
      * @param aRandom - the pseudo-random number generator object to use.
      * If the chance is 0 or 1 the random state will be unchanged.
+     * @return a stack of items, considering the chances.
      */
     public ItemStack getActualOutput(Random aRandom) {
         int tCount = 0;
-        if (mChance == 1.0f) {
+        if (mChance == 10000) {
             tCount = mItemStack.stackSize;
         } else if (mChance > 0.0f) {
             for (int i = 0; i < mItemStack.stackSize; i++) {
-                if (aRandom.nextFloat() < mChance) {
+                if (aRandom.nextInt(10000) < mChance) {
                     tCount++;
                 }
             }
@@ -102,7 +103,7 @@ public class GT_RecipeOutput {
         return mItemStack.copy();
     }
     
-    public float getChance() {
+    public int getChance() {
         return mChance;
     }
     
@@ -113,4 +114,18 @@ public class GT_RecipeOutput {
     public void setCount(int aCount) {
         mItemStack.stackSize = aCount;
     }
+    
+    public String getOutputDescription() {
+        String rDescription = mItemStack.stackSize + " " + mItemStack.getDisplayName();
+        if (mChance > 0 && mChance < 10000) {
+            rDescription += String.format(" (Chance: %d.%2d)", mChance / 100, mChance % 100);
+        }
+        return rDescription;
+    }
+    
+    @Override
+    public String toString() {
+        return getOutputDescription();
+    }
+    
 }

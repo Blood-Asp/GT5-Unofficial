@@ -435,7 +435,7 @@ public class GT_MachineRecipeAdder implements IGT_RecipeAdder {
                 return false;
             }
         }
-        GT_AssemblyLineRecipe tRecipe = (GT_AssemblyLineRecipe) new GT_AssemblyLineRecipe(tInputs, new GT_RecipeOutput[]{new GT_RecipeOutput(aOutput)}, aFluidInputs, new FluidStack[0]).setDuration(tDuration).setEUt(aEUt).setSpecialItems(new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Reads Research result", new Object[0])});
+        GT_AssemblyLineRecipe tRecipe = (GT_AssemblyLineRecipe) new GT_AssemblyLineRecipe(tInputs, new GT_RecipeOutput[]{new GT_RecipeOutput(aOutput)}, aFluidInputs, new FluidStack[0]).setResearchItem(aResearchItem).setResearchTime(aResearchTime).setDuration(tDuration).setEUt(aEUt).setSpecialItems(new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Reads Research result", new Object[0])});
         GT_AssemblyLineRecipe.sAssemblyLineRecipes.add(tRecipe);
         GT_MachineRecipe tFakeRecipe = new GT_MachineRecipe(new ItemStack[]{aResearchItem}, new ItemStack[]{aOutput}, null, null).setSpecialItems(new ItemStack[]{ItemList.Tool_DataStick.getWithName(1L, "Writes Research result", new Object[0])}).setDuration(aResearchTime).setEUt(30).setSpecialValue(-201);
         GT_RecipeMap.sScannerFakeRecipes.addFakeRecipe(false, tFakeRecipe);

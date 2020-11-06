@@ -64,12 +64,19 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     public String getInputDescription() {
         StringBuilder rDescription = new StringBuilder(100);
         for (ItemStack tItem : mItems) {
+            rDescription.append(tItem.stackSize);
+            rDescription.append(' ');
             rDescription.append(tItem.getDisplayName());
             rDescription.append(" or ");
         }
         return rDescription.substring(0, rDescription.length() - 4);
     }
 
+    @Override
+    public String toString() {
+        return getInputDescription();
+    }
+    
     @Override
     public int getCount() {
         return mCount;

@@ -15,7 +15,6 @@ import gregtech.api.recipes.GT_MachineRecipe;
 import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -804,8 +803,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         for (int i = 0; i < mOutputItems.length; i++) {
-            if (tRecipe.mOutputs[i] != null) {
-                mOutputItems[i] = tRecipe.mOutputs[i].getActualOutput(getBaseMetaTileEntity().getWorld().rand);
+            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i)) {
+                mOutputItems[i] = tRecipe.getOutput(i);
             }
         }
         if (tRecipe.mSpecialValue == -200)

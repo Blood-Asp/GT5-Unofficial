@@ -1,5 +1,7 @@
 package gregtech.api.recipes;
 
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import java.util.Collections;
 import java.util.List;
 import net.minecraft.item.ItemStack;
@@ -12,17 +14,11 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeInput {
     
     private final ItemStack mItemStack;
-    private final boolean mUseMeta;
  
     public GT_RecipeInput(ItemStack aItemStack) {
-        this(aItemStack, true);
+        mItemStack = aItemStack;
     }
     
-    public GT_RecipeInput(ItemStack aItemStack, boolean aUseMeta) {
-        mItemStack = aItemStack;
-        mUseMeta = aUseMeta;
-    }
- 
     public boolean inputMatches(ItemStack aItemStack) {
         return inputMatches(aItemStack, true);
     }
@@ -30,8 +26,9 @@ public class GT_RecipeInput {
     public boolean inputMatches(ItemStack aItemStack, boolean aIgnoreCount) {
         if (aItemStack == null) return false;
         if (!aIgnoreCount && aItemStack.stackSize < mItemStack.stackSize) return false;
-        if (aItemStack.getItem() != mItemStack.getItem()) return false;
-        if (mUseMeta && aItemStack.getItemDamage() != mItemStack.getItemDamage()) return false;
+        if (!GT_Utility.areStacksEqual(aItemStack, mItemStack, true)) {
+            return false;
+        }
         // Now check for NBT tags specified in recipe input. Extra tags specified on provided item but not in recipe can be ignored.
         if (mItemStack.stackTagCompound != null) {
             if (aItemStack.stackTagCompound == null) return false;
@@ -58,6 +55,11 @@ public class GT_RecipeInput {
         return mItemStack.stackSize + " " + mItemStack.getDisplayName();
     }
 
+    @Override
+    public String toString() {
+        return getInputDescription();
+    }
+    
     public int getCount() {
         return mItemStack.stackSize;
     }

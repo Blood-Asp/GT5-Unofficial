@@ -13,7 +13,6 @@ import gregtech.api.recipes.GT_MachineRecipe;
 import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -174,7 +173,9 @@ public class GT_MetaTileEntity_AdvancedProcessingArray extends GT_MetaTileEntity
                 for (int f = 0; f < tOut.length; f++) {
                     if (tRecipe.mOutputs[f] != null && tOut[f] != null) {
                         for (int g = 0; g < i; g++) {
-                            tOut[f].stackSize += tRecipe.mOutputs[f].getActualOutput(getBaseMetaTileEntity().getWorld().rand).stackSize;
+                            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(f)) {
+                                tOut[f].stackSize += tRecipe.mOutputs[f].getShownOutput().stackSize;
+                            }
                         }
                     }
                 }

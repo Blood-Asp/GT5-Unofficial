@@ -10,6 +10,8 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.ItemData;
+import gregtech.api.recipes.GT_MachineRecipe;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -103,14 +105,14 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 continue;
             }
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.findRecipe(getBaseMetaTileEntity(), false, voltage, null, currentItem);
+            GT_MachineRecipe tRecipe = GT_RecipeMap.sMaceratorRecipes.findRecipe(getBaseMetaTileEntity(), null, false, voltage, null, currentItem);
             if (tRecipe == null) {
                 outputItems.add(currentItem);
                 continue;
             }
 
             for (int i = 0; i < tRecipe.mOutputs.length; i++) {
-                ItemStack recipeOutput = tRecipe.mOutputs[i].copy();
+                ItemStack recipeOutput = tRecipe.getOutput(i);
                 if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                     multiplyStackSize(recipeOutput);
                 outputItems.add(recipeOutput);

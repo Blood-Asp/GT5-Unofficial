@@ -37,6 +37,7 @@ import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
 import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
+import gregtech.api.recipes.GT_RecipeMap;
 import ic2.api.item.IBoxable;
 import ic2.api.item.IC2Items;
 import ic2.api.item.IElectricItem;
@@ -773,14 +774,14 @@ public class GT_ModHandler {
     /**
      * Adds GT versions of the IC2 recipes from the supplied IC2RecipeList.
      */
-    public static void addIC2RecipesToGT(Map<IRecipeInput, RecipeOutput> aIC2RecipeList, GT_Recipe.GT_Recipe_Map aGTRecipeMap, boolean aAddGTRecipe, boolean aRemoveIC2Recipe, boolean aExcludeGTIC2Items) {
+    public static void addIC2RecipesToGT(Map<IRecipeInput, RecipeOutput> aIC2RecipeList, GT_RecipeMap aGTRecipeMap, boolean aAddGTRecipe, boolean aRemoveIC2Recipe, boolean aExcludeGTIC2Items) {
         Map<ItemStack, ItemStack> aRecipesToRemove = new HashMap<>();
         for (Iterator i$ = aIC2RecipeList.entrySet().iterator(); i$.hasNext(); ) {
             Entry tRecipe = (Map.Entry) i$.next();
             if (((RecipeOutput) tRecipe.getValue()).items.size() > 0) {
                 for (ItemStack tStack : ((IRecipeInput) tRecipe.getKey()).getInputs()) {
                     if (GT_Utility.isStackValid(tStack)) {
-                        if (aAddGTRecipe && (aGTRecipeMap.findRecipe(null, false, Long.MAX_VALUE, null, tStack) == null)) {
+                        if (aAddGTRecipe && (aGTRecipeMap.findRecipe(null, null, false, Long.MAX_VALUE, null, tStack) == null)) {
                         	try{
                             if (aExcludeGTIC2Items && ((tStack.getUnlocalizedName().contains("gt.metaitem.01") || tStack.getUnlocalizedName().contains("gt.blockores") || tStack.getUnlocalizedName().contains("ic2.itemCrushed") || tStack.getUnlocalizedName().contains("ic2.itemPurifiedCrushed")))) continue;
                             switch (aGTRecipeMap.mUnlocalizedName) {

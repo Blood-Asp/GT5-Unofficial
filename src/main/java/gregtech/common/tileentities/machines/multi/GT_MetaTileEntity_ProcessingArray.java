@@ -174,7 +174,9 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 for (int f = 0; f < tOut.length; f++) {
                     if (tRecipe.mOutputs[f] != null && tOut[f] != null) {
                         for (int g = 0; g < i; g++) {
-                            tOut[f].stackSize += tRecipe.mOutputs[f].getActualOutput(getBaseMetaTileEntity().getWorld().rand).stackSize;
+                            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(f)) {
+                                tOut[f].stackSize += tRecipe.mOutputs[f].getShownOutput().stackSize;
+                            }
                         }
                     }
                 }

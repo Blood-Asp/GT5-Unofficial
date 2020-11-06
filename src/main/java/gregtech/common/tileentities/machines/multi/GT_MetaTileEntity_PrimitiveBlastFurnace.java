@@ -6,6 +6,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.XSTR;
+import gregtech.api.recipes.GT_MachineRecipe;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
@@ -139,7 +141,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 	}
 
 	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-		return new GT_GUIContainer_PrimitiveBlastFurnace(aPlayerInventory, aBaseMetaTileEntity, getName(), GT_Recipe.GT_Recipe_Map.sPrimitiveBlastRecipes.mNEIName);
+		return new GT_GUIContainer_PrimitiveBlastFurnace(aPlayerInventory, aBaseMetaTileEntity, getName(), GT_RecipeMap.sPrimitiveBlastRecipes.mNEIName);
 	}
 
 	private boolean checkMachine() {
@@ -277,7 +279,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 		}
 		ItemStack[] inputs = new ItemStack[INPUT_SLOTS];
 		System.arraycopy(mInventory, 0, inputs, 0, INPUT_SLOTS);
-		GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sPrimitiveBlastRecipes.findRecipe(getBaseMetaTileEntity(), false, 0, null, inputs);
+		GT_MachineRecipe recipe = GT_RecipeMap.sPrimitiveBlastRecipes.findRecipe(getBaseMetaTileEntity(), null, false, 0, null, null, inputs);
 		if (recipe == null) {
 			this.mOutputItems = null;
 			return false;
@@ -300,7 +302,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 		}
 		
 		this.mMaxProgresstime = recipe.mDuration;
-		this.mOutputItems = recipe.mOutputs;
+		this.mOutputItems = GT_MachineRecipe.unwrapOutputs(recipe.mOutputs);
 		return true;
 	}
 

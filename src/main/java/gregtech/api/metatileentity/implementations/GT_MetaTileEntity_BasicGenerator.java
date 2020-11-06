@@ -3,8 +3,9 @@ package gregtech.api.metatileentity.implementations;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipes.GT_MachineRecipe;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -226,7 +227,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     public abstract int getPollution();
 
-    public abstract GT_Recipe_Map getRecipes();
+    public abstract GT_RecipeMap getRecipes();
 
     public abstract int getEfficiency();
 
@@ -237,9 +238,9 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     public int getFuelValue(FluidStack aLiquid) {
         if (aLiquid == null || getRecipes() == null) return 0;
         FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = getRecipes().mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
+        Collection<GT_MachineRecipe> tRecipeList = getRecipes().mRecipeList;
+        if (tRecipeList != null) for (GT_MachineRecipe tFuel : tRecipeList)
+            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0).get(0), true)) != null)
                 if (aLiquid.isFluidEqual(tLiquid))
                     return (int) (((long) tFuel.mSpecialValue * getEfficiency() * consumedFluidPerOperation(tLiquid)) / 100);
         return 0;
@@ -247,14 +248,14 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     public int getFuelValue(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return 0;
-        GT_Recipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, aStack);
+        GT_MachineRecipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), null, false, Long.MAX_VALUE, null, aStack);
         if (tFuel != null) return (int) ((tFuel.mSpecialValue * 1000L * getEfficiency()) / 100);
         return 0;
     }
 
     public ItemStack getEmptyContainer(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return null;
-        GT_Recipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, aStack);
+        GT_MachineRecipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), null, false, Long.MAX_VALUE, null, aStack);
         if (tFuel != null) return GT_Utility.copy(tFuel.getOutput(0));
         return GT_Utility.getContainerItem(aStack, true);
     }

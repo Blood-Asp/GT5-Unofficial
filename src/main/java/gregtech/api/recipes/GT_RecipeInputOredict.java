@@ -15,7 +15,7 @@ public class GT_RecipeInputOredict extends GT_RecipeInput {
     private int mCount;
 
     public GT_RecipeInputOredict(String aOredictName, int aCount) {
-        super(null, false);
+        super(null);
         mOredictName = aOredictName;
         mCount = aCount;
     }
@@ -41,6 +41,11 @@ public class GT_RecipeInputOredict extends GT_RecipeInput {
     @Override
     public String getInputDescription() {
         return mCount + " " + mOredictName;
+    }
+    
+    @Override
+    public String toString() {
+        return getInputDescription();
     }
     
     @Override

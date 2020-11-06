@@ -6,8 +6,9 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.recipes.GT_MachineRecipe;
+import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -47,11 +48,11 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
+        if (aLiquid == null || GT_RecipeMap.sTurbineFuels == null) return 0;
         FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sTurbineFuels.mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
+        Collection<GT_MachineRecipe> tRecipeList = GT_RecipeMap.sTurbineFuels.mRecipeList;
+        if (tRecipeList != null) for (GT_MachineRecipe tFuel : tRecipeList)
+            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0).get(0), true)) != null)
                 if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
         return 0;
     }
