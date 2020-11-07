@@ -351,11 +351,19 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         
         for (GT_RecipeInput tInput : mInputs) {
             if (tInput != null) {
+                amt = tInput.getCount();
                 boolean temp = true;
                 for (ItemStack tStack : aInputs) {
-                    if (tInput.inputMatches(tStack, aIgnoreCounts)) {
-                        temp = false;
-                        break;
+                    if (tInput.inputMatches(tStack)) {
+                        if (aIgnoreCounts) {
+                            temp = false;
+                            break;
+                        }
+                        amt -= tStack.stackSize;
+                        if (amt < 1) {
+                            temp = false;
+                            break;
+                        }
                     }
                 }
                 if (temp) {
@@ -393,7 +401,7 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
                     if (tInput != null) {
                         amt = tInput.getCount();
                         for (ItemStack aStack : aInputs) {
-                            if (tInput.inputMatches(aStack, aIgnoreCounts)) {
+                            if (tInput.inputMatches(aStack)) {
                                 if (aIgnoreCounts) {
                                     aStack.stackSize -= amt;
                                     break;

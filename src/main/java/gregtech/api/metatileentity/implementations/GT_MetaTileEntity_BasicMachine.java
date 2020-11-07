@@ -787,7 +787,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public int checkRecipe(boolean skipOC){
         GT_RecipeMap tMap = getRecipeList();
         if (tMap == null) return DID_NOT_FIND_RECIPE;
-        GT_MachineRecipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
+        GT_MachineRecipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
 
         if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&

@@ -6,8 +6,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 
 /**
- * Represents a choice of several item stacks for use in a recipe (most likely an assembly line)
- * which don't even have to use the same stack size.
+ * Represents a choice of several item stacks for use in a recipe (most likely an assembly line).
  */
 public class GT_RecipeInputAlts extends GT_RecipeInput {
     
@@ -16,9 +15,10 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     
     public GT_RecipeInputAlts(ItemStack[] aItems) {
         super(null);
-        this.mItems = aItems;
-        for (ItemStack aItem : aItems) {
-            mCount = Math.min(mCount, aItem.stackSize);
+        this.mItems = Arrays.copyOf(aItems, aItems.length);
+        this.mCount = mItems[0].stackSize;
+        for (ItemStack mItem : mItems) {
+            mItem.stackSize = mCount;
         }
     }
 
@@ -32,11 +32,11 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
         if (aItemStack == null) {
             return false;
         }
+        if (!aIgnoreCount && aItemStack.stackSize < mCount) {
+            return false;
+        }
         for (ItemStack tItemStack : mItems) {
             if (GT_Utility.areStacksEqual(tItemStack, aItemStack)) {
-                if (!aIgnoreCount && aItemStack.stackSize < tItemStack.stackSize) {
-                    return false;
-                }
                 if (tItemStack.stackTagCompound != null) {
                     if (aItemStack.stackTagCompound == null) {
                         return false;

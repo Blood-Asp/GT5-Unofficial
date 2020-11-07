@@ -607,8 +607,8 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
-            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null || rRecipe == null || !GregTech_API.sPostloadFinished) {
                 return rRecipe;
             }
@@ -694,8 +694,8 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
-            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null || rRecipe != null || !GregTech_API.sPostloadFinished) {
                 return rRecipe;
             }
@@ -741,8 +741,8 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
-            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length < 2 || aInputs[0] == null || aInputs[1] == null || !GregTech_API.sPostloadFinished) {
                 return rRecipe;
             }
@@ -821,7 +821,7 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) {
                 return null;
             }
@@ -980,7 +980,7 @@ public class GT_RecipeMap {
             if (aOptimize) {
                 rRecipe.optimize();
             }
-            return rRecipe;
+            return addRecipe(rRecipe);
 
         }
 
@@ -1043,10 +1043,10 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null || !GregTech_API.sPostloadFinished)
-                return super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
-            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+                return super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
+            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (rRecipe != null) return rRecipe;
 
             if (Loader.isModLoaded("Railcraft")) {
@@ -1080,7 +1080,7 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) {
                 return null;
             }
@@ -1172,8 +1172,8 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
-            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+            GT_MachineRecipe rRecipe = super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null || aFluids == null || aFluids.length <= 0 || aFluids[0] == null || !GregTech_API.sPostloadFinished) {
                 return rRecipe;
             }
@@ -1277,7 +1277,7 @@ public class GT_RecipeMap {
         }
 
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) {
                 return null;
             }
@@ -1300,9 +1300,9 @@ public class GT_RecipeMap {
         }
         
         @Override
-        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        public GT_MachineRecipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_MachineRecipe aRecipe, boolean aIgnoreCounts, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || !ItemList.IC2_Scrapbox.isStackEqual(aInputs[0], false, true)) {
-                return super.findRecipe(aTileEntity, aRecipe, aVoltage, aFluids, aSpecialSlot, aInputs);
+                return super.findRecipe(aTileEntity, aRecipe, aIgnoreCounts, aVoltage, aFluids, aSpecialSlot, aInputs);
             }
             ItemStack tOutput = GT_ModHandler.getRandomScrapboxDrop();
             if (tOutput == null) {
