@@ -32,10 +32,9 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
     /**
      * Use this to just disable a specific Recipe, but the Configuration enables that already for every single Recipe.
      */
-    public boolean mEnabled = true;
+    private boolean mEnabled = true;
     /**
      * Use this to make a recipe enabled depending on a certain config setting.
-     * TODO: implement map for looking up said config settings.
      */
     public String mEnableCondition = null;
     /**
@@ -154,6 +153,13 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
     public GT_MachineRecipe setEnabled(boolean aEnabled) {
         mEnabled = aEnabled;
         return this;
+    }
+    
+    public boolean isEnabled() {
+        if (mEnableCondition != null) {
+            return GT_RecipeConditions.getConditionValue(mEnableCondition) ^ mInvertCondition;
+        }
+        return mEnabled;
     }
     
     public GT_MachineRecipe setEnableCondition(String aEnableCondition) {

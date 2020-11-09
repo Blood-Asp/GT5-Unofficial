@@ -1,6 +1,5 @@
 package gregtech.api.recipes;
 
-import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import java.util.Collections;
 import java.util.List;

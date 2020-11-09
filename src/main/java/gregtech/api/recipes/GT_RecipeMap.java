@@ -356,6 +356,12 @@ public class GT_RecipeMap {
         return addToItemMap(aRecipe);
     }
     
+    public void addAll(Collection<GT_MachineRecipe> aRecipeList) {
+        for (GT_MachineRecipe tRecipe : aRecipeList) {
+            add(tRecipe);
+        }
+    }
+    
     protected GT_MachineRecipe addToFluidMap(GT_MachineRecipe aRecipe) {
         for (FluidStack aFluid : aRecipe.mFluidInputs) {
             if (aFluid != null) {
@@ -454,7 +460,7 @@ public class GT_RecipeMap {
         // Check the Recipe which has been used last time in order to not have to search for it again, if possible.
         if (aRecipe != null) {
             if (!aRecipe.mFakeRecipe && aRecipe.mCanBeBuffered && aRecipe.isRecipeInputEqual(false, aIgnoreCounts, aFluids, aInputs)) {
-                if (aRecipe.mEnabled && aVoltage * mAmperage >= aRecipe.mEUt) {
+                if (aRecipe.isEnabled() && aVoltage * mAmperage >= aRecipe.mEUt) {
                     return aRecipe;
                 }
                 return null;
@@ -469,7 +475,7 @@ public class GT_RecipeMap {
                     if (tRecipes != null) {
                         for (GT_MachineRecipe tRecipe : tRecipes) {
                             if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aIgnoreCounts, aFluids, aInputs)) {
-                                if (tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt) {
+                                if (tRecipe.isEnabled() && aVoltage * mAmperage >= tRecipe.mEUt) {
                                     return tRecipe;
                                 }
                                 return null;
@@ -480,7 +486,7 @@ public class GT_RecipeMap {
                     if (tRecipes != null) {
                         for (GT_MachineRecipe tRecipe : tRecipes) {
                             if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aIgnoreCounts, aFluids, aInputs)) {
-                                if (tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt) {
+                                if (tRecipe.isEnabled() && aVoltage * mAmperage >= tRecipe.mEUt) {
                                     return tRecipe;
                                 }
                                 return null;
@@ -499,7 +505,7 @@ public class GT_RecipeMap {
                     if (tRecipes != null) {
                         for (GT_MachineRecipe tRecipe : tRecipes) {
                             if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, aIgnoreCounts, aFluids, aInputs)) {
-                                if (tRecipe.mEnabled && aVoltage * mAmperage >= tRecipe.mEUt) {
+                                if (tRecipe.isEnabled() && aVoltage * mAmperage >= tRecipe.mEUt) {
                                     return tRecipe;
                                 }
                                 return null;
