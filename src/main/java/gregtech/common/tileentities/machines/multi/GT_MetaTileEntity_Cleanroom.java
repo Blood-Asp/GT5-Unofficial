@@ -5,10 +5,10 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMachineCallback;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
@@ -16,9 +16,9 @@ import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 import static gregtech.api.enums.GT_Values.debugCleanroom;
-import static gregtech.api.enums.GT_Values.V;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeight = -1;
@@ -207,24 +207,8 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		if (this.mMaintenanceHatches.size() != 1 || this.mEnergyHatches.size() != 1 || mDoorCount != 2 || mHullCount > 10) {
 			return false;
 		}
-		for (int dX = -x + 1; dX <= x - 1; dX++) {
-			for (int dZ = -z + 1; dZ <= z - 1; dZ++) {
-				for (int dY = -1; dY >= y + 1; dY--) {
-					IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
-					if (tTileEntity != null) {
-						IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
-						if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine) {
-							if (debugCleanroom) {
-								GT_Log.out.println(
-									"Cleanroom: Machine detected, adding pointer back to cleanroom"
-								);
-							}
-							((GT_MetaTileEntity_BasicMachine) aMetaTileEntity).mCleanroom = this;
-						}
-					}
-				}
-			}
-		}
+
+		setCallbacks(x, y, z, aBaseMetaTileEntity);
 
         if (doorState) {
 			this.mEfficiency = Math.max(0, this.mEfficiency - 200);
@@ -240,7 +224,34 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 
         return mPlascreteCount>=20 && mGlassCount < (int) Math.floor(ratio);
     }
-    
+
+    private void setCallbacks(int x, int y, int z, IGregTechTileEntity aBaseMetaTileEntity){
+		for (int dX = -x + 1; dX <= x - 1; dX++)
+			for (int dZ = -z + 1; dZ <= z - 1; dZ++)
+				for (int dY = -1; dY >= y + 1; dY--) {
+					TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
+
+					if (tTileEntity instanceof IGregTechTileEntity) {
+						IMetaTileEntity iMetaTileEntity = ((IGregTechTileEntity) tTileEntity).getMetaTileEntity();
+
+						if (iMetaTileEntity instanceof IMachineCallback<?>)
+							checkAndSetCallback((IMachineCallback<?>) iMetaTileEntity);
+
+					} else if (tTileEntity instanceof IMachineCallback<?>)
+						checkAndSetCallback((IMachineCallback<?>) tTileEntity);
+				}
+	}
+
+    @SuppressWarnings("unchecked")
+    private void checkAndSetCallback(IMachineCallback<?> iMachineCallback) {
+		if (debugCleanroom)
+			GT_Log.out.println(
+					"Cleanroom: IMachineCallback detected, checking for cleanroom: " + (iMachineCallback.getType() == this.getClass())
+			);
+		if (iMachineCallback.getType() == this.getClass())
+			((IMachineCallback<GT_MetaTileEntity_Cleanroom>) iMachineCallback).setCallbackBase(this);
+	}
+
     @Override
     public boolean allowGeneralRedstoneOutput(){
     	return true;

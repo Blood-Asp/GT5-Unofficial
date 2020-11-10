@@ -7,6 +7,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_Container_BasicMachine;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMachineCallback;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
@@ -15,6 +16,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_Cleanroom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,7 +39,8 @@ import static gregtech.api.enums.GT_Values.debugCleanroom;
  * This is the main construct for my Basic Machines such as the Automatic Extractor
  * Extend this class to make a simple Machine
  */
-public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_BasicTank {
+public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_BasicTank implements IMachineCallback<GT_MetaTileEntity_Cleanroom> {
+
     /**
      * return values for checkRecipe()
      */
@@ -51,8 +54,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     public boolean mAllowInputFromOutputSide = false, mFluidTransfer = false, mItemTransfer = false, mHasBeenUpdated = false, mStuttering = false, mCharge = false, mDecharge = false;
     public int mMainFacing = -1, mProgresstime = 0, mMaxProgresstime = 0, mEUt = 0, mOutputBlocked = 0;
     public FluidStack mOutputFluid;
-    public String mGUIName = "", mNEIName = "";
-    public GT_MetaTileEntity_MultiBlockBase mCleanroom;
+    public String mGUIName, mNEIName;
+
+
+    @Deprecated
+    public GT_MetaTileEntity_Cleanroom mCleanroom;
     /**
      * Contains the Recipe which has been previously used, or null if there was no previous Recipe, which could have been buffered
      */
@@ -123,6 +129,21 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         onFacingChange();
         onMachineBlockUpdate();
     	return true;
+    }
+
+    @Override
+    public GT_MetaTileEntity_Cleanroom getCallbackBase() {
+        return this.mCleanroom;
+    }
+
+    @Override
+    public void setCallbackBase(GT_MetaTileEntity_Cleanroom callback) {
+        this.mCleanroom = callback;
+    }
+
+    @Override
+    public Class<GT_MetaTileEntity_Cleanroom> getType() {
+        return GT_MetaTileEntity_Cleanroom.class;
     }
 
     @Override
@@ -449,7 +470,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                             if (getDrainableStack() == null) setDrainableStack(mOutputFluid.copy());
                             else if (mOutputFluid.isFluidEqual(getDrainableStack()))
                                 getDrainableStack().amount += mOutputFluid.amount;
-                        for (int i = 0; i < mOutputItems.length; i++) mOutputItems[i] = null;
+                        Arrays.fill(mOutputItems, null);
                         mOutputFluid = null;
                         mEUt = 0;
                         mProgresstime = 0;
@@ -518,7 +539,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                         startProcess();
                     } else {
                         mMaxProgresstime = 0;
-                        for (int i = 0; i < mOutputItems.length; i++) mOutputItems[i] = null;
+                        Arrays.fill(mOutputItems, null);
                         mOutputFluid = null;
                     }
                 }
@@ -584,7 +605,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             //Long EUt calculation
             long xEUt=aEUt;
             //Isnt too low EUt check?
-            long tempEUt = xEUt<V[1] ? V[1] : xEUt;
+            long tempEUt = Math.max(xEUt, V[1]);
 
             mMaxProgresstime = aDuration;
 
@@ -652,7 +673,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
 
     protected boolean isOutputEmpty() {
         boolean rIsEmpty = true;
-        for (ItemStack tOutputSlotContent : getAllOutputs()) if (tOutputSlotContent != null) rIsEmpty = false;
+        for (ItemStack tOutputSlotContent : getAllOutputs())
+            if (tOutputSlotContent != null) {
+                rIsEmpty = false;
+                break;
+            }
         return rIsEmpty;
     }
 
@@ -816,7 +841,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     /**
      *
      * @param skipOC disables OverclockedNess calculation and check - if you do you must implement your own method...
-     * @return
+     * @return DID_NOT_FIND_RECIPE = 0,
+     *         FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS = 1,
+     *         FOUND_AND_SUCCESSFULLY_USED_RECIPE = 2;
      */
     public int checkRecipe(boolean skipOC){
         GT_Recipe_Map tMap = getRecipeList();
@@ -832,7 +859,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             mOutputBlocked++;
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
-        if (tRecipe.mSpecialValue == -200 && (mCleanroom == null || mCleanroom.mEfficiency == 0))
+        if (tRecipe.mSpecialValue == -200 && (getCallbackBase() == null || getCallbackBase().mEfficiency == 0))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
@@ -841,12 +868,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 mOutputItems[i] = tRecipe.getOutput(i);
         if (tRecipe.mSpecialValue == -200 || tRecipe.mSpecialValue == -300)
             for (int i = 0; i < mOutputItems.length; i++)
-                if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)
+                if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > getCallbackBase().mEfficiency)
                 {
 					if (debugCleanroom) {
 						GT_Log.out.println(
 							"BasicMachine: Voiding output due to efficiency failure. mEfficiency = " + 
-							mCleanroom.mEfficiency
+							getCallbackBase().mEfficiency
 						);
 					}
                     mOutputItems[i] = null;
