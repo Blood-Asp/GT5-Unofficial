@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeInputAlts extends GT_RecipeInput {
     
     private final ItemStack[] mItems;
-    private int mCount = Integer.MAX_VALUE;
     
     public GT_RecipeInputAlts(ItemStack[] aItems) {
         super(null);
@@ -55,6 +54,9 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     
     @Override
     public List<ItemStack> getInputStacks() {
+        for (ItemStack tItem : mItems) {
+            tItem.stackSize = mCount;
+        }
         return Arrays.asList(mItems);
     }
     
@@ -83,7 +85,7 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     @Override
     public void setCount(int aCount) {
         for (ItemStack tItem : mItems) {
-            tItem.stackSize = tItem.stackSize * aCount / mCount;
+            tItem.stackSize = aCount;
         }
         mCount = aCount;
     }

@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeInputOredict extends GT_RecipeInput {
 
     private final String mOredictName;
-    private int mCount;
 
     public GT_RecipeInputOredict(String aOredictName, int aCount) {
         super(null);

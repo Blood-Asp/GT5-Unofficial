@@ -81,6 +81,9 @@ public class GT_RecipeOutput {
      * @return a stack of items, considering the chances.
      */
     public ItemStack getActualOutput(Random aRandom) {
+        if (mItemStack == null) {
+            return null;
+        }
         int tCount = 0;
         if (mChance == 10000) {
             tCount = mItemStack.stackSize;
@@ -100,6 +103,9 @@ public class GT_RecipeOutput {
      * Get the output to show, e.g. for an NEI recipe.
      */
     public ItemStack getShownOutput() {
+        if (mItemStack == null) {
+            return null;
+        }
         return mItemStack.copy();
     }
     
@@ -108,14 +114,22 @@ public class GT_RecipeOutput {
     }
     
     public int getCount() {
+        if (mItemStack == null) {
+            return 0;
+        }
         return mItemStack.stackSize;
     }
     
     public void setCount(int aCount) {
-        mItemStack.stackSize = aCount;
+        if (mItemStack != null) {
+            mItemStack.stackSize = aCount;
+        }
     }
     
     public String getOutputDescription() {
+        if (mItemStack == null) {
+            return null;
+        }
         String rDescription = mItemStack.stackSize + " " + mItemStack.getDisplayName();
         if (mChance > 0 && mChance < 10000) {
             rDescription += String.format(" (Chance: %d.%2d)", mChance / 100, mChance % 100);

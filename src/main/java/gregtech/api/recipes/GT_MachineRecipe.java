@@ -257,6 +257,17 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         if (mEUt <= 0) return false;
         if (mInputs.length == 0 && mFluidInputs.length == 0) return false;
         if (mOutputs.length == 0 && mFluidOutputs.length == 0) return false;
+        // Ore dictionary inputs/outputs that refer to un-registered entries can be considered invalid.
+        for (GT_RecipeInput mInput : mInputs) {
+            if (mInput.getInputStacks().isEmpty()) {
+                return false;
+            }
+        }
+        for (GT_RecipeOutput mOutput : mOutputs) {
+            if (mOutput.getShownOutput() == null) {
+                return false;
+            }
+        }
         return true;
     }
     

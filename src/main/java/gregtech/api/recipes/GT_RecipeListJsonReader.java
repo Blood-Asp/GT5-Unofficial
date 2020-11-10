@@ -3,6 +3,7 @@ package gregtech.api.recipes;
 import com.google.gson.stream.JsonReader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import java.io.IOException;
@@ -26,11 +27,15 @@ public class GT_RecipeListJsonReader {
     }
     
     public static List<GT_MachineRecipe> readRecipes(JsonReader aReader) {
+        aReader.setLenient(true);
         List<GT_MachineRecipe> rList = new ArrayList<>(100);
         try {
             aReader.beginArray();
             while (aReader.hasNext()) {
-                rList.add(readRecipe(aReader));
+                GT_MachineRecipe tRecipe = readRecipe(aReader);
+                if (tRecipe != null) {
+                    rList.add(tRecipe);
+                }
             }
             aReader.endArray();
         } catch (IOException e) {
@@ -161,7 +166,9 @@ public class GT_RecipeListJsonReader {
             rRecipe.setEnableCondition(tEnableCondition);
             rRecipe.setInvertCondition(tInvertCondition);
             rRecipe.setHidden(tHidden);
-            return rRecipe;
+            if (rRecipe.isValidRecipe()) {
+                return rRecipe;
+            }
         }
         return null;
     }
@@ -238,8 +245,14 @@ public class GT_RecipeListJsonReader {
             if (tOreName != null) {
                 return new GT_RecipeInputOredict(tOreName, tCount);
             } else if (!tAlts.isEmpty()) {
-                tAlts.get(0).stackSize = tCount;
-                return new GT_RecipeInputAlts(tAlts.toArray(new ItemStack[0]));
+                for (ItemStack tAlt : tAlts) {
+                    tAlt.stackSize = tCount;
+                }
+                GT_RecipeInputAlts rInput = new GT_RecipeInputAlts(tAlts.toArray(new ItemStack[0]));
+                System.out.println("Input with alts, before setCount: " + rInput);
+                rInput.setCount(tCount);
+                System.out.println("Input with alts, after setCount: " + rInput);
+                return rInput;
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
@@ -266,8 +279,20 @@ public class GT_RecipeListJsonReader {
             }
         }
         if (tPieces.length >= 2) {
-            ItemStack rStack = GameRegistry.findItemStack(tPieces[0], tPieces[1], 1);
-            rStack.setItemDamage(tMeta);
+            ItemStack rStack = null;
+            if ("GTItemList".equals(tPieces[0])) {
+                try {
+                    rStack = ItemList.valueOf(tPieces[1]).get(1, new Object[0]);
+                    return rStack;
+                } catch (Throwable e) {
+                    e.printStackTrace(GT_Log.err);
+                }
+            } else {
+                rStack = GameRegistry.findItemStack(tPieces[0], tPieces[1], 1);
+            }
+            if (rStack != null) {
+                rStack.setItemDamage(tMeta);
+            }
             return rStack;
         }
         return null;
@@ -302,6 +327,7 @@ public class GT_RecipeListJsonReader {
                     break;
                 case "displayName":
                 case "comment":
+                    aReader.nextString();
                     // cosmetic, to make recipe more readable, in case item's internal name is something like 
                     // gregtech:gt.metaitem.02:30500
                     break;
@@ -312,7 +338,7 @@ public class GT_RecipeListJsonReader {
         aReader.endObject();
         if (tCount >= 0) {
             if (tOreName != null) {
-                return new GT_RecipeOutput(tOreName, tCount);
+                return new GT_RecipeOutput(tOreName, tCount, tChance);
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
