@@ -756,6 +756,11 @@
 "outputs":[{"item": "GTItemList:Block_SSFUEL", "count": 1}],
 "enableCondition": "ModLoaded(Railcraft)",
 "duration": 120,
-"EUt": 96}
+"EUt": 96},
 
-]
+{"inputs":[{"ore": "dustSugar", "count": 4}, {"ore": "dustMeatRaw", "count": 1}, {"ore": "dustTinySalt", "count": 1}],
+"inputFluids":[{"fluid": "ic2distilledwater", "amount": 4000}], 
+"outputFluids":[{"fluid": "growthmediumraw", "amount": 4000}],
+"duration": 160, 
+"EUt": 16},
+{}]

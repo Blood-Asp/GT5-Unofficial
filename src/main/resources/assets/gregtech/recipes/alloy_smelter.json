@@ -1,0 +1,6 @@
+[
+{"inputs":[{"ore": "dustGlass", "count": 1}, {"item": "GTItemList:Shape_Mold_Ball", "count": 0}], 
+"outputs":[{"item": "GTItemList:Circuit_Parts_Glass_Tube", "count": 1}], 
+"duration": 160, 
+"EUt": 8},
+{}]

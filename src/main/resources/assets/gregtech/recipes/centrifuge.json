@@ -1,0 +1,12 @@
+[
+{"inputs":[{"item": "GTItemList:Cell_Empty", "count": 1}],
+"inputFluids":[{"fluid": "air", "amount": 10000}], 
+"outputFluids":[{"fluid": "nitrogen", "amount": 3900}], 
+"outputs":[{"ore": "cellOxygen", "count": 1}], 
+"duration": 1600, 
+"EUt": 8},
+{"inputs":[{"ore": "dustPlatinumGroupSludge", "count": 1}]
+"outputs":[{"ore": "dustSiliconDioxide", "count": 1}, {"ore": "dustTinyGold", "count": 1}, {"ore": "dustTinyPlatinum", "count": 1}, {"ore": "dustTinyPalladium", "count": 1, "chance": 0.8}, {"ore": "dustTinyIridium", "count": 1, "chance": 0.6}, {"ore": "dustTinyOsmium", "count": 1, "chance": 0.6}],
+"duration": 900, 
+"EUt": 30},
+{}]

@@ -1,0 +1,12 @@
+[
+{"inputs":[{"item": "gregtech:gt.integrated_circuit:1", "count": 0}], 
+"inputFluids":[{"fluid": "growthmediumraw", "amount": 1000}], 
+"outputFluids":[{"fluid": "growthmediumsterilized", "amount": 1000}], 
+"duration": 60, 
+"EUt": 24},
+{"inputs":[{"item": "gregtech:gt.integrated_circuit:1", "count": 0}], 
+"inputFluids":[{"fluid": "potion.dragonblood", "amount": 1000}], 
+"outputFluids":[{"fluid": "growthmediumsterilized", "amount": 1000}], 
+"duration": 60, 
+"EUt": 24},
+{}]

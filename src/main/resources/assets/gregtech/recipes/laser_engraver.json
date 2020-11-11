@@ -1,0 +1,18 @@
+[
+{"inputs":[{"item": "GTItemList:Circuit_Silicon_Wafer2", "count": 1}, {"ore": "lensEnderPearl", "count": 0}],
+"outputs":[{"item": "GTItemList:Circuit_Wafer_NAND", "count": 1}],
+"duration": 500,
+"EUt": 480},
+{"inputs":[{"item": "GTItemList:Circuit_Silicon_Wafer3", "count": 1}, {"ore": "lensEnderPearl", "count": 0}],
+"outputs":[{"item": "GTItemList:Circuit_Wafer_NAND", "count": 4}],
+"duration": 200,
+"EUt": 1920},
+{"inputs":[{"item": "GTItemList:Circuit_Silicon_Wafer2", "count": 1}, {"ore": "lensEnderEye", "count": 0}],
+"outputs":[{"item": "GTItemList:Circuit_Wafer_NOR", "count": 1}],
+"duration": 500,
+"EUt": 480},
+{"inputs":[{"item": "GTItemList:Circuit_Silicon_Wafer3", "count": 1}, {"ore": "lensEnderEye", "count": 0}],
+"outputs":[{"item": "GTItemList:Circuit_Wafer_NOR", "count": 4}],
+"duration": 200,
+"EUt": 1920},
+{}]

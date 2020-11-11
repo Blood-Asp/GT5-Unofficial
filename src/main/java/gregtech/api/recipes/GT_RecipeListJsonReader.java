@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -138,6 +136,8 @@ public class GT_RecipeListJsonReader {
                         tSpecialValue = Integer.valueOf(tSpecialValueString);
                     }
                     break;
+                case "blastTemp":
+                    tSpecialValue = aReader.nextInt();
                 case "enabled":
                     tEnabled = aReader.nextBoolean();
                     break;
@@ -152,7 +152,7 @@ public class GT_RecipeListJsonReader {
                     tHidden = aReader.nextBoolean();
                     break;
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError("Invalid recipe specifier");
             }
         }
         aReader.endObject();
@@ -178,7 +178,7 @@ public class GT_RecipeListJsonReader {
         List<ItemStack> tAlts = new ArrayList<>(5);
         String tOreName = null;
         int tCount = -1;
-        String tNbtData = null;
+        NBTTagCompound tNbtData = null;
         aReader.beginObject();
         while (aReader.hasNext()) {
             String tEntryName = aReader.nextName();
@@ -195,13 +195,13 @@ public class GT_RecipeListJsonReader {
                     tCount = aReader.nextInt();
                     break;
                 case "nbt":
-                    tNbtData = aReader.nextString();
+                    tNbtData = readNbt(aReader);
                     break;
                 case "alts":
                     aReader.beginArray();
                     while (aReader.hasNext()) {
                         ItemStack tAltStack = null;
-                        String tAltNbtData = null;
+                        NBTTagCompound tAltNbtData = null;
                         String tAltOreName = null;
                         aReader.beginObject();
                         while (aReader.hasNext()) {
@@ -211,16 +211,12 @@ public class GT_RecipeListJsonReader {
                             } else if ("ore".equals(tAltEntryName)) {
                                 tAltOreName = aReader.nextString();
                             }else if ("nbt".equals(tAltEntryName)) {
-                                tAltNbtData = aReader.nextString();
+                                tAltNbtData = readNbt(aReader);
                             }
                         }
                         aReader.endObject();
                         if (tAltStack != null && tAltNbtData != null) {
-                            try {
-                                tAltStack.setTagCompound((NBTTagCompound) JsonToNBT.func_150315_a(tAltNbtData));
-                            } catch (NBTException e) {
-                                e.printStackTrace(GT_Log.err);
-                            }
+                            tAltStack.setTagCompound(tAltNbtData);
                         }
                         if (tAltOreName != null) {
                             tAlts.addAll(GT_OreDictUnificator.getOres(tAltOreName));
@@ -237,7 +233,7 @@ public class GT_RecipeListJsonReader {
                     // gregtech:gt.metaitem.02:30500
                     break;
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError("Invalid input specifier");
             }
         }
         aReader.endObject();
@@ -256,11 +252,7 @@ public class GT_RecipeListJsonReader {
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
-                    try {
-                        tStack.setTagCompound((NBTTagCompound) JsonToNBT.func_150315_a(tNbtData));
-                    } catch (NBTException e) {
-                        e.printStackTrace(GT_Log.err);
-                    }
+                    tStack.setTagCompound(tNbtData);
                 }
                 return new GT_RecipeInput(tStack);
             }
@@ -303,7 +295,7 @@ public class GT_RecipeListJsonReader {
         String tOreName = null;
         int tCount = -1;
         float tChance = 1.0f;
-        String tNbtData = null;
+        NBTTagCompound tNbtData = null;
         aReader.beginObject();
         while (aReader.hasNext()) {
             String tEntryName = aReader.nextName();
@@ -320,7 +312,7 @@ public class GT_RecipeListJsonReader {
                     tCount = aReader.nextInt();
                     break;
                 case "nbt":
-                    tNbtData = aReader.nextString();
+                    tNbtData = readNbt(aReader);
                     break;
                 case "chance":
                     tChance = (float) aReader.nextDouble();
@@ -332,7 +324,7 @@ public class GT_RecipeListJsonReader {
                     // gregtech:gt.metaitem.02:30500
                     break;
                 default:
-                    throw new AssertionError();
+                    throw new AssertionError("Invalid output specifier");
             }
         }
         aReader.endObject();
@@ -342,16 +334,75 @@ public class GT_RecipeListJsonReader {
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
-                    try {
-                        tStack.setTagCompound((NBTTagCompound) JsonToNBT.func_150315_a(tNbtData));
-                    } catch (NBTException e) {
-                        e.printStackTrace(GT_Log.err);
-                    }
+                    tStack.setTagCompound(tNbtData);
                 }
                 return new GT_RecipeOutput(tStack, tChance);
             }
         }
         return null;
+    }
+    
+    private static NBTTagCompound readNbt(JsonReader aReader) throws IOException {
+        NBTTagCompound rNBT = new NBTTagCompound();
+        aReader.beginArray();
+        while (aReader.hasNext()) {
+            String tTagName = null;
+            String tType = null;
+            String tValue = null;
+            aReader.beginObject();
+            while (aReader.hasNext()) {
+                String tEntryName = aReader.nextName();
+                switch (tEntryName) {
+                    case "tag":
+                    case "tagName":
+                    case "name":
+                    case "key":
+                        tTagName = aReader.nextString();
+                        break;
+                    case "type":
+                        tType = aReader.nextString();
+                        break;
+                    case "value":
+                        tValue = aReader.nextString();
+                        break;
+                    default:
+                        throw new AssertionError("Invalid NBT specifier");
+                }
+            }
+            aReader.endObject();
+            if (tTagName != null && tType != null && tValue != null) {
+                switch (tType.toLowerCase()) {
+                    case "boolean":
+                        rNBT.setBoolean(tTagName, Boolean.valueOf(tValue));
+                        break;
+                    case "byte":
+                        rNBT.setByte(tTagName, Byte.valueOf(tValue));
+                        break;
+                    case "double":
+                        rNBT.setDouble(tTagName, Double.valueOf(tValue));
+                        break;
+                    case "float":
+                        rNBT.setFloat(tTagName, Float.valueOf(tValue));
+                        break;
+                    case "int":
+                        rNBT.setInteger(tTagName, Integer.valueOf(tValue));
+                        break;
+                    case "long":
+                        rNBT.setLong(tTagName, Long.valueOf(tValue));
+                        break;
+                    case "short":
+                        rNBT.setShort(tTagName, Short.valueOf(tValue));
+                        break;
+                    case "string":
+                        rNBT.setString(tTagName, tValue);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+            }
+        }
+        aReader.endArray();
+        return rNBT;
     }
     
 }
