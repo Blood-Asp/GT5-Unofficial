@@ -1,5 +1,5 @@
 [
-{"inputFluids":[{"fluid": "solution.leadzincsolution", "amount": 8000}], 
+{"inputFluids":[{"fluid": "leadzincsolution", "amount": 8000}], 
 "outputFluids":[{"fluid": "water", "amount": 2000}], 
 "outputs":[{"ore": "dustLead", "count": 1}, {"ore": "dustSilver", "count": 1}, {"ore": "dustZinc", "count": 1}, {"ore": "dustSulfur", "count": 3}], 
 "duration": 300, 

@@ -1,6 +1,7 @@
 package gregtech.api.recipes;
 
 import gregtech.api.util.GT_Utility;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.item.ItemStack;
@@ -13,8 +14,11 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     private final ItemStack[] mItems;
     
     public GT_RecipeInputAlts(ItemStack[] aItems) {
-        super(null);
-        this.mItems = Arrays.copyOf(aItems, aItems.length);
+        super();
+        mItems = new ItemStack[aItems.length];
+        for (int i = 0; i < aItems.length; i++) {
+            mItems[i] = aItems[i].copy();
+        }
         this.mCount = mItems[0].stackSize;
         for (ItemStack mItem : mItems) {
             mItem.stackSize = mCount;
@@ -54,10 +58,11 @@ public class GT_RecipeInputAlts extends GT_RecipeInput {
     
     @Override
     public List<ItemStack> getInputStacks() {
-        for (ItemStack tItem : mItems) {
-            tItem.stackSize = mCount;
+        ArrayList<ItemStack> rList = new ArrayList<>(mItems.length);
+        for (ItemStack mItem : mItems) {
+            rList.add(mItem.copy());
         }
-        return Arrays.asList(mItems);
+        return rList;
     }
     
     @Override

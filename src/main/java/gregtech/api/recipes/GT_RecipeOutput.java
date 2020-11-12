@@ -70,7 +70,11 @@ public class GT_RecipeOutput {
     }
     
     public GT_RecipeOutput(ItemStack aItemStack, float aChance) {
-        mItemStack = aItemStack;
+        if (aItemStack != null) {
+            mItemStack = aItemStack.copy();
+        } else {
+            mItemStack = null;
+        }
         mChance = Math.min(10000, Math.max((int)(aChance * 10000), 0));
     }
     

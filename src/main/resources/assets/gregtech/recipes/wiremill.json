@@ -1,0 +1,7 @@
+[
+
+{"inputs":[{"ore": "ingotPolycaprolactam", "count": 1}], 
+"outputs":[{"item": "minecraft:string", "count": 32}], 
+"duration": 80, 
+"EUt": 48},
+{}]

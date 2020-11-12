@@ -137,7 +137,9 @@ public class GT_RecipeListJsonReader {
                     }
                     break;
                 case "blastTemp":
+                case "startingCost":
                     tSpecialValue = aReader.nextInt();
+                    break;
                 case "enabled":
                     tEnabled = aReader.nextBoolean();
                     break;

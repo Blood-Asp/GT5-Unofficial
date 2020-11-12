@@ -912,6 +912,82 @@ public class GT_RecipeMap {
         }
         
         @Override
+        public GT_MachineRecipe addRecipe(GT_MachineRecipe aRecipe) {
+            ArrayList<GT_RecipeInput> adjustedInputs = new ArrayList<>(5);
+            ArrayList<GT_RecipeOutput> adjustedOutputs = new ArrayList<>(5);
+            ArrayList<FluidStack> adjustedFluidInputs = new ArrayList<>(5);
+            ArrayList<FluidStack> adjustedFluidOutputs = new ArrayList<>(5);
+
+            GT_RecipeInput[] tInputs = aRecipe.mInputs;
+            if (tInputs == null) {
+                tInputs = new GT_RecipeInput[0];
+            }
+            for (GT_RecipeInput input : tInputs) {
+                FluidStack inputFluidContent = FluidContainerRegistry.getFluidForFilledItem(input.getInputStacks().get(0));
+                if (inputFluidContent != null) {
+                    inputFluidContent.amount *= input.getCount();
+                    if (inputFluidContent.getFluid().getName().equals("ic2steam")) {
+                        inputFluidContent = GT_ModHandler.getSteam(inputFluidContent.amount);
+                    }
+                    adjustedFluidInputs.add(inputFluidContent);
+                } else {
+                    ItemData itemData = GT_OreDictUnificator.getItemData(input.getInputStacks().get(0));
+                    if ((itemData == null || !itemData.hasValidPrefixMaterialData()) || itemData.mMaterial.mMaterial != Materials.Empty) {
+                        if (itemData != null && itemData.hasValidPrefixMaterialData() && itemData.mPrefix == OrePrefixes.cell) {
+                            ItemStack dustStack = itemData.mMaterial.mMaterial.getDust(input.getCount());
+                            if (dustStack != null) {
+                                adjustedInputs.add(new GT_RecipeInput(dustStack));
+                            } else {
+                                adjustedInputs.add(input);
+                            }
+                        } else {
+                            adjustedInputs.add(input);
+                        }
+                    }
+                }
+            }
+            FluidStack[] tFluidInputs = aRecipe.mFluidInputs;
+            if (tFluidInputs == null) {
+                tFluidInputs = new FluidStack[0];
+            }
+            adjustedFluidInputs.addAll(Arrays.asList(tFluidInputs));
+            tInputs = adjustedInputs.toArray(new GT_RecipeInput[adjustedInputs.size()]);
+            tFluidInputs = adjustedFluidInputs.toArray(new FluidStack[adjustedFluidInputs.size()]);
+
+            GT_RecipeOutput[] tOutputs = aRecipe.mOutputs;
+            if (tOutputs == null) {
+                tOutputs = new GT_RecipeOutput[0];
+            }
+            for (GT_RecipeOutput output : tOutputs) {
+                FluidStack outputFluidContent = FluidContainerRegistry.getFluidForFilledItem(output.getShownOutput());
+                if (outputFluidContent != null) {
+                    outputFluidContent.amount *= output.getCount();
+                    if (outputFluidContent.getFluid().getName().equals("ic2steam")) {
+                        outputFluidContent = GT_ModHandler.getSteam(outputFluidContent.amount);
+                    }
+                    adjustedFluidOutputs.add(outputFluidContent);
+                } else {
+                    ItemData itemData = GT_OreDictUnificator.getItemData(output.getShownOutput());
+                    if ((itemData == null || !itemData.hasValidPrefixMaterialData()) || itemData.mMaterial.mMaterial != Materials.Empty) {
+                        adjustedOutputs.add(output);
+                    }
+                }
+            }
+
+            FluidStack[] tFluidOutputs = aRecipe.mFluidOutputs;
+            if (tFluidOutputs == null) {
+                tFluidOutputs = new FluidStack[0];
+            }
+            adjustedFluidOutputs.addAll(Arrays.asList(tFluidOutputs));
+            tOutputs = adjustedOutputs.toArray(new GT_RecipeOutput[adjustedOutputs.size()]);
+            tFluidOutputs = adjustedFluidOutputs.toArray(new FluidStack[adjustedFluidOutputs.size()]);
+
+            GT_MachineRecipe_LargeChemicalReactor rRecipe = (GT_MachineRecipe_LargeChemicalReactor) new GT_MachineRecipe_LargeChemicalReactor(tInputs, tOutputs, tFluidInputs, tFluidOutputs).setDuration(aRecipe.mDuration).setEUt(aRecipe.mEUt).setSpecialValue(aRecipe.mSpecialValue);
+            return super.addRecipe(rRecipe);
+            
+        }
+        
+        @Override
         public GT_MachineRecipe addRecipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, int[] aOutputChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
             ArrayList<ItemStack> adjustedInputs = new ArrayList<>(5);
             ArrayList<ItemStack> adjustedOutputs = new ArrayList<>(5);
@@ -986,13 +1062,17 @@ public class GT_RecipeMap {
             if (aOptimize) {
                 rRecipe.optimize();
             }
-            return addRecipe(rRecipe);
+            return super.addRecipe(rRecipe);
 
         }
 
         private static class GT_MachineRecipe_LargeChemicalReactor extends GT_MachineRecipe {
 
             protected GT_MachineRecipe_LargeChemicalReactor(ItemStack[] aInputs, ItemStack[] aOutputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs) {
+                super(aInputs, aOutputs, aFluidInputs, aFluidOutputs);
+            }
+
+            protected GT_MachineRecipe_LargeChemicalReactor(GT_RecipeInput[] aInputs, GT_RecipeOutput[] aOutputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs) {
                 super(aInputs, aOutputs, aFluidInputs, aFluidOutputs);
             }
 

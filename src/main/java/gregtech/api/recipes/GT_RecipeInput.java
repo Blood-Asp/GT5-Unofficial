@@ -13,14 +13,15 @@ import net.minecraft.item.ItemStack;
 public class GT_RecipeInput {
     
     private final ItemStack mItemStack;
-    // GT_RecipeInputAlts showed that stack sizes can sometimes be reset to one between recipe creation and viewing in NEI, so keeping a separate field for the count.
     protected int mCount; 
- 
+
+    protected GT_RecipeInput() {
+        mItemStack = null;
+    }
+    
     public GT_RecipeInput(ItemStack aItemStack) {
-        mItemStack = aItemStack;
-        if (mItemStack != null) {
-            mCount = aItemStack.stackSize;
-        }
+        mItemStack = aItemStack.copy();
+        mCount = aItemStack.stackSize;
     }
     
     public boolean inputMatches(ItemStack aItemStack) {

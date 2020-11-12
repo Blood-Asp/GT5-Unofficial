@@ -125,4 +125,10 @@
 "outputs":[{"item": "GTItemList:Circuit_Parts_PetriDish", "count": 1}], 
 "duration": 160, 
 "EUt": 16},
+
+{"inputs":[{"item": "GTItemList:Shape_Mold_Ball", "count": 0}], 
+"inputFluids":[{"fluid": "liquid_toluene", "amount": 100}], 
+"outputs":[{"item": "GTItemList:GelledToluene", "count": 1}], 
+"duration": 100, 
+"EUt": 16},
 {}]
