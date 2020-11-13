@@ -2,12 +2,16 @@ package gregtech.api.recipes;
 
 import com.google.gson.stream.JsonReader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,9 +34,9 @@ public class GT_RecipeListJsonReader {
         try {
             aReader.beginArray();
             while (aReader.hasNext()) {
-                GT_MachineRecipe tRecipe = readRecipe(aReader);
+                List<GT_MachineRecipe> tRecipe = readRecipe(aReader);
                 if (tRecipe != null) {
-                    rList.add(tRecipe);
+                    rList.addAll(tRecipe);
                 }
             }
             aReader.endArray();
@@ -42,7 +46,7 @@ public class GT_RecipeListJsonReader {
         return rList;
     }
 
-    private static GT_MachineRecipe readRecipe(JsonReader aReader) throws IOException {
+    private static List<GT_MachineRecipe> readRecipe(JsonReader aReader) throws IOException {
         List<GT_RecipeInput> tInputs = new ArrayList<>(10);
         List<GT_RecipeOutput> tOutputs = new ArrayList<>(10);
         List<FluidStack> tFluidInputs = new ArrayList<>(10);
@@ -54,6 +58,8 @@ public class GT_RecipeListJsonReader {
         String tEnableCondition = null;
         boolean tInvertCondition = false;
         boolean tHidden = false;
+        boolean tUseSolderFluids = false;
+        int tSolderAmount = 0;
         aReader.beginObject();
         while (aReader.hasNext()) {
             String tName = aReader.nextName();
@@ -85,13 +91,18 @@ public class GT_RecipeListJsonReader {
                                 tFluidName = aReader.nextString();
                             } else if ("amount".equals(tSubName)) {
                                 tFluidAmount = aReader.nextInt();
+                            } else if ("solderFluids".equals(tSubName)) {
+                                tUseSolderFluids = true;
+                                tSolderAmount = aReader.nextInt();
                             }
                         }
                         aReader.endObject();
-                        if (FluidRegistry.isFluidRegistered(tFluidName)) {
-                            tFluidInputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
-                        } else {
-                            GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                        if (!tUseSolderFluids) {
+                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                                tFluidInputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
+                            } else {
+                                GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                            }
                         }
                     }
                     aReader.endArray();
@@ -169,7 +180,18 @@ public class GT_RecipeListJsonReader {
             rRecipe.setInvertCondition(tInvertCondition);
             rRecipe.setHidden(tHidden);
             if (rRecipe.isValidRecipe()) {
-                return rRecipe;
+                if (tUseSolderFluids && (tSolderAmount > 0)) {
+                    FluidStack[] tSolderFluids = getSolderFluids();
+                    List<GT_MachineRecipe> tList = new ArrayList<>(tSolderFluids.length);
+                    for (FluidStack tSolderFluid : tSolderFluids) {
+                        GT_MachineRecipe tRecipe = rRecipe.copy();
+                        tRecipe.mFluidInputs = new FluidStack[]{tSolderFluid.copy()};
+                        tRecipe.mFluidInputs[0].amount *= tSolderAmount;
+                        tList.add(tRecipe);
+                    }
+                    return tList;
+                }
+                return Collections.singletonList(rRecipe);
             }
         }
         return null;
@@ -210,7 +232,7 @@ public class GT_RecipeListJsonReader {
                             String tAltEntryName = aReader.nextName();
                             if ("item".equals(tAltEntryName)) {
                                 tAltStack = StringtoItemStack(aReader.nextString());
-                            } else if ("ore".equals(tAltEntryName)) {
+                            } else if ("ore".equals(tAltEntryName) || "oredict".equals(tAltEntryName)) {
                                 tAltOreName = aReader.nextString();
                             }else if ("nbt".equals(tAltEntryName)) {
                                 tAltNbtData = readNbt(aReader);
@@ -247,9 +269,7 @@ public class GT_RecipeListJsonReader {
                     tAlt.stackSize = tCount;
                 }
                 GT_RecipeInputAlts rInput = new GT_RecipeInputAlts(tAlts.toArray(new ItemStack[0]));
-                System.out.println("Input with alts, before setCount: " + rInput);
                 rInput.setCount(tCount);
-                System.out.println("Input with alts, after setCount: " + rInput);
                 return rInput;
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
@@ -405,6 +425,23 @@ public class GT_RecipeListJsonReader {
         }
         aReader.endArray();
         return rNBT;
+    }
+
+    private static FluidStack[] sSolderFluids = null;
+    
+    private static FluidStack[] getSolderFluids() {
+        if (sSolderFluids != null) {
+            return sSolderFluids;
+        }
+        List<FluidStack> tSolderFluids = new ArrayList<>(3);
+        for (Materials tMat : Materials.values()) {
+            if (tMat.mStandardMoltenFluid != null && tMat.contains(SubTag.SOLDERING_MATERIAL) && !(GregTech_API.mUseOnlyGoodSolderingMaterials && !tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD))) {
+                int tMultiplier = tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD) ? 1 : tMat.contains(SubTag.SOLDERING_MATERIAL_BAD) ? 4 : 2;
+                tSolderFluids.add(tMat.getMolten(tMultiplier));
+            }
+        }
+        sSolderFluids = tSolderFluids.toArray(new FluidStack[0]);
+        return sSolderFluids;
     }
     
 }

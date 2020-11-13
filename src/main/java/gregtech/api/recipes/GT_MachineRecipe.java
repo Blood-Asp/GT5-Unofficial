@@ -253,7 +253,6 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
      */
     public boolean isValidRecipe() {
         if (mFakeRecipe) return true;
-        if (mDuration <= 0) return false;
         if (mEUt <= 0) return false;
         if (mInputs.length == 0 && mFluidInputs.length == 0) return false;
         if (mOutputs.length == 0 && mFluidOutputs.length == 0) return false;

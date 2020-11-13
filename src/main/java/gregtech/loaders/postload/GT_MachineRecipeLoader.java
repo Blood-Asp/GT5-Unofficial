@@ -8,7 +8,6 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.recipes.GT_MachineRecipe;
 import gregtech.api.recipes.GT_RecipeListJsonReader;
 import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.*;
@@ -17,48 +16,43 @@ import gregtech.common.items.GT_MetaGenerated_Item_03;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
 import ic2.api.recipe.Recipes;
 import ic2.core.Ic2Items;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 
 public class GT_MachineRecipeLoader implements Runnable {
-    private final MaterialStack[][] mAlloySmelterList = {
-            {new MaterialStack(Materials.Tetrahedrite, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 3L)},
-            {new MaterialStack(Materials.Tetrahedrite, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 3L)},
-            {new MaterialStack(Materials.Copper, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 4L)},
-            {new MaterialStack(Materials.Copper, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 4L)},
-            {new MaterialStack(Materials.Copper, 1L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Cupronickel, 2L)},
-            {new MaterialStack(Materials.Copper, 1L), new MaterialStack(Materials.Redstone, 4L), new MaterialStack(Materials.RedAlloy, 1L)},
-            {new MaterialStack(Materials.AnnealedCopper, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 4L)},
-            {new MaterialStack(Materials.AnnealedCopper, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 4L)},
-            {new MaterialStack(Materials.AnnealedCopper, 1L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Cupronickel, 2L)},
-            {new MaterialStack(Materials.AnnealedCopper, 1L), new MaterialStack(Materials.Redstone, 4L), new MaterialStack(Materials.RedAlloy, 1L)},
-            {new MaterialStack(Materials.Iron, 1L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.TinAlloy, 2L)},
-            {new MaterialStack(Materials.WroughtIron, 1L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.TinAlloy, 2L)},
-            {new MaterialStack(Materials.Iron, 2L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Invar, 3L)},
-            {new MaterialStack(Materials.WroughtIron, 2L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Invar, 3L)},
-            {new MaterialStack(Materials.Tin, 9L), new MaterialStack(Materials.Antimony, 1L), new MaterialStack(Materials.SolderingAlloy, 10L)},
-            {new MaterialStack(Materials.Lead, 4L), new MaterialStack(Materials.Antimony, 1L), new MaterialStack(Materials.BatteryAlloy, 5L)},
-            {new MaterialStack(Materials.Gold, 1L), new MaterialStack(Materials.Silver, 1L), new MaterialStack(Materials.Electrum, 2L)},
-            {new MaterialStack(Materials.Magnesium, 1L), new MaterialStack(Materials.Aluminium, 2L), new MaterialStack(Materials.Magnalium, 3L)},
-            {new MaterialStack(Materials.Silver, 1L), new MaterialStack(Materials.Nikolite, 4L), new MaterialStack(Materials.BlueAlloy, 1L)},
-            {new MaterialStack(Materials.Boron, 1L), new MaterialStack(Materials.Glass, 7L), new MaterialStack(Materials.BorosilicateGlass, 8L)}};
     private final static String aTextAE = "appliedenergistics2"; private final static String aTextAEMM = "item.ItemMultiMaterial"; private final static String aTextForestry = "Forestry";
     private final static String aTextEBXL = "ExtrabiomesXL"; private final static String aTextTCGTPage = "gt.research.page.1.";
     private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
 
+    // found in an old Minecraft Forge forum post
+    public static File getMcDir() {
+        if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isDedicatedServer()) {
+            return new File(".");
+        }
+        return Minecraft.getMinecraft().mcDataDir;
+    }
+    
     public void run() {
         GT_Log.out.println("GT_Mod: Adding non-OreDict Machine Recipes.");
         try {
@@ -72,11 +66,79 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Utility.removeIC2BottleRecipe(GT_ModHandler.getIC2Item("fuelRod", 1), GT_ModHandler.getIC2Item("UranFuel", 1), ic2.api.recipe.Recipes.cannerBottle.getRecipes(), GT_ModHandler.getIC2Item("reactorUraniumSimple", 1, 1));
         GT_Utility.removeIC2BottleRecipe(GT_ModHandler.getIC2Item("fuelRod", 1), GT_ModHandler.getIC2Item("MOXFuel", 1), ic2.api.recipe.Recipes.cannerBottle.getRecipes(), GT_ModHandler.getIC2Item("reactorMOXSimple", 1, 1));
 
+        Map<GT_RecipeMap, String> tRecipeFileMap = new HashMap<>(30);
+        tRecipeFileMap.put(GT_RecipeMap.sAlloySmelterRecipes, "alloy_smelter.json");
+        tRecipeFileMap.put(GT_RecipeMap.sAssemblerRecipes, "assembler.json");
+        tRecipeFileMap.put(GT_RecipeMap.sAutoclaveRecipes, "autoclave.json");
+        tRecipeFileMap.put(GT_RecipeMap.sBlastRecipes, "blast_furnace.json");
+        tRecipeFileMap.put(GT_RecipeMap.sBrewingRecipes, "brewery.json");
+        tRecipeFileMap.put(GT_RecipeMap.sCentrifugeRecipes, "centrifuge.json");
+        tRecipeFileMap.put(GT_RecipeMap.sChemicalBathRecipes, "chemical_bath.json");
+        tRecipeFileMap.put(GT_RecipeMap.sChemicalRecipes, "chemical_reactor.json");
+        tRecipeFileMap.put(GT_RecipeMap.sMultiblockChemicalRecipes, "large_chemical_reactor.json");
+        tRecipeFileMap.put(GT_RecipeMap.sCircuitAssemblerRecipes, "circuit_assembler.json");
+        tRecipeFileMap.put(GT_RecipeMap.sElectrolyzerRecipes, "electrolyzer.json");
+        tRecipeFileMap.put(GT_RecipeMap.sExtruderRecipes, "extruder.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFermentingRecipes, "fermenter.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFluidCannerRecipes, "fluid_canner.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFluidExtractionRecipes, "fluid_extractor.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFluidHeaterRecipes, "fluid_heater.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFluidSolidificationRecipes, "fluid_solidifier.json");
+        tRecipeFileMap.put(GT_RecipeMap.sHammerRecipes, "forge_hammer.json");
+        tRecipeFileMap.put(GT_RecipeMap.sPressRecipes, "forming_press.json");
+        tRecipeFileMap.put(GT_RecipeMap.sFusionRecipes, "fusion_reactor.json");
+        tRecipeFileMap.put(GT_RecipeMap.sLaserEngraverRecipes, "laser_engraver.json");
+        tRecipeFileMap.put(GT_RecipeMap.sMixerRecipes, "mixer.json");
+        tRecipeFileMap.put(GT_RecipeMap.sSifterRecipes, "sifter.json");
+        tRecipeFileMap.put(GT_RecipeMap.sSlicerRecipes, "slicer.json");
+        tRecipeFileMap.put(GT_RecipeMap.sWiremillRecipes, "wiremill.json");
+        
+        File tConfigRecipeFolder = new File(getMcDir(), "config" + File.separator + "GregTech" + File.separator + "recipes");
         try {
-            GT_RecipeMap.sFluidExtractionRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/fluid_extractor.json")))));
+            tConfigRecipeFolder.mkdirs();
         } catch (Throwable e) {
+            GT_Log.err.println("Failed to create config/GregTech/recipes folder.");
             e.printStackTrace(GT_Log.err);
+        }
+        InputStream tExplanation = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/Explanation.cfg");
+        if (tExplanation != null) {
+            try (BufferedReader tReader = new BufferedReader(new InputStreamReader(tExplanation)); PrintWriter tWriter = new PrintWriter(new FileWriter(new File(tConfigRecipeFolder, "Explanation.txt")))) {
+                String tLine = tReader.readLine();
+                while (tLine != null) {
+                    tWriter.println(tLine);
+                    tLine = tReader.readLine();
+                }
+                String[] tJsonFileList = tRecipeFileMap.values().toArray(new String[0]);
+                Arrays.sort(tJsonFileList);
+                for (String tFileName : tJsonFileList) {
+                    tWriter.println(tFileName);
+                }
+            } catch (IOException e) {
+                e.printStackTrace(GT_Log.err);
+            }
+        }
+        for (Map.Entry<GT_RecipeMap, String> tEntry : tRecipeFileMap.entrySet()) {
+            try {
+                File tFile = new File(tConfigRecipeFolder, tEntry.getValue());
+                if (tFile.isFile()) {
+                    FileReader tFileReader = new FileReader(tFile);
+                    tEntry.getKey().addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(tFileReader)));
+                    tFileReader.close();
+                }
+            } catch (Throwable e) {
+                GT_Log.err.println("Error while reading file " + tEntry.getValue());
+                e.printStackTrace(GT_Log.err);
+            }
+            try {
+                InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/" + tEntry.getValue());
+                if (tStream != null) {
+                    tEntry.getKey().addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream))));
+                    tStream.close();
+                }
+            } catch (Throwable e) {
+                GT_Log.err.println("Error while reading resource " + tEntry.getValue());
+                e.printStackTrace(GT_Log.err);
+            }
         }
         try {
             GT_DummyWorld tWorld = (GT_DummyWorld) GT_Values.DW;
@@ -100,50 +162,6 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addPrinterRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 3L), FluidRegistry.getFluidStack("squidink", 144), ItemList.Tool_DataStick.getWithName(0L, "With Scanned Book Data", new Object[0]), ItemList.Paper_Printed_Pages.get(1L, new Object[0]), 400, 2);
         GT_Values.RA.addPrinterRecipe(new ItemStack(Items.map, 1, 32767), FluidRegistry.getFluidStack("squidink", 144), ItemList.Tool_DataStick.getWithName(0L, "With Scanned Map Data", new Object[0]), new ItemStack(Items.filled_map, 1, 0), 400, 2);
         GT_Values.RA.addPrinterRecipe(new ItemStack(Items.book, 1, 32767), FluidRegistry.getFluidStack("squidink", 144), GT_Values.NI, GT_Utility.getWrittenBook("Manual_Printer", ItemList.Book_Written_01.get(1L, new Object[0])), 400, 2);
-        try {
-            GT_RecipeMap.sMixerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/mixer.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sExtruderRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/extruder.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sFluidCannerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/fluid_canner.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sFluidSolidificationRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/fluid_solidifier.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sChemicalBathRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_bath.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            List<GT_MachineRecipe> tChemicalRecipes = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                    GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_reactor.json"))));
-            GT_RecipeMap.sChemicalRecipes.addAll(tChemicalRecipes);
-            GT_RecipeMap.sMultiblockChemicalRecipes.addAll(tChemicalRecipes);
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sAssemblerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/assembler.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
 
         for (int j = 0; j < Dyes.dyeRed.getSizeOfFluidList(); j++) {
             GT_Values.RA.addChemicalBathRecipe(GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.RedAlloy, 1L), Dyes.dyeRed.getFluidDye(j, 72L), GT_ModHandler.getModItem("BuildCraft|Transport", "pipeWire", 4L, 0), GT_Values.NI, GT_Values.NI, null, 32, 16);
@@ -167,94 +185,6 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GT_Values.RA.addChemicalBathRecipe(new ItemStack(Blocks.hardened_clay, 1, 0), Dyes.VALUES[i].getFluidDye(j, 18L), new ItemStack(Blocks.stained_hardened_clay, 1, 15 - i), GT_Values.NI, GT_Values.NI, null, 64, 2);
             }
         }
-
-        try {
-            GT_RecipeMap.sAutoclaveRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/autoclave.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sCentrifugeRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/centrifuge.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sElectrolyzerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/electrolyzer.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sSlicerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/slicer.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sFluidHeaterRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/fluid_heater.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sAlloySmelterRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/alloy_smelter.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sLaserEngraverRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/laser_engraver.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sPressRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/forming_press.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sBlastRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/blast_furnace.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sWiremillRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/wiremill.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sBrewingRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/brewery.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sHammerRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/forge_hammer.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sSifterRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/sifter.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
-            GT_RecipeMap.sFusionRecipes.addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(
-                GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/fusion_reactor.json")))));
-        } catch (Throwable e) {
-            e.printStackTrace(GT_Log.err);
-        }
-        
-        
-        
 
 //Circuit Recipes!!!
         Object[] o = new Object[0];
@@ -288,74 +218,6 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(9,o), new Object[]{ItemList.Circuit_Chip_CrystalCPU.get(1,o)});
 
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1,o), new Object[]{"IVC","VDV","CVI",'D',ItemList.Circuit_Parts_Diode.get(1,o),'C',GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.RedAlloy, 1),'V', Ic2Items.electronicCircuit ,'I',ItemList.IC2_Item_Casing_Steel.get(1,o)});
-
-        for (Materials tMat : Materials.values()) {
-            if (tMat.mStandardMoltenFluid != null && tMat.contains(SubTag.SOLDERING_MATERIAL) && !(GregTech_API.mUseOnlyGoodSolderingMaterials && !tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD))) {
-                int tMultiplier = tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD) ? 1 : tMat.contains(SubTag.SOLDERING_MATERIAL_BAD) ? 4 : 2;
-                //Circuit soldering
-                //Integraded Circuits
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Phenolic.get(1,o),ItemList.Circuit_Chip_ILC.get(1,o),ItemList.Circuit_Parts_Resistor.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 4)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Basic.get(1,o), 200, 8);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Phenolic.get(1,o),ItemList.Circuit_Chip_ILC.get(1,o),ItemList.Circuit_Parts_ResistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 4)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Basic.get(1,o), 200, 8);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Phenolic.get(1,o),ItemList.Circuit_Basic.get(3,o),ItemList.Circuit_Parts_Resistor.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 8)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Integrated_Good.get(1,o), 400, 16);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Phenolic.get(1,o),ItemList.Circuit_Basic.get(3,o),ItemList.Circuit_Parts_ResistorSMD.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Gold, 8)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Integrated_Good.get(1,o), 400, 16);
-
-                //Advanced circuit
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Integrated_Good.get(2,new Object[0]),ItemList.Circuit_Chip_ILC.get(3,new Object[0]),ItemList.Circuit_Chip_Ram.get(1,new Object[0]),ItemList.Circuit_Parts_Transistor.get(4,new Object[0]),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 16)},tMat.getMolten(144L * tMultiplier / 2L), GT_ModHandler.getIC2Item("advancedCircuit", 1L), 800, 28);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Integrated_Good.get(2,new Object[0]),ItemList.Circuit_Chip_ILC.get(3,new Object[0]),ItemList.Circuit_Chip_Ram.get(1,new Object[0]),ItemList.Circuit_Parts_TransistorSMD.get(4,new Object[0]),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 16)},tMat.getMolten(144L * tMultiplier / 2L), GT_ModHandler.getIC2Item("advancedCircuit", 1L), 800, 28);
-
-                //Integrated Processors
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_CPU.get(4,o),ItemList.Circuit_Parts_Resistor.get(4,o),ItemList.Circuit_Parts_Capacitor.get(4,o),ItemList.Circuit_Parts_Transistor.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Microprocessor.get(4,o), 200, 60);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_CPU.get(1,o),ItemList.Circuit_Parts_Resistor.get(2,o),ItemList.Circuit_Parts_Capacitor.get(2,o),ItemList.Circuit_Parts_Transistor.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Processor.get(1,o), 200, 60);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Processor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_Capacitor.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 12)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Computer.get(1,o), 400, 90);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Processor.get(1,o),ItemList.Circuit_Chip_NAND.get(32,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 8),GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Plastic, 4)},tMat.getMolten(144L * tMultiplier), ItemList.Tool_DataStick.get(1,o), 400, 90);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(2,o),ItemList.Circuit_Advanced.get(3,o),ItemList.Circuit_Parts_Diode.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Data.get(1,o), 400, 90);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),ItemList.Circuit_Data.get(4,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_Capacitor.get(24,o),ItemList.Circuit_Chip_Ram.get(16,o),GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 12)},tMat.getMolten(144L * tMultiplier*2), ItemList.Circuit_Elite.get(1,o), 1600, 480);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_CPU.get(4,o),ItemList.Circuit_Parts_ResistorSMD.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Parts_TransistorSMD.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Microprocessor.get(4,o), 200, 60);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_CPU.get(1,o),ItemList.Circuit_Parts_ResistorSMD.get(2,o),ItemList.Circuit_Parts_CapacitorSMD.get(2,o),ItemList.Circuit_Parts_TransistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Processor.get(1,o), 200, 60);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Processor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 12)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Computer.get(1,o), 400, 80);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(2,o),ItemList.Circuit_Advanced.get(3,o),ItemList.Circuit_Parts_DiodeSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Data.get(1,o), 400, 90);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),ItemList.Circuit_Data.get(4,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(24,o),ItemList.Circuit_Chip_Ram.get(16,o),GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 12)},tMat.getMolten(144L * tMultiplier*2), ItemList.Circuit_Elite.get(1,o), 1600, 480);
-                //Nanotech Circuits
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Epoxy.get(1,o),ItemList.Circuit_Chip_NanoCPU.get(1,o),ItemList.Circuit_Parts_ResistorSMD.get(2,o),ItemList.Circuit_Parts_CapacitorSMD.get(2,o),ItemList.Circuit_Parts_TransistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Nanoprocessor.get(1,o), 200, 600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Epoxy.get(1,o),ItemList.Circuit_Nanoprocessor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Nanocomputer.get(1,o), 400, 600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Epoxy.get(1,o),ItemList.Circuit_Nanoprocessor.get(1,o),ItemList.Circuit_Chip_Ram.get(4,o),ItemList.Circuit_Chip_NOR.get(32,o),ItemList.Circuit_Chip_NAND.get(64,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 32)},tMat.getMolten(144L * tMultiplier), ItemList.Tool_DataOrb.get(1,o), 400, 1200);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Epoxy.get(2,o),ItemList.Circuit_Nanocomputer.get(3,o),ItemList.Circuit_Parts_DiodeSMD.get(4,o),ItemList.Circuit_Chip_NOR.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Elitenanocomputer.get(1,o), 400, 600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),ItemList.Circuit_Elitenanocomputer.get(4,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(24,o),ItemList.Circuit_Chip_Ram.get(16,o),GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 12)},tMat.getMolten(144L * tMultiplier*2), ItemList.Circuit_Master.get(1,o), 1600, 1920);
-                //Quantum Circuits
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(1,o),ItemList.Circuit_Chip_QuantumCPU.get(1,o),ItemList.Circuit_Chip_NanoCPU.get(1,o),ItemList.Circuit_Parts_CapacitorSMD.get(2,o),ItemList.Circuit_Parts_TransistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Quantumprocessor.get(1,o), 200, 2400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(1,o),ItemList.Circuit_Quantumprocessor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Quantumcomputer.get(1,o), 400, 2400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(2,o),ItemList.Circuit_Quantumcomputer.get(3,o),ItemList.Circuit_Parts_DiodeSMD.get(4,o),ItemList.Circuit_Chip_NOR.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Masterquantumcomputer.get(1,o), 400, 2400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),ItemList.Circuit_Masterquantumcomputer.get(4,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(24,o),ItemList.Circuit_Chip_Ram.get(16,o),GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 12)},tMat.getMolten(144L * tMultiplier*2), ItemList.Circuit_Quantummainframe.get(1,o), 1600, 7680);
-                //Crystallized Circuits
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Multifiberglass.get(1,o),ItemList.Circuit_Chip_CrystalCPU.get(1,o),ItemList.Circuit_Chip_NanoCPU.get(1,o),ItemList.Circuit_Parts_CapacitorSMD.get(2,o),ItemList.Circuit_Parts_TransistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NiobiumTitanium, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Crystalprocessor.get(1,o), 200, 9600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Multifiberglass.get(1,o),ItemList.Circuit_Crystalprocessor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NiobiumTitanium, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Crystalcomputer.get(1,o), 400, 9600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Multifiberglass.get(2,o),ItemList.Circuit_Crystalcomputer.get(3,o),ItemList.Circuit_Parts_DiodeSMD.get(4,o),ItemList.Circuit_Chip_NOR.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NiobiumTitanium, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Ultimatecrystalcomputer.get(1,o), 400, 9600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),ItemList.Circuit_Ultimatecrystalcomputer.get(4,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(24,o),ItemList.Circuit_Chip_Ram.get(16,o),GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Superconductor, 12)},tMat.getMolten(144L * tMultiplier*2), ItemList.Circuit_Crystalmainframe.get(1,o), 1600, 30720);
-                //Wetware Circuits
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Chip_NeuroCPU.get(1,o),ItemList.Circuit_Chip_CrystalCPU.get(1,o), ItemList.Circuit_Chip_NanoCPU.get(1,o), ItemList.Circuit_Parts_CapacitorSMD.get(2,o),ItemList.Circuit_Parts_TransistorSMD.get(2,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.YttriumBariumCuprate, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Neuroprocessor.get(1,o), 200, 38400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Wetware.get(1,o),ItemList.Circuit_Neuroprocessor.get(2,o),ItemList.Circuit_Parts_Coil.get(4,o),ItemList.Circuit_Parts_CapacitorSMD.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.YttriumBariumCuprate, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Wetwarecomputer.get(1,o), 400, 38400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Wetware.get(2,o),ItemList.Circuit_Wetwarecomputer.get(3,o),ItemList.Circuit_Parts_DiodeSMD.get(4,o),ItemList.Circuit_Chip_NOR.get(4,o),ItemList.Circuit_Chip_Ram.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.YttriumBariumCuprate, 6)},tMat.getMolten(144L * tMultiplier), ItemList.Circuit_Wetwaresupercomputer.get(1,o), 400, 38400);
-
-                //SoC
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_SoC.get(4,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Microprocessor.get(4,o), 50, 600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_SoC.get(1,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.RedAlloy, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Processor.get(1,o), 50, 2400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Plastic.get(1,o),ItemList.Circuit_Chip_SoC2.get(1,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Electrum, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Nanoprocessor.get(1,o), 50, 9600);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Epoxy.get(1,o),ItemList.Circuit_Chip_SoC2.get(1,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Quantumprocessor.get(1,o), 50, 38400);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(1,o),ItemList.Circuit_Chip_CrystalSoC.get(1,o),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.NiobiumTitanium, 2)},tMat.getMolten(144L * tMultiplier / 2L), ItemList.Circuit_Crystalprocessor.get(1,o), 50, 153600);
-
-                //Lapoorbs
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(1,o),ItemList.Circuit_Chip_PIC.get(4,o), ItemList.Circuit_Parts_Crystal_Chip_Master.get(18L,o),ItemList.Circuit_Chip_NanoCPU.get(1,o), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 16)},tMat.getMolten(144L * tMultiplier), ItemList.Energy_LapotronicOrb.get(1,o), 512, 1024);
-                GT_Values.RA.addCircuitAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Fiberglass.get(1,o),ItemList.Circuit_Chip_HPIC.get(4,o), ItemList.Energy_LapotronicOrb.get(8L,o),ItemList.Circuit_Chip_QuantumCPU.get(1,o), GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Platinum, 16),GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Europium, 4L)},tMat.getMolten(144L * tMultiplier), ItemList.Energy_LapotronicOrb2.get(1,o), 1024, 4096);
-
-                for (ItemStack tPlate : new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iron, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.WroughtIron, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L)}) {
-                    GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.lever, 1, 32767), tPlate, tMat.getMolten(144L * tMultiplier / 2L), ItemList.Cover_Controller.get(1L, new Object[0]), 800, 16);
-                    GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.redstone_torch, 1, 32767), tPlate, tMat.getMolten(144L * tMultiplier / 2L), ItemList.Cover_ActivityDetector.get(1L, new Object[0]), 800, 16);
-                    GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.heavy_weighted_pressure_plate, 1, 32767), tPlate, tMat.getMolten(144L * tMultiplier / 2L), ItemList.Cover_FluidDetector.get(1L, new Object[0]), 800, 16);
-                    GT_Values.RA.addAssemblerRecipe(new ItemStack(Blocks.light_weighted_pressure_plate, 1, 32767), tPlate, tMat.getMolten(144L * tMultiplier / 2L), ItemList.Cover_ItemDetector.get(1L, new Object[0]), 800, 16);
-                    GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("ecMeter", 1L), tPlate, tMat.getMolten(144L * tMultiplier / 2L), ItemList.Cover_EnergyDetector.get(1L, new Object[0]), 800, 16);
-                }
-            }
-        }
 
         GT_Values.RA.addCutterRecipe(ItemList.Circuit_Silicon_Ingot.get(1, new Object[0]), ItemList.Circuit_Silicon_Wafer.get(16, new Object[0]),null, 200, 8);
         GT_Values.RA.addCutterRecipe(ItemList.Circuit_Silicon_Ingot2.get(1, new Object[0]), ItemList.Circuit_Silicon_Wafer2.get(32, new Object[0]),null, 400, 64);
@@ -2000,20 +1862,6 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_ModHandler.removeFurnaceSmelting(GT_ModHandler.getModItem("Magneticraft", "item.chunks", 1, 21));
             GT_ModHandler.removeFurnaceSmelting(GT_ModHandler.getModItem("Magneticraft", "item.pebbles", 1, 21));
             GT_ModHandler.removeFurnaceSmelting(GT_ModHandler.getModItem("Magneticraft", "item.rubble", 1, 21));
-        }
-
-        for (MaterialStack[] tMats : this.mAlloySmelterList) {
-            ItemStack tDust1 = GT_OreDictUnificator.get(OrePrefixes.dust, tMats[0].mMaterial, tMats[0].mAmount);
-            ItemStack tDust2 = GT_OreDictUnificator.get(OrePrefixes.dust, tMats[1].mMaterial, tMats[1].mAmount);
-            ItemStack tIngot1 = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[0].mMaterial, tMats[0].mAmount);
-            ItemStack tIngot2 = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[1].mMaterial, tMats[1].mAmount);
-            ItemStack tOutputIngot = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[2].mMaterial, tMats[2].mAmount);
-            if (tOutputIngot != GT_Values.NI) {
-                GT_ModHandler.addAlloySmelterRecipe(tIngot1, tDust2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
-                GT_ModHandler.addAlloySmelterRecipe(tIngot1, tIngot2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
-                GT_ModHandler.addAlloySmelterRecipe(tDust1, tIngot2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
-                GT_ModHandler.addAlloySmelterRecipe(tDust1, tDust2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
-            }
         }
 
         if(!GregTech_API.mIC2Classic){
