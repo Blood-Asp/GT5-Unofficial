@@ -92,7 +92,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         }
         return true;
     }
-
+    
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
@@ -111,7 +111,13 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     radiusConfig = 0;
             }
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + (radiusConfig * 2 + 1) + "x" + (radiusConfig * 2 + 1));//TODO Add translation support
+            oreBlockPositions.clear();
+            fillOreList(getBaseMetaTileEntity());
         }
+    }
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        fillOreList(aBaseMetaTileEntity);
     }
 
     @Override
@@ -180,6 +186,8 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         }
     }
     private void fillOreList(IGregTechTileEntity aBaseMetaTileEntity) {
+        if (drillY == 0)
+            return;
         for (int z = -radiusConfig; z <= radiusConfig; ++z) {
             for (int x = -radiusConfig; x <= radiusConfig; ++x) {
                 Block block = aBaseMetaTileEntity.getBlockOffset(x, drillY, z);
