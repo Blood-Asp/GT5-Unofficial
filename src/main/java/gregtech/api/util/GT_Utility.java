@@ -65,6 +65,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -2488,6 +2489,13 @@ public class GT_Utility {
 
     public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
         return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix) : false;
+    }
+    public static boolean isOre(ItemStack aStack) {
+        for (int id: OreDictionary.getOreIDs(aStack)) {
+            if (OreDictionary.getOreName(id).startsWith("ore"))
+                return true;
+        }
+        return false;
     }
 
 }
