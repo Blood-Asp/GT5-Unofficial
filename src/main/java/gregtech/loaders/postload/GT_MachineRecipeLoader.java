@@ -1398,7 +1398,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         //GT_Values.RA.addBlastRecipe(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadah, 1L), GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Osmiridium, 1L), Materials.Argon.getGas(1000), null, GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.NaquadahAlloy, 2L), null, 500, 30720, Materials.NaquadahAlloy.mBlastFurnaceTemp);
         //GT_Values.RA.addBlastRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Gallium, 1L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Arsenic, 1L), null, null, GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.GalliumArsenide, 2L), null, 600, 120, Materials.GalliumArsenide.mBlastFurnaceTemp);
 
-
+        //fuel rod canner recipes
         if (!GregTech_API.mIC2Classic) {
             GT_Values.RA.addCannerRecipe(GT_ModHandler.getIC2Item("fuelRod", 1), GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Lithium, 1L), GT_ModHandler.getIC2Item("reactorLithiumCell", 1, 1), null, 16, 64);
             GT_Values.RA.addFluidExtractionRecipe(GT_ModHandler.getIC2Item("TritiumCell", 1), GT_ModHandler.getIC2Item("fuelRod", 1), Materials.Tritium.getGas(32), 10000, 16, 64);
@@ -1953,15 +1953,26 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Gold, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), new ItemStack(Items.golden_hoe, 1), 100, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Diamond, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), new ItemStack(Items.diamond_hoe, 1), 100, 16);
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Bronze, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), ItemList.Tool_Hoe_Bronze.getUndamaged(1L), 100, 16);
-        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Steel, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), ItemList.Tool_Hoe_Steel.getUndamaged(1L), 100, 16);
-
-        GT_Values.RA.addAssemblerRecipe(ItemList.NaquadahCell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.NaquadahCell_2.get(1L), 100, 400);
-        GT_Values.RA.addAssemblerRecipe(ItemList.NaquadahCell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenSteel, 6L), ItemList.NaquadahCell_4.get(1L), 150, 400);
-        GT_Values.RA.addAssemblerRecipe(ItemList.NaquadahCell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.NaquadahCell_4.get(1L), 100, 400);
-        GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.MNqCell_2.get(1L), 100, 400);
-        GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenSteel, 6L), ItemList.MNqCell_4.get(1L), 150, 400);
-        GT_Values.RA.addAssemblerRecipe(ItemList.MNqCell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), ItemList.MNqCell_4.get(1L), 100, 400);
-
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.toolHeadHoe, Materials.Steel, 1L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), ItemList.Tool_Hoe_Steel.getUndamaged(1L), 100, 16);        
+        
+        //fuel rod assembler recipes
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.ThoriumCell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.ThoriumCell_2.get(1L), 200, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.ThoriumCell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Steel, 6L), GT_Utility.getIntegratedCircuit(4)}, null, ItemList.ThoriumCell_4.get(1L), 300, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.ThoriumCell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(5)}, null, ItemList.ThoriumCell_4.get(1L), 200, 30);        
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Uraniumcell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.Uraniumcell_2.get(1L), 200, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Uraniumcell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Steel, 6L), GT_Utility.getIntegratedCircuit(4)}, null, ItemList.Uraniumcell_4.get(1L), 300, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Uraniumcell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(5)}, null, ItemList.Uraniumcell_4.get(1L), 200, 30);      
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Moxcell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.Moxcell_2.get(1L), 200, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Moxcell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Steel, 6L), GT_Utility.getIntegratedCircuit(4)}, null, ItemList.Moxcell_4.get(1L), 300, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.Moxcell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 4L), GT_Utility.getIntegratedCircuit(5)}, null, ItemList.Moxcell_4.get(1L), 200, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.NaquadahCell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.NaquadahCell_2.get(1L), 100, 400);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.NaquadahCell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenSteel, 6L), GT_Utility.getIntegratedCircuit(4)}, null, ItemList.NaquadahCell_4.get(1L), 150, 400);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.NaquadahCell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), GT_Utility.getIntegratedCircuit(5)}, null, ItemList.NaquadahCell_4.get(1L), 100, 400);                
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.MNqCell_1.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.MNqCell_2.get(1L), 100, 400);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.MNqCell_1.get(4L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.TungstenSteel, 6L), GT_Utility.getIntegratedCircuit(4)}, null, ItemList.MNqCell_4.get(1L), 150, 400);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.MNqCell_2.get(2L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.TungstenSteel, 4L), GT_Utility.getIntegratedCircuit(5)}, null, ItemList.MNqCell_4.get(1L), 100, 400);
+                        
+        
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Neutronium, 8L), GT_OreDictUnificator.get(OrePrefixes.stickLong, Materials.Iridium, 4L), ItemList.neutroniumHeatCapacitor.get(1L), 100, 120000);
 
         GT_ModHandler.removeRecipe(new ItemStack(Items.lava_bucket), ItemList.Cell_Empty.get(1L));
