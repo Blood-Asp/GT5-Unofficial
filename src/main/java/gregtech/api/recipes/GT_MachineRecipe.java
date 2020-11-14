@@ -159,6 +159,9 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
         if (mEnableCondition != null) {
             return GT_RecipeConditions.getConditionValue(mEnableCondition) ^ mInvertCondition;
         }
+        if (mDuration <= 0 || mEUt <= 0) {
+            return false;
+        }
         return mEnabled;
     }
     

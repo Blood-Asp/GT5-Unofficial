@@ -80,4 +80,10 @@
 "outputs":[{"item": "GTItemList:Tool_DataOrb", "count": 1}],
 "duration": 12000,
 "EUt": 320},
+
+{"inputs": [{"ore": "gemNetherStar", "count": 1}], 
+"inputFluids":[{"molten": "Neutronium", "amount": 288}], 
+"outputs":[{"item": "GTItemList:Gravistar", "count": 1}], 
+"duration": 480, 
+"EUt": 7680},
 {}]

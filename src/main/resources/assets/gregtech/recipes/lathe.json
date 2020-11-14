@@ -1,0 +1,7 @@
+[
+{"inputs": [{"ore": "slabWood", "count": 1}],
+"outputs": [{"item": "minecraft:bowl", "count": 1}, {"ore": "dustSmallWood", "count": 1}], 
+"duration": 50, 
+"EUt": 8},
+
+{}]

@@ -97,4 +97,8 @@
 "duration": 256,
 "EUt": 128},
 
+{"inputs":[{"ore": "dustQuartzite", "count": 1}], 
+"outputs":[{"molten": "Glass", "amount": 72}], 
+"duration": 600, 
+"EUt": 28},
 {}]

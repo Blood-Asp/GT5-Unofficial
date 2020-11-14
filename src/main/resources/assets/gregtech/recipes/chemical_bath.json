@@ -175,4 +175,15 @@
 "outputs": [{"ore": "plateEpoxidFiberReinforced", "count": 1}], 
 "duration": 240, 
 "EUt": 16},
+
+{"inputs": [{"ore": "gemEnderEye", "count": 1}], 
+"inputFluids": [{"gas": "Radon", "amount": 250}], 
+"outputs": [{"item": "GTItemList:QuantumEye", "count": 1}], 
+"duration": 480, 
+"EUt": 384},
+{"inputs": [{"ore": "gemNetherStar", "count": 1}], 
+"inputFluids": [{"gas": "Radon", "amount": 1250}], 
+"outputs": [{"item": "GTItemList:QuantumStar", "count": 1}], 
+"duration": 1920, 
+"EUt": 384},
 {}]

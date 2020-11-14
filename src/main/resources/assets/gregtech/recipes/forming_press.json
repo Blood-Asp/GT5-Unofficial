@@ -57,4 +57,22 @@
 "outputs":[{"item": "GTItemList:Arrow_Head_Glass_Emtpy", "count": 1}],
 "duration": 64,
 "EUt": 4},
+
+{"inputs": [{"ore": "plateCupronickel", "count": 1}, {"item": "GTItemList:Shape_Mold_Credit", "count": 0}],
+"outputs":[{"item": "GTItemList:Credit_Greg_Cupronickel", "count": 4}],
+"duration":100,
+"EUt":16},
+{"inputs": [{"ore": "plateBrass", "count": 1}, {"item": "GTItemList:Shape_Mold_Credit", "count": 0}],
+"outputs":[{"item": "GTItemList:Coin_Doge", "count": 4}],
+"duration":100,
+"EUt":16},
+{"inputs": [{"ore": "plateIron", "count": 1}, {"item": "GTItemList:Shape_Mold_Credit", "count": 0}],
+"outputs":[{"item": "GTItemList:Credit_Iron", "count": 4}],
+"duration":100,
+"EUt":16},
+{"inputs": [{"ore": "plateWroughtIron", "count": 1}, {"item": "GTItemList:Shape_Mold_Credit", "count": 0}],
+"outputs":[{"item": "GTItemList:Credit_Iron", "count": 4}],
+"duration":100,
+"EUt":16},
+
 {}]

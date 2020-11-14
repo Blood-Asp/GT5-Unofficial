@@ -71,7 +71,7 @@ public class GT_NEI_AssLineHandler
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
             for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-                if (!tRecipe.mHidden) {
+                if (!tRecipe.mHidden && tRecipe.isEnabled()) {
                     this.arecipes.add(new CachedDefaultRecipe(tRecipe));
                 }else{
                     this.arecipes.remove(new CachedDefaultRecipe(tRecipe));
@@ -103,7 +103,7 @@ public class GT_NEI_AssLineHandler
             }
         }
         for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-            if (!tRecipe.mHidden) {
+            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
@@ -145,7 +145,7 @@ public class GT_NEI_AssLineHandler
             }
         }
         for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-            if (!tRecipe.mHidden) {
+            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tInputs) {
                     if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {

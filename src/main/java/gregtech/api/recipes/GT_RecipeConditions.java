@@ -1,7 +1,10 @@
 package gregtech.api.recipes;
 
 import cpw.mods.fml.common.Loader;
+import gregtech.GT_Mod;
 import gregtech.api.enums.Materials;
+import gregtech.api.util.GT_Log;
+import gregtech.common.GT_Proxy;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +13,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 /**
  *
  * Maps the conditions that certain recipes might need to be enabled or disabled based on.
- * These are mostly boolean fields in other classes.<br>
+ * Some of these are boolean fields in other classes.<br>
  * Plus a few special cases:
  * <ul><li>ModLoaded(<i>ModName</i>) - Checks if the named mod is loaded
  * <li>ModsLoaded(<i>ModName</i>, <i>ModName</i>, ...) - Checks if all the mods in the comma separated list are loaded.
@@ -49,10 +52,19 @@ public class GT_RecipeConditions {
             }
         }
         try {
-            return sConditionMap.get(aConditionName).getBoolean(null);
+            return sConditionMap.get(aConditionName).getBoolean(GT_Mod.gregtechproxy);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             // ignore exceptions
         }
         return false;
+    }
+    
+    static {
+        try {
+            sConditionMap.put("DisableIC2Cables", GT_Proxy.class.getField("mDisableIC2Cables"));
+            sConditionMap.put("HardMachineCasings", GT_Proxy.class.getField("mHardMachineCasings"));
+        } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
+        }
     }
 }

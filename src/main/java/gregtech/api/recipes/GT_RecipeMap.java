@@ -318,7 +318,7 @@ public class GT_RecipeMap {
             for (int i = 0; i < tInputs.length; i++) {
                 tInputs[i] = aRecipe.mInputs[i].getInputStacks().get(0);
             }
-            if (findRecipe(null, null, Long.MAX_VALUE, aRecipe.mFluidInputs, null, tInputs) != null) {
+            if (findAnyRecipe(aRecipe.mFluidInputs, null, tInputs) != null) {
                 return null;
             }
         }
@@ -358,7 +358,7 @@ public class GT_RecipeMap {
     
     public void addAll(Collection<GT_MachineRecipe> aRecipeList) {
         for (GT_MachineRecipe tRecipe : aRecipeList) {
-            add(tRecipe);
+            addRecipe(tRecipe);
         }
     }
     
@@ -509,6 +509,102 @@ public class GT_RecipeMap {
                                     return tRecipe;
                                 }
                                 return null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // And nothing has been found.
+        return null;
+    }
+
+    /**
+     * finds a Recipe matching the aFluid and ItemStack Inputs.
+     * Special version to be used when checking for collisions, which doesn't bother checking voltage or cached recipes, but allows returning disabled recipes.
+     * 
+     * @param aFluids the Fluid Inputs
+     * @param aSpecialSlot the content of the Special Slot, the regular Manager
+     * doesn't do anything with this, but some custom ones do.
+     * @param aInputs the Item Inputs
+     * @return the Recipe it has found or null for no matching Recipe
+     */
+    protected GT_MachineRecipe findAnyRecipe(FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
+        // No Recipes? Well, nothing to be found then.
+        if (mRecipeList.isEmpty()) {
+            return null;
+        }
+
+        // Some Recipe Classes require a certain amount of Inputs of certain kinds. Like "at least 1 Fluid + 1 Stack" or "at least 2 Stacks" before they start searching for Recipes.
+        // This improves Performance massively, especially if people leave things like Circuits, Molds or Shapes in their Machines to select Sub Recipes.
+        int tFluidCount = 0;
+        int tItemCount = 0;
+        if (GregTech_API.sPostloadFinished) {
+            if (mMinimalInputFluids > 0 || mMinimalTotalInputs > 0) {
+                if (aFluids == null) {
+                    return null;
+                }
+                for (FluidStack aFluid : aFluids) {
+                    if (aFluid != null) {
+                        tFluidCount++;
+                    }
+                }
+                if (tFluidCount < mMinimalInputFluids) {
+                    return null;
+                }
+            }
+            if (mMinimalInputItems > 0 || mMinimalTotalInputs > 0) {
+                if (aInputs == null) {
+                    return null;
+                }
+                for (ItemStack aInput : aInputs) {
+                    if (aInput != null) {
+                        tItemCount++;
+                    }
+                }
+                if (tItemCount < mMinimalInputItems) {
+                    return null;
+                }
+            }
+            if (tItemCount + tFluidCount < mMinimalTotalInputs) {
+                return null;
+            }
+        }
+
+        // Now look for the Recipes inside the Item HashMaps, but only when the Recipes usually have Items.
+        if (mInputSlots > 0 && aInputs != null) {
+            for (ItemStack tStack : aInputs) {
+                if (tStack != null) {
+                    Collection<GT_MachineRecipe> tRecipes = mRecipeItemMap.get(new GT_ItemStack(tStack));
+                    if (tRecipes != null) {
+                        for (GT_MachineRecipe tRecipe : tRecipes) {
+                            if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) {
+                                return tRecipe;
+                            }
+                        }
+                    }
+                    tRecipes = mRecipeItemMap.get(new GT_ItemStack(GT_Utility.copyMetaData(W, tStack)));
+                    if (tRecipes != null) {
+                        for (GT_MachineRecipe tRecipe : tRecipes) {
+                            if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) {
+                                return tRecipe;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // If the minimal Amount of Items for the Recipe is 0, then it could be a Fluid-Only Recipe, so check that Map too.
+        if (mMinimalInputItems == 0 && aFluids != null) {
+            for (FluidStack aFluid : aFluids) {
+                if (aFluid != null) {
+                    Collection<GT_MachineRecipe> tRecipes = mRecipeFluidMap.get(aFluid.getFluid());
+                    if (tRecipes != null) {
+                        for (GT_MachineRecipe tRecipe : tRecipes) {
+                            if (!tRecipe.mFakeRecipe && tRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) {
+                                return tRecipe;
                             }
                         }
                     }

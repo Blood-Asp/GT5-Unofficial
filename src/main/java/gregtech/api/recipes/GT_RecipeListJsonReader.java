@@ -8,6 +8,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class GT_RecipeListJsonReader {
         boolean tInvertCondition = false;
         boolean tHidden = false;
         boolean tUseSolderFluids = false;
+        boolean tUseCuttingFluids = false;
         int tSolderAmount = 0;
         aReader.beginObject();
         while (aReader.hasNext()) {
@@ -94,6 +96,18 @@ public class GT_RecipeListJsonReader {
                             } else if ("solderFluids".equals(tSubName)) {
                                 tUseSolderFluids = true;
                                 tSolderAmount = aReader.nextInt();
+                            } else if ("gas".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getGas(1L).getFluid().getName();
+                            } else if ("plasma".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getPlasma(1L).getFluid().getName();
+                            } else if ("molten".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getMolten(1L).getFluid().getName();
+                            } else if ("materialFluid".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getFluid(1L).getFluid().getName();
                             }
                         }
                         aReader.endObject();
@@ -120,6 +134,18 @@ public class GT_RecipeListJsonReader {
                                 tFluidName = aReader.nextString();
                             } else if ("amount".equals(tSubName)) {
                                 tFluidAmount = aReader.nextInt();
+                            } else if ("gas".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getGas(1L).getFluid().getName();
+                            } else if ("plasma".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getPlasma(1L).getFluid().getName();
+                            } else if ("molten".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getMolten(1L).getFluid().getName();
+                            } else if ("materialFluid".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tFluidName = Materials.get(tMaterialName).getFluid(1L).getFluid().getName();
                             }
                         }
                         aReader.endObject();
@@ -164,6 +190,9 @@ public class GT_RecipeListJsonReader {
                 case "hidden":
                     tHidden = aReader.nextBoolean();
                     break;
+                case "useCuttingFluids":
+                    tUseCuttingFluids = aReader.nextBoolean();
+                    break;
                 default:
                     throw new AssertionError("Invalid recipe specifier");
             }
@@ -189,6 +218,20 @@ public class GT_RecipeListJsonReader {
                         tRecipe.mFluidInputs[0].amount *= tSolderAmount;
                         tList.add(tRecipe);
                     }
+                    return tList;
+                } else if (tUseCuttingFluids) {
+                    List<GT_MachineRecipe> tList = new ArrayList<>(3);
+                    GT_MachineRecipe tRecipe = rRecipe.copy();
+                    tRecipe.mFluidInputs = new FluidStack[]{Materials.Lubricant.getFluid(Math.max(1, Math.min(250, tDuration * tEUt / 1280)))};
+                    tList.add(tRecipe);
+                    tRecipe = rRecipe.copy();
+                    tRecipe.mFluidInputs = new FluidStack[]{GT_ModHandler.getDistilledWater(Math.max(3, Math.min(750, tDuration * tEUt / 426)))};
+                    tRecipe.setDuration(tDuration * 2);
+                    tList.add(tRecipe);
+                    tRecipe = rRecipe.copy();
+                    tRecipe.mFluidInputs = new FluidStack[]{Materials.Water.getFluid(Math.max(4, Math.min(1000, tDuration * tEUt / 320)))};
+                    tRecipe.setDuration(tDuration * 2);
+                    tList.add(tRecipe);
                     return tList;
                 }
                 return Collections.singletonList(rRecipe);
@@ -301,6 +344,8 @@ public class GT_RecipeListJsonReader {
                 } catch (Throwable e) {
                     e.printStackTrace(GT_Log.err);
                 }
+            } else if ("IC2ItemList".equals(tPieces[0])) {
+                rStack = GT_ModHandler.getIC2Item(tPieces[0], 1);
             } else {
                 rStack = GameRegistry.findItemStack(tPieces[0], tPieces[1], 1);
             }

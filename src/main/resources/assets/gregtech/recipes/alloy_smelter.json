@@ -73,4 +73,8 @@
 "duration": 400,
 "EUt": 16},
 
+{"inputs":[{"alts":[{"ore": "dustLead"}, {"ore": "ingotLead"}], "count": 1}, {"ore": "dustObsidian", "count": 2}], 
+"outputs":[{"item": "GTItemList:TE_Hardened_Glass", "count": 2}], 
+"duration": 200, 
+"EUt": 16},
 {}]
