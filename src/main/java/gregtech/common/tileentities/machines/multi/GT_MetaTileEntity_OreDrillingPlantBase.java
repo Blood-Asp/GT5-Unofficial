@@ -11,8 +11,6 @@ import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import gregtech.common.blocks.GT_Block_Ores_Abstract;
-import gregtech.common.blocks.GT_TileEntity_Ores;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -318,17 +316,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         Block block = getBaseMetaTileEntity().getBlock(x, y, z);
         int blockMeta = getBaseMetaTileEntity().getMetaID(x, y, z);
         ChunkPosition blockPos = new ChunkPosition(x, y, z);
-        if (oreBlockPositions.contains(blockPos))
-            return;
-        if (block instanceof GT_Block_Ores_Abstract) {
-            TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
-            if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
-                oreBlockPositions.add(blockPos);
-        } else {
-            ItemData association = GT_OreDictUnificator.getAssociation(new ItemStack(block, 1, blockMeta));
-            if (association != null && association.mPrefix.toString().startsWith("ore"))
-                oreBlockPositions.add(blockPos);
-        }
+        if (!oreBlockPositions.contains(blockPos) && GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+            oreBlockPositions.add(blockPos);
     }
 
     protected abstract int getRadiusInChunks();
@@ -337,7 +326,6 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        int d = getRadiusInChunks() * 2;
         return new String[]{
                 "Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""),
                 "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
