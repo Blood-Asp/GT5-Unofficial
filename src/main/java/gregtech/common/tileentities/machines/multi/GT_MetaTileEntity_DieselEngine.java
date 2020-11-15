@@ -74,10 +74,15 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeDieselEngine.png");
     }
 
+    // can't use getRecipeMap() or else the fluid hatch will reject oxygen
+    protected GT_Recipe.GT_Recipe_Map_Fuel getFuelMap() {
+        return GT_Recipe.GT_Recipe_Map.sDieselFuels;
+    }
+
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tFluids = getStoredFluids();
-        Collection<GT_Recipe> tRecipeList = GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList;
+        Collection<GT_Recipe> tRecipeList = getFuelMap().mRecipeList;
 
         if(tFluids.size() > 0 && tRecipeList != null) { //Does input hatch have a diesel fuel?
             for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches

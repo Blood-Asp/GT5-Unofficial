@@ -25,7 +25,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
-public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_DieselEngine {
 	protected int fuelConsumption = 0;
     protected int fuelValue = 0;
     protected int fuelRemaining = 0;
@@ -39,6 +39,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Mul
         super(aName);
     }
 
+    @Override
     public String[] getDescription() {
         return new String[]{
                 "Controller Block for the Extreme Combustion Engine",
@@ -59,6 +60,12 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Mul
                 "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
     }
 
+    @Override
+    protected GT_Recipe.GT_Recipe_Map_Fuel getFuelMap() {
+        return GT_Recipe.GT_Recipe_Map.sExtremeDieselFuels;
+    }
+
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
             return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE)};
@@ -67,147 +74,43 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Mul
     }
 
     @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return getMaxEfficiency(aStack) > 0;
-    }
-
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeExtremeDieselEngine.png");//change
     }
-    
+
     @Override
-    public boolean checkRecipe(ItemStack aStack) {
-        ArrayList<FluidStack> tFluids = getStoredFluids();
-        Collection<GT_Recipe> tRecipeList = GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList;
-
-        if(tFluids.contains(Materials.GasolinePremium.getFluid(4L))) { //Does input hatch contain HOG?
-            for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
-                for(GT_Recipe aFuel : tRecipeList) { //Loops through diesel fuel recipes dd. Can't remove because I suck at coding
-                    FluidStack tLiquid;
-                    
-                    if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
-                        if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
-                            fuelConsumption = tLiquid.amount = boostEu ? (8192 / aFuel.mSpecialValue) : (2048 / aFuel.mSpecialValue); //Calc fuel consumption
-                            if(depleteInput(tLiquid)) { //Deplete that amount		^Doesn't give bonus to fuel usage anymore
-                                boostEu = depleteInput(Materials.LiquidOxygen.getGas(16L));//x8, and LOX instead
-
-                                if(tFluids.contains(Materials.Lubricant.getFluid(8L))) { //Has lubricant?
-                                    //Deplete Lubricant. 8000L should = 1 hour of runtime (if baseEU = 8192)
-                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid(boostEu ? 16 : 8));//x8
-                                } else return false;
-
-                                fuelValue = aFuel.mSpecialValue;
-                                fuelRemaining = hatchFluid1.amount; //Record available fuel
-                                this.mEUt = mEfficiency < 2000 ? 0 : 8192; //Output 0 if startup is less than 20%
-                                this.mProgresstime = 1;				//will output 8192 normally, 32768 boosted
-                                this.mMaxProgresstime = 1;
-                                this.mEfficiencyIncrease = 15;
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        this.mEUt = 0;
-        this.mEfficiency = 0;
-        return false;
-    }
-    
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        byte tSide = getBaseMetaTileEntity().getBackFacing();
-        int tX = getBaseMetaTileEntity().getXCoord();
-        int tY = getBaseMetaTileEntity().getYCoord();
-        int tZ = getBaseMetaTileEntity().getZCoord();
-
-        if(getBaseMetaTileEntity().getBlockAtSideAndDistance(tSide, 1) != getGearboxBlock() && getBaseMetaTileEntity().getBlockAtSideAndDistance(tSide, 2) != getGearboxBlock()) {
-            return false;
-        }
-        if(getBaseMetaTileEntity().getMetaIDAtSideAndDistance(tSide, 1) != getGearboxMeta() && getBaseMetaTileEntity().getMetaIDAtSideAndDistance(tSide, 2) != getGearboxMeta()) {
-            return false;
-        }
-        for (byte i = -1; i < 2; i = (byte) (i + 1)) {
-            for (byte j = -1; j < 2; j = (byte) (j + 1)) {
-                if ((i != 0) || (j != 0)) {
-                    for (byte k = 0; k < 4; k = (byte) (k + 1)) {
-
-                        final int fX = tX - (tSide == 5 ? 1 : tSide == 4 ? -1 : i),
-                                  fZ = tZ - (tSide == 2 ? -1 : tSide == 3 ? 1 : i),
-                                  aY = tY + j,
-                                  aX = tX + (tSide == 5 ? k : tSide == 4 ? -k : i),
-                                  aZ = tZ + (tSide == 2 ? -k : tSide == 3 ? k : i);
-
-                        final Block frontAir = getBaseMetaTileEntity().getBlock(fX, aY, fZ);
-                        final String frontAirName = frontAir.getUnlocalizedName();
-                        if(!(getBaseMetaTileEntity().getAir(fX, aY, fZ) || frontAirName.equalsIgnoreCase("tile.air") || frontAirName.equalsIgnoreCase("tile.railcraft.residual.heat"))) {
-                            return false; //Fail if vent blocks are obstructed
-                        }
-
-                        if (((i == 0) || (j == 0)) && ((k == 1) || (k == 2))) {
-                            if (getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getCasingBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getCasingMeta()) {
-                                // Do nothing
-                            } else if (!addMufflerToMachineList(getBaseMetaTileEntity().getIGregTechTileEntity(tX + (tSide == 5 ? 2 : tSide == 4 ? -2 : 0), tY + 1, tZ + (tSide == 3 ? 2 : tSide == 2 ? -2 : 0)), getCasingTextureIndex())) {
-                                return false; //Fail if no muffler top middle back
-                            } else if (!addToMachineList(getBaseMetaTileEntity().getIGregTechTileEntity(aX, aY, aZ))) {
-                                return false;
-                            }
-                        } else if (k == 0) {
-                          if(!(getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getIntakeBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getIntakeMeta())) {
-                              return false;
-                          }
-                        } else if (getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getCasingBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getCasingMeta()) {
-                            // Do nothing
-                        } else {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        this.mDynamoHatches.clear();
-        IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSideAndDistance(getBaseMetaTileEntity().getBackFacing(), 3);
-        if ((tTileEntity != null) && (tTileEntity.getMetaTileEntity() != null)) {
-            if ((tTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Dynamo)) {
-                this.mDynamoHatches.add((GT_MetaTileEntity_Hatch_Dynamo) tTileEntity.getMetaTileEntity());
-                ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).updateTexture(getCasingTextureIndex());
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public Block getCasingBlock() {//changed to RTSMC
         return GregTech_API.sBlockCasings4;
     }
 
+    @Override
     public byte getCasingMeta() {//same
         return 0;
     }
 
+    @Override
     public Block getIntakeBlock() {
         return GregTech_API.sBlockCasings8;//added new
     }
 
+    @Override
     public byte getIntakeMeta() {//same
         return 4;
     }
 
+    @Override
     public Block getGearboxBlock() {
         return GregTech_API.sBlockCasings2;
     }
 
+    @Override
     public byte getGearboxMeta() {
         return 4;
     }
 
+    @Override
     public byte getCasingTextureIndex() {//should be what hatches/busses change to?
         return 60;
-    }
-
-    private boolean addToMachineList(IGregTechTileEntity tTileEntity) {
-        return ((addMaintenanceToMachineList(tTileEntity, getCasingTextureIndex())) || (addInputToMachineList(tTileEntity, getCasingTextureIndex())) || (addOutputToMachineList(tTileEntity, getCasingTextureIndex())) || (addMufflerToMachineList(tTileEntity, getCasingTextureIndex())));
     }
 
     @Override
@@ -216,32 +119,13 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Mul
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 1;
-    }
-
     public int getMaxEfficiency(ItemStack aStack) {
         return boostEu ? 40000 : 10000;//4x output if boosted instead of x3
     }
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return 192;//x8
-    }
-    
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return true;
+        return super.getPollutionPerTick(aStack) * 8;//x8
     }
 
     @Override
@@ -280,10 +164,4 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Mul
 
         };
     }
-
-    @Override
-    public boolean isGivingInformation() {
-        return true;
-    }
-
 }
