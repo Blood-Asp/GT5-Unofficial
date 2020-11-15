@@ -175,4 +175,8 @@
 "duration": 2048,
 "EUt": 2},
 
+{"inputFluids": [{"materialFluid": "Biomass", "amount": 100}], 
+"outputFluids": [{"materialFluid": "FermentedBiomass", "amount": 100}], 
+"duration": 150,
+"EUt": 2},
 {}]

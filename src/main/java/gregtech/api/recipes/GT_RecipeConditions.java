@@ -63,6 +63,8 @@ public class GT_RecipeConditions {
         try {
             sConditionMap.put("DisableIC2Cables", GT_Proxy.class.getField("mDisableIC2Cables"));
             sConditionMap.put("HardMachineCasings", GT_Proxy.class.getField("mHardMachineCasings"));
+            sConditionMap.put("DisableOldChemicalRecipes", GT_Proxy.class.getField("mDisableOldChemicalRecipes"));
+            sConditionMap.put("MoreComplicatedChemicalRecipes", GT_Proxy.class.getField("mMoreComplicatedChemicalRecipes"));
         } catch (Throwable e) {
             e.printStackTrace(GT_Log.err);
         }

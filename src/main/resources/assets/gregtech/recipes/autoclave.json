@@ -86,4 +86,16 @@
 "outputs":[{"item": "GTItemList:Gravistar", "count": 1}], 
 "duration": 480, 
 "EUt": 7680},
+
+{"inputs": [{"ore": "dustSiliconDioxide", "count": 1}], 
+"inputFluids": [{"fluid": "water", "amount": 200}],
+"outputs": [{"ore": "gemQuartzite", "count": 1, "chance": 0.075}],
+"duration": 2000, 
+"EUt": 24},
+{"inputs": [{"ore": "dustSiliconDioxide", "count": 1}], 
+"inputFluids": [{"fluid": "ic2distilledwater", "amount": 200}], 
+"outputs": [{"ore": "gemQuartzite", "count": 1, "chance": 0.1}], 
+"duration": 1500, 
+"EUt": 24},
+
 {}]

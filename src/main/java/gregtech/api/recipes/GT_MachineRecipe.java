@@ -252,10 +252,13 @@ public class GT_MachineRecipe implements Comparable<GT_MachineRecipe> {
      * Validates the recipe by making sure the duration and EU/t have been set, it has input items and/or fluid as well
      * as output items and/or fluid, unless it is a fake recipe (fake recipes are always considered valid).
      * Because of the chained setters, some details could accidentally be omitted, and this method should be used before
-     * adding a recipe to a list or map.
+     * adding a recipe to a list or map.  Also, if the recipe has been disabled based on conditions, it should probably not
+     * be added to lists/maps, but if it has been deliberately disabled, either by setting "enabled" to false or by setting
+     * duration less than or equal to 0, it should be added for collision checking.
      */
     public boolean isValidRecipe() {
         if (mFakeRecipe) return true;
+        if (mEnableCondition != null && !(GT_RecipeConditions.getConditionValue(mEnableCondition) ^ mInvertCondition)) return false;
         if (mEUt <= 0) return false;
         if (mInputs.length == 0 && mFluidInputs.length == 0) return false;
         if (mOutputs.length == 0 && mFluidOutputs.length == 0) return false;

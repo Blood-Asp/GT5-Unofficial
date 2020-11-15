@@ -31,4 +31,16 @@
 "duration": 16,
 "EUt":32},
 
+{"inputs": [{"circuit": 1}], 
+"fluidInputs": [{"materialFluid": "CalciumAcetateSolution", "amount": 900}], 
+"fluidOutputs": [{"materialFluid": "Acetone", "amount": 500}], 
+"enableCondition": "MoreComplicatedChemicalRecipes", 
+"duration": 80, 
+"EUt": 30},
+{"inputs": [{"circuit": 1}], 
+"fluidInputs": [{"materialFluid": "Acetone", "amount": 1000}], 
+"fluidOutputs": [{"gas": "Ethenone", "amount": 500}], 
+"enableCondition": "MoreComplicatedChemicalRecipes",
+"duration": 160, 
+"EUt": 30},
 {}]

@@ -9,4 +9,20 @@
 "outputs":[{"ore": "dustSiliconDioxide", "count": 1}, {"ore": "dustTinyGold", "count": 1}, {"ore": "dustTinyPlatinum", "count": 1}, {"ore": "dustTinyPalladium", "count": 1, "chance": 0.8}, {"ore": "dustTinyIridium", "count": 1, "chance": 0.6}, {"ore": "dustTinyOsmium", "count": 1, "chance": 0.6}],
 "duration": 900, 
 "EUt": 30},
+
+{"inputs": [{"circuit": 1}],
+"inputFluids": [{"gas": "Gas", "amount": 8000}], 
+"outputFluids": [{"materialFluid": "LPG", "amount": 4000}], 
+"enableCondition": "!DisableOldChemicalRecipes",
+"specialValue": -300,
+"duration": 200, 
+"EUt": 5},
+{"inputs": [{"item": "GTItemList:Cell_Empty", "count": 4}], 
+"inputFluids": [{"gas": "Gas", "amount": 8000}], 
+"outputs": [{"ore": "cellLPG", "count": 4}], 
+"enableCondition": "!DisableOldChemicalRecipes",
+"specialValue": -300,
+"duration": 200, 
+"EUt": 5},
+
 {}]

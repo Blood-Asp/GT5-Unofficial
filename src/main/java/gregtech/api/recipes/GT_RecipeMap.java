@@ -752,12 +752,31 @@ public class GT_RecipeMap {
             return addRecipe(aOptimize, aInputs, aOutputs, aSpecial, null, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
         }
 
+        @Override
+        public GT_MachineRecipe addRecipe(GT_MachineRecipe aRecipe) {
+            return super.addRecipe(new GT_Recipe_DistillationTower(aRecipe));
+        }
+        
         private static class GT_Recipe_DistillationTower extends GT_MachineRecipe {
 
             protected GT_Recipe_DistillationTower(ItemStack[] aInputs, ItemStack[] aOutputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs) {
                 super(aInputs, aOutputs, aFluidInputs, aFluidOutputs);
             }
 
+            protected GT_Recipe_DistillationTower(GT_MachineRecipe aRecipe) {
+                super(aRecipe.mInputs, aRecipe.mOutputs, aRecipe.mFluidInputs, aRecipe.mFluidOutputs);
+                this.mCanBeBuffered = aRecipe.mCanBeBuffered;
+                this.mDuration = aRecipe.mDuration;
+                this.mEUt = aRecipe.mEUt;
+                this.mEnableCondition = aRecipe.mEnableCondition;
+                this.mFakeRecipe = aRecipe.mFakeRecipe;
+                this.mHidden = aRecipe.mHidden;
+                this.mInvertCondition = aRecipe.mInvertCondition;
+                this.mNeedsEmptyOutput = aRecipe.mNeedsEmptyOutput;
+                this.mSpecialItems = aRecipe.mSpecialItems;
+                this.mSpecialValue = aRecipe.mSpecialValue;
+            }
+            
             @Override
             public ArrayList<PositionedStack> getInputPositionedStacks() {
                 ArrayList<PositionedStack> inputStacks = new ArrayList<>(1);

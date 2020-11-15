@@ -10,6 +10,7 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +53,7 @@ public class GT_RecipeListJsonReader {
         List<GT_RecipeOutput> tOutputs = new ArrayList<>(10);
         List<FluidStack> tFluidInputs = new ArrayList<>(10);
         List<FluidStack> tFluidOutputs = new ArrayList<>(10);
+        List<FluidStack> tFluidsPerCircuit = new ArrayList<>(10);
         int tDuration = 0;
         int tEUt = 0;
         int tSpecialValue = 0;
@@ -86,6 +88,7 @@ public class GT_RecipeListJsonReader {
                     while (aReader.hasNext()) {
                         String tFluidName = null;
                         int tFluidAmount = 0;
+                        FluidStack tMaterialFluid = null;
                         aReader.beginObject();
                         while (aReader.hasNext()) {
                             String tSubName = aReader.nextName();
@@ -98,24 +101,29 @@ public class GT_RecipeListJsonReader {
                                 tSolderAmount = aReader.nextInt();
                             } else if ("gas".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getGas(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getGas(1L);
                             } else if ("plasma".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getPlasma(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getPlasma(1L);
                             } else if ("molten".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getMolten(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getMolten(1L);
                             } else if ("materialFluid".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getFluid(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getFluid(1L);
                             }
                         }
                         aReader.endObject();
                         if (!tUseSolderFluids) {
-                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
-                                tFluidInputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
-                            } else {
-                                GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                            if (tMaterialFluid != null) {
+                                tMaterialFluid.amount = tFluidAmount;
+                                tFluidInputs.add(tMaterialFluid);
+                            } else if (tFluidName != null) {
+                                if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                                    tFluidInputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
+                                } else {
+                                    GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                                }
                             }
                         }
                     }
@@ -127,6 +135,7 @@ public class GT_RecipeListJsonReader {
                     while (aReader.hasNext()) {
                         String tFluidName = null;
                         int tFluidAmount = 0;
+                        FluidStack tMaterialFluid = null;
                         aReader.beginObject();
                         while (aReader.hasNext()) {
                             String tSubName = aReader.nextName();
@@ -136,23 +145,69 @@ public class GT_RecipeListJsonReader {
                                 tFluidAmount = aReader.nextInt();
                             } else if ("gas".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getGas(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getGas(1L);
                             } else if ("plasma".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getPlasma(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getPlasma(1L);
                             } else if ("molten".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getMolten(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getMolten(1L);
                             } else if ("materialFluid".equals(tSubName)) {
                                 String tMaterialName = aReader.nextString();
-                                tFluidName = Materials.get(tMaterialName).getFluid(1L).getFluid().getName();
+                                tMaterialFluid = Materials.get(tMaterialName).getFluid(1L);
                             }
                         }
                         aReader.endObject();
-                        if (FluidRegistry.isFluidRegistered(tFluidName)) {
-                            tFluidOutputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
-                        } else {
-                            GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                        if (tMaterialFluid != null) {
+                            tMaterialFluid.amount = tFluidAmount;
+                            tFluidOutputs.add(tMaterialFluid);
+                        } else if (tFluidName != null) {
+                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                                tFluidOutputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
+                            } else {
+                                GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                            }
+                        }
+                    }
+                    aReader.endArray();
+                    break;
+                case "fluidsPerCircuit":
+                    aReader.beginArray();
+                    while (aReader.hasNext()) {
+                        String tFluidName = null;
+                        int tFluidAmount = 0;
+                        FluidStack tMaterialFluid = null;
+                        aReader.beginObject();
+                        while (aReader.hasNext()) {
+                            String tSubName = aReader.nextName();
+                            if ("fluid".equals(tSubName)) {
+                                tFluidName = aReader.nextString();
+                            } else if ("amount".equals(tSubName)) {
+                                tFluidAmount = aReader.nextInt();
+                            } else if ("gas".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tMaterialFluid = Materials.get(tMaterialName).getGas(1L);
+                            } else if ("plasma".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tMaterialFluid = Materials.get(tMaterialName).getPlasma(1L);
+                            } else if ("molten".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tMaterialFluid = Materials.get(tMaterialName).getMolten(1L);
+                            } else if ("materialFluid".equals(tSubName)) {
+                                String tMaterialName = aReader.nextString();
+                                tMaterialFluid = Materials.get(tMaterialName).getFluid(1L);
+                            }
+                        }
+                        aReader.endObject();
+                        if (tMaterialFluid != null) {
+                            tMaterialFluid.amount = tFluidAmount;
+                            tFluidsPerCircuit.add(tMaterialFluid);
+                        } else if (tFluidName != null) {
+                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                                tFluidsPerCircuit.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
+                            } else {
+                                GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
+                            }
                         }
                     }
                     aReader.endArray();
@@ -194,10 +249,28 @@ public class GT_RecipeListJsonReader {
                     tUseCuttingFluids = aReader.nextBoolean();
                     break;
                 default:
-                    throw new AssertionError("Invalid recipe specifier");
+                    throw new AssertionError("Invalid recipe specifier: " + tName);
             }
         }
         aReader.endObject();
+        if (!tFluidsPerCircuit.isEmpty()) {
+            tInputs.add(new GT_RecipeInput(GT_Utility.getIntegratedCircuit(0)));
+            List<GT_MachineRecipe> tList = new ArrayList<>(tFluidsPerCircuit.size());
+            for (int i = 0; i < tFluidsPerCircuit.size(); i++) {
+                tInputs.set(tInputs.size() - 1, new GT_RecipeInput(GT_Utility.getIntegratedCircuit(i + 1)));
+                GT_MachineRecipe rRecipe = new GT_MachineRecipe(tInputs.toArray(new GT_RecipeInput[0]), tOutputs.toArray(new GT_RecipeOutput[0]), 
+                    tFluidInputs.toArray(new FluidStack[0]), new FluidStack[]{tFluidsPerCircuit.get(i)});
+                rRecipe.setDuration(tDuration);
+                rRecipe.setEUt(tEUt);
+                rRecipe.setSpecialValue(tSpecialValue);
+                rRecipe.setEnabled(tEnabled);
+                rRecipe.setEnableCondition(tEnableCondition);
+                rRecipe.setInvertCondition(tInvertCondition);
+                rRecipe.setHidden(tHidden);
+                tList.add(rRecipe);
+            }
+            return tList;
+        }
         if (!tOutputs.isEmpty() || !tFluidOutputs.isEmpty()) {
             GT_MachineRecipe rRecipe = new GT_MachineRecipe(tInputs.toArray(new GT_RecipeInput[0]), tOutputs.toArray(new GT_RecipeOutput[0]), 
                     tFluidInputs.toArray(new FluidStack[0]), tFluidOutputs.toArray(new FluidStack[0]));
@@ -277,7 +350,7 @@ public class GT_RecipeListJsonReader {
                                 tAltStack = StringtoItemStack(aReader.nextString());
                             } else if ("ore".equals(tAltEntryName) || "oredict".equals(tAltEntryName)) {
                                 tAltOreName = aReader.nextString();
-                            }else if ("nbt".equals(tAltEntryName)) {
+                            } else if ("nbt".equals(tAltEntryName)) {
                                 tAltNbtData = readNbt(aReader);
                             }
                         }
@@ -293,6 +366,11 @@ public class GT_RecipeListJsonReader {
                     }
                     aReader.endArray();
                     break;
+                case "circuit":
+                    int tCircuitConfig = aReader.nextInt();
+                    tStack = GT_Utility.getIntegratedCircuit(tCircuitConfig);
+                    tCount = 0;
+                    break;
                 case "displayName":
                 case "comment":
                     aReader.nextString();
@@ -300,7 +378,7 @@ public class GT_RecipeListJsonReader {
                     // gregtech:gt.metaitem.02:30500
                     break;
                 default:
-                    throw new AssertionError("Invalid input specifier");
+                    throw new AssertionError("Invalid input specifier: " + tEntryName);
             }
         }
         aReader.endObject();
@@ -391,7 +469,7 @@ public class GT_RecipeListJsonReader {
                     // gregtech:gt.metaitem.02:30500
                     break;
                 default:
-                    throw new AssertionError("Invalid output specifier");
+                    throw new AssertionError("Invalid output specifier: " + tEntryName);
             }
         }
         aReader.endObject();
@@ -433,7 +511,7 @@ public class GT_RecipeListJsonReader {
                         tValue = aReader.nextString();
                         break;
                     default:
-                        throw new AssertionError("Invalid NBT specifier");
+                        throw new AssertionError("Invalid NBT specifier: " + tEntryName);
                 }
             }
             aReader.endObject();
@@ -464,7 +542,7 @@ public class GT_RecipeListJsonReader {
                         rNBT.setString(tTagName, tValue);
                         break;
                     default:
-                        throw new AssertionError();
+                        throw new AssertionError("Invalid NBT tag type: " + tType);
                 }
             }
         }
