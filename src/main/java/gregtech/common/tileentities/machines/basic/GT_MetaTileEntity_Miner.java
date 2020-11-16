@@ -9,11 +9,15 @@ import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.blocks.GT_Block_Ores_Abstract;
+import gregtech.common.blocks.GT_TileEntity_Ores;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.ChunkPosition;
@@ -187,7 +191,11 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
             for (int x = -radiusConfig; x <= radiusConfig; ++x) {
                 Block block = aBaseMetaTileEntity.getBlockOffset(x, drillY, z);
                 int blockMeta = aBaseMetaTileEntity.getMetaIDOffset(x, drillY, z);
-                if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+                if (block instanceof GT_Block_Ores_Abstract) {
+                    TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(x, drillY, z);
+                    if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
+                        oreBlockPositions.add(new ChunkPosition(x, drillY, z));
+                } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
                     oreBlockPositions.add(new ChunkPosition(x, drillY, z));
             }
         }
@@ -241,8 +249,11 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public void mineBlock(IGregTechTileEntity aBaseMetaTileEntity, int x, int y, int z) {
-        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z, true))
+        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z, true)) {
+            if (debugBlockMiner)
+                GT_Log.out.println("MINER: FakePlayer cannot mine block at " + (aBaseMetaTileEntity.getXCoord() + x) + ", " + (aBaseMetaTileEntity.getYCoord() + y) + ", " + (aBaseMetaTileEntity.getZCoord() + z));
             return;
+        }
         ArrayList<ItemStack> drops = getBlockDrops(aBaseMetaTileEntity.getBlockOffset(x, y, z), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z);
         if (drops.size() > 0)
             mOutputItems[0] = drops.get(0);
