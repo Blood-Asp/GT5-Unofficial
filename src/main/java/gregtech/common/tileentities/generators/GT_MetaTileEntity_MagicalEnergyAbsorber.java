@@ -10,7 +10,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDragonEgg;
@@ -287,8 +286,8 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     }
 
     @Override
-    public GT_RecipeMap getRecipes() {
-        return GT_RecipeMap.sMagicFuels;
+    public GT_Recipe.GT_Recipe_Map getRecipes() {
+        return GT_Recipe.GT_Recipe_Map.sMagicFuels;
     }
 
     @Override

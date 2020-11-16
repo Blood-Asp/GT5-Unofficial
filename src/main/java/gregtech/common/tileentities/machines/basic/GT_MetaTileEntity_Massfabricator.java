@@ -9,7 +9,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
@@ -75,8 +74,8 @@ public class GT_MetaTileEntity_Massfabricator
     }
 
     @Override
-    public GT_RecipeMap getRecipeList() {
-        return GT_RecipeMap.sMassFabFakeRecipes;
+    public GT_Recipe.GT_Recipe_Map getRecipeList() {
+        return GT_Recipe.GT_Recipe_Map.sMassFabFakeRecipes;
     }
 
     public boolean isFluidInputAllowed(FluidStack aFluid) {

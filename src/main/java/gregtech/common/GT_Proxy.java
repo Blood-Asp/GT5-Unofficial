@@ -21,7 +21,6 @@ import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Pollution;
 import gregtech.api.objects.*;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.gui.GT_ContainerVolumetricFlask;
@@ -1768,7 +1767,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
         GregTech_API.sUnificationEntriesRegistered = true;
         GregTech_API.sUnification.mConfig.save();
-        GT_RecipeMap.reInitAll();
+        GT_Recipe.reInit();
     }
 
     public void activateOreDictHandler() {

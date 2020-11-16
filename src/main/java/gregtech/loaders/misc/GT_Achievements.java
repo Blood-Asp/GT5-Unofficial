@@ -13,8 +13,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -80,7 +78,7 @@ public class GT_Achievements {
             }
         }
 
-        for(GT_MachineRecipe recipe: GT_RecipeMap.sAssemblyLineVisualRecipes.mRecipeList)
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
             registerAssAchievement(recipe);
 
         registerAchievement("flintpick", 0, 0, GT_MetaGenerated_Tool_01.INSTANCE.getToolWithStats(GT_MetaGenerated_Tool_01.PICKAXE, 1, Materials.Flint, Materials.Wood, null), "", false);
@@ -285,7 +283,7 @@ public class GT_Achievements {
         return null;
     }
 
-    public Achievement registerAssAchievement(GT_MachineRecipe recipe) {
+    public Achievement registerAssAchievement(GT_Recipe recipe) {
         if (this.achievementList.get(recipe.getOutput(0).getUnlocalizedName()) == null) {
             assReg++;
             return registerAchievement(recipe.getOutput(0).getUnlocalizedName(), -(11 + assReg % 5), ((assReg) / 5) - 8, recipe.getOutput(0)
@@ -639,12 +637,12 @@ public class GT_Achievements {
             issueAchievement(player, "stepforward");
         }
         if(player.capabilities.isCreativeMode && stack.getUnlocalizedName().equals("gt.metaitem.01.32761")){//Debug Scanner pickup shows all assline recipes.
-            for(GT_MachineRecipe recipe: GT_RecipeMap.sAssemblyLineVisualRecipes.mRecipeList) {
+            for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
                 issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
                 recipe.mHidden=false;
             }
         }
-        for(GT_MachineRecipe recipe: GT_RecipeMap.sAssemblyLineVisualRecipes.mRecipeList){
+        for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
             if(recipe.getOutput(0).getUnlocalizedName().equals(stack.getUnlocalizedName())) {
                 issueAchievement(player, recipe.getOutput(0).getUnlocalizedName());
                 recipe.mHidden=false;

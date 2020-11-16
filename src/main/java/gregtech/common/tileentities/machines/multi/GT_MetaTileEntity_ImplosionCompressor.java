@@ -8,8 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -57,8 +55,8 @@ public class GT_MetaTileEntity_ImplosionCompressor
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "ImplosionCompressor.png");
     }
 
-    public GT_RecipeMap getRecipeMap() {
-        return GT_RecipeMap.sImplosionRecipes;
+    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        return GT_Recipe.GT_Recipe_Map.sImplosionRecipes;
     }
 
     public boolean isCorrectMachinePart(ItemStack aStack) {
@@ -86,7 +84,7 @@ public class GT_MetaTileEntity_ImplosionCompressor
         }
         ItemStack[] tInputs = tInputList.toArray(new ItemStack[tInputList.size()]);
         if (tInputList.size() > 0) {
-            GT_MachineRecipe tRecipe = GT_RecipeMap.sImplosionRecipes.findRecipe(getBaseMetaTileEntity(), null, Long.MAX_VALUE, null, null, tInputs);
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sImplosionRecipes.findRecipe(getBaseMetaTileEntity(), false, 9223372036854775807L, null, tInputs);
             if ((tRecipe != null) && (tRecipe.isRecipeInputEqual(true, null, tInputs))) {
                 this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                 this.mEfficiencyIncrease = 10000;

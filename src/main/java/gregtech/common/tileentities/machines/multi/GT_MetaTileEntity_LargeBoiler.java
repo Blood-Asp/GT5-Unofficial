@@ -9,8 +9,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -115,8 +113,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
         }
 
         this.mSuperEfficencyIncrease = 0;
-        for (GT_MachineRecipe tRecipe : GT_RecipeMap.sDieselFuels.mRecipeList) {
-            FluidStack tFluid = GT_Utility.getFluidForFilledItem(tRecipe.getRepresentativeInput(0).get(0), true);
+        for (GT_Recipe tRecipe : GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList) {
+            FluidStack tFluid = GT_Utility.getFluidForFilledItem(tRecipe.getRepresentativeInput(0), true);
             if (tFluid != null && tRecipe.mSpecialValue > 1) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {
@@ -127,8 +125,8 @@ public abstract class GT_MetaTileEntity_LargeBoiler
                 }
             }
         }
-        for (GT_MachineRecipe tRecipe : GT_RecipeMap.sDenseLiquidFuels.mRecipeList) {
-            FluidStack tFluid = GT_Utility.getFluidForFilledItem(tRecipe.getRepresentativeInput(0).get(0), true);
+        for (GT_Recipe tRecipe : GT_Recipe.GT_Recipe_Map.sDenseLiquidFuels.mRecipeList) {
+            FluidStack tFluid = GT_Utility.getFluidForFilledItem(tRecipe.getRepresentativeInput(0), true);
             if (tFluid != null) {
                 tFluid.amount = 1000;
                 if (depleteInput(tFluid)) {

@@ -8,8 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -55,8 +53,8 @@ public class GT_MetaTileEntity_VacuumFreezer
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "VacuumFreezer.png");
     }
 
-    public GT_RecipeMap getRecipeMap() {
-        return GT_RecipeMap.sVacuumRecipes;
+    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        return GT_Recipe.GT_Recipe_Map.sVacuumRecipes;
     }
 
     public boolean isCorrectMachinePart(ItemStack aStack) {
@@ -73,7 +71,7 @@ public class GT_MetaTileEntity_VacuumFreezer
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-            GT_MachineRecipe tRecipe = GT_RecipeMap.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), null, gregtech.api.enums.GT_Values.V[tTier], null, null, new ItemStack[]{tInput});
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, new ItemStack[]{tInput});
             if (tRecipe != null) {
                 if (tRecipe.isRecipeInputEqual(true, null, new ItemStack[]{tInput})) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);

@@ -8,8 +8,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -33,12 +31,12 @@ public class GT_MetaTileEntity_AlloySmelter_Bronze
     }
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeAlloySmelter.png", GT_RecipeMap.sAlloySmelterRecipes.mUnlocalizedName);
+        return new GT_GUIContainer_BasicMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "BronzeAlloySmelter.png", GT_Recipe.GT_Recipe_Map.sAlloySmelterRecipes.mUnlocalizedName);
     }
 
     public int checkRecipe() {
-        GT_MachineRecipe tRecipe = GT_RecipeMap.sAlloySmelterRecipes.findRecipe(getBaseMetaTileEntity(), null, gregtech.api.enums.GT_Values.V[1], null, null, getAllInputs());
-        if ((tRecipe != null) && (canOutput(GT_MachineRecipe.unwrapOutputs(tRecipe.mOutputs))) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sAlloySmelterRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[1], null, getAllInputs());
+        if ((tRecipe != null) && (canOutput(tRecipe.mOutputs)) && (tRecipe.isRecipeInputEqual(true, null, getAllInputs()))) {
             this.mOutputItems[0] = tRecipe.getOutput(0);
             this.mEUt = tRecipe.mEUt;
             this.mMaxProgresstime = (tRecipe.mDuration * 2);

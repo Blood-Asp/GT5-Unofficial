@@ -11,10 +11,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -55,7 +54,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     /**
      * Contains the Recipe which has been previously used, or null if there was no previous Recipe, which could have been buffered
      */
-    protected GT_MachineRecipe mLastRecipe = null;
+    protected GT_Recipe mLastRecipe = null;
     private FluidStack mFluidOut;
 
     /**
@@ -560,7 +559,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return getBaseMetaTileEntity().decreaseStoredEnergyUnits(aEUt, false);
     }
 
-    protected void calculateOverclockedNess(GT_MachineRecipe aRecipe) {
+    protected void calculateOverclockedNess(GT_Recipe aRecipe) {
         calculateOverclockedNess(aRecipe.mEUt, aRecipe.mDuration);
     }
 
@@ -592,8 +591,8 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return rOutputs;
     }
 
-    protected boolean canOutput(GT_MachineRecipe aRecipe) {
-        return aRecipe != null && (aRecipe.mNeedsEmptyOutput ? isOutputEmpty() && getDrainableStack() == null : canOutput(aRecipe.getFluidOutput(0)) && canOutput(GT_MachineRecipe.unwrapOutputs(aRecipe.mOutputs)));
+    protected boolean canOutput(GT_Recipe aRecipe) {
+        return aRecipe != null && (aRecipe.mNeedsEmptyOutput ? isOutputEmpty() && getDrainableStack() == null : canOutput(aRecipe.getFluidOutput(0)) && canOutput(aRecipe.mOutputs));
     }
 
     protected boolean canOutput(ItemStack... aOutputs) {
@@ -752,7 +751,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     /**
      * @return the Recipe List which is used for this Machine, this is a useful Default Handler
      */
-    public GT_RecipeMap getRecipeList() {
+    public GT_Recipe_Map getRecipeList() {
         return null;
     }
 
@@ -769,7 +768,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return checkRecipe(false);
     }
 
-    public static boolean isValidForLowGravity(GT_MachineRecipe tRecipe, int dimId){
+    public static boolean isValidForLowGravity(GT_Recipe tRecipe, int dimId){
         return //TODO check or get a better solution
                 DimensionManager.getProvider(dimId).getClass().getName().contains("Orbit") ||
                 DimensionManager.getProvider(dimId).getClass().getName().endsWith("Space") ||
@@ -785,9 +784,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
      * @return
      */
     public int checkRecipe(boolean skipOC){
-        GT_RecipeMap tMap = getRecipeList();
+        GT_Recipe_Map tMap = getRecipeList();
         if (tMap == null) return DID_NOT_FIND_RECIPE;
-        GT_MachineRecipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
+        GT_Recipe tRecipe = tMap.findRecipe(getBaseMetaTileEntity(), mLastRecipe, false, V[mTier], new FluidStack[]{getFillableStack()}, getSpecialSlot(), getAllInputs());
         if (tRecipe == null) return DID_NOT_FIND_RECIPE;
 
         if (GT_Mod.gregtechproxy.mLowGravProcessing && tRecipe.mSpecialValue == -100 &&
@@ -802,11 +801,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
-        for (int i = 0; i < mOutputItems.length; i++) {
-            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i)) {
+        for (int i = 0; i < mOutputItems.length; i++)
+            if (getBaseMetaTileEntity().getRandomNumber(10000) < tRecipe.getOutputChance(i))
                 mOutputItems[i] = tRecipe.getOutput(i);
-            }
-        }
         if (tRecipe.mSpecialValue == -200)
             for (int i = 0; i < mOutputItems.length; i++)
                 if (mOutputItems[i] != null && getBaseMetaTileEntity().getRandomNumber(10000) > mCleanroom.mEfficiency)

@@ -8,8 +8,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -119,8 +117,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		if (inputs.length > 0 || fluids.length > 0) {
 			long voltage = getMaxInputVoltage();
 			byte tier = (byte) Math.max(1, GT_Utility.getTier(voltage));
-			GT_MachineRecipe recipe = GT_RecipeMap.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), null,
-					false, gregtech.api.enums.GT_Values.V[tier], fluids, null, inputs);
+			GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
+					false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
 			if (recipe != null && recipe.isRecipeInputEqual(true, fluids, inputs)) {
 				this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
 				this.mEfficiencyIncrease = 10000;
@@ -139,7 +137,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 
 				this.mEUt = -EUt;
 				this.mMaxProgresstime = maxProgresstime;
-				this.mOutputItems = GT_MachineRecipe.unwrapOutputs(recipe.mOutputs);
+				this.mOutputItems = recipe.mOutputs;
 				this.mOutputFluids = recipe.mFluidOutputs;
 				this.updateSlots();
 				return true;

@@ -15,8 +15,6 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.objects.ItemData;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -47,9 +45,9 @@ public class GT_NEI_DefaultHandler
         GuiContainerManager.addTooltipHandler(new GT_RectHandler());
     }
 
-    protected final GT_RecipeMap mRecipeMap;
+    protected final GT_Recipe.GT_Recipe_Map mRecipeMap;
 
-    public GT_NEI_DefaultHandler(GT_RecipeMap aRecipeMap) {
+    public GT_NEI_DefaultHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {
         this.mRecipeMap = aRecipeMap;
         this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 13, 36, 18), getOverlayIdentifier(), new Object[0]));
         if (!NEI_GT_Config.sIsAdded) {
@@ -59,8 +57,8 @@ public class GT_NEI_DefaultHandler
         }
     }
 
-    public List<GT_MachineRecipe> getSortedRecipes() {
-        List<GT_MachineRecipe> result = new ArrayList<>(this.mRecipeMap.mRecipeList);
+    public List<GT_Recipe> getSortedRecipes() {
+        List<GT_Recipe> result = new ArrayList<>(this.mRecipeMap.mRecipeList);
         Collections.sort(result);
         return result;
     }
@@ -75,8 +73,8 @@ public class GT_NEI_DefaultHandler
 
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
-            for (GT_MachineRecipe tRecipe : getSortedRecipes()) {
-                if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+            for (GT_Recipe tRecipe : getSortedRecipes()) {
+                if (!tRecipe.mHidden) {
                     this.arecipes.add(new CachedDefaultRecipe(tRecipe));
                 }
             }
@@ -105,8 +103,8 @@ public class GT_NEI_DefaultHandler
                 }
             }
         }
-        for (GT_MachineRecipe tRecipe : getSortedRecipes()) {
-            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+        for (GT_Recipe tRecipe : getSortedRecipes()) {
+            if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
@@ -139,8 +137,8 @@ public class GT_NEI_DefaultHandler
                 }
             }
         }
-        for (GT_MachineRecipe tRecipe : getSortedRecipes()) {
-            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+        for (GT_Recipe tRecipe : getSortedRecipes()) {
+            if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tInputs) {
                     if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {
@@ -373,11 +371,11 @@ public class GT_NEI_DefaultHandler
 
     public class CachedDefaultRecipe
             extends TemplateRecipeHandler.CachedRecipe {
-        public final GT_MachineRecipe mRecipe;
+        public final GT_Recipe mRecipe;
         public final List<PositionedStack> mOutputs;
         public final List<PositionedStack> mInputs;
 
-        public CachedDefaultRecipe(GT_MachineRecipe aRecipe) {
+        public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
 
@@ -391,7 +389,7 @@ public class GT_NEI_DefaultHandler
             mInputs = new ArrayList<PositionedStack>();
             
             int tStartIndex = 0;
-            switch (GT_NEI_DefaultHandler.this.mRecipeMap.mInputSlots) {
+            switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualInputCount) {
                 case 0:
                     break;
                 case 1:
@@ -596,7 +594,7 @@ public class GT_NEI_DefaultHandler
                 this.mInputs.add(new FixedPositionedStack(aRecipe.mSpecialItems, 120, 52));
             }
             tStartIndex = 0;
-            switch (GT_NEI_DefaultHandler.this.mRecipeMap.mOutputSlots) {
+            switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualOutputCount) {
                 case 0:
                     break;
                 case 1:

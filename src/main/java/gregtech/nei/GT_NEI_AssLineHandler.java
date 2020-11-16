@@ -15,8 +15,6 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.objects.ItemData;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
@@ -47,9 +45,9 @@ public class GT_NEI_AssLineHandler
         GuiContainerManager.addTooltipHandler(new GT_RectHandler());
     }
 
-    protected final GT_RecipeMap mRecipeMap;
+    protected final GT_Recipe.GT_Recipe_Map mRecipeMap;
 
-    public GT_NEI_AssLineHandler(GT_RecipeMap aRecipeMap) {//this is called when recipes should be shown
+    public GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {//this is called when recipes should be shown
         this.mRecipeMap = aRecipeMap;
         this.transferRects.add(new RecipeTransferRect(new Rectangle(138, 18, 18, 18), getOverlayIdentifier(), new Object[0]));
         if (!NEI_GT_Config.sIsAdded) {
@@ -70,8 +68,8 @@ public class GT_NEI_AssLineHandler
 
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
-            for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-                if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+            for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
+                if (!tRecipe.mHidden) {
                     this.arecipes.add(new CachedDefaultRecipe(tRecipe));
                 }else{
                     this.arecipes.remove(new CachedDefaultRecipe(tRecipe));
@@ -102,8 +100,8 @@ public class GT_NEI_AssLineHandler
                 }
             }
         }
-        for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+        for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
+            if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
@@ -144,8 +142,8 @@ public class GT_NEI_AssLineHandler
                 }
             }
         }
-        for (GT_MachineRecipe tRecipe : this.mRecipeMap.mRecipeList) {
-            if (!tRecipe.mHidden && tRecipe.isEnabled()) {
+        for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
+            if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tInputs) {
                     if (tNEIRecipe.contains(tNEIRecipe.mInputs, tStack)) {
@@ -370,16 +368,16 @@ public class GT_NEI_AssLineHandler
 
     public class CachedDefaultRecipe
             extends CachedRecipe {
-        public final GT_MachineRecipe mRecipe;
+        public final GT_Recipe mRecipe;
         public final List<PositionedStack> mOutputs = new ArrayList();
         public final List<PositionedStack> mInputs = new ArrayList();
 
-        public CachedDefaultRecipe(GT_MachineRecipe aRecipe) {
+        public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
 
             for (int i = 0; i < 16; i++) {
-            	Object obj = aRecipe.getRepresentativeInput(i);
+            	Object obj = aRecipe instanceof GT_Recipe_WithAlt ? ((GT_Recipe_WithAlt) aRecipe).getAltRepresentativeInput(i) : aRecipe.getRepresentativeInput(i);
             	if (obj != null) {
             		this.mInputs.add(new FixedPositionedStack(obj, 18 * (i % 4) + 12, 18 * (i / 4)));
             	}

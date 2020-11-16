@@ -11,8 +11,6 @@ import gregtech.api.objects.GT_MultiTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.recipes.GT_MachineRecipe;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.*;
 import gregtech.common.covers.*;
 import gregtech.common.items.behaviors.*;
@@ -862,9 +860,9 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
     }
 
     public boolean isPlasmaCellUsed(OrePrefixes aPrefix, Materials aMaterial) {
-        Collection<GT_MachineRecipe> fusionRecipes = GT_RecipeMap.sFusionRecipes.mRecipeList;
+        Collection<GT_Recipe> fusionRecipes = GT_Recipe.GT_Recipe_Map.sFusionRecipes.mRecipeList;
         if(aPrefix == OrePrefixes.cellPlasma && aMaterial.getPlasma(1L) != null) { //Materials has a plasma fluid
-            for(GT_MachineRecipe recipe : fusionRecipes) { //Loop through fusion recipes
+            for(GT_Recipe recipe : fusionRecipes) { //Loop through fusion recipes
                 if(recipe.getFluidOutput(0) != null) { //Make sure fluid output can't be null (not sure if possible)
                     if (recipe.getFluidOutput(0).isFluidEqual(aMaterial.getPlasma(1L)))
                         return true; //Fusion recipe output matches current plasma cell fluid
