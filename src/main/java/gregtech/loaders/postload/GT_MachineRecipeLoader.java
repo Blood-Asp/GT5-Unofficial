@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
@@ -66,7 +68,8 @@ public class GT_MachineRecipeLoader implements Runnable {
     private final static String aTextAE = "appliedenergistics2"; private final static String aTextAEMM = "item.ItemMultiMaterial"; private final static String aTextForestry = "Forestry";
     private final static String aTextEBXL = "ExtrabiomesXL"; private final static String aTextTCGTPage = "gt.research.page.1.";
     private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
-
+    private static List<GT_Recipe> sJsonDisabledRecipes = new ArrayList<>(100);
+    
     // found in an old Minecraft Forge forum post
     public static File getMcDir() {
         if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isDedicatedServer()) {
@@ -96,16 +99,20 @@ public class GT_MachineRecipeLoader implements Runnable {
         tRecipeFileMap.put(GT_Recipe_Map.sBenderRecipes, "bender.json");
         tRecipeFileMap.put(GT_Recipe_Map.sBlastRecipes, "blast_furnace.json");
         tRecipeFileMap.put(GT_Recipe_Map.sBrewingRecipes, "brewery.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCannerRecipes, "canner.json");
         tRecipeFileMap.put(GT_Recipe_Map.sCentrifugeRecipes, "centrifuge.json");
         tRecipeFileMap.put(GT_Recipe_Map.sChemicalBathRecipes, "chemical_bath.json");
         tRecipeFileMap.put(GT_Recipe_Map.sChemicalRecipes, "chemical_reactor.json");
         tRecipeFileMap.put(GT_Recipe_Map.sMultiblockChemicalRecipes, "large_chemical_reactor.json");
         tRecipeFileMap.put(GT_Recipe_Map.sCircuitAssemblerRecipes, "circuit_assembler.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCompressorRecipes, "compressor.json");
         tRecipeFileMap.put(GT_Recipe_Map.sCutterRecipes, "cutter.json");
         tRecipeFileMap.put(GT_Recipe_Map.sDistillationRecipes, "distillation_tower.json");
         tRecipeFileMap.put(GT_Recipe_Map.sDistilleryRecipes, "distillery.json");
         tRecipeFileMap.put(GT_Recipe_Map.sCutterRecipes, "cutter.json");
         tRecipeFileMap.put(GT_Recipe_Map.sElectrolyzerRecipes, "electrolyzer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sElectroMagneticSeparatorRecipes, "electromagnetic_separator.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sExtractorRecipes, "extractor.json");
         tRecipeFileMap.put(GT_Recipe_Map.sExtruderRecipes, "extruder.json");
         tRecipeFileMap.put(GT_Recipe_Map.sFermentingRecipes, "fermenter.json");
         tRecipeFileMap.put(GT_Recipe_Map.sFluidCannerRecipes, "fluid_canner.json");
@@ -115,13 +122,22 @@ public class GT_MachineRecipeLoader implements Runnable {
         tRecipeFileMap.put(GT_Recipe_Map.sHammerRecipes, "forge_hammer.json");
         tRecipeFileMap.put(GT_Recipe_Map.sPressRecipes, "forming_press.json");
         tRecipeFileMap.put(GT_Recipe_Map.sFusionRecipes, "fusion_reactor.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sImplosionRecipes, "implosion_compressor.json");
         tRecipeFileMap.put(GT_Recipe_Map.sLaserEngraverRecipes, "laser_engraver.json");
         tRecipeFileMap.put(GT_Recipe_Map.sLatheRecipes, "lathe.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sMaceratorRecipes, "macerator.json");
         tRecipeFileMap.put(GT_Recipe_Map.sMixerRecipes, "mixer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCrakingRecipes, "oil_cracking.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sOreWasherRecipes, "ore_washer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sBoxinatorRecipes, "packager.json");
         tRecipeFileMap.put(GT_Recipe_Map.sPlasmaArcFurnaceRecipes, "plasma_arc_furnace.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPolarizerRecipes, "polarizer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPrimitiveBlastRecipes, "primitive_blast_furnace.json");
         tRecipeFileMap.put(GT_Recipe_Map.sPrinterRecipes, "printer.json");
         tRecipeFileMap.put(GT_Recipe_Map.sSifterRecipes, "sifter.json");
         tRecipeFileMap.put(GT_Recipe_Map.sSlicerRecipes, "slicer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sThermalCentrifugeRecipes, "thermal_centrifuge.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sUnboxinatorRecipes, "unpackager.json");
         tRecipeFileMap.put(GT_Recipe_Map.sVacuumRecipes, "vacuum_freezer.json");
         tRecipeFileMap.put(GT_Recipe_Map.sWiremillRecipes, "wiremill.json");
         
@@ -219,6 +235,18 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GT_Values.RA.addChemicalBathRecipe(new ItemStack(Blocks.hardened_clay, 1, 0), Dyes.VALUES[i].getFluidDye(j, 18L), new ItemStack(Blocks.stained_hardened_clay, 1, 15 - i), GT_Values.NI, GT_Values.NI, null, 64, 2);
             }
         }
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.EnderPearl, 1), OrePrefixes.circuit.get(Materials.Basic), 4, Materials.Osmium.getMolten(288), ItemList.Field_Generator_LV.get(1, new Object[0]), 1800, 30);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.EnderEye, 1), OrePrefixes.circuit.get(Materials.Good), 4, Materials.Osmium.getMolten(576), ItemList.Field_Generator_MV.get(1, new Object[0]), 1800, 120);
+        GT_Values.RA.addAssemblerRecipe(ItemList.QuantumEye.get(1, new Object[]{}), OrePrefixes.circuit.get(Materials.Advanced), 4, Materials.Osmium.getMolten(1152), ItemList.Field_Generator_HV.get(1, new Object[0]), 1800, 480);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.NetherStar, 1), OrePrefixes.circuit.get(Materials.Data), 4, Materials.Osmium.getMolten(2304), ItemList.Field_Generator_EV.get(1, new Object[0]), 1800, 1920);
+        GT_Values.RA.addAssemblerRecipe(ItemList.QuantumStar.get(1, new Object[]{}), OrePrefixes.circuit.get(Materials.Elite), 4, Materials.Osmium.getMolten(4608), ItemList.Field_Generator_IV.get(1, new Object[0]), 1800, 7680);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_LV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Basic), 2, GT_Values.NF,	ItemList.FluidRegulator_LV.get(1L, new Object[0]), 800, 4);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_MV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Good), 2, GT_Values.NF, 	ItemList.FluidRegulator_MV.get(1L, new Object[0]), 800, 8);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_HV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Advanced), 2,  GT_Values.NF,ItemList.FluidRegulator_HV.get(1L, new Object[0]), 800, 16);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_EV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Data), 2, GT_Values.NF, 	ItemList.FluidRegulator_EV.get(1L, new Object[0]), 800, 32);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Electric_Pump_IV.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Elite), 2, GT_Values.NF, 	ItemList.FluidRegulator_IV.get(1L, new Object[0]), 800, 64);
+        GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.StainlessSteel, 2L), OrePrefixes.circuit.get(Materials.Good), 4,GT_Values.NF, ItemList.Schematic.get(1L, new Object[0]), 3200, 4);
+        GT_Values.RA.addAssemblerRecipe(ItemList.Cover_Shutter.get(1L, new Object[0]), OrePrefixes.circuit.get(Materials.Advanced), 2,GT_Values.NF, ItemList.FluidFilter.get(1L, new Object[0]), 800, 4);
 
 //Circuit Recipes!!!
         Object[] o = new Object[0];
@@ -226,6 +254,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Board_Phenolic.get(8, o), new Object[]{"PRP","PPP","PPP",'P',GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Wood, 1),'R',GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Glue, 1)});
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Board_Phenolic.get(32, o), new Object[]{"PRP","PPP","PPP",'P',GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Wood, 1),'R',GT_OreDictUnificator.get(OrePrefixes.cell, Materials.BisphenolA, 1)});
 
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Circuit_Board_Multifiberglass.get(1, o), ItemList.Circuit_Parts_PetriDish.get(1, o), ItemList.Electric_Pump_LV.get(1,o), ItemList.Sensor_LV.get(1,o)},
+                OrePrefixes.circuit.get(Materials.Good), 1, Materials.GrowthMediumSterilized.getFluid(250), ItemList.Circuit_Board_Wetware.get(1, o), 400, 480);
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Parts_Resistor.get(3, o), new Object[]{" P ","FCF"," P ",'P',new ItemStack(Items.paper),'F',OrePrefixes.wireFine.get(Materials.Copper),'C',OrePrefixes.dust.get(Materials.Coal)});
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Parts_Resistor.get(3, o), new Object[]{" P ","FCF"," P ",'P',new ItemStack(Items.paper),'F',OrePrefixes.wireFine.get(Materials.Copper),'C',OrePrefixes.dust.get(Materials.Charcoal)});
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Parts_Resistor.get(3, o), new Object[]{" P ","FCF"," P ",'P',new ItemStack(Items.paper),'F',OrePrefixes.wireFine.get(Materials.Copper),'C',OrePrefixes.dust.get(Materials.Carbon)});
@@ -241,6 +271,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Circuit_Parts_RawCrystalChip.get(9,o), new Object[]{ItemList.Circuit_Chip_CrystalCPU.get(1,o)});
 
         GT_ModHandler.addCraftingRecipe(ItemList.Circuit_Good.get(1,o), new Object[]{"IVC","VDV","CVI",'D',ItemList.Circuit_Parts_Diode.get(1,o),'C',GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.RedAlloy, 1),'V', Ic2Items.electronicCircuit ,'I',ItemList.IC2_Item_Casing_Steel.get(1,o)});
+
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Glass, 1), GT_OreDictUnificator.get(OrePrefixes.foil,Materials.Aluminium,4),GT_OreDictUnificator.get(OrePrefixes.circuit.get(Materials.Basic),1),GT_OreDictUnificator.get(OrePrefixes.wireFine, Materials.Copper, 4)},GT_Values.NF, ItemList.Cover_Screen.get(1,new Object[0]),50,16);
 
         if (GregTech_API.sSpecialFile.get("general", "EnableLagencyOilGalactiCraft", false) && FluidRegistry.getFluid("oilgc") != null) {
             GT_Values.RA.addUniversalDistillationRecipe(new FluidStack(FluidRegistry.getFluid("oilgc"), 50), new FluidStack[]{Materials.SulfuricHeavyFuel.getFluid(15), Materials.SulfuricLightFuel.getFluid(50), Materials.SulfuricNaphtha.getFluid(20), Materials.SulfuricGas.getGas(60)}, null, 20, 96);
@@ -537,7 +569,10 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addPyrolyseRecipe(GT_OreDictUnificator.get(OrePrefixes.block, Materials.Coal, 8), Materials.Nitrogen.getGas(1000), 2, EnumCube.COKE_BLOCK.getItem(8), Materials.Creosote.getFluid(32000), 1280, 96);
         }
         run2();
-
+        for (GT_Recipe tRecipe : sJsonDisabledRecipes) {
+            tRecipe.mEnabled = false;
+            tRecipe.mHidden = true;
+        }
     }
 
     public void addProcess(ItemStack tCrop, Materials aMaterial, int chance, boolean aMainOutput) {
@@ -2005,12 +2040,37 @@ public class GT_MachineRecipeLoader implements Runnable {
 
     private static void addRecipesToMap(GT_Recipe_Map aMap, List<GT_Recipe> aList) {
         for (GT_Recipe tRecipe : aList) {
-            // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
-            GT_Recipe tAddedRecipe = aMap.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
-                    tRecipe.mChances, tRecipe.mFluidInputs, tRecipe.mFluidOutputs, tRecipe.mDuration, tRecipe.mEUt, tRecipe.mSpecialValue);
+            boolean tDisabled = false;
+            // disabled recipes are not returned by collision checking, and duration 0 recipes are forced to duration 1 when used
+            // by machines.  Workaround by temporarily enabling recipes marked as disabled in the json, then re-disabling them later.
+            if (!tRecipe.mEnabled || tRecipe.mDuration <= 0) {
+                tDisabled = true;
+                tRecipe.mEnabled = true;
+            }
+            boolean tRecipeNeedsUnwrapping = false;
+            GT_Recipe tAddedRecipe = null;
+            if (aMap.getClass() != GT_Recipe_Map.class) {
+                for (Method tMethod : aMap.getClass().getDeclaredMethods()) {
+                    if ("addRecipe".equals(tMethod.getName())) {
+                        tRecipeNeedsUnwrapping = true;
+                        break;
+                    }
+                }
+            }
+            if (tRecipeNeedsUnwrapping) {
+                // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
+                tAddedRecipe = aMap.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
+                        tRecipe.mChances, tRecipe.mFluidInputs, tRecipe.mFluidOutputs, tRecipe.mDuration, tRecipe.mEUt, tRecipe.mSpecialValue);
+            } else {
+                tAddedRecipe = aMap.addRecipe(tRecipe);
+            }
             if (tAddedRecipe != null) {
                 tAddedRecipe.mEnabled = tRecipe.mEnabled;
                 tAddedRecipe.mHidden = tRecipe.mHidden;
+                tAddedRecipe.mFakeRecipe = tRecipe.mFakeRecipe;
+                if (tDisabled) {
+                    sJsonDisabledRecipes.add(tAddedRecipe);
+                }
             }
         }
     }

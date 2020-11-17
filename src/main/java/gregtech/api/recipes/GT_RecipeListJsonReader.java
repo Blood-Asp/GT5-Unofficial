@@ -327,14 +327,6 @@ public class GT_RecipeListJsonReader {
         if (tEUt <= 0 || (tInputs.isEmpty() && tFluidInputs.isEmpty()) || (tOutputs.isEmpty() && tFluidOutputs.isEmpty() && tFluidsPerCircuit.isEmpty())) {
             return null;
         }
-        // Recipes disabled this way (possibly from file in config folder) still need to be added for the sake of collision, 
-        // so recipes from assets will not be added, but make sure they're fully disabled and hidden from NEI.
-        if (!tEnabled) {
-            tDuration = 0;
-        }
-        if (tDuration <= 0) {
-            tHidden = true;
-        }
         if (!tFluidsPerCircuit.isEmpty()) {
             tInputs.add(GT_Utility.getIntegratedCircuit(0));
             List<GT_Recipe> tList = new ArrayList<>(tFluidsPerCircuit.size());
