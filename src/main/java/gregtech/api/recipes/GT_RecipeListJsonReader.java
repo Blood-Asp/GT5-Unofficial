@@ -1,6 +1,7 @@
 package gregtech.api.recipes;
 
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
@@ -10,6 +11,7 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,13 +32,52 @@ public class GT_RecipeListJsonReader {
         // Utility class, private constructor.
     }
     
-    public static List<GT_MachineRecipe> readRecipes(JsonReader aReader) {
+    private static class GT_Json_Recipe extends GT_Recipe {
+        GT_Json_Recipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+            super(aOptimize, aInputs, aOutputs, aSpecialItems, aChances, aFluidInputs, aFluidOutputs, aDuration, aEUt, aSpecialValue);
+        }
+    }
+    
+    private static class ItemStackWithChance {
+        public ItemStack mStack;
+        public float mChance;
+        ItemStackWithChance(ItemStack aStack, float aChance) {
+            mStack = aStack;
+            mChance = aChance;
+        }
+    }
+    
+    private static ItemStack[] getOutputItems(List<ItemStackWithChance> aList) {
+        ItemStack[] rItems = new ItemStack[aList.size()];
+        for (int i = 0; i < aList.size(); i++) {
+            if (aList.get(i) != null) {
+                rItems[i] = aList.get(i).mStack;
+            } else {
+                rItems[i] = null;
+            }
+        }
+        return rItems;
+    }
+    
+    private static int[] getOutputChancesAsInts(List<ItemStackWithChance> aList) {
+        int[] rChances = new int[aList.size()];
+        for (int i = 0; i < aList.size(); i++) {
+            if (aList.get(i) != null) {
+                rChances[i] = (int)(aList.get(i).mChance * 10000);
+            } else {
+                rChances[i] = 0;
+            }
+        }
+        return rChances;
+    }
+    
+    public static List<GT_Recipe> readRecipes(JsonReader aReader) {
         aReader.setLenient(true);
-        List<GT_MachineRecipe> rList = new ArrayList<>(100);
+        List<GT_Recipe> rList = new ArrayList<>(100);
         try {
             aReader.beginArray();
             while (aReader.hasNext()) {
-                List<GT_MachineRecipe> tRecipe = readRecipe(aReader);
+                List<GT_Recipe> tRecipe = readSingleRecipe(aReader);
                 if (tRecipe != null) {
                     rList.addAll(tRecipe);
                 }
@@ -48,9 +89,11 @@ public class GT_RecipeListJsonReader {
         return rList;
     }
 
-    private static List<GT_MachineRecipe> readRecipe(JsonReader aReader) throws IOException {
-        List<GT_RecipeInput> tInputs = new ArrayList<>(10);
-        List<GT_RecipeOutput> tOutputs = new ArrayList<>(10);
+    // Reads one recipe object from the json, but some convenience features may cause a single json recipe
+    // to translate into multiple GT_Recipe objects.
+    private static List<GT_Recipe> readSingleRecipe(JsonReader aReader) throws IOException {
+        List<ItemStack> tInputs = new ArrayList<>(10);
+        List<ItemStackWithChance> tOutputs = new ArrayList<>(10);
         List<FluidStack> tFluidInputs = new ArrayList<>(10);
         List<FluidStack> tFluidOutputs = new ArrayList<>(10);
         List<FluidStack> tFluidsPerCircuit = new ArrayList<>(10);
@@ -63,6 +106,7 @@ public class GT_RecipeListJsonReader {
         boolean tHidden = false;
         boolean tUseSolderFluids = false;
         boolean tUseCuttingFluids = false;
+        boolean tOptimize = true;
         int tSolderAmount = 0;
         aReader.beginObject();
         while (aReader.hasNext()) {
@@ -119,7 +163,9 @@ public class GT_RecipeListJsonReader {
                                 tMaterialFluid.amount = tFluidAmount;
                                 tFluidInputs.add(tMaterialFluid);
                             } else if (tFluidName != null) {
-                                if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                                if ("ic2distilledwater".equals(tFluidName)) {
+                                    tFluidInputs.add(GT_ModHandler.getDistilledWater(tFluidAmount));
+                                } else if (FluidRegistry.isFluidRegistered(tFluidName)) {
                                     tFluidInputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
                                 } else {
                                     GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
@@ -162,7 +208,9 @@ public class GT_RecipeListJsonReader {
                             tMaterialFluid.amount = tFluidAmount;
                             tFluidOutputs.add(tMaterialFluid);
                         } else if (tFluidName != null) {
-                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                            if ("ic2distilledwater".equals(tFluidName)) {
+                                tFluidOutputs.add(GT_ModHandler.getDistilledWater(tFluidAmount));
+                            } else if (FluidRegistry.isFluidRegistered(tFluidName)) {
                                 tFluidOutputs.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
                             } else {
                                 GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
@@ -203,7 +251,9 @@ public class GT_RecipeListJsonReader {
                             tMaterialFluid.amount = tFluidAmount;
                             tFluidsPerCircuit.add(tMaterialFluid);
                         } else if (tFluidName != null) {
-                            if (FluidRegistry.isFluidRegistered(tFluidName)) {
+                            if ("ic2distilledwater".equals(tFluidName)) {
+                                tFluidsPerCircuit.add(GT_ModHandler.getDistilledWater(tFluidAmount));
+                            } else if (FluidRegistry.isFluidRegistered(tFluidName)) {
                                 tFluidsPerCircuit.add(new FluidStack(FluidRegistry.getFluid(tFluidName), tFluidAmount));
                             } else {
                                 GT_Log.err.println("Unregistered fluid used in recipe: " + tFluidName);
@@ -219,13 +269,20 @@ public class GT_RecipeListJsonReader {
                     tEUt = aReader.nextInt();
                     break;
                 case "specialValue":
-                    String tSpecialValueString = aReader.nextString();
-                    if ("lowgravity".equals(tSpecialValueString)) {
-                        tSpecialValue = -100;
-                    } else if ("cleanroom".equals(tSpecialValueString)) {
-                        tSpecialValue = -200;
+                    JsonToken tToken = aReader.peek();
+                    if (tToken == JsonToken.STRING) {
+                        String tSpecialValueString = aReader.nextString();
+                        if ("lowgravity".equals(tSpecialValueString)) {
+                            tSpecialValue = -100;
+                        } else if ("cleanroom".equals(tSpecialValueString)) {
+                            tSpecialValue = -200;
+                        } else {
+                            tSpecialValue = Integer.valueOf(tSpecialValueString);
+                        }
+                    } else if (tToken == JsonToken.NUMBER) {
+                        tSpecialValue = aReader.nextInt();
                     } else {
-                        tSpecialValue = Integer.valueOf(tSpecialValueString);
+                        throw new AssertionError("Invalid token in specialValue: " + tToken);
                     }
                     break;
                 case "blastTemp":
@@ -248,74 +305,86 @@ public class GT_RecipeListJsonReader {
                 case "useCuttingFluids":
                     tUseCuttingFluids = aReader.nextBoolean();
                     break;
+                case "optimize":
+                    tOptimize = aReader.nextBoolean();
+                    break;
                 default:
                     throw new AssertionError("Invalid recipe specifier: " + tName);
             }
         }
         aReader.endObject();
+        // Recipes disabled by condition should not be added.
+        if (tEnableCondition != null && !(GT_RecipeConditions.getConditionValue(tEnableCondition) ^ tInvertCondition)) {
+            return null;
+        }
+        // Clear input/output lists of nulls, which could be from unregistered items/fluids, or items from unloaded mods.
+        // if this results in completely empty inputs or outputs, that usually means the recipe should not be added.
+        // (except for things like fuels and some fake recipes which are not currently handled in json)
+        while (tInputs.remove(null)) { /* do nothing else */ }
+        while (tOutputs.remove(null)) { /* do nothing else */ }
+        while (tFluidInputs.remove(null)) { /* do nothing else */ }
+        while (tFluidOutputs.remove(null)) { /* do nothing else */ }
+        if (tEUt <= 0 || (tInputs.isEmpty() && tFluidInputs.isEmpty()) || (tOutputs.isEmpty() && tFluidOutputs.isEmpty() && tFluidsPerCircuit.isEmpty())) {
+            return null;
+        }
+        // Recipes disabled this way (possibly from file in config folder) still need to be added for the sake of collision, 
+        // so recipes from assets will not be added, but make sure they're fully disabled and hidden from NEI.
+        if (!tEnabled) {
+            tDuration = 0;
+        }
+        if (tDuration <= 0) {
+            tHidden = true;
+        }
         if (!tFluidsPerCircuit.isEmpty()) {
-            tInputs.add(new GT_RecipeInput(GT_Utility.getIntegratedCircuit(0)));
-            List<GT_MachineRecipe> tList = new ArrayList<>(tFluidsPerCircuit.size());
+            tInputs.add(GT_Utility.getIntegratedCircuit(0));
+            List<GT_Recipe> tList = new ArrayList<>(tFluidsPerCircuit.size());
             for (int i = 0; i < tFluidsPerCircuit.size(); i++) {
-                tInputs.set(tInputs.size() - 1, new GT_RecipeInput(GT_Utility.getIntegratedCircuit(i + 1)));
-                GT_MachineRecipe rRecipe = new GT_MachineRecipe(tInputs.toArray(new GT_RecipeInput[0]), tOutputs.toArray(new GT_RecipeOutput[0]), 
-                    tFluidInputs.toArray(new FluidStack[0]), new FluidStack[]{tFluidsPerCircuit.get(i)});
-                rRecipe.setDuration(tDuration);
-                rRecipe.setEUt(tEUt);
-                rRecipe.setSpecialValue(tSpecialValue);
-                rRecipe.setEnabled(tEnabled);
-                rRecipe.setEnableCondition(tEnableCondition);
-                rRecipe.setInvertCondition(tInvertCondition);
-                rRecipe.setHidden(tHidden);
+                tInputs.set(tInputs.size() - 1, GT_Utility.getIntegratedCircuit(i + 1));
+                GT_Recipe rRecipe = new GT_Json_Recipe(tOptimize, tInputs.toArray(new ItemStack[0]), getOutputItems(tOutputs), null,
+                    getOutputChancesAsInts(tOutputs), tFluidInputs.toArray(new FluidStack[0]), new FluidStack[]{tFluidsPerCircuit.get(i)}, tDuration, tEUt, tSpecialValue);
+                rRecipe.mEnabled = tEnabled;
+                rRecipe.mHidden = tHidden;
                 tList.add(rRecipe);
             }
             return tList;
         }
         if (!tOutputs.isEmpty() || !tFluidOutputs.isEmpty()) {
-            GT_MachineRecipe rRecipe = new GT_MachineRecipe(tInputs.toArray(new GT_RecipeInput[0]), tOutputs.toArray(new GT_RecipeOutput[0]), 
-                    tFluidInputs.toArray(new FluidStack[0]), tFluidOutputs.toArray(new FluidStack[0]));
-            rRecipe.setDuration(tDuration);
-            rRecipe.setEUt(tEUt);
-            rRecipe.setSpecialValue(tSpecialValue);
-            rRecipe.setEnabled(tEnabled);
-            rRecipe.setEnableCondition(tEnableCondition);
-            rRecipe.setInvertCondition(tInvertCondition);
-            rRecipe.setHidden(tHidden);
-            if (rRecipe.isValidRecipe()) {
-                if (tUseSolderFluids && (tSolderAmount > 0)) {
-                    FluidStack[] tSolderFluids = getSolderFluids();
-                    List<GT_MachineRecipe> tList = new ArrayList<>(tSolderFluids.length);
-                    for (FluidStack tSolderFluid : tSolderFluids) {
-                        GT_MachineRecipe tRecipe = rRecipe.copy();
-                        tRecipe.mFluidInputs = new FluidStack[]{tSolderFluid.copy()};
-                        tRecipe.mFluidInputs[0].amount *= tSolderAmount;
-                        tList.add(tRecipe);
-                    }
-                    return tList;
-                } else if (tUseCuttingFluids) {
-                    List<GT_MachineRecipe> tList = new ArrayList<>(3);
-                    GT_MachineRecipe tRecipe = rRecipe.copy();
-                    tRecipe.mFluidInputs = new FluidStack[]{Materials.Lubricant.getFluid(Math.max(1, Math.min(250, tDuration * tEUt / 1280)))};
+            GT_Recipe rRecipe = new GT_Json_Recipe(tOptimize, tInputs.toArray(new ItemStack[0]), getOutputItems(tOutputs), null,
+                    getOutputChancesAsInts(tOutputs), tFluidInputs.toArray(new FluidStack[0]), tFluidOutputs.toArray(new FluidStack[0]), tDuration, tEUt, tSpecialValue);
+            rRecipe.mEnabled = tEnabled;
+            rRecipe.mHidden = tHidden;
+            if (tUseSolderFluids && (tSolderAmount > 0)) {
+                FluidStack[] tSolderFluids = getSolderFluids();
+                List<GT_Recipe> tList = new ArrayList<>(tSolderFluids.length);
+                for (FluidStack tSolderFluid : tSolderFluids) {
+                    GT_Recipe tRecipe = rRecipe.copy();
+                    tRecipe.mFluidInputs = new FluidStack[]{tSolderFluid.copy()};
+                    tRecipe.mFluidInputs[0].amount *= tSolderAmount;
                     tList.add(tRecipe);
-                    tRecipe = rRecipe.copy();
-                    tRecipe.mFluidInputs = new FluidStack[]{GT_ModHandler.getDistilledWater(Math.max(3, Math.min(750, tDuration * tEUt / 426)))};
-                    tRecipe.setDuration(tDuration * 2);
-                    tList.add(tRecipe);
-                    tRecipe = rRecipe.copy();
-                    tRecipe.mFluidInputs = new FluidStack[]{Materials.Water.getFluid(Math.max(4, Math.min(1000, tDuration * tEUt / 320)))};
-                    tRecipe.setDuration(tDuration * 2);
-                    tList.add(tRecipe);
-                    return tList;
                 }
-                return Collections.singletonList(rRecipe);
+                return tList;
+            } else if (tUseCuttingFluids) {
+                List<GT_Recipe> tList = new ArrayList<>(3);
+                GT_Recipe tRecipe = rRecipe.copy();
+                tRecipe.mFluidInputs = new FluidStack[]{Materials.Lubricant.getFluid(Math.max(1, Math.min(250, tDuration * tEUt / 1280)))};
+                tList.add(tRecipe);
+                tRecipe = rRecipe.copy();
+                tRecipe.mFluidInputs = new FluidStack[]{GT_ModHandler.getDistilledWater(Math.max(3, Math.min(750, tDuration * tEUt / 426)))};
+                tRecipe.mDuration = tDuration * 2;
+                tList.add(tRecipe);
+                tRecipe = rRecipe.copy();
+                tRecipe.mFluidInputs = new FluidStack[]{Materials.Water.getFluid(Math.max(4, Math.min(1000, tDuration * tEUt / 320)))};
+                tRecipe.mDuration = tDuration * 2;
+                tList.add(tRecipe);
+                return tList;
             }
+            return Collections.singletonList(rRecipe);
         }
         return null;
     }
 
-    private static GT_RecipeInput readInput(JsonReader aReader) throws IOException {
+    private static ItemStack readInput(JsonReader aReader) throws IOException {
         ItemStack tStack = null;
-        List<ItemStack> tAlts = new ArrayList<>(5);
         String tOreName = null;
         int tCount = -1;
         NBTTagCompound tNbtData = null;
@@ -337,35 +406,6 @@ public class GT_RecipeListJsonReader {
                 case "nbt":
                     tNbtData = readNbt(aReader);
                     break;
-                case "alts":
-                    aReader.beginArray();
-                    while (aReader.hasNext()) {
-                        ItemStack tAltStack = null;
-                        NBTTagCompound tAltNbtData = null;
-                        String tAltOreName = null;
-                        aReader.beginObject();
-                        while (aReader.hasNext()) {
-                            String tAltEntryName = aReader.nextName();
-                            if ("item".equals(tAltEntryName)) {
-                                tAltStack = StringtoItemStack(aReader.nextString());
-                            } else if ("ore".equals(tAltEntryName) || "oredict".equals(tAltEntryName)) {
-                                tAltOreName = aReader.nextString();
-                            } else if ("nbt".equals(tAltEntryName)) {
-                                tAltNbtData = readNbt(aReader);
-                            }
-                        }
-                        aReader.endObject();
-                        if (tAltStack != null && tAltNbtData != null) {
-                            tAltStack.setTagCompound(tAltNbtData);
-                        }
-                        if (tAltOreName != null) {
-                            tAlts.addAll(GT_OreDictUnificator.getOres(tAltOreName));
-                        } else {
-                            tAlts.add(tAltStack);
-                        }
-                    }
-                    aReader.endArray();
-                    break;
                 case "circuit":
                     int tCircuitConfig = aReader.nextInt();
                     tStack = GT_Utility.getIntegratedCircuit(tCircuitConfig);
@@ -384,20 +424,13 @@ public class GT_RecipeListJsonReader {
         aReader.endObject();
         if (tCount >= 0) {
             if (tOreName != null) {
-                return new GT_RecipeInputOredict(tOreName, tCount);
-            } else if (!tAlts.isEmpty()) {
-                for (ItemStack tAlt : tAlts) {
-                    tAlt.stackSize = tCount;
-                }
-                GT_RecipeInputAlts rInput = new GT_RecipeInputAlts(tAlts.toArray(new ItemStack[0]));
-                rInput.setCount(tCount);
-                return rInput;
+                return GT_OreDictUnificator.getFirstOre(tOreName, tCount);
             } else if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
                     tStack.setTagCompound(tNbtData);
                 }
-                return new GT_RecipeInput(tStack);
+                return tStack;
             }
         }
         return null;
@@ -423,7 +456,12 @@ public class GT_RecipeListJsonReader {
                     e.printStackTrace(GT_Log.err);
                 }
             } else if ("IC2ItemList".equals(tPieces[0])) {
-                rStack = GT_ModHandler.getIC2Item(tPieces[0], 1);
+                if (tPieces.length >= 3) {
+                    rStack = GT_ModHandler.getIC2Item(tPieces[1], 1, tMeta);
+                } else {
+                    rStack = GT_ModHandler.getIC2Item(tPieces[1], 1);
+                }
+                return rStack;
             } else {
                 rStack = GameRegistry.findItemStack(tPieces[0], tPieces[1], 1);
             }
@@ -435,7 +473,7 @@ public class GT_RecipeListJsonReader {
         return null;
     }
     
-    private static GT_RecipeOutput readOutput(JsonReader aReader) throws IOException {
+    private static ItemStackWithChance readOutput(JsonReader aReader) throws IOException {
         ItemStack tStack = null;
         String tOreName = null;
         int tCount = -1;
@@ -475,13 +513,14 @@ public class GT_RecipeListJsonReader {
         aReader.endObject();
         if (tCount >= 0) {
             if (tOreName != null) {
-                return new GT_RecipeOutput(tOreName, tCount, tChance);
-            } else if (tStack != null) {
+                tStack = GT_OreDictUnificator.getFirstOre(tOreName, tCount);
+            }
+            if (tStack != null) {
                 tStack.stackSize = tCount;
                 if (tNbtData != null) {
                     tStack.setTagCompound(tNbtData);
                 }
-                return new GT_RecipeOutput(tStack, tChance);
+                return new ItemStackWithChance(tStack, tChance);
             }
         }
         return null;

@@ -8,10 +8,9 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.objects.MaterialStack;
-import gregtech.api.recipes.GT_MachineRecipe;
 import gregtech.api.recipes.GT_RecipeListJsonReader;
-import gregtech.api.recipes.GT_RecipeMap;
 import gregtech.api.util.*;
+import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.common.GT_DummyWorld;
 import gregtech.common.items.GT_MetaGenerated_Item_03;
 import ic2.api.recipe.ILiquidHeatExchangerManager.HeatExchangeProperty;
@@ -43,6 +42,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 
 public class GT_MachineRecipeLoader implements Runnable {
+    private final MaterialStack[][] mAlloySmelterList = {
+            {new MaterialStack(Materials.Tetrahedrite, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 3L)},
+            {new MaterialStack(Materials.Tetrahedrite, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 3L)},
+            {new MaterialStack(Materials.Copper, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 4L)},
+            {new MaterialStack(Materials.Copper, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 4L)},
+            {new MaterialStack(Materials.Copper, 1L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Cupronickel, 2L)},
+            {new MaterialStack(Materials.Copper, 1L), new MaterialStack(Materials.Redstone, 4L), new MaterialStack(Materials.RedAlloy, 1L)},
+            {new MaterialStack(Materials.AnnealedCopper, 3L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.Bronze, 4L)},
+            {new MaterialStack(Materials.AnnealedCopper, 3L), new MaterialStack(Materials.Zinc, 1L), new MaterialStack(Materials.Brass, 4L)},
+            {new MaterialStack(Materials.AnnealedCopper, 1L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Cupronickel, 2L)},
+            {new MaterialStack(Materials.AnnealedCopper, 1L), new MaterialStack(Materials.Redstone, 4L), new MaterialStack(Materials.RedAlloy, 1L)},
+            {new MaterialStack(Materials.Iron, 1L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.TinAlloy, 2L)},
+            {new MaterialStack(Materials.WroughtIron, 1L), new MaterialStack(Materials.Tin, 1L), new MaterialStack(Materials.TinAlloy, 2L)},
+            {new MaterialStack(Materials.Iron, 2L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Invar, 3L)},
+            {new MaterialStack(Materials.WroughtIron, 2L), new MaterialStack(Materials.Nickel, 1L), new MaterialStack(Materials.Invar, 3L)},
+            {new MaterialStack(Materials.Tin, 9L), new MaterialStack(Materials.Antimony, 1L), new MaterialStack(Materials.SolderingAlloy, 10L)},
+            {new MaterialStack(Materials.Lead, 4L), new MaterialStack(Materials.Antimony, 1L), new MaterialStack(Materials.BatteryAlloy, 5L)},
+            {new MaterialStack(Materials.Gold, 1L), new MaterialStack(Materials.Silver, 1L), new MaterialStack(Materials.Electrum, 2L)},
+            {new MaterialStack(Materials.Magnesium, 1L), new MaterialStack(Materials.Aluminium, 2L), new MaterialStack(Materials.Magnalium, 3L)},
+            {new MaterialStack(Materials.Silver, 1L), new MaterialStack(Materials.Nikolite, 4L), new MaterialStack(Materials.BlueAlloy, 1L)},
+            {new MaterialStack(Materials.Boron, 1L), new MaterialStack(Materials.Glass, 7L), new MaterialStack(Materials.BorosilicateGlass, 8L)}};
     private final static String aTextAE = "appliedenergistics2"; private final static String aTextAEMM = "item.ItemMultiMaterial"; private final static String aTextForestry = "Forestry";
     private final static String aTextEBXL = "ExtrabiomesXL"; private final static String aTextTCGTPage = "gt.research.page.1.";
     private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
@@ -68,42 +88,42 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Utility.removeIC2BottleRecipe(GT_ModHandler.getIC2Item("fuelRod", 1), GT_ModHandler.getIC2Item("UranFuel", 1), ic2.api.recipe.Recipes.cannerBottle.getRecipes(), GT_ModHandler.getIC2Item("reactorUraniumSimple", 1, 1));
         GT_Utility.removeIC2BottleRecipe(GT_ModHandler.getIC2Item("fuelRod", 1), GT_ModHandler.getIC2Item("MOXFuel", 1), ic2.api.recipe.Recipes.cannerBottle.getRecipes(), GT_ModHandler.getIC2Item("reactorMOXSimple", 1, 1));
 
-        Map<GT_RecipeMap, String> tRecipeFileMap = new HashMap<>(30);
-        tRecipeFileMap.put(GT_RecipeMap.sAlloySmelterRecipes, "alloy_smelter.json");
-        tRecipeFileMap.put(GT_RecipeMap.sArcFurnaceRecipes, "arc_furnace.json");
-        tRecipeFileMap.put(GT_RecipeMap.sAssemblerRecipes, "assembler.json");
-        tRecipeFileMap.put(GT_RecipeMap.sAutoclaveRecipes, "autoclave.json");
-        tRecipeFileMap.put(GT_RecipeMap.sBenderRecipes, "bender.json");
-        tRecipeFileMap.put(GT_RecipeMap.sBlastRecipes, "blast_furnace.json");
-        tRecipeFileMap.put(GT_RecipeMap.sBrewingRecipes, "brewery.json");
-        tRecipeFileMap.put(GT_RecipeMap.sCentrifugeRecipes, "centrifuge.json");
-        tRecipeFileMap.put(GT_RecipeMap.sChemicalBathRecipes, "chemical_bath.json");
-        tRecipeFileMap.put(GT_RecipeMap.sChemicalRecipes, "chemical_reactor.json");
-        tRecipeFileMap.put(GT_RecipeMap.sMultiblockChemicalRecipes, "large_chemical_reactor.json");
-        tRecipeFileMap.put(GT_RecipeMap.sCircuitAssemblerRecipes, "circuit_assembler.json");
-        tRecipeFileMap.put(GT_RecipeMap.sCutterRecipes, "cutter.json");
-        tRecipeFileMap.put(GT_RecipeMap.sDistillationRecipes, "distillation_tower.json");
-        tRecipeFileMap.put(GT_RecipeMap.sDistilleryRecipes, "distillery.json");
-        tRecipeFileMap.put(GT_RecipeMap.sCutterRecipes, "cutter.json");
-        tRecipeFileMap.put(GT_RecipeMap.sElectrolyzerRecipes, "electrolyzer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sExtruderRecipes, "extruder.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFermentingRecipes, "fermenter.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFluidCannerRecipes, "fluid_canner.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFluidExtractionRecipes, "fluid_extractor.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFluidHeaterRecipes, "fluid_heater.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFluidSolidificationRecipes, "fluid_solidifier.json");
-        tRecipeFileMap.put(GT_RecipeMap.sHammerRecipes, "forge_hammer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sPressRecipes, "forming_press.json");
-        tRecipeFileMap.put(GT_RecipeMap.sFusionRecipes, "fusion_reactor.json");
-        tRecipeFileMap.put(GT_RecipeMap.sLaserEngraverRecipes, "laser_engraver.json");
-        tRecipeFileMap.put(GT_RecipeMap.sLatheRecipes, "lathe.json");
-        tRecipeFileMap.put(GT_RecipeMap.sMixerRecipes, "mixer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sPlasmaArcFurnaceRecipes, "plasma_arc_furnace.json");
-        tRecipeFileMap.put(GT_RecipeMap.sPrinterRecipes, "printer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sSifterRecipes, "sifter.json");
-        tRecipeFileMap.put(GT_RecipeMap.sSlicerRecipes, "slicer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sVacuumRecipes, "vacuum_freezer.json");
-        tRecipeFileMap.put(GT_RecipeMap.sWiremillRecipes, "wiremill.json");
+        Map<GT_Recipe_Map, String> tRecipeFileMap = new HashMap<>(30);
+        tRecipeFileMap.put(GT_Recipe_Map.sAlloySmelterRecipes, "alloy_smelter.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sArcFurnaceRecipes, "arc_furnace.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sAssemblerRecipes, "assembler.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sAutoclaveRecipes, "autoclave.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sBenderRecipes, "bender.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sBlastRecipes, "blast_furnace.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sBrewingRecipes, "brewery.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCentrifugeRecipes, "centrifuge.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sChemicalBathRecipes, "chemical_bath.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sChemicalRecipes, "chemical_reactor.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sMultiblockChemicalRecipes, "large_chemical_reactor.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCircuitAssemblerRecipes, "circuit_assembler.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCutterRecipes, "cutter.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sDistillationRecipes, "distillation_tower.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sDistilleryRecipes, "distillery.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sCutterRecipes, "cutter.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sElectrolyzerRecipes, "electrolyzer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sExtruderRecipes, "extruder.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFermentingRecipes, "fermenter.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFluidCannerRecipes, "fluid_canner.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFluidExtractionRecipes, "fluid_extractor.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFluidHeaterRecipes, "fluid_heater.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFluidSolidficationRecipes, "fluid_solidifier.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sHammerRecipes, "forge_hammer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPressRecipes, "forming_press.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sFusionRecipes, "fusion_reactor.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sLaserEngraverRecipes, "laser_engraver.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sLatheRecipes, "lathe.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sMixerRecipes, "mixer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPlasmaArcFurnaceRecipes, "plasma_arc_furnace.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPrinterRecipes, "printer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sSifterRecipes, "sifter.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sSlicerRecipes, "slicer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sVacuumRecipes, "vacuum_freezer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sWiremillRecipes, "wiremill.json");
         
         File tConfigRecipeFolder = new File(getMcDir(), "config" + File.separator + "GregTech" + File.separator + "recipes");
         try {
@@ -129,12 +149,13 @@ public class GT_MachineRecipeLoader implements Runnable {
                 e.printStackTrace(GT_Log.err);
             }
         }
-        for (Map.Entry<GT_RecipeMap, String> tEntry : tRecipeFileMap.entrySet()) {
+        for (Map.Entry<GT_Recipe_Map, String> tEntry : tRecipeFileMap.entrySet()) {
             try {
                 File tFile = new File(tConfigRecipeFolder, tEntry.getValue());
                 if (tFile.isFile()) {
                     FileReader tFileReader = new FileReader(tFile);
-                    tEntry.getKey().addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(tFileReader)));
+                    List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(tFileReader));
+                    addRecipesToMap(tEntry.getKey(), tRecipeList);
                     tFileReader.close();
                 }
             } catch (Throwable e) {
@@ -144,7 +165,8 @@ public class GT_MachineRecipeLoader implements Runnable {
             try {
                 InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/" + tEntry.getValue());
                 if (tStream != null) {
-                    tEntry.getKey().addAll(GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream))));
+                    List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                    addRecipesToMap(tEntry.getKey(), tRecipeList);
                     tStream.close();
                 }
             } catch (Throwable e) {
@@ -1518,6 +1540,20 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_ModHandler.removeFurnaceSmelting(GT_ModHandler.getModItem("Magneticraft", "item.rubble", 1, 21));
         }
 
+        for (MaterialStack[] tMats : this.mAlloySmelterList) {
+            ItemStack tDust1 = GT_OreDictUnificator.get(OrePrefixes.dust, tMats[0].mMaterial, tMats[0].mAmount);
+            ItemStack tDust2 = GT_OreDictUnificator.get(OrePrefixes.dust, tMats[1].mMaterial, tMats[1].mAmount);
+            ItemStack tIngot1 = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[0].mMaterial, tMats[0].mAmount);
+            ItemStack tIngot2 = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[1].mMaterial, tMats[1].mAmount);
+            ItemStack tOutputIngot = GT_OreDictUnificator.get(OrePrefixes.ingot, tMats[2].mMaterial, tMats[2].mAmount);
+            if (tOutputIngot != GT_Values.NI) {
+                GT_ModHandler.addAlloySmelterRecipe(tIngot1, tDust2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
+                GT_ModHandler.addAlloySmelterRecipe(tIngot1, tIngot2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
+                GT_ModHandler.addAlloySmelterRecipe(tDust1, tIngot2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
+                GT_ModHandler.addAlloySmelterRecipe(tDust1, tDust2, tOutputIngot, (int) tMats[2].mAmount * 50, 16, false);
+            }
+        }
+
         if(!GregTech_API.mIC2Classic){
             try {
                 Map<String, HeatExchangeProperty> tLiqExchange = ic2.api.recipe.Recipes.liquidCooldownManager.getHeatExchangeProperties();
@@ -1654,9 +1690,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_simple.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sChemicalRecipes.addAll(tRecipeList);
-                GT_RecipeMap.sMultiblockChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
+                addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1666,8 +1702,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_simple_small.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1681,9 +1717,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sChemicalRecipes.addAll(tRecipeList);
-                GT_RecipeMap.sMultiblockChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
+                addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1693,8 +1729,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated_small.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1704,8 +1740,14 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated_large.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sMultiblockChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                for (GT_Recipe tRecipe : tRecipeList) {
+                    // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
+                    GT_Recipe tAddedRecipe = GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
+                            tRecipe.mChances, tRecipe.mFluidInputs, tRecipe.mFluidOutputs, tRecipe.mDuration, tRecipe.mEUt, tRecipe.mSpecialValue);
+                    tAddedRecipe.mEnabled = tRecipe.mEnabled;
+                    tAddedRecipe.mHidden = tRecipe.mHidden;
+                }
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1742,9 +1784,9 @@ public class GT_MachineRecipeLoader implements Runnable {
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_old.json");
             if (tStream != null) {
-                List<GT_MachineRecipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                GT_RecipeMap.sChemicalRecipes.addAll(tRecipeList);
-                GT_RecipeMap.sMultiblockChemicalRecipes.addAll(tRecipeList);
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
+                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
+                addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
@@ -1961,4 +2003,16 @@ public class GT_MachineRecipeLoader implements Runnable {
         }
     }
 
+    private static void addRecipesToMap(GT_Recipe_Map aMap, List<GT_Recipe> aList) {
+        for (GT_Recipe tRecipe : aList) {
+            // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
+            GT_Recipe tAddedRecipe = aMap.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
+                    tRecipe.mChances, tRecipe.mFluidInputs, tRecipe.mFluidOutputs, tRecipe.mDuration, tRecipe.mEUt, tRecipe.mSpecialValue);
+            if (tAddedRecipe != null) {
+                tAddedRecipe.mEnabled = tRecipe.mEnabled;
+                tAddedRecipe.mHidden = tRecipe.mHidden;
+            }
+        }
+    }
+    
 }
