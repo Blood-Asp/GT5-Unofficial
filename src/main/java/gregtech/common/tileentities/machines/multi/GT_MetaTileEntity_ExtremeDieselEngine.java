@@ -119,6 +119,26 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
+    protected int getNominalOutput() {
+        return 8192;
+    }
+
+    @Override
+    protected int getBoostFactor() {
+        return 4;
+    }
+
+    @Override
+    protected int getAdditiveFactor() {
+        return 8;
+    }
+
+    @Override
+    protected int getEfficiencyIncrease() {
+        return 20;
+    }
+
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return boostEu ? 40000 : 10000;//4x output if boosted instead of x3
     }

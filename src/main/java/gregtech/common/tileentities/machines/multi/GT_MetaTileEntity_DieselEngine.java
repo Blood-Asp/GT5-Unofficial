@@ -79,6 +79,37 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return GT_Recipe.GT_Recipe_Map.sDieselFuels;
     }
 
+    /**
+     * The nominal energy output
+     * This can be further multiplied by {@link #getMaxEfficiency(ItemStack)} when boosted
+     */
+    protected int getNominalOutput() {
+        return 2048;
+    }
+
+    /**
+     * x times fuel will be consumed when boosted
+     * This will however NOT increase power output
+     * Go tweak {@link #getMaxEfficiency(ItemStack)} and {@link #getNominalOutput()} instead
+     */
+    protected int getBoostFactor() {
+        return 2;
+    }
+
+    /**
+     * x times of additive will be consumed when boosted
+     */
+    protected int getAdditiveFactor() {
+        return 1;
+    }
+
+    /**
+     * Efficiency will increase by this amount every tick
+     */
+    protected int getEfficiencyIncrease() {
+        return 15;
+    }
+
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tFluids = getStoredFluids();
@@ -90,21 +121,21 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                     FluidStack tLiquid;
                     if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
                         if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
-                            fuelConsumption = tLiquid.amount = boostEu ? (4096 / aFuel.mSpecialValue) : (2048 / aFuel.mSpecialValue); //Calc fuel consumption
+                            fuelConsumption = tLiquid.amount = boostEu ? (getBoostFactor() * getNominalOutput() / aFuel.mSpecialValue) : (getNominalOutput() / aFuel.mSpecialValue); //Calc fuel consumption
                             if(depleteInput(tLiquid)) { //Deplete that amount
-                                boostEu = depleteInput(Materials.Oxygen.getGas(2L));
+                                boostEu = depleteInput(Materials.Oxygen.getGas(2L * getAdditiveFactor()));
 
                                 if(tFluids.contains(Materials.Lubricant.getFluid(1L))) { //Has lubricant?
                                     //Deplete Lubricant. 1000L should = 1 hour of runtime (if baseEU = 2048)
-                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid(boostEu ? 2 : 1));
+                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid((boostEu ? 2L : 1L) * getAdditiveFactor()));
                                 } else return false;
 
                                 fuelValue = aFuel.mSpecialValue;
                                 fuelRemaining = hatchFluid1.amount; //Record available fuel
-                                this.mEUt = mEfficiency < 2000 ? 0 : 2048; //Output 0 if startup is less than 20%
+                                this.mEUt = mEfficiency < 2000 ? 0 : getNominalOutput(); //Output 0 if startup is less than 20%
                                 this.mProgresstime = 1;
                                 this.mMaxProgresstime = 1;
-                                this.mEfficiencyIncrease = 15;
+                                this.mEfficiencyIncrease = getEfficiencyIncrease();
                                 return true;
                             }
                         }
