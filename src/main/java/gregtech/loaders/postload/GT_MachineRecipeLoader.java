@@ -2039,7 +2039,18 @@ public class GT_MachineRecipeLoader implements Runnable {
     }
 
     private static void addRecipesToMap(GT_Recipe_Map aMap, List<GT_Recipe> aList) {
+        boolean tRecipeNeedsUnwrapping = false;
+        if (aMap.getClass() != GT_Recipe_Map.class) {
+            for (Method tMethod : aMap.getClass().getDeclaredMethods()) {
+                if ("addRecipe".equals(tMethod.getName())) {
+                    tRecipeNeedsUnwrapping = true;
+                    break;
+                }
+            }
+        }
         for (GT_Recipe tRecipe : aList) {
+            boolean tHidden = tRecipe.mHidden; // recipe adding functions may change these, so save original values.
+            boolean tFakeRecipe = tRecipe.mFakeRecipe;
             boolean tDisabled = false;
             // disabled recipes are not returned by collision checking, and duration 0 recipes are forced to duration 1 when used
             // by machines.  Workaround by temporarily enabling recipes marked as disabled in the json, then re-disabling them later.
@@ -2047,16 +2058,7 @@ public class GT_MachineRecipeLoader implements Runnable {
                 tDisabled = true;
                 tRecipe.mEnabled = true;
             }
-            boolean tRecipeNeedsUnwrapping = false;
             GT_Recipe tAddedRecipe = null;
-            if (aMap.getClass() != GT_Recipe_Map.class) {
-                for (Method tMethod : aMap.getClass().getDeclaredMethods()) {
-                    if ("addRecipe".equals(tMethod.getName())) {
-                        tRecipeNeedsUnwrapping = true;
-                        break;
-                    }
-                }
-            }
             if (tRecipeNeedsUnwrapping) {
                 // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
                 tAddedRecipe = aMap.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
@@ -2065,9 +2067,8 @@ public class GT_MachineRecipeLoader implements Runnable {
                 tAddedRecipe = aMap.addRecipe(tRecipe);
             }
             if (tAddedRecipe != null) {
-                tAddedRecipe.mEnabled = tRecipe.mEnabled;
-                tAddedRecipe.mHidden = tRecipe.mHidden;
-                tAddedRecipe.mFakeRecipe = tRecipe.mFakeRecipe;
+                tAddedRecipe.mHidden = tHidden;
+                tAddedRecipe.mFakeRecipe = tFakeRecipe;
                 if (tDisabled) {
                     sJsonDisabledRecipes.add(tAddedRecipe);
                 }

@@ -110,5 +110,17 @@
 "duration":500,
 "EUt":1920,
 "blastTemp":2900},
-        
+{"inputs":[{"item": "GTItemList:Circuit_Parts_RawCrystalChip", "count": 1}, {"ore": "plateEmerald", "count": 1}],
+"inputFluids":[{"fluid": "helium", "amount": 1000}],
+"outputs":[{"item": "GTItemList:Circuit_Parts_Crystal_Chip_Elite", "count": 1}],
+"duration": 900,
+"EUt": 480,
+"blastTemp": 5000},
+{"inputs":[{"item": "GTItemList:Circuit_Parts_RawCrystalChip", "count": 1}, {"ore": "plateOlivine", "count": 1}],
+"inputFluids":[{"fluid": "helium", "amount": 1000}],
+"outputs":[{"item": "GTItemList:Circuit_Parts_Crystal_Chip_Elite", "count": 1}],
+"duration": 900,
+"EUt": 480,
+"blastTemp": 5000},
+      
 {}]
