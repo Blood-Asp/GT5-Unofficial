@@ -87,6 +87,10 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return 2048;
     }
 
+    protected Materials getBooster() {
+        return Materials.Oxygen;
+    }
+
     /**
      * x times fuel will be consumed when boosted
      * This will however NOT increase power output
@@ -123,7 +127,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                         if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
                             fuelConsumption = tLiquid.amount = boostEu ? (getBoostFactor() * getNominalOutput() / aFuel.mSpecialValue) : (getNominalOutput() / aFuel.mSpecialValue); //Calc fuel consumption
                             if(depleteInput(tLiquid)) { //Deplete that amount
-                                boostEu = depleteInput(Materials.Oxygen.getGas(2L * getAdditiveFactor()));
+                                boostEu = depleteInput(getBooster().getGas(2L * getAdditiveFactor()));
 
                                 if(tFluids.contains(Materials.Lubricant.getFluid(1L))) { //Has lubricant?
                                     //Deplete Lubricant. 1000L should = 1 hour of runtime (if baseEU = 2048)

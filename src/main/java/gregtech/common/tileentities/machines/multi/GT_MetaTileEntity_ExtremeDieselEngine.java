@@ -129,6 +129,11 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
+    protected Materials getBooster() {
+        return Materials.LiquidOxygen;
+    }
+
+    @Override
     protected int getAdditiveFactor() {
         return 8;
     }
