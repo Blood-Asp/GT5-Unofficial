@@ -1,0 +1,7 @@
+[
+
+{"inputs": [{"item": "minecraft:gravel:0", "count": 1}], 
+"outputs": [{"item": "minecraft:flint:0", "count": 1}],
+"duration": 800, 
+"EUt": 16},
+{}]

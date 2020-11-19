@@ -1,0 +1,15 @@
+[
+{"inputs":[{"item": "GTItemList:FR_Wax", "count": 1}, {"item": "GTItemList:Shape_Extruder_Cell", "count": 0}],
+"outputs":[{"item": "GTItemList:FR_WaxCapsule", "count": 1}],
+"duration": 64,
+"EUt": 16},
+{"inputs":[{"item": "GTItemList:FR_RefractoryWax", "count": 1}, {"item": "GTItemList:Shape_Extruder_Cell", "count": 0}],
+"outputs":[{"item": "GTItemList:FR_RefractoryCapsule", "count": 1}],
+"duration": 128,
+"EUt": 16},
+
+{"inputs":[{"ore": "ingotBorosilicateGlass", "count": 1}, {"item": "GTItemList:Shape_Extruder_Wire", "count": 0}], 
+"outputs":[{"item": "GTItemList:Circuit_Parts_GlassFiber", "count": 8}], 
+"duration": 160, 
+"EUt": 96},
+{}]

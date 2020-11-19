@@ -1,0 +1,22 @@
+[
+
+{"inputFluids": [{"materialFluid": "Biomass", "amount": 1000}], 
+"inputs": [{"circuit": 2}],
+"outputFluids": [{"materialFluid": "FermentedBiomass", "amount": 1000}], 
+"duration": 100, 
+"EUt": 10},
+
+{"inputs": [{"ore": "dustSugar", "count": 23}, {"circuit": 1}],
+"outputs": [{"ore": "dustCharcoal", "count": 12}],
+"outputFluids": [{"fluid": "water", "amount": 11000}], 
+"duration": 320, 
+"EUt": 64},
+
+{"inputs": [{"ore": "dustSugar", "count": 23}, {"circuit": 2}], 
+"inputFluids": [{"gas": "Nitrogen", "amount": 500}], 
+"outputs": [{"ore": "dustCharcoal", "count": 12}],
+"outputFluids": [{"fluid": "water", "amount": 11000}], 
+"duration": 160, 
+"EUt": 96},
+
+{}]
