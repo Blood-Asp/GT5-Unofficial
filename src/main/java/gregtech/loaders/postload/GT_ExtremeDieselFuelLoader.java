@@ -3,14 +3,18 @@ package gregtech.loaders.postload;
 import gregtech.api.enums.Materials;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import net.minecraftforge.fluids.FluidStack;
 
 public class GT_ExtremeDieselFuelLoader implements Runnable {
     @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding extreme diesel fuel.");
-        for (GT_Recipe r : GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList) {
-            if (r.mFluidInputs.length == 1 && Materials.GasolinePremium.getFluid(1).isFluidEqual(r.mFluidInputs[0])) {
-                GT_Recipe.GT_Recipe_Map.sExtremeDieselFuels.add(r);
+        FluidStack tHOGStack = Materials.GasolinePremium.getFluid(1);
+        for (GT_Recipe tFuel : GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList) {
+            FluidStack tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true);
+            if (tLiquid != null && tHOGStack.isFluidEqual(tLiquid)) {
+                GT_Recipe.GT_Recipe_Map.sExtremeDieselFuels.add(tFuel);
                 return;
             }
         }
