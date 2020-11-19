@@ -80,8 +80,8 @@
 "duration": 40,
 "EUt": 256},
 
-{"inputFluids": [{"materialFluid": "DilutedHydrochloricAcid", "amount": 2000}],
-"outputFluids": [{"fluid": "water", "amount": 1000}, {"materialFluid": "HydrochloricAcid", "amount": 1000}],
+{"inputFluids": [{"materialFluid": "DilutedHydrochloricAcid_GT5U", "amount": 2000}],
+"outputFluids": [{"fluid": "water", "amount": 1000}, {"materialFluid": "HydrochloricAcid_GT5U", "amount": 1000}],
 "optimize": false,
 "enableCondition": "MoreComplicatedChemicalRecipes",
 "duration": 300,
@@ -100,4 +100,21 @@
 "optimize": false,
 "duration": 75,
 "EUt": 180},
+
+{"inputFluids": [{"materialFluid": "WoodVinegar", "amount": 1000}],
+"outputFluids": [{"materialFluid": "AceticAcid", "amount": 100}, {"fluid": "water", "amount": 500}, {"materialFluid": "Ethanol", "amount": 10}, {"materialFluid": "Methanol", "amount": 300}, {"materialFluid": "Acetone", "amount": 50}, {"materialFluid": "MethylAcetate", "amount": 10}],
+"enableCondition": "MoreComplicatedChemicalRecipes",
+"duration": 80,
+"EUt": 64},
+{"inputFluids": [{"materialFluid": "WoodTar", "amount": 1000}],
+"outputFluids": [{"materialFluid": "Creosote", "amount": 500}, {"materialFluid": "Phenol", "amount": 75}, {"materialFluid": "Benzene", "amount": 350}, {"materialFluid": "Toluene", "amount": 75}],
+"enableCondition": "MoreComplicatedChemicalRecipes",
+"duration": 80,
+"EUt": 64},
+
+{"inputFluids": [{"materialFluid": "Acetone", "amount": 1000}],
+"outputFluids": [{"gas": "Ethenone", "amount": 500}, {"gas": "Methane", "amount": 500}],
+"enableCondition": "MoreComplicatedChemicalRecipes",
+"duration": 100,
+"EUt": 160},
 {}]

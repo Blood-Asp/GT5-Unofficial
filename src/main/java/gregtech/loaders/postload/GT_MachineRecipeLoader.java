@@ -134,6 +134,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         tRecipeFileMap.put(GT_Recipe_Map.sPolarizerRecipes, "polarizer.json");
         tRecipeFileMap.put(GT_Recipe_Map.sPrimitiveBlastRecipes, "primitive_blast_furnace.json");
         tRecipeFileMap.put(GT_Recipe_Map.sPrinterRecipes, "printer.json");
+        tRecipeFileMap.put(GT_Recipe_Map.sPyrolyseRecipes, "pyrolyse_oven.json");
         tRecipeFileMap.put(GT_Recipe_Map.sSifterRecipes, "sifter.json");
         tRecipeFileMap.put(GT_Recipe_Map.sSlicerRecipes, "slicer.json");
         tRecipeFileMap.put(GT_Recipe_Map.sThermalCentrifugeRecipes, "thermal_centrifuge.json");
@@ -1723,18 +1724,6 @@ public class GT_MachineRecipeLoader implements Runnable {
 
     private void addChemicalRecipesSimple(){
         try {
-            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_simple.json");
-            if (tStream != null) {
-                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
-                addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
-                tStream.close();
-            }
-        } catch (Throwable e) {
-            GT_Log.err.println("Error while reading resource chemical_simple.json");
-            e.printStackTrace(GT_Log.err);
-        }
-        try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_simple_small.json");
             if (tStream != null) {
                 List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
@@ -1745,22 +1734,21 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Log.err.println("Error while reading resource chemical_simple_small.json");
             e.printStackTrace(GT_Log.err);
         }
-
-    }
-
-    private void addChemicalRecipesComplicated(){
         try {
-            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated.json");
+            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_simple_large.json");
             if (tStream != null) {
                 List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
                 addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
-            GT_Log.err.println("Error while reading resource chemical_complicated.json");
+            GT_Log.err.println("Error while reading resource chemical_simple_large.json");
             e.printStackTrace(GT_Log.err);
         }
+
+    }
+
+    private void addChemicalRecipesComplicated(){
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated_small.json");
             if (tStream != null) {
@@ -1769,24 +1757,18 @@ public class GT_MachineRecipeLoader implements Runnable {
                 tStream.close();
             }
         } catch (Throwable e) {
-            GT_Log.err.println("Error while reading resource chemical_complicated.json");
+            GT_Log.err.println("Error while reading resource chemical_complicated_small.json");
             e.printStackTrace(GT_Log.err);
         }
         try {
             InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_complicated_large.json");
             if (tStream != null) {
                 List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
-                for (GT_Recipe tRecipe : tRecipeList) {
-                    // A couple of the recipe maps wrap the recipe in a subclass, but don't override the addRecipe method that takes a GT_Recipe argument.
-                    GT_Recipe tAddedRecipe = GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, tRecipe.mInputs, tRecipe.mOutputs, tRecipe.mSpecialItems,
-                            tRecipe.mChances, tRecipe.mFluidInputs, tRecipe.mFluidOutputs, tRecipe.mDuration, tRecipe.mEUt, tRecipe.mSpecialValue);
-                    tAddedRecipe.mEnabled = tRecipe.mEnabled;
-                    tAddedRecipe.mHidden = tRecipe.mHidden;
-                }
+                addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
-            GT_Log.err.println("Error while reading resource chemical_complicated.json");
+            GT_Log.err.println("Error while reading resource chemical_complicated_large.json");
             e.printStackTrace(GT_Log.err);
         }
         GT_Values.RA.addDefaultPolymerizationRecipes(Materials.VinylAcetate.mFluid, Materials.VinylAcetate.getCells(1), Materials.PolyvinylAcetate.mFluid);
@@ -1817,15 +1799,25 @@ public class GT_MachineRecipeLoader implements Runnable {
 
     private void addOldChemicalRecipes() {
         try {
-            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_old.json");
+            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_old_small.json");
             if (tStream != null) {
                 List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
                 addRecipesToMap(GT_Recipe_Map.sChemicalRecipes, tRecipeList);
+                tStream.close();
+            }
+        } catch (Throwable e) {
+            GT_Log.err.println("Error while reading resource chemical_old_small.json");
+            e.printStackTrace(GT_Log.err);
+        }
+        try {
+            InputStream tStream = GT_MachineRecipeLoader.class.getResourceAsStream("/assets/gregtech/recipes/chemical_old_large.json");
+            if (tStream != null) {
+                List<GT_Recipe> tRecipeList = GT_RecipeListJsonReader.readRecipes(new JsonReader(new InputStreamReader(tStream)));
                 addRecipesToMap(GT_Recipe_Map.sMultiblockChemicalRecipes, tRecipeList);
                 tStream.close();
             }
         } catch (Throwable e) {
-            GT_Log.err.println("Error while reading resource chemical_old.json");
+            GT_Log.err.println("Error while reading resource chemical_old_large.json");
             e.printStackTrace(GT_Log.err);
         }
     }

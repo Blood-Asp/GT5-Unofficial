@@ -170,8 +170,8 @@
 "duration": 80,
 "EUt": 64},
 
-{"inputFluids": [{"materialFluid": "DilutedHydrochloricAcid", "amount": 2000}],
-"fluidsPerCircuit": [{"fluid": "water", "amount": 1000}, {"materialFluid": "HydrochloricAcid", "amount": 1000}],
+{"inputFluids": [{"materialFluid": "DilutedHydrochloricAcid_GT5U", "amount": 2000}],
+"fluidsPerCircuit": [{"fluid": "water", "amount": 1000}, {"materialFluid": "HydrochloricAcid_GT5U", "amount": 1000}],
 "enableCondition": "MoreComplicatedChemicalRecipes",
 "duration": 600,
 "EUt": 16},
