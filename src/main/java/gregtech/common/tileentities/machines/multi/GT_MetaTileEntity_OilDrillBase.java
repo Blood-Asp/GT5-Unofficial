@@ -3,6 +3,7 @@ package gregtech.common.tileentities.machines.multi;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,6 +16,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.GT_Values.debugDriller;
@@ -55,18 +58,30 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        return new String[]{
-                "Controller Block for the Oil/Gas/Fluid Drilling Rig " + (tierSuffix != null ? tierSuffix : ""),
-                "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
-                "3x1x3 Base of " + casings,
-                "1x3x1 " + casings + " pillar (Center of base)",
-                "1x3x1 " + getFrameMaterial().mName + " Frame Boxes (Each pillar side and on top)",
-                "1x Output Hatch (One of base casings)",
-                "1x Maintenance Hatch (One of base casings)",
-                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Working on " + getRangeInChunks() + "x" + getRangeInChunks() + " chunks",
-                "Use Screwdriver to configure range",
-                "Use Programmed Circuits to ignore near exhausted oil field"};
+        
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Pump")
+		.addInfo("Controller Block for the Oil/Gas/Fluid Drilling Rig " + (tierSuffix != null ? tierSuffix : ""))
+		.addInfo("Works on " + getRangeInChunks() + "x" + getRangeInChunks() + " chunks")
+		.addInfo("Use a Screwdriver to configure range")
+		.addInfo("Use Programmed Circuits to ignore near exhausted oil field")
+		.addInfo("If total circuit # is greater than output amount it will halt. If it worked right.")//doesn't work
+		.addSeparator()
+		.beginStructureBlock(3, 7, 3, false)
+		.addController("Front bottom")
+		.addStructureInfo(casings + " form the 3x1x3 Base")
+		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
+		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
+		.addMaintenanceHatch("Any base casing")
+		.addInputBus("Mining Pipes or Circuits, optional, any base casing")
+		.addOutputHatch("Any base casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
 

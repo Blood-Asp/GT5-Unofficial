@@ -4,8 +4,11 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
 import static gregtech.api.enums.GT_Values.VN;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_ConcreteBackfiller2 extends GT_MetaTileEntity_ConcreteBackfillerBase {
     public GT_MetaTileEntity_ConcreteBackfiller2(int aID, String aName, String aNameRegional) {
@@ -19,18 +22,33 @@ public class GT_MetaTileEntity_ConcreteBackfiller2 extends GT_MetaTileEntity_Con
     @Override
     public String[] getDescription() {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        return new String[]{
-                "Controller Block for the Advanced Concrete Backfiller",
-                "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
-                "3x1x3 Base of " + casings,
-                "1x3x1 " + casings + " pillar (Center of base)",
-                "1x3x1 " + getFrameMaterial().mName + " Frame Boxes (Each pillar side and on top)",
-                "1x Input Hatch (One of base casings)",
-                "1x Maintenance Hatch (One of base casings)",
-                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Put Programmed Circuits into Data Access to config radius",
-                "Radius = (total config value)x2 blocks",
-                "Default 64, Maximum 128",};
+        
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Concrete Backfiller")
+		.addInfo("Controller Block for the Advanced Concrete Backfiller")
+		.addInfo("Will fill in areas below it with light concrete. This goes through walls")
+		.addInfo("Use it to remove any spawning locations beneath your base to reduce lag")
+		.addInfo("Will pull back the pipes after it finishes that layer")
+		.addInfo("Put Programmed Circuits into a Data Access Hatch to config radius. Buggy")
+		.addInfo("Radius = (total config value)x2 blocks. Default 64, Maximum 128")//broken
+		.addSeparator()
+		.beginStructureBlock(3, 7, 3, false)
+		.addController("Front bottom")
+		.addStructureInfo(casings + " form the 3x1x3 Base")
+		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
+		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
+		.addMaintenanceHatch("Any base casing")
+		.addStructureInfo("Data Access Hatch: Any base casing")
+		.addInputBus("Mining Pipes, optional, any base casing")
+		.addInputHatch("GT Concrete, any base casing")
+		.addOutputBus("Mining Pipes, optional, any base casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

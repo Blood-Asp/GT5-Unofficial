@@ -1,10 +1,13 @@
 package gregtech.common.tileentities.machines.multi;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import net.minecraft.block.Block;
 
 public class GT_MetaTileEntity_FusionComputer2 extends GT_MetaTileEntity_FusionComputer {
@@ -48,14 +51,29 @@ public class GT_MetaTileEntity_FusionComputer2 extends GT_MetaTileEntity_FusionC
     }
 
     public String[] getDescription() {
-        return new String[]{
-        		"It's over 9000!!!", 
-        		"Fusion Machine Casings around Fusion Coil Blocks", 
-        		"2-16 Input Hatches", 
-        		"1-16 Output Hatches", 
-        		"1-16 Energy Hatches", 
-        		"All Hatches must be ZPMV or better", 
-        		"4096EU/t and 20mio EU Cap per Energy Hatch"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Fusion Reactor")
+		.addInfo("It's over 9000!!!")
+		.addInfo("Controller block for the Fusion Reactor Mk II")
+		.addInfo("4096EU/t and 20M EU capacity per Energy Hatch")
+		.addInfo("If the recipe has a startup cost greater than the")
+		.addInfo("number of energy hatches * cap, you can't do it")
+		.addSeparator()
+		.beginStructureBlock(15, 3, 15, false)
+		.addController("See diagram when placed")
+		.addCasingInfo("Fusion Machine Casing", 79)
+		.addStructureInfo("Cover the coils with casing")
+		.addOtherStructurePart("Fusion Coil Block", "Center part of the ring")
+		.addEnergyHatch("1-16, Specified casings")
+		.addInputHatch("2-16, Specified casings")
+		.addOutputHatch("1-16, Specified casings")
+		.addStructureInfo("ALL Hatches must be ZPM or better")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override
