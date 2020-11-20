@@ -2,13 +2,16 @@ package gregtech.api.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.GT_Mod;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Iterator;
 
@@ -187,7 +190,91 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                 if (mTileEntity.getMetaTileEntity() == null) return null;
                 ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer = !((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer;
                 return null;
+            case 2:
+                // fluid output tank
+                if (mTileEntity.getMetaTileEntity() == null) return null;
+                GT_MetaTileEntity_BasicMachine tMachine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
+                ItemStack tStack = aPlayer.inventory.getItemStack();
+                if (tStack != null) {
+                    FluidStack tFluid = GT_Utility.getFluidForFilledItem(tStack, true);
+                    if (tFluid != null) {
+                        if (tMachine.getDrainableStack() == null) {
+                            if (tFluid.amount <= tMachine.getCapacity()) {
+                                if (aPlayer.inventory.addItemStackToInventory(GT_Utility.getContainerItem(tStack, true))) {
+                                    tMachine.setDrainableStack(tFluid.copy());
+                                    tStack.stackSize--;
+                                    if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                    aPlayer.inventoryContainer.detectAndSendChanges();
+                                }
+                            }
+                        } else {
+                            if (tFluid.isFluidEqual(tMachine.getDrainableStack()) && tFluid.amount + tMachine.getDrainableStack().amount <= tMachine.getCapacity()) {
+                                if (aPlayer.inventory.addItemStackToInventory(GT_Utility.getContainerItem(tStack, true))) {
+                                    tMachine.getDrainableStack().amount += tFluid.amount;
+                                    tStack.stackSize--;
+                                    if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                    aPlayer.inventoryContainer.detectAndSendChanges();
+                                }
+                            }
+                        }
+                        return tStack;
+                    }
+                    ItemStack tOutput = GT_Utility.fillFluidContainer(tMachine.getDrainableStack(), tStack, false, true);
+                    if (tOutput != null && aPlayer.inventory.addItemStackToInventory(tOutput)) {
+                        tFluid = GT_Utility.getFluidForFilledItem(tOutput, true);
+                        tStack.stackSize--;
+                        if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                        if (tFluid != null) tMachine.getDrainableStack().amount -= tFluid.amount;
+                        if (tMachine.getDrainableStack().amount <= 0 && tMachine.isFluidChangingAllowed()) tMachine.setDrainableStack(null);
+                        aPlayer.inventoryContainer.detectAndSendChanges();
+                        return tStack;
+                    }
+                }       
+                return null;
             default:
+                if (aSlotIndex == getAllSlotCount() - 1) {
+                    // fluid input tank
+                    if (mTileEntity.getMetaTileEntity() == null) return null;
+                    tMachine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
+                    tStack = aPlayer.inventory.getItemStack();
+                    if (tStack != null) {
+                        FluidStack tFluid = GT_Utility.getFluidForFilledItem(tStack, true);
+                        if (tFluid != null) {
+                            if (tMachine.getFillableStack() == null) {
+                                if (tFluid.amount <= tMachine.getCapacity()) {
+                                    if (aPlayer.inventory.addItemStackToInventory(GT_Utility.getContainerItem(tStack, true))) {
+                                        tMachine.setFillableStack(tFluid.copy());
+                                        tStack.stackSize--;
+                                        if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                        aPlayer.inventoryContainer.detectAndSendChanges();
+                                    }
+                                }
+                            } else {
+                                if (tFluid.isFluidEqual(tMachine.getFillableStack()) && tFluid.amount + tMachine.getFillableStack().amount <= tMachine.getCapacity()) {
+                                    if (aPlayer.inventory.addItemStackToInventory(GT_Utility.getContainerItem(tStack, true))) {
+                                        tMachine.getFillableStack().amount += tFluid.amount;
+                                        tStack.stackSize--;
+                                        if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                        aPlayer.inventoryContainer.detectAndSendChanges();
+                                    }
+                                }
+                            }
+                            return tStack;
+                        }
+                        if (GT_Mod.gregtechproxy.mHardCoreInputTanks) return null;
+                        ItemStack tOutput = GT_Utility.fillFluidContainer(tMachine.getFillableStack(), tStack, false, true);
+                        if (tOutput != null && aPlayer.inventory.addItemStackToInventory(tOutput)) {
+                            tFluid = GT_Utility.getFluidForFilledItem(tOutput, true);
+                            tStack.stackSize--;
+                            if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                            if (tFluid != null) tMachine.getFillableStack().amount -= tFluid.amount;
+                            if (tMachine.getFillableStack().amount <= 0 && tMachine.isFluidChangingAllowed()) tMachine.setFillableStack(null);
+                            aPlayer.inventoryContainer.detectAndSendChanges();
+                            return tStack;
+                        }
+                    }       
+                    return null;              
+                }
                 return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
         }
     }
