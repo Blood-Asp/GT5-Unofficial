@@ -190,7 +190,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			}
 
 		}
-		return casingAmount >= 8 && hasHeatingCoil;
+		return casingAmount >= 8 && hasHeatingCoil && !mEnergyHatches.isEmpty() && !mMaintenanceHatches.isEmpty();
 	}
 
 	@Override
