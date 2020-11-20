@@ -8,6 +8,7 @@ import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.objects.ItemData;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+
+import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.VN;
 
@@ -335,22 +338,33 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        return new String[]{
-                "Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""),
-                "Size(WxHxD): 3x7x3, Controller (Front middle bottom)",
-                "3x1x3 Base of " + casings,
-                "1x3x1 " + casings + " pillar (Center of base)",
-                "1x3x1 " + getFrameMaterial().mName + " Frame Boxes (Each pillar side and on top)",
-                "1x Input Hatch for drilling fluid (Any bottom layer casing)",
-                "1x Input Bus for mining pipes (Any bottom layer casing; not necessary)",
-                "1x Output Bus (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any bottom layer casing)",
-                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Use Screwdriver to configure block radius",
-                "Use Soldering iron to turn off chunk mode",
-                "Maximum radius is " + (getRadiusInChunks() << 4) + " blocks",
-                "In chunk mode working area center is the chunk corner nearest to the drill",
-                "Fortune bonus of " + (mTier + 3)};
+        
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Miner")
+		.addInfo("Controller Block for the Ore Drilling Plant " + (tierSuffix != null ? tierSuffix : ""))
+		.addInfo("Use a Screwdriver to configure block radius")
+		.addInfo("Maximum radius is " + (getRadiusInChunks() << 4) + " blocks")
+		.addInfo("Use Soldering iron to turn off chunk mode")
+		.addInfo("In chunk mode, working area center is the chunk corner nearest to the drill")
+		.addInfo("Gives ~3x as much crushed ore vs normal processing")
+		.addInfo("Fortune bonus of " + (mTier + 3) + ". Only works on small ores")
+		.addSeparator()
+		.beginStructureBlock(3, 7, 3, false)
+		.addController("Front bottom")
+		.addStructureInfo(casings + " form the 3x1x3 Base")
+		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
+		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
+		.addMaintenanceHatch("Any base casing")
+		.addInputBus("Mining Pipes, optional, any base casing")
+		.addInputHatch("Drilling Fluid, any base casing")
+		.addOutputBus("Any base casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

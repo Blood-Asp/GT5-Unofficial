@@ -1,19 +1,20 @@
 # Multiblock Tooltip Builder Keywords
 # Context can be found in the class gregtech.api.util.GT_Multiblock_Tooltip_Builder
-GT5U.MBTT.MachineType=Machine Type:
-GT5U.MBTT.Dimensions=Dimensions:
-GT5U.MBTT.Structure=Structure:
-GT5U.MBTT.Controller=Controller:
+GT5U.MBTT.MachineType=Machine Type
+GT5U.MBTT.Dimensions=Dimensions
+GT5U.MBTT.Hollow=(Hollow)
+GT5U.MBTT.Structure=Structure
+GT5U.MBTT.Controller=Controller
 GT5U.MBTT.Minimum=(minimum)
-GT5U.MBTT.MaintenanceHatch=Maintenance Hatch:
-GT5U.MBTT.MufflerHatch=Muffler Hatch:
-GT5U.MBTT.EnergyHatch=Energy Hatch:
-GT5U.MBTT.DynamoHatch=Dynamo Hatch:
-GT5U.MBTT.InputBus=Input Bus/ses:
-GT5U.MBTT.InputHatch=Input Hatch/es:
-GT5U.MBTT.OutputBus=Output Bus/ses:
-GT5U.MBTT.OutputHatch=Output Hatch/es:
-GT5U.MBTT.Causes=Causes:
+GT5U.MBTT.MaintenanceHatch=Maintenance Hatch
+GT5U.MBTT.MufflerHatch=Muffler Hatch
+GT5U.MBTT.EnergyHatch=Energy Hatch
+GT5U.MBTT.DynamoHatch=Dynamo Hatch
+GT5U.MBTT.InputBus=Input Bus
+GT5U.MBTT.InputHatch=Input Hatch
+GT5U.MBTT.OutputBus=Output Bus
+GT5U.MBTT.OutputHatch=Output Hatch
+GT5U.MBTT.Causes=Causes
 GT5U.MBTT.PPS=pollution per second
 GT5U.MBTT.Hold=Hold
 GT5U.MBTT.Display=to display structure guidelines

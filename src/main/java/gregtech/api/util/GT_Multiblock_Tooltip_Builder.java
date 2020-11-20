@@ -25,7 +25,7 @@ import net.minecraft.util.StatCollector;
  * addInputBus/addInputHatch/addOutputBus/addOutputHatch, in that order<br>
  * Use addStructureInfo for any comments on nonstandard structure info wherever needed
  * <br>
- * toolTipFinisher<br>
+ * toolTipFinisher goes at the very end<br>
  * <br>
  * Originally created by kekzdealer
  */
@@ -42,6 +42,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	//Localized tooltips
 	private static final String TT_machineType = StatCollector.translateToLocal("GT5U.MBTT.MachineType");
 	private static final String TT_dimensions = StatCollector.translateToLocal("GT5U.MBTT.Dimensions");
+	private static final String TT_hollow = StatCollector.translateToLocal("GT5U.MBTT.Hollow");
 	private static final String TT_structure = StatCollector.translateToLocal("GT5U.MBTT.Structure");
 	private static final String TT_controller = StatCollector.translateToLocal("GT5U.MBTT.Controller");
 	private static final String TT_minimum = StatCollector.translateToLocal("GT5U.MBTT.Minimum");
@@ -74,7 +75,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addMachineType(String machine) {
-		iLines.add(TT_machineType + EnumChatFormatting.YELLOW + machine + EnumChatFormatting.RESET);
+		iLines.add(TT_machineType + COLON + EnumChatFormatting.YELLOW + machine + EnumChatFormatting.RESET);
 		return this;
 	}
 	
@@ -111,7 +112,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addPollutionAmount(int pollution) {
-		iLines.add(TT_causes + " " + EnumChatFormatting.DARK_PURPLE + pollution + " " + TT_pps + EnumChatFormatting.RESET);
+		iLines.add(TT_causes + COLON + EnumChatFormatting.DARK_PURPLE + pollution + " " + EnumChatFormatting.GRAY + TT_pps);
 		return this;
 	}
 
@@ -125,12 +126,50 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * 		Structure height.
 	 * @param l
 	 * 		Structure depth/length.
+	 * @param hollow
+	 * 		T/F, adds a (hollow) comment if true
 	 * @return Instance this method was called on.
 	 */
-	public GT_Multiblock_Tooltip_Builder beginStructureBlock(int w, int h, int l) {
-		sLines.add(TT_dimensions + w + "x" + h + "x" + l + " (WxHxL)");
-		sLines.add(TT_structure);
-		return this;
+	public GT_Multiblock_Tooltip_Builder beginStructureBlock(int w, int h, int l, boolean hollow) {
+		if (hollow) {
+			sLines.add(TT_dimensions + COLON + w + "x" + h + "x" + l + " (WxHxL) " + TT_hollow);
+		}
+		else {
+			sLines.add(TT_dimensions + COLON + w + "x" + h + "x" + l + " (WxHxL)");
+		}
+			sLines.add(TT_structure + COLON);
+			return this;
+	}
+	
+	/**
+	 * Begin adding structural information by adding a line about the structure's dimensions<br>
+	 * and then inserting a "Structure:" line. Variable version displays min and max
+	 *  
+	 * @param wmin
+	 * 		Structure min width.
+	 * @param wmax
+	 * 		Structure max width.
+	 * @param hmin
+	 * 		Structure min height.
+	 * @param hmax
+	 * 		Structure max height.
+	 * @param lmin
+	 * 		Structure min depth/length.
+	 * @param lmax
+	 * 		Structure max depth/length.
+	 * @param hollow
+	 * 		T/F, adds a (hollow) comment if true
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder beginVariableStructureBlock(int wmin, int wmax, int hmin, int hmax, int lmin, int lmax, boolean hollow) {
+		if (hollow) {
+			sLines.add(TT_dimensions + COLON + wmin + "-" + wmax + "x" + hmin + "-" + hmax + "x" + lmin + "-" + lmax + " (WxHxL) " + TT_hollow);
+		}
+		else {
+			sLines.add(TT_dimensions + COLON + wmin + "-" + wmax + "x" + hmin + "-" + hmax + "x" + lmin + "-" + lmax + " (WxHxL)");
+		}
+			sLines.add(TT_structure + COLON);
+			return this;
 	}
 	
 	/**
@@ -141,7 +180,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addController(String info) {
-		sLines.add(TAB + TT_controller + info);
+		sLines.add(TAB + TT_controller + COLON + info);
 		return this;
 	}
 		
@@ -169,7 +208,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addOtherStructurePart(String name, String info) {
-		sLines.add(TAB + name + info);
+		sLines.add(TAB + name + COLON + info);
 		return this;
 	}
 	
@@ -181,7 +220,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addMaintenanceHatch(String info) {
-		sLines.add(TAB + TT_maintenancehatch + info);
+		sLines.add(TAB + TT_maintenancehatch + COLON + info);
 		return this;
 	}
 	
@@ -193,7 +232,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addMufflerHatch(String info) {
-		sLines.add(TAB + TT_mufflerhatch + info);
+		sLines.add(TAB + TT_mufflerhatch + COLON + info);
 		return this;
 	}
 	
@@ -205,7 +244,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addEnergyHatch(String info) {
-		sLines.add(TAB + TT_energyhatch + info);
+		sLines.add(TAB + TT_energyhatch + COLON + info);
 		return this;
 	}
 	
@@ -217,7 +256,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addDynamoHatch(String info) {
-		sLines.add(TAB + TT_dynamohatch + info);
+		sLines.add(TAB + TT_dynamohatch + COLON + info);
 		return this;
 	}
 
@@ -229,7 +268,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addInputBus(String info) {
-		sLines.add(TAB + TT_inputbus + info);
+		sLines.add(TAB + TT_inputbus + COLON + info);
 		return this;
 	}
 	
@@ -241,7 +280,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addInputHatch(String info) {
-		sLines.add(TAB + TT_inputhatch + info);
+		sLines.add(TAB + TT_inputhatch + COLON + info);
 		return this;
 	}
 	
@@ -253,7 +292,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addOutputBus(String info) {
-		sLines.add(TAB + TT_outputbus + info);
+		sLines.add(TAB + TT_outputbus + COLON + info);
 		return this;
 	}
 	
@@ -265,7 +304,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 * @return Instance this method was called on.
 	 */
 	public GT_Multiblock_Tooltip_Builder addOutputHatch(String info) {
-		sLines.add(TAB + TT_outputhatch + info);
+		sLines.add(TAB + TT_outputhatch + COLON + info);
 		return this;
 	}
 	
@@ -291,7 +330,7 @@ public class GT_Multiblock_Tooltip_Builder {
 	 */
 	public void toolTipFinisher(String mod) {
 		iLines.add(TT_hold + " " + EnumChatFormatting.BOLD + "[LSHIFT]" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " " + TT_todisplay);
-		iLines.add(TT_mod + " " + EnumChatFormatting.GREEN + mod + EnumChatFormatting.RESET);
+		iLines.add(TT_mod + COLON + EnumChatFormatting.GREEN + mod + EnumChatFormatting.GRAY);
 		iArray = new String[iLines.size()];
 		sArray = new String[sLines.size()];
 		iLines.toArray(iArray);

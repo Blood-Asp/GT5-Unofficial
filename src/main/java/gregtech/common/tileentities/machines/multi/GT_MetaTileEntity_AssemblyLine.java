@@ -2,6 +2,8 @@ package gregtech.common.tileentities.machines.multi;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
@@ -14,6 +16,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataAccess;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -42,17 +45,34 @@ public class GT_MetaTileEntity_AssemblyLine
     }
 
     public String[] getDescription() {
-        return new String[]{"Assembling Line",
-                "Size: 3x(5-16)x4, variable length",
-                "From Bottom to Top, Left to Right",
-                "Layer 1 - Solid Steel Machine Casing, Input Bus (last is Output Bus), Solid Steel Machine Casing",
-                "        - Casings can be replaced by Maint or Input Hatch",
-                "Layer 2 - Reinforced Glass, Assembling Line Casing, Reinforced Glass",
-                "Layer 3 - Grate Machine Casing, Assembler Machine Casing, Grate Machine Casing",
-                "Layer 4 - Empty, Solid Steel Machine Casing, Empty - Casing can be replaced by Energy Hatch",
-                "Up to 16 repeating slices, First replaces 1 Grate with Assembly Line,",
-                "Last has Output Bus instead of Input Bus",
-                "Optional - Replace 1x Grate with Data Access Hatch next to the Controller"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Assembling Line")
+		.addInfo("Controller block for the Assembling Line")
+		.addInfo("Used to make complex machine parts (LuV+)")
+		.addInfo("Does not make Assembler items")
+		.addSeparator()
+		.beginVariableStructureBlock(5, 15, 4, 4, 3, 3, false)//?
+		.addStructureInfo("From Bottom to Top, Left to Right")
+		.addStructureInfo("Layer 1 - Solid Steel Machine Casing, Input Bus (last is Output Bus), Solid Steel Machine Casing")
+		.addStructureInfo("Layer 2 - Reinforced Glass, Assembling Line Casing, Reinforced Glass")
+		.addStructureInfo("Layer 3 - Grate Machine Casing, Assembler Machine Casing, Grate Machine Casing")
+		.addStructureInfo("Layer 4 - Empty, Solid Steel Machine Casing, Empty")
+		.addStructureInfo("Up to 16 repeating slices, each one allows for 1 more item in recipes, aside from the last")
+		.addStructureInfo("Optional - Replace 1x Grate with (Advanced) Data Access Hatch next to the Controller")
+		.addStructureInfo("Optional - Replace 1x Grate with (Advanced) Data Access Hatch next to the Controller")//TT
+		
+		.addController("Either Grate on layer 3 of the first slice")
+		.addEnergyHatch("Any layer 4 casing")
+		.addMaintenanceHatch("Any layer 1 casing")
+		.addInputBus("As specified on layer 1")
+		.addInputHatch("Any layer 1 casing")
+		.addOutputBus("Replaces Input Bus on final slice")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

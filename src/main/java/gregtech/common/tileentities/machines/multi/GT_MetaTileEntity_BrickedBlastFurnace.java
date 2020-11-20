@@ -1,11 +1,14 @@
 package gregtech.common.tileentities.machines.multi;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import net.minecraft.block.Block;
 
 public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_PrimitiveBlastFurnace{
@@ -26,13 +29,25 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Bricked Blast Furnace",
-                "Controller has to be placed in the (front) center of the second layer",
-                "Useable for Steel and general Pyrometallurgy",
-                "Size(WxHxD): 3x4x3 (Hollow, with opening on top)",
-                "Built from 32 Firebricks",
-                "Causes 200 Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Blast Furnace")
+		.addInfo("Controller Block for the Bricked Blast Furnace")
+		.addInfo("Usable for Steel and general Pyrometallurgy")
+		.addInfo("Has a useful interface, unlike other gregtech multis")
+		.addPollutionAmount(200)
+		.addSeparator()
+		.beginStructureBlock(3, 4, 3, true)
+		.addController("Front center")
+		.addOtherStructurePart("Firebricks", "Everything except the controller")
+		.addStructureInfo("The top block is also empty")
+		.addStructureInfo("You can share the walls of GT multis, so")
+		.addStructureInfo("each additional one costs less, up to 4")
+    	.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
 }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

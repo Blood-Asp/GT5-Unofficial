@@ -4,6 +4,8 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
@@ -12,6 +14,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,17 +41,27 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Large High Pressure Steam Turbine",
-                "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Superheated Steam Input Hatch (Side centered)",
-                "1x Maintenance Hatch (Side centered)",
-                "1x Dynamo Hatch (Back centered)",
-                "1x Output Hatch for Steam (Side centered)",
-                "Titanium Turbine Casings for the rest (24 at least!)",
-                "Needs a Turbine Item (Inside controller GUI)",
-                "Output depending on Rotor and fitting",
-                "Use screwdriver to adjust fitting of turbine"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Steam Turbine")
+		.addInfo("Controller block for the Large High Pressure Steam Turbine")
+		.addInfo("Needs a Turbine, place inside controller")
+		.addInfo("Outputs Steam as well as producing power")
+		.addInfo("Power output depends on turbine and fitting")
+		.addInfo("Use screwdriver to adjust fitting of turbine")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, true)
+		.addController("Front center")
+		.addCasingInfo("Titanium Turbine Casing", 24)
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("Side centered")
+		.addInputHatch("Superheated Steam, Side centered")
+		.addOutputHatch("Steam, Side centered")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

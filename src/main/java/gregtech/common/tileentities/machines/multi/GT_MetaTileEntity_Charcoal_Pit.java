@@ -2,6 +2,8 @@ package gregtech.common.tileentities.machines.multi;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
@@ -10,6 +12,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.common.GT_Pollution;
 import net.minecraft.block.Block;
@@ -38,15 +41,25 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller for the Charcoal Pit",
-                "Converts Logs into Brittle Charcoal blocks",
-                "Max Size(WxHxD): 11x6x11, Controller (Top layer, centered)",
-                "11x1x11 of Bricks (Bottom layer only)",
-                "11x5x11 of Logs (Above bottom Brick layer)",
-                "Only grass/dirt can touch Log blocks",
-                "No air between logs allowed",
-                "Causes 100 Pollution per second"};
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Charcoal Pile Igniter")
+		.addInfo("Controller for the Charcoal Pit")
+		.addInfo("Converts Logs into Brittle Charcoal blocks")
+		.addInfo("Will automatically start when valid")
+		.addPollutionAmount(100)
+		.addSeparator()
+		.beginVariableStructureBlock(3, 11, 3, 6, 3, 11, false)
+		.addStructureInfo("Can be up to 11x6x11 in size, shape doesn't matter")
+		.addOtherStructurePart("Bricks", "Bottom layer, under all wood logs")
+		.addOtherStructurePart("Dirt/Grass", "All logs must be covered by these, the controller, or bricks")
+		.addOtherStructurePart("Wood Logs", "Inside the previously mentioned blocks")
+		.addStructureInfo("No air between logs allowed")
+		.toolTipFinisher("Gregtech");
+        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

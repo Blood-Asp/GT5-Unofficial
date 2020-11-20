@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -16,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_ImplosionCompressor
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -32,17 +35,27 @@ public class GT_MetaTileEntity_ImplosionCompressor
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Implosion Compressor",
-                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front centered)",
-                "1x Input Bus (Any casing)",
-                "1x Output Bus (Any casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Muffler Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
-                "Solid Steel Machine Casings for the rest (16 at least!)",
-                "Casings can be replaced with Explosion Warning Signs",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Implosion Compressor")
+		.addInfo("Explosions are fun")
+		.addInfo("Controller block for the Implosion Compressor")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, true)
+		.addController("Front center")
+		.addCasingInfo("Solid Steel Machine Casing", 16)
+		.addStructureInfo("Casings can be replaced with Explosion Warning Signs")
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addMufflerHatch("Any casing")
+		.addInputBus("Any casing")
+		.addOutputBus("Any casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
