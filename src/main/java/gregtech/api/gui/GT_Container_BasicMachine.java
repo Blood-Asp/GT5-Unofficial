@@ -204,6 +204,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                                     tMachine.setDrainableStack(tFluid.copy());
                                     tStack.stackSize--;
                                     if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                    aPlayer.inventoryContainer.detectAndSendChanges();
                                 }
                             }
                         } else {
@@ -212,10 +213,11 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                                     tMachine.getDrainableStack().amount += tFluid.amount;
                                     tStack.stackSize--;
                                     if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                    aPlayer.inventoryContainer.detectAndSendChanges();
                                 }
                             }
                         }
-                        return null;
+                        return tStack;
                     }
                     ItemStack tOutput = GT_Utility.fillFluidContainer(tMachine.getDrainableStack(), tStack, false, true);
                     if (tOutput != null && aPlayer.inventory.addItemStackToInventory(tOutput)) {
@@ -224,7 +226,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                         if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
                         if (tFluid != null) tMachine.getDrainableStack().amount -= tFluid.amount;
                         if (tMachine.getDrainableStack().amount <= 0 && tMachine.isFluidChangingAllowed()) tMachine.setDrainableStack(null);
-                        return null;
+                        aPlayer.inventoryContainer.detectAndSendChanges();
+                        return tStack;
                     }
                 }       
                 return null;
@@ -243,6 +246,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                                         tMachine.setFillableStack(tFluid.copy());
                                         tStack.stackSize--;
                                         if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                        aPlayer.inventoryContainer.detectAndSendChanges();
                                     }
                                 }
                             } else {
@@ -251,10 +255,11 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                                         tMachine.getFillableStack().amount += tFluid.amount;
                                         tStack.stackSize--;
                                         if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
+                                        aPlayer.inventoryContainer.detectAndSendChanges();
                                     }
                                 }
                             }
-                            return null;
+                            return tStack;
                         }
                         if (GT_Mod.gregtechproxy.mHardCoreInputTanks) return null;
                         ItemStack tOutput = GT_Utility.fillFluidContainer(tMachine.getFillableStack(), tStack, false, true);
@@ -264,7 +269,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                             if (tStack.stackSize <= 0) aPlayer.inventory.setItemStack(null);
                             if (tFluid != null) tMachine.getFillableStack().amount -= tFluid.amount;
                             if (tMachine.getFillableStack().amount <= 0 && tMachine.isFluidChangingAllowed()) tMachine.setFillableStack(null);
-                            return null;
+                            aPlayer.inventoryContainer.detectAndSendChanges();
+                            return tStack;
                         }
                     }       
                     return null;              
