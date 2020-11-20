@@ -1,8 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-//import java.util.ArrayList;
-//import java.util.Collection;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -10,26 +7,17 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-//import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-//import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
-//import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-//import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-//import net.minecraftforge.fluids.FluidStack;
 
 public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_DieselEngine {
-	//protected int fuelConsumption = 0;
-    //protected int fuelValue = 0;
-    //protected int fuelRemaining = 0;
-    //protected boolean boostEu = false;
 
     public GT_MetaTileEntity_ExtremeDieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -41,11 +29,11 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
 
     @Override
     public String[] getDescription() {
-        return new String[]{
+        return new String[]{//change to new format after it's approved
                 "Controller Block for the Extreme Combustion Engine",
                 "Size(WxHxD): 3x3x4, Controller (front centered)",
                 "3x3x4 of Robust Tungstensteel Machine Casing (hollow, Min 16!)",
-                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",//todo
+                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
                 "8x Extreme Engine Intake Casing (around controller)",
                 "2x Input Hatch (HOG/Lubricant) (one of the Casings next to a Gear Box)",
                 "1x Input Hatch (Optional, for Liquid Oxygen) (one of the Casings next to a Gear Box)",
@@ -70,31 +58,31 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
         if (aSide == aFacing) {
             return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE)};
         }
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60]};//controller texture? where do I find this? Copied plasma turbine
+        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60]};
     }
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeExtremeDieselEngine.png");//change
+        return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeExtremeDieselEngine.png");
     }
 
     @Override
-    public Block getCasingBlock() {//changed to RTSMC
+    public Block getCasingBlock() {
         return GregTech_API.sBlockCasings4;
     }
 
     @Override
-    public byte getCasingMeta() {//same
+    public byte getCasingMeta() {
         return 0;
     }
 
     @Override
     public Block getIntakeBlock() {
-        return GregTech_API.sBlockCasings8;//added new
+        return GregTech_API.sBlockCasings8;
     }
 
     @Override
-    public byte getIntakeMeta() {//same
+    public byte getIntakeMeta() {
         return 4;
     }
 
@@ -109,7 +97,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
-    public byte getCasingTextureIndex() {//should be what hatches/busses change to?
+    public byte getCasingTextureIndex() {
         return 60;
     }
 
@@ -145,12 +133,12 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
-        return boostEu ? 40000 : 10000;//4x output if boosted instead of x3
+        return boostEu ? 40000 : 10000;
     }
 
     @Override
     public int getPollutionPerTick(ItemStack aStack) {
-        return super.getPollutionPerTick(aStack) * 8;//x8
+        return super.getPollutionPerTick(aStack) * 8;
     }
 
     @Override
@@ -170,8 +158,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
                 maxEnergy+=tHatch.getBaseMetaTileEntity().getEUCapacity();
             }
         }
-
-        
+      
         return new String[]{
                 EnumChatFormatting.BLUE+"Extreme Diesel Engine"+EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("GT5U.multiblock.energy")+": " +
@@ -186,7 +173,6 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
                 StatCollector.translateToLocal("GT5U.turbine.fuel")+": " +EnumChatFormatting.GOLD+fuelRemaining+EnumChatFormatting.RESET+" L",
                 StatCollector.translateToLocal("GT5U.engine.efficiency")+": " +EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.YELLOW+" %",
                 StatCollector.translateToLocal("GT5U.multiblock.pollution")+": " + EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
-
         };
     }
 }

@@ -1258,8 +1258,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_DieselEngine.get(1L), bitsd, new Object[]{"PCP", "EME", "GWG", 'M', ItemList.Hull_EV, 'P', ItemList.Electric_Piston_EV, 'E', ItemList.Electric_Motor_EV, 'C', OrePrefixes.circuit.get(Materials.Elite), 'W', OrePrefixes.cableGt01.get(Materials.TungstenSteel), 'G', OrePrefixes.gearGt.get(Materials.Titanium)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_EngineIntake.get(1L), bitsd, new Object[]{"PhP", "RFR", aTextPlateWrench, 'R', OrePrefixes.pipeMedium.get(Materials.Titanium), 'F', ItemList.Casing_StableTitanium, 'P', OrePrefixes.rotor.get(Materials.Titanium)});
         
-        //add recipe here, also # is meta (for controller at least). How do I find the next open #?
-        ItemList.Machine_Multi_ExtremeDieselEngine.set(new GT_MetaTileEntity_ExtremeDieselEngine(5000, "multimachine.extremedieselengine", "Extreme Combustion Engine").getStackForm(1L));
+        ItemList.Machine_Multi_ExtremeDieselEngine.set(new GT_MetaTileEntity_ExtremeDieselEngine(2105, "multimachine.extremedieselengine", "Extreme Combustion Engine").getStackForm(1L));
         GT_ModHandler.addCraftingRecipe(ItemList.Machine_Multi_ExtremeDieselEngine.get(1L), bitsd, new Object[]{"PCP", "EME", "GWG", 'M', ItemList.Hull_IV, 'P', ItemList.Electric_Piston_IV, 'E', ItemList.Electric_Motor_IV, 'C', OrePrefixes.circuit.get(Materials.Master), 'W', OrePrefixes.cableGt01.get(Materials.HSSG), 'G', OrePrefixes.gearGt.get(Materials.TungstenSteel)});
         GT_ModHandler.addCraftingRecipe(ItemList.Casing_ExtremeEngineIntake.get(1L), bitsd, new Object[]{"PhP", "RFR", aTextPlateWrench, 'R', OrePrefixes.pipeMedium.get(Materials.TungstenSteel), 'F', ItemList.Casing_RobustTungstenSteel, 'P', OrePrefixes.rotor.get(Materials.TungstenSteel)});
 
