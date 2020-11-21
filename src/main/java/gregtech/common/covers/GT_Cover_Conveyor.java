@@ -14,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
+import static gregtech.api.util.GT_Utility.moveMultipleItemStacks;
+
 public class GT_Cover_Conveyor extends GT_CoverBehavior {
     public final int mTickRate;
     private final int mMaxStacks;
@@ -42,19 +44,29 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
         boolean costsEnergy = ((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= 128L);
         byte moved;
 
-        for(int i=0 ; i < this.mMaxStacks ; i++) {
-            // Costs energy but we don't have enough, bail
-            if ((costsEnergy && !aTileEntity.isUniversalEnergyStored(256L)))
-                break;
 
-            moved = GT_Utility.moveOneItemStack(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
-
-            if(moved == 0)
-                break;
-
-            if (costsEnergy)
-                aTileEntity.decreaseStoredEnergyUnits(4 * moved, true);
+        if (costsEnergy) {
+            long tStoredEnergy = aTileEntity.getUniversalEnergyStored();
+            int tMaxStacks = (int)(tStoredEnergy/(4*64*this.mMaxStacks));
+            if (tMaxStacks > this.mMaxStacks)
+                tMaxStacks = this.mMaxStacks;
+            int tCost = moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,tMaxStacks);
+            aTileEntity.decreaseStoredEnergyUnits(4 * tCost, true);
+        } else {
+            moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
         }
+
+
+//        for(int i=0 ; i < this.mMaxStacks ; i++) {
+//            // Costs energy but we don't have enough, bail
+//            if ((costsEnergy && !aTileEntity.isUniversalEnergyStored(256L)))
+//                break;
+//
+//            moved = GT_Utility.moveOneItemStack(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+//
+//            if(moved == 0)
+//                break;
+//        }
 
         return aCoverVariable;
     }
