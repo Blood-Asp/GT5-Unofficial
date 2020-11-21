@@ -3,6 +3,8 @@ package gregtech.common.tileentities.machines.multi;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -10,6 +12,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -33,17 +36,26 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TU_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TU5) : Textures.BlockIcons.casingTexturePages[0][60]};
     }
 
-
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Large Plasma Generator",
-                "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Plasma Input Hatch (Side centered)",
-                "1x Maintenance Hatch (Side centered)",
-                "1x Output Hatch (Side centered, optional)",
-                "1x Dynamo Hatch (Back centered)",
-                "Tungstensteel Turbine Casings for the rest (24 at least!)",
-                "Needs a Turbine Item (Inside controller GUI)"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Plasma Turbine")
+		.addInfo("Controller block for the Large Plasma Generator")
+		.addInfo("Needs a Turbine, place inside controller")
+		.addInfo("Use your Fusion Reactor to produce the Plasma")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, true)
+		.addController("Front center")
+		.addCasingInfo("Tungstensteel Turbine Casing", 24)
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("Side centered")
+		.addInputHatch("Plasma Fluid, Side centered")
+		.addOutputHatch("Molten Fluid, optional, Side centered")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public int getFuelValue(FluidStack aLiquid) {

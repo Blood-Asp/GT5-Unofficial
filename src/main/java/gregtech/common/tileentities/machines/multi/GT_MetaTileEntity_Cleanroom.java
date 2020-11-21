@@ -12,6 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import static gregtech.api.enums.GT_Values.debugCleanroom;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeight = -1;
@@ -38,21 +41,31 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 
 	@Override
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Cleanroom",
-                "Min(WxHxD): 3x4x3 (Hollow), Max(WxHxD): 15x15x15 (Hollow)",
-                "Controller (Top center)",
-                "Top besides contoller and edges: Filter Machine Casing",
-                "1 Reinforced Door (keep closed for 100% efficency)",
-				"1x LV or 1x MV Energy Hatch, 1x Maintainance Hatch",
-				"Up to 10 Machine Hull Item & Energy transfer through walls",
-				"Remaining Blocks: Plascrete, 20 min",
-				GT_Values.cleanroomGlass+"% of the Plascrete can be Reinforced Glass (min 20 Plascrete still apply)",
-				"Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency when not overclocked",
-				"An energy hatch accepts up to 2A, so you can use 2A LV or 1A MV",
-				"2 LV batteries + 1 LV generator or 1 MV generator",
-				"Time required to reach full efficiency is propotional to the height of empty space within.",
-				"Make sure your Energy Hatch matches!"};
+		final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Cleanroom")
+		.addInfo("Controller block for the Cleanroom")
+		.addInfo("Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency when not overclocked")//?
+		.addInfo("An energy hatch accepts up to 2A, so you can use 2A LV or 1A MV")
+		.addInfo("2 LV batteries + 1 LV generator or 1 MV generator")//?
+		.addInfo("Time required to reach full efficiency is propotional to the height of empty space within")
+		.addInfo("Make sure your Energy Hatch matches! ?")
+		.addSeparator()
+		.beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true)
+		.addController("Top center")
+		.addCasingInfo("Plascrete", 20)
+		.addStructureInfo(GT_Values.cleanroomGlass+"% of the Plascrete can be replaced with Reinforced Glass")//check
+		.addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges")
+		.addEnergyHatch("LV or MV, any casing")//check
+		.addMaintenanceHatch("Any casing")
+		.addStructureInfo("1x Reinforced Door (keep closed or efficiency will reduce)")
+		.addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls")
+		.addStructureInfo("You can also use Diodes for more power")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
 	@Override

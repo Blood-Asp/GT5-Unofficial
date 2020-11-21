@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -17,6 +18,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -37,20 +40,30 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 
 	@Override
 	public String[] getDescription() {
-		return new String[] {
-				"Controller block for the Large Chemical Reactor",
-				"Has the same recipes as the Chemical Reactor",
-				"Does not lose efficiency when overclocked",
-				"Accepts fluids instead of fluid cells",
-				"Size(WxHxD): 3x3x3",
-				"3x3x3 of Chemically Inert Machine Casings (hollow, min 8!)",
-				"Controller (Front centered)",
-				"1x PTFE Pipe Machine Casing (inside the hollow casings)",
-				"1x Cupronickel Coil Block (next to PTFE Pipe Machine Casing)",
-				"1x Input Bus/Hatch (Any inert casing)",
-				"1x Output Bus/Hatch (Any inert casing)",
-				"1x Maintenance Hatch (Any inert casing)",
-				"1x Energy Hatch (Any inert casing)"};
+		final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Chemical Reactor")
+		.addInfo("Controller block for the Large Chemical Reactor")
+		.addInfo("Does not lose efficiency when overclocked")
+		.addInfo("Accepts fluids instead of fluid cells")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, false)
+		.addController("Front center")
+		.addCasingInfo("Chemically Inert Machine Casing", 8)
+		.addOtherStructurePart("PTFE Pipe Machine Casing", "Center")
+		.addOtherStructurePart("Cupronickel Coil Block", "Adjacent to the PTFE Pipe Machine Casing")
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputBus("Any casing")
+		.addInputHatch("Any casing")
+		.addOutputBus("Any casing")
+		.addOutputHatch("Any casing")
+		.addStructureInfo("You can have multiple hatches/busses")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
 	}
 
 	@Override

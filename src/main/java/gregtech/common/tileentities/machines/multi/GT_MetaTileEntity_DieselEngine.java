@@ -3,6 +3,8 @@ package gregtech.common.tileentities.machines.multi;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -15,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynam
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -40,22 +43,34 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Large Combustion Engine",
-                "Size(WxHxD): 3x3x4, Controller (front centered)",
-                "3x3x4 of Stable Titanium Machine Casing (hollow, Min 16!)",
-                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
-                "8x Engine Intake Machine Casing (around controller)",
-                "2x Input Hatch (Fuel/Lubricant) (one of the Casings next to a Gear Box)",
-                "1x Maintenance Hatch (one of the Casings next to a Gear Box)",
-                "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
-                "1x Dynamo Hatch (back centered)",
-                "Engine Intake Casings must not be obstructed in front (only air blocks)",
-                "Supply Flammable Fuels and 1000L of Lubricant per hour to run.",
-                "Supply 40L of Oxygen per second to boost output (optional).",
-                "Default: Produces 2048EU/t at 100% efficiency",
-                "Boosted: Produces 6144EU/t at 150% efficiency",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Combustion Generator")
+		.addInfo("Controller block for the Large Combustion Engine")
+		.addInfo("Supply Diesel Fuels and 1000L of Lubricant per hour to run")
+		.addInfo("Supply 40L/s of Oxygen to boost output (optional)")
+		.addInfo("Default: Produces 2048EU/t at 100% fuel efficiency")
+		.addInfo("Boosted: Produces 6144EU/t at 150% fuel efficiency")
+		.addInfo("You need to wait for it to reach 300% to output full power")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, false)
+		.addController("Front center")
+		.addCasingInfo("Stable Titanium Machine Casing", 16)
+		.addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
+		.addOtherStructurePart("Engine Intake Machine Casing", "8x, ring around controller")
+		.addStructureInfo("Engine Intake Casings must not be obstructed in front (only air blocks)")
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("One of the casings next to a Gear Box")
+		.addMufflerHatch("Top middle back, above the rear Gear Box")
+		.addInputHatch("Diesel Fuel, next to a Gear Box")
+		.addInputHatch("Lubricant, next to a Gear Box")
+		.addInputHatch("Oxygen, optional, next to a Gear Box")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
