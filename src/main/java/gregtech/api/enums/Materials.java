@@ -1785,7 +1785,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public String getToolTip(long aMultiplier, boolean aShowQuestionMarks) {
         if (!aShowQuestionMarks && mChemicalFormula.equals("?")) return "";
         if (aMultiplier >= M * 2 && !mMaterialList.isEmpty()) {
-            return ((mElement != null || (mMaterialList.size() < 2 && mMaterialList.get(0).mAmount == 1)) ? mChemicalFormula : "(" + mChemicalFormula + ")") + aMultiplier;
+            return ((mElement != null || (mMaterialList.size() < 2 && mMaterialList.get(0).mAmount == 1)) ? mChemicalFormula : "(" + mChemicalFormula + ")") + GT_Utility.makeSubscript((int)aMultiplier);
         }
         return mChemicalFormula;
     }

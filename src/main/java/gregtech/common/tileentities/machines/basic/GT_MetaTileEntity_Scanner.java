@@ -202,7 +202,7 @@ public class GT_MetaTileEntity_Scanner
                             if (s==null)
                                 s=tRecipe.mOutput.getDisplayName();
                         }
-                        tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+s+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)));
+                        tNBTList.appendTag(new NBTTagString("Construction plan for "+tRecipe.mOutput.stackSize+" "+s+". Needed EU/t: "+tRecipe.mEUt+" Production time: "+(tRecipe.mDuration/20)+" seconds"));
                         for(int i=0;i<tRecipe.mInputs.length;i++){
                             if (tRecipe.mOreDictAlt[i] != null) {
                                 int count = 0;

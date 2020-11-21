@@ -3,6 +3,7 @@ package gregtech.common.tileentities.machines.multi;
 import static gregtech.api.enums.GT_Values.VN;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -122,9 +123,8 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
     private boolean doUseMaceratorRecipe(ItemStack currentItem) {
         ItemData itemData = GT_OreDictUnificator.getItemData(currentItem);
         return itemData == null
-                || itemData.mPrefix != OrePrefixes.crushed
-                && itemData.mPrefix != OrePrefixes.dustImpure
-                && itemData.mPrefix != OrePrefixes.dust
+                || !EnumSet.of(OrePrefixes.crushed, OrePrefixes.dustImpure, OrePrefixes.dust, OrePrefixes.gemChipped, 
+                               OrePrefixes.gemFlawed, OrePrefixes.gemFlawless, OrePrefixes.gemExquisite, OrePrefixes.gem).contains(itemData.mPrefix)
                 && itemData.mMaterial.mMaterial != Materials.Oilsands;
     }
 
