@@ -4,11 +4,14 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import static gregtech.api.enums.GT_Values.VN;
+
+import org.lwjgl.input.Keyboard;
 
 public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTileEntity_DrillerBase {
 
@@ -24,16 +27,31 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        return new String[]{
-                "Controller Block for the Concrete Backfiller " + (tierSuffix != null ? tierSuffix : ""),
-                "Size(WxHxD): 3x7x3", "Controller (Front middle at bottom)",
-                "3x1x3 Base of " + casings,
-                "1x3x1 " + casings + " pillar (Center of base)",
-                "1x3x1 " + getFrameMaterial().mName + " Frame Boxes (Each pillar side and on top)",
-                "1x Input Hatch (One of base casings)",
-                "1x Maintenance Hatch (One of base casings)",
-                "1x " + VN[getMinTier()] + "+ Energy Hatch (Any bottom layer casing)",
-                "Radius is " + getRadius() + " blocks"};
+        
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Concrete Backfiller")
+		.addInfo("Controller Block for the Concrete Backfiller " + (tierSuffix != null ? tierSuffix : ""))//Unused?
+		.addInfo("Will fill in areas below it with light concrete. This goes through walls")
+		.addInfo("Use it to remove any spawning locations beneath your base to reduce lag")
+		.addInfo("Will pull back the pipes after it finishes that layer")
+		.addInfo("Radius is " + getRadius() + " blocks")
+		.addSeparator()
+		.beginStructureBlock(3, 7, 3, false)
+		.addController("Front bottom")
+		.addStructureInfo(casings + " form the 3x1x3 Base")
+		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
+		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
+		.addMaintenanceHatch("Any base casing")
+		.addInputBus("Mining Pipes, optional, any base casing")
+		.addInputHatch("GT Concrete, any base casing")
+		.addOutputBus("Mining Pipes, optional, any base casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

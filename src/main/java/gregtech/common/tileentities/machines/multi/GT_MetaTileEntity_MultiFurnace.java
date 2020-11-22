@@ -4,6 +4,8 @@ import static gregtech.api.enums.GT_Values.VN;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -15,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -41,18 +44,28 @@ public class GT_MetaTileEntity_MultiFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Multi Smelter",
-                "Smelts up to 8-128 Items at once",
-                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front middle at bottom)",
-                "8x Heating Coils (Middle layer, hollow)",
-                "1x Input Bus (One of bottom)",
-                "1x Output Bus (One of bottom)",
-                "1x Maintenance Hatch (One of bottom)",
-                "1x Muffler Hatch (Top middle)",
-                "1x Energy Hatch (One of bottom)",
-                "Heat Proof Machine Casings for the rest",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Furnace")
+		.addInfo("Controller Block for the Multi Smelter")
+		.addInfo("Smelts up to 8-128 items at once")
+		.addInfo("Items smelted increases with coil tier")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, true)
+		.addController("Front bottom")
+		.addCasingInfo("Heat Proof Machine Casing", 8)
+		.addOtherStructurePart("Heating Coils (any tier)", "Middle layer")
+		.addEnergyHatch("Any bottom casing")
+		.addMaintenanceHatch("Any bottom casing")
+		.addMufflerHatch("Top Middle")
+		.addInputBus("Any bottom casing")
+		.addOutputBus("Any bottom casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

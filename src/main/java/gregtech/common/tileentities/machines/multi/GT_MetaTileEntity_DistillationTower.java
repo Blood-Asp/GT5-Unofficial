@@ -10,6 +10,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Outpu
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -19,6 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_DistillationTower
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -38,18 +41,26 @@ public class GT_MetaTileEntity_DistillationTower
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Distillation Tower",
-                "Size(WxHxD): 3xhx3 (Hollow), with h ranging from 3 to 12",
-                "Controller (Front bottom)",
-                "1x Input Hatch (Any bottom layer casing)",
-                "2-11x Output Hatch (One per layer except bottom layer)",
-                "1x Output Bus (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
-                "Fluids are only put out at the correct height",
-                "The correct height equals the slot number in the NEI recipe",
-                "Clean Stainless Steel Machine Casings for the rest (7 x h - 5 at least!)"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Distillery")
+		.addInfo("Controller block for the Distillation Tower")
+		.addInfo("Fluids are only put out at the correct height")
+		.addInfo("The correct height equals the slot number in the NEI recipe")
+		.addSeparator()
+		.beginVariableStructureBlock(3, 3, 3, 12, 3, 3, true)
+		.addController("Front bottom")
+		.addOtherStructurePart("Clean Stainless Steel Machine Casing", "7 x h - 5 (minimum)")
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputHatch("Any bottom layer casing")
+		.addOutputBus("Any bottom layer casing")
+		.addOutputHatch("2-11x Output Hatches (One per layer except bottom layer)")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

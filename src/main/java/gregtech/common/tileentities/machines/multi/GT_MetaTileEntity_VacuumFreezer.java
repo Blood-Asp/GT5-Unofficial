@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_VacuumFreezer
         extends GT_MetaTileEntity_MultiBlockBase {
@@ -31,15 +34,24 @@ public class GT_MetaTileEntity_VacuumFreezer
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Vacuum Freezer",
-                "Super cools hot ingots and cells",
-                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front centered)",
-                "1x Input Bus (Any casing)",
-                "1x Output Bus (Any casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
-                "Frost Proof Machine Casings for the rest (16 at least!)"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Vacuum Freezer")
+		.addInfo("Controller Block for the Vacuum Freezer")
+		.addInfo("Cools hot ingots and cells")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, true)
+		.addController("Front center")
+		.addCasingInfo("Frost Proof Machine Casing", 16)
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputBus("Any casing")
+		.addOutputBus("Any casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

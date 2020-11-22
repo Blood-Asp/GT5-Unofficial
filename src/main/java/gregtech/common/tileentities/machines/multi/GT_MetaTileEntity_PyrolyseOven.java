@@ -10,6 +10,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.loaders.oreprocessing.ProcessingLog;
@@ -22,6 +23,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 	
@@ -38,21 +41,32 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Pyrolyse Oven",
-                "Industrial Charcoal producer and Oil from Plants",
-                "Size(WxHxD): 5x4x5, Controller (Bottom center)",
-                "3x1x3 of Heating Coils (At the center of the bottom layer)",
-                "1x Input Hatch/Bus (Centered 3x1x3 area in Top layer)",
-                "1x Output Hatch/Bus (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any bottom layer casing)",
-                "1x Muffler Hatch (Centered 3x1x3 area in Top layer)",
-                "1x Energy Hatch (Any bottom layer casing)",
-                "Pyrolyse Oven Casings for the rest (60 at least!)",
-                "Processing speed scales linearly with Coil tier:",
-                "CuNi: 50%, FeAlCr: 100%, Ni4Cr: 150%, Fe50CW: 200%, etc.",
-                "EU/t is not affected by Coil tier",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Coke Oven")
+		.addInfo("Controller block for the Pyrolyse Oven")
+		.addInfo("Industrial Charcoal producer")
+		.addInfo("Processing speed scales linearly with Coil tier:")
+		.addInfo("CuNi: 50%, FeAlCr: 100%, Ni4Cr: 150%, Fe50CW: 200%, etc.")
+		.addInfo("EU/t is not affected by Coil tier")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(5, 4, 5, true)
+		.addController("Front center")
+		.addCasingInfo("Pyrolyse Oven Casing", 60)
+		.addOtherStructurePart("Heating Coils (any tier)", "Center 3x1x3 of the bottom layer")
+		.addEnergyHatch("Any bottom layer casing")
+		.addMaintenanceHatch("Any bottom layer casing")
+		.addMufflerHatch("Center 3x1x3 area in top layer")
+		.addInputBus("Center 3x1x3 area in top layer")
+		.addInputHatch("Center 3x1x3 area in top layer")
+		.addOutputBus("Any bottom layer casing")
+		.addOutputHatch("Any bottom layer casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}        
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

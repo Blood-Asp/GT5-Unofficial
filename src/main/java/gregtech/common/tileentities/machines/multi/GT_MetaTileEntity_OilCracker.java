@@ -11,6 +11,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,6 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
     private ForgeDirection orientation;
@@ -33,18 +36,29 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Oil Cracking Unit",
-                "Thermally cracks heavy hydrocarbons into lighter fractions",
-                "Size(WxHxD): 5x3x3 (Hollow), Controller (Front center)",
-                "Ring of 8 Cupronickel Coils (Each side of Controller)",
-                "1x Hydrocarbon Input Bus/Hatch (Any left/right side casing)",
-                "1x Steam/Hydrogen Input Hatch (Any middle ring casing)",
-                "1x Cracked Hydrocarbon Output Hatch (Any left/right side casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
-                "Clean Stainless Steel Machine Casings for the rest (18 at least!)",
-                "Input/Output Hatches must be on opposite sides"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Cracker")
+		.addInfo("Controller block for the Oil Cracking Unit")
+		.addInfo("Thermally cracks heavy hydrocarbons into lighter fractions")
+		.addInfo("More efficient than the Chemical Reactor")
+		.addInfo("Place the appropriate circuit in the controller")
+		.addSeparator()
+		.beginStructureBlock(5, 3, 3, true)
+		.addController("Front center")
+		.addCasingInfo("Clean Stainless Steel Machine Casing", 18)
+		.addOtherStructurePart("2 Rings of 8 Cupronickel Coils", "Each side of the controller")
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputHatch("Steam/Hydrogen, Any middle ring casing")
+		.addInputHatch("Any left/right side casing")
+		.addOutputHatch("Any left/right side casing")
+		.addStructureInfo("Input/Output Hatches must be on opposite sides!")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

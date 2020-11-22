@@ -3,6 +3,8 @@ package gregtech.common.tileentities.machines.multi;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -15,6 +17,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynam
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -40,22 +43,34 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Large Combustion Engine",
-                "Size(WxHxD): 3x3x4, Controller (front centered)",
-                "3x3x4 of Stable Titanium Machine Casing (hollow, Min 16!)",
-                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
-                "8x Engine Intake Machine Casing (around controller)",
-                "2x Input Hatch (Fuel/Lubricant) (one of the Casings next to a Gear Box)",
-                "1x Maintenance Hatch (one of the Casings next to a Gear Box)",
-                "1x Muffler Hatch (top middle back, next to the rear Gear Box)",
-                "1x Dynamo Hatch (back centered)",
-                "Engine Intake Casings must not be obstructed in front (only air blocks)",
-                "Supply Flammable Fuels and 1000L of Lubricant per hour to run.",
-                "Supply 40L of Oxygen per second to boost output (optional).",
-                "Default: Produces 2048EU/t at 100% efficiency",
-                "Boosted: Produces 6144EU/t at 150% efficiency",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Combustion Generator")
+		.addInfo("Controller block for the Large Combustion Engine")
+		.addInfo("Supply Diesel Fuels and 1000L of Lubricant per hour to run")
+		.addInfo("Supply 40L/s of Oxygen to boost output (optional)")
+		.addInfo("Default: Produces 2048EU/t at 100% fuel efficiency")
+		.addInfo("Boosted: Produces 6144EU/t at 150% fuel efficiency")
+		.addInfo("You need to wait for it to reach 300% to output full power")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, false)
+		.addController("Front center")
+		.addCasingInfo("Stable Titanium Machine Casing", 16)
+		.addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
+		.addOtherStructurePart("Engine Intake Machine Casing", "8x, ring around controller")
+		.addStructureInfo("Engine Intake Casings must not be obstructed in front (only air blocks)")
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("One of the casings next to a Gear Box")
+		.addMufflerHatch("Top middle back, above the rear Gear Box")
+		.addInputHatch("Diesel Fuel, next to a Gear Box")
+		.addInputHatch("Lubricant, next to a Gear Box")
+		.addInputHatch("Oxygen, optional, next to a Gear Box")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
@@ -74,10 +89,50 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeDieselEngine.png");
     }
 
+    // can't use getRecipeMap() or else the fluid hatch will reject oxygen
+    protected GT_Recipe.GT_Recipe_Map_Fuel getFuelMap() {
+        return GT_Recipe.GT_Recipe_Map.sDieselFuels;
+    }
+
+    /**
+     * The nominal energy output
+     * This can be further multiplied by {@link #getMaxEfficiency(ItemStack)} when boosted
+     */
+    protected int getNominalOutput() {
+        return 2048;
+    }
+
+    protected Materials getBooster() {
+        return Materials.Oxygen;
+    }
+
+    /**
+     * x times fuel will be consumed when boosted
+     * This will however NOT increase power output
+     * Go tweak {@link #getMaxEfficiency(ItemStack)} and {@link #getNominalOutput()} instead
+     */
+    protected int getBoostFactor() {
+        return 2;
+    }
+
+    /**
+     * x times of additive will be consumed when boosted
+     */
+    protected int getAdditiveFactor() {
+        return 1;
+    }
+
+    /**
+     * Efficiency will increase by this amount every tick
+     */
+    protected int getEfficiencyIncrease() {
+        return 15;
+    }
+
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tFluids = getStoredFluids();
-        Collection<GT_Recipe> tRecipeList = GT_Recipe.GT_Recipe_Map.sDieselFuels.mRecipeList;
+        Collection<GT_Recipe> tRecipeList = getFuelMap().mRecipeList;
 
         if(tFluids.size() > 0 && tRecipeList != null) { //Does input hatch have a diesel fuel?
             for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
@@ -85,21 +140,21 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                     FluidStack tLiquid;
                     if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
                         if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
-                            fuelConsumption = tLiquid.amount = boostEu ? (4096 / aFuel.mSpecialValue) : (2048 / aFuel.mSpecialValue); //Calc fuel consumption
+                            fuelConsumption = tLiquid.amount = boostEu ? (getBoostFactor() * getNominalOutput() / aFuel.mSpecialValue) : (getNominalOutput() / aFuel.mSpecialValue); //Calc fuel consumption
                             if(depleteInput(tLiquid)) { //Deplete that amount
-                                boostEu = depleteInput(Materials.Oxygen.getGas(2L));
+                                boostEu = depleteInput(getBooster().getGas(2L * getAdditiveFactor()));
 
                                 if(tFluids.contains(Materials.Lubricant.getFluid(1L))) { //Has lubricant?
                                     //Deplete Lubricant. 1000L should = 1 hour of runtime (if baseEU = 2048)
-                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid(boostEu ? 2 : 1));
+                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid((boostEu ? 2L : 1L) * getAdditiveFactor()));
                                 } else return false;
 
                                 fuelValue = aFuel.mSpecialValue;
                                 fuelRemaining = hatchFluid1.amount; //Record available fuel
-                                this.mEUt = mEfficiency < 2000 ? 0 : 2048; //Output 0 if startup is less than 20%
+                                this.mEUt = mEfficiency < 2000 ? 0 : getNominalOutput(); //Output 0 if startup is less than 20%
                                 this.mProgresstime = 1;
                                 this.mMaxProgresstime = 1;
-                                this.mEfficiencyIncrease = 15;
+                                this.mEfficiencyIncrease = getEfficiencyIncrease();
                                 return true;
                             }
                         }
