@@ -123,7 +123,7 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.bedrockium",true,5,25,6,false, false, false, Materials.Bedrockium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.realgar",true,15,85,32,false, true, false, Materials.Realgar);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.certusquartz",true,5,115,16,false, true, false, Materials.CertusQuartz);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.jade",true,5,250,8,false, false, false, Materials.Jade);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.jade",true,5,35,2,false, false, false, Materials.Jade);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.deepiron",true,5,40,8,false, false, false, Materials.DeepIron);
 
         //GT Default Veins
