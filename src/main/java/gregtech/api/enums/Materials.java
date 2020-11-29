@@ -1778,6 +1778,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
                 Inolashite,
                 Mercassium,
                 MeteoricIron,
+                BloodInfusedIron,
 
                 MeteoricSteel,
                 Naquadah,
