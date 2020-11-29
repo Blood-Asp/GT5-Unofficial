@@ -14,6 +14,10 @@ import net.minecraft.item.ItemStack;
 
 public class GT_MetaTileEntity_Boxinator
         extends GT_MetaTileEntity_BasicMachine {
+    ItemStack aInputCache;
+    ItemStack aOutputCache;
+    int aTypeCache = 0;
+
     public GT_MetaTileEntity_Boxinator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Puts things into Boxes", 2, 1, "Packager.png", "", new ITexture[]{new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_BOXINATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_BOXINATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_BOXINATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_BOXINATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_BOXINATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_BOXINATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_BOXINATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_BOXINATOR)});
     }
@@ -34,28 +38,54 @@ public class GT_MetaTileEntity_Boxinator
         return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
     }
 
+    private boolean hasValidCache(ItemStack mItem,int mType) {
+        if (aInputCache != null
+                && aOutputCache != null
+                && aTypeCache == mType
+                && aInputCache.isItemEqual(mItem)
+                && ItemStack.areItemStackTagsEqual(mItem,aInputCache))
+            return true;
+        // clear cache if it was invalid
+        aInputCache = null;
+        aOutputCache = null;
+        aTypeCache = 0;
+        return false;
+    }
+
+    private void cacheItem(ItemStack mInputItem,ItemStack mOutputItem,int mType) {
+        aTypeCache = mType;
+        aOutputCache = mOutputItem.copy();
+        aInputCache = mInputItem.copy();
+    }
+
     public int checkRecipe() {
         int tCheck = super.checkRecipe();
         if (tCheck != DID_NOT_FIND_RECIPE) {
             return tCheck;
         }
-        if ((GT_Utility.isStackValid(getInputAt(0))) && (GT_Utility.isStackValid(getInputAt(1))) && (GT_Utility.getContainerItem(getInputAt(0), true) == null)) {
-            if ((ItemList.Schematic_1by1.isStackEqual(getInputAt(1))) && (getInputAt(0).stackSize >= 1)) {
-                this.mOutputItems[0] = GT_ModHandler.getRecipeOutput(new ItemStack[]{getInputAt(0)});
+        ItemStack tSlot0 = getInputAt(0);
+        ItemStack tSlot1 = getInputAt(1);
+        if ((GT_Utility.isStackValid(tSlot0)) && (GT_Utility.isStackValid(tSlot1)) && (GT_Utility.getContainerItem(tSlot0, true) == null)) {
+            if ((ItemList.Schematic_1by1.isStackEqual(tSlot1)) && (tSlot0.stackSize >= 1)) {
+                boolean tIsCached = hasValidCache(tSlot0,1);
+                this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
-                        getInputAt(0).stackSize -= 1;
+                        tSlot0.stackSize -= 1;
                         calculateOverclockedNess(32,16);
                         //In case recipe is too OP for that machine
                         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+                        if (!tIsCached)
+                            cacheItem(tSlot0,this.mOutputItems[0],1);
                         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                     }
                 }
                 return DID_NOT_FIND_RECIPE;
             }
-            if ((ItemList.Schematic_2by2.isStackEqual(getInputAt(1))) && (getInputAt(0).stackSize >= 4)) {
-                this.mOutputItems[0] = GT_ModHandler.getRecipeOutput(new ItemStack[]{getInputAt(0), getInputAt(0), null, getInputAt(0), getInputAt(0)});
+            if ((ItemList.Schematic_2by2.isStackEqual(tSlot1)) && (getInputAt(0).stackSize >= 4)) {
+                boolean tIsCached = hasValidCache(tSlot0,2);
+                this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0, tSlot0, null, tSlot0, tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
                         getInputAt(0).stackSize -= 4;
@@ -63,13 +93,16 @@ public class GT_MetaTileEntity_Boxinator
                         //In case recipe is too OP for that machine
                         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+                        if (!tIsCached)
+                            cacheItem(tSlot0,this.mOutputItems[0],2);
                         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                     }
                 }
                 return DID_NOT_FIND_RECIPE;
             }
-            if ((ItemList.Schematic_3by3.isStackEqual(getInputAt(1))) && (getInputAt(0).stackSize >= 9)) {
-                this.mOutputItems[0] = GT_ModHandler.getRecipeOutput(new ItemStack[]{getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0), getInputAt(0)});
+            if ((ItemList.Schematic_3by3.isStackEqual(tSlot1)) && (getInputAt(0).stackSize >= 9)) {
+                boolean tIsCached = hasValidCache(tSlot0,3);
+                this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
                         getInputAt(0).stackSize -= 9;
@@ -77,6 +110,8 @@ public class GT_MetaTileEntity_Boxinator
                         //In case recipe is too OP for that machine
                         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
                             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+                        if (!tIsCached)
+                            cacheItem(tSlot0,this.mOutputItems[0],3);
                         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
                     }
                 }
