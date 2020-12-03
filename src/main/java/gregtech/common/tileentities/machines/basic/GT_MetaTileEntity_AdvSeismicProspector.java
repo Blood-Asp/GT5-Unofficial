@@ -216,12 +216,13 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
             }
         } else {
             int tMetaID = getBaseMetaTileEntity().getWorld().getBlockMetadata(x, y, z);
-            ItemData tAssotiation = GT_OreDictUnificator.getAssociation(new ItemStack(tBlock, 1, tMetaID));
-
-            if ((tAssotiation != null) && (tAssotiation.mPrefix.toString().startsWith("ore")))
-                return tAssotiation.mMaterial.mMaterial.mDefaultLocalName;
+            ItemStack is = new ItemStack(tBlock, 1, tMetaID);
+            ItemData association = GT_OreDictUnificator.getAssociation(is);
+            if ((association != null) && (association.mPrefix.toString().startsWith("ore")))
+                return association.mMaterial.mMaterial.mDefaultLocalName;
+            else if (GT_Utility.isOre(is))
+                return tBlock.getLocalizedName();
         }
-
         return null;
     }
 
