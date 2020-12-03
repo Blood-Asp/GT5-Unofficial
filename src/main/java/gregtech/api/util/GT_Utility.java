@@ -546,13 +546,14 @@ public class GT_Utility {
             for (int tGrabSlot = 0;tGrabSlot<tGrabInventorySize;tGrabSlot++)
             {
                 //ItemStack tInventoryStack : mInventory
-                int tMovedItems = 0;
+                int tMovedItems;
                 do {
+		    tMovedItems = 0;
                     ItemStack tGrabStack = aTileEntity1.getStackInSlot(tGrabSlot);
                     if (listContainsItem(aFilter, tGrabStack, true, aInvertFilter) &&
                             (tGrabStack.stackSize >= aMinMoveAtOnce && isAllowedToTakeFromSlot(aTileEntity1, tGrabSlot, aGrabFrom, tGrabStack))) {
                         int tStackSize = tGrabStack.stackSize;
-                        tMovedItems = 0;
+                        
                         for (int tPutSlot = tFirstsValidSlot; tPutSlot < tPutInventorySize; tPutSlot++) {
                             if (isAllowedToPutIntoSlot(tPutInventory, tPutSlot, aPutTo, tGrabStack, (byte) 64)) {
                                 int tMoved = moveStackFromSlotAToSlotB(aTileEntity1, tPutInventory, tGrabSlot, tPutSlot, aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItems), aMinMoveAtOnce);

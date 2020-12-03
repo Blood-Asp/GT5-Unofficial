@@ -731,7 +731,7 @@ public enum OrePrefixes {
                 //Fine Wire
                 if (!enableUnusedFineWires && !(aMaterial == Materials.Steel || aMaterial == Materials.AnnealedCopper || aMaterial == Materials.Platinum || aMaterial == Materials.Osmium ||
                         aMaterial == Materials.Tin || aMaterial == Materials.Lead || aMaterial == Materials.SolderingAlloy || aMaterial == Materials.Copper || aMaterial == Materials.Electrum ||
-                        aMaterial == Materials.Gold || aMaterial == Materials.RedAlloy || aMaterial == Materials.Graphene || aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.YttriumBariumCuprate ))
+                        aMaterial == Materials.Gold || aMaterial == Materials.RedAlloy || aMaterial == Materials.Graphene || aMaterial == Materials.NiobiumTitanium || aMaterial == Materials.YttriumBariumCuprate || aMaterial == Materials.BloodInfusedIron))
                     wireFine.mDisabledItems.add(aMaterial);
                 //Gears
                 if (!enableUnusedGears && !(aMaterial == Materials.Aluminium || aMaterial == Materials.Titanium || aMaterial == Materials.Iron || aMaterial == Materials.Copper ||
