@@ -6,6 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
@@ -38,7 +39,7 @@ public class GT_MetaTileEntity_Boxinator
         return GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes;
     }
 
-    private boolean hasValidCache(ItemStack mItem,int mType) {
+    private boolean hasValidCache(ItemStack mItem,int mType,boolean mClearOnFailure) {
         if (aInputCache != null
                 && aOutputCache != null
                 && aTypeCache == mType
@@ -46,9 +47,11 @@ public class GT_MetaTileEntity_Boxinator
                 && ItemStack.areItemStackTagsEqual(mItem,aInputCache))
             return true;
         // clear cache if it was invalid
-        aInputCache = null;
-        aOutputCache = null;
-        aTypeCache = 0;
+        if (mClearOnFailure) {
+            aInputCache = null;
+            aOutputCache = null;
+            aTypeCache = 0;
+        }
         return false;
     }
 
@@ -67,7 +70,7 @@ public class GT_MetaTileEntity_Boxinator
         ItemStack tSlot1 = getInputAt(1);
         if ((GT_Utility.isStackValid(tSlot0)) && (GT_Utility.isStackValid(tSlot1)) && (GT_Utility.getContainerItem(tSlot0, true) == null)) {
             if ((ItemList.Schematic_1by1.isStackEqual(tSlot1)) && (tSlot0.stackSize >= 1)) {
-                boolean tIsCached = hasValidCache(tSlot0,1);
+                boolean tIsCached = hasValidCache(tSlot0,1,true);
                 this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
@@ -84,7 +87,7 @@ public class GT_MetaTileEntity_Boxinator
                 return DID_NOT_FIND_RECIPE;
             }
             if ((ItemList.Schematic_2by2.isStackEqual(tSlot1)) && (getInputAt(0).stackSize >= 4)) {
-                boolean tIsCached = hasValidCache(tSlot0,2);
+                boolean tIsCached = hasValidCache(tSlot0,2,true);
                 this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0, tSlot0, null, tSlot0, tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
@@ -101,7 +104,7 @@ public class GT_MetaTileEntity_Boxinator
                 return DID_NOT_FIND_RECIPE;
             }
             if ((ItemList.Schematic_3by3.isStackEqual(tSlot1)) && (getInputAt(0).stackSize >= 9)) {
-                boolean tIsCached = hasValidCache(tSlot0,3);
+                boolean tIsCached = hasValidCache(tSlot0,3,true);
                 this.mOutputItems[0] = tIsCached ? aOutputCache.copy() : GT_ModHandler.getRecipeOutput(new ItemStack[]{tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0, tSlot0});
                 if (this.mOutputItems[0] != null) {
                     if (canOutput(new ItemStack[]{this.mOutputItems[0]})) {
@@ -123,8 +126,11 @@ public class GT_MetaTileEntity_Boxinator
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
-            if ((ItemList.Schematic_1by1.isStackEqual(getInputAt(1))) || (ItemList.Schematic_2by2.isStackEqual(getInputAt(1))) || (ItemList.Schematic_3by3.isStackEqual(getInputAt(1)))) {
-                if (GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes.findRecipe(getBaseMetaTileEntity(), true, gregtech.api.enums.GT_Values.V[mTier], null, new ItemStack[]{GT_Utility.copyAmount(64L, new Object[]{aStack}), getInputAt(1)}) != null) {
+            ItemStack tInput1 = getInputAt(1);
+            if ((ItemList.Schematic_1by1.isStackEqual(tInput1)) || (ItemList.Schematic_2by2.isStackEqual(tInput1)) || (ItemList.Schematic_3by3.isStackEqual(tInput1))) {
+                if (hasValidCache(aStack,aTypeCache,false))
+                    return true;
+                if (GT_Recipe.GT_Recipe_Map.sBoxinatorRecipes.findRecipe(getBaseMetaTileEntity(), true, gregtech.api.enums.GT_Values.V[mTier], null, new ItemStack[]{GT_Utility.copyAmount(64L, new Object[]{aStack}), tInput1}) != null) {
                     return true;
                 }
                 if (ItemList.Schematic_1by1.isStackEqual(getInputAt(1)) && GT_ModHandler.getRecipeOutput(new ItemStack[]{aStack}) != null)
