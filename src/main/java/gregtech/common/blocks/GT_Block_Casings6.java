@@ -26,7 +26,7 @@ public class GT_Block_Casings6
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".5.name", "Hermetic Casing V");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Hermetic Casing VI");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Hermetic Casing VII");
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Hermetic Casing VII");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Hermetic Casing VIII");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "Hermetic Casing IX");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".10.name", "Hermetic Casing X");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".11.name", "Hermetic Casing XI");
