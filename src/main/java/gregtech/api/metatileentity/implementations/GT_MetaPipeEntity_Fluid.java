@@ -111,7 +111,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         if (aSide >= 0 && aSide < 6) {
             for (byte i = 0; i < 4; i++) if (isInputDisabledAtSide(sRestrictionArray[aSide][i])) tMask |= 1 << i;
             //Full block size renderer flips side 5 and 2  textures, flip restrictor textures to compensate
-            if (tThickNess >= 0.99F && (aSide == 5 || aSide == 2))
+            if (aSide == 5 || aSide == 2 || aSide == 0)
                 if (tMask > 3 && tMask < 12)
                     tMask = (byte) (tMask ^ 12);
         }

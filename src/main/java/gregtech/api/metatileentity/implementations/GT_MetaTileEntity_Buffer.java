@@ -8,10 +8,18 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import static gregtech.api.enums.GT_Values.V;
 
 public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredMachineBlock {
+    private static final int OUTPUT_INDEX = 0;
+    private static final int ARROW_RIGHT_INDEX = 1;
+    private static final int ARROW_DOWN_INDEX = 2;
+    private static final int ARROW_LEFT_INDEX = 3;
+    private static final int ARROW_UP_INDEX = 4;
+    private static final int FRONT_INDEX = 5;
+
     public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
@@ -33,74 +41,85 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
-        ITexture[][][] rTextures = new ITexture[6][17][];
-        ITexture tIcon = getOverlayIcon(), tOut = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT), tUp = new GT_RenderedTexture(Textures.BlockIcons.ARROW_UP), tDown = new GT_RenderedTexture(Textures.BlockIcons.ARROW_DOWN), tLeft = new GT_RenderedTexture(Textures.BlockIcons.ARROW_LEFT), tRight = new GT_RenderedTexture(Textures.BlockIcons.ARROW_RIGHT);
-        for (byte i = -1; i < 16; i++) {
-            rTextures[0][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tOut};
-            rTextures[1][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tRight, tIcon};
-            rTextures[2][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tDown, tIcon};
-            rTextures[3][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tLeft, tIcon};
-            rTextures[4][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tUp, tIcon};
-            rTextures[5][i + 1] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i + 1], tIcon};
+        ITexture[][][] rTextures = new ITexture[ForgeDirection.VALID_DIRECTIONS.length][17][];
+        ITexture tIcon = getOverlayIcon();
+        ITexture tOut = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
+        ITexture tUp = new GT_RenderedTexture(Textures.BlockIcons.ARROW_UP);
+        ITexture tDown = new GT_RenderedTexture(Textures.BlockIcons.ARROW_DOWN);
+        ITexture tLeft = new GT_RenderedTexture(Textures.BlockIcons.ARROW_LEFT);
+        ITexture tRight = new GT_RenderedTexture(Textures.BlockIcons.ARROW_RIGHT);
+        for (int i = 0; i < rTextures[0].length; i++) {
+            rTextures[OUTPUT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tOut};
+            rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tRight, tIcon};
+            rTextures[ARROW_DOWN_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tDown, tIcon};
+            rTextures[ARROW_LEFT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tLeft, tIcon};
+            rTextures[ARROW_UP_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tUp, tIcon};
+            rTextures[FRONT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tIcon};
         }
         return rTextures;
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing) return mTextures[5][aColorIndex + 1];
-        if (GT_Utility.getOppositeSide(aSide) == aFacing) return mTextures[0][aColorIndex + 1];
-        switch (aFacing) {
-            case 0:
-                return mTextures[4][aColorIndex + 1];
-            case 1:
-                return mTextures[2][aColorIndex + 1];
-            case 2:
-                switch (aSide) {
-                    case 0:
-                        return mTextures[2][aColorIndex + 1];
-                    case 1:
-                        return mTextures[2][aColorIndex + 1];
-                    case 4:
-                        return mTextures[1][aColorIndex + 1];
-                    case 5:
-                        return mTextures[3][aColorIndex + 1];
+        int colorIndex = aColorIndex + 1;
+        ForgeDirection side = ForgeDirection.VALID_DIRECTIONS[aSide];
+        ForgeDirection facing = ForgeDirection.VALID_DIRECTIONS[aFacing];
+        if (side == facing) return mTextures[FRONT_INDEX][colorIndex];
+        if (ForgeDirection.OPPOSITES[aSide] == aFacing) return mTextures[OUTPUT_INDEX][colorIndex];
+        switch (facing) {
+            case DOWN:
+                return mTextures[ARROW_UP_INDEX][colorIndex]; // ARROW_UP
+            case UP:
+                return mTextures[ARROW_DOWN_INDEX][colorIndex]; // ARROW_DOWN
+            case NORTH:
+                switch (side) {
+                    case DOWN:
+                    case UP:
+                        return mTextures[ARROW_DOWN_INDEX][colorIndex]; // ARROW_DOWN
+                    case WEST:
+                        return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
+                    case EAST:
+                        return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
+                    default:
                 }
-            case 3:
-                switch (aSide) {
-                    case 0:
-                        return mTextures[4][aColorIndex + 1];
-                    case 1:
-                        return mTextures[4][aColorIndex + 1];
-                    case 4:
-                        return mTextures[3][aColorIndex + 1];
-                    case 5:
-                        return mTextures[1][aColorIndex + 1];
+                break;
+            case SOUTH:
+                switch (side) {
+                    case DOWN:
+                    case UP:
+                        return mTextures[ARROW_UP_INDEX][colorIndex]; // ARROW_UP
+                    case WEST:
+                        return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
+                    case EAST:
+                        return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
+                    default:
                 }
-            case 4:
-                switch (aSide) {
-                    case 0:
-                        return mTextures[3][aColorIndex + 1];
-                    case 1:
-                        return mTextures[1][aColorIndex + 1];
-                    case 2:
-                        return mTextures[3][aColorIndex + 1];
-                    case 3:
-                        return mTextures[1][aColorIndex + 1];
+                break;
+            case WEST:
+                switch (side) {
+                    case DOWN:
+                    case UP:
+                    case SOUTH:
+                        return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
+                    case NORTH:
+                        return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
+                    default:
                 }
-            case 5:
-                switch (aSide) {
-                    case 0:
-                        return mTextures[1][aColorIndex + 1];
-                    case 1:
-                        return mTextures[3][aColorIndex + 1];
-                    case 2:
-                        return mTextures[1][aColorIndex + 1];
-                    case 3:
-                        return mTextures[3][aColorIndex + 1];
+                break;
+            case EAST:
+                switch (side) {
+                    case DOWN:
+                    case UP:
+                    case SOUTH:
+                        return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
+                    case NORTH:
+                        return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
+                    default:
                 }
+                break;
+            default:
         }
-        return mTextures[5][aColorIndex + 1];
+        return mTextures[FRONT_INDEX][colorIndex];
     }
 
     @Override
