@@ -1427,6 +1427,7 @@ public enum ItemList implements IItemContainer {
     Casing_Turbine2,
     Casing_Turbine3,
     Casing_EngineIntake,
+    Casing_ExtremeEngineIntake,
 
     Casing_Coil_Cupronickel,
     Casing_Coil_Kanthal,
@@ -1474,6 +1475,7 @@ public enum ItemList implements IItemContainer {
     Block_TungstenSteelReinforced,
     Block_NaquadahPlate,
     Block_NeutroniumPlate,
+    Block_BedrockiumCompressed,
 
     Honeycomb,
     Charcoal_Pile,
@@ -1569,6 +1571,7 @@ public enum ItemList implements IItemContainer {
     CuringOven,
     Machine_Multi_Assemblyline,
     Machine_Multi_DieselEngine,
+    Machine_Multi_ExtremeDieselEngine,
     QuantumEye,
     QuantumStar,
     Gravistar,

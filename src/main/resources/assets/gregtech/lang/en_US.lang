@@ -1,3 +1,25 @@
+# Multiblock Tooltip Builder Keywords
+# Context can be found in the class gregtech.api.util.GT_Multiblock_Tooltip_Builder
+GT5U.MBTT.MachineType=Machine Type
+GT5U.MBTT.Dimensions=Dimensions
+GT5U.MBTT.Hollow=(Hollow)
+GT5U.MBTT.Structure=Structure
+GT5U.MBTT.Controller=Controller
+GT5U.MBTT.Minimum=(minimum)
+GT5U.MBTT.MaintenanceHatch=Maintenance Hatch
+GT5U.MBTT.MufflerHatch=Muffler Hatch
+GT5U.MBTT.EnergyHatch=Energy Hatch
+GT5U.MBTT.DynamoHatch=Dynamo Hatch
+GT5U.MBTT.InputBus=Input Bus
+GT5U.MBTT.InputHatch=Input Hatch
+GT5U.MBTT.OutputBus=Output Bus
+GT5U.MBTT.OutputHatch=Output Hatch
+GT5U.MBTT.Causes=Causes
+GT5U.MBTT.PPS=pollution per second
+GT5U.MBTT.Hold=Hold
+GT5U.MBTT.Display=to display structure guidelines
+GT5U.MBTT.Mod=Added by
+
 GT5U.turbine.running.true=Turbine running
 GT5U.turbine.running.false=Turbine stopped
 GT5U.turbine.maintenance.false=No Maintainance issues
@@ -41,9 +63,11 @@ GT5U.machines.separatebus=Input busses are separated
 GT5U.machines.pumpareaset=Pumping area set to
 GT5U.machines.oilfluidpump=Oil/Fluid Pump
 GT5U.machines.minermulti=Multiblock Miner
+GT5U.machines.voidoveflow.enabled=Overflow voiding enabled
+GT5U.machines.voidoveflow.disabled=Overflow voiding disabled
 
-
-
+GT5U.hatch.disableFilter.true=Input Filter Off
+GT5U.hatch.disableFilter.false=Input Filter On
 
 GT5U.multiblock.pollution=Pollution reduced to
 GT5U.multiblock.energy=Stored Energy
@@ -815,6 +839,8 @@ achievement.gt.blockmachines.multimachine.em.emtoessentia=Essentia Dequantizer
 achievement.gt.blockmachines.multimachine.em.emtoessentia.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.multimachine.em.scanner=Elemental Scanner
 achievement.gt.blockmachines.multimachine.em.scanner.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.multimachine.em.scanner=Data Bank
+achievement.gt.blockmachines.multimachine.em.databank.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockcasingsTT.8=Hollow Casing
 achievement.gt.blockcasingsTT.8.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockcasingsTT.7=Molecular Coil
@@ -853,6 +879,9 @@ achievement.ic2.itemArmorQuantumBoots.desc=Pickup this item to see the recipe in
 
 achievement.item.graviChestPlate=Gravi Chestplate
 achievement.item.graviChestPlate.desc=Pickup this item to see the recipe in NEI
+
+achievement.gt.blockreinforced.12=Raw Deep Dark Portal Block
+achievement.gt.blockreinforced.12.desc=Pickup this item to see the recipe in NEI
 
 for.bees.species.clay=Clay
 for.bees.species.slimeball=Slimeball

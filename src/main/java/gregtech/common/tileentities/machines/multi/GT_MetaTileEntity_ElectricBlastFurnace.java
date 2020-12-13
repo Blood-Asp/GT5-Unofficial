@@ -5,6 +5,8 @@ import static gregtech.api.enums.GT_Values.VN;
 
 import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -18,6 +20,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Outpu
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -47,22 +50,35 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Blast Furnace",
-                "Size(WxHxD): 3x4x3 (Hollow), Controller (Front middle bottom)",
-                "16x Heating Coils (Two middle Layers, hollow)",
-                "1x Input Hatch/Bus (Any bottom layer casing)",
-                "1x Output Hatch/Bus (Any bottom layer casing)",
-                "1x Energy Hatch (Any bottom layer casing)",
-                "1x Maintenance Hatch (Any bottom layer casing)",
-                "1x Muffler Hatch (Top middle)",
-                "1x Output Hatch to recover CO2/CO/SO2 (optional, any top layer casing),",
-                "    Recovery scales with Muffler Hatch tier",
-                "Heat Proof Machine Casings for the rest",
-                "Each 900K over the min. Heat Capacity multiplies eu/t by 0.95",
-                "Each 1800K over the min. Heat Capacity allows for one upgraded overclock",
-                "Upgraded overclocks reduce recipe time to 25% and increase EU/t to 400%",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Blast Furnace")
+		.addInfo("Controller block for the Electric Blast Furnace")
+		.addInfo("You can use some fluids to reduce recipe time. Place the circuit in the Input Bus")
+		.addInfo("Each 900K over the min. Heat required multiplies EU/t by 0.95")
+		.addInfo("Each 1800K over the min. Heat required allows for one upgraded overclock instead of normal")
+		.addInfo("Upgraded overclocks reduce recipe time to 25% (instead of 50%) and increase EU/t to 400%")
+		.addInfo("Additionally gives +100K for every tier past MV")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 4, 3, true)
+		.addController("Front bottom")
+		.addCasingInfo("Heat Proof Machine Casing", 0)
+		.addOtherStructurePart("Heating Coils (any tier)", "Two middle Layers")
+		.addEnergyHatch("Any bottom layer casing")
+		.addMaintenanceHatch("Any bottom layer casing")
+		.addMufflerHatch("Top middle")
+		.addInputBus("Any bottom layer casing")
+		.addInputHatch("Any bottom layer casing")
+		.addOutputBus("Any bottom layer casing")
+		.addOutputHatch("Gasses, Any top layer casing")
+		.addStructureInfo("Recovery amount scales with Muffler Hatch tier")
+		.addOutputHatch("Platline fluids, Any bottom layer casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

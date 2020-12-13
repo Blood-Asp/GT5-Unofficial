@@ -123,7 +123,7 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.bedrockium",true,5,25,6,false, false, false, Materials.Bedrockium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.realgar",true,15,85,32,false, true, false, Materials.Realgar);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.certusquartz",true,5,115,16,false, true, false, Materials.CertusQuartz);
-        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.jade",true,5,250,8,false, false, false, Materials.Jade);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.jade",true,5,35,2,false, false, false, Materials.Jade);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.deepiron",true,5,40,8,false, false, false, Materials.DeepIron);
 
         //GT Default Veins
@@ -207,6 +207,7 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_Layer("ore.mix.quartzspace", true, 40, 80, 20, 3, 16, false, false, false, Materials.Quartzite, Materials.Barite, Materials.CertusQuartz, Materials.CertusQuartz);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.rutile", true, 5, 20, 8, 4, 12, false, false, false, Materials.Rutile, Materials.Titanium, Materials.Bauxite, Materials.MeteoricIron);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.TFgalena", true, 5, 35, 40, 4, 16, false, false, false, Materials.Galena, Materials.Galena, Materials.Silver, Materials.Lead);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.luvtantalite", true, 20, 30, 10, 4, 16, false, false, false, Materials.Pyrolusite, Materials.Apatite, Materials.Tantalite, Materials.Pyrochlore);
 
         /*
         

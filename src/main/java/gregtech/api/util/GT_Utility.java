@@ -65,6 +65,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -522,6 +523,109 @@ public class GT_Utility {
     }
 
     /**
+     * moves multiple stacks from Inv-Side to Inv-Side
+     *
+     * @return the Amount of moved Items
+     */
+
+    public static int moveMultipleItemStacks(Object aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce,int aStackAmount) {
+        if (aTileEntity1 instanceof  IInventory)
+            return moveMultipleItemStacks((IInventory) aTileEntity1, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,aStackAmount, true);
+        return 0;
+    }
+
+    public static int moveMultipleItemStacks(IInventory aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce,int aMaxStackTransfer, boolean aDoCheckChests) {
+        if (aTileEntity1 == null || aMaxTargetStackSize <= 0 || aMinTargetStackSize <= 0 || aMaxMoveAtOnce <= 0 || aMinTargetStackSize > aMaxTargetStackSize || aMinMoveAtOnce > aMaxMoveAtOnce || aMaxStackTransfer == 0)
+            return 0;
+        int tGrabInventorySize = aTileEntity1.getSizeInventory();
+        if (aTileEntity2 instanceof IInventory)
+        {
+            IInventory tPutInventory = (IInventory) aTileEntity2;
+            int tPutInventorySize = tPutInventory.getSizeInventory();
+            int tFirstsValidSlot = 0,tStacksMoved = 0,tTotalItemsMoved = 0;
+            for (int tGrabSlot = 0;tGrabSlot<tGrabInventorySize;tGrabSlot++)
+            {
+                //ItemStack tInventoryStack : mInventory
+                int tMovedItems;
+                do {
+		    tMovedItems = 0;
+                    ItemStack tGrabStack = aTileEntity1.getStackInSlot(tGrabSlot);
+                    if (listContainsItem(aFilter, tGrabStack, true, aInvertFilter) &&
+                            (tGrabStack.stackSize >= aMinMoveAtOnce && isAllowedToTakeFromSlot(aTileEntity1, tGrabSlot, aGrabFrom, tGrabStack))) {
+                        int tStackSize = tGrabStack.stackSize;
+                        
+                        for (int tPutSlot = tFirstsValidSlot; tPutSlot < tPutInventorySize; tPutSlot++) {
+                            if (isAllowedToPutIntoSlot(tPutInventory, tPutSlot, aPutTo, tGrabStack, (byte) 64)) {
+                                int tMoved = moveStackFromSlotAToSlotB(aTileEntity1, tPutInventory, tGrabSlot, tPutSlot, aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItems), aMinMoveAtOnce);
+                                tTotalItemsMoved += tMoved;
+                                tMovedItems += tMoved;
+                                if (tMovedItems == tStackSize)
+                                    break;
+                            }
+                        }
+                        if (tMovedItems > 0) {
+                            if (++tStacksMoved >= aMaxStackTransfer)
+                                return tTotalItemsMoved;
+                        }
+                    }
+                } while (tGrabInventorySize == 2 && tMovedItems > 0); //to suport draweres and barrels
+            }
+            if (aDoCheckChests && aTileEntity1 instanceof TileEntityChest) {
+                TileEntityChest tTileEntity1 = (TileEntityChest) aTileEntity1;
+                int tAmount = 0;
+                int maxStackTransfer = aMaxStackTransfer - tStacksMoved;
+                if (tTileEntity1.adjacentChestXNeg != null) {
+                    tAmount = moveMultipleItemStacks(tTileEntity1.adjacentChestXNeg, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                } else if (tTileEntity1.adjacentChestZNeg != null) {
+                    tAmount = moveMultipleItemStacks(tTileEntity1.adjacentChestZNeg, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                } else if (tTileEntity1.adjacentChestXPos != null) {
+                    tAmount = moveMultipleItemStacks(tTileEntity1.adjacentChestXPos, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                } else if (tTileEntity1.adjacentChestZPos != null) {
+                    tAmount = moveMultipleItemStacks(tTileEntity1.adjacentChestZPos, aTileEntity2, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                }
+                if (tAmount != 0) return tAmount+tTotalItemsMoved;
+            }
+
+            if (aDoCheckChests && aTileEntity2 instanceof TileEntityChest) {
+                TileEntityChest tTileEntity2 = (TileEntityChest) aTileEntity2;
+                if (tTileEntity2.adjacentChestChecked) {
+                    int tAmount = 0;
+                    int maxStackTransfer = aMaxStackTransfer - tStacksMoved;
+                    if (tTileEntity2.adjacentChestXNeg != null) {
+                        tAmount = moveMultipleItemStacks(aTileEntity1, tTileEntity2.adjacentChestXNeg, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                    } else if (tTileEntity2.adjacentChestZNeg != null) {
+                        tAmount = moveMultipleItemStacks(aTileEntity1, tTileEntity2.adjacentChestZNeg, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                    } else if (tTileEntity2.adjacentChestXPos != null) {
+                        tAmount = moveMultipleItemStacks(aTileEntity1, tTileEntity2.adjacentChestXPos, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                    } else if (tTileEntity2.adjacentChestZPos != null) {
+                        tAmount = moveMultipleItemStacks(aTileEntity1, tTileEntity2.adjacentChestZPos, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce,maxStackTransfer, false);
+                    }
+                    if (tAmount != 0) return tAmount+tTotalItemsMoved;
+                }
+            }
+
+            return tTotalItemsMoved;
+
+        }
+        //there should be a function to transfer more then 1 stack in a pipe
+        //ut i dont see any ways to improve it too much work for what it is worth
+        int[] tGrabSlots = new int[tGrabInventorySize];
+        for (int i = 0; i < tGrabInventorySize; i++) {
+            tGrabSlots[i] = i;
+        }
+        int tTotalItemsMoved = 0;
+        for (int i = 0; i < tGrabInventorySize; i++) {
+            int tMoved = moveStackIntoPipe(aTileEntity1, aTileEntity2, tGrabSlots, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, aDoCheckChests);
+            if (tMoved == 0)
+                return tTotalItemsMoved;
+            else
+                tTotalItemsMoved += tMoved;
+        }
+        return  0;
+    }
+
+
+    /**
      * Moves Stack from Inv-Side to Inv-Side.
      *
      * @return the Amount of moved Items
@@ -538,7 +642,7 @@ public class GT_Utility {
     private static byte moveOneItemStack(IInventory aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce, boolean aDoCheckChests) {
         if (aTileEntity1 == null || aMaxTargetStackSize <= 0 || aMinTargetStackSize <= 0 || aMaxMoveAtOnce <= 0 || aMinTargetStackSize > aMaxTargetStackSize || aMinMoveAtOnce > aMaxMoveAtOnce)
             return 0;
-
+            
         int[] tGrabSlots = null;
         if (aTileEntity1 instanceof ISidedInventory)
             tGrabSlots = ((ISidedInventory) aTileEntity1).getAccessibleSlotsFromSide(aGrabFrom);
@@ -547,7 +651,7 @@ public class GT_Utility {
             for (int i = 0; i < tGrabSlots.length; i++) tGrabSlots[i] = i;
         }
 
-        if (aTileEntity2 != null && aTileEntity2 instanceof IInventory) {
+        if (aTileEntity2 instanceof IInventory) {
             int[] tPutSlots = null;
             if (aTileEntity2 instanceof ISidedInventory)
                 tPutSlots = ((ISidedInventory) aTileEntity2).getAccessibleSlotsFromSide(aPutTo);
@@ -559,15 +663,14 @@ public class GT_Utility {
 
             for (int i = 0; i < tGrabSlots.length; i++) {
             	byte tMovedItemCount = 0;
-                for (int j = 0; j < tPutSlots.length; j++) {
-                    if (listContainsItem(aFilter, aTileEntity1.getStackInSlot(tGrabSlots[i]), true, aInvertFilter)) {
-                        if (isAllowedToTakeFromSlot(aTileEntity1, tGrabSlots[i], aGrabFrom, aTileEntity1.getStackInSlot(tGrabSlots[i]))) {
-                            if (isAllowedToPutIntoSlot((IInventory) aTileEntity2, tPutSlots[j], aPutTo, aTileEntity1.getStackInSlot(tGrabSlots[i]), aMaxTargetStackSize)) {
-                                tMovedItemCount += moveStackFromSlotAToSlotB(aTileEntity1, (IInventory) aTileEntity2, tGrabSlots[i], tPutSlots[j], aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItemCount), aMinMoveAtOnce);
-                                 if (tMovedItemCount >= aMaxMoveAtOnce) {
+                ItemStack tGrabStack = aTileEntity1.getStackInSlot(tGrabSlots[i]);
+                if (listContainsItem(aFilter, tGrabStack, true, aInvertFilter)) {
+                    if (tGrabStack.stackSize >= aMinMoveAtOnce && isAllowedToTakeFromSlot(aTileEntity1, tGrabSlots[i], aGrabFrom, tGrabStack)) {
+                        for (int j = 0; j < tPutSlots.length; j++) {
+                             if (isAllowedToPutIntoSlot((IInventory) aTileEntity2, tPutSlots[j], aPutTo, tGrabStack, aMaxTargetStackSize)) {
+                                 tMovedItemCount += moveStackFromSlotAToSlotB(aTileEntity1, (IInventory) aTileEntity2, tGrabSlots[i], tPutSlots[j], aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItemCount), aMinMoveAtOnce);
+                                 if (tMovedItemCount >= aMaxMoveAtOnce ||(tMovedItemCount > 0 && aMaxTargetStackSize < 64))
                                      return tMovedItemCount;
-
-                                }
                             }
                         }
                     }
@@ -663,6 +766,64 @@ public class GT_Utility {
             }
         }
         return 0;
+    }
+
+    /**
+     * Moves Stack from Inv-Side to Inv-Slot.
+     *
+     * @return the Amount of moved Items
+     */
+    public static byte moveFromSlotToSide(IInventory fromTile, Object toTile, int aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce, boolean aDoCheckChests) {
+        if (fromTile == null || aGrabFrom < 0 || aMinTargetStackSize <= 0 || aMaxMoveAtOnce <= 0 || aMinTargetStackSize > aMaxTargetStackSize || aMinMoveAtOnce > aMaxMoveAtOnce)
+            return 0;
+
+        if (!listContainsItem(aFilter, fromTile.getStackInSlot(aGrabFrom), true, aInvertFilter) ||
+            !isAllowedToTakeFromSlot(fromTile, aGrabFrom, (byte) 6, fromTile.getStackInSlot(aGrabFrom)))
+            return 0;
+
+        if (toTile instanceof IInventory) {
+            int[] tPutSlots = null;
+            if (toTile instanceof ISidedInventory)
+                tPutSlots = ((ISidedInventory) toTile).getAccessibleSlotsFromSide(aPutTo);
+
+            if (tPutSlots == null) {
+                tPutSlots = new int[((IInventory) toTile).getSizeInventory()];
+                for (int i = 0; i < tPutSlots.length; i++) tPutSlots[i] = i;
+            }
+
+            byte tMovedItemCount = 0;
+            for (int tPutSlot : tPutSlots) {
+                if (isAllowedToPutIntoSlot((IInventory) toTile, tPutSlot, aPutTo, fromTile.getStackInSlot(aGrabFrom), aMaxTargetStackSize)) {
+                    tMovedItemCount += moveStackFromSlotAToSlotB(fromTile, (IInventory) toTile, aGrabFrom, tPutSlot, aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItemCount), aMinMoveAtOnce);
+                    if (tMovedItemCount >= aMaxMoveAtOnce) {
+                        return tMovedItemCount;
+
+                    }
+                }
+            }
+            if (tMovedItemCount > 0) return tMovedItemCount;
+
+            if (aDoCheckChests && toTile instanceof TileEntityChest) {
+                TileEntityChest tTileEntity2 = (TileEntityChest) toTile;
+                if (tTileEntity2.adjacentChestChecked) {
+                    if (tTileEntity2.adjacentChestXNeg != null) {
+                        tMovedItemCount = moveFromSlotToSide(fromTile, tTileEntity2.adjacentChestXNeg, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, false);
+                    } else if (tTileEntity2.adjacentChestZNeg != null) {
+                        tMovedItemCount = moveFromSlotToSide(fromTile, tTileEntity2.adjacentChestZNeg, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, false);
+                    } else if (tTileEntity2.adjacentChestXPos != null) {
+                        tMovedItemCount = moveFromSlotToSide(fromTile, tTileEntity2.adjacentChestXPos, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, false);
+                    } else if (tTileEntity2.adjacentChestZPos != null) {
+                        tMovedItemCount = moveFromSlotToSide(fromTile, tTileEntity2.adjacentChestZPos, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, false);
+                    }
+                    if (tMovedItemCount > 0) return tMovedItemCount;
+                }
+            }
+        }
+        return moveStackIntoPipe(fromTile, toTile, new int[]{aGrabFrom}, (byte) 6, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, aDoCheckChests);
+    }
+
+    public static byte moveFromSlotToSide(IInventory fromTile, Object toTile, int aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce) {
+        return moveFromSlotToSide(fromTile, toTile, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, true);
     }
 
     public static boolean listContainsItem(Collection<ItemStack> aList, ItemStack aStack, boolean aTIfListEmpty, boolean aInvertFilter) {
@@ -2431,6 +2592,13 @@ public class GT_Utility {
 
     public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
         return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix) : false;
+    }
+    public static boolean isOre(ItemStack aStack) {
+        for (int id: OreDictionary.getOreIDs(aStack)) {
+            if (OreDictionary.getOreName(id).startsWith("ore"))
+                return true;
+        }
+        return false;
     }
 
 }

@@ -62,7 +62,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private byte[] mSidedRedstone = new byte[]{15, 15, 15, 15, 15, 15};
     private int[] mCoverSides = new int[]{0, 0, 0, 0, 0, 0}, mCoverData = new int[]{0, 0, 0, 0, 0, 0}, mTimeStatistics = new int[GregTech_API.TICKS_FOR_LAG_AVERAGING];
     private boolean mHasEnoughEnergy = true, mRunningThroughTick = false, mInputDisabled = false, mOutputDisabled = false, mMuffler = false, mLockUpgrade = false, mActive = false, mRedstone = false, mWorkUpdate = false, mSteamConverter = false, mInventoryChanged = false, mWorks = true, mNeedsUpdate = true, mNeedsBlockUpdate = true, mSendClientData = false, oRedstone = false;
-    private byte mColor = 0, oColor = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
+    private byte mColor = 0, oColor = 0, oStrongRedstone = 0, mStrongRedstone = 0, oRedstoneData = 63, oTextureData = 0, oUpdateData = 0, oTexturePage=0, oLightValueClient = -1, oLightValue = -1, mLightValue = 0, mOtherUpgrades = 0, mFacing = 0, oFacing = 0, mWorkData = 0;
     private int mDisplayErrorCode = 0, oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0, mLagWarningCount = 0;
     private short mID = 0;
     public long mTickTimer = 0;
@@ -447,11 +447,16 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 }
 
                                 if (getRandomNumber(1000) == 0) {
+				    int precipitationHeightAtSide2 = worldObj.getPrecipitationHeight(xCoord, zCoord - 1);
+                                    int precipitationHeightAtSide3 = worldObj.getPrecipitationHeight(xCoord, zCoord + 1);
+                                    int precipitationHeightAtSide4 = worldObj.getPrecipitationHeight(xCoord - 1, zCoord);
+                                    int precipitationHeightAtSide5 = worldObj.getPrecipitationHeight(xCoord + 1, zCoord);
+
                                     if ((getCoverIDAtSide((byte) 1) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord) - 2 < yCoord)
-                                            || (getCoverIDAtSide((byte) 2) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord - 1) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 3) == 0 && worldObj.getPrecipitationHeight(xCoord, zCoord + 1) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 4) == 0 && worldObj.getPrecipitationHeight(xCoord - 1, zCoord) - 1 < yCoord)
-                                            || (getCoverIDAtSide((byte) 5) == 0 && worldObj.getPrecipitationHeight(xCoord + 1, zCoord) - 1 < yCoord)) {
+                                            || (getCoverIDAtSide((byte) 2) == 0 && precipitationHeightAtSide2 - 1 < yCoord && precipitationHeightAtSide2 > -1)
+                                            || (getCoverIDAtSide((byte) 3) == 0 && precipitationHeightAtSide3 - 1 < yCoord && precipitationHeightAtSide3 > -1)
+                                            || (getCoverIDAtSide((byte) 4) == 0 && precipitationHeightAtSide4 - 1 < yCoord && precipitationHeightAtSide4 > -1)
+                                            || (getCoverIDAtSide((byte) 5) == 0 && precipitationHeightAtSide5 - 1 < yCoord && precipitationHeightAtSide5 > -1)) {
                                         if (GregTech_API.sMachineRainExplosions && worldObj.isRaining() && getBiome().rainfall > 0) {
                                             if (getRandomNumber(10) == 0) {
                                                 try{
@@ -496,15 +501,17 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             for (int i = mMetaTileEntity.dechargerSlotStartIndex(), k = mMetaTileEntity.dechargerSlotCount() + i; i < k; i++) {
                                 if (mMetaTileEntity.mInventory[i] != null && getStoredEU() < getEUCapacity()) {
                                     dischargeItem(mMetaTileEntity.mInventory[i]);
-				    if(ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i])>0){
+				                    if(ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i])>0){
                                        if((getStoredEU() + ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]))<getEUCapacity()){
                                            increaseStoredEnergyUnits((long)ic2.api.info.Info.itemEnergy.getEnergyValue(mMetaTileEntity.mInventory[i]),false);
                                            mMetaTileEntity.mInventory[i].stackSize--;
+                                           mInventoryChanged = true;
                                        }
                                     }
-                                    if (mMetaTileEntity.mInventory[i].stackSize <= 0)
+                                    if (mMetaTileEntity.mInventory[i].stackSize <= 0) {
                                         mMetaTileEntity.mInventory[i] = null;
-                                    mInventoryChanged = true;
+                                        mInventoryChanged = true;
+                                    }
                                 }
                             }
                         }
@@ -516,9 +523,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             for (int i = mMetaTileEntity.rechargerSlotStartIndex(), k = mMetaTileEntity.rechargerSlotCount() + i; i < k; i++) {
                                 if (getStoredEU() > 0 && mMetaTileEntity.mInventory[i] != null) {
                                     chargeItem(mMetaTileEntity.mInventory[i]);
-                                    if (mMetaTileEntity.mInventory[i].stackSize <= 0)
+                                    if (mMetaTileEntity.mInventory[i].stackSize <= 0) {
                                         mMetaTileEntity.mInventory[i] = null;
-                                    mInventoryChanged = true;
+                                        mInventoryChanged = true;
+                                    }
                                 }
                             }
                         }
@@ -545,7 +553,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 NW.sendPacketToAllPlayersInRange(worldObj,
                                         new GT_Packet_TileEntity(xCoord, (short) yCoord, zCoord, mID,
                                                 mCoverSides[0], mCoverSides[1], mCoverSides[2], mCoverSides[3], mCoverSides[4], mCoverSides[5],
-                                                oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)),
+                                                oTextureData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0) | (mWorks ? 64 : 0) ),
                                                 oTexturePage = (hasValidMetaTileEntity() && mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) ? ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage() : 0,
                                                 oUpdateData = hasValidMetaTileEntity() ? mMetaTileEntity.getUpdateData() : 0,
                                                 oRedstoneData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0)),
@@ -556,7 +564,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         }
 
                         if (mTickTimer > 10) {
-                            byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0));
+                            byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)| (mWorks ? 64 : 0));
                             if (tData != oTextureData) sendBlockEvent((byte) 0, oTextureData = tData);
 
                             tData = mMetaTileEntity.getUpdateData();
@@ -583,7 +591,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         }
 
                         if (mNeedsBlockUpdate) {
-                            worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockOffset(0, 0, 0));
+                            updateNeighbours(mStrongRedstone, oStrongRedstone);
+                            oStrongRedstone = mStrongRedstone;
                             mNeedsBlockUpdate = false;
                         }
                     }
@@ -681,6 +690,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     mActive = ((aValue & 8) != 0);
                     mRedstone = ((aValue & 16) != 0);
 				    //mLockUpgrade	= ((aValue&32) != 0);
+                    mWorks =  ((aValue & 64) != 0);
                     break;
                 case 1:
                     if (hasValidMetaTileEntity()) {
@@ -1395,6 +1405,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             mStrongRedstone ^= (1 << tSide);
                             GT_Utility.sendChatToPlayer(aPlayer, trans("091","Redstone Output at Side ") + tSide + trans("092"," set to: ") + ((mStrongRedstone & (1 << tSide)) != 0 ? trans("093","Strong") : trans("094","Weak")));
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(103), 3.0F, -1, xCoord, yCoord, zCoord);
+                            issueBlockUpdate();
                         }
                         doEnetUpdate();
                         return true;
@@ -1724,15 +1735,19 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public long getAverageElectricInput() {
         long rEU = 0;
-        for (long tEU : mAverageEUInput) rEU += tEU;
-        return rEU / mAverageEUInput.length;
+        for (int i = 0; i < mAverageEUInput.length; ++i)
+            if (i != mAverageEUInputIndex)
+                rEU += mAverageEUInput[i];
+        return rEU / (mAverageEUInput.length - 1);
     }
 
     @Override
     public long getAverageElectricOutput() {
         long rEU = 0;
-        for (long tEU : mAverageEUOutput) rEU += tEU;
-        return rEU / mAverageEUOutput.length;
+        for (int i = 0; i < mAverageEUOutput.length; ++i)
+            if (i != mAverageEUOutputIndex)
+                rEU += mAverageEUOutput[i];
+        return rEU / (mAverageEUOutput.length - 1);
     }
 
     @Override

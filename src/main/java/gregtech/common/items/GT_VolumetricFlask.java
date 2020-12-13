@@ -1,7 +1,6 @@
 
 package gregtech.common.items;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GT_Values;
@@ -32,24 +31,16 @@ import static ic2.core.util.LiquidUtil.*;
 
 public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContainerItem {
     private final int maxCapacity;
+    private final String unlocalFlaskName;
     @SideOnly(Side.CLIENT)
     public IIcon iconWindow;
 
     public GT_VolumetricFlask(String unlocalized, String english, int maxCapacity) {
         super(unlocalized, english, null);
         this.maxCapacity = maxCapacity;
+        unlocalFlaskName = unlocalized;
         setMaxStackSize(16);
         setNoRepair();
-        if (Loader.isModLoaded("NotEnoughItems")) {
-            for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-                if (fluid != null) {
-                    ItemStack stack = new ItemStack(this);
-                    setCapacity(stack, getMaxCapacity());
-                    fill(stack, new FluidStack(fluid, Integer.MAX_VALUE), true);
-                    codechicken.nei.api.API.hideItem(stack);
-                }
-            }
-        }
     }
 
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
@@ -120,9 +111,10 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aIconRegister) {
         super.registerIcons(aIconRegister);
-        iconWindow = aIconRegister.registerIcon(RES_PATH_ITEM + "gt.Volumetric_Flask.window");
+        iconWindow = aIconRegister.registerIcon(RES_PATH_ITEM + "gt."+unlocalFlaskName+".window");
     }
 
     public void setCapacity(ItemStack stack, int capacity) {

@@ -8,6 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -17,6 +18,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+
+import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -37,20 +40,30 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 
 	@Override
 	public String[] getDescription() {
-		return new String[] {
-				"Controller block for the Large Chemical Reactor",
-				"Has the same recipes as the Chemical Reactor",
-				"Does not lose efficiency when overclocked",
-				"Accepts fluids instead of fluid cells",
-				"Size(WxHxD): 3x3x3",
-				"3x3x3 of Chemically Inert Machine Casings (hollow, min 8!)",
-				"Controller (Front centered)",
-				"1x PTFE Pipe Machine Casing (inside the hollow casings)",
-				"1x Cupronickel Coil Block (next to PTFE Pipe Machine Casing)",
-				"1x Input Bus/Hatch (Any inert casing)",
-				"1x Output Bus/Hatch (Any inert casing)",
-				"1x Maintenance Hatch (Any inert casing)",
-				"1x Energy Hatch (Any inert casing)"};
+		final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Chemical Reactor")
+		.addInfo("Controller block for the Large Chemical Reactor")
+		.addInfo("Does not lose efficiency when overclocked")
+		.addInfo("Accepts fluids instead of fluid cells")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, false)
+		.addController("Front center")
+		.addCasingInfo("Chemically Inert Machine Casing", 8)
+		.addOtherStructurePart("PTFE Pipe Machine Casing", "Center")
+		.addOtherStructurePart("Cupronickel Coil Block", "Adjacent to the PTFE Pipe Machine Casing")
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputBus("Any casing")
+		.addInputHatch("Any casing")
+		.addOutputBus("Any casing")
+		.addOutputHatch("Any casing")
+		.addStructureInfo("You can have multiple hatches/busses")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
 	}
 
 	@Override
@@ -115,30 +128,24 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 		FluidStack[] fluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
 
 		if (inputs.length > 0 || fluids.length > 0) {
-			long voltage = getMaxInputVoltage();
-			byte tier = (byte) Math.max(1, GT_Utility.getTier(voltage));
-			GT_Recipe recipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
+			long tVoltage = getMaxInputVoltage();
+			byte tier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+			GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.findRecipe(getBaseMetaTileEntity(), false,
 					false, gregtech.api.enums.GT_Values.V[tier], fluids, inputs);
-			if (recipe != null && recipe.isRecipeInputEqual(true, fluids, inputs)) {
+			if (tRecipe != null && tRecipe.isRecipeInputEqual(true, fluids, inputs)) {
 				this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
 				this.mEfficiencyIncrease = 10000;
 
-				int EUt = recipe.mEUt;
-				int maxProgresstime = recipe.mDuration;
+				calculatePerfectOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+				//In case recipe is too OP for that machine
+				if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+					return false;
+				if (this.mEUt > 0) {
+					this.mEUt = (-this.mEUt);
+				}
 
-				while (EUt <= gregtech.api.enums.GT_Values.V[tier - 1] && maxProgresstime > 2) {
-					EUt *= 4;
-					maxProgresstime /= 4;
-				}
-				if (maxProgresstime < 2) {
-					maxProgresstime = 2;
-					EUt = recipe.mEUt * recipe.mDuration / 2;
-				}
-				
-				this.mEUt = -EUt;
-				this.mMaxProgresstime = maxProgresstime;
-				this.mOutputItems = recipe.mOutputs;
-				this.mOutputFluids = recipe.mFluidOutputs;
+				this.mOutputItems = tRecipe.mOutputs;
+				this.mOutputFluids = tRecipe.mFluidOutputs;
 				this.updateSlots();
 				return true;
 			}
@@ -196,7 +203,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
 			}
 
 		}
-		return casingAmount >= 8 && hasHeatingCoil;
+		return casingAmount >= 8 && hasHeatingCoil && !mEnergyHatches.isEmpty() && !mMaintenanceHatches.isEmpty();
 	}
 
 	@Override

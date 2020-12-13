@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -13,6 +15,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockB
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,16 +44,30 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Heat Exchanger",
-                "Size(WxHxD): 3x4x3, Controller (Front middle at bottom)",
-                "3x3x4 of Stable Titanium Machine Casings (hollow, Min 20!)",
-                "2x Titanium Pipe Casing (Inside the Hollow Machine Casings)",
-                "1x Distillated Water Input (Any casing)",
-                "1x Steam Output (Any casing)",
-                "1x Hot Fluid Input (Bottom center)",
-                "1x Cold Fluid Output (Top Center)",
-                "1x Maintenance Hatch (Any casing)"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Heat Exchanger")
+		.addInfo("Controller Block for the Large Heat Exchanger")
+		.addInfo("More complicated than a Fusion Reactor. Seriously")
+		.addInfo("Inputs are Hot Coolant or Lava")
+		.addInfo("Outputs Coolant or Pahoehoe Lava and SH Steam/Steam")
+		.addInfo("Read the wiki article to understand how it works")
+		.addInfo("Then go to the Discord to understand the wiki")
+		.addSeparator()
+		.beginStructureBlock(3, 4, 3, false)
+		.addController("Front bottom")
+		.addCasingInfo("Stable Titanium Machine Casing", 20)
+		.addOtherStructurePart("Titanium Pipe Casing", "Center 2 blocks")
+		.addMaintenanceHatch("Any casing")
+		.addInputHatch("Hot fluid, bottom center")
+		.addInputHatch("Distilled water, any casing")
+		.addOutputHatch("Cold fluid, top center")
+		.addOutputHatch("Steam/SH Steam, any casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

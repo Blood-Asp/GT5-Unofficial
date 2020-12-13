@@ -36,8 +36,27 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         this.z = aZ;
     }
 
+    public static boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public static void setEnabled() {
+        GT_Runnable_MachineBlockUpdate.isEnabled = true;
+    }
+
+    public static void setDisabled() {
+        GT_Runnable_MachineBlockUpdate.isEnabled = false;
+    }
+
+    public static void setEnabled(boolean isEnabled) {
+        GT_Runnable_MachineBlockUpdate.isEnabled = isEnabled;
+    }
+
+    private static boolean isEnabled = true;
+
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
-        EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
+        if (isEnabled)
+            EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
     }
 
     public static void initExecutorService() {

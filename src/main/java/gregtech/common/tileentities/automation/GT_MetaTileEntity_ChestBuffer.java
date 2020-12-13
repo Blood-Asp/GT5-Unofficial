@@ -19,11 +19,15 @@ import java.util.Comparator;
 
 public class GT_MetaTileEntity_ChestBuffer
         extends GT_MetaTileEntity_Buffer {
+    private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1,1,1};
+
+
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 28, new String[]{
                         		"Buffers up to 27 Item Stacks",
                         		"Use Screwdriver to regulate output stack size",
-                        		"Consumes 3EU per moved Item"});
+                        		"Consumes 3EU per moved Item",
+                        		getTickRateDesc(aTier)});
     }
 
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String aDescription) {
@@ -55,6 +59,8 @@ public class GT_MetaTileEntity_ChestBuffer
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
+        if (aTimer % tickRate[mTier] > 0) return;
+
         if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
             fillStacksIntoFirstSlots();
         }
@@ -64,9 +70,9 @@ public class GT_MetaTileEntity_ChestBuffer
             super.moveItems(aBaseMetaTileEntity, aTimer);
         }
         // mSuccesss is set to 50 on a successful move
-        if(mSuccess == 50) {
-            fillStacksIntoFirstSlots();
-        }
+        //if(mSuccess == 50) {
+        //    fillStacksIntoFirstSlots();
+        //}
         if(mSuccess < 0) {
             mSuccess = 0;
         }
@@ -85,47 +91,32 @@ public class GT_MetaTileEntity_ChestBuffer
                         return 1;
                     Item item1 = o1.getItem();
                     Item item2 = o2.getItem();
-                
-                    // If item1 is a block and item2 isn't, sort item1 before item2
-                    if (((item1 instanceof ItemBlock)) && (!(item2 instanceof ItemBlock))) {
+
+                    if(item1 instanceof ItemBlock) {
+                        if (!(item2 instanceof ItemBlock))
+                            return -1; // If item1 is a block and item2 isn't, sort item1 before item2
+                    } else if (item2 instanceof ItemBlock)
+                        return 1; // If item2 is a block and item1 isn't, sort item1 after item2
+
+                    int id1 = Item.getIdFromItem( item1 );
+                    int id2 = Item.getIdFromItem( item2 );
+                    if ( id1 < id2 ) {
                         return -1;
                     }
-                
-                    // If item2 is a block and item1 isn't, sort item1 after item2
-                    if (((item2 instanceof ItemBlock)) && (!(item1 instanceof ItemBlock))) {
+                    if ( id1 > id2 ) {
                         return 1;
                     }
 
-                    // If the items are blocks, use the string comparison
-                    if ((item1 instanceof ItemBlock)) { // only need to check one since we did the check above
-                        String displayName1 = o1.getDisplayName();
-                        String displayName2 = o2.getDisplayName();
-                        int result = displayName1.compareToIgnoreCase(displayName2);
-                        //GT_FML_LOGGER.info("sorter: " + displayName1 + " " + displayName2 + " " + result);
-                        return result;
-                    } else
-                    {
-                        // Not a block.  Use the ID and damage to compare them.
-                        int id1 = Item.getIdFromItem( item1 );
-                        int id2 = Item.getIdFromItem( item2 );
-                        if ( id1 < id2 ) {
-                            return -1;
-                        }
-                        if ( id1 > id2 ) {
-                            return 1;
-                        }
-                        // id1 must equal id2, get their damage and compare
-                        id1 = o1.getItemDamage();
-                        id2 = o2.getItemDamage();
-                        
-                        if ( id1 < id2 ) {
-                        	return -1;
-                        }
-                        if ( id1 > id2 ) {
-                        	return 1;
-                        }
-                        return 0;
+                    id1 = o1.getItemDamage();
+                    id2 = o2.getItemDamage();
+
+                    if ( id1 < id2 ) {
+                        return -1;
                     }
+                    if ( id1 > id2 ) {
+                        return 1;
+                    }
+                    return 0;
                 }
             });
     }
@@ -154,5 +145,22 @@ public class GT_MetaTileEntity_ChestBuffer
 
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
+    }
+
+    protected static String getTickRateDesc(int tier){
+        int tickRate = getTickRate(tier);
+        String s = "";
+        if (tickRate < 20)
+            s = "1/" + 20/tickRate + " ";
+        else if (tickRate > 20) {
+            s = (tickRate / 20) + "th ";
+        }
+        return "Moves items every " + s + "second";
+    }
+
+    protected static int getTickRate(int tier) {
+        if (tier > 9)
+            return 1;
+        return tickRate[tier];
     }
 }

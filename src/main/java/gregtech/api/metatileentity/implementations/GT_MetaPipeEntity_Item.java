@@ -270,7 +270,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             TileEntity tInventory = getBaseMetaTileEntity().getTileEntityAtSide(aSide);
             if (tInventory != null && !(tInventory instanceof BaseMetaPipeEntity)) {
                 if ((!(tInventory instanceof TileEntityHopper) && !(tInventory instanceof TileEntityDispenser)) || getBaseMetaTileEntity().getMetaIDAtSide(aSide) != GT_Utility.getOppositeSide(aSide)) {
-                    return GT_Utility.moveOneItemStack(aSender, tInventory, (byte) 6, GT_Utility.getOppositeSide(aSide), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1) > 0;
+                    return GT_Utility.moveMultipleItemStacks(aSender, tInventory, (byte) 6, GT_Utility.getOppositeSide(aSide), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,1) > 0;
                 }
             }
         }

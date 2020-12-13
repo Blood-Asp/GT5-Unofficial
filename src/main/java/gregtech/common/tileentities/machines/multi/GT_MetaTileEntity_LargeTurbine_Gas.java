@@ -3,12 +3,15 @@ package gregtech.common.tileentities.machines.multi;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -31,18 +34,26 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_SS5) : Textures.BlockIcons.casingTexturePages[0][58]};
     }
 
-
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Large Gas Turbine",
-                "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)",
-                "1x Gas Input Hatch (Side centered)",
-                "1x Maintenance Hatch (Side centered)",
-                "1x Muffler Hatch (Side centered)",
-                "1x Dynamo Hatch (Back centered)",
-                "Stainless Steel Turbine Casings for the rest (24 at least!)",
-                "Needs a Turbine Item (Inside controller GUI)",
-                "Produces " + getPollutionPerTick(null)*20 + " pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Gas Turbine")
+		.addInfo("Controller block for the Large Gas Turbine")
+		.addInfo("Needs a Turbine, place inside controller")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, true)
+		.addController("Front center")
+		.addCasingInfo("Stainless Steel Turbine Casing", 24)
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("Side centered")
+		.addMufflerHatch("Side centered")
+		.addInputHatch("Gas Fuel, Side centered")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     public int getFuelValue(FluidStack aLiquid) {
@@ -88,6 +99,17 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
             FluidStack firstFuelType = new FluidStack(aFluids.get(0), 0); // Identify a SINGLE type of fluid to process.  Doesn't matter which one. Ignore the rest!
             int fuelValue = getFuelValue(firstFuelType);
+            
+            if (aOptFlow < fuelValue) {
+                // turbine too weak and/or fuel too powerful
+                // at least consume 1L
+                this.realOptFlow = 1;
+                // wastes the extra fuel and generate aOptFlow directly
+                depleteInput(new FluidStack(firstFuelType, 1));
+                this.storedFluid += 1;
+                return GT_Utility.safeInt((long)aOptFlow * (long)aBaseEff / 10000L);
+            }
+            
             actualOptimalFlow = GT_Utility.safeInt((long)aOptFlow / fuelValue);
             this.realOptFlow = actualOptimalFlow;
 

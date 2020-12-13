@@ -12,6 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energ
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_ProcessingArray_Manager;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -25,6 +26,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,18 +56,31 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     }
 
     public String[] getDescription() {
-        return new String[]{
-                "Controller Block for the Processing Array",
-                "Runs supplied machines as if placed in the world",
-                "Size(WxHxD): 3x3x3 (Hollow), Controller (Front centered)",
-                "1x Input Hatch/Bus (Any casing)",
-                "1x Output Hatch/Bus (Any casing)",
-                "1x Maintenance Hatch (Any casing)",
-                "1x Energy Hatch (Any casing)",
-                "Robust Tungstensteel Machine Casings for the rest (14 at least!)",
-                "Place up to 64 Single Block GT Machines into the Controller Inventory",
-                "Use screwdriver to enable separate input busses",
-                "Maximal overclockedness of machines inside: Tier 9"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Processing Array")
+		.addInfo("Runs supplied machines as if placed in the world")
+		.addInfo("Place up to 64 singleblock GT machines into the controller")
+		.addInfo("Note that tou still need to supply power to them all")
+		.addInfo("Use a screwdriver to enable separate input busses")
+		.addInfo("Maximal overclockedness of machines inside: Tier 9")
+		.addInfo("Doesn't work on certain machines, deal with it")
+		.addInfo("Use it if you hate GT++, or want even more speed later on")
+		.addSeparator()
+		.beginStructureBlock(3, 3, 3, true)
+		.addController("Front center")
+		.addCasingInfo("Robust Tungstensteel Machine Casing", 14)
+		.addEnergyHatch("Any casing")
+		.addMaintenanceHatch("Any casing")
+		.addInputBus("Any casing")
+		.addInputHatch("Any casing")
+		.addOutputBus("Any casing")
+		.addOutputHatch("Any casing")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}  
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {

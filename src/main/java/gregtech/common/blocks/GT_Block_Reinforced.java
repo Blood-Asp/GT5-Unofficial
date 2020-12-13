@@ -55,6 +55,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "Titanium Reinforced Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".10.name", "Naquadah Reinforced Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".11.name", "Neutronium Reinforced Block");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Raw Deep Dark Portal Block");
         ItemList.Block_BronzePlate.set(new ItemStack(this.setHardness(60.0f).setResistance(150.0f), 1, 0));
         ItemList.Block_IridiumTungstensteel.set(new ItemStack(this.setHardness(400.0f).setResistance(600.0f), 1, 1));
         ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(40.0f).setResistance(100.0f), 1, 2));
@@ -67,6 +68,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         ItemList.Block_TitaniumPlate.set(new ItemStack(this.setHardness(200.0f).setResistance(300.0f), 1, 9));
         ItemList.Block_NaquadahPlate.set(new ItemStack(this.setHardness(500.0f).setResistance(1000.0f), 1, 10));
         ItemList.Block_NeutroniumPlate.set(new ItemStack(this.setHardness(750.0f).setResistance(2500.0f), 1, 11));
+        ItemList.Block_BedrockiumCompressed.set(new ItemStack(this.setHardness(1500.0f).setResistance(5000.0f), 1, 12));
         //GT_ModHandler.addCraftingRecipe(ItemList.Block_BronzePlate.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"hP ", "PBP", " P ", 'P', OrePrefixes.plate.get(Materials.Bronze), 'B', OrePrefixes.stone.get(Materials.GraniteBlack)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Block_BronzePlate.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"hP ", "PBP", " P ", 'P', OrePrefixes.plate.get(Materials.Bronze), 'B', OrePrefixes.stone.get(Materials.GraniteRed)});
         //GT_ModHandler.addCraftingRecipe(ItemList.Block_IridiumTungstensteel.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"hBP", 'P', OrePrefixes.plate.get(Materials.Iridium), 'B', ItemList.Block_TungstenSteelReinforced.get(1L, new Object[0])});
@@ -116,6 +118,8 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
                     return Textures.BlockIcons.BLOCK_NAQUADAHPREIN.getIcon();
                 case 11:
                     return Textures.BlockIcons.BLOCK_NEUTRONIUMPREIN.getIcon();
+                case 12:
+                    return Textures.BlockIcons.BLOCK_DEEP_DARK_RAW.getIcon();
             }
         }
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
