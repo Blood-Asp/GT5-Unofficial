@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 public class GT_Cover_Pump
         extends GT_CoverBehavior{
     public final int mTransferRate;
+    public boolean isSteamPump;
 
     public GT_Cover_Pump(int aTransferRate) {
         this.mTransferRate = aTransferRate;
@@ -40,7 +41,7 @@ public class GT_Cover_Pump
                     if (tLiquid != null) {
                         tLiquid = tLiquid.copy();
                         tLiquid.amount = tTank2.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tLiquid, false);
-                        if (tLiquid.amount > 0) {
+                        if (tLiquid.amount > 0 && canTransferFluid(tLiquid)) {
                             if (((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= Math.min(1, tLiquid.amount / 10))) {
                                 if (aTileEntity.isUniversalEnergyStored(Math.min(1, tLiquid.amount / 10))) {
                                     aTileEntity.decreaseStoredEnergyUnits(Math.min(1, tLiquid.amount / 10), true);
@@ -56,7 +57,7 @@ public class GT_Cover_Pump
                     if (tLiquid != null) {
                         tLiquid = tLiquid.copy();
                         tLiquid.amount = tTank1.fill(ForgeDirection.getOrientation(aSide), tLiquid, false);
-                        if (tLiquid.amount > 0) {
+                        if (tLiquid.amount > 0 && canTransferFluid(tLiquid)) {
                             if (((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= Math.min(1, tLiquid.amount / 10))) {
                                 if (aTileEntity.isUniversalEnergyStored(Math.min(1, tLiquid.amount / 10))) {
                                     aTileEntity.decreaseStoredEnergyUnits(Math.min(1, tLiquid.amount / 10), true);
@@ -71,6 +72,10 @@ public class GT_Cover_Pump
             }
         }
         return aCoverVariable;
+    }
+
+    protected boolean canTransferFluid(FluidStack fluid) {
+        return true;
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
