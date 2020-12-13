@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 public class GT_Cover_Pump
         extends GT_CoverBehavior{
     public final int mTransferRate;
-    public boolean isSteamPump;
 
     public GT_Cover_Pump(int aTransferRate) {
         this.mTransferRate = aTransferRate;
