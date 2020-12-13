@@ -11,11 +11,6 @@ public class GT_Cover_SteamValve extends GT_Cover_Pump {
     }
 
     @Override
-    public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
-        return super.doCoverThings(aSide, aInputRedstone, aCoverID, aCoverVariable, aTileEntity, aTimer);
-    }
-
-    @Override
     protected boolean canTransferFluid(FluidStack fluid) {
         String fluidName = fluid.getFluid().getUnlocalizedName(fluid);
         return GT_ModHandler.isSteam(fluid) || fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name");
