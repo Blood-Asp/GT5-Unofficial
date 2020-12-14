@@ -398,6 +398,7 @@ public class Textures {
         OVERLAY_DATA_ACCESS,
         OVERLAY_CONVEYOR,
         OVERLAY_PUMP,
+        OVERLAY_VALVE,
         OVERLAY_ARM,
         OVERLAY_DRAIN,
         OVERLAY_CRAFTING,

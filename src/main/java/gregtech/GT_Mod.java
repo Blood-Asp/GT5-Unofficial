@@ -1,19 +1,52 @@
 package gregtech;
 
-import cpw.mods.fml.common.*;
-import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.ProgressManager;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLModIdMappingEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
 import gregtech.api.enchants.Enchantment_EnderDamage;
 import gregtech.api.enchants.Enchantment_Radioactivity;
-import gregtech.api.enums.*;
+import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.Element;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Assemblyline_Server;
+import gregtech.api.util.GT_CLS_Compat;
+import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_Forestry_Compat;
+import gregtech.api.util.GT_ItsNotMyFaultException;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_RecipeRegistrator;
+import gregtech.api.util.GT_SpawnEventHandler;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_DummyWorld;
 import gregtech.common.GT_Network;
 import gregtech.common.GT_Proxy;
@@ -33,8 +66,23 @@ import gregtech.loaders.load.GT_SonictronLoader;
 import gregtech.loaders.misc.GT_Achievements;
 import gregtech.loaders.misc.GT_Bees;
 import gregtech.loaders.misc.GT_CoverLoader;
-import gregtech.loaders.postload.*;
-import gregtech.loaders.preload.*;
+import gregtech.loaders.postload.GT_BlockResistanceLoader;
+import gregtech.loaders.postload.GT_BookAndLootLoader;
+import gregtech.loaders.postload.GT_CraftingRecipeLoader;
+import gregtech.loaders.postload.GT_CropLoader;
+import gregtech.loaders.postload.GT_ExtremeDieselFuelLoader;
+import gregtech.loaders.postload.GT_ItemMaxStacksizeLoader;
+import gregtech.loaders.postload.GT_MachineRecipeLoader;
+import gregtech.loaders.postload.GT_MinableRegistrator;
+import gregtech.loaders.postload.GT_RecyclerBlacklistLoader;
+import gregtech.loaders.postload.GT_ScrapboxDropLoader;
+import gregtech.loaders.postload.GT_Worldgenloader;
+import gregtech.loaders.preload.GT_Loader_CircuitBehaviors;
+import gregtech.loaders.preload.GT_Loader_ItemData;
+import gregtech.loaders.preload.GT_Loader_Item_Block_And_Fluid;
+import gregtech.loaders.preload.GT_Loader_MetaTileEntities;
+import gregtech.loaders.preload.GT_Loader_OreDictionary;
+import gregtech.loaders.preload.GT_Loader_OreProcessing;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeOutput;
 import net.minecraft.creativetab.CreativeTabs;
@@ -59,9 +107,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1013,6 +1073,7 @@ public class GT_Mod implements IGT_Mod {
         }
 
         addSolidFakeLargeBoilerFuels();
+        identifyAnySteam();
 
         achievements = new GT_Achievements();
 
@@ -1357,5 +1418,15 @@ public class GT_Mod implements IGT_Mod {
         if (Loader.isModLoaded("Thaumcraft")) {
             GT_Recipe.GT_Recipe_Map.sLargeBoilerFakeFuels.addSolidRecipe(GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1));
         }
+    }
+
+    private void identifyAnySteam() {
+        final String[] steamCandidates = {"steam", "ic2steam"};
+        final String[] superHeatedSteamCandidates = {"ic2superheatedsteam"};
+
+        GT_ModHandler.sAnySteamFluidIDs = Arrays.stream(steamCandidates).map(FluidRegistry::getFluid).filter(Objects::nonNull)
+            .map(FluidRegistry::getFluidID).collect(Collectors.toList());
+        GT_ModHandler.sSuperHeatedSteamFluidIDs = Arrays.stream(superHeatedSteamCandidates).map(FluidRegistry::getFluid).filter(Objects::nonNull)
+            .map(FluidRegistry::getFluidID).collect(Collectors.toList());
     }
 }
