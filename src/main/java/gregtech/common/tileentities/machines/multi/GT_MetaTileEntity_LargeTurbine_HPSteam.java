@@ -1,11 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
-
-import java.util.ArrayList;
-
-import org.lwjgl.input.Keyboard;
-
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
@@ -21,6 +15,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_LargeTurbine {
 
@@ -111,11 +110,11 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
         storedFluid=0;
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) {
-            String fluidName = aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i));
-            if (fluidName.equals("ic2.fluidSuperheatedSteam")) {
-                flow = Math.min(aFluids.get(i).amount, remainingFlow); // try to use up w/o exceeding remainingFlow
-                depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
-                this.storedFluid += aFluids.get(i).amount;
+            final FluidStack aFluidStack = aFluids.get(i);
+            if (GT_ModHandler.isSuperHeatedSteam(aFluidStack)) {
+                flow = Math.min(aFluidStack.amount, remainingFlow); // try to use up w/o exceeding remainingFlow
+                depleteInput(new FluidStack(aFluidStack, flow)); // deplete that amount
+                this.storedFluid += aFluidStack.amount;
                 remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                 totalFlow += flow; // track total input used
                 if (!achievement) {
@@ -125,8 +124,8 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                     }
                     achievement = true;
                 }
-            }else if(fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name")){
-                depleteInput(new FluidStack(aFluids.get(i), aFluids.get(i).amount));
+            } else if(GT_ModHandler.isAnySteam(aFluidStack)){
+                depleteInput(new FluidStack(aFluidStack, aFluidStack.amount));
             }
         }
         if(totalFlow<=0)return 0;
