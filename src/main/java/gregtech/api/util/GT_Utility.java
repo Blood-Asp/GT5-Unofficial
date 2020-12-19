@@ -537,24 +537,47 @@ public class GT_Utility {
     public static int moveMultipleItemStacks(IInventory aTileEntity1, Object aTileEntity2, byte aGrabFrom, byte aPutTo, List<ItemStack> aFilter, boolean aInvertFilter, byte aMaxTargetStackSize, byte aMinTargetStackSize, byte aMaxMoveAtOnce, byte aMinMoveAtOnce,int aMaxStackTransfer, boolean aDoCheckChests) {
         if (aTileEntity1 == null || aMaxTargetStackSize <= 0 || aMinTargetStackSize <= 0 || aMaxMoveAtOnce <= 0 || aMinTargetStackSize > aMaxTargetStackSize || aMinMoveAtOnce > aMaxMoveAtOnce || aMaxStackTransfer == 0)
             return 0;
-        int tGrabInventorySize = aTileEntity1.getSizeInventory();
+
+        int[] tGrabSlots = null;
+        if (aTileEntity1 instanceof ISidedInventory)
+            tGrabSlots = ((ISidedInventory) aTileEntity1).getAccessibleSlotsFromSide(aGrabFrom);
+        if (tGrabSlots == null) {
+            tGrabSlots = new int[aTileEntity1.getSizeInventory()];
+            for (int i = 0; i < tGrabSlots.length; i++) tGrabSlots[i] = i;
+        }
+
+
+
+
+        int tGrabInventorySize = tGrabSlots.length;
         if (aTileEntity2 instanceof IInventory)
         {
+            int[] tPutSlots = null;
+            if (aTileEntity2 instanceof ISidedInventory)
+                tPutSlots = ((ISidedInventory) aTileEntity2).getAccessibleSlotsFromSide(aPutTo);
+
+            if (tPutSlots == null) {
+                tPutSlots = new int[((IInventory) aTileEntity2).getSizeInventory()];
+                for (int i = 0; i < tPutSlots.length; i++) tPutSlots[i] = i;
+            }
+
             IInventory tPutInventory = (IInventory) aTileEntity2;
-            int tPutInventorySize = tPutInventory.getSizeInventory();
+            int tPutInventorySize = tPutSlots.length;
             int tFirstsValidSlot = 0,tStacksMoved = 0,tTotalItemsMoved = 0;
-            for (int tGrabSlot = 0;tGrabSlot<tGrabInventorySize;tGrabSlot++)
+            for (int tGrabSlotIndex = 0;tGrabSlotIndex<tGrabInventorySize;tGrabSlotIndex++)
             {
                 //ItemStack tInventoryStack : mInventory
                 int tMovedItems;
                 do {
-		    tMovedItems = 0;
+                    int tGrabSlot = tGrabSlots[tGrabSlotIndex];
+		            tMovedItems = 0;
                     ItemStack tGrabStack = aTileEntity1.getStackInSlot(tGrabSlot);
                     if (listContainsItem(aFilter, tGrabStack, true, aInvertFilter) &&
                             (tGrabStack.stackSize >= aMinMoveAtOnce && isAllowedToTakeFromSlot(aTileEntity1, tGrabSlot, aGrabFrom, tGrabStack))) {
                         int tStackSize = tGrabStack.stackSize;
                         
-                        for (int tPutSlot = tFirstsValidSlot; tPutSlot < tPutInventorySize; tPutSlot++) {
+                        for (int tPutSlotIndex = tFirstsValidSlot; tPutSlotIndex < tPutInventorySize; tPutSlotIndex++) {
+                            int tPutSlot = tPutSlots[tPutSlotIndex];
                             if (isAllowedToPutIntoSlot(tPutInventory, tPutSlot, aPutTo, tGrabStack, (byte) 64)) {
                                 int tMoved = moveStackFromSlotAToSlotB(aTileEntity1, tPutInventory, tGrabSlot, tPutSlot, aMaxTargetStackSize, aMinTargetStackSize, (byte) (aMaxMoveAtOnce - tMovedItems), aMinMoveAtOnce);
                                 tTotalItemsMoved += tMoved;
@@ -609,10 +632,6 @@ public class GT_Utility {
         }
         //there should be a function to transfer more then 1 stack in a pipe
         //ut i dont see any ways to improve it too much work for what it is worth
-        int[] tGrabSlots = new int[tGrabInventorySize];
-        for (int i = 0; i < tGrabInventorySize; i++) {
-            tGrabSlots[i] = i;
-        }
         int tTotalItemsMoved = 0;
         for (int i = 0; i < tGrabInventorySize; i++) {
             int tMoved = moveStackIntoPipe(aTileEntity1, aTileEntity2, tGrabSlots, aGrabFrom, aPutTo, aFilter, aInvertFilter, aMaxTargetStackSize, aMinTargetStackSize, aMaxMoveAtOnce, aMinMoveAtOnce, aDoCheckChests);
