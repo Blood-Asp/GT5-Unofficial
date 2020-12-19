@@ -38,6 +38,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public int mTransferredItems = 0;
     public byte mLastReceivedFrom = 0, oLastReceivedFrom = 0;
     public boolean mIsRestrictive = false;
+    private int[] cacheSides;
 
     public GT_MetaPipeEntity_Item(int aID, String aName, String aNameRegional, float aThickNess, Materials aMaterial, int aInvSlotCount, int aStepSize, boolean aIsRestrictive, int aTickTime) {
         super(aID, aName, aNameRegional, aInvSlotCount, false);
@@ -310,6 +311,19 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     @Override
     public boolean canExtractItem(int aIndex, ItemStack aStack, int aSide) {
         return isConnectedAtSide(aSide);
+    }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int aSide) {
+        IGregTechTileEntity tTileEntity = getBaseMetaTileEntity();
+        boolean tAllow = tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsIn((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), -2, tTileEntity) || tTileEntity.getCoverBehaviorAtSide((byte) aSide).letsItemsOut((byte) aSide, tTileEntity.getCoverIDAtSide((byte) aSide), tTileEntity.getCoverDataAtSide((byte) aSide), -2, tTileEntity);
+        if (tAllow) {
+            if (cacheSides == null)
+                cacheSides = super.getAccessibleSlotsFromSide(aSide);
+            return cacheSides;
+        } else {
+            return new int[0];
+        }
     }
 
     @Override
