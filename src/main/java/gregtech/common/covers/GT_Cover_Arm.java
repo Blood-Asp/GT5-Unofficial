@@ -43,15 +43,6 @@ public class GT_Cover_Arm
             aCoverVariable = CONVERTED_BIT | Math.min(Math.abs(aCoverVariable-1), SLOT_ID_MASK);
         }
 
-        boolean usePower = false;
-        if (aTileEntity.getUniversalEnergyCapacity() >= 128L) {
-            if (aTileEntity.isUniversalEnergyStored(256L)) {
-                usePower = true;
-            } else {
-                return aCoverVariable;
-            }
-        }
-
         TileEntity toTile, fromTile;
         int toSlot, fromSlot;
 
@@ -97,9 +88,6 @@ public class GT_Cover_Arm
             }
             movedItems = GT_Utility.moveOneItemStack(fromTile, toTile, fromSide, toSide, null, false, (byte)64, (byte)1, (byte)64, (byte)1);
         }
-
-        if (usePower)
-            aTileEntity.decreaseStoredEnergyUnits(4*movedItems, true);
 
         return aCoverVariable;
     }
