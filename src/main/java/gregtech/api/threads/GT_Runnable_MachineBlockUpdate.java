@@ -55,8 +55,10 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private static boolean isEnabled = true;
 
     public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
-        if (isEnabled)
+        if (isEnabled) {
+            aWorld.getTileEntity(aX, aY, aZ);
             EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
+        }
     }
 
     public static void initExecutorService() {
