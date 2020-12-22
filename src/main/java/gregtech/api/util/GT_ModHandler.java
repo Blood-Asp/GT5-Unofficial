@@ -6,7 +6,12 @@ import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OreDictNames;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.ToolDictNames;
 import gregtech.api.interfaces.IDamagableItem;
 import gregtech.api.interfaces.IItemContainer;
 import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
@@ -31,7 +36,11 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
@@ -40,11 +49,26 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.B;
+import static gregtech.api.enums.GT_Values.D1;
+import static gregtech.api.enums.GT_Values.DW;
+import static gregtech.api.enums.GT_Values.E;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.RA;
+import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.GT_Values.W;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -125,6 +149,8 @@ public class GT_ModHandler {
     public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<Integer>(50);
     public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<IRecipe>(1000);
     private static Cache<GT_ItemStack, ItemStack> sSmeltingRecipeCache = CacheBuilder.newBuilder().maximumSize(1000).build();
+    public static List<Integer> sAnySteamFluidIDs = new ArrayList<>();
+    public static List<Integer> sSuperHeatedSteamFluidIDs = new ArrayList<>();
 
     static {
         sNativeRecipeClasses.add(ShapedRecipes.class.getName());
@@ -214,6 +240,20 @@ public class GT_ModHandler {
     public static boolean isSteam(FluidStack aFluid) {
         if (aFluid == null) return false;
         return aFluid.isFluidEqual(getSteam(1));
+    }
+
+    /**
+     * Returns if that Liquid is Any Steam (including other mods)
+     */
+    public static boolean isAnySteam(FluidStack aFluid) {
+        return(aFluid != null && (isSteam(aFluid) || sAnySteamFluidIDs.contains(aFluid.getFluidID())));
+    }
+
+    /**
+     * Returns if that Liquid is Super Heated Steam (including other mods)
+     */
+    public static boolean isSuperHeatedSteam(FluidStack aFluid) {
+        return(aFluid != null && sSuperHeatedSteamFluidIDs.contains(aFluid.getFluidID()));
     }
 
     /**

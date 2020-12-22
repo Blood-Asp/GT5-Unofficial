@@ -41,21 +41,8 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
                  toEntity = aCoverVariable % 2 != 0 ? aTileEntity : tTileEntity;
         byte fromSide = aCoverVariable % 2 != 0 ? GT_Utility.getOppositeSide(aSide) : aSide,
                toSide = aCoverVariable % 2 == 0 ? GT_Utility.getOppositeSide(aSide) : aSide;
-        boolean costsEnergy = ((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= 128L);
-        byte moved;
 
-
-        if (costsEnergy) {
-            long tStoredEnergy = aTileEntity.getUniversalEnergyStored();
-            int tMaxStacks = (int)(tStoredEnergy/(4*64*this.mMaxStacks));
-            if (tMaxStacks > this.mMaxStacks)
-                tMaxStacks = this.mMaxStacks;
-            int tCost = moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,tMaxStacks);
-            aTileEntity.decreaseStoredEnergyUnits(4 * tCost, true);
-        } else {
-            moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
-        }
-
+        moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
 
 //        for(int i=0 ; i < this.mMaxStacks ; i++) {
 //            // Costs energy but we don't have enough, bail

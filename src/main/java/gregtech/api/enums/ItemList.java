@@ -401,6 +401,12 @@ public enum ItemList implements IItemContainer {
     Electric_Pump_UHV,
     Electric_Pump_UEV,
 
+    Steam_Valve_LV,
+    Steam_Valve_MV,
+    Steam_Valve_HV,
+    Steam_Valve_EV,
+    Steam_Valve_IV,
+
     Conveyor_Module_LV,
     Conveyor_Module_MV,
     Conveyor_Module_HV,

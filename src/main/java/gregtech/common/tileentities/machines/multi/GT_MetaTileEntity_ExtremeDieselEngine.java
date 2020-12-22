@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import org.lwjgl.input.Keyboard;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -10,6 +12,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -29,23 +32,34 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
 
     @Override
     public String[] getDescription() {
-        return new String[]{//change to new format after it's approved
-                "Controller Block for the Extreme Combustion Engine",
-                "Size(WxHxD): 3x3x4, Controller (front centered)",
-                "3x3x4 of Robust Tungstensteel Machine Casing (hollow, Min 16!)",
-                "2x Titanium Gear Box Machine Casing inside the Hollow Casing",
-                "8x Extreme Engine Intake Casing (around controller)",
-                "2x Input Hatch (HOG/Lubricant) (one of the Casings next to a Gear Box)",
-                "1x Input Hatch (Optional, for Liquid Oxygen) (one of the Casings next to a Gear Box)",
-                "1x Maintenance Hatch (one of the Casings next to a Gear Box)",
-                "1x Muffler Hatch (top middle back, above the rear Gear Box)",
-                "1x Dynamo Hatch (back centered)",
-                "Engine Intake Casings must not be obstructed in front (only air blocks)",
-                "Supply High Octane Gasoline and 8000L of Lubricant per hour to run.",
-                "Supply 320L of Liquid Oxygen per second to boost output (optional).",
-                "Default: Produces 8192EU/t at 100% efficiency",
-                "Boosted: Produces 32768EU/t at 400% efficiency",
-                "Causes " + 20 * getPollutionPerTick(null) + " Pollution per second"};
+    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+		tt.addMachineType("Combustion Generator")
+		.addInfo("Controller block for the Extreme Combustion Engine")
+		.addInfo("Supply High Octane Gasoline and 8000L of Lubricant per hour to run")
+		.addInfo("Supply 320L/s of Liquid Oxygen to boost output (optional)")
+		.addInfo("Default: Produces 8192EU/t at 100% fuel efficiency")
+		.addInfo("Boosted: Produces 32768EU/t at 400% fuel efficiency")
+		.addInfo("You need to wait for it to reach 400% to output full power")
+		.addPollutionAmount(20 * getPollutionPerTick(null))
+		.addSeparator()
+		.beginStructureBlock(3, 3, 4, false)
+		.addController("Front center")
+		.addCasingInfo("Robust Tungstensteel Machine Casing", 16)
+		.addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
+		.addOtherStructurePart("Extreme Engine Intake Machine Casing", "8x, ring around controller")
+		.addStructureInfo("Extreme Engine Intake Casings must not be obstructed in front (only air blocks)")
+		.addDynamoHatch("Back center")
+		.addMaintenanceHatch("One of the casings next to a Gear Box")
+		.addMufflerHatch("Top middle back, above the rear Gear Box")
+		.addInputHatch("HOG, next to a Gear Box")
+		.addInputHatch("Lubricant, next to a Gear Box")
+		.addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
+		.toolTipFinisher("Gregtech");
+		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			return tt.getInformation();
+		} else {
+			return tt.getStructureInformation();
+		}
     }
 
     @Override

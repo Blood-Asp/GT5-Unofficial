@@ -40,15 +40,8 @@ public class GT_Cover_Pump
                     if (tLiquid != null) {
                         tLiquid = tLiquid.copy();
                         tLiquid.amount = tTank2.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tLiquid, false);
-                        if (tLiquid.amount > 0) {
-                            if (((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= Math.min(1, tLiquid.amount / 10))) {
-                                if (aTileEntity.isUniversalEnergyStored(Math.min(1, tLiquid.amount / 10))) {
-                                    aTileEntity.decreaseStoredEnergyUnits(Math.min(1, tLiquid.amount / 10), true);
-                                    tTank2.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tTank1.drain(ForgeDirection.getOrientation(aSide), tLiquid.amount, true), true);
-                                }
-                            } else {
-                                tTank2.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tTank1.drain(ForgeDirection.getOrientation(aSide), tLiquid.amount, true), true);
-                            }
+                        if (tLiquid.amount > 0 && canTransferFluid(tLiquid)) {
+                            tTank2.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tTank1.drain(ForgeDirection.getOrientation(aSide), tLiquid.amount, true), true);
                         }
                     }
                 } else {
@@ -56,21 +49,18 @@ public class GT_Cover_Pump
                     if (tLiquid != null) {
                         tLiquid = tLiquid.copy();
                         tLiquid.amount = tTank1.fill(ForgeDirection.getOrientation(aSide), tLiquid, false);
-                        if (tLiquid.amount > 0) {
-                            if (((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= Math.min(1, tLiquid.amount / 10))) {
-                                if (aTileEntity.isUniversalEnergyStored(Math.min(1, tLiquid.amount / 10))) {
-                                    aTileEntity.decreaseStoredEnergyUnits(Math.min(1, tLiquid.amount / 10), true);
-                                    tTank1.fill(ForgeDirection.getOrientation(aSide), tTank2.drain(ForgeDirection.getOrientation(aSide).getOpposite(), tLiquid.amount, true), true);
-                                }
-                            } else {
-                                tTank1.fill(ForgeDirection.getOrientation(aSide), tTank2.drain(ForgeDirection.getOrientation(aSide).getOpposite(), tLiquid.amount, true), true);
-                            }
+                        if (tLiquid.amount > 0 && canTransferFluid(tLiquid)) {
+                            tTank1.fill(ForgeDirection.getOrientation(aSide), tTank2.drain(ForgeDirection.getOrientation(aSide).getOpposite(), tLiquid.amount, true), true);
                         }
                     }
                 }
             }
         }
         return aCoverVariable;
+    }
+
+    protected boolean canTransferFluid(FluidStack fluid) {
+        return true;
     }
 
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
