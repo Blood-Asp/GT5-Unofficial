@@ -3,8 +3,10 @@ package gregtech.common.tileentities.machines.multi;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
+import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -28,9 +30,9 @@ import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 	
-	private int coilMetaID;
+	private HeatingCoilLevel coilHeat;
 	//public static GT_CopiedBlockTexture mTextureULV = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0, Dyes.MACHINE_METAL.mRGBa);
-	private final int CASING_INDEX = 1090;
+	private static final int CASING_INDEX = 1090;
 
     public GT_MetaTileEntity_PyrolyseOven(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -53,7 +55,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
 		.beginStructureBlock(5, 4, 5, true)
 		.addController("Front center")
 		.addCasingInfo("Pyrolyse Oven Casing", 60)
-		.addOtherStructurePart("Heating Coils (any tier)", "Center 3x1x3 of the bottom layer")
+		.addOtherStructurePart("Heating Coils", "Center 3x1x3 of the bottom layer")
 		.addEnergyHatch("Any bottom layer casing")
 		.addMaintenanceHatch("Any bottom layer casing")
 		.addMufflerHatch("Center 3x1x3 area in top layer")
@@ -86,8 +88,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         int tInputList_sS=tInputList.size();
         for (int i = 0; i < tInputList_sS - 1; i++) {
             for (int j = i + 1; j < tInputList_sS; j++) {
-                if (GT_Utility.areStacksEqual((ItemStack) tInputList.get(i), (ItemStack) tInputList.get(j))) {
-                    if (((ItemStack) tInputList.get(i)).stackSize >= ((ItemStack) tInputList.get(j)).stackSize) {
+                if (GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j))) {
+                    if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
                         tInputList.remove(j--); tInputList_sS=tInputList.size();
                     } else {
                         tInputList.remove(i--); tInputList_sS=tInputList.size();
@@ -96,14 +98,14 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 }
             }
         }
-        ItemStack[] tInputs = (ItemStack[]) Arrays.copyOfRange(tInputList.toArray(new ItemStack[tInputList.size()]), 0, 2);
+        ItemStack[] tInputs = Arrays.copyOfRange(tInputList.toArray(new ItemStack[0]), 0, 2);
 
         ArrayList<FluidStack> tFluidList = getStoredFluids();
         int tFluidList_sS=tFluidList.size();
         for (int i = 0; i < tFluidList_sS - 1; i++) {
             for (int j = i + 1; j < tFluidList_sS; j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
                         tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
                     } else {
                         tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
@@ -112,43 +114,43 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 }
             }
         }
-        FluidStack[] tFluids = (FluidStack[]) Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
-        if (tInputList.size() > 0) {
-            long tVoltage = getMaxInputVoltage();
-            byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+        FluidStack[] tFluids = Arrays.copyOfRange(tFluidList.toArray(new FluidStack[tInputList.size()]), 0, 1);
+        if (tInputList.size() <= 0)
+            return false;
 
-            //Dynamic recipe adding for newly found logWoods - wont be visible in nei most probably
-            if(tRecipe==null){
-                for(ItemStack is:tInputs) {
-                    for (int id : OreDictionary.getOreIDs(is)) {
-                        if (OreDictionary.getOreName(id).equals("logWood"))
-                            ProcessingLog.addPyrolyeOvenRecipes(is);
-                    }
+        long tVoltage = getMaxInputVoltage();
+        byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+
+        //Dynamic recipe adding for newly found logWoods - wont be visible in nei most probably
+        if(tRecipe==null){
+            for(ItemStack is:tInputs) {
+                for (int id : OreDictionary.getOreIDs(is)) {
+                    if (OreDictionary.getOreName(id).equals("logWood"))
+                        ProcessingLog.addPyrolyeOvenRecipes(is);
                 }
-                tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
             }
-
-            if (tRecipe != null && tRecipe.isRecipeInputEqual(true, tFluids, tInputs)) {
-                this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                this.mEfficiencyIncrease = 10000;
-
-                calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
-                //In case recipe is too OP for that machine
-                if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                    return false;
-                if (this.mEUt > 0) {
-                    this.mEUt = (-this.mEUt);
-                }
-                this.mMaxProgresstime = Math.max(mMaxProgresstime * 2 / (1 + coilMetaID), 1);
-                if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
-                if (tRecipe.mFluidOutputs.length > 0)
-                    this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
-                updateSlots();
-                return true;
-            }
+            tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
         }
-        return false;
+
+        if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluids, tInputs))
+            return false;
+
+        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        this.mEfficiencyIncrease = 10000;
+
+        calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
+        if (this.mEUt > 0)
+            this.mEUt = (-this.mEUt);
+        this.mMaxProgresstime = Math.max(mMaxProgresstime * 2 / (1 + coilHeat.getTier()), 1);
+        if (tRecipe.mOutputs.length > 0) this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
+        if (tRecipe.mFluidOutputs.length > 0)
+            this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
+        updateSlots();
+        return true;
     }
 
     @Override
@@ -166,29 +168,36 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 for (int h = 0; h < 4; h++) {
                     IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, h, zDir + j);
                     if ((i != -2 && i != 2) && (j != -2 && j != 2)) {// inner 3x3 without height
-                        if (h == 0) {// inner floor (Cupronickel or Kanthal coils)
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != GregTech_API.sBlockCasings5) {
+                        if (h == 0) {// inner floor (Coils)
+
+                            Block coil = aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j);
+
+                            if (!(coil instanceof IHeatingCoil))
                                 return false;
-                            }
+
                             int metaID = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j);
-                            if (metaID > 8) {
+
+                            HeatingCoilLevel coilHeat = ((IHeatingCoil)coil).getCoilHeat(metaID);
+
+                            if (coilHeat == HeatingCoilLevel.None) {
                                 return false;
                             } else {
                             	if (firstCoil) {
-                            		this.coilMetaID = metaID;
+                            		this.coilHeat = coilHeat;
                             		firstCoil = false;
-                            	} else if (metaID != this.coilMetaID) {
+                            	} else if (coilHeat != this.coilHeat) {
                             		return false;
                             	}
                             }
                         } else if (h == 3) {// inner ceiling (ulv casings + input + muffler)
-                            if ((!addInputToMachineList(tTileEntity, CASING_INDEX)) && (!addMufflerToMachineList(tTileEntity, CASING_INDEX))) {
-                                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
-                                    return false;
-                                }
-                                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
-                                    return false;
-                                }
+                            if ((addInputToMachineList(tTileEntity, CASING_INDEX)) || (addMufflerToMachineList(tTileEntity, CASING_INDEX))) {
+                                continue;
+                            }
+                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
+                                return false;
+                            }
+                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
+                                return false;
                             }
                         } else {// inside air
                             if (!aBaseMetaTileEntity.getAirOffset(xDir + i, h, zDir + j)) {
@@ -197,23 +206,28 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                         }
                     } else {// outer 5x5 without height
                         if (h == 0) {// outer floor (controller, output, energy, maintainance, rest ulv casings)
-                            if ((!addMaintenanceToMachineList(tTileEntity, CASING_INDEX)) && (!addOutputToMachineList(tTileEntity, CASING_INDEX)) && (!addEnergyInputToMachineList(tTileEntity, CASING_INDEX))) {
-                                if ((xDir + i != 0) || (zDir + j != 0)) {//no controller
-                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
-                                        return false;
-                                    }
-                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
-                                        return false;
-                                    }
-                                }
+                            if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX)) {
+                                continue;
                             }
-                        } else {// outer above floor (ulv casings)
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
-                                return false;
+
+                            if (addOutputToMachineList(tTileEntity, CASING_INDEX)) {
+                                continue;
                             }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
-                                return false;
+
+                            if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX)) {
+                                continue;
                             }
+
+                            if ((xDir + i == 0) && (zDir + j == 0)) {
+                                continue;
+                            }//no controller
+                        }
+                        // outer above floor (ulv casings)
+                        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, h, zDir + j) != CasingBlock) {
+                            return false;
+                        }
+                        if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, h, zDir + j) != CasingMeta) {
+                            return false;
                         }
                     }
                 }
@@ -255,7 +269,7 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
         int tX = aBaseMetaTileEntity.getXCoord() + xDir * 2;
-        int tY = (int) aBaseMetaTileEntity.getYCoord();
+        int tY = aBaseMetaTileEntity.getYCoord();
         int tZ = aBaseMetaTileEntity.getZCoord() + zDir * 2;
         for (int xPos = tX - 1; xPos <= tX + 1; xPos++) {
             for (int zPos = tZ - 1; zPos <= tZ + 1; zPos++) {

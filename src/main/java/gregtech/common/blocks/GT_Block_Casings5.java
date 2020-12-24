@@ -2,16 +2,23 @@ package gregtech.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
+import java.util.function.Consumer;
+
+import static gregtech.api.enums.HeatingCoilLevel.*;
+
 public class GT_Block_Casings5
-        extends GT_Block_Casings_Abstract {
+        extends GT_Block_Casings_Abstract
+        implements IHeatingCoil {
+
     public GT_Block_Casings5() {
         super(GT_Item_Casings5.class, "gt.blockcasings5", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
@@ -37,6 +44,7 @@ public class GT_Block_Casings5
         ItemList.Casing_Coil_ElectrumFlux.set(new ItemStack(this, 1, 7));
         ItemList.Casing_Coil_AwakenedDraconium.set(new ItemStack(this, 1, 8));
     }
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int aSide, int aMeta) {
@@ -61,5 +69,48 @@ public class GT_Block_Casings5
                 return Textures.BlockIcons.MACHINE_COIL_AWAKENEDDRACONIUM.getIcon();
         }
         return Textures.BlockIcons.MACHINE_COIL_CUPRONICKEL.getIcon();
+    }
+
+    /*--------------- COIL CHECK IMPL. ------------*/
+
+    @Override
+    public HeatingCoilLevel getCoilHeat(int meta) {
+        getOnCoilCheck().accept(this);
+        switch (meta) {
+            case 0:
+                return LV;
+            case 1:
+                return MV;
+            case 2:
+                return HV;
+            case 3:
+                return EV;
+            case 4:
+                return IV;
+            case 5:
+                return ZPM;
+            case 6:
+                return UV;
+            case 7:
+                return UHV;
+            case 8:
+                return UIV;
+            default:
+                return None;
+        }
+    }
+
+    /*--------------- CALLBACK ------------*/
+
+    private Consumer<IHeatingCoil> callback;
+
+    @Override
+    public void setOnCoilCheck(Consumer<IHeatingCoil> callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    public Consumer<IHeatingCoil> getOnCoilCheck() {
+        return this.callback;
     }
 }
