@@ -58,7 +58,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Pump(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3,
                 new String[]{"The best way to empty Oceans! Outputs on top",
-                        getEuUsagePerTier(aTier) + " EU/operation, " + GT_Utility.safeInt(160 / (long)Math.pow(2, aTier) ) + " sec per bucket, no stuttering",
+                        getEuUsagePerTier(aTier) + " EU/operation, " + GT_Utility.safeInt(160 / 20 / (long)Math.pow(2, aTier) ) + " sec per bucket, no stuttering",
                         "Maximum pumping area: " + (getMaxDistanceForTier( aTier) * 2 + 1) + "x" + (getMaxDistanceForTier( aTier) * 2 + 1),
                         "Use Screwdriver to regulate pumping area"});
         radiusConfig = getMaxDistanceForTier(mTier);
