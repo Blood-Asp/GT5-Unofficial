@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -265,6 +266,8 @@ public class GregTech_API {
             sBlockCasings5,
             sBlockCasings6,
             sBlockCasings8;
+    public static Block
+            sBlockLongDistancePipes;
     /**
      * Getting assigned by the Config
      */

@@ -16,7 +16,6 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
-import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_PlayedSound;
@@ -24,7 +23,14 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
-import gregtech.common.render.*;
+import gregtech.common.render.GT_CapeRenderer;
+import gregtech.common.render.GT_FlaskRenderer;
+import gregtech.common.render.GT_FluidDisplayStackRenderer;
+import gregtech.common.render.GT_MetaGenerated_Item_Renderer;
+import gregtech.common.render.GT_MetaGenerated_Tool_Renderer;
+import gregtech.common.render.GT_PollutionRenderer;
+import gregtech.common.render.GT_Renderer_Block;
+import gregtech.common.render.GT_Renderer_Entity_Arrow;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -40,7 +46,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 // Referenced classes of package gregtech.common:
 //            GT_Proxy
@@ -315,8 +327,10 @@ public class GT_Client extends GT_Proxy
                 do {
                     if (i >= GregTech_API.METATILEENTITIES.length)
                         continue label0;
-                    if (GregTech_API.METATILEENTITIES[i] != null)
+                    if (GregTech_API.METATILEENTITIES[i] != null) {
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
+                        GT_Log.out.println("META " + i + " " + GregTech_API.METATILEENTITIES[i].getMetaName());
+                    }
                     i++;
                 } while (true);
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
