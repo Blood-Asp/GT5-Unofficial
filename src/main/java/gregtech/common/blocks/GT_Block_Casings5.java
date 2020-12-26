@@ -6,12 +6,10 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class GT_Block_Casings5
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings5 extends GT_Block_Casings_Abstract {
     public GT_Block_Casings5() {
         super(GT_Item_Casings5.class, "gt.blockcasings5", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {

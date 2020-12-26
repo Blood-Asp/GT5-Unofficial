@@ -11,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class GT_Block_Concretes
-        extends GT_Block_Stones_Abstract implements IBlockOnWalkOver{
+public class GT_Block_Concretes extends GT_Block_Stones_Abstract implements IBlockOnWalkOver{
     public GT_Block_Concretes() {
         super(GT_Item_Concretes.class, "gt.blockconcretes");
         setResistance(20.0F);

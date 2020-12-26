@@ -12,8 +12,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class GT_Block_Granites
-        extends GT_Block_Stones_Abstract {
+public class GT_Block_Granites extends GT_Block_Stones_Abstract {
     public GT_Block_Granites() {
         super(GT_Item_Granites.class, "gt.blockgranites");
         setResistance(60.0F);

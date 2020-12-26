@@ -22,8 +22,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public abstract class GT_Block_Casings_Abstract
-        extends GT_Generic_Block {
+public abstract class GT_Block_Casings_Abstract extends GT_Generic_Block {
     public GT_Block_Casings_Abstract(Class<? extends ItemBlock> aItemClass, String aName, Material aMaterial) {
         super(aItemClass, aName, aMaterial);
         setStepSound(soundTypeMetal);

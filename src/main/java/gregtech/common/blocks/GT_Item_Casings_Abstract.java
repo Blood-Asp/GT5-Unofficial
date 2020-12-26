@@ -9,8 +9,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public abstract class GT_Item_Casings_Abstract
-        extends ItemBlock {
+public abstract class GT_Item_Casings_Abstract extends ItemBlock {
     protected final String mNoMobsToolTip = GT_LanguageManager.addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
     protected final String mNoTileEntityToolTip = GT_LanguageManager.addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
     protected final String mCoil01Tooltip = GT_LanguageManager.addStringLocalization("gt.coil01tooltip", "Base Heating Capacity = 1800 Kelvin");
@@ -25,6 +24,7 @@ public abstract class GT_Item_Casings_Abstract
     protected final String mCoilOverheated1Tooltip = GT_LanguageManager.addStringLocalization("gt.coil.overheated1.tooltip", "These coils are deprecated");
     protected final String mCoilOverheated2Tooltip = GT_LanguageManager.addStringLocalization("gt.coil.overheated2.tooltip", "Place in crafting grid to get regular coils");
     protected final String mBlastProofTooltip = GT_LanguageManager.addStringLocalization("gt.blastprooftooltip", "This Block is Blast Proof");
+
     public GT_Item_Casings_Abstract(Block par1) {
         super(par1);
         setMaxDamage(0);

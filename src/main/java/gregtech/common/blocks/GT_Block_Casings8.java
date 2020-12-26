@@ -9,8 +9,7 @@ import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class GT_Block_Casings8
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings8 extends GT_Block_Casings_Abstract {
 
     //WATCH OUT FOR TEXTURE ID's
     public GT_Block_Casings8() {
