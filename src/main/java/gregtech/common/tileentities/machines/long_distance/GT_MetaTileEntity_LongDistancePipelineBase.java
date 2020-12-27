@@ -152,21 +152,31 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
 
     }
     
+    // What meta should the pipes for this pipeline have
+    public abstract int getPipeMeta();
+    
     protected void scanPipes() {
         if (mSender != null && !mSender.isDead() && mSender.mTarget == this) return;
         GT_Mod.GT_FML_LOGGER.info("ScanPipes()");
         
         // Check if we need to scan anything
         final IGregTechTileEntity gtTile = getBaseMetaTileEntity();
+        if (gtTile == null) return;
+        
+        final World world = gtTile.getWorld();
+        if (world == null) return;
+        
         mTargetPos = getCoords();
         mTarget = this;
         mSender = null;
         
         // Start scanning from the output side
         Block aBlock = gtTile.getBlockAtSide(gtTile.getBackFacing());
-        byte aMetaData = gtTile.getMetaIDAtSide(gtTile.getBackFacing());
         
         if(aBlock instanceof GT_Block_LongDistancePipe) {
+            byte aMetaData = gtTile.getMetaIDAtSide(gtTile.getBackFacing());
+            if (aMetaData != getPipeMeta()) return;
+            
             HashSet<ChunkCoordinates>
                 tVisited = new HashSet<>(Collections.singletonList(getCoords())),
                 tWires   = new HashSet<>();
@@ -176,7 +186,7 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
             while (!tQueue.isEmpty()) {
                 final ChunkCoordinates aCoords = tQueue.poll();
                 
-                if(gtTile.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ) == aBlock) {
+                if(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ) == aBlock && world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ) == aMetaData) {
                     // We've got another pipe/wire block
                     // TODO: Make sure it's the right type of pipe/wire via meta 
                     ChunkCoordinates tCoords;
@@ -191,7 +201,7 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
                     if (tVisited.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY, aCoords.posZ - 1))) tQueue.add(tCoords);
                 } else {
                     // It's not a block - let's see if it's a tile entity
-                    TileEntity tTileEntity = gtTile.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+                    TileEntity tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
                     if (
                         tTileEntity != gtTile && tTileEntity instanceof BaseMetaTileEntity && 
                         ((BaseMetaTileEntity)tTileEntity).getMetaTileEntity() instanceof GT_MetaTileEntity_LongDistancePipelineBase) 

@@ -49,7 +49,11 @@ public class GT_MetaTileEntity_LongDistancePipelineFluid extends GT_MetaTileEnti
     public boolean isSameClass(GT_MetaTileEntity_LongDistancePipelineBase other) {
         return other instanceof GT_MetaTileEntity_LongDistancePipelineFluid;
     }
- 
+
+    public int getPipeMeta() {
+        return 0;    
+    }
+    
     public IFluidHandler getTank() {
         final IGregTechTileEntity tTile = mTarget.getBaseMetaTileEntity();
         TileEntity tankTile = tTile.getTileEntityAtSide(tTile.getBackFacing());

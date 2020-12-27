@@ -49,6 +49,9 @@ public class GT_MetaTileEntity_LongDistancePipelineItem extends GT_MetaTileEntit
         return other instanceof GT_MetaTileEntity_LongDistancePipelineItem;
     }
 
+    public int getPipeMeta() {
+        return 1;
+    }
 
     public IInventory getInventory() {
         final IGregTechTileEntity tTile = mTarget.getBaseMetaTileEntity();
