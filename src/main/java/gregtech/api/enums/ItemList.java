@@ -1221,9 +1221,6 @@ public enum ItemList implements IItemContainer {
     Machine_HV_Massfab,
     Machine_EV_Massfab,
     Machine_IV_Massfab,
-    Machine_LuV_Massfab,
-    Machine_ZPM_Massfab,
-    Machine_UV_Massfab,
 
     Machine_LV_Amplifab,
     Machine_MV_Amplifab,
