@@ -12,11 +12,11 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace extends GT_MetaTile
 
     private static final int CASING_INDEX = 11;
 
-    public GT_MetaTileEntity_AbstractMultiFurnace(int aID, String aName, String aNameRegional) {
+    protected GT_MetaTileEntity_AbstractMultiFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public GT_MetaTileEntity_AbstractMultiFurnace(String aName) {
+    protected GT_MetaTileEntity_AbstractMultiFurnace(String aName) {
         super(aName);
     }
 
