@@ -1005,6 +1005,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     protected ItemStack[] getCompactedInputs(){
+        //TODO: repalce method with a cleaner one
         ArrayList<ItemStack> tInputList = getStoredInputs();
         int tInputList_sS = tInputList.size();
         for (int i = 0; i < tInputList_sS - 1; i++) {
@@ -1025,6 +1026,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     protected FluidStack[] getCompactedFluids(){
+        //TODO: repalce method with a cleaner one
         ArrayList<FluidStack> tFluidList = getStoredFluids();
         int tFluidList_sS = tFluidList.size();
         for (int i = 0; i < tFluidList_sS - 1; i++) {
