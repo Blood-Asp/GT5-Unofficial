@@ -26,8 +26,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
-
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.VN;
 
@@ -108,44 +106,10 @@ public class GT_MetaTileEntity_ElectricBlastFurnace
     }
 
     public boolean checkRecipe(ItemStack aStack) {
-        ArrayList<ItemStack> tInputList = getStoredInputs();
-        int tInputList_sS = tInputList.size();
-        for (int i = 0; i < tInputList_sS - 1; i++) {
-            for (int j = i + 1; j < tInputList_sS; j++) {
-                if (!GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j)))
-                    continue;
+        ItemStack[] tInputs = getCompactedInputs();
+        FluidStack[] tFluids = getCompactedFluids();
 
-                if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
-                    tInputList.remove(j--);
-                    tInputList_sS = tInputList.size();
-                } else {
-                    tInputList.remove(i--);
-                    tInputList_sS = tInputList.size();
-                    break;
-                }
-            }
-        }
-        ItemStack[] tInputs = tInputList.toArray(new ItemStack[0]);
-
-        ArrayList<FluidStack> tFluidList = getStoredFluids();
-        int tFluidList_sS = tFluidList.size();
-        for (int i = 0; i < tFluidList_sS - 1; i++) {
-            for (int j = i + 1; j < tFluidList_sS; j++) {
-                if (!GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j)))
-                    continue;
-
-                if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
-                    tFluidList.remove(j--);
-                    tFluidList_sS = tFluidList.size();
-                } else {
-                    tFluidList.remove(i--);
-                    tFluidList_sS = tFluidList.size();
-                    break;
-                }
-            }
-        }
-        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[0]);
-        if (tInputList.size() <= 0)
+        if (tInputs.length <= 0)
             return false;
 
         long tVoltage = getMaxInputVoltage();

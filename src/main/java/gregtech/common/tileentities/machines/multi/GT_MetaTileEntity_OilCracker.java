@@ -21,10 +21,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
-
-import org.lwjgl.input.Keyboard;
+import java.util.BitSet;
 
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
     private ForgeDirection orientation;
@@ -136,130 +137,120 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        heatLevel = HeatingCoilLevel.None;
+        this.heatLevel = HeatingCoilLevel.None;
         this.orientation = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing());
         this.controllerX = aBaseMetaTileEntity.getXCoord();
         this.controllerZ = aBaseMetaTileEntity.getZCoord();
         int xDir = this.orientation.offsetX;
         int zDir = this.orientation.offsetZ;
-        int amount = 0;
+        MutableInt amount = new MutableInt(0);
         replaceDeprecatedCoils(aBaseMetaTileEntity);
-        boolean negSideInput = false, negSideOutput = false, posSideInput = false, posSideOutput = false;
-        // zDirection
-        // height
-        // xDirection
-        // height
-        if (xDir != 0) {
-            for (int i = -1; i < 2; i++)
-                for (int j = -1; j < 2; j++)
-                    for (int h = -2; h < 3; h++) {
-                        if (j == 0 && i == 0 && (h == -1 || h == 0 || h == 1))
-                            continue;
-                        if (h == 1 || h == -1) {
-                            if (coilsNotPresent(aBaseMetaTileEntity, xDir + h, j, i + zDir))
-                                return false;
-                        }
-                        if (h == 2 || h == -2) {
-                            IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, j, h + zDir);
-                            if (addInputToMachineList(tTileEntity, CASING_INDEX))
-                                if (h == -2)
-                                    negSideInput = true;
-                                else
-                                    posSideInput = true;
-                            else if (addOutputToMachineList(tTileEntity, CASING_INDEX))
-                                if (h == -2)
-                                    negSideOutput = true;
-                                else
-                                    posSideOutput = true;
-                            else if (!addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
-                                if (!addMaintenanceToMachineList(tTileEntity, CASING_INDEX)) {
-                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, j, h + zDir) != GregTech_API.sBlockCasings4)
-                                        return false;
-                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, j, h + zDir) != 1)
-                                        return false;
-                                    amount++;
-                                }
-                        }
-                        if (h == 0) {
-                            IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, j, h + zDir);
-                            if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX))
-                                continue;
-                            if (addInputToMachineList(tTileEntity, CASING_INDEX))
-                                continue;
-                            if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
-                                continue;
-                            if ((xDir + i) == 0 && j == 0 && (h + zDir) == 0)
-                                continue;
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, j, h + zDir) != GregTech_API.sBlockCasings4)
-                                return false;
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, j, h + zDir) != 1)
-                                return false;
-                            amount++;
-                        }
+        BitSet flags = new BitSet(4);
 
-                    }
-    } else
-            for (int i = -1; i < 2; i++)
-                for (int j = -1; j < 2; j++)
-                    for (int h = -2; h < 3; h++) {
-                        if (j == 0 && i == 0 && (h == -1 || h == 0 || h == 1))
-                            continue;
-                        if (h == 1 || h == -1) {
-                            if (coilsNotPresent(aBaseMetaTileEntity, xDir + h, j, i + zDir))
-                                return false;
-                        } else {
-                            IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + h, j, i + zDir);
-                            if (h == 2 || h == -2) {
-                                if (addInputToMachineList(tTileEntity, CASING_INDEX))
-                                    if (h == -2)
-                                        negSideInput = true;
-                                else
-                                    posSideInput = true;
-                                else if (addOutputToMachineList(tTileEntity, CASING_INDEX)) {
-                                    if (h == -2)
-                                        negSideOutput = true;
-                                    else
-                                        posSideOutput = true;
-                                } else {
-                                    if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
-                                        continue;
-                                    if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX))
-                                        continue;
-                                    if (aBaseMetaTileEntity.getBlockOffset(xDir + h, j, i + zDir) != GregTech_API.sBlockCasings4)
-                                        return false;
-                                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + h, j, i + zDir) != 1)
-                                        return false;
-                                    amount++;
-                                }
-                            } else {
-                                if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX))
-                                    continue;
-                                if (addInputToMachineList(tTileEntity, CASING_INDEX))
-                                    continue;
-                                if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
-                                    continue;
-
-                                if (j == 0 && i + zDir == 0)
-                                    continue;
-                                if (aBaseMetaTileEntity.getBlockOffset(0, j, i + zDir) != GregTech_API.sBlockCasings4)
-                                    return false;
-                                if (aBaseMetaTileEntity.getMetaIDOffset(0, j, i + zDir) != 1)
-                                    return false;
-                                amount++;
-                            }
-                        }
+        for (int depth = -1; depth < 2; depth++)
+            for (int height = -1; height < 2; height++)
+                for (int slice = -2; slice < 3; slice++)
+                    if (xDir != 0) {
+                        if (isStructureBroken(xDir, zDir, depth, height, slice, aBaseMetaTileEntity, amount, flags))
+                            return false;
+                    } else {
+                        if (isStructureBroken(xDir, zDir, slice, height, depth, aBaseMetaTileEntity, amount, flags))
+                            return false;
                     }
 
-        if (negSideInput && negSideOutput)
-            return false;
-        if (posSideInput && posSideOutput)
-            return false;
-        if (negSideInput && posSideInput)
-            return false;
-        if (negSideOutput && posSideOutput)
+        if(checkInputOutputBroken(flags))
             return false;
 
-        return amount >= 18;
+        return amount.intValue() >= 18;
+    }
+
+    private boolean checkInputOutputBroken(BitSet flags){
+        if (flags.get(0) && flags.get(2)) //input and output on side 1
+            return true;
+        if (flags.get(1) && flags.get(3)) //input and output on side 2
+            return true;
+        if (flags.get(1) && flags.get(2)) //input on both sides
+            return true;
+        return flags.get(2) && flags.get(3); //output on both sides
+    }
+
+    private boolean isStructureBroken(
+            int xDir,
+            int zDir,
+            int a,
+            int b,
+            int c,
+            IGregTechTileEntity aBaseMetaTileEntity,
+            MutableInt amount,
+            BitSet flags) {
+        if (b == 0 && c == 0 && (a == -1 || a == 0 || a == 1))
+            return false;
+        if (a == 1 || a == -1) {
+            return coilsNotPresent(aBaseMetaTileEntity, xDir + a, b, c + zDir);
+        }
+        else if (a == 2 || a == -2) {
+            return checkEndsBroken(xDir, zDir, a, b, c, aBaseMetaTileEntity, amount, flags);
+        }
+        else if (a == 0)
+            return checkMiddleBroken(xDir, zDir, a, b, c, aBaseMetaTileEntity, amount);
+
+        return false;
+    }
+
+    private boolean checkEndsBroken(
+            int xDir,
+            int zDir,
+            int a,
+            int b,
+            int c,
+            IGregTechTileEntity aBaseMetaTileEntity,
+            MutableInt amount,
+            BitSet flags
+    ){
+        IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + c, b, a + zDir);
+        if (addInputToMachineList(tTileEntity, CASING_INDEX))
+            if (a == -2)
+                flags.set(0); //input on side 1
+            else
+                flags.set(1); //input on side 2
+        else if (addOutputToMachineList(tTileEntity, CASING_INDEX))
+            if (a == -2)
+                flags.set(2); //output on side 1
+            else
+                flags.set(3); //output on side 2
+        else if (!addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
+            if (!addMaintenanceToMachineList(tTileEntity, CASING_INDEX)) {
+                if (aBaseMetaTileEntity.getBlockOffset(xDir + c, b, a + zDir) != GregTech_API.sBlockCasings4)
+                    return true;
+                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + c, b, a + zDir) != 1)
+                    return true;
+                amount.increment();
+            }
+        return false;
+    }
+
+    private boolean checkMiddleBroken( int xDir,
+                                       int zDir,
+                                       int a,
+                                       int b,
+                                       int c,
+                                       IGregTechTileEntity aBaseMetaTileEntity,
+                                       MutableInt amount){
+        IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + c, b, a + zDir);
+        if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX))
+            return false;
+        if (addInputToMachineList(tTileEntity, CASING_INDEX))
+            return false;
+        if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
+            return false;
+        if ((xDir + c) == 0 && b == 0 && (a + zDir) == 0)
+            return false;
+        if (aBaseMetaTileEntity.getBlockOffset(xDir + c, b, a + zDir) != GregTech_API.sBlockCasings4)
+            return true;
+        if (aBaseMetaTileEntity.getMetaIDOffset(xDir + c, b, a + zDir) != 1)
+            return true;
+        amount.increment();
+        return false;
     }
 
     @Override

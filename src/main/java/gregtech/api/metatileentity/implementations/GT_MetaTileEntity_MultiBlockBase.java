@@ -34,21 +34,21 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public static boolean disableMaintenance;
     public boolean mMachine = false, mWrench = false, mScrewdriver = false, mSoftHammer = false, mHardHammer = false, mSolderingTool = false, mCrowbar = false, mRunningOnLoad = false;
     public int mPollution = 0, mProgresstime = 0, mMaxProgresstime = 0, mEUt = 0, mEfficiencyIncrease = 0, mStartUpCheck = 100, mRuntime = 0, mEfficiency = 0;
-    public volatile int mUpdate = 0;
+    public volatile int mUpdate = 0; //TODO: Replace with AtomicInteger
     public ItemStack[] mOutputItems = null;
     public FluidStack[] mOutputFluids = null;
     public String mNEI;
     public int damageFactorLow = 5;
     public float damageFactorHigh = 0.6f;
 
-    public ArrayList<GT_MetaTileEntity_Hatch_Input> mInputHatches = new ArrayList<GT_MetaTileEntity_Hatch_Input>();
-    public ArrayList<GT_MetaTileEntity_Hatch_Output> mOutputHatches = new ArrayList<GT_MetaTileEntity_Hatch_Output>();
-    public ArrayList<GT_MetaTileEntity_Hatch_InputBus> mInputBusses = new ArrayList<GT_MetaTileEntity_Hatch_InputBus>();
-    public ArrayList<GT_MetaTileEntity_Hatch_OutputBus> mOutputBusses = new ArrayList<GT_MetaTileEntity_Hatch_OutputBus>();
-    public ArrayList<GT_MetaTileEntity_Hatch_Dynamo> mDynamoHatches = new ArrayList<GT_MetaTileEntity_Hatch_Dynamo>();
-    public ArrayList<GT_MetaTileEntity_Hatch_Muffler> mMufflerHatches = new ArrayList<GT_MetaTileEntity_Hatch_Muffler>();
-    public ArrayList<GT_MetaTileEntity_Hatch_Energy> mEnergyHatches = new ArrayList<GT_MetaTileEntity_Hatch_Energy>();
-    public ArrayList<GT_MetaTileEntity_Hatch_Maintenance> mMaintenanceHatches = new ArrayList<GT_MetaTileEntity_Hatch_Maintenance>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Input> mInputHatches = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Output> mOutputHatches = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_InputBus> mInputBusses = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_OutputBus> mOutputBusses = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Dynamo> mDynamoHatches = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Muffler> mMufflerHatches = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Energy> mEnergyHatches = new ArrayList<>();
+    public ArrayList<GT_MetaTileEntity_Hatch_Maintenance> mMaintenanceHatches = new ArrayList<>();
 
     public GT_MetaTileEntity_MultiBlockBase(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 2);
@@ -791,7 +791,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     public ArrayList<ItemStack> getStoredOutputs() {
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
 //        for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
 //            if (isValidMetaTileEntity(tHatch)) {
 //                rList.add(tHatch.getBaseMetaTileEntity().getStackInSlot(1));
@@ -808,7 +808,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     public ArrayList<FluidStack> getStoredFluids() {
-        ArrayList<FluidStack> rList = new ArrayList<FluidStack>();
+        ArrayList<FluidStack> rList = new ArrayList<>();
         for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch) && tHatch.getFillableStack() != null) {
@@ -819,7 +819,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     }
 
     public ArrayList<ItemStack> getStoredInputs() {
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
 //        for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
 //            tHatch.mRecipeMap = getRecipeMap();
 //            if (isValidMetaTileEntity(tHatch) && tHatch.getBaseMetaTileEntity().getStackInSlot(0) != null) {
@@ -1002,5 +1002,46 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
+    }
+
+    protected ItemStack[] getCompactedInputs(){
+        ArrayList<ItemStack> tInputList = getStoredInputs();
+        int tInputList_sS = tInputList.size();
+        for (int i = 0; i < tInputList_sS - 1; i++) {
+            for (int j = i + 1; j < tInputList_sS; j++) {
+                if (!GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j)))
+                    continue;
+                if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
+                    tInputList.remove(j--);
+                    tInputList_sS = tInputList.size();
+                } else {
+                    tInputList.remove(i--);
+                    tInputList_sS = tInputList.size();
+                    break;
+                }
+            }
+        }
+        return tInputList.toArray(new ItemStack[0]);
+    }
+
+    protected FluidStack[] getCompactedFluids(){
+        ArrayList<FluidStack> tFluidList = getStoredFluids();
+        int tFluidList_sS = tFluidList.size();
+        for (int i = 0; i < tFluidList_sS - 1; i++) {
+            for (int j = i + 1; j < tFluidList_sS; j++) {
+                if (!GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j)))
+                    continue;
+
+                if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
+                    tFluidList.remove(j--);
+                    tFluidList_sS = tFluidList.size();
+                } else {
+                    tFluidList.remove(i--);
+                    tFluidList_sS = tFluidList.size();
+                    break;
+                }
+            }
+        }
+        return tFluidList.toArray(new FluidStack[0]);
     }
 }
