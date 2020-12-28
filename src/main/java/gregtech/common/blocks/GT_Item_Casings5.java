@@ -17,7 +17,7 @@ public class GT_Item_Casings5
     }
 
     protected final static String mCoilHeatTooltip = GT_LanguageManager.addStringLocalization("gt.coilheattooltip", "Base Heating Capacity = ");
-    protected final static String mCoilUnitTooltip = GT_LanguageManager.addStringLocalization("gt.coilunittooltip", "Kelvin");
+    protected final static String mCoilUnitTooltip = GT_LanguageManager.addStringLocalization("gt.coilunittooltip", " Kelvin");
     protected final static String mCoilTierTooltip = GT_LanguageManager.addStringLocalization("gt.coiltiertooltip", "Coil Tier = ");
 
     @Override

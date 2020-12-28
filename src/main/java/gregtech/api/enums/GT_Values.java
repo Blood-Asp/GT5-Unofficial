@@ -4,6 +4,7 @@ import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.net.IGT_NetworkHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -126,6 +127,16 @@ public class GT_Values {
                     "Ultimate High Voltage", "Ultimate Extreme Voltage", "Ultimate Insane Voltage",
                     "Ultimate Mega Voltage", "Ultimate Extended Mega Voltage", "Overpowered Voltage",
                     "Maximum Voltage"};
+
+    public static final String[] TIER_COLORS =
+            new String[]{
+                    EnumChatFormatting.RED.toString(), EnumChatFormatting.GRAY.toString(), EnumChatFormatting.AQUA.toString(),
+                    EnumChatFormatting.GOLD.toString(), EnumChatFormatting.DARK_PURPLE.toString(), EnumChatFormatting.DARK_BLUE.toString(),
+                    EnumChatFormatting.LIGHT_PURPLE.toString(), EnumChatFormatting.WHITE.toString(), EnumChatFormatting.DARK_AQUA.toString(),
+                    EnumChatFormatting.DARK_RED.toString(), EnumChatFormatting.GREEN.toString(), EnumChatFormatting.DARK_GREEN.toString(),
+                    EnumChatFormatting.YELLOW.toString(), EnumChatFormatting.UNDERLINE.toString(), EnumChatFormatting.BOLD.toString(),
+                    EnumChatFormatting.OBFUSCATED.toString()};
+
     /**
      * This way it is possible to have a Call Hierarchy of NullPointers in ItemStack based Functions, and also because most of the time I don't know what kind of Data Type the "null" stands for
      */
