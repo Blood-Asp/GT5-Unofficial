@@ -22,11 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import org.lwjgl.input.Keyboard;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 	
@@ -90,9 +89,11 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
             for (int j = i + 1; j < tInputList_sS; j++) {
                 if (GT_Utility.areStacksEqual(tInputList.get(i), tInputList.get(j))) {
                     if (tInputList.get(i).stackSize >= tInputList.get(j).stackSize) {
-                        tInputList.remove(j--); tInputList_sS=tInputList.size();
+                        tInputList.remove(j--);
+                        tInputList_sS=tInputList.size();
                     } else {
-                        tInputList.remove(i--); tInputList_sS=tInputList.size();
+                        tInputList.remove(i--);
+                        tInputList_sS=tInputList.size();
                         break;
                     }
                 }
@@ -106,9 +107,11 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
             for (int j = i + 1; j < tFluidList_sS; j++) {
                 if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
                     if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
-                        tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
+                        tFluidList.remove(j--);
+                        tFluidList_sS=tFluidList.size();
                     } else {
-                        tFluidList.remove(i--); tFluidList_sS=tFluidList.size();
+                        tFluidList.remove(i--);
+                        tFluidList_sS=tFluidList.size();
                         break;
                     }
                 }
@@ -123,15 +126,19 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
         GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
 
         //Dynamic recipe adding for newly found logWoods - wont be visible in nei most probably
-        if(tRecipe==null){
-            for(ItemStack is:tInputs) {
-                for (int id : OreDictionary.getOreIDs(is)) {
-                    if (OreDictionary.getOreName(id).equals("logWood"))
-                        ProcessingLog.addPyrolyeOvenRecipes(is);
+        if(tRecipe == null)
+            if (tInputs.length > 1 || (tInputs[0] != null && tInputs[0].getItem() != GT_Utility.getIntegratedCircuit(0).getItem())) {
+                int oreId = OreDictionary.getOreID("logWood");
+                outer : for(ItemStack is : tInputs) {
+                    for (int id : OreDictionary.getOreIDs(is)) {
+                        if (oreId == id) {
+                            ProcessingLog.addPyrolyeOvenRecipes(is);
+                            tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
+                            break outer;
+                        }
+                    }
                 }
             }
-            tRecipe = GT_Recipe.GT_Recipe_Map.sPyrolyseRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], tFluids, tInputs);
-        }
 
         if (tRecipe == null || !tRecipe.isRecipeInputEqual(true, tFluids, tInputs))
             return false;
@@ -157,9 +164,16 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX * 2;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ * 2;
+        Block CasingBlock;
+        int CasingMeta;
 
-        Block CasingBlock= Loader.isModLoaded("dreamcraft")? GameRegistry.findBlock("dreamcraft","gt.blockcasingsNH"): GregTech_API.sBlockCasings1;
-        int CasingMeta= Loader.isModLoaded("dreamcraft")?2:0;
+        if (Loader.isModLoaded("dreamcraft")){
+            CasingBlock = GameRegistry.findBlock("dreamcraft","gt.blockcasingsNH");
+            CasingMeta = 2;
+        } else {
+            CasingBlock = GregTech_API.sBlockCasings1;
+            CasingMeta = 0;
+        }
 
         replaceDeprecatedCoils(aBaseMetaTileEntity);
         boolean firstCoil = true;

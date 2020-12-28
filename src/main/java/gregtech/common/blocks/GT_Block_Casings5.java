@@ -33,6 +33,8 @@ public class GT_Block_Casings5
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".6.name", "Naquadah Alloy Coil Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".7.name", "Electrum Flux Coil Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".8.name", "Awakened Draconium Coil Block");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".9.name", "HSS-S Coil Block");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".10.name", "Trinium Coil Block");
 
         ItemList.Casing_Coil_Cupronickel.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Coil_Kanthal.set(new ItemStack(this, 1, 1));
@@ -43,6 +45,8 @@ public class GT_Block_Casings5
         ItemList.Casing_Coil_NaquadahAlloy.set(new ItemStack(this, 1, 6));
         ItemList.Casing_Coil_ElectrumFlux.set(new ItemStack(this, 1, 7));
         ItemList.Casing_Coil_AwakenedDraconium.set(new ItemStack(this, 1, 8));
+        ItemList.Casing_Coil_HSSS.set(new ItemStack(this, 1, 9));
+        ItemList.Casing_Coil_Trinium.set(new ItemStack(this, 1, 10));
     }
 
     @Override
@@ -67,15 +71,17 @@ public class GT_Block_Casings5
                 return Textures.BlockIcons.MACHINE_COIL_ELECTRUMFLUX.getIcon();
             case 8:
                 return Textures.BlockIcons.MACHINE_COIL_AWAKENEDDRACONIUM.getIcon();
+            case 9:
+                return Textures.BlockIcons.MACHINE_COIL_HSSS.getIcon();
+            case 10:
+                return Textures.BlockIcons.MACHINE_COIL_TRINIUM.getIcon();
         }
         return Textures.BlockIcons.MACHINE_COIL_CUPRONICKEL.getIcon();
     }
 
     /*--------------- COIL CHECK IMPL. ------------*/
 
-    @Override
-    public HeatingCoilLevel getCoilHeat(int meta) {
-        getOnCoilCheck().accept(this);
+    public static HeatingCoilLevel getCoilHeatFromDamage(int meta) {
         switch (meta) {
             case 0:
                 return LV;
@@ -92,17 +98,27 @@ public class GT_Block_Casings5
             case 6:
                 return UV;
             case 7:
-                return UHV;
+                return UEV;
             case 8:
                 return UIV;
+            case 9:
+                return LuV;
+            case 10:
+                return UHV;
             default:
                 return None;
         }
     }
 
+    @Override
+    public HeatingCoilLevel getCoilHeat(int meta) {
+        getOnCoilCheck().accept(this);
+        return getCoilHeatFromDamage(meta);
+    }
+
     /*--------------- CALLBACK ------------*/
 
-    private Consumer<IHeatingCoil> callback;
+    private Consumer<IHeatingCoil> callback = coil -> {};
 
     @Override
     public void setOnCoilCheck(Consumer<IHeatingCoil> callback) {

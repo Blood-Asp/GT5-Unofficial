@@ -10,7 +10,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import static gregtech.api.enums.GT_Values.VN;
 
 public class GT_MetaTileEntity_MultiFurnace
-        extends GT_MetaTileEntity_MultiBlockBase {
+        extends GT_MetaTileEntity_AbstractMultiFurnace {
     private int mLevel = 0;
     private int mCostDiscount = 1;
 
@@ -82,14 +81,6 @@ public class GT_MetaTileEntity_MultiFurnace
 
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sFurnaceRecipes;
-    }
-
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    public boolean isFacingValid(byte aFacing) {
-        return aFacing > 1;
     }
 
     public boolean checkRecipe(ItemStack aStack) {
@@ -155,82 +146,46 @@ public class GT_MetaTileEntity_MultiFurnace
         this.mLevel = 0;
         this.mCostDiscount = 1;
 
-        if (!aBaseMetaTileEntity.getAirOffset(xDir, 1, zDir))
-            return false;
-
-        addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 2, zDir), CASING_INDEX);
         replaceDeprecatedCoils(aBaseMetaTileEntity);
-        Block coil = aBaseMetaTileEntity.getBlockOffset(xDir + 1, 1, zDir);
-        if (!(coil instanceof IHeatingCoil))
+        HeatingCoilLevel heatingCap = getInitialHeatLevel(aBaseMetaTileEntity, xDir, zDir);
+        if (heatingCap == null)
             return false;
-        IHeatingCoil heatingCoil = (IHeatingCoil) coil;
-        byte tUsedMeta = aBaseMetaTileEntity.getMetaIDOffset(xDir + 1, 1, zDir);
-        HeatingCoilLevel heatingLevel = heatingCoil.getCoilHeat(tUsedMeta);
 
-        for (int i = -1; i < 2; i++)
-            for (int j = -1; j < 2; j++) {
+        if (!checkStructure(heatingCap, xDir, zDir, aBaseMetaTileEntity))
+            return false;
 
-                //Middle
-                if ((i == 0) && (j == 0))
-                    continue;
-
-                Block coilM = aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j);
-                if (!(coilM instanceof IHeatingCoil))
-                    return false;
-                byte usedMetaM = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j);
-
-                IHeatingCoil heatingCoilM = (IHeatingCoil) coilM;
-                HeatingCoilLevel heatingLevelM = heatingCoilM.getCoilHeat(usedMetaM);
-
-                if (heatingLevelM != heatingLevel)
-                    return false;
-
-                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != GregTech_API.sBlockCasings1)
-                    return false;
-                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) != CASING_INDEX)
-                    return false;
-
-                //Controller
-                if ((xDir + i == 0) && (zDir + j == 0))
-                    continue;
-                IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 0, zDir + j);
-                if (addMaintenanceToMachineList(tTileEntity, CASING_INDEX))
-                    continue;
-                if (addInputToMachineList(tTileEntity, CASING_INDEX))
-                    continue;
-                if (addOutputToMachineList(tTileEntity, CASING_INDEX))
-                    continue;
-                if (addEnergyInputToMachineList(tTileEntity, CASING_INDEX))
-                    continue;
-                if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 0, zDir + j) != GregTech_API.sBlockCasings1)
-                    return false;
-                if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 0, zDir + j) != CASING_INDEX)
-                    return false;
-            }
-
-        this.mLevel = heatingLevel.getLevel();
-        this.mCostDiscount = heatingLevel.getCostDiscount();
+        this.mLevel = heatingCap.getLevel();
+        this.mCostDiscount = heatingCap.getCostDiscount();
         return true;
     }
 
+    protected boolean checkCoils(HeatingCoilLevel heatingCap, int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
+        if ((i == 0) && (j == 0))
+            return aBaseMetaTileEntity.getAirOffset(xDir, 1, zDir);
+
+        Block coilM = aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j);
+        if (!(coilM instanceof IHeatingCoil))
+            return false;
+        byte usedMetaM = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j);
+
+        IHeatingCoil heatingCoilM = (IHeatingCoil) coilM;
+        HeatingCoilLevel heatingLevelM = heatingCoilM.getCoilHeat(usedMetaM);
+
+        return heatingLevelM == heatingCap;
+    }
+
+    protected boolean checkTopLayer(int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
+        if ((i == 0) && (j == 0)) {
+            return addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 3, zDir), CASING_INDEX);
+        }
+        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != GregTech_API.sBlockCasings1)
+            return false;
+        return aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) == CASING_INDEX;
+    }
+
+
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
         return this.checkMachineFunction(aBaseMetaTileEntity,aStack);
-    }
-
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    public int getPollutionPerTick(ItemStack aStack) {
-        return 20;
-    }
-
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
     }
 
     private void replaceDeprecatedCoils(IGregTechTileEntity aBaseMetaTileEntity) {
