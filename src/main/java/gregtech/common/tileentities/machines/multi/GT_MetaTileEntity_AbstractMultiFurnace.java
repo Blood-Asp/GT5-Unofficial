@@ -20,10 +20,12 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace extends GT_MetaTile
         super(aName);
     }
 
+    @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
     }
 
+    @Override
     public boolean isFacingValid(byte aFacing) {
         return aFacing > 1;
     }
@@ -74,18 +76,22 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace extends GT_MetaTile
         return aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 0, zDir + j) == CASING_INDEX;
     }
 
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
 
+    @Override
     public int getPollutionPerTick(ItemStack aStack) {
         return 20;
     }
 
+    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
 
+    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

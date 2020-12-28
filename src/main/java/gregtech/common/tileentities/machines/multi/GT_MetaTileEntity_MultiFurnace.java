@@ -42,10 +42,12 @@ public class GT_MetaTileEntity_MultiFurnace
         super(aName);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_MultiFurnace(this.mName);
     }
 
+    @Override
     public String[] getDescription() {
     	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
 		tt.addMachineType("Furnace")
@@ -69,20 +71,24 @@ public class GT_MetaTileEntity_MultiFurnace
         return tt.getStructureInformation();
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing)
             return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][CASING_INDEX], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER)};
         return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][CASING_INDEX]};
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "MultiFurnace.png");
     }
 
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sFurnaceRecipes;
     }
 
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
         if (tInputList.isEmpty())
@@ -159,6 +165,7 @@ public class GT_MetaTileEntity_MultiFurnace
         return true;
     }
 
+    @Override
     protected boolean checkCoils(HeatingCoilLevel heatingCap, int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
         if ((i == 0) && (j == 0))
             return aBaseMetaTileEntity.getAirOffset(xDir, 1, zDir);
@@ -174,6 +181,7 @@ public class GT_MetaTileEntity_MultiFurnace
         return heatingLevelM == heatingCap;
     }
 
+    @Override
     protected boolean checkTopLayer(int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
         if ((i == 0) && (j == 0)) {
             return addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 2, zDir), CASING_INDEX);
@@ -183,7 +191,7 @@ public class GT_MetaTileEntity_MultiFurnace
         return aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) == CASING_INDEX;
     }
 
-
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
         return this.checkMachineFunction(aBaseMetaTileEntity,aStack);
     }
