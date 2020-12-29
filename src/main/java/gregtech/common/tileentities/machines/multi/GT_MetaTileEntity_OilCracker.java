@@ -55,8 +55,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
 		.addController("Front center")
 		.addCasingInfo("Clean Stainless Steel Machine Casing", 18)
 		.addOtherStructurePart("2 Rings of 8 Coils", "Each side of the controller")
-        .addInfo("Processing speed scales linearly with Coil tier:")
-        .addInfo("CuNi: 100%, FeAlCr: 150%, Ni4Cr: 200%, Fe50CW: 250%, etc.")
+        .addInfo("Gets 5% energy cost reduction per coil tier")
 		.addEnergyHatch("Any casing")
 		.addMaintenanceHatch("Any casing")
 		.addInputHatch("Steam/Hydrogen, Any middle ring casing")
@@ -108,10 +107,10 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
                 this.mMaxProgresstime /= 2;
             }
 
+            this.mEUt *= Math.pow(0.95D, this.heatLevel.getTier());
+
             if (this.mEUt > 0)
                 this.mEUt = (-this.mEUt);
-
-            this.mMaxProgresstime = Math.max(mMaxProgresstime / heatLevel.getTier(), 1);
 
             this.mOutputFluids = new FluidStack[]{tRecipe.getFluidOutput(0)};
             return true;
