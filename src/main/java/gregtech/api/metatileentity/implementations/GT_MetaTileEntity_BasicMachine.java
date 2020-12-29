@@ -516,8 +516,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 if (tMaxStacks > mOutputItems.length)
                     tMaxStacks = mOutputItems.length;
 
-                int tCost = moveMultipleItemStacks(aBaseMetaTileEntity, tTileEntity2, aBaseMetaTileEntity.getFrontFacing(), aBaseMetaTileEntity.getBackFacing(), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,tMaxStacks);
-                aBaseMetaTileEntity.decreaseStoredEnergyUnits(tCost, true);
+                moveMultipleItemStacks(aBaseMetaTileEntity, tTileEntity2, aBaseMetaTileEntity.getFrontFacing(), aBaseMetaTileEntity.getBackFacing(), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,tMaxStacks);
 //                for (int i = 0, tCosts = 1; i < mOutputItems.length && tCosts > 0 && aBaseMetaTileEntity.isUniversalEnergyStored(128); i++) {
 //                    tCosts = GT_Utility.moveOneItemStack(aBaseMetaTileEntity, tTileEntity2, aBaseMetaTileEntity.getFrontFacing(), aBaseMetaTileEntity.getBackFacing(), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
 //                    if (tCosts > 0) aBaseMetaTileEntity.decreaseStoredEnergyUnits(tCosts, true);
