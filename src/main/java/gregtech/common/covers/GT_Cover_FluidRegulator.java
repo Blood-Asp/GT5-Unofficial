@@ -50,14 +50,7 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 					tLiquid = tLiquid.copy();
 					tLiquid.amount = tTank2.fill(directionTo, tLiquid, false);
 					if (tLiquid.amount > 0) {
-						if (aTileEntity.getUniversalEnergyCapacity() >= Math.min(1, tLiquid.amount / 10)) {
-							if (aTileEntity.isUniversalEnergyStored(Math.min(1, tLiquid.amount / 10))) {
-								aTileEntity.decreaseStoredEnergyUnits(Math.min(1, tLiquid.amount / 10), true);
-								tTank2.fill(directionTo, tTank1.drain(directionFrom, tLiquid.amount, true), true);
-							}
-						} else {
-							tTank2.fill(directionTo, tTank1.drain(directionFrom, tLiquid.amount, true), true);
-						}
+						tTank2.fill(directionTo, tTank1.drain(directionFrom, tLiquid.amount, true), true);
 					}
 				}
 			}

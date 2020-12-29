@@ -143,7 +143,6 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         }
         if (movedItems > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
             mSuccess = 50;
-            aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(movedItems), true);
         }
         fillStacksIntoFirstSlots();
     }
