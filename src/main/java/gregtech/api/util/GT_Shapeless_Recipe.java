@@ -1,17 +1,14 @@
 package gregtech.api.util;
 
 import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
-import net.minecraft.block.Block;
+import gregtech.api.objects.ReverseShapelessRecipe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import java.util.List;
 
 public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_CraftingRecipe {
     public final boolean /*mDismantleable,*/ mRemovableByGT, mKeepingNBT;
@@ -24,22 +21,9 @@ public class GT_Shapeless_Recipe extends ShapelessOreRecipe implements IGT_Craft
         mEnchantmentLevelsAdded = aEnchantmentLevelsAdded;
         mRemovableByGT = aRemovableByGT;
         mKeepingNBT = aKeepingNBT;
-//        mDismantleable = aDismantleAble;
         if (aDismantleAble){
-            for (Object o : aRecipe) {
-                String toPrint = o.toString();
-                if (o instanceof ItemStack)
-                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName((ItemStack)o));
-                else if (o instanceof List)
-                    toPrint = String.join(", ", ((List<String>) o));
-                else if (o instanceof Item)
-                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Item)o)));
-                else if (o instanceof Block)
-                    toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Block)o)));
-                System.out.println(toPrint);
-            }
+            new ReverseShapelessRecipe(aResult, aRecipe);
         }
-        //TODO: Register Dissassembler "Recipe"
     }
 
     @Override

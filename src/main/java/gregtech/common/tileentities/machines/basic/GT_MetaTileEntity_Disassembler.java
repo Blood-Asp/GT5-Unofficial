@@ -120,6 +120,13 @@ public class GT_MetaTileEntity_Disassembler
     }
 
     private boolean process(){
+
+        GT_Recipe gt_recipe = GT_Recipe.GT_Recipe_Map.sDisassemblerRecipes.findRecipe(this.getBaseMetaTileEntity(), true, this.mEUt, null, this.getAllInputs());
+        if (gt_recipe != null) {
+            gt_recipe.isRecipeInputEqual(true, null, this.getRealInventory());
+            return setOutputsAndTime(gt_recipe.mOutputs, gt_recipe.mInputs[0].stackSize);
+        }
+
         Collection<DissassembleReference> recipes = this.findRecipeFromMachine();
         if (recipes.isEmpty())
             return false;
@@ -131,6 +138,7 @@ public class GT_MetaTileEntity_Disassembler
                 recipe.inputs[i] = null;
 
         recipe.inputs = GT_Utility.getArrayListWithoutNulls(recipe.inputs).toArray(new ItemStack[0]);
+
         return setOutputsAndTime(recipe.inputs, recipe.stackSize);
     }
 
@@ -160,18 +168,37 @@ public class GT_MetaTileEntity_Disassembler
                     .map(x -> x.recipe)
                     .collect(Collectors.toList());
 
-        handleRecipeTranceformation(inputs, output, recipesColl);
+        handleRecipeTransformation(inputs, output, recipesColl);
 
         return new DissassembleReference(recipes.stream().mapToInt(x -> x.stackSize).min().orElseThrow(NumberFormatException::new), output, null);
     }
 
-    private static void handleRecipeTranceformation(ItemStack[] inputs, ItemStack[] output, List<GT_Recipe> recipesColl) {
+    private static void handleRecipeTransformation(ItemStack[] inputs, ItemStack[] output, List<GT_Recipe> recipesColl) {
         for (int i = 0, inputsLength = inputs.length; i < inputsLength; i++) {
             Set<ItemStack[]> inputsStacks = null;
             if (recipesColl != null)
                 inputsStacks = recipesColl.stream()
                         .map(x -> x.mInputs)
                         .collect(Collectors.toSet());
+            ItemStack input = inputs[i];
+            ItemData data = GT_OreDictUnificator.getItemData(input);
+            if (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null || data.mPrefix == null) {
+                output[i] = input;
+                continue;
+            }
+            handleReplacement(inputsStacks, data, output, input, i);
+        }
+        addOthersAndHandleAlwaysReplace(inputs, output);
+    }
+
+    /**
+     * Public Interface for ReverseRecipes, do not call inside of this class.
+     * @param inputs
+     * @param output
+     * @param inputsStacks
+     */
+    public static void handleRecipeTransformation(ItemStack[] inputs, ItemStack[] output, Set<ItemStack[]> inputsStacks) {
+        for (int i = 0, inputsLength = inputs.length; i < inputsLength; i++) {
             ItemStack input = inputs[i];
             ItemData data = GT_OreDictUnificator.getItemData(input);
             if (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null || data.mPrefix == null) {
