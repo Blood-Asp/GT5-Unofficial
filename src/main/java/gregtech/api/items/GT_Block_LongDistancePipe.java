@@ -11,7 +11,9 @@ import gregtech.common.blocks.GT_Item_LongDistancePipe;
 import gregtech.common.blocks.GT_Material_Machines;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -55,6 +57,15 @@ public class GT_Block_LongDistancePipe extends GT_Generic_Block {
     public int getHarvestLevel(int aMeta) {
         return 2;
     }
+
+    public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
+        return Blocks.iron_block.getBlockHardness(aWorld, aX, aY, aZ);
+    }
+
+    public float getExplosionResistance(Entity aTNT) {
+        return Blocks.iron_block.getExplosionResistance(aTNT);
+    }
+
 
     public String getUnlocalizedName() {
         return this.mUnlocalizedName;
