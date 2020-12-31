@@ -812,6 +812,16 @@ public class GT_Mod implements IGT_Mod {
         }
 
         gregtechproxy.onPostLoad();
+
+
+        for (int i = 1; i < GregTech_API.METATILEENTITIES.length; i++) {
+            if (i >= GregTech_API.METATILEENTITIES.length)
+                break;
+            if (GregTech_API.METATILEENTITIES[i] != null) {
+                GT_Log.out.println("META " + i + " " + GregTech_API.METATILEENTITIES[i].getMetaName());
+            }
+        }
+        
         if (gregtechproxy.mSortToTheEnd) {
             gregtechproxy.registerUnificationEntries();
         } else {
