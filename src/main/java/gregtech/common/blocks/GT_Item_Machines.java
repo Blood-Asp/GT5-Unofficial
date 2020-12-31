@@ -64,10 +64,12 @@ public class GT_Item_Machines extends ItemBlock {
                 }
                 if (tTileEntity.getEUCapacity() > 0L) {
                     if (tTileEntity.getInputVoltage() > 0L) {
-                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_IN", "Voltage IN: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getInputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getInputVoltage())] + ")" + EnumChatFormatting.GRAY);
+                        int inputTier = GT_Utility.getTier(tTileEntity.getInputVoltage());
+                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_IN", "Voltage IN: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getInputVoltage() + " (" + GT_Values.TIER_COLORS[inputTier] + GT_Values.VN[inputTier] + EnumChatFormatting.GREEN +")" + EnumChatFormatting.GRAY);
                     }
                     if (tTileEntity.getOutputVoltage() > 0L) {
-                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_OUT", "Voltage OUT: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getOutputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(tTileEntity.getOutputVoltage())] + ")" + EnumChatFormatting.GRAY);
+                        int outputTier = GT_Utility.getTier(tTileEntity.getOutputVoltage());
+                        aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_OUT", "Voltage OUT: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.GREEN + tTileEntity.getOutputVoltage() + " (" + GT_Values.TIER_COLORS[outputTier] + GT_Values.VN[outputTier] + EnumChatFormatting.GREEN + ")" + EnumChatFormatting.GRAY);
                     }
                     if (tTileEntity.getOutputAmperage() > 1L) {
                         aList.add(GT_LanguageManager.addStringLocalization("TileEntity_EUp_AMOUNT", "Amperage: ", !GregTech_API.sPostloadFinished ) + EnumChatFormatting.YELLOW + tTileEntity.getOutputAmperage() + EnumChatFormatting.GRAY);

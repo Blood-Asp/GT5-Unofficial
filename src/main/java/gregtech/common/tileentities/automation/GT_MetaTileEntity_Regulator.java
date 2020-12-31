@@ -95,7 +95,6 @@ public class GT_MetaTileEntity_Regulator
                 tCosts = GT_Utility.moveOneItemStackIntoSlot(getBaseMetaTileEntity(), getBaseMetaTileEntity().getTileEntityAtSide(getBaseMetaTileEntity().getBackFacing()), getBaseMetaTileEntity().getBackFacing(), this.mTargetSlots[i], Arrays.asList(new ItemStack[]{this.mInventory[(i + 9)]}), false, (byte) this.mInventory[(i + 9)].stackSize, (byte) this.mInventory[(i + 9)].stackSize, (byte) 64, (byte) 1) * 3;
                 if (tCosts > 0) {
                     this.mSuccess = 50;
-                    getBaseMetaTileEntity().decreaseStoredEnergyUnits(tCosts, true);
                     break;
                 }
             }

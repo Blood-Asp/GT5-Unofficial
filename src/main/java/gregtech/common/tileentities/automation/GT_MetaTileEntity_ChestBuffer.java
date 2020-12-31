@@ -19,7 +19,7 @@ import java.util.Comparator;
 
 public class GT_MetaTileEntity_ChestBuffer
         extends GT_MetaTileEntity_Buffer {
-    private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1,1,1};
+    private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1, 1, 1, 1, 1, 1};
 
 
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier) {

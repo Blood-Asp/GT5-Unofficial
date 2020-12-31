@@ -248,7 +248,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isUniversalEnergyStored(getMinimumStoredEU()) && (aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified() || aTimer % 200 == 0 || mSuccess > 0)) {
+        if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isServerSide() && (aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified() || aTimer % 200 == 0 || mSuccess > 0)) {
             mSuccess--;
             moveItems(aBaseMetaTileEntity, aTimer);
             for(byte b = 0;b<6;b++)
@@ -261,7 +261,6 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
                         if (mInventory[i] == null) {
                             for(byte b = 0;b<6;b++)
                                 aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,bInvert ? (byte)15 : (byte)0);
-                            aBaseMetaTileEntity.decreaseStoredEnergyUnits(1, true);
                             break;
                         }
                     }
@@ -284,7 +283,6 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
         if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
             mSuccess = 50;
-            aBaseMetaTileEntity.decreaseStoredEnergyUnits(Math.abs(tCost), true);
         }
     }
 
