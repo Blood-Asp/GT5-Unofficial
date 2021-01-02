@@ -1398,6 +1398,12 @@ public enum ItemList implements IItemContainer {
     Super_Chest_HV,
     Super_Chest_EV,
     Super_Chest_IV,
+    
+    Long_Distance_Pipeline_Fluid,
+    Long_Distance_Pipeline_Item,
+
+    Long_Distance_Pipeline_Fluid_Pipe,
+    Long_Distance_Pipeline_Item_Pipe,
 
     NULL,
     Cover_RedstoneTransmitterExternal,

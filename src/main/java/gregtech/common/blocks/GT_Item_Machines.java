@@ -23,8 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class GT_Item_Machines
-        extends ItemBlock {
+public class GT_Item_Machines extends ItemBlock {
 
     private static final String[] directionNames = {"Bottom", "Top", "North", "South", "West", "East"};
 

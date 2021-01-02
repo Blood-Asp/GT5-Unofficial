@@ -12,8 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class GT_Block_Casings2
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings2 extends GT_Block_Casings_Abstract {
     public GT_Block_Casings2() {
         super(GT_Item_Casings2.class, "gt.blockcasings2", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {

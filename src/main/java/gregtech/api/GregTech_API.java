@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -89,8 +90,16 @@ public class GregTech_API {
      * 9728 - 10239 are reserved for 28Smiles.
      * 10240 - 10751 are reserved for VirMan.
      * 10752 - 11263 are reserved for Briareos81.
-     * 11264 - 12000 are reserved for the next one who asks me.
-     * 9728 - 32766 are currently free.
+     * 11264 - 12000 are reserved for Quantum64.
+     * 12001 - 12500 are reserved for RedMage17.
+     * 12501 - 13000 are reserved for bartimaeusnek.
+     * 13001 - 13100 are reserved for Techlone
+     * 13101 - 13500 are reserved for kekzdealer
+     * 13501 - 14999 are currently free.
+     * 15000 - 16999 are reserved for TecTech.
+     * 17000 - 29999 are currently free.
+     * 30000 - 31999 are reserved for Alkalus.
+     * 32001 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's
@@ -257,6 +266,8 @@ public class GregTech_API {
             sBlockCasings5,
             sBlockCasings6,
             sBlockCasings8;
+    public static Block
+            sBlockLongDistancePipes;
     /**
      * Getting assigned by the Config
      */
@@ -389,8 +400,8 @@ public class GregTech_API {
      * @param aZ     is the Z-Coord of the update causing Block
      */
     public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ) {
-        if (aWorld != null && !aWorld.isRemote) { //World might be null during Worldgen
-            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
+        if (aWorld != null && !aWorld.isRemote) { // World might be null during Worldgen
+            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, new ChunkCoordinates(aX, aY, aZ));
             return true;
         }
         return false;

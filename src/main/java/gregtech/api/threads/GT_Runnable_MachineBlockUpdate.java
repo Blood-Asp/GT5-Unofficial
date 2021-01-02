@@ -4,10 +4,12 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,12 +17,13 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class GT_Runnable_MachineBlockUpdate implements Runnable {
-    //used by runner thread
-    private final int x, y, z;
+    // used by runner thread
+    private final ChunkCoordinates mCoords;
     private final World world;
-    private final Set<ChunkPosition> visited = new HashSet<>(80);
-
-    //Threading
+    private final Set<ChunkCoordinates> visited = new HashSet<>(80);
+    private final Queue<ChunkCoordinates> tQueue = new LinkedList<>();
+    
+    // Threading
     private static final ThreadFactory THREAD_FACTORY = r -> {
         Thread thread = new Thread(r);
         thread.setName("GT_MachineBlockUpdate");
@@ -28,12 +31,13 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     };
     private static ExecutorService EXECUTOR_SERVICE;
 
-    //This class should never be initiated outside of this class!
-    private GT_Runnable_MachineBlockUpdate(World aWorld, int aX, int aY, int aZ) {
+    // This class should never be initiated outside of this class!
+    private GT_Runnable_MachineBlockUpdate(World aWorld, ChunkCoordinates aCoords) {
         this.world = aWorld;
-        this.x = aX;
-        this.y = aY;
-        this.z = aZ;
+        this.mCoords = aCoords;
+        visited.add(aCoords);
+        tQueue.add(aCoords);
+        
     }
 
     public static boolean isEnabled() {
@@ -54,18 +58,15 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
 
     private static boolean isEnabled = true;
 
-    public static void setMachineUpdateValues(World aWorld, int aX, int aY, int aZ) {
+    public static void setMachineUpdateValues(World aWorld, ChunkCoordinates aCoords) {
         if (isEnabled) {
-            aWorld.getTileEntity(aX, aY, aZ);
-            EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aX, aY, aZ));
+            aWorld.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+            EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aCoords));
         }
     }
 
     public static void initExecutorService() {
-        EXECUTOR_SERVICE = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), THREAD_FACTORY);
-        //Executors.newSingleThreadExecutor(THREAD_FACTORY);
-        //Executors.newCachedThreadPool(THREAD_FACTORY);
-        //Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(),THREAD_FACTORY);
+        EXECUTOR_SERVICE = Executors.newFixedThreadPool((Runtime.getRuntime().availableProcessors() * 2 / 3), THREAD_FACTORY);
     }
 
     public static void shutdownExecutorService() {
@@ -87,7 +88,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
             // Preserve interrupt status
             Thread.currentThread().interrupt();
         }catch (Exception e){
-            GT_Mod.GT_FML_LOGGER.error("Well this didn't terminated well...",e);
+            GT_Mod.GT_FML_LOGGER.error("Well this didn't terminated well...", e);
             // (Re-)Cancel in case
             EXECUTOR_SERVICE.shutdownNow();
         }finally {
@@ -95,70 +96,39 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         }
     }
 
-    private boolean shouldRecurse(TileEntity aTileEntity, int aX, int aY, int aZ) {
-        //no check on IGregTechTileEntity as it should call the underlying meta tile isMachineBlockUpdateRecursive
-        //if (aTileEntity instanceof IGregTechTileEntity) {
-        //    return ((IGregTechTileEntity) aTileEntity).isMachineBlockUpdateRecursive();
-        //}
-        return (aTileEntity instanceof IMachineBlockUpdateable &&
-                ((IMachineBlockUpdateable) aTileEntity).isMachineBlockUpdateRecursive()) ||
-                GregTech_API.isMachineBlock(world.getBlock(aX, aY, aZ), world.getBlockMetadata(aX, aY, aZ));
-    }
-
-    private void causeUpdate(TileEntity tileEntity) {
-        //no check for IGregTechTileEntity as it should call the underlying meta tile onMachineBlockUpdate
-        if (tileEntity instanceof IMachineBlockUpdateable) {
-            ((IMachineBlockUpdateable) tileEntity).onMachineBlockUpdate();
-        }
-    }
-
-    private void stepToUpdateMachine(int aX, int aY, int aZ) {
-        if (!visited.add(new ChunkPosition(aX, aY, aZ)))
-            return;
-        TileEntity tTileEntity = world.getTileEntity(aX, aY, aZ);
-
-        causeUpdate(tTileEntity);
-
-        if (visited.size() < 5 || shouldRecurse(tTileEntity, aX, aY, aZ)) {
-            stepToUpdateMachine(aX + 1, aY, aZ);
-            stepToUpdateMachine(aX - 1, aY, aZ);
-            stepToUpdateMachine(aX, aY + 1, aZ);
-            stepToUpdateMachine(aX, aY - 1, aZ);
-            stepToUpdateMachine(aX, aY, aZ + 1);
-            stepToUpdateMachine(aX, aY, aZ - 1);
-        }
-    }
-
     @Override
     public void run() {
         try {
-            stepToUpdateMachine(x, y, z);
+            while (!tQueue.isEmpty()) {
+                final ChunkCoordinates aCoords = tQueue.poll();
+                TileEntity tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+
+                // See if the block itself needs an update
+                if (tTileEntity instanceof IMachineBlockUpdateable)
+                    ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
+
+                // Now see if we should add the nearby blocks to the queue:
+                // 1) If we've visited less than 5 blocks, then yes
+                // 2) If the tile says we should recursively updated (pipes don't, machine blocks do)
+                // 3) If the block at the coordinates is marked as a machine block
+                if (visited.size() < 5 
+                    || (tTileEntity instanceof IMachineBlockUpdateable && ((IMachineBlockUpdateable) tTileEntity).isMachineBlockUpdateRecursive()) 
+                    || GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ))) 
+                {
+                    ChunkCoordinates tCoords;
+                    
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX + 1, aCoords.posY, aCoords.posZ))) tQueue.add(tCoords);
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX - 1, aCoords.posY, aCoords.posZ))) tQueue.add(tCoords);
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY + 1, aCoords.posZ))) tQueue.add(tCoords);
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY - 1, aCoords.posZ))) tQueue.add(tCoords);
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY, aCoords.posZ + 1))) tQueue.add(tCoords);
+                    if (visited.add(tCoords = new ChunkCoordinates(aCoords.posX, aCoords.posY, aCoords.posZ - 1))) tQueue.add(tCoords);
+                }
+            }
         } catch (Exception e) {
-            GT_Mod.GT_FML_LOGGER.error("Well this update was broken... " + new Coordinates(x, y, z, world), e);
+            GT_Mod.GT_FML_LOGGER.error(
+                "Well this update was broken... " + mCoords + ", mWorld={" + world.getProviderName() + " @dimId " + world.provider.dimensionId + "}", e);
         }
     }
 
-    public static class Coordinates {
-        public final int mX;
-        public final int mY;
-        public final int mZ;
-        public final World mWorld;
-
-        public Coordinates(int mX, int mY, int mZ, World mWorld) {
-            this.mX = mX;
-            this.mY = mY;
-            this.mZ = mZ;
-            this.mWorld = mWorld;
-        }
-
-        @Override
-        public String toString() {
-            return "Coordinates{" +
-                    "mX=" + mX +
-                    ", mY=" + mY +
-                    ", mZ=" + mZ +
-                    ", mWorld=" + mWorld.getProviderName() + " @dimId " + mWorld.provider.dimensionId +
-                    '}';
-        }
-    }
 }

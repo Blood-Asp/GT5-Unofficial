@@ -843,8 +843,16 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (isValidFacing(aFacing)) {
             mFacing = aFacing;
             mMetaTileEntity.onFacingChange();
-            onMachineBlockUpdate();
+
             doEnetUpdate();
+            
+            if (mMetaTileEntity.shouldTriggerBlockUpdate()) {
+                // If we're triggering a block update this will call onMachineBlockUpdate()
+                GregTech_API.causeMachineUpdate(worldObj, xCoord, yCoord, zCoord);
+            } else {
+                // If we're not trigger a cascading one, call the update here.
+                onMachineBlockUpdate();
+            }
         }
     }
 

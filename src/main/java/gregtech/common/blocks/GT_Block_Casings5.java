@@ -15,9 +15,7 @@ import java.util.function.Consumer;
 
 import static gregtech.api.enums.HeatingCoilLevel.*;
 
-public class GT_Block_Casings5
-        extends GT_Block_Casings_Abstract
-        implements IHeatingCoil {
+public class GT_Block_Casings5 extends GT_Block_Casings_Abstract implements IHeatingCoil {
 
     public GT_Block_Casings5() {
         super(GT_Item_Casings5.class, "gt.blockcasings5", GT_Material_Casings.INSTANCE);

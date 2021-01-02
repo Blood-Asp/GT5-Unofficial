@@ -7,8 +7,7 @@ import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class GT_Block_Casings3
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings3 extends GT_Block_Casings_Abstract {
     public GT_Block_Casings3() {
         super(GT_Item_Casings3.class, "gt.blockcasings3", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {

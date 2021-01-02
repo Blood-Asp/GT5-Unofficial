@@ -6,6 +6,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
+import gregtech.api.items.GT_Block_LongDistancePipe;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.items.GT_RadioactiveCellIC_Item;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
@@ -220,17 +221,11 @@ public class GT_Loader_Item_Block_And_Fluid
         GregTech_API.sBlockCasings6 = new GT_Block_Casings6();
         GregTech_API.sBlockCasings8 = new GT_Block_Casings8();
         GregTech_API.sBlockGranites = new GT_Block_Granites();
+        GregTech_API.sBlockLongDistancePipes = new GT_Block_LongDistancePipe();
         GregTech_API.sBlockConcretes = new GT_Block_Concretes();
         GregTech_API.sBlockStones = new GT_Block_Stones();
         GregTech_API.sBlockOres1 = new GT_Block_Ores();
-//        if (Loader.isModLoaded("UndergroundBiomes")) {
-//            GregTech_API.sBlockOresUb1 = new GT_Block_Ores_UB1();
-//            GregTech_API.sBlockOresUb2 = new GT_Block_Ores_UB2();
-//            GregTech_API.sBlockOresUb3 = new GT_Block_Ores_UB3();
-//        }
-        //if(Loader.isModLoaded("GalacticraftCore") && Loader.isModLoaded("GalacticraftMars")) {
-        //    GregTech_API.sBlockOresGC = new GT_Block_Ores_GC();
-        //}
+
         GregTech_API.sBlockMetal1 = new GT_Block_Metal("gt.blockmetal1", new Materials[]{
                 Materials.Adamantium,
                 Materials.Aluminium,
