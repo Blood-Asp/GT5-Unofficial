@@ -14,8 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public class GT_Block_Casings4
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings4 extends GT_Block_Casings_Abstract {
     public static boolean mConnectedMachineTextures = true;
 
     public GT_Block_Casings4() {

@@ -10,8 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 
-public class GT_MetaTileEntity_SuperTank
-        extends GT_MetaTileEntity_BasicTank {
+public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_SuperTank(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, "Stores " + CommonSizeCompute(aTier) + "L of fluid");
     }

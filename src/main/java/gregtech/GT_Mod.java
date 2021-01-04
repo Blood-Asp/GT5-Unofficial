@@ -32,6 +32,8 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.objects.ItemData;
+import gregtech.api.objects.ReverseShapedRecipe;
+import gregtech.api.objects.ReverseShapelessRecipe;
 import gregtech.api.objects.XSTR;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.GT_Assemblyline_Server;
@@ -810,6 +812,16 @@ public class GT_Mod implements IGT_Mod {
         }
 
         gregtechproxy.onPostLoad();
+
+
+        for (int i = 1; i < GregTech_API.METATILEENTITIES.length; i++) {
+            if (i >= GregTech_API.METATILEENTITIES.length)
+                break;
+            if (GregTech_API.METATILEENTITIES[i] != null) {
+                GT_Log.out.println("META " + i + " " + GregTech_API.METATILEENTITIES[i].getMetaName());
+            }
+        }
+        
         if (gregtechproxy.mSortToTheEnd) {
             gregtechproxy.registerUnificationEntries();
         } else {
@@ -1076,6 +1088,9 @@ public class GT_Mod implements IGT_Mod {
         identifyAnySteam();
 
         achievements = new GT_Achievements();
+
+        ReverseShapedRecipe.runReverseRecipes();
+        ReverseShapelessRecipe.runReverseRecipes();
 
         GT_Recipe.GTppRecipeHelper = true;
         GT_Log.out.println("GT_Mod: Loading finished, deallocating temporary Init Variables.");

@@ -8,8 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public class GT_Block_Casings1
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings1 extends GT_Block_Casings_Abstract {
 	
 	/**
 	 * Texture Index Information
@@ -28,7 +27,7 @@ public class GT_Block_Casings1
 	
     public GT_Block_Casings1() {
         super(GT_Item_Casings1.class, "gt.blockcasings", GT_Material_Casings.INSTANCE);
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
+        for (int i = 0; i < 16; i = i+1) {
             Textures.BlockIcons.casingTexturePages[0][i] = new GT_CopiedBlockTexture(this, 6, i);
         }
 

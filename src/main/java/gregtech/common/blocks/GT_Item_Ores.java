@@ -8,8 +8,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class GT_Item_Ores
-        extends ItemBlock {
+public class GT_Item_Ores extends ItemBlock {
     public GT_Item_Ores(Block par1) {
         super(par1);
         setMaxDamage(0);

@@ -141,8 +141,7 @@ public interface IGregTechTileEntity extends ITexturedTileEntity, IGearEnergyTil
      */
     @Override
     default void onMachineBlockUpdate(){
-        if(!isDead() && getMetaTileEntity()!=null &&
-                getMetaTileEntity().getBaseMetaTileEntity()==this){
+        if(!isDead() && getMetaTileEntity() != null && getMetaTileEntity().getBaseMetaTileEntity() == this){
             getMetaTileEntity().onMachineBlockUpdate();
         }
     }
@@ -152,8 +151,8 @@ public interface IGregTechTileEntity extends ITexturedTileEntity, IGearEnergyTil
      */
     @Override
     default boolean isMachineBlockUpdateRecursive() {
-        return !isDead() && getMetaTileEntity()!=null &&
-                getMetaTileEntity().getBaseMetaTileEntity()==this &&
+        return !isDead() && getMetaTileEntity() != null &&
+                getMetaTileEntity().getBaseMetaTileEntity() == this &&
                 getMetaTileEntity().isMachineBlockUpdateRecursive();
     }
 }

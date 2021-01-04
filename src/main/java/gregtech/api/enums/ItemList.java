@@ -1398,6 +1398,12 @@ public enum ItemList implements IItemContainer {
     Super_Chest_HV,
     Super_Chest_EV,
     Super_Chest_IV,
+    
+    Long_Distance_Pipeline_Fluid,
+    Long_Distance_Pipeline_Item,
+
+    Long_Distance_Pipeline_Fluid_Pipe,
+    Long_Distance_Pipeline_Item_Pipe,
 
     NULL,
     Cover_RedstoneTransmitterExternal,
@@ -1437,7 +1443,9 @@ public enum ItemList implements IItemContainer {
     Casing_Coil_Nichrome,
     Casing_Coil_TungstenSteel,
     Casing_Coil_HSSG,
+    Casing_Coil_HSSS,
     Casing_Coil_Naquadah,
+    Casing_Coil_Trinium,
     Casing_Coil_NaquadahAlloy,
     Casing_Coil_ElectrumFlux,
     Casing_Coil_AwakenedDraconium,

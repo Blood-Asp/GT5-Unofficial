@@ -933,4 +933,6 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     }
 
     public boolean shouldJoinIc2Enet() { return false; }
+    
+    public boolean shouldTriggerBlockUpdate() { return false; }
 }

@@ -14,6 +14,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.*;
 import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
+import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_ItemStack;
@@ -1022,7 +1023,7 @@ public class GT_Utility {
             return copyMetaData(Items.feather.getDamage(aStack) + 1, aStack);
         return null;
     }
-    
+
     public static synchronized boolean removeIC2BottleRecipe(ItemStack aContainer, ItemStack aInput, Map<ic2.api.recipe.ICannerBottleRecipeManager.Input, RecipeOutput> aRecipeList, ItemStack aOutput){
         if ((isStackInvalid(aInput) && isStackInvalid(aOutput) && isStackInvalid(aContainer)) || aRecipeList == null) return false;
         boolean rReturn = false;
@@ -1742,7 +1743,7 @@ public class GT_Utility {
         if(aDimensionID<=1 && aDimensionID>=-1 && !GregTech_API.sDimensionalList.contains(aDimensionID)) return true;
         return !GregTech_API.sDimensionalList.contains(aDimensionID) && DimensionManager.isDimensionRegistered(aDimensionID);
     }
-	 
+
     //public static boolean isRealDimension(int aDimensionID) {
     //    try {
     //        if (DimensionManager.getProvider(aDimensionID).getClass().getName().contains("com.xcompwiz.mystcraft"))
@@ -1756,7 +1757,7 @@ public class GT_Utility {
     //    } catch (Throwable e) {/*Do nothing*/}
     //    return GregTech_API.sDimensionalList.contains(aDimensionID);
     //}
-	
+
     public static boolean moveEntityToDimensionAtCoords(Entity entity, int aDimension, double aX, double aY, double aZ) {
         //Credit goes to BrandonCore Author :!:
 
@@ -2040,7 +2041,7 @@ public class GT_Utility {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
         }
-        
+
         if (aPlayer.capabilities.isCreativeMode) {
             FluidStack tFluid = undergroundOilReadInformation(aWorld.getChunkFromBlockCoords(aX,aZ));//-# to only read
             if (tFluid!=null)
@@ -2355,7 +2356,7 @@ public class GT_Utility {
             setBookTitle(aStack, "Raw Prospection Data");
 
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
-            
+
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);
 
@@ -2369,27 +2370,27 @@ public class GT_Utility {
             	String[] aStats = aStr.split(",");
             	tOilsTransformed.add(aStats[0] + ": " + aStats[1] + "L " + aStats[2]);
             }
-            
+
             tNBT.setString("prospection_oils", joinListToString(tOilsTransformed));
 
             String tOilsPosStr = "X: " + Math.floorDiv(aX, 16*8)*16*8 + " Z: " + Math.floorDiv(aZ, 16*8)*16*8 + "\n";
             int xOff = aX - Math.floorDiv(aX, 16*8)*16*8;
             xOff = xOff/16;
             int xOffRemain = 7 - xOff;
-            
+
             int zOff = aZ - Math.floorDiv(aZ, 16*8)*16*8;
             zOff = zOff/16;
             int zOffRemain = 7 - zOff;
-            
+
             for( ; zOff > 0; zOff-- ) {
                 tOilsPosStr = tOilsPosStr.concat("--------\n");
             }
             for( ; xOff > 0; xOff-- ) {
                 tOilsPosStr = tOilsPosStr.concat("-");
             }
-            
+
             tOilsPosStr = tOilsPosStr.concat("P");
-            
+
             for( ; xOffRemain > 0; xOffRemain-- ) {
                 tOilsPosStr = tOilsPosStr.concat("-");
             }
@@ -2444,11 +2445,11 @@ public class GT_Utility {
                     + "Location is center of orevein\n\n"
                     + "Check NEI to confirm orevein type";
                 tNBTList.appendTag(new NBTTagString(tPageText));
-  
+
                 if (tOres != null)
                     fillBookWithList(tNBTList, "Ores Found %s\n\n", "\n", 7, tOres);
 
-                
+
                if (tOils != null)
                     fillBookWithList(tNBTList, "Oils%s\n\n", "\n", 9, tOils);
 
@@ -2466,7 +2467,7 @@ public class GT_Utility {
                             tOilsPosStr + "\n" +
                             "P - Prospector in 8x8 field";
                 tNBTList.appendTag(new NBTTagString(tPageText));
-                
+
                 tNBT.setString("author", tPos.replace("\n"," "));
                 tNBT.setTag("pages", tNBTList);
                 setNBT(aStack, tNBT);
@@ -2606,11 +2607,11 @@ public class GT_Utility {
     }
 
     public static boolean isPartOfMaterials(ItemStack aStack, Materials aMaterials){
-        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mMaterial.mMaterial.equals(aMaterials) : false;
+        return GT_OreDictUnificator.getAssociation(aStack) != null && GT_OreDictUnificator.getAssociation(aStack).mMaterial.mMaterial.equals(aMaterials);
     }
 
     public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
-        return GT_OreDictUnificator.getAssociation(aStack) != null ? GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix) : false;
+        return GT_OreDictUnificator.getAssociation(aStack) != null && GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix);
     }
     public static boolean isOre(ItemStack aStack) {
         for (int id: OreDictionary.getOreIDs(aStack)) {
@@ -2620,4 +2621,152 @@ public class GT_Utility {
         return false;
     }
 
+    public static Optional<GT_Recipe> reverseShapelessRecipe(ItemStack output, Object... aRecipe) {
+        if (output == null) {
+            return Optional.empty();
+        }
+
+        List<ItemStack> inputs = new ArrayList<>();
+
+        for (Object o : aRecipe) {
+            if (o instanceof ItemStack) {
+                ItemStack toAdd = ((ItemStack) o).copy();
+                inputs.add(toAdd);
+            } else if (o instanceof String) {
+                ItemStack stack = GT_OreDictUnificator.get(o, 1);
+                if (stack == null) {
+                    Optional<ItemStack> oStack = OreDictionary.getOres((String) o)
+                            .stream()
+                            .findAny();
+                    if (oStack.isPresent()) {
+                        ItemStack copy = oStack.get().copy();
+                        inputs.add(copy);
+                    }
+                } else {
+                    ItemStack copy = stack.copy();
+                    inputs.add(copy);
+                }
+            } else if (o instanceof Item)
+                inputs.add(new ItemStack((Item) o));
+            else if (o instanceof Block)
+                inputs.add(new ItemStack((Block) o));
+            else
+                throw new IllegalStateException("A Recipe contains an invalid input! Output: " + output);
+        }
+
+        inputs.removeIf(x -> x.getItem() instanceof GT_MetaGenerated_Tool);
+
+        return Optional.of(
+                new GT_Recipe(
+                        false,
+                        new ItemStack[]{output},
+                        inputs.toArray(new ItemStack[0]),
+                        null, null,
+                        null, null,
+                        300, 30, 0
+                )
+        );
+    }
+
+
+    public static Optional<GT_Recipe> reverseShapedRecipe(ItemStack output, Object... aRecipe) {
+        if (output == null) {
+//            System.out.println("Null Recipe detected!");
+            return Optional.empty();
+        }
+//        System.out.println("Registering Reverse Recipe for: " + GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(output) + "|" + output.getUnlocalizedName()));
+//        for (Object o : aRecipe) {
+//            String toPrint;
+//            if (o instanceof String) {
+//                toPrint = (String) o;
+//                toPrint += " String";
+//            } else if (o instanceof ItemStack) {
+//                toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName((ItemStack) o));
+//                toPrint += " ItemStack";
+//            } else if (o instanceof List) {
+//                toPrint = String.join(", ", ((List<String>) o));
+//                toPrint += " List<String>";
+//            } else if (o instanceof Item) {
+//                toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Item) o)));
+//                toPrint += " Item";
+//            } else if (o instanceof Block) {
+//                toPrint = GT_LanguageManager.getTranslation(GT_LanguageManager.getTranslateableItemStackName(new ItemStack((Block) o)));
+//                toPrint += " Block";
+//            } else if (o != null) {
+//                toPrint = o.toString();
+//                toPrint += " Other";
+//            } else {
+//                toPrint = "NULL";
+//            }
+//            System.out.println(toPrint);
+//        }
+        Map<Object, Integer> recipeAsMap = new HashMap<>();
+        Map<Character, Object> ingridients = new HashMap<>();
+        Map<Character, Integer> amounts = new HashMap<>();
+        boolean startFound = false;
+        for (int i = 0, aRecipeLength = aRecipe.length; i < aRecipeLength; i++) {
+            Object o = aRecipe[i];
+            if (!startFound) {
+                if (o instanceof String) {
+                    for (Character c : ((String) o).toCharArray())
+                        amounts.merge(c, 1, (a, b) -> ++a);
+                } else if (o instanceof Character)
+                    startFound = true;
+            } else if (!(o instanceof Character))
+                ingridients.put((Character) aRecipe[i - 1], o);
+        }
+        for (Map.Entry<Character, Object> characterObjectEntry : ingridients.entrySet()) {
+            for (Map.Entry<Character, Integer> characterIntegerEntry : amounts.entrySet()) {
+                if (characterObjectEntry.getKey() != characterIntegerEntry.getKey())
+                    continue;
+                recipeAsMap.put(characterObjectEntry.getValue(), characterIntegerEntry.getValue());
+            }
+        }
+        List<ItemStack> inputs = new ArrayList<>();
+
+        for (Map.Entry<Object, Integer> o : recipeAsMap.entrySet()) {
+            if (o.getKey() instanceof ItemStack) {
+                ItemStack toAdd = ((ItemStack) o.getKey()).copy();
+                toAdd.stackSize = o.getValue();
+                inputs.add(toAdd);
+            } else if (o.getKey() instanceof String) {
+//                System.out.println("Found OreDictEntry: "+o.getKey());
+                ItemStack stack = GT_OreDictUnificator.get(o.getKey(), o.getValue());
+                if (stack == null) {
+                    Optional<ItemStack> oStack = OreDictionary.getOres((String) o.getKey())
+                            .stream()
+                            .findAny();
+                    if (oStack.isPresent()) {
+                        ItemStack copy = oStack.get().copy();
+                        copy.stackSize = o.getValue();
+                        inputs.add(copy);
+                    }
+//                    else
+//                        System.out.println("OreDict Entry "+o.getKey()+" couldn't be found!");
+                } else {
+                    ItemStack copy = stack.copy();
+                    copy.stackSize = o.getValue();
+                    inputs.add(copy);
+                }
+            } else if (o.getKey() instanceof Item)
+                inputs.add(new ItemStack((Item) o.getKey(), o.getValue()));
+            else if (o.getKey() instanceof Block)
+                inputs.add(new ItemStack((Block) o.getKey(), o.getValue()));
+            else
+                throw new IllegalStateException("A Recipe contains an invalid input! Output: " + output);
+        }
+
+        inputs.removeIf(x -> x.getItem() instanceof GT_MetaGenerated_Tool);
+
+        return Optional.of(
+                new GT_Recipe(
+                        false,
+                        new ItemStack[]{output},
+                        inputs.toArray(new ItemStack[0]),
+                        null, null,
+                        null, null,
+                        300, 30, 0
+                )
+        );
+    }
 }
