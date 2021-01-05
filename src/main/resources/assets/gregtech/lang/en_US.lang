@@ -883,6 +883,9 @@ achievement.item.graviChestPlate.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockreinforced.12=Raw Deep Dark Portal Block
 achievement.gt.blockreinforced.12.desc=Pickup this item to see the recipe in NEI
 
+achievement.gt.blockmachines.debug.tt.maintenance=Auto-Taping Maintenance Hatch
+achievement.gt.blockmachines.debug.tt.maintenance.desc=Pickup this item to see the recipe in NEI
+
 for.bees.species.clay=Clay
 for.bees.species.slimeball=Slimeball
 for.bees.species.peat=Peat
