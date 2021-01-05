@@ -132,7 +132,7 @@ public class GT_MetaTileEntity_PotionBrewer
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (getRecipeList().containsInput(aStack));
+        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && (mDisableFilter || getRecipeList().containsInput(aStack));
     }
 
     public boolean isFluidInputAllowed(FluidStack aFluid) {

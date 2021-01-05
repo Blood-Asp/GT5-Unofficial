@@ -746,7 +746,7 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) return false;
-        if (this.mInventory[aIndex] != null) return true;
+        if (this.mInventory[aIndex] != null || mDisableFilter) return true;
         switch (this.mInputSlotCount) {
             case 0:
                 return false;

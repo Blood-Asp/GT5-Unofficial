@@ -126,6 +126,7 @@ public class GT_MetaTileEntity_Boxinator
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         if (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
+            if (mDisableFilter) return true;
             ItemStack tInput1 = getInputAt(1);
             if ((ItemList.Schematic_1by1.isStackEqual(tInput1)) || (ItemList.Schematic_2by2.isStackEqual(tInput1)) || (ItemList.Schematic_3by3.isStackEqual(tInput1))) {
                 if (hasValidCache(aStack,aTypeCache,false))
