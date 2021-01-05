@@ -36,7 +36,7 @@ public class GT_CopiedBlockTexture implements ITexture {
         this(aBlock, aSide, aMeta, Dyes._NULL.mRGBa);
     }
 
-    private final IIcon getIcon(int aSide) {
+    private IIcon getIcon(int aSide) {
         if (mSide == 6) return mBlock.getIcon(aSide, mMeta);
         return mBlock.getIcon(mSide, mMeta);
     }
@@ -45,9 +45,9 @@ public class GT_CopiedBlockTexture implements ITexture {
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         IIcon aIcon = getIcon(5);
         Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
-//		aRenderer.flipTexture = !aRenderer.flipTexture;
+        aRenderer.field_152631_f = true;
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, aIcon);
-//		aRenderer.flipTexture = !aRenderer.flipTexture;
+        aRenderer.field_152631_f = false;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class GT_CopiedBlockTexture implements ITexture {
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         IIcon aIcon = getIcon(2);
         Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
-//		aRenderer.flipTexture = !aRenderer.flipTexture;
+        aRenderer.field_152631_f = true;
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, aIcon);
-//		aRenderer.flipTexture = !aRenderer.flipTexture;
+        aRenderer.field_152631_f = false;
     }
 
     @Override
