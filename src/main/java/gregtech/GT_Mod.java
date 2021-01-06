@@ -857,7 +857,7 @@ public class GT_Mod implements IGT_Mod {
             });
         }
         ProgressManager.pop(progressBar);
-        GT_FML_LOGGER.info("Congratulations, you have been waiting long enough (" + stopwatch.stop() + "). Have a Cake.");
+        GT_FML_LOGGER.info("Replaced Vanilla Materials (" + stopwatch.stop() + "). Have a Cake.");
 
 
         stopwatch.reset();

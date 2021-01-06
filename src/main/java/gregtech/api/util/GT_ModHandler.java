@@ -61,6 +61,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.B;
 import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.DW;
@@ -154,7 +155,7 @@ public class GT_ModHandler {
     public static List<Integer> sSingleNonBlockDamagableRecipeList_warntOutput = new ArrayList<>(50);
     public static List<Integer> sVanillaRecipeList_warntOutput = new ArrayList<>(50);
     public static final List<IRecipe> sSingleNonBlockDamagableRecipeList_verified = new ArrayList<>(1000);
-    private static Cache<GT_ItemStack, ItemStack> sSmeltingRecipeCache = CacheBuilder.newBuilder().maximumSize(1000).build();
+    private static final Cache<GT_ItemStack, ItemStack> sSmeltingRecipeCache = CacheBuilder.newBuilder().maximumSize(1000).build();
     public static List<Integer> sAnySteamFluidIDs = new ArrayList<>();
     public static List<Integer> sSuperHeatedSteamFluidIDs = new ArrayList<>();
 
@@ -1333,11 +1334,14 @@ public class GT_ModHandler {
 
     public static void bulkRemoveByRecipe(List<InventoryCrafting> toRemove) {
         ArrayList<IRecipe> tList = (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList();
+        GT_FML_LOGGER.info("BulkRemoveByRecipe: tList: " + tList.size() + " toRemove: " + toRemove.size() );
         
-        tList.removeIf(tRecipe -> {
+        Set<IRecipe> tListToRemove = tList.parallelStream().filter(tRecipe -> {
             if ((tRecipe instanceof IGT_CraftingRecipe) && !((IGT_CraftingRecipe) tRecipe).isRemovable()) return false;
-            return toRemove.stream().anyMatch(aCrafting -> tRecipe.matches(aCrafting, DW));            
-       });
+            return toRemove.stream().anyMatch(aCrafting -> tRecipe.matches(aCrafting, DW));
+        }).collect(Collectors.toSet());
+        
+        tList.removeIf(tListToRemove::contains);
     }
 
     public static boolean removeRecipeByOutputDelayed(ItemStack aOutput) {
@@ -1395,14 +1399,18 @@ public class GT_ModHandler {
     public static boolean bulkRemoveRecipeByOutput(List<ItemStack> toRemove) {
         ArrayList<IRecipe> tList = (ArrayList<IRecipe>) CraftingManager.getInstance().getRecipeList();
 
-        Set<ItemStack> setToRemove = toRemove.stream().map(GT_OreDictUnificator::get_nocopy).collect(Collectors.toSet());
-
-        tList.removeIf(tRecipe -> {
+        Set<ItemStack> setToRemove = toRemove.parallelStream().map(GT_OreDictUnificator::get_nocopy).collect(Collectors.toSet());
+        
+        GT_FML_LOGGER.info("BulkRemoveRecipeByOutput: tList: " + tList.size() + " setToRemove: " + setToRemove.size() );
+        
+        Set<IRecipe> tListToRemove = tList.parallelStream().filter(tRecipe -> {
             if ((tRecipe instanceof IGT_CraftingRecipe) && !((IGT_CraftingRecipe) tRecipe).isRemovable()) return false;
             if (sSpecialRecipeClasses.contains(tRecipe.getClass().getName())) return false;
             final ItemStack tStack = GT_OreDictUnificator.get_nocopy(tRecipe.getRecipeOutput());
             return setToRemove.stream().anyMatch(aOutput -> GT_Utility.areStacksEqual(tStack, aOutput, true));
-        });
+        }).collect(Collectors.toSet());
+        
+        tList.removeIf(tListToRemove::contains);
         return true;
     }
     
