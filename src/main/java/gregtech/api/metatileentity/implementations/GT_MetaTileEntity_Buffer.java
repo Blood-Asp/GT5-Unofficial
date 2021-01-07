@@ -97,10 +97,10 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
                 break;
             case WEST:
                 switch (side) {
-                    case DOWN:
                     case UP:
                     case SOUTH:
                         return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
+                    case DOWN:
                     case NORTH:
                         return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
                     default:
@@ -108,10 +108,10 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
                 break;
             case EAST:
                 switch (side) {
-                    case DOWN:
                     case UP:
                     case SOUTH:
                         return mTextures[ARROW_LEFT_INDEX][colorIndex]; // ARROW_LEFT
+                    case DOWN:
                     case NORTH:
                         return mTextures[ARROW_RIGHT_INDEX][colorIndex]; // ARROW_RIGHT
                     default:
