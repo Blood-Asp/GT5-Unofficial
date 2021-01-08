@@ -628,7 +628,7 @@ public class GT_Utility {
                                 return tTotalItemsMoved;
                         }
                     }
-                } while (tGrabInventorySize == 2 && tMovedItems > 0); //to suport draweres and barrels
+                } while (tMovedItems > 0); //suport inventorys thgat store motre then a stack in a aslot
             }
             if (aDoCheckChests && aTileEntity1 instanceof TileEntityChest) {
                 TileEntityChest tTileEntity1 = (TileEntityChest) aTileEntity1;
