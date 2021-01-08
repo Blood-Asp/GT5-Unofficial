@@ -240,7 +240,7 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
 
     @Override 
     public void onMachineBlockUpdate() {
-        GT_Mod.GT_FML_LOGGER.info("You're dead to me"); 
+        //GT_Mod.GT_FML_LOGGER.info("You're dead to me");
         mTargetPos = null; mSender = null;
     }
 
