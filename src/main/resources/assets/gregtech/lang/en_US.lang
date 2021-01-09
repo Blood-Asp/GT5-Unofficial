@@ -1044,3 +1044,5 @@ gregtech.speedUnproductive=Unproductive
 gregtech.speedAccelerated=Accelerated
 gregtech.lifeBlink=Blink 
 gregtech.lifeEon=Eon
+
+entity.gregtech.GT_Entity_Arrow.name= a GregTech arrow
