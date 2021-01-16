@@ -13,10 +13,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.Map.Entry;
 
 import static gregtech.api.enums.GT_Values.*;
@@ -161,7 +159,7 @@ public class GT_OreDictUnificator {
     public static ItemStack get_nocopy(ItemStack aStack) {
         return get_nocopy(true, aStack);
     }
-    
+
     /** Doesn't copy the returned stack or set quantity. Be careful and do not mutate it;
      * intended only to optimize comparisons */
     static ItemStack get_nocopy(boolean aUseBlackList, ItemStack aStack) {
@@ -313,7 +311,7 @@ public class GT_OreDictUnificator {
 
     public static boolean isItemStackInstanceOf(ItemStack aStack, Object aName) {
         if (GT_Utility.isStringInvalid(aName) || GT_Utility.isStackInvalid(aStack)) return false;
-        for (ItemStack tOreStack : getOres(aName.toString()))
+        for (ItemStack tOreStack : getOresImmutable(aName.toString()))
             if (GT_Utility.areStacksEqual(tOreStack, aStack, true)) return true;
         return false;
     }
@@ -470,5 +468,23 @@ public class GT_OreDictUnificator {
         ArrayList<ItemStack> rList = new ArrayList<>();
         if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
         return rList;
+    }
+
+    /**
+     * Fast version of {@link #getOres(Object)},
+     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
+     */
+    public static List<ItemStack> getOresImmutable(@Nullable Object oreName) {
+        return getOresImmutable(oreName != null ? oreName.toString() : null);
+    }
+
+    /**
+     * Fast version of {@link #getOres(Object)},
+     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
+     */
+    public static List<ItemStack> getOresImmutable(@Nullable String oreName) {
+        if(oreName == null) oreName = E;
+
+        return GT_Utility.isStackValid(oreName) ? Collections.unmodifiableList(OreDictionary.getOres(oreName)) : Collections.emptyList();
     }
 }
