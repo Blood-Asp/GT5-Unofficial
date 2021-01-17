@@ -73,7 +73,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 	public boolean checkRecipe(ItemStack aStack) {
 		mEfficiencyIncrease = 100;
 		// use the standard overclock mechanism to determine duration and estimate a maximum consumption
-		calculateOverclockedNessMulti(40, 45 * Math.min(1, mHeight - 1), 1, getMaxInputVoltage());
+		calculateOverclockedNessMulti(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage());
 		// negate it to trigger the special energy consumption function. divide by 10 to get the actual final consumption.
 		mEUt /= -10;
 		return true;
