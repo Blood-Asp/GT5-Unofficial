@@ -13,10 +13,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.*;
 import java.util.Map.Entry;
 
 import static gregtech.api.enums.GT_Values.*;
@@ -81,7 +79,7 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(aName)) return null;
         ItemStack tStack = sName2StackMap.get(aName.toString());
         if (GT_Utility.isStackValid(tStack)) return GT_Utility.copyAmount(aAmount, tStack);
-        return GT_Utility.copyAmount(aAmount, getOres(aName).toArray());
+        return GT_Utility.copyAmount(aAmount, getOresImmutable(aName).toArray());
     }
 
     public static ItemStack get(Object aName, long aAmount) {
@@ -313,7 +311,7 @@ public class GT_OreDictUnificator {
 
     public static boolean isItemStackInstanceOf(ItemStack aStack, Object aName) {
         if (GT_Utility.isStringInvalid(aName) || GT_Utility.isStackInvalid(aStack)) return false;
-        for (ItemStack tOreStack : getOres(aName.toString()))
+        for (ItemStack tOreStack : getOresImmutable(aName.toString()))
             if (GT_Utility.areStacksEqual(tOreStack, aStack, true)) return true;
         return false;
     }
@@ -342,9 +340,7 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(tName))
             return false;
 
-        ArrayList<ItemStack> tList = getOres(tName);
-
-        for (ItemStack itemStack : tList)
+        for (ItemStack itemStack : getOresImmutable(tName))
             if (GT_Utility.areStacksEqual(itemStack, aStack, true))
                 return false;
 
@@ -470,5 +466,15 @@ public class GT_OreDictUnificator {
         ArrayList<ItemStack> rList = new ArrayList<>();
         if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
         return rList;
+    }
+
+    /**
+     * Fast version of {@link #getOres(Object)},
+     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
+     */
+    public static List<ItemStack> getOresImmutable(@Nullable Object aOreName) {
+        String aName = aOreName == null ? E : aOreName.toString();
+        
+        return GT_Utility.isStringValid(aName) ? Collections.unmodifiableList(OreDictionary.getOres(aName)) : Collections.emptyList();
     }
 }

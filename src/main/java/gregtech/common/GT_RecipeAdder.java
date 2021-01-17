@@ -359,7 +359,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
 
 
     public boolean addAssemblerRecipe(ItemStack aInput1, Object aOreDict,int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
-        for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+        for(ItemStack tStack : GT_OreDictUnificator.getOresImmutable(aOreDict)){
             if(GT_Utility.isStackValid(tStack))
                 addAssemblerRecipe(aInput1, GT_Utility.copyAmount(aAmount, tStack), aFluidInput, aOutput1, aDuration, aEUt);
         }
@@ -367,7 +367,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
     }
 
     public boolean addAssemblerRecipe(ItemStack[] aInputs, Object aOreDict, int aAmount, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt){
-        for(ItemStack tStack : GT_OreDictUnificator.getOres(aOreDict)){
+        for(ItemStack tStack : GT_OreDictUnificator.getOresImmutable(aOreDict)){
             if(GT_Utility.isStackValid(tStack)) {
                 ItemStack[] extendedInputs = new ItemStack[aInputs.length + 1];
                 System.arraycopy(aInputs, 0, extendedInputs, 0, aInputs.length);
@@ -450,7 +450,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
                 if (odName.contains("circuit")) {
-                    for (ItemStack tStack : GT_OreDictUnificator.getOres(odName)) {
+                    for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
                         aInputs[i] = new ItemStack(tStack.getItem(),aInputs[i].stackSize,tStack.getItemDamage());
@@ -1339,7 +1339,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
                 if (odName.contains("circuit")) {
-                    for (ItemStack tStack : GT_OreDictUnificator.getOres(odName)) {
+                    for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
                         aInputs[i] = new ItemStack(tStack.getItem(),aInputs[i].stackSize,tStack.getItemDamage());

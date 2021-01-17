@@ -60,6 +60,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 		.addStructureInfo("1x Reinforced Door (keep closed or efficiency will reduce)")
 		.addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls")
 		.addStructureInfo("You can also use Diodes for more power")
+		.addStructureInfo("Diodes also count towards 10 Machine Hulls count limit")
 		.toolTipFinisher("Gregtech");
 		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			return tt.getInformation();
@@ -72,7 +73,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 	public boolean checkRecipe(ItemStack aStack) {
 		mEfficiencyIncrease = 100;
 		// use the standard overclock mechanism to determine duration and estimate a maximum consumption
-		calculateOverclockedNessMulti(40, 45 * Math.min(1, mHeight - 1), 1, getMaxInputVoltage());
+		calculateOverclockedNessMulti(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage());
 		// negate it to trigger the special energy consumption function. divide by 10 to get the actual final consumption.
 		mEUt /= -10;
 		return true;
@@ -188,10 +189,12 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
 							if ((!this.addMaintenanceToMachineList(tTileEntity, 82)) && (!this.addEnergyInputToMachineList(tTileEntity, 82))) {
 								if (tBlock instanceof ic2.core.block.BlockIC2Door) {
 									if ((tMeta & 8) == 0) {
-										if (Math.abs(dY) < y) //x - side
-											doorState = (tMeta & 0x5) == 0x4 || (tMeta & 0x5) == 0x1;
-										else if (Math.abs(dX) < x) //y-side, corners ignored.
-											doorState = (tMeta & 0x5) == 0x5 || (tMeta & 0x5) == 0x0;
+										// let's not fiddle with bits anymore.
+										if (Math.abs(dZ) < z) // on side parallel to z axis
+											doorState = tMeta == 1 || tMeta == 3 || tMeta == 4 || tMeta == 6;
+										else if (Math.abs(dX) < x) // on side parallel to x axis
+											doorState = tMeta == 0 || tMeta == 2 || tMeta == 5 || tMeta == 7;
+										// corners ignored
 									}
 									mDoorCount++;
 								} else {
