@@ -221,7 +221,6 @@ public class GregTech_API {
             sRecipeFile = null,
             sMachineFile = null,
             sWorldgenFile = null,
-            sModularArmor = null,
             sMaterialProperties = null,
             sMaterialComponents = null,
             sUnification = null,
