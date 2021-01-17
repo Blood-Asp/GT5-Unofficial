@@ -95,6 +95,10 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         mName = aName;
     }
 
+    public boolean isDisplaySecondaryDescription() {
+        return false;
+    }
+
     @Override
     public IGregTechTileEntity getBaseMetaTileEntity() {
         return mBaseMetaTileEntity;

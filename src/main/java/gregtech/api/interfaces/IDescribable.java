@@ -8,4 +8,6 @@ public interface IDescribable {
      * The Tooltip Text
      */
     String[] getDescription();
+
+    boolean isDisplaySecondaryDescription();
 }
