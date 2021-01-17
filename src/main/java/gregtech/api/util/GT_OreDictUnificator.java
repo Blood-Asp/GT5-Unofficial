@@ -79,7 +79,7 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(aName)) return null;
         ItemStack tStack = sName2StackMap.get(aName.toString());
         if (GT_Utility.isStackValid(tStack)) return GT_Utility.copyAmount(aAmount, tStack);
-        return GT_Utility.copyAmount(aAmount, getOresImmutable(aName).toArray());
+        return GT_Utility.copyAmount(aAmount, getOres(aName).toArray());
     }
 
     public static ItemStack get(Object aName, long aAmount) {
@@ -159,7 +159,7 @@ public class GT_OreDictUnificator {
     public static ItemStack get_nocopy(ItemStack aStack) {
         return get_nocopy(true, aStack);
     }
-
+    
     /** Doesn't copy the returned stack or set quantity. Be careful and do not mutate it;
      * intended only to optimize comparisons */
     static ItemStack get_nocopy(boolean aUseBlackList, ItemStack aStack) {
