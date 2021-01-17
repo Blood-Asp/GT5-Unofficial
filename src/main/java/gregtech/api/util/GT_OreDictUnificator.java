@@ -159,7 +159,7 @@ public class GT_OreDictUnificator {
     public static ItemStack get_nocopy(ItemStack aStack) {
         return get_nocopy(true, aStack);
     }
-
+    
     /** Doesn't copy the returned stack or set quantity. Be careful and do not mutate it;
      * intended only to optimize comparisons */
     static ItemStack get_nocopy(boolean aUseBlackList, ItemStack aStack) {
@@ -472,17 +472,9 @@ public class GT_OreDictUnificator {
      * Fast version of {@link #getOres(Object)},
      * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
      */
-    public static List<ItemStack> getOresImmutable(@Nullable Object oreName) {
-        return getOresImmutable(oreName != null ? oreName.toString() : null);
-    }
-
-    /**
-     * Fast version of {@link #getOres(Object)},
-     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
-     */
-    public static List<ItemStack> getOresImmutable(@Nullable String oreName) {
-        if(oreName == null) oreName = E;
-
-        return GT_Utility.isStackValid(oreName) ? Collections.unmodifiableList(OreDictionary.getOres(oreName)) : Collections.emptyList();
+    public static List<ItemStack> getOresImmutable(@Nullable Object aOreName) {
+        String aName = aOreName == null ? E : aOreName.toString();
+        
+        return GT_Utility.isStringValid(aName) ? Collections.unmodifiableList(OreDictionary.getOres(aName)) : Collections.emptyList();
     }
 }
