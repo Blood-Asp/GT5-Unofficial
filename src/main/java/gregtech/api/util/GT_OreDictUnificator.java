@@ -79,7 +79,7 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(aName)) return null;
         ItemStack tStack = sName2StackMap.get(aName.toString());
         if (GT_Utility.isStackValid(tStack)) return GT_Utility.copyAmount(aAmount, tStack);
-        return GT_Utility.copyAmount(aAmount, getOres(aName).toArray());
+        return GT_Utility.copyAmount(aAmount, getOresImmutable(aName).toArray());
     }
 
     public static ItemStack get(Object aName, long aAmount) {
@@ -472,17 +472,9 @@ public class GT_OreDictUnificator {
      * Fast version of {@link #getOres(Object)},
      * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
      */
-    public static List<ItemStack> getOresImmutable(@Nullable Object oreName) {
-        return getOresImmutable(oreName != null ? oreName.toString() : null);
-    }
-
-    /**
-     * Fast version of {@link #getOres(Object)},
-     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
-     */
-    public static List<ItemStack> getOresImmutable(@Nullable String oreName) {
-        if(oreName == null) oreName = E;
-
-        return GT_Utility.isStackValid(oreName) ? Collections.unmodifiableList(OreDictionary.getOres(oreName)) : Collections.emptyList();
+    public static List<ItemStack> getOresImmutable(@Nullable Object aOreName) {
+        String aName = aOreName == null ? E : aOreName.toString();
+        
+        return GT_Utility.isStringValid(aName) ? Collections.unmodifiableList(OreDictionary.getOres(aName)) : Collections.emptyList();
     }
 }
