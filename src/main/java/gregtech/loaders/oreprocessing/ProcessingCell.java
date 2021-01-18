@@ -14,8 +14,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ProcessingCell
-        implements IOreRecipeRegistrator {
+public class ProcessingCell implements IOreRecipeRegistrator {
     public ProcessingCell() {
         OrePrefixes.cell.add(this);
         OrePrefixes.cellPlasma.add(this);
