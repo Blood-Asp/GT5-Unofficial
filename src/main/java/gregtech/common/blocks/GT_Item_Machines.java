@@ -4,7 +4,9 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IConnectable;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Frame;
@@ -45,7 +47,8 @@ public class GT_Item_Machines extends ItemBlock {
                 IGregTechTileEntity tTileEntity = GregTech_API.METATILEENTITIES[tDamage].getBaseMetaTileEntity();
                 if (tTileEntity.getDescription() != null) {
                     int i = 0;
-                    String suffix = tTileEntity.isDisplaySecondaryDescription() ? "Secondary_" : "";
+                    IMetaTileEntity metaTileEntity = tTileEntity.getMetaTileEntity();
+                    String suffix = (metaTileEntity instanceof MetaTileEntity && ((MetaTileEntity) metaTileEntity).isDisplaySecondaryDescription()) ? "Secondary_" : "";
                     for (String tDescription : tTileEntity.getDescription()) {
                         if (GT_Utility.isStringValid(tDescription)) {
                             if(tDescription.contains("%%%")){

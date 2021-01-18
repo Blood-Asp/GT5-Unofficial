@@ -741,12 +741,6 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public boolean isDisplaySecondaryDescription() {
-        if (canAccessData()) return mMetaTileEntity.isDisplaySecondaryDescription();
-        return false;
-    }
-
-    @Override
     public boolean isValidSlot(int aIndex) {
         if (canAccessData()) return mMetaTileEntity.isValidSlot(aIndex);
         return false;
