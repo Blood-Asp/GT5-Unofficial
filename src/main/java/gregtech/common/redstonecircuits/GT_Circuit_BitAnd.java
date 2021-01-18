@@ -3,8 +3,7 @@ package gregtech.common.redstonecircuits;
 import gregtech.api.interfaces.IRedstoneCircuitBlock;
 import gregtech.api.util.GT_CircuitryBehavior;
 
-public class GT_Circuit_BitAnd
-        extends GT_CircuitryBehavior {
+public class GT_Circuit_BitAnd extends GT_CircuitryBehavior {
     public GT_Circuit_BitAnd(int aIndex) {
         super(aIndex);
     }
