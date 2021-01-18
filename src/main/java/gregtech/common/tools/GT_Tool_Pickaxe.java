@@ -14,8 +14,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_Pickaxe
-        extends GT_Tool {
+public class GT_Tool_Pickaxe extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
     }
@@ -57,7 +56,7 @@ public class GT_Tool_Pickaxe
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
@@ -98,7 +97,7 @@ public class GT_Tool_Pickaxe
         aPlayer.triggerAchievement(AchievementList.buildBetterPickaxe);
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "flintpick");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

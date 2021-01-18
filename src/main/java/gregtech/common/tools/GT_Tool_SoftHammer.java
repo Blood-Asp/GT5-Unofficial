@@ -12,8 +12,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_SoftHammer
-        extends GT_Tool {
+public class GT_Tool_SoftHammer extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
@@ -51,19 +50,19 @@ public class GT_Tool_SoftHammer
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public boolean canBlock() {

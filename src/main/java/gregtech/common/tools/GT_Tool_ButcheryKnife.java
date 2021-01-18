@@ -12,8 +12,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_ButcheryKnife
-        extends GT_Tool {
+public class GT_Tool_ButcheryKnife extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 200;
     }

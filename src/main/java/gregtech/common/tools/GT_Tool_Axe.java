@@ -17,8 +17,7 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
 
-public class GT_Tool_Axe
-        extends GT_Tool {
+public class GT_Tool_Axe extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
@@ -60,7 +59,7 @@ public class GT_Tool_Axe
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {

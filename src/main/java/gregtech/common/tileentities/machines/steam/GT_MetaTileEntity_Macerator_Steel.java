@@ -59,8 +59,6 @@ public class GT_MetaTileEntity_Macerator_Steel extends GT_MetaTileEntity_BasicMa
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         }
 		
-//        if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
-//                    return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (tRecipe.getOutput(0) != null) mOutputItems[0] = tRecipe.getOutput(0);
@@ -73,7 +71,7 @@ public class GT_MetaTileEntity_Macerator_Steel extends GT_MetaTileEntity_BasicMa
         if (!super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) {
             return false;
         }
-        return mDisableFilter || GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, new Object[]{aStack}));
+        return mDisableFilter || GT_Recipe.GT_Recipe_Map.sMaceratorRecipes.containsInput(GT_Utility.copyAmount(64L, aStack));
     }
 
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {

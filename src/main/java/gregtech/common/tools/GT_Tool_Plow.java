@@ -17,8 +17,7 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
 
-public class GT_Tool_Plow
-        extends GT_Tool {
+public class GT_Tool_Plow extends GT_Tool {
     private ThreadLocal<Object> sIsHarvestingRightNow = new ThreadLocal();
 
     public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
@@ -41,7 +40,10 @@ public class GT_Tool_Plow
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     for (int k = -1; k < 2; k++) {
-                        if (((i != 0) || (j != 0) || (k != 0)) && (aStack.getItem().getDigSpeed(aStack, aPlayer.worldObj.getBlock(aX + i, aY + j, aZ + k), aPlayer.worldObj.getBlockMetadata(aX + i, aY + j, aZ + k)) > 0.0F) && (((EntityPlayerMP) aPlayer).theItemInWorldManager.tryHarvestBlock(aX + i, aY + j, aZ + k))) {
+                        if (((i != 0) || (j != 0) || (k != 0)) 
+                            && (aStack.getItem().getDigSpeed(aStack, aPlayer.worldObj.getBlock(aX + i, aY + j, aZ + k), aPlayer.worldObj.getBlockMetadata(aX + i, aY + j, aZ + k)) > 0.0F) 
+                            && (((EntityPlayerMP) aPlayer).theItemInWorldManager.tryHarvestBlock(aX + i, aY + j, aZ + k))) 
+                        {
                             rConversions++;
                         }
                     }

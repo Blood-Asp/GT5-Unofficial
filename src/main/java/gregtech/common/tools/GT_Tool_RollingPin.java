@@ -11,8 +11,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_RollingPin
-        extends GT_Tool {
+public class GT_Tool_RollingPin extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
