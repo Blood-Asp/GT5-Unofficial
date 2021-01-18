@@ -44,17 +44,6 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
 
         moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
 
-//        for(int i=0 ; i < this.mMaxStacks ; i++) {
-//            // Costs energy but we don't have enough, bail
-//            if ((costsEnergy && !aTileEntity.isUniversalEnergyStored(256L)))
-//                break;
-//
-//            moved = GT_Utility.moveOneItemStack(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
-//
-//            if(moved == 0)
-//                break;
-//        }
-
         return aCoverVariable;
     }
 

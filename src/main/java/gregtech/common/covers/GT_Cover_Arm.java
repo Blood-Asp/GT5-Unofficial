@@ -17,8 +17,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_Arm
-        extends GT_CoverBehavior {
+public class GT_Cover_Arm extends GT_CoverBehavior {
     public final int mTickRate;
     //msb converted, 2nd : direction (1=export)
     //right 14 bits: internalSlot, next 14 bits adjSlot, 0 = all, slot = -1
@@ -390,33 +389,5 @@ public class GT_Cover_Arm
                 return !export;
             return export;
         }
-
-//        getStackInSlot wasn't available client side..
-//        private void updateInventorySlots() {
-//            updateInventorySlot(intSlotIcon, internalSlotID, true);
-//            updateInventorySlot(adjSlotIcon, adjacentSlotID, false);
-//        }
-//
-//        private void updateInventorySlot(GT_GuiFakeItemButton button, int slotID, boolean internal) {
-//            if (slotID == SLOT_ID_ANY) {
-//                button.setItem(null);
-//                return;
-//            }
-//
-//            if (super.tile instanceof TileEntity && !super.tile.isDead()) {
-//                TileEntity tile;
-//                if (internal)
-//                    tile = (TileEntity) super.tile;
-//                else
-//                    tile = super.tile.getTileEntityAtSide(side);
-//
-//                if (tile instanceof IInventory && ((IInventory) tile).getSizeInventory() >= slotID) {
-//                    ItemStack item = ((IInventory) tile).getStackInSlot(slotID);
-//                    button.setItem(item);
-//                    return;
-//                }
-//            }
-//            button.setItem(null);
-//        }
     }
 }

@@ -5,8 +5,7 @@ import gregtech.api.util.GT_CoverBehavior;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_Screen
-        extends GT_CoverBehavior {
+public class GT_Cover_Screen extends GT_CoverBehavior {
     public float getBlastProofLevel(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 20.0F;
     }

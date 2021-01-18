@@ -5,8 +5,7 @@ import gregtech.api.interfaces.tileentity.IMachineProgress;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
 
-public class GT_Cover_Vent
-        extends GT_CoverBehavior {
+public class GT_Cover_Vent extends GT_CoverBehavior {
     private final int mEfficiency;
 
     public GT_Cover_Vent(int aEfficiency) {

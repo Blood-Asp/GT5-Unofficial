@@ -14,8 +14,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_DoesWork
-        extends GT_CoverBehavior {
+public class GT_Cover_DoesWork extends GT_CoverBehavior {
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aTileEntity instanceof IMachineProgress)) {
             if (aCoverVariable < 2) {
