@@ -15,8 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
 
-public class GT_CapeRenderer
-        extends RenderPlayer {
+public class GT_CapeRenderer extends RenderPlayer {
         private final ResourceLocation[] mCapes = { new ResourceLocation("gregtech:textures/BrainTechCape.png"),
             new ResourceLocation("gregtech:textures/GregTechCape.png"),
             new ResourceLocation("gregtech:textures/MrBrainCape.png"),
@@ -41,7 +40,7 @@ public class GT_CapeRenderer
         if (aPlayer.isInvisible()) {
             return;
         }
-        if (GT_Utility.getPotion(aPlayer, Integer.valueOf(Potion.invisibility.id).intValue())) {
+        if (GT_Utility.getPotion(aPlayer, Potion.invisibility.id)) {
             return;
         }
         try {

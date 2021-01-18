@@ -18,8 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-public class GT_Renderer_Block
-        implements ISimpleBlockRenderingHandler {
+public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
     public static GT_Renderer_Block INSTANCE;
     public final int mRenderID;
 
