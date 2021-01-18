@@ -35,8 +35,7 @@ import java.util.List;
 
 import static gregtech.api.util.GT_Utility.trans;
 
-public class GT_NEI_AssLineHandler
-        extends TemplateRecipeHandler {
+public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
     public static final int sOffsetX = 5;
     public static final int sOffsetY = 11;
 
@@ -109,7 +108,7 @@ public class GT_NEI_AssLineHandler
                         break;
                     }
                 }
-            }else{
+            } else {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {

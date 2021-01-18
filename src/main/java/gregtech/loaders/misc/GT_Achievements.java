@@ -214,13 +214,6 @@ public class GT_Achievements {
             registerAchievement("whatnow", 8, 10, ItemList.ZPM2.get(1), "denseaspossible", false);
         }
 
-//        if(Loader.isModLoaded("NotEnoughItems") && GT_Mod.gregtechproxy.mHideUnusedOres){
-//            for (int i = 1; i < GregTech_API.sGeneratedMaterials.length; i++) {
-//                if ((GregTech_API.sGeneratedMaterials[i] != null) && !oreList.contains(GregTech_API.sGeneratedMaterials[i])) {
-//                    codechicken.nei.api.API.hideItem(GT_OreDictUnificator.get(OrePrefixes.ore, GregTech_API.sGeneratedMaterials[i], 1));
-//                }
-//            }
-//        }
         if (GT_Mod.gregtechproxy.mAchievements) {
             AchievementPage.registerAchievementPage(new AchievementPage("GregTech 5", (Achievement[]) this.achievementList.values().toArray(
                     new Achievement[this.achievementList.size()])));
@@ -230,11 +223,7 @@ public class GT_Achievements {
     }
 
     public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
-        /*if (aMaterial != Materials._NULL) {
-            oreList.add(aMaterial);
-            //if(!oreList.add(aMaterial)) Minecraft.getMinecraft().crashed(new CrashReport("GT Achievement - Ore with that (" + aMaterial.name() + ") material already exists.",new IllegalArgumentException()));
-        }
-        oreStats.add(new Integer[]{min, max, chance, overworld ? 1 : 0, nether ? 1 : 0, end ? 1 : 0});*/
+
     }
 
     public Achievement registerAchievement(String textId, int x, int y, ItemStack icon, Achievement requirement, boolean special) {
@@ -273,12 +262,6 @@ public class GT_Achievements {
     }
 
     public Achievement registerOreAchievement(Materials aMaterial) {
-    	/*
-        if (this.achievementList.get(aMaterial.mName) == null) {
-            oreReg++;
-            return registerAchievement(aMaterial.mName, -(6 + oreReg % 5), ((oreReg) / 5) - 8, new ItemStack(GregTech_API.sBlockOres1, 1,
-                    aMaterial.mMetaItemSubID), AchievementList.openInventory, false);
-        }*/
         return null;
     }
 
@@ -295,14 +278,7 @@ public class GT_Achievements {
         if (entityplayer == null || !GT_Mod.gregtechproxy.mAchievements) {
             return;
         }
-//		if (this.achievementList.containsKey(textId)) {
-//			if(this.issuedAchievements.containsKey((entityplayer.getDisplayName()+textId))){
-//			return;
-//			}else{
-//			this.issuedAchievements.put((entityplayer.getDisplayName()+textId), true);
         entityplayer.triggerAchievement((StatBase) this.achievementList.get(textId));
-//			}
-//		}
     }
 
     public Achievement getAchievement(String textId) {
