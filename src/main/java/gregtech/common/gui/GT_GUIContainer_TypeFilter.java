@@ -4,8 +4,7 @@ import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_GUIContainer_TypeFilter
-        extends GT_GUIContainerMetaTile_Machine {
+public class GT_GUIContainer_TypeFilter extends GT_GUIContainerMetaTile_Machine {
     public GT_GUIContainer_TypeFilter(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(new GT_Container_TypeFilter(aInventoryPlayer, aTileEntity), "gregtech:textures/gui/TypeFilter.png");
     }

@@ -7,8 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 
-public class GT_GUIContainer_MicrowaveEnergyTransmitter
-        extends GT_GUIContainerMetaTile_Machine {
+public class GT_GUIContainer_MicrowaveEnergyTransmitter extends GT_GUIContainerMetaTile_Machine {
     public GT_GUIContainer_MicrowaveEnergyTransmitter(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(new GT_Container_MicrowaveEnergyTransmitter(aInventoryPlayer, aTileEntity), RES_PATH_GUI + "Teleporter.png");
     }

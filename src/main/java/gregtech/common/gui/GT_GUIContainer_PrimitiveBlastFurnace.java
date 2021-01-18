@@ -4,8 +4,7 @@ import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_GUIContainer_PrimitiveBlastFurnace extends GT_GUIContainerMetaTile_Machine {
-	private String name;
+public class GT_GUIContainer_PrimitiveBlastFurnace extends GT_GUIContainerMetaTile_Machine { private String name;
 	public String mNEI;
 	
 	public GT_GUIContainer_PrimitiveBlastFurnace(InventoryPlayer inventoryPlayer, IGregTechTileEntity tileEntity, String name, String aNEI) {
@@ -26,7 +25,7 @@ public class GT_GUIContainer_PrimitiveBlastFurnace extends GT_GUIContainerMetaTi
         drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
         if ((this.mContainer != null) && (this.mContainer.mProgressTime > 0)) {
             drawTexturedModalRect(x + 58, y + 28, 176, 0, Math.max(0, Math.min(20, (1)
-                            + this.mContainer.mProgressTime * 20 / (this.mContainer.mMaxProgressTime < 1 ? 1 : this.mContainer.mMaxProgressTime))),
+                            + this.mContainer.mProgressTime * 20 / (Math.max(this.mContainer.mMaxProgressTime, 1)))),
                     11);
         }
     }

@@ -4,8 +4,7 @@ import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_GUIContainer_Boiler
-        extends GT_GUIContainerMetaTile_Machine {
+public class GT_GUIContainer_Boiler extends GT_GUIContainerMetaTile_Machine {
     public GT_GUIContainer_Boiler(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, String aTextureName, int aSteamCapacity) {
         super(new GT_Container_Boiler(aInventoryPlayer, aTileEntity, aSteamCapacity), "gregtech:textures/gui/" + aTextureName);
     }
