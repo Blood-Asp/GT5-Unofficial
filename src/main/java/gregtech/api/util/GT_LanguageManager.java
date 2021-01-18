@@ -34,11 +34,11 @@ public class GT_LanguageManager {
         LanguageRegistry.instance().injectLanguage("en_US", TEMPMAP);
         TEMPMAP.clear();
         if(sUseEnglishFile && !aWriteIntoLangFile){
-        	if (!LANGMAP.containsKey(aKey)) {
-        		Property tProperty = sEnglishFile.get("LanguageFile", aKey, aEnglish);
-        		aEnglish = tProperty.getString();
-        		LANGMAP.put(aKey, aEnglish);
-			} else aEnglish = LANGMAP.get(aKey);
+            if (!LANGMAP.containsKey(aKey)) {
+                Property tProperty = sEnglishFile.get("LanguageFile", aKey, aEnglish);
+                aEnglish = tProperty.getString();
+                LANGMAP.put(aKey, aEnglish);
+            } else aEnglish = LANGMAP.get(aKey);
         }
         return aEnglish;
     }
