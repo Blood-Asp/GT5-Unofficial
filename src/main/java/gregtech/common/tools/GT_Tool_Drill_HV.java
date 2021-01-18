@@ -6,8 +6,7 @@ import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GT_Tool_Drill_HV
-        extends GT_Tool_Drill_LV {
+public class GT_Tool_Drill_HV extends GT_Tool_Drill_LV {
     public int getToolDamagePerBlockBreak() {
         return GT_Mod.gregtechproxy.mHardRock ? 400 : 800;
     }
@@ -45,7 +44,7 @@ public class GT_Tool_Drill_HV
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "highpowerdrill");
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildDDrill");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

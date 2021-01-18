@@ -5,8 +5,7 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import net.minecraft.item.ItemStack;
 
-public class GT_Tool_Screwdriver_LV
-        extends GT_Tool_Screwdriver {
+public class GT_Tool_Screwdriver_LV extends GT_Tool_Screwdriver {
     public float getMaxDurabilityMultiplier() {
         return 1.0F;
     }

@@ -17,8 +17,7 @@ import net.minecraft.item.ItemStack;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class GT_MetaTileEntity_ChestBuffer
-        extends GT_MetaTileEntity_Buffer {
+public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
     private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1, 1, 1, 1, 1, 1};
 
 
@@ -69,10 +68,7 @@ public class GT_MetaTileEntity_ChestBuffer
         if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
             super.moveItems(aBaseMetaTileEntity, aTimer);
         }
-        // mSuccesss is set to 50 on a successful move
-        //if(mSuccess == 50) {
-        //    fillStacksIntoFirstSlots();
-        //}
+
         if(mSuccess < 0) {
             mSuccess = 0;
         }
@@ -110,13 +106,7 @@ public class GT_MetaTileEntity_ChestBuffer
                     id1 = o1.getItemDamage();
                     id2 = o2.getItemDamage();
 
-                    if ( id1 < id2 ) {
-                        return -1;
-                    }
-                    if ( id1 > id2 ) {
-                        return 1;
-                    }
-                    return 0;
+                    return Integer.compare(id1, id2);
                 }
             });
     }

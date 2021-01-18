@@ -7,8 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class GT_Tool_Wrench_LV
-        extends GT_Tool_Wrench {
+public class GT_Tool_Wrench_LV extends GT_Tool_Wrench {
     public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
         return aOriginalDamage;
     }

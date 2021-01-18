@@ -10,8 +10,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class GT_Container_ItemDistributor
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_ItemDistributor extends GT_ContainerMetaTile_Machine {
     public GT_Container_ItemDistributor(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
     }

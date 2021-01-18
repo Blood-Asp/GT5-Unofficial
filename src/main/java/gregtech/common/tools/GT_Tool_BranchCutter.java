@@ -19,8 +19,7 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
 
-public class GT_Tool_BranchCutter
-        extends GT_Tool {
+public class GT_Tool_BranchCutter extends GT_Tool {
     public float getBaseDamage() {
         return 2.5F;
     }

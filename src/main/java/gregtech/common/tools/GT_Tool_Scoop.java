@@ -16,8 +16,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_Scoop
-        extends GT_Tool {
+public class GT_Tool_Scoop extends GT_Tool {
     public static Material sBeeHiveMaterial;
 
     public int getToolDamagePerBlockBreak() {
@@ -61,7 +60,7 @@ public class GT_Tool_Scoop
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {

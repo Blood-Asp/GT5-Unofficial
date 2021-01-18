@@ -19,8 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_EUMeter
-        extends GT_CoverBehavior {
+public class GT_Cover_EUMeter extends GT_CoverBehavior {
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         long tScale = 0L;
         if (aCoverVariable < 2) {

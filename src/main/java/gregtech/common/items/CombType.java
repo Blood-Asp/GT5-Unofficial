@@ -181,7 +181,7 @@ public enum CombType {
     }
 
     public String getName() {
-//		return "gt.comb."+this.name;
+
         return GT_LanguageManager.addStringLocalization("comb." + this.name, this.name.substring(0, 1).toUpperCase() + this.name.substring(1) + " Comb");
     }
 

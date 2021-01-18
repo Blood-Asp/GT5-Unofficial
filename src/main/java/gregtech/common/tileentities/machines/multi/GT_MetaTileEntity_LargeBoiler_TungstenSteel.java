@@ -5,8 +5,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.block.Block;
 
-public class GT_MetaTileEntity_LargeBoiler_TungstenSteel
-        extends GT_MetaTileEntity_LargeBoiler {
+public class GT_MetaTileEntity_LargeBoiler_TungstenSteel extends GT_MetaTileEntity_LargeBoiler {
     public GT_MetaTileEntity_LargeBoiler_TungstenSteel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }

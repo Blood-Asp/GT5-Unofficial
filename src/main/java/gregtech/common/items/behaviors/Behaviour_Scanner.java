@@ -15,8 +15,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Behaviour_Scanner
-        extends Behaviour_None {
+public class Behaviour_Scanner extends Behaviour_None {
     public static final IItemBehaviour<GT_MetaBase_Item> INSTANCE = new Behaviour_Scanner();
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.scanning", "Can scan Blocks in World");
 
@@ -34,7 +33,7 @@ public class Behaviour_Scanner
             }
             return true;
         }
-        GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(Integer.valueOf(108)), 1, 1.0F, aX, aY, aZ);
+        GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(108), 1, 1.0F, aX, aY, aZ);
         //doGuiAtClient()
         return aPlayer instanceof EntityPlayerMP;
     }
@@ -54,10 +53,4 @@ public class Behaviour_Scanner
         return aList;
     }
 
-    //public static boolean doGuiAtClient() {
-    //    if (!FMLCommonHandler.instance().getEffectiveSide().isClient() || GT.getThePlayer() == null || !GT.getThePlayer().worldObj.isRemote)
-    //        return false;
-    //    //GUI render start HERE
-    //    return true;
-    //}
 }

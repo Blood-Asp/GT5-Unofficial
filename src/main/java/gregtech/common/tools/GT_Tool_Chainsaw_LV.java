@@ -22,8 +22,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GT_Tool_Chainsaw_LV
-        extends GT_Tool_Saw {
+public class GT_Tool_Chainsaw_LV extends GT_Tool_Saw {
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
@@ -57,19 +56,19 @@ public class GT_Tool_Chainsaw_LV
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(105));
+        return (String) GregTech_API.sSoundList.get(105);
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
     public boolean canBlock() {
@@ -89,7 +88,7 @@ public class GT_Tool_Chainsaw_LV
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "brrrr");
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildChainsaw");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
     @Override
@@ -100,20 +99,7 @@ public class GT_Tool_Chainsaw_LV
             if (((IShearable) aBlock).isShearable(aStack, aPlayer.worldObj, aX, aY, aZ)) {
                 ArrayList<ItemStack> tDrops = ((IShearable) aBlock).onSheared(aStack, aPlayer.worldObj, aX, aY, aZ, aFortune);
                 aDrops.clear();
-//                aDrops.addAll(tDrops);
-//                aEvent.dropChance = 1.0F;
-//                for (ItemStack stack : tDrops)
-//                {
-//                Random itemRand = new Random();
-//                  float f = 0.7F;
-//                  double d = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  double d1 = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  double d2 = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  EntityItem entityitem = new EntityItem(aPlayer.worldObj, aX + d, aY + d1, aZ + d2, stack);
-//                  entityitem.delayBeforeCanPickup = 10;
-//                  aPlayer.worldObj.spawnEntityInWorld(entityitem);
-//                }
-//                aPlayer.addStat(net.minecraft.stats.StatList.mineBlockStatArray[Block.getIdFromBlock(aBlock)], 1);                
+       
             }
             aPlayer.worldObj.setBlock(aX, aY, aZ, Blocks.air, 0, 0);
         } else 

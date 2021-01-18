@@ -18,8 +18,7 @@ import net.minecraft.world.storage.WorldInfo;
 
 import java.io.File;
 
-public class GT_DummyWorld
-        extends World {
+public class GT_DummyWorld extends World {
     public GT_IteratorRandom mRandom = new GT_IteratorRandom();
     public ItemStack mLastSetBlock = null;
 
@@ -66,17 +65,7 @@ public class GT_DummyWorld
                      return null;
                  }
              }, "DUMMY_DIMENSION", null,
-//				new WorldProvider(),
-//    
-//
-//
-//      new WorldSettings(new WorldInfo(new NBTTagCompound()))
-//      {
-//        public String getDimensionName()
-//        {
-//          return "DUMMY_DIMENSION";
-//        }
-//      }
+
                 new WorldSettings(new WorldInfo(new NBTTagCompound())), new Profiler());
     }
 

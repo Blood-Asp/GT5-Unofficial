@@ -27,9 +27,7 @@ import java.util.List;
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 
 @ChannelHandler.Sharable
-public class GT_Network
-        extends MessageToMessageCodec<FMLProxyPacket, GT_Packet>
-        implements IGT_NetworkHandler {
+public class GT_Network extends MessageToMessageCodec<FMLProxyPacket, GT_Packet> implements IGT_NetworkHandler {
     private final EnumMap<Side, FMLEmbeddedChannel> mChannel;
     private final GT_Packet[] mSubChannels;
 

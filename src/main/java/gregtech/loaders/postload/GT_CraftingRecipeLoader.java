@@ -383,7 +383,7 @@ public class GT_CraftingRecipeLoader implements Runnable {
         GT_ModHandler.addCraftingRecipe(ItemList.IC2_Mixed_Metal_Ingot.get(56L), bits_no_remove_buffered, new Object[]{"X", "Y", "Z", 'X', OrePrefixes.plate.get(Materials.DraconiumAwakened), 'Y', OrePrefixes.plate.get(Materials.Neutronium), 'Z', OrePrefixes.plate.get(Materials.NaquadahAlloy)});
         GT_ModHandler.addCraftingRecipe(ItemList.IC2_Mixed_Metal_Ingot.get(64L), bits_no_remove_buffered, new Object[]{"X", "Y", "Z", 'X', OrePrefixes.plate.get(Materials.DraconiumAwakened), 'Y', OrePrefixes.plate.get(Materials.Neutronium), 'Z', OrePrefixes.plate.get(Materials.BlackPlutonium)});
 
-        GT_Log.out.println("GT_Mod: Beginning to add regular Crafting Recipes.");  // TODO: Not Buffered
+        GT_Log.out.println("GT_Mod: Beginning to add regular Crafting Recipes."); 
         GT_ModHandler.addCraftingRecipe(GT_ModHandler.getIC2Item("scaffold", 4L), bits_no_remove_buffered, new Object[]{"WWW", " S ", "S S", 'W', OrePrefixes.plank.get(Materials.Wood), 'S', OrePrefixes.stick.get(Materials.Wood)});
 
         GT_ModHandler.addShapelessCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.IronMagnetic, 1L), bits_no_remove_buffered, new Object[]{OrePrefixes.stick.get(Materials.AnyIron), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone), OrePrefixes.dust.get(Materials.Redstone)});

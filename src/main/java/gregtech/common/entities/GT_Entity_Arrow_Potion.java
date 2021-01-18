@@ -7,8 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class GT_Entity_Arrow_Potion
-        extends GT_Entity_Arrow {
+public class GT_Entity_Arrow_Potion extends GT_Entity_Arrow {
     private int[] mPotions = new int[0];
 
     public GT_Entity_Arrow_Potion(World aWorld) {

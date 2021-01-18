@@ -20,9 +20,8 @@ import net.minecraft.util.IChatComponent;
 import java.util.Arrays;
 import java.util.List;
 
-public class GT_Tool_Screwdriver
-        extends GT_Tool {
-    public static final List<String> mEffectiveList = Arrays.asList(new String[]{EntityCaveSpider.class.getName(), EntitySpider.class.getName(), "EntityTFHedgeSpider", "EntityTFKingSpider", "EntityTFSwarmSpider", "EntityTFTowerBroodling"});
+public class GT_Tool_Screwdriver extends GT_Tool {
+    public static final List<String> mEffectiveList = Arrays.asList(EntityCaveSpider.class.getName(), EntitySpider.class.getName(), "EntityTFHedgeSpider", "EntityTFKingSpider", "EntityTFSwarmSpider", "EntityTFTowerBroodling");
 
     public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
         String tName = aEntity.getClass().getName();
@@ -63,7 +62,7 @@ public class GT_Tool_Screwdriver
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(100));
+        return (String) GregTech_API.sSoundList.get(100);
     }
 
     public String getEntityHitSound() {
@@ -71,7 +70,7 @@ public class GT_Tool_Screwdriver
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {

@@ -16,8 +16,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
-public class GT_MetaTileEntity_DieselGenerator
-        extends GT_MetaTileEntity_BasicGenerator {
+public class GT_MetaTileEntity_DieselGenerator extends GT_MetaTileEntity_BasicGenerator {
 
     public static final int BASE_POLLUTION = 2;
 

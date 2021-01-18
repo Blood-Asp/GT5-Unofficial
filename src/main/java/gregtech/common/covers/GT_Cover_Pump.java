@@ -16,8 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public class GT_Cover_Pump
-        extends GT_CoverBehavior{
+public class GT_Cover_Pump extends GT_CoverBehavior{
     public final int mTransferRate;
 
     public GT_Cover_Pump(int aTransferRate) {

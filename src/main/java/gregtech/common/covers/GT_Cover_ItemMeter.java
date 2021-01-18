@@ -17,8 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_ItemMeter
-        extends GT_CoverBehavior {
+public class GT_Cover_ItemMeter extends GT_CoverBehavior {
 
     // format:
     private static final int SLOT_MASK = 0x3FFFFFF; // 0 = all, 1 = 0 ...

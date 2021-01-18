@@ -14,8 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public class GT_Cover_Drain
-        extends GT_CoverBehavior {
+public class GT_Cover_Drain extends GT_CoverBehavior {
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aCoverVariable % 3 > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 3 < 2) {

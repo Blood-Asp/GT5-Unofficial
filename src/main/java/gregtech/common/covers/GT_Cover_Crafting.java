@@ -7,8 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.network.play.server.S2DPacketOpenWindow;
 
-public class GT_Cover_Crafting
-        extends GT_CoverBehavior {
+public class GT_Cover_Crafting extends GT_CoverBehavior {
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if ((aPlayer instanceof EntityPlayerMP)) {
             ((EntityPlayerMP) aPlayer).getNextWindowId();

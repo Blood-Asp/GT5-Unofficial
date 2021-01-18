@@ -120,7 +120,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                 if (!achievement) {
                     try {
                         GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "efficientsteam");
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     achievement = true;
                 }
@@ -163,53 +163,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
     	super.looseFit = looseFit;
     	return super.getInfoData();
     }
-    /* 
-     * moved to super
-     * 
-        int mPollutionReduction=0;
-        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
-            }
-        }
 
-        String tRunning = mMaxProgresstime>0 ?
-                EnumChatFormatting.GREEN+"Turbine running"+EnumChatFormatting.RESET :
-                EnumChatFormatting.RED+"Turbine stopped"+EnumChatFormatting.RESET;
-        String tMaintainance = getIdealStatus() == getRepairStatus() ?
-                EnumChatFormatting.GREEN+"No Maintainance issues"+EnumChatFormatting.RESET :
-                EnumChatFormatting.RED+"Needs Maintainance"+EnumChatFormatting.RESET ;
-        int tDura = 0;
-
-        if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
-            tDura = GT_Utility.safeInt((long)(100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
-        }
-
-        long storedEnergy=0;
-        long maxEnergy=0;
-        for(GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                storedEnergy+=tHatch.getBaseMetaTileEntity().getStoredEU();
-                maxEnergy+=tHatch.getBaseMetaTileEntity().getEUCapacity();
-            }
-        }
-
-        return new String[]{
-                // 8 Lines available for information panels
-                tRunning + ": " + EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t", // 1 
-                tMaintainance, // 2
-                "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%", // 2 
-                "Stored Energy:" + EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+ // 3 
-                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU", 
-                "Optimal Flow: "+EnumChatFormatting.YELLOW+GT_Utility.safeInt((long)realOptFlow)+EnumChatFormatting.RESET+" L/t" + // 4 
-                        EnumChatFormatting.YELLOW+"("+(looseFit?"Loose":"Tight")+")", // 5 
-                "Fuel Remaining: "+EnumChatFormatting.GOLD+storedFluid+EnumChatFormatting.RESET+"L", // 6 
-                "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%", // 7 
-                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %" // 8 
-        };
-    }
-    */
-    
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);

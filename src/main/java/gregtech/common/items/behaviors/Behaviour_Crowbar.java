@@ -10,8 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class Behaviour_Crowbar
-        extends Behaviour_None {
+public class Behaviour_Crowbar extends Behaviour_None {
     private final int mVanillaCosts;
     private final int mEUCosts;
 

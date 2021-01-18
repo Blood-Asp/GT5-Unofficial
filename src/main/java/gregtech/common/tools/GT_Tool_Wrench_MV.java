@@ -5,8 +5,7 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import net.minecraft.item.ItemStack;
 
-public class GT_Tool_Wrench_MV
-        extends GT_Tool_Wrench_LV {
+public class GT_Tool_Wrench_MV extends GT_Tool_Wrench_LV {
     public int getToolDamagePerBlockBreak() {
         return 200;
     }

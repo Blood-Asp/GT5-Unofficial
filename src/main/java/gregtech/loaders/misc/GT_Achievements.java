@@ -30,9 +30,6 @@ import thaumcraft.api.ThaumcraftApiHelper;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GT_Achievements {
-
-    //public static List<Materials> oreList = new ArrayList<Materials>();
-    //public static List<Integer[]> oreStats = new ArrayList<Integer[]>();
     public static int oreReg = -1;
     public static int assReg=-1;
     public ConcurrentHashMap<String, Achievement> achievementList;
@@ -43,39 +40,7 @@ public class GT_Achievements {
     public GT_Achievements() {
         this.achievementList = new ConcurrentHashMap<>();
         this.issuedAchievements = new ConcurrentHashMap<>();
-        /*int oreList_sS=oreList.size();
-        for (int i = 0; i < oreList_sS; i++) {
-            if (oreList.get(i) != null) {
-                if (GT_Values.D1 && this.achievementList.get(oreList.get(i).mName) == null) {
-                    GT_Log.out.println("achievement." + oreList.get(i).mName + "=Find " + oreList.get(i).mName + " Ore");
 
-                    StringBuilder dimensions = new StringBuilder();
-                    boolean isFirst = true;
-                    if (oreStats.get(i)[3] == 1) {
-                        dimensions.append("Overworld");
-                        isFirst = false;
-                    }
-                    if (oreStats.get(i)[4] == 1) {
-                        if (!isFirst) dimensions.append("/");
-                        dimensions.append("Nether");
-                        isFirst = false;
-                    }
-                    if (oreStats.get(i)[5] == 1) {
-                        if (!isFirst) dimensions.append("/");
-                        dimensions.append("End");
-                        isFirst = false;
-                    }
-                    GT_Log.out.println("achievement." + oreList.get(i).mName + ".desc=Height: " + (oreStats.get(i)[0]) + "-" + (oreStats.get(i)[1]) + ", Chance: " + (oreStats.get(i)[2]) + ", " + dimensions.toString());
-                }
-                //if(oreList.get(i)==null)
-                //    GT_Log.out.println("GT Achievement - Ore with NULL pointer material tries to register achievement.");
-                //if(oreList.get(i).name()==null)
-                //    GT_Log.out.println("GT Achievement - Ore with NULL named material tries to register achievement.");
-                //else
-                registerOreAchievement(oreList.get(i));
-            }
-        }
-*/
         for(GT_Recipe recipe: GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList)
             registerAssAchievement(recipe);
 
@@ -223,7 +188,6 @@ public class GT_Achievements {
     }
 
     public static void registerOre(Materials aMaterial, int min, int max, int chance, boolean overworld, boolean nether, boolean end) {
-
     }
 
     public Achievement registerAchievement(String textId, int x, int y, ItemStack icon, Achievement requirement, boolean special) {
@@ -328,18 +292,25 @@ public class GT_Achievements {
         if (player == null || fluid == null) {
             return;
         }
-        if (fluid.getFluid().getUnlocalizedName().equals("fluid.plasma.helium")) {
-            issueAchievement(player, "fusion");
-        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.europium")) {
-            issueAchievement(player, "advancing");
-        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.naquadah")) {
-            issueAchievement(player, "stargateliquid");
-        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.americium")) {
-            issueAchievement(player, "tothelimit");
-        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.molten.neutronium")) {
-            issueAchievement(player, "denseaspossible");
-        } else if (fluid.getFluid().getUnlocalizedName().equals("fluid.plasma.nitrogen")) {
-            issueAchievement(player, "higherefficency");
+        switch (fluid.getFluid().getUnlocalizedName()) {
+            case "fluid.plasma.helium":
+                issueAchievement(player, "fusion");
+                break;
+            case "fluid.molten.europium":
+                issueAchievement(player, "advancing");
+                break;
+            case "fluid.molten.naquadah":
+                issueAchievement(player, "stargateliquid");
+                break;
+            case "fluid.molten.americium":
+                issueAchievement(player, "tothelimit");
+                break;
+            case "fluid.molten.neutronium":
+                issueAchievement(player, "denseaspossible");
+                break;
+            case "fluid.plasma.nitrogen":
+                issueAchievement(player, "higherefficency");
+                break;
         }
     }
 
@@ -350,35 +321,42 @@ public class GT_Achievements {
         if (player == null || stack == null) {
             return;
         }
-        //if(stack.getItem()==Items.paper){player.inventory.addItemStackToInventory(new ItemStack(Blocks.stone_slab,2));}//TODO REALLY BLOODASP, REALLY
         ItemData data = GT_OreDictUnificator.getItemData(stack);
         if (data != null) {
             if (data.mPrefix == OrePrefixes.dust && data.mMaterial.mMaterial == Materials.Bronze) {
                 issueAchievement(player, "bronze");
-//            } else if (data.mPrefix == OrePrefixes.circuit && data.mMaterial.mMaterial == Materials.Advanced) {
-//                issueAchievement(player, "stepforward");
             }
         }
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
-            if (stack.getUnlocalizedName().equals("gt.metaitem.01.2300")) {
-                issueAchievement(player, "bronze");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32700")) {
-                issueAchievement(player, "smallparts");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
-                issueAchievement(player, "bettercircuits");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.23354")) {
-                issueAchievement(player, "magneticiron");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32600")) {
-                issueAchievement(player, "lvmotor");
-                issueAchievement(player, "buildCable");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32610")) {
-                issueAchievement(player, "pumpcover");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32630")) {
-                issueAchievement(player, "transport");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32650")) {
-                issueAchievement(player, "complexmachines");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32670")) {
-                issueAchievement(player, "hightech");
+            switch (stack.getUnlocalizedName()) {
+                case "gt.metaitem.01.2300":
+                    issueAchievement(player, "bronze");
+                    break;
+                case "gt.metaitem.01.32700":
+                    issueAchievement(player, "smallparts");
+                    break;
+                case "gt.metaitem.01.32702":
+                    issueAchievement(player, "bettercircuits");
+                    break;
+                case "gt.metaitem.01.23354":
+                    issueAchievement(player, "magneticiron");
+                    break;
+                case "gt.metaitem.01.32600":
+                    issueAchievement(player, "lvmotor");
+                    issueAchievement(player, "buildCable");
+                    break;
+                case "gt.metaitem.01.32610":
+                    issueAchievement(player, "pumpcover");
+                    break;
+                case "gt.metaitem.01.32630":
+                    issueAchievement(player, "transport");
+                    break;
+                case "gt.metaitem.01.32650":
+                    issueAchievement(player, "complexmachines");
+                    break;
+                case "gt.metaitem.01.32670":
+                    issueAchievement(player, "hightech");
+                    break;
             }
         } else if (stack.getUnlocalizedName().equals("ic2.blockCrop")) {
             issueAchievement(player, "crops");
@@ -542,64 +520,88 @@ public class GT_Achievements {
         }
 //        GT_FML_LOGGER.info(stack.getUnlocalizedName());
         if (stack.getUnlocalizedName().startsWith("gt.metaitem.")) {
-            if (stack.getUnlocalizedName().equals("gt.metaitem.02.32500")) {
-                issueAchievement(player, "havestlead");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32501")) {
-                issueAchievement(player, "havestsilver");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32503")) {
-                issueAchievement(player, "havestiron");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32504")) {
-                issueAchievement(player, "havestgold");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32530")) {
-                issueAchievement(player, "havestcopper");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32540")) {
-                issueAchievement(player, "havesttin");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32510")) {
-                issueAchievement(player, "havestoil");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.02.32511")) {
-                issueAchievement(player, "havestemeralds");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32082")) {
-                issueAchievement(player, "energyflow");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32702")) {
-                issueAchievement(player, "bettercircuits");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32707")) {
-                issueAchievement(player, "datasaving");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32597")) {
-                issueAchievement(player, "orbs");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32599")) {
-                issueAchievement(player, "thatspower");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32598")) {
-                issueAchievement(player, "luck");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32749")) {
-                issueAchievement(player, "closeit");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32730")) {
-                issueAchievement(player, "manipulation");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32729")) {
-                issueAchievement(player, "filterregulate");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32605")) {
-                issueAchievement(player, "whatnow");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32736")) {
-                issueAchievement(player, "zpmage");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32737")) {
-                issueAchievement(player, "uvage");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32030")) {
-                issueAchievement(player, "gtmonosilicon");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32036")) {
-                issueAchievement(player, "gtlogicwafer");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32701")) {
-                issueAchievement(player, "gtlogiccircuit");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32085")) {
-                issueAchievement(player, "gtquantumprocessor");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32089")) {
-                issueAchievement(player, "gtcrystalprocessor");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32092")) {
-                issueAchievement(player, "gtwetware");
-            }  else if (stack.getUnlocalizedName().equals("gt.metaitem.03.32095")) {
-                issueAchievement(player, "gtwetmain");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32736")) {
-                issueAchievement(player, "zpmage");
-            } else if (stack.getUnlocalizedName().equals("gt.metaitem.01.32737")) {
-                issueAchievement(player, "uvage");
+            switch (stack.getUnlocalizedName()) {
+                case "gt.metaitem.02.32500":
+                    issueAchievement(player, "havestlead");
+                    break;
+                case "gt.metaitem.02.32501":
+                    issueAchievement(player, "havestsilver");
+                    break;
+                case "gt.metaitem.02.32503":
+                    issueAchievement(player, "havestiron");
+                    break;
+                case "gt.metaitem.02.32504":
+                    issueAchievement(player, "havestgold");
+                    break;
+                case "gt.metaitem.02.32530":
+                    issueAchievement(player, "havestcopper");
+                    break;
+                case "gt.metaitem.02.32540":
+                    issueAchievement(player, "havesttin");
+                    break;
+                case "gt.metaitem.02.32510":
+                    issueAchievement(player, "havestoil");
+                    break;
+                case "gt.metaitem.02.32511":
+                    issueAchievement(player, "havestemeralds");
+                    break;
+                case "gt.metaitem.03.32082":
+                    issueAchievement(player, "energyflow");
+                    break;
+                case "gt.metaitem.01.32702":
+                    issueAchievement(player, "bettercircuits");
+                    break;
+                case "gt.metaitem.01.32707":
+                    issueAchievement(player, "datasaving");
+                    break;
+                case "gt.metaitem.01.32597":
+                    issueAchievement(player, "orbs");
+                    break;
+                case "gt.metaitem.01.32599":
+                    issueAchievement(player, "thatspower");
+                    break;
+                case "gt.metaitem.01.32598":
+                    issueAchievement(player, "luck");
+                    break;
+                case "gt.metaitem.01.32749":
+                    issueAchievement(player, "closeit");
+                    break;
+                case "gt.metaitem.01.32730":
+                    issueAchievement(player, "manipulation");
+                    break;
+                case "gt.metaitem.01.32729":
+                    issueAchievement(player, "filterregulate");
+                    break;
+                case "gt.metaitem.01.32605":
+                    issueAchievement(player, "whatnow");
+                    break;
+                case "gt.metaitem.01.32736":
+                    issueAchievement(player, "zpmage");
+                    break;
+                case "gt.metaitem.01.32737":
+                    issueAchievement(player, "uvage");
+                    break;
+                case "gt.metaitem.03.32030":
+                    issueAchievement(player, "gtmonosilicon");
+                    break;
+                case "gt.metaitem.03.32036":
+                    issueAchievement(player, "gtlogicwafer");
+                    break;
+                case "gt.metaitem.01.32701":
+                    issueAchievement(player, "gtlogiccircuit");
+                    break;
+                case "gt.metaitem.03.32085":
+                    issueAchievement(player, "gtquantumprocessor");
+                    break;
+                case "gt.metaitem.03.32089":
+                    issueAchievement(player, "gtcrystalprocessor");
+                    break;
+                case "gt.metaitem.03.32092":
+                    issueAchievement(player, "gtwetware");
+                    break;
+                case "gt.metaitem.03.32095":
+                    issueAchievement(player, "gtwetmain");
+                    break;
             } 
         } else if (stack.getUnlocalizedName().equals("gt.Thoriumcell")) {
             issueAchievement(player, "newfuel");

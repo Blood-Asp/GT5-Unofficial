@@ -13,8 +13,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class GT_MetaTileEntity_Filter
-        extends GT_MetaTileEntity_Buffer {
+public class GT_MetaTileEntity_Filter extends GT_MetaTileEntity_Buffer {
     public boolean bIgnoreNBT = false;
     public boolean bInvertFilter = false;
 

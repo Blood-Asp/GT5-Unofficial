@@ -11,7 +11,6 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
@@ -29,9 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
-import static gregtech.common.GT_Proxy.*;
+import static gregtech.common.GT_Proxy.GTPOLLUTION;
+import static gregtech.common.GT_Proxy.dimensionWiseChunkData;
+import static gregtech.common.GT_Proxy.dimensionWisePollution;
+import static gregtech.common.GT_Proxy.getDefaultChunkDataOnCreation;
 
-//import net.minecraft.entity.EntityLiving;
 
 public class GT_Pollution {
 	/**
@@ -62,7 +63,9 @@ public class GT_Pollution {
 	 * 
 	 * Machine Explosion(100,000)
 	 * 
-	 * Muffler Hatch Pollution reduction:
+	 * Other Random Shit: lots and lots
+	 * 
+	 * Muffler Hatch Pollution reduction:  ** inaccurate **
 	 * LV (0%), MV (30%), HV (52%), EV (66%), IV (76%), LuV (84%), ZPM (89%), UV (92%), MAX (95%)
 	 */
 	private List<ChunkCoordIntPair> pollutionList = new ArrayList<>();//chunks left to process

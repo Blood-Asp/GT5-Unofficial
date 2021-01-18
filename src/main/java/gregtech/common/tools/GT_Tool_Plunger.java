@@ -15,8 +15,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_Plunger
-        extends GT_Tool {
+public class GT_Tool_Plunger extends GT_Tool {
     public float getBaseDamage() {
         return 1.25F;
     }
@@ -26,19 +25,19 @@ public class GT_Tool_Plunger
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(101));
+        return (String) GregTech_API.sSoundList.get(101);
     }
 
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
@@ -58,11 +57,11 @@ public class GT_Tool_Plunger
         aItem.addItemBehavior(aID, new Behaviour_Plunger_Item(getToolDamagePerDropConversion()));
         aItem.addItemBehavior(aID, new Behaviour_Plunger_Fluid(getToolDamagePerDropConversion()));
         try {
-            Object tObject = GT_Utility.callConstructor("gregtech.common.items.behaviors.Behaviour_Plunger_Essentia", 0, null, false, new Object[]{Integer.valueOf(getToolDamagePerDropConversion())});
+            Object tObject = GT_Utility.callConstructor("gregtech.common.items.behaviors.Behaviour_Plunger_Essentia", 0, null, false, getToolDamagePerDropConversion());
             if ((tObject instanceof IItemBehaviour)) {
                 aItem.addItemBehavior(aID, (IItemBehaviour) tObject);
             }
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
         }
     }
 

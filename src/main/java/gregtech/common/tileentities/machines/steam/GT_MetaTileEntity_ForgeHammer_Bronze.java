@@ -47,7 +47,7 @@ public class GT_MetaTileEntity_ForgeHammer_Bronze extends GT_MetaTileEntity_Basi
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
         if (aIndex == 1) {
-            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(Integer.valueOf(1)), 10, 1.0F, aX, aY, aZ);
+            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(1), 10, 1.0F, aX, aY, aZ);
         }
     }
 

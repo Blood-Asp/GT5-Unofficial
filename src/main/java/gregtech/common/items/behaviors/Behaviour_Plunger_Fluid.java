@@ -17,8 +17,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.List;
 
-public class Behaviour_Plunger_Fluid
-        extends Behaviour_None {
+public class Behaviour_Plunger_Fluid extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.plunger.fluid", "Clears 1000 Liters of Fluid from Tanks");
 
@@ -36,7 +35,7 @@ public class Behaviour_Plunger_Fluid
                 if (((IFluidHandler) aTileEntity).drain(tDirection, 1000, false) != null) {
                     if ((aPlayer.capabilities.isCreativeMode) || (((GT_MetaGenerated_Tool) aItem).doDamage(aStack, this.mCosts))) {
                         ((IFluidHandler) aTileEntity).drain(tDirection, 1000, true);
-                        GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(101)), 1.0F, -1.0F, aX, aY, aZ);
+                        GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(101), 1.0F, -1.0F, aX, aY, aZ);
                         return true;
                     }
                 }
@@ -50,7 +49,7 @@ public class Behaviour_Plunger_Fluid
           	GT_MetaTileEntity_BasicTank machine = (GT_MetaTileEntity_BasicTank) mTileEntity;
            	if(machine.mFluid!=null&&machine.mFluid.amount>0)
            	machine.mFluid.amount = machine.mFluid.amount - Math.min(machine.mFluid.amount, 1000);
-            GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(101)), 1.0F, -1.0F, aX, aY, aZ);
+            GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(101), 1.0F, -1.0F, aX, aY, aZ);
            	return true;
                 }
             }

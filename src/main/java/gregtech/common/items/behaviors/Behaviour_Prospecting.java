@@ -25,8 +25,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import java.util.List;
 import java.util.Random;
 
-public class Behaviour_Prospecting
-        extends Behaviour_None {
+public class Behaviour_Prospecting extends Behaviour_None {
     private final int mVanillaCosts;
     private final int mEUCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.prospecting", "Usable for Prospecting");
@@ -50,7 +49,7 @@ public class Behaviour_Prospecting
         ItemData tAssotiation = GT_OreDictUnificator.getAssociation(new ItemStack(aBlock, 1, aMeta));
         if ((tAssotiation != null) && (tAssotiation.mPrefix.toString().startsWith("ore"))){
         	GT_Utility.sendChatToPlayer(aPlayer, trans("100","This is ") + tAssotiation.mMaterial.mMaterial.mDefaultLocalName + trans("101"," Ore."));
-        	GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(1)), 1.0F, -1.0F, aX, aY, aZ);	
+        	GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(1), 1.0F, -1.0F, aX, aY, aZ);	
         	return true;
 	    	}
 	    	
@@ -64,7 +63,7 @@ public class Behaviour_Prospecting
 		    	(aBlock == GregTech_API.sBlockOresUb3)  || 
 		    	(aBlock == GregTech_API.sBlockOres1)){
 	            if (GT_ModHandler.damageOrDechargeItem(aStack, this.mVanillaCosts, this.mEUCosts, aPlayer)) {
-              GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(Integer.valueOf(1)), 1.0F, -1.0F, aX, aY, aZ);
+              GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(1), 1.0F, -1.0F, aX, aY, aZ);
               int tMetaID = 0;
               int tQuality = (aItem instanceof GT_MetaGenerated_Tool) ? ((GT_MetaGenerated_Tool) aItem).getHarvestLevel(aStack, "") : 0;
 		    	int tX = aX, tY = aY, tZ = aZ;

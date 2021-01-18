@@ -15,13 +15,11 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
-public class GT_MetaTileEntity_ImplosionCompressor
-        extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_MultiBlockBase {
     public GT_MetaTileEntity_ImplosionCompressor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -122,7 +120,7 @@ public class GT_MetaTileEntity_ImplosionCompressor
     public void startSoundLoop(byte aIndex, double aX, double aY, double aZ) {
         super.startSoundLoop(aIndex, aX, aY, aZ);
         if (aIndex == 20) {
-            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(Integer.valueOf(5)), 10, 1.0F, aX, aY, aZ);
+            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(5), 10, 1.0F, aX, aY, aZ);
         }
     }
 

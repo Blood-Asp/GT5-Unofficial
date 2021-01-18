@@ -8,8 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-public class GT_ItemMaxStacksizeLoader
-        implements Runnable {
+public class GT_ItemMaxStacksizeLoader implements Runnable {
     public void run() {
         GT_Log.out.println("GT_Mod: Changing maximum Stacksizes if configured.");
 

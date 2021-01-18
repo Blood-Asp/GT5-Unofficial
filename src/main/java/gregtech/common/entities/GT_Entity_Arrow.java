@@ -29,8 +29,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import java.util.List;
 import java.util.UUID;
 
-public class GT_Entity_Arrow
-        extends EntityArrow {
+public class GT_Entity_Arrow extends EntityArrow {
     private int mHitBlockX = -1;
     private int mHitBlockY = -1;
     private int mHitBlockZ = -1;
@@ -327,11 +326,11 @@ public class GT_Entity_Arrow
     }
 
     public ItemStack getArrowItem() {
-        return GT_Utility.copy(new Object[]{this.mArrow});
+        return GT_Utility.copy(this.mArrow);
     }
 
     public void setArrowItem(ItemStack aStack) {
-        this.mArrow = GT_Utility.updateItemStack(GT_Utility.copyAmount(1L, new Object[]{aStack}));
+        this.mArrow = GT_Utility.updateItemStack(GT_Utility.copyAmount(1L, aStack));
     }
 
     public boolean breaksOnImpact() {

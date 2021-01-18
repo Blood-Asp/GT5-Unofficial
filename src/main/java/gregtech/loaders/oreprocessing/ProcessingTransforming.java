@@ -8,8 +8,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
-public class ProcessingTransforming
-        implements IOreRecipeRegistrator {
+public class ProcessingTransforming implements IOreRecipeRegistrator {
     public ProcessingTransforming() {
         for (OrePrefixes tPrefix : OrePrefixes.values())
             if (((tPrefix.mMaterialAmount > 0L) && (!tPrefix.mIsContainer) && (!tPrefix.mIsEnchantable)) || (tPrefix == OrePrefixes.plank))

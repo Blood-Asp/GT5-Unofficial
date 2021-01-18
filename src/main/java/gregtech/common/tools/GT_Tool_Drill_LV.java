@@ -15,8 +15,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_Drill_LV
-        extends GT_Tool {
+public class GT_Tool_Drill_LV extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return GT_Mod.gregtechproxy.mHardRock ? 25 : 50;
     }
@@ -50,19 +49,19 @@ public class GT_Tool_Drill_LV
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(106));
+        return (String) GregTech_API.sSoundList.get(106);
     }
 
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(106));
+        return (String) GregTech_API.sSoundList.get(106);
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(106));
+        return (String) GregTech_API.sSoundList.get(106);
     }
 
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(106));
+        return (String) GregTech_API.sSoundList.get(106);
     }
 
     public boolean canBlock() {
@@ -100,7 +99,7 @@ public class GT_Tool_Drill_LV
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "driltime");
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildDrill");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
