@@ -108,7 +108,7 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
                         break;
                     }
                 }
-            }else{
+            } else {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {

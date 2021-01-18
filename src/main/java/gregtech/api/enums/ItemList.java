@@ -1553,20 +1553,6 @@ public enum ItemList implements IItemContainer {
     Moxcell_2,
     Moxcell_4,
 
-    ModularBasicHelmet,
-    ModularBasicChestplate,
-    ModularBasicLeggings,
-    ModularBasicBoots,
-
-    ModularElectric1Helmet,
-    ModularElectric1Chestplate,
-    ModularElectric1Leggings,
-    ModularElectric1Boots,
-
-    ModularElectric2Helmet,
-    ModularElectric2Chestplate,
-    ModularElectric2Leggings,
-    ModularElectric2Boots,
     Block_Powderbarrel,
     GelledToluene,
 

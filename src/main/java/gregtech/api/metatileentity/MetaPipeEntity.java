@@ -130,6 +130,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
      */
     public abstract boolean renderInside(byte aSide);
 
+    public boolean isDisplaySecondaryDescription() {
+        return false;
+    }
+
     @Override
     public IGregTechTileEntity getBaseMetaTileEntity() {
         return mBaseMetaTileEntity;

@@ -17,8 +17,6 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.blocks.*;
 import gregtech.common.items.*;
-import gregtech.common.items.armor.ElectricModularArmor1;
-import gregtech.common.items.armor.ModularArmor_Item;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -740,19 +738,6 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
             GT_OreDictUnificator.set(OrePrefixes.nugget, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemNugget", 1L, 7));
             GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.Void, GT_ModHandler.getModItem("Thaumcraft", "ItemResource", 1L, 16));
             GT_OreDictUnificator.set(OrePrefixes.ingot, Materials.BloodInfusedIron, GT_ModHandler.getModItem("BloodArsenal", "blood_infused_iron", 1L, 0));
-
-            ItemList.ModularBasicHelmet.set(new ModularArmor_Item(0, 0, "modulararmor_helmet", 0));
-            ItemList.ModularBasicChestplate.set(new ModularArmor_Item(0, 1, "modulararmor_chestplate", 0));
-            ItemList.ModularBasicLeggings.set(new ModularArmor_Item(0, 2, "modulararmor_leggings", 0));
-            ItemList.ModularBasicBoots.set(new ModularArmor_Item(0, 3, "modulararmor_boots", 0));
-            ItemList.ModularElectric1Helmet.set(new ElectricModularArmor1(0, 0, "modularelectric1_helmet", 1));
-            ItemList.ModularElectric1Chestplate.set(new ElectricModularArmor1(0, 1, "modularelectric1_chestplate", 1));
-            ItemList.ModularElectric1Leggings.set(new ElectricModularArmor1(0, 2, "modularelectric1_leggings", 1));
-            ItemList.ModularElectric1Boots.set(new ElectricModularArmor1(0, 3, "modularelectric1_boots", 1));
-            ItemList.ModularElectric2Helmet.set(new ElectricModularArmor1(0, 0, "modularelectric2_helmet", 2));
-            ItemList.ModularElectric2Chestplate.set(new ElectricModularArmor1(0, 1, "modularelectric2_chestplate", 2));
-            ItemList.ModularElectric2Leggings.set(new ElectricModularArmor1(0, 2, "modularelectric2_leggings", 2));
-            ItemList.ModularElectric2Boots.set(new ElectricModularArmor1(0, 3, "modularelectric2_boots", 2));
 
             if (GregTech_API.sUnification.get(ConfigCategories.specialunificationtargets + "." + "railcraft", "plateIron", true)) {
                 GT_OreDictUnificator.set(OrePrefixes.plate, Materials.Iron, GT_ModHandler.getModItem("Railcraft", "part.plate", 1L, 0));
