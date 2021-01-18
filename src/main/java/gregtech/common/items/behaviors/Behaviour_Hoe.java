@@ -15,8 +15,7 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
 
 import java.util.List;
 
-public class Behaviour_Hoe
-        extends Behaviour_None {
+public class Behaviour_Hoe extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.hoe", "Can till Dirt");
 

@@ -7,8 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.List;
 
-public class Behaviour_PrintedPages
-        extends Behaviour_None {
+public class Behaviour_PrintedPages extends Behaviour_None {
     public static String getTitle(ItemStack aStack) {
         NBTTagCompound tNBT = aStack.getTagCompound();
         if (tNBT == null) {

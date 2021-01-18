@@ -12,8 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class Behaviour_Arrow_Potion
-        extends Behaviour_Arrow {
+public class Behaviour_Arrow_Potion extends Behaviour_Arrow {
     private final int[] mPotions;
 
     public Behaviour_Arrow_Potion(float aSpeed, float aPrecision, int... aPotions) {

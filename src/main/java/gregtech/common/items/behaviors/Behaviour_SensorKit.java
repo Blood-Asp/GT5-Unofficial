@@ -15,8 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class Behaviour_SensorKit
-        extends Behaviour_None {
+public class Behaviour_SensorKit extends Behaviour_None {
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.sensorkit.tooltip", "Used to display Information using the Mod Nuclear Control");
 
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
@@ -26,7 +25,7 @@ public class Behaviour_SensorKit
                 return false;
             }
             if (((tTileEntity instanceof IGregTechDeviceInformation)) && (((IGregTechDeviceInformation) tTileEntity).isGivingInformation())) {
-                GT_Utility.setStack(aStack, ItemList.NC_SensorCard.get(aStack.stackSize, new Object[0]));
+                GT_Utility.setStack(aStack, ItemList.NC_SensorCard.get(aStack.stackSize));
                 NBTTagCompound tNBT = aStack.getTagCompound();
                 if (tNBT == null) {
                     tNBT = new NBTTagCompound();

@@ -20,8 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class Behaviour_Spray_Color
-        extends Behaviour_None {
+public class Behaviour_Spray_Color extends Behaviour_None {
     private final ItemStack mEmpty;
     private final ItemStack mUsed;
     private final ItemStack mFull;

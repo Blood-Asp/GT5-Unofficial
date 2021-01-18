@@ -5,9 +5,7 @@ import ic2.api.reactor.IReactor;
 import ic2.api.reactor.IReactorComponent;
 import net.minecraft.item.ItemStack;
 
-public class GT_NeutronReflector_Item
-        extends GT_Generic_Item
-        implements IReactorComponent {
+public class GT_NeutronReflector_Item extends GT_Generic_Item implements IReactorComponent {
     public GT_NeutronReflector_Item(String aUnlocalized, String aEnglish, int aMaxDamage) {
         super(aUnlocalized, aEnglish, "Undestructable");
         this.setMaxStackSize(64);

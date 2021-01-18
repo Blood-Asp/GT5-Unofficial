@@ -13,8 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class Behaviour_Scoop
-        extends Behaviour_None {
+public class Behaviour_Scoop extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.scoop", "Catches Butterflies on Leftclick");
 

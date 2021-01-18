@@ -8,8 +8,7 @@ import net.minecraft.nbt.NBTTagList;
 
 import java.util.List;
 
-public class Behaviour_DataOrb
-        extends Behaviour_None {
+public class Behaviour_DataOrb extends Behaviour_None {
     public static void copyInventory(ItemStack[] aInventory, ItemStack[] aNewContent, int aIndexlength) {
         for (int i = 0; i < aIndexlength; i++) {
             if (aNewContent[i] == null) {
