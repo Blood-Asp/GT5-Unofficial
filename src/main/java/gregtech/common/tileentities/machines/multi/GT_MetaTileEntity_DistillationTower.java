@@ -18,13 +18,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
-public class GT_MetaTileEntity_DistillationTower
-        extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_MultiBlockBase {
     private static final int CASING_INDEX = 49;
     private short controllerY;
 
@@ -106,25 +104,25 @@ public class GT_MetaTileEntity_DistillationTower
         byte tTier = (byte) Math.max(0, GT_Utility.getTier(tVoltage));
         FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
         if (tFluids.length > 0) {
-        	for(int i = 0;i<tFluids.length;i++){
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluids[i]}, new ItemStack[]{});
-            if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
-                    this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
-                    this.mEfficiencyIncrease = 10000;
-                    calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
-                    //In case recipe is too OP for that machine
-                    if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                        return false;
-                    if (this.mEUt > 0) {
-                        this.mEUt = (-this.mEUt);
+            for (FluidStack tFluid : tFluids) {
+                GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluid});
+                if (tRecipe != null) {
+                    if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
+                        this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+                        this.mEfficiencyIncrease = 10000;
+                        calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+                        //In case recipe is too OP for that machine
+                        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                            return false;
+                        if (this.mEUt > 0) {
+                            this.mEUt = (-this.mEUt);
+                        }
+                        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+                        this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
+                        this.mOutputFluids = tRecipe.mFluidOutputs.clone();
+                        updateSlots();
+                        return true;
                     }
-                    this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-                    this.mOutputItems = new ItemStack[]{tRecipe.getOutput(0)};
-                    this.mOutputFluids = tRecipe.mFluidOutputs.clone();
-                    updateSlots();
-                    return true;
-                	}
                 }
             }
         }

@@ -10,8 +10,7 @@ import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_MetaTileEntity_Boiler_Steel
-        extends GT_MetaTileEntity_Boiler_Bronze {//TODO CHECK POLLUTION VALUES AND DESCRIPTIONS FOR POLLUTION SPOILERS
+public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bronze {
 
 
     public GT_MetaTileEntity_Boiler_Steel(int aID, String aName, String aNameRegional) {

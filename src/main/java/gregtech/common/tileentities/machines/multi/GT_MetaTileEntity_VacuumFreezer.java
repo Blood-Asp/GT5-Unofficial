@@ -14,13 +14,11 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
-public class GT_MetaTileEntity_VacuumFreezer
-        extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBlockBase {
     public GT_MetaTileEntity_VacuumFreezer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }

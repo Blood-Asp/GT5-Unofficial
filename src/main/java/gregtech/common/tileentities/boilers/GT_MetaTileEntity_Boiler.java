@@ -22,8 +22,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
-public abstract class GT_MetaTileEntity_Boiler
-        extends GT_MetaTileEntity_BasicTank {
+public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTank {
     public int mTemperature = 20;
     public int mProcessingEnergy = 0;
     public int mLossTimer = 0;
@@ -48,7 +47,6 @@ public abstract class GT_MetaTileEntity_Boiler
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         ITexture[] tmp = mTextures[aSide >= 2 ? aSide != aFacing ? 2 : ((byte) (aActive ? 4 : 3)) : aSide][aColorIndex + 1];
-        //mTextures[(aSide==aFacing?(aActive?4:3):aSide==GT_Utility.getOppositeSide(aFacing)?2:aSide==0?0:aSide==1?1:2)][aColorIndex+1];
         if (aSide != aFacing && tmp.length == 2) {
             tmp = new ITexture[]{tmp[0]};
         }
@@ -155,7 +153,7 @@ public abstract class GT_MetaTileEntity_Boiler
         if (this.mSteam != null) {
             try {
                 aNBT.setTag("mSteam", this.mSteam.writeToNBT(new NBTTagCompound()));
-            } catch (Throwable e) {
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -257,24 +255,17 @@ public abstract class GT_MetaTileEntity_Boiler
     }
 
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if (GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
-            return true;
-        else
-            return false;
+        return GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation;
 
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        if(GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation)
-            return true;
-        else
-            return false;
-
+        return GT_Mod.gregtechproxy.mAllowSmallBoilerAutomation;
     }
 
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
         if (aIndex == 1) {
-            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(Integer.valueOf(4)), 2, 1.0F, aX, aY, aZ);
+            GT_Utility.doSoundAtClient((String) GregTech_API.sSoundList.get(4), 2, 1.0F, aX, aY, aZ);
             for (int l = 0; l < 8; l++) {
                 getBaseMetaTileEntity().getWorld().spawnParticle("largesmoke", aX - 0.5D + XSTR_INSTANCE.nextFloat(), aY, aZ - 0.5D + XSTR_INSTANCE.nextFloat(), 0.0D, 0.0D, 0.0D);
             }

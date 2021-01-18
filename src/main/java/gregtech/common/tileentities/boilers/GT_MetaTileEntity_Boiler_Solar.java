@@ -19,8 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
 
-public class GT_MetaTileEntity_Boiler_Solar
-        extends GT_MetaTileEntity_Boiler {
+public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Solar(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[0]);
     }

@@ -29,8 +29,7 @@ import org.lwjgl.input.Keyboard;
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.VN;
 
-public class GT_MetaTileEntity_ElectricBlastFurnace
-        extends GT_MetaTileEntity_AbstractMultiFurnace {
+public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_AbstractMultiFurnace {
     private int mHeatingCapacity = 0;
     private int controllerY;
     private FluidStack[] pollutionFluidStacks = new FluidStack[]{Materials.CarbonDioxide.getGas(1000),
