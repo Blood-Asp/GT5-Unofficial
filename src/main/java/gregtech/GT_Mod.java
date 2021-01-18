@@ -195,8 +195,6 @@ public class GT_Mod implements IGT_Mod {
 
         GregTech_API.sClientDataFile = new GT_Config(new Configuration(new File(aEvent.getModConfigurationDirectory().getParentFile(), "GregTech.cfg")));
         GregTech_API.mIC2Classic = Loader.isModLoaded("IC2-Classic-Spmod");
-        //GregTech_API.mMagneticraft = Loader.isModLoaded("Magneticraft");
-        //GregTech_API.mImmersiveEngineering = Loader.isModLoaded("ImmersiveEngineering");
         GregTech_API.mGTPlusPlus = Loader.isModLoaded("miscutils");
         GregTech_API.mTranslocator = Loader.isModLoaded("Translocator");
         GregTech_API.mTConstruct = Loader.isModLoaded("TConstruct");
@@ -267,6 +265,7 @@ public class GT_Mod implements IGT_Mod {
 
         GT_Values.D1 = tMainConfig.get(aTextGeneral, "Debug", false).getBoolean(false);
         GT_Values.D2 = tMainConfig.get(aTextGeneral, "Debug2", false).getBoolean(false);
+        GT_Values.hideAssLineRecipes = tMainConfig.get(aTextGeneral, "hide assline recipes", false).getBoolean(false);
         GT_Values.allow_broken_recipemap = tMainConfig.get(aTextGeneral, "debug allow broken recipemap", false).getBoolean(false);
         GT_Values.debugCleanroom = tMainConfig.get(aTextGeneral, "debugCleanroom", false).getBoolean(false);
         GT_Values.debugDriller = tMainConfig.get(aTextGeneral, "debugDriller", false).getBoolean(false);

@@ -298,4 +298,6 @@ public class GT_Values {
 
     public static boolean debugChunkloaders = false;
     public static boolean cls_enabled;
+    
+    public static boolean hideAssLineRecipes = false;
 }

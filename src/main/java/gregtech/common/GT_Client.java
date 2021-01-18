@@ -400,14 +400,14 @@ public class GT_Client extends GT_Proxy
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
         if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
             afterSomeTime++;
-            if(afterSomeTime>=100L){
+            if(afterSomeTime>=100L) {
                 afterSomeTime=0;
                 StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
                 try {
-                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
-                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
+                        recipe.mHidden=GT_Values.hideAssLineRecipes && !sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
                     }
-                }catch (Exception e){}
+                } catch (Exception ignored){}
             }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
@@ -421,30 +421,7 @@ public class GT_Client extends GT_Proxy
             for (Iterator i$ = tList.iterator(); i$.hasNext(); GT_Utility.sPlayedSoundMap.remove(tKey)) {
                 tKey = (GT_PlayedSound) i$.next();
             }
-            if(GregTech_API.mServerStarted == false)GregTech_API.mServerStarted = true;
-            /*if ((this.isFirstClientPlayerTick) && (aEvent.player == GT_Values.GT.getThePlayer())) {
-                this.isFirstClientPlayerTick = false;
-                GT_FluidStack.fixAllThoseFuckingFluidIDs();
-                if ((this.mMessage.length() > 5) && (GregTech_API.sSpecialFile.get(ConfigCategories.news, this.mMessage, true))) {
-                    aEvent.player.addChatComponentMessage(new ChatComponentText(this.mMessage));
-                }
-                try {
-                    int tVersion = Integer.parseInt(((String) Class.forName("ic2.core.IC2").getField("VERSION").get(null)).substring(4, 7));
-                    if (GT_Values.D1) {
-                        GT_Log.out.println("Industrialcraft Version: " + tVersion);
-                    }
-                    if (tVersion < 624) {
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please update your IndustrialCraft here:"));
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + (GT_Mod.MAX_IC2 < Integer.MAX_VALUE ? GT_Mod.MAX_IC2 : 624) + "/"));
-                    } else if (tVersion > GT_Mod.MAX_IC2) {
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please downgrade your IndustrialCraft here:"));
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + GT_Mod.MAX_IC2 + "/"));
-                    }
-                } catch (Throwable e) {
-                    aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please get the recommended Version of IndustrialCraft here:"));
-                    aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + (GT_Mod.MAX_IC2 < Integer.MAX_VALUE ? GT_Mod.MAX_IC2 : 624) + "/"));
-                }
-            }*/
+            if(!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
         }
     }
 
