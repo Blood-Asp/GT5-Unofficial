@@ -114,6 +114,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
@@ -1575,6 +1576,76 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         return null;
     }
 
+    private static List<String> getOreDictNames(ItemStack stack) {
+        return Arrays.stream(OreDictionary.getOreIDs(stack)).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
+    }
+    
+    private static int getOreDictBurnTime(String oreDictName) {
+        switch (oreDictName) {
+            case "dustTinyWood":
+                return 11;
+            case "dustTinySodium":
+                return 44;
+            case "dustSmallWood":
+                return 25;
+            case "dustSmallSodium":
+            case "dustWood":
+                return 100;
+            case "dustTinyCoal":
+            case "dustTinyCharcoal":
+                return 177;
+            case "dustTinyLignite":
+                return 166;
+            case "plateWood":
+                return 300;
+            case "dustSmallLignite":
+                return 375;
+            case "dustSodium":
+            case "dustSmallCoal":
+            case "dustSmallCharcoal":
+                return 400;
+            case "dustTinyLithium":
+            case "dustTinyCaesium":
+                return 888;
+            case "gemLignite":
+            case "crushedLignite":
+            case "dustImpureLignite":
+            case "dustLignite":
+                return 1200;
+            case "dustSulfur":
+            case "gemCoal":
+            case "crushedCoal":
+            case "dustImpureCoal":
+            case "dustCoal":
+            case "gemCharcoal":
+            case "crushedCharcoal":
+            case "dustImpureCharcoal":
+            case "dustCharcoal":
+                return 1600;
+            case "dustSmallLithium":
+            case "dustSmallCaesium":
+                return 2000;
+            case "gemSodium":
+            case "crushedSodium":
+            case "dustImpureSodium":
+                return 4000;
+            case "gemLithium":
+            case "crushedLithium":
+            case "dustImpureLithium":
+            case "dustLithium":
+            case "gemCaesium":
+            case "crushedCaesium":
+            case "dustImpureCaesium":
+            case "dustCaesium":
+                return 6000;
+            case "blockLignite":
+                return 12000;
+            case "blockCharcoal":
+                return 16000;
+        } 
+        return 0;
+    }
+    
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
             return 0;
@@ -1588,110 +1659,26 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
         NBTTagCompound tNBT = aFuel.getTagCompound();
         if (tNBT != null) {
+            // See if we have something defined by NBT
             short tValue = tNBT.getShort("GT.ItemFuelValue");
             rFuelValue = Math.max(rFuelValue, tValue);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinySodium")) {
-            rFuelValue =   Math.max(rFuelValue, 44);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSulfur")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 2000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 888);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 2000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 888);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 375);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 166);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 177);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 177);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustWood")) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallWood")) {
-            rFuelValue =   Math.max(rFuelValue, 25);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyWood")) {
-            rFuelValue =   Math.max(rFuelValue, 11);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "plateWood")) {
-            rFuelValue =   Math.min(rFuelValue, 300);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "blockLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 12000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "blockCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 16000);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.wooden_button, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 150);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.ladder, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.sign, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 600);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.wooden_door, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 600);
-        } else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1))) {
-            rFuelValue = Math.max(rFuelValue, 150000);
+        } else {
+            // If not check the ore dict
+            rFuelValue = Math.max(rFuelValue, getOreDictNames(aFuel).stream().mapToInt(GT_Proxy::getOreDictBurnTime).max().orElse(0));
         }
-        if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1))) {
-            rFuelValue = Math.max(rFuelValue, 100000);
-        }
+        
+        // If we have something from the GT MetaGenerated_Item, ItemFuelValue, or OreDict return
+        if (rFuelValue > 0) return rFuelValue;
+        
+        // Otherwise a few more checks
+        if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.wooden_button, 1)))    return 150; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.ladder, 1)))      return 100; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.sign, 1)))         return 600; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.wooden_door, 1)))  return 600; 
+        else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1)))          return 150000; 
+        else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1)))           return 100000;
 
-        return rFuelValue;
+        return 0;
     }
 
     public Fluid addAutoGeneratedCorrespondingFluid(Materials aMaterial){
