@@ -121,7 +121,8 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                 // This might load a chunk... which might load a TileEntity... which might get added to `loadedTileEntityList`... which might be in the process
                 // of being iterated over during `UpdateEntities()`... which might cause a ConcurrentModificationException.  So, lock that shit.
                 lock.lock();
-                TileEntity tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+                final TileEntity tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+                final boolean isMachineBlock = GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ)); 
                 lock.unlock();
                 
                 // See if the block itself needs an update
@@ -134,7 +135,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                 // 3) If the block at the coordinates is marked as a machine block
                 if (visited.size() < 5 
                     || (tTileEntity instanceof IMachineBlockUpdateable && ((IMachineBlockUpdateable) tTileEntity).isMachineBlockUpdateRecursive()) 
-                    || GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ))) 
+                    || isMachineBlock) 
                 {
                     ChunkCoordinates tCoords;
                     
