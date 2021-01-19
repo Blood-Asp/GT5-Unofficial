@@ -49,6 +49,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
 
     @SubscribeEvent
     public void onServerTick(TickEvent.ServerTickEvent aEvent) {
+        // Using onServerTick because there's race conditions in updateTrackedEntities() which is called AFTER the END phase of onWorldTick 
         if (aEvent.phase == TickEvent.Phase.START) {
             lock.lock();
         } else {
