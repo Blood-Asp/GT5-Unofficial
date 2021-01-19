@@ -114,6 +114,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
@@ -252,6 +253,56 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean ic2EnergySourceCompat = true;
     public boolean costlyCableConnection = false;
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
+
+    public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
+
+    static {
+        oreDictBurnTimes.put("dustTinyWood", 11);
+        oreDictBurnTimes.put("dustTinySodium", 44);
+        oreDictBurnTimes.put("dustSmallWood", 25);
+        oreDictBurnTimes.put("dustSmallSodium", 100);
+        oreDictBurnTimes.put("dustWood", 100);
+        oreDictBurnTimes.put("dustTinyCoal", 177);
+        oreDictBurnTimes.put("dustTinyCharcoal", 177);
+        oreDictBurnTimes.put("dustTinyLignite", 166);
+        oreDictBurnTimes.put("plateWood", 300);
+        oreDictBurnTimes.put("dustSmallLignite", 375);
+        oreDictBurnTimes.put("dustSodium", 400);
+        oreDictBurnTimes.put("dustSmallCoal", 400);
+        oreDictBurnTimes.put("dustSmallCharcoal", 400);
+        oreDictBurnTimes.put("dustTinyLithium", 888);
+        oreDictBurnTimes.put("dustTinyCaesium", 888);
+        oreDictBurnTimes.put("gemLignite", 1200);
+        oreDictBurnTimes.put("crushedLignite", 1200);
+        oreDictBurnTimes.put("dustImpureLignite", 1200);
+        oreDictBurnTimes.put("dustLignite", 1200);
+        oreDictBurnTimes.put("dustSulfur", 1600);
+        oreDictBurnTimes.put("gemCoal", 1600);
+        oreDictBurnTimes.put("crushedCoal", 1600);
+        oreDictBurnTimes.put("dustImpureCoal", 1600);
+        oreDictBurnTimes.put("dustCoal", 1600);
+        oreDictBurnTimes.put("gemCharcoal", 1600);
+        oreDictBurnTimes.put("crushedCharcoal", 1600);
+        oreDictBurnTimes.put("dustImpureCharcoal", 1600);
+        oreDictBurnTimes.put("dustCharcoal", 1600);
+        oreDictBurnTimes.put("dustSmallLithium", 2000);
+        oreDictBurnTimes.put("dustSmallCaesium", 2000);
+        oreDictBurnTimes.put("gemSodium", 4000);
+        oreDictBurnTimes.put("crushedSodium", 4000);
+        oreDictBurnTimes.put("dustImpureSodium", 4000);
+        oreDictBurnTimes.put("gemLithium", 6000);
+        oreDictBurnTimes.put("crushedLithium", 6000);
+        oreDictBurnTimes.put("dustImpureLithium", 6000);
+        oreDictBurnTimes.put("dustLithium", 6000);
+        oreDictBurnTimes.put("gemCaesium", 6000);
+        oreDictBurnTimes.put("crushedCaesium", 6000);
+        oreDictBurnTimes.put("dustImpureCaesium", 6000);
+        oreDictBurnTimes.put("dustCaesium", 6000);
+        oreDictBurnTimes.put("blockLignite", 12000);
+        oreDictBurnTimes.put("blockCharcoal", 16000);
+    }
+
+
 
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
@@ -1579,73 +1630,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     private static List<String> getOreDictNames(ItemStack stack) {
         return Arrays.stream(OreDictionary.getOreIDs(stack)).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
     }
-    
-    private static int getOreDictBurnTime(String oreDictName) {
-        switch (oreDictName) {
-            case "dustTinyWood":
-                return 11;
-            case "dustTinySodium":
-                return 44;
-            case "dustSmallWood":
-                return 25;
-            case "dustSmallSodium":
-            case "dustWood":
-                return 100;
-            case "dustTinyCoal":
-            case "dustTinyCharcoal":
-                return 177;
-            case "dustTinyLignite":
-                return 166;
-            case "plateWood":
-                return 300;
-            case "dustSmallLignite":
-                return 375;
-            case "dustSodium":
-            case "dustSmallCoal":
-            case "dustSmallCharcoal":
-                return 400;
-            case "dustTinyLithium":
-            case "dustTinyCaesium":
-                return 888;
-            case "gemLignite":
-            case "crushedLignite":
-            case "dustImpureLignite":
-            case "dustLignite":
-                return 1200;
-            case "dustSulfur":
-            case "gemCoal":
-            case "crushedCoal":
-            case "dustImpureCoal":
-            case "dustCoal":
-            case "gemCharcoal":
-            case "crushedCharcoal":
-            case "dustImpureCharcoal":
-            case "dustCharcoal":
-                return 1600;
-            case "dustSmallLithium":
-            case "dustSmallCaesium":
-                return 2000;
-            case "gemSodium":
-            case "crushedSodium":
-            case "dustImpureSodium":
-                return 4000;
-            case "gemLithium":
-            case "crushedLithium":
-            case "dustImpureLithium":
-            case "dustLithium":
-            case "gemCaesium":
-            case "crushedCaesium":
-            case "dustImpureCaesium":
-            case "dustCaesium":
-                return 6000;
-            case "blockLignite":
-                return 12000;
-            case "blockCharcoal":
-                return 16000;
-        } 
-        return 0;
-    }
-    
+
+
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
             return 0;
@@ -1664,7 +1650,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             rFuelValue = Math.max(rFuelValue, tValue);
         } else {
             // If not check the ore dict
-            rFuelValue = Math.max(rFuelValue, getOreDictNames(aFuel).stream().mapToInt(GT_Proxy::getOreDictBurnTime).max().orElse(0));
+            rFuelValue = Math.max(rFuelValue, getOreDictNames(aFuel).stream().mapToInt(f -> oreDictBurnTimes.getOrDefault(f, 0)).max().orElse(0));
         }
         
         // If we have something from the GT MetaGenerated_Item, ItemFuelValue, or OreDict return
