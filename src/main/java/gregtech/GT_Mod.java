@@ -197,6 +197,7 @@ public class GT_Mod implements IGT_Mod {
         GregTech_API.mTranslocator = Loader.isModLoaded("Translocator");
         GregTech_API.mTConstruct = Loader.isModLoaded("TConstruct");
         GregTech_API.mGalacticraft = Loader.isModLoaded("GalacticraftCore");
+        GregTech_API.mAE2 = Loader.isModLoaded(MOD_ID_AE);
         GT_Log.out.println("GT_Mod: Are you there Translocator? " + GregTech_API.mTranslocator);
         GT_Log.out.println("GT_Mod: Are you there TConstruct? " + GregTech_API.mTConstruct);
         GT_Log.out.println("GT_Mod: Are you there GalacticraftCore? " + GregTech_API.mGalacticraft);
@@ -344,7 +345,7 @@ public class GT_Mod implements IGT_Mod {
         gregtechproxy.mSortToTheEnd = tMainConfig.get(aTextGeneral, "EnsureToBeLoadedLast", true).getBoolean(true);
         gregtechproxy.mDisableIC2Cables = tMainConfig.get(aTextGeneral, "DisableIC2Cables", true).getBoolean(true);
         gregtechproxy.mAchievements = tMainConfig.get(aTextGeneral, "EnableAchievements", true).getBoolean(true);
-        gregtechproxy.mAE2Integration = GregTech_API.sSpecialFile.get(ConfigCategories.general, "EnableAE2Integration", Loader.isModLoaded("appliedenergistics2"));
+        gregtechproxy.mAE2Integration = GregTech_API.sSpecialFile.get(ConfigCategories.general, "EnableAE2Integration", GregTech_API.mAE2);
         gregtechproxy.mNerfedCombs = tMainConfig.get(aTextGeneral, "NerfCombs", true).getBoolean(true);
         gregtechproxy.mNerfedCrops = tMainConfig.get(aTextGeneral, "NerfCrops", true).getBoolean(true);
         gregtechproxy.mHideUnusedOres = tMainConfig.get(aTextGeneral, "HideUnusedOres", true).getBoolean(true);
@@ -831,7 +832,7 @@ public class GT_Mod implements IGT_Mod {
             GT_Forestry_Compat.transferCentrifugeRecipes();
             GT_Forestry_Compat.transferSqueezerRecipes();
         }
-        if (Loader.isModLoaded(MOD_ID_AE))
+        if (GregTech_API.mAE2)
             GT_MetaTileEntity_DigitalChestBase.registerAEIntegration();
 
 
