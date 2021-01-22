@@ -1,11 +1,9 @@
 package gregtech.api.threads;
 
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
+import gregtech.common.GT_Proxy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -18,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class GT_Runnable_MachineBlockUpdate implements Runnable {
     // used by runner thread
@@ -26,9 +23,6 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private final World world;
     private final Set<ChunkCoordinates> visited = new HashSet<>(80);
     private final Queue<ChunkCoordinates> tQueue = new LinkedList<>();
-    
-    // Locking
-    private static ReentrantLock lock = new ReentrantLock();
     
     // Threading
     private static final ThreadFactory THREAD_FACTORY = r -> {
@@ -45,16 +39,6 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         visited.add(aCoords);
         tQueue.add(aCoords);
         
-    }
-
-    @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent aEvent) {
-        // Using onServerTick because there's race conditions in updateTrackedEntities() which is called AFTER the END phase of onWorldTick 
-        if (aEvent.phase == TickEvent.Phase.START) {
-            lock.lock();
-        } else {
-            lock.unlock();
-        }
     }
 
     public static boolean isEnabled() {
@@ -123,12 +107,12 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                 
                 // This might load a chunk... which might load a TileEntity... which might get added to `loadedTileEntityList`... which might be in the process
                 // of being iterated over during `UpdateEntities()`... which might cause a ConcurrentModificationException.  So, lock that shit.
-                lock.lock();
+                GT_Proxy.TICK_LOCK.lock();
                 try {
                     tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
                     isMachineBlock = GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ));
                 } finally {
-                    lock.unlock();
+                    GT_Proxy.TICK_LOCK.unlock();
                 }
                 
                 // See if the block itself needs an update
