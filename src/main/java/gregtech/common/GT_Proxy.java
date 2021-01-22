@@ -116,6 +116,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
@@ -255,6 +256,10 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
     public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
+
+    // Locking
+    public static ReentrantLock TICK_LOCK = new ReentrantLock();
+    
 
     static {
         oreDictBurnTimes.put("dustTinyWood", 11);
@@ -1324,6 +1329,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     @SubscribeEvent
     public void onServerTickEvent(TickEvent.ServerTickEvent aEvent) {
+        if (aEvent.side.isServer()) {
+            if (aEvent.phase == TickEvent.Phase.START) {
+                TICK_LOCK.lock();
+            } else {
+                TICK_LOCK.unlock();
+            }
+        }
+
     }
 
     @SubscribeEvent
