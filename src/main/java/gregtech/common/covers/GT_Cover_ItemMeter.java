@@ -7,10 +7,11 @@ import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.gui.widgets.GT_GuiIntegerTextBox;
 import gregtech.api.interfaces.tileentity.ICoverable;
-import gregtech.api.interfaces.tileentity.IDigitalChest;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -36,8 +37,8 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
 
         long tMax = 0;
         long tUsed = 0;
-        if (aTileEntity instanceof IDigitalChest) {
-            IDigitalChest dc = (IDigitalChest)aTileEntity;
+        if (aTileEntity instanceof GT_MetaTileEntity_DigitalChestBase) {
+            GT_MetaTileEntity_DigitalChestBase dc = (GT_MetaTileEntity_DigitalChestBase)aTileEntity;
             tMax = dc.getMaxItemCount(); // currently it is limited by int, but there is not much reason for that
             ItemStack[] inv = dc.getStoredItemData();
             if (inv != null && inv.length > 1 && inv[1] != null)
@@ -175,7 +176,7 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
             else
                 maxSlot = -1;
 
-            if (maxSlot == -1 || tile instanceof IDigitalChest)
+            if (maxSlot == -1 || tile instanceof GT_MetaTileEntity_DigitalChestBase)
                 intSlot.setEnabled(false);
         }
 

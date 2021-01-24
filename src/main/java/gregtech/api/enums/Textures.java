@@ -903,7 +903,9 @@ public class Textures {
         PIPE_RESTRICTOR_UR,
         PIPE_RESTRICTOR_DL,
         PIPE_RESTRICTOR_DR,
-        PIPE_RESTRICTOR_LR;
+        PIPE_RESTRICTOR_LR,
+
+        OVERLAY_ME_HATCH;
 
         /**
          * Icon for Fresh CFoam
