@@ -69,6 +69,7 @@ public class Textures {
         BLOCK_STEELEAF,
         BLOCK_ICHORIUM,
         BLOCK_FIRESTONE,
+        BLOCK_SHADOW,
 
         OVERLAY_ENERGY_IN_POWER,
         OVERLAY_ENERGY_OUT_POWER,
@@ -1288,7 +1289,8 @@ public class Textures {
                         BLOCK_HSSS,
                         BLOCK_STEELEAF,
                         BLOCK_ICHORIUM,
-                        BLOCK_FIRESTONE
+                        BLOCK_FIRESTONE,
+                        BLOCK_SHADOW
                 },
                 STORAGE_BLOCKS9 = new IIconContainer[]{
                         BLOCK_AERCRYSTAL,
