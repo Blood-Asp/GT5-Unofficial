@@ -85,9 +85,6 @@ dependencies {
     compileOnly "eu.usrv:YAMCore:${config.minecraft.version}-${config.yamcore.version}:deobf"
     compileOnly "tconstruct:TConstruct:${config.minecraft.version}-${config.tconstruct.version}:deobf"
 	//compile "mantle:Mantle:${config.minecraft.version}-${config.mantle.version}:deobf"
-    compileOnly ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
-        transitive = true
-    }
     compileOnly "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
     compileOnly "codechicken:CodeChickenCore:${config.minecraft.version}-${config.codechickencore.version}:dev"
     compileOnly "codechicken:NotEnoughItems:${config.minecraft.version}-${config.nei.version}:dev"
@@ -99,6 +96,7 @@ dependencies {
     compileOnly ("com.enderio:EnderIO:${config.enderio.version}:dev") {
         transitive = false
     }
+    implementation("appeng:appliedenergistics2:${config.ae2.version}:dev")
     compileOnly files("libs/Galacticraft-API-1.7-${config.gc.version}.jar")
     compileOnly files("libs/GalacticraftCore-Dev-${config.gc.version}.jar")
     compileOnly name: "Galacticraft-API", version: config.gc.version, ext: 'jar'
