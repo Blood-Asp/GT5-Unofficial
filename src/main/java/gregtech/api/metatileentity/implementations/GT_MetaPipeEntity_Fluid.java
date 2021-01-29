@@ -675,4 +675,16 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
     	}
     }
+    @Override
+    public FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
+        if (aFluid == null)
+            return null;
+        for (int i = 0; i < mFluids.length; ++i) {
+            final FluidStack f = mFluids[i];
+            if (f == null || !f.isFluidEqual(aFluid))
+                continue;
+            return drainFromIndex(aFluid.amount, doDrain, i);
+        }
+        return null;
+    }
 }
