@@ -86,7 +86,7 @@ dependencies {
     compileOnly "tconstruct:TConstruct:${config.minecraft.version}-${config.tconstruct.version}:deobf"
 	//compile "mantle:Mantle:${config.minecraft.version}-${config.mantle.version}:deobf"
     compileOnly ("appeng:appliedenergistics2:${config.ae2.version}:dev") {
-        exclude module: '*'
+        transitive = true
     }
     compileOnly "codechicken:CodeChickenLib:${config.minecraft.version}-${config.codechickenlib.version}:dev"
     compileOnly "codechicken:CodeChickenCore:${config.minecraft.version}-${config.codechickencore.version}:dev"
