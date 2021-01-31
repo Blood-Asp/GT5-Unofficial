@@ -4,11 +4,18 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.IFluidTank;
+
+import static gregtech.api.enums.GT_Values.NI;
+import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -179,18 +186,101 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
 
     @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
+        if (mTileEntity.getMetaTileEntity() == null) return null;
+        GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
         switch (aSlotIndex) {
             case 0:
-                if (mTileEntity.getMetaTileEntity() == null) return null;
-                ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mFluidTransfer = !((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mFluidTransfer;
+                machine.mFluidTransfer = !machine.mFluidTransfer;
                 return null;
             case 1:
                 if (mTileEntity.getMetaTileEntity() == null) return null;
-                ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer = !((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer;
+                machine.mItemTransfer = !machine.mItemTransfer;
                 return null;
+            case 2:
+                return pickupFluid(machine.getDrainableStack(), aPlayer);
             default:
-                return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
+                if (aSlotIndex == OTHER_SLOT_COUNT + 1 + machine.mInputSlotCount + machine.mOutputItems.length) {
+                    // input fluid slot
+                    ItemStack tStackHeld = aPlayer.inventory.getItemStack();
+                    ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
+                    if (tStackSizedOne == null) return null;
+                    FluidStack tInputFluid = machine.getFillableStack();
+                    FluidStack tFluidHeld = GT_Utility.getFluidForFilledItem(tStackSizedOne, true);
+                    if (tInputFluid == null) {
+                        if (tFluidHeld == null)
+                            // both null -> no op
+                            return null;
+                        return fillFluid(machine, aPlayer, tFluidHeld);
+                    } else {
+                        if (tFluidHeld != null) {
+                            // both nonnull. actually both pickup and fill is reasonable, but I'll go with fill here
+                            return fillFluid(machine, aPlayer, tFluidHeld);
+                        } else {
+                            return pickupFluid(machine.getFillableStack(), aPlayer);
+                        }
+                    }
+                } else {
+                    return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
+                }
         }
+    }
+
+    private ItemStack pickupFluid(FluidStack aTankStack, EntityPlayer aPlayer) {
+        if (aTankStack == null) return null;
+        ItemStack tStackHeld = aPlayer.inventory.getItemStack();
+        ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
+        if (tStackSizedOne == null) return null;
+        ItemStack tFilled = GT_Utility.fillFluidContainer(aTankStack, tStackSizedOne, true, false);
+        if (tFilled == null && tStackSizedOne.getItem() instanceof IFluidContainerItem) {
+            IFluidContainerItem tContainerItem = (IFluidContainerItem) tStackSizedOne.getItem();
+            int tFilledAmount = tContainerItem.fill(tStackSizedOne, aTankStack, true);
+            if (tFilledAmount > 0) {
+                tFilled = tStackSizedOne;
+                aTankStack.amount -= tFilledAmount;
+            }
+        }
+        if (tFilled != null) {
+            reduceStackSizeInHandByOne(aPlayer);
+            GT_Utility.addItemToPlayerInventory(aPlayer, tFilled);
+        }
+        return tFilled;
+    }
+
+    private ItemStack fillFluid(IFluidTank aTank, EntityPlayer aPlayer, FluidStack aFluidHeld) {
+        ItemStack tStackHeld = aPlayer.inventory.getItemStack();
+        ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
+        if (tStackSizedOne == null)
+            return null;
+
+        int tFilled = aTank.fill(aFluidHeld, false);
+        if (tFilled == 0)  // filled nothing
+            return null;
+        ItemStack tStackEmptied = null;
+        if (tFilled == aFluidHeld.amount)
+            // fully accepted - try take it from item now
+            // IFluidContainerItem is intentionally not checked here. it will be checked later
+            tStackEmptied = GT_Utility.getContainerForFilledItem(tStackSizedOne, false);
+        if (tStackEmptied == null && tStackHeld.getItem() instanceof IFluidContainerItem) {
+            IFluidContainerItem container = (IFluidContainerItem) tStackHeld.getItem();
+            FluidStack tDrained = container.drain(tStackSizedOne, tFilled, true);
+            if (tDrained != null && tDrained.amount > 0)
+                // something is actually drained - change the cell and drop it to player
+                tStackEmptied = tStackSizedOne;
+        }
+        if (tStackEmptied == null)
+            // somehow the cell refuse to take that amount of fluid, no op then
+            return null;
+        aTank.fill(aFluidHeld, true);
+        GT_Utility.addItemToPlayerInventory(aPlayer, tStackEmptied);
+        reduceStackSizeInHandByOne(aPlayer);
+        return tStackEmptied;
+    }
+
+    private void reduceStackSizeInHandByOne(EntityPlayer aPlayer) {
+        ItemStack tStackHeld = aPlayer.inventory.getItemStack();
+        tStackHeld.stackSize -= 1;
+        if (tStackHeld.stackSize == 0)
+            aPlayer.inventory.setItemStack(NI);
     }
 
     @Override

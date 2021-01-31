@@ -972,6 +972,15 @@ public class GT_Utility {
         return rStack;
     }
 
+    public static FluidStack getFluidFromDisplayStack(ItemStack aDisplayStack) {
+        if (!isStackValid(aDisplayStack) ||
+                aDisplayStack.getItem() != ItemList.Display_Fluid.getItem() ||
+                !aDisplayStack.hasTagCompound())
+            return null;
+        Fluid tFluid = FluidRegistry.getFluid(ItemList.Display_Fluid.getItem().getDamage(aDisplayStack));
+        return new FluidStack(tFluid, (int) aDisplayStack.getTagCompound().getLong("mFluidDisplayAmount"));
+    }
+
     public static boolean containsFluid(ItemStack aStack, FluidStack aFluid, boolean aCheckIFluidContainerItems) {
         if (isStackInvalid(aStack) || aFluid == null) return false;
         if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem) aStack.getItem()).getCapacity(aStack) > 0)
@@ -2767,5 +2776,17 @@ public class GT_Utility {
                         300, 30, 0
                 )
         );
+    }
+
+    /**
+     * Add an itemstack to player inventory, or drop on ground if full.
+     * Can be called on client but it probably won't work very well.
+     */
+    public static void addItemToPlayerInventory(EntityPlayer aPlayer, ItemStack aStack) {
+        if (isStackInvalid(aStack)) return;
+        if (!aPlayer.inventory.addItemStackToInventory(aStack) && !aPlayer.worldObj.isRemote) {
+            EntityItem dropItem = aPlayer.entityDropItem(aStack, 0);
+            dropItem.delayBeforeCanPickup = 0;
+        }
     }
 }
