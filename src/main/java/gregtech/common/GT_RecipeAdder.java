@@ -944,8 +944,12 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         return addAutoclaveRecipe(aInput, aCircuit, aFluid, aOutput, aChance, aDuration, aEUt, false);
     }
 
-    public boolean addAutoclaveRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
-        if ((aInput == null) || (aFluid == null) || (aOutput == null)) {
+    public boolean addAutoclaveRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
+        return addAutoclaveRecipe(aInput, aCircuit, aFluidIn, null, aOutput, aChance, aDuration, aEUt,aCleanroom);
+    }
+
+    public boolean addAutoclaveRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, FluidStack aFluidOut, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom) {
+        if ((aInput == null) || (aFluidIn == null) || (aOutput == null)) {
             return false;
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("autoclave", aInput, aDuration)) <= 0) {
@@ -954,7 +958,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         if (!GT_Mod.gregtechproxy.mEnableCleanroom){
             aCleanroom = false;
         }
-        GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput, aCircuit}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluid}, null, aDuration, aEUt, aCleanroom ? -200 : 0);
+        GT_Recipe.GT_Recipe_Map.sAutoclaveRecipes.addRecipe(true, new ItemStack[]{aInput, aCircuit}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluidIn}, new FluidStack[]{aFluidOut}, aDuration, aEUt, aCleanroom ? -200 : 0);
         return true;
     }
 
