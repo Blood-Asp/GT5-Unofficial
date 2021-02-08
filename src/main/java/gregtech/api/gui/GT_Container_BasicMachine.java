@@ -188,6 +188,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
         if (machine == null) return null;
+        ItemStack tResultStack;
         switch (aSlotIndex) {
             case 0:
                 machine.mFluidTransfer = !machine.mFluidTransfer;
@@ -197,7 +198,10 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                 machine.mItemTransfer = !machine.mItemTransfer;
                 return null;
             case 2:
-                return pickupFluid(machine.getDrainableStack(), aPlayer);
+                tResultStack = pickupFluid(machine.getDrainableStack(), aPlayer);
+                if (machine.getDrainableStack().amount == 0)
+                    machine.setDrainableStack(null);
+                return tResultStack;
             default:
                 if (aSlotIndex == OTHER_SLOT_COUNT + 1 + machine.mInputSlotCount + machine.mOutputItems.length) {
                     // input fluid slot
@@ -216,7 +220,10 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                             // both nonnull. actually both pickup and fill is reasonable, but I'll go with fill here
                             return fillFluid(machine, aPlayer, tFluidHeld);
                         } else {
-                            return pickupFluid(tInputFluid, aPlayer);
+                            tResultStack = pickupFluid(tInputFluid, aPlayer);
+                            if (tInputFluid.amount == 0)
+                                machine.setFillableStack(null);
+                            return tResultStack;
                         }
                     }
                 } else {
