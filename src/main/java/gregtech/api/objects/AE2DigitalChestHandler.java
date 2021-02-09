@@ -17,7 +17,7 @@ public class AE2DigitalChestHandler implements appeng.api.storage.IExternalStora
     @Optional.Method(modid = "appliedenergistics2")
     public appeng.api.storage.IMEInventory getInventory(final TileEntity te, final ForgeDirection d, final appeng.api.storage.StorageChannel chan, final appeng.api.networking.security.BaseActionSource src) {
         if (chan == appeng.api.storage.StorageChannel.ITEMS) {
-            return new appeng.me.storage.MEMonitorIInventory(new appeng.util.inv.IMEAdaptor((GT_MetaTileEntity_DigitalChestBase) (((BaseMetaTileEntity) te).getMetaTileEntity()), src));
+            return ((GT_MetaTileEntity_DigitalChestBase) (((BaseMetaTileEntity) te).getMetaTileEntity()));
         }
         return null;
     }
