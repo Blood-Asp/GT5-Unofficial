@@ -209,7 +209,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                     // input fluid slot
                     ItemStack tStackHeld = aPlayer.inventory.getItemStack();
                     ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
-                    if (tStackSizedOne == null) return null;
+                    if (tStackSizedOne == null || tStackHeld.stackSize == 0) return null;
                     FluidStack tInputFluid = machine.getFillableStack();
                     FluidStack tFluidHeld = GT_Utility.getFluidForFilledItem(tStackSizedOne, true);
                     if (tInputFluid == null) {
@@ -220,7 +220,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                     } else {
                         if (tFluidHeld != null) {
                             // both nonnull. actually both pickup and fill is reasonable, but I'll go with fill here
-                            return fillFluid(machine, aPlayer, tFluidHeld, aMouseclick == 1);
+                            return fillFluid(machine, aPlayer, tFluidHeld, aMouseclick == 0);
                         } else {
                             tResultStack = pickupFluid(tInputFluid, aPlayer, aMouseclick == 0);
                             if (tInputFluid.amount == 0)
@@ -238,7 +238,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         if (aTankStack == null) return null;
         ItemStack tStackHeld = aPlayer.inventory.getItemStack();
         ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
-        if (tStackSizedOne == null) return null;
+        if (tStackSizedOne == null || tStackHeld.stackSize == 0) return null;
         int tOriginalFluidAmount = aTankStack.amount;
         ItemStack tFilled = GT_Utility.fillFluidContainer(aTankStack, tStackSizedOne, true, false);
         if (tFilled == null && tStackSizedOne.getItem() instanceof IFluidContainerItem) {
@@ -254,11 +254,12 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                 int tFilledAmount = tOriginalFluidAmount - aTankStack.amount;
                 /*
                  work out how many more items we can fill
+                 one cell is already used, so account for that
                  the round down behavior will left over a fraction of a cell worth of fluid
                  the user then get to decide what to do with it
                  it will not be too fancy if it spills out partially filled cells
                 */
-                int tAdditionalParallel = Math.min(tStackHeld.stackSize, aTankStack.amount / tFilledAmount);
+                int tAdditionalParallel = Math.min(tStackHeld.stackSize - 1, aTankStack.amount / tFilledAmount);
                 aTankStack.amount -= tFilledAmount * tAdditionalParallel;
                 tFilled.stackSize += tAdditionalParallel;
             }
@@ -285,7 +286,7 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
         // some cells cannot be partially filled
         ItemStack tStackEmptied = null;
         int tAmountTaken = 0;
-        if (tFreeSpace == aFluidHeld.amount) {
+        if (tFreeSpace >= aFluidHeld.amount) {
             // fully accepted - try take it from item now
             // IFluidContainerItem is intentionally not checked here. it will be checked later
             tStackEmptied = GT_Utility.getContainerForFilledItem(tStackSizedOne, false);
@@ -322,6 +323,11 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
     }
 
     private void replaceCursorItemStack(EntityPlayer aPlayer, ItemStack tStackResult) {
+        int tStackResultMaxStackSize = tStackResult.getMaxStackSize();
+        while (tStackResult.stackSize > tStackResultMaxStackSize) {
+            aPlayer.inventory.getItemStack().stackSize -= tStackResultMaxStackSize;
+            GT_Utility.addItemToPlayerInventory(aPlayer, tStackResult.splitStack(tStackResultMaxStackSize));
+        }
         if (aPlayer.inventory.getItemStack().stackSize == tStackResult.stackSize) {
             // every cell is mutated. it could just stay on the cursor.
             aPlayer.inventory.setItemStack(tStackResult);
