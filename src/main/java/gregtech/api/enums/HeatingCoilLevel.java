@@ -50,14 +50,14 @@ public enum HeatingCoilLevel {
          * @return the coil Level, used for Parallels in the Multi Furnace for example
          */
         public byte getLevel() {
-            return (byte) Math.min(16, 2 << (this.ordinal() - 2));
+            return (byte) (1 << Math.min(Math.max(0, this.ordinal() - 2), 4));
         }
 
         /**
          * @return the coil Discount, used for discount in the Multi Furnace for example
          */
-        public byte getCostDiscount() {
-            return (byte) Math.max(1, 2 << (this.ordinal() - 1 - 6)); //-1 bcs. of none, -4 = offset
+        public int getCostDiscount() {
+            return 1 << Math.max(0, this.ordinal() - 5);
         }
 
         public static HeatingCoilLevel getFromTier(byte tier){
