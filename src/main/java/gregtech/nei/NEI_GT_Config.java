@@ -5,8 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_Recipe;
 
-public class NEI_GT_Config
-        implements IConfigureNEI {
+public class NEI_GT_Config implements IConfigureNEI {
     public static boolean sIsAdded = true;
     public static GT_NEI_AssLineHandler ALH;
 

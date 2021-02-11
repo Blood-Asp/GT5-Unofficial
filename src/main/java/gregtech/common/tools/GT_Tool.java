@@ -19,8 +19,7 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.List;
 
-public abstract class GT_Tool
-        implements IToolStats {
+public abstract class GT_Tool implements IToolStats {
     public static final Enchantment[] FORTUNE_ENCHANTMENT = {Enchantment.fortune};
     public static final Enchantment[] LOOTING_ENCHANTMENT = {Enchantment.looting};
     public static final Enchantment[] ZERO_ENCHANTMENTS = new Enchantment[0];

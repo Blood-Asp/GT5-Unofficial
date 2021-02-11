@@ -14,8 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Iterator;
 
-public class GT_Container_Teleporter
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_Teleporter extends GT_ContainerMetaTile_Machine {
     public int mEgg = 0;
     public int mTargetD = 0;
     public int mTargetZ = 0;

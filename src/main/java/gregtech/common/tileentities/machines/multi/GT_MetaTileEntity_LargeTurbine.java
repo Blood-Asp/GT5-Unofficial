@@ -1,7 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
@@ -18,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.util.ArrayList;
 
 public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -175,15 +175,6 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             this.mMaxProgresstime = 1;
             this.mEfficiencyIncrease = 10;
             // Overvoltage is handled inside the MultiBlockBase when pushing out to dynamos.  no need to do it here.
-            /*
-            if(this.mDynamoHatches.size()>0){
-                for(GT_MetaTileEntity_Hatch dynamo:mDynamoHatches)
-            	    if(isValidMetaTileEntity(dynamo) && dynamo.maxEUOutput() < mEUt) {
-                        GT_Log.exp.println("Turbine "+this.mName+" DynHatch Explosion!");
-                        explodeMultiblock();
-                    }
-            }
-            */
             return true;
         }
     }

@@ -8,8 +8,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class GT_MinableOreGenerator
-        extends WorldGenerator {
+public class GT_MinableOreGenerator extends WorldGenerator {
     private Block minableBlockId;
     private Block mBlock;
     private int minableBlockMeta = 0;

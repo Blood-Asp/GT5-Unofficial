@@ -4,8 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class GT_Server
-        extends GT_Proxy {
+public class GT_Server extends GT_Proxy {
     public boolean isServerSide() {
         return true;
     }

@@ -6,8 +6,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_RedstoneConductor
-        extends GT_CoverBehavior {
+public class GT_Cover_RedstoneConductor extends GT_CoverBehavior {
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if (aCoverVariable == 0) {
             aTileEntity.setOutputRedstoneSignal(aSide, aTileEntity.getStrongestRedstone());

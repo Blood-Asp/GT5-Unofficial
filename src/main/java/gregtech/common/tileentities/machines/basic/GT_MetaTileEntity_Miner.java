@@ -80,7 +80,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
     }
 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (aStack.getItem() == MINING_PIPE.getItem());
+        return (super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack)) && (mDisableFilter || aStack.getItem() == MINING_PIPE.getItem());
     }
 
     public boolean hasFreeSpace() {

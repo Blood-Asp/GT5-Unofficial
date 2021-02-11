@@ -11,8 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 
-public class Behaviour_Sonictron
-        extends Behaviour_None {
+public class Behaviour_Sonictron extends Behaviour_None {
     public static final IItemBehaviour<GT_MetaBase_Item> INSTANCE = new Behaviour_Sonictron();
 
     public static int getCurrentIndex(ItemStack aStack) {
@@ -91,7 +90,7 @@ public class Behaviour_Sonictron
             if (aNewContent[i] == null) {
                 aInventory[i] = null;
             } else {
-                aInventory[i] = GT_Utility.copy(new Object[]{aNewContent[i]});
+                aInventory[i] = GT_Utility.copy(aNewContent[i]);
             }
         }
     }

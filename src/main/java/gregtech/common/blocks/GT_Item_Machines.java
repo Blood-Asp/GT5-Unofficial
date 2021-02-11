@@ -4,7 +4,9 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IConnectable;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Frame;
@@ -45,20 +47,22 @@ public class GT_Item_Machines extends ItemBlock {
                 IGregTechTileEntity tTileEntity = GregTech_API.METATILEENTITIES[tDamage].getBaseMetaTileEntity();
                 if (tTileEntity.getDescription() != null) {
                     int i = 0;
+                    IMetaTileEntity metaTileEntity = tTileEntity.getMetaTileEntity();
+                    String suffix = (metaTileEntity instanceof MetaTileEntity && ((MetaTileEntity) metaTileEntity).isDisplaySecondaryDescription()) ? "Secondary_" : "";
                     for (String tDescription : tTileEntity.getDescription()) {
                         if (GT_Utility.isStringValid(tDescription)) {
-                        	if(tDescription.contains("%%%")){
-                        		String[] tString = tDescription.split("%%%");
-                        		if(tString.length>=2){
-                                                StringBuffer tBuffer = new StringBuffer();
-                        			Object tRep[] = new String[tString.length / 2];
-                        			for (int j = 0; j < tString.length; j++)
-                        				if (j % 2 == 0) tBuffer.append(tString[j]);
-                        				else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}
-                                                aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished), tRep));
-                        		}
-                        	}else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
-                            aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
+                            if(tDescription.contains("%%%")){
+                                String[] tString = tDescription.split("%%%");
+                                if(tString.length>=2){
+                                    StringBuffer tBuffer = new StringBuffer();
+                                    Object tRep[] = new String[tString.length / 2];
+                                    for (int j = 0; j < tString.length; j++)
+                                        if (j % 2 == 0) tBuffer.append(tString[j]);
+                                        else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}
+                                    aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_" + suffix + "DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished ), tRep));
+                                }
+                            }else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_" + suffix + "DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
+                                aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
                         }else i++;
                     }
                 }

@@ -3,8 +3,7 @@ package gregtech.common.redstonecircuits;
 import gregtech.api.interfaces.IRedstoneCircuitBlock;
 import gregtech.api.util.GT_CircuitryBehavior;
 
-public class GT_Circuit_Repeater
-        extends GT_CircuitryBehavior {
+public class GT_Circuit_Repeater extends GT_CircuitryBehavior {
     public GT_Circuit_Repeater(int aIndex) {
         super(aIndex);
     }
@@ -59,9 +58,8 @@ public class GT_Circuit_Repeater
     }
 
     public String getDataDescription(int[] aCircuitData, int aCircuitDataIndex) {
-        switch (aCircuitDataIndex) {
-            case 0:
-                return "Delay";
+        if (aCircuitDataIndex == 0) {
+            return "Delay";
         }
         return "";
     }

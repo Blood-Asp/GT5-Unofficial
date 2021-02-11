@@ -23,10 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidHandler;
 
-public class GT_MetaTileEntity_Boiler_Bronze
-        extends GT_MetaTileEntity_Boiler {
-
-
+public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
                 "An early way to get Steam Power",

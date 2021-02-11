@@ -6,8 +6,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
-public class GT_Container_BronzeBlastFurnace
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_BronzeBlastFurnace extends GT_ContainerMetaTile_Machine {
     public GT_Container_BronzeBlastFurnace(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
     }

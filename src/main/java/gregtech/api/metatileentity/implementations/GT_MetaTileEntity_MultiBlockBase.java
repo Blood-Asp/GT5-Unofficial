@@ -16,6 +16,8 @@ import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
+import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
@@ -67,6 +70,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public static boolean isValidMetaTileEntity(MetaTileEntity aMetaTileEntity) {
         return aMetaTileEntity.getBaseMetaTileEntity() != null && aMetaTileEntity.getBaseMetaTileEntity().getMetaTileEntity() == aMetaTileEntity && !aMetaTileEntity.getBaseMetaTileEntity().isDead();
+    }
+
+    @Override
+    public boolean isDisplaySecondaryDescription() {
+        return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
     }
 
     @Override
@@ -727,11 +735,25 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public boolean addOutput(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return false;
         aStack = GT_Utility.copy(aStack);
-//		FluidStack aLiquid = GT_Utility.getFluidForFilledItem(aStack, true);
-//		if (aLiquid == null) {
         boolean outputSuccess = true;
         while (outputSuccess && aStack.stackSize > 0) {
             outputSuccess = false;
+
+            if (GregTech_API.mAE2) {
+                // this separate cycle may be refactored out, after this function will hopefully be totally refactored
+                // for now it is here to avoid splitting stack when we have ME output bus
+                for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
+                    // TODO: If ever there will be another hatch storing in some external storage, here should be an interface check
+                    if (tHatch instanceof GT_MetaTileEntity_Hatch_OutputBus_ME && isValidMetaTileEntity(tHatch)) {
+                        int rest = ((GT_MetaTileEntity_Hatch_OutputBus_ME) tHatch).store(aStack);
+                        if (rest != aStack.stackSize)
+                            outputSuccess = true;
+                        aStack.stackSize = rest;
+                        if (rest == 0)
+                            return true;
+                    }
+                }
+            }
             ItemStack single = aStack.splitStack(1);
             for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
                 if (!outputSuccess && isValidMetaTileEntity(tHatch)) {
@@ -746,16 +768,6 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
                 }
             }
         }
-//		}else {
-//			for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
-//				if (isValidMetaTileEntity(tHatch) && GT_ModHandler.isSteam(aLiquid)?tHatch.outputsSteam():tHatch.outputsLiquids()) {
-//					int tAmount = tHatch.fill(aLiquid, false);
-//					if (tAmount >= aLiquid.amount) {
-//						return tHatch.fill(aLiquid, true) >= aLiquid.amount;
-//					}
-//				}
-//			}
-//		}
         return outputSuccess;
     }
 

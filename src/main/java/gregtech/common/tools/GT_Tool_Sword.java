@@ -10,8 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 
-public class GT_Tool_Sword
-        extends GT_Tool {
+public class GT_Tool_Sword extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 200;
     }
@@ -53,7 +52,7 @@ public class GT_Tool_Sword
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {

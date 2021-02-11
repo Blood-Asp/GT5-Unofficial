@@ -17,8 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 
-public class GT_MetaGenerated_Item_Renderer
-        implements IItemRenderer {
+public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
     public GT_MetaGenerated_Item_Renderer() {
         GT_MetaGenerated_Item tItem;
         for (Iterator i$ = GT_MetaGenerated_Item.sInstances.values().iterator(); i$.hasNext(); MinecraftForgeClient.registerItemRenderer(tItem, this)) {

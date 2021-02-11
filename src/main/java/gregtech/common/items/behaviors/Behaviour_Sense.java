@@ -11,8 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class Behaviour_Sense
-        extends Behaviour_None {
+public class Behaviour_Sense extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.sense", "Rightclick to harvest Crop Sticks");
 

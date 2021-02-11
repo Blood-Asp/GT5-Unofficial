@@ -35,8 +35,7 @@ import java.util.List;
 
 import static gregtech.api.util.GT_Utility.trans;
 
-public class GT_NEI_AssLineHandler
-        extends TemplateRecipeHandler {
+public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
     public static final int sOffsetX = 5;
     public static final int sOffsetY = 11;
 
@@ -49,7 +48,7 @@ public class GT_NEI_AssLineHandler
 
     public GT_NEI_AssLineHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {//this is called when recipes should be shown
         this.mRecipeMap = aRecipeMap;
-        this.transferRects.add(new RecipeTransferRect(new Rectangle(138, 18, 18, 18), getOverlayIdentifier(), new Object[0]));
+        this.transferRects.add(new RecipeTransferRect(new Rectangle(138, 18, 18, 18), getOverlayIdentifier()));
         if (!NEI_GT_Config.sIsAdded) {
             FMLInterModComms.sendRuntimeMessage(GT_Values.GT, "NEIPlugins", "register-crafting-handler", "gregtech@" + getRecipeName() + "@" + getOverlayIdentifier());
             GuiCraftingRecipe.craftinghandlers.add(this);
@@ -96,7 +95,7 @@ public class GT_NEI_AssLineHandler
             tResults.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tResults.add(GT_Utility.copy(new Object[]{tData.filledContainer}));
+                    tResults.add(GT_Utility.copy(tData.filledContainer));
                 }
             }
         }
@@ -109,7 +108,7 @@ public class GT_NEI_AssLineHandler
                         break;
                     }
                 }
-            }else{
+            } else {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
                     if (tNEIRecipe.contains(tNEIRecipe.mOutputs, tStack)) {
@@ -137,7 +136,7 @@ public class GT_NEI_AssLineHandler
             tInputs.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tInputs.add(GT_Utility.copy(new Object[]{tData.filledContainer}));
+                    tInputs.add(GT_Utility.copy(tData.filledContainer));
                 }
             }
         }
@@ -250,17 +249,9 @@ public class GT_NEI_AssLineHandler
         }
     }
 
-    public static class GT_RectHandler
-            implements IContainerInputHandler, IContainerTooltipHandler {
+    public static class GT_RectHandler implements IContainerInputHandler, IContainerTooltipHandler {
         public boolean mouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
-            //if (canHandle(gui)) {
-            //    if (button == 0) {
-            //        return transferRect(gui, false);
-            //    }
-            //    if (button == 1) {
-            //        return transferRect(gui, true);
-            //    }
-            //}
+
             return false;
         }
 
@@ -274,11 +265,6 @@ public class GT_NEI_AssLineHandler
         }
 
         public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
-            //if ((canHandle(gui)) && (currenttip.isEmpty())) {
-            //    if (new Rectangle(138, 18, 18, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) {
-            //        currenttip.add("Recipes");
-            //    }
-            //}
             return currenttip;
         }
 

@@ -27,8 +27,7 @@ import java.util.ArrayList;
 
 import static gregtech.api.enums.GT_Values.VN;
 
-public class GT_MetaTileEntity_MultiFurnace
-        extends GT_MetaTileEntity_AbstractMultiFurnace {
+public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMultiFurnace {
     private int mLevel = 0;
     private int mCostDiscount = 1;
 
@@ -110,12 +109,7 @@ public class GT_MetaTileEntity_MultiFurnace
                 tCurrenParrallel = tMaxParrallel;
                 break;
             }
-//            this.mOutputItems = new ItemStack[8 * this.mLevel];
-//            for (int i = 0; (i < 256) && (j < this.mOutputItems.length); i++) {
-//                if (null != (this.mOutputItems[j] = GT_ModHandler.getSmeltingOutput((ItemStack) tInputList.get(i % tInputList.size()), true, null))) {
-//                    j++;
-//                }
-//            }
+
         tCurrenParrallel *= tOutputStack.stackSize;
         this.mOutputItems = new ItemStack[(tCurrenParrallel/64)+1];
         for (int i = 0; i < this.mOutputItems.length; i++) {

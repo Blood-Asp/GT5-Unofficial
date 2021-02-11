@@ -12,10 +12,9 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-public class GT_MetaTileEntity_Printer
-        extends GT_MetaTileEntity_BasicMachine {
+public class GT_MetaTileEntity_Printer extends GT_MetaTileEntity_BasicMachine {
     public GT_MetaTileEntity_Printer(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "It can copy Books and paint Stuff", 1, 1, "Printer.png", GT_Recipe.GT_Recipe_Map.sPrinterRecipes.mNEIName, new ITexture[0]);
+        super(aID, aName, aNameRegional, aTier, 1, "It can copy Books and paint Stuff", 1, 1, "Printer.png", GT_Recipe.GT_Recipe_Map.sPrinterRecipes.mNEIName);
     }
 
     public GT_MetaTileEntity_Printer(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -34,7 +33,7 @@ public class GT_MetaTileEntity_Printer
                 int i = 0;
                 for (int j = tList.size() - 1; i < j; i++) {
                     if (GT_Utility.areStacksEqual(getInputAt(0), (ItemStack) tList.get(i))) {
-                        this.mOutputItems[0] = GT_Utility.copyAmount(1L, new Object[]{tList.get(i + 1)});
+                        this.mOutputItems[0] = GT_Utility.copyAmount(1L, tList.get(i + 1));
                         calculateOverclockedNess(1,32);
                         //In case recipe is too OP for that machine
                         if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)

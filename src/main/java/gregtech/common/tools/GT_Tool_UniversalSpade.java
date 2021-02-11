@@ -15,8 +15,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_UniversalSpade
-        extends GT_Tool {
+public class GT_Tool_UniversalSpade extends GT_Tool {
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
@@ -58,7 +57,7 @@ public class GT_Tool_UniversalSpade
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
@@ -103,7 +102,7 @@ public class GT_Tool_UniversalSpade
         aPlayer.triggerAchievement(AchievementList.buildSword);
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "unitool");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

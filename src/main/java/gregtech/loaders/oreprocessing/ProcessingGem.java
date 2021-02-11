@@ -69,7 +69,7 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
                     case "Coal":
                     case "Charcoal":
                         if (gregtech.api.GregTech_API.sRecipeFile.get(gregtech.api.enums.ConfigCategories.Recipes.disabledrecipes, "torchesFromCoal", false)) {
-                            GT_ModHandler.removeRecipe(GT_Utility.copyAmount(1L, aStack), null, null, new ItemStack(net.minecraft.init.Items.stick, 1, 0));
+                            GT_ModHandler.removeRecipeDelayed(GT_Utility.copyAmount(1L, aStack), null, null, new ItemStack(net.minecraft.init.Items.stick, 1, 0));
                         }
                         break;
                     case "CertusQuartz":
@@ -101,7 +101,6 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
                 if (aFuelPower)
                     GT_Values.RA.addFuel(GT_Utility.copyAmount(1L, aStack), null, aMaterial.mFuelPower * 8, aMaterial.mFuelType);
                 if (!aNoWorking) {
-//                    GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, new Object[]{aStack}), GT_OreDictUnificator.get(OrePrefixes.stickLong, aMaterial, 3L), GT_OreDictUnificator.getDust(aMaterial, aPrefix.mMaterialAmount - OrePrefixes.stickLong.mMaterialAmount * 3L), (int) Math.max(aMaterialMass * 10L, 1L), 16);
                     if (aMaterial.mUnificatable && (aMaterial.mMaterialInto == aMaterial))
                         if (aSpecialRecipeReq)
                             GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, aMaterial, 4L), GT_Proxy.tBits, new Object[]{"X", "m", 'X', OrePrefixes.gemExquisite.get(aMaterial)});

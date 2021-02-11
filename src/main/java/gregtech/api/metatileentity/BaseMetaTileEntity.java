@@ -1,5 +1,15 @@
 package gregtech.api.metatileentity;
 
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.security.IActionHost;
+import appeng.api.util.AECableType;
+import appeng.api.util.DimensionalCoord;
+import appeng.me.helpers.AENetworkProxy;
+import appeng.me.helpers.IGridProxyable;
+import appeng.tile.TileEvent;
+import appeng.tile.events.TileEventType;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
@@ -51,7 +61,10 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
  * <p/>
  * This is the main TileEntity for EVERYTHING.
  */
-public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileEntity {
+@Optional.InterfaceList(value = {
+    @Optional.Interface(iface = "appeng.api.networking.security.IActionHost", modid = "appliedenergistics2", striprefs = true),
+    @Optional.Interface(iface = "appeng.me.helpers.IGridProxyable", modid = "appliedenergistics2", striprefs = true)})
+public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileEntity, IActionHost, IGridProxyable {
     private final GT_CoverBehavior[] mCoverBehaviors = new GT_CoverBehavior[]{GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior};
     protected MetaTileEntity mMetaTileEntity;
     protected long mStoredEnergy = 0, mStoredSteam = 0;
@@ -918,11 +931,15 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mMetaTileEntity.setBaseMetaTileEntity(null);
         }
         super.invalidate();
+        if (GregTech_API.mAE2)
+            invalidateAE();
     }
 
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
+        if (GregTech_API.mAE2)
+            onChunkUnloadAE();
     }
 
     @Override
@@ -2210,5 +2227,78 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
          }
          return slotIndex + indexShift;
      }
-}
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public IGridNode getGridNode(ForgeDirection forgeDirection) {
+        if (mFacing != forgeDirection.ordinal())
+            return null;
+        AENetworkProxy gp = getProxy();
+        return gp != null ? gp.getNode() : null;
+    }
 
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public AECableType getCableConnectionType(ForgeDirection forgeDirection) {
+        return mMetaTileEntity == null ? AECableType.NONE : mMetaTileEntity.getCableConnectionType(forgeDirection);
+     }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public void securityBreak() {}
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public IGridNode getActionableNode() {
+        AENetworkProxy gp = getProxy();
+        return gp != null ? gp.getNode() : null;
+     }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public AENetworkProxy getProxy() {
+        return mMetaTileEntity == null ? null : mMetaTileEntity.getProxy();
+    }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public DimensionalCoord getLocation() { return new DimensionalCoord( this ); }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public void gridChanged() {
+        if (mMetaTileEntity != null)
+            mMetaTileEntity.gridChanged();
+    }
+
+    @TileEvent( TileEventType.WORLD_NBT_READ )
+    @Optional.Method(modid = "appliedenergistics2")
+    public void readFromNBT_AENetwork( final NBTTagCompound data )
+    {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            getProxy().readFromNBT( data );
+    }
+
+    @TileEvent( TileEventType.WORLD_NBT_WRITE )
+    @Optional.Method(modid = "appliedenergistics2")
+    public void writeToNBT_AENetwork( final NBTTagCompound data )
+    {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.writeToNBT( data );
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    void onChunkUnloadAE() {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.onChunkUnload();
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    void invalidateAE() {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.invalidate();
+    }
+}

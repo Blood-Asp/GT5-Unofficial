@@ -3,8 +3,7 @@ package gregtech.common.redstonecircuits;
 import gregtech.api.interfaces.IRedstoneCircuitBlock;
 import gregtech.api.util.GT_CircuitryBehavior;
 
-public class GT_Circuit_BasicLogic
-        extends GT_CircuitryBehavior {
+public class GT_Circuit_BasicLogic extends GT_CircuitryBehavior {
     public GT_Circuit_BasicLogic(int aIndex) {
         super(aIndex);
     }

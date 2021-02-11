@@ -9,8 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_Knife
-        extends GT_Tool_Sword {
+public class GT_Tool_Knife extends GT_Tool_Sword {
     public int getToolDamagePerBlockBreak() {
         return 100;
     }

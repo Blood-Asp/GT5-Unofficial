@@ -3,6 +3,7 @@ package gregtech.api.threads;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IMachineBlockUpdateable;
+import gregtech.common.GT_Proxy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -101,8 +102,19 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         try {
             while (!tQueue.isEmpty()) {
                 final ChunkCoordinates aCoords = tQueue.poll();
-                TileEntity tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
-
+                final TileEntity tTileEntity;
+                final boolean isMachineBlock;
+                
+                // This might load a chunk... which might load a TileEntity... which might get added to `loadedTileEntityList`... which might be in the process
+                // of being iterated over during `UpdateEntities()`... which might cause a ConcurrentModificationException.  So, lock that shit.
+                GT_Proxy.TICK_LOCK.lock();
+                try {
+                    tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
+                    isMachineBlock = GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ));
+                } finally {
+                    GT_Proxy.TICK_LOCK.unlock();
+                }
+                
                 // See if the block itself needs an update
                 if (tTileEntity instanceof IMachineBlockUpdateable)
                     ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
@@ -113,7 +125,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
                 // 3) If the block at the coordinates is marked as a machine block
                 if (visited.size() < 5 
                     || (tTileEntity instanceof IMachineBlockUpdateable && ((IMachineBlockUpdateable) tTileEntity).isMachineBlockUpdateRecursive()) 
-                    || GregTech_API.isMachineBlock(world.getBlock(aCoords.posX, aCoords.posY, aCoords.posZ), world.getBlockMetadata(aCoords.posX, aCoords.posY, aCoords.posZ))) 
+                    || isMachineBlock) 
                 {
                     ChunkCoordinates tCoords;
                     

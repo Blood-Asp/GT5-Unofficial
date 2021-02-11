@@ -21,8 +21,7 @@ import java.util.List;
 import static gregtech.api.enums.GT_Values.M;
 import static gregtech.api.enums.OrePrefixes.cellMolten;
 
-public class GT_MetaGenerated_Item_99
-        extends GT_MetaGenerated_Item {
+public class GT_MetaGenerated_Item_99 extends GT_MetaGenerated_Item {
     public static GT_MetaGenerated_Item_99 INSTANCE;
 
     private BitSet enabled=new BitSet();

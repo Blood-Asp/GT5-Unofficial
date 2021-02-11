@@ -104,7 +104,7 @@ public final class GT_GUIContainerVolumetricFlask extends GuiContainer {
                         amount.setText("1");
                     }
 
-                } catch (NumberFormatException localNumberFormatException) {
+                } catch (NumberFormatException ignored) {
                 }
             } else {
                 super.keyTyped(character, key);
@@ -159,7 +159,7 @@ public final class GT_GUIContainerVolumetricFlask extends GuiContainer {
             out = Long.toString(result);
             Integer.parseInt(out);
             amount.setText(out);
-        } catch (NumberFormatException localNumberFormatException) {
+        } catch (NumberFormatException ignored) {
         }
     }
 
@@ -168,7 +168,7 @@ public final class GT_GUIContainerVolumetricFlask extends GuiContainer {
         try {
             DecimalFormat df = new DecimalFormat("+#;-#");
             return df.parse(btn.displayString).intValue();
-        } catch (ParseException e) {
+        } catch (ParseException ignored) {
         }
 
         return 0;

@@ -10,9 +10,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenera
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 
-public class GT_MetaTileEntity_GasTurbine
-        extends GT_MetaTileEntity_BasicGenerator {
-
+public class GT_MetaTileEntity_GasTurbine extends GT_MetaTileEntity_BasicGenerator {
     public static final int BASE_POLLUTION = 1;
 
     public int mEfficiency;

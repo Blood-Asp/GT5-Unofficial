@@ -276,15 +276,13 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 }
                 tOut = clean(tOut);
                 this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-                List<ItemStack> overStacks = new ArrayList<ItemStack>();
-                for (int f = 0; f < tOut.length; f++) {
-                    while (tOut[f].getMaxStackSize() < tOut[f].stackSize) {
-                        if (tOut[f] != null) {
-                            ItemStack tmp = tOut[f].copy();
-                            tmp.stackSize = tmp.getMaxStackSize();
-                            tOut[f].stackSize = tOut[f].stackSize - tOut[f].getMaxStackSize();
-                            overStacks.add(tmp);
-                        }
+                List<ItemStack> overStacks = new ArrayList<>();
+                for (ItemStack itemStack : tOut) {
+                    while (itemStack != null && itemStack.getMaxStackSize() < itemStack.stackSize) {
+                        ItemStack tmp = itemStack.copy();
+                        tmp.stackSize = tmp.getMaxStackSize();
+                        itemStack.stackSize = itemStack.stackSize - itemStack.getMaxStackSize();
+                        overStacks.add(tmp);
                     }
                 }
                 if (overStacks.size() > 0) {
@@ -301,9 +299,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 this.mOutputFluids = new FluidStack[]{tFOut};
                 updateSlots();
                 return true;
-            }/* else{
-                ...remoteRecipeCheck()
-            }*/
+            }
         }
     	return false;
     }

@@ -80,6 +80,7 @@ public class Textures {
         BLOCK_STEELEAF,
         BLOCK_ICHORIUM,
         BLOCK_FIRESTONE,
+        BLOCK_SHADOW,
 
         OVERLAY_ENERGY_IN_POWER,
         OVERLAY_ENERGY_OUT_POWER,
@@ -903,7 +904,9 @@ public class Textures {
         PIPE_RESTRICTOR_UR,
         PIPE_RESTRICTOR_DL,
         PIPE_RESTRICTOR_DR,
-        PIPE_RESTRICTOR_LR;
+        PIPE_RESTRICTOR_LR,
+
+        OVERLAY_ME_HATCH;
 
         /**
          * Icon for Fresh CFoam
@@ -1302,7 +1305,8 @@ public class Textures {
                         BLOCK_HSSS,
                         BLOCK_STEELEAF,
                         BLOCK_ICHORIUM,
-                        BLOCK_FIRESTONE
+                        BLOCK_FIRESTONE,
+                        BLOCK_SHADOW
                 },
                 STORAGE_BLOCKS9 = new IIconContainer[]{
                         BLOCK_AERCRYSTAL,

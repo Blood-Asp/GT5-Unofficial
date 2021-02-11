@@ -12,8 +12,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fluids.Fluid;
 
-public abstract class GT_Cover_RedstoneWirelessBase
-        extends GT_CoverBehavior {
+public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
     public boolean onCoverRemoval(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, boolean aForced) {
         GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
         return true;

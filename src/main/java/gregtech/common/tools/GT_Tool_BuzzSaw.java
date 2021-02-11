@@ -11,8 +11,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
-public class GT_Tool_BuzzSaw
-        extends GT_Tool_Saw {
+public class GT_Tool_BuzzSaw extends GT_Tool_Saw {
     public int getToolDamagePerContainerCraft() {
         return 100;
     }
@@ -30,19 +29,19 @@ public class GT_Tool_BuzzSaw
     }
 
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(105));
+        return (String) GregTech_API.sSoundList.get(105);
     }
 
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {

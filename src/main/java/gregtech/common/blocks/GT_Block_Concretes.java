@@ -72,29 +72,4 @@ public class GT_Block_Concretes extends GT_Block_Stones_Abstract implements IBlo
             aEntity.motionX *= tSpeed; aEntity.motionZ *= tSpeed;
         }
     }
-
-    /**
-    public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity aEntity) {
-        Block tBlock = aWorld.getBlock(aX, aY + 1, aZ);
-        if (((aEntity instanceof EntityLivingBase)) && (!(tBlock instanceof IFluidBlock)) && (!(tBlock instanceof BlockLiquid)) && (aEntity.onGround) && (!aEntity.isInWater()) && (!aEntity.isWet())) {
-            if (aEntity.isSneaking()) {
-                aEntity.motionX *= 0.8999999761581421D;
-                aEntity.motionZ *= 0.8999999761581421D;
-            } else {
-                if (aEntity.motionX < 6.0 && aEntity.motionZ < 6.0) {
-                    aEntity.motionX *= 1.100000023841858D;
-                    aEntity.motionZ *= 1.100000023841858D;
-                }
-            }
-        }
-    }
-
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-        Block tBlock = aWorld.getBlock(aX, aY + 1, aZ);
-        if (((tBlock instanceof IFluidBlock)) || ((tBlock instanceof BlockLiquid))) {
-            return super.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
-        }
-        return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 0.875D, aZ + 1);
-    }
-	**/
 }

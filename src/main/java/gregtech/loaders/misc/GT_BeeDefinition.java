@@ -1234,7 +1234,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
             dis -> {
                 IBeeMutationCustom tMutation = dis.registerMutation(getSpecies(MAGICBEES, "TCChaos"), getSpecies(MAGICBEES, "TCVoid"), 6);
                 if (Loader.isModLoaded("TaintedMagic"))
-                    tMutation.requireResource(GameRegistry.findBlock("TaintedMagic", "BlockShadowmetal"), 0);
+                    tMutation.requireResource("blockShadow");
             }
     ),
     DIVIDED(GT_BranchDefinition.THAUMIC, "Unstable", true, new Color(0xF0F0F0), new Color(0xDCDCDC),

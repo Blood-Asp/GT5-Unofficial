@@ -239,10 +239,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     public boolean ignoreController(Block tTileEntity) {
-        if (!controller && tTileEntity == GregTech_API.sBlockMachines) {
-            return true;
-        }
-        return false;
+        return !controller && tTileEntity == GregTech_API.sBlockMachines;
     }
 
     public boolean addColdFluidOutputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
