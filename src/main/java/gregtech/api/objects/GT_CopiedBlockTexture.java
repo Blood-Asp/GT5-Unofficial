@@ -2,10 +2,12 @@ package gregtech.api.objects;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_CopiedBlockTexture implements ITexture {
     private final Block mBlock;
@@ -43,46 +45,58 @@ public class GT_CopiedBlockTexture implements ITexture {
 
     @Override
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(5);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.EAST.ordinal());
         aRenderer.field_152631_f = true;
+        new LightingHelper(aRenderer)
+                .setupLightingXPos(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.EAST.ordinal(), 0xffffff);
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, aIcon);
         aRenderer.field_152631_f = false;
     }
 
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(4);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.WEST.ordinal());
+        new LightingHelper(aRenderer)
+                .setupLightingXNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.WEST.ordinal(), 0xffffff);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, aIcon);
     }
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(1);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 1.0F), (int) (mRGBa[1] * 1.0F), (int) (mRGBa[2] * 1.0F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.UP.ordinal());
+            new LightingHelper(aRenderer)
+                    .setupLightingYPos(aBlock, aX, aY, aZ)
+                    .setupColor(ForgeDirection.UP.ordinal(), 0xffffff);
         aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, aIcon);
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(0);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.5F), (int) (mRGBa[1] * 0.5F), (int) (mRGBa[2] * 0.5F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.DOWN.ordinal());
+        new LightingHelper(aRenderer)
+                .setupLightingYNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
         aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, aIcon);
     }
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(3);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.SOUTH.ordinal());
+        new LightingHelper(aRenderer)
+                .setupLightingZPos(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.SOUTH.ordinal(), 0xffffff);
         aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, aIcon);
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        IIcon aIcon = getIcon(2);
-        Tessellator.instance.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        IIcon aIcon = getIcon(ForgeDirection.NORTH.ordinal());
         aRenderer.field_152631_f = true;
+        new LightingHelper(aRenderer)
+                .setupLightingZNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.NORTH.ordinal(), 0xffffff);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, aIcon);
         aRenderer.field_152631_f = false;
     }

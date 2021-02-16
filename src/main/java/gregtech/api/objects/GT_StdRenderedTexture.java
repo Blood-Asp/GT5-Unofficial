@@ -2,9 +2,10 @@ package gregtech.api.objects;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * This ITexture implementation extends the GT_RenderedTexture class
@@ -30,11 +31,12 @@ public class GT_StdRenderedTexture extends GT_RenderedTexture{
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.5F), (int) (mRGBa[1] * 0.5F), (int) (mRGBa[2] * 0.5F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingYNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.DOWN.ordinal(), mRGBa);
         aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(128, 128, 128, 255);
+            lighting.setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
             aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
     }
