@@ -2,10 +2,7 @@ package gregtech.common.tileentities.machines.basic;
 
 import com.google.common.collect.ArrayListMultimap;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -31,8 +28,33 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachine {
+
     public GT_MetaTileEntity_Disassembler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "Disassembles Machines at " + Math.min(50 + 10 * aTier,100) + "% Efficiency", 1, 9, "Disassembler.png", "", new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER));
+        super(
+                aID,
+                aName,
+                aNameRegional,
+                aTier,
+                1,
+                new String[]{
+                    "Disassembles Machines up to " + GT_Values.TIER_COLORS[aTier] + GT_Values.VOLTAGE_NAMES[aTier],
+                    "Can also disassemble most assembler recipes!"
+                },
+                1,
+                9,
+                "Disassembler.png",
+                "",
+
+                //Textures
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER_ACTIVE),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
+                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER)
+        );
     }
 
     public GT_MetaTileEntity_Disassembler(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -179,34 +201,28 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 inputsStacks = recipesColl.stream()
                         .map(x -> x.mInputs)
                         .collect(Collectors.toSet());
-            ItemStack input = inputs[i];
-            ItemData data = GT_OreDictUnificator.getItemData(input);
-            if (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null || data.mPrefix == null) {
-                output[i] = input;
-                continue;
-            }
-            handleReplacement(inputsStacks, data, output, input, i);
+            handleRecipeTransformationInternal(inputs, output, inputsStacks, i);
         }
         addOthersAndHandleAlwaysReplace(inputs, output);
     }
 
     /**
      * Public Interface for ReverseRecipes, do not call inside of this class.
-     * @param inputs
-     * @param output
-     * @param inputsStacks
      */
     public static void handleRecipeTransformation(ItemStack[] inputs, ItemStack[] output, Set<ItemStack[]> inputsStacks) {
-        for (int i = 0, inputsLength = inputs.length; i < inputsLength; i++) {
-            ItemStack input = inputs[i];
-            ItemData data = GT_OreDictUnificator.getItemData(input);
-            if (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null || data.mPrefix == null) {
-                output[i] = input;
-                continue;
-            }
-            handleReplacement(inputsStacks, data, output, input, i);
-        }
+        for (int i = 0, inputsLength = inputs.length; i < inputsLength; i++)
+            handleRecipeTransformationInternal(inputs, output, inputsStacks, i);
         addOthersAndHandleAlwaysReplace(inputs, output);
+    }
+
+    private static void handleRecipeTransformationInternal(ItemStack[] inputs, ItemStack[] output, Set<ItemStack[]> inputsStacks, int i) {
+        ItemStack input = inputs[i];
+        ItemData data = GT_OreDictUnificator.getItemData(input);
+        if (data == null || data.mMaterial == null || data.mMaterial.mMaterial == null || data.mPrefix == null) {
+            output[i] = input;
+            return;
+        }
+        handleReplacement(inputsStacks, data, output, input, i);
     }
 
     private static void addOthersAndHandleAlwaysReplace(ItemStack[] inputs, ItemStack[] output){
