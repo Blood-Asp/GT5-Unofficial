@@ -21,7 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
-@Optional.Interface(iface = "appeng.api.storage.IMEMonitor", modid = "appliedenergistics2")
+@Optional.Interface(iface = "appeng.api.storage.IMEMonitor", modid = "appliedenergistics2", striprefs = true)
 public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements appeng.api.storage.IMEMonitor<appeng.api.storage.data.IAEItemStack> {
     private Map<appeng.api.storage.IMEMonitorHandlerReceiver<appeng.api.storage.data.IAEItemStack>, Object> listeners = null;
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
