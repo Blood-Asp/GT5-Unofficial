@@ -212,6 +212,8 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                     if (tStackSizedOne == null || tStackHeld.stackSize == 0) return null;
                     FluidStack tInputFluid = machine.getFillableStack();
                     FluidStack tFluidHeld = GT_Utility.getFluidForFilledItem(tStackSizedOne, true);
+                    if (tFluidHeld != null && tFluidHeld.amount <= 0)
+                        tFluidHeld = null;
                     if (tInputFluid == null) {
                         if (tFluidHeld == null)
                             // both null -> no op
