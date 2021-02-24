@@ -4,10 +4,12 @@ import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.IColorModulationContainer;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
     final IIconContainer mIconContainer;
@@ -37,36 +39,38 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
 
     @Override
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.field_152631_f = true;
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingXPos(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.EAST.ordinal(), mRGBa);
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(153, 153, 153, 255);
+            lighting.setupColor(ForgeDirection.EAST.ordinal(), 0xffffff);
             aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
         aRenderer.field_152631_f = false;
     }
 
-
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.6F), (int) (mRGBa[1] * 0.6F), (int) (mRGBa[2] * 0.6F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingXNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.WEST.ordinal(), mRGBa);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(153, 153, 153, 255);
+            lighting.setupColor(ForgeDirection.WEST.ordinal(), 0xffffff);
             aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
     }
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 1.0F), (int) (mRGBa[1] * 1.0F), (int) (mRGBa[2] * 1.0F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingYPos(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.UP.ordinal(), mRGBa);
         aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(255, 255, 255, 255);
+            lighting.setupColor(ForgeDirection.UP.ordinal(), 0xffffff);
             aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
     }
@@ -74,7 +78,6 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.5F), (int) (mRGBa[1] * 0.5F), (int) (mRGBa[2] * 0.5F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         IIcon aIcon = mIconContainer.getIcon();
 
         float minU = aIcon.getInterpolatedU((1.0D - aRenderer.renderMaxX) * 16.0D);
@@ -98,13 +101,30 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         double minZ = aZ + aRenderer.renderMinZ;
         double maxZ = aZ + aRenderer.renderMaxZ;
 
-        tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
-        tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
-        tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
-        tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
-        if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(128, 128, 128, 255);
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingYNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.DOWN.ordinal(), mRGBa);
 
+        if (aRenderer.enableAO) {
+            tessellator.setColorOpaque_F(aRenderer.colorRedTopLeft, aRenderer.colorGreenTopLeft, aRenderer.colorBlueTopLeft);
+            tessellator.setBrightness(aRenderer.brightnessTopLeft);
+            tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
+            tessellator.setColorOpaque_F(aRenderer.colorRedBottomLeft, aRenderer.colorGreenBottomLeft, aRenderer.colorBlueBottomLeft);
+            tessellator.setBrightness(aRenderer.brightnessBottomLeft);
+            tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
+            tessellator.setColorOpaque_F(aRenderer.colorRedBottomRight, aRenderer.colorGreenBottomRight, aRenderer.colorBlueBottomRight);
+            tessellator.setBrightness(aRenderer.brightnessBottomRight);
+            tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
+            tessellator.setColorOpaque_F(aRenderer.colorRedTopRight, aRenderer.colorGreenTopRight, aRenderer.colorBlueTopRight);
+            tessellator.setBrightness(aRenderer.brightnessTopRight);
+        } else {
+            tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
+            tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
+            tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
+        }
+        tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
+
+        if (mIconContainer.getOverlayIcon() != null) {
             minU = aIcon.getInterpolatedU((1.0D - aRenderer.renderMaxX) * 16.0D);
             maxU = aIcon.getInterpolatedU((1.0D - aRenderer.renderMinX) * 16.0D);
             minV = aIcon.getInterpolatedV(aRenderer.renderMinZ * 16.0D);
@@ -126,32 +146,50 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             minZ = aZ + (float)aRenderer.renderMinZ;
             maxZ = aZ + (float)aRenderer.renderMaxZ;
 
-            tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
-            tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
-            tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
+            lighting.setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
+
+            if (aRenderer.enableAO) {
+                tessellator.setColorOpaque_F(aRenderer.colorRedTopLeft, aRenderer.colorGreenTopLeft, aRenderer.colorBlueTopLeft);
+                tessellator.setBrightness(aRenderer.brightnessTopLeft);
+                tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
+                tessellator.setColorOpaque_F(aRenderer.colorRedBottomLeft, aRenderer.colorGreenBottomLeft, aRenderer.colorBlueBottomLeft);
+                tessellator.setBrightness(aRenderer.brightnessBottomLeft);
+                tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
+                tessellator.setColorOpaque_F(aRenderer.colorRedBottomRight, aRenderer.colorGreenBottomRight, aRenderer.colorBlueBottomRight);
+                tessellator.setBrightness(aRenderer.brightnessBottomRight);
+                tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
+                tessellator.setColorOpaque_F(aRenderer.colorRedTopRight, aRenderer.colorGreenTopRight, aRenderer.colorBlueTopRight);
+                tessellator.setBrightness(aRenderer.brightnessTopRight);
+            } else {
+                tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
+                tessellator.addVertexWithUV(minX, minY, minZ, maxU, minV);
+                tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
+            }
             tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
         }
     }
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingZPos(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.SOUTH.ordinal(), mRGBa);
         aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(204, 204, 204, 255);
+            lighting.setupColor(ForgeDirection.SOUTH.ordinal(), 0xffffff);
             aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        final Tessellator tessellator = Tessellator.instance;
-        tessellator.setColorRGBA((int) (mRGBa[0] * 0.8F), (int) (mRGBa[1] * 0.8F), (int) (mRGBa[2] * 0.8F), mAllowAlpha ? 255 - mRGBa[3] : 255);
         aRenderer.field_152631_f = true;
+        LightingHelper lighting = new LightingHelper(aRenderer);
+        lighting.setupLightingZNeg(aBlock, aX, aY, aZ)
+                .setupColor(ForgeDirection.NORTH.ordinal(), mRGBa);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            tessellator.setColorRGBA(204, 204, 204, 255);
+            lighting.setupColor(ForgeDirection.NORTH.ordinal(), 0xffffff);
             aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
         aRenderer.field_152631_f = false;

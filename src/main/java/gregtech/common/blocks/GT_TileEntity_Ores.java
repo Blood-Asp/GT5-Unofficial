@@ -9,7 +9,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.ITexturedTileEntity;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_StdRenderedTexture;
-import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.XSTR;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -282,6 +281,6 @@ public class GT_TileEntity_Ores extends TileEntity implements ITexturedTileEntit
                 return new ITexture[]{((GT_Block_Ores_Abstract) aBlock).getTextureSet()[((this.mMetaData / 1000) % 16)], aIconSet};
             }
         }
-        return new ITexture[]{new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_RenderedTexture(gregtech.api.enums.TextureSet.SET_NONE.mTextures[OrePrefixes.ore.mTextureIndex])};
+        return new ITexture[]{new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_StdRenderedTexture(gregtech.api.enums.TextureSet.SET_NONE.mTextures[OrePrefixes.ore.mTextureIndex])};
     }
 }
