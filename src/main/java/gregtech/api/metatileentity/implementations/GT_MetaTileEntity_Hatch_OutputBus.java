@@ -20,6 +20,10 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
         		"Capacity: " + getSlots(aTier) + " stack" + (getSlots(aTier) >= 2 ? "s" : "")});
     }
 
+    public GT_MetaTileEntity_Hatch_OutputBus(int aID, String aName, String aNameRegional, int aTier, String[] aDescription) {
+        super(aID, aName, aNameRegional, aTier, getSlots(aTier), aDescription);
+    }
+
     public GT_MetaTileEntity_Hatch_OutputBus(int aID, String aName, String aNameRegional, int aTier, int inventorySize, String[] aDescription) {
         super(aID, aName, aNameRegional, aTier, inventorySize, aDescription);
     }
