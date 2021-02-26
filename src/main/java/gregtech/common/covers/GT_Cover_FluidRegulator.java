@@ -36,13 +36,13 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 			if (aCoverVariable > 0) {
 				tTank2 = aTileEntity.getITankContainerAtSide(aSide);
 				tTank1 = (IFluidHandler) aTileEntity;
-                directionFrom = ForgeDirection.UNKNOWN;
+                directionFrom = ForgeDirection.getOrientation(aSide);
                 directionTo = ForgeDirection.getOrientation(aSide).getOpposite();
 			} else {
 				tTank1 = aTileEntity.getITankContainerAtSide(aSide);
 				tTank2 = (IFluidHandler) aTileEntity;
                 directionFrom = ForgeDirection.getOrientation(aSide).getOpposite();
-                directionTo = ForgeDirection.UNKNOWN;
+                directionTo = ForgeDirection.getOrientation(aSide);
 			}
 			if (tTank1 != null && tTank2 != null) {
 				FluidStack tLiquid = tTank1.drain(directionFrom, Math.abs(aCoverVariable), false);
