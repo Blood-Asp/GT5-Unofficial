@@ -739,4 +739,23 @@ public class GregTech_API {
         sToolList.add(new GT_ItemStack(GT_Utility.copyAmount(1, aTool)));
         return true;
     }
+
+    /**
+     * Sets the {@link IIconRegister} for Block Icons
+     * @param aIconRegister The {@link IIconRegister} Icon Register
+     */
+    @SideOnly(Side.CLIENT)
+    public static void setBlockIconRegister(IIconRegister aIconRegister) {
+        sBlockIcons = aIconRegister;
+    };
+
+    /**
+     * Sets the {@link IIconRegister} for Items Icons
+     * @param aIconRegister The {@link IIconRegister} Icon Register
+     */
+    @SideOnly(Side.CLIENT)
+    public static void setItemIconRegister(IIconRegister aIconRegister) {
+        GregTech_API.sItemIcons = aIconRegister;
+    }
+
 }
