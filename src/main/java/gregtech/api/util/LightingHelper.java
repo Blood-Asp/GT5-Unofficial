@@ -286,6 +286,21 @@ public class LightingHelper {
     }
 
     /**
+     * Gets mixed ambient occlusion value from two inputs, with a
+     * ratio applied to the final result.
+     *
+     * @param ao1   the first ambient occlusion value
+     * @param ao2   the second ambient occlusion value
+     * @param ratio the ratio for mixing
+     * @return the mixed red, green, blue float values
+     */
+    public static float getMixedAo(float ao1, float ao2, double ratio) {
+        float diff = (float) (Math.abs(ao1 - ao2) * (1.0F - ratio));
+
+        return ao1 > ao2 ? ao1 - diff : ao1 + diff;
+    }
+
+    /**
      * Sets up lighting for the West face and returns the {@link LightingHelper}.
      * <p>
      * This is a consolidated <code>method</code> that sets side shading
@@ -303,15 +318,16 @@ public class LightingHelper {
      * @return the {@link LightingHelper}
      */
     public LightingHelper setupLightingXNeg(Block block, int x, int y, int z) {
-        int xOffset = renderBlocks.renderMinX > 0.0F ? x : x - 1;
 
         if (renderBlocks.enableAO) {
+
+            int xOffset = renderBlocks.renderMinX > 0.0F ? x : x - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z);
             brightness = mixedBrightness;
 
             float ratio = (float) (1.0F - renderBlocks.renderMinX);
-            float aoLightValue = renderBlocks.blockAccess.getBlock(xOffset, y, z).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x - 1, y, z).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXYNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y - 1, z);
             renderBlocks.aoBrightnessXZNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z - 1);
@@ -356,21 +372,6 @@ public class LightingHelper {
     }
 
     /**
-     * Gets mixed ambient occlusion value from two inputs, with a
-     * ratio applied to the final result.
-     *
-     * @param ao1   the first ambient occlusion value
-     * @param ao2   the second ambient occlusion value
-     * @param ratio the ratio for mixing
-     * @return the mixed red, green, blue float values
-     */
-    public static float getMixedAo(float ao1, float ao2, double ratio) {
-        float diff = (float) (Math.abs(ao1 - ao2) * (1.0F - ratio));
-
-        return ao1 > ao2 ? ao1 - diff : ao1 + diff;
-    }
-
-    /**
      * Sets up lighting for the East face and returns the {@link LightingHelper}.
      * <p>
      * This is a consolidated <code>method</code> that sets side shading
@@ -388,14 +389,15 @@ public class LightingHelper {
      * @return the {@link LightingHelper}
      */
     public LightingHelper setupLightingXPos(Block block, int x, int y, int z) {
-        int xOffset = renderBlocks.renderMaxX < 1.0F ? x : x + 1;
 
         if (renderBlocks.enableAO) {
+
+            int xOffset = renderBlocks.renderMaxX < 1.0F ? x : x + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z);
             brightness = mixedBrightness;
 
-            float aoLightValue = renderBlocks.blockAccess.getBlock(xOffset, y, z).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x + 1, y, z).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXYPN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y - 1, z);
             renderBlocks.aoBrightnessXZPN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z - 1);
@@ -458,15 +460,15 @@ public class LightingHelper {
      */
     public LightingHelper setupLightingYNeg(Block block, int x, int y, int z) {
 
-        int yOffset = renderBlocks.renderMinY > 0.0F ? y : y - 1;
-
         if (renderBlocks.enableAO) {
+
+            int yOffset = renderBlocks.renderMinY > 0.0F ? y : y - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, yOffset, z);
             brightness = mixedBrightness;
 
             float ratio = (float) (1.0F - renderBlocks.renderMinY);
-            float aoLightValue = renderBlocks.blockAccess.getBlock(x, yOffset, z).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y - 1, z).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXYNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x - 1, yOffset, z);
             renderBlocks.aoBrightnessYZNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, yOffset, z - 1);
@@ -528,14 +530,15 @@ public class LightingHelper {
      * @return the {@link LightingHelper}
      */
     public LightingHelper setupLightingYPos(Block block, int x, int y, int z) {
-        int yOffset = renderBlocks.renderMaxY < 1.0F ? y : y + 1;
 
         if (renderBlocks.enableAO) {
+
+            int yOffset = renderBlocks.renderMaxY < 1.0F ? y : y + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, yOffset, z);
             brightness = mixedBrightness;
 
-            float aoLightValue = renderBlocks.blockAccess.getBlock(x, yOffset, z).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y + 1, z).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXYNP = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x - 1, yOffset, z);
             renderBlocks.aoBrightnessXYPP = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x + 1, yOffset, z);
@@ -596,15 +599,16 @@ public class LightingHelper {
      * @return the {@link LightingHelper}
      */
     public LightingHelper setupLightingZNeg(Block block, int x, int y, int z) {
-        int zOffset = renderBlocks.renderMinZ > 0.0F ? z : z - 1;
 
         if (renderBlocks.enableAO) {
+
+            int zOffset = renderBlocks.renderMinZ > 0.0F ? z : z - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, y, zOffset);
             brightness = mixedBrightness;
 
             float ratio = (float) (1.0F - renderBlocks.renderMinZ);
-            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y, zOffset).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y, z - 1).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXZNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x - 1, y, zOffset);
             renderBlocks.aoBrightnessYZNN = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, y - 1, zOffset);
@@ -666,14 +670,15 @@ public class LightingHelper {
      * @return the {@link LightingHelper}
      */
     public LightingHelper setupLightingZPos(Block block, int x, int y, int z) {
-        int zOffset = renderBlocks.renderMaxZ < 1.0F ? z : z + 1;
 
         if (renderBlocks.enableAO) {
+
+            int zOffset = renderBlocks.renderMaxZ < 1.0F ? z : z + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, y, zOffset);
             brightness = mixedBrightness;
 
-            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y, zOffset).getAmbientOcclusionLightValue();
+            float aoLightValue = renderBlocks.blockAccess.getBlock(x, y, z + 1).getAmbientOcclusionLightValue();
 
             renderBlocks.aoBrightnessXZNP = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x - 1, y, zOffset);
             renderBlocks.aoBrightnessXZPP = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x + 1, y, zOffset);
