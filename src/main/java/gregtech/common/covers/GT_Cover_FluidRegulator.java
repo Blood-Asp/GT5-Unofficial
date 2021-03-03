@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 	public final int mTransferRate;
+	private boolean allowFluid = false;
 
 	public GT_Cover_FluidRegulator(int aTransferRate) {
 		this.mTransferRate = aTransferRate;
@@ -36,15 +37,16 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 			if (aCoverVariable > 0) {
 				tTank2 = aTileEntity.getITankContainerAtSide(aSide);
 				tTank1 = (IFluidHandler) aTileEntity;
-                directionFrom = ForgeDirection.UNKNOWN;
+                directionFrom = ForgeDirection.getOrientation(aSide);
                 directionTo = ForgeDirection.getOrientation(aSide).getOpposite();
 			} else {
 				tTank1 = aTileEntity.getITankContainerAtSide(aSide);
 				tTank2 = (IFluidHandler) aTileEntity;
                 directionFrom = ForgeDirection.getOrientation(aSide).getOpposite();
-                directionTo = ForgeDirection.UNKNOWN;
+                directionTo = ForgeDirection.getOrientation(aSide);
 			}
 			if (tTank1 != null && tTank2 != null) {
+				allowFluid = true;
 				FluidStack tLiquid = tTank1.drain(directionFrom, Math.abs(aCoverVariable), false);
 				if (tLiquid != null) {
 					tLiquid = tLiquid.copy();
@@ -53,6 +55,7 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 						tTank2.fill(directionTo, tTank1.drain(directionFrom, tLiquid.amount, true), true);
 					}
 				}
+				allowFluid = false;
 			}
 		}
 		return aCoverVariable;
@@ -120,11 +123,11 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
     }
 
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
-    	return false;
+    	return allowFluid;
     }
 
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
-    	return false;
+    	return allowFluid;
     }
 
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {

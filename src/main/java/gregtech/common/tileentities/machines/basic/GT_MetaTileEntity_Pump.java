@@ -215,9 +215,16 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
                             if (!this.wasPumping) {
                                 tMovedOneDown = moveOneDown();
                                 if (!tMovedOneDown) {
-                                    getBaseMetaTileEntity().disableWorking();
-                                    if (debugBlockPump) {
-                                        GT_Log.out.println("PUMP: Can't move. Retracting in next few ticks");
+                                    if (canMoveDown(getBaseMetaTileEntity().getXCoord(), Math.max(getYOfPumpHead() - 1, 1), getBaseMetaTileEntity().getZCoord())) {
+                                        if (debugBlockPump) {
+                                            GT_Log.out.println("PUMP: No pipe left. Idle for a little longer.");
+                                        }
+                                        this.mPumpTimer = 160;
+                                    } else {
+                                        getBaseMetaTileEntity().disableWorking();
+                                        if (debugBlockPump) {
+                                            GT_Log.out.println("PUMP: Can't move. Retracting in next few ticks");
+                                        }
                                     }
                                 } else if (debugBlockPump) {
                                     GT_Log.out.println("PUMP: Moved down");
@@ -528,6 +535,21 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         }
         this.mPrimaryPumpedBlock = null;
         this.mSecondaryPumpedBlock = null;
+    }
+
+    /** only check if block below can be replaced with pipe tip. pipe stockpile condition is ignored */
+    private boolean canMoveDown(int aX, int aY, int aZ) {
+        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), aX, aY, aZ, true)) return false;
+
+        Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
+
+        return GT_Utility.isBlockValid(aBlock) &&
+                (aBlock == Blocks.water ||
+                        aBlock == Blocks.flowing_water ||
+                        aBlock == Blocks.lava ||
+                        aBlock == Blocks.flowing_lava ||
+                        aBlock instanceof IFluidBlock ||
+                        aBlock.isAir(getBaseMetaTileEntity().getWorld(), aX, aY, aZ));
     }
 
     private boolean consumeFluid(int aX, int aY, int aZ) {

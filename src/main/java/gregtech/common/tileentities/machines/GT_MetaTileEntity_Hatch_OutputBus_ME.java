@@ -32,11 +32,11 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
 
     public GT_MetaTileEntity_Hatch_OutputBus_ME(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 1, new String[]{
-            "Item Output for Multiblocks", "Stores directly into ME"});
+            "Item Output for Multiblocks", "Stores directly into ME"}, 0);
     }
 
     public GT_MetaTileEntity_Hatch_OutputBus_ME(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aDescription, aTextures);
+        super(aName, aTier, aDescription, 0, aTextures);
     }
 
     @Override

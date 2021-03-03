@@ -212,14 +212,17 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
                     if (tStackSizedOne == null || tStackHeld.stackSize == 0) return null;
                     FluidStack tInputFluid = machine.getFillableStack();
                     FluidStack tFluidHeld = GT_Utility.getFluidForFilledItem(tStackSizedOne, true);
+                    if (tFluidHeld != null && tFluidHeld.amount <= 0)
+                        tFluidHeld = null;
                     if (tInputFluid == null) {
                         if (tFluidHeld == null)
                             // both null -> no op
                             return null;
                         return fillFluid(machine, aPlayer, tFluidHeld, aMouseclick == 0);
                     } else {
-                        if (tFluidHeld != null) {
-                            // both nonnull. actually both pickup and fill is reasonable, but I'll go with fill here
+                        if (tFluidHeld != null && tInputFluid.amount < machine.getCapacity()) {
+                            // both nonnull and have space left for filling.
+                            // actually both pickup and fill is reasonable, but I'll go with fill here
                             return fillFluid(machine, aPlayer, tFluidHeld, aMouseclick == 0);
                         } else {
                             tResultStack = pickupFluid(tInputFluid, aPlayer, aMouseclick == 0);
