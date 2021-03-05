@@ -558,13 +558,20 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             IMetaTileEntity metaTileEntity;
             if ((metaTileEntity = ((IGregTechTileEntity) tileEntity).getMetaTileEntity()) != null &&
                     metaTileEntity.renderInWorld(aWorld, aX, aY, aZ, aBlock, aRenderer)) {
+                aRenderer.enableAO = false;
                 return true;
             }
         }
-        if ((tileEntity instanceof IPipeRenderedTileEntity)) {
-            return renderPipeBlock(aWorld, aX, aY, aZ, aBlock, (IPipeRenderedTileEntity) tileEntity, aRenderer);
+        if (tileEntity instanceof IPipeRenderedTileEntity &&
+                renderPipeBlock(aWorld, aX, aY, aZ, aBlock, (IPipeRenderedTileEntity) tileEntity, aRenderer)) {
+            aRenderer.enableAO = false;
+            return true;
         }
-        return renderStandardBlock(aWorld, aX, aY, aZ, aBlock, aRenderer);
+        if (renderStandardBlock(aWorld, aX, aY, aZ, aBlock, aRenderer)) {
+            aRenderer.enableAO = false;
+            return true;
+        }
+        return false;
     }
 
     public boolean shouldRender3DInInventory(int aModel) {
