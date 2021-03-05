@@ -518,35 +518,44 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Tin, 2L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 9L), GT_Utility.getIntegratedCircuit(24)}, Materials.Tin.getMolten(144L), ItemList.Long_Distance_Pipeline_Item_Pipe.get(64L), 600, 24);
 
         {//limiting life time of the variables
-             ItemStack flask = ItemList.VOLUMETRIC_FLASK.get(1);
-             NBTTagCompound nbtFlask = new NBTTagCompound();
-             nbtFlask.setInteger("Capacity", 144);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(1), flask, 10, 30);
-             nbtFlask.setInteger("Capacity", 288);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(2), flask, 10, 30);
-             nbtFlask.setInteger("Capacity", 576);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(3), flask, 10, 30);
-             nbtFlask.setInteger("Capacity", 720);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(4), flask, 10, 30);
-	     nbtFlask.setInteger("Capacity", 864);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(5), flask, 10, 30);
-             nbtFlask.setInteger("Capacity", 250);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(10), flask, 10, 30);
-	     nbtFlask.setInteger("Capacity", 500);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(11), flask, 10, 30);
-             // make the 1000L recipe actualy in
-             ItemStack flask500 = flask.copy();
-             nbtFlask.setInteger("Capacity", 1000);
-             flask.setTagCompound(nbtFlask);
-             GT_Values.RA.addAssemblerRecipe(flask500, GT_Utility.getIntegratedCircuit(24), flask, 10, 30);
-         }
+            ItemStack flask = ItemList.VOLUMETRIC_FLASK.get(1);
+            NBTTagCompound nbtFlask = new NBTTagCompound();
+            nbtFlask.setInteger("Capacity", 144);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(1), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 288);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(2), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 576);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(3), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 720);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(4), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 864);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(5), flask, 10, 30);      
+            nbtFlask.setInteger("Capacity", 72);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(6), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 648);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(7), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 936);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(8), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 250);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(10), flask, 10, 30);
+            nbtFlask.setInteger("Capacity", 500);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(ItemList.VOLUMETRIC_FLASK.get(1), GT_Utility.getIntegratedCircuit(11), flask, 10, 30);
+            // make the 1000L recipe actualy in
+            ItemStack flask500 = flask.copy();
+            nbtFlask.setInteger("Capacity", 1000);
+            flask.setTagCompound(nbtFlask);
+            GT_Values.RA.addAssemblerRecipe(flask500, GT_Utility.getIntegratedCircuit(24), flask, 10, 30);
+        }
 
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_HV.get(1L), GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.StainlessSteel, 1L), GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.StainlessSteel, 1L), ItemList.Electric_Motor_HV.get(1L), GT_Utility.getIntegratedCircuit(3)}, GT_Values.NF, ItemList.Hatch_Muffler_HV.get(1L), 200, 480);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.Hull_EV.get(1L), GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Titanium, 1L), ItemList.Electric_Motor_EV.get(1L), GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.Titanium, 1L), GT_Utility.getIntegratedCircuit(3)}, GT_Values.NF, ItemList.Hatch_Muffler_EV.get(1L), 200, 1920);
