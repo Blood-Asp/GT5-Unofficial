@@ -90,7 +90,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                         GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Mold_Bottle.get(0L), new ItemStack(Items.glass_bottle, 1), tAmount * 64, 4);
                         break;
                     case "Steel":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, aStack), ItemList.Shape_Extruder_Cell.get(0L), ItemList.Cell_Empty.get(tAmount), tAmount * 128, 30);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Cell.get(0L), ItemList.Cell_Empty.get(tAmount), tAmount * 128, 30);
                         if (tAmount * 2 <= 64)
                             GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Casing.get(0L), GT_ModHandler.getIC2Item("casingadviron", tAmount * 2), tAmount * 32, 3 * tVoltageMultiplier);
                         if (tAmount * 2 <= 64)
@@ -139,7 +139,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
                             GT_Values.RA.addAlloySmelterRecipe(GT_Utility.copyAmount(2L, aStack), ItemList.Shape_Mold_Casing.get(0L), GT_ModHandler.getIC2Item("casinggold", tAmount * 3), tAmount * 128, 1 * tVoltageMultiplier);
                         break;
                     case "Polytetrafluoroethylene":
-                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(2L, aStack), ItemList.Shape_Extruder_Cell.get(0L), ItemList.Cell_Empty.get(tAmount), tAmount * 128, 30);
+                        GT_Values.RA.addExtruderRecipe(GT_Utility.copyAmount(1L, aStack), ItemList.Shape_Extruder_Cell.get(0L), ItemList.Cell_Empty.get(tAmount * 4), tAmount * 128, 30);
                     	break;
                 }
             }
