@@ -18,7 +18,7 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_Muffler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Might cause ... things)");
+        super(aID, aName, aNameRegional, aTier, 0, "");
     }
 
     public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -29,15 +29,21 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, 0, aDescription, aTextures);
     }
 
+    private int[] mFacings;
+
+    /*private void init()*/ {
+        setInValidFacings(ForgeDirection.DOWN);
+    }
+
     @Override
     public String[] getDescription() {
-        String[] desc = new String[mDescriptionArray.length + 3];
-        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        desc[mDescriptionArray.length] = "DO NOT OBSTRUCT THE OUTPUT!";
-        desc[mDescriptionArray.length + 1] = "Reduces Pollution to " + calculatePollutionReduction(100) + "%";
-        //Pollution Recovery scales from 0% at LV to 100% at UHV Voltage
-        desc[mDescriptionArray.length + 2] = "Recovers " + (100 - calculatePollutionReduction(100)) + "% of CO2/CO/SO2";
-        return desc;
+        int pollutionReduction = calculatePollutionReduction(100);
+        return new String[]{
+                "Outputs the Pollution (Might cause ... things)",
+                "DO NOT OBSTRUCT THE OUTPUT!",
+                "Reduces Pollution to " + pollutionReduction + "%",
+                "Recovers " + (100 - pollutionReduction) + "% of CO2/CO/SO2"
+        };
     }
 
     @Override
@@ -55,22 +61,19 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return true;
     }
 
-    private int[] mFacings;
-
-    /*private void init()*/ {
-        setInValidFacings(ForgeDirection.DOWN);
-    }
-
+    //API Code, BartWorks/TecTech based EBF relies on this. It's marked here, not anywhere else.
     public void setInValidFacings(ForgeDirection... aFacings) {
         mFacings = Arrays.stream(aFacings).mapToInt(Enum::ordinal).toArray();
     }
 
     @Override
     public boolean isFacingValid(byte aFacing) {
-        for (int x : mFacings)
-            if (x == aFacing)
-                return false;
-        return true;
+        for (int x : mFacings) {
+            if (x == aFacing) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -88,7 +91,8 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
     }
 
-    public boolean polluteEnvironment() {
+    //MetaTileEntity is passed so newer muffler hatches can do wacky things with the multis
+    public boolean polluteEnvironment(MetaTileEntity mte) {
         if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
             GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
             return true;
@@ -96,9 +100,15 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return false;
     }
 
+    @Deprecated
+    public boolean polluteEnvironment() {
+        return polluteEnvironment(null);
+    }
+
     public int calculatePollutionReduction(int aPollution) {
-        if ((float) mTier < 2)
+        if ((float) mTier < 2) {
             return aPollution;
+        }
         return (int) ((float) aPollution * ((100F - (12.5F * ((float) mTier - 1F))) / 100F));
     }
 
@@ -115,8 +125,9 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive())
+        if (aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive()) {
             pollutionParticles(this.getBaseMetaTileEntity().getWorld(), "largesmoke");
+        }
     }
 
     public void pollutionParticles(World aWorld, String name) {
