@@ -61,19 +61,21 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return true;
     }
 
-    //API Code, BartWorks/TecTech based EBF relies on this. It's marked here, not anywhere else.
+    //API Code, Bartworks relies on this. It's marked here, not anywhere else.
     public void setInValidFacings(ForgeDirection... aFacings) {
         mFacings = Arrays.stream(aFacings).mapToInt(Enum::ordinal).toArray();
     }
 
     @Override
     public boolean isFacingValid(byte aFacing) {
+        boolean valid = true;
         for (int x : mFacings) {
             if (x == aFacing) {
-                return true;
+                valid = false;
+                break;
             }
         }
-        return false;
+        return valid;
     }
 
     @Override
@@ -91,25 +93,23 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
     }
 
-    //MetaTileEntity is passed so newer muffler hatches can do wacky things with the multis
     public boolean polluteEnvironment(MetaTileEntity mte) {
+        boolean doPollute = false;
         if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
             GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
-            return true;
+            doPollute = true;
         }
-        return false;
-    }
-
-    @Deprecated
-    public boolean polluteEnvironment() {
-        return polluteEnvironment(null);
+        return doPollute;
     }
 
     public int calculatePollutionReduction(int aPollution) {
+        int pollutionReduction;
         if ((float) mTier < 2) {
-            return aPollution;
+            pollutionReduction = aPollution;
+        } else {
+            pollutionReduction = (int) ((float) aPollution * ((100F - (12.5F * ((float) mTier - 1F))) / 100F));
         }
-        return (int) ((float) aPollution * ((100F - (12.5F * ((float) mTier - 1F))) / 100F));
+        return pollutionReduction;
     }
 
     @Override
