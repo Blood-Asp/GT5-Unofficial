@@ -136,8 +136,8 @@ public class PositionedWorldEvent<T> {
      * Positional Data is rounded down due to this targeting a block.
      */
     public boolean extinguishFire(int side) {
-        if (position == null || world == null)
-            throw new IllegalStateException("Position and world must be set");
+        if (position == null || world == null || !(thing instanceof EntityPlayer))
+            throw new IllegalStateException("Position and world must be set, thing must be a EntityPlayer");
 
         return world.extinguishFire((EntityPlayer) thing, (int) position.xCoord, (int) position.yCoord, (int) position.zCoord, side);
     }
