@@ -256,8 +256,8 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       if(!world.isRemote && world.getBlockMetadata(x, y, z)==5){
     	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, player);
         world.spawnEntityInWorld(entitytntprimed);
-        PositionedWorldEvent<String> events = new PositionedWorldEvent<>(world, "game.tnt.primed");
-        events.playSoundAtEntity(entitytntprimed, 1.0F, 1.0F);
+        new PositionedWorldEvent<>(world, "game.tnt.primed")
+             .playSoundAtEntity(entitytntprimed, 1.0F, 1.0F);
 
       world.setBlockToAir(x, y, z);
       return false;

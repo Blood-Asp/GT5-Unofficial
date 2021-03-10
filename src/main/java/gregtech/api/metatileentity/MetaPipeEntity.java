@@ -699,8 +699,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
         if (GregTech_API.sMachineExplosions){
-            PositionedWorldEvent<Entity> event = new PositionedWorldEvent<>(tWorld);
-            event.setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+            new PositionedWorldEvent<>(tWorld)
+                 .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
                  .createExplosion(tStrength, true);
         }
     }
