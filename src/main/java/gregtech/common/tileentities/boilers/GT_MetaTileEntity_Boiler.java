@@ -263,16 +263,14 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
         if (aIndex == 1) {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 2, 1.0F, aX, aY, aZ);
-            PositionedWorldEvent<String> events = new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "largesmoke");
 
-            for (int l = 0; l < 8; l++) {
-                events.setPosition(
-                        aX - 0.5D + XSTR_INSTANCE.nextFloat(),
-                        aY,
-                        aZ - 0.5D + XSTR_INSTANCE.nextFloat()
-                );
-                events.spawnParticle(0.0D, 0.0D, 0.0D);
-            }
+            new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "largesmoke")
+                    .times(8, x -> x.setPosition(
+                            aX - 0.5D + XSTR_INSTANCE.nextFloat(),
+                            aY,
+                            aZ - 0.5D + XSTR_INSTANCE.nextFloat()
+                            )
+                            .spawnParticle(0.0D, 0.0D, 0.0D));
         }
     }
 

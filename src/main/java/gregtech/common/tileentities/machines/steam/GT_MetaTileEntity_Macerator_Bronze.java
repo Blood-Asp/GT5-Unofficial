@@ -44,10 +44,13 @@ public class GT_MetaTileEntity_Macerator_Bronze extends GT_MetaTileEntity_BasicM
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
         if ((aBaseMetaTileEntity.isClientSide()) && (aBaseMetaTileEntity.isActive()) && (aBaseMetaTileEntity.getFrontFacing() != 1) && (aBaseMetaTileEntity.getCoverIDAtSide((byte) 1) == 0) && (!aBaseMetaTileEntity.getOpacityAtSide((byte) 1))) {
-            PositionedWorldEvent<String> events = new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "smoke");
-            Random tRandom = events.getWorld().rand;
-            events.setPosition(aBaseMetaTileEntity.getXCoord() + 0.8F - tRandom.nextFloat() * 0.6F, aBaseMetaTileEntity.getYCoord() + 0.9F + tRandom.nextFloat() * 0.2F, aBaseMetaTileEntity.getZCoord() + 0.8F - tRandom.nextFloat() * 0.6F);
-            events.spawnParticle(0.0D, 0.0D, 0.0D);
+            Random tRandom = getBaseMetaTileEntity().getWorld().rand;
+            new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "smoke")
+                .setPosition(
+                        aBaseMetaTileEntity.getXCoord() + 0.8F - tRandom.nextFloat() * 0.6F,
+                        aBaseMetaTileEntity.getYCoord() + 0.9F + tRandom.nextFloat() * 0.2F,
+                        aBaseMetaTileEntity.getZCoord() + 0.8F - tRandom.nextFloat() * 0.6F
+                ).spawnParticle(0.0D, 0.0D, 0.0D);
         }
     }
 

@@ -445,20 +445,17 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         super.doSound(aIndex, aX, aY, aZ);
         if (aIndex == 9) {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 5, 1.0F, aX, aY, aZ);
-            PositionedWorldEvent<String> events = new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "largesmoke");
 
-            for (int i = 0; i < 6; i++){
-                events.setPosition(
-                        aX - 0.5 + XSTR_INSTANCE.nextFloat(),
-                        aY - 0.5 + XSTR_INSTANCE.nextFloat(),
-                        aZ - 0.5 + XSTR_INSTANCE.nextFloat()
-                );
-                events.spawnParticle(
-                        ForgeDirection.getOrientation(i).offsetX / 5.0,
-                        ForgeDirection.getOrientation(i).offsetY / 5.0,
-                        ForgeDirection.getOrientation(i).offsetZ / 5.0
-                );
-            }
+            new PositionedWorldEvent<>(getBaseMetaTileEntity().getWorld(), "largesmoke")
+                    .times(6, (x, i) -> x.setPosition(
+                            aX - 0.5 + XSTR_INSTANCE.nextFloat(),
+                            aY - 0.5 + XSTR_INSTANCE.nextFloat(),
+                            aZ - 0.5 + XSTR_INSTANCE.nextFloat()
+                    ).spawnParticle(
+                            ForgeDirection.getOrientation(i).offsetX / 5.0,
+                            ForgeDirection.getOrientation(i).offsetY / 5.0,
+                            ForgeDirection.getOrientation(i).offsetZ / 5.0
+                    ));
         }
     }
 

@@ -244,15 +244,11 @@ public class GT_Entity_Arrow extends EntityArrow {
             }
             PositionedWorldEvent<String> events = new PositionedWorldEvent<>(this.worldObj);
             if (getIsCritical()) {
-                events.setThing("crit");
-                for (int i = 0; i < 4; i++) {
-                    events.setPosition(
-                            this.posX + this.motionX * i / 4.0D,
-                            this.posY + this.motionY * i / 4.0D,
-                            this.posZ + this.motionZ * i / 4.0D
-                    );
-                    events.spawnParticle(-this.motionX, -this.motionY + 0.2D, -this.motionZ);
-                }
+                events.setThing("crit").times(4, (x, i) -> x.setPosition(
+                        this.posX + this.motionX * i / 4.0D,
+                        this.posY + this.motionY * i / 4.0D,
+                        this.posZ + this.motionZ * i / 4.0D
+                ).spawnParticle(-this.motionX, -this.motionY + 0.2D, -this.motionZ));
             }
             this.posX += this.motionX;
             this.posY += this.motionY;
@@ -274,11 +270,13 @@ public class GT_Entity_Arrow extends EntityArrow {
             this.rotationYaw = (this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F);
             float tFrictionMultiplier = 0.99F;
             if (isInWater()) {
-                events.setThing("bubble");
-                events.setPosition(this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D);
-                for (int l = 0; l < 4; l++) {
-                    events.spawnParticle(this.motionX, this.motionY, this.motionZ);
-                }
+                events.setThing("bubble")
+                      .setPosition(
+                              this.posX - this.motionX * 0.25D,
+                              this.posY - this.motionY * 0.25D,
+                              this.posZ - this.motionZ * 0.25D
+                      ).times(4, x -> x.spawnParticle(this.motionX, this.motionY, this.motionZ));
+
                 tFrictionMultiplier = 0.8F;
             }
             if (isWet()) {

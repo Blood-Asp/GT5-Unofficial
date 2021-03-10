@@ -144,16 +144,16 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         PositionedWorldEvent<String> events = new PositionedWorldEvent<>(aWorld, name);
 
         if (chk1) {
-            events.setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F);
-            events.spawnParticle(xSpd, ySpd, zSpd);
+            events.setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .spawnParticle(xSpd, ySpd, zSpd);
         }
         if (chk2) {
-            events.setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F);
-            events.spawnParticle(xSpd, ySpd, zSpd);
+            events.setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .spawnParticle(xSpd, ySpd, zSpd);
         }
         if (chk3) {
-            events.setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F);
-            events.spawnParticle(xSpd, ySpd, zSpd);
+            events.setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .spawnParticle(xSpd, ySpd, zSpd);
         }
     }
 

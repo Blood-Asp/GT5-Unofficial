@@ -40,9 +40,9 @@ public class Behaviour_Hoe extends Behaviour_None {
         }
         Block aBlock = aWorld.getBlock(aX, aY, aZ);
         if ((aSide != 0) && (GT_Utility.isBlockAir(aWorld, aX, aY + 1, aZ)) && ((aBlock == Blocks.grass) || (aBlock == Blocks.dirt))) {
-            PositionedWorldEvent<String> events = new PositionedWorldEvent<>(aWorld, Blocks.farmland.stepSound.getStepResourcePath());
-            events.setPosition(aX + 0.5F, aY + 0.5F, aZ + 0.5F);
-            events.playSoundEffect((Blocks.farmland.stepSound.getVolume() + 1.0F) / 2.0F, Blocks.farmland.stepSound.getPitch() * 0.8F);
+            new PositionedWorldEvent<>(aWorld, Blocks.farmland.stepSound.getStepResourcePath())
+                .setPosition(aX + 0.5F, aY + 0.5F, aZ + 0.5F)
+                .playSoundEffect((Blocks.farmland.stepSound.getVolume() + 1.0F) / 2.0F, Blocks.farmland.stepSound.getPitch() * 0.8F);
             if (aWorld.isRemote) {
                 return true;
             }

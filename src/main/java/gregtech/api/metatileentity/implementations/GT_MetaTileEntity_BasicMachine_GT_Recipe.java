@@ -800,15 +800,15 @@ public class GT_MetaTileEntity_BasicMachine_GT_Recipe extends GT_MetaTileEntity_
                     break;
                 case 1:
                     if (aBaseMetaTileEntity.getFrontFacing() != 1 && aBaseMetaTileEntity.getCoverIDAtSide((byte) 1) == 0 && !aBaseMetaTileEntity.getOpacityAtSide((byte) 1)) {
-                        PositionedWorldEvent<String> events = new PositionedWorldEvent<>(aBaseMetaTileEntity.getWorld(), "smoke");
-                        Random tRandom = events.getWorld().rand;
 
-                        events.setPosition(
-                                aBaseMetaTileEntity.getXCoord() + 0.8F - tRandom.nextFloat() * 0.6F,
-                                aBaseMetaTileEntity.getYCoord() + 0.9F + tRandom.nextFloat() * 0.2F,
-                                aBaseMetaTileEntity.getZCoord() + 0.8F - tRandom.nextFloat() * 0.6F
-                        );
-                        events.spawnParticle(0.0D, 0.0D, 0.0D);
+                        Random tRandom = aBaseMetaTileEntity.getWorld().rand;
+                        new PositionedWorldEvent<>(aBaseMetaTileEntity.getWorld(), "smoke")
+                            .setPosition(
+                                    aBaseMetaTileEntity.getXCoord() + 0.8F - tRandom.nextFloat() * 0.6F,
+                                    aBaseMetaTileEntity.getYCoord() + 0.9F + tRandom.nextFloat() * 0.2F,
+                                    aBaseMetaTileEntity.getZCoord() + 0.8F - tRandom.nextFloat() * 0.6F
+                            )
+                            .spawnParticle(0.0D, 0.0D, 0.0D);
                     }
                     break;
             }

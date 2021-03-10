@@ -116,8 +116,8 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                         GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX, tZ), 100000);
 
                                 PositionedWorldEvent<Entity> event = new PositionedWorldEvent<>(tWorld);
-                                event.setPosition(tX + 0.5, tY + 0.5, tZ + 0.5);
-                                event.createExplosion(tStrength, true);
+                                event.setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                                     .createExplosion(tStrength, true);
                             }
                         }
                     }

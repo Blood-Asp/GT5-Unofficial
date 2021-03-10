@@ -80,9 +80,9 @@ public class GT_FoodStat implements IFoodStat {
                 }
             }
             if (mExplosive) {
-                event.setThing(aPlayer);
-                event.setPosition(aPlayer.posX, aPlayer.posY, aPlayer.posZ);
-                event.newExplosion(4,true, true);
+                event.setThing(aPlayer)
+                     .setPosition(aPlayer.posX, aPlayer.posY, aPlayer.posZ)
+                     .newExplosion(4,true, true);
                 aPlayer.attackEntityFrom(GT_DamageSources.getExplodingDamage(), Float.MAX_VALUE);
             }
         }

@@ -5,6 +5,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 @SuppressWarnings("unused")
 public class PositionedWorldEvent<T> {
 
@@ -58,28 +64,32 @@ public class PositionedWorldEvent<T> {
         return world;
     }
 
-    public void setWorld(World world) {
+    public PositionedWorldEvent<T> setWorld(World world) {
         this.world = world;
+        return this;
     }
 
     public Vec3 getPosition() {
         return position;
     }
 
-    public void setPosition(Vec3 position) {
+    public PositionedWorldEvent<T> setPosition(Vec3 position) {
         this.position = position;
+        return this;
     }
 
-    public void setPosition(double x, double y, double z) {
+    public PositionedWorldEvent<T> setPosition(double x, double y, double z) {
         this.position = Vec3.createVectorHelper(x, y, z);
+        return this;
     }
 
     public T getThing() {
         return thing;
     }
 
-    public void setThing(T thing) {
+    public PositionedWorldEvent<T> setThing(T thing) {
         this.thing = thing;
+        return this;
     }
 
     public void spawnParticle(double motionX, double motionY, double motionZ) {
@@ -140,5 +150,19 @@ public class PositionedWorldEvent<T> {
             return;
         }
         world.playSoundToNearExcept(player, (String) thing, volume, pitch);
+    }
+
+    public void times(int times, Consumer<PositionedWorldEvent<T>> action) {
+        Objects.requireNonNull(action);
+        for (int i = 0; i < times; i++) {
+            action.accept(this);
+        }
+    }
+
+    public void times(int times, BiConsumer<PositionedWorldEvent<T>, Integer> action) {
+        Objects.requireNonNull(action);
+        for (int i = 0; i < times; i++) {
+            action.accept(this, i);
+        }
     }
 }
