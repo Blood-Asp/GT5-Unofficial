@@ -5,11 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class PositionedWorldEvent<T> {
@@ -94,28 +92,31 @@ public class PositionedWorldEvent<T> {
 
     public void spawnParticle(double motionX, double motionY, double motionZ) {
         if (position == null || !(thing instanceof String) || world == null)
-            return;
+            throw new IllegalStateException("Position and world must be set, thing must be a string indicating the Particle to be spawned");
 
         world.spawnParticle((String) thing, position.xCoord, position.yCoord, position.zCoord, motionX, motionY, motionZ);
     }
 
     public void playSoundEffect(float volume, float pitch) {
         if (position == null || !(thing instanceof String) || world == null)
-            return;
+            throw new IllegalStateException("Position and world must be set, thing must be a string indicating the SoundEffect to be spawned");
 
         world.playSoundEffect(position.xCoord, position.yCoord, position.zCoord, (String) thing, volume, pitch);
     }
 
+    /**
+     * Positional Data is rounded down due to this targeting a block.
+     */
     public void playRecord() {
         if (position == null || !(thing instanceof String) || world == null)
-            return;
+            throw new IllegalStateException("Position and world must be set, thing must be a string indicating the Record to be spawned");
 
         world.playRecord((String) thing, (int) position.xCoord, (int) position.yCoord, (int) position.zCoord);
     }
 
     public void playSound(float volume, float pitch, boolean proximity) {
         if (position == null || !(thing instanceof String) || world == null)
-            return;
+            throw new IllegalStateException("Position and world must be set, thing must be a string indicating the Sound to be spawned");
 
         world.playSound(position.xCoord, position.yCoord, position.zCoord, (String) thing, volume, pitch, proximity);
     }
@@ -125,30 +126,33 @@ public class PositionedWorldEvent<T> {
     }
 
     public void newExplosion(float strength, boolean isFlaming, boolean isSmoking) {
-        if (position == null || world == null)
-            return;
+        if (position == null || world == null || thing != null && !(thing instanceof Entity))
+            throw new IllegalStateException("Position and world must be set, thing must either be null or an Entity");
 
         world.newExplosion((Entity) thing, position.xCoord, position.yCoord, position.zCoord, strength, isFlaming, isSmoking);
     }
 
+    /**
+     * Positional Data is rounded down due to this targeting a block.
+     */
     public boolean extinguishFire(int side) {
         if (position == null || world == null)
-            return false;
+            throw new IllegalStateException("Position and world must be set");
 
         return world.extinguishFire((EntityPlayer) thing, (int) position.xCoord, (int) position.yCoord, (int) position.zCoord, side);
     }
 
     public void playSoundAtEntity(Entity entity, float volume, float pitch) {
-        if (!(thing instanceof String)) {
-            return;
-        }
+        if (world == null || !(thing instanceof String))
+            throw new IllegalStateException("World must be set, string indicating the Sound to be spawned");
+
         world.playSoundAtEntity(entity, (String) thing, volume, pitch);
     }
 
     public void playSoundToNearExcept(EntityPlayer player, float volume, float pitch) {
-        if (!(thing instanceof String)) {
-            return;
-        }
+        if (world == null || !(thing instanceof String))
+            throw new IllegalStateException("World must be set, string indicating the Sound to be spawned");
+
         world.playSoundToNearExcept(player, (String) thing, volume, pitch);
     }
 
