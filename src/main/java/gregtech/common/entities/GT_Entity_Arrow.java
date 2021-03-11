@@ -242,14 +242,14 @@ public class GT_Entity_Arrow extends EntityArrow {
                     }
                 }
             }
-            WorldSpawnedEventBuilder.ParticleEventBuilder events = (WorldSpawnedEventBuilder.ParticleEventBuilder)
-                    new WorldSpawnedEventBuilder.ParticleEventBuilder()
+            WorldSpawnedEventBuilder.ParticleEventBuilder events = new WorldSpawnedEventBuilder.ParticleEventBuilder()
                     .setWorld(this.worldObj);
+
             if (getIsCritical()) {
                 events.setIdentifier("crit")
+                        .setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
                         .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(4, (x, i) ->
-                                       x.setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
-                                        .setPosition(
+                                       x.setPosition(
                                                 this.posX + this.motionX * i / 4.0D,
                                                 this.posY + this.motionY * i / 4.0D,
                                                 this.posZ + this.motionZ * i / 4.0D

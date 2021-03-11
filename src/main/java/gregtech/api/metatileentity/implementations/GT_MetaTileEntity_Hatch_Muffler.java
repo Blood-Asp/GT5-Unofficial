@@ -141,25 +141,21 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             zSpd = aDir.offsetZ * (0.1F + 0.2F * XSTR_INSTANCE.nextFloat());
         }
 
-        WorldSpawnedEventBuilder.ParticleEventBuilder events =
-                (WorldSpawnedEventBuilder.ParticleEventBuilder)
-                new WorldSpawnedEventBuilder.ParticleEventBuilder()
+        WorldSpawnedEventBuilder.ParticleEventBuilder events = new WorldSpawnedEventBuilder.ParticleEventBuilder()
                 .setIdentifier(name)
-                .setWorld(aWorld);
+                .setWorld(aWorld)
+                .setMotion(xSpd, ySpd, zSpd);
 
         if (chk1) {
-            events.setMotion(xSpd, ySpd, zSpd)
-                  .setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+            events.setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
                   .run();
         }
         if (chk2) {
-            events.setMotion(xSpd, ySpd, zSpd)
-                  .setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+            events.setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
                   .run();
         }
         if (chk3) {
-            events.setMotion(xSpd, ySpd, zSpd)
-                  .setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+            events.setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
                   .run();
         }
     }

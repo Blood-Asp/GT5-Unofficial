@@ -158,12 +158,12 @@ public abstract class GT_MetaTileEntity_BasicMachine_Bronze extends GT_MetaTileE
             new WorldSpawnedEventBuilder.ParticleEventBuilder()
                     .setIdentifier("largesmoke")
                     .setWorld(getBaseMetaTileEntity().getWorld())
+                    .setMotion(
+                            ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetX / 5.0,
+                            ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetY / 5.0,
+                            ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetZ / 5.0
+                    )
                     .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(8, x -> x
-                            .setMotion(
-                                    ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetX / 5.0,
-                                    ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetY / 5.0,
-                                    ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()).offsetZ / 5.0
-                            )
                             .setPosition(
                                     aX - 0.5 + XSTR_INSTANCE.nextFloat(),
                                     aY - 0.5 + XSTR_INSTANCE.nextFloat(),

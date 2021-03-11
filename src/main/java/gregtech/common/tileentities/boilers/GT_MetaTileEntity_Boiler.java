@@ -267,8 +267,8 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
             new WorldSpawnedEventBuilder.ParticleEventBuilder()
                     .setIdentifier("largesmoke")
                     .setWorld(getBaseMetaTileEntity().getWorld())
+                    .setMotion(0D,0D,0D)
                     .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(8, x -> x
-                            .setMotion(0D,0D,0D)
                             .setPosition(
                                     aX - 0.5D + XSTR_INSTANCE.nextFloat(),
                                     aY,

@@ -192,7 +192,6 @@ public abstract class WorldSpawnedEventBuilder implements Runnable {
             return this;
         }
 
-
         public ParticleEventBuilder setMotion(Vec3 motion) {
             this.motion = motion;
             return this;
