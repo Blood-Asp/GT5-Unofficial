@@ -9,7 +9,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.PositionedWorldEvent;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -141,19 +141,26 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             zSpd = aDir.offsetZ * (0.1F + 0.2F * XSTR_INSTANCE.nextFloat());
         }
 
-        PositionedWorldEvent<String> events = new PositionedWorldEvent<>(aWorld, name);
+        WorldSpawnedEventBuilder.ParticleEventBuilder events =
+                (WorldSpawnedEventBuilder.ParticleEventBuilder)
+                new WorldSpawnedEventBuilder.ParticleEventBuilder()
+                .setIdentifier(name)
+                .setWorld(aWorld);
 
         if (chk1) {
-            events.setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
-                  .spawnParticle(xSpd, ySpd, zSpd);
+            events.setMotion(xSpd, ySpd, zSpd)
+                  .setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
         }
         if (chk2) {
-            events.setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
-                  .spawnParticle(xSpd, ySpd, zSpd);
+            events.setMotion(xSpd, ySpd, zSpd)
+                  .setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
         }
         if (chk3) {
-            events.setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
-                  .spawnParticle(xSpd, ySpd, zSpd);
+            events.setMotion(xSpd, ySpd, zSpd)
+                  .setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
         }
     }
 

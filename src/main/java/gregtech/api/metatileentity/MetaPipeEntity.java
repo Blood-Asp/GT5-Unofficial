@@ -9,7 +9,7 @@ import gregtech.api.interfaces.tileentity.IColoredTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.PositionedWorldEvent;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_LanguageManager;
@@ -699,9 +699,12 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
         if (GregTech_API.sMachineExplosions){
-            new PositionedWorldEvent<>(tWorld)
-                 .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
-                 .createExplosion(tStrength, true);
+            new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                    .setStrength(tStrength)
+                    .setSmoking(true)
+                    .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                    .setWorld(tWorld)
+                    .run();
         }
     }
 

@@ -68,8 +68,15 @@ public class GT_FoodStat implements IFoodStat {
         ItemStack tStack = GT_OreDictUnificator.get(GT_Utility.copy(mEmptyContainer));
         if (tStack != null && !aPlayer.inventory.addItemStackToInventory(tStack))
             aPlayer.dropPlayerItemWithRandomChoice(tStack, true);
-        PositionedWorldEvent<Object> event = new PositionedWorldEvent<>(aPlayer.worldObj, "random.burp");
-        event.playSoundAtEntity(aPlayer,0.5F, aPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+
+        new WorldSpawnedEventBuilder.SoundAtEntityEventBuilder()
+                .setIdentifier("random.burp")
+                .setVolume(0.5F)
+                .setPitch(aPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F)
+                .setEntity(aPlayer)
+                .setWorld(aPlayer.worldObj)
+                .run();
+
         if (!aPlayer.worldObj.isRemote) {
             if (mMilk) {
                 aPlayer.curePotionEffects(new ItemStack(Items.milk_bucket, 1, 0));
@@ -80,9 +87,14 @@ public class GT_FoodStat implements IFoodStat {
                 }
             }
             if (mExplosive) {
-                event.setThing(aPlayer)
-                     .setPosition(aPlayer.posX, aPlayer.posY, aPlayer.posZ)
-                     .newExplosion(4,true, true);
+                new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                        .setSmoking(true)
+                        .setFlaming(true)
+                        .setStrength(4f)
+                        .setPosition(aPlayer.posX, aPlayer.posY, aPlayer.posZ)
+                        .setEntity(aPlayer)
+                        .setWorld(aPlayer.worldObj)
+                        .run();
                 aPlayer.attackEntityFrom(GT_DamageSources.getExplodingDamage(), Float.MAX_VALUE);
             }
         }

@@ -3,11 +3,10 @@ package gregtech.api.interfaces.tileentity;
 import cofh.api.energy.IEnergyReceiver;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.util.PositionedWorldEvent;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -115,9 +114,11 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                     if (GT_Mod.gregtechproxy.mPollution)
                                         GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX, tZ), 100000);
 
-                                new PositionedWorldEvent<>(tWorld)
-                                    .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
-                                    .createExplosion(tStrength, true);
+                                new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                                        .setStrength(tStrength)
+                                        .setSmoking(true)
+                                        .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                                        .setWorld(tWorld);
                             }
                         }
                     }

@@ -768,8 +768,13 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             aEvent.bow.damageItem(1, aEvent.entityPlayer);
             aEvent.bow.getItem();
 
-            new PositionedWorldEvent<>(aEvent.entityPlayer.worldObj, "random.bow")
-                .playSoundAtEntity(aEvent.entityPlayer, 1.0F, 0.64893958288F + tSpeed * 0.5F);
+            new WorldSpawnedEventBuilder.SoundAtEntityEventBuilder()
+                    .setPitch(0.64893958288F + tSpeed * 0.5F)
+                    .setVolume(1f)
+                    .setIdentifier("random.bow")
+                    .setEntity(aEvent.entityPlayer)
+                    .setWorld(aEvent.entityPlayer.worldObj)
+                    .run();
 
             tArrowEntity.canBePickedUp = 1;
             if (!aEvent.entityPlayer.capabilities.isCreativeMode) {

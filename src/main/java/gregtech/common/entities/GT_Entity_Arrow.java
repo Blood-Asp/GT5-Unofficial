@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
-import gregtech.api.util.PositionedWorldEvent;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -242,13 +242,19 @@ public class GT_Entity_Arrow extends EntityArrow {
                     }
                 }
             }
-            PositionedWorldEvent<String> events = new PositionedWorldEvent<>(this.worldObj);
+            WorldSpawnedEventBuilder.ParticleEventBuilder events = (WorldSpawnedEventBuilder.ParticleEventBuilder)
+                    new WorldSpawnedEventBuilder.ParticleEventBuilder()
+                    .setWorld(this.worldObj);
             if (getIsCritical()) {
-                events.setThing("crit").times(4, (x, i) -> x.setPosition(
-                        this.posX + this.motionX * i / 4.0D,
-                        this.posY + this.motionY * i / 4.0D,
-                        this.posZ + this.motionZ * i / 4.0D
-                ).spawnParticle(-this.motionX, -this.motionY + 0.2D, -this.motionZ));
+                events.setIdentifier("crit")
+                        .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(4, (x, i) ->
+                                       x.setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
+                                        .setPosition(
+                                                this.posX + this.motionX * i / 4.0D,
+                                                this.posY + this.motionY * i / 4.0D,
+                                                this.posZ + this.motionZ * i / 4.0D
+                                        ).run()
+                        );
             }
             this.posX += this.motionX;
             this.posY += this.motionY;
@@ -270,13 +276,14 @@ public class GT_Entity_Arrow extends EntityArrow {
             this.rotationYaw = (this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F);
             float tFrictionMultiplier = 0.99F;
             if (isInWater()) {
-                events.setThing("bubble")
-                      .setPosition(
-                              this.posX - this.motionX * 0.25D,
-                              this.posY - this.motionY * 0.25D,
-                              this.posZ - this.motionZ * 0.25D
-                      ).times(4, x -> x.spawnParticle(this.motionX, this.motionY, this.motionZ));
-
+                events.setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
+                        .setIdentifier("bubble")
+                        .setPosition(
+                                this.posX - this.motionX * 0.25D,
+                                this.posY - this.motionY * 0.25D,
+                                this.posZ - this.motionZ * 0.25D
+                        )
+                        .times(4, Runnable::run);
                 tFrictionMultiplier = 0.8F;
             }
             if (isWet()) {

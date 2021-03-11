@@ -632,19 +632,19 @@ public class GT_Client extends GT_Proxy
                     tString = (new StringBuilder()).append(tString).append("wherearewenow").toString();
                     break;
             }
-        PositionedWorldEvent<String> events = new PositionedWorldEvent<String>(aWorld)
-                                                  .setPosition(aX, aY, aZ);
         if (tString.startsWith("streaming.")){
-            events.setThing(tString.substring(10))
-                  .playRecord();
+            new WorldSpawnedEventBuilder.RecordEffectEventBuilder()
+                    .setIdentifier(tString.substring(10))
+                    .setPosition(aX, aY, aZ)
+                    .run();
         }
         else{
-            events.setThing(tString)
-                  .playSound(
-                    3F,
-                    tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F,
-                    false
-            );
+            new WorldSpawnedEventBuilder.SoundEventBuilder()
+                    .setVolume(3f)
+                    .setPitch(tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F)
+                    .setIdentifier(tString)
+                    .setPosition(aX, aY, aZ)
+                    .run();
         }
     }
 
