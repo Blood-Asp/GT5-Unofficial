@@ -456,9 +456,9 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
                                     ForgeDirection.getOrientation(i).offsetZ / 5.0
                             )
                             .setPosition(
-                            aX - 0.5 + XSTR_INSTANCE.nextFloat(),
-                            aY - 0.5 + XSTR_INSTANCE.nextFloat(),
-                            aZ - 0.5 + XSTR_INSTANCE.nextFloat()
+                                aX - 0.5 + XSTR_INSTANCE.nextFloat(),
+                                aY - 0.5 + XSTR_INSTANCE.nextFloat(),
+                                aZ - 0.5 + XSTR_INSTANCE.nextFloat()
                             ).run()
                     );
         }
