@@ -927,12 +927,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         tileEntityInvalid = false;
         leaveEnet();
         if (canAccessData()) {
+            if (GregTech_API.mAE2)
+                invalidateAE();
             mMetaTileEntity.onRemoval();
             mMetaTileEntity.setBaseMetaTileEntity(null);
         }
         super.invalidate();
-        if (GregTech_API.mAE2)
-            invalidateAE();
     }
 
     @Override
