@@ -175,10 +175,19 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                 if (drillY == 0 || oreBlockPositions.isEmpty()) {
                     moveOneDown(aBaseMetaTileEntity);
                 } else {
-                    ChunkPosition oreBlockPos = oreBlockPositions.remove(0);
-                    mineBlock(aBaseMetaTileEntity, oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
-                    if (debugBlockMiner) {
-                        GT_Log.out.println("MINER: Mining GT ore block at " + oreBlockPos.chunkPosX + " " + drillY + " " + oreBlockPos.chunkPosZ);
+                    while (!oreBlockPositions.isEmpty()) {
+                        ChunkPosition oreBlockPos = oreBlockPositions.remove(0);
+                        Block block = aBaseMetaTileEntity.getBlockOffset(oreBlockPos.chunkPosX, oreBlockPos.chunkPosY, oreBlockPos.chunkPosZ);
+                        if (block == Blocks.air)
+                            continue;
+                        mineBlock(aBaseMetaTileEntity, block,
+                            aBaseMetaTileEntity.getXCoord() + oreBlockPos.chunkPosX,
+                            aBaseMetaTileEntity.getYCoord() + oreBlockPos.chunkPosY,
+                            aBaseMetaTileEntity.getZCoord() + oreBlockPos.chunkPosZ);
+                        if (debugBlockMiner) {
+                            GT_Log.out.println("MINER: Mining GT ore block at " + oreBlockPos.chunkPosX + " " + drillY + " " + oreBlockPos.chunkPosZ);
+                        }
+                        break;
                     }
                 }
             }
@@ -236,8 +245,9 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
             waitMiningPipe = true;
             return false;
         }
-        if (aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0) != Blocks.air) {
-            mineBlock(aBaseMetaTileEntity, 0, drillY - 1, 0);
+        Block block = aBaseMetaTileEntity.getBlockOffset(0, drillY - 1, 0);
+        if (block != Blocks.air) {
+            mineBlock(aBaseMetaTileEntity, block, xCoord, yCoord + drillY - 1, zCoord);
             if (debugBlockMiner) {
                 GT_Log.out.println("MINER: Removed block to replace with pipe" );
             }
@@ -248,18 +258,18 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
         return true;
     }
 
-    public void mineBlock(IGregTechTileEntity aBaseMetaTileEntity, int x, int y, int z) {
-        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z, true)) {
+    public void mineBlock(IGregTechTileEntity aBaseMetaTileEntity, Block block, int x, int y, int z) {
+        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(aBaseMetaTileEntity), x, y, z, true)) {
             if (debugBlockMiner)
-                GT_Log.out.println("MINER: FakePlayer cannot mine block at " + (aBaseMetaTileEntity.getXCoord() + x) + ", " + (aBaseMetaTileEntity.getYCoord() + y) + ", " + (aBaseMetaTileEntity.getZCoord() + z));
+                GT_Log.out.println("MINER: FakePlayer cannot mine block at " + x + ", " + y + ", " + z);
             return;
         }
-        ArrayList<ItemStack> drops = getBlockDrops(aBaseMetaTileEntity.getBlockOffset(x, y, z), aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z);
+        ArrayList<ItemStack> drops = getBlockDrops(block, x, y, z);
         if (drops.size() > 0)
             mOutputItems[0] = drops.get(0);
         if (drops.size() > 1)
             mOutputItems[1] = drops.get(1);
-        aBaseMetaTileEntity.getWorld().setBlockToAir(aBaseMetaTileEntity.getXCoord() + x, aBaseMetaTileEntity.getYCoord() + y, aBaseMetaTileEntity.getZCoord() + z);
+        aBaseMetaTileEntity.getWorld().setBlockToAir(x, y, z);
     }
 
     private ArrayList<ItemStack> getBlockDrops(final Block oreBlock, int posX, int posY, int posZ) {
