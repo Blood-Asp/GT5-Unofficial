@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.objects.GT_StdRenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_RecipeRegistrator;
@@ -74,22 +75,22 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                         GregTech_API.registerCover(aStack, new GT_CopiedBlockTexture(Blocks.stone, 1, 0), null);
                         break;
                     case "GraniteBlack":
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.GRANITE_BLACK_SMOOTH), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(gregtech.api.enums.Textures.BlockIcons.GRANITE_BLACK_SMOOTH), null);
                         break;
                     case "GraniteRed":
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.GRANITE_RED_SMOOTH), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(gregtech.api.enums.Textures.BlockIcons.GRANITE_RED_SMOOTH), null);
                         break;
                     case "Basalt":
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.BASALT_SMOOTH), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(gregtech.api.enums.Textures.BlockIcons.BASALT_SMOOTH), null);
                         break;
                     case "Marble":
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.MARBLE_SMOOTH), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(gregtech.api.enums.Textures.BlockIcons.MARBLE_SMOOTH), null);
                         break;
                     case "Concrete":
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(gregtech.api.enums.Textures.BlockIcons.CONCRETE_LIGHT_SMOOTH), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(gregtech.api.enums.Textures.BlockIcons.CONCRETE_LIGHT_SMOOTH), null);
                         break;
                     default:
-                        GregTech_API.registerCover(aStack, new GT_RenderedTexture(aMaterial.mIconSet.mTextures[71], aMaterial.mRGBa, false), null);
+                        GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[71], aMaterial.mRGBa, false), null);
                 }
 
                 if (aMaterial.mFuelPower > 0)
@@ -115,7 +116,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 break;
             case plateDouble:
                 GT_ModHandler.removeRecipeByOutputDelayed(aStack);
-                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_RenderedTexture(aMaterial.mIconSet.mTextures[72], aMaterial.mRGBa, false), null);
+                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[72], aMaterial.mRGBa, false), null);
                 if (!aNoSmashing) {
                     GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(2L, aStack), GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, aMaterial, 1L), (int) Math.max(aMaterialMass * 2L, 1L), 96);
                     if (GregTech_API.sRecipeFile.get(gregtech.api.enums.ConfigCategories.Tools.hammerdoubleplate, OrePrefixes.plate.get(aMaterial).toString(), true)) {
@@ -130,7 +131,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 break;
             case plateTriple:
                 GT_ModHandler.removeRecipeByOutputDelayed(aStack);
-                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_RenderedTexture(aMaterial.mIconSet.mTextures[73], aMaterial.mRGBa, false), null);
+                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[73], aMaterial.mRGBa, false), null);
                 if (!aNoSmashing) {
                     GT_Values.RA.addBenderRecipe(GT_Utility.copyAmount(3L, aStack), GT_OreDictUnificator.get(OrePrefixes.plateDense, aMaterial, 1L), (int) Math.max(aMaterialMass * 3L, 1L), 96);
                     if (GregTech_API.sRecipeFile.get(gregtech.api.enums.ConfigCategories.Tools.hammertripleplate, OrePrefixes.plate.get(aMaterial).toString(), true)) {
@@ -146,7 +147,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 break;
             case plateQuadruple:
                 GT_ModHandler.removeRecipeByOutputDelayed(aStack);
-                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_RenderedTexture(aMaterial.mIconSet.mTextures[74], aMaterial.mRGBa, false), null);
+                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[74], aMaterial.mRGBa, false), null);
                 if (!aNoWorking)
                     GT_Values.RA.addCNCRecipe(GT_Utility.copyAmount(1L, aStack), GT_OreDictUnificator.get(OrePrefixes.gearGt, aMaterial, 1L), (int) Math.max(aMaterialMass * 2L, 1L), 30);
                 if (!aNoSmashing) {
@@ -162,7 +163,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 break;
             case plateQuintuple:
                 GT_ModHandler.removeRecipeByOutputDelayed(aStack);
-                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_RenderedTexture(aMaterial.mIconSet.mTextures[75], aMaterial.mRGBa, false), null);
+                GregTech_API.registerCover(aStack, new gregtech.api.objects.GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[75], aMaterial.mRGBa, false), null);
                 if (!aNoSmashing) {
                     if (GregTech_API.sRecipeFile.get(gregtech.api.enums.ConfigCategories.Tools.hammerquintupleplate, OrePrefixes.plate.get(aMaterial).toString(), true)) {
                         Object aPlateStack = OrePrefixes.plate.get(aMaterial);
@@ -176,7 +177,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                 break;
             case plateDense:
                 GT_ModHandler.removeRecipeByOutputDelayed(aStack);
-                GregTech_API.registerCover(aStack, new GT_RenderedTexture(aMaterial.mIconSet.mTextures[76], aMaterial.mRGBa, false), null);
+                GregTech_API.registerCover(aStack, new GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[76], aMaterial.mRGBa, false), null);
                 if (!aNoSmashing) {
                     GT_Values.RA.addBenderRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, aMaterial, 9L), GT_Utility.copyAmount(1L, aStack), (int) Math.max(aMaterialMass * 9L, 1L), 96);
                 }
