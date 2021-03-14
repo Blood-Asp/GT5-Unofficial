@@ -6,6 +6,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.SubTag;
+import gregtech.api.enums.TextureSet;
 import gregtech.api.enums.ToolDictNames;
 import gregtech.api.objects.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_StdRenderedTexture;
@@ -14,8 +15,8 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_RecipeRegistrator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Proxy;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import static gregtech.api.enums.GT_Values.RA;
@@ -404,19 +405,20 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
     }
 
     private void registerCover(final Materials aMaterial, final ItemStack aStack) {
-        final ItemStack tStack = aMaterial.getBlocks(1);
-        if (tStack != null) {
-            ItemBlock tItemBlock = (ItemBlock) tStack.getItem();
 
-            GregTech_API.registerCover(
-                    aStack,
-                    new GT_CopiedBlockTexture((tItemBlock).field_150939_a, 1, tStack.getItemDamage()),
-                    null);
-        } else {
-            GregTech_API.registerCover(
-                    aStack,
-                    new GT_StdRenderedTexture(aMaterial.mIconSet.mTextures[71], aMaterial.mRGBa, false),
-                    null);
-        }
+        // Get ItemStack of Block matching Materials
+        final ItemStack tStack = aMaterial.getBlocks(1);
+
+        // Register the cover
+        GregTech_API.registerCover(
+                aStack,
+                // If there is an ItemStack of Block for Materials
+                tStack != null ?
+                        // Copy Block texture
+                        new GT_CopiedBlockTexture(Block.getBlockFromItem(tStack.getItem()), 1, tStack.getItemDamage()) :
+                        // or use Materials mRGBa dyed blocs/materialicons/MATERIALSET/block1 icons
+                        new GT_StdRenderedTexture(
+                                aMaterial.mIconSet.mTextures[TextureSet.INDEX_block1], aMaterial.mRGBa, false),
+                null);
     }
 }
