@@ -36,12 +36,13 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
     }
 
     /**
-     * Register processes for the item stack by its Ore Dictionary Name property for all plate related items
+     * Register processes for the {@link ItemStack} with Ore Dictionary Name Prefix "plate"
      *
-     * @param aPrefix      always != null, the Ore Prefix
+     * @param aPrefix      always != null, the {@link OrePrefixes} of the {@link ItemStack}
      * @param aMaterial    always != null, and can be == _NULL if the Prefix is Self Referencing or not Material based!
-     * @param aOreDictName the Ore Dictionary Name
-     * @param aModName     the name of the mod providing this stack
+     *                     the {@link Materials} of the {@link ItemStack}
+     * @param aOreDictName the Ore Dictionary Name {@link String} of the {@link ItemStack}
+     * @param aModName     the ModID {@link String} of the mod providing this {@link ItemStack}
      * @param aStack       always != null, the {@link ItemStack} to register
      */
     public void registerOre(OrePrefixes aPrefix,
