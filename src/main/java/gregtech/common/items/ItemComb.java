@@ -491,7 +491,7 @@ public class ItemComb extends Item {
 	}
 	
 	/**
-	 * @param volt	required Tier of system. If it's lower than MV, it will also add forestry centrifuge. If its higher than 
+	 * @param volt	required Tier of system. If it's lower than MV, it will also add forestry centrifuge.
 	 * @param aItem can be more than 6. but Over 6 will be ignored in Gregtech Centrifuge.
 	 **/
 	public void addCentrifugeToItemStack(CombType comb, ItemStack[] aItem, int[] chance, Voltage volt) {
