@@ -425,7 +425,7 @@ public class ItemComb extends Item {
 	 * **/
 	public void addChemicalProcess(CombType comb, Materials aInMaterial, Materials aOutMaterial, Voltage volt){
 		if(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4) == NI) return;
-		RA.addChemicalRecipe(GT_Utility.copyAmount(9, getStackForType(comb)), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), volt.getComplexChemical(), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), NI, volt.getComplexTime(), volt.getComplexEnergy(), volt.getCleanRoomNeeded());
+		RA.addChemicalRecipe(GT_Utility.copyAmount(9, getStackForType(comb)), GT_OreDictUnificator.get(OrePrefixes.crushed, aInMaterial, 1), volt.getComplexChemical(), aInMaterial.mOreByProducts.isEmpty() ? null : aInMaterial.mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aOutMaterial, 4), NI, volt.getComplexTime(), volt.getChemicalEnergy(), volt.compareTo(Voltage.IV) > 0);
 	}
 	
 	/**
@@ -435,7 +435,7 @@ public class ItemComb extends Item {
 	 * **/
 	public void addAutoclaveProcess(CombType comb, Materials aMaterial, Voltage volt, int circuitNumber){
 		if(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4) == NI) return;
-		RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, getStackForType(comb)), GT_Utility.getIntegratedCircuit(circuitNumber), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+volt.getUUAmplifier())/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 10000, (int) (aMaterial.getMass() * 128), volt.getComplexEnergy(), volt.getCleanRoomNeeded());
+		RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, getStackForType(comb)), GT_Utility.getIntegratedCircuit(circuitNumber), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial.getMass()+volt.getUUAmplifier())/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial, 4), 10000, (int) (aMaterial.getMass() * 128), volt.getAutoClaveEnergy(), volt.compareTo(Voltage.HV) > 0);
 	}
 	
 	/**
@@ -448,8 +448,8 @@ public class ItemComb extends Item {
 		ItemStack tComb = getStackForType(comb);
 		for(int i=0; i < aMaterial.length; i++) {
 			if(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial[i], 4)!= NI) {
-				RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial[i], 1), volt.getComplexChemical(), aMaterial[i].mOreByProducts.isEmpty() ? null : aMaterial[i].mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial[i], 4), NI, volt.getComplexTime(), volt.getComplexEnergy(), volt.getCleanRoomNeeded());
-				RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, tComb), GT_Utility.getIntegratedCircuit(i+1), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial[i].getMass()+volt.getUUAmplifier())/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial[i], 4), 10000, (int) (aMaterial[i].getMass() * 128), volt.getComplexEnergy(), volt.getCleanRoomNeeded());
+				RA.addChemicalRecipe(GT_Utility.copyAmount(9, tComb), GT_OreDictUnificator.get(OrePrefixes.crushed, aMaterial[i], 1), volt.getComplexChemical(), aMaterial[i].mOreByProducts.isEmpty() ? null : aMaterial[i].mOreByProducts.get(0).getMolten(144), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial[i], 4), NI, volt.getComplexTime(), volt.getChemicalEnergy(), volt.compareTo(Voltage.IV) > 0);
+				RA.addAutoclaveRecipe(GT_Utility.copyAmount(9, tComb), GT_Utility.getIntegratedCircuit(i+1), Materials.UUMatter.getFluid(Math.max(1, ((aMaterial[i].getMass()+volt.getUUAmplifier())/10))), GT_OreDictUnificator.get(OrePrefixes.crushedPurified, aMaterial[i], 4), 10000, (int) (aMaterial[i].getMass() * 128), volt.getAutoClaveEnergy(), volt.compareTo(Voltage.HV) > 0);
 			}
 		}
 	}
@@ -524,8 +524,11 @@ public class ItemComb extends Item {
 			return (int) V[this.ordinal()];
 		}
 		/**@return aEU/t needed for chemical and autoclave process related to the Tier**/
-		public int getComplexEnergy() {
-			return (int) (this.getVoltage() / 4) * 3;
+		public int getChemicalEnergy() {
+			return this.getVoltage()*3/4;
+		}
+		public int getAutoClaveEnergy() {
+			return (int) ((this.getVoltage()*3/4) * (Math.max(1, Math.pow(2, 5 - this.ordinal()))));
 		}
 		/**@return FluidStack needed for chemical process related to the Tier**/
 		public FluidStack getComplexChemical() {
@@ -534,7 +537,7 @@ public class ItemComb extends Item {
 			}else if(this.compareTo(Voltage.HV) < 0) {
 				return GT_ModHandler.getDistilledWater(1000L);
 			}else if(this.compareTo(Voltage.LuV) < 0) {
-				return Materials.Mercury.getFluid((long) (Math.pow(2, this.compareTo(Voltage.HV)) * L) );
+				return Materials.Mercury.getFluid((long) (Math.pow(2, this.compareTo(Voltage.HV)) * L));
 			}else if(this.compareTo(Voltage.UHV) < 0) {
 				return FluidRegistry.getFluidStack("mutagen", (int) (Math.pow(2, this.compareTo(Voltage.LuV)) * L));
 			}else {
@@ -545,7 +548,7 @@ public class ItemComb extends Item {
 		public int getUUAmplifier() {
 			return 9 * ( (this.compareTo(Voltage.MV) < 0) ? 1 : this.compareTo(Voltage.MV));
 		}
-		/**@return duration needed for Chemical and Autoclave process related to the Tier**/
+		/**@return duration needed for Chemical process related to the Tier**/
 		public int getComplexTime() {
 			return 64 + this.ordinal() * 32;
 		}
@@ -560,10 +563,6 @@ public class ItemComb extends Item {
 			}else {
 				return (int) (this.getVoltage() / 16) * 15;
 			}
-		}
-		/**@return rather the CleanRoom is needed for the process in this Tier. (if Higher than HV tier)**/
-		public boolean getCleanRoomNeeded() {
-			return this.compareTo(Voltage.IV) > 0;
 		}
 	}
 }
