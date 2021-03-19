@@ -575,7 +575,12 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
     private void registerCover(final Materials aMaterial, final ItemStack aStack) {
 
         // Get ItemStack of Block matching Materials
-        final ItemStack tStack = aMaterial.getBlocks(1);
+        ItemStack tStack = NI;
+        // Try different prefixes to use same smooth stones as older GT5U
+        for (OrePrefixes orePrefix : new OrePrefixes[]{
+                OrePrefixes.block, OrePrefixes.block_, OrePrefixes.stoneSmooth, OrePrefixes.stone}) {
+            if ((tStack = GT_OreDictUnificator.get(orePrefix, aMaterial, 1)) != NI) break;
+        }
 
         // Register the cover
         GregTech_API.registerCover(
