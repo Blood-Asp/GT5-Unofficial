@@ -784,7 +784,7 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
-    public ITexture[] getTextureCovered(Block aBlock, byte aSide) {
+    public ITexture[] getTextureCovered(byte aSide) {
         ITexture coverTexture = getCoverTexture(aSide);
         ITexture[] textureUncovered = getTextureUncovered(aSide);
         ITexture[] textureCovered;

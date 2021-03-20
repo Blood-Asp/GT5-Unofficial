@@ -120,12 +120,12 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IPipeRenderedTileEntity)) {
             return renderStandardBlock(aWorld, aX, aY, aZ, aBlock, aRenderer, new ITexture[][]{
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 0),
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 1),
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 2),
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 3),
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 4),
-                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered(aBlock, (byte) 5)});
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 0),
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 1),
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 2),
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 3),
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 4),
+                    ((IPipeRenderedTileEntity) tTileEntity).getTextureCovered((byte) 5)});
         }
         if ((tTileEntity instanceof ITexturedTileEntity)) {
             return renderStandardBlock(aWorld, aX, aY, aZ, aBlock, aRenderer, new ITexture[][]{
