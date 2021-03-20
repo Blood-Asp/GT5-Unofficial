@@ -10,5 +10,7 @@ public interface IPipeRenderedTileEntity extends ICoverable, ITexturedTileEntity
 
     ITexture[] getTextureUncovered(byte aSide);
 
-    ITexture[] getTextureCovered(Block aBlock, byte aSide);
+    default ITexture[] getTextureCovered(Block aBlock, byte aSide) {
+        return getTextureUncovered(aSide);
+    };
 }
