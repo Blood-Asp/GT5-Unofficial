@@ -784,6 +784,20 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     @Override
+    public ITexture[] getTextureCovered(Block aBlock, byte aSide) {
+        ITexture coverTexture = getCoverTexture(aSide);
+        ITexture[] textureUncovered = getTextureUncovered(aSide);
+        ITexture[] textureCovered;
+        if (coverTexture != null) {
+            textureCovered = Arrays.copyOf(textureUncovered, textureUncovered.length + 1);
+            textureCovered[textureUncovered.length] = coverTexture;
+            return textureCovered;
+        } else {
+            return textureUncovered;
+        }
+    }
+
+    @Override
     public ITexture[] getTextureUncovered(byte aSide) {
         if ((mConnections & 64) != 0) return Textures.BlockIcons.FRESHFOAM;
         if ((mConnections & -128) != 0) return Textures.BlockIcons.HARDENEDFOAMS[mColor];
