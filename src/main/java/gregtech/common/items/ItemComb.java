@@ -551,7 +551,7 @@ public class ItemComb extends Item {
 		}
 		/**@return duration needed for Centrifuge process related to the Tier**/
 		public int getSimpleTime() {
-			if(GT_Mod.gregtechproxy.mNerfedCombs) {
+			if(!GT_Mod.gregtechproxy.mNerfedCombs) {
 				return 96 + this.ordinal() * 32;
 			} else {
 				//ULV, LV needs 128ticks, MV need 256 ticks, HV need 384 ticks, EV need 512 ticks, IV need 640 ticks
