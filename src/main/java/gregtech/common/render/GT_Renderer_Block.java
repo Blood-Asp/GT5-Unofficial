@@ -20,8 +20,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
+import static gregtech.api.util.LightingHelper.NO_Z_FIGHT_OFFSET;
+
 public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
-    private static final float NoZFightOffset = 1.0F / 16384.0F;
     public static GT_Renderer_Block INSTANCE;
     public final int mRenderID;
 
@@ -305,7 +306,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             renderPositiveZFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tIcons[3], false);
         }
         if (tIsCovered[0]) {
-            aBlock.setBlockBounds(0.0F, 0.0F + NoZFightOffset, 0.0F, 1.0F, 0.125F, 1.0F);
+            aBlock.setBlockBounds(0.0F, 0.0F + NO_Z_FIGHT_OFFSET, 0.0F, 1.0F, 0.125F, 1.0F);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[0], false);
             renderPositiveYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[0], false);
@@ -323,7 +324,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             }
         }
         if (tIsCovered[1]) {
-            aBlock.setBlockBounds(0.0F, 0.875F, 0.0F, 1.0F, 1.0F - NoZFightOffset, 1.0F);
+            aBlock.setBlockBounds(0.0F, 0.875F, 0.0F, 1.0F, 1.0F - NO_Z_FIGHT_OFFSET, 1.0F);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[1], false);
             renderPositiveYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[1], false);
@@ -341,7 +342,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             }
         }
         if (tIsCovered[2]) {
-            aBlock.setBlockBounds(0.0F, 0.0F, 0.0F + NoZFightOffset, 1.0F, 1.0F, 0.125F);
+            aBlock.setBlockBounds(0.0F, 0.0F, 0.0F + NO_Z_FIGHT_OFFSET, 1.0F, 1.0F, 0.125F);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             if (!tIsCovered[0]) {
                 renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[2], false);
@@ -359,7 +360,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             }
         }
         if (tIsCovered[3]) {
-            aBlock.setBlockBounds(0.0F, 0.0F, 0.875F, 1.0F, 1.0F, 1.0F - NoZFightOffset);
+            aBlock.setBlockBounds(0.0F, 0.0F, 0.875F, 1.0F, 1.0F, 1.0F - NO_Z_FIGHT_OFFSET);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             if (!tIsCovered[0]) {
                 renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[3], false);
@@ -377,7 +378,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             }
         }
         if (tIsCovered[4]) {
-            aBlock.setBlockBounds(0.0F + NoZFightOffset, 0.0F, 0.0F, 0.125F, 1.0F, 1.0F);
+            aBlock.setBlockBounds(0.0F + NO_Z_FIGHT_OFFSET, 0.0F, 0.0F, 0.125F, 1.0F, 1.0F);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             if (!tIsCovered[0]) {
                 renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[4], false);
@@ -395,7 +396,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             renderPositiveXFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[4], false);
         }
         if (tIsCovered[5]) {
-            aBlock.setBlockBounds(0.875F, 0.0F, 0.0F, 1.0F - NoZFightOffset, 1.0F, 1.0F);
+            aBlock.setBlockBounds(0.875F, 0.0F, 0.0F, 1.0F - NO_Z_FIGHT_OFFSET, 1.0F, 1.0F);
             aRenderer.setRenderBoundsFromBlock(aBlock);
             if (!tIsCovered[0]) {
                 renderNegativeYFacing(aWorld, aRenderer, aBlock, aX, aY, aZ, tCovers[5], false);
