@@ -139,7 +139,6 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
     }
 
     private String mMachine = "";
-    private int mMachineTier = 0;
 
     public boolean checkRecipe(ItemStack aStack) {
         if (!isCorrectMachinePart(mInventory[1])) {
@@ -153,16 +152,18 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
             mMachine = mInventory[1].getUnlocalizedName();
         }
 
+        int machineTier = 0;
+
         if (mLastRecipe == null) {
             try {
                 int length = mMachine.length();
 
-                mMachineTier = Integer.parseInt(mMachine.substring(length - 2));
+                machineTier = Integer.parseInt(mMachine.substring(length - 2));
 
             } catch (NumberFormatException e) {
             }
 
-            switch (mMachineTier) {
+            switch (machineTier) {
                 default:
                     tTier = 0;
                     mMult = 0;//*1
@@ -176,7 +177,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_MultiBl
                 case 7:
                 case 8:
                 case 9:
-                    tTier = mMachineTier;
+                    tTier = machineTier;
                     mMult = 0;//*1
                     break;
                 case 10:
