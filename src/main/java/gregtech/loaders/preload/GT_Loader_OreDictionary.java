@@ -82,6 +82,7 @@ public class GT_Loader_OreDictionary implements Runnable {
         GT_OreDictUnificator.set(OrePrefixes.block, Materials.Coal, new ItemStack(Blocks.coal_block, 1, 0));
         GT_OreDictUnificator.set(OrePrefixes.block, Materials.Redstone, new ItemStack(Blocks.redstone_block, 1, 0));
         GT_OreDictUnificator.set(OrePrefixes.block, Materials.NetherQuartz, new ItemStack(Blocks.quartz_block, 1, 0));
+        GT_OreDictUnificator.set(OrePrefixes.block, Materials.Clay, new ItemStack(Blocks.clay, 1, 0));
         if (Blocks.ender_chest != null) {
             GT_OreDictUnificator.registerOre(OreDictNames.enderChest, new ItemStack(Blocks.ender_chest, 1));
         }
