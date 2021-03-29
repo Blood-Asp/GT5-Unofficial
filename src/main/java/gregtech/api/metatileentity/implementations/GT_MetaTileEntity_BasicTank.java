@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_TieredMachineBlock {
 
     public FluidStack mFluid;
+    protected int mOpenerCount;
 
     /**
      * @param aInvSlotCount should be 3
@@ -133,12 +134,24 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
     }
 
     @Override
+    public void onOpenGUI() {
+        super.onOpenGUI();
+        mOpenerCount++;
+    }
+
+    @Override
+    public void onCloseGUI() {
+        super.onCloseGUI();
+        mOpenerCount--;
+    }
+
+    @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide()) {
             if (isFluidChangingAllowed() && getFillableStack() != null && getFillableStack().amount <= 0)
                 setFillableStack(null);
 
-            if (displaysItemStack() && getStackDisplaySlot() >= 0 && getStackDisplaySlot() < mInventory.length) {
+            if (mOpenerCount > 0 && displaysItemStack() && getStackDisplaySlot() >= 0 && getStackDisplaySlot() < mInventory.length) {
                 if (getDisplayedFluid() == null) {
                     if (ItemList.Display_Fluid.isStackEqual(mInventory[getStackDisplaySlot()], true, true))
                         mInventory[getStackDisplaySlot()] = null;
