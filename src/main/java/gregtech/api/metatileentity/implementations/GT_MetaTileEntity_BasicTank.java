@@ -137,6 +137,8 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
     public void onOpenGUI() {
         super.onOpenGUI();
         mOpenerCount++;
+        if (mOpenerCount == 1)
+            updateFluidDisplayItem();
     }
 
     @Override
@@ -151,14 +153,8 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
             if (isFluidChangingAllowed() && getFillableStack() != null && getFillableStack().amount <= 0)
                 setFillableStack(null);
 
-            if (mOpenerCount > 0 && displaysItemStack() && getStackDisplaySlot() >= 0 && getStackDisplaySlot() < mInventory.length) {
-                if (getDisplayedFluid() == null) {
-                    if (ItemList.Display_Fluid.isStackEqual(mInventory[getStackDisplaySlot()], true, true))
-                        mInventory[getStackDisplaySlot()] = null;
-                } else {
-                    mInventory[getStackDisplaySlot()] = GT_Utility.getFluidDisplayStack(getDisplayedFluid(), displaysStackSize());
-                }
-            }
+            if (mOpenerCount > 0)
+                updateFluidDisplayItem();
 
             if (doesEmptyContainers()) {
                 FluidStack tFluid = GT_Utility.getFluidForFilledItem(mInventory[getInputSlot()], true);
@@ -190,6 +186,17 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
                     if (tFluid != null) getDrainableStack().amount -= tFluid.amount;
                     if (getDrainableStack().amount <= 0 && isFluidChangingAllowed()) setDrainableStack(null);
                 }
+            }
+        }
+    }
+
+    protected void updateFluidDisplayItem() {
+        if (displaysItemStack() && getStackDisplaySlot() >= 0 && getStackDisplaySlot() < mInventory.length) {
+            if (getDisplayedFluid() == null) {
+                if (ItemList.Display_Fluid.isStackEqual(mInventory[getStackDisplaySlot()], true, true))
+                    mInventory[getStackDisplaySlot()] = null;
+            } else {
+                mInventory[getStackDisplaySlot()] = GT_Utility.getFluidDisplayStack(getDisplayedFluid(), displaysStackSize());
             }
         }
     }

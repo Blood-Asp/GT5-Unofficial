@@ -576,8 +576,12 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
             mHasBeenUpdated = true;
             getBaseMetaTileEntity().setFrontFacing(getBaseMetaTileEntity().getBackFacing());
         }
+    }
 
-        if (mOpenerCount > 0 && displaysInputFluid()) {
+    @Override
+    protected void updateFluidDisplayItem() {
+        super.updateFluidDisplayItem();
+        if (displaysInputFluid()) {
             int tDisplayStackSlot = OTHER_SLOT_COUNT + mInputSlotCount + mOutputItems.length;
             if (getFillableStack() == null) {
                 if (ItemList.Display_Fluid.isStackEqual(mInventory[tDisplayStackSlot], true, true))
