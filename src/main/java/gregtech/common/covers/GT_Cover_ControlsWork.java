@@ -16,11 +16,16 @@ import net.minecraftforge.fluids.Fluid;
 public class GT_Cover_ControlsWork extends GT_CoverBehavior {
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if (aTileEntity instanceof IMachineProgress) {
-            if ((aInputRedstone > 0) == (aCoverVariable == 0) && aCoverVariable != 2)
-                ((IMachineProgress) aTileEntity).enableWorking();
-            else
+            if (!((IMachineProgress) aTileEntity).wasShutdown()) {
+                if ((aInputRedstone > 0) == (aCoverVariable == 0) && aCoverVariable != 2)
+                    ((IMachineProgress) aTileEntity).enableWorking();
+                else
+                    ((IMachineProgress) aTileEntity).disableWorking();
+                ((IMachineProgress) aTileEntity).setWorkDataValue(aInputRedstone);
+            } else {
                 ((IMachineProgress) aTileEntity).disableWorking();
-            ((IMachineProgress) aTileEntity).setWorkDataValue(aInputRedstone);
+                return 2;
+            }
         }
         return aCoverVariable;
     }

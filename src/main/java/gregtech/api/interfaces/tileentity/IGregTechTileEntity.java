@@ -155,4 +155,6 @@ public interface IGregTechTileEntity extends ITexturedTileEntity, IGearEnergyTil
                 getMetaTileEntity().getBaseMetaTileEntity() == this &&
                 getMetaTileEntity().isMachineBlockUpdateRecursive();
     }
+
+    default void setShutdownStatus(boolean newStatus) {return;}
 }
