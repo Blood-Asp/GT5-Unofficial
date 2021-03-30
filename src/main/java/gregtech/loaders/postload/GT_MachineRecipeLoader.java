@@ -1206,8 +1206,6 @@ public class GT_MachineRecipeLoader implements Runnable {
 	    GT_Values.RA.addFusionReactorRecipe(Materials.Caesium.getMolten(144), Materials.Carbon.getMolten(144), Materials.Promethium.getMolten(144), 64, 49152, 400000000);//FT3
         GT_Values.RA.addFusionReactorRecipe(Materials.Iridium.getMolten(144), Materials.Fluorine.getGas(500), Materials.Radon.getPlasma(144), 32, 98304, 450000000);//FT3 - utility
         GT_Values.RA.addFusionReactorRecipe(Materials.Plutonium241.getMolten(144), Materials.Hydrogen.getGas(2000), Materials.Americium.getPlasma(144), 64, 98304, 500000000);//FT3
-	//
-	GT_Values.RA.addFusionReactorRecipe(Materials.Uranium.getMolten(432), Materials.Naquadah.getMolten(288), Materials.Naquadria.getMolten(144), 128, 112880, 600000000);
         //GT_Values.RA.addFusionReactorRecipe(Materials.Neutronium.getMolten(144), Materials.Neutronium.getMolten(144), Materials.Neutronium.getPlasma(72), 64, 130000, 640000000);//FT3+ - yes it is a bit troll XD
 
         GT_ModHandler.removeRecipeByOutput(ItemList.IC2_Fertilizer.get(1L));
