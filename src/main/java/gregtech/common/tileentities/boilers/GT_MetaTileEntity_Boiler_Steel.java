@@ -61,7 +61,33 @@ public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bro
         return new GT_MetaTileEntity_Boiler_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-       super.singleBlockBoilerLogic(aBaseMetaTileEntity,aTick,2,40,10L,30);
+    @Override
+    protected int getPollution() {
+        return 30;
+    }
+
+    @Override
+    public int getCapacity() {
+        return 32000;
+    }
+
+    @Override
+    protected int getProductionPerSecond() {
+        return 300;
+    }
+
+    @Override
+    protected int getMaxTemperature() {
+        return 1000;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return 2;
+    }
+
+    @Override
+    protected int getCooldownInterval() {
+        return 40;
     }
 }

@@ -19,11 +19,12 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.GT_Values.STEAM_PER_WATER;
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_LargeTurbine {
 
-    private float water;
+    private int excessWater;
     private boolean achievement = false;
     private boolean looseFit=false;
 
@@ -90,11 +91,11 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         return 0;
     }
 
-    private int useWater(float input) {
-        water = water + input;
-        int usage = (int) water;
-        water = water - usage;
-        return usage;
+    private int condenseSteam(int steam) {
+        excessWater += steam;
+        int water = excessWater / STEAM_PER_WATER;
+        excessWater %= STEAM_PER_WATER;
+        return water;
     }
 
     @Override
@@ -127,7 +128,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                 totalFlow += flow; // track total input used
                 if (!achievement) {
-                    GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
+                    GT_Mod.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
                     achievement = true;
                 }
             }else if(GT_ModHandler.isSuperHeatedSteam(aFluidStack)) {
@@ -136,11 +137,10 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         }
         if(totalFlow<=0)return 0;
         tEU = totalFlow;
-        int waterToOutput = useWater(totalFlow / 160.0f);
+        int waterToOutput = condenseSteam(totalFlow);
         addOutput(GT_ModHandler.getDistilledWater(waterToOutput));
         if (totalFlow != aOptFlow) {
             float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float)aOptFlow);
-            //if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;
             tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 20000L));
         } else {
