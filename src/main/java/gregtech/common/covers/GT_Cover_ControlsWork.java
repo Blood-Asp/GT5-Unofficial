@@ -8,6 +8,7 @@ import gregtech.api.gui.widgets.GT_GuiIconButton;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IMachineProgress;
+import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
@@ -35,7 +36,7 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
             } else {
                 if (((IMachineProgress) aTileEntity).wasShutdown()) {
                     ((IMachineProgress) aTileEntity).disableWorking();
-                    // TODO: Notify lastPlayer the name and location of machine and that it stopped
+                    GT_Utility.sendChatToPlayer(lastPlayer, aTileEntity.getInventoryName() + "at " + String.format("(%d,%d,%d)", aTileEntity.getXCoord(), aTileEntity.getYCoord(), aTileEntity.getZCoord()) +  " shut down.");
                     return 2;
                 } else {
                     return 3 + doCoverThings(aSide,aInputRedstone, aCoverID, aCoverVariable - 3, aTileEntity, aTimer);
