@@ -221,6 +221,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         bInvert = aNBT.getBoolean("bInvert");
         bOutput = aNBT.getBoolean("bOutput");
         bRedstoneIfFull = aNBT.getBoolean("bRedstoneIfFull");
+        bSortStacks = aNBT.getBoolean("bSortStacks");
         if (aNBT.hasKey("bStockingMode")) { // Adding new key to existing NBT, need to protect if it is not there.
             bStockingMode = aNBT.getBoolean("bStockingMode");
         }
@@ -326,7 +327,15 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
 
     @Override
     public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ)  {
-        return super().onSolderingToolRightClick(aSide,aWrenchingSide,aPlayer,aX,aY,aZ);
+        if (aPlayer.isSneaking()) {
+            if (bSortStacks = !bSortStacks) {
+                GT_Utility.sendChatToPlayer(aPlayer, "Auto-Sort Enabled");
+            } else {
+                GT_Utility.sendChatToPlayer(aPlayer, "Auto-Sort Disabled");
+            }
+            return true;
+        }
+        return super.onSolderingToolRightClick(aSide,aWrenchingSide,aPlayer,aX,aY,aZ);
     }
 
 }
