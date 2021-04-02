@@ -250,6 +250,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aBaseMetaTileEntity.isAllowedToWork() && aBaseMetaTileEntity.isServerSide() && (aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified() || aTimer % 200 == 0 || mSuccess > 0)) {
             mSuccess--;
+            updateSlots();
             moveItems(aBaseMetaTileEntity, aTimer);
             for(byte b = 0;b<6;b++)
             	aBaseMetaTileEntity.setInternalOutputRedstoneSignal(b,bInvert ? (byte)15 : (byte)0);
@@ -300,4 +301,18 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public boolean allowGeneralRedstoneOutput(){
     	return true;
     }
+
+    public void updateSlots() {
+        for (int i = 0; i < mInventory.length; i++)
+            if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
+        fillStacksIntoFirstSlots();
+    }
+
+    protected void fillStacksIntoFirstSlots() {
+        for (int i = 0; i < mInventory.length; i++)
+            for (int j = i + 1; j < mInventory.length; j++)
+                if (mInventory[j] != null && mInventory[j].stackSize <= 0 && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
+                    GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+    }
+
 }
