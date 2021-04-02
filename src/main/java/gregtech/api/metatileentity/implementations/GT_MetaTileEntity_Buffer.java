@@ -20,7 +20,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     private static final int ARROW_UP_INDEX = 4;
     private static final int FRONT_INDEX = 5;
 
-    public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false;
+    public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false, bSortStacks = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
     public GT_MetaTileEntity_Buffer(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String aDescription) {
@@ -213,6 +213,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         aNBT.setBoolean("bRedstoneIfFull", bRedstoneIfFull);
         aNBT.setBoolean("bStockingMode", bStockingMode);
         aNBT.setInteger("mTargetStackSize", mTargetStackSize);
+        aNBT.setBoolean("bSortStacks", bSortStacks);
     }
 
     @Override
@@ -309,10 +310,23 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     protected void fillStacksIntoFirstSlots() {
-        for (int i = 0; i < mInventory.length; i++)
-            for (int j = i + 1; j < mInventory.length; j++)
-                if (mInventory[j] != null && mInventory[j].stackSize <= 0 && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
-                    GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+        if (bSortStacks) {
+            for (int i = 0; i < mInventory.length; i++)
+                for (int j = i + 1; j < mInventory.length; j++)
+                    if (mInventory[j] != null && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
+                        GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+        }
+        else {
+            for (int i = 0; i < mInventory.length; i++)
+                for (int j = i + 1; j < mInventory.length; j++)
+                    if (mInventory[j] != null && mInventory[j].stackSize <= 0 && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
+                        GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+        }
+    }
+
+    @Override
+    public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ)  {
+        return super().onSolderingToolRightClick(aSide,aWrenchingSide,aPlayer,aX,aY,aZ);
     }
 
 }
