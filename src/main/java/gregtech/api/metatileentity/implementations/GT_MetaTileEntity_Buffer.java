@@ -322,11 +322,9 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     @Override
     public boolean onSolderingToolRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ)  {
         if (aPlayer.isSneaking()) {
-            if (bSortStacks = !bSortStacks) {
-                GT_Utility.sendChatToPlayer(aPlayer, "Auto-Sort Enabled");
-            } else {
-                GT_Utility.sendChatToPlayer(aPlayer, "Auto-Sort Disabled");
-            }
+            // I was so proud of all this but I literally just copied code from OutputBus
+            bSortStacks = !bSortStacks;
+            GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Sort mode: " + (bSortStacks ? "Disabled" : "Enabled")));
             return true;
         }
         return super.onSolderingToolRightClick(aSide,aWrenchingSide,aPlayer,aX,aY,aZ);
