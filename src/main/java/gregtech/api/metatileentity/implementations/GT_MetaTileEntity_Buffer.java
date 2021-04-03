@@ -225,6 +225,9 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aNBT.hasKey("bStockingMode")) { // Adding new key to existing NBT, need to protect if it is not there.
             bStockingMode = aNBT.getBoolean("bStockingMode");
         }
+	if (aNBT.hasKey("bSortStacks")) {
+	    bSortStacks = aNBT.getBoolean("bSortStacks");
+	}
         mTargetStackSize = aNBT.getInteger("mTargetStackSize");
     }
 
