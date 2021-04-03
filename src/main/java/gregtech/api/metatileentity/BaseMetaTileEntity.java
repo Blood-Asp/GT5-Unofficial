@@ -92,6 +92,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private UUID mOwnerUuid = GT_Utility.defaultUuid;
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
 
+    public boolean mWasShutdown = false;
+
     private static final Field ENTITY_ITEM_HEALTH_FIELD;
     static
     {
@@ -1004,6 +1006,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public void enableWorking() {
         if (!mWorks) mWorkUpdate = true;
         mWorks = true;
+        mWasShutdown = false;
     }
 
     @Override
@@ -2317,5 +2320,14 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         AENetworkProxy gp = getProxy();
         if (gp != null)
             gp.invalidate();
+    }
+
+    @Override
+    public boolean wasShutdown() {
+         return mWasShutdown;
+    }
+
+    public void setShutdownStatus(boolean newStatus) {
+         mWasShutdown = newStatus;
     }
 }
