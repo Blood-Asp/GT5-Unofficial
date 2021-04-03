@@ -6,17 +6,12 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 
 
 public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
@@ -126,74 +121,50 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         }
     }
 
-    public int getBasicOutput() {
-        return this.basicOutput;
+    @Override
+    protected void produceSteam(int aAmount) {
+        super.produceSteam(aAmount);
+        mRunTime++;
     }
 
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if ((aBaseMetaTileEntity.isServerSide()) && (aTick > 20L)) {
-            if (this.mTemperature <= 20) {
-                this.mTemperature = 20;
-                this.mLossTimer = 0;
-            }
-            if (++this.mLossTimer > basicLossTimerLimit) {
-                this.mTemperature -= basicTemperatureMod;
-                this.mLossTimer = 0;
-            }
-            if (this.mSteam != null) {
-                byte i = aBaseMetaTileEntity.getFrontFacing();
-                IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide(i);
-                if (tTileEntity != null) {
-                    FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), Math.max(1, this.mSteam.amount / 2), false);
-                    if (tDrained != null) {
-                        int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), tDrained, false);
-                        if (tFilledAmount > 0) {
-                            tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), tFilledAmount, true), true);
-                        }
-                    }
-                }
-            }
-            if (aTick % 25L == 0L) { // Every 25 ticks since 1L of water = 150L of steam. So for 120L, have to use 25 instead of 20.
-                if (this.mTemperature > 100) {
-                    if ((this.mFluid == null) || (!GT_ModHandler.isWater(this.mFluid)) || (this.mFluid.amount <= 0)) {
-                        this.mHadNoWater = true;
-                    } else {
-                        if (this.mHadNoWater) {
-                            GT_Log.exp.println("Boiler "+this.mName+" had no Water!");
-                            aBaseMetaTileEntity.doExplosion(2048L);
-                            return;
-                        }
-                        this.mFluid.amount -= (basicOutput/150);
-                        mRunTime += 1;
+    @Override
+    protected int getPollution() {
+        return 0;
+    }
 
-                        int tOutput = getCalcificationOutput();
+    @Override
+    protected int getProductionPerSecond() {
+        if (this.mTemperature < 100 ) {
+            return 0;
+        }
+        if (this.mRunTime > CALCIFICATION_TIME) {
+            // Calcification takes about 2/3 CALCIFICATION_TIME to completely calcify on basic solar. For HP solar, it takes about 2x CALCIFICATION_TIME
+            return Math.max(this.basicMaxOuput, this.basicOutput - ((this.mRunTime - CALCIFICATION_TIME) / (CALCIFICATION_TIME/150))); // Every 288*25 ticks, or 6 minutes, lose 1 L output.
+        } else {
+            return this.basicOutput;
+        }
+    }
 
-                        if (this.mSteam == null) {
-                            this.mSteam = GT_ModHandler.getSteam(tOutput);
-                        } else if (GT_ModHandler.isSteam(this.mSteam)) {
-                            this.mSteam.amount += tOutput;
-                        } else {
-                            this.mSteam = GT_ModHandler.getSteam(tOutput);
-                        }
-                    }
-                } else {
-                    this.mHadNoWater = false;
-                }
-            }
-            if ((this.mSteam != null) &&
-                    (this.mSteam.amount > this.getCapacity())) {
-                sendSound((byte) 1);
-                this.mSteam.amount = 3*(this.getCapacity()/4);
-            }
-            if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()) && (aTick % 256L == 0L) && (!aBaseMetaTileEntity.getWorld().isThundering())) {
-                boolean bRain = aBaseMetaTileEntity.getWorld().isRaining() && aBaseMetaTileEntity.getBiome().rainfall > 0.0F;
-                mProcessingEnergy += bRain && aBaseMetaTileEntity.getWorld().skylightSubtracted >= 4 || !aBaseMetaTileEntity.getSkyAtSide((byte) 1) ? 0 : !bRain && aBaseMetaTileEntity.getWorld().isDaytime() ? 8*basicTemperatureMod : basicTemperatureMod;
-            }
-            if ((this.mTemperature < maxProgresstime()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
-                this.mProcessingEnergy -= basicTemperatureMod;
-                this.mTemperature += basicTemperatureMod;
-            }
-            aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
+    @Override
+    protected int getMaxTemperature() {
+        return 500;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return 1;
+    }
+
+    @Override
+    protected int getCooldownInterval() {
+        return basicLossTimerLimit / basicTemperatureMod;
+    }
+
+    @Override
+    protected void updateFuel(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if ((aTick % 256L == 0L) && (!aBaseMetaTileEntity.getWorld().isThundering())) {
+            boolean bRain = aBaseMetaTileEntity.getWorld().isRaining() && aBaseMetaTileEntity.getBiome().rainfall > 0.0F;
+            mProcessingEnergy += bRain && aBaseMetaTileEntity.getWorld().skylightSubtracted >= 4 || !aBaseMetaTileEntity.getSkyAtSide((byte) 1) ? 0 : !bRain && aBaseMetaTileEntity.getWorld().isDaytime() ? 8 * basicTemperatureMod : basicTemperatureMod;
         }
     }
 }

@@ -2,13 +2,14 @@ package gregtech.common.tileentities.boilers;
 
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.*;
+import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public int mLossTimer = 0;
     public FluidStack mSteam = null;
     public boolean mHadNoWater = false;
+    private int mExcessWater = 0;
 
     public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
@@ -152,6 +154,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
         aNBT.setInteger("mLossTimer", this.mLossTimer);
         aNBT.setInteger("mTemperature", this.mTemperature);
         aNBT.setInteger("mProcessingEnergy", this.mProcessingEnergy);
+        aNBT.setInteger("mExcessWater", this.mExcessWater);
         if (this.mSteam != null) {
             try {
                 aNBT.setTag("mSteam", this.mSteam.writeToNBT(new NBTTagCompound()));
@@ -165,7 +168,25 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
         this.mLossTimer = aNBT.getInteger("mLossTimer");
         this.mTemperature = aNBT.getInteger("mTemperature");
         this.mProcessingEnergy = aNBT.getInteger("mProcessingEnergy");
+        this.mExcessWater = aNBT.getInteger("mExcessWater");
         this.mSteam = FluidStack.loadFluidStackFromNBT(aNBT.getCompoundTag("mSteam"));
+    }
+
+    /**
+     * Produce some steam. Assume water is present.
+     */
+    protected void produceSteam(int aAmount) {
+        mExcessWater -= aAmount;
+        if (mExcessWater < 0) {
+            int tWaterToConsume = -mExcessWater / GT_Values.STEAM_PER_WATER + 1;
+            mFluid.amount -= tWaterToConsume;
+            mExcessWater += GT_Values.STEAM_PER_WATER * tWaterToConsume;
+        }
+        if (GT_ModHandler.isSteam(this.mSteam)) {
+            this.mSteam.amount += aAmount;
+        } else {
+            this.mSteam = GT_ModHandler.getSteam(aAmount);
+        }
     }
 
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
@@ -173,14 +194,14 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
             if (this.mTemperature <= 20) {
                 this.mTemperature = 20;
                 this.mLossTimer = 0;
-            }
-            if (++this.mLossTimer > 40) {
+            } else if (++this.mLossTimer > getCooldownInterval()) {
+                // only loss temperature if hot
                 this.mTemperature -= 1;
                 this.mLossTimer = 0;
             }
-            for (byte i = 1; (this.mSteam != null) && (i < 6); i = (byte) (i + 1)) {
+            for (int i = 1; (this.mSteam != null) && (i < 6); i++) {
                 if (i != aBaseMetaTileEntity.getFrontFacing()) {
-                    IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide(i);
+                    IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide((byte) i);
                     if (tTileEntity != null) {
                         FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), Math.max(1, this.mSteam.amount / 2), false);
                         if (tDrained != null) {
@@ -194,7 +215,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
             }
             if (aTick % 10L == 0L) {
                 if (this.mTemperature > 100) {
-                    if ((this.mFluid == null) || (!GT_ModHandler.isWater(this.mFluid)) || (this.mFluid.amount <= 0)) {
+                    if ((!GT_ModHandler.isWater(this.mFluid)) || (this.mFluid.amount <= 0)) {
                         this.mHadNoWater = true;
                     } else {
                         if (this.mHadNoWater) {
@@ -202,57 +223,27 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
                             aBaseMetaTileEntity.doExplosion(2048L);
                             return;
                         }
-                        this.mFluid.amount -= 1;
-                        if (this.mSteam == null) {
-                            this.mSteam = GT_ModHandler.getSteam(150L);
-                        } else if (GT_ModHandler.isSteam(this.mSteam)) {
-                            this.mSteam.amount += 150;
-                        } else {
-                            this.mSteam = GT_ModHandler.getSteam(150L);
-                        }
+                        produceSteam(getProductionPerSecond() / 2);
                     }
                 } else {
                     this.mHadNoWater = false;
                 }
             }
             if ((this.mSteam != null) &&
-                    (this.mSteam.amount > 32000)) {
+                    (this.mSteam.amount > getCapacity())) {
                 sendSound((byte) 1);
-                this.mSteam.amount = 24000;
+                this.mSteam.amount = getCapacity() * 3 / 4;
             }
-            if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()) &&
-                    (this.mInventory[2] != null)) {
-                if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Coal))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Coal)))) {
-                    this.mProcessingEnergy += 160;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(3) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
-                    }
-                } else if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Charcoal))) {
-                    this.mProcessingEnergy += 160;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(3) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1L));
-                    }
-                } else if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], "fuelCoke")) {
-                    this.mProcessingEnergy += 640;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(2) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.Ash, 1L));
-                    }
-                } else if ((GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.gem.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dust.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.dustImpure.get(Materials.Lignite))) || (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.crushed.get(Materials.Lignite)))) {
-                    this.mProcessingEnergy += 120;
-                    aBaseMetaTileEntity.decrStackSize(2, 1);
-                    if (aBaseMetaTileEntity.getRandomNumber(8) == 0) {
-                        aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.DarkAsh, 1L));
-                    }
-                }
-            }
-            if ((this.mTemperature < 1000) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
-                this.mProcessingEnergy -= 2;
+            if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()))
+                updateFuel(aBaseMetaTileEntity, aTick);
+            if ((this.mTemperature < getMaxTemperature()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
+                this.mProcessingEnergy -= getEnergyConsumption();
                 this.mTemperature += 1;
             }
             aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
+        }
+        if (this.mProcessingEnergy > 0 && (aTick % 20L == 0L)) {
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), getPollution());
         }
     }
 
@@ -282,12 +273,23 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
                     );
         }
     }
+    public int getTankPressure() {
+        return 100;
+    }
+
+    protected abstract int getPollution();
 
     public int getCapacity() {
         return 16000;
     }
 
-    public int getTankPressure() {
-        return 100;
-    }
+    protected abstract int getProductionPerSecond();
+
+    protected abstract int getMaxTemperature();
+
+    protected abstract int getEnergyConsumption();
+
+    protected abstract int getCooldownInterval();
+
+    protected abstract void updateFuel(IGregTechTileEntity aBaseMetaTileEntity, long aTick);
 }
