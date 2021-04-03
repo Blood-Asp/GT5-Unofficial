@@ -20,6 +20,8 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     private static final int ARROW_UP_INDEX = 4;
     private static final int FRONT_INDEX = 5;
 
+    public int maxStackSize = 64;
+
     public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
@@ -237,7 +239,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aSide == getBaseMetaTileEntity().getBackFacing()) {
         	
             mTargetStackSize = (byte) ((mTargetStackSize + (aPlayer.isSneaking()? -1 : 1)) % 65);
-            if(mTargetStackSize <0){mTargetStackSize = 64;}
+            if(mTargetStackSize <0){mTargetStackSize = maxStackSize;}
             if (mTargetStackSize == 0) {
                 GT_Utility.sendChatToPlayer(aPlayer, trans("098","Do not regulate Item Stack Size"));
             } else {
