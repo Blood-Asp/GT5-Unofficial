@@ -21,6 +21,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     private static final int FRONT_INDEX = 5;
 
     public int maxStackSize = 64;
+    public static int MAX = 8;
 
     public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false;
     public int mSuccess = 0, mTargetStackSize = 0;

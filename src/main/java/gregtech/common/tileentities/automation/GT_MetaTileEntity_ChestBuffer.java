@@ -18,7 +18,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
-    private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1, 1, 1, 1, 1, 1};
+
+    private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1, 1,  1,  1,  1,   1};
+    private static final int[] maxStacks = { 1,   1,   1,  1, 1, 1, 2, 4, 8, 16, 32, 64, 128};
 
 
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier) {
@@ -60,17 +62,19 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aTimer % tickRate[mTier] > 0) return;
 
-        if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
-            fillStacksIntoFirstSlots();
-        }
-        // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
-        // For the first 6 ticks after a successful move (49->44), push every tick. Then go to every 5 ticks.
-        if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
-            super.moveItems(aBaseMetaTileEntity, aTimer);
-        }
+        for (int i = 0; i < MAX; i++ ){
+            if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
+                fillStacksIntoFirstSlots();
+            }
+            // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
+            // For the first 6 ticks after a successful move (49->44), push every tick. Then go to every 5 ticks.
+            if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
+                super.moveItems(aBaseMetaTileEntity, aTimer);
+            }
 
-        if(mSuccess < 0) {
-            mSuccess = 0;
+            if(mSuccess < 0) {
+                mSuccess = 0;
+            }
         }
     }
 
@@ -141,7 +145,7 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
         int tickRate = getTickRate(tier);
         String s = "";
         if (tickRate < 20)
-            s = "1/" + 20/tickRate + " ";
+            s = maxStacks[tier] + "/" + 20/tickRate + " ";
         else if (tickRate > 20) {
             s = (tickRate / 20) + "th ";
         }
@@ -152,5 +156,10 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
         if (tier > 9)
             return 1;
         return tickRate[tier];
+    }
+
+    protected static int getMaxStacks(int tier) {
+        // Included higher tiers on the off chance they actually work without blowing things up lmao
+        return tier > 9 ? MAX : Math.min(maxStacks[tier], MAX);
     }
 }
