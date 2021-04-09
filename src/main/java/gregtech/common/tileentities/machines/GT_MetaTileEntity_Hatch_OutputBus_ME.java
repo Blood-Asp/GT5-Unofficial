@@ -68,7 +68,7 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
         int tTotal = aStack.stackSize;
         int tStored = store(aStack);
         aStack.stackSize -= tStored;
-        return tTotal < tStored;
+        return tTotal == tStored;
     }
 
     @Optional.Method(modid = "appliedenergistics2")
