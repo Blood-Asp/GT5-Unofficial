@@ -18,6 +18,7 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.util.Platform;
 import cpw.mods.fml.common.Optional;
+import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -58,6 +59,16 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         getProxy();
+    }
+
+    @Override
+    public boolean storeAll(ItemStack aStack) {
+        if (!GregTech_API.mAE2)
+            return false;
+        int tTotal = aStack.stackSize;
+        int tStored = store(aStack);
+        aStack.stackSize -= tStored;
+        return tTotal < tStored;
     }
 
     @Optional.Method(modid = "appliedenergistics2")
