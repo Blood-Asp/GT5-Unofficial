@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import static gregtech.api.util.GT_Utility.*;
+import static gregtech.api.util.GT_Utility.moveMultipleItemStacks;
 
 public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
     public GT_MetaTileEntity_Hatch_OutputBus(int aID, String aName, String aNameRegional, int aTier) {
@@ -108,6 +108,42 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
             default:
                 return new GT_GUIContainer_4by4(aPlayerInventory, aBaseMetaTileEntity, "Output Bus");
         }
+    }
+
+    /**
+     * Attempt to store as many items as possible into the internal inventory of this output bus.
+     * If you need atomicity you should use {@link gregtech.api.interfaces.tileentity.IHasInventory#addStackToSlot(int, ItemStack)}
+     * @param aStack Assume valid.
+     *               Will be mutated.
+     *               Take over the ownership. Caller should not retain a reference to this stack if the call returns true.
+     * @return true if stack is fully accepted. false is stack is partially accepted or nothing is accepted
+     */
+    public boolean storeAll(ItemStack aStack) {
+        for (int i = 0, mInventoryLength = mInventory.length; i < mInventoryLength; i++) {
+            ItemStack tSlot = mInventory[i];
+            if (GT_Utility.isStackInvalid(tSlot)) {
+                if (aStack.stackSize <= getInventoryStackLimit()) {
+                    mInventory[i] = aStack;
+                    return true;
+                }
+                mInventory[i] = aStack.splitStack(getInventoryStackLimit());
+            } else {
+                int tRealStackLimit = Math.min(getInventoryStackLimit(), tSlot.getMaxStackSize());
+                if (tSlot.stackSize < tRealStackLimit &&
+                        tSlot.isItemEqual(aStack) &&
+                        ItemStack.areItemStackTagsEqual(tSlot, aStack)) {
+                    if (aStack.stackSize + tSlot.stackSize <= tRealStackLimit) {
+                        mInventory[i].stackSize += aStack.stackSize;
+                        return true;
+                    } else {
+                        // more to serve
+                        aStack.stackSize -= tRealStackLimit - tSlot.stackSize;
+                        mInventory[i].stackSize = tRealStackLimit;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
