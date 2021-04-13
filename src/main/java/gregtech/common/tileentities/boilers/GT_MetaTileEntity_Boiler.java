@@ -284,20 +284,24 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
         return false;
     }
 
-    private void pushSteamToInventories(IGregTechTileEntity aBaseMetaTileEntity) {
+    protected final void pushSteamToSide(IGregTechTileEntity aBaseMetaTileEntity, int aSide) {
+        IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide((byte) aSide);
+        if (tTileEntity == null)
+            return;
+        FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aSide), Math.max(1, this.mSteam.amount / 2), false);
+        if (tDrained == null)
+            return;
+        int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(aSide).getOpposite(), tDrained, false);
+        if (tFilledAmount <= 0)
+            return;
+        tTileEntity.fill(ForgeDirection.getOrientation(aSide).getOpposite(), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(aSide), tFilledAmount, true), true);
+    }
+
+    protected void pushSteamToInventories(IGregTechTileEntity aBaseMetaTileEntity) {
         for (int i = 1; (this.mSteam != null) && (i < 6); i++) {
             if (i == aBaseMetaTileEntity.getFrontFacing())
                 continue;
-            IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide((byte) i);
-            if (tTileEntity == null)
-                continue;
-            FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), Math.max(1, this.mSteam.amount / 2), false);
-            if (tDrained == null)
-                continue;
-            int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), tDrained, false);
-            if (tFilledAmount <= 0)
-                continue;
-            tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), tFilledAmount, true), true);
+            pushSteamToSide(aBaseMetaTileEntity, i);
         }
     }
 
@@ -345,6 +349,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     @Override
     public int getTankPressure() {
         return 100;
+    }
+
+    protected boolean isOutputToFront() {
+        return false;
     }
 
     protected abstract int getPollution();

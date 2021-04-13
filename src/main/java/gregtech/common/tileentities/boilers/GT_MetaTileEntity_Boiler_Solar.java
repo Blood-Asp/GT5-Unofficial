@@ -93,7 +93,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
                 + "    Hot time: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.mRunTime*25/20)+EnumChatFormatting.RESET+" s",
                 "Min output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicMaxOuput*20/25)+EnumChatFormatting.RESET+ " L/s"
                 + "    Max output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicOutput*20/25)+EnumChatFormatting.RESET+" L/s",
-                "Current Output: " + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCalcificationOutput()*20/25) +EnumChatFormatting.RESET+" L/s"};
+                "Current Output: " + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getProductionPerSecond()*20/25) +EnumChatFormatting.RESET+" L/s"};
     }
 
     @Override
@@ -108,23 +108,16 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
 
     // Calcification start time is 43200*25/20=54,000s or 15 hours of game time.
     static final int CALCIFICATION_TIME = 43200;
-    
-    public int getCalcificationOutput() { // Returns how much output the boiler can do.
-        if (this.mTemperature < 100 ) {
-            return 0;
-        }
-        if (this.mRunTime > CALCIFICATION_TIME) {
-            // Calcification takes about 2/3 CALCIFICATION_TIME to completely calcify on basic solar. For HP solar, it takes about 2x CALCIFICATION_TIME
-            return Math.max(this.basicMaxOuput, this.basicOutput - ((this.mRunTime - CALCIFICATION_TIME) / (CALCIFICATION_TIME/150))); // Every 288*25 ticks, or 6 minutes, lose 1 L output.
-        } else {
-            return this.basicOutput;
-        }
-    }
 
     @Override
     protected void produceSteam(int aAmount) {
         super.produceSteam(aAmount);
         mRunTime++;
+    }
+
+    @Override
+    protected void pushSteamToInventories(IGregTechTileEntity aBaseMetaTileEntity) {
+        pushSteamToSide(aBaseMetaTileEntity, aBaseMetaTileEntity.getFrontFacing());
     }
 
     @Override
