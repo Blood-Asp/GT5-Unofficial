@@ -62,19 +62,17 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aTimer % tickRate[mTier] > 0) return;
 
-        for (int i = 0; i < MAX; i++ ){
-            if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
-                fillStacksIntoFirstSlots();
-            }
-            // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
-            // For the first 6 ticks after a successful move (49->44), push every tick. Then go to every 5 ticks.
-            if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
-                super.moveItems(aBaseMetaTileEntity, aTimer);
-            }
+        if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
+            fillStacksIntoFirstSlots();
+        }
+        // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
+        // For the first 6 ticks after a successful move (49->44), push every tick. Then go to every 5 ticks.
+        if ( (mSuccess <= 0 ) || (mSuccess > 43) || ((mSuccess % 5) == 0 )){
+            super.moveItems(aBaseMetaTileEntity, aTimer, Math.min(MAX, maxStacks[mTier]));
+        }
 
-            if(mSuccess < 0) {
-                mSuccess = 0;
-            }
+        if(mSuccess < 0) {
+            mSuccess = 0;
         }
     }
 
@@ -143,13 +141,19 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
 
     protected static String getTickRateDesc(int tier){
         int tickRate = getTickRate(tier);
-        String s = "";
-        if (tickRate < 20)
-            s = maxStacks[tier] + "/" + 20/tickRate + " ";
-        else if (tickRate > 20) {
-            s = (tickRate / 20) + "th ";
+        String timeStr = "";
+        String numStr = "";
+        if (maxStacks[tier] > 1) {
+            numStr = maxStacks[tier] + " items";
+        } else {
+            numStr = "1 item";
         }
-        return "Moves items every " + s + "second";
+        if (tickRate < 20)
+            timeStr = "1/" + 20/tickRate + " ";
+        else if (tickRate > 20) {
+            timeStr = (tickRate / 20) + "th ";
+        }
+        return "Moves " + numStr + " every " + timeStr + "second";
     }
 
     protected static int getTickRate(int tier) {
