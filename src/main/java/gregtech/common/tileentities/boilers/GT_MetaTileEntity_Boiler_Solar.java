@@ -160,4 +160,14 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
             mProcessingEnergy += bRain && aBaseMetaTileEntity.getWorld().skylightSubtracted >= 4 || !aBaseMetaTileEntity.getSkyAtSide((byte) 1) ? 0 : !bRain && aBaseMetaTileEntity.getWorld().isDaytime() ? 8 * basicTemperatureMod : basicTemperatureMod;
         }
     }
+
+    /** for waila */
+    public int getBasicOutput() {
+        return basicOutput;
+    }
+
+    /** for waila */
+    public int getCalcificationOutput() {
+        return getProductionPerSecond();
+    }
 }
