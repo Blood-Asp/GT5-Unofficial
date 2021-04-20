@@ -56,6 +56,10 @@ public class LightingHelper {
      */
     public LightingHelper(RenderBlocks renderBlocks) {
         this.renderBlocks = renderBlocks;
+        if (renderBlocks.useInventoryTint) {
+            // Block will be rendered in an inventory, so it needs its lightness maxed
+            setLightnessOverride(1.0F);
+        }
     }
 
     /**

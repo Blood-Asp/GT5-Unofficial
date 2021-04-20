@@ -450,9 +450,18 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
 
     public void renderInventoryBlock(Block aBlock, int aMeta, int aModelID, RenderBlocks aRenderer) {
         aRenderer.enableAO = false;
+        aRenderer.useInventoryTint = true;
+
+        GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+
+        Tessellator.instance.startDrawingQuads();
+
         if ((aBlock instanceof GT_Block_Machines)) {
-            if ((aMeta > 0) && (aMeta < GregTech_API.METATILEENTITIES.length) && (GregTech_API.METATILEENTITIES[aMeta] != null) &&
-                    (!GregTech_API.METATILEENTITIES[aMeta].renderInInventory(aBlock, aMeta, aRenderer))) {
+            if ((aMeta > 0)
+                    && (aMeta < GregTech_API.METATILEENTITIES.length)
+                    && (GregTech_API.METATILEENTITIES[aMeta] != null)
+                    && (!GregTech_API.METATILEENTITIES[aMeta].renderInInventory(aBlock, aMeta, aRenderer))) {
                 renderNormalInventoryMetaTileEntity(aBlock, aMeta, aRenderer);
             }
         } else if ((aBlock instanceof GT_Block_Ores_Abstract)) {
@@ -462,41 +471,32 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             aBlock.setBlockBoundsForItemRender();
             aRenderer.setRenderBoundsFromBlock(aBlock);
 
-            GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, -1.0F, 0.0F);
-            renderNegativeYFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 0), true);
-            Tessellator.instance.draw();
+            renderNegativeYFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) DOWN.ordinal()), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 1.0F, 0.0F);
-            renderPositiveYFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 1), true);
-            Tessellator.instance.draw();
+            renderPositiveYFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) UP.ordinal()), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, -1.0F);
-            renderNegativeZFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 2), true);
-            Tessellator.instance.draw();
+            renderNegativeZFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) NORTH.ordinal()), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, 1.0F);
-            renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 3), true);
-            Tessellator.instance.draw();
+            renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) SOUTH.ordinal()), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(-1.0F, 0.0F, 0.0F);
-            renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 4), true);
-            Tessellator.instance.draw();
+            renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) WEST.ordinal()), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(1.0F, 0.0F, 0.0F);
-            renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) 5), true);
-            Tessellator.instance.draw();
+            renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) EAST.ordinal()), true);
+
         }
-        aBlock.setBlockBounds(blockMin, blockMin, blockMin, 1.0F, 1.0F, 1.0F);
+        Tessellator.instance.draw();
+
+        aBlock.setBlockBounds(blockMin, blockMin, blockMin, blockMax, blockMax, blockMax);
         aRenderer.setRenderBoundsFromBlock(aBlock);
+
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+        aRenderer.useInventoryTint = false;
     }
 
     private static void renderNormalInventoryMetaTileEntity(Block aBlock, int aMeta, RenderBlocks aRenderer) {
@@ -512,7 +512,6 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
 
         final IGregTechTileEntity iGregTechTileEntity = tMetaTileEntity.getBaseMetaTileEntity();
 
-        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
         if ((iGregTechTileEntity instanceof IPipeRenderedTileEntity)) {
             final float tThickness = ((IPipeRenderedTileEntity) iGregTechTileEntity).getThickNess();
             final float pipeMin = (blockMax - tThickness) / 2.0F;
@@ -521,68 +520,42 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             aBlock.setBlockBounds(blockMin, pipeMin, pipeMin, blockMax, pipeMax, pipeMax);
             aRenderer.setRenderBoundsFromBlock(aBlock);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, -1.0F, 0.0F);
             renderNegativeYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) DOWN.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, false, false), true);
-            Tessellator.instance.draw();
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 1.0F, 0.0F);
             renderPositiveYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) UP.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, false, false), true);
-            Tessellator.instance.draw();
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, -1.0F);
             renderNegativeZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) NORTH.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, false, false), true);
-            Tessellator.instance.draw();
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, 1.0F);
             renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) SOUTH.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, false, false), true);
-            Tessellator.instance.draw();
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(-1.0F, 0.0F, 0.0F);
             renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) WEST.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(1.0F, 0.0F, 0.0F);
             renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) EAST.ordinal(), (byte) (CONNECTED_WEST | CONNECTED_EAST), (byte) -1, true, false), true);
         } else {
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, -1.0F, 0.0F);
-            renderNegativeYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) DOWN.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
+            renderNegativeYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) DOWN.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 1.0F, 0.0F);
-            renderPositiveYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) UP.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
+            renderPositiveYFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) UP.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, -1.0F);
-            renderNegativeZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) NORTH.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
+            renderNegativeZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) NORTH.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(0.0F, 0.0F, 1.0F);
-            renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) SOUTH.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
+            renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) SOUTH.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(-1.0F, 0.0F, 0.0F);
-            renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) WEST.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
-            Tessellator.instance.draw();
+            renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) WEST.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
 
-            Tessellator.instance.startDrawingQuads();
             Tessellator.instance.setNormal(1.0F, 0.0F, 0.0F);
-            renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) EAST.ordinal(), (byte) EAST.ordinal(), (byte) -1, true, false), true);
+            renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tMetaTileEntity.getTexture(iGregTechTileEntity, (byte) EAST.ordinal(), (byte) WEST.ordinal(), (byte) -1, true, false), true);
         }
-        Tessellator.instance.draw();
-        aBlock.setBlockBounds(blockMin, blockMin, blockMin, blockMax, blockMax, blockMax);
-        aRenderer.setRenderBoundsFromBlock(aBlock);
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 
     public static void renderNegativeYFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
@@ -665,6 +638,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
 
     public boolean renderWorldBlock(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, int aModelID, RenderBlocks aRenderer) {
         aRenderer.enableAO = Minecraft.isAmbientOcclusionEnabled() && GT_Mod.gregtechproxy.mRenderTileAmbientOcclusion;
+        aRenderer.useInventoryTint = false;
         TileEntity tileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if (tileEntity == null) return false;
         if (tileEntity instanceof IGregTechTileEntity) {
