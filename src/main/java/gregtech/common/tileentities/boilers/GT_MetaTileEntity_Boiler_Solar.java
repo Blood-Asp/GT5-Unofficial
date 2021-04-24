@@ -59,7 +59,6 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
      * for WAILA
      *
      * @deprecated replaced by {@link #getMaxOutputPerSecond()}
-     * TODO: Update WAILAPlugins to use getMaxOutputPerSecond() instead
      */
     @Deprecated
     public int getBasicOutput() {
@@ -74,7 +73,6 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
      * for WAILA
      *
      * @deprecated replaced by {@link #getProductionPerSecond()}
-     * TODO: Update WAILAPlugins to use getProductionPerSecond() instead
      */
     @SuppressWarnings("unused")
     @Deprecated
