@@ -27,27 +27,32 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
                     "Produces %sL of Steam per second%n" +
                     "Calcifies over time, reducing Steam output to %sL/s%n" +
                     "Break and replace to descale");
-    private final Config config = new Config();
-    protected int calcificationTicks;
-    protected int minOutputPerSecond;
-    protected int maxOutputPerSecond;
+    protected final Config mConfig;
     protected int basicTemperatureMod = 5; // Base Celsius gain or loss
-    protected int coolDownTicks;
     private int mRunTimeTicks = 0;
 
     public GT_MetaTileEntity_Boiler_Solar(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[0]);
-        config.onConfigLoad();
+        mConfig = createConfig();
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
-        config.onConfigLoad();
+        mConfig = createConfig();
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
-        config.onConfigLoad();
+        mConfig = createConfig();
+    }
+
+    protected GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, Config aConfig) {
+        super(aName, aTier, aDescription, aTextures);
+        mConfig = aConfig;
+    }
+
+    protected Config createConfig() {
+        return new Config(machineconfig + ".boiler.solar.bronze",1080000,40,120,45);
     }
 
     /**
@@ -62,7 +67,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
     }
 
     public int getMaxOutputPerSecond() {
-        return maxOutputPerSecond;
+        return mConfig.getMaxOutputPerSecond();
     }
 
     /**
@@ -86,7 +91,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
     }
 
     public int getMinOutputPerSecond() {
-        return minOutputPerSecond;
+        return mConfig.getMinOutputPerSecond();
     }
 
     @Override
@@ -170,15 +175,15 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         if (mTemperature < 100) {
             return 0;
         }
-        if (mRunTimeTicks > calcificationTicks) {
+        if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
             /* When reaching calcification ticks; discount the proportion of run-time spent on calcification
              *  from the maximum output per second, and return this or the minimum output per second
              */
-            return Math.max(minOutputPerSecond,
-                    maxOutputPerSecond
-                            - maxOutputPerSecond * (mRunTimeTicks - calcificationTicks) / calcificationTicks);
+            return Math.max(mConfig.getMinOutputPerSecond(),
+                    mConfig.getMaxOutputPerSecond()
+                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks());
         } else {
-            return maxOutputPerSecond;
+            return mConfig.getMaxOutputPerSecond();
         }
     }
 
@@ -194,7 +199,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
 
     @Override
     protected int getCooldownInterval() {
-        return coolDownTicks / basicTemperatureMod;
+        return mConfig.getCoolDownTicks() / basicTemperatureMod;
     }
 
     @Override
@@ -257,45 +262,50 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Solar(mName, mTier, mDescriptionArray, mTextures);
+        return new GT_MetaTileEntity_Boiler_Solar(mName, mTier, mDescriptionArray, mTextures, mConfig);
     }
 
-    protected class Config {
+    protected static class Config {
+        private final int calcificationTicks;
+        private final int minOutputPerSecond;
+        private final int maxOutputPerSecond;
+        private final int coolDownTicks;
 
-        protected int get(final String key, final int defaultValue, final String... comments) {
-            final StringBuilder comment = new StringBuilder();
-            if (comments.length > 0) comment.append(String.join("\n", comments)).append("\n");
-            comment.append("Default: ").append(defaultValue);
-            return sMachineFile.mConfig.get(getConfigCategory(), key, defaultValue, comment.toString()).getInt();
-        }
-
-        protected int getCalcificationTicks() {
-            return get("CalcificationTicks", 1080000,
+        public Config(String aCategory,
+                      int aDefaultCalcificationTicks,
+                      int aDefaultMinOutputPerSecond,
+                      int aDefaultMaxOutputPerSecond,
+                      int aDefaultCoolDownTicks) {
+            calcificationTicks = get(aCategory,"CalcificationTicks", aDefaultCalcificationTicks,
                     "Number of run-time ticks before boiler starts calcification.",
                     "100% calcification and minimal output will be reached at 2 times this.");
+            minOutputPerSecond = get(aCategory,"MinOutputPerSecond", aDefaultMinOutputPerSecond);
+            maxOutputPerSecond = get(aCategory,"MaxOutputPerSecond", aDefaultMaxOutputPerSecond);
+            coolDownTicks = get(aCategory,"CoolDownTicks", aDefaultCoolDownTicks, "Number of ticks it takes to lose 1°C.");
         }
 
-        protected String getConfigCategory() {
-            return machineconfig + ".boiler.solar.bronze";
+        protected int get(final String aCategory, final String aKey, final int aDefaultValue, final String... aComments) {
+            final StringBuilder tCommentBuilder = new StringBuilder();
+            for (String tComment: aComments)
+                tCommentBuilder.append(tComment).append('\n');
+            tCommentBuilder.append("Default: ").append(aDefaultValue);
+            return sMachineFile.mConfig.get(aCategory, aKey, aDefaultValue, tCommentBuilder.toString()).getInt();
         }
 
-        protected int getCoolDownTicks() {
-            return get("CoolDownTicks", 45, "Number of ticks it takes to lose 1°C.");
+        public int getCalcificationTicks() {
+            return calcificationTicks;
         }
 
-        protected int getMaxOutputPerSecond() {
-            return get("MaxOutputPerSecond", 120);
+        public int getMinOutputPerSecond() {
+            return minOutputPerSecond;
         }
 
-        protected int getMinOutputPerSecond() {
-            return get("MinOutputPerSecond", 40);
+        public int getMaxOutputPerSecond() {
+            return maxOutputPerSecond;
         }
 
-        protected void onConfigLoad() {
-            calcificationTicks = getCalcificationTicks();
-            minOutputPerSecond = getMinOutputPerSecond();
-            maxOutputPerSecond = getMaxOutputPerSecond();
-            coolDownTicks = getCoolDownTicks();
+        public int getCoolDownTicks() {
+            return coolDownTicks;
         }
     }
 }

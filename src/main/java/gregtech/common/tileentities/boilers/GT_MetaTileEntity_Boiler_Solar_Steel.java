@@ -12,21 +12,25 @@ import net.minecraft.entity.player.InventoryPlayer;
 import static gregtech.api.enums.ConfigCategories.machineconfig;
 
 public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boiler_Solar {
-    private final GT_MetaTileEntity_Boiler_Solar_Steel.Config config = new GT_MetaTileEntity_Boiler_Solar_Steel.Config();
-
     public GT_MetaTileEntity_Boiler_Solar_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        config.onConfigLoad();
     }
 
     public GT_MetaTileEntity_Boiler_Solar_Steel(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
-        config.onConfigLoad();
     }
 
     public GT_MetaTileEntity_Boiler_Solar_Steel(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
-        config.onConfigLoad();
+    }
+
+    public GT_MetaTileEntity_Boiler_Solar_Steel(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, Config aConfig) {
+        super(aName, aTier, aDescription, aTextures, aConfig);
+    }
+
+    @Override
+    protected Config createConfig() {
+        return new Config(machineconfig + ".boiler.solar.steel",108000, 120, 360, 75);
     }
 
     @Override
@@ -62,32 +66,6 @@ public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boil
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Solar_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
+        return new GT_MetaTileEntity_Boiler_Solar_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mConfig);
     }
-
-    protected class Config extends GT_MetaTileEntity_Boiler_Solar.Config {
-
-        @Override
-        protected String getConfigCategory() {
-            return machineconfig + ".boiler.solar.steel";
-        }
-
-        @Override
-        protected int getCoolDownTicks() {
-            return get("CoolDownTicks", 75,
-                    "Number of ticks it takes to loose 1°C (Cools down slower than a normal boiler).");
-        }
-
-        @Override
-        protected int getMaxOutputPerSecond() {
-            return get("MaxOutputPerSecond", 360);
-        }
-
-        @Override
-        protected int getMinOutputPerSecond() {
-            return get("MinOutputPerSecond", 120);
-        }
-
-    }
-
 }
