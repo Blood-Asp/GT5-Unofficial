@@ -95,6 +95,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         super.onScrewdriverRightClick(aSide, aPlayer, aX, aY, aZ);
+        int oldChunkRange = chunkRangeConfig;
         if (aPlayer.isSneaking()) {
             if (chunkRangeConfig > 0) {
                 chunkRangeConfig--;
@@ -108,6 +109,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             if (chunkRangeConfig > getRangeInChunks())
                 chunkRangeConfig = 1;
         }
+        if (oldChunkRange != chunkRangeConfig) mOilFieldChunks.clear();
         GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.workareaset") + " " + chunkRangeConfig + "x" + chunkRangeConfig + StatCollector.translateToLocal("GT5U.machines.chunks"));//TODO Add translation support
     }
 
