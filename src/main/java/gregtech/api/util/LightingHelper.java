@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.Tessellator;
 public class LightingHelper {
     public static final int NORMAL_BRIGHTNESS = 0xff00ff;
     public static final int MAX_BRIGHTNESS = 0xf000f0;
+    public static final float NO_Z_FIGHT_OFFSET = 1.0F / 1024.0F;
     protected static final float[] LIGHTNESS = {0.5F, 1.0F, 0.8F, 0.8F, 0.6F, 0.6F};
     private final RenderBlocks renderBlocks;
     /**
@@ -55,6 +56,10 @@ public class LightingHelper {
      */
     public LightingHelper(RenderBlocks renderBlocks) {
         this.renderBlocks = renderBlocks;
+        if (renderBlocks.useInventoryTint) {
+            // Block will be rendered in an inventory, so it needs its lightness maxed
+            setLightnessOverride(1.0F);
+        }
     }
 
     /**
@@ -321,7 +326,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int xOffset = renderBlocks.renderMinX > 0.0F ? x : x - 1;
+            int xOffset = renderBlocks.renderMinX > 0.0F + NO_Z_FIGHT_OFFSET ? x : x - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z);
             brightness = mixedBrightness;
@@ -392,7 +397,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int xOffset = renderBlocks.renderMaxX < 1.0F ? x : x + 1;
+            int xOffset = renderBlocks.renderMaxX < 1.0F - NO_Z_FIGHT_OFFSET ? x : x + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, xOffset, y, z);
             brightness = mixedBrightness;
@@ -462,7 +467,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int yOffset = renderBlocks.renderMinY > 0.0F ? y : y - 1;
+            int yOffset = renderBlocks.renderMinY > 0.0F + NO_Z_FIGHT_OFFSET ? y : y - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, yOffset, z);
             brightness = mixedBrightness;
@@ -497,7 +502,7 @@ public class LightingHelper {
             float aoMixedXYZNNN = (renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchXYZNNN + aoLightValue + renderBlocks.aoLightValueScratchYZNN) / 4.0F;
             float aoMixedXYZNNP = (renderBlocks.aoLightValueScratchXYZNNP + renderBlocks.aoLightValueScratchXYNN + renderBlocks.aoLightValueScratchYZNP + aoLightValue) / 4.0F;
 
-            aoTopLeft  = (float) (aoMixedXYZNNP * renderBlocks.renderMaxZ * (1.0D - renderBlocks.renderMinX) + aoMixedXYZPNP * renderBlocks.renderMaxZ * renderBlocks.renderMinX + aoMixedXYZPNN * (1.0D - renderBlocks.renderMaxZ) * renderBlocks.renderMinX + aoMixedXYZNNN * (1.0D - renderBlocks.renderMaxZ) * (1.0D - renderBlocks.renderMinX));
+            aoTopLeft = (float) (aoMixedXYZNNP * renderBlocks.renderMaxZ * (1.0D - renderBlocks.renderMinX) + aoMixedXYZPNP * renderBlocks.renderMaxZ * renderBlocks.renderMinX + aoMixedXYZPNN * (1.0D - renderBlocks.renderMaxZ) * renderBlocks.renderMinX + aoMixedXYZNNN * (1.0D - renderBlocks.renderMaxZ) * (1.0D - renderBlocks.renderMinX));
             aoBottomLeft = (float) (aoMixedXYZNNP * renderBlocks.renderMinZ * (1.0D - renderBlocks.renderMinX) + aoMixedXYZPNP * renderBlocks.renderMinZ * renderBlocks.renderMinX + aoMixedXYZPNN * (1.0D - renderBlocks.renderMinZ) * renderBlocks.renderMinX + aoMixedXYZNNN * (1.0D - renderBlocks.renderMinZ) * (1.0D - renderBlocks.renderMinX));
             aoBottomRight = (float) (aoMixedXYZNNP * renderBlocks.renderMinZ * (1.0D - renderBlocks.renderMaxX) + aoMixedXYZPNP * renderBlocks.renderMinZ * renderBlocks.renderMaxX + aoMixedXYZPNN * (1.0D - renderBlocks.renderMinZ) * renderBlocks.renderMaxX + aoMixedXYZNNN * (1.0D - renderBlocks.renderMinZ) * (1.0D - renderBlocks.renderMaxX));
             aoTopRight = (float) (aoMixedXYZNNP * renderBlocks.renderMaxZ * (1.0D - renderBlocks.renderMaxX) + aoMixedXYZPNP * renderBlocks.renderMaxZ * renderBlocks.renderMaxX + aoMixedXYZPNN * (1.0D - renderBlocks.renderMaxZ) * renderBlocks.renderMaxX + aoMixedXYZNNN * (1.0D - renderBlocks.renderMaxZ) * (1.0D - renderBlocks.renderMaxX));
@@ -533,7 +538,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int yOffset = renderBlocks.renderMaxY < 1.0F ? y : y + 1;
+            int yOffset = renderBlocks.renderMaxY < 1.0F - NO_Z_FIGHT_OFFSET ? y : y + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, yOffset, z);
             brightness = mixedBrightness;
@@ -602,7 +607,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int zOffset = renderBlocks.renderMinZ > 0.0F ? z : z - 1;
+            int zOffset = renderBlocks.renderMinZ > 0.0F + NO_Z_FIGHT_OFFSET ? z : z - 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, y, zOffset);
             brightness = mixedBrightness;
@@ -673,7 +678,7 @@ public class LightingHelper {
 
         if (renderBlocks.enableAO) {
 
-            int zOffset = renderBlocks.renderMaxZ < 1.0F ? z : z + 1;
+            int zOffset = renderBlocks.renderMaxZ < 1.0F - NO_Z_FIGHT_OFFSET ? z : z + 1;
 
             int mixedBrightness = block.getMixedBrightnessForBlock(renderBlocks.blockAccess, x, y, zOffset);
             brightness = mixedBrightness;

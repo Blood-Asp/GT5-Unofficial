@@ -13,6 +13,7 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
@@ -21,11 +22,13 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.net.GT_Packet_TileEntity;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.objects.GT_StdRenderedTexture;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Client;
 import gregtech.common.GT_Pollution;
 import ic2.api.Direction;
 import net.minecraft.block.Block;
@@ -88,6 +91,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private String mOwnerName = "";
     private UUID mOwnerUuid = GT_Utility.defaultUuid;
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
+
+    public boolean mWasShutdown = false;
 
     private static final Field ENTITY_ITEM_HEALTH_FIELD;
     static
@@ -829,6 +834,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     public ITexture getCoverTexture(byte aSide) {
+        if (getCoverIDAtSide(aSide) == 0) return null;
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x1) != 0) {
+            return BlockIcons.HIDDEN_TEXTURE[0]; // See through
+        }
         return GregTech_API.sCovers.get(new GT_ItemStack(getCoverIDAtSide(aSide)));
     }
 
@@ -997,6 +1006,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public void enableWorking() {
         if (!mWorks) mWorkUpdate = true;
         mWorks = true;
+        mWasShutdown = false;
     }
 
     @Override
@@ -2310,5 +2320,14 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         AENetworkProxy gp = getProxy();
         if (gp != null)
             gp.invalidate();
+    }
+
+    @Override
+    public boolean wasShutdown() {
+         return mWasShutdown;
+    }
+
+    public void setShutdownStatus(boolean newStatus) {
+         mWasShutdown = newStatus;
     }
 }

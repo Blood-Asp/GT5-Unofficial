@@ -232,6 +232,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && aTick % 5 == 0) {
             mLastReceivedFrom &= 63;
             if (mLastReceivedFrom == 63) {
@@ -256,7 +257,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
 
             oLastReceivedFrom = mLastReceivedFrom;
 
-        } else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
+        }
     }
 
     private boolean checkEnvironment(int index, IGregTechTileEntity aBaseMetaTileEntity) {

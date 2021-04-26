@@ -16,8 +16,6 @@ import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -310,8 +308,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             aBaseMetaTileEntity.setActive(mMaxProgresstime > 0);
             boolean active=aBaseMetaTileEntity.isActive() && mPollution>0;
-            for(GT_MetaTileEntity_Hatch_Muffler aMuffler:mMufflerHatches)
-                aMuffler.getBaseMetaTileEntity().setActive(active);
+            for (GT_MetaTileEntity_Hatch_Muffler aMuffler : mMufflerHatches) {
+                IGregTechTileEntity iGTTileEntity = aMuffler.getBaseMetaTileEntity();
+                if (iGTTileEntity != null && !iGTTileEntity.isDead()) {
+                    iGTTileEntity.setActive(active);
+                }
+            }
         }
     }
 
@@ -341,7 +343,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         }
         if (mEUt < 0) {
             if (!drainEnergyInput(((long) -mEUt * 10000) / Math.max(1000, mEfficiency))) {
-                stopMachine();
+                criticalStopMachine();
                 return false;
             }
         }
@@ -391,6 +393,11 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
         mMaxProgresstime = 0;
         mEfficiencyIncrease = 0;
         getBaseMetaTileEntity().disableWorking();
+    }
+
+    public void criticalStopMachine() {
+        stopMachine();
+        getBaseMetaTileEntity().setShutdownStatus(true);
     }
 
     public int getRepairStatus() {
@@ -735,33 +742,15 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public boolean addOutput(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return false;
         aStack = GT_Utility.copy(aStack);
+        for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
+            if (isValidMetaTileEntity(tHatch) && tHatch.storeAll(aStack)) {
+                return true;
+            }
+        }
         boolean outputSuccess = true;
         while (outputSuccess && aStack.stackSize > 0) {
             outputSuccess = false;
-
-            if (GregTech_API.mAE2) {
-                // this separate cycle may be refactored out, after this function will hopefully be totally refactored
-                // for now it is here to avoid splitting stack when we have ME output bus
-                for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
-                    // TODO: If ever there will be another hatch storing in some external storage, here should be an interface check
-                    if (tHatch instanceof GT_MetaTileEntity_Hatch_OutputBus_ME && isValidMetaTileEntity(tHatch)) {
-                        int rest = ((GT_MetaTileEntity_Hatch_OutputBus_ME) tHatch).store(aStack);
-                        if (rest != aStack.stackSize)
-                            outputSuccess = true;
-                        aStack.stackSize = rest;
-                        if (rest == 0)
-                            return true;
-                    }
-                }
-            }
             ItemStack single = aStack.splitStack(1);
-            for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
-                if (!outputSuccess && isValidMetaTileEntity(tHatch)) {
-                    for (int i = tHatch.getSizeInventory() - 1; i >= 0 && !outputSuccess; i--) {
-                        if (tHatch.getBaseMetaTileEntity().addStackToSlot(i, single)) outputSuccess = true;
-                    }
-                }
-            }
             for (GT_MetaTileEntity_Hatch_Output tHatch : mOutputHatches) {
                 if (!outputSuccess && isValidMetaTileEntity(tHatch) && tHatch.outputsItems()) {
                     if (tHatch.getBaseMetaTileEntity().addStackToSlot(1, single)) outputSuccess = true;

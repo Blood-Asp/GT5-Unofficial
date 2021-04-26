@@ -18,16 +18,20 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.GT_Values.STEAM_PER_WATER;
+
 public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_MultiBlockBase {
     private boolean firstRun = true;
     private int mSuperEfficencyIncrease = 0;
     private int integratedCircuitConfig = 0; //Steam output is reduced by 1000L per config
+    private int excessWater = 0; //Eliminate rounding errors for water
     private int excessFuel = 0; //Eliminate rounding errors for fuels that burn half items
     private int excessProjectedEU = 0; //Eliminate rounding errors from throttling the boiler
 
@@ -185,7 +189,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
                 mEfficiency = Math.max(0, Math.min(mEfficiency + mSuperEfficencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
             int tGeneratedEU = (int) (this.mEUt * 2L * this.mEfficiency / 10000L);
             if (tGeneratedEU > 0) {
-                long amount = (tGeneratedEU + 160) / 160;
+                long amount = (tGeneratedEU + STEAM_PER_WATER) / STEAM_PER_WATER;
+                excessWater += amount * STEAM_PER_WATER - tGeneratedEU;
+                amount -= excessWater / STEAM_PER_WATER;
+                excessWater %= STEAM_PER_WATER;
                 if (depleteInput(Materials.Water.getFluid(amount)) || depleteInput(GT_ModHandler.getDistilledWater(amount))) {
                     addOutput(GT_ModHandler.getSteam(tGeneratedEU));
                 } else {
@@ -196,6 +203,22 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
             return true;
         }
         return true;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("excessFuel", excessFuel);
+        aNBT.setInteger("excessWater", excessWater);
+        aNBT.setInteger("excessProjectedEU", excessProjectedEU);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        excessFuel = aNBT.getInteger("excessFuel");
+        excessWater = aNBT.getInteger("excessWater");
+        excessProjectedEU = aNBT.getInteger("excessProjectedEU");
     }
 
     @Override

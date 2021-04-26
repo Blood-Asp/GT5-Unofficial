@@ -156,6 +156,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
         if (aBaseMetaTileEntity.isServerSide() && aTick % 10 == 0) {
             if (aTick % mTickTime == 0) mTransferredItems = 0;
 
@@ -181,7 +182,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
             if (isInventoryEmpty()) mLastReceivedFrom = 6;
             oLastReceivedFrom = mLastReceivedFrom;
-        }else if(aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected==4) aBaseMetaTileEntity.issueTextureUpdate();
+        }
     }
 
     @Override

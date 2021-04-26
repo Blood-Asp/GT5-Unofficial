@@ -15,6 +15,9 @@ import static gregtech.api.enums.GT_Values.E;
  * For Covers with a special behavior.
  */
 public abstract class GT_CoverBehavior {
+
+    public EntityPlayer lastPlayer = null;
+
     /**
      * Called by updateEntity inside the covered TileEntity. aCoverVariable is the Value you returned last time.
      */

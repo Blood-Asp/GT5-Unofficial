@@ -66,4 +66,12 @@ public interface IMachineProgress extends IHasWorldObjectAndCoords {
      * sets the visible Active Status of the Machine
      */
     void setActive(boolean aActive);
+
+    /**
+     * Indicates if the object in question was forced to shut down (i.e. loss of power)
+     * */
+    default boolean wasShutdown() {
+        return false;
+    }
+
 }
