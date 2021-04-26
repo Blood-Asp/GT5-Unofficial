@@ -16,8 +16,6 @@ import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
-import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -310,8 +308,12 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8) | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
             aBaseMetaTileEntity.setActive(mMaxProgresstime > 0);
             boolean active=aBaseMetaTileEntity.isActive() && mPollution>0;
-            for(GT_MetaTileEntity_Hatch_Muffler aMuffler:mMufflerHatches)
-                aMuffler.getBaseMetaTileEntity().setActive(active);
+            for (GT_MetaTileEntity_Hatch_Muffler aMuffler : mMufflerHatches) {
+                IGregTechTileEntity iGTTileEntity = aMuffler.getBaseMetaTileEntity();
+                if (iGTTileEntity != null && !iGTTileEntity.isDead()) {
+                    iGTTileEntity.setActive(active);
+                }
+            }
         }
     }
 
