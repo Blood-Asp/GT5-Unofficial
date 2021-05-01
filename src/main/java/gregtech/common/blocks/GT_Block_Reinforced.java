@@ -59,7 +59,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".12.name", "Raw Deep Dark Portal Block");
         ItemList.Block_BronzePlate.set(new ItemStack(this.setHardness(60.0f).setResistance(150.0f), 1, 0));
         ItemList.Block_IridiumTungstensteel.set(new ItemStack(this.setHardness(400.0f).setResistance(600.0f), 1, 1));
-        ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(40.0f).setResistance(100.0f), 1, 2));
+        ItemList.Block_Plascrete.set(new ItemStack(this.setHardness(5.0f).setResistance(6.0f), 1, 2));
         ItemList.Block_TungstenSteelReinforced.set(new ItemStack(this.setHardness(250.0f).setResistance(400.0f), 1, 3));
         ItemList.Block_BrittleCharcoal.set(new ItemStack(this.setHardness(0.5f).setResistance(8.0f), 1, 4));
         ItemList.Block_Powderbarrel.set(new ItemStack(this.setHardness(2.5f).setResistance(2.0f), 1, 5));
@@ -77,6 +77,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public String getHarvestTool(int aMeta) {
         if (aMeta == 5 || aMeta == 4 || aMeta == 6 || aMeta == 7) return "axe";
+        if (aMeta == 2) return "wrench";
         return "pickaxe";
     }
 
@@ -137,7 +138,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
             return 400.0F;
         }
         if (tMeta == 2) {
-            return 40.0F;
+            return 5.0F;
         }
         if (tMeta == 3) {
             return 250.0F;
@@ -172,7 +173,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
             return 600.0F;
         }
         if (tMeta == 2) {
-            return 100.0F;
+            return 6.0F;
         }
         if (tMeta == 3) {
             return 400.0F;
