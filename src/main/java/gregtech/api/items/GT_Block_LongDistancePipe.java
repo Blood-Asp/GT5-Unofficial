@@ -59,7 +59,7 @@ public class GT_Block_LongDistancePipe extends GT_Generic_Block {
     }
 
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
-        return Blocks.iron_block.getBlockHardness(aWorld, aX, aY, aZ);
+        return Blocks.sandstone.getBlockHardness(aWorld, aX, aY, aZ);
     }
 
     public float getExplosionResistance(Entity aTNT) {
