@@ -2,7 +2,6 @@ package gregtech.api.objects;
 
 import gregtech.GT_Mod;
 import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.IColorModulationContainer;
 import gregtech.api.interfaces.IIconContainer;
@@ -11,10 +10,8 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
-import org.lwjgl.opengl.GL11;
 
 import static gregtech.api.util.LightingHelper.MAX_BRIGHTNESS;
-import static gregtech.api.util.LightingHelper.NORMAL_BRIGHTNESS;
 
 public class GT_RenderedGlowTexture implements ITexture, IColorModulationContainer {
     final IIconContainer mIconContainer;
@@ -27,6 +24,14 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
      */
     public short[] mRGBa;
 
+    public GT_RenderedGlowTexture(IIconContainer aIcon) {
+        this(aIcon, Dyes._NULL.mRGBa);
+    }
+
+    public GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa) {
+        this(aIcon, aRGBa, true);
+    }
+
     public GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa, boolean aAllowAlpha) {
         if (aRGBa.length != 4) throw new IllegalArgumentException("RGBa doesn't have 4 Values @ GT_RenderedTexture");
         mIconContainer = GT_Mod.gregtechproxy.mRenderGlowTextures ? aIcon : BlockIcons.VOID;
@@ -34,16 +39,14 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         mRGBa = aRGBa;
     }
 
-    public GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa) {
-        this(aIcon, aRGBa, true);
-    }
-
-    public GT_RenderedGlowTexture(IIconContainer aIcon) {
-        this(aIcon, Dyes._NULL.mRGBa);
+    @Override
+    public short[] getRGBA() {
+        return mRGBa;
     }
 
     @Override
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         aRenderer.field_152631_f = true;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
@@ -60,6 +63,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
 
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
@@ -74,6 +78,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
@@ -88,6 +93,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         final Tessellator tessellator = Tessellator.instance;
         IIcon aIcon = mIconContainer.getIcon();
@@ -137,11 +143,11 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
                 maxV = aIcon.getMaxV();
             }
 
-            minX = aX + (float)aRenderer.renderMinX;
-            maxX = aX + (float)aRenderer.renderMaxX;
-            minY = aY + (float)aRenderer.renderMinY;
-            minZ = aZ + (float)aRenderer.renderMinZ;
-            maxZ = aZ + (float)aRenderer.renderMaxZ;
+            minX = aX + (float) aRenderer.renderMinX;
+            maxX = aX + (float) aRenderer.renderMaxX;
+            minY = aY + (float) aRenderer.renderMinY;
+            minZ = aZ + (float) aRenderer.renderMinZ;
+            maxZ = aZ + (float) aRenderer.renderMaxZ;
 
             Tessellator.instance.setColorOpaque(255, 255, 255);
             tessellator.addVertexWithUV(minX, minY, maxZ, maxU, maxV);
@@ -154,6 +160,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
@@ -167,6 +174,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         aRenderer.field_152631_f = true;
@@ -179,11 +187,6 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         }
         aRenderer.field_152631_f = false;
         aRenderer.enableAO = enableAO;
-    }
-
-    @Override
-    public short[] getRGBA() {
-        return mRGBa;
     }
 
     @Override
