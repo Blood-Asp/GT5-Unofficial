@@ -50,6 +50,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         aRenderer.field_152631_f = true;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
+        startDrawingQuads(aRenderer, 1.0f, 0.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -57,6 +58,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
         aRenderer.enableAO = enableAO;
     }
@@ -66,6 +68,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
+        startDrawingQuads(aRenderer, -1.0f, 0.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -73,6 +76,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
@@ -81,6 +85,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
+        startDrawingQuads(aRenderer, 0.0f, 1.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -88,6 +93,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
@@ -95,6 +101,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
+        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         final Tessellator tessellator = Tessellator.instance;
         IIcon aIcon = mIconContainer.getIcon();
 
@@ -155,6 +162,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
             tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
         }
+        draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
@@ -163,12 +171,14 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, 1.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
             aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
@@ -178,6 +188,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         aRenderer.field_152631_f = true;
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, -1.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -185,6 +196,7 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
         aRenderer.enableAO = enableAO;
     }

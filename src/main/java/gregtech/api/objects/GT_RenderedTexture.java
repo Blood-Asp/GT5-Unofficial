@@ -40,6 +40,7 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
     @Override
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         aRenderer.field_152631_f = true;
+        startDrawingQuads(aRenderer, 1.0f, 0.0f, 0.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingXPos(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.EAST.ordinal(), mRGBa);
@@ -48,11 +49,13 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             lighting.setupColor(ForgeDirection.EAST.ordinal(), 0xffffff);
             aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
     }
 
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, -1.0f, 0.0f, 0.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingXNeg(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.WEST.ordinal(), mRGBa);
@@ -61,10 +64,12 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             lighting.setupColor(ForgeDirection.WEST.ordinal(), 0xffffff);
             aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
     }
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 1.0f, 0.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingYPos(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.UP.ordinal(), mRGBa);
@@ -73,10 +78,12 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             lighting.setupColor(ForgeDirection.UP.ordinal(), 0xffffff);
             aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         final Tessellator tessellator = Tessellator.instance;
         IIcon aIcon = mIconContainer.getIcon();
 
@@ -167,10 +174,12 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             }
             tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
         }
+        draw(aRenderer);
     }
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, 1.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingZPos(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.SOUTH.ordinal(), mRGBa);
@@ -179,10 +188,12 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             lighting.setupColor(ForgeDirection.SOUTH.ordinal(), 0xffffff);
             aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, -1.0f);
         aRenderer.field_152631_f = true;
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingZNeg(aBlock, aX, aY, aZ)
@@ -192,6 +203,7 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
             lighting.setupColor(ForgeDirection.NORTH.ordinal(), 0xffffff);
             aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
     }
 

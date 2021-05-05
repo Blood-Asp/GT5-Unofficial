@@ -520,115 +520,79 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
     }
 
     public static void renderNegativeYFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX, aY - 1, aZ, 0))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aX, aFullBlock ? aY - 1 : aY, aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aX, aFullBlock ? aY - 1 : aY, aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(0.0F, -1.0F, 0.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderYNeg(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
 
     public static void renderPositiveYFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX, aY + 1, aZ, 1))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aX, aFullBlock ? aY + 1 : aY, aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aX, aFullBlock ? aY + 1 : aY, aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(0.0F, 1.0F, 0.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderYPos(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
 
     public static void renderNegativeZFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX, aY, aZ - 1, 2))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aX, aY, aFullBlock ? aZ - 1 : aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aX, aY, aFullBlock ? aZ - 1 : aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(0.0F, 0.0F, -1.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderZNeg(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
 
     public static void renderPositiveZFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX, aY, aZ + 1, 3))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aX, aY, aFullBlock ? aZ + 1 : aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aX, aY, aFullBlock ? aZ + 1 : aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(0.0F, 0.0F, 1.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderZPos(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
 
     public static void renderNegativeXFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX - 1, aY, aZ, 4))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aFullBlock ? aX - 1 : aX, aY, aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aFullBlock ? aX - 1 : aX, aY, aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(-1.0F, 0.0F, 0.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderXNeg(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
 
     public static void renderPositiveXFacing(IBlockAccess aWorld, RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ, ITexture[] aIcon, boolean aFullBlock) {
-        int worldBrightness = 0;
         if (aWorld != null) {
             if ((aFullBlock) && (!aBlock.shouldSideBeRendered(aWorld, aX + 1, aY, aZ, 5))) return;
-            worldBrightness = aBlock.getMixedBrightnessForBlock(aWorld, aFullBlock ? aX + 1 : aX, aY, aZ);
+            Tessellator.instance.setBrightness(aBlock.getMixedBrightnessForBlock(aWorld, aFullBlock ? aX + 1 : aX, aY, aZ));
         }
         if (aIcon == null) return;
         for (ITexture iTexture : aIcon) {
             if (iTexture != null) {
-                if (aWorld == null) {
-                    Tessellator.instance.startDrawingQuads();
-                    Tessellator.instance.setNormal(1.0F, 0.0F, 0.0F);
-                } else Tessellator.instance.setBrightness(worldBrightness);
                 iTexture.renderXPos(aRenderer, aBlock, aX, aY, aZ);
-                if (aWorld == null) Tessellator.instance.draw();
             }
         }
     }
