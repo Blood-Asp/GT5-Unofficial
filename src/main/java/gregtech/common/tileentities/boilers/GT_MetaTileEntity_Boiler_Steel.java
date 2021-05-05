@@ -1,14 +1,21 @@
 package gregtech.common.tileentities.boilers;
 
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
+
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE;
 
 public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bronze {
 
@@ -30,17 +37,21 @@ public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bro
 
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
-        for (byte i = -1; i < 16; i = (byte) (i + 1)) {
-            ITexture[] tmp0 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM, Dyes.getModulation(i, Dyes._NULL.mRGBa))};
-            rTextures[0][(i + 1)] = tmp0;
-            ITexture[] tmp1 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_TOP, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE)};
-            rTextures[1][(i + 1)] = tmp1;
-            ITexture[] tmp2 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE)};
-            rTextures[2][(i + 1)] = tmp2;
-            ITexture[] tmp4 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.BOILER_FRONT)};
-            rTextures[3][(i + 1)] = tmp4;
-            ITexture[] tmp5 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.BOILER_FRONT_ACTIVE)};
-            rTextures[4][(i + 1)] = tmp5;
+        final ITexture[]
+                texBottom = {new GT_RenderedTexture(MACHINE_STEELBRICKS_BOTTOM)},
+                texTop = {new GT_RenderedTexture(MACHINE_STEELBRICKS_TOP), new GT_RenderedTexture(OVERLAY_PIPE)},
+                texSide = {new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE), new GT_RenderedTexture(OVERLAY_PIPE)},
+                texFront = {new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE), new GT_RenderedTexture(BOILER_FRONT)},
+                texFrontActive = {
+                        new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE),
+                        new GT_RenderedTexture(BOILER_FRONT_ACTIVE),
+                        new GT_RenderedGlowTexture(BOILER_FRONT_ACTIVE_GLOW)};
+        for (int i = 0; i < 17; i++) {
+            rTextures[0][i] = texBottom;
+            rTextures[1][i] = texTop;
+            rTextures[2][i] = texSide;
+            rTextures[3][i] = texFront;
+            rTextures[4][i] = texFrontActive;
         }
         return rTextures;
     }
