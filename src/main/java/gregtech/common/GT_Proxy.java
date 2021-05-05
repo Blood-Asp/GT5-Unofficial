@@ -245,6 +245,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      */
     public boolean mRenderTileAmbientOcclusion = true;
 
+    /**
+     * This enables rendering of glowing textures
+     */
+    public boolean mRenderGlowTextures = true;
+
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
     public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
