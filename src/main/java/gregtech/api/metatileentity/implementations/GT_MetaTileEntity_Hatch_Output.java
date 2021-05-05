@@ -10,6 +10,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -301,5 +302,20 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         	this.setLockedFluidName(this.mFluid.getUnlocalizedName());
         	GT_Utility.sendChatToPlayer(playerThatLockedfluid, String.format(trans("151.4","Sucessfully locked Fluid to %s"), mFluid.getLocalizedName()));
     	}
+    }
+    @Override
+    public boolean isGivingInformation() {
+        return true;
+    }
+    @Override
+    public String[] getInfoData() {
+        return new String[]{
+            EnumChatFormatting.BLUE + "Output Hatch"+ EnumChatFormatting.RESET,
+            "Stored Fluid:",
+            EnumChatFormatting.GOLD + (mFluid == null ? "No Fluid" : mFluid.getLocalizedName())+ EnumChatFormatting.RESET,
+            EnumChatFormatting.GREEN + Integer.toString(mFluid == null ? 0 : mFluid.amount) + " L"+ EnumChatFormatting.RESET+" "+
+                EnumChatFormatting.YELLOW+ getCapacity() + " L"+ EnumChatFormatting.RESET,
+            lockedFluidName == null ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
+        };
     }
 }
