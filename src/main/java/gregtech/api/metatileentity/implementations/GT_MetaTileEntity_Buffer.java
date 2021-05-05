@@ -310,7 +310,8 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public void updateSlots() {
         for (int i = 0; i < mInventory.length; i++)
             if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
-        fillStacksIntoFirstSlots();
+        if (bSortStacks)
+            fillStacksIntoFirstSlots();
     }
 
     protected void fillStacksIntoFirstSlots() {
