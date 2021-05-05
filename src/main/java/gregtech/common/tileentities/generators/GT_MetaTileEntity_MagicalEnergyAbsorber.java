@@ -4,7 +4,6 @@ import com.google.common.base.Enums;
 import cpw.mods.fml.common.Loader;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -50,6 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static gregtech.api.enums.ConfigCategories.machineconfig;
 import static gregtech.api.enums.GT_Values.MOD_ID_TC;
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 import static net.minecraft.util.EnumChatFormatting.GRAY;
 import static net.minecraft.util.EnumChatFormatting.GREEN;
 import static net.minecraft.util.EnumChatFormatting.LIGHT_PURPLE;
@@ -204,57 +204,84 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     @Override
     public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+        return new ITexture[]{
+                super.getFront(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW),
+                OVERLAYS_ENERGY_OUT[mTier]};
     }
 
     @Override
     public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_FRONT)};
+        return new ITexture[]{
+                super.getBack(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC_FRONT),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_FRONT_GLOW)};
     }
 
     @Override
     public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC)};
+        return new ITexture[]{
+                super.getBottom(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW)};
     }
 
     @Override
     public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG)};
+        return new ITexture[]{
+                super.getTop(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_DRAGONEGG)};
     }
 
     @Override
     public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC)};
+        return new ITexture[]{
+                super.getSides(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW)};
     }
 
     @Override
     public ITexture[] getFrontActive(byte aColor) {
-        return new ITexture[]{super.getFrontActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+        return new ITexture[]{
+                super.getFrontActive(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW),
+                OVERLAYS_ENERGY_OUT[mTier]};
     }
 
     @Override
     public ITexture[] getBackActive(byte aColor) {
-        return new ITexture[]{super.getBackActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_FRONT_ACTIVE)};
+        return new ITexture[]{
+                super.getBackActive(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC_FRONT_ACTIVE),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_FRONT_ACTIVE_GLOW)};
     }
 
     @Override
     public ITexture[] getBottomActive(byte aColor) {
-        return new ITexture[]{super.getBottomActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
+        return new ITexture[]{
+                super.getBottomActive(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW)};
     }
 
     @Override
     public ITexture[] getTopActive(byte aColor) {
-        return new ITexture[]{super.getTopActive(aColor)[0],
-                new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG),
-                new GT_RenderedGlowTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW)
+        return new ITexture[]{
+                super.getTopActive(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_DRAGONEGG),
+                new GT_RenderedGlowTexture(MACHINE_CASING_DRAGONEGG_GLOW)
         };
     }
 
     @Override
     public ITexture[] getSidesActive(byte aColor) {
-        return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
+        return new ITexture[]{
+                super.getSidesActive(aColor)[0],
+                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
+                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW)};
     }
 
     @Override
