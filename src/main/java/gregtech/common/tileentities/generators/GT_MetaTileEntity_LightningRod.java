@@ -1,17 +1,19 @@
 package gregtech.common.tileentities.generators;
 
 import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
@@ -30,7 +32,20 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],aSide==1?(aActive ? new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW) : new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS)):Textures.BlockIcons.OVERLAYS_ENERGY_OUT_POWER[mTier]};
+        if (aSide != ForgeDirection.UP.ordinal()) {
+            return new ITexture[]{
+                    BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    BlockIcons.OVERLAYS_ENERGY_OUT_POWER[mTier]};
+        }
+        if (!aActive) return new ITexture[]{
+                BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],
+                new GT_RenderedTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS)
+        };
+        return new ITexture[]{
+                BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],
+                new GT_RenderedTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW),
+                new GT_RenderedGlowTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)
+        };
     }
 
     @Override
@@ -46,13 +61,13 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         World aWorld = aBaseMetaTileEntity.getWorld();
         if (!aWorld.isRemote) {
-        	if(aBaseMetaTileEntity.getStoredEU()>0){
+            if (aBaseMetaTileEntity.getStoredEU() > 0) {
                 aBaseMetaTileEntity.setActive(true);
-        	    aBaseMetaTileEntity.decreaseStoredEnergyUnits(aBaseMetaTileEntity.getStoredEU()/100+1, false);
-            }else {
+                aBaseMetaTileEntity.decreaseStoredEnergyUnits(aBaseMetaTileEntity.getStoredEU() / 100 + 1, false);
+            } else {
                 aBaseMetaTileEntity.setActive(false);
             }
-        	
+
             if (aTick % 256 == 0 && (aWorld.isThundering() || (aWorld.isRaining() && XSTR_INSTANCE.nextInt(10) == 0))) {
                 int aRodValue = 0;
                 boolean isRodValid = true;
@@ -60,13 +75,13 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
                 int aY = aBaseMetaTileEntity.getYCoord();
                 int aZ = aBaseMetaTileEntity.getZCoord();
 
-                for (int i = aBaseMetaTileEntity.getYCoord() + 1; i < aWorld.getHeight()-1; i++) {
+                for (int i = aBaseMetaTileEntity.getYCoord() + 1; i < aWorld.getHeight() - 1; i++) {
                     if (isRodValid && aBaseMetaTileEntity.getBlock(aX, i, aZ).getUnlocalizedName().equals("blockFenceIron")) {
                         aRodValue++;
                     } else {
                         isRodValid = false;
                         if (aBaseMetaTileEntity.getBlock(aX, i, aZ) != Blocks.air) {
-                            aRodValue=0;
+                            aRodValue = 0;
                             break;
                         }
                     }

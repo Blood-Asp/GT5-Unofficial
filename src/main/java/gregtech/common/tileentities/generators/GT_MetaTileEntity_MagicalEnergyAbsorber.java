@@ -9,8 +9,13 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.enchantment.Enchantment;
@@ -27,16 +32,30 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
-import thaumcraft.api.aspects.*;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectSourceHelper;
+import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.visnet.VisNetHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.ConfigCategories.machineconfig;
 import static gregtech.api.enums.GT_Values.MOD_ID_TC;
 import static gregtech.api.enums.GT_Values.V;
-import static net.minecraft.util.EnumChatFormatting.*;
+import static net.minecraft.util.EnumChatFormatting.GRAY;
+import static net.minecraft.util.EnumChatFormatting.GREEN;
+import static net.minecraft.util.EnumChatFormatting.LIGHT_PURPLE;
+import static net.minecraft.util.EnumChatFormatting.RESET;
+import static net.minecraft.util.EnumChatFormatting.UNDERLINE;
+import static net.minecraft.util.EnumChatFormatting.YELLOW;
 
 interface MagicalEnergyBBListener {
     void onMagicalEnergyBBUpdate();
@@ -227,7 +246,10 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     @Override
     public ITexture[] getTopActive(byte aColor) {
-        return new ITexture[]{super.getTopActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG)};
+        return new ITexture[]{super.getTopActive(aColor)[0],
+                new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG),
+                new GT_RenderedGlowTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW)
+        };
     }
 
     @Override

@@ -5,13 +5,17 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import net.minecraft.block.Block;
 
 public class GT_MetaTileEntity_BronzeBlastFurnace extends GT_MetaTileEntity_PrimitiveBlastFurnace {
     private static final ITexture[] FACING_SIDE = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEPLATEDBRICKS)};
     private static final ITexture[] FACING_FRONT = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE)};
-    private static final ITexture[] FACING_ACTIVE = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE)};
+    private static final ITexture[] FACING_ACTIVE = {
+            new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE),
+            new GT_RenderedGlowTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE_GLOW)
+    };
 
     public GT_MetaTileEntity_BronzeBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -21,19 +25,22 @@ public class GT_MetaTileEntity_BronzeBlastFurnace extends GT_MetaTileEntity_Prim
         super(aName);
     }
 
-	public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-		return new GT_MetaTileEntity_BronzeBlastFurnace(this.mName);
-	}
-
+    @Override
     public String[] getDescription() {
-    	return new String[]{"Disabled"};
+        return new String[]{"Disabled"};
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
             return aActive ? FACING_ACTIVE : FACING_FRONT;
         }
         return FACING_SIDE;
+    }
+
+    @Override
+    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_MetaTileEntity_BronzeBlastFurnace(this.mName);
     }
 
     @Override
@@ -50,6 +57,4 @@ public class GT_MetaTileEntity_BronzeBlastFurnace extends GT_MetaTileEntity_Prim
     public String getName() {
         return "Bronze Blast Furnace";
     }
-
-
 }
