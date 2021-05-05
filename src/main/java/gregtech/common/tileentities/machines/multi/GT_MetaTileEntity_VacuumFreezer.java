@@ -7,6 +7,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -18,6 +19,12 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+
 public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBlockBase {
     public GT_MetaTileEntity_VacuumFreezer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -27,10 +34,12 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
         super(aName);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_VacuumFreezer(this.mName);
     }
 
+    @Override
     public String[] getDescription() {
     	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
 		tt.addMachineType("Vacuum Freezer")
@@ -52,29 +61,48 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
 		}
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+        ITexture[] rTexture;
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][17], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZER)};
+            if (aActive) {
+                rTexture = new ITexture[]{
+                        casingTexturePages[0][17],
+                        new GT_RenderedTexture(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE),
+                        new GT_RenderedGlowTexture(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW)};
+            } else {
+                rTexture = new ITexture[]{
+                        casingTexturePages[0][17],
+                        new GT_RenderedTexture(OVERLAY_FRONT_VACUUM_FREEZER),
+                        new GT_RenderedGlowTexture(OVERLAY_FRONT_VACUUM_FREEZER_GLOW)};
+            }
+        } else {
+            rTexture = new ITexture[]{casingTexturePages[0][17]};
         }
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][17]};
+        return rTexture;
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "VacuumFreezer.png");
     }
 
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sVacuumRecipes;
     }
 
+    @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
     }
 
+    @Override
     public boolean isFacingValid(byte aFacing) {
         return aFacing > 1;
     }
 
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<ItemStack> tInputList = getStoredInputs();
         for (ItemStack tInput : tInputList) {
@@ -104,6 +132,7 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
         return false;
     }
 
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
         int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
@@ -132,18 +161,22 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
         return tAmount >= 16;
     }
 
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
 
+    @Override
     public int getPollutionPerTick(ItemStack aStack) {
         return 0;
     }
 
+    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
 
+    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }
