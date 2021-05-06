@@ -1,16 +1,29 @@
 package gregtech.common.tileentities.machines.basic;
 
-import gregtech.api.enums.*;
+import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.objects.GT_MultiTexture;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_MASSFAB;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_MASSFAB_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_MASSFAB;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_MASSFAB_ACTIVE;
 
 public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMachine {
     public static int sUUAperUUM = 1;
@@ -19,7 +32,17 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
     public static boolean sRequiresUUA = false;
 
     public GT_MetaTileEntity_Massfabricator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "UUM = Matter * Fabrication Squared", 1, 1, "Massfabricator.png", "", new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_MASSFAB_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_MASSFAB), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_MASSFAB_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_MASSFAB), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_MASSFAB_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_MASSFAB), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB));
+        super(aID, aName, aNameRegional, aTier, 1, "UUM = Matter * Fabrication Squared", 1, 1, "Massfabricator.png", "",
+                new GT_RenderedTexture(OVERLAY_SIDE_MASSFAB_ACTIVE),
+                new GT_RenderedTexture(OVERLAY_SIDE_MASSFAB),
+                new GT_MultiTexture(
+                        new GT_RenderedTexture(OVERLAY_FRONT_MASSFAB_ACTIVE),
+                        new GT_RenderedGlowTexture(OVERLAY_FRONT_MASSFAB_ACTIVE_GLOW)),
+                new GT_RenderedTexture(OVERLAY_FRONT_MASSFAB),
+                new GT_RenderedTexture(OVERLAY_TOP_MASSFAB_ACTIVE),
+                new GT_RenderedTexture(OVERLAY_TOP_MASSFAB),
+                new GT_RenderedTexture(OVERLAY_BOTTOM_MASSFAB_ACTIVE),
+                new GT_RenderedTexture(OVERLAY_BOTTOM_MASSFAB));
     }
 
     public GT_MetaTileEntity_Massfabricator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -30,10 +53,12 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Massfabricator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
+    @Override
     public void onConfigLoad(GT_Config aConfig) {
         super.onConfigLoad(aConfig);
         sDurationMultiplier = aConfig.get(ConfigCategories.machineconfig, "Massfabricator.UUM_Duration_Multiplier", sDurationMultiplier);
@@ -53,6 +78,7 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
         return V[mTier] * 512L;
     }
 
+    @Override
     public int checkRecipe() {
         FluidStack tFluid = getDrainableStack();
         if ((tFluid == null) || (tFluid.amount < getCapacity())) {
@@ -84,14 +110,14 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
                 mEUt=Integer.MAX_VALUE-1;
                 mMaxProgresstime=Integer.MAX_VALUE-1;
             }else{
-                mEUt= (int)(GT_Values.V[1]<<2);//2^2=4  so shift <<2
+                mEUt= (int)(V[1]<<2);//2^2=4  so shift <<2
                 mMaxProgresstime=(int)xMaxProgresstime;
             }
         }else{
             //Long EUt calculation
-            long xEUt=GT_Values.V[1] * (long)Math.pow(2,mTier+2);
+            long xEUt= V[1] * (long)Math.pow(2,mTier+2);
 
-            long tempEUt = GT_Values.V[1];
+            long tempEUt = V[1];
 
             mMaxProgresstime = sDurationMultiplier;
 
@@ -114,10 +140,12 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
         }
     }
 
+    @Override
     public boolean isFluidInputAllowed(FluidStack aFluid) {
         return aFluid.isFluidEqual(Materials.UUAmplifier.getFluid(1L));
     }
 
+    @Override
     public int getCapacity() {
         return Math.max(sUUAperUUM, 1000);
     }
