@@ -44,7 +44,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private Block casingBlock;
     private int casingMeta;
     private int frameMeta;
-    private int casingTextureIndex;
+    protected int casingTextureIndex;
     protected boolean isPickingPipes;
 
     private ForgeDirection back;

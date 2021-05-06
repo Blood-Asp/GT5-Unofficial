@@ -1,8 +1,11 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
+import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
+import gregtech.api.objects.GT_RenderedGlowTexture;
+import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
@@ -17,13 +20,17 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.GT_Values.debugDriller;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_DRILL_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 import static gregtech.common.GT_UndergroundOil.undergroundOil;
 import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
 
@@ -39,6 +46,21 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 
     public GT_MetaTileEntity_OilDrillBase(String aName) {
         super(aName);
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+        if (aSide == aFacing) {
+            if (aActive) return new ITexture[]{
+                    getCasingTextureForId(casingTextureIndex),
+                    new GT_RenderedTexture(OVERLAY_FRONT_OIL_DRILL_ACTIVE),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW)};
+            return new ITexture[]{
+                    getCasingTextureForId(casingTextureIndex),
+                    new GT_RenderedTexture(OVERLAY_FRONT_OIL_DRILL),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_OIL_DRILL_GLOW)};
+        }
+        return new ITexture[]{getCasingTextureForId(casingTextureIndex)};
     }
 
     @Override
@@ -58,30 +80,30 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
 
     protected String[] getDescriptionInternal(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
-        
+
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Pump")
-		.addInfo("Controller Block for the Oil/Gas/Fluid Drilling Rig " + (tierSuffix != null ? tierSuffix : ""))
-		.addInfo("Works on " + getRangeInChunks() + "x" + getRangeInChunks() + " chunks")
-		.addInfo("Use a Screwdriver to configure range")
-		.addInfo("Use Programmed Circuits to ignore near exhausted oil field")
-		.addInfo("If total circuit # is greater than output amount it will halt. If it worked right.")//doesn't work
-		.addSeparator()
-		.beginStructureBlock(3, 7, 3, false)
-		.addController("Front bottom")
-		.addStructureInfo(casings + " form the 3x1x3 Base")
-		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
-		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
-		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
-		.addMaintenanceHatch("Any base casing")
-		.addInputBus("Mining Pipes or Circuits, optional, any base casing")
-		.addOutputHatch("Any base casing")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        tt.addMachineType("Pump")
+                .addInfo("Controller Block for the Oil/Gas/Fluid Drilling Rig " + (tierSuffix != null ? tierSuffix : ""))
+                .addInfo("Works on " + getRangeInChunks() + "x" + getRangeInChunks() + " chunks")
+                .addInfo("Use a Screwdriver to configure range")
+                .addInfo("Use Programmed Circuits to ignore near exhausted oil field")
+                .addInfo("If total circuit # is greater than output amount it will halt. If it worked right.")//doesn't work
+                .addSeparator()
+                .beginStructureBlock(3, 7, 3, false)
+                .addController("Front bottom")
+                .addStructureInfo(casings + " form the 3x1x3 Base")
+                .addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
+                .addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
+                .addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
+                .addMaintenanceHatch("Any base casing")
+                .addInputBus("Mining Pipes or Circuits, optional, any base casing")
+                .addOutputHatch("Any base casing")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
 
