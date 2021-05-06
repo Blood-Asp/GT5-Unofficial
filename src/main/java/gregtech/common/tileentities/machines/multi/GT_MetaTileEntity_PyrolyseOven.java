@@ -5,12 +5,14 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -24,6 +26,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.lwjgl.input.Keyboard;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW;
 
 public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -62,17 +69,25 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
                 .addOutputBus("Any bottom layer casing")
                 .addOutputHatch("Any bottom layer casing")
                 .toolTipFinisher("Gregtech");
-        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getInformation();
-        } else {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
         }
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.casingTexturePages[8][66], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN)};
+            if (aActive)
+                return new ITexture[]{
+                        BlockIcons.casingTexturePages[8][66],
+                        new GT_RenderedTexture(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE),
+                        new GT_RenderedGlowTexture(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW)};
+            return new ITexture[]{
+                    BlockIcons.casingTexturePages[8][66],
+                    new GT_RenderedTexture(OVERLAY_FRONT_PYROLYSE_OVEN),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_PYROLYSE_OVEN_GLOW)};
         }
         return new ITexture[]{Textures.BlockIcons.casingTexturePages[8][66]};
     }
