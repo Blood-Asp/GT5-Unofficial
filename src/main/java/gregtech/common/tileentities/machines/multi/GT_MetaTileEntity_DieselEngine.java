@@ -1,13 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.lwjgl.input.Keyboard;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -16,6 +10,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -27,6 +22,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlockBase {
     protected int fuelConsumption = 0;
@@ -42,42 +47,51 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         super(aName);
     }
 
+    @Override
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Combustion Generator")
-		.addInfo("Controller block for the Large Combustion Engine")
-		.addInfo("Supply Diesel Fuels and 1000L of Lubricant per hour to run")
-		.addInfo("Supply 40L/s of Oxygen to boost output (optional)")
-		.addInfo("Default: Produces 2048EU/t at 100% fuel efficiency")
-		.addInfo("Boosted: Produces 6144EU/t at 150% fuel efficiency")
-		.addInfo("You need to wait for it to reach 300% to output full power")
-		.addPollutionAmount(20 * getPollutionPerTick(null))
-		.addSeparator()
-		.beginStructureBlock(3, 3, 4, false)
-		.addController("Front center")
-		.addCasingInfo("Stable Titanium Machine Casing", 16)
-		.addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
-		.addOtherStructurePart("Engine Intake Machine Casing", "8x, ring around controller")
-		.addStructureInfo("Engine Intake Casings must not be obstructed in front (only air blocks)")
-		.addDynamoHatch("Back center")
-		.addMaintenanceHatch("One of the casings next to a Gear Box")
-		.addMufflerHatch("Top middle back, above the rear Gear Box")
-		.addInputHatch("Diesel Fuel, next to a Gear Box")
-		.addInputHatch("Lubricant, next to a Gear Box")
-		.addInputHatch("Oxygen, optional, next to a Gear Box")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Combustion Generator")
+                .addInfo("Controller block for the Large Combustion Engine")
+                .addInfo("Supply Diesel Fuels and 1000L of Lubricant per hour to run")
+                .addInfo("Supply 40L/s of Oxygen to boost output (optional)")
+                .addInfo("Default: Produces 2048EU/t at 100% fuel efficiency")
+                .addInfo("Boosted: Produces 6144EU/t at 150% fuel efficiency")
+                .addInfo("You need to wait for it to reach 300% to output full power")
+                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addSeparator()
+                .beginStructureBlock(3, 3, 4, false)
+                .addController("Front center")
+                .addCasingInfo("Stable Titanium Machine Casing", 16)
+                .addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
+                .addOtherStructurePart("Engine Intake Machine Casing", "8x, ring around controller")
+                .addStructureInfo("Engine Intake Casings must not be obstructed in front (only air blocks)")
+                .addDynamoHatch("Back center")
+                .addMaintenanceHatch("One of the casings next to a Gear Box")
+                .addMufflerHatch("Top middle back, above the rear Gear Box")
+                .addInputHatch("Diesel Fuel, next to a Gear Box")
+                .addInputHatch("Lubricant, next to a Gear Box")
+                .addInputHatch("Oxygen, optional, next to a Gear Box")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][50], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE)};
+            if (aActive) return new ITexture[]{
+                    casingTexturePages[0][50],
+                    new GT_RenderedTexture(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW)};
+            return new ITexture[]{
+                    casingTexturePages[0][50],
+                    new GT_RenderedTexture(OVERLAY_FRONT_DIESEL_ENGINE),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_DIESEL_ENGINE_GLOW)};
         }
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][50]};
+        return new ITexture[]{casingTexturePages[0][50]};
     }
 
     @Override
@@ -85,6 +99,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return getMaxEfficiency(aStack) > 0;
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeDieselEngine.png");
     }
@@ -134,7 +149,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         ArrayList<FluidStack> tFluids = getStoredFluids();
         Collection<GT_Recipe> tRecipeList = getFuelMap().mRecipeList;
 
-        if(tFluids.size() > 0 && tRecipeList != null) { //Does input hatch have a diesel fuel?
+        if(!tFluids.isEmpty() && tRecipeList != null) { //Does input hatch have a diesel fuel?
             for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
                 for(GT_Recipe aFuel : tRecipeList) { //Loops through diesel fuel recipes
                     FluidStack tLiquid;
@@ -283,6 +298,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         return 1;
     }
 
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return boostEu ? 30000 : 10000;
     }
@@ -315,12 +331,12 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
             }
         }
 
-        
+
         return new String[]{
                 EnumChatFormatting.BLUE+"Diesel Engine"+EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("GT5U.multiblock.energy")+": " +
-                EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+
-                EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.GREEN + storedEnergy + EnumChatFormatting.RESET +" EU / "+
+                EnumChatFormatting.YELLOW + maxEnergy + EnumChatFormatting.RESET +" EU",
                 getIdealStatus() == getRepairStatus() ?
                 EnumChatFormatting.GREEN+StatCollector.translateToLocal("GT5U.turbine.maintenance.false")+EnumChatFormatting.RESET :
                 EnumChatFormatting.RED+StatCollector.translateToLocal("GT5U.turbine.maintenance.true")+EnumChatFormatting.RESET,
