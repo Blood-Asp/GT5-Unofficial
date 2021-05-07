@@ -1,16 +1,14 @@
 package gregtech.common.tileentities.machines.multi;
 
-import org.lwjgl.input.Keyboard;
-
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -19,6 +17,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_DieselEngine {
 
@@ -32,34 +37,34 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
 
     @Override
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Combustion Generator")
-		.addInfo("Controller block for the Extreme Combustion Engine")
-		.addInfo("Supply High Octane Gasoline and 8000L of Lubricant per hour to run")
-		.addInfo("Supply 320L/s of Liquid Oxygen to boost output (optional)")
-		.addInfo("Default: Produces 8192EU/t at 100% fuel efficiency")
-		.addInfo("Boosted: Produces 32768EU/t at 400% fuel efficiency")
-		.addInfo("You need to wait for it to reach 400% to output full power")
-		.addPollutionAmount(20 * getPollutionPerTick(null))
-		.addSeparator()
-		.beginStructureBlock(3, 3, 4, false)
-		.addController("Front center")
-		.addCasingInfo("Robust Tungstensteel Machine Casing", 16)
-		.addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
-		.addOtherStructurePart("Extreme Engine Intake Machine Casing", "8x, ring around controller")
-		.addStructureInfo("Extreme Engine Intake Casings must not be obstructed in front (only air blocks)")
-		.addDynamoHatch("Back center")
-		.addMaintenanceHatch("One of the casings next to a Gear Box")
-		.addMufflerHatch("Top middle back, above the rear Gear Box")
-		.addInputHatch("HOG, next to a Gear Box")
-		.addInputHatch("Lubricant, next to a Gear Box")
-		.addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Combustion Generator")
+                .addInfo("Controller block for the Extreme Combustion Engine")
+                .addInfo("Supply High Octane Gasoline and 8000L of Lubricant per hour to run")
+                .addInfo("Supply 320L/s of Liquid Oxygen to boost output (optional)")
+                .addInfo("Default: Produces 8192EU/t at 100% fuel efficiency")
+                .addInfo("Boosted: Produces 32768EU/t at 400% fuel efficiency")
+                .addInfo("You need to wait for it to reach 400% to output full power")
+                .addPollutionAmount(20 * getPollutionPerTick(null))
+                .addSeparator()
+                .beginStructureBlock(3, 3, 4, false)
+                .addController("Front center")
+                .addCasingInfo("Robust Tungstensteel Machine Casing", 16)
+                .addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
+                .addOtherStructurePart("Extreme Engine Intake Machine Casing", "8x, ring around controller")
+                .addStructureInfo("Extreme Engine Intake Casings must not be obstructed in front (only air blocks)")
+                .addDynamoHatch("Back center")
+                .addMaintenanceHatch("One of the casings next to a Gear Box")
+                .addMufflerHatch("Top middle back, above the rear Gear Box")
+                .addInputHatch("HOG, next to a Gear Box")
+                .addInputHatch("Lubricant, next to a Gear Box")
+                .addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
     @Override
@@ -70,9 +75,16 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60], new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE)};
+            if (aActive) return new ITexture[]{
+                    casingTexturePages[0][60],
+                    new GT_RenderedTexture(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW)};
+            return new ITexture[]{
+                    casingTexturePages[0][60],
+                    new GT_RenderedTexture(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE),
+                    new GT_RenderedGlowTexture(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW)};
         }
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][60]};
+        return new ITexture[]{casingTexturePages[0][60]};
     }
 
     @Override
@@ -176,8 +188,8 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
         return new String[]{
                 EnumChatFormatting.BLUE+"Extreme Diesel Engine"+EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("GT5U.multiblock.energy")+": " +
-                EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+
-                EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.GREEN + storedEnergy + EnumChatFormatting.RESET +" EU / "+
+                EnumChatFormatting.YELLOW + maxEnergy + EnumChatFormatting.RESET +" EU",
                 getIdealStatus() == getRepairStatus() ?
                 EnumChatFormatting.GREEN+StatCollector.translateToLocal("GT5U.turbine.maintenance.false")+EnumChatFormatting.RESET :
                 EnumChatFormatting.RED+StatCollector.translateToLocal("GT5U.turbine.maintenance.true")+EnumChatFormatting.RESET,
