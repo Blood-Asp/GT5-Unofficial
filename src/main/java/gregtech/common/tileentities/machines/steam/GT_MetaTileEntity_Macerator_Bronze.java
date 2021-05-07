@@ -19,15 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_MACERATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_MACERATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_MACERATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_MACERATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_MACERATOR_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_STEAM_MACERATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_STEAM_MACERATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_STEAM_MACERATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_STEAM_MACERATOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Macerator_Bronze extends GT_MetaTileEntity_BasicMachine_Bronze {
     public GT_MetaTileEntity_Macerator_Bronze(int aID, String aName, String aNameRegional) {
@@ -140,7 +132,8 @@ public class GT_MetaTileEntity_Macerator_Bronze extends GT_MetaTileEntity_BasicM
     public ITexture[] getTopFacingActive(byte aColor) {
         return new ITexture[]{
                 super.getTopFacingActive(aColor)[0],
-                new GT_RenderedTexture(OVERLAY_TOP_STEAM_MACERATOR_ACTIVE)};
+                new GT_RenderedTexture(OVERLAY_TOP_STEAM_MACERATOR_ACTIVE),
+                new GT_RenderedGlowTexture(OVERLAY_TOP_STEAM_MACERATOR_ACTIVE_GLOW)};
     }
 
     @Override
