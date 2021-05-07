@@ -22,10 +22,10 @@
 
 package gregtech.common.tileentities.machines.long_distance;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.tileentity.TileEntity;
@@ -34,8 +34,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_BACK;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_FRONT;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_SIDE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_SIDE_GLOW;
+
 public class GT_MetaTileEntity_LongDistancePipelineFluid extends GT_MetaTileEntity_LongDistancePipelineBase {
-    final static FluidTankInfo[] emptyTank = {new FluidTankInfo(null, Integer.MAX_VALUE)};
+    static final FluidTankInfo[] emptyTank = {new FluidTankInfo(null, Integer.MAX_VALUE)};
     
     public GT_MetaTileEntity_LongDistancePipelineFluid(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, "Sends fluids over long distances");
@@ -91,7 +97,7 @@ public class GT_MetaTileEntity_LongDistancePipelineFluid extends GT_MetaTileEnti
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_LongDistancePipelineFluid(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_LongDistancePipelineFluid(mName, mTier, getDescription()[0], mTextures);
     }
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
@@ -101,10 +107,17 @@ public class GT_MetaTileEntity_LongDistancePipelineFluid extends GT_MetaTileEnti
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) 
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_FRONT)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    new GT_RenderedTexture(OVERLAY_PIPELINE_FLUID_FRONT)};
         else if (aSide == GT_Utility.getOppositeSide(aFacing))
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_BACK)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    new GT_RenderedTexture(OVERLAY_PIPELINE_FLUID_BACK)};
         else 
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_FLUID_SIDE)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    new GT_RenderedTexture(OVERLAY_PIPELINE_FLUID_SIDE),
+                    new GT_RenderedGlowTexture(OVERLAY_PIPELINE_FLUID_SIDE_GLOW)};
     }
 }
