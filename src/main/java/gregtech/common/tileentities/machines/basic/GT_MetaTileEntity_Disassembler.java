@@ -58,7 +58,9 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 new GT_MultiTexture(
                         new GT_RenderedTexture(OVERLAY_FRONT_DISASSEMBLER),
                         new GT_RenderedGlowTexture(OVERLAY_FRONT_DISASSEMBLER_GLOW)),
-                new GT_RenderedTexture(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
+                new GT_MultiTexture(
+                        new GT_RenderedTexture(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
+                        new GT_RenderedGlowTexture(OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW)),
                 new GT_RenderedTexture(OVERLAY_TOP_DISASSEMBLER),
                 new GT_RenderedTexture(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
                 new GT_RenderedTexture(OVERLAY_BOTTOM_DISASSEMBLER)
