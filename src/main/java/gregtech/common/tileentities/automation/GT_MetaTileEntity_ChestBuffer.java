@@ -1,10 +1,11 @@
 package gregtech.common.tileentities.automation;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
+import gregtech.api.objects.GT_MultiTexture;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ChestBuffer;
@@ -17,6 +18,9 @@ import net.minecraft.item.ItemStack;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_CHESTBUFFER;
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_CHESTBUFFER_GLOW;
+
 public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
 
     private static final int[] tickRate = {400, 200, 100, 20, 4, 1, 1, 1, 1,  1,  1,  1,   1};
@@ -25,10 +29,10 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
 
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 28, new String[]{
-                        		"Buffers up to 27 Item Stacks",
-                        		"Use Screwdriver to regulate output stack size",
-                        		"Does not consume energy to move Item",
-                        		getTickRateDesc(aTier)});
+                "Buffers up to 27 Item Stacks",
+                "Use Screwdriver to regulate output stack size",
+                "Does not consume energy to move Item",
+                getTickRateDesc(aTier)});
     }
 
     public GT_MetaTileEntity_ChestBuffer(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount, String aDescription) {
@@ -47,18 +51,24 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_ChestBuffer(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public ITexture getOverlayIcon() {
-        return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_CHESTBUFFER);
+        return new GT_MultiTexture(
+                new GT_RenderedTexture(AUTOMATION_CHESTBUFFER),
+                new GT_RenderedGlowTexture(AUTOMATION_CHESTBUFFER_GLOW));
     }
 
+    @Override
     public boolean isValidSlot(int aIndex) {
         return aIndex < this.mInventory.length - 1;
     }
 
+    @Override
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aTimer % tickRate[mTier] > 0) return;
 
@@ -113,6 +123,7 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
             });
     }
 
+    @Override
     protected void fillStacksIntoFirstSlots() {
         sortStacks();
         // Merge small stacks together
@@ -131,10 +142,12 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
         }
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_ChestBuffer(aPlayerInventory, aBaseMetaTileEntity);
     }

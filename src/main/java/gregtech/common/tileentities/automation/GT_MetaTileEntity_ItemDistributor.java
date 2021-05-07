@@ -5,6 +5,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
+import gregtech.api.objects.GT_MultiTexture;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ItemDistributor;
@@ -14,6 +16,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_ITEMDISTRIBUTOR;
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_ITEMDISTRIBUTOR_GLOW;
 
 public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer {
     private byte[] itemsPerSide = new byte[6];
@@ -40,11 +45,13 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_ItemDistributor(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray,
                 this.mTextures);
     }
 
+    @Override
     protected void fillStacksIntoFirstSlots() {
         for (int i = 0; i < this.mInventory.length - 1; i++) {
             for (int j = i + 1; j < this.mInventory.length - 1; j++) {
@@ -57,14 +64,19 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         }
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_ItemDistributor(aPlayerInventory, aBaseMetaTileEntity);
     }
 
+    @Override
     public ITexture getOverlayIcon() {
-        return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_ITEMDISTRIBUTOR);
+        return new GT_MultiTexture(
+                new GT_RenderedTexture(AUTOMATION_ITEMDISTRIBUTOR),
+                new GT_RenderedGlowTexture(AUTOMATION_ITEMDISTRIBUTOR_GLOW));
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_ItemDistributor(aPlayerInventory, aBaseMetaTileEntity);
     }
@@ -104,6 +116,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         return getBaseMetaTileEntity().getFrontFacing() != aSide && itemsPerSide[aSide] > 0;
     }
 
+    @Override
     public boolean isValidSlot(int aIndex) {
         return aIndex < this.mInventory.length - 1;
     }
@@ -119,9 +132,10 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
         currentSideItemCount = aNBT.getByte("mCurrentSideItemCount");
     }
 
+    @Override
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         fillStacksIntoFirstSlots();
-        int movedItems = 0;
+        int movedItems;
         TileEntity adjacentTileEntity = aBaseMetaTileEntity.getTileEntityAtSide(currentSide);
         int inspectedSides = 0;
         while (itemsPerSide[currentSide] == 0) {

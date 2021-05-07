@@ -1,8 +1,9 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.objects.GT_MultiTexture;
+import gregtech.api.objects.GT_RenderedGlowTexture;
 import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredMachineBlock {
     private static final int OUTPUT_INDEX = 0;
@@ -45,18 +47,26 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[ForgeDirection.VALID_DIRECTIONS.length][17][];
         ITexture tIcon = getOverlayIcon();
-        ITexture tOut = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
-        ITexture tUp = new GT_RenderedTexture(Textures.BlockIcons.ARROW_UP);
-        ITexture tDown = new GT_RenderedTexture(Textures.BlockIcons.ARROW_DOWN);
-        ITexture tLeft = new GT_RenderedTexture(Textures.BlockIcons.ARROW_LEFT);
-        ITexture tRight = new GT_RenderedTexture(Textures.BlockIcons.ARROW_RIGHT);
+        ITexture tOut = new GT_RenderedTexture(OVERLAY_PIPE_OUT);
+        ITexture tUp = new GT_MultiTexture(
+                new GT_RenderedTexture(ARROW_UP),
+                new GT_RenderedGlowTexture(ARROW_UP_GLOW));
+        ITexture tDown = new GT_MultiTexture(
+                new GT_RenderedTexture(ARROW_DOWN),
+                new GT_RenderedGlowTexture(ARROW_DOWN_GLOW));
+        ITexture tLeft = new GT_MultiTexture(
+                new GT_RenderedTexture(ARROW_LEFT),
+                new GT_RenderedGlowTexture(ARROW_LEFT_GLOW));
+        ITexture tRight = new GT_MultiTexture(
+                new GT_RenderedTexture(ARROW_RIGHT),
+                new GT_RenderedGlowTexture(ARROW_RIGHT_GLOW));
         for (int i = 0; i < rTextures[0].length; i++) {
-            rTextures[OUTPUT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tOut};
-            rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tRight, tIcon};
-            rTextures[ARROW_DOWN_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tDown, tIcon};
-            rTextures[ARROW_LEFT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tLeft, tIcon};
-            rTextures[ARROW_UP_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tUp, tIcon};
-            rTextures[FRONT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tIcon};
+            rTextures[OUTPUT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tOut};
+            rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tRight, tIcon};
+            rTextures[ARROW_DOWN_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tDown, tIcon};
+            rTextures[ARROW_LEFT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tLeft, tIcon};
+            rTextures[ARROW_UP_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tUp, tIcon};
+            rTextures[FRONT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tIcon};
         }
         return rTextures;
     }
