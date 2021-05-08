@@ -325,7 +325,7 @@ public class ItemComb extends Item {
 		addProcessGT(CombType.NAQUADRIA,new Materials[] {Materials.Naquadria, Materials.NaquadahEnriched, Materials.Naquadah}, Voltage.LUV);
 		addProcessGT(CombType.THORIUM,new Materials[] {Materials.Thorium, Materials.Uranium, Materials.Coal}, Voltage.EV);
 		addProcessGT(CombType.LUTETIUM,new Materials[] {Materials.Lutetium, Materials.Thorium}, Voltage.IV);
-		addProcessGT(CombType.AMERICUM,new Materials[] {Materials.Americium, Materials.Lutetium}, Voltage.LUV);
+		addProcessGT(CombType.AMERICIUM,new Materials[] {Materials.Americium, Materials.Lutetium}, Voltage.LUV);
 		addProcessGT(CombType.NEUTRONIUM,new Materials[] {Materials.Neutronium, Materials.Americium}, Voltage.UV);
 		if(!GT_Mod.gregtechproxy.mNerfedCombs) {
 			addCentrifugeToMaterial(CombType.ALMANDINE, new Materials[] {Materials.Almandine, Materials.Pyrope, Materials.Sapphire, Materials.GreenSapphire}, new int[] { 90 * 100, 80 * 100, 75 * 100, 75 * 100}, new int[] {}, Voltage.ULV, NI, 30 * 100);
@@ -335,7 +335,7 @@ public class ItemComb extends Item {
 			addCentrifugeToMaterial(CombType.NAQUADRIA,new Materials[] {Materials.Naquadria, Materials.NaquadahEnriched, Materials.Naquadah}, new int[] {10 * 100, 10 * 100, 15 * 100}, new int[] {}, Voltage.LUV, NI, 30 * 100);
 			addCentrifugeToMaterial(CombType.THORIUM,new Materials[] {Materials.Thorium, Materials.Uranium, Materials.Coal}, new int[] {75 * 100, 75 * 100 * 100, 95 * 100}, new int[] {}, Voltage.EV, NI, 30 * 100);
 			addCentrifugeToMaterial(CombType.LUTETIUM,new Materials[] {Materials.Lutetium, Materials.Thorium}, new int[] {35 * 100, 55 * 100}, new int[] {}, Voltage.IV, NI, 30 * 100);
-			addCentrifugeToMaterial(CombType.AMERICUM,new Materials[] {Materials.Americium, Materials.Lutetium}, new int[] {25 * 100, 45 * 100}, new int[] {}, Voltage.LUV, NI, 30 * 100);
+			addCentrifugeToMaterial(CombType.AMERICIUM,new Materials[] {Materials.Americium, Materials.Lutetium}, new int[] {25 * 100, 45 * 100}, new int[] {}, Voltage.LUV, NI, 30 * 100);
 			addCentrifugeToMaterial(CombType.NEUTRONIUM,new Materials[] {Materials.Neutronium, Materials.Americium}, new int[] {15 * 100, 35 * 100}, new int[] {}, Voltage.UV, NI, 30 * 100);
 		}
 		

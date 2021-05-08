@@ -1408,7 +1408,7 @@ public enum GT_BeeDefinition implements IBeeDefinition {
     ),
     AMERICIUM(GT_BranchDefinition.RADIOACTIVE, "Americium", false, new Color(0xE6E6FF), new Color(0xC8C8C8),
             beeSpecies -> {
-                beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.AMERICUM), 0.05f);
+                beeSpecies.addProduct(GT_Bees.combs.getStackForType(CombType.AMERICIUM), 0.05f);
                 beeSpecies.setHumidity(EnumHumidity.NORMAL);
                 beeSpecies.setTemperature(EnumTemperature.NORMAL);
                 beeSpecies.setNocturnal();
