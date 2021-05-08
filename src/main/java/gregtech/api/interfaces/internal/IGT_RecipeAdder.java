@@ -179,8 +179,8 @@ public interface IGT_RecipeAdder {
      * @param aOutputs  item outputs
      * @param aDuration must be > 0
      * @param aEUtick   must be > 0
-     * aInputs and aFluidInputs must contain at least one valid input.
-     * aOutputs and aFluidOutputs must contain at least one valid output.
+     * <br>aInputs and aFluidInputs must contain at least one valid input.
+     * <br>aOutputs and aFluidOutputs must contain at least one valid output.
      * 
      */
 
