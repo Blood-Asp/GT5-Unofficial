@@ -3,7 +3,7 @@ package gregtech.common.items;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
 import gregtech.api.items.GT_MetaGenerated_Item_X32;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import gregtech.common.covers.GT_Cover_SolarPanel;
 
 public class GT_MetaGenerated_Item_03

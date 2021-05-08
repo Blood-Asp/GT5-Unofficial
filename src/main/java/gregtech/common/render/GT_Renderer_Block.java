@@ -448,6 +448,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
         return true;
     }
 
+    @Override
     public void renderInventoryBlock(Block aBlock, int aMeta, int aModelID, RenderBlocks aRenderer) {
         aRenderer.enableAO = false;
         aRenderer.useInventoryTint = true;
@@ -467,13 +468,12 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
             renderPositiveZFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) SOUTH.ordinal()), true);
             renderNegativeXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) WEST.ordinal()), true);
             renderPositiveXFacing(null, aRenderer, aBlock, 0, 0, 0, tTileEntity.getTexture(aBlock, (byte) EAST.ordinal()), true);
-        } else {
-            if ((aMeta > 0)
-                    && (aMeta < GregTech_API.METATILEENTITIES.length)
-                    && (GregTech_API.METATILEENTITIES[aMeta] != null)
-                    && (!GregTech_API.METATILEENTITIES[aMeta].renderInInventory(aBlock, aMeta, aRenderer))) {
-                renderNormalInventoryMetaTileEntity(aBlock, aMeta, aRenderer);
-            }
+        } else if (aMeta > 0
+                && (aMeta < GregTech_API.METATILEENTITIES.length)
+                && aBlock instanceof GT_Block_Machines
+                && (GregTech_API.METATILEENTITIES[aMeta] != null)
+                && (!GregTech_API.METATILEENTITIES[aMeta].renderInInventory(aBlock, aMeta, aRenderer))) {
+            renderNormalInventoryMetaTileEntity(aBlock, aMeta, aRenderer);
         }
 
         aBlock.setBlockBounds(blockMin, blockMin, blockMin, blockMax, blockMax, blockMax);
@@ -597,6 +597,7 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
         }
     }
 
+    @Override
     public boolean renderWorldBlock(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, int aModelID, RenderBlocks aRenderer) {
         aRenderer.enableAO = Minecraft.isAmbientOcclusionEnabled() && GT_Mod.gregtechproxy.mRenderTileAmbientOcclusion;
         aRenderer.useInventoryTint = false;
@@ -622,10 +623,12 @@ public class GT_Renderer_Block implements ISimpleBlockRenderingHandler {
         return false;
     }
 
+    @Override
     public boolean shouldRender3DInInventory(int aModel) {
         return true;
     }
 
+    @Override
     public int getRenderId() {
         return this.mRenderID;
     }

@@ -6,8 +6,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
-import gregtech.api.objects.GT_RenderedGlowTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedGlowTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 
 import static gregtech.api.enums.Textures.BlockIcons.*;

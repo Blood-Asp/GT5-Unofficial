@@ -6,7 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicHull_NonElectric;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedTexture;
 
 public class GT_MetaTileEntity_BasicHull_Steel extends GT_MetaTileEntity_BasicHull_NonElectric { public GT_MetaTileEntity_BasicHull_Steel(int aID, String aName, String aNameRegional, int aTier, String aDescription) {
         super(aID, aName, aNameRegional, aTier, aDescription);

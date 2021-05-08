@@ -6,7 +6,7 @@ import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHeatingCoil;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;

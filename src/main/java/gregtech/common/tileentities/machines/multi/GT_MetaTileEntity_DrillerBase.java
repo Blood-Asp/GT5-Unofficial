@@ -12,8 +12,8 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataA
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_ChunkManager;
-import gregtech.api.objects.GT_RenderedGlowTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedGlowTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;

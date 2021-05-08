@@ -1,14 +1,13 @@
 package gregtech.common.tileentities.machines.steam;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
-import gregtech.api.objects.GT_RenderedGlowTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedGlowTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;

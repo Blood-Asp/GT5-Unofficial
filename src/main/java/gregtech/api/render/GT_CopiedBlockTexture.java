@@ -1,4 +1,4 @@
-package gregtech.api.objects;
+package gregtech.api.render;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.ITexture;
@@ -47,57 +47,69 @@ public class GT_CopiedBlockTexture implements ITexture {
     public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
         IIcon aIcon = getIcon(ForgeDirection.EAST.ordinal());
         aRenderer.field_152631_f = true;
+        startDrawingQuads(aRenderer, 1.0f, 0.0f, 0.0f);
         new LightingHelper(aRenderer)
                 .setupLightingXPos(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.EAST.ordinal(), 0xffffff);
         aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
     }
 
     @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, -1.0f, 0.0f, 0.0f);
         IIcon aIcon = getIcon(ForgeDirection.WEST.ordinal());
         new LightingHelper(aRenderer)
                 .setupLightingXNeg(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.WEST.ordinal(), 0xffffff);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
     }
 
     @Override
     public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 1.0f, 0.0f);
         IIcon aIcon = getIcon(ForgeDirection.UP.ordinal());
             new LightingHelper(aRenderer)
                     .setupLightingYPos(aBlock, aX, aY, aZ)
                     .setupColor(ForgeDirection.UP.ordinal(), 0xffffff);
         aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         IIcon aIcon = getIcon(ForgeDirection.DOWN.ordinal());
         new LightingHelper(aRenderer)
                 .setupLightingYNeg(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
         aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
     }
 
     @Override
     public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, 1.0f);
         IIcon aIcon = getIcon(ForgeDirection.SOUTH.ordinal());
         new LightingHelper(aRenderer)
                 .setupLightingZPos(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.SOUTH.ordinal(), 0xffffff);
         aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, 0.0f, -1.0f);
         IIcon aIcon = getIcon(ForgeDirection.NORTH.ordinal());
         aRenderer.field_152631_f = true;
         new LightingHelper(aRenderer)
                 .setupLightingZNeg(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.NORTH.ordinal(), 0xffffff);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, aIcon);
+        draw(aRenderer);
         aRenderer.field_152631_f = false;
     }
 

@@ -5,8 +5,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedGlowTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_RenderedGlowTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import net.minecraft.block.Block;
 
 public class GT_MetaTileEntity_BronzeBlastFurnace extends GT_MetaTileEntity_PrimitiveBlastFurnace {

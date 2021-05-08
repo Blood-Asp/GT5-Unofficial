@@ -1,4 +1,4 @@
-package gregtech.api.objects;
+package gregtech.api.render;
 
 import gregtech.GT_Mod;
 import gregtech.api.enums.Dyes;

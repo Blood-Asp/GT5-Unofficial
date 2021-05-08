@@ -8,7 +8,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.items.GT_Generic_Block;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.GT_CopiedBlockTexture;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.WorldSpawnedEventBuilder;

@@ -1,4 +1,4 @@
-package gregtech.api.objects;
+package gregtech.api.render;
 
 import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.IIconContainer;
@@ -31,6 +31,7 @@ public class GT_StdRenderedTexture extends GT_RenderedTexture{
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingYNeg(aBlock, aX, aY, aZ)
                 .setupColor(ForgeDirection.DOWN.ordinal(), mRGBa);
@@ -39,5 +40,6 @@ public class GT_StdRenderedTexture extends GT_RenderedTexture{
             lighting.setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
             aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
+        draw(aRenderer);
     }
 }

@@ -2,8 +2,8 @@ package gregtech.loaders.misc;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
-import gregtech.api.objects.GT_CopiedBlockTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.GT_CopiedBlockTexture;
+import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.common.covers.GT_Cover_Vent;
 import net.minecraft.init.Blocks;
