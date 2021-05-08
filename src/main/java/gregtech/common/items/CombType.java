@@ -103,7 +103,7 @@ public enum CombType {
     DOB("d-o-b", true, Materials._NULL, 50,0x007700, 0x002400),
     THORIUM("thorium", true, Materials.Thorium, 75,0x001E00, 0x005000),
     LUTETIUM("lutetium", true, Materials.Lutetium, 10,0xE6FFE6, 0xFFFFFF),
-    AMERICUM("americum", true, Materials.Americium, 5,0xE6E6FF, 0xC8C8C8),
+    AMERICIUM("americium", true, Materials.Americium, 5,0xE6E6FF, 0xC8C8C8),
     NEUTRONIUM("neutronium", true, Materials.Neutronium, 2,0xFFF0F0, 0xFAFAFA),
 
     //Twilight
