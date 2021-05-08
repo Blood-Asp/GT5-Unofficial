@@ -275,13 +275,13 @@ public interface IGT_RecipeAdder {
     boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * +     * Adds an Assembler Recipe
-     * +     *
-     * +     * @param aInputs   must be != null
-     * +     * @param aOutput1  must be != null
-     * +     * @param aDuration must be > 0
-     * +     * @param aEUt      should be > 0
-     * +
+     * Adds an Assembler Recipe
+     * 
+     * @param aInputs   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     * 
      */
     boolean addAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
