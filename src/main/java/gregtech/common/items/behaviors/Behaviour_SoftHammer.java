@@ -88,7 +88,7 @@ public class Behaviour_SoftHammer extends Behaviour_None {
         }
         if (aBlock == Blocks.hopper) {
             if ((aPlayer.capabilities.isCreativeMode) || (((GT_MetaGenerated_Tool) aItem).doDamage(aStack, this.mCosts))) {
-                aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta + 1) % 6 == 1 ? (aMeta + 1) % 6 : 2, 3);
+                aWorld.setBlockMetadataWithNotify(aX, aY, aZ, (aMeta + 1) % 6 != 1 ? (aMeta + 1) % 6 : 2, 3);
                 GT_Utility.sendSoundToPlayers(aWorld, (String) GregTech_API.sSoundList.get(101), 1.0F, -1.0F, aX, aY, aZ);
             }
             return true;
