@@ -20,6 +20,8 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     private static final int ARROW_UP_INDEX = 4;
     private static final int FRONT_INDEX = 5;
 
+    public int mMaxStackSize = 64;
+    public static int MAX = 8;
     public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false, bSortStacks = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
@@ -225,9 +227,9 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aNBT.hasKey("bStockingMode")) { // Adding new key to existing NBT, need to protect if it is not there.
             bStockingMode = aNBT.getBoolean("bStockingMode");
         }
-	if (aNBT.hasKey("bSortStacks")) {
-	    bSortStacks = aNBT.getBoolean("bSortStacks");
-	}
+	    if (aNBT.hasKey("bSortStacks")) {
+	        bSortStacks = aNBT.getBoolean("bSortStacks");
+	    }
         mTargetStackSize = aNBT.getInteger("mTargetStackSize");
     }
 
@@ -242,7 +244,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aSide == getBaseMetaTileEntity().getBackFacing()) {
         	
             mTargetStackSize = (byte) ((mTargetStackSize + (aPlayer.isSneaking()? -1 : 1)) % 65);
-            if(mTargetStackSize <0){mTargetStackSize = 64;}
+            if(mTargetStackSize <0){mTargetStackSize = mMaxStackSize;}
             if (mTargetStackSize == 0) {
                 GT_Utility.sendChatToPlayer(aPlayer, trans("098","Do not regulate Item Stack Size"));
             } else {
@@ -281,15 +283,19 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        int tCost;
-        if( bStockingMode )
-            tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1,1);
-        else
-            tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize,1);
+        moveItems(aBaseMetaTileEntity, aTimer, 1);
+    }
 
-        if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-            mSuccess = 50;
-        }
+    protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer, int stacks) {
+            int tCost;
+            if (bStockingMode)
+                tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1, stacks);
+            else
+                tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, stacks);
+
+            if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+                mSuccess = 50;
+            }
     }
 
     @Override
