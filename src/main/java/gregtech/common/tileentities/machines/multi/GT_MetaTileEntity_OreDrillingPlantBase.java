@@ -324,7 +324,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
                 if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                     oreBlockPositions.add(blockPos);
-            } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+            } else if (GT_Utility.isOre(block, blockMeta))
                 oreBlockPositions.add(blockPos);
         }
     }

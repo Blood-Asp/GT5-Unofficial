@@ -220,7 +220,7 @@ public class GT_MetaTileEntity_AdvSeismicProspector extends GT_MetaTileEntity_Ba
             ItemData association = GT_OreDictUnificator.getAssociation(is);
             if ((association != null) && (association.mPrefix.toString().startsWith("ore")))
                 return association.mMaterial.mMaterial.mDefaultLocalName;
-            else if (GT_Utility.isOre(is))
+            else if (GT_Utility.isOre(tBlock, tMetaID))
                 return tBlock.getLocalizedName();
         }
         return null;
