@@ -13,13 +13,16 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.interfaces.IHasFluidDisplayItem;
 import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
+import gregtech.common.net.MessageUpdateFluidDisplayItem;
 import gregtech.common.render.*;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
@@ -29,6 +32,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -76,6 +80,9 @@ public class GT_Client extends GT_Proxy
     /**This is the place to def the value used below**/
     private long afterSomeTime;
     private boolean mAnimationDirection;
+    private int mLastUpdatedBlockX;
+    private int mLastUpdatedBlockY;
+    private int mLastUpdatedBlockZ;
     private boolean isFirstClientPlayerTick;
     private String mMessage;
     public GT_Client() {
@@ -406,6 +413,24 @@ public class GT_Client extends GT_Proxy
                 tKey = (GT_PlayedSound) i$.next();
             }
             if(!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
+            if (GT_Values.updateFluidDisplayItems) {
+                MovingObjectPosition trace = Minecraft.getMinecraft().objectMouseOver;
+                if (trace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK &&
+                        (mLastUpdatedBlockX != trace.blockX &&
+                        mLastUpdatedBlockY != trace.blockY &&
+                        mLastUpdatedBlockZ != trace.blockZ || afterSomeTime % 10 == 0)) {
+                    mLastUpdatedBlockX = trace.blockX;
+                    mLastUpdatedBlockY = trace.blockY;
+                    mLastUpdatedBlockZ = trace.blockZ;
+                    TileEntity tileEntity = aEvent.player.worldObj.getTileEntity(trace.blockX, trace.blockY, trace.blockZ);
+                    if (tileEntity instanceof IGregTechTileEntity) {
+                        IGregTechTileEntity gtTile = (IGregTechTileEntity) tileEntity;
+                        if (gtTile.getMetaTileEntity() instanceof IHasFluidDisplayItem) {
+                            GT_Values.NW.sendToServer(new MessageUpdateFluidDisplayItem(trace.blockX, trace.blockY, trace.blockZ, gtTile.getWorld().provider.dimensionId));
+                        }
+                    }
+                }
+            }
         }
     }
 
