@@ -800,6 +800,12 @@ public class GT_Mod implements IGT_Mod {
 
         stopwatch.reset();
         stopwatch.start();
+        // remove gemIridium exploit
+        ItemStack iridiumOre = GT_ModHandler.getIC2Item("iridiumOre", 1);
+        aCompressorRecipeList.entrySet().parallelStream()
+                .filter(e -> e.getKey().getInputs().size() == 1 && e.getKey().getInputs().get(0).isItemEqual(iridiumOre))
+                .findAny()
+                .ifPresent(e -> aCompressorRecipeList.remove(e.getKey()));
         //Add default IC2 recipe to GT
         GT_ModHandler.addIC2RecipesToGT(aMaceratorRecipeList, GT_Recipe.GT_Recipe_Map.sMaceratorRecipes, true, true, true);
         GT_ModHandler.addIC2RecipesToGT(aCompressorRecipeList, GT_Recipe.GT_Recipe_Map.sCompressorRecipes, true, true, true);
