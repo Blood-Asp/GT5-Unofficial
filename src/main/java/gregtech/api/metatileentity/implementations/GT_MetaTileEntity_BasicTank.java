@@ -3,6 +3,7 @@ package gregtech.api.metatileentity.implementations;
 import gregtech.api.enums.ItemList;
 import gregtech.api.gui.GT_Container_BasicTank;
 import gregtech.api.gui.GT_GUIContainer_BasicTank;
+import gregtech.api.interfaces.IHasFluidDisplayItem;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Utility;
@@ -18,7 +19,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
  * <p/>
  * This is the main construct for my generic Tanks. Filling and emptying behavior have to be implemented manually
  */
-public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_TieredMachineBlock {
+public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_TieredMachineBlock implements IHasFluidDisplayItem {
 
     public FluidStack mFluid;
     protected int mOpenerCount;
@@ -190,7 +191,8 @@ public abstract class GT_MetaTileEntity_BasicTank extends GT_MetaTileEntity_Tier
         }
     }
 
-    protected void updateFluidDisplayItem() {
+    @Override
+    public void updateFluidDisplayItem() {
         if (displaysItemStack() && getStackDisplaySlot() >= 0 && getStackDisplaySlot() < mInventory.length) {
             if (getDisplayedFluid() == null) {
                 if (ItemList.Display_Fluid.isStackEqual(mInventory[getStackDisplaySlot()], true, true))

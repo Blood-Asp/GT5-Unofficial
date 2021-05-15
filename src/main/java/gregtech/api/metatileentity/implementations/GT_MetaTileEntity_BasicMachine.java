@@ -579,7 +579,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     }
 
     @Override
-    protected void updateFluidDisplayItem() {
+    public void updateFluidDisplayItem() {
         super.updateFluidDisplayItem();
         if (displaysInputFluid()) {
             int tDisplayStackSlot = OTHER_SLOT_COUNT + mInputSlotCount + mOutputItems.length;

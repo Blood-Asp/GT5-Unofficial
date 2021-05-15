@@ -300,5 +300,6 @@ public class GT_Values {
     public static boolean cls_enabled;
     
     public static boolean hideAssLineRecipes = false;
+    public static boolean updateFluidDisplayItems = true;
     public static final int STEAM_PER_WATER = 160;
 }
