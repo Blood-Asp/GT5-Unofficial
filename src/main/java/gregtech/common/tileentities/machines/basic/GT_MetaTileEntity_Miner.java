@@ -205,7 +205,7 @@ public class GT_MetaTileEntity_Miner extends GT_MetaTileEntity_BasicMachine {
                     TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(x, drillY, z);
                     if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                         oreBlockPositions.add(new ChunkPosition(x, drillY, z));
-                } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+                } else if (GT_Utility.isOre(block, blockMeta))
                     oreBlockPositions.add(new ChunkPosition(x, drillY, z));
             }
         }

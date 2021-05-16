@@ -1,6 +1,7 @@
 package gregtech.api.util;
 
 import cofh.api.transport.IItemDuct;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -2668,6 +2669,17 @@ public class GT_Utility {
     public static boolean isPartOfOrePrefix(ItemStack aStack, OrePrefixes aPrefix){
         return GT_OreDictUnificator.getAssociation(aStack) != null && GT_OreDictUnificator.getAssociation(aStack).mPrefix.equals(aPrefix);
     }
+
+    public static final ImmutableSet<String> ORE_BLOCK_CLASSES = ImmutableSet.of(
+            "com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_Ores",
+            "com.github.bartimaeusnek.bartworks.system.material.BW_MetaGenerated_SmallOres",
+            "gtPlusPlus.core.block.base.BlockBaseOre"
+    );
+
+    public static boolean isOre(Block aBlock, int aMeta) {
+        return isOre(new ItemStack(aBlock, 1, aMeta)) || ORE_BLOCK_CLASSES.contains(aBlock.getClass().getName());
+    }
+
     public static boolean isOre(ItemStack aStack) {
         for (int id: OreDictionary.getOreIDs(aStack)) {
             if (OreDictionary.getOreName(id).startsWith("ore"))
