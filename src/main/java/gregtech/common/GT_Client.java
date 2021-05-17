@@ -415,7 +415,7 @@ public class GT_Client extends GT_Proxy
             if(!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
             if (GT_Values.updateFluidDisplayItems) {
                 MovingObjectPosition trace = Minecraft.getMinecraft().objectMouseOver;
-                if (trace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK &&
+                if (trace != null && trace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK &&
                         (mLastUpdatedBlockX != trace.blockX &&
                         mLastUpdatedBlockY != trace.blockY &&
                         mLastUpdatedBlockZ != trace.blockZ || afterSomeTime % 10 == 0)) {
