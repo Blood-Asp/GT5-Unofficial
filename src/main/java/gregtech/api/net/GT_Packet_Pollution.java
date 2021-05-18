@@ -2,12 +2,11 @@ package gregtech.api.net;
 
 import com.google.common.io.ByteArrayDataInput;
 import gregtech.common.GT_Client;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.IBlockAccess;
 
-import java.nio.ByteBuffer;
-
-public class GT_Packet_Pollution extends GT_Packet {
+public class GT_Packet_Pollution extends GT_Packet_New {
     private ChunkCoordIntPair chunk;
     private int pollution;
 
@@ -22,17 +21,12 @@ public class GT_Packet_Pollution extends GT_Packet {
     }
 
     @Override
-    public byte[] encode() {
-        return ByteBuffer
-                .allocate(12)
-                .putInt(chunk.chunkXPos)
-                .putInt(chunk.chunkZPos)
-                .putInt(pollution)
-                .array();
+    public void encode(ByteBuf aOut) {
+        aOut.writeInt(chunk.chunkXPos).writeInt(chunk.chunkZPos).writeInt(pollution);
     }
 
     @Override
-    public GT_Packet decode(ByteArrayDataInput aData) {
+    public GT_Packet_New decode(ByteArrayDataInput aData) {
         return new GT_Packet_Pollution(
                 new ChunkCoordIntPair(aData.readInt(), aData.readInt()),
                 aData.readInt()

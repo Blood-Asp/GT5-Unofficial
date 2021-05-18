@@ -1,14 +1,13 @@
 package gregtech.common.blocks;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import gregtech.api.net.GT_Packet;
+import gregtech.api.net.GT_Packet_New;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class GT_Packet_Ores extends GT_Packet {
+public class GT_Packet_Ores extends GT_Packet_New {
     private int mX;
     private int mZ;
     private short mY;
@@ -26,18 +25,15 @@ public class GT_Packet_Ores extends GT_Packet {
         this.mMetaData = aMetaData;
     }
 
-    public byte[] encode() {
-        ByteArrayDataOutput tOut = ByteStreams.newDataOutput(12);
-
-        tOut.writeInt(this.mX);
-        tOut.writeShort(this.mY);
-        tOut.writeInt(this.mZ);
-        tOut.writeShort(this.mMetaData);
-
-        return tOut.toByteArray();
+    @Override
+    public void encode(ByteBuf aOut) {
+        aOut.writeInt(this.mX);
+        aOut.writeShort(this.mY);
+        aOut.writeInt(this.mZ);
+        aOut.writeShort(this.mMetaData);
     }
 
-    public GT_Packet decode(ByteArrayDataInput aData) {
+    public GT_Packet_New decode(ByteArrayDataInput aData) {
         return new GT_Packet_Ores(aData.readInt(), aData.readShort(), aData.readInt(), aData.readShort());
     }
 
