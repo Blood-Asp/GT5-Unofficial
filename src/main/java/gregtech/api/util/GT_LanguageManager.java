@@ -67,7 +67,12 @@ public class GT_LanguageManager {
 
     public static String getTranslation(String aKey) {
         if (aKey == null) return E;
-        String tTrimmedKey = aKey.trim(), rTranslation = LanguageRegistry.instance().getStringLocalization(tTrimmedKey);
+        String tTrimmedKey = aKey.trim(), rTranslation;
+        if (sUseEnglishFile) {
+        	rTranslation = LanguageRegistry.instance().getStringLocalization(tTrimmedKey);
+        } else {
+        	rTranslation = StatCollector.translateToLocal(tTrimmedKey);
+        }
         if (GT_Utility.isStringInvalid(rTranslation)) {
             rTranslation = StatCollector.translateToLocal(tTrimmedKey);
             if (GT_Utility.isStringInvalid(rTranslation) || tTrimmedKey.equals(rTranslation)) {
