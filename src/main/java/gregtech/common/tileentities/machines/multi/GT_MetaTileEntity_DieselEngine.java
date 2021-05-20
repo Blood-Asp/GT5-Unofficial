@@ -10,8 +10,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -84,12 +83,12 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[0][50],
-                    new GT_RenderedTexture(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     casingTexturePages[0][50],
-                    new GT_RenderedTexture(OVERLAY_FRONT_DIESEL_ENGINE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_DIESEL_ENGINE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_DIESEL_ENGINE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_GLOW).glow().build()};
         }
         return new ITexture[]{casingTexturePages[0][50]};
     }

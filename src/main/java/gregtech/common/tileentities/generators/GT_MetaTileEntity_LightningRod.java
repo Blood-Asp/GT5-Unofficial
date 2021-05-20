@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -39,12 +38,12 @@ public class GT_MetaTileEntity_LightningRod extends GT_MetaTileEntity_TieredMach
         }
         if (!aActive) return new ITexture[]{
                 BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS)
+                TextureFactory.of(BlockIcons.MACHINE_CASING_FUSION_GLASS)
         };
         return new ITexture[]{
                 BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)
+                TextureFactory.of(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(BlockIcons.MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()
         };
     }
 

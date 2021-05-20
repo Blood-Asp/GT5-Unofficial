@@ -4,8 +4,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -94,8 +93,8 @@ public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
         if (aSide != ForgeDirection.UP.ordinal()) return new ITexture[]{MACHINE_CASINGS[mTier][aColorIndex + 1]};
         return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_QTANK),
-                new GT_RenderedGlowTexture(OVERLAY_QTANK_GLOW)
+                TextureFactory.of(OVERLAY_QTANK),
+                TextureFactory.builder().addIcon(OVERLAY_QTANK_GLOW).glow().build()
         };
     }
 

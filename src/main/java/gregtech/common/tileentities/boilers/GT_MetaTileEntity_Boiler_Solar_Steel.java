@@ -5,7 +5,7 @@ import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -41,15 +41,15 @@ public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boil
             int i = color + 1;
             short[] colorModulation = Dyes.getModulation(color, Dyes._NULL.mRGBa);
             rTextures[0][i] = new ITexture[]{
-                    new GT_RenderedTexture(BlockIcons.MACHINE_STEELBRICKS_BOTTOM, colorModulation)};
+                    TextureFactory.of(BlockIcons.MACHINE_STEELBRICKS_BOTTOM, colorModulation)};
             rTextures[1][i] = new ITexture[]{
-                    new GT_RenderedTexture(BlockIcons.MACHINE_STEELBRICKS_TOP, colorModulation),
-                    new GT_RenderedTexture(BlockIcons.BOILER_SOLAR)};
+                    TextureFactory.of(BlockIcons.MACHINE_STEELBRICKS_TOP, colorModulation),
+                    TextureFactory.of(BlockIcons.BOILER_SOLAR)};
             rTextures[2][i] = new ITexture[]{
-                    new GT_RenderedTexture(BlockIcons.MACHINE_STEELBRICKS_SIDE, colorModulation)};
+                    TextureFactory.of(BlockIcons.MACHINE_STEELBRICKS_SIDE, colorModulation)};
             rTextures[3][i] = new ITexture[]{
-                    new GT_RenderedTexture(BlockIcons.MACHINE_STEELBRICKS_SIDE, colorModulation),
-                    new GT_RenderedTexture(BlockIcons.OVERLAY_PIPE)};
+                    TextureFactory.of(BlockIcons.MACHINE_STEELBRICKS_SIDE, colorModulation),
+                    TextureFactory.of(BlockIcons.OVERLAY_PIPE)};
         }
         return rTextures;
     }

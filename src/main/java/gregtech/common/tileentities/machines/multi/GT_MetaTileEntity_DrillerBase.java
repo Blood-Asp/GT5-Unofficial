@@ -12,8 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataA
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_ChunkManager;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -83,12 +82,12 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    new GT_RenderedTexture(OVERLAY_FRONT_ORE_DRILL_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_ORE_DRILL_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    new GT_RenderedTexture(OVERLAY_FRONT_ORE_DRILL),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_ORE_DRILL_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_ORE_DRILL),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_ORE_DRILL_GLOW).glow().build()};
         }
         return new ITexture[]{getCasingTextureForId(casingTextureIndex)};
     }
@@ -450,8 +449,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private boolean isCorrectDataItem(ItemStack aStack, int state){
         if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, true, true)) return true;
         if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
-        if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
-        return false;
+        return (state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true);
     }
 
     /**

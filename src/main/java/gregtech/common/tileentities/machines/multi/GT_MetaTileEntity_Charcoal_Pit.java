@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.common.GT_Pollution;
@@ -251,11 +250,11 @@ public class GT_MetaTileEntity_Charcoal_Pit extends GT_MetaTileEntity_MultiBlock
         if (aSide == 1) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[0][10],
-                    new GT_RenderedTexture(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     casingTexturePages[0][10],
-                    new GT_RenderedTexture(OVERLAY_FRONT_ROCK_BREAKER)};
+                    TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER)};
         }
         return new ITexture[]{casingTexturePages[0][10]};
     }

@@ -20,6 +20,13 @@ public interface ITexture {
     boolean isValidTexture();
 
     /**
+     * @return {@code true} if this texture is from the old package
+     */
+    default boolean isOldTexture() {
+        return getClass().toString().startsWith("gregtech.api.objects");
+    }
+
+    /**
      * Will initialize the {@link Tessellator} if rendering off-world (Inventory)
      * @param aRenderer The {@link RenderBlocks} Renderer
      * @param aNormalX The X Normal for current Quad Face

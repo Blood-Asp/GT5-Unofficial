@@ -3,9 +3,7 @@ package gregtech.api.enums;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.render.GT_RenderedTexture;
-import gregtech.api.render.GT_SidedTexture;
-import gregtech.api.render.GT_StdRenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
@@ -1009,30 +1007,30 @@ public class Textures {
         /**
          * Icon for Fresh CFoam
          */
-        public static final ITexture[] FRESHFOAM = {new GT_RenderedTexture(CFOAM_FRESH)};
+        public static final ITexture[] FRESHFOAM = {TextureFactory.of(CFOAM_FRESH)};
         /**
          * Icons for Hardened CFoam
          * 0 = No Color
          * 1 - 16 = Colors
          */
         public static final ITexture[][] HARDENEDFOAMS = {
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.CONSTRUCTION_FOAM.mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[0].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[1].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[2].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[3].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[4].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[5].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[6].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[7].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[8].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[9].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[10].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[11].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[12].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[13].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[14].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[15].mRGBa)}
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.CONSTRUCTION_FOAM.mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[0].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[1].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[2].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[3].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[4].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[5].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[6].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[7].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[8].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[9].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[10].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[11].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[12].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[13].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[14].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[15].mRGBa)}
         };
         /**
          * Machine Casings by Tier
@@ -1451,135 +1449,135 @@ public class Textures {
                         BLOCK_BLAZE
                 };
         public static ITexture[] HIDDEN_TEXTURE = {
-                new GT_StdRenderedTexture(HIDDEN_FACE)
+                TextureFactory.builder().addIcon(HIDDEN_FACE).stdOrient().build()
         };
         public static ITexture[]
                 ERROR_RENDERING = {
-                new GT_RenderedTexture(RENDERING_ERROR)
+                TextureFactory.of(RENDERING_ERROR)
         };
         public static ITexture[] OVERLAYS_ENERGY_IN = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] OVERLAYS_ENERGY_OUT = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] OVERLAYS_ENERGY_IN_MULTI = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] OVERLAYS_ENERGY_OUT_MULTI = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] OVERLAYS_ENERGY_IN_POWER = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] OVERLAYS_ENERGY_OUT_POWER = {
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{40, 40, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{40, 40, 245, 0}),
         };
         public static ITexture[] LOCKERS = {
-                new GT_RenderedTexture(OVERLAY_LOCKER_000),
-                new GT_RenderedTexture(OVERLAY_LOCKER_001),
-                new GT_RenderedTexture(OVERLAY_LOCKER_002),
-                new GT_RenderedTexture(OVERLAY_LOCKER_003),
-                new GT_RenderedTexture(OVERLAY_LOCKER_004),
-                new GT_RenderedTexture(OVERLAY_LOCKER_005),
-                new GT_RenderedTexture(OVERLAY_LOCKER_006),
-                new GT_RenderedTexture(OVERLAY_LOCKER_007),
-                new GT_RenderedTexture(OVERLAY_LOCKER_008),
-                new GT_RenderedTexture(OVERLAY_LOCKER_009),
-                new GT_RenderedTexture(OVERLAY_LOCKER_010),
-                new GT_RenderedTexture(OVERLAY_LOCKER_011),
-                new GT_RenderedTexture(OVERLAY_LOCKER_012),
-                new GT_RenderedTexture(OVERLAY_LOCKER_013),
+                TextureFactory.of(OVERLAY_LOCKER_000),
+                TextureFactory.of(OVERLAY_LOCKER_001),
+                TextureFactory.of(OVERLAY_LOCKER_002),
+                TextureFactory.of(OVERLAY_LOCKER_003),
+                TextureFactory.of(OVERLAY_LOCKER_004),
+                TextureFactory.of(OVERLAY_LOCKER_005),
+                TextureFactory.of(OVERLAY_LOCKER_006),
+                TextureFactory.of(OVERLAY_LOCKER_007),
+                TextureFactory.of(OVERLAY_LOCKER_008),
+                TextureFactory.of(OVERLAY_LOCKER_009),
+                TextureFactory.of(OVERLAY_LOCKER_010),
+                TextureFactory.of(OVERLAY_LOCKER_011),
+                TextureFactory.of(OVERLAY_LOCKER_012),
+                TextureFactory.of(OVERLAY_LOCKER_013),
         };
         /**
          * USE casingTexturePages[page] instead of CASING_BLOCKS since it is casingTexturePages[0]
@@ -1595,8 +1593,11 @@ public class Textures {
         static {
             for (byte i = 0; i < MACHINE_CASINGS.length; i++)
                 for (byte j = 0; j < MACHINE_CASINGS[i].length; j++)
-                    MACHINE_CASINGS[i][j] = new GT_SidedTexture(MACHINECASINGS_BOTTOM[i], MACHINECASINGS_TOP[i], MACHINECASINGS_SIDE[i], Dyes.getModulation(j - 1, Dyes.MACHINE_METAL.mRGBa));
-            casingTexturePages[0] = CASING_BLOCKS;
+                    MACHINE_CASINGS[i][j] = TextureFactory.of(
+                            MACHINECASINGS_BOTTOM[i],
+                            MACHINECASINGS_TOP[i],
+                            MACHINECASINGS_SIDE[i], Dyes.getModulation(j - 1, Dyes.MACHINE_METAL.mRGBa));
+            casingTexturePages[0] = new ITexture[128];
             //adds some known pages, modders also can do it...
             GT_Utility.addTexturePage((byte) 1);
             GT_Utility.addTexturePage((byte) 8);
@@ -1743,7 +1744,7 @@ public class Textures {
                         ENERGY_BAR_8,
                 };
 
-        public static final ITexture[] ERROR_RENDERING = {new GT_RenderedTexture(RENDERING_ERROR)};
+        public static final ITexture[] ERROR_RENDERING = {TextureFactory.of(RENDERING_ERROR)};
 
         protected IIcon mIcon, mOverlay;
 

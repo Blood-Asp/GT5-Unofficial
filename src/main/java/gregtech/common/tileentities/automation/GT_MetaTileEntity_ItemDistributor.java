@@ -5,9 +5,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_ItemDistributor;
 import gregtech.common.gui.GT_GUIContainer_ItemDistributor;
@@ -71,9 +69,9 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 
     @Override
     public ITexture getOverlayIcon() {
-        return new GT_MultiTexture(
-                new GT_RenderedTexture(AUTOMATION_ITEMDISTRIBUTOR),
-                new GT_RenderedGlowTexture(AUTOMATION_ITEMDISTRIBUTOR_GLOW));
+        return TextureFactory.of(
+                TextureFactory.of(AUTOMATION_ITEMDISTRIBUTOR),
+                TextureFactory.builder().addIcon(AUTOMATION_ITEMDISTRIBUTOR_GLOW).glow().build());
     }
 
     @Override
@@ -98,7 +96,7 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] returnTextures = new ITexture[2][17][];
-        ITexture baseIcon = getOverlayIcon(), pipeIcon = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
+        ITexture baseIcon = getOverlayIcon(), pipeIcon = TextureFactory.of(Textures.BlockIcons.OVERLAY_PIPE_OUT);
         for (int i = 0; i < 17; i++) {
             returnTextures[0][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], baseIcon};
             returnTextures[1][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], pipeIcon, baseIcon};

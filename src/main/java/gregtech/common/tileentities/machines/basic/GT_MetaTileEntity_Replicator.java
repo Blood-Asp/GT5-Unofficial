@@ -1,14 +1,15 @@
 package gregtech.common.tileentities.machines.basic;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Element;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -45,16 +46,16 @@ public class GT_MetaTileEntity_Replicator
 
     public GT_MetaTileEntity_Replicator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Producing Elemental Matter", 1, 1, "Replicator.png", "",
-                new GT_RenderedTexture(OVERLAY_SIDE_REPLICATOR_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_SIDE_REPLICATOR),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_FRONT_REPLICATOR_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_REPLICATOR_ACTIVE_GLOW)),
-                new GT_RenderedTexture(OVERLAY_FRONT_REPLICATOR),
-                new GT_RenderedTexture(OVERLAY_TOP_REPLICATOR_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_TOP_REPLICATOR),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_REPLICATOR_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_REPLICATOR));
+                TextureFactory.of(OVERLAY_SIDE_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_SIDE_REPLICATOR),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_REPLICATOR_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_REPLICATOR_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(OVERLAY_FRONT_REPLICATOR),
+                TextureFactory.of(OVERLAY_TOP_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_TOP_REPLICATOR),
+                TextureFactory.of(OVERLAY_BOTTOM_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_BOTTOM_REPLICATOR));
     }
 
     public GT_MetaTileEntity_Replicator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {

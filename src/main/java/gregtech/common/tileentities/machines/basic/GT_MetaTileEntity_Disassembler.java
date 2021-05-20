@@ -2,7 +2,10 @@ package gregtech.common.tileentities.machines.basic;
 
 import com.google.common.collect.ArrayListMultimap;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -11,10 +14,8 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -23,7 +24,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -50,20 +57,20 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 "",
 
                 //Textures
-                new GT_RenderedTexture(OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_SIDE_DISASSEMBLER),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_DISASSEMBLER_ACTIVE_GLOW)),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_FRONT_DISASSEMBLER),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_DISASSEMBLER_GLOW)),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW)),
-                new GT_RenderedTexture(OVERLAY_TOP_DISASSEMBLER),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_DISASSEMBLER)
+                TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
+                TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISASSEMBLER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(OVERLAY_TOP_DISASSEMBLER),
+                TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
+                TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER)
         );
     }
 

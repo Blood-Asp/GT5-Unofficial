@@ -9,8 +9,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -80,12 +79,12 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         if (aSide != aFacing) return new ITexture[]{casingTexturePages[0][CASING_INDEX]};
         if (aActive) return new ITexture[]{
                 casingTexturePages[0][CASING_INDEX],
-                new GT_RenderedTexture(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE),
-                new GT_RenderedGlowTexture(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW)};
+                TextureFactory.of(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW).glow().build()};
         return new ITexture[]{
                 casingTexturePages[0][CASING_INDEX],
-                new GT_RenderedTexture(OVERLAY_FRONT_MULTI_SMELTER),
-                new GT_RenderedGlowTexture(OVERLAY_FRONT_MULTI_SMELTER_GLOW)};
+                TextureFactory.of(OVERLAY_FRONT_MULTI_SMELTER),
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_GLOW).glow().build()};
     }
 
     @Override

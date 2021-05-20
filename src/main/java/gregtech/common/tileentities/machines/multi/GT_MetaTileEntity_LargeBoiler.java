@@ -9,8 +9,7 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -108,12 +107,12 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     BlockIcons.getCasingTextureForId(getCasingTextureIndex()),
-                    new GT_RenderedTexture(OVERLAY_FRONT_LARGE_BOILER_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_LARGE_BOILER_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     BlockIcons.getCasingTextureForId(getCasingTextureIndex()),
-                    new GT_RenderedTexture(OVERLAY_FRONT_LARGE_BOILER),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_LARGE_BOILER_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_LARGE_BOILER),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_GLOW).glow().build()};
         }
         return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(getCasingTextureIndex())};
     }

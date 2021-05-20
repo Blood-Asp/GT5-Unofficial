@@ -12,8 +12,7 @@ import gregtech.api.gui.GT_GUIContainer_MaintenanceHatch;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -75,23 +74,23 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         if (mAuto) return new ITexture[]{
                 aBaseTexture,
-                new GT_RenderedTexture(OVERLAY_AUTOMAINTENANCE_IDLE),
-                new GT_RenderedGlowTexture(OVERLAY_AUTOMAINTENANCE_IDLE_GLOW)};
+                TextureFactory.of(OVERLAY_AUTOMAINTENANCE_IDLE),
+                TextureFactory.builder().addIcon(OVERLAY_AUTOMAINTENANCE_IDLE_GLOW).glow().build()};
         return new ITexture[]{
                 aBaseTexture,
-                new GT_RenderedTexture(OVERLAY_MAINTENANCE)};
+                TextureFactory.of(OVERLAY_MAINTENANCE)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         if (mAuto) return new ITexture[]{
                 aBaseTexture,
-                new GT_RenderedTexture(OVERLAY_AUTOMAINTENANCE),
-                new GT_RenderedGlowTexture(OVERLAY_AUTOMAINTENANCE_GLOW)};
+                TextureFactory.of(OVERLAY_AUTOMAINTENANCE),
+                TextureFactory.builder().addIcon(OVERLAY_AUTOMAINTENANCE_GLOW).glow().build()};
         return new ITexture[]{
                 aBaseTexture,
-                new GT_RenderedTexture(OVERLAY_MAINTENANCE),
-                new GT_RenderedTexture(OVERLAY_DUCTTAPE)};
+                TextureFactory.of(OVERLAY_MAINTENANCE),
+                TextureFactory.of(OVERLAY_DUCTTAPE)};
     }
 
     @Override

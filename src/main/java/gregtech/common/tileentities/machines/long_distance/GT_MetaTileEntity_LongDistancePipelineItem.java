@@ -25,8 +25,7 @@ package gregtech.common.tileentities.machines.long_distance;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -182,15 +181,15 @@ public class GT_MetaTileEntity_LongDistancePipelineItem extends GT_MetaTileEntit
         if (aSide == aFacing) 
             return new ITexture[]{
                     MACHINE_CASINGS[mTier][aColorIndex + 1],
-                    new GT_RenderedTexture(OVERLAY_PIPELINE_ITEM_FRONT)};
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_FRONT)};
         else if (aSide == GT_Utility.getOppositeSide(aFacing))
             return new ITexture[]{
                     MACHINE_CASINGS[mTier][aColorIndex + 1],
-                    new GT_RenderedTexture(OVERLAY_PIPELINE_ITEM_BACK)};
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_BACK)};
         else 
             return new ITexture[]{
                     MACHINE_CASINGS[mTier][aColorIndex + 1],
-                    new GT_RenderedTexture(OVERLAY_PIPELINE_ITEM_SIDE),
-                    new GT_RenderedGlowTexture(OVERLAY_PIPELINE_ITEM_SIDE_GLOW)};
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_SIDE),
+                    TextureFactory.builder().addIcon(OVERLAY_PIPELINE_ITEM_SIDE_GLOW).glow().build()};
     }
 }

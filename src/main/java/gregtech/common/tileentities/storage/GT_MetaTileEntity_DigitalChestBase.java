@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
 import gregtech.api.objects.AE2DigitalChestHandler;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_QuantumChest;
 import gregtech.common.gui.GT_GUIContainer_QuantumChest;
@@ -432,8 +431,8 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         if (aSide != aFacing) return new ITexture[]{MACHINE_CASINGS[mTier][aColorIndex + 1]};
         return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_SCHEST),
-                new GT_RenderedGlowTexture(OVERLAY_SCHEST_GLOW)
+                TextureFactory.of(OVERLAY_SCHEST),
+                TextureFactory.builder().addIcon(OVERLAY_SCHEST_GLOW).glow().build()
         };
     }
 }

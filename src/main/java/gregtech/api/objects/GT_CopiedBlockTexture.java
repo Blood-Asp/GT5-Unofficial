@@ -5,10 +5,13 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
+/**
+ * @deprecated Replaced by the {@link gregtech.api.render.TextureFactory} API.
+ */
+@Deprecated
 public class GT_CopiedBlockTexture implements ITexture {
     private final Block mBlock;
     private final byte mSide, mMeta;

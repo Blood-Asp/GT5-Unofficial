@@ -5,8 +5,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Teleporter;
@@ -202,16 +201,16 @@ public class GT_MetaTileEntity_Teleporter extends GT_MetaTileEntity_BasicTank {
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide != this.getBaseMetaTileEntity().getFrontFacing()) return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER_SIDES),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_SIDES_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER_SIDES),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_SIDES_GLOW).glow().build()};
         if (aActive) return new ITexture[]{
                     MACHINE_CASINGS[mTier][aColorIndex + 1],
-                    new GT_RenderedTexture(OVERLAY_TELEPORTER_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_TELEPORTER_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_ACTIVE_GLOW).glow().build()};
         return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_GLOW).glow().build()};
     }
 
     @Override

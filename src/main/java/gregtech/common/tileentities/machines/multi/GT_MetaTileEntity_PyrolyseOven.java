@@ -12,8 +12,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -82,12 +81,12 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_MultiBlock
             if (aActive)
                 return new ITexture[]{
                         BlockIcons.casingTexturePages[8][66],
-                        new GT_RenderedTexture(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW)};
+                        TextureFactory.of(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     BlockIcons.casingTexturePages[8][66],
-                    new GT_RenderedTexture(OVERLAY_FRONT_PYROLYSE_OVEN),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_PYROLYSE_OVEN_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_PYROLYSE_OVEN),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_PYROLYSE_OVEN_GLOW).glow().build()};
         }
         return new ITexture[]{Textures.BlockIcons.casingTexturePages[8][66]};
     }

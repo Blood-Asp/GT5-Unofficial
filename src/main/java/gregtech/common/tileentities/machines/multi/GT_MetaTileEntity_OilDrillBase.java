@@ -4,8 +4,7 @@ import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
@@ -53,12 +52,12 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    new GT_RenderedTexture(OVERLAY_FRONT_OIL_DRILL_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_OIL_DRILL_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    new GT_RenderedTexture(OVERLAY_FRONT_OIL_DRILL),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_OIL_DRILL_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_OIL_DRILL),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_GLOW).glow().build()};
         }
         return new ITexture[]{getCasingTextureForId(casingTextureIndex)};
     }

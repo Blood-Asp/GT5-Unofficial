@@ -8,8 +8,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
@@ -65,17 +64,17 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     private static final boolean THAUMCRAFT_LOADED = Loader.isModLoaded(MOD_ID_TC);
     private static final ConcurrentHashMap<UUID, GT_MetaTileEntity_MagicalEnergyAbsorber> sSubscribedCrystals = new ConcurrentHashMap<>(4);
-    private static List<Aspect> sPrimalAspects = (THAUMCRAFT_LOADED) ? Aspect.getPrimalAspects() : new ArrayList<Aspect>();
+    private static final List<Aspect> sPrimalAspects = (THAUMCRAFT_LOADED) ? Aspect.getPrimalAspects() : new ArrayList<Aspect>();
     private static boolean sAllowMultipleEggs = false;
     private static GT_MetaTileEntity_MagicalEnergyAbsorber sActiveSiphon = null;
     private static int sEnergyPerEndercrystal = 512;
     private static int sEnergyFromVis = 20;
     private static int sEnergyPerEssentia = 320;
-    private static Map<Aspect, Integer> sAspectsEnergy = new HashMap<>();
+    private static final Map<Aspect, Integer> sAspectsEnergy = new HashMap<>();
     private static int sDragonEggEnergyPerTick = 2048;
     private int mEfficiency;
     private int mMaxVisPerDrain;
-    private MagicalEnergyBB mMagicalEnergyBB = new MagicalEnergyBB(this, mTier, mTier + 2);
+    private final MagicalEnergyBB mMagicalEnergyBB = new MagicalEnergyBB(this, mTier, mTier + 2);
     private long mNextGenerateTickRate = 1;
     private int mNoGenerationTicks = 0;
 
@@ -206,8 +205,8 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public ITexture[] getFront(byte aColor) {
         return new ITexture[]{
                 super.getFront(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW),
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build(),
                 OVERLAYS_ENERGY_OUT[mTier]};
     }
 
@@ -215,39 +214,39 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public ITexture[] getBack(byte aColor) {
         return new ITexture[]{
                 super.getBack(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC_FRONT),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_FRONT_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC_FRONT),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_FRONT_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottom(byte aColor) {
         return new ITexture[]{
                 super.getBottom(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTop(byte aColor) {
         return new ITexture[]{
                 super.getTop(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_DRAGONEGG)};
+                TextureFactory.of(MACHINE_CASING_DRAGONEGG)};
     }
 
     @Override
     public ITexture[] getSides(byte aColor) {
         return new ITexture[]{
                 super.getSides(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getFrontActive(byte aColor) {
         return new ITexture[]{
                 super.getFrontActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW),
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build(),
                 OVERLAYS_ENERGY_OUT[mTier]};
     }
 
@@ -255,24 +254,24 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public ITexture[] getBackActive(byte aColor) {
         return new ITexture[]{
                 super.getBackActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC_FRONT_ACTIVE),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_FRONT_ACTIVE_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC_FRONT_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_FRONT_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottomActive(byte aColor) {
         return new ITexture[]{
                 super.getBottomActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTopActive(byte aColor) {
         return new ITexture[]{
                 super.getTopActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_DRAGONEGG),
-                new GT_RenderedGlowTexture(MACHINE_CASING_DRAGONEGG_GLOW)
+                TextureFactory.of(MACHINE_CASING_DRAGONEGG),
+                TextureFactory.builder().addIcon(MACHINE_CASING_DRAGONEGG_GLOW).glow().build()
         };
     }
 
@@ -280,8 +279,8 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{
                 super.getSidesActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_MAGIC_ACTIVE),
-                new GT_RenderedGlowTexture(MACHINE_CASING_MAGIC_ACTIVE_GLOW)};
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
@@ -519,12 +518,12 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
      * Handles Bounding Box ranged operations for Magic sources
      */
     static class MagicalEnergyBB {
-        private GT_MetaTileEntity_MagicalEnergyAbsorber mAbsorber;
-        private MagicalEnergyBBListener mListener;
-        private int mDefaultTier;
+        private final GT_MetaTileEntity_MagicalEnergyAbsorber mAbsorber;
+        private final MagicalEnergyBBListener mListener;
+        private final int mDefaultTier;
         private int mTier;
-        private int mMaxTier;
-        private List<UUID> mLivingCrystalIDs = new ArrayList<>();
+        private final int mMaxTier;
+        private final List<UUID> mLivingCrystalIDs = new ArrayList<>();
         private List<Aspect> mAvailableAspects;
 
         /**

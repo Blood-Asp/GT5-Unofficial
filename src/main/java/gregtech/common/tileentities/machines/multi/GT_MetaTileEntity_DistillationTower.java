@@ -9,8 +9,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -73,12 +72,12 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
             if (aActive)
                 return new ITexture[]{
                         BlockIcons.getCasingTextureForId(CASING_INDEX),
-                        new GT_RenderedTexture(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW)};
+                        TextureFactory.of(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     BlockIcons.getCasingTextureForId(CASING_INDEX),
-                    new GT_RenderedTexture(OVERLAY_FRONT_DISTILLATION_TOWER),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_DISTILLATION_TOWER_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_DISTILLATION_TOWER),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_GLOW).glow().build()};
         }
         return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX)};
     }

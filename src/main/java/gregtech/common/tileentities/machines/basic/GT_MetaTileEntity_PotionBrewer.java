@@ -6,9 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -30,16 +28,16 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_POTIONBREWER_AC
 public class GT_MetaTileEntity_PotionBrewer extends GT_MetaTileEntity_BasicMachine {
     public GT_MetaTileEntity_PotionBrewer(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Brewing your Drinks", 1, 0, "PotionBrewer.png", "",
-                new GT_RenderedTexture(OVERLAY_SIDE_POTIONBREWER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_SIDE_POTIONBREWER),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_FRONT_POTIONBREWER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_POTIONBREWER_ACTIVE_GLOW)),
-                new GT_RenderedTexture(OVERLAY_FRONT_POTIONBREWER),
-                new GT_RenderedTexture(OVERLAY_TOP_POTIONBREWER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_TOP_POTIONBREWER),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_POTIONBREWER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_POTIONBREWER));
+                TextureFactory.of(OVERLAY_SIDE_POTIONBREWER_ACTIVE),
+                TextureFactory.of(OVERLAY_SIDE_POTIONBREWER),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_POTIONBREWER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_POTIONBREWER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(OVERLAY_FRONT_POTIONBREWER),
+                TextureFactory.of(OVERLAY_TOP_POTIONBREWER_ACTIVE),
+                TextureFactory.of(OVERLAY_TOP_POTIONBREWER),
+                TextureFactory.of(OVERLAY_BOTTOM_POTIONBREWER_ACTIVE),
+                TextureFactory.of(OVERLAY_BOTTOM_POTIONBREWER));
     }
 
     public GT_MetaTileEntity_PotionBrewer(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {

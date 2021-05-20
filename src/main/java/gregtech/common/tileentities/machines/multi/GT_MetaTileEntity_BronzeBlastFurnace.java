@@ -1,20 +1,23 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_BRONZEPLATEDBRICKS;
+
 public class GT_MetaTileEntity_BronzeBlastFurnace extends GT_MetaTileEntity_PrimitiveBlastFurnace {
-    private static final ITexture[] FACING_SIDE = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEPLATEDBRICKS)};
-    private static final ITexture[] FACING_FRONT = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE)};
+    private static final ITexture[] FACING_SIDE = {TextureFactory.of(MACHINE_BRONZEPLATEDBRICKS)};
+    private static final ITexture[] FACING_FRONT = {TextureFactory.of(MACHINE_BRONZEBLASTFURNACE)};
     private static final ITexture[] FACING_ACTIVE = {
-            new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE),
-            new GT_RenderedGlowTexture(Textures.BlockIcons.MACHINE_BRONZEBLASTFURNACE_ACTIVE_GLOW)
+            TextureFactory.of(MACHINE_BRONZEBLASTFURNACE_ACTIVE),
+            TextureFactory.builder().addIcon(MACHINE_BRONZEBLASTFURNACE_ACTIVE_GLOW).glow().build()
     };
 
     public GT_MetaTileEntity_BronzeBlastFurnace(int aID, String aName, String aNameRegional) {

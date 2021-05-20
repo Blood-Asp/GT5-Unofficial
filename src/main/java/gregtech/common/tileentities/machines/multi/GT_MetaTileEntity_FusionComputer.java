@@ -13,9 +13,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_GUIContainer_FusionReactor;
@@ -41,9 +39,9 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     static {
         Textures.BlockIcons.setCasingTextureForId(52,
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                        new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)
+                TextureFactory.of(
+                        TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                        TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()
                 ));
     }
 
@@ -236,9 +234,9 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing) return new ITexture[]{new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS), getTextureOverlay()};
+        if (aSide == aFacing) return new ITexture[]{TextureFactory.of(MACHINE_CASING_FUSION_GLASS), getTextureOverlay()};
         if (aActive) return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(52)};
-        return new ITexture[]{new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{TextureFactory.of(MACHINE_CASING_FUSION_GLASS)};
     }
 
     /**
@@ -270,8 +268,8 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
         int tFluidList_sS=tFluidList.size();
         for (int i = 0; i < tFluidList_sS - 1; i++) {
             for (int j = i + 1; j < tFluidList_sS; j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
                         tFluidList.remove(j--); tFluidList_sS=tFluidList.size();
                     } else {
                         tFluidList.remove(i--); tFluidList_sS=tFluidList.size();

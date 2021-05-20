@@ -3,9 +3,7 @@ package gregtech.common.tileentities.automation;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.common.gui.GT_Container_SuperBuffer;
 import gregtech.common.gui.GT_GUIContainer_SuperBuffer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -36,9 +34,9 @@ public class GT_MetaTileEntity_SuperBuffer extends GT_MetaTileEntity_ChestBuffer
 
     @Override
     public ITexture getOverlayIcon() {
-        return new GT_MultiTexture(
-                new GT_RenderedTexture(AUTOMATION_SUPERBUFFER),
-                new GT_RenderedGlowTexture(AUTOMATION_SUPERBUFFER_GLOW));
+        return TextureFactory.of(
+                TextureFactory.of(AUTOMATION_SUPERBUFFER),
+                TextureFactory.builder().addIcon(AUTOMATION_SUPERBUFFER_GLOW).glow().build());
     }
 
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {

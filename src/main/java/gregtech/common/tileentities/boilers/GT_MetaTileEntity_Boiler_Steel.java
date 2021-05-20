@@ -3,8 +3,7 @@ package gregtech.common.tileentities.boilers;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -38,14 +37,14 @@ public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bro
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
         final ITexture[]
-                texBottom = {new GT_RenderedTexture(MACHINE_STEELBRICKS_BOTTOM)},
-                texTop = {new GT_RenderedTexture(MACHINE_STEELBRICKS_TOP), new GT_RenderedTexture(OVERLAY_PIPE)},
-                texSide = {new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE), new GT_RenderedTexture(OVERLAY_PIPE)},
-                texFront = {new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE), new GT_RenderedTexture(BOILER_FRONT)},
+                texBottom = {TextureFactory.of(MACHINE_STEELBRICKS_BOTTOM)},
+                texTop = {TextureFactory.of(MACHINE_STEELBRICKS_TOP), TextureFactory.of(OVERLAY_PIPE)},
+                texSide = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(OVERLAY_PIPE)},
+                texFront = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(BOILER_FRONT)},
                 texFrontActive = {
-                        new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE),
-                        new GT_RenderedTexture(BOILER_FRONT_ACTIVE),
-                        new GT_RenderedGlowTexture(BOILER_FRONT_ACTIVE_GLOW)};
+                        TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_FRONT_ACTIVE),
+                        TextureFactory.builder().addIcon(BOILER_FRONT_ACTIVE_GLOW).glow().build()};
         for (int i = 0; i < 17; i++) {
             rTextures[0][i] = texBottom;
             rTextures[1][i] = texTop;

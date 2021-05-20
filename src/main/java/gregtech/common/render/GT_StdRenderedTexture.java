@@ -1,6 +1,5 @@
-package gregtech.api.render;
+package gregtech.common.render;
 
-import gregtech.api.enums.Dyes;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
@@ -13,33 +12,25 @@ import net.minecraftforge.common.util.ForgeDirection;
  * It is used in Ore blocks rendering so they better blends with dumb block ores
  * from vanilla or other mods, when seen from bottom.
  */
-public class GT_StdRenderedTexture extends GT_RenderedTexture{
+class GT_StdRenderedTexture extends GT_RenderedTexture{
 
-    @SuppressWarnings("unused")
-    public GT_StdRenderedTexture(IIconContainer aIcon, short[] aRGBa, boolean aAllowAlpha) {
-        super(aIcon, aRGBa, aAllowAlpha);
-    }
-
-    public GT_StdRenderedTexture(IIconContainer aIcon, short[] aRGBa) {
-        super(aIcon, aRGBa, true);
-    }
-
-    @SuppressWarnings("unused")
-    public GT_StdRenderedTexture(IIconContainer aIcon) {
-        super(aIcon, Dyes._NULL.mRGBa);
+    GT_StdRenderedTexture(IIconContainer aIcon, short[] aRGBa, boolean allowAlpha) {
+        super(aIcon, aRGBa, allowAlpha);
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         LightingHelper lighting = new LightingHelper(aRenderer);
         lighting.setupLightingYNeg(aBlock, aX, aY, aZ)
-                .setupColor(ForgeDirection.DOWN.ordinal(), mRGBa);
+                .setupColor(ForgeDirection.DOWN.ordinal(), getRGBA());
         aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
             lighting.setupColor(ForgeDirection.DOWN.ordinal(), 0xffffff);
             aRenderer.renderFaceYNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
     }
 }

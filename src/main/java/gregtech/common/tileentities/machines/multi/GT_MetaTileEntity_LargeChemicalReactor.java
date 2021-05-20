@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -77,12 +76,12 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[1][48],
-                    new GT_RenderedTexture(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW).glow().build()};
             return new ITexture[]{
                     casingTexturePages[1][48],
-                    new GT_RenderedTexture(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR),
-                    new GT_RenderedGlowTexture(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)};
+                    TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW).glow().build()};
         }
         return new ITexture[]{casingTexturePages[1][48]};
     }

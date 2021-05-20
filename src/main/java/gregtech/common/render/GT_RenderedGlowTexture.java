@@ -1,7 +1,6 @@
-package gregtech.api.render;
+package gregtech.common.render;
 
 import gregtech.GT_Mod;
-import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.IColorModulationContainer;
 import gregtech.api.interfaces.IIconContainer;
@@ -13,29 +12,17 @@ import net.minecraft.util.IIcon;
 
 import static gregtech.api.util.LightingHelper.MAX_BRIGHTNESS;
 
-public class GT_RenderedGlowTexture implements ITexture, IColorModulationContainer {
-    final IIconContainer mIconContainer;
-    final boolean mAllowAlpha;
-    /**
-     * DO NOT MANIPULATE THE VALUES INSIDE THIS ARRAY!!!
-     * <p/>
-     * Just set this variable to another different Array instead.
-     * Otherwise some colored things will get Problems.
-     */
-    public short[] mRGBa;
+/**
+ * This {@link ITexture} implementation renders texture with max brightness to glow in the dark.
+ */
 
-    public GT_RenderedGlowTexture(IIconContainer aIcon) {
-        this(aIcon, Dyes._NULL.mRGBa);
-    }
+class GT_RenderedGlowTexture implements ITexture, IColorModulationContainer {
+    protected final IIconContainer mIconContainer;
+    private final short[] mRGBa;
 
-    public GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa) {
-        this(aIcon, aRGBa, true);
-    }
-
-    public GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa, boolean aAllowAlpha) {
+    GT_RenderedGlowTexture(IIconContainer aIcon, short[] aRGBa, boolean allowAlpha) {
         if (aRGBa.length != 4) throw new IllegalArgumentException("RGBa doesn't have 4 Values @ GT_RenderedTexture");
         mIconContainer = GT_Mod.gregtechproxy.mRenderGlowTextures ? aIcon : BlockIcons.VOID;
-        mAllowAlpha = aAllowAlpha;
         mRGBa = aRGBa;
     }
 
@@ -45,30 +32,13 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
     }
 
     @Override
-    public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
-        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
-        aRenderer.field_152631_f = true;
-        final boolean enableAO = aRenderer.enableAO;
-        aRenderer.enableAO = false;
-        startDrawingQuads(aRenderer, 1.0f, 0.0f, 0.0f);
-        Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
-        Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
-        aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
-        if (mIconContainer.getOverlayIcon() != null) {
-            Tessellator.instance.setColorOpaque(255, 255, 255);
-            aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
-        }
-        draw(aRenderer);
-        aRenderer.field_152631_f = false;
-        aRenderer.enableAO = enableAO;
-    }
-
-    @Override
     public void renderXNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
-        startDrawingQuads(aRenderer, -1.0f, 0.0f, 0.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, -1.0f, 0.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -76,32 +46,40 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceXNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
     @Override
-    public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+    public void renderXPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
+        aRenderer.field_152631_f = true;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
-        startDrawingQuads(aRenderer, 0.0f, 1.0f, 0.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 1.0f, 0.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
-        aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
+        aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
             Tessellator.instance.setColorOpaque(255, 255, 255);
-            aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
+            aRenderer.renderFaceXPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
+        aRenderer.field_152631_f = false;
         aRenderer.enableAO = enableAO;
     }
 
     @Override
     public void renderYNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
-        startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 0.0f, -1.0f, 0.0f);
         final Tessellator tessellator = Tessellator.instance;
         IIcon aIcon = mIconContainer.getIcon();
 
@@ -162,33 +140,40 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             tessellator.addVertexWithUV(maxX, minY, minZ, minU, minV);
             tessellator.addVertexWithUV(maxX, minY, maxZ, minU, maxV);
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
     @Override
-    public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+    public void renderYPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
-        startDrawingQuads(aRenderer, 0.0f, 0.0f, 1.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 0.0f, 1.0f, 0.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
-        aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
+        aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
         if (mIconContainer.getOverlayIcon() != null) {
-            aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
+            Tessellator.instance.setColorOpaque(255, 255, 255);
+            aRenderer.renderFaceYPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 
     @Override
     public void renderZNeg(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
         if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
         final boolean enableAO = aRenderer.enableAO;
         aRenderer.enableAO = false;
         aRenderer.field_152631_f = true;
-        startDrawingQuads(aRenderer, 0.0f, 0.0f, -1.0f);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 0.0f, 0.0f, -1.0f);
         Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
         Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
         aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getIcon());
@@ -196,8 +181,28 @@ public class GT_RenderedGlowTexture implements ITexture, IColorModulationContain
             Tessellator.instance.setColorOpaque(255, 255, 255);
             aRenderer.renderFaceZNeg(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
         }
-        draw(aRenderer);
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
         aRenderer.field_152631_f = false;
+        aRenderer.enableAO = enableAO;
+    }
+
+    @Override
+    public void renderZPos(RenderBlocks aRenderer, Block aBlock, int aX, int aY, int aZ) {
+        if (aRenderer.useInventoryTint) return; // TODO: Remove this once all addons have migrated to the new Texture API
+        if (!GT_Mod.gregtechproxy.mRenderGlowTextures) return;
+        final boolean enableAO = aRenderer.enableAO;
+        aRenderer.enableAO = false;
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //startDrawingQuads(aRenderer, 0.0f, 0.0f, 1.0f);
+        Tessellator.instance.setBrightness(MAX_BRIGHTNESS);
+        Tessellator.instance.setColorOpaque(mRGBa[0], mRGBa[1], mRGBa[2]);
+        aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getIcon());
+        if (mIconContainer.getOverlayIcon() != null) {
+            aRenderer.renderFaceZPos(aBlock, aX, aY, aZ, mIconContainer.getOverlayIcon());
+        }
+        // TODO: Uncomment this once all addons have migrated to the new Texture API
+        //draw(aRenderer);
         aRenderer.enableAO = enableAO;
     }
 

@@ -1,7 +1,9 @@
 package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntityItemPipe;
@@ -9,7 +11,7 @@ import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_Client;
@@ -29,6 +31,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static gregtech.api.enums.Textures.BlockIcons.PIPE_RESTRICTOR;
 
 public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileEntityItemPipe {
     public final float mThickNess;
@@ -79,34 +83,34 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             if (aConnected) {
                 float tThickNess = getThickNess();
                 if (tThickNess < 0.124F)
-                    return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+                    return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
                 if (tThickNess < 0.374F)//0.375
-                    return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+                    return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
                 if (tThickNess < 0.499F)//0.500
-                    return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+                    return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
                 if (tThickNess < 0.749F)//0.750
-                    return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+                    return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
                 if (tThickNess < 0.874F)//0.825
-                    return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+                    return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
             }
-            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.PIPE_RESTRICTOR)};
+            return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), TextureFactory.of(PIPE_RESTRICTOR)};
         }
         if (aConnected) {
             float tThickNess = getThickNess();
             if (tThickNess < 0.124F)
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.374F)//0.375
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeTiny.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.499F)//0.500
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeSmall.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.749F)//0.750
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeMedium.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
             if (tThickNess < 0.874F)//0.825
-                return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
-            return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+                return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeLarge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+            return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
         }
-        return new ITexture[]{new GT_RenderedTexture(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
+        return new ITexture[]{TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa))};
     }
 
     @Override
@@ -143,14 +147,14 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setByte("mLastReceivedFrom", mLastReceivedFrom);
         if (GT_Mod.gregtechproxy.gt6Pipe)
-        	aNBT.setByte("mConnections", mConnections);
+            aNBT.setByte("mConnections", mConnections);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         mLastReceivedFrom = aNBT.getByte("mLastReceivedFrom");
         if (GT_Mod.gregtechproxy.gt6Pipe) {
-        	mConnections = aNBT.getByte("mConnections");
+            mConnections = aNBT.getByte("mConnections");
         }
     }
 
@@ -187,18 +191,17 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-    	if (GT_Mod.gregtechproxy.gt6Pipe) {
-    		byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
-    		if (!isConnectedAtSide(tSide)) {
-    			if (connect(tSide) > 0)
-    				GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
-    		}
-    		else {
-    			disconnect(tSide);
-    			GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
-    		}
-    		return true;
-    	}
+        if (GT_Mod.gregtechproxy.gt6Pipe) {
+            byte tSide = GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ);
+            if (isConnectedAtSide(tSide)) {
+                disconnect(tSide);
+                GT_Utility.sendChatToPlayer(aPlayer, trans("215", "Disconnected"));
+            } else {
+                if (connect(tSide) > 0)
+                    GT_Utility.sendChatToPlayer(aPlayer, trans("214", "Connected"));
+            }
+            return true;
+        }
         return false;
     }
 
@@ -272,7 +275,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
             TileEntity tInventory = getBaseMetaTileEntity().getTileEntityAtSide(aSide);
             if (tInventory != null && !(tInventory instanceof BaseMetaPipeEntity)) {
                 if ((!(tInventory instanceof TileEntityHopper) && !(tInventory instanceof TileEntityDispenser)) || getBaseMetaTileEntity().getMetaIDAtSide(aSide) != GT_Utility.getOppositeSide(aSide)) {
-                    return GT_Utility.moveMultipleItemStacks(aSender, tInventory, (byte) 6, GT_Utility.getOppositeSide(aSide), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,1) > 0;
+                    return GT_Utility.moveMultipleItemStacks(aSender, tInventory, (byte) 6, GT_Utility.getOppositeSide(aSide), null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1, 1) > 0;
                 }
             }
         }
@@ -306,7 +309,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public boolean canInsertItem(int aIndex, ItemStack aStack, int aSide) {
-    	return isConnectedAtSide(aSide) && super.canInsertItem(aIndex, aStack, aSide);
+        return isConnectedAtSide(aSide) && super.canInsertItem(aIndex, aStack, aSide);
     }
 
     @Override
@@ -334,7 +337,7 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-    	if (!isConnectedAtSide(aSide)) return false;
+        if (!isConnectedAtSide(aSide)) return false;
         if (isInventoryEmpty()) mLastReceivedFrom = aSide;
         return mLastReceivedFrom == aSide && mInventory[aIndex] == null;
     }
@@ -356,51 +359,69 @@ public class GT_MetaPipeEntity_Item extends MetaPipeEntity implements IMetaTileE
 
     @Override
     public float getThickNess() {
-        if(GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x1) != 0) return 0.0625F;
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x1) != 0) return 0.0625F;
         return mThickNess;
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0)
-    		return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 1, aZ + 1);
-    	else
-    		return getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0)
+            return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 1, aZ + 1);
+        else
+            return getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
     }
 
     private AxisAlignedBB getActualCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-    	float tSpace = (1f - mThickNess)/2;
-    	float tSide0 = tSpace;
-    	float tSide1 = 1f - tSpace;
-    	float tSide2 = tSpace;
-    	float tSide3 = 1f - tSpace;
-    	float tSide4 = tSpace;
-    	float tSide5 = 1f - tSpace;
-    	
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 0) != 0){tSide0=tSide2=tSide4=0;tSide3=tSide5=1;}
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 1) != 0){tSide2=tSide4=0;tSide1=tSide3=tSide5=1;}
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 2) != 0){tSide0=tSide2=tSide4=0;tSide1=tSide5=1;}
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 3) != 0){tSide0=tSide4=0;tSide1=tSide3=tSide5=1;}
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 4) != 0){tSide0=tSide2=tSide4=0;tSide1=tSide3=1;}
-    	if(getBaseMetaTileEntity().getCoverIDAtSide((byte) 5) != 0){tSide0=tSide2=0;tSide1=tSide3=tSide5=1;}
-    	
-    	byte tConn = ((BaseMetaPipeEntity) getBaseMetaTileEntity()).mConnections;
-    	if((tConn & (1 << ForgeDirection.DOWN.ordinal()) ) != 0) tSide0 = 0f;
-    	if((tConn & (1 << ForgeDirection.UP.ordinal())   ) != 0) tSide1 = 1f;
-    	if((tConn & (1 << ForgeDirection.NORTH.ordinal())) != 0) tSide2 = 0f;
-    	if((tConn & (1 << ForgeDirection.SOUTH.ordinal())) != 0) tSide3 = 1f;
-    	if((tConn & (1 << ForgeDirection.WEST.ordinal()) ) != 0) tSide4 = 0f;
-    	if((tConn & (1 << ForgeDirection.EAST.ordinal()) ) != 0) tSide5 = 1f;
-    	
-    	return AxisAlignedBB.getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
+        float tSpace = (1f - mThickNess) / 2;
+        float tSide0 = tSpace;
+        float tSide1 = 1f - tSpace;
+        float tSide2 = tSpace;
+        float tSide3 = 1f - tSpace;
+        float tSide4 = tSpace;
+        float tSide5 = 1f - tSpace;
+
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 0) != 0) {
+            tSide0 = tSide2 = tSide4 = 0;
+            tSide3 = tSide5 = 1;
+        }
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 1) != 0) {
+            tSide2 = tSide4 = 0;
+            tSide1 = tSide3 = tSide5 = 1;
+        }
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 2) != 0) {
+            tSide0 = tSide2 = tSide4 = 0;
+            tSide1 = tSide5 = 1;
+        }
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 3) != 0) {
+            tSide0 = tSide4 = 0;
+            tSide1 = tSide3 = tSide5 = 1;
+        }
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 4) != 0) {
+            tSide0 = tSide2 = tSide4 = 0;
+            tSide1 = tSide3 = 1;
+        }
+        if (getBaseMetaTileEntity().getCoverIDAtSide((byte) 5) != 0) {
+            tSide0 = tSide2 = 0;
+            tSide1 = tSide3 = tSide5 = 1;
+        }
+
+        byte tConn = ((BaseMetaPipeEntity) getBaseMetaTileEntity()).mConnections;
+        if ((tConn & (1 << ForgeDirection.DOWN.ordinal())) != 0) tSide0 = 0f;
+        if ((tConn & (1 << ForgeDirection.UP.ordinal())) != 0) tSide1 = 1f;
+        if ((tConn & (1 << ForgeDirection.NORTH.ordinal())) != 0) tSide2 = 0f;
+        if ((tConn & (1 << ForgeDirection.SOUTH.ordinal())) != 0) tSide3 = 1f;
+        if ((tConn & (1 << ForgeDirection.WEST.ordinal())) != 0) tSide4 = 0f;
+        if ((tConn & (1 << ForgeDirection.EAST.ordinal())) != 0) tSide5 = 1f;
+
+        return AxisAlignedBB.getBoundingBox(aX + tSide4, aY + tSide0, aZ + tSide2, aX + tSide5, aY + tSide1, aZ + tSide3);
     }
 
     @Override
     public void addCollisionBoxesToList(World aWorld, int aX, int aY, int aZ, AxisAlignedBB inputAABB, List<AxisAlignedBB> outputAABB, Entity collider) {
-    	super.addCollisionBoxesToList(aWorld, aX, aY, aZ, inputAABB, outputAABB, collider);
-    	if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0) {
-    		AxisAlignedBB aabb = getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
-    		if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
-    	}
+        super.addCollisionBoxesToList(aWorld, aX, aY, aZ, inputAABB, outputAABB, collider);
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x2) != 0) {
+            AxisAlignedBB aabb = getActualCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
+            if (inputAABB.intersectsWith(aabb)) outputAABB.add(aabb);
+        }
     }
 }

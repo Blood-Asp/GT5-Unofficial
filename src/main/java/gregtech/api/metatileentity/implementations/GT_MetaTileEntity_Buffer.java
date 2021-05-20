@@ -2,9 +2,7 @@ package gregtech.api.metatileentity.implementations;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -47,19 +45,19 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[ForgeDirection.VALID_DIRECTIONS.length][17][];
         ITexture tIcon = getOverlayIcon();
-        ITexture tOut = new GT_RenderedTexture(OVERLAY_PIPE_OUT);
-        ITexture tUp = new GT_MultiTexture(
-                new GT_RenderedTexture(ARROW_UP),
-                new GT_RenderedGlowTexture(ARROW_UP_GLOW));
-        ITexture tDown = new GT_MultiTexture(
-                new GT_RenderedTexture(ARROW_DOWN),
-                new GT_RenderedGlowTexture(ARROW_DOWN_GLOW));
-        ITexture tLeft = new GT_MultiTexture(
-                new GT_RenderedTexture(ARROW_LEFT),
-                new GT_RenderedGlowTexture(ARROW_LEFT_GLOW));
-        ITexture tRight = new GT_MultiTexture(
-                new GT_RenderedTexture(ARROW_RIGHT),
-                new GT_RenderedGlowTexture(ARROW_RIGHT_GLOW));
+        ITexture tOut = TextureFactory.of(OVERLAY_PIPE_OUT);
+        ITexture tUp = TextureFactory.of(
+                TextureFactory.of(ARROW_UP),
+                TextureFactory.builder().addIcon(ARROW_UP_GLOW).glow().build());
+        ITexture tDown = TextureFactory.of(
+                TextureFactory.of(ARROW_DOWN),
+                TextureFactory.builder().addIcon(ARROW_DOWN_GLOW).glow().build());
+        ITexture tLeft = TextureFactory.of(
+                TextureFactory.of(ARROW_LEFT),
+                TextureFactory.builder().addIcon(ARROW_LEFT_GLOW).glow().build());
+        ITexture tRight = TextureFactory.of(
+                TextureFactory.of(ARROW_RIGHT),
+                TextureFactory.builder().addIcon(ARROW_RIGHT_GLOW).glow().build());
         for (int i = 0; i < rTextures[0].length; i++) {
             rTextures[OUTPUT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tOut};
             rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tRight, tIcon};

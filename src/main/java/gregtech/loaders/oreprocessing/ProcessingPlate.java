@@ -8,8 +8,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TextureSet;
 import gregtech.api.enums.ToolDictNames;
-import gregtech.api.render.GT_CopiedBlockTexture;
-import gregtech.api.render.GT_StdRenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_RecipeRegistrator;
@@ -586,12 +585,14 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
         GregTech_API.registerCover(
                 aStack,
                 // If there is an ItemStack of Block for Materials
-                tStack != NI ?
-                        // Copy Block texture
-                        new GT_CopiedBlockTexture(Block.getBlockFromItem(tStack.getItem()), 1, tStack.getItemDamage()) :
-                        // or use Materials mRGBa dyed blocs/materialicons/MATERIALSET/block1 icons
-                        new GT_StdRenderedTexture(
-                                aMaterial.mIconSet.mTextures[TextureSet.INDEX_block1], aMaterial.mRGBa, false),
+                tStack == NI ?
+                        // Use Materials mRGBa dyed blocs/materialicons/MATERIALSET/block1 icons
+                        TextureFactory.builder()
+                                .addIcon(aMaterial.mIconSet.mTextures[TextureSet.INDEX_block1])
+                                .setRGBA(aMaterial.mRGBa)
+                                .stdOrient().build() :
+                        // or copy Block texture
+                        TextureFactory.of(Block.getBlockFromItem(tStack.getItem()), tStack.getItemDamage()),
                 null);
 
     }

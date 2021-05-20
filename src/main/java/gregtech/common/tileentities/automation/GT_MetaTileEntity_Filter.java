@@ -4,9 +4,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Filter;
 import gregtech.common.gui.GT_GUIContainer_Filter;
@@ -43,9 +41,9 @@ public class GT_MetaTileEntity_Filter extends GT_MetaTileEntity_Buffer {
 
     @Override
     public ITexture getOverlayIcon() {
-        return new GT_MultiTexture(
-                new GT_RenderedTexture(AUTOMATION_FILTER),
-                new GT_RenderedGlowTexture(AUTOMATION_FILTER_GLOW));
+        return TextureFactory.of(
+                TextureFactory.of(AUTOMATION_FILTER),
+                TextureFactory.builder().addIcon(AUTOMATION_FILTER_GLOW).glow().build());
     }
 
     @Override

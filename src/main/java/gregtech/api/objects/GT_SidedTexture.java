@@ -7,6 +7,10 @@ import gregtech.api.interfaces.ITexture;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 
+/**
+ * @deprecated Replaced by the {@link gregtech.api.render.TextureFactory} API.
+ */
+@Deprecated
 public class GT_SidedTexture implements ITexture, IColorModulationContainer {
     private final ITexture[] mTextures;
     /**

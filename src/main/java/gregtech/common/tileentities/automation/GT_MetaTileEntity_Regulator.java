@@ -4,9 +4,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Regulator;
 import gregtech.common.gui.GT_GUIContainer_Regulator;
@@ -48,9 +46,9 @@ public class GT_MetaTileEntity_Regulator
 
     @Override
     public ITexture getOverlayIcon() {
-        return new GT_MultiTexture(
-                new GT_RenderedTexture(AUTOMATION_REGULATOR),
-                new GT_RenderedGlowTexture(AUTOMATION_REGULATOR_GLOW));
+        return TextureFactory.of(
+                TextureFactory.of(AUTOMATION_REGULATOR),
+                TextureFactory.builder().addIcon(AUTOMATION_REGULATOR_GLOW).glow().build());
     }
 
     @Override

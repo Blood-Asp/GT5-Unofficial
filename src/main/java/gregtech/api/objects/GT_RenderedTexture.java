@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 
+@Deprecated
 public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
     final IIconContainer mIconContainer;
     final boolean mAllowAlpha;

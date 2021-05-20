@@ -16,6 +16,7 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.ToolDictNames;
 import gregtech.api.events.BlockScanningEvent;
+import gregtech.api.interfaces.IBlockContainer;
 import gregtech.api.interfaces.IDebugableBlock;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.ITexture;
@@ -29,7 +30,6 @@ import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Sound;
-import gregtech.api.render.GT_CopiedBlockTexture;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
@@ -153,7 +153,7 @@ public class GT_Utility {
     }
 
     public static int safeInt(long number){
-        return number>GT_Values.V[GT_Values.V.length-1] ? safeInt(GT_Values.V[GT_Values.V.length-1],1) : number<Integer.MIN_VALUE ? Integer.MIN_VALUE : (int)number;
+        return number> V[V.length-1] ? safeInt(V[V.length-1],1) : number<Integer.MIN_VALUE ? Integer.MIN_VALUE : (int)number;
     }
 
     public static Field getPublicField(Object aObject, String aField) {
@@ -411,9 +411,7 @@ public class GT_Utility {
         if (TE_CHECK && aTileEntity instanceof IItemDuct) return true;
         if (BC_CHECK && aTileEntity instanceof buildcraft.api.transport.IPipeTile)
             return ((buildcraft.api.transport.IPipeTile) aTileEntity).isPipeConnected(ForgeDirection.getOrientation(aSide));
-        if (GregTech_API.mTranslocator && aTileEntity instanceof codechicken.translocator.TileItemTranslocator) return true;
-
-        return false;
+        return GregTech_API.mTranslocator && aTileEntity instanceof codechicken.translocator.TileItemTranslocator;
     }
     /**
      * Moves Stack from Inv-Slot to Inv-Slot, without checking if its even allowed.
@@ -1028,7 +1026,7 @@ public class GT_Utility {
         if (aCheckIFluidContainerItems && aStack.getItem() instanceof IFluidContainerItem && ((IFluidContainerItem) aStack.getItem()).getCapacity(aStack) > 0)
             return aFluid.isFluidEqual(((IFluidContainerItem) aStack.getItem()).getFluid(aStack = copyAmount(1, aStack)));
         FluidContainerData tData = sFilledContainerToData.get(new GT_ItemStack(aStack));
-        return tData == null ? false : tData.fluid.isFluidEqual(aFluid);
+        return tData != null && tData.fluid.isFluidEqual(aFluid);
     }
 
     public static FluidStack getFluidForFilledItem(ItemStack aStack, boolean aCheckIFluidContainerItems) {
@@ -1140,7 +1138,7 @@ public class GT_Utility {
             }
         }
         ItemStack[] tStack = GT_OreDictUnificator.getStackArray(true, aOutput);
-        if(tStack==null||(tStack.length>0&&GT_Utility.areStacksEqual(aInput, tStack[0])))return false;
+        if(tStack==null||(tStack.length>0&& areStacksEqual(aInput, tStack[0])))return false;
         if (tOreName != null) {
         	if(tOreName.toString().equals("dustAsh")&&tStack[0].getUnlocalizedName().equals("tile.volcanicAsh"))return false;
             aRecipeList.put(new RecipeInputOreDict(tOreName.toString(), aInput.stackSize), new RecipeOutput(aNBT, tStack));
@@ -1438,24 +1436,24 @@ public class GT_Utility {
      * Return texture id from item stack, unoptimized but readable?
      * @return casing texture 0 to 16383
      */
-    public static int getTextureId(Block blockFromBlock,byte metaFromBlock){
+    public static int getTextureId(Block blockFromBlock, byte metaFromBlock) {
         for (int page = 0; page < Textures.BlockIcons.casingTexturePages.length; page++) {
             ITexture[] casingTexturePage = Textures.BlockIcons.casingTexturePages[page];
-            if(casingTexturePage!=null){
+            if (casingTexturePage != null) {
                 for (int index = 0; index < casingTexturePage.length; index++) {
                     ITexture iTexture = casingTexturePage[index];
-                    if(iTexture instanceof GT_CopiedBlockTexture){
-                        Block block = ((GT_CopiedBlockTexture) iTexture).getBlock();
-                        byte meta = ((GT_CopiedBlockTexture) iTexture).getMeta();
-                        if(meta==metaFromBlock && blockFromBlock==block){
-                            return (page<<7)+index;
+                    if (iTexture instanceof IBlockContainer) {
+                        Block block = ((IBlockContainer) iTexture).getBlock();
+                        byte meta = ((IBlockContainer) iTexture).getMeta();
+                        if (meta == metaFromBlock && blockFromBlock == block) {
+                            return (page << 7) + index;
                         }
                     }
                 }
             }
         }
-        throw new RuntimeException("Probably missing mapping or different texture class used for: "+
-                blockFromBlock.getUnlocalizedName()+" meta:"+metaFromBlock);
+        throw new RuntimeException("Probably missing mapping or different texture class used for: " +
+                blockFromBlock.getUnlocalizedName() + " meta:" + metaFromBlock);
     }
 
     /**
@@ -1938,7 +1936,7 @@ public class GT_Utility {
                     rEUAmount += 500;
                     FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
                     if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
-                    tList.add(trans("167","Tank ") + i + ": " +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) +EnumChatFormatting.RESET+ " L / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(tTanks[i].capacity) +EnumChatFormatting.RESET+ " L " +EnumChatFormatting.GOLD+ getFluidName(tTanks[i].fluid, true)+EnumChatFormatting.RESET);
+                    tList.add(trans("167","Tank ") + i + ": " +EnumChatFormatting.GREEN+ formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) +EnumChatFormatting.RESET+ " L / " +EnumChatFormatting.YELLOW+ formatNumbers(tTanks[i].capacity) +EnumChatFormatting.RESET+ " L " +EnumChatFormatting.GOLD+ getFluidName(tTanks[i].fluid, true)+EnumChatFormatting.RESET);
                     }
                 }
             } catch (Throwable e) {
@@ -2032,7 +2030,7 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add(trans("178","Progress/Load: ") +EnumChatFormatting.GREEN+GT_Utility.formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+GT_Utility.formatNumbers(tValue) +EnumChatFormatting.RESET);
+                        tList.add(trans("178","Progress/Load: ") +EnumChatFormatting.GREEN+ formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ formatNumbers(tValue) +EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2048,9 +2046,9 @@ public class GT_Utility {
             }
             try {
                 if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
-                    tList.add(trans("179","Max IN: ")  +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getInputVoltage()  + " (" + GT_Values.VN[GT_Utility.getTier(((IBasicEnergyContainer) tTileEntity).getInputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+((IBasicEnergyContainer)tTileEntity).getInputAmperage()+EnumChatFormatting.RESET+trans("183"," A"));
-                    tList.add(trans("181","Max OUT: ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " (" + GT_Values.VN[GT_Utility.getTier(((IBasicEnergyContainer) tTileEntity).getOutputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() +EnumChatFormatting.RESET+ trans("183"," A"));
-                    tList.add(trans("184","Energy: ")  +EnumChatFormatting.GREEN+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ GT_Utility.formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) +EnumChatFormatting.RESET+ " EU");
+                    tList.add(trans("179","Max IN: ")  +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getInputVoltage()  + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getInputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+((IBasicEnergyContainer)tTileEntity).getInputAmperage()+EnumChatFormatting.RESET+trans("183"," A"));
+                    tList.add(trans("181","Max OUT: ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getOutputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() +EnumChatFormatting.RESET+ trans("183"," A"));
+                    tList.add(trans("184","Energy: ")  +EnumChatFormatting.GREEN+ formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) +EnumChatFormatting.RESET+ " EU");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2412,7 +2410,7 @@ public class GT_Utility {
 
             setBookTitle(aStack, "Raw Prospection Data");
 
-            NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
+            NBTTagCompound tNBT = getNBT(aStack);
 
             tNBT.setByte("prospection_tier", aTier);
             tNBT.setString("prospection_pos", "Dim: " + aDim + "\nX: " + aX + " Y: " + aY + " Z: " + aZ);

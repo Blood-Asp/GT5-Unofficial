@@ -4,9 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import net.minecraft.block.Block;
 import org.lwjgl.input.Keyboard;
@@ -16,9 +14,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 
 public class GT_MetaTileEntity_FusionComputer1 extends GT_MetaTileEntity_FusionComputer {
 
-    private static final ITexture textureOverlay = new GT_MultiTexture(
-            new GT_RenderedTexture(OVERLAY_FUSION1),
-            new GT_RenderedGlowTexture(OVERLAY_FUSION1_GLOW));
+    private static final ITexture textureOverlay = TextureFactory.of(
+            TextureFactory.of(OVERLAY_FUSION1),
+            TextureFactory.builder().addIcon(OVERLAY_FUSION1_GLOW).glow().build());
 
     public GT_MetaTileEntity_FusionComputer1(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 6);

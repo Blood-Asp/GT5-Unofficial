@@ -4,8 +4,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_SpawnEventHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,12 +43,12 @@ public class GT_MetaTileEntity_MonsterRepellent extends GT_MetaTileEntity_Tiered
         if (aSide != ForgeDirection.UP.ordinal()) return new ITexture[]{MACHINE_CASINGS[mTier][aColorIndex + 1]};
         if (aActive) return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER_ACTIVE),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_ACTIVE_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_ACTIVE_GLOW).glow().build()};
         return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_GLOW).glow().build()};
     }
 
     @Override

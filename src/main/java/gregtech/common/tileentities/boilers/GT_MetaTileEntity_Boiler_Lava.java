@@ -5,8 +5,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.common.gui.GT_Container_Boiler;
@@ -41,16 +40,16 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
         final ITexture[]
-                texBottom = {new GT_RenderedTexture(MACHINE_STEELBRICKS_BOTTOM)},
-                texTop = {new GT_RenderedTexture(MACHINE_STEELBRICKS_TOP), new GT_RenderedTexture(OVERLAY_PIPE)},
-                texSide = {new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE), new GT_RenderedTexture(OVERLAY_PIPE)},
+                texBottom = {TextureFactory.of(MACHINE_STEELBRICKS_BOTTOM)},
+                texTop = {TextureFactory.of(MACHINE_STEELBRICKS_TOP), TextureFactory.of(OVERLAY_PIPE)},
+                texSide = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(OVERLAY_PIPE)},
                 texFront = {
-                        new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE),
-                        new GT_RenderedTexture(BOILER_LAVA_FRONT)},
+                        TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_LAVA_FRONT)},
                 texFrontActive = {
-                        new GT_RenderedTexture(MACHINE_STEELBRICKS_SIDE),
-                        new GT_RenderedTexture(BOILER_LAVA_FRONT_ACTIVE),
-                        new GT_RenderedGlowTexture(BOILER_LAVA_FRONT_ACTIVE_GLOW)};
+                        TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_LAVA_FRONT_ACTIVE),
+                        TextureFactory.builder().addIcon(BOILER_LAVA_FRONT_ACTIVE_GLOW).glow().build()};
         for (byte i = 0; i < 17; i++) {
             rTextures[0][i] = texBottom;
             rTextures[1][i] = texTop;

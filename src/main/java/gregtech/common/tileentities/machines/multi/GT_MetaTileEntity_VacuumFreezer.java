@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -67,13 +66,13 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
             if (aActive) {
                 rTexture = new ITexture[]{
                         casingTexturePages[0][17],
-                        new GT_RenderedTexture(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW)};
+                        TextureFactory.of(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW).glow().build()};
             } else {
                 rTexture = new ITexture[]{
                         casingTexturePages[0][17],
-                        new GT_RenderedTexture(OVERLAY_FRONT_VACUUM_FREEZER),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_VACUUM_FREEZER_GLOW)};
+                        TextureFactory.of(OVERLAY_FRONT_VACUUM_FREEZER),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_GLOW).glow().build()};
             }
         } else {
             rTexture = new ITexture[]{casingTexturePages[0][17]};
@@ -108,9 +107,9 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_MultiBloc
             long tVoltage = getMaxInputVoltage();
             byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, new ItemStack[]{tInput});
+            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sVacuumRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], null, tInput);
             if (tRecipe != null) {
-                if (tRecipe.isRecipeInputEqual(true, null, new ItemStack[]{tInput})) {
+                if (tRecipe.isRecipeInputEqual(true, null, tInput)) {
                     this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                     this.mEfficiencyIncrease = 10000;
 

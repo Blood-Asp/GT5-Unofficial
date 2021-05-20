@@ -7,10 +7,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
-import gregtech.api.render.GT_MultiTexture;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.GT_UndergroundOil;
@@ -46,16 +44,16 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
         super(aID, aName, aNameRegional, aTier, 1,
                 "(DEPRECATED, DO NOT USE! SWAP TO ADVANCED VERSION USING SHAPELESS RECIPE!)", 1, 1,
                 "Default.png", "",
-                new GT_RenderedTexture(OVERLAY_SIDE_ROCK_BREAKER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_SIDE_ROCK_BREAKER),
-                new GT_RenderedTexture(OVERLAY_TOP_ROCK_BREAKER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_TOP_ROCK_BREAKER),
-                new GT_MultiTexture(
-                        new GT_RenderedTexture(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE),
-                        new GT_RenderedGlowTexture(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW)),
-                new GT_RenderedTexture(OVERLAY_FRONT_ROCK_BREAKER),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE),
-                new GT_RenderedTexture(OVERLAY_BOTTOM_ROCK_BREAKER));
+                TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER_ACTIVE),
+                TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER),
+                TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER_ACTIVE),
+                TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER),
+                TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE),
+                TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER));
     }
 
     public GT_MetaTileEntity_SeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {

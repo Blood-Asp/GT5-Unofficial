@@ -6,8 +6,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Recipe;
 
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS;
@@ -38,36 +37,36 @@ public class GT_MetaTileEntity_PlasmaGenerator extends GT_MetaTileEntity_BasicGe
     public ITexture[] getFront(byte aColor) {
         return new ITexture[]{
                 super.getFront(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS),
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS),
                 OVERLAYS_ENERGY_OUT[mTier]};
     }
 
     @Override
     public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{super.getBack(aColor)[0], TextureFactory.of(MACHINE_CASING_FUSION_GLASS)};
     }
 
     @Override
     public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{super.getBottom(aColor)[0], TextureFactory.of(MACHINE_CASING_FUSION_GLASS)};
     }
 
     @Override
     public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{super.getTop(aColor)[0], TextureFactory.of(MACHINE_CASING_FUSION_GLASS)};
     }
 
     @Override
     public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS)};
+        return new ITexture[]{super.getSides(aColor)[0], TextureFactory.of(MACHINE_CASING_FUSION_GLASS)};
     }
 
     @Override
     public ITexture[] getFrontActive(byte aColor) {
         return new ITexture[]{
                 super.getFrontActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW),
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build(),
                 OVERLAYS_ENERGY_OUT[mTier]};
     }
 
@@ -75,32 +74,32 @@ public class GT_MetaTileEntity_PlasmaGenerator extends GT_MetaTileEntity_BasicGe
     public ITexture[] getBackActive(byte aColor) {
         return new ITexture[]{
                 super.getBackActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)};
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottomActive(byte aColor) {
         return new ITexture[]{
                 super.getBottomActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)};
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTopActive(byte aColor) {
         return new ITexture[]{
                 super.getTopActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)};
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getSidesActive(byte aColor) {
         return new ITexture[]{
                 super.getSidesActive(aColor)[0],
-                new GT_RenderedTexture(MACHINE_CASING_FUSION_GLASS_YELLOW),
-                new GT_RenderedGlowTexture(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW)};
+                TextureFactory.of(MACHINE_CASING_FUSION_GLASS_YELLOW),
+                TextureFactory.builder().addIcon(MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW).glow().build()};
     }
 
     @Override

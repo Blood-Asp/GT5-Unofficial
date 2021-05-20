@@ -9,8 +9,7 @@ import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
-import gregtech.api.render.GT_RenderedGlowTexture;
-import gregtech.api.render.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_MicrowaveEnergyTransmitter;
@@ -102,12 +101,12 @@ public class GT_MetaTileEntity_MicrowaveEnergyTransmitter extends GT_MetaTileEnt
         if (aSide == 0) return new ITexture[]{MACHINE_CASINGS[mTier][aColorIndex + 1]};
         if (aActive) return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER_ACTIVE),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_ACTIVE_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_ACTIVE_GLOW).glow().build()};
         return new ITexture[]{
                 MACHINE_CASINGS[mTier][aColorIndex + 1],
-                new GT_RenderedTexture(OVERLAY_TELEPORTER),
-                new GT_RenderedGlowTexture(OVERLAY_TELEPORTER_GLOW)};
+                TextureFactory.of(OVERLAY_TELEPORTER),
+                TextureFactory.builder().addIcon(OVERLAY_TELEPORTER_GLOW).glow().build()};
     }
 
     @Override
