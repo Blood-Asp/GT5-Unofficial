@@ -33,7 +33,7 @@ public class GT_TextureBuilder implements ITextureBuilder {
     }
 
     @Override
-    public ITextureBuilder setFromBlock(Block block, int meta) {
+    public ITextureBuilder setFromBlock(final Block block, final int meta) {
         this.fromBlock = block;
         this.fromMeta = meta;
         this.fromSide = ForgeDirection.UNKNOWN;
@@ -41,31 +41,31 @@ public class GT_TextureBuilder implements ITextureBuilder {
     }
 
     @Override
-    public ITextureBuilder setFromSide(ForgeDirection side) {
+    public ITextureBuilder setFromSide(final ForgeDirection side) {
         this.fromSide = side;
         return this;
     }
 
     @Override
-    public ITextureBuilder addIcon(IIconContainer... iconContainers) {
+    public ITextureBuilder addIcon(final IIconContainer... iconContainers) {
         this.iconContainerList.addAll(Arrays.asList(iconContainers));
         return this;
     }
 
     @Override
-    public ITextureBuilder setRGBA(short[] rgba) {
+    public ITextureBuilder setRGBA(final short[] rgba) {
         this.rgba = rgba;
         return this;
     }
 
     @Override
-    public ITextureBuilder addLayer(ITexture... iTextures) {
+    public ITextureBuilder addLayer(final ITexture... iTextures) {
         this.textureLayers.addAll(Arrays.asList(iTextures));
         return this;
     }
 
     @Override
-    public ITextureBuilder setAllowAlpha(boolean allowAlpha) {
+    public ITextureBuilder setAllowAlpha(final boolean allowAlpha) {
         this.allowAlpha = allowAlpha;
         return this;
     }
