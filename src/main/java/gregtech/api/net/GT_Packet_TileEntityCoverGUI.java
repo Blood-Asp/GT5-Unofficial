@@ -1,12 +1,11 @@
 package gregtech.api.net;
 
 import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.common.GT_Proxy;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
  * Server -> Client: Show GUI
  */
 
-public class GT_Packet_TileEntityCoverGUI extends GT_Packet {
+public class GT_Packet_TileEntityCoverGUI extends GT_Packet_New {
     protected int mX;
     protected short mY;
     protected int mZ;
@@ -79,24 +78,21 @@ public class GT_Packet_TileEntityCoverGUI extends GT_Packet {
     }
 
     @Override
-    public byte[] encode() {
-        ByteArrayDataOutput tOut = ByteStreams.newDataOutput(4+2+4+1+4+4+4+4);
-        tOut.writeInt(mX);
-        tOut.writeShort(mY);
-        tOut.writeInt(mZ);
+    public void encode(ByteBuf aOut) {
+        aOut.writeInt(mX);
+        aOut.writeShort(mY);
+        aOut.writeInt(mZ);
 
-        tOut.writeByte(side);
-        tOut.writeInt(coverID);
-        tOut.writeInt(coverData);
+        aOut.writeByte(side);
+        aOut.writeInt(coverID);
+        aOut.writeInt(coverData);
 
-        tOut.writeInt(dimID);
-        tOut.writeInt(playerID);
-
-        return tOut.toByteArray();
+        aOut.writeInt(dimID);
+        aOut.writeInt(playerID);
     }
 
     @Override
-    public GT_Packet decode(ByteArrayDataInput aData) {
+    public GT_Packet_New decode(ByteArrayDataInput aData) {
         return new GT_Packet_TileEntityCoverGUI(
                 aData.readInt(),
                 aData.readShort(),
