@@ -22,19 +22,24 @@
 
 package gregtech.common.tileentities.machines.long_distance;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_BACK;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_FRONT;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_SIDE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_SIDE_GLOW;
+
 public class GT_MetaTileEntity_LongDistancePipelineItem extends GT_MetaTileEntity_LongDistancePipelineBase {
-    final static int[] emptyIntArray = new int[0];
+    static final int[] emptyIntArray = new int[0];
     
     public GT_MetaTileEntity_LongDistancePipelineItem(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, "Sends Items over long distances");
@@ -169,15 +174,22 @@ public class GT_MetaTileEntity_LongDistancePipelineItem extends GT_MetaTileEntit
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_LongDistancePipelineItem(mName, mTier, mDescription, mTextures);
+        return new GT_MetaTileEntity_LongDistancePipelineItem(mName, mTier, getDescription()[0], mTextures);
     }
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) 
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_FRONT)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_FRONT)};
         else if (aSide == GT_Utility.getOppositeSide(aFacing))
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_BACK)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_BACK)};
         else 
-            return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPELINE_ITEM_SIDE)};
+            return new ITexture[]{
+                    MACHINE_CASINGS[mTier][aColorIndex + 1],
+                    TextureFactory.of(OVERLAY_PIPELINE_ITEM_SIDE),
+                    TextureFactory.builder().addIcon(OVERLAY_PIPELINE_ITEM_SIDE_GLOW).glow().build()};
     }
 }

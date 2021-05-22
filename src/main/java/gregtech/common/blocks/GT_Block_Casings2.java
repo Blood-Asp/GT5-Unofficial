@@ -3,7 +3,7 @@ package gregtech.common.blocks;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -11,17 +11,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class GT_Block_Casings2 extends GT_Block_Casings_Abstract {
     public GT_Block_Casings2() {
         super(GT_Item_Casings2.class, "gt.blockcasings2", GT_Material_Casings.INSTANCE);
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-        	if (i != 6){
-        		Textures.BlockIcons.casingTexturePages[0][(i + 16)] = new GT_CopiedBlockTexture(this, 6, i);
-        	}
-         }
+        for (int i = 0; i < 16; i++) {
+            if (i != 6) {
+                Textures.BlockIcons.casingTexturePages[0][(i + 16)] = TextureFactory.of(this, i);
+            }
+        }
         //Special handler for Pyrolyse Oven Casing on hatches...
-        Textures.BlockIcons.casingTexturePages[0][22] = new GT_CopiedBlockTexture(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 6, 0,Dyes.MACHINE_METAL.mRGBa);
+        Textures.BlockIcons.casingTexturePages[0][22] = TextureFactory.of(Block.getBlockFromItem(ItemList.Casing_ULV.get(1).getItem()), 0, ForgeDirection.UNKNOWN, Dyes.MACHINE_METAL.mRGBa);
 
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Solid Steel Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Frost Proof Machine Casing");

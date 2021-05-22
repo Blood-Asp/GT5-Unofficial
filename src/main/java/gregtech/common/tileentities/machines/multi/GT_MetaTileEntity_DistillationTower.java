@@ -2,13 +2,14 @@ package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -21,6 +22,11 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_GLOW;
 
 public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_MultiBlockBase {
     private static final int CASING_INDEX = 49;
@@ -39,31 +45,39 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
     }
 
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Distillery")
-		.addInfo("Controller block for the Distillation Tower")
-		.addInfo("Fluids are only put out at the correct height")
-		.addInfo("The correct height equals the slot number in the NEI recipe")
-		.addSeparator()
-		.beginVariableStructureBlock(3, 3, 3, 12, 3, 3, true)
-		.addController("Front bottom")
-		.addOtherStructurePart("Clean Stainless Steel Machine Casing", "7 x h - 5 (minimum)")
-		.addEnergyHatch("Any casing")
-		.addMaintenanceHatch("Any casing")
-		.addInputHatch("Any bottom layer casing")
-		.addOutputBus("Any bottom layer casing")
-		.addOutputHatch("2-11x Output Hatches (One per layer except bottom layer)")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Distillery")
+                .addInfo("Controller block for the Distillation Tower")
+                .addInfo("Fluids are only put out at the correct height")
+                .addInfo("The correct height equals the slot number in the NEI recipe")
+                .addSeparator()
+                .beginVariableStructureBlock(3, 3, 3, 12, 3, 3, true)
+                .addController("Front bottom")
+                .addOtherStructurePart("Clean Stainless Steel Machine Casing", "7 x h - 5 (minimum)")
+                .addEnergyHatch("Any casing")
+                .addMaintenanceHatch("Any casing")
+                .addInputHatch("Any bottom layer casing")
+                .addOutputBus("Any bottom layer casing")
+                .addOutputHatch("2-11x Output Hatches (One per layer except bottom layer)")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
-            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX), new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER)};
+            if (aActive)
+                return new ITexture[]{
+                        BlockIcons.getCasingTextureForId(CASING_INDEX),
+                        TextureFactory.of(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW).glow().build()};
+            return new ITexture[]{
+                    BlockIcons.getCasingTextureForId(CASING_INDEX),
+                    TextureFactory.of(OVERLAY_FRONT_DISTILLATION_TOWER),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DISTILLATION_TOWER_GLOW).glow().build()};
         }
         return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX)};
     }
@@ -89,8 +103,8 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         ArrayList<FluidStack> tFluidList = getStoredFluids();
         for (int i = 0; i < tFluidList.size() - 1; i++) {
             for (int j = i + 1; j < tFluidList.size(); j++) {
-                if (GT_Utility.areFluidsEqual((FluidStack) tFluidList.get(i), (FluidStack) tFluidList.get(j))) {
-                    if (((FluidStack) tFluidList.get(i)).amount >= ((FluidStack) tFluidList.get(j)).amount) {
+                if (GT_Utility.areFluidsEqual(tFluidList.get(i), tFluidList.get(j))) {
+                    if (tFluidList.get(i).amount >= tFluidList.get(j).amount) {
                         tFluidList.remove(j--);
                     } else {
                         tFluidList.remove(i--);
@@ -102,12 +116,12 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
 
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(0, GT_Utility.getTier(tVoltage));
-        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[tFluidList.size()]);
+        FluidStack[] tFluids = tFluidList.toArray(new FluidStack[0]);
         if (tFluids.length > 0) {
             for (FluidStack tFluid : tFluids) {
                 GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sDistillationRecipes.findRecipe(getBaseMetaTileEntity(), false, gregtech.api.enums.GT_Values.V[tTier], new FluidStack[]{tFluid});
                 if (tRecipe != null) {
-                    if (tRecipe.isRecipeInputEqual(true, tFluids, new ItemStack[]{})) {
+                    if (tRecipe.isRecipeInputEqual(true, tFluids)) {
                         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
                         this.mEfficiencyIncrease = 10000;
                         calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);

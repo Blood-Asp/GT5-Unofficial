@@ -1,12 +1,15 @@
 package gregtech.common.tileentities.machines.basic;
 
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.Element;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -16,6 +19,16 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_REPLICATOR;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_REPLICATOR_ACTIVE;
 
 public class GT_MetaTileEntity_Replicator
         extends GT_MetaTileEntity_BasicMachine {
@@ -32,7 +45,17 @@ public class GT_MetaTileEntity_Replicator
     }
 
     public GT_MetaTileEntity_Replicator(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 1, "Producing Elemental Matter", 1, 1, "Replicator.png", "", new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_REPLICATOR), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR_ACTIVE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_REPLICATOR));
+        super(aID, aName, aNameRegional, aTier, 1, "Producing Elemental Matter", 1, 1, "Replicator.png", "",
+                TextureFactory.of(OVERLAY_SIDE_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_SIDE_REPLICATOR),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_REPLICATOR_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_REPLICATOR_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(OVERLAY_FRONT_REPLICATOR),
+                TextureFactory.of(OVERLAY_TOP_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_TOP_REPLICATOR),
+                TextureFactory.of(OVERLAY_BOTTOM_REPLICATOR_ACTIVE),
+                TextureFactory.of(OVERLAY_BOTTOM_REPLICATOR));
     }
 
     public GT_MetaTileEntity_Replicator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -43,6 +66,7 @@ public class GT_MetaTileEntity_Replicator
         super(aName, aTier, 1, aDescription, aTextures, 1, 1, aGUIName, aNEIName);
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Replicator(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
@@ -53,6 +77,7 @@ public class GT_MetaTileEntity_Replicator
         return (long) Math.pow(amount, EXPONENT);
     }
 
+    @Override
     public int checkRecipe() {
         FluidStack tFluid = getFillableStack();
         if ((tFluid != null) && (tFluid.isFluidEqual(Materials.UUMatter.getFluid(1L)))) {
@@ -63,7 +88,7 @@ public class GT_MetaTileEntity_Replicator
                 if ((tFluid.amount >= tMass) && (tMass > 0L)) {
 
                     this.mEUt = GT_Utility.safeInt(gregtech.api.enums.GT_Values.V[this.mTier],1);
-                    this.mMaxProgresstime = GT_Utility.safeInt(tMass * 1024L / (1 << this.mTier),1);
+                    this.mMaxProgresstime = GT_Utility.safeInt(tMass * 1024L / (1L << this.mTier),1);
                     if (mMaxProgresstime == Integer.MAX_VALUE - 1 || mEUt == Integer.MAX_VALUE - 1)
                         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
 
@@ -106,10 +131,12 @@ public class GT_MetaTileEntity_Replicator
         return super.allowPutStackValidated(aBaseMetaTileEntity, aIndex, aSide, aStack) && ItemList.Cell_Empty.isStackEqual(aStack);
     }
 
+    @Override
     public boolean isFluidInputAllowed(FluidStack aFluid) {
         return aFluid.isFluidEqual(Materials.UUMatter.getFluid(1L));
     }
 
+    @Override
     public int getCapacity() {
         if ((sHeaviestElementMass == 0) && (GregTech_API.sPostloadFinished)) {
             sHeaviestElementMass = Materials.getMaterialsMap().values().stream().mapToInt(material -> (int) cubicFluidMultiplier((int)material.getMass())).max().orElseThrow(NoSuchElementException::new);

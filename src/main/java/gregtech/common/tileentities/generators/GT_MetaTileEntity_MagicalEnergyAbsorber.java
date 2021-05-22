@@ -4,13 +4,16 @@ import com.google.common.base.Enums;
 import cpw.mods.fml.common.Loader;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.TC_Aspects;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicGenerator;
-import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.*;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Config;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.enchantment.Enchantment;
@@ -27,16 +30,31 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
-import thaumcraft.api.aspects.*;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectSourceHelper;
+import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.visnet.VisNetHandler;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static gregtech.api.enums.ConfigCategories.machineconfig;
 import static gregtech.api.enums.GT_Values.MOD_ID_TC;
 import static gregtech.api.enums.GT_Values.V;
-import static net.minecraft.util.EnumChatFormatting.*;
+import static gregtech.api.enums.Textures.BlockIcons.*;
+import static net.minecraft.util.EnumChatFormatting.GRAY;
+import static net.minecraft.util.EnumChatFormatting.GREEN;
+import static net.minecraft.util.EnumChatFormatting.LIGHT_PURPLE;
+import static net.minecraft.util.EnumChatFormatting.RESET;
+import static net.minecraft.util.EnumChatFormatting.UNDERLINE;
+import static net.minecraft.util.EnumChatFormatting.YELLOW;
 
 interface MagicalEnergyBBListener {
     void onMagicalEnergyBBUpdate();
@@ -46,17 +64,17 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     private static final boolean THAUMCRAFT_LOADED = Loader.isModLoaded(MOD_ID_TC);
     private static final ConcurrentHashMap<UUID, GT_MetaTileEntity_MagicalEnergyAbsorber> sSubscribedCrystals = new ConcurrentHashMap<>(4);
-    private static List<Aspect> sPrimalAspects = (THAUMCRAFT_LOADED) ? Aspect.getPrimalAspects() : new ArrayList<Aspect>();
+    private static final List<Aspect> sPrimalAspects = (THAUMCRAFT_LOADED) ? Aspect.getPrimalAspects() : new ArrayList<Aspect>();
     private static boolean sAllowMultipleEggs = false;
     private static GT_MetaTileEntity_MagicalEnergyAbsorber sActiveSiphon = null;
     private static int sEnergyPerEndercrystal = 512;
     private static int sEnergyFromVis = 20;
     private static int sEnergyPerEssentia = 320;
-    private static Map<Aspect, Integer> sAspectsEnergy = new HashMap<>();
+    private static final Map<Aspect, Integer> sAspectsEnergy = new HashMap<>();
     private static int sDragonEggEnergyPerTick = 2048;
     private int mEfficiency;
     private int mMaxVisPerDrain;
-    private MagicalEnergyBB mMagicalEnergyBB = new MagicalEnergyBB(this, mTier, mTier + 2);
+    private final MagicalEnergyBB mMagicalEnergyBB = new MagicalEnergyBB(this, mTier, mTier + 2);
     private long mNextGenerateTickRate = 1;
     private int mNoGenerationTicks = 0;
 
@@ -185,54 +203,84 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
 
     @Override
     public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+        return new ITexture[]{
+                super.getFront(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build(),
+                OVERLAYS_ENERGY_OUT[mTier]};
     }
 
     @Override
     public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_FRONT)};
+        return new ITexture[]{
+                super.getBack(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC_FRONT),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_FRONT_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC)};
+        return new ITexture[]{
+                super.getBottom(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG)};
+        return new ITexture[]{
+                super.getTop(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_DRAGONEGG)};
     }
 
     @Override
     public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC)};
+        return new ITexture[]{
+                super.getSides(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getFrontActive(byte aColor) {
-        return new ITexture[]{super.getFrontActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[mTier]};
+        return new ITexture[]{
+                super.getFrontActive(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build(),
+                OVERLAYS_ENERGY_OUT[mTier]};
     }
 
     @Override
     public ITexture[] getBackActive(byte aColor) {
-        return new ITexture[]{super.getBackActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_FRONT_ACTIVE)};
+        return new ITexture[]{
+                super.getBackActive(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC_FRONT_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_FRONT_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottomActive(byte aColor) {
-        return new ITexture[]{super.getBottomActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
+        return new ITexture[]{
+                super.getBottomActive(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTopActive(byte aColor) {
-        return new ITexture[]{super.getTopActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_DRAGONEGG)};
+        return new ITexture[]{
+                super.getTopActive(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_DRAGONEGG),
+                TextureFactory.builder().addIcon(MACHINE_CASING_DRAGONEGG_GLOW).glow().build()
+        };
     }
 
     @Override
     public ITexture[] getSidesActive(byte aColor) {
-        return new ITexture[]{super.getSidesActive(aColor)[0], new GT_RenderedTexture(Textures.BlockIcons.MACHINE_CASING_MAGIC_ACTIVE)};
+        return new ITexture[]{
+                super.getSidesActive(aColor)[0],
+                TextureFactory.of(MACHINE_CASING_MAGIC_ACTIVE),
+                TextureFactory.builder().addIcon(MACHINE_CASING_MAGIC_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
@@ -470,12 +518,12 @@ public class GT_MetaTileEntity_MagicalEnergyAbsorber extends GT_MetaTileEntity_B
      * Handles Bounding Box ranged operations for Magic sources
      */
     static class MagicalEnergyBB {
-        private GT_MetaTileEntity_MagicalEnergyAbsorber mAbsorber;
-        private MagicalEnergyBBListener mListener;
-        private int mDefaultTier;
+        private final GT_MetaTileEntity_MagicalEnergyAbsorber mAbsorber;
+        private final MagicalEnergyBBListener mListener;
+        private final int mDefaultTier;
         private int mTier;
-        private int mMaxTier;
-        private List<UUID> mLivingCrystalIDs = new ArrayList<>();
+        private final int mMaxTier;
+        private final List<UUID> mLivingCrystalIDs = new ArrayList<>();
         private List<Aspect> mAvailableAspects;
 
         /**

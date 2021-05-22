@@ -12,7 +12,9 @@ import net.minecraftforge.common.util.ForgeDirection;
  * to render with bottom side flipped as with dumb blocks rendering.
  * It is used in Ore blocks rendering so they better blends with dumb block ores
  * from vanilla or other mods, when seen from bottom.
+ * @deprecated Replaced by the {@link gregtech.api.render.TextureFactory} API.
  */
+@Deprecated
 public class GT_StdRenderedTexture extends GT_RenderedTexture{
 
     @SuppressWarnings("unused")
