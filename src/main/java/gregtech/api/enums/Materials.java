@@ -2094,9 +2094,33 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         initMaterialProperties(); //No more material addition or manipulation should be done past this point!
         MATERIALS_ARRAY = MATERIALS_MAP.values().toArray(new Materials[0]); //Generate standard object array. This is a lot faster to loop over.
         VALUES = Arrays.asList(MATERIALS_ARRAY);
-        if (!Loader.isModLoaded("dreamcraft"))
-            if (!GT_Mod.gregtechproxy.mEnableAllComponents)
-                OrePrefixes.initMaterialComponents();
+        if (!Loader.isModLoaded("dreamcraft") && !GT_Mod.gregtechproxy.mEnableAllComponents)
+            OrePrefixes.initMaterialComponents();
+        else {
+            OrePrefixes.ingotHot.mDisabledItems.addAll(
+                    Arrays.stream(Materials.values()).parallel()
+                            .filter(OrePrefixes.ingotHot::doGenerateItem)
+                            .filter(m -> m.mBlastFurnaceTemp < 1750 && m.mAutoGenerateBlastFurnaceRecipes)
+                            .collect(Collectors.toSet())
+            );
+            OrePrefixes.ingotHot.disableComponent(Materials.Reinforced);
+            OrePrefixes.ingotHot.disableComponent(Materials.ConductiveIron);
+            OrePrefixes.ingotHot.disableComponent(Materials.FierySteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.ElectricalSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.EndSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.Soularium);
+            OrePrefixes.ingotHot.disableComponent(Materials.EnergeticSilver);
+            OrePrefixes.ingotHot.disableComponent(Materials.Cheese);
+            OrePrefixes.ingotHot.disableComponent(Materials.Calcium);
+            OrePrefixes.ingotHot.disableComponent(Materials.Flerovium);
+            OrePrefixes.ingotHot.disableComponent(Materials.Cobalt);
+            OrePrefixes.ingotHot.disableComponent(Materials.RedstoneAlloy);
+            OrePrefixes.ingotHot.disableComponent(Materials.Ardite);
+            OrePrefixes.ingotHot.disableComponent(Materials.DarkSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.EnergeticAlloy);
+            OrePrefixes.ingotHot.disableComponent(Materials.PulsatingIron);
+            OrePrefixes.ingotHot.disableComponent(Materials.CrudeSteel);
+        }
 
         fillGeneratedMaterialsMap();
 
