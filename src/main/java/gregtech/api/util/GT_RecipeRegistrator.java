@@ -278,7 +278,7 @@ public class GT_RecipeRegistrator {
     /**
      * Place Materials which you want to replace in Non-GT-Recipes here (warning HUGHE impact on loading times!)
      */
-    private final static Materials[] VANILLA_MATS = {
+    private static final Materials[] VANILLA_MATS = {
             Cobalt,
             Gold,
             Iron,

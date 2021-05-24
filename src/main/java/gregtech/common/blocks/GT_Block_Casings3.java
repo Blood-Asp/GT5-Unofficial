@@ -47,6 +47,7 @@ public class GT_Block_Casings3 extends GT_Block_Casings_Abstract {
         ItemList.Casing_Firebox_TungstenSteel.set(new ItemStack(this, 1, 15));
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         switch (aMeta) {
             case 0:

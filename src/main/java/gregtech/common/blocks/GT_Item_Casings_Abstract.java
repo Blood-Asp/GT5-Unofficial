@@ -32,14 +32,17 @@ public abstract class GT_Item_Casings_Abstract extends ItemBlock {
         setCreativeTab(GregTech_API.TAB_GREGTECH_MATERIALS);
     }
 
+    @Override
     public int getMetadata(int aMeta) {
         return aMeta;
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack aStack) {
         return this.field_150939_a.getUnlocalizedName() + "." + getDamage(aStack);
     }
 
+    @Override
     public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
         super.addInformation(aStack, aPlayer, aList, aF3_H);
         aList.add(this.mNoMobsToolTip);

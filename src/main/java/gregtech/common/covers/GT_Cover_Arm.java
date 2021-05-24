@@ -21,15 +21,16 @@ public class GT_Cover_Arm extends GT_CoverBehavior {
     public final int mTickRate;
     //msb converted, 2nd : direction (1=export)
     //right 14 bits: internalSlot, next 14 bits adjSlot, 0 = all, slot = -1
-    protected final static int EXPORT_MASK = 0x40000000;
-    protected final static int SLOT_ID_MASK = 0x3FFF;
-    protected final static int SLOT_ID_MIN = 0;
-    protected final static int CONVERTED_BIT = 0x80000000;
+    protected static final int EXPORT_MASK = 0x40000000;
+    protected static final int SLOT_ID_MASK = 0x3FFF;
+    protected static final int SLOT_ID_MIN = 0;
+    protected static final int CONVERTED_BIT = 0x80000000;
 
     public GT_Cover_Arm(int aTickRate) {
         this.mTickRate = aTickRate;
     }
 
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((((aTileEntity instanceof IMachineProgress)) && (!((IMachineProgress) aTileEntity).isAllowedToWork()))) {
             return aCoverVariable;
@@ -91,6 +92,7 @@ public class GT_Cover_Arm extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         int step = 0;
         if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
@@ -103,6 +105,7 @@ public class GT_Cover_Arm extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         int step = (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) ? 1 : -1;
         aCoverVariable = getNewVar(aCoverVariable, step);
@@ -144,42 +147,52 @@ public class GT_Cover_Arm extends GT_CoverBehavior {
         return  CONVERTED_BIT | export | ((adjSlot & SLOT_ID_MASK) << 14) | (intSlot & SLOT_ID_MASK);
     }
 
+    @Override
     public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return this.mTickRate;
     }
@@ -205,10 +218,10 @@ public class GT_Cover_Arm extends GT_CoverBehavior {
         private GT_GuiFakeItemButton intSlotIcon, adjSlotIcon;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         private final String ANY_TEXT = trans("ANY", "Any");
 

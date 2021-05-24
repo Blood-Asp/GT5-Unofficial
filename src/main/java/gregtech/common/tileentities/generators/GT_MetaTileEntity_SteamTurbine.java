@@ -2,7 +2,6 @@ package gregtech.common.tileentities.generators;
 
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -11,6 +10,8 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
+
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGenerator {
 
@@ -33,14 +34,17 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         onConfigLoad();
     }
 
+    @Override
     public boolean isOutputFacing(byte aSide) {
         return aSide == getBaseMetaTileEntity().getFrontFacing();
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_SteamTurbine(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipes() {
         return null;
     }
@@ -55,6 +59,7 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         return desc;
     }
 
+    @Override
     public int getCapacity() {
         return 24000 * this.mTier;
     }
@@ -63,59 +68,92 @@ public class GT_MetaTileEntity_SteamTurbine extends GT_MetaTileEntity_BasicGener
         this.mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SteamTurbine.efficiency.tier." + this.mTier, 6 + this.mTier);
     }
 
+    @Override
     public int getEfficiency() {
         return this.mEfficiency;
     }
 
+    @Override
     public int getFuelValue(FluidStack aLiquid) {
         if (aLiquid == null) return 0;
         return GT_ModHandler.isAnySteam(aLiquid) ? 3 : 0;
     }
 
+    @Override
     public int consumedFluidPerOperation(FluidStack aLiquid) {
         return this.mEfficiency;
     }
 
+    @Override
     public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_FRONT),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+        return new ITexture[]{super.getFront(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_FRONT),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_FRONT_GLOW).glow().build()),
+                OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
+    @Override
     public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_BACK)};
+        return new ITexture[]{super.getBack(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_BACK),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_BACK_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_BOTTOM)};
+        return new ITexture[]{super.getBottom(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_BOTTOM),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_BOTTOM_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_TOP)};
+        return new ITexture[]{super.getTop(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_TOP),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_TOP_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_SIDE)};
+        return new ITexture[]{super.getSides(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_SIDE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_SIDE_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getFrontActive(byte aColor) {
-        return new ITexture[]{super.getFrontActive(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_FRONT_ACTIVE),
-                Textures.BlockIcons.OVERLAYS_ENERGY_OUT[this.mTier]};
+        return new ITexture[]{super.getFrontActive(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_FRONT_ACTIVE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_FRONT_ACTIVE_GLOW).glow().build()),
+                OVERLAYS_ENERGY_OUT[this.mTier]};
     }
 
+    @Override
     public ITexture[] getBackActive(byte aColor) {
-        return new ITexture[]{super.getBackActive(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_BACK_ACTIVE)};
+        return new ITexture[]{super.getBackActive(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_BACK_ACTIVE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_BACK_ACTIVE_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getBottomActive(byte aColor) {
-        return new ITexture[]{super.getBottomActive(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_BOTTOM_ACTIVE)};
+        return new ITexture[]{super.getBottomActive(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_BOTTOM_ACTIVE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_BOTTOM_ACTIVE_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getTopActive(byte aColor) {
-        return new ITexture[]{super.getTopActive(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_TOP_ACTIVE)};
+        return new ITexture[]{super.getTopActive(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_TOP_ACTIVE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_TOP_ACTIVE_GLOW).glow().build())};
     }
 
+    @Override
     public ITexture[] getSidesActive(byte aColor) {
-        return new ITexture[]{super.getSidesActive(aColor)[0], TextureFactory.of(Textures.BlockIcons.STEAM_TURBINE_SIDE_ACTIVE)};
+        return new ITexture[]{super.getSidesActive(aColor)[0], TextureFactory.of(
+                TextureFactory.of(STEAM_TURBINE_SIDE_ACTIVE),
+                TextureFactory.builder().addIcon(STEAM_TURBINE_SIDE_ACTIVE_GLOW).glow().build())};
     }
 
     @Override

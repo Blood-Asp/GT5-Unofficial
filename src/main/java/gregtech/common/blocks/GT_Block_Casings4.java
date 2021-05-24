@@ -55,6 +55,7 @@ public class GT_Block_Casings4 extends GT_Block_Casings_Abstract {
         ItemList.Casing_Firebricks.set(new ItemStack(this, 1, 15));
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         switch (aMeta) {
             case 0:
@@ -110,6 +111,7 @@ public class GT_Block_Casings4 extends GT_Block_Casings_Abstract {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess aWorld, int xCoord, int yCoord, int zCoord, int aSide) {
         int tMeta = aWorld.getBlockMetadata(xCoord, yCoord, zCoord);

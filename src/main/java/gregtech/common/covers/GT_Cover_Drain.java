@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 
 public class GT_Cover_Drain extends GT_CoverBehavior {
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aCoverVariable % 3 > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 3 < 2) {
@@ -56,6 +57,7 @@ public class GT_Cover_Drain extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 6;
         if(aCoverVariable <0){aCoverVariable = 5;}
@@ -70,14 +72,17 @@ public class GT_Cover_Drain extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return ((IMachineProgress) aTileEntity).isAllowedToWork() == aCoverVariable < 2;
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return aCoverVariable < 3 ? 50 : 1;
     }

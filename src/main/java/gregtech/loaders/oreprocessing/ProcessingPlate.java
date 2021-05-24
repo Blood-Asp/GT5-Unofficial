@@ -49,6 +49,7 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
      * @param aModName     the ModID {@link String} of the mod providing this {@link ItemStack}
      * @param aStack       always != null, the {@link ItemStack} to register
      */
+    @Override
     public void registerOre(OrePrefixes aPrefix,
                             Materials aMaterial,
                             String aOreDictName,

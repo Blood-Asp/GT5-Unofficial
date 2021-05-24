@@ -1,7 +1,6 @@
 package gregtech.api.objects;
 
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 

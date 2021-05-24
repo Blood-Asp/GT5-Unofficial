@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 public class GT_ItemMaxStacksizeLoader implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Changing maximum Stacksizes if configured.");
 

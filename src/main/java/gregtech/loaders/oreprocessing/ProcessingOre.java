@@ -18,6 +18,7 @@ public class ProcessingOre implements gregtech.api.interfaces.IOreRecipeRegistra
                 tPrefix.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         boolean tIsRich = (aPrefix == OrePrefixes.oreNetherrack) || (aPrefix == OrePrefixes.oreNether) || (aPrefix == OrePrefixes.oreEndstone) || (aPrefix == OrePrefixes.oreEnd) || (aPrefix == OrePrefixes.oreRich) || (aPrefix == OrePrefixes.oreDense);
 

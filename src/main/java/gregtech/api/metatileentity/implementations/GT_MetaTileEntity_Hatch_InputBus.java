@@ -169,6 +169,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
         }
     }
 
+    @Override
     public String trans(String aKey, String aEnglish) {
         return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_" + aKey, aEnglish, false);
     }

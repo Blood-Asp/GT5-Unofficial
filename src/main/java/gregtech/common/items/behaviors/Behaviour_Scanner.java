@@ -19,6 +19,7 @@ public class Behaviour_Scanner extends Behaviour_None {
     public static final IItemBehaviour<GT_MetaBase_Item> INSTANCE = new Behaviour_Scanner();
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.scanning", "Can scan Blocks in World");
 
+    @Override
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         NBTTagCompound tNBT = aStack.getTagCompound();
         if (((aPlayer instanceof EntityPlayerMP)) && (aItem.canUse(aStack, 20000.0D))) {
@@ -38,6 +39,7 @@ public class Behaviour_Scanner extends Behaviour_None {
         return aPlayer instanceof EntityPlayerMP;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         try {
             NBTTagCompound tNBT = aStack.getTagCompound();

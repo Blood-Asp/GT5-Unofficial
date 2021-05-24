@@ -19,6 +19,7 @@ public class ProcessingIngot implements gregtech.api.interfaces.IOreRecipeRegist
         OrePrefixes.ingotHot.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         boolean aNoSmashing = aMaterial.contains(SubTag.NO_SMASHING);
         boolean aNoSmelting = aMaterial.contains(SubTag.NO_SMELTING);

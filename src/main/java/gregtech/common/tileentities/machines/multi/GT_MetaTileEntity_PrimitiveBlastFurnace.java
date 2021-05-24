@@ -46,65 +46,81 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         super(aName, INPUT_SLOTS + OUTPUT_SLOTS);
     }
 
+    @Override
     public boolean isSteampowered() {
         return false;
     }
 
+    @Override
     public boolean isElectric() {
         return false;
     }
 
+    @Override
     public boolean isPneumatic() {
         return false;
     }
 
+    @Override
     public boolean isEnetInput() {
         return false;
     }
 
+    @Override
     public boolean isEnetOutput() {
         return false;
     }
 
+    @Override
     public boolean isInputFacing(byte aSide) {
         return false;
     }
 
+    @Override
     public boolean isOutputFacing(byte aSide) {
         return false;
     }
 
+    @Override
     public boolean isTeleporterCompatible() {
         return false;
     }
 
+    @Override
     public boolean isFacingValid(byte aFacing) {
         return aFacing > 1;
     }
 
+    @Override
     public boolean isAccessAllowed(EntityPlayer aPlayer) {
         return true;
     }
 
+    @Override
     public int getProgresstime() {
         return this.mProgresstime;
     }
 
+    @Override
     public int maxProgresstime() {
         return this.mMaxProgresstime;
     }
 
+    @Override
     public int increaseProgress(int aProgress) {
         this.mProgresstime += aProgress;
         return this.mMaxProgresstime - this.mProgresstime;
     }
 
+    @Override
     public boolean allowCoverOnSide(byte aSide, GT_ItemStack aCoverID) {
         return (GregTech_API.getCoverBehavior(aCoverID.toStack()).isSimpleCover()) && (super.allowCoverOnSide(aSide, aCoverID));
     }
 
-	public abstract MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity);
+	@Override
+    public abstract MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity);
 
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("mProgresstime", this.mProgresstime);
         aNBT.setInteger("mMaxProgresstime", this.mMaxProgresstime);
@@ -119,6 +135,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         }
     }
 
+    @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         this.mUpdate = 5;
         this.mProgresstime = aNBT.getInteger("mProgresstime");
@@ -129,6 +146,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         }
     }
 
+    @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) {
             return true;
@@ -137,11 +155,13 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         return true;
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_PrimitiveBlastFurnace(aPlayerInventory, aBaseMetaTileEntity);
     }
 
-	public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+	@Override
+    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
 		return new GT_GUIContainer_PrimitiveBlastFurnace(aPlayerInventory, aBaseMetaTileEntity, getName(), GT_Recipe.GT_Recipe_Map.sPrimitiveBlastRecipes.mNEIName);
 	}
 
@@ -172,10 +192,12 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
 
     protected abstract boolean isCorrectCasingMetaID(int metaID);
 
+    @Override
     public void onMachineBlockUpdate() {
         this.mUpdate = 5;
     }
 
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if ((aBaseMetaTileEntity.isClientSide()) && (aBaseMetaTileEntity.isActive())) {
 
@@ -309,18 +331,22 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         return true;
     }
 
+    @Override
     public boolean isGivingInformation() {
         return false;
     }
 
+    @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return aIndex > INPUT_SLOTS;
     }
 
+    @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return !GT_Utility.areStacksEqual(aStack, this.mInventory[0]);
     }
 
+    @Override
     public byte getTileEntityBaseType() {
         return 0;
     }

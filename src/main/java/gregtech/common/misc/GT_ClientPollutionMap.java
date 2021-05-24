@@ -2,10 +2,7 @@ package gregtech.common.misc;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
-import org.lwjgl.opengl.GL11;
 
 public class GT_ClientPollutionMap {
     private static final byte RADIUS = 24;

@@ -20,6 +20,7 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         this.mTargetSlots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -58,6 +59,7 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 18, 8, 63, false, true, 1));
     }
 
+    @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         if (aSlotIndex < 10) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
@@ -103,6 +105,7 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         if ((this.mTileEntity.isClientSide()) || (this.mTileEntity.getMetaTileEntity() == null)) {
@@ -120,6 +123,7 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);
@@ -153,10 +157,12 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
         }
     }
 
+    @Override
     public int getSlotCount() {
         return 10;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 10;
     }

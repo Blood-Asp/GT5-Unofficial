@@ -12,13 +12,16 @@ public class GT_CoolantCellIC_Item
         super(aUnlocalized, aEnglish, aMaxStore);
     }
 
+    @Override
     public void processChamber(IReactor aReactor, ItemStack aStack, int x, int y, boolean aHeatRun) {
     }
 
+    @Override
     public boolean acceptUraniumPulse(IReactor aReactor, ItemStack aStack, ItemStack pulsingStack, int youX, int youY, int pulseX, int pulseY, boolean aHeatRun) {
         return false;
     }
 
+    @Override
     public boolean canStoreHeat(IReactor aReactor, ItemStack aStack, int x, int y) {
         if (aReactor.isFluidCooled() && (getControlTagOfStack(aStack)) != 0) {
             return false;
@@ -26,18 +29,22 @@ public class GT_CoolantCellIC_Item
         return true;
     }
 
+    @Override
     public int getMaxHeat(IReactor aReactor, ItemStack aStack, int x, int y) {
         return this.heatStorage;
     }
 
+    @Override
     public int getCurrentHeat(IReactor aReactor, ItemStack aStack, int x, int y) {
         return getHeatOfStack(aStack);
     }
 
+    @Override
     public float influenceExplosion(IReactor aReactor, ItemStack aStack) {
         return 1.0F + this.heatStorage / 30000.0F;
     }
 
+    @Override
     public int alterHeat(IReactor aReactor, ItemStack aStack, int x, int y, int aHeat) {
         int tHeat = getHeatOfStack(aStack);
         if ((tHeat == 0) && (getControlTagOfStack(aStack) != 0)) {

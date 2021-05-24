@@ -15,6 +15,7 @@ public class ProcessingShaping implements gregtech.api.interfaces.IOreRecipeRegi
         OrePrefixes.dust.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (((aMaterial == Materials.Glass) || (GT_OreDictUnificator.get(OrePrefixes.ingot, aMaterial, 1L) != null)) && (!aMaterial.contains(SubTag.NO_SMELTING))) {
             long aMaterialMass = aMaterial.getMass();

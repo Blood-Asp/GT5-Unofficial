@@ -6,7 +6,6 @@ import gregtech.api.objects.GT_ChunkManager;
 import gregtech.common.GT_Pollution;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 

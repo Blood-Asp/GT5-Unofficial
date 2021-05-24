@@ -17,12 +17,15 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.debugCleanroom;
 import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeight = -1;
@@ -63,10 +66,10 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 .addStructureInfo("You can also use Diodes for more power")
                 .addStructureInfo("Diodes also count towards 10 Machine Hulls count limit")
                 .toolTipFinisher("Gregtech");
-        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getInformation();
-        } else {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
         }
     }
 
@@ -286,10 +289,18 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         return true;
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == 0 || aSide == 1) {
-            return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE),
-                    TextureFactory.of(aActive ? OVERLAY_TOP_CLEANROOM_ACTIVE : OVERLAY_TOP_CLEANROOM)};
+        if (aSide == ForgeDirection.DOWN.ordinal() || aSide == ForgeDirection.UP.ordinal()) {
+            return new ITexture[]{
+                    TextureFactory.of(BLOCK_PLASCRETE),
+                    aActive ?
+                            TextureFactory.of(
+                                    TextureFactory.of(OVERLAY_TOP_CLEANROOM_ACTIVE),
+                                    TextureFactory.builder().addIcon(OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW).glow().build()) :
+                            TextureFactory.of(
+                                    TextureFactory.of(OVERLAY_TOP_CLEANROOM),
+                                    TextureFactory.builder().addIcon(OVERLAY_TOP_CLEANROOM_GLOW).glow().build())};
         }
         return new ITexture[]{TextureFactory.of(BLOCK_PLASCRETE)};
     }

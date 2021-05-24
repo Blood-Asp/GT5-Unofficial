@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_LAVA_FRONT;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_LAVA_FRONT_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_LAVA_FRONT_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_LAVA_FRONT_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
@@ -37,6 +38,7 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
         super(aName, aTier, aDescription, aTextures);
     }
 
+    @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
         final ITexture[]
@@ -45,7 +47,8 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
                 texSide = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(OVERLAY_PIPE)},
                 texFront = {
                         TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
-                        TextureFactory.of(BOILER_LAVA_FRONT)},
+                        TextureFactory.of(BOILER_LAVA_FRONT),
+                        TextureFactory.of(BOILER_LAVA_FRONT_GLOW)},
                 texFrontActive = {
                         TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
                         TextureFactory.of(BOILER_LAVA_FRONT_ACTIVE),
@@ -60,18 +63,22 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
         return rTextures;
     }
 
+    @Override
     public int maxProgresstime() {
         return 1000;
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity, 32000);
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png", 32000);
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Boiler_Lava(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
@@ -110,6 +117,7 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
         }
     }
 
+    @Override
     public final int fill(FluidStack aFluid, boolean doFill) {
         if ((GT_ModHandler.isLava(aFluid)) && (this.mProcessingEnergy < 50)) {
             int tFilledAmount = Math.min(50, aFluid.amount);

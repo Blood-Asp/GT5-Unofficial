@@ -27,6 +27,7 @@ public class GT_MetaTileEntity_BrickedBlastFurnace extends GT_MetaTileEntity_Pri
         super(aName);
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Blast Furnace")

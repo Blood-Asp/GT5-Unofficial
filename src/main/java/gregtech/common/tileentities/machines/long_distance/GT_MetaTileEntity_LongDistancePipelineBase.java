@@ -22,7 +22,6 @@
 
 package gregtech.common.tileentities.machines.long_distance;
 
-import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;

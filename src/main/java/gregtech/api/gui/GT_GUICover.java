@@ -154,6 +154,7 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
         }
     }
 
+    @Override
     public void mouseClicked(int x, int y, int button) {
         for (GT_GuiIntegerTextBox tBox : textBoxes) {
             boolean hadFocus = tBox.isFocused();
@@ -195,7 +196,7 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
                     return;
                 }
             }
-            if (textBoxes.size() > 0 )
+            if (!textBoxes.isEmpty())
                 setFocusedTextBox(textBoxes.get(0));
             return;
         }
@@ -226,15 +227,19 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
      * Button
      */
 
+    @Override
     public void actionPerformed(GuiButton button) {
         selectedButton = button;
     }
 
+    @Override
     public void clearSelectedButton() {
         selectedButton = null;
     }
+    @Override
     public GuiButton getSelectedButton(){return selectedButton;}
 
+    @Override
     public void buttonClicked(GuiButton button) {
 
     }
@@ -295,6 +300,7 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
         return gui_height;
     }
 
+    @Override
     public RenderItem getItemRenderer() {
         return itemRender;
     }

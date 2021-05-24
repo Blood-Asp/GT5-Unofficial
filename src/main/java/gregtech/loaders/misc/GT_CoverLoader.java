@@ -12,6 +12,7 @@ import static gregtech.api.enums.Textures.BlockIcons.VENT_NORMAL;
 
 public class GT_CoverLoader
         implements Runnable {
+    @Override
     public void run() {
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
             GregTech_API.registerCover(new ItemStack(Blocks.carpet, 1, i), TextureFactory.of(Blocks.wool, i), null);

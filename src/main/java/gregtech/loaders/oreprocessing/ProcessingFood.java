@@ -14,6 +14,7 @@ public class ProcessingFood implements gregtech.api.interfaces.IOreRecipeRegistr
         OrePrefixes.food.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         switch (aOreDictName) {
             case "foodCheese":

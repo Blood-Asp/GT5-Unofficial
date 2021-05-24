@@ -36,6 +36,7 @@ public class GT_Item_Machines extends ItemBlock {
         setCreativeTab(GregTech_API.TAB_GREGTECH);
     }
 
+    @Override
     public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean par4) {
         try {
             int tDamage = getDamage(aStack);
@@ -116,10 +117,12 @@ public class GT_Item_Machines extends ItemBlock {
         }
     }
 
+    @Override
     public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         return false;
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack aStack) {
         short tDamage = (short) getDamage(aStack);
         if ((tDamage < 0) || (tDamage >= GregTech_API.METATILEENTITIES.length)) {
@@ -131,6 +134,7 @@ public class GT_Item_Machines extends ItemBlock {
         return "";
     }
 
+    @Override
     public String getItemStackDisplayName(ItemStack aStack) {
     	String aName = super.getItemStackDisplayName(aStack);
     	short aDamage = (short) getDamage(aStack);
@@ -152,6 +156,7 @@ public class GT_Item_Machines extends ItemBlock {
     	return aName;
     }
 
+    @Override
     public void onCreated(ItemStack aStack, World aWorld, EntityPlayer aPlayer) {
         super.onCreated(aStack, aWorld, aPlayer);
         short tDamage = (short) getDamage(aStack);
@@ -160,6 +165,7 @@ public class GT_Item_Machines extends ItemBlock {
         }
     }
 
+    @Override
     public boolean placeBlockAt(ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int side, float hitX, float hitY, float hitZ, int aMeta) {
         short tDamage = (short) getDamage(aStack);
         if (tDamage > 0) {

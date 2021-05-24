@@ -11,15 +11,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_EXTRACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_EXTRACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_EXTRACTOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_EXTRACTOR_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_STEAM_EXTRACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_STEAM_EXTRACTOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Extractor_Steel extends GT_MetaTileEntity_BasicMachine_Steel {
     public GT_MetaTileEntity_Extractor_Steel(int aID, String aName, String aNameRegional) {
@@ -73,14 +65,16 @@ public class GT_MetaTileEntity_Extractor_Steel extends GT_MetaTileEntity_BasicMa
     public ITexture[] getSideFacingActive(byte aColor) {
         return new ITexture[]{
                 super.getSideFacingActive(aColor)[0],
-                TextureFactory.of(OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE)};
+                TextureFactory.of(OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getSideFacingInactive(byte aColor) {
         return new ITexture[]{
                 super.getSideFacingInactive(aColor)[0],
-                TextureFactory.of(OVERLAY_SIDE_STEAM_EXTRACTOR)};
+                TextureFactory.of(OVERLAY_SIDE_STEAM_EXTRACTOR),
+                TextureFactory.builder().addIcon(OVERLAY_SIDE_STEAM_EXTRACTOR_GLOW).glow().build()};
     }
 
     @Override
@@ -95,34 +89,39 @@ public class GT_MetaTileEntity_Extractor_Steel extends GT_MetaTileEntity_BasicMa
     public ITexture[] getFrontFacingInactive(byte aColor) {
         return new ITexture[]{
                 super.getFrontFacingInactive(aColor)[0],
-                TextureFactory.of(OVERLAY_FRONT_STEAM_EXTRACTOR)};
+                TextureFactory.of(OVERLAY_FRONT_STEAM_EXTRACTOR),
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_STEAM_EXTRACTOR_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTopFacingActive(byte aColor) {
         return new ITexture[]{
                 super.getTopFacingActive(aColor)[0],
-                TextureFactory.of(OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE)};
+                TextureFactory.of(OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getTopFacingInactive(byte aColor) {
         return new ITexture[]{
                 super.getTopFacingInactive(aColor)[0],
-                TextureFactory.of(OVERLAY_TOP_STEAM_EXTRACTOR)};
+                TextureFactory.of(OVERLAY_TOP_STEAM_EXTRACTOR),
+                TextureFactory.builder().addIcon(OVERLAY_TOP_STEAM_EXTRACTOR_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottomFacingActive(byte aColor) {
         return new ITexture[]{
                 super.getBottomFacingActive(aColor)[0],
-                TextureFactory.of(OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE)};
+                TextureFactory.of(OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE),
+                TextureFactory.builder().addIcon(OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE_GLOW).glow().build()};
     }
 
     @Override
     public ITexture[] getBottomFacingInactive(byte aColor) {
         return new ITexture[]{
                 super.getBottomFacingInactive(aColor)[0],
-                TextureFactory.of(OVERLAY_BOTTOM_STEAM_EXTRACTOR)};
+                TextureFactory.of(OVERLAY_BOTTOM_STEAM_EXTRACTOR),
+                TextureFactory.builder().addIcon(OVERLAY_BOTTOM_STEAM_EXTRACTOR_GLOW).glow().build()};
     }
 }

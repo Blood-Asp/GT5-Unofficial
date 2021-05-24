@@ -9,6 +9,7 @@ public class GT_GUIContainer_ChestBuffer extends GT_GUIContainerMetaTile_Machine
         super(new GT_Container_ChestBuffer(aInventoryPlayer, aTileEntity), "gregtech:textures/gui/ChestBuffer.png");
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;

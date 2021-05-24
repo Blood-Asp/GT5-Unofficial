@@ -404,6 +404,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         ItemList.Display_ITS_FREE.set(addItem(tLastID = 766, "ITS FREE", "(or at least almost free)", SubTag.INVISIBLE, new TC_Aspects.TC_AspectStack(TC_Aspects.LUCRUM, 1L)));
 }
 
+    @Override
     public boolean onLeftClickEntity(ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
         super.onLeftClickEntity(aStack, aPlayer, aEntity);
         int aDamage = aStack.getItemDamage();
@@ -416,11 +417,13 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         return false;
     }
 
+    @Override
     public boolean hasProjectile(SubTag aProjectileType, ItemStack aStack) {
         int aDamage = aStack.getItemDamage();
         return ((aDamage >= 25000) && (aDamage < 27000)) || (super.hasProjectile(aProjectileType, aStack));
     }
 
+    @Override
     public EntityArrow getProjectile(SubTag aProjectileType, ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         int aDamage = aStack.getItemDamage();
         if ((aDamage >= 25000) && (aDamage < 27000)) {
@@ -432,6 +435,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         return super.getProjectile(aProjectileType, aStack, aWorld, aX, aY, aZ);
     }
 
+    @Override
     public EntityArrow getProjectile(SubTag aProjectileType, ItemStack aStack, World aWorld, EntityLivingBase aEntity, float aSpeed) {
         int aDamage = aStack.getItemDamage();
         if ((aDamage >= 25000) && (aDamage < 27000)) {
@@ -443,6 +447,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         return super.getProjectile(aProjectileType, aStack, aWorld, aEntity, aSpeed);
     }
 
+    @Override
     public boolean isItemStackUsable(ItemStack aStack) {
         int aDamage = aStack.getItemDamage();
         Materials aMaterial = GregTech_API.sGeneratedMaterials[(aDamage % 1000)];
@@ -460,10 +465,12 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         return super.isItemStackUsable(aStack);
     }
 
+    @Override
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
         return (aDoShowAllItems) || (!aPrefix.name().startsWith("toolHead"));
     }
 
+    @Override
     public ItemStack onDispense(IBlockSource aSource, ItemStack aStack) {
         int aDamage = aStack.getItemDamage();
         if ((aDamage >= 25000) && (aDamage < 27000)) {
@@ -475,6 +482,7 @@ public class GT_MetaGenerated_Item_02 extends GT_MetaGenerated_Item_X32 {
         return super.onDispense(aSource, aStack);
     }
 
+    @Override
     public final ItemStack getContainerItem(ItemStack aStack) {
         int aDamage = aStack.getItemDamage();
         if (aDamage < 32000) {

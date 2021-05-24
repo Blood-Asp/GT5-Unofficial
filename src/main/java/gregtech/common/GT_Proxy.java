@@ -1592,6 +1592,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
     }
 
+    @Override
     public Object getServerGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
         if(aID>=1000){
             int ID = aID-1000;
@@ -1648,6 +1649,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
 
+    @Override
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
             return 0;

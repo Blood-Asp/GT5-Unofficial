@@ -26,15 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_ROCK_BREAKER;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ROCK_BREAKER;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ROCK_BREAKER_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_ROCK_BREAKER;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_ROCK_BREAKER_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_ROCK_BREAKER;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_ROCK_BREAKER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_BasicMachine {
 
@@ -44,16 +36,30 @@ public class GT_MetaTileEntity_SeismicProspector extends GT_MetaTileEntity_Basic
         super(aID, aName, aNameRegional, aTier, 1,
                 "(DEPRECATED, DO NOT USE! SWAP TO ADVANCED VERSION USING SHAPELESS RECIPE!)", 1, 1,
                 "Default.png", "",
-                TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER_ACTIVE),
-                TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER),
-                TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER_ACTIVE),
-                TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_ROCK_BREAKER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_ROCK_BREAKER),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_ROCK_BREAKER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_ROCK_BREAKER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_ROCK_BREAKER),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_ROCK_BREAKER_GLOW).glow().build()),
                 TextureFactory.of(
                         TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE),
                         TextureFactory.builder().addIcon(OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW).glow().build()),
-                TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER),
-                TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE),
-                TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER));
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_ROCK_BREAKER),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_ROCK_BREAKER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_ROCK_BREAKER),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_ROCK_BREAKER_GLOW).glow().build()));
     }
 
     public GT_MetaTileEntity_SeismicProspector(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {

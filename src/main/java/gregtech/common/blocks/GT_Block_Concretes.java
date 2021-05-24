@@ -50,14 +50,17 @@ public class GT_Block_Concretes extends GT_Block_Stones_Abstract implements IBlo
         GT_OreDictUnificator.registerOre(OrePrefixes.stone, Materials.Concrete, new ItemStack(this, 1, 15));
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         return 1;
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return this.blockHardness = Blocks.stone.getBlockHardness(aWorld, aX, aY, aZ);
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             return gregtech.api.enums.Textures.BlockIcons.CONCRETES[aMeta].getIcon();

@@ -44,6 +44,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
         return 0;
     }
 
+    @Override
     public void processChamber(IReactor reactor, ItemStack yourStack, int x, int y, boolean heatrun) {
         if (!reactor.produceEnergy()) {
             return;
@@ -110,6 +111,7 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
         }
     }
 
+    @Override
     public boolean acceptUraniumPulse(IReactor reactor, ItemStack yourStack, ItemStack pulsingStack, int youX, int youY, int pulseX, int pulseY, boolean heatrun) {
     	if (!heatrun) {
         	if(sMox){
@@ -122,26 +124,32 @@ public class GT_RadioactiveCellIC_Item extends GT_RadioactiveCell_Item implement
         return true;
     }
 
+    @Override
     public boolean canStoreHeat(IReactor reactor, ItemStack yourStack, int x, int y) {
         return false;
     }
 
+    @Override
     public int getMaxHeat(IReactor reactor, ItemStack yourStack, int x, int y) {
         return 0;
     }
 
+    @Override
     public int getCurrentHeat(IReactor reactor, ItemStack yourStack, int x, int y) {
         return 0;
     }
 
+    @Override
     public int alterHeat(IReactor reactor, ItemStack yourStack, int x, int y, int heat) {
         return heat;
     }
 
+    @Override
     public float influenceExplosion(IReactor reactor, ItemStack yourStack) {
         return 2 * this.numberOfCells;
     }
 
+    @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int slotIndex, boolean isCurrentItem) {
         if (this.sRadiation > 0 && (entity instanceof EntityLivingBase)) {
             EntityLivingBase entityLiving = (EntityLivingBase) entity;

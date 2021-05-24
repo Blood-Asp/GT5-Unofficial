@@ -13,6 +13,7 @@ public class ProcessingSand implements gregtech.api.interfaces.IOreRecipeRegistr
         OrePrefixes.sand.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (aOreDictName.equals("sandCracked")) {
             GT_Values.RA.addCentrifugeRecipe(GT_Utility.copyAmount(16L, aStack), -1, gregtech.api.util.GT_ModHandler.getFuelCan(25000), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 8L), null, null, null, new ItemStack(Blocks.sand, 10), 2500);

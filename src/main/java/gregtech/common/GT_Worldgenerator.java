@@ -54,6 +54,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
         }
     }
 
+    @Override
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         synchronized (listLock)
         {
@@ -327,6 +328,7 @@ public class GT_Worldgenerator implements IWorldGenerator {
             }
         }
 
+        @Override
         public void run() {
             long startTime = System.nanoTime();
             int oreveinMaxSize;

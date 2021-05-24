@@ -119,6 +119,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
         return tier() * mGrowthSpeed;
     }
 
+    @Override
     public int getrootslength(ICropTile crop) {
         return 5;
     }
@@ -233,6 +234,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
         return false;
     }
 
+    @Override
     public List<String> getCropInformation() {
         if (mBlock != null) {
             ArrayList<String> result = new ArrayList<String>(1);
@@ -242,6 +244,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
         return null;
     }
 
+    @Override
     public ItemStack getDisplayItem() {
         if (mSpecialDrops != null && mSpecialDrops[mSpecialDrops.length - 1] != null) {
             return GT_Utility.copy(mSpecialDrops[mSpecialDrops.length - 1]);

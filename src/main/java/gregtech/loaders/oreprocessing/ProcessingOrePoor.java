@@ -16,6 +16,7 @@ public class ProcessingOrePoor implements gregtech.api.interfaces.IOreRecipeRegi
         OrePrefixes.oreRich.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         int aMultiplier = 1;
         switch (aPrefix) {

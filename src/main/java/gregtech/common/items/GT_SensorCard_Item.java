@@ -30,6 +30,7 @@ public class GT_SensorCard_Item extends GT_Generic_Item implements IRemoteSensor
         setMaxStackSize(1);
     }
 
+    @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
         if (aStack != null) {
@@ -64,6 +65,7 @@ public class GT_SensorCard_Item extends GT_Generic_Item implements IRemoteSensor
         return CardState.NO_TARGET;
     }
 
+    @Override
     public List<PanelString> getStringData(int aSettings, ICardWrapper aCard, boolean aLabels) {
         List<PanelString> rList = new LinkedList<>();
         for (int i = 0; i < (strCount=aCard.getInt("mString")); i++) {
@@ -76,6 +78,7 @@ public class GT_SensorCard_Item extends GT_Generic_Item implements IRemoteSensor
         return rList;
     }
 
+    @Override
     public List<PanelSetting> getSettingsList() {
         List<PanelSetting> rList = new ArrayList<>();
         for (int i = 0; i < strCount; i++) {
@@ -84,10 +87,12 @@ public class GT_SensorCard_Item extends GT_Generic_Item implements IRemoteSensor
         return rList;
     }
 
+    @Override
     public UUID getCardType() {
         return CARD_TYPE;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item var1, CreativeTabs aTab, List aList) {
     }

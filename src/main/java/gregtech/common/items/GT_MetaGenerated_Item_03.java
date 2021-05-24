@@ -236,6 +236,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.UHV_Coil.set(addItem(tLastID = 149, "Highly Ultimate Voltage Coil", "Infinite Coil", o));
     }
 
+    @Override
     public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
         return aDoShowAllItems;
     }
