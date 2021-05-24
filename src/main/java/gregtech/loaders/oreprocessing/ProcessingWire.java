@@ -30,6 +30,7 @@ public class ProcessingWire implements gregtech.api.interfaces.IOreRecipeRegistr
         OrePrefixes.wireGt16.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (GT_Mod.gregtechproxy.mAE2Integration) {
             if (tt == TunnelType.ME) {

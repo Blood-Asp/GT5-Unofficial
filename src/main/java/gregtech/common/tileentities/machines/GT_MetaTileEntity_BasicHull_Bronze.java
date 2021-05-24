@@ -21,10 +21,12 @@ public class GT_MetaTileEntity_BasicHull_Bronze extends GT_MetaTileEntity_BasicH
         super(aName, aTier, aDescription, aTextures);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_BasicHull_Bronze(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[3][17][];
         for (byte i = -1; i < 16; i = (byte) (i + 1)) {

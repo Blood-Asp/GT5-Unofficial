@@ -92,6 +92,7 @@ public class Behaviour_DataOrb extends Behaviour_None {
         return tNBT;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         if (!(getDataTitle(aStack).length() == 0)) {
             aList.add(getDataTitle(aStack));

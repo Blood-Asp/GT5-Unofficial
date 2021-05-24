@@ -25,6 +25,7 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
     private static final int CONVERTED_BIT = 0x80000000;
     private static final int INVERT_BIT = 0x40000000;
 
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         //Convert from ver. 5.09.33.50
         if ((CONVERTED_BIT & aCoverVariable) == 0)
@@ -68,6 +69,7 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aPlayer.isSneaking()) {
             if ((aCoverVariable & INVERT_BIT) == INVERT_BIT) {
@@ -92,34 +94,42 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
         return CONVERTED_BIT | (aCoverVariable & INVERT_BIT) | slot;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean manipulatesSidedRedstoneOutput(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 5;
     }
@@ -146,10 +156,10 @@ public class GT_Cover_ItemMeter extends GT_CoverBehavior {
         private final GT_GuiFakeItemButton intSlotIcon;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         private final int maxSlot;
 

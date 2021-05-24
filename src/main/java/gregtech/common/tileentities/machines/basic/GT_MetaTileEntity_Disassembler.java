@@ -57,8 +57,12 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 "",
 
                 //Textures
-                TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
-                TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_DISASSEMBLER_GLOW).glow().build()),
                 TextureFactory.of(
                         TextureFactory.of(OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
                         TextureFactory.builder().addIcon(OVERLAY_FRONT_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
@@ -68,9 +72,15 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 TextureFactory.of(
                         TextureFactory.of(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
                         TextureFactory.builder().addIcon(OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
-                TextureFactory.of(OVERLAY_TOP_DISASSEMBLER),
-                TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
-                TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER)
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_DISASSEMBLER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_DISASSEMBLER_GLOW).glow().build())
         );
     }
 

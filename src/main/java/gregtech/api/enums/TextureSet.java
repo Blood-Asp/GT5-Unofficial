@@ -47,8 +47,8 @@ public class TextureSet {
 
     public final IIconContainer[] mTextures = new IIconContainer[128];
     public final String mSetName;
-    private final static String aTextMatIconDir = "materialicons/";
-    private final static String aTextVoidDir = "/void";
+    private static final String aTextMatIconDir = "materialicons/";
+    private static final String aTextVoidDir = "/void";
 
     public TextureSet(String aSetName) {
         mSetName = aSetName;

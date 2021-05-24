@@ -13,15 +13,7 @@ import gregtech.api.util.GT_Recipe;
 import net.minecraftforge.fluids.FluidStack;
 
 import static gregtech.api.enums.GT_Values.V;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_MASSFAB_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MASSFAB_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_MASSFAB;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_MASSFAB_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_MASSFAB;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_MASSFAB_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMachine {
     public static int sUUAperUUM = 1;
@@ -31,16 +23,30 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
 
     public GT_MetaTileEntity_Massfabricator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "UUM = Matter * Fabrication Squared", 1, 1, "Massfabricator.png", "",
-                TextureFactory.of(OVERLAY_SIDE_MASSFAB_ACTIVE),
-                TextureFactory.of(OVERLAY_SIDE_MASSFAB),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_MASSFAB_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_MASSFAB_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_MASSFAB),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_MASSFAB_GLOW).glow().build()),
                 TextureFactory.of(
                         TextureFactory.of(OVERLAY_FRONT_MASSFAB_ACTIVE),
                         TextureFactory.builder().addIcon(OVERLAY_FRONT_MASSFAB_ACTIVE_GLOW).glow().build()),
-                TextureFactory.of(OVERLAY_FRONT_MASSFAB),
-                TextureFactory.of(OVERLAY_TOP_MASSFAB_ACTIVE),
-                TextureFactory.of(OVERLAY_TOP_MASSFAB),
-                TextureFactory.of(OVERLAY_BOTTOM_MASSFAB_ACTIVE),
-                TextureFactory.of(OVERLAY_BOTTOM_MASSFAB));
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_MASSFAB),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_MASSFAB_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_MASSFAB_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_MASSFAB_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_MASSFAB),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_MASSFAB_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_MASSFAB_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_MASSFAB_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_MASSFAB),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_MASSFAB_GLOW).glow().build()));
     }
 
     public GT_MetaTileEntity_Massfabricator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {
@@ -94,45 +100,46 @@ public class GT_MetaTileEntity_Massfabricator extends GT_MetaTileEntity_BasicMac
         }
         return 0;
     }
-	@Override
+
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeList() {
         return GT_Recipe.GT_Recipe_Map.sMassFabFakeRecipes;
     }
 
     private void calculateOverclockedNessMassFabricator() {
-        if(mTier==0){
+        if (mTier == 0) {
             //Long time calculation
-            long xMaxProgresstime = ((long)sDurationMultiplier)<<1;
-            if(xMaxProgresstime>Integer.MAX_VALUE-1){
+            long xMaxProgresstime = ((long) sDurationMultiplier) << 1;
+            if (xMaxProgresstime > Integer.MAX_VALUE - 1) {
                 //make impossible if too long
-                mEUt=Integer.MAX_VALUE-1;
-                mMaxProgresstime=Integer.MAX_VALUE-1;
-            }else{
-                mEUt= (int)(V[1]<<2);//2^2=4  so shift <<2
-                mMaxProgresstime=(int)xMaxProgresstime;
+                mEUt = Integer.MAX_VALUE - 1;
+                mMaxProgresstime = Integer.MAX_VALUE - 1;
+            } else {
+                mEUt = (int) (V[1] << 2);//2^2=4  so shift <<2
+                mMaxProgresstime = (int) xMaxProgresstime;
             }
-        }else{
+        } else {
             //Long EUt calculation
-            long xEUt= V[1] * (long)Math.pow(2,mTier+2);
+            long xEUt = V[1] * (long) Math.pow(2, mTier + 2);
 
             long tempEUt = V[1];
 
             mMaxProgresstime = sDurationMultiplier;
 
-            while (tempEUt <= V[mTier -1]) {
-                tempEUt<<=2;//this actually controls overclocking
-                mMaxProgresstime>>=1;//this is effect of overclocking
-                if(mMaxProgresstime==0)
-                    xEUt = (long)(xEUt/1.1D);//U know, if the time is less than 1 tick make the machine use less power
+            while (tempEUt <= V[mTier - 1]) {
+                tempEUt <<= 2;//this actually controls overclocking
+                mMaxProgresstime >>= 1;//this is effect of overclocking
+                if (mMaxProgresstime == 0)
+                    xEUt = (long) (xEUt / 1.1D);//U know, if the time is less than 1 tick make the machine use less power
             }
-            if(xEUt>Integer.MAX_VALUE-1){
-                mEUt = Integer.MAX_VALUE-1;
-                mMaxProgresstime = Integer.MAX_VALUE-1;
-            }else{
-                mEUt = (int)xEUt;
-                if(mEUt==0)
+            if (xEUt > Integer.MAX_VALUE - 1) {
+                mEUt = Integer.MAX_VALUE - 1;
+                mMaxProgresstime = Integer.MAX_VALUE - 1;
+            } else {
+                mEUt = (int) xEUt;
+                if (mEUt == 0)
                     mEUt = 1;
-                if(mMaxProgresstime==0)
+                if (mMaxProgresstime == 0)
                     mMaxProgresstime = 1;//set time to 1 tick
             }
         }

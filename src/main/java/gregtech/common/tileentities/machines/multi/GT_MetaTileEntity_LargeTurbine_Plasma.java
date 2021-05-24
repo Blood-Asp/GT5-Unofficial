@@ -9,7 +9,6 @@ import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -45,6 +44,7 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
         return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_TU_ACTIVE5) : TextureFactory.of(Textures.BlockIcons.LARGETURBINE_TU5) : casingTexturePages[0][60]};
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Plasma Turbine")

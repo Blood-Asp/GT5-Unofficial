@@ -37,6 +37,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
         return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_SS_ACTIVE5) : TextureFactory.of(LARGETURBINE_SS5) : casingTexturePages[0][58]};
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Gas Turbine")

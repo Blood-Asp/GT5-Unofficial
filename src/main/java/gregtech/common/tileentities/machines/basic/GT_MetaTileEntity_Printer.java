@@ -21,6 +21,7 @@ public class GT_MetaTileEntity_Printer extends GT_MetaTileEntity_BasicMachine {
         super(aName, aTier, 1, aDescription, aTextures, 2, 2, aGUIName, aNEIName);
     }
 
+    @Override
     public int checkRecipe() {
         if (getOutputAt(0) != null) {
             this.mOutputBlocked += 1;
@@ -48,6 +49,7 @@ public class GT_MetaTileEntity_Printer extends GT_MetaTileEntity_BasicMachine {
         return 0;
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return null;
     }

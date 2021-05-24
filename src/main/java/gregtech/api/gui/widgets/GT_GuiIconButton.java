@@ -27,6 +27,7 @@ public class GT_GuiIconButton extends GuiButton implements IGuiScreen.IGuiElemen
         gui.addElement(this);
     }
 
+    @Override
     public void onInit() {
         if (tooltip != null)
             gui.addToolTip(tooltip);
@@ -39,6 +40,7 @@ public class GT_GuiIconButton extends GuiButton implements IGuiScreen.IGuiElemen
         drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
     }
 
+    @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
         if (this.tooltip != null)
             this.tooltip.enabled = true;

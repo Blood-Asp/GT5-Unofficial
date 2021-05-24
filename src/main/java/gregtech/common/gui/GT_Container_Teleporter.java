@@ -135,6 +135,7 @@ public class GT_Container_Teleporter extends GT_ContainerMetaTile_Machine {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);

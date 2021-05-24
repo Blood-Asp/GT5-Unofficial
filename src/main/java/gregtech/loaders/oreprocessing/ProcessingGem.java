@@ -18,6 +18,7 @@ public class ProcessingGem implements gregtech.api.interfaces.IOreRecipeRegistra
         OrePrefixes.gemFlawless.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         long aMaterialMass = aMaterial.getMass();
         boolean aNoSmashing = aMaterial.contains(SubTag.NO_SMASHING);

@@ -16,10 +16,12 @@ public class GT_Item_Storage extends ItemBlock {
         setCreativeTab(GregTech_API.TAB_GREGTECH_MATERIALS);
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack aStack) {
         return this.field_150939_a.getUnlocalizedName() + "." + getDamage(aStack);
     }
 
+    @Override
     public String getItemStackDisplayName(ItemStack aStack) {
     	String aName = super.getItemStackDisplayName(aStack);
     	if (this.field_150939_a instanceof GT_Block_Metal) {
@@ -31,10 +33,12 @@ public class GT_Item_Storage extends ItemBlock {
     	return aName;
     }
 
+    @Override
     public int getMetadata(int aMeta) {
         return aMeta;
     }
 
+    @Override
     public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
         super.addInformation(aStack, aPlayer, aList, aF3_H);
     }

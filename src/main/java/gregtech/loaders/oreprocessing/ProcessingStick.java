@@ -12,6 +12,7 @@ public class ProcessingStick implements gregtech.api.interfaces.IOreRecipeRegist
         OrePrefixes.stick.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         GT_ModHandler.addCraftingRecipe(GT_OreDictUnificator.get(OrePrefixes.springSmall, aMaterial, 1L), GT_ModHandler.RecipeBits.BUFFERED, new Object[]{" s ", "fPx", 'P', OrePrefixes.stick.get(aMaterial)});
         if (!aMaterial.contains(gregtech.api.enums.SubTag.NO_WORKING)) {

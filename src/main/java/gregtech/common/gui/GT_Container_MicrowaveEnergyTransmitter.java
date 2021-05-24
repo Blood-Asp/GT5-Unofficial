@@ -132,6 +132,7 @@ public class GT_Container_MicrowaveEnergyTransmitter extends GT_ContainerMetaTil
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);

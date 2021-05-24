@@ -15,88 +15,109 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 public class GT_Tool_Hoe extends GT_Tool {
+    @Override
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
 
+    @Override
     public int getToolDamagePerDropConversion() {
         return 100;
     }
 
+    @Override
     public int getToolDamagePerContainerCraft() {
         return 100;
     }
 
+    @Override
     public int getToolDamagePerEntityAttack() {
         return 200;
     }
 
+    @Override
     public int getBaseQuality() {
         return 0;
     }
 
+    @Override
     public float getBaseDamage() {
         return 1.75F;
     }
 
+    @Override
     public float getSpeedMultiplier() {
         return 1.0F;
     }
 
+    @Override
     public float getMaxDurabilityMultiplier() {
         return 1.0F;
     }
 
+    @Override
     public String getCraftingSound() {
         return null;
     }
 
+    @Override
     public String getEntityHitSound() {
         return null;
     }
 
+    @Override
     public String getBreakingSound() {
         return (String) GregTech_API.sSoundList.get(0);
     }
 
+    @Override
     public String getMiningSound() {
         return null;
     }
 
+    @Override
     public boolean canBlock() {
         return false;
     }
 
+    @Override
     public boolean isCrowbar() {
         return false;
     }
 
+    @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
         String tTool = aBlock.getHarvestTool(aMetaData);
         return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("hoe"))) || (aBlock.getMaterial() == Material.gourd);
     }
 
+    @Override
     public ItemStack getBrokenItem(ItemStack aStack) {
         return null;
     }
 
+    @Override
     public IIconContainer getIcon(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mIconSet.mTextures[gregtech.api.enums.OrePrefixes.toolHeadHoe.mTextureIndex] : GT_MetaGenerated_Tool.getSecondaryMaterial(aStack).mIconSet.mTextures[gregtech.api.enums.OrePrefixes.stick.mTextureIndex];
     }
 
+    @Override
     public short[] getRGBa(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mRGBa : GT_MetaGenerated_Tool.getSecondaryMaterial(aStack).mRGBa;
     }
 
+    @Override
     public void onStatsAddedToTool(GT_MetaGenerated_Tool aItem, int aID) {
         aItem.addItemBehavior(aID, new Behaviour_Hoe(100));
     }
 
+    @Override
     public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
         super.onToolCrafted(aStack, aPlayer);
         aPlayer.triggerAchievement(AchievementList.buildHoe);
     }
 
+    @Override
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE + " has been called a stupid Hoe by " + EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE);
     }

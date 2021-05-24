@@ -11,14 +11,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
 
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_BOXINATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_BOTTOM_BOXINATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_BOXINATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_BOXINATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_BOXINATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SIDE_BOXINATOR_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_BOXINATOR;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_BOXINATOR_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Boxinator extends GT_MetaTileEntity_BasicMachine {
     ItemStack aInputCache;
@@ -27,16 +20,30 @@ public class GT_MetaTileEntity_Boxinator extends GT_MetaTileEntity_BasicMachine 
 
     public GT_MetaTileEntity_Boxinator(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 1, "Puts things into Boxes", 2, 1, "Packager.png", "",
-                TextureFactory.of(OVERLAY_SIDE_BOXINATOR_ACTIVE),
-                TextureFactory.of(OVERLAY_SIDE_BOXINATOR),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_BOXINATOR_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_BOXINATOR_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_BOXINATOR),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_BOXINATOR_GLOW).glow().build()),
                 TextureFactory.of(
                         TextureFactory.of(OVERLAY_FRONT_BOXINATOR_ACTIVE),
                         TextureFactory.builder().addIcon(OVERLAY_FRONT_BOXINATOR_ACTIVE).glow().build()),
-                TextureFactory.of(OVERLAY_FRONT_BOXINATOR),
-                TextureFactory.of(OVERLAY_TOP_BOXINATOR_ACTIVE),
-                TextureFactory.of(OVERLAY_TOP_BOXINATOR),
-                TextureFactory.of(OVERLAY_BOTTOM_BOXINATOR_ACTIVE),
-                TextureFactory.of(OVERLAY_BOTTOM_BOXINATOR));
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_BOXINATOR),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_BOXINATOR_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_BOXINATOR_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_BOXINATOR_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_BOXINATOR),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_BOXINATOR_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_BOXINATOR_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_BOXINATOR_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_BOXINATOR),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_BOXINATOR_GLOW).glow().build()));
     }
 
     public GT_MetaTileEntity_Boxinator(String aName, int aTier, String aDescription, ITexture[][][] aTextures, String aGUIName, String aNEIName) {

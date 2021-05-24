@@ -55,6 +55,7 @@ public class GT_MetaTileEntity_LongDistancePipelineFluid extends GT_MetaTileEnti
         return other instanceof GT_MetaTileEntity_LongDistancePipelineFluid;
     }
 
+    @Override
     public int getPipeMeta() {
         return 0;    
     }

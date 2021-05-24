@@ -55,6 +55,7 @@ public class GT_MachineRecipeLoader implements Runnable {
     private static final String aTextEBXL = "ExtrabiomesXL"; private static final String aTextTCGTPage = "gt.research.page.1.";
     private static final Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
 
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding non-OreDict Machine Recipes.");
         try {

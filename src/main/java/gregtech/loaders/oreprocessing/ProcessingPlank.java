@@ -16,6 +16,7 @@ public class ProcessingPlank implements gregtech.api.interfaces.IOreRecipeRegist
         OrePrefixes.plank.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (aOreDictName.startsWith("plankWood")) {
             GT_Values.RA.addLatheRecipe(GT_Utility.copyAmount(1L, aStack), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Wood, 2L), null, 10, 8);

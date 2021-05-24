@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 
 public class GT_RecyclerBlacklistLoader
         implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding Stuff to the Recycler Blacklist.");
         if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.disabledrecipes, "easymobgrinderrecycling", true)) {

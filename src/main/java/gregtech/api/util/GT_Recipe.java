@@ -898,7 +898,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     /**
      * Abstract Class for general Recipe Handling of non GT Recipes
      */
-    public static abstract class GT_Recipe_Map_NonGTRecipes extends GT_Recipe_Map {
+    public abstract static class GT_Recipe_Map_NonGTRecipes extends GT_Recipe_Map {
         public GT_Recipe_Map_NonGTRecipes(Collection<GT_Recipe> aRecipeList, String aUnlocalizedName, String aLocalName, String aNEIName, String aNEIGUIPath, int aUsualInputCount, int aUsualOutputCount, int aMinimalInputItems, int aMinimalInputFluids, int aAmperage, String aNEISpecialValuePre, int aNEISpecialValueMultiplier, String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI, boolean aNEIAllowed) {
             super(aRecipeList, aUnlocalizedName, aLocalName, aNEIName, aNEIGUIPath, aUsualInputCount, aUsualOutputCount, aMinimalInputItems, aMinimalInputFluids, aAmperage, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed);
         }
@@ -1840,6 +1840,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             super(aRecipeList, aUnlocalizedName, aLocalName, aNEIName, aNEIGUIPath, aUsualInputCount, aUsualOutputCount, aMinimalInputItems, aMinimalInputFluids, aAmperage, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed);
         }
 
+        @Override
         public GT_Recipe addFakeRecipe(boolean aCheckForCollisions, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecial, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
             AtomicInteger ai = new AtomicInteger();
             Optional.ofNullable(GT_OreDictUnificator.getAssociation(aOutputs[0]))

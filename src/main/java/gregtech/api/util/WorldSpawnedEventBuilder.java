@@ -119,15 +119,18 @@ public abstract class WorldSpawnedEventBuilder implements Runnable {
     private abstract static class PositionedWorldSpawnedEventBuilder extends WorldSpawnedEventBuilder implements IPositionedWorldSpawnedEvent {
         private Vec3 position;
 
+        @Override
         public Vec3 getPosition() {
             return position;
         }
 
+        @Override
         public PositionedWorldSpawnedEventBuilder setPosition(Vec3 position) {
             this.position = position;
             return this;
         }
 
+        @Override
         public PositionedWorldSpawnedEventBuilder setPosition(double x, double y, double z) {
             this.position = Vec3.createVectorHelper(x, y, z);
             return this;

@@ -40,10 +40,12 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         super(aName);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_DistillationTower(this.mName);
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Distillery")
@@ -67,6 +69,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         }
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
         if (aSide == aFacing) {
             if (aActive)
@@ -82,22 +85,27 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX)};
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "DistillationTower.png");
     }
 
+    @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
         return GT_Recipe.GT_Recipe_Map.sDistillationRecipes;
     }
 
+    @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
     }
 
+    @Override
     public boolean isFacingValid(byte aFacing) {
         return aFacing > 1;
     }
 
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
 
         ArrayList<FluidStack> tFluidList = getStoredFluids();
@@ -144,6 +152,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         return false;
     }
 
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         controllerY = aBaseMetaTileEntity.getYCoord();
         int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
@@ -202,19 +211,23 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Multi
         return casingAmount >= 7 * y - 5 && y >= 3 && y <= 12 && reachedTop;
     }
 
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
 
+    @Override
     public int getPollutionPerTick(ItemStack aStack) {
         return 0;
     }
 
+    @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
     }
 
 
+    @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
     }

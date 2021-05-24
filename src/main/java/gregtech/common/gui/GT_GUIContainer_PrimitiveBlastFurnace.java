@@ -14,10 +14,12 @@ public class GT_GUIContainer_PrimitiveBlastFurnace extends GT_GUIContainerMetaTi
 		this.mNEI = aNEI;
 	}
 
+    @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString(name, 8, 4, 4210752);
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;

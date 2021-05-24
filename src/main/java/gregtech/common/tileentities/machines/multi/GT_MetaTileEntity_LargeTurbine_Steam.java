@@ -2,7 +2,6 @@ package gregtech.common.tileentities.machines.multi;
 
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -46,6 +45,7 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_ST_ACTIVE5) : TextureFactory.of(LARGETURBINE_ST5) : casingTexturePages[0][57]};
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Steam Turbine")

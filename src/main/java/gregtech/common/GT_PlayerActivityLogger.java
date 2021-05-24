@@ -6,6 +6,7 @@ import gregtech.api.util.GT_Log;
 import java.util.ArrayList;
 
 public class GT_PlayerActivityLogger implements Runnable {
+    @Override
     public void run() {
         try {
             for (; ; ) {

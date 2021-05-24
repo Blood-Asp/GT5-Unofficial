@@ -11,6 +11,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
@@ -34,13 +35,16 @@ public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bro
         super(aName, aTier, aDescription, aTextures);
     }
 
+    @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
         final ITexture[]
                 texBottom = {TextureFactory.of(MACHINE_STEELBRICKS_BOTTOM)},
                 texTop = {TextureFactory.of(MACHINE_STEELBRICKS_TOP), TextureFactory.of(OVERLAY_PIPE)},
                 texSide = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(OVERLAY_PIPE)},
-                texFront = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(BOILER_FRONT)},
+                texFront = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_FRONT),
+                        TextureFactory.builder().addIcon(BOILER_FRONT_GLOW).glow().build()},
                 texFrontActive = {
                         TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
                         TextureFactory.of(BOILER_FRONT_ACTIVE),
@@ -55,18 +59,22 @@ public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bro
         return rTextures;
     }
 
+    @Override
     public int maxProgresstime() {
         return 1000;
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity, 32000);
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png", 32000);
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Boiler_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }

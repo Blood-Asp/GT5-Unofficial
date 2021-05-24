@@ -62,6 +62,7 @@ public class GT_Entity_Arrow extends EntityArrow {
         setArrowItem(aStack);
     }
 
+    @Override
     public void onUpdate() {
         onEntityUpdate();
         if ((this.mArrow == null) && (!this.worldObj.isRemote)) {
@@ -298,6 +299,7 @@ public class GT_Entity_Arrow extends EntityArrow {
         }
     }
 
+    @Override
     public void writeEntityToNBT(NBTTagCompound aNBT) {
         super.writeEntityToNBT(aNBT);
         aNBT.setShort("xTile", (short) this.mHitBlockX);
@@ -313,6 +315,7 @@ public class GT_Entity_Arrow extends EntityArrow {
         aNBT.setTag("mArrow", this.mArrow == null ? null : this.mArrow.writeToNBT(new NBTTagCompound()));
     }
 
+    @Override
     public void readEntityFromNBT(NBTTagCompound aNBT) {
         super.readEntityFromNBT(aNBT);
         this.mHitBlockX = aNBT.getShort("xTile");
@@ -328,6 +331,7 @@ public class GT_Entity_Arrow extends EntityArrow {
         this.mArrow = GT_Utility.loadItem(aNBT, "mArrow");
     }
 
+    @Override
     public void onCollideWithPlayer(EntityPlayer aPlayer) {
         if ((!this.worldObj.isRemote) && (this.inGround) && (this.arrowShake <= 0) && (this.canBePickedUp == 1) && (aPlayer.inventory.addItemStackToInventory(getArrowItem()))) {
             playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -352,6 +356,7 @@ public class GT_Entity_Arrow extends EntityArrow {
         return false;
     }
 
+    @Override
     public void setKnockbackStrength(int aKnockback) {
         this.mKnockback = aKnockback;
     }

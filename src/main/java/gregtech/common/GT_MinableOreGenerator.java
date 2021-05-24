@@ -27,6 +27,7 @@ public class GT_MinableOreGenerator extends WorldGenerator {
         this.mBlock = aBlock;
     }
 
+    @Override
     public boolean generate(World par1World, Random par2Random, int par3, int par4, int par5) {
         float math_pi = 3.141593F;//FB: CNT - CNT_ROUGH_CONSTANT_VALUE
         float var6 = par2Random.nextFloat() * math_pi;

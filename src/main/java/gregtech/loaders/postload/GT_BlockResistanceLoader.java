@@ -10,6 +10,7 @@ import net.minecraft.item.ItemPickaxe;
 import java.util.Set;
 
 public class GT_BlockResistanceLoader implements Runnable {
+    @Override
     public void run() {
         if (GT_Mod.gregtechproxy.mHardRock) {
             Blocks.stone.setHardness(16.0F);

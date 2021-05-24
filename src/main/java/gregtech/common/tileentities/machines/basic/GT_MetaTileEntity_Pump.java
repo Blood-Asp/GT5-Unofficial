@@ -85,6 +85,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         boolean wasPumping = this.wasPumping || !this.mPumpList.isEmpty();
         if (debugBlockPump) {
@@ -97,6 +98,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         aNBT.setInteger("radiusConfig", radiusConfig);
     }
 
+    @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         this.wasPumping = aNBT.getBoolean("wasPumping");

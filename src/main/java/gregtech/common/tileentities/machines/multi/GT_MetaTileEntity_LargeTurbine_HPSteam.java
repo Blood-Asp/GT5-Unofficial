@@ -42,6 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
         return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_TI_ACTIVE5) : TextureFactory.of(LARGETURBINE_TI5) : casingTexturePages[0][59]};
     }
 
+    @Override
     public String[] getDescription() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Steam Turbine")

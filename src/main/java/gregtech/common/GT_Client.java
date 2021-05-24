@@ -58,7 +58,7 @@ public class GT_Client extends GT_Proxy
     }
 
     private final HashSet<String> mCapeList = new HashSet<>();
-    public final static GT_PollutionRenderer mPollutionRenderer = new GT_PollutionRenderer();
+    public static final GT_PollutionRenderer mPollutionRenderer = new GT_PollutionRenderer();
     private final GT_CapeRenderer mCapeRenderer;
     private final List mPosR;
     private final List mPosG;
@@ -252,26 +252,32 @@ public class GT_Client extends GT_Proxy
         drawGrid(aEvent, false);
     }
 
+    @Override
     public boolean isServerSide() {
         return true;
     }
 
+    @Override
     public boolean isClientSide() {
         return true;
     }
 
+    @Override
     public boolean isBukkitSide() {
         return false;
     }
 
+    @Override
     public EntityPlayer getThePlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
 
+    @Override
     public int addArmor(String aPrefix) {
         return RenderingRegistry.addNewArmourRendererPrefix(aPrefix);
     }
 
+    @Override
     public void onPreLoad() {
         super.onPreLoad();
         String arr$[] = {
@@ -299,6 +305,7 @@ public class GT_Client extends GT_Proxy
         mPollutionRenderer.preLoad();
     }
 
+    @Override
     public void onLoad() {
         super.onLoad();
         new GT_Renderer_Block();
@@ -310,6 +317,7 @@ public class GT_Client extends GT_Proxy
         new GT_FluidDisplayStackRenderer();
     }
 
+    @Override
     public void onPostLoad() {
         super.onPostLoad();
         try {
@@ -338,6 +346,7 @@ public class GT_Client extends GT_Proxy
 //            }
     }
 
+    @Override
     public void run() {
         try {
             GT_Log.out.println("GT_Mod: Downloading Cape List.");
@@ -583,6 +592,7 @@ public class GT_Client extends GT_Proxy
         }
     }
 
+    @Override
     public void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         if (GT_Utility.isStackInvalid(aStack))
             return;

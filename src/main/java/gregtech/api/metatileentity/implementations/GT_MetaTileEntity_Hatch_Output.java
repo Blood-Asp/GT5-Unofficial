@@ -267,6 +267,7 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, aSide, aX, aY, aZ);
     }
 
+    @Override
     public String trans(String aKey, String aEnglish){
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }

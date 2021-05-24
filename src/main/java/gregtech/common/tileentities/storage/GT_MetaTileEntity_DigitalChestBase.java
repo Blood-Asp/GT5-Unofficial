@@ -136,6 +136,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     protected abstract void setItemStack(ItemStack s);
 
+    @Override
     @Optional.Method(modid = "appliedenergistics2")
     public appeng.api.storage.data.IItemList<appeng.api.storage.data.IAEItemStack> getAvailableItems(final appeng.api.storage.data.IItemList out) {
         ItemStack storedStack = getItemStack();
@@ -162,6 +163,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     protected abstract int getItemCount();
 
+    @Override
     public abstract void setItemCount(int aCount);
 
     @Override
@@ -184,6 +186,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return new ITexture[0][0][0];
     }
 
+    @Override
     @Optional.Method(modid = "appliedenergistics2")
     public appeng.api.storage.data.IAEItemStack injectItems(final appeng.api.storage.data.IAEItemStack input, final appeng.api.config.Actionable mode, final appeng.api.networking.security.BaseActionSource src) {
         final ItemStack inputStack = input.getItemStack();
@@ -226,6 +229,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return overflow;
     }
 
+    @Override
     @Optional.Method(modid = "appliedenergistics2")
     public appeng.api.storage.data.IAEItemStack extractItems(final appeng.api.storage.data.IAEItemStack request, final appeng.api.config.Actionable mode, final appeng.api.networking.security.BaseActionSource src) {
         if (request.isSameType(getItemStack())) {
@@ -246,6 +250,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return null;
     }
 
+    @Override
     @Optional.Method(modid = "appliedenergistics2")
     public appeng.api.storage.StorageChannel getChannel() {
         return appeng.api.storage.StorageChannel.ITEMS;

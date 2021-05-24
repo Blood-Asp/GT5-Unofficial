@@ -64,6 +64,7 @@ public class GT_Block_Stones_Abstract extends GT_Generic_Block implements IOreRe
         GT_ModHandler.addCraftingRecipe(new ItemStack(this, 4, 11), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{"XX", "XX", 'X', new ItemStack(this, 4, 15)});
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (aOreDictName.equals(OreDictNames.craftingLensWhite.toString())) {
             GT_Values.RA.addLaserEngraverRecipe(new ItemStack(this, 1, 7), GT_Utility.copyAmount(0L, new Object[]{aStack}), new ItemStack(this, 1, 6), 50, 16);
@@ -131,14 +132,17 @@ public class GT_Block_Stones_Abstract extends GT_Generic_Block implements IOreRe
         return 1;
     }
 
+    @Override
     public Item getItemDropped(int par1, Random par2Random, int par3) {
         return Item.getItemFromBlock(this);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister aIconRegister) {
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs par2CreativeTabs, List aList) {
         for (int i = 0; i < 16; i++) {

@@ -23,6 +23,7 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         this.mTransferRate = aTransferRate;
     }
 
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aCoverVariable % 6 > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 6 < 4) {
@@ -62,6 +63,7 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         return true;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
         if(aCoverVariable <0){aCoverVariable = 11;}
@@ -82,30 +84,37 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         return aCoverVariable;
     }
 
+    @Override
     public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         if ((aCoverVariable > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 6 < 4) {
@@ -115,6 +124,7 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         return (aCoverVariable >= 6) || (aCoverVariable % 2 != 0);
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         if ((aCoverVariable > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 6 < 4) {
@@ -124,10 +134,12 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         return (aCoverVariable >= 6) || (aCoverVariable % 2 == 0);
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }
@@ -151,10 +163,10 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
         private final int coverID;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         public GT_PumpGUICover(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
             super(aTileEntity, 176, 107, GT_Utility.intToStack(aCoverID));
@@ -185,6 +197,7 @@ public class GT_Cover_Pump extends GT_CoverBehavior{
             updateButtons();
         }
 
+        @Override
         public void buttonClicked(GuiButton btn){
             if (getClickable(btn.id)){
                 coverVariable = getNewCoverVariable(btn.id);

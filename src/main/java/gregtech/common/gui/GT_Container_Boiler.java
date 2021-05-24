@@ -20,6 +20,7 @@ public class GT_Container_Boiler extends GT_ContainerMetaTile_Machine {
         this.mSteamCapacity = aSteamCapacity;
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         addSlotToContainer(new Slot(this.mTileEntity, 2, 116, 62));
         addSlotToContainer(new Slot(this.mTileEntity, 0, 44, 26));
@@ -27,14 +28,17 @@ public class GT_Container_Boiler extends GT_ContainerMetaTile_Machine {
         addSlotToContainer(new Slot(this.mTileEntity, 3, 116, 26));
     }
 
+    @Override
     public int getSlotCount() {
         return 4;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 1;
     }
 
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         if ((this.mTileEntity.isClientSide()) || (this.mTileEntity.getMetaTileEntity() == null)) {
@@ -59,6 +63,7 @@ public class GT_Container_Boiler extends GT_ContainerMetaTile_Machine {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);

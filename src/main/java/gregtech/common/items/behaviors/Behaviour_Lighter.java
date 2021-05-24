@@ -33,6 +33,7 @@ public class Behaviour_Lighter extends Behaviour_None {
         this.mFuelAmount = aFuelAmount;
     }
 
+    @Override
     public boolean onLeftClickEntity(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
         if ((aPlayer.worldObj.isRemote) || (aStack.stackSize != 1)) {
             return false;
@@ -57,10 +58,12 @@ public class Behaviour_Lighter extends Behaviour_None {
         return rOutput;
     }
 
+    @Override
     public boolean onItemUse(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         return false;
     }
 
+    @Override
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         if ((aWorld.isRemote) || (aStack.stackSize != 1)) {
             return false;
@@ -108,6 +111,7 @@ public class Behaviour_Lighter extends Behaviour_None {
         }
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         aList.add(this.mTooltip);
         NBTTagCompound tNBT = aStack.getTagCompound();

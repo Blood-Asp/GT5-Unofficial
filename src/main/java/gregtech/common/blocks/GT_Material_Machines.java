@@ -11,6 +11,7 @@ public class GT_Material_Machines extends Material {
         setAdventureModeExempt();
     }
 
+    @Override
     public boolean isOpaque() {
         return true;
     }

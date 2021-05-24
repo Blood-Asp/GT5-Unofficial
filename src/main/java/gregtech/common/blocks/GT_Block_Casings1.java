@@ -65,6 +65,7 @@ public class GT_Block_Casings1 extends GT_Block_Casings_Abstract {
         ItemList.Casing_Coil_Superconductor.set(new ItemStack(this, 1, 15));
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             switch (aMeta) {
@@ -92,6 +93,7 @@ public class GT_Block_Casings1 extends GT_Block_Casings_Abstract {
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
     }
 
+    @Override
     public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }

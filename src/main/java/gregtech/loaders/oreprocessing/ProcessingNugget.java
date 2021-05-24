@@ -12,6 +12,7 @@ public class ProcessingNugget implements gregtech.api.interfaces.IOreRecipeRegis
         OrePrefixes.nugget.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         if (aMaterial == Materials.Iron)
             GT_ModHandler.addSmeltingRecipe(GT_Utility.copyAmount(1L, aStack), GT_OreDictUnificator.get(OrePrefixes.nugget, Materials.WroughtIron, 1L));

@@ -63,8 +63,9 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 		return aFlowRate & ~TICK_RATE_BITMASK | (tToStore << SPEED_LENGTH);
 	}
 
-	public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
-							 long aTimer) {
+	@Override
+    public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
+                             long aTimer) {
 		int tSpeed = getSpeed(aCoverVariable);
 		if (tSpeed == 0) {
 			return aCoverVariable;
@@ -119,8 +120,9 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 		return generateNewCoverVariable(tSpeed, tTickRate);
 	}
 
-	public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
-									   EntityPlayer aPlayer, float aX, float aY, float aZ) {
+	@Override
+    public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
+                                       EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
 			return adjustSpeed(aPlayer, aCoverVariable, aPlayer.isSneaking() ? 256 : 16);
 		} else {
@@ -128,8 +130,9 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 		}
 	}
 
-	public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
-									 EntityPlayer aPlayer, float aX, float aY, float aZ) {
+	@Override
+    public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity,
+                                     EntityPlayer aPlayer, float aX, float aY, float aZ) {
 		if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
 			aCoverVariable = adjustSpeed(aPlayer, aCoverVariable, 1);
 		} else {
@@ -139,43 +142,53 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 		return true;
 	}
 
-	public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
+	@Override
+    public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
+	@Override
+    public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
+	@Override
+    public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
 		return allowFluid;
 	}
 
-	public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
+	@Override
+    public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
 		return allowFluid;
 	}
 
-	public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return true;
 	}
 
-	public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
+	@Override
+    public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
 		return getTickRate(aCoverVariable);
 	}
 
@@ -199,10 +212,10 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 		private GT_GuiIntegerTextBox tBox, lBox;
 		private int coverVariable;
 
-		private final static int startX = 10;
-		private final static int startY = 25;
-		private final static int spaceX = 18;
-		private final static int spaceY = 18;
+		private static final int startX = 10;
+		private static final int startY = 25;
+		private static final int spaceX = 18;
+		private static final int spaceY = 18;
 
 		private int speed;
 		private boolean export;
@@ -250,7 +263,8 @@ public class GT_Cover_FluidRegulator extends GT_CoverBehavior {
 			tBox.setFocused(true);
 		}
 
-		public void buttonClicked(GuiButton btn){
+		@Override
+        public void buttonClicked(GuiButton btn){
 			if (getClickable(btn.id)){
 				coverVariable = getNewCoverVariable(btn.id);
 				GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));

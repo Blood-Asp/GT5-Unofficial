@@ -14,10 +14,12 @@ public class GT_MetaTileEntity_LargeBoiler_Steel extends GT_MetaTileEntity_Large
         super(aName);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_Steel(this.mName);
     }
     
+    @Override
     public String getCasingMaterial(){
     	return "Steel";
     }
@@ -27,42 +29,52 @@ public class GT_MetaTileEntity_LargeBoiler_Steel extends GT_MetaTileEntity_Large
         return "Machine Casings";
     }
 
+    @Override
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings2;
     }
 
+    @Override
     public byte getCasingMeta() {
         return 0;
     }
 
+    @Override
     public byte getCasingTextureIndex() {
         return 16;
     }
 
+    @Override
     public Block getPipeBlock() {
         return GregTech_API.sBlockCasings2;
     }
 
+    @Override
     public byte getPipeMeta() {
         return 13;
     }
 
+    @Override
     public Block getFireboxBlock() {
         return GregTech_API.sBlockCasings3;
     }
 
+    @Override
     public byte getFireboxMeta() {
         return 14;
     }
 
+    @Override
     public byte getFireboxTextureIndex() {
         return 46;
     }
 
+    @Override
     public int getEUt() {
         return 600;
     }
 
+    @Override
     public int getEfficiencyIncrease() {
         return 12;
     }

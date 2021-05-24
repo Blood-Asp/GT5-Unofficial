@@ -27,6 +27,7 @@ public class Behaviour_Wrench extends Behaviour_None {
         this.mCosts = aCosts;
     }
 
+    @Override
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         if (aWorld.isRemote) {
             return false;
@@ -140,6 +141,7 @@ public class Behaviour_Wrench extends Behaviour_None {
         return false;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         aList.add(this.mTooltip);
         return aList;

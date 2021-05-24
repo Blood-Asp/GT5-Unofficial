@@ -15,6 +15,7 @@ public class GT_Container_ItemDistributor extends GT_ContainerMetaTile_Machine {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 9; x++) {
@@ -26,6 +27,7 @@ public class GT_Container_ItemDistributor extends GT_ContainerMetaTile_Machine {
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 27, 44, 63, false, true, 1));
     }
 
+    @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         if (aSlotIndex < 27) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
@@ -66,10 +68,12 @@ public class GT_Container_ItemDistributor extends GT_ContainerMetaTile_Machine {
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 
+    @Override
     public int getSlotCount() {
         return 27;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 27;
     }

@@ -33,10 +33,12 @@ public class GT_Packet_Ores extends GT_Packet_New {
         aOut.writeShort(this.mMetaData);
     }
 
+    @Override
     public GT_Packet_New decode(ByteArrayDataInput aData) {
         return new GT_Packet_Ores(aData.readInt(), aData.readShort(), aData.readInt(), aData.readShort());
     }
 
+    @Override
     public void process(IBlockAccess aWorld) {
         if (aWorld != null) {
             TileEntity tTileEntity = aWorld.getTileEntity(this.mX, this.mY, this.mZ);
@@ -49,6 +51,7 @@ public class GT_Packet_Ores extends GT_Packet_New {
         }
     }
 
+    @Override
     public byte getPacketID() {
         return 3;
     }

@@ -2326,6 +2326,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
          return mWasShutdown;
     }
 
+    @Override
     public void setShutdownStatus(boolean newStatus) {
          mWasShutdown = newStatus;
     }

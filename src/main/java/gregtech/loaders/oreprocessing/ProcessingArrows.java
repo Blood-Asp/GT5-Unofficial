@@ -15,6 +15,7 @@ public class ProcessingArrows implements gregtech.api.interfaces.IOreRecipeRegis
         OrePrefixes.arrowGtPlastic.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         ItemStack tOutput = GT_Utility.copyAmount(1L, aStack);
         GT_Utility.updateItemStack(tOutput);

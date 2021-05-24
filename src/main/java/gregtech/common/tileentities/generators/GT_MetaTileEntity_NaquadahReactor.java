@@ -44,7 +44,7 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipes() {
         GT_Recipe.GT_Recipe_Map ret;
-        switch (mTier){
+        switch (mTier) {
             case 4: {
                 ret = GT_Recipe.GT_Recipe_Map.sSmallNaquadahReactorFuels;
                 break;
@@ -61,11 +61,11 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
                 ret = GT_Recipe.GT_Recipe_Map.sExtremeNaquadahReactorFuels;
                 break;
             }
-            case 8:{
+            case 8: {
                 ret = GT_Recipe.GT_Recipe_Map.sUltraHugeNaquadahReactorFuels;
                 break;
             }
-            default:{
+            default: {
                 ret = null;
                 break;
             }
@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
 
     @Override
     public int getCapacity() {
-        return getRecipes() != null ? getRecipes().mMinimalInputFluids>0 ? 8000*(mTier+1) : 0 : 0 ;
+        return getRecipes() != null ? getRecipes().mMinimalInputFluids > 0 ? 8000 * (mTier + 1) : 0 : 0;
     }
 
     @Override
@@ -84,37 +84,47 @@ public class GT_MetaTileEntity_NaquadahReactor extends GT_MetaTileEntity_BasicGe
         return mEfficiency == 0 ? onConfigLoad() : mEfficiency;
     }
 
-    private int getBaseEff(){
-        return mTier == 4 ? 80 : 100 + (50*(mTier-5));
+    private int getBaseEff() {
+        return mTier == 4 ? 80 : 100 + (50 * (mTier - 5));
     }
 
     public int onConfigLoad() {
-       return mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + mTier, getBaseEff());
+        return mEfficiency = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "SolidNaquadah.efficiency.tier." + mTier, getBaseEff());
     }
 
     @Override
     public ITexture[] getFront(byte aColor) {
-        return new ITexture[]{super.getFront(aColor)[0], TextureFactory.of(NAQUADAH_REACTOR_SOLID_FRONT)};
+        return new ITexture[]{super.getFront(aColor)[0], TextureFactory.of(
+                TextureFactory.of(NAQUADAH_REACTOR_SOLID_FRONT),
+                TextureFactory.builder().addIcon(NAQUADAH_REACTOR_SOLID_FRONT_GLOW).glow().build())};
     }
 
     @Override
     public ITexture[] getBack(byte aColor) {
-        return new ITexture[]{super.getBack(aColor)[0], TextureFactory.of(NAQUADAH_REACTOR_SOLID_BACK)};
+        return new ITexture[]{super.getBack(aColor)[0], TextureFactory.of(
+                TextureFactory.of(NAQUADAH_REACTOR_SOLID_BACK),
+                TextureFactory.builder().addIcon(NAQUADAH_REACTOR_SOLID_BACK_GLOW).glow().build())};
     }
 
     @Override
     public ITexture[] getBottom(byte aColor) {
-        return new ITexture[]{super.getBottom(aColor)[0], TextureFactory.of(NAQUADAH_REACTOR_SOLID_BOTTOM)};
+        return new ITexture[]{super.getBottom(aColor)[0], TextureFactory.of(
+                TextureFactory.of(NAQUADAH_REACTOR_SOLID_BOTTOM),
+                TextureFactory.builder().addIcon(NAQUADAH_REACTOR_SOLID_BOTTOM_GLOW).glow().build())};
     }
 
     @Override
     public ITexture[] getTop(byte aColor) {
-        return new ITexture[]{super.getTop(aColor)[0], TextureFactory.of(NAQUADAH_REACTOR_SOLID_TOP)};
+        return new ITexture[]{super.getTop(aColor)[0], TextureFactory.of(
+                TextureFactory.of(NAQUADAH_REACTOR_SOLID_TOP),
+                TextureFactory.builder().addIcon(NAQUADAH_REACTOR_SOLID_TOP_GLOW).glow().build())};
     }
 
     @Override
     public ITexture[] getSides(byte aColor) {
-        return new ITexture[]{super.getSides(aColor)[0], TextureFactory.of(NAQUADAH_REACTOR_SOLID_SIDE)};
+        return new ITexture[]{super.getSides(aColor)[0], TextureFactory.of(
+                TextureFactory.of(NAQUADAH_REACTOR_SOLID_SIDE),
+                TextureFactory.builder().addIcon(NAQUADAH_REACTOR_SOLID_SIDE_GLOW).glow().build())};
     }
 
     @Override

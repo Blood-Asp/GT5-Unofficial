@@ -40,6 +40,7 @@ public class Behaviour_Spray_Color extends Behaviour_None {
         this.mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.paintspray." + this.mColor + ".tooltip", "Can Color things in " + Dyes.get(this.mColor).mName);
     }
 
+    @Override
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         if ((aWorld.isRemote) || (aStack.stackSize != 1)) {
             return false;
@@ -109,6 +110,7 @@ public class Behaviour_Spray_Color extends Behaviour_None {
         return aBlock.recolourBlock(aWorld, aX, aY, aZ, ForgeDirection.getOrientation(aSide), (this.mColor ^ 0xFFFFFFFF) & 0xF);
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         aList.add(this.mTooltip);
         NBTTagCompound tNBT = aStack.getTagCompound();
