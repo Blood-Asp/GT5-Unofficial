@@ -101,6 +101,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -257,6 +260,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     // Locking
     public static ReentrantLock TICK_LOCK = new ReentrantLock();
     
+    private final ConcurrentMap<UUID, GT_ClientPreference> mClientPrefernces = new ConcurrentHashMap<>();
 
     static {
         oreDictBurnTimes.put("dustTinyWood", 11);
@@ -1590,6 +1594,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 }
             }
         }
+    }
+
+    public GT_ClientPreference getClientPreference(UUID aPlayerID) {
+        return mClientPrefernces.get(aPlayerID);
+    }
+
+    public void setClientPreference(UUID aPlayerID, GT_ClientPreference aPreference) {
+        mClientPrefernces.put(aPlayerID, aPreference);
     }
 
     @Override
