@@ -1,5 +1,6 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.GT_Mod;
 import gregtech.api.gui.GT_Container_1by1;
 import gregtech.api.gui.GT_Container_2by2;
 import gregtech.api.gui.GT_Container_3by3;
@@ -12,6 +13,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_ClientPreference;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
@@ -96,6 +98,15 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
                 return new GT_Container_3by3(aPlayerInventory, aBaseMetaTileEntity);
             default:
                 return new GT_Container_4by4(aPlayerInventory, aBaseMetaTileEntity);
+        }
+    }
+
+    @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        if (!getBaseMetaTileEntity().getWorld().isRemote) {
+            GT_ClientPreference tPreference = GT_Mod.gregtechproxy.getClientPreference(getBaseMetaTileEntity().getOwnerUuid());
+            if (tPreference != null)
+                disableFilter = !tPreference.isInputBusInitialFilterEnabled();
         }
     }
 

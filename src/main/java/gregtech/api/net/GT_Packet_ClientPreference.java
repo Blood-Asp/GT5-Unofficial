@@ -43,10 +43,11 @@ public class GT_Packet_ClientPreference extends GT_Packet_New {
     @Override
     public void encode(ByteBuf aOut) {
         aOut.writeBoolean(mPreference.isSingleBlockInitialFilterEnabled());
+        aOut.writeBoolean(mPreference.isInputBusInitialFilterEnabled());
     }
 
     @Override
     public GT_Packet_New decode(ByteArrayDataInput aData) {
-        return new GT_Packet_ClientPreference(new GT_ClientPreference(aData.readBoolean()));
+        return new GT_Packet_ClientPreference(new GT_ClientPreference(aData.readBoolean(), aData.readBoolean()));
     }
 }
