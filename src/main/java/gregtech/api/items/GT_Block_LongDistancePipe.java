@@ -10,6 +10,7 @@ import gregtech.api.util.GT_LanguageManager;
 import gregtech.common.blocks.GT_Item_LongDistancePipe;
 import gregtech.common.blocks.GT_Material_Machines;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
@@ -86,6 +87,11 @@ public class GT_Block_LongDistancePipe extends GT_Generic_Block {
     @Override
     public IIcon getIcon(int aSide, int aMeta) {
         return mIcons[aMeta % mIcons.length].getIcon();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister p_149651_1_) {
     }
 
     @Override
