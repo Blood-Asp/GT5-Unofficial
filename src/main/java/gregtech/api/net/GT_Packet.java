@@ -2,6 +2,7 @@ package gregtech.api.net;
 
 import com.google.common.io.ByteArrayDataInput;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.INetHandler;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -46,4 +47,9 @@ public abstract class GT_Packet {
      * @param aWorld null if message is received on server side, the client world if message is received on client side
      */
     public abstract void process(IBlockAccess aWorld);
+
+    /**
+     * This will be called just before {@link #process(IBlockAccess)} to inform the handler about the source and type of connection
+     */
+    public void setINetHandler(INetHandler aHandler) {}
 }

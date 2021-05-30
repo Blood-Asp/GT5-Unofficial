@@ -36,7 +36,7 @@ public class GT_Network extends MessageToMessageCodec<FMLProxyPacket, GT_Packet>
 
     public GT_Network() {
         this.mChannel = NetworkRegistry.INSTANCE.newChannel("GregTech", this, new HandlerShared());
-        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores(), new GT_Packet_Pollution(), new MessageSetFlaskCapacity(), new GT_Packet_TileEntityCover(), new GT_Packet_TileEntityCoverGUI(), new MessageUpdateFluidDisplayItem()};
+        this.mSubChannels = new GT_Packet[]{new GT_Packet_TileEntity(), new GT_Packet_Sound(), new GT_Packet_Block_Event(), new GT_Packet_Ores(), new GT_Packet_Pollution(), new MessageSetFlaskCapacity(), new GT_Packet_TileEntityCover(), new GT_Packet_TileEntityCoverGUI(), new MessageUpdateFluidDisplayItem(), new GT_Packet_ClientPreference()};
     }
 
     @Override
@@ -51,7 +51,9 @@ public class GT_Network extends MessageToMessageCodec<FMLProxyPacket, GT_Packet>
     protected void decode(ChannelHandlerContext aContext, FMLProxyPacket aPacket, List<Object> aOutput)
             throws Exception {
         ByteArrayDataInput aData = ByteStreams.newDataInput(aPacket.payload().array());
-        aOutput.add(this.mSubChannels[aData.readByte()].decode(aData));
+        GT_Packet tPacket = this.mSubChannels[aData.readByte()].decode(aData);
+        tPacket.setINetHandler(aPacket.handler());
+        aOutput.add(tPacket);
     }
 
     @Override

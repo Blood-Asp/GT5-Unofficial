@@ -15,6 +15,7 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.GT_ClientPreference;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_Cleanroom;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -417,6 +418,11 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
     @Override
     public void initDefaultModes(NBTTagCompound aNBT) {
         mMainFacing = -1;
+        if (!getBaseMetaTileEntity().getWorld().isRemote) {
+            GT_ClientPreference tPreference = GT_Mod.gregtechproxy.getClientPreference(getBaseMetaTileEntity().getOwnerUuid());
+            if (tPreference != null)
+                mDisableFilter = !tPreference.isSingleBlockInitialFilterEnabled();
+        }
     }
 
     @Override
