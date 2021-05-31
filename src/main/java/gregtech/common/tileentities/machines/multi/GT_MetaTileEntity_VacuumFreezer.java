@@ -62,13 +62,13 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_CubicMult
             if (aActive) {
                 rTexture = new ITexture[]{
                         casingTexturePages[0][17],
-                        TextureFactory.of(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE),
-                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW).glow().build()};
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE).extFacing().build(),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW).extFacing().glow().build()};
             } else {
                 rTexture = new ITexture[]{
                         casingTexturePages[0][17],
-                        TextureFactory.of(OVERLAY_FRONT_VACUUM_FREEZER),
-                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_GLOW).glow().build()};
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER).extFacing().build(),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_VACUUM_FREEZER_GLOW).extFacing().glow().build()};
             }
         } else {
             rTexture = new ITexture[]{casingTexturePages[0][17]};
