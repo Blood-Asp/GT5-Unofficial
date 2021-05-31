@@ -13,20 +13,23 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
@@ -44,7 +47,7 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
             })
             .addElement('c', ofBlock(GregTech_API.sBlockCasings1, CASING_INDEX))
             .addElement('m', ofHatchAdder(GT_MetaTileEntity_MultiFurnace::addMufflerToMachineList, CASING_INDEX, 2))
-            .addElement('C', ofBlockAdder(GT_MetaTileEntity_MultiFurnace::addCoil, GregTech_API.sBlockCasings5, 0))
+            .addElement('C', GT_StructureUtility.ofCoil(GT_MetaTileEntity_MultiFurnace::setCoilLevel, GT_MetaTileEntity_MultiFurnace::getCoilLevel))
             .addElement('b', ofHatchAdderOptional(GT_MetaTileEntity_MultiFurnace::addBottomHatch, CASING_INDEX, 3, GregTech_API.sBlockCasings1, CASING_INDEX))
             .build();
 
@@ -170,16 +173,16 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
 
         replaceDeprecatedCoils(aBaseMetaTileEntity);
 
-        mCoilLevel = null;
+        setCoilLevel(null);
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 1, 2, 0))
             return false;
 
-        if (mCoilLevel == null)
+        if (getCoilLevel() == null)
             return false;
 
-        this.mLevel = mCoilLevel.getLevel();
-        this.mCostDiscount = mCoilLevel.getCostDiscount();
+        this.mLevel = getCoilLevel().getLevel();
+        this.mCostDiscount = getCoilLevel().getCostDiscount();
         return true;
     }
 

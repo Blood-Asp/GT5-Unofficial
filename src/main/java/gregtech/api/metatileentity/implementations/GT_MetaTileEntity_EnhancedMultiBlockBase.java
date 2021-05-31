@@ -30,17 +30,15 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  */
 public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_MetaTileEntity_EnhancedMultiBlockBase<T>> extends GT_MetaTileEntity_MultiBlockBase implements IAlignment, IConstructable {
 	private static final AtomicReferenceArray<GT_Multiblock_Tooltip_Builder> tooltips = new AtomicReferenceArray<>(GregTech_API.METATILEENTITIES.length);
-	private ExtendedFacing mExtendedFacing;
-	private final IAlignmentLimits mLimits;
+	private ExtendedFacing mExtendedFacing = ExtendedFacing.DEFAULT;
+	private final IAlignmentLimits mLimits = getInitialAlignmentLimits();
 
 	protected GT_MetaTileEntity_EnhancedMultiBlockBase(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
-		mLimits = getInitialAlignmentLimits();
 	}
 
 	protected GT_MetaTileEntity_EnhancedMultiBlockBase(String aName) {
 		super(aName);
-		mLimits = getInitialAlignmentLimits();
 	}
 
 	@Override
@@ -127,9 +125,6 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 				Rotation.byIndex(aNBT.getByte("mRotation")),
 				Flip.byIndex(aNBT.getByte("mFlip")));
 	}
-
-	@Override
-	public abstract GT_MetaTileEntity_EnhancedMultiBlockBase<T> newMetaEntity(IGregTechTileEntity aTileEntity);
 
 	@SuppressWarnings("unchecked")
 	private IStructureDefinition<GT_MetaTileEntity_EnhancedMultiBlockBase<T>> getCastedStructureDefinition() {

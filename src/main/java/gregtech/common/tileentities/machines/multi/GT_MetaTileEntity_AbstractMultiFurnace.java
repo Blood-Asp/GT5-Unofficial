@@ -1,15 +1,13 @@
 package gregtech.common.tileentities.machines.multi;
 
 import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public abstract class GT_MetaTileEntity_AbstractMultiFurnace<T extends GT_MetaTileEntity_AbstractMultiFurnace<T>> extends GT_MetaTileEntity_EnhancedMultiBlockBase<T> {
 
-    protected HeatingCoilLevel mCoilLevel;
+    private HeatingCoilLevel mCoilLevel;
 
     protected GT_MetaTileEntity_AbstractMultiFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -22,16 +20,6 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace<T extends GT_MetaTi
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
-    }
-
-    protected final boolean addCoil(Block aBlock, int aMeta) {
-        if (aBlock instanceof IHeatingCoil) {
-            if (mCoilLevel != null)
-                return mCoilLevel == ((IHeatingCoil) aBlock).getCoilHeat(aMeta);
-            mCoilLevel = ((IHeatingCoil) aBlock).getCoilHeat(aMeta);
-            return true;
-        }
-        return false;
     }
 
     protected boolean addBottomHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
@@ -59,5 +47,13 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace<T extends GT_MetaTi
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return mCoilLevel;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
+        mCoilLevel = aCoilLevel;
     }
 }

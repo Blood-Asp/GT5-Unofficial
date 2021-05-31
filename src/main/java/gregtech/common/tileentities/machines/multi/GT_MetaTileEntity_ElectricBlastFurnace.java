@@ -16,6 +16,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Outpu
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,11 +27,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAdder;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
@@ -51,7 +55,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
             }))
             .addElement('t', ofHatchAdderOptional(GT_MetaTileEntity_ElectricBlastFurnace::addOutputHatchToTopList, CASING_INDEX, 1, GregTech_API.sBlockCasings1, CASING_INDEX))
             .addElement('m', ofHatchAdder(GT_MetaTileEntity_ElectricBlastFurnace::addMufflerToMachineList, CASING_INDEX, 2))
-            .addElement('C', ofBlockAdder(GT_MetaTileEntity_ElectricBlastFurnace::addCoil, GregTech_API.sBlockCasings5, 0))
+            .addElement('C', GT_StructureUtility.ofCoil(GT_MetaTileEntity_ElectricBlastFurnace::setCoilLevel, GT_MetaTileEntity_ElectricBlastFurnace::getCoilLevel))
             .addElement('b', ofHatchAdderOptional(GT_MetaTileEntity_ElectricBlastFurnace::addBottomHatch, CASING_INDEX, 3, GregTech_API.sBlockCasings1, CASING_INDEX))
             .build();
 
@@ -64,7 +68,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     }
 
     @Override
-    public GT_MetaTileEntity_ElectricBlastFurnace newMetaEntity(IGregTechTileEntity aTileEntity) {
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_ElectricBlastFurnace(this.mName);
     }
 
@@ -252,15 +256,15 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
 
         replaceDeprecatedCoils(aBaseMetaTileEntity);
 
-        mCoilLevel = null;
+        setCoilLevel(null);
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 1, 3, 0))
             return false;
 
-        if (mCoilLevel == null)
+        if (getCoilLevel() == null)
             return false;
 
-        this.mHeatingCapacity = (int) mCoilLevel.getHeat() + 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 2);
+        this.mHeatingCapacity = (int) getCoilLevel().getHeat() + 100 * (GT_Utility.getTier(getMaxInputVoltage()) - 2);
         return true;
     }
 
