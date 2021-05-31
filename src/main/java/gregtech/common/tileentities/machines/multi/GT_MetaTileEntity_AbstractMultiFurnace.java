@@ -1,6 +1,5 @@
 package gregtech.common.tileentities.machines.multi;
 
-import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -60,11 +59,5 @@ public abstract class GT_MetaTileEntity_AbstractMultiFurnace<T extends GT_MetaTi
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
-    }
-
-    @Override
-    protected IAlignmentLimits getInitialAlignmentLimits() {
-        // even though flipping doesn't really change the overall structure, but maybe someone want it somehow
-        return (direction, rotation, flip) -> direction.offsetY == 0 && rotation.isNotRotated();
     }
 }
