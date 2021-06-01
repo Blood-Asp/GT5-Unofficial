@@ -20,6 +20,7 @@ public class ProcessingCell implements IOreRecipeRegistrator {
         OrePrefixes.cellPlasma.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         switch (aPrefix) {
             case cell:

@@ -5,7 +5,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -50,6 +50,6 @@ public class GT_Block_Ores_UB1 extends GT_Block_Ores_Abstract {
 
     @Override
     public ITexture[] getTextureSet() { //Must have 16 entries.
-        return new ITexture[]{new GT_CopiedBlockTexture(aUBBlock, 0, 0), new GT_CopiedBlockTexture(aUBBlock, 0, 1), new GT_CopiedBlockTexture(aUBBlock, 0, 2), new GT_CopiedBlockTexture(aUBBlock, 0, 3), new GT_CopiedBlockTexture(aUBBlock, 0, 4), new GT_CopiedBlockTexture(aUBBlock, 0, 5), new GT_CopiedBlockTexture(aUBBlock, 0, 6), new GT_CopiedBlockTexture(aUBBlock, 0, 7), new GT_CopiedBlockTexture(aUBBlock, 0, 0), new GT_CopiedBlockTexture(aUBBlock, 0, 1), new GT_CopiedBlockTexture(aUBBlock, 0, 2), new GT_CopiedBlockTexture(aUBBlock, 0, 3), new GT_CopiedBlockTexture(aUBBlock, 0, 4), new GT_CopiedBlockTexture(aUBBlock, 0, 5), new GT_CopiedBlockTexture(aUBBlock, 0, 6), new GT_CopiedBlockTexture(aUBBlock, 0, 7)};
+        return new ITexture[]{TextureFactory.of(aUBBlock, 0), TextureFactory.of(aUBBlock, 1), TextureFactory.of(aUBBlock, 2), TextureFactory.of(aUBBlock, 3), TextureFactory.of(aUBBlock, 4), TextureFactory.of(aUBBlock, 5), TextureFactory.of(aUBBlock, 6), TextureFactory.of(aUBBlock, 7), TextureFactory.of(aUBBlock, 0), TextureFactory.of(aUBBlock, 1), TextureFactory.of(aUBBlock, 2), TextureFactory.of(aUBBlock, 3), TextureFactory.of(aUBBlock, 4), TextureFactory.of(aUBBlock, 5), TextureFactory.of(aUBBlock, 6), TextureFactory.of(aUBBlock, 7)};
     }
 }

@@ -67,10 +67,12 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
         Minecraft.getMinecraft().fontRenderer.drawString(aString, aX, aY, aColor);
     }
 
+    @Override
     public TemplateRecipeHandler newInstance() {
         return new GT_NEI_DefaultHandler(this.mRecipeMap);
     }
 
+    @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
             for (GT_Recipe tRecipe : getSortedRecipes()) {
@@ -83,6 +85,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
         }
     }
 
+    @Override
     public void loadCraftingRecipes(ItemStack aResult) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aResult);
 
@@ -116,6 +119,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
         }
     }
 
+    @Override
     public void loadUsageRecipes(ItemStack aInput) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aInput);
 
@@ -150,29 +154,35 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
         CachedDefaultRecipe tNEIRecipe;
     }
 
+    @Override
     public String getOverlayIdentifier() {
         return this.mRecipeMap.mNEIName;
     }
 
+    @Override
     public void drawBackground(int recipe) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(getGuiTexture());
         GuiDraw.drawTexturedModalRect(-4, -8, 1, 3, 174, 78);
     }
 
+    @Override
     public int recipiesPerPage() {
         return 1;
     }
 
+    @Override
     public String getRecipeName() {
         return GT_LanguageManager.getTranslation(this.mRecipeMap.mUnlocalizedName);
     }
 
+    @Override
     public String getGuiTexture() {
 //    return "gregtech:textures/gui/" + this.mRecipeMap.mUnlocalizedName + ".png";
         return this.mRecipeMap.mNEIGUIPath;
     }
 
+    @Override
     public List<String> handleItemTooltip(GuiRecipe gui, ItemStack aStack, List<String> currenttip, int aRecipeIndex) {
         TemplateRecipeHandler.CachedRecipe tObject = (TemplateRecipeHandler.CachedRecipe) this.arecipes.get(aRecipeIndex);
         if ((tObject instanceof CachedDefaultRecipe)) {
@@ -200,7 +210,8 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
         return currenttip;
     }
 
-	public void drawExtras(int aRecipeIndex) {
+	@Override
+    public void drawExtras(int aRecipeIndex) {
 		int tEUt = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mEUt;
 		int tDuration = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mDuration;
 		String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
@@ -249,6 +260,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
 
     public static class GT_RectHandler
             implements IContainerInputHandler, IContainerTooltipHandler {
+        @Override
         public boolean mouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
             if (canHandle(gui)) {
                 if (button == 0) {
@@ -261,6 +273,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             return false;
         }
 
+        @Override
         public boolean lastKeyTyped(GuiContainer gui, char keyChar, int keyCode) {
             return false;
         }
@@ -271,6 +284,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             		|| (gui instanceof GT_GUIContainer_PrimitiveBlastFurnace && GT_Utility.isStringValid(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI));
         }
 
+        @Override
         public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
             if ((canHandle(gui)) && (currenttip.isEmpty())) {
                 if (gui instanceof GT_GUIContainer_BasicMachine && new Rectangle(65, 13, 36, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) {
@@ -296,34 +310,43 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             return false;
         }
 
+        @Override
         public List<String> handleItemDisplayName(GuiContainer gui, ItemStack itemstack, List<String> currenttip) {
             return currenttip;
         }
 
+        @Override
         public List<String> handleItemTooltip(GuiContainer gui, ItemStack itemstack, int mousex, int mousey, List<String> currenttip) {
             return currenttip;
         }
 
+        @Override
         public boolean keyTyped(GuiContainer gui, char keyChar, int keyCode) {
             return false;
         }
 
+        @Override
         public void onKeyTyped(GuiContainer gui, char keyChar, int keyID) {
         }
 
+        @Override
         public void onMouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
         }
 
+        @Override
         public void onMouseUp(GuiContainer gui, int mousex, int mousey, int button) {
         }
 
+        @Override
         public boolean mouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
             return false;
         }
 
+        @Override
         public void onMouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
         }
 
+        @Override
         public void onMouseDragged(GuiContainer gui, int mousex, int mousey, int button, long heldTime) {
         }
     }
@@ -341,6 +364,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             this.mChance = aChance;
         }
 
+        @Override
         public void generatePermutations() {
             if (this.permutated) {
                 return;
@@ -844,14 +868,17 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             }
         }
 
+        @Override
         public List<PositionedStack> getIngredients() {
             return getCycledIngredients(GT_NEI_DefaultHandler.this.cycleticks / 10, this.mInputs);
         }
 
+        @Override
         public PositionedStack getResult() {
             return null;
         }
 
+        @Override
         public List<PositionedStack> getOtherStacks() {
             return this.mOutputs;
         }

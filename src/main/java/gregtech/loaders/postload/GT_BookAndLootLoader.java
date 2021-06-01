@@ -12,6 +12,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
 public class GT_BookAndLootLoader implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding worldgenerated Chest Content.");
         if (GT_Mod.gregtechproxy.mIncreaseDungeonLoot) {

@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class GT_FuelLoader implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Initializing various Fuels.");
         ItemList.sNitricAcid = GT_Mod.gregtechproxy.addFluid("nitricacid", "Nitric acid ", Materials.NitricAcid, 1, 295, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.NitricAcid, 1), ItemList.Cell_Empty.get(1, new Object[0]), 1000);

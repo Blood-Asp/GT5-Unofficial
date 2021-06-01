@@ -2,11 +2,10 @@ package gregtech.common.tileentities.machines.multi;
 
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
@@ -19,12 +18,16 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_TI5;
+import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_TI_ACTIVE5;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_LargeTurbine {
 
     public boolean achievement = false;
-    private boolean looseFit=false;
+    private boolean looseFit = false;
 
     public GT_MetaTileEntity_LargeTurbine_HPSteam(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -36,31 +39,32 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TI_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_TI5) : Textures.BlockIcons.casingTexturePages[0][59]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_TI_ACTIVE5) : TextureFactory.of(LARGETURBINE_TI5) : casingTexturePages[0][59]};
     }
 
+    @Override
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Steam Turbine")
-		.addInfo("Controller block for the Large High Pressure Steam Turbine")
-		.addInfo("Needs a Turbine, place inside controller")
-		.addInfo("Outputs Steam as well as producing power")
-		.addInfo("Power output depends on turbine and fitting")
-		.addInfo("Use screwdriver to adjust fitting of turbine")
-		.addSeparator()
-		.beginStructureBlock(3, 3, 4, true)
-		.addController("Front center")
-		.addCasingInfo("Titanium Turbine Casing", 24)
-		.addDynamoHatch("Back center")
-		.addMaintenanceHatch("Side centered")
-		.addInputHatch("Superheated Steam, Side centered")
-		.addOutputHatch("Steam, Side centered")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Steam Turbine")
+                .addInfo("Controller block for the Large High Pressure Steam Turbine")
+                .addInfo("Needs a Turbine, place inside controller")
+                .addInfo("Outputs Steam as well as producing power")
+                .addInfo("Power output depends on turbine and fitting")
+                .addInfo("Use screwdriver to adjust fitting of turbine")
+                .addSeparator()
+                .beginStructureBlock(3, 3, 4, true)
+                .addController("Front center")
+                .addCasingInfo("Titanium Turbine Casing", 24)
+                .addDynamoHatch("Back center")
+                .addMaintenanceHatch("Side centered")
+                .addInputHatch("Superheated Steam, Side centered")
+                .addOutputHatch("Steam, Side centered")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
     @Override
@@ -90,25 +94,25 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
     @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
-        if(looseFit) {
-            aOptFlow*=4;
-            if(aBaseEff>10000){
-                aOptFlow*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
-                aBaseEff=7500;
-            }else if(aBaseEff>7500){
-                aOptFlow*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
-                aBaseEff*=0.75f;
-            }else{
-                aBaseEff*=0.75f;
+        if (looseFit) {
+            aOptFlow *= 4;
+            if (aBaseEff > 10000) {
+                aOptFlow *= Math.pow(1.1f, ((aBaseEff - 7500) / 10000F) * 20f);
+                aBaseEff = 7500;
+            } else if (aBaseEff > 7500) {
+                aOptFlow *= Math.pow(1.1f, ((aBaseEff - 7500) / 10000F) * 20f);
+                aBaseEff *= 0.75f;
+            } else {
+                aBaseEff *= 0.75f;
             }
         }
         int tEU = 0;
         int totalFlow = 0; // Byproducts are based on actual flow
         int flow = 0;
-        int remainingFlow = GT_Utility.safeInt((long)(aOptFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
+        int remainingFlow = GT_Utility.safeInt((long) (aOptFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
         this.realOptFlow = aOptFlow;
 
-        storedFluid=0;
+        storedFluid = 0;
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) {
             final FluidStack aFluidStack = aFluids.get(i);
             if (GT_ModHandler.isSuperHeatedSteam(aFluidStack)) {
@@ -119,25 +123,25 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                 totalFlow += flow; // track total input used
                 if (!achievement) {
                     try {
-                        GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "efficientsteam");
+                        GT_Mod.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "efficientsteam");
                     } catch (Exception ignored) {
                     }
                     achievement = true;
                 }
-            } else if(GT_ModHandler.isAnySteam(aFluidStack)){
+            } else if (GT_ModHandler.isAnySteam(aFluidStack)) {
                 depleteInput(new FluidStack(aFluidStack, aFluidStack.amount));
             }
         }
-        if(totalFlow<=0)return 0;
+        if (totalFlow <= 0) return 0;
         tEU = totalFlow;
         addOutput(GT_ModHandler.getSteam(totalFlow));
-        if (totalFlow != aOptFlow) {
-            float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float)aOptFlow);
+        if (totalFlow == aOptFlow) {
+            tEU = GT_Utility.safeInt((long) tEU * (long) aBaseEff / 10000L);
+        } else {
+            float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float) aOptFlow);
             //if(totalFlow>aOptFlow){efficiency = 1.0f;}
             tEU *= efficiency;
-            tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L));
-        } else {
-            tEU = GT_Utility.safeInt((long)tEU * (long)aBaseEff / 10000L);
+            tEU = Math.max(1, GT_Utility.safeInt((long) tEU * (long) aBaseEff / 10000L));
         }
 
         return tEU;
@@ -146,33 +150,32 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getFrontFacing()) {
-            looseFit^=true;
+            looseFit ^= true;
             GT_Utility.sendChatToPlayer(aPlayer, looseFit ? trans("500", "Fitting: Loose - More Flow") : trans("501", "Fitting: Tight - More Efficiency"));
         }
     }
 
     @Override
     public int getDamageToComponent(ItemStack aStack) {
-        return (looseFit && XSTR_INSTANCE.nextInt(4)==0)?0:1;
+        return (looseFit && XSTR_INSTANCE.nextInt(4) == 0) ? 0 : 1;
     }
 
-    
-    
+
     @Override
     public String[] getInfoData() {
-    	super.looseFit = looseFit;
-    	return super.getInfoData();
+        super.looseFit = looseFit;
+        return super.getInfoData();
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("turbineFitting",looseFit);
+        aNBT.setBoolean("turbineFitting", looseFit);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        looseFit=aNBT.getBoolean("turbineFitting");
+        looseFit = aNBT.getBoolean("turbineFitting");
     }
 }

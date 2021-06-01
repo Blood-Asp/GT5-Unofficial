@@ -2,7 +2,10 @@ package gregtech.common.tileentities.machines.basic;
 
 import com.google.common.collect.ArrayListMultimap;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -11,8 +14,8 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
@@ -21,11 +24,19 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachine {
 
@@ -46,14 +57,30 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 "",
 
                 //Textures
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_SIDE_DISASSEMBLER),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_DISASSEMBLER),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_TOP_DISASSEMBLER),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_BOTTOM_DISASSEMBLER)
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_SIDE_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_SIDE_DISASSEMBLER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_FRONT_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_DISASSEMBLER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_TOP_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_TOP_DISASSEMBLER_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE_GLOW).glow().build()),
+                TextureFactory.of(
+                        TextureFactory.of(OVERLAY_BOTTOM_DISASSEMBLER),
+                        TextureFactory.builder().addIcon(OVERLAY_BOTTOM_DISASSEMBLER_GLOW).glow().build())
         );
     }
 
@@ -65,11 +92,12 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         super(aName, aTier, 1, aDescription, aTextures, 1, 9, aGUIName, aNEIName);
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Disassembler(this.mName, this.mTier, this.mDescriptionArray, this.mTextures, this.mGUIName, this.mNEIName);
     }
 
-    private static final ItemStack[][] alwaysReplace = new ItemStack[][]{
+    private static final ItemStack[][] alwaysReplace = {
             {
                 //ItemStack to look for
                 new ItemStack(Blocks.trapped_chest, 1, OreDictionary.WILDCARD_VALUE)
@@ -80,7 +108,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
             }
     };
 
-    private static final Object[][] OreDictionaryOverride = new Object[][]{
+    private static final Object[][] OreDictionaryOverride = {
             {
                     //String to look for
                     "plankWood",
@@ -130,6 +158,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                is);
     }
 
+    @Override
     public int checkRecipe() {
         ItemStack is = getInputAt(0);
 
@@ -232,7 +261,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         return true;
     }
 
-    private static DissassembleReference ensureDowncasting(Collection<DissassembleReference> recipes) {
+    private static DissassembleReference ensureDowncasting(Collection<? extends DissassembleReference> recipes) {
         ItemStack[] inputs = recipes.stream()
                 .findFirst()
                 .orElseThrow(NullPointerException::new)
@@ -251,7 +280,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         return new DissassembleReference(recipes.stream().mapToInt(x -> x.stackSize).min().orElseThrow(NumberFormatException::new), output, null);
     }
 
-    private static void handleRecipeTransformation(ItemStack[] inputs, ItemStack[] output, List<GT_Recipe> recipesColl) {
+    private static void handleRecipeTransformation(ItemStack[] inputs, ItemStack[] output, List<? extends GT_Recipe> recipesColl) {
         for (int i = 0, inputsLength = inputs.length; i < inputsLength; i++) {
             Set<ItemStack[]> inputsStacks = null;
             if (recipesColl != null)
@@ -293,11 +322,11 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 output[i].stackSize = Math.min(output[i].stackSize, inputs[i].stackSize);
 
             //Handles replacement Overrides
-            ItemStack[] itemStacks = GT_MetaTileEntity_Disassembler.alwaysReplace[0];
+            ItemStack[] itemStacks = alwaysReplace[0];
             for (int j = 0; j < itemStacks.length; j++) {
                 ItemStack x = itemStacks[j];
                 if (GT_Utility.areStacksEqual(x, output[i], true)) {
-                    output[i] = GT_MetaTileEntity_Disassembler.alwaysReplace[1][j];
+                    output[i] = alwaysReplace[1][j];
                     break;
                 }
             }
@@ -338,7 +367,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         }
     }
 
-    private static void handleInputStacks(Set<ItemStack[]> inputsStacks, AtomicReference<Materials> toRpl, ItemData data, Materials first, int i){
+    private static void handleInputStacks(Set<ItemStack[]> inputsStacks, AtomicReference<? super Materials> toRpl, ItemData data, Materials first, int i){
         final int finalIndex = i;
         inputsStacks.forEach(stackArray -> {
             ItemData dataAgainst = GT_OreDictUnificator.getItemData(stackArray[finalIndex]);
@@ -356,7 +385,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         });
     }
 
-    private static void handleAnyMaterials(Materials first, AtomicReference<Materials> toRpl){
+    private static void handleAnyMaterials(Materials first, AtomicReference<? super Materials> toRpl){
         if (first.mOreReRegistrations.stream().anyMatch(y -> y.equals(Materials.AnyIron)))
             toRpl.set(Materials.Iron);
         else if (first.mOreReRegistrations.stream().anyMatch(y -> y.equals(Materials.AnyCopper)))
@@ -369,7 +398,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
             toRpl.set(Materials.Rubber);
     }
 
-    private static void handleDifferentMaterialsOnRecipes(Materials first, Materials second, AtomicReference<Materials> toRpl){
+    private static void handleDifferentMaterialsOnRecipes(Materials first, Materials second, AtomicReference<? super Materials> toRpl){
         if (!first.equals(second))
             if (first.equals(Materials.Aluminium) && second.equals(Materials.Iron))
                 toRpl.set(second);
@@ -397,7 +426,7 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
                 toRpl.set(second);
     }
 
-    private static void handleBetterMaterialsVersions(ItemData data, AtomicReference<Materials> toRpl){
+    private static void handleBetterMaterialsVersions(ItemData data, AtomicReference<? super Materials> toRpl){
         if (Materials.SteelMagnetic.equals(data.mMaterial.mMaterial)) {
             toRpl.set(Materials.Steel);
         } else if (Materials.IronMagnetic.equals(data.mMaterial.mMaterial)) {

@@ -24,16 +24,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUIT RECIPES AND USAGES
-    private final static String aTextWire1 = "wire."; private static final String aTextCable1 = "cable."; private static final String aTextWire2 = " Wire"; private static final String aTextCable2 = " Cable";
-    private final static String aTextPlate = "PPP"; private final static String aTextPlateWrench = "PwP"; private final static String aTextPlateMotor = "PMP"; private final static String aTextCableHull = "CMC";
-    private final static String aTextWireHull = "WMW"; private final static String aTextWireChest = "WTW"; private final static String aTextWireCoil = "WCW"; private final static String aTextMotorWire = "EWE";
-    private final static String aTextWirePump = "WPW";
-	public final static String imagination=EnumChatFormatting.RESET + "You just need " + EnumChatFormatting.DARK_PURPLE + "I" + EnumChatFormatting.LIGHT_PURPLE + "m" + EnumChatFormatting.DARK_RED + "a" + EnumChatFormatting.RED + "g" + EnumChatFormatting.YELLOW + "i" + EnumChatFormatting.GREEN + "n" + EnumChatFormatting.AQUA + "a" + EnumChatFormatting.DARK_AQUA + "t" + EnumChatFormatting.BLUE + "i" + EnumChatFormatting.DARK_BLUE + "o" + EnumChatFormatting.DARK_PURPLE + "n" + EnumChatFormatting.RESET + " to use this.";
-    private final static long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
-    private final static long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
+    private static final String aTextWire1 = "wire."; private static final String aTextCable1 = "cable."; private static final String aTextWire2 = " Wire"; private static final String aTextCable2 = " Cable";
+    private static final String aTextPlate = "PPP"; private static final String aTextPlateWrench = "PwP"; private static final String aTextPlateMotor = "PMP"; private static final String aTextCableHull = "CMC";
+    private static final String aTextWireHull = "WMW"; private static final String aTextWireChest = "WTW"; private static final String aTextWireCoil = "WCW"; private static final String aTextMotorWire = "EWE";
+    private static final String aTextWirePump = "WPW";
+	public static final String imagination=EnumChatFormatting.RESET + "You just need " + EnumChatFormatting.DARK_PURPLE + "I" + EnumChatFormatting.LIGHT_PURPLE + "m" + EnumChatFormatting.DARK_RED + "a" + EnumChatFormatting.RED + "g" + EnumChatFormatting.YELLOW + "i" + EnumChatFormatting.GREEN + "n" + EnumChatFormatting.AQUA + "a" + EnumChatFormatting.DARK_AQUA + "t" + EnumChatFormatting.BLUE + "i" + EnumChatFormatting.DARK_BLUE + "o" + EnumChatFormatting.DARK_PURPLE + "n" + EnumChatFormatting.RESET + " to use this.";
+    private static final long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
+    private static final long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
 
-    private final static boolean aBoolConst_0 = false;
-	private final static Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
+    private static final boolean aBoolConst_0 = false;
+	private static final Boolean isNEILoaded = Loader.isModLoaded("NotEnoughItems");
 	
     private static void run1() {
 		GT_ModHandler.addCraftingRecipe(ItemList.Casing_Pipe_Polytetrafluoroethylene.get(1L), bits, new Object[]{"PIP", "IFI", "PIP", 'P', OrePrefixes.plate.get(Materials.Polytetrafluoroethylene), 'F', OrePrefixes.frameGt.get(Materials.Polytetrafluoroethylene), 'I', OrePrefixes.pipeMedium.get(Materials.Polytetrafluoroethylene)});
@@ -182,9 +182,9 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
         GT_ModHandler.addCraftingRecipe(ItemList.Transformer_EV_HV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_HV, 'C', OrePrefixes.cableGt01.get(Materials.Aluminium), 'B', OrePrefixes.cableGt01.get(Materials.Gold),'K',ItemList.Circuit_Chip_ULPIC});
         GT_ModHandler.addCraftingRecipe(ItemList.Transformer_IV_EV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_EV, 'C', OrePrefixes.cableGt01.get(Materials.Tungsten), 'B', OrePrefixes.cableGt01.get(Materials.Aluminium),'K',ItemList.Circuit_Chip_LPIC});
         GT_ModHandler.addCraftingRecipe(ItemList.Transformer_LuV_IV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_IV, 'C', OrePrefixes.cableGt01.get(Materials.VanadiumGallium), 'B', OrePrefixes.cableGt01.get(Materials.Tungsten),'K',ItemList.Circuit_Chip_PIC});
-        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_ZPM_LuV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_LuV, 'C', OrePrefixes.cableGt02.get(Materials.Naquadah), 'B', OrePrefixes.cableGt01.get(Materials.VanadiumGallium),'K',ItemList.Circuit_Chip_HPIC});
-        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_UV_ZPM.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_ZPM, 'C', OrePrefixes.cableGt04.get(Materials.NaquadahAlloy), 'B', OrePrefixes.cableGt02.get(Materials.Naquadah),'K',ItemList.Circuit_Chip_UHPIC});
-        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_MAX_UV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_UV, 'C', OrePrefixes.wireGt01.get(Materials.SuperconductorUHV), 'B', OrePrefixes.cableGt04.get(Materials.NaquadahAlloy),'K',ItemList.Circuit_Chip_NPIC});
+        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_ZPM_LuV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_LuV, 'C', OrePrefixes.cableGt01.get(Materials.Naquadah), 'B', OrePrefixes.cableGt01.get(Materials.VanadiumGallium),'K',ItemList.Circuit_Chip_HPIC});
+        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_UV_ZPM.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_ZPM, 'C', OrePrefixes.cableGt01.get(Materials.NaquadahAlloy), 'B', OrePrefixes.cableGt01.get(Materials.Naquadah),'K',ItemList.Circuit_Chip_UHPIC});
+        GT_ModHandler.addCraftingRecipe(ItemList.Transformer_MAX_UV.get(1L), bitsd, new Object[]{"KBB", "CM ", "KBB", 'M', ItemList.Hull_UV, 'C', OrePrefixes.wireGt01.get(Materials.Bedrockium), 'B', OrePrefixes.cableGt01.get(Materials.NaquadahAlloy),'K',ItemList.Circuit_Chip_NPIC});
 
         ItemList.Hatch_Dynamo_ULV.set(new GT_MetaTileEntity_Hatch_Dynamo(30, "hatch.dynamo.tier.00", "ULV Dynamo Hatch", 0).getStackForm(1L));
         ItemList.Hatch_Dynamo_LV.set(new GT_MetaTileEntity_Hatch_Dynamo(31, "hatch.dynamo.tier.01", "LV Dynamo Hatch", 1).getStackForm(1L));
@@ -1369,6 +1369,7 @@ public class GT_Loader_MetaTileEntities implements Runnable {//TODO CHECK CIRCUI
 
         }
 
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Registering MetaTileEntities.");
         run1();

@@ -21,15 +21,18 @@ public final class GT_FlaskRenderer implements net.minecraftforge.client.IItemRe
         MinecraftForgeClient.registerItemRenderer(ItemList.VOLUMETRIC_FLASK.getItem(), this);
     }
 
+    @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return type != ItemRenderType.FIRST_PERSON_MAP;
     }
 
 
+    @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper) {
         return type == ItemRenderType.ENTITY;
     }
 
+    @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GT_VolumetricFlask cell = (GT_VolumetricFlask) item.getItem();
         IIcon icon = item.getIconIndex();

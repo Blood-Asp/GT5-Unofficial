@@ -1,18 +1,38 @@
 package gregtech.common.tileentities.storage;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_QTANK;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_QTANK_GLOW;
 
 public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_QuantumTank(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "Stores " + CommonSizeCompute(aTier) + "L of fluid");
+        super(aID, aName, aNameRegional, aTier, 3, "Stores " + commonSizeCompute(aTier) + "L of fluid");
+    }
+
+    private static int commonSizeCompute(int tier) {
+        switch (tier) {
+            case 6:
+                return 128000000;
+            case 7:
+                return 256000000;
+            case 8:
+                return 512000000;
+            case 9:
+                return 1024000000;
+            case 10:
+                return 2147483640;
+            default:
+                return 0;
+        }
     }
 
     public GT_MetaTileEntity_QuantumTank(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -29,45 +49,8 @@ public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return aSide == 1 ? new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_QTANK)} : new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1]};
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-        if (aBaseMetaTileEntity.isClientSide()) return true;
-        aBaseMetaTileEntity.openGUI(aPlayer);
-        return true;
-    }
-
-    @Override
     public boolean isSimpleMachine() {
         return true;
-    }
-
-    @Override
-    public boolean isFacingValid(byte aFacing) {
-        return true;
-    }
-
-    @Override
-    public boolean isAccessAllowed(EntityPlayer aPlayer) {
-        return true;
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-    }
-
-    @Override
-    public final byte getUpdateData() {
-        return 0x00;
     }
 
     @Override
@@ -101,24 +84,49 @@ public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     }
 
     @Override
-    public String[] getInfoData() {
+    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescriptionArray, mTextures);
+    }
 
-        if (mFluid == null) {
-            return new String[]{
-                    EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
-                    "Stored Fluid:",
-                    EnumChatFormatting.GOLD + "No Fluid"+ EnumChatFormatting.RESET,
-                    EnumChatFormatting.GREEN + Integer.toString(0) + " L"+ EnumChatFormatting.RESET+" "+
-                    EnumChatFormatting.YELLOW + Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
-            };
-        }
-        return new String[]{
-                EnumChatFormatting.BLUE + "Quantum Tank"+ EnumChatFormatting.RESET,
-                "Stored Fluid:",
-                EnumChatFormatting.GOLD + mFluid.getLocalizedName()+ EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L"+ EnumChatFormatting.RESET+" "+
-                EnumChatFormatting.YELLOW+ Integer.toString(getCapacity()) + " L"+ EnumChatFormatting.RESET
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+        if (aSide != ForgeDirection.UP.ordinal()) return new ITexture[]{MACHINE_CASINGS[mTier][aColorIndex + 1]};
+        return new ITexture[]{
+                MACHINE_CASINGS[mTier][aColorIndex + 1],
+                TextureFactory.of(OVERLAY_QTANK),
+                TextureFactory.builder().addIcon(OVERLAY_QTANK_GLOW).glow().build()
         };
+    }
+
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
+        if (!aBaseMetaTileEntity.isClientSide()) aBaseMetaTileEntity.openGUI(aPlayer);
+        return true;
+    }
+
+    @Override
+    public final byte getUpdateData() {
+        return 0x00;
+    }
+
+    @Override
+    public boolean isFacingValid(byte aFacing) {
+        return true;
+    }
+
+    @Override
+    public boolean isAccessAllowed(EntityPlayer aPlayer) {
+        return true;
+    }
+
+    @Override
+    public int getTankPressure() {
+        return 100;
+    }
+
+    @Override
+    public int getCapacity() {
+        return commonSizeCompute(mTier);
     }
 
     @Override
@@ -127,35 +135,24 @@ public class GT_MetaTileEntity_QuantumTank extends GT_MetaTileEntity_BasicTank {
     }
 
     @Override
-    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_QuantumTank(mName, mTier, mDescriptionArray, mTextures);
-    }
+    public String[] getInfoData() {
 
-    private static int CommonSizeCompute(int tier){
-        switch(tier){
-            case 6:
-                return  128000000;
-            case 7:
-                return  256000000;
-            case 8:
-                return  512000000;
-            case 9:
-                return 1024000000;
-            case 10:
-                return 2147483640;
-            default:
-                return 0;
+        if (mFluid == null) {
+            return new String[]{
+                    EnumChatFormatting.BLUE + "Quantum Tank" + EnumChatFormatting.RESET,
+                    "Stored Fluid:",
+                    EnumChatFormatting.GOLD + "No Fluid" + EnumChatFormatting.RESET,
+                    EnumChatFormatting.GREEN + Integer.toString(0) + " L" + EnumChatFormatting.RESET + " " +
+                            EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+            };
         }
-    }
-
-    @Override
-    public int getCapacity() {
-        return CommonSizeCompute(mTier);
-    }
-
-    @Override
-    public int getTankPressure() {
-        return 100;
+        return new String[]{
+                EnumChatFormatting.BLUE + "Quantum Tank" + EnumChatFormatting.RESET,
+                "Stored Fluid:",
+                EnumChatFormatting.GOLD + mFluid.getLocalizedName() + EnumChatFormatting.RESET,
+                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+        };
     }
 
 }

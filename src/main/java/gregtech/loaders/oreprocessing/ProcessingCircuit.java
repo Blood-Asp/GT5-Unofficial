@@ -12,6 +12,7 @@ public class ProcessingCircuit implements gregtech.api.interfaces.IOreRecipeRegi
         OrePrefixes.circuit.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
     	if(gregtech.api.util.GT_OreDictUnificator.isBlacklisted(aStack)&&aModName.equals("gregtech"))return;
         switch (aMaterial.mName) {

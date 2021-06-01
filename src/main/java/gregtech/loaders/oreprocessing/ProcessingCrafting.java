@@ -15,6 +15,7 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
         OrePrefixes.crafting.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         switch (aOreDictName) {
             case "craftingQuartz":

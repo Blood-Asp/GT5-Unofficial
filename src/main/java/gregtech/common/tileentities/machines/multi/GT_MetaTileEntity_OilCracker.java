@@ -3,7 +3,6 @@ package gregtech.common.tileentities.machines.multi;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.ITexture;
@@ -11,7 +10,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -26,6 +25,12 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBase {
     private ForgeDirection orientation;
@@ -44,34 +49,40 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
 
     @Override
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Cracker")
-		.addInfo("Controller block for the Oil Cracking Unit")
-		.addInfo("Thermally cracks heavy hydrocarbons into lighter fractions")
-		.addInfo("More efficient than the Chemical Reactor")
-		.addInfo("Place the appropriate circuit in the controller")
-		.addSeparator()
-		.beginStructureBlock(5, 3, 3, true)
-		.addController("Front center")
-		.addCasingInfo("Clean Stainless Steel Machine Casing", 18)
-		.addOtherStructurePart("2 Rings of 8 Coils", "Each side of the controller")
-        .addInfo("Gets 5% energy cost reduction per coil tier")
-		.addEnergyHatch("Any casing")
-		.addMaintenanceHatch("Any casing")
-		.addInputHatch("Steam/Hydrogen, Any middle ring casing")
-		.addInputHatch("Any left/right side casing")
-		.addOutputHatch("Any left/right side casing")
-		.addStructureInfo("Input/Output Hatches must be on opposite sides!")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return tt.getInformation();
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Cracker")
+                .addInfo("Controller block for the Oil Cracking Unit")
+                .addInfo("Thermally cracks heavy hydrocarbons into lighter fractions")
+                .addInfo("More efficient than the Chemical Reactor")
+                .addInfo("Place the appropriate circuit in the controller")
+                .addSeparator()
+                .beginStructureBlock(5, 3, 3, true)
+                .addController("Front center")
+                .addCasingInfo("Clean Stainless Steel Machine Casing", 18)
+                .addOtherStructurePart("2 Rings of 8 Coils", "Each side of the controller")
+                .addInfo("Gets 5% energy cost reduction per coil tier")
+                .addEnergyHatch("Any casing")
+                .addMaintenanceHatch("Any casing")
+                .addInputHatch("Steam/Hydrogen, Any middle ring casing")
+                .addInputHatch("Any left/right side casing")
+                .addOutputHatch("Any left/right side casing")
+                .addStructureInfo("Input/Output Hatches must be on opposite sides!")
+                .toolTipFinisher("Gregtech");
+        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) return tt.getInformation();
         return tt.getStructureInformation();
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing) return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][CASING_INDEX],
-                new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_OIL_CRACKER)};
-        return new ITexture[]{Textures.BlockIcons.casingTexturePages[0][CASING_INDEX]};
+        if (aSide == aFacing) {
+            if (aActive) return new ITexture[]{casingTexturePages[0][CASING_INDEX],
+                    TextureFactory.of(OVERLAY_FRONT_OIL_CRACKER_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW).glow().build()};
+            return new ITexture[]{casingTexturePages[0][CASING_INDEX],
+                    TextureFactory.of(OVERLAY_FRONT_OIL_CRACKER),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_CRACKER_GLOW).glow().build()};
+        }
+        return new ITexture[]{casingTexturePages[0][CASING_INDEX]};
     }
 
     @Override
@@ -152,11 +163,11 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_MultiBlockBa
         for (int depth = -1; depth < 2; depth++)
             for (int height = -1; height < 2; height++)
                 for (int slice = -2; slice < 3; slice++)
-                    if (xDir != 0) {
-                        if (isStructureBroken(xDir, zDir, depth, height, slice, aBaseMetaTileEntity, amount, flags))
+                    if (xDir == 0) {
+                        if (isStructureBroken(xDir, zDir, slice, height, depth, aBaseMetaTileEntity, amount, flags))
                             return false;
                     } else {
-                        if (isStructureBroken(xDir, zDir, slice, height, depth, aBaseMetaTileEntity, amount, flags))
+                        if (isStructureBroken(xDir, zDir, depth, height, slice, aBaseMetaTileEntity, amount, flags))
                             return false;
                     }
 

@@ -3,9 +3,7 @@ package gregtech.api.enums;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.objects.GT_SidedTexture;
-import gregtech.api.objects.GT_StdRenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
@@ -45,16 +43,20 @@ public class Textures {
         MACHINE_MAXV_BOTTOM,
 
         OVERLAY_SCHEST,
+        OVERLAY_SCHEST_GLOW,
         OVERLAY_STANK,
-        
+        OVERLAY_STANK_GLOW,
+
         OVERLAY_PIPELINE_FLUID_BACK,
         OVERLAY_PIPELINE_FLUID_FRONT,
-        OVERLAY_PIPELINE_FLUID_SIDE,  
-        
+        OVERLAY_PIPELINE_FLUID_SIDE,
+        OVERLAY_PIPELINE_FLUID_SIDE_GLOW,
+
         OVERLAY_PIPELINE_ITEM_BACK,
         OVERLAY_PIPELINE_ITEM_FRONT,
         OVERLAY_PIPELINE_ITEM_SIDE,
-        
+        OVERLAY_PIPELINE_ITEM_SIDE_GLOW,
+
         LONG_DISTANCE_PIPE_FLUID,
         LONG_DISTANCE_PIPE_ITEM,
 
@@ -88,8 +90,9 @@ public class Textures {
         OVERLAY_ENERGY_IN_POWER,
         OVERLAY_ENERGY_OUT_POWER,
         OVERLAY_AUTOMAINTENANCE,
+        OVERLAY_AUTOMAINTENANCE_GLOW,
         OVERLAY_AUTOMAINTENANCE_IDLE,
-        OVERLAY_TELEPORTER_SIDES,
+        OVERLAY_AUTOMAINTENANCE_IDLE_GLOW,
 
         //
         VOID // The Empty Texture
@@ -124,16 +127,26 @@ public class Textures {
         VENT_ADVANCED,
         COVER_WOOD_PLATE,
         ARROW_UP,
+        ARROW_UP_GLOW,
         ARROW_DOWN,
+        ARROW_DOWN_GLOW,
         ARROW_LEFT,
+        ARROW_LEFT_GLOW,
         ARROW_RIGHT,
+        ARROW_RIGHT_GLOW,
         AUTOMATION_FILTER,
+        AUTOMATION_FILTER_GLOW,
         AUTOMATION_TYPEFILTER,
+        AUTOMATION_TYPEFILTER_GLOW,
 
         AUTOMATION_CHESTBUFFER,
+        AUTOMATION_CHESTBUFFER_GLOW,
         AUTOMATION_SUPERBUFFER,
+        AUTOMATION_SUPERBUFFER_GLOW,
         AUTOMATION_REGULATOR,
+        AUTOMATION_REGULATOR_GLOW,
         AUTOMATION_ITEMDISTRIBUTOR,
+        AUTOMATION_ITEMDISTRIBUTOR_GLOW,
         CONCRETE_LIGHT_STONE,
         CONCRETE_LIGHT_COBBLE,
         CONCRETE_LIGHT_COBBLE_MOSSY,
@@ -224,6 +237,7 @@ public class Textures {
 
         MACHINE_BRONZEBLASTFURNACE,
         MACHINE_BRONZEBLASTFURNACE_ACTIVE,
+        MACHINE_BRONZEBLASTFURNACE_ACTIVE_GLOW,
         MACHINE_CASING_ROBUST_TUNGSTENSTEEL,
         MACHINE_CASING_CLEAN_STAINLESSSTEEL,
         MACHINE_CASING_STABLE_TITANIUM,
@@ -236,13 +250,19 @@ public class Textures {
         MACHINE_CASING_FUSION,
         MACHINE_CASING_FUSION_GLASS,
         MACHINE_CASING_FUSION_GLASS_YELLOW,
+        MACHINE_CASING_FUSION_GLASS_YELLOW_GLOW,
         MACHINE_CASING_FUSION_2,
 
         MACHINE_CASING_MAGIC,
+        MACHINE_CASING_MAGIC_GLOW,
         MACHINE_CASING_MAGIC_ACTIVE,
+        MACHINE_CASING_MAGIC_ACTIVE_GLOW,
         MACHINE_CASING_MAGIC_FRONT,
+        MACHINE_CASING_MAGIC_FRONT_GLOW,
         MACHINE_CASING_MAGIC_FRONT_ACTIVE,
+        MACHINE_CASING_MAGIC_FRONT_ACTIVE_GLOW,
         MACHINE_CASING_DRAGONEGG,
+        MACHINE_CASING_DRAGONEGG_GLOW,
         MACHINE_CASING_SOLID_STEEL,
 
         MACHINE_CASING_FROST_PROOF,
@@ -288,6 +308,7 @@ public class Textures {
 
         MACHINE_CASING_DENSEBRICKS,
         MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE,
+        MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW,
         MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE,
 
         MACHINE_COIL_KANTHAL,
@@ -302,68 +323,120 @@ public class Textures {
         MACHINE_COIL_TRINIUM,
         BOILER_SOLAR,
         BOILER_FRONT,
+        BOILER_FRONT_GLOW,
 
         BOILER_FRONT_ACTIVE,
+        BOILER_FRONT_ACTIVE_GLOW,
         BOILER_LAVA_FRONT,
+        BOILER_LAVA_FRONT_GLOW,
         BOILER_LAVA_FRONT_ACTIVE,
+        BOILER_LAVA_FRONT_ACTIVE_GLOW,
+
         NAQUADAH_REACTOR_SOLID_BACK,
+        NAQUADAH_REACTOR_SOLID_BACK_GLOW,
         NAQUADAH_REACTOR_SOLID_FRONT,
+        NAQUADAH_REACTOR_SOLID_FRONT_GLOW,
         NAQUADAH_REACTOR_SOLID_SIDE,
+        NAQUADAH_REACTOR_SOLID_SIDE_GLOW,
         NAQUADAH_REACTOR_SOLID_BOTTOM,
-
+        NAQUADAH_REACTOR_SOLID_BOTTOM_GLOW,
         NAQUADAH_REACTOR_SOLID_TOP,
+        NAQUADAH_REACTOR_SOLID_TOP_GLOW,
         NAQUADAH_REACTOR_SOLID_BACK_ACTIVE,
+        NAQUADAH_REACTOR_SOLID_BACK_ACTIVE_GLOW,
         NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE,
+        NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW,
         NAQUADAH_REACTOR_SOLID_SIDE_ACTIVE,
+        NAQUADAH_REACTOR_SOLID_SIDE_ACTIVE_GLOW,
         NAQUADAH_REACTOR_SOLID_BOTTOM_ACTIVE,
-
+        NAQUADAH_REACTOR_SOLID_BOTTOM_ACTIVE_GLOW,
         NAQUADAH_REACTOR_SOLID_TOP_ACTIVE,
-        NAQUADAH_REACTOR_FLUID_BACK,
-        NAQUADAH_REACTOR_FLUID_FRONT,
-        NAQUADAH_REACTOR_FLUID_SIDE,
-        NAQUADAH_REACTOR_FLUID_BOTTOM,
-        NAQUADAH_REACTOR_FLUID_TOP,
+        NAQUADAH_REACTOR_SOLID_TOP_ACTIVE_GLOW,
 
+        NAQUADAH_REACTOR_FLUID_BACK,
+        NAQUADAH_REACTOR_FLUID_BACK_GLOW,
+        NAQUADAH_REACTOR_FLUID_FRONT,
+        NAQUADAH_REACTOR_FLUID_FRONT_GLOW,
+        NAQUADAH_REACTOR_FLUID_SIDE,
+        NAQUADAH_REACTOR_FLUID_SIDE_GLOW,
+        NAQUADAH_REACTOR_FLUID_BOTTOM,
+        NAQUADAH_REACTOR_FLUID_BOTTOM_GLOW,
+        NAQUADAH_REACTOR_FLUID_TOP,
+        NAQUADAH_REACTOR_FLUID_TOP_GLOW,
         NAQUADAH_REACTOR_FLUID_BACK_ACTIVE,
+        NAQUADAH_REACTOR_FLUID_BACK_ACTIVE_GLOW,
         NAQUADAH_REACTOR_FLUID_FRONT_ACTIVE,
+        NAQUADAH_REACTOR_FLUID_FRONT_ACTIVE_GLOW,
         NAQUADAH_REACTOR_FLUID_SIDE_ACTIVE,
+        NAQUADAH_REACTOR_FLUID_SIDE_ACTIVE_GLOW,
         NAQUADAH_REACTOR_FLUID_BOTTOM_ACTIVE,
+        NAQUADAH_REACTOR_FLUID_BOTTOM_ACTIVE_GLOW,
         NAQUADAH_REACTOR_FLUID_TOP_ACTIVE,
+        NAQUADAH_REACTOR_FLUID_TOP_ACTIVE_GLOW,
 
         DIESEL_GENERATOR_BACK,
+        DIESEL_GENERATOR_BACK_GLOW,
         DIESEL_GENERATOR_FRONT,
+        DIESEL_GENERATOR_FRONT_GLOW,
         DIESEL_GENERATOR_SIDE,
+        DIESEL_GENERATOR_SIDE_GLOW,
         DIESEL_GENERATOR_BOTTOM,
+        DIESEL_GENERATOR_BOTTOM_GLOW,
         DIESEL_GENERATOR_TOP,
+        DIESEL_GENERATOR_TOP_GLOW,
         DIESEL_GENERATOR_BACK_ACTIVE,
+        DIESEL_GENERATOR_BACK_ACTIVE_GLOW,
         DIESEL_GENERATOR_FRONT_ACTIVE,
-
+        DIESEL_GENERATOR_FRONT_ACTIVE_GLOW,
         DIESEL_GENERATOR_SIDE_ACTIVE,
+        DIESEL_GENERATOR_SIDE_ACTIVE_GLOW,
         DIESEL_GENERATOR_BOTTOM_ACTIVE,
+        DIESEL_GENERATOR_BOTTOM_ACTIVE_GLOW,
         DIESEL_GENERATOR_TOP_ACTIVE,
+        DIESEL_GENERATOR_TOP_ACTIVE_GLOW,
+
         GAS_TURBINE_BACK,
+        GAS_TURBINE_BACK_GLOW,
         GAS_TURBINE_FRONT,
+        GAS_TURBINE_FRONT_GLOW,
         GAS_TURBINE_SIDE,
+        GAS_TURBINE_SIDE_GLOW,
         GAS_TURBINE_BOTTOM,
-
+        GAS_TURBINE_BOTTOM_GLOW,
         GAS_TURBINE_TOP,
+        GAS_TURBINE_TOP_GLOW,
         GAS_TURBINE_BACK_ACTIVE,
+        GAS_TURBINE_BACK_ACTIVE_GLOW,
         GAS_TURBINE_FRONT_ACTIVE,
+        GAS_TURBINE_FRONT_ACTIVE_GLOW,
         GAS_TURBINE_SIDE_ACTIVE,
+        GAS_TURBINE_SIDE_ACTIVE_GLOW,
         GAS_TURBINE_BOTTOM_ACTIVE,
+        GAS_TURBINE_BOTTOM_ACTIVE_GLOW,
         GAS_TURBINE_TOP_ACTIVE,
+        GAS_TURBINE_TOP_ACTIVE_GLOW,
+
         STEAM_TURBINE_BACK,
-
+        STEAM_TURBINE_BACK_GLOW,
         STEAM_TURBINE_FRONT,
+        STEAM_TURBINE_FRONT_GLOW,
         STEAM_TURBINE_SIDE,
+        STEAM_TURBINE_SIDE_GLOW,
         STEAM_TURBINE_BOTTOM,
+        STEAM_TURBINE_BOTTOM_GLOW,
         STEAM_TURBINE_TOP,
+        STEAM_TURBINE_TOP_GLOW,
         STEAM_TURBINE_BACK_ACTIVE,
+        STEAM_TURBINE_BACK_ACTIVE_GLOW,
         STEAM_TURBINE_FRONT_ACTIVE,
+        STEAM_TURBINE_FRONT_ACTIVE_GLOW,
         STEAM_TURBINE_SIDE_ACTIVE,
-
+        STEAM_TURBINE_SIDE_ACTIVE_GLOW,
         STEAM_TURBINE_BOTTOM_ACTIVE,
+        STEAM_TURBINE_BOTTOM_ACTIVE_GLOW,
         STEAM_TURBINE_TOP_ACTIVE,
+        STEAM_TURBINE_TOP_ACTIVE_GLOW,
+
         BLOCK_BRONZEPREIN,
         BLOCK_STEELPREIN,
         BLOCK_TITANIUMPREIN,
@@ -373,10 +446,10 @@ public class Textures {
         BLOCK_IRREIN,
         BLOCK_PLASCRETE,
         BLOCK_TSREIN,
+
         OVERLAY_LOCKER,
         OVERLAY_LOCKER_000,
         OVERLAY_LOCKER_001,
-
         OVERLAY_LOCKER_002,
         OVERLAY_LOCKER_003,
         OVERLAY_LOCKER_004,
@@ -386,27 +459,35 @@ public class Textures {
         OVERLAY_LOCKER_008,
         OVERLAY_LOCKER_009,
         OVERLAY_LOCKER_010,
-
         OVERLAY_LOCKER_011,
         OVERLAY_LOCKER_012,
         OVERLAY_LOCKER_013,
+
         OVERLAY_LENS,
         OVERLAY_PIPE,
         OVERLAY_PIPE_IN,
         OVERLAY_PIPE_OUT,
         OVERLAY_MUFFLER,
+
         OVERLAY_CONTROLLER,
         OVERLAY_ACTIVITYDETECTOR,
-
+        OVERLAY_ACTIVITYDETECTOR_GLOW,
         OVERLAY_ENERGYDETECTOR,
         OVERLAY_FLUIDDETECTOR,
         OVERLAY_ITEMDETECTOR,
+
         OVERLAY_FUSION1,
+        OVERLAY_FUSION1_GLOW,
         OVERLAY_FUSION2,
+        OVERLAY_FUSION2_GLOW,
         OVERLAY_FUSION3,
+        OVERLAY_FUSION3_GLOW,
         OVERLAY_SCREEN,
+        OVERLAY_SCREEN_GLOW,
         OVERLAY_QTANK,
+        OVERLAY_QTANK_GLOW,
         OVERLAY_QCHEST,
+        OVERLAY_QCHEST_GLOW,
         OVERLAY_SHUTTER,
 
         OVERLAY_CLOSET,
@@ -425,142 +506,260 @@ public class Textures {
         OVERLAY_ENERGY_IN_MULTI,
         OVERLAY_ENERGY_OUT_MULTI,
         OVERLAY_FRONT_LARGE_BOILER,
+        OVERLAY_FRONT_LARGE_BOILER_GLOW,
         OVERLAY_FRONT_LARGE_BOILER_ACTIVE,
+        OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW,
         OVERLAY_FRONT_VACUUM_FREEZER,
+        OVERLAY_FRONT_VACUUM_FREEZER_GLOW,
         OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE,
+        OVERLAY_FRONT_VACUUM_FREEZER_ACTIVE_GLOW,
 
         OVERLAY_FRONT_MULTI_SMELTER,
+        OVERLAY_FRONT_MULTI_SMELTER_GLOW,
         OVERLAY_FRONT_MULTI_SMELTER_ACTIVE,
+        OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW,
         OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE,
+        OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW,
         OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE,
+        OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW,
         OVERLAY_FRONT_IMPLOSION_COMPRESSOR,
-
+        OVERLAY_FRONT_IMPLOSION_COMPRESSOR_GLOW,
         OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE,
+        OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE_GLOW,
+
         OVERLAY_TOP_POTIONBREWER,
+        OVERLAY_TOP_POTIONBREWER_GLOW,
         OVERLAY_TOP_REPLICATOR,
+        OVERLAY_TOP_REPLICATOR_GLOW,
         OVERLAY_TOP_MASSFAB,
+        OVERLAY_TOP_MASSFAB_GLOW,
         OVERLAY_TOP_STEAM_HAMMER,
+        OVERLAY_TOP_STEAM_HAMMER_GLOW,
         OVERLAY_TOP_STEAM_FURNACE,
+        OVERLAY_TOP_STEAM_FURNACE_GLOW,
         OVERLAY_TOP_STEAM_ALLOY_SMELTER,
+        OVERLAY_TOP_STEAM_ALLOY_SMELTER_GLOW,
 
         OVERLAY_TOP_STEAM_MACERATOR,
+        OVERLAY_TOP_STEAM_MACERATOR_GLOW,
         OVERLAY_TOP_STEAM_COMPRESSOR,
+        OVERLAY_TOP_STEAM_COMPRESSOR_GLOW,
         OVERLAY_TOP_STEAM_EXTRACTOR,
+        OVERLAY_TOP_STEAM_EXTRACTOR_GLOW,
         OVERLAY_TOP_DISASSEMBLER,
+        OVERLAY_TOP_DISASSEMBLER_GLOW,
         OVERLAY_TOP_BOXINATOR,
+        OVERLAY_TOP_BOXINATOR_GLOW,
         OVERLAY_TOP_ROCK_BREAKER,
+        OVERLAY_TOP_ROCK_BREAKER_GLOW,
         OVERLAY_TOP_SCANNER,
+        OVERLAY_TOP_SCANNER_GLOW,
 
         OVERLAY_FRONT_POTIONBREWER,
+        OVERLAY_FRONT_POTIONBREWER_GLOW,
         OVERLAY_FRONT_REPLICATOR,
+        OVERLAY_FRONT_REPLICATOR_GLOW,
         OVERLAY_FRONT_MASSFAB,
+        OVERLAY_FRONT_MASSFAB_GLOW,
         OVERLAY_FRONT_STEAM_HAMMER,
+        OVERLAY_FRONT_STEAM_HAMMER_GLOW,
+        OVERLAY_FRONT_STEAM_HAMMER_ACTIVE,
+        OVERLAY_FRONT_STEAM_HAMMER_ACTIVE_GLOW,
         OVERLAY_FRONT_STEAM_FURNACE,
+        OVERLAY_FRONT_STEAM_FURNACE_GLOW,
         OVERLAY_FRONT_STEAM_ALLOY_SMELTER,
+        OVERLAY_FRONT_STEAM_ALLOY_SMELTER_GLOW,
 
         OVERLAY_FRONT_STEAM_MACERATOR,
+        OVERLAY_FRONT_STEAM_MACERATOR_GLOW,
+        OVERLAY_FRONT_STEAM_MACERATOR_ACTIVE,
+        OVERLAY_FRONT_STEAM_MACERATOR_ACTIVE_GLOW,
         OVERLAY_FRONT_STEAM_COMPRESSOR,
+        OVERLAY_FRONT_STEAM_COMPRESSOR_GLOW,
         OVERLAY_FRONT_STEAM_EXTRACTOR,
+        OVERLAY_FRONT_STEAM_EXTRACTOR_GLOW,
         OVERLAY_FRONT_DISASSEMBLER,
+        OVERLAY_FRONT_DISASSEMBLER_GLOW,
+        OVERLAY_FRONT_DISASSEMBLER_ACTIVE,
+        OVERLAY_FRONT_DISASSEMBLER_ACTIVE_GLOW,
         OVERLAY_FRONT_BOXINATOR,
+        OVERLAY_FRONT_BOXINATOR_GLOW,
         OVERLAY_FRONT_ROCK_BREAKER,
+        OVERLAY_FRONT_ROCK_BREAKER_GLOW,
 
         OVERLAY_FRONT_SCANNER,
+        OVERLAY_FRONT_SCANNER_GLOW,
         OVERLAY_BOTTOM_POTIONBREWER,
+        OVERLAY_BOTTOM_POTIONBREWER_GLOW,
         OVERLAY_BOTTOM_REPLICATOR,
+        OVERLAY_BOTTOM_REPLICATOR_GLOW,
         OVERLAY_BOTTOM_MASSFAB,
+        OVERLAY_BOTTOM_MASSFAB_GLOW,
         OVERLAY_BOTTOM_STEAM_HAMMER,
+        OVERLAY_BOTTOM_STEAM_HAMMER_GLOW,
         OVERLAY_BOTTOM_STEAM_FURNACE,
+        OVERLAY_BOTTOM_STEAM_FURNACE_GLOW,
 
         OVERLAY_BOTTOM_STEAM_ALLOY_SMELTER,
+        OVERLAY_BOTTOM_STEAM_ALLOY_SMELTER_GLOW,
         OVERLAY_BOTTOM_STEAM_MACERATOR,
+        OVERLAY_BOTTOM_STEAM_MACERATOR_GLOW,
         OVERLAY_BOTTOM_STEAM_COMPRESSOR,
+        OVERLAY_BOTTOM_STEAM_COMPRESSOR_GLOW,
         OVERLAY_BOTTOM_STEAM_EXTRACTOR,
+        OVERLAY_BOTTOM_STEAM_EXTRACTOR_GLOW,
         OVERLAY_BOTTOM_DISASSEMBLER,
+        OVERLAY_BOTTOM_DISASSEMBLER_GLOW,
 
         OVERLAY_BOTTOM_BOXINATOR,
+        OVERLAY_BOTTOM_BOXINATOR_GLOW,
         OVERLAY_BOTTOM_ROCK_BREAKER,
+        OVERLAY_BOTTOM_ROCK_BREAKER_GLOW,
         OVERLAY_BOTTOM_SCANNER,
+        OVERLAY_BOTTOM_SCANNER_GLOW,
         OVERLAY_SIDE_POTIONBREWER,
+        OVERLAY_SIDE_POTIONBREWER_GLOW,
         OVERLAY_SIDE_REPLICATOR,
+        OVERLAY_SIDE_REPLICATOR_GLOW,
         OVERLAY_SIDE_MASSFAB,
+        OVERLAY_SIDE_MASSFAB_GLOW,
         OVERLAY_SIDE_STEAM_HAMMER,
+        OVERLAY_SIDE_STEAM_HAMMER_GLOW,
 
         OVERLAY_SIDE_STEAM_FURNACE,
+        OVERLAY_SIDE_STEAM_FURNACE_GLOW,
         OVERLAY_SIDE_STEAM_ALLOY_SMELTER,
+        OVERLAY_SIDE_STEAM_ALLOY_SMELTER_GLOW,
         OVERLAY_SIDE_STEAM_MACERATOR,
+        OVERLAY_SIDE_STEAM_MACERATOR_GLOW,
         OVERLAY_SIDE_STEAM_COMPRESSOR,
+        OVERLAY_SIDE_STEAM_COMPRESSOR_GLOW,
         OVERLAY_SIDE_STEAM_EXTRACTOR,
+        OVERLAY_SIDE_STEAM_EXTRACTOR_GLOW,
         OVERLAY_SIDE_DISASSEMBLER,
+        OVERLAY_SIDE_DISASSEMBLER_GLOW,
 
         OVERLAY_SIDE_BOXINATOR,
+        OVERLAY_SIDE_BOXINATOR_GLOW,
         OVERLAY_SIDE_ROCK_BREAKER,
+        OVERLAY_SIDE_ROCK_BREAKER_GLOW,
         OVERLAY_SIDE_SCANNER,
+        OVERLAY_SIDE_SCANNER_GLOW,
         OVERLAY_TOP_POTIONBREWER_ACTIVE,
+        OVERLAY_TOP_POTIONBREWER_ACTIVE_GLOW,
         OVERLAY_TOP_REPLICATOR_ACTIVE,
+        OVERLAY_TOP_REPLICATOR_ACTIVE_GLOW,
         OVERLAY_TOP_MASSFAB_ACTIVE,
+        OVERLAY_TOP_MASSFAB_ACTIVE_GLOW,
 
         OVERLAY_TOP_STEAM_HAMMER_ACTIVE,
+        OVERLAY_TOP_STEAM_HAMMER_ACTIVE_GLOW,
         OVERLAY_TOP_STEAM_FURNACE_ACTIVE,
+        OVERLAY_TOP_STEAM_FURNACE_ACTIVE_GLOW,
         OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE,
+        OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE_GLOW,
         OVERLAY_TOP_STEAM_MACERATOR_ACTIVE,
+        OVERLAY_TOP_STEAM_MACERATOR_ACTIVE_GLOW,
         OVERLAY_TOP_STEAM_COMPRESSOR_ACTIVE,
+        OVERLAY_TOP_STEAM_COMPRESSOR_ACTIVE_GLOW,
 
         OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE,
+        OVERLAY_TOP_STEAM_EXTRACTOR_ACTIVE_GLOW,
         OVERLAY_TOP_DISASSEMBLER_ACTIVE,
+        OVERLAY_TOP_DISASSEMBLER_ACTIVE_GLOW,
         OVERLAY_TOP_BOXINATOR_ACTIVE,
+        OVERLAY_TOP_BOXINATOR_ACTIVE_GLOW,
         OVERLAY_TOP_ROCK_BREAKER_ACTIVE,
+        OVERLAY_TOP_ROCK_BREAKER_ACTIVE_GLOW,
         OVERLAY_TOP_SCANNER_ACTIVE,
+        OVERLAY_TOP_SCANNER_ACTIVE_GLOW,
         OVERLAY_FRONT_POTIONBREWER_ACTIVE,
+        OVERLAY_FRONT_POTIONBREWER_ACTIVE_GLOW,
 
         OVERLAY_FRONT_REPLICATOR_ACTIVE,
+        OVERLAY_FRONT_REPLICATOR_ACTIVE_GLOW,
         OVERLAY_FRONT_MASSFAB_ACTIVE,
-        OVERLAY_FRONT_STEAM_HAMMER_ACTIVE,
+        OVERLAY_FRONT_MASSFAB_ACTIVE_GLOW,
         OVERLAY_FRONT_STEAM_FURNACE_ACTIVE,
+        OVERLAY_FRONT_STEAM_FURNACE_ACTIVE_GLOW,
         OVERLAY_FRONT_STEAM_ALLOY_SMELTER_ACTIVE,
+        OVERLAY_FRONT_STEAM_ALLOY_SMELTER_ACTIVE_GLOW,
 
-        OVERLAY_FRONT_STEAM_MACERATOR_ACTIVE,
         OVERLAY_FRONT_STEAM_COMPRESSOR_ACTIVE,
+        OVERLAY_FRONT_STEAM_COMPRESSOR_ACTIVE_GLOW,
         OVERLAY_FRONT_STEAM_EXTRACTOR_ACTIVE,
-        OVERLAY_FRONT_DISASSEMBLER_ACTIVE,
+        OVERLAY_FRONT_STEAM_EXTRACTOR_ACTIVE_GLOW,
         OVERLAY_FRONT_BOXINATOR_ACTIVE,
+        OVERLAY_FRONT_BOXINATOR_ACTIVE_GLOW,
 
         OVERLAY_FRONT_ROCK_BREAKER_ACTIVE,
+        OVERLAY_FRONT_ROCK_BREAKER_ACTIVE_GLOW,
         OVERLAY_FRONT_SCANNER_ACTIVE,
+        OVERLAY_FRONT_SCANNER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_POTIONBREWER_ACTIVE,
+        OVERLAY_BOTTOM_POTIONBREWER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_REPLICATOR_ACTIVE,
+        OVERLAY_BOTTOM_REPLICATOR_ACTIVE_GLOW,
         OVERLAY_BOTTOM_MASSFAB_ACTIVE,
+        OVERLAY_BOTTOM_MASSFAB_ACTIVE_GLOW,
 
         OVERLAY_BOTTOM_STEAM_HAMMER_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_HAMMER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_STEAM_FURNACE_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_FURNACE_ACTIVE_GLOW,
         OVERLAY_BOTTOM_STEAM_ALLOY_SMELTER_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_ALLOY_SMELTER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_STEAM_MACERATOR_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_MACERATOR_ACTIVE_GLOW,
         OVERLAY_BOTTOM_STEAM_COMPRESSOR_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_COMPRESSOR_ACTIVE_GLOW,
 
         OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE,
+        OVERLAY_BOTTOM_STEAM_EXTRACTOR_ACTIVE_GLOW,
         OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE,
+        OVERLAY_BOTTOM_DISASSEMBLER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_BOXINATOR_ACTIVE,
+        OVERLAY_BOTTOM_BOXINATOR_ACTIVE_GLOW,
         OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE,
+        OVERLAY_BOTTOM_ROCK_BREAKER_ACTIVE_GLOW,
         OVERLAY_BOTTOM_SCANNER_ACTIVE,
+        OVERLAY_BOTTOM_SCANNER_ACTIVE_GLOW,
 
         OVERLAY_SIDE_POTIONBREWER_ACTIVE,
+        OVERLAY_SIDE_POTIONBREWER_ACTIVE_GLOW,
         OVERLAY_SIDE_REPLICATOR_ACTIVE,
+        OVERLAY_SIDE_REPLICATOR_ACTIVE_GLOW,
         OVERLAY_SIDE_MASSFAB_ACTIVE,
+        OVERLAY_SIDE_MASSFAB_ACTIVE_GLOW,
         OVERLAY_SIDE_STEAM_HAMMER_ACTIVE,
+        OVERLAY_SIDE_STEAM_HAMMER_ACTIVE_GLOW,
         OVERLAY_SIDE_STEAM_FURNACE_ACTIVE,
+        OVERLAY_SIDE_STEAM_FURNACE_ACTIVE_GLOW,
         OVERLAY_SIDE_STEAM_ALLOY_SMELTER_ACTIVE,
+        OVERLAY_SIDE_STEAM_ALLOY_SMELTER_ACTIVE_GLOW,
 
         OVERLAY_SIDE_STEAM_MACERATOR_ACTIVE,
+        OVERLAY_SIDE_STEAM_MACERATOR_ACTIVE_GLOW,
         OVERLAY_SIDE_STEAM_COMPRESSOR_ACTIVE,
+        OVERLAY_SIDE_STEAM_COMPRESSOR_ACTIVE_GLOW,
         OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE,
+        OVERLAY_SIDE_STEAM_EXTRACTOR_ACTIVE_GLOW,
         OVERLAY_SIDE_DISASSEMBLER_ACTIVE,
+        OVERLAY_SIDE_DISASSEMBLER_ACTIVE_GLOW,
         OVERLAY_SIDE_BOXINATOR_ACTIVE,
+        OVERLAY_SIDE_BOXINATOR_ACTIVE_GLOW,
 
         OVERLAY_SIDE_ROCK_BREAKER_ACTIVE,
+        OVERLAY_SIDE_ROCK_BREAKER_ACTIVE_GLOW,
         OVERLAY_SIDE_SCANNER_ACTIVE,
+        OVERLAY_SIDE_SCANNER_ACTIVE_GLOW,
         OVERLAY_ADV_PUMP,
         OVERLAY_TELEPORTER,
+        OVERLAY_TELEPORTER_GLOW,
         OVERLAY_TELEPORTER_ACTIVE,
+        OVERLAY_TELEPORTER_ACTIVE_GLOW,
+        OVERLAY_TELEPORTER_SIDES,
+        OVERLAY_TELEPORTER_SIDES_GLOW,
         FUSIONI_1,
         FUSIONI_2,
         FUSIONI_3,
@@ -865,33 +1064,57 @@ public class Textures {
         BASALT_BRICKS_CHISELED,
         BASALT_SMOOTH,
         OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE,
+        OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW,
         OVERLAY_FRONT_HEAT_EXCHANGER,
+        OVERLAY_FRONT_HEAT_EXCHANGER_GLOW,
         OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE,
+        OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW,
 
         OVERLAY_FRONT_PROCESSING_ARRAY,
+        OVERLAY_FRONT_PROCESSING_ARRAY_GLOW,
         OVERLAY_FRONT_OIL_DRILL_ACTIVE,
+        OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW,
         OVERLAY_FRONT_OIL_DRILL,
+        OVERLAY_FRONT_OIL_DRILL_GLOW,
         OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE,
+        OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW,
         OVERLAY_FRONT_DIESEL_ENGINE,
+        OVERLAY_FRONT_DIESEL_ENGINE_GLOW,
         OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE,
+        OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW,
         OVERLAY_FRONT_EXTREME_DIESEL_ENGINE,
+        OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW,
         OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE,
+        OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW,
 
         OVERLAY_FRONT_PYROLYSE_OVEN,
+        OVERLAY_FRONT_PYROLYSE_OVEN_GLOW,
         OVERLAY_FRONT_OIL_CRACKER_ACTIVE,
+        OVERLAY_FRONT_OIL_CRACKER_ACTIVE_GLOW,
         OVERLAY_FRONT_OIL_CRACKER,
+        OVERLAY_FRONT_OIL_CRACKER_GLOW,
         OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE,
+        OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW,
         OVERLAY_FRONT_DISTILLATION_TOWER,
+        OVERLAY_FRONT_DISTILLATION_TOWER_GLOW,
 
         OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE,
+        OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW,
         OVERLAY_FRONT_ASSEMBLY_LINE,
+        OVERLAY_FRONT_ASSEMBLY_LINE_GLOW,
         OVERLAY_FRONT_ORE_DRILL_ACTIVE,
+        OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW,
         OVERLAY_FRONT_ORE_DRILL,
+        OVERLAY_FRONT_ORE_DRILL_GLOW,
         OVERLAY_TOP_CLEANROOM_ACTIVE,
+        OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW,
         OVERLAY_TOP_CLEANROOM,
+        OVERLAY_TOP_CLEANROOM_GLOW,
 
         OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR,
+        OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW,
         OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE,
+        OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW,
 
         PIPE_RESTRICTOR_UP,
         PIPE_RESTRICTOR_DOWN,
@@ -914,37 +1137,37 @@ public class Textures {
         /**
          * Icon for Fresh CFoam
          */
-        public static final ITexture[] FRESHFOAM = new ITexture[]{new GT_RenderedTexture(CFOAM_FRESH)};
+        public static final ITexture[] FRESHFOAM = {TextureFactory.of(CFOAM_FRESH)};
         /**
          * Icons for Hardened CFoam
          * 0 = No Color
          * 1 - 16 = Colors
          */
-        public static final ITexture[][] HARDENEDFOAMS = new ITexture[][]{
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.CONSTRUCTION_FOAM.mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[0].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[1].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[2].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[3].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[4].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[5].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[6].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[7].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[8].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[9].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[10].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[11].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[12].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[13].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[14].mRGBa)},
-                new ITexture[]{new GT_RenderedTexture(CFOAM_HARDENED, Dyes.VALUES[15].mRGBa)}
+        public static final ITexture[][] HARDENEDFOAMS = {
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.CONSTRUCTION_FOAM.mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[0].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[1].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[2].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[3].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[4].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[5].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[6].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[7].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[8].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[9].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[10].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[11].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[12].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[13].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[14].mRGBa)},
+                new ITexture[]{TextureFactory.of(CFOAM_HARDENED, Dyes.VALUES[15].mRGBa)}
         };
         /**
          * Machine Casings by Tier
          * 0 = 8V, 1 = LV, 2 = MV, 3 = HV, 4 = EV, 5 = IV, 6 = IV, 7 = IV, 8 = IV, 9 = IV
          */
         public static final IIconContainer[]
-                MACHINECASINGS_SIDE = new IIconContainer[]{
+                MACHINECASINGS_SIDE = {
                 MACHINE_8V_SIDE,
                 MACHINE_LV_SIDE,
                 MACHINE_MV_SIDE,
@@ -962,7 +1185,7 @@ public class Textures {
                 MACHINE_OPV_SIDE,
                 MACHINE_MAXV_SIDE,
         },
-                MACHINECASINGS_TOP = new IIconContainer[]{
+                MACHINECASINGS_TOP = {
                         MACHINE_8V_TOP,
                         MACHINE_LV_TOP,
                         MACHINE_MV_TOP,
@@ -980,7 +1203,7 @@ public class Textures {
                         MACHINE_OPV_TOP,
                         MACHINE_MAXV_TOP,
                 },
-                MACHINECASINGS_BOTTOM = new IIconContainer[]{
+                MACHINECASINGS_BOTTOM = {
                         MACHINE_8V_BOTTOM,
                         MACHINE_LV_BOTTOM,
                         MACHINE_MV_BOTTOM,
@@ -998,7 +1221,7 @@ public class Textures {
                         MACHINE_OPV_BOTTOM,
                         MACHINE_MAXV_BOTTOM,
                 },
-                GRANITES = new IIconContainer[]{
+                GRANITES = {
                         GRANITE_BLACK_STONE,
                         GRANITE_BLACK_COBBLE,
                         GRANITE_BLACK_COBBLE_MOSSY,
@@ -1016,7 +1239,7 @@ public class Textures {
                         GRANITE_RED_BRICKS_CHISELED,
                         GRANITE_RED_SMOOTH,
                 },
-                CONCRETES = new IIconContainer[]{
+                CONCRETES = {
                         CONCRETE_DARK_STONE,
                         CONCRETE_DARK_COBBLE,
                         CONCRETE_DARK_COBBLE_MOSSY,
@@ -1034,7 +1257,7 @@ public class Textures {
                         CONCRETE_LIGHT_BRICKS_CHISELED,
                         CONCRETE_LIGHT_SMOOTH,
                 },
-                STONES = new IIconContainer[]{
+                STONES = {
                         MARBLE_STONE,
                         MARBLE_COBBLE,
                         MARBLE_COBBLE_MOSSY,
@@ -1052,7 +1275,7 @@ public class Textures {
                         BASALT_BRICKS_CHISELED,
                         BASALT_SMOOTH,
                 },
-                TURBINE = new IIconContainer[]{
+                TURBINE = {
                         LARGETURBINE_ST1,
                         LARGETURBINE_ST2,
                         LARGETURBINE_ST3,
@@ -1063,7 +1286,7 @@ public class Textures {
                         LARGETURBINE_ST8,
                         LARGETURBINE_ST9
                 },
-                TURBINE_ACTIVE = new IIconContainer[]{
+                TURBINE_ACTIVE = {
                         LARGETURBINE_ST_ACTIVE1,
                         LARGETURBINE_ST_ACTIVE2,
                         LARGETURBINE_ST_ACTIVE3,
@@ -1074,7 +1297,7 @@ public class Textures {
                         LARGETURBINE_ST_ACTIVE8,
                         LARGETURBINE_ST_ACTIVE9
                 },
-                TURBINE1 = new IIconContainer[]{
+                TURBINE1 = {
                         LARGETURBINE_SS1,
                         LARGETURBINE_SS2,
                         LARGETURBINE_SS3,
@@ -1085,7 +1308,7 @@ public class Textures {
                         LARGETURBINE_SS8,
                         LARGETURBINE_SS9
                 },
-                TURBINE_ACTIVE1 = new IIconContainer[]{
+                TURBINE_ACTIVE1 = {
                         LARGETURBINE_SS_ACTIVE1,
                         LARGETURBINE_SS_ACTIVE2,
                         LARGETURBINE_SS_ACTIVE3,
@@ -1096,7 +1319,7 @@ public class Textures {
                         LARGETURBINE_SS_ACTIVE8,
                         LARGETURBINE_SS_ACTIVE9
                 },
-                TURBINE2 = new IIconContainer[]{
+                TURBINE2 = {
                         LARGETURBINE_TI1,
                         LARGETURBINE_TI2,
                         LARGETURBINE_TI3,
@@ -1107,7 +1330,7 @@ public class Textures {
                         LARGETURBINE_TI8,
                         LARGETURBINE_TI9
                 },
-                TURBINE_ACTIVE2 = new IIconContainer[]{
+                TURBINE_ACTIVE2 = {
                         LARGETURBINE_TI_ACTIVE1,
                         LARGETURBINE_TI_ACTIVE2,
                         LARGETURBINE_TI_ACTIVE3,
@@ -1118,7 +1341,7 @@ public class Textures {
                         LARGETURBINE_TI_ACTIVE8,
                         LARGETURBINE_TI_ACTIVE9
                 },
-                TURBINE3 = new IIconContainer[]{
+                TURBINE3 = {
                         LARGETURBINE_TU1,
                         LARGETURBINE_TU2,
                         LARGETURBINE_TU3,
@@ -1129,7 +1352,7 @@ public class Textures {
                         LARGETURBINE_TU8,
                         LARGETURBINE_TU9
                 },
-                TURBINE_ACTIVE3 = new IIconContainer[]{
+                TURBINE_ACTIVE3 = {
                         LARGETURBINE_TU_ACTIVE1,
                         LARGETURBINE_TU_ACTIVE2,
                         LARGETURBINE_TU_ACTIVE3,
@@ -1140,7 +1363,7 @@ public class Textures {
                         LARGETURBINE_TU_ACTIVE8,
                         LARGETURBINE_TU_ACTIVE9
                 },
-                CONNECTED_HULLS = new IIconContainer[]{
+                CONNECTED_HULLS = {
                         CONCRETE_DARK_STONE,
                         FUSIONI_1,
                         FUSIONI_2,
@@ -1167,7 +1390,7 @@ public class Textures {
                         FUSIONII_11,
                         FUSIONII_12,
                 },
-                STORAGE_BLOCKS1 = new IIconContainer[]{
+                STORAGE_BLOCKS1 = {
                         BLOCK_ADAMANTIUM,
                         BLOCK_ALUMINIUM,
                         BLOCK_AMERICIUM,
@@ -1185,7 +1408,7 @@ public class Textures {
                         BLOCK_BLUESTEEL,
                         BLOCK_BRASS
                 },
-                STORAGE_BLOCKS2 = new IIconContainer[]{
+                STORAGE_BLOCKS2 = {
                         BLOCK_BRONZE,
                         BLOCK_CAESIUM,
                         BLOCK_CERIUM,
@@ -1203,7 +1426,7 @@ public class Textures {
                         BLOCK_DYSPROSIUM,
                         BLOCK_ELECTRUM
                 },
-                STORAGE_BLOCKS3 = new IIconContainer[]{
+                STORAGE_BLOCKS3 = {
                         BLOCK_ELECTRUMFLUX,
                         BLOCK_ENDERIUM,
                         BLOCK_ERBIUM,
@@ -1221,7 +1444,7 @@ public class Textures {
                         BLOCK_IRONWOOD,
                         BLOCK_KANTHAL
                 },
-                STORAGE_BLOCKS4 = new IIconContainer[]{
+                STORAGE_BLOCKS4 = {
                         BLOCK_KNIGHTMETAL,
                         BLOCK_LANTHANUM,
                         BLOCK_LEAD,
@@ -1239,7 +1462,7 @@ public class Textures {
                         BLOCK_NAQUADAHENRICHED,
                         BLOCK_NAQUADRIA
                 },
-                STORAGE_BLOCKS5 = new IIconContainer[]{
+                STORAGE_BLOCKS5 = {
                         BLOCK_NEODYMIUM,
                         BLOCK_NEODYMIUMMAGNETIC,
                         BLOCK_NEUTRONIUM,
@@ -1257,7 +1480,7 @@ public class Textures {
                         BLOCK_PLUTONIUM241,
                         BLOCK_PRASEODYMIUM
                 },
-                STORAGE_BLOCKS6 = new IIconContainer[]{
+                STORAGE_BLOCKS6 = {
                         BLOCK_PROMETHIUM,
                         BLOCK_REDALLOY,
                         BLOCK_REDSTEEL,
@@ -1275,7 +1498,7 @@ public class Textures {
                         BLOCK_STEELMAGNETIC,
                         BLOCK_STERLINGSILVER
                 },
-                STORAGE_BLOCKS7 = new IIconContainer[]{
+                STORAGE_BLOCKS7 = {
                         BLOCK_SUNNARIUM,
                         BLOCK_TANTALUM,
                         BLOCK_TELLURIUM,
@@ -1293,7 +1516,7 @@ public class Textures {
                         BLOCK_URANIUM,
                         BLOCK_URANIUM235
                 },
-                STORAGE_BLOCKS8 = new IIconContainer[]{
+                STORAGE_BLOCKS8 = {
                         BLOCK_VANADIUM,
                         BLOCK_VANADIUMGALLIUM,
                         BLOCK_WROUGHTIRON,
@@ -1311,7 +1534,7 @@ public class Textures {
                         BLOCK_FIRESTONE,
                         BLOCK_SHADOW
                 },
-                STORAGE_BLOCKS9 = new IIconContainer[]{
+                STORAGE_BLOCKS9 = {
                         BLOCK_AERCRYSTAL,
                         BLOCK_AMBER,
                         BLOCK_AMETHYST,
@@ -1329,7 +1552,7 @@ public class Textures {
                         BLOCK_IGNISCRYSTAL,
                         BLOCK_JASPER
                 },
-                STORAGE_BLOCKS10 = new IIconContainer[]{
+                STORAGE_BLOCKS10 = {
                         BLOCK_LAZURITE,
                         BLOCK_LIGNITE,
                         BLOCK_MONAZITE,
@@ -1347,7 +1570,7 @@ public class Textures {
                         BLOCK_TANZANITE,
                         BLOCK_TERRACRYSTAL
                 },
-                STORAGE_BLOCKS11 = new IIconContainer[]{
+                STORAGE_BLOCKS11 = {
                         BLOCK_TOPAZ,
                         BLOCK_VINTEUM,
                         BLOCK_YELLOWGARNET,
@@ -1355,136 +1578,136 @@ public class Textures {
                         BLOCK_CHARCOAL,
                         BLOCK_BLAZE
                 };
-        public static ITexture[] HIDDEN_TEXTURE = new ITexture[]{
-                new GT_StdRenderedTexture(BlockIcons.HIDDEN_FACE)
+        public static ITexture[] HIDDEN_TEXTURE = {
+                TextureFactory.builder().addIcon(HIDDEN_FACE).stdOrient().build()
         };
         public static ITexture[]
-                ERROR_RENDERING = new ITexture[]{
-                new GT_RenderedTexture(RENDERING_ERROR)
+                ERROR_RENDERING = {
+                TextureFactory.of(RENDERING_ERROR)
         };
-        public static ITexture[] OVERLAYS_ENERGY_IN = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_IN = {
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] OVERLAYS_ENERGY_OUT = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_OUT = {
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] OVERLAYS_ENERGY_IN_MULTI = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_MULTI, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_IN_MULTI = {
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_MULTI, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] OVERLAYS_ENERGY_OUT_MULTI = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_MULTI, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_OUT_MULTI = {
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_MULTI, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] OVERLAYS_ENERGY_IN_POWER = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_IN_POWER, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_IN_POWER = {
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_IN_POWER, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] OVERLAYS_ENERGY_OUT_POWER = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 180, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 220, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 100, 0, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 255, 30, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{128, 128, 128, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{240, 240, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{200, 200, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{160, 160, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{140, 140, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{120, 120, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{100, 100, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{80, 80, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{60, 60, 245, 0}),
-                new GT_RenderedTexture(OVERLAY_ENERGY_OUT_POWER, new short[]{40, 40, 245, 0}),
+        public static ITexture[] OVERLAYS_ENERGY_OUT_POWER = {
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 180, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 220, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 100, 0, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{255, 255, 30, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{128, 128, 128, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{240, 240, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{220, 220, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{200, 200, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{180, 180, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{160, 160, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{140, 140, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{120, 120, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{100, 100, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{80, 80, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{60, 60, 245, 0}),
+                TextureFactory.of(OVERLAY_ENERGY_OUT_POWER, new short[]{40, 40, 245, 0}),
         };
-        public static ITexture[] LOCKERS = new ITexture[]{
-                new GT_RenderedTexture(OVERLAY_LOCKER_000),
-                new GT_RenderedTexture(OVERLAY_LOCKER_001),
-                new GT_RenderedTexture(OVERLAY_LOCKER_002),
-                new GT_RenderedTexture(OVERLAY_LOCKER_003),
-                new GT_RenderedTexture(OVERLAY_LOCKER_004),
-                new GT_RenderedTexture(OVERLAY_LOCKER_005),
-                new GT_RenderedTexture(OVERLAY_LOCKER_006),
-                new GT_RenderedTexture(OVERLAY_LOCKER_007),
-                new GT_RenderedTexture(OVERLAY_LOCKER_008),
-                new GT_RenderedTexture(OVERLAY_LOCKER_009),
-                new GT_RenderedTexture(OVERLAY_LOCKER_010),
-                new GT_RenderedTexture(OVERLAY_LOCKER_011),
-                new GT_RenderedTexture(OVERLAY_LOCKER_012),
-                new GT_RenderedTexture(OVERLAY_LOCKER_013),
+        public static ITexture[] LOCKERS = {
+                TextureFactory.of(OVERLAY_LOCKER_000),
+                TextureFactory.of(OVERLAY_LOCKER_001),
+                TextureFactory.of(OVERLAY_LOCKER_002),
+                TextureFactory.of(OVERLAY_LOCKER_003),
+                TextureFactory.of(OVERLAY_LOCKER_004),
+                TextureFactory.of(OVERLAY_LOCKER_005),
+                TextureFactory.of(OVERLAY_LOCKER_006),
+                TextureFactory.of(OVERLAY_LOCKER_007),
+                TextureFactory.of(OVERLAY_LOCKER_008),
+                TextureFactory.of(OVERLAY_LOCKER_009),
+                TextureFactory.of(OVERLAY_LOCKER_010),
+                TextureFactory.of(OVERLAY_LOCKER_011),
+                TextureFactory.of(OVERLAY_LOCKER_012),
+                TextureFactory.of(OVERLAY_LOCKER_013),
         };
         /**
          * USE casingTexturePages[page] instead of CASING_BLOCKS since it is casingTexturePages[0]
@@ -1497,30 +1720,35 @@ public class Textures {
          */
         public static ITexture[][] casingTexturePages = new ITexture[128][];//page holder so we don't make an short long array
 
-        public static ITexture getCasingTextureForId(int id){
-            return casingTexturePages[(id>>7)&0x7f][id&0x7f];
-        }
-        public static void setCasingTextureForId(int id,ITexture iTexture){
-            casingTexturePages[(id>>7)&0x7f][id&0x7f]=iTexture;
-        }
-        public static void setCasingTexture(byte page,byte index,ITexture iTexture){
-            casingTexturePages[page][index]=iTexture;
-        }
-
         static {
             for (byte i = 0; i < MACHINE_CASINGS.length; i++)
                 for (byte j = 0; j < MACHINE_CASINGS[i].length; j++)
-                    MACHINE_CASINGS[i][j] = new GT_SidedTexture(MACHINECASINGS_BOTTOM[i], MACHINECASINGS_TOP[i], MACHINECASINGS_SIDE[i], Dyes.getModulation(j - 1, Dyes.MACHINE_METAL.mRGBa));
-            casingTexturePages[0] = CASING_BLOCKS;
+                    MACHINE_CASINGS[i][j] = TextureFactory.of(
+                            MACHINECASINGS_BOTTOM[i],
+                            MACHINECASINGS_TOP[i],
+                            MACHINECASINGS_SIDE[i], Dyes.getModulation(j - 1, Dyes.MACHINE_METAL.mRGBa));
+            casingTexturePages[0] = new ITexture[128];
             //adds some known pages, modders also can do it...
-            GT_Utility.addTexturePage((byte)1);
-            GT_Utility.addTexturePage((byte)8);
+            GT_Utility.addTexturePage((byte) 1);
+            GT_Utility.addTexturePage((byte) 8);
         }
 
         protected IIcon mIcon;
 
         BlockIcons() {
             GregTech_API.sGTBlockIconload.add(this);
+        }
+
+        public static ITexture getCasingTextureForId(int id) {
+            return casingTexturePages[(id >> 7) & 0x7f][id & 0x7f];
+        }
+
+        public static void setCasingTextureForId(int id, ITexture iTexture) {
+            casingTexturePages[(id >> 7) & 0x7f][id & 0x7f] = iTexture;
+        }
+
+        public static void setCasingTexture(byte page, byte index, ITexture iTexture) {
+            casingTexturePages[page][index] = iTexture;
         }
 
         @Override
@@ -1534,13 +1762,13 @@ public class Textures {
         }
 
         @Override
-        public void run() {
-            mIcon = GregTech_API.sBlockIcons.registerIcon(RES_PATH_BLOCK + "iconsets/" + this);
+        public ResourceLocation getTextureFile() {
+            return TextureMap.locationBlocksTexture;
         }
 
         @Override
-        public ResourceLocation getTextureFile() {
-            return TextureMap.locationBlocksTexture;
+        public void run() {
+            mIcon = GregTech_API.sBlockIcons.registerIcon(RES_PATH_BLOCK + "iconsets/" + this);
         }
 
         public static class CustomIcon implements IIconContainer, Runnable {
@@ -1563,13 +1791,13 @@ public class Textures {
             }
 
             @Override
-            public void run() {
-                mIcon = GregTech_API.sBlockIcons.registerIcon(RES_PATH_BLOCK + mIconName);
+            public ResourceLocation getTextureFile() {
+                return TextureMap.locationBlocksTexture;
             }
 
             @Override
-            public ResourceLocation getTextureFile() {
-                return TextureMap.locationBlocksTexture;
+            public void run() {
+                mIcon = GregTech_API.sBlockIcons.registerIcon(RES_PATH_BLOCK + mIconName);
             }
         }
     }
@@ -1623,7 +1851,7 @@ public class Textures {
         TURBINE_HUGE;
 
         public static final IIconContainer[]
-                DURABILITY_BAR = new IIconContainer[]{
+                DURABILITY_BAR = {
                 DURABILITY_BAR_0,
                 DURABILITY_BAR_1,
                 DURABILITY_BAR_2,
@@ -1634,7 +1862,7 @@ public class Textures {
                 DURABILITY_BAR_7,
                 DURABILITY_BAR_8,
         },
-                ENERGY_BAR = new IIconContainer[]{
+                ENERGY_BAR = {
                         ENERGY_BAR_0,
                         ENERGY_BAR_1,
                         ENERGY_BAR_2,
@@ -1646,7 +1874,7 @@ public class Textures {
                         ENERGY_BAR_8,
                 };
 
-        public static final ITexture[] ERROR_RENDERING = new ITexture[]{new GT_RenderedTexture(RENDERING_ERROR)};
+        public static final ITexture[] ERROR_RENDERING = {TextureFactory.of(RENDERING_ERROR)};
 
         protected IIcon mIcon, mOverlay;
 
@@ -1695,14 +1923,14 @@ public class Textures {
             }
 
             @Override
-            public void run() {
-                mIcon = GregTech_API.sItemIcons.registerIcon(RES_PATH_ITEM + mIconName);
-                mOverlay = GregTech_API.sItemIcons.registerIcon(RES_PATH_ITEM + mIconName + "_OVERLAY");
+            public ResourceLocation getTextureFile() {
+                return TextureMap.locationItemsTexture;
             }
 
             @Override
-            public ResourceLocation getTextureFile() {
-                return TextureMap.locationItemsTexture;
+            public void run() {
+                mIcon = GregTech_API.sItemIcons.registerIcon(RES_PATH_ITEM + mIconName);
+                mOverlay = GregTech_API.sItemIcons.registerIcon(RES_PATH_ITEM + mIconName + "_OVERLAY");
             }
         }
     }

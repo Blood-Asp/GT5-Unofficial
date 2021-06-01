@@ -1,6 +1,5 @@
 package gregtech.common.covers;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.gui.GT_GUICover;
 import gregtech.api.gui.widgets.GT_GuiIcon;
@@ -8,20 +7,15 @@ import gregtech.api.gui.widgets.GT_GuiIconButton;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IMachineProgress;
-import gregtech.api.metatileentity.BaseTileEntity;
-import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraft.world.WorldServer;
-
-import static gregtech.GT_Mod.GT_FML_LOGGER;
 
 public class GT_Cover_ControlsWork extends GT_CoverBehavior {
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if (aTileEntity instanceof IMachineProgress) {
             if (aCoverVariable < 2) {
@@ -46,30 +40,37 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean onCoverRemoval(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, boolean aForced) {
         if ((aTileEntity instanceof IMachineProgress)) {
             ((IMachineProgress) aTileEntity).enableWorking();
@@ -78,6 +79,7 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
         return true;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 5;
         if(aCoverVariable <0){aCoverVariable = 2;}
@@ -100,6 +102,7 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }
@@ -123,10 +126,10 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
         private final int coverID;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         public GUI(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
             super(aTileEntity, 176, 107, GT_Utility.intToStack(aCoverID));
@@ -134,12 +137,11 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
             this.coverID = aCoverID;
             this.coverVariable = aCoverVariable;
 
-            GuiButton b;
-            b = new GT_GuiIconButton(this, 0, startX + spaceX * 0, startY + spaceY * 0, GT_GuiIcon.REDSTONE_ON);
-            b = new GT_GuiIconButton(this, 1, startX + spaceX * 0, startY + spaceY * 1, GT_GuiIcon.REDSTONE_OFF);
-            b = new GT_GuiIconButton(this, 2, startX + spaceX * 0, startY + spaceY * 2, GT_GuiIcon.CROSS);
+            new GT_GuiIconButton(this, 0, startX + spaceX * 0, startY + spaceY * 0, GT_GuiIcon.REDSTONE_ON);
+            new GT_GuiIconButton(this, 1, startX + spaceX * 0, startY + spaceY * 1, GT_GuiIcon.REDSTONE_OFF);
+            new GT_GuiIconButton(this, 2, startX + spaceX * 0, startY + spaceY * 2, GT_GuiIcon.CROSS);
 
-            b = new GT_GuiIconCheckButton(this, 3, startX + spaceX * 0, startY + spaceY * 3, GT_GuiIcon.CHECKMARK, GT_GuiIcon.CROSS);
+            new GT_GuiIconCheckButton(this, 3, startX + spaceX * 0, startY + spaceY * 3, GT_GuiIcon.CHECKMARK, GT_GuiIcon.CROSS).setChecked(aCoverVariable > 2);
         }
 
         @Override
@@ -156,6 +158,7 @@ public class GT_Cover_ControlsWork extends GT_CoverBehavior {
             updateButtons();
         }
 
+        @Override
         public void buttonClicked(GuiButton btn) {
             if (getClickable(btn.id)) {
                 int bID = btn.id;

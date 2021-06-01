@@ -1,9 +1,8 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -11,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import static gregtech.api.enums.GT_Values.V;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredMachineBlock {
     private static final int OUTPUT_INDEX = 0;
@@ -20,6 +20,8 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     private static final int ARROW_UP_INDEX = 4;
     private static final int FRONT_INDEX = 5;
 
+    public int mMaxStackSize = 64;
+    public static int MAX = 8;
     public boolean bOutput = false, bRedstoneIfFull = false, bInvert = false, bStockingMode = false, bSortStacks = false;
     public int mSuccess = 0, mTargetStackSize = 0;
 
@@ -43,18 +45,26 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[ForgeDirection.VALID_DIRECTIONS.length][17][];
         ITexture tIcon = getOverlayIcon();
-        ITexture tOut = new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT);
-        ITexture tUp = new GT_RenderedTexture(Textures.BlockIcons.ARROW_UP);
-        ITexture tDown = new GT_RenderedTexture(Textures.BlockIcons.ARROW_DOWN);
-        ITexture tLeft = new GT_RenderedTexture(Textures.BlockIcons.ARROW_LEFT);
-        ITexture tRight = new GT_RenderedTexture(Textures.BlockIcons.ARROW_RIGHT);
+        ITexture tOut = TextureFactory.of(OVERLAY_PIPE_OUT);
+        ITexture tUp = TextureFactory.of(
+                TextureFactory.of(ARROW_UP),
+                TextureFactory.builder().addIcon(ARROW_UP_GLOW).glow().build());
+        ITexture tDown = TextureFactory.of(
+                TextureFactory.of(ARROW_DOWN),
+                TextureFactory.builder().addIcon(ARROW_DOWN_GLOW).glow().build());
+        ITexture tLeft = TextureFactory.of(
+                TextureFactory.of(ARROW_LEFT),
+                TextureFactory.builder().addIcon(ARROW_LEFT_GLOW).glow().build());
+        ITexture tRight = TextureFactory.of(
+                TextureFactory.of(ARROW_RIGHT),
+                TextureFactory.builder().addIcon(ARROW_RIGHT_GLOW).glow().build());
         for (int i = 0; i < rTextures[0].length; i++) {
-            rTextures[OUTPUT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tOut};
-            rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tRight, tIcon};
-            rTextures[ARROW_DOWN_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tDown, tIcon};
-            rTextures[ARROW_LEFT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tLeft, tIcon};
-            rTextures[ARROW_UP_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tUp, tIcon};
-            rTextures[FRONT_INDEX][i] = new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][i], tIcon};
+            rTextures[OUTPUT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tOut};
+            rTextures[ARROW_RIGHT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tRight, tIcon};
+            rTextures[ARROW_DOWN_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tDown, tIcon};
+            rTextures[ARROW_LEFT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tLeft, tIcon};
+            rTextures[ARROW_UP_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tUp, tIcon};
+            rTextures[FRONT_INDEX][i] = new ITexture[]{MACHINE_CASINGS[mTier][i], tIcon};
         }
         return rTextures;
     }
@@ -225,9 +235,9 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aNBT.hasKey("bStockingMode")) { // Adding new key to existing NBT, need to protect if it is not there.
             bStockingMode = aNBT.getBoolean("bStockingMode");
         }
-	if (aNBT.hasKey("bSortStacks")) {
-	    bSortStacks = aNBT.getBoolean("bSortStacks");
-	}
+	    if (aNBT.hasKey("bSortStacks")) {
+	        bSortStacks = aNBT.getBoolean("bSortStacks");
+	    }
         mTargetStackSize = aNBT.getInteger("mTargetStackSize");
     }
 
@@ -242,7 +252,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aSide == getBaseMetaTileEntity().getBackFacing()) {
         	
             mTargetStackSize = (byte) ((mTargetStackSize + (aPlayer.isSneaking()? -1 : 1)) % 65);
-            if(mTargetStackSize <0){mTargetStackSize = 64;}
+            if(mTargetStackSize <0){mTargetStackSize = mMaxStackSize;}
             if (mTargetStackSize == 0) {
                 GT_Utility.sendChatToPlayer(aPlayer, trans("098","Do not regulate Item Stack Size"));
             } else {
@@ -281,15 +291,19 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
-        int tCost;
-        if( bStockingMode )
-            tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1,1);
-        else
-            tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize,1);
+        moveItems(aBaseMetaTileEntity, aTimer, 1);
+    }
 
-        if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-            mSuccess = 50;
-        }
+    protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer, int stacks) {
+            int tCost;
+            if (bStockingMode)
+                tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, (byte) 64, (byte) 1, stacks);
+            else
+                tCost = GT_Utility.moveMultipleItemStacks(aBaseMetaTileEntity, aBaseMetaTileEntity.getTileEntityAtSide(aBaseMetaTileEntity.getBackFacing()), aBaseMetaTileEntity.getBackFacing(), aBaseMetaTileEntity.getFrontFacing(), null, false, (byte) 64, (byte) 1, mTargetStackSize == 0 ? 64 : (byte) mTargetStackSize, mTargetStackSize == 0 ? 1 : (byte) mTargetStackSize, stacks);
+
+            if (tCost > 0 || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+                mSuccess = 50;
+            }
     }
 
     @Override

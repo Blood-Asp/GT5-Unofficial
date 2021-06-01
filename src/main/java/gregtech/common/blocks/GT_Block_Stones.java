@@ -36,14 +36,17 @@ public class GT_Block_Stones extends GT_Block_Stones_Abstract {
         }
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         return 2;
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return this.blockHardness = Blocks.stone.getBlockHardness(aWorld, aX, aY, aZ) * 3.0F;
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             return gregtech.api.enums.Textures.BlockIcons.STONES[aMeta].getIcon();

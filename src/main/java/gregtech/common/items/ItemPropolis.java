@@ -51,7 +51,8 @@ public class ItemPropolis extends Item {
 	}
 
 
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon("forestry:propolis.0");
 	}

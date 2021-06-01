@@ -101,6 +101,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -245,6 +248,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      */
     public boolean mRenderTileAmbientOcclusion = true;
 
+    /**
+     * This enables rendering of glowing textures
+     */
+    public boolean mRenderGlowTextures = true;
+
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
     public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
@@ -252,6 +260,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     // Locking
     public static ReentrantLock TICK_LOCK = new ReentrantLock();
     
+    private final ConcurrentMap<UUID, GT_ClientPreference> mClientPrefernces = new ConcurrentHashMap<>();
 
     static {
         oreDictBurnTimes.put("dustTinyWood", 11);
@@ -1587,6 +1596,15 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
     }
 
+    public GT_ClientPreference getClientPreference(UUID aPlayerID) {
+        return mClientPrefernces.get(aPlayerID);
+    }
+
+    public void setClientPreference(UUID aPlayerID, GT_ClientPreference aPreference) {
+        mClientPrefernces.put(aPlayerID, aPreference);
+    }
+
+    @Override
     public Object getServerGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
         if(aID>=1000){
             int ID = aID-1000;
@@ -1643,6 +1661,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     }
 
 
+    @Override
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
             return 0;

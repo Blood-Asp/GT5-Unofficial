@@ -12,6 +12,7 @@ public class GT_GuiIconCheckButton extends GT_GuiIconButton {
         this.normalIcon = normalIcon;
     }
 
+    @Override
     public GT_GuiIcon getButtonTexture(boolean mouseOver) {
         if (!enabled)
             return GT_GuiIcon.BUTTON_DISABLED;

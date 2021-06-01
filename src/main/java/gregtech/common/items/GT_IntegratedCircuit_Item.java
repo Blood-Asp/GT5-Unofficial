@@ -24,7 +24,7 @@ import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.RES_PATH_ITEM;
 
 public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
-    private final static String aTextEmptyRow = "   ";
+    private static final String aTextEmptyRow = "   ";
     protected IIcon[] mIconDamage = new IIcon[25];
     public GT_IntegratedCircuit_Item() {
         super("integrated_circuit", "Programmed Circuit", "");
@@ -83,15 +83,18 @@ public class GT_IntegratedCircuit_Item extends GT_Generic_Item {
         return getModeString(aMetaData) + " " + (byte) (aMetaData & 0xFF);
     }
 
+    @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
         aList.add(GT_LanguageManager.addStringLocalization(new StringBuilder().append(getUnlocalizedName()).append(".configuration").toString(), "Configuration: ") + getConfigurationString(getDamage(aStack)));
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack aStack) {
         return getUnlocalizedName();
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public final void getSubItems(Item var1, CreativeTabs aCreativeTab, List aList) {
         aList.add(new ItemStack(this, 1, 0));

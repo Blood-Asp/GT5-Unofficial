@@ -4,7 +4,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
-import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.objects.ItemData;
@@ -324,7 +323,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
                 if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                     oreBlockPositions.add(blockPos);
-            } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+            } else if (GT_Utility.isOre(block, blockMeta))
                 oreBlockPositions.add(blockPos);
         }
     }

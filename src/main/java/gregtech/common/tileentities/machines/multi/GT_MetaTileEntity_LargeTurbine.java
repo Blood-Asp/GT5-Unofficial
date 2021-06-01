@@ -40,6 +40,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         return getMaxEfficiency(aStack) > 0;
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "LargeTurbine.png");
     }
@@ -186,6 +187,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
         return 1;
     }
 
+    @Override
     public int getMaxEfficiency(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) {
             return 0;

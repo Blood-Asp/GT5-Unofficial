@@ -19,6 +19,7 @@ public class ProcessingStone
         OrePrefixes.stone.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         Block aBlock = GT_Utility.getBlockFromStack(aStack);
         switch (aMaterial.mName) {

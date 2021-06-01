@@ -19,6 +19,7 @@ public class ProcessingDye implements IOreRecipeRegistrator {
         OrePrefixes.dye.add(this);
     }
 
+    @Override
     public void registerOre(OrePrefixes aPrefix, Materials aMaterial, String aOreDictName, String aModName, ItemStack aStack) {
         Dyes aDye = Dyes.get(aOreDictName);
         if ((aDye.mIndex >= 0) && (aDye.mIndex < 16) &&

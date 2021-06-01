@@ -8,7 +8,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.items.GT_Generic_Block;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.WorldSpawnedEventBuilder;
@@ -39,8 +39,8 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
 
     public GT_Block_Reinforced(String aName) {
         super(GT_Item_Storage.class, aName, new GT_Material_Reinforced());
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.casingTexturePages[1][i + 80] = new GT_CopiedBlockTexture(this, 6, i);
+        for (int i = 0; i < 16; i++) {
+            Textures.BlockIcons.casingTexturePages[1][i + 80] = TextureFactory.of(this, i);
         }
         setStepSound(soundTypeStone);
         setCreativeTab(GregTech_API.TAB_GREGTECH);
@@ -70,17 +70,19 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         ItemList.Block_NaquadahPlate.set(new ItemStack(this.setHardness(500.0f).setResistance(1000.0f), 1, 10));
         ItemList.Block_NeutroniumPlate.set(new ItemStack(this.setHardness(750.0f).setResistance(2500.0f), 1, 11));
         ItemList.Block_BedrockiumCompressed.set(new ItemStack(this.setHardness(1500.0f).setResistance(5000.0f), 1, 12));
-        GT_ModHandler.addShapelessCraftingRecipe(new ItemStack(Items.coal, 1, 1), new Object[]{ItemList.Block_BrittleCharcoal.get(1, new Object[0])});
-        GT_ModHandler.addCraftingRecipe(ItemList.Block_Powderbarrel.get(1L, new Object[0]),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WSW","GGG","WGW", 'W', OrePrefixes.plate.get(Materials.Wood), 'G', new ItemStack(Items.gunpowder,1),'S',new ItemStack(Items.string,1)});
+        GT_ModHandler.addShapelessCraftingRecipe(new ItemStack(Items.coal, 1, 1), new Object[]{ItemList.Block_BrittleCharcoal.get(1)});
+        GT_ModHandler.addCraftingRecipe(ItemList.Block_Powderbarrel.get(1L),GT_ModHandler.RecipeBits.REVERSIBLE, new Object[]{"WSW","GGG","WGW", 'W', OrePrefixes.plate.get(Materials.Wood), 'G', new ItemStack(Items.gunpowder,1),'S',new ItemStack(Items.string,1)});
         
     }
 
+    @Override
     public String getHarvestTool(int aMeta) {
         if (aMeta == 5 || aMeta == 4 || aMeta == 6 || aMeta == 7) return "axe";
         if (aMeta == 2) return "wrench";
         return "pickaxe";
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         if (aMeta == 4||aMeta == 5 || aMeta == 6 || aMeta == 7) return 1;
         if (aMeta == 2) return 2;
@@ -89,6 +91,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         return 4;
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             switch (aMeta) {
@@ -123,6 +126,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         if (aWorld == null) {
             return 0.0F;
@@ -161,6 +165,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         return Blocks.iron_block.getBlockHardness(aWorld, aX, aY, aZ);
     }
 
+    @Override
     public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ) {
         if (world == null) {
             return 0.0F;
@@ -200,50 +205,62 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         return super.getExplosionResistance(par1Entity, world, x, y, z, explosionX, explosionY, explosionZ);
     }
 
+    @Override
     public String getUnlocalizedName() {
         return this.mUnlocalizedName;
     }
 
+    @Override
     public String getLocalizedName() {
         return StatCollector.translateToLocal(this.mUnlocalizedName + ".name");
     }
 
+    @Override
     public boolean canBeReplacedByLeaves(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return false;
     }
 
+    @Override
     public boolean isNormalCube(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return true;
     }
 
+    @Override
     public boolean renderAsNormalBlock() {
         return true;
     }
 
+    @Override
     public boolean isOpaqueCube() {
         return true;
     }
 
+    @Override
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
         return false;
     }
 
+    @Override
     public int damageDropped(int par1) {
         return par1;
     }
 
+    @Override
     public int getDamageValue(World par1World, int par2, int par3, int par4) {
         return par1World.getBlockMetadata(par2, par3, par4);
     }
 
+    @Override
     public int quantityDropped(Random par1Random) {
         return 1;
     }
 
+    @Override
     public Item getItemDropped(int par1, Random par2Random, int par3) {
         return Item.getItemFromBlock(this);
     }
 
+    @Override
     public void dropBlockAsItemWithChance(World aWorld, int aX, int aY, int aZ, int par5, float chance, int par7) {
         if (par5 == 4) {
             this.dropBlockAsItem(aWorld, aX, aY, aZ, new ItemStack(Items.coal, XSTR_INSTANCE.nextInt(2) + 1, 1));
@@ -252,6 +269,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         }
     }
     
+    @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z)
     {
       if(!world.isRemote && world.getBlockMetadata(x, y, z)==5){
@@ -270,6 +288,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       return super.removedByPlayer(world, player, x, y, z);
     }
     
+    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
       super.onBlockAdded(world, x, y, z);
@@ -278,6 +297,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       }
     }
     
+    @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor)
     {
       if (world.isBlockIndirectlyGettingPowered(x, y, z)&&world.getBlockMetadata(x, y, z)==5) {
@@ -285,6 +305,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       }
     }
     
+    @Override
     public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
       if (!world.isRemote && world.getBlockMetadata(x, y, z)==5){
     	EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, x + 0.5F, y + 0.5F, z + 0.5F, explosion.getExplosivePlacedBy());
@@ -294,6 +315,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       super.onBlockExploded(world, x, y, z, explosion);
     }
     
+    @Override
     public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int side, float xOffset, float yOffset, float zOffset)
     {
       if ((player.getCurrentEquippedItem() != null) && (player.getCurrentEquippedItem().getItem() == Items.flint_and_steel)&&par1World.getBlockMetadata(x, y, z)==5)
@@ -305,10 +327,12 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
       return super.onBlockActivated(par1World, x, y, z, player, side, xOffset, yOffset, zOffset);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister aIconRegister) {
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item aItem, CreativeTabs par2CreativeTabs, List aList) {
         for (int i = 0; i < 16; i++) {
@@ -317,6 +341,7 @@ public class GT_Block_Reinforced extends GT_Generic_Block {
         }
     }
     
+    @Override
     public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
         return !(entity instanceof EntityWither);
     }

@@ -53,7 +53,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public static Materials Bismuth                 = new Materials(  90, TextureSet.SET_METALLIC          ,   6.0F,     64,  1, 1|2  |8   |32|64|128      , 100, 160, 160,   0,   "Bismuth"                 ,   "Bismuth"                       ,    0,       0,        544,    0, false, false,   2,   1,   1, Dyes.dyeCyan        , Element.Bi        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.INSTRUMENTUM, 1)));
     public static Materials Boron                   = new Materials(   9, TextureSet.SET_DULL              ,   1.0F,      0,  2, 1|32                      , 210, 250, 210,   0,   "Boron"                   ,   "Boron"                         ,    0,       0,       2349,    0, false, false,   1,   1,   1, Dyes.dyeWhite       , Element.B         , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 3)));
     public static Materials Caesium                 = new Materials(  62, TextureSet.SET_METALLIC          ,   1.0F,      0,  2, 1|2  |8   |32             , 255, 255, 255,   0,   "Caesium"                 ,   "Caesium"                       ,    0,       0,        301,    0, false, false,   4,   1,   1, Dyes._NULL          , Element.Cs        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
-    public static Materials Calcium                 = new Materials(  26, TextureSet.SET_METALLIC          ,   1.0F,      0,  2, 1         |32             , 255, 245, 245,   0,   "Calcium"                 ,   "Calcium"                       ,    0,       0,       1115,    0, false, false,   4,   1,   1, Dyes.dyePink        , Element.Ca        , Arrays.asList(new TC_AspectStack(TC_Aspects.SANO, 1), new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
+    public static Materials Calcium                 = new Materials(  26, TextureSet.SET_METALLIC          ,   1.0F,      0,  2, 1         |32             , 255, 245, 245,   0,   "Calcium"                 ,   "Calcium"                       ,    0,       0,       1115, 1115,  true, false,   4,   1,   1, Dyes.dyePink        , Element.Ca        , Arrays.asList(new TC_AspectStack(TC_Aspects.SANO, 1), new TC_AspectStack(TC_Aspects.TUTAMEN, 1)));
     public static Materials Carbon                  = new Materials(  10, TextureSet.SET_DULL              ,   1.0F,     64,  2, 1|2    |16|32|64|128      ,  20,  20,  20,   0,   "Carbon"                  ,   "Carbon"                        ,    0,       0,       3800,    0, false, false,   2,   1,   1, Dyes.dyeBlack       , Element.C         , Arrays.asList(new TC_Aspects.TC_AspectStack(TC_Aspects.VITREUS, 1), new TC_AspectStack(TC_Aspects.IGNIS, 1)));
     public static Materials Cadmium                 = new Materials(  55, TextureSet.SET_SHINY             ,   1.0F,      0,  2, 1    |8   |32             ,  50,  50,  60,   0,   "Cadmium"                 ,   "Cadmium"                       ,    0,       0,        594,    0, false, false,   3,   1,   1, Dyes.dyeGray        , Element.Cd        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 1), new TC_AspectStack(TC_Aspects.POTENTIA, 1), new TC_AspectStack(TC_Aspects.VENENUM, 1)));
     public static Materials Cerium                  = new Materials(  65, TextureSet.SET_METALLIC          ,   1.0F,      0,  2, 1|2  |8   |32             , 255, 255, 255,   0,   "Cerium"                  ,   "Cerium"                        ,    0,       0,       1068, 1068,  true, false,   4,   1,   1, Dyes._NULL          , Element.Ce        , Arrays.asList(new TC_AspectStack(TC_Aspects.METALLUM, 2), new TC_AspectStack(TC_Aspects.RADIO, 1)));
@@ -2094,9 +2094,33 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         initMaterialProperties(); //No more material addition or manipulation should be done past this point!
         MATERIALS_ARRAY = MATERIALS_MAP.values().toArray(new Materials[0]); //Generate standard object array. This is a lot faster to loop over.
         VALUES = Arrays.asList(MATERIALS_ARRAY);
-        if (!Loader.isModLoaded("dreamcraft"))
-            if (!GT_Mod.gregtechproxy.mEnableAllComponents)
-                OrePrefixes.initMaterialComponents();
+        if (!Loader.isModLoaded("dreamcraft") && !GT_Mod.gregtechproxy.mEnableAllComponents)
+            OrePrefixes.initMaterialComponents();
+        else {
+            OrePrefixes.ingotHot.mDisabledItems.addAll(
+                    Arrays.stream(Materials.values()).parallel()
+                            .filter(OrePrefixes.ingotHot::doGenerateItem)
+                            .filter(m -> m.mBlastFurnaceTemp < 1750 && m.mAutoGenerateBlastFurnaceRecipes)
+                            .collect(Collectors.toSet())
+            );
+            OrePrefixes.ingotHot.disableComponent(Materials.Reinforced);
+            OrePrefixes.ingotHot.disableComponent(Materials.ConductiveIron);
+            OrePrefixes.ingotHot.disableComponent(Materials.FierySteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.ElectricalSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.EndSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.Soularium);
+            OrePrefixes.ingotHot.disableComponent(Materials.EnergeticSilver);
+            OrePrefixes.ingotHot.disableComponent(Materials.Cheese);
+            OrePrefixes.ingotHot.disableComponent(Materials.Calcium);
+            OrePrefixes.ingotHot.disableComponent(Materials.Flerovium);
+            OrePrefixes.ingotHot.disableComponent(Materials.Cobalt);
+            OrePrefixes.ingotHot.disableComponent(Materials.RedstoneAlloy);
+            OrePrefixes.ingotHot.disableComponent(Materials.Ardite);
+            OrePrefixes.ingotHot.disableComponent(Materials.DarkSteel);
+            OrePrefixes.ingotHot.disableComponent(Materials.EnergeticAlloy);
+            OrePrefixes.ingotHot.disableComponent(Materials.PulsatingIron);
+            OrePrefixes.ingotHot.disableComponent(Materials.CrudeSteel);
+        }
 
         fillGeneratedMaterialsMap();
 

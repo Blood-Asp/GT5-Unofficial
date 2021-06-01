@@ -27,15 +27,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GT_CraftingRecipeLoader implements Runnable {
-    private final static String aTextIron1 = "X X";
-    private final static String aTextIron2 = "XXX";
-    private final static String aTextRailcraft = "Railcraft";
-    private final static String aTextMachineBeta = "machine.beta";
-    private final static String aTextMachineAlpha = "machine.alpha";
-    private final static long bits_no_remove_buffered = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED;
-    private final static long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
-    private final static long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
+    private static final String aTextIron1 = "X X";
+    private static final String aTextIron2 = "XXX";
+    private static final String aTextRailcraft = "Railcraft";
+    private static final String aTextMachineBeta = "machine.beta";
+    private static final String aTextMachineAlpha = "machine.alpha";
+    private static final long bits_no_remove_buffered = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.BUFFERED;
+    private static final long bits = GT_ModHandler.RecipeBits.NOT_REMOVABLE | GT_ModHandler.RecipeBits.REVERSIBLE | GT_ModHandler.RecipeBits.BUFFERED;
+    private static final long bitsd = GT_ModHandler.RecipeBits.DISMANTLEABLE | bits;
 
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding nerfed Vanilla Recipes.");
         GT_ModHandler.addCraftingRecipe(new ItemStack(Items.bucket, 1), bits_no_remove_buffered | GT_ModHandler.RecipeBits.DELETE_ALL_OTHER_SHAPED_RECIPES, new Object[]{"XhX", " X ", 'X', OrePrefixes.plate.get(Materials.AnyIron)});
