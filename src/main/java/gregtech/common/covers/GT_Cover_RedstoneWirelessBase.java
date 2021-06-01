@@ -22,6 +22,10 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
         if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D)))) {
             GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
             aCoverVariable = GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem());
+
+            int playerHash = aPlayer.getDisplayName().hashCode();
+            aCoverVariable = playerHash << 16 | aCoverVariable >> 16;
+
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
             GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
             return true;
