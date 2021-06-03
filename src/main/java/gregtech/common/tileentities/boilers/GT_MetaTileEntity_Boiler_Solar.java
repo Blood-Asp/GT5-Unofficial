@@ -173,13 +173,14 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         if (mTemperature < 100) {
             return 0;
         }
-        if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
+        if (mRunTimeTicks > getMaxRuntimeInTicks()) {
+            return mConfig.getMinOutputPerSecond();
+        } else if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
             /* When reaching calcification ticks; discount the proportion of run-time spent on calcification
              *  from the maximum output per second, and return this or the minimum output per second
              */
-            return Math.max(mConfig.getMinOutputPerSecond(),
-                    mConfig.getMaxOutputPerSecond()
-                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks());
+            return mConfig.getMaxOutputPerSecond()
+                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks();
         } else {
             return mConfig.getMaxOutputPerSecond();
         }
@@ -256,6 +257,13 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
 
     public int getHotTimeSeconds() {
         return mRunTimeTicks / 20;
+    }
+
+    /**
+     * After which min output is reached.
+     */
+    public int getMaxRuntimeInTicks() {
+        return (mConfig.getMaxOutputPerSecond() - mConfig.getMinOutputPerSecond()) * mConfig.getCalcificationTicks() / mConfig.getMaxOutputPerSecond();
     }
 
     @Override
