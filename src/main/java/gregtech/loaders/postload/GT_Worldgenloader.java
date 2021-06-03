@@ -95,15 +95,13 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.garnetred", true, 5, 35, 2, false, false, false, false, true, true, Materials.GarnetRed);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.garnetyellow", true, 5, 35, 2, false, false, false, false, true, true, Materials.GarnetYellow);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.redstone", true, 5, 25, 8, true, true, false, true, true, true, Materials.Redstone);
-        //new GT_Worldgen_GT_Ore_SmallPieces("ore.small.platinum", true, 20, 80, 8, false, false, true, false, true, true, Materials.Platinum);
-        //new GT_Worldgen_GT_Ore_SmallPieces("ore.small.iridium", true, 20, 40, 8, false, false, false, false, true, true, Materials.Iridium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.netherquartz", true, 30, 120, 64, false, true, false, false, false, false, Materials.NetherQuartz);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.saltpeter", true, 10, 60, 8, false, true, false, false, false, false, Materials.Saltpeter);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.sulfur", true, 5, 60, 40, false, true, false, false, false, false, Materials.Sulfur);
         
         //TODO: GTNH Custom Small Ores 
-        //new GT_Worldgen_GT_Ore_SmallPieces("ore.small.osmium",true,10,30,8,false, false, false, Materials.Osmium);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.titanium",true,10,180,32,false, false, false, Materials.Titanium);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.tungsten",true,10,120,16,false, false, false, Materials.Tungsten);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.meteoriciron",true,50,70,8,false, false, false, Materials.MeteoricIron);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.firestone",true,5,15,2,false, false, false, Materials.Firestone);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.neutronium",true,5,15,8,false, false, false, Materials.Neutronium);
