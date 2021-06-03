@@ -100,8 +100,8 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.sulfur", true, 5, 60, 40, false, true, false, false, false, false, Materials.Sulfur);
         
         //TODO: GTNH Custom Small Ores 
-	new GT_Worldgen_GT_Ore_SmallPieces("ore.small.titanium",true,10,180,32,false, false, false, Materials.Titanium);
-	new GT_Worldgen_GT_Ore_SmallPieces("ore.small.tungsten",true,10,120,16,false, false, false, Materials.Tungsten);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.titanium",true,10,180,32,false, false, false, Materials.Titanium);
+        new GT_Worldgen_GT_Ore_SmallPieces("ore.small.tungsten",true,10,120,16,false, false, false, Materials.Tungsten);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.meteoriciron",true,50,70,8,false, false, false, Materials.MeteoricIron);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.firestone",true,5,15,2,false, false, false, Materials.Firestone);
         new GT_Worldgen_GT_Ore_SmallPieces("ore.small.neutronium",true,5,15,8,false, false, false, Materials.Neutronium);
