@@ -17,7 +17,10 @@ import net.minecraftforge.fluids.Fluid;
 
 public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
-    private static int MAX_CHANNEL = 65535;
+    private static final int MAX_CHANNEL = 65535;
+    private static final int PRIVATE_MASK = 0xFFFE0000;
+    private static final int PUBLIC_MASK = 0x0000FFFF;
+    private static final int CHECKBOX_MASK = 0x00010000;
 
     @Override
     public boolean onCoverRemoval(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, boolean aForced) {
@@ -144,7 +147,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             this.coverVariable = aCoverVariable;
 
             fBox = new GT_GuiShortTextBox(this, 2,startX + spaceX*0,startY+spaceY*0 + 2, spaceX*4-3,12);
-            fBox.setText(String.valueOf(coverVariable & 0x0000ffff));
+            fBox.setText(String.valueOf(coverVariable & PUBLIC_MASK));
             fBox.setMaxStringLength(12);
 
             GuiButton b;
@@ -161,6 +164,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
         @Override
         protected void onInitGui(int guiLeft, int guiTop, int gui_width, int gui_height) {
             fBox.setFocused(true);
+            ((GT_GuiIconCheckButton) buttonList.get(0)).setChecked((coverVariable & 0x00010000) > 0);
         }
 
         @Override
@@ -203,14 +207,34 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             else if (i < 0)
                 i = 0;
 
-            coverVariable = (coverVariable & 0xffff0000) | (i & 0x0000ffff);
-            fBox.setText(Integer.toString(coverVariable & 0x0000ffff));
+            coverVariable = (coverVariable & PRIVATE_MASK) | (i & PUBLIC_MASK);
+            fBox.setText(Integer.toString(coverVariable & PUBLIC_MASK));
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
         }
 
         @Override
         public void resetTextBox(GT_GuiIntegerTextBox box) {
-            box.setText(String.valueOf(coverVariable & 0x0000ffff));
+            box.setText(String.valueOf(coverVariable & PUBLIC_MASK));
+        }
+
+        @Override
+        public void buttonClicked(GuiButton btn) {
+
+            final GT_GuiIconCheckButton tBtn = (GT_GuiIconCheckButton) btn;
+
+            tBtn.setChecked(!tBtn.isChecked());
+
+            if (tBtn.isChecked())
+                coverVariable = coverVariable | CHECKBOX_MASK;
+            else
+                coverVariable = coverVariable & ~CHECKBOX_MASK;
+
+            if ((coverVariable & CHECKBOX_MASK) > 0)
+            {
+                coverVariable = coverVariable & (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+            }
+
+            GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
         }
 
         private class GT_GuiShortTextBox extends GT_GuiIntegerTextBox {
