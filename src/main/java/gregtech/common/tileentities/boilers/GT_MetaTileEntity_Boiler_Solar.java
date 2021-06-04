@@ -282,6 +282,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
             minOutputPerSecond = get(aCategory,"MinOutputPerSecond", aDefaultMinOutputPerSecond);
             maxOutputPerSecond = get(aCategory,"MaxOutputPerSecond", aDefaultMaxOutputPerSecond);
             coolDownTicks = get(aCategory,"CoolDownTicks", aDefaultCoolDownTicks, "Number of ticks it takes to lose 1°C.");
+            // After which min output is reached.
             maxRuntimeTicks = (getMaxOutputPerSecond() - getMinOutputPerSecond()) * getCalcificationTicks() / getMaxOutputPerSecond() + getCalcificationTicks();
         }
 
@@ -309,9 +310,6 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
             return coolDownTicks;
         }
 
-        /**
-         * After which min output is reached.
-         */
         public int getMaxRuntimeTicks() {
             return maxRuntimeTicks;
         }
