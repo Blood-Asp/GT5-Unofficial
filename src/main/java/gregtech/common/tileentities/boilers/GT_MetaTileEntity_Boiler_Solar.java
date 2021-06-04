@@ -173,13 +173,14 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         if (mTemperature < 100) {
             return 0;
         }
-        if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
+        if (mRunTimeTicks > mConfig.getMaxRuntimeTicks()) {
+            return mConfig.getMinOutputPerSecond();
+        } else if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
             /* When reaching calcification ticks; discount the proportion of run-time spent on calcification
              *  from the maximum output per second, and return this or the minimum output per second
              */
-            return Math.max(mConfig.getMinOutputPerSecond(),
-                    mConfig.getMaxOutputPerSecond()
-                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks());
+            return mConfig.getMaxOutputPerSecond()
+                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks();
         } else {
             return mConfig.getMaxOutputPerSecond();
         }
@@ -268,6 +269,7 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
         private final int minOutputPerSecond;
         private final int maxOutputPerSecond;
         private final int coolDownTicks;
+        private final int maxRuntimeTicks;
 
         public Config(String aCategory,
                       int aDefaultCalcificationTicks,
@@ -280,6 +282,8 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
             minOutputPerSecond = get(aCategory,"MinOutputPerSecond", aDefaultMinOutputPerSecond);
             maxOutputPerSecond = get(aCategory,"MaxOutputPerSecond", aDefaultMaxOutputPerSecond);
             coolDownTicks = get(aCategory,"CoolDownTicks", aDefaultCoolDownTicks, "Number of ticks it takes to lose 1°C.");
+            // After which min output is reached.
+            maxRuntimeTicks = (getMaxOutputPerSecond() - getMinOutputPerSecond()) * getCalcificationTicks() / getMaxOutputPerSecond() + getCalcificationTicks();
         }
 
         protected int get(final String aCategory, final String aKey, final int aDefaultValue, final String... aComments) {
@@ -304,6 +308,10 @@ public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
 
         public int getCoolDownTicks() {
             return coolDownTicks;
+        }
+
+        public int getMaxRuntimeTicks() {
+            return maxRuntimeTicks;
         }
     }
 }

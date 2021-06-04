@@ -30,7 +30,7 @@ public class GT_MetaTileEntity_Boiler_Solar_Steel extends GT_MetaTileEntity_Boil
 
     @Override
     protected Config createConfig() {
-        return new Config(machineconfig + ".boiler.solar.steel",108000, 120, 360, 75);
+        return new Config(machineconfig + ".boiler.solar.steel", 1080000, 120, 360, 75);
     }
 
     @Override
