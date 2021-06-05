@@ -2069,33 +2069,34 @@ public class GT_Utility {
             }
             try {
                 if (tTileEntity instanceof ic2.api.crops.ICropTile) {
-                    if (((ic2.api.crops.ICropTile) tTileEntity).getScanLevel() < 4) {
-                        rEUAmount += 10000;
-                        ((ic2.api.crops.ICropTile) tTileEntity).setScanLevel((byte) 4);
+                    rEUAmount += 1000;
+                    ic2.api.crops.ICropTile crop = (ic2.api.crops.ICropTile) tTileEntity;
+                    if (crop.getScanLevel() < 4)
+                        crop.setScanLevel((byte) 4);
+                    if (crop.getCrop() != null) {
+                        tList.add(trans("187", "Type -- Crop-Name: ") + crop.getCrop().name()
+                            + trans("188", "  Growth: ") + crop.getGrowth()
+                            + trans("189", "  Gain: ") + crop.getGain()
+                            + trans("190", "  Resistance: ") + crop.getResistance()
+                        );
                     }
-                    if (((ic2.api.crops.ICropTile) tTileEntity).getID() >= 0 && ((ic2.api.crops.ICropTile) tTileEntity).getID() < ic2.api.crops.Crops.instance.getCropList().length && ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()] != null) {
-                        rEUAmount += 1000;
-                        tList.add(trans("187","Type -- Crop-Name: ") + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].name()
-                                        + trans("188","  Growth: ") + ((ic2.api.crops.ICropTile) tTileEntity).getGrowth()
-                                        + trans("189","  Gain: ") + ((ic2.api.crops.ICropTile) tTileEntity).getGain()
-                                        + trans("190","  Resistance: ") + ((ic2.api.crops.ICropTile) tTileEntity).getResistance()
-                        );
-                        tList.add(trans("191","Plant -- Fertilizer: ") + ((ic2.api.crops.ICropTile) tTileEntity).getNutrientStorage()
-                                        + trans("192","  Water: ") + ((ic2.api.crops.ICropTile) tTileEntity).getHydrationStorage()
-                                        + trans("193","  Weed-Ex: ") + ((ic2.api.crops.ICropTile) tTileEntity).getWeedExStorage()
-                                        + trans("194","  Scan-Level: ") + ((ic2.api.crops.ICropTile) tTileEntity).getScanLevel()
-                        );
-                        tList.add(trans("195","Environment -- Nutrients: ") + ((ic2.api.crops.ICropTile) tTileEntity).getNutrients()
-                                        + trans("196","  Humidity: ") + ((ic2.api.crops.ICropTile) tTileEntity).getHumidity()
-                                        + trans("197","  Air-Quality: ") + ((ic2.api.crops.ICropTile) tTileEntity).getAirQuality()
-                        );
+                    tList.add(trans("191","Plant -- Fertilizer: ") + crop.getNutrientStorage()
+                        + trans("192","  Water: ") + crop.getHydrationStorage()
+                        + trans("193","  Weed-Ex: ") + crop.getWeedExStorage()
+                        + trans("194","  Scan-Level: ") + crop.getScanLevel()
+                    );
+                    tList.add(trans("195","Environment -- Nutrients: ") + crop.getNutrients()
+                        + trans("196","  Humidity: ") + crop.getHumidity()
+                        + trans("197","  Air-Quality: ") + crop.getAirQuality()
+                    );
+                    if (crop.getCrop() != null) {
                         StringBuilder tStringB = new StringBuilder();
-                        for (String tAttribute : ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].attributes()) {
+                        for (String tAttribute : crop.getCrop().attributes()) {
                             tStringB.append(", ").append(tAttribute);
                         }
                         String tString = tStringB.toString();
                         tList.add(trans("198","Attributes:") + tString.replaceFirst(",", E));
-                        tList.add(trans("199","Discovered by: ") + ic2.api.crops.Crops.instance.getCropList()[((ic2.api.crops.ICropTile) tTileEntity).getID()].discoveredBy());
+                        tList.add(trans("199","Discovered by: ") + crop.getCrop().discoveredBy());
                     }
                 }
             } catch (Throwable e) {
