@@ -165,7 +165,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
         @Override
         protected void onInitGui(int guiLeft, int guiTop, int gui_width, int gui_height) {
             fBox.setFocused(true);
-            ((GT_GuiIconCheckButton) buttonList.get(0)).setChecked((coverVariable & 0x00010000) > 0);
+            ((GT_GuiIconCheckButton) buttonList.get(0)).setChecked((coverVariable & CHECKBOX_MASK) > 0);
         }
 
         @Override
