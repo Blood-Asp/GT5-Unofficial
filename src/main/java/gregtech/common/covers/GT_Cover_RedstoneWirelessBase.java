@@ -63,14 +63,15 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                     tAdjustVal = 1024;
             }
 
-            aCoverVariable += tAdjustVal;
+            int tCoverVariable = (aCoverVariable & PUBLIC_MASK) + tAdjustVal;
 
-            if ((aCoverVariable & PUBLIC_MASK) < 0)
-            {
+            if (tCoverVariable < 0) {
                 aCoverVariable = aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK);
             }
 
-            //aCoverVariable = aCoverVariable | (aCoverVariable & PUBLIC_MASK);
+            if (tCoverVariable > MAX_CHANNEL) {
+                aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | MAX_CHANNEL;
+            }
         }
         GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
         return aCoverVariable;
@@ -236,7 +237,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             if ((coverVariable & CHECKBOX_MASK) > 0) {
                 //clear out upper 15 bits and replace them with the upper 15 bits of the hashed player name
-                coverVariable = (coverVariable & (PUBLIC_MASK | CHECKBOX_MASK)) | (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+                coverVariable = (coverVariable & (PUBLIC_MASK | CHECKBOX_MASK)) | (lastPlayer.getUniqueID().hashCode() & PRIVATE_MASK);
             }
             else {
                 //clear out upper 16 bits
