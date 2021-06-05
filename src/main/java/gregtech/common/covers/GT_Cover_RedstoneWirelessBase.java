@@ -32,7 +32,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D)))) {
             GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
-            aCoverVariable &= ((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK;
+            aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK);
 
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
             GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
@@ -67,10 +67,10 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             if ((aCoverVariable & PUBLIC_MASK) < 0)
             {
-                aCoverVariable = 0;
+                aCoverVariable = aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK);
             }
 
-            aCoverVariable &= PUBLIC_MASK;
+            //aCoverVariable = aCoverVariable | (aCoverVariable & PUBLIC_MASK);
         }
         GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
         return aCoverVariable;
@@ -208,7 +208,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             else if (i < 0)
                 i = 0;
 
-            coverVariable = (coverVariable & PRIVATE_MASK) | (i & PUBLIC_MASK);
+            coverVariable = (coverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (i & PUBLIC_MASK);
             fBox.setText(Integer.toString(coverVariable & PUBLIC_MASK));
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
         }
@@ -225,18 +225,22 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             tBtn.setChecked(!tBtn.isChecked());
 
-            if (tBtn.isChecked())
-                coverVariable |= CHECKBOX_MASK;
-            else
-                coverVariable &= ~CHECKBOX_MASK;
-
-            if ((coverVariable & CHECKBOX_MASK) > 0)
-            {
-                coverVariable &= (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+            if (tBtn.isChecked()) {
+                //set bit 16
+                coverVariable = coverVariable | CHECKBOX_MASK;
             }
-            else
-            {
-                coverVariable &= PUBLIC_MASK;
+            else {
+                //un-set bit 16
+                coverVariable = coverVariable & ~CHECKBOX_MASK;
+            }
+
+            if ((coverVariable & CHECKBOX_MASK) > 0) {
+                //clear out upper 15 bits and replace them with the upper 15 bits of the hashed player name
+                coverVariable = (coverVariable & (PUBLIC_MASK | CHECKBOX_MASK)) | (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+            }
+            else {
+                //clear out upper 16 bits
+                coverVariable = coverVariable & PUBLIC_MASK;
             }
 
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
