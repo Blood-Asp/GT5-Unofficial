@@ -32,10 +32,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (((aX > 0.375D) && (aX < 0.625D)) || ((aSide > 3) && ((aY > 0.375D) && (aY < 0.625D)))) {
             GregTech_API.sWirelessRedstone.put(Integer.valueOf(aCoverVariable), Byte.valueOf((byte) 0));
-            aCoverVariable = ((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode();
-
-            int playerHash = aPlayer.getDisplayName().hashCode();
-            aCoverVariable = playerHash & 0xffff0000 | aCoverVariable & 0x0000ffff;
+            aCoverVariable &= ((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK;
 
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
             GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
@@ -66,10 +63,14 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                     tAdjustVal = 1024;
             }
 
-            if ((aCoverVariable & 0x0000ffff) > Short.MAX_VALUE)
-            {
+            aCoverVariable += tAdjustVal;
 
+            if ((aCoverVariable & PUBLIC_MASK) < 0)
+            {
+                aCoverVariable = 0;
             }
+
+            aCoverVariable &= PUBLIC_MASK;
         }
         GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
         return aCoverVariable;
@@ -225,13 +226,17 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             tBtn.setChecked(!tBtn.isChecked());
 
             if (tBtn.isChecked())
-                coverVariable = coverVariable | CHECKBOX_MASK;
+                coverVariable |= CHECKBOX_MASK;
             else
-                coverVariable = coverVariable & ~CHECKBOX_MASK;
+                coverVariable &= ~CHECKBOX_MASK;
 
             if ((coverVariable & CHECKBOX_MASK) > 0)
             {
-                coverVariable = coverVariable & (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+                coverVariable &= (lastPlayer.getDisplayName().hashCode() & PRIVATE_MASK);
+            }
+            else
+            {
+                coverVariable &= PUBLIC_MASK;
             }
 
             GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
