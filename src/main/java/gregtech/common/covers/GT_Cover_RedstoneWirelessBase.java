@@ -9,6 +9,7 @@ import gregtech.api.gui.widgets.GT_GuiIntegerTextBox;
 import gregtech.api.interfaces.IGuiScreen;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.net.GT_Packet_TileEntityCover;
+import gregtech.api.net.GT_Packet_WirelessRedstoneCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.gui.GuiButton;
@@ -63,14 +64,16 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                     tAdjustVal = 1024;
             }
 
-            int tCoverVariable = (aCoverVariable & PUBLIC_MASK) + tAdjustVal;
+            int tPublicChannel = (aCoverVariable & PUBLIC_MASK) + tAdjustVal;
 
-            if (tCoverVariable < 0) {
-                aCoverVariable = aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK);
+            if (tPublicChannel < 0) {
+                aCoverVariable = aCoverVariable & ~PUBLIC_MASK;
             }
-
-            if (tCoverVariable > MAX_CHANNEL) {
+            else if (tPublicChannel > MAX_CHANNEL) {
                 aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | MAX_CHANNEL;
+            }
+            else {
+                aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | tPublicChannel;
             }
         }
         GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
@@ -175,19 +178,19 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                 if (box.isFocused()) {
                     int step = Math.max(1, Math.abs(delta / 120));
                     step = (isShiftKeyDown() ? 1000 : isCtrlKeyDown() ? 50 : 1) * (delta > 0 ? step : -step);
-                    long i;
+                    long tCoverVariable;
                     try {
-                        i = Long.parseLong(box.getText());
+                        tCoverVariable = Long.parseLong(box.getText());
                     } catch (NumberFormatException e) {
                         return;
                     }
-                    i = i + step;
-                    if (i > MAX_CHANNEL)
-                        i = MAX_CHANNEL;
-                    else if (i < 0)
-                        i = 0;
+                    tCoverVariable = tCoverVariable + step;
+                    if (tCoverVariable > MAX_CHANNEL)
+                        tCoverVariable = MAX_CHANNEL;
+                    else if (tCoverVariable < 0)
+                        tCoverVariable = 0;
 
-                    box.setText(String.valueOf(i));
+                    box.setText(String.valueOf(tCoverVariable));
                     return;
                 }
             }
@@ -195,28 +198,31 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
         @Override
         public void applyTextBox(GT_GuiIntegerTextBox box) {
-            int i;
+            int tPublicChannel;
             String s = box.getText().trim();
             try {
-                i = Integer.parseInt(s);
+                tPublicChannel = Integer.parseInt(s);
             } catch (NumberFormatException e) {
                 resetTextBox(box);
                 return;
             }
 
-            if (i > MAX_CHANNEL)
-                i = MAX_CHANNEL;
-            else if (i < 0)
-                i = 0;
+            if (tPublicChannel > MAX_CHANNEL)
+                tPublicChannel = MAX_CHANNEL;
+            else if (tPublicChannel < 0)
+                tPublicChannel = 0;
 
-            coverVariable = (coverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (i & PUBLIC_MASK);
-            fBox.setText(Integer.toString(coverVariable & PUBLIC_MASK));
-            GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
+            int tCheckBoxValue = ((GT_GuiIconCheckButton)this.buttonList.get(0)).isChecked() ? CHECKBOX_MASK : 0;
+
+            coverVariable = tCheckBoxValue | tPublicChannel;
+
+            fBox.setText(Integer.toString(tPublicChannel));
+            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, coverVariable, tile, tPublicChannel, tCheckBoxValue));
         }
 
         @Override
         public void resetTextBox(GT_GuiIntegerTextBox box) {
-            box.setText(String.valueOf(coverVariable & PUBLIC_MASK));
+            box.setText(String.valueOf(0));
         }
 
         @Override
@@ -226,25 +232,18 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             tBtn.setChecked(!tBtn.isChecked());
 
-            if (tBtn.isChecked()) {
-                //set bit 16
-                coverVariable = coverVariable | CHECKBOX_MASK;
-            }
-            else {
-                //un-set bit 16
-                coverVariable = coverVariable & ~CHECKBOX_MASK;
+            int tPublicChannel = 0;
+            String tText = fBox.getText().trim();
+
+            if (tText.length() > 0) {
+                tPublicChannel = Integer.parseInt(tText);
             }
 
-            if ((coverVariable & CHECKBOX_MASK) > 0) {
-                //clear out upper 15 bits and replace them with the upper 15 bits of the hashed player name
-                coverVariable = (coverVariable & (PUBLIC_MASK | CHECKBOX_MASK)) | (lastPlayer.getUniqueID().hashCode() & PRIVATE_MASK);
-            }
-            else {
-                //clear out upper 16 bits
-                coverVariable = coverVariable & PUBLIC_MASK;
-            }
+            int tCheckBoxValue = tBtn.isChecked() ? CHECKBOX_MASK : 0;
 
-            GT_Values.NW.sendToServer(new GT_Packet_TileEntityCover(side, coverID, coverVariable, tile));
+            coverVariable = tCheckBoxValue | tPublicChannel;
+
+            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, coverVariable, tile, tPublicChannel, tCheckBoxValue));
         }
 
         private class GT_GuiShortTextBox extends GT_GuiIntegerTextBox {
@@ -255,17 +254,16 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             @Override
             public boolean textboxKeyTyped(char c, int key) {
-                String tText = getText().trim();
                 int tValue = 0;
 
                 super.textboxKeyTyped(c, key);
 
                 int cursorPos = this.getCursorPosition();
 
-                String newText = getText().trim();
-                if (newText.length() > 0) {
+                String tText = getText().trim();
+                if (tText.length() > 0) {
                     try {
-                        tValue = Integer.parseInt(newText);
+                        tValue = Integer.parseInt(tText);
                     } catch (NumberFormatException ignored) {}
 
                     if (tValue > MAX_CHANNEL)
