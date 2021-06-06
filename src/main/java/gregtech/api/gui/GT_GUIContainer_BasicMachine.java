@@ -44,7 +44,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        fontRendererObj.drawString(mName, 8, 4, 4210752);
+    	super.drawGuiContainerTitleForeground(mName, 5, -12, 4210752);
     }
 
     private void drawTooltip(int x2, int y2) {
@@ -67,6 +67,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+    	super.drawGuiContainerTitleBackground();
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;

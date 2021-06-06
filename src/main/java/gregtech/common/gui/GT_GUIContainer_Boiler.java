@@ -2,20 +2,25 @@ package gregtech.common.gui;
 
 import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GT_GUIContainer_Boiler extends GT_GUIContainerMetaTile_Machine {
+	String unlocalisedName;
     public GT_GUIContainer_Boiler(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, String aTextureName, int aSteamCapacity) {
         super(new GT_Container_Boiler(aInventoryPlayer, aTileEntity, aSteamCapacity), "gregtech:textures/gui/" + aTextureName);
+        unlocalisedName = aTileEntity.getMetaTileEntity().getMetaName();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        this.fontRendererObj.drawString("Boiler", 8, 4, 4210752);
+    	String mName = GT_LanguageManager.getTranslation("gt.blockmachines." + unlocalisedName + ".name");
+    	super.drawGuiContainerTitleForeground(mName, 5, -12, 4210752);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+    	super.drawGuiContainerTitleBackground();
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
