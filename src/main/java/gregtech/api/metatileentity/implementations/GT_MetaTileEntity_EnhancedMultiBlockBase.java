@@ -13,6 +13,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -67,6 +68,18 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 	@Override
 	public final boolean isFacingValid(byte aFacing) {
 		return canSetToDirectionAny(ForgeDirection.getOrientation(aFacing));
+	}
+
+	@Override
+	public boolean onWrenchRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+		if (aWrenchingSide != getBaseMetaTileEntity().getFrontFacing())
+			return super.onWrenchRightClick(aSide, aWrenchingSide, aPlayer, aX, aY, aZ);
+		if (aPlayer.isSneaking()) {
+			toolSetFlip(null);
+		} else {
+			toolSetRotation(null);
+		}
+		return true;
 	}
 
 	@Override

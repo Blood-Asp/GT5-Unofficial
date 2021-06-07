@@ -6,6 +6,11 @@
 package gregtech.common;
 
 import codechicken.lib.vec.Rotation;
+import codechicken.lib.vec.Scale;
+import codechicken.lib.vec.Transformation;
+import codechicken.lib.vec.Translation;
+import com.gtnewhorizon.structurelib.alignment.IAlignment;
+import com.gtnewhorizon.structurelib.alignment.IAlignmentProvider;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -29,6 +34,7 @@ import gregtech.common.render.*;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -40,6 +46,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
@@ -52,36 +59,61 @@ import java.util.*;
 public class GT_Client extends GT_Proxy
         implements Runnable {
 
-    private static List ROTATABLE_VANILLA_BLOCKS;
+    public static final String GTNH_CAPE_LIST_URL = "https://raw.githubusercontent.com/GTNewHorizons/CustomGTCapeHook-Cape-List/master/capes.txt";
+    public static final String GT_CAPE_LIST_URL = "http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt";
+    private static final List<Block> ROTATABLE_VANILLA_BLOCKS;
+
+    private static final int[][] GRID_SWITCH_ARR = new int[][]{
+            {0, 5, 3, 1, 2, 4},
+            {5, 0, 1, 3, 2, 4},
+            {1, 3, 0, 5, 2, 4},
+            {3, 1, 5, 0, 2, 4},
+            {4, 2, 3, 1, 0, 5},
+            {2, 4, 3, 1, 5, 0},
+    };
+
+    public static final Transformation ROTATION_MARKER_TRANSFORM_CENTER = new Scale(0.5);
+    private static final Transformation[] ROTATION_MARKER_TRANSFORMS_SIDES = {
+            new Scale(0.25).with(new Translation(0, 0, 0.375)),
+            new Scale(0.25).with(new Translation(0.375, 0, 0)),
+            new Scale(0.25).with(new Translation(0, 0, -0.375)),
+            new Scale(0.25).with(new Translation(-0.375, 0, 0)),
+    };
+    private static final Transformation[] ROTATION_MARKER_TRANSFORMS_CORNER = {
+            new Scale(0.25).with(new Translation(0.375, 0, 0.375)),
+            new Scale(0.25).with(new Translation(-0.375, 0, 0.375)),
+            new Scale(0.25).with(new Translation(0.375, 0, -0.375)),
+            new Scale(0.25).with(new Translation(-0.375, 0, -0.375)),
+    };
 
     static {
-        ROTATABLE_VANILLA_BLOCKS = Arrays.asList(new Block[]{
-                Blocks.piston, Blocks.sticky_piston, Blocks.furnace, Blocks.lit_furnace, Blocks.dropper, Blocks.dispenser, Blocks.chest, Blocks.trapped_chest, Blocks.ender_chest, Blocks.hopper,
-                Blocks.pumpkin, Blocks.lit_pumpkin
-        });
+        ROTATABLE_VANILLA_BLOCKS = Arrays.asList(Blocks.piston, Blocks.sticky_piston, Blocks.furnace, Blocks.lit_furnace, Blocks.dropper, Blocks.dispenser, Blocks.chest, Blocks.trapped_chest, Blocks.ender_chest, Blocks.hopper,
+                Blocks.pumpkin, Blocks.lit_pumpkin);
     }
 
     private final HashSet<String> mCapeList = new HashSet<>();
     public static final GT_PollutionRenderer mPollutionRenderer = new GT_PollutionRenderer();
     private final GT_CapeRenderer mCapeRenderer;
-    private final List mPosR;
-    private final List mPosG;
-    private final List mPosB;
-    private final List mPosA = Arrays.asList(new Object[0]);
-    private final List mNegR;
-    private final List mNegG;
-    private final List mNegB;
-    private final List mNegA = Arrays.asList(new Object[0]);
-    private final List mMoltenPosR;
-    private final List mMoltenPosG;
-    private final List mMoltenPosB;
-    private final List mMoltenPosA = Arrays.asList(new Object[0]);
-    private final List mMoltenNegR;
-    private final List mMoltenNegG;
-    private final List mMoltenNegB;
-    private final List mMoltenNegA = Arrays.asList(new Object[0]);
+    private final List<Materials> mPosR;
+    private final List<Materials> mPosG;
+    private final List<Materials> mPosB;
+    private final List<Materials> mPosA = Collections.emptyList();
+    private final List<Materials> mNegR;
+    private final List<Materials> mNegG;
+    private final List<Materials> mNegB;
+    private final List<Materials> mNegA = Collections.emptyList();
+    private final List<Materials> mMoltenPosR;
+    private final List<Materials> mMoltenPosG;
+    private final List<Materials> mMoltenPosB;
+    private final List<Materials> mMoltenPosA = Collections.emptyList();
+    private final List<Materials> mMoltenNegR;
+    private final List<Materials> mMoltenNegG;
+    private final List<Materials> mMoltenNegB;
+    private final List<Materials> mMoltenNegA = Collections.emptyList();
     private long mAnimationTick;
-    /**This is the place to def the value used below**/
+    /**
+     * This is the place to def the value used below
+     **/
     private long afterSomeTime;
     private boolean mAnimationDirection;
     private int mLastUpdatedBlockX;
@@ -92,57 +124,34 @@ public class GT_Client extends GT_Proxy
     private GT_ClientPreference mPreference;
     private boolean mFirstTick = false;
     public GT_Client() {
-    	mCapeRenderer = new GT_CapeRenderer(mCapeList);
+        mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
         mAnimationDirection = false;
         isFirstClientPlayerTick = true;
         mMessage = "";
-        mPosR = Arrays.asList(new Materials[]{
-                /**Materials.ChargedCertusQuartz, **/Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
-                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone
-        });
-        mPosG = Arrays.asList(new Materials[]{
-                /**Materials.ChargedCertusQuartz, **/Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
-                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.InfusedAir, Materials.InfusedEarth
-        });
-        mPosB = Arrays.asList(new Materials[]{
-                /**Materials.ChargedCertusQuartz, **/Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.InfusedVis,
-                Materials.InfusedWater, Materials.Thaumium
-        });
-        mNegR = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy, Materials.NetherStar
-        });
-        mNegG = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy, Materials.NetherStar
-        });
-        mNegB = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy, Materials.NetherStar
-        });
-        mMoltenPosR = Arrays.asList(new Materials[]{
-                Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
-                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone
-        });
-        mMoltenPosG = Arrays.asList(new Materials[]{
-                Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
-                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.InfusedAir, Materials.InfusedEarth
-        });
-        mMoltenPosB = Arrays.asList(new Materials[]{
-                Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.InfusedVis,
-                Materials.InfusedWater, Materials.Thaumium
-        });
-        mMoltenNegR = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy
-        });
-        mMoltenNegG = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy
-        });
-        mMoltenNegB = Arrays.asList(new Materials[]{
-                Materials.InfusedEntropy
-        });
+        mPosR = Arrays.asList(Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
+                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone);
+        mPosG = Arrays.asList(Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
+                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.InfusedAir, Materials.InfusedEarth);
+        mPosB = Arrays.asList(Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.InfusedVis,
+                Materials.InfusedWater, Materials.Thaumium);
+        mNegR = Arrays.asList(Materials.InfusedEntropy, Materials.NetherStar);
+        mNegG = Arrays.asList(Materials.InfusedEntropy, Materials.NetherStar);
+        mNegB = Arrays.asList(Materials.InfusedEntropy, Materials.NetherStar);
+        mMoltenPosR = Arrays.asList(Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
+                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone);
+        mMoltenPosG = Arrays.asList(Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
+                Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.InfusedAir, Materials.InfusedEarth);
+        mMoltenPosB = Arrays.asList(Materials.Enderium, Materials.NetherStar, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.InfusedVis,
+                Materials.InfusedWater, Materials.Thaumium);
+        mMoltenNegR = Collections.singletonList(Materials.InfusedEntropy);
+        mMoltenNegG = Collections.singletonList(Materials.InfusedEntropy);
+        mMoltenNegB = Collections.singletonList(Materials.InfusedEntropy);
     }
 
 
     private static boolean checkedForChicken = false;
+
     private static void drawGrid(DrawBlockHighlightEvent aEvent, boolean showCoverConnections) {
         if (!checkedForChicken) {
             try {
@@ -159,11 +168,13 @@ public class GT_Client extends GT_Proxy
         GL11.glPushMatrix();
         GL11.glTranslated(-(aEvent.player.lastTickPosX + (aEvent.player.posX - aEvent.player.lastTickPosX) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosY + (aEvent.player.posY - aEvent.player.lastTickPosY) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosZ + (aEvent.player.posZ - aEvent.player.lastTickPosZ) * (double) aEvent.partialTicks));
         GL11.glTranslated((float) aEvent.target.blockX + 0.5F, (float) aEvent.target.blockY + 0.5F, (float) aEvent.target.blockZ + 0.5F);
-        Rotation.sideRotations[aEvent.target.sideHit].glApply();
+        int tSideHit = aEvent.target.sideHit;
+        Rotation.sideRotations[tSideHit].glApply();
+        // draw grid
         GL11.glTranslated(0.0D, -0.501D, 0.0D);
         GL11.glLineWidth(2.0F);
         GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.5F);
-        GL11.glBegin(1);
+        GL11.glBegin(GL11.GL_LINES);
         GL11.glVertex3d(+.50D, .0D, -.25D);
         GL11.glVertex3d(-.50D, .0D, -.25D);
         GL11.glVertex3d(+.50D, .0D, +.25D);
@@ -174,88 +185,118 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(-.25D, .0D, +.50D);
         TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
 
+        // draw turning indicator
+        if (tTile instanceof IGregTechTileEntity &&
+                ((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof IAlignmentProvider) {
+            IAlignment tAlignment = ((IAlignmentProvider) ((IGregTechTileEntity) tTile).getMetaTileEntity()).getAlignment();
+            if (tAlignment != null) {
+                ForgeDirection direction = tAlignment.getDirection();
+
+                GL11.glEnd();
+                if (direction.ordinal() == tSideHit)
+                    drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
+                else if (direction.getOpposite().ordinal() == tSideHit) {
+                    for (Transformation t : ROTATION_MARKER_TRANSFORMS_CORNER) {
+                        drawRotationMarker(t);
+                    }
+                } else {
+                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES[Rotation.rotationTo(direction.ordinal(), tSideHit)]);
+                }
+                // resume glBegin
+                GL11.glBegin(GL11.GL_LINES);
+            }
+        }
+
+        // draw connection indicators
         byte tConnections = 0;
-        if (tTile instanceof ICoverable){
+        if (tTile instanceof ICoverable) {
             if (showCoverConnections) {
                 for (byte i = 0; i < 6; i++) {
-                    if ( ((ICoverable) tTile).getCoverIDAtSide(i) > 0)
-                        tConnections = (byte)(tConnections + (1 << i));
+                    if (((ICoverable) tTile).getCoverIDAtSide(i) > 0)
+                        tConnections = (byte) (tConnections + (1 << i));
                 }
-            }
-            else if (tTile instanceof BaseMetaPipeEntity)
+            } else if (tTile instanceof BaseMetaPipeEntity)
                 tConnections = ((BaseMetaPipeEntity) tTile).mConnections;
         }
 
         if (tConnections>0) {
-        	int[][] GridSwitchArr = new int[][]{
-            	{0, 5, 3, 1, 2, 4},
-            	{5, 0, 1, 3, 2, 4},
-            	{1, 3, 0, 5, 2, 4},
-            	{3, 1, 5, 0, 2, 4},
-            	{4, 2, 3, 1, 0, 5},
-            	{2, 4, 3, 1, 5, 0},
-            };
-        	for (byte i = 0; i < 6; i++) {
-        		if ((tConnections & (1 << i)) != 0) {
-        			switch (GridSwitchArr[aEvent.target.sideHit][i]) {
-        	        case 0:
-        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
-        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
-        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
-        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
-        	        	break;
-        	        case 1:
-        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
-        				GL11.glVertex3d(+.25D, .0D, +.25D);
-        				GL11.glVertex3d(-.25D, .0D, +.25D);
-        				GL11.glVertex3d(+.25D, .0D, +.50D);
-        	        	break;
-        	        case 2:
-        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
-        				GL11.glVertex3d(-.25D, .0D, +.25D);
-        				GL11.glVertex3d(-.50D, .0D, +.25D);
-        				GL11.glVertex3d(-.25D, .0D, -.25D);
-        	        	break;
-        	        case 3:
-        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
-        				GL11.glVertex3d(+.25D, .0D, -.25D);
-        				GL11.glVertex3d(-.25D, .0D, -.25D);
-        				GL11.glVertex3d(+.25D, .0D, -.50D);
-        	        	break;
-        	        case 4:
-        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
-        				GL11.glVertex3d(+.25D, .0D, +.25D);
-        				GL11.glVertex3d(+.50D, .0D, +.25D);
-        				GL11.glVertex3d(+.25D, .0D, -.25D);
-        	        	break;
-        	        case 5:
-        	        	GL11.glVertex3d(+.50D, .0D, +.50D);
-        	        	GL11.glVertex3d(+.25D, .0D, +.25D);
-        	        	GL11.glVertex3d(+.50D, .0D, +.25D);
-        	        	GL11.glVertex3d(+.25D, .0D, +.50D);
-        	        	GL11.glVertex3d(+.50D, .0D, -.50D);
-        	        	GL11.glVertex3d(+.25D, .0D, -.25D);
-        	        	GL11.glVertex3d(+.50D, .0D, -.25D);
-        	        	GL11.glVertex3d(+.25D, .0D, -.50D);
-        	        	GL11.glVertex3d(-.50D, .0D, +.50D);
-        	        	GL11.glVertex3d(-.25D, .0D, +.25D);
-        	        	GL11.glVertex3d(-.50D, .0D, +.25D);
-        	        	GL11.glVertex3d(-.25D, .0D, +.50D);
-        	        	GL11.glVertex3d(-.50D, .0D, -.50D);
-        	        	GL11.glVertex3d(-.25D, .0D, -.25D);
-        	        	GL11.glVertex3d(-.50D, .0D, -.25D);
-        	        	GL11.glVertex3d(-.25D, .0D, -.50D);
-        	        	break;
-        	        }
-        		}
-        	}
+            for (byte i = 0; i < 6; i++) {
+                if ((tConnections & (1 << i)) != 0) {
+                    switch (GRID_SWITCH_ARR[aEvent.target.sideHit][i]) {
+                        case 0:
+                            GL11.glVertex3d(+.25D, .0D, +.25D);
+                            GL11.glVertex3d(-.25D, .0D, -.25D);
+                            GL11.glVertex3d(-.25D, .0D, +.25D);
+                            GL11.glVertex3d(+.25D, .0D, -.25D);
+                            break;
+                        case 1:
+                            GL11.glVertex3d(-.25D, .0D, +.50D);
+                            GL11.glVertex3d(+.25D, .0D, +.25D);
+                            GL11.glVertex3d(-.25D, .0D, +.25D);
+                            GL11.glVertex3d(+.25D, .0D, +.50D);
+                            break;
+                        case 2:
+                            GL11.glVertex3d(-.50D, .0D, -.25D);
+                            GL11.glVertex3d(-.25D, .0D, +.25D);
+                            GL11.glVertex3d(-.50D, .0D, +.25D);
+                            GL11.glVertex3d(-.25D, .0D, -.25D);
+                            break;
+                        case 3:
+                            GL11.glVertex3d(-.25D, .0D, -.50D);
+                            GL11.glVertex3d(+.25D, .0D, -.25D);
+                            GL11.glVertex3d(-.25D, .0D, -.25D);
+                            GL11.glVertex3d(+.25D, .0D, -.50D);
+                            break;
+                        case 4:
+                            GL11.glVertex3d(+.50D, .0D, -.25D);
+                            GL11.glVertex3d(+.25D, .0D, +.25D);
+                            GL11.glVertex3d(+.50D, .0D, +.25D);
+                            GL11.glVertex3d(+.25D, .0D, -.25D);
+                            break;
+                        case 5:
+                            GL11.glVertex3d(+.50D, .0D, +.50D);
+                            GL11.glVertex3d(+.25D, .0D, +.25D);
+                            GL11.glVertex3d(+.50D, .0D, +.25D);
+                            GL11.glVertex3d(+.25D, .0D, +.50D);
+                            GL11.glVertex3d(+.50D, .0D, -.50D);
+                            GL11.glVertex3d(+.25D, .0D, -.25D);
+                            GL11.glVertex3d(+.50D, .0D, -.25D);
+                            GL11.glVertex3d(+.25D, .0D, -.50D);
+                            GL11.glVertex3d(-.50D, .0D, +.50D);
+                            GL11.glVertex3d(-.25D, .0D, +.25D);
+                            GL11.glVertex3d(-.50D, .0D, +.25D);
+                            GL11.glVertex3d(-.25D, .0D, +.50D);
+                            GL11.glVertex3d(-.50D, .0D, -.50D);
+                            GL11.glVertex3d(-.25D, .0D, -.25D);
+                            GL11.glVertex3d(-.50D, .0D, -.25D);
+                            GL11.glVertex3d(-.25D, .0D, -.50D);
+                            break;
+                    }
+                }
+            }
         }
         GL11.glEnd();
         GL11.glPopMatrix();
     }
 
-    private static void drawGrid(DrawBlockHighlightEvent aEvent) {
-        drawGrid(aEvent, false);
+    private static void drawRotationMarker(Transformation transform) {
+        GL11.glPushMatrix();
+        transform.glApply();
+        Tessellator t = Tessellator.instance;
+        t.startDrawing(GL11.GL_LINE_LOOP);
+        t.addVertex(-0.4d, 0d, -0.4d);
+        t.addVertex(-0.4d, 0d, 0.4d);
+        t.addVertex(0.4d, 0d, 0.4d);
+        t.addVertex(0.4d, 0d, -0.325d);
+        t.addVertex(0.45d, 0d, -0.325d);
+        t.addVertex(0.35d, 0d, -0.425d);
+        t.addVertex(0.25d, 0d, -0.325d);
+        t.addVertex(0.3d, 0d, -0.325d);
+        t.addVertex(0.3d, 0d, 0.3d);
+        t.addVertex(-0.3d, 0d, 0.3d);
+        t.addVertex(-0.3d, 0d, -0.4d);
+        t.draw();
+        GL11.glPopMatrix();
     }
 
     @Override
@@ -286,7 +327,7 @@ public class GT_Client extends GT_Proxy
     @Override
     public void onPreLoad() {
         super.onPreLoad();
-        String arr$[] = {
+        String[] arr = {
                 "renadi", "hanakocz", "MysteryDump", "Flaver4", "x_Fame", "Peluche321", "Goshen_Ithilien", "manf", "Bimgo", "leagris",
                 "IAmMinecrafter02", "Cerous", "Devilin_Pixy", "Bkarlsson87", "BadAlchemy", "CaballoCraft", "melanclock", "Resursator", "demanzke", "AndrewAmmerlaan",
                 "Deathlycraft", "Jirajha", "Axlegear", "kei_kouma", "Dracion", "dungi", "Dorfschwein", "Zero Tw0", "mattiagraz85", "sebastiank30",
@@ -301,12 +342,10 @@ public class GT_Client extends GT_Proxy
                 "25FiveDetail", "AntiCivilBoy", "michaelbrady", "xXxIceFirexXx", "Speedynutty68", "GarretSidzaka", "HallowCharm977", "mastermind1919", "The_Hypersonic", "diamondguy2798",
                 "zF4ll3nPr3d4t0r", "CrafterOfMines57", "XxELIT3xSNIP3RxX", "SuterusuKusanagi", "xavier0014", "adamros", "alexbegt"
         };
-        int len$ = arr$.length;
-        for (int i$ = 0; i$ < len$; i$++) {
-            String tName = arr$[i$];
+        for (String tName : arr) {
             mCapeList.add(tName.toLowerCase());
         }
-        (new Thread(this)).start();
+        new Thread(this).start();
 
         mPollutionRenderer.preLoad();
 
@@ -356,47 +395,29 @@ public class GT_Client extends GT_Proxy
 
     @Override
     public void run() {
-        try {
-            GT_Log.out.println("GT_Mod: Downloading Cape List.");
-            @SuppressWarnings("resource")
-            Scanner tScanner = new Scanner(new URL("http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt").openStream());
+        GT_Log.out.println("GT_Mod: Downloading Cape List.");
+        try (Scanner tScanner = new Scanner(new URL(GT_CAPE_LIST_URL).openStream())) {
             while (tScanner.hasNextLine()) {
-                String tName = tScanner.nextLine();
-                if (!this.mCapeList.contains(tName.toLowerCase())) {
-                    this.mCapeList.add(tName.toLowerCase());
+                this.mCapeList.add(tScanner.nextLine().toLowerCase());
+            }
+        } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
+        }
+        GT_Log.out.println("GT New Horizons: Downloading Cape List.");
+        try (Scanner tScanner = new Scanner(new URL(GTNH_CAPE_LIST_URL).openStream())) {
+            while (tScanner.hasNextLine()) {
+                String tName = tScanner.nextLine().toLowerCase();
+                if (tName.contains(":")) {
+                    if (!this.mCapeList.contains(tName.substring(0, tName.indexOf(":")))) {
+                        this.mCapeList.add(tName);
+                    }
+                } else {
+                    this.mCapeList.add(tName);
                 }
             }
         } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
         }
-        try {
-            GT_Log.out.println("GT New Horizons: Downloading Cape List.");
-                 @SuppressWarnings("resource")
-                 Scanner tScanner = new Scanner(new URL("https://raw.githubusercontent.com/GTNewHorizons/CustomGTCapeHook-Cape-List/master/capes.txt").openStream());
-                 while (tScanner.hasNextLine()) {
-                     String tName = tScanner.nextLine();
-                     if (tName.contains(":")) {
-                     int splitLocation = tName.indexOf(":");
-                     String username = tName.substring(0, splitLocation);
-                     if (!this.mCapeList.contains(username.toLowerCase()) && !this.mCapeList.contains(tName.toLowerCase())) {
-                     this.mCapeList.add(tName.toLowerCase());
-                 }
-                 } else {
-                     if (!this.mCapeList.contains(tName.toLowerCase())) {
-                     this.mCapeList.add(tName.toLowerCase());
-                     }
-                 }
-              }
-                 } catch (Throwable e) {
-            }
-        /**try {
-            GT_Log.out.println("GT_Mod: Downloading News.");
-            @SuppressWarnings("resource")
-            Scanner tScanner = new Scanner(new URL("http://files.minecraftforge.net/maven/com/gregoriust/gregtech/message.txt").openStream());
-            while (tScanner.hasNextLine()) {
-                this.mMessage = (this.mMessage + tScanner.nextLine() + " ");
-            }
-        } catch (Throwable e) {
-        }**/
     }
 
     @Override
@@ -418,34 +439,31 @@ public class GT_Client extends GT_Proxy
                 GT_Values.NW.sendToServer(new GT_Packet_ClientPreference(mPreference));
             }
             afterSomeTime++;
-            if(afterSomeTime>=100L) {
-                afterSomeTime=0;
-                StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
+            if (afterSomeTime >= 100L) {
+                afterSomeTime = 0;
+                StatFileWriter sfw = Minecraft.getMinecraft().thePlayer.getStatFileWriter();
                 try {
-                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
-                        recipe.mHidden=GT_Values.hideAssLineRecipes && !sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
+                        recipe.mHidden = GT_Values.hideAssLineRecipes && !sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
                     }
-                } catch (Exception ignored){}
-            }
-            ArrayList<GT_PlayedSound> tList = new ArrayList();
-            for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
-                if (tEntry.getValue().intValue() < 0) {//Integer -> Integer -> int? >_<, fix
-                    tList.add(tEntry.getKey());
-                } else {
-                    tEntry.setValue(Integer.valueOf(tEntry.getValue().intValue() - 1));
+                } catch (Exception ignored) {
                 }
             }
-            GT_PlayedSound tKey;
-            for (Iterator i$ = tList.iterator(); i$.hasNext(); GT_Utility.sPlayedSoundMap.remove(tKey)) {
-                tKey = (GT_PlayedSound) i$.next();
+            for (Iterator<Map.Entry<GT_PlayedSound, Integer>> iterator = GT_Utility.sPlayedSoundMap.entrySet().iterator(); iterator.hasNext(); ) {
+                Map.Entry<GT_PlayedSound, Integer> tEntry = iterator.next();
+                if (tEntry.getValue() < 0) {
+                    iterator.remove();
+                } else {
+                    tEntry.setValue(tEntry.getValue() - 1);
+                }
             }
-            if(!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
+            if (!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
             if (GT_Values.updateFluidDisplayItems) {
                 MovingObjectPosition trace = Minecraft.getMinecraft().objectMouseOver;
                 if (trace != null && trace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK &&
                         (mLastUpdatedBlockX != trace.blockX &&
-                        mLastUpdatedBlockY != trace.blockY &&
-                        mLastUpdatedBlockZ != trace.blockZ || afterSomeTime % 10 == 0)) {
+                                mLastUpdatedBlockY != trace.blockY &&
+                                mLastUpdatedBlockZ != trace.blockZ || afterSomeTime % 10 == 0)) {
                     mLastUpdatedBlockX = trace.blockX;
                     mLastUpdatedBlockY = trace.blockY;
                     mLastUpdatedBlockZ = trace.blockZ;
@@ -508,102 +526,85 @@ public class GT_Client extends GT_Proxy
     public void receiveRenderEvent(net.minecraftforge.client.event.RenderPlayerEvent.Pre aEvent) {
         if (GT_Utility.getFullInvisibility(aEvent.entityPlayer)) {
             aEvent.setCanceled(true);
-            return;
-        } else {
-            return;
         }
     }
 
     @SubscribeEvent
     public void onClientTickEvent(cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent aEvent) {
         if (aEvent.phase == cpw.mods.fml.common.gameevent.TickEvent.Phase.END) {
-            if(changeDetected>0)changeDetected--;
-            int newHideValue=shouldHeldItemHideThings();
-            if(newHideValue!=hideValue){
-                hideValue=newHideValue;
-                changeDetected=5;
+            if (changeDetected > 0) changeDetected--;
+            int newHideValue = shouldHeldItemHideThings();
+            if (newHideValue != hideValue) {
+                hideValue = newHideValue;
+                changeDetected = 5;
             }
             mAnimationTick++;
-            if (mAnimationTick % 50L == 0L)
-                {mAnimationDirection = !mAnimationDirection;}
+            if (mAnimationTick % 50L == 0L) {
+                mAnimationDirection = !mAnimationDirection;
+            }
             int tDirection = mAnimationDirection ? 1 : -1;
-            for (Iterator i$ = mPosR.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Object o : mPosR) {
+                Materials tMaterial = (Materials) o;
                 tMaterial.mRGBa[0] += tDirection;
             }
 
-            for (Iterator i$ = mPosG.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mPosG) {
                 tMaterial.mRGBa[1] += tDirection;
             }
 
-            for (Iterator i$ = mPosB.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mPosB) {
                 tMaterial.mRGBa[2] += tDirection;
             }
 
-            for (Iterator i$ = mPosA.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mPosA) {
                 tMaterial.mRGBa[3] += tDirection;
             }
 
-            for (Iterator i$ = mNegR.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mNegR) {
                 tMaterial.mRGBa[0] -= tDirection;
             }
 
-            for (Iterator i$ = mNegG.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mNegG) {
                 tMaterial.mRGBa[1] -= tDirection;
             }
 
-            for (Iterator i$ = mNegB.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mNegB) {
                 tMaterial.mRGBa[2] -= tDirection;
             }
 
-            for (Iterator i$ = mNegA.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mNegA) {
                 tMaterial.mRGBa[3] -= tDirection;
             }
 
-            for (Iterator i$ = mMoltenPosR.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenPosR) {
                 tMaterial.mMoltenRGBa[0] += tDirection;
             }
 
-            for (Iterator i$ = mMoltenPosG.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenPosG) {
                 tMaterial.mMoltenRGBa[1] += tDirection;
             }
 
-            for (Iterator i$ = mMoltenPosB.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenPosB) {
                 tMaterial.mMoltenRGBa[2] += tDirection;
             }
 
-            for (Iterator i$ = mMoltenPosA.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenPosA) {
                 tMaterial.mMoltenRGBa[3] += tDirection;
             }
 
-            for (Iterator i$ = mMoltenNegR.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenNegR) {
                 tMaterial.mMoltenRGBa[0] -= tDirection;
             }
 
-            for (Iterator i$ = mMoltenNegG.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenNegG) {
                 tMaterial.mMoltenRGBa[1] -= tDirection;
             }
 
-            for (Iterator i$ = mMoltenNegB.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenNegB) {
                 tMaterial.mMoltenRGBa[2] -= tDirection;
             }
 
-            for (Iterator i$ = mMoltenNegA.iterator(); i$.hasNext(); ) {
-                Materials tMaterial = (Materials) i$.next();
+            for (Materials tMaterial : mMoltenNegA) {
                 tMaterial.mMoltenRGBa[3] -= tDirection;
             }
 
@@ -620,8 +621,8 @@ public class GT_Client extends GT_Proxy
         do {
             if (i >= j)
                 break;
-            if (GT_Utility.areStacksEqual((ItemStack) mSoundItems.get(i), aStack)) {
-                tString = (String) mSoundNames.get(i);
+            if (GT_Utility.areStacksEqual(mSoundItems.get(i), aStack)) {
+                tString = mSoundNames.get(i);
                 break;
             }
             i++;
