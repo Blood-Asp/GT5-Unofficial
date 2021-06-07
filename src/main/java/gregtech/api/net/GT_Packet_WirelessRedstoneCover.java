@@ -14,6 +14,8 @@ import net.minecraftforge.common.DimensionManager;
 
 public class GT_Packet_WirelessRedstoneCover extends GT_Packet_TileEntityCover {
     private static final int PRIVATE_MASK = 0xFFFE0000;
+    private static final int PUBLIC_MASK = 0x0000FFFF;
+    private static final int CHECKBOX_MASK = 0x00010000;
 
     private EntityPlayerMP mPlayer;
     private int mPublicChannel;
@@ -23,14 +25,14 @@ public class GT_Packet_WirelessRedstoneCover extends GT_Packet_TileEntityCover {
         super();
     }
 
-    public GT_Packet_WirelessRedstoneCover(int mX, short mY, int mZ, byte coverSide, int coverID, int coverData, int dimID, int publicChannel, int checkBoxValue) {
-        super(mX, mY, mZ, coverSide, coverID, coverData, dimID);
+    public GT_Packet_WirelessRedstoneCover(int mX, short mY, int mZ, byte coverSide, int coverID, int dimID, int publicChannel, int checkBoxValue) {
+        super(mX, mY, mZ, coverSide, coverID, 0, dimID);
         mPublicChannel = publicChannel;
         mCheckBoxValue = checkBoxValue;
     }
 
-    public GT_Packet_WirelessRedstoneCover(byte coverSide, int coverID, int coverData, ICoverable tile, int publicChannel, int checkBoxValue) {
-        super(coverSide, coverID, coverData, tile);
+    public GT_Packet_WirelessRedstoneCover(byte coverSide, int coverID, ICoverable tile, int publicChannel, int checkBoxValue) {
+        super(coverSide, coverID, 0, tile);
         mPublicChannel = publicChannel;
         mCheckBoxValue = checkBoxValue;
     }
@@ -55,7 +57,6 @@ public class GT_Packet_WirelessRedstoneCover extends GT_Packet_TileEntityCover {
 
         aOut.writeByte(side);
         aOut.writeInt(coverID);
-        aOut.writeInt(coverData);
 
         aOut.writeInt(dimID);
 
@@ -72,7 +73,6 @@ public class GT_Packet_WirelessRedstoneCover extends GT_Packet_TileEntityCover {
 
                 aData.readByte(),
                 aData.readInt(),
-                aData.readInt(),
 
                 aData.readInt(),
 
@@ -87,7 +87,7 @@ public class GT_Packet_WirelessRedstoneCover extends GT_Packet_TileEntityCover {
             TileEntity tile = world.getTileEntity(mX, mY, mZ);
             if (tile instanceof IGregTechTileEntity && !((IGregTechTileEntity) tile).isDead()) {
                 int tPrivateChannel = (mCheckBoxValue > 0) ? mPlayer.getUniqueID().hashCode() & PRIVATE_MASK : 0;
-                int tCoverData = tPrivateChannel | mCheckBoxValue | mPublicChannel;
+                int tCoverData = tPrivateChannel | (mCheckBoxValue & CHECKBOX_MASK) | (mPublicChannel & PUBLIC_MASK);
                 ((IGregTechTileEntity) tile).receiveCoverData(side, coverID, tCoverData);
             }
         }

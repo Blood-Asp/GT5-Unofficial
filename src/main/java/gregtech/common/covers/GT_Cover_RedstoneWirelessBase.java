@@ -217,7 +217,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             coverVariable = tCheckBoxValue | tPublicChannel;
 
             fBox.setText(Integer.toString(tPublicChannel));
-            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, coverVariable, tile, tPublicChannel, tCheckBoxValue));
+            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, tile, tPublicChannel, tCheckBoxValue));
         }
 
         @Override
@@ -243,7 +243,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
             coverVariable = tCheckBoxValue | tPublicChannel;
 
-            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, coverVariable, tile, tPublicChannel, tCheckBoxValue));
+            GT_Values.NW.sendToServer(new GT_Packet_WirelessRedstoneCover(side, coverID, tile, tPublicChannel, tCheckBoxValue));
         }
 
         private class GT_GuiShortTextBox extends GT_GuiIntegerTextBox {
