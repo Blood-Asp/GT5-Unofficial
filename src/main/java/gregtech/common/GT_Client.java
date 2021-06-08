@@ -26,11 +26,22 @@ import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.net.GT_Packet_ClientPreference;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_PlayedSound;
+import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
 import gregtech.common.net.MessageUpdateFluidDisplayItem;
-import gregtech.common.render.*;
+import gregtech.common.render.GT_CapeRenderer;
+import gregtech.common.render.GT_FlaskRenderer;
+import gregtech.common.render.GT_FluidDisplayStackRenderer;
+import gregtech.common.render.GT_MetaGenerated_Item_Renderer;
+import gregtech.common.render.GT_MetaGenerated_Tool_Renderer;
+import gregtech.common.render.GT_PollutionRenderer;
+import gregtech.common.render.GT_Renderer_Block;
+import gregtech.common.render.GT_Renderer_Entity_Arrow;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -51,7 +62,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 // Referenced classes of package gregtech.common:
 //            GT_Proxy
@@ -72,18 +89,27 @@ public class GT_Client extends GT_Proxy
             {2, 4, 3, 1, 5, 0},
     };
 
-    public static final Transformation ROTATION_MARKER_TRANSFORM_CENTER = new Scale(0.5);
-    private static final Transformation[] ROTATION_MARKER_TRANSFORMS_SIDES = {
-            new Scale(0.25).with(new Translation(0, 0, 0.375)),
-            new Scale(0.25).with(new Translation(0.375, 0, 0)),
-            new Scale(0.25).with(new Translation(0, 0, -0.375)),
-            new Scale(0.25).with(new Translation(-0.375, 0, 0)),
+    // don't ask. these "just works"
+    private static final Transformation ROTATION_MARKER_TRANSFORM_CENTER = new Scale(0.5);
+    private static final Transformation[] ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS = {
+            new Scale(0.25).with(new Translation(0, 0, 0.375)).compile(),
+            new Scale(0.25).with(new Translation(0.375, 0, 0)).compile(),
+            new Scale(0.25).with(new Translation(0, 0, -0.375)).compile(),
+            new Scale(0.25).with(new Translation(-0.375, 0, 0)).compile(),
+    };
+    private static final int[] ROTATION_MARKER_TRANSFORMS_SIDES = {
+            -1, -1, 2, 0, 3, 1,
+            -1, -1, 0, 2, 3, 1,
+            0, 2, -1, -1, 3, 1,
+            2, 0, -1, -1, 3, 1,
+            1, 3, 2, 0, -1, -1,
+            3, 1, 2, 0, -1, -1
     };
     private static final Transformation[] ROTATION_MARKER_TRANSFORMS_CORNER = {
-            new Scale(0.25).with(new Translation(0.375, 0, 0.375)),
-            new Scale(0.25).with(new Translation(-0.375, 0, 0.375)),
-            new Scale(0.25).with(new Translation(0.375, 0, -0.375)),
-            new Scale(0.25).with(new Translation(-0.375, 0, -0.375)),
+            new Scale(0.25).with(new Translation(0.375, 0, 0.375)).compile(),
+            new Scale(0.25).with(new Translation(-0.375, 0, 0.375)).compile(),
+            new Scale(0.25).with(new Translation(0.375, 0, -0.375)).compile(),
+            new Scale(0.25).with(new Translation(-0.375, 0, -0.375)).compile(),
     };
 
     static {
@@ -185,28 +211,6 @@ public class GT_Client extends GT_Proxy
         GL11.glVertex3d(-.25D, .0D, +.50D);
         TileEntity tTile = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
 
-        // draw turning indicator
-        if (tTile instanceof IGregTechTileEntity &&
-                ((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof IAlignmentProvider) {
-            IAlignment tAlignment = ((IAlignmentProvider) ((IGregTechTileEntity) tTile).getMetaTileEntity()).getAlignment();
-            if (tAlignment != null) {
-                ForgeDirection direction = tAlignment.getDirection();
-
-                GL11.glEnd();
-                if (direction.ordinal() == tSideHit)
-                    drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
-                else if (direction.getOpposite().ordinal() == tSideHit) {
-                    for (Transformation t : ROTATION_MARKER_TRANSFORMS_CORNER) {
-                        drawRotationMarker(t);
-                    }
-                } else {
-                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES[Rotation.rotationTo(direction.ordinal(), tSideHit)]);
-                }
-                // resume glBegin
-                GL11.glBegin(GL11.GL_LINES);
-            }
-        }
-
         // draw connection indicators
         byte tConnections = 0;
         if (tTile instanceof ICoverable) {
@@ -276,7 +280,24 @@ public class GT_Client extends GT_Proxy
             }
         }
         GL11.glEnd();
-        GL11.glPopMatrix();
+        // draw turning indicator
+        if (tTile instanceof IGregTechTileEntity &&
+                ((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof IAlignmentProvider) {
+            IAlignment tAlignment = ((IAlignmentProvider) ((IGregTechTileEntity) tTile).getMetaTileEntity()).getAlignment();
+            if (tAlignment != null) {
+                ForgeDirection direction = tAlignment.getDirection();
+                if (direction.ordinal() == tSideHit)
+                    drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
+                else if (direction.getOpposite().ordinal() == tSideHit) {
+                    for (Transformation t : ROTATION_MARKER_TRANSFORMS_CORNER) {
+                        drawRotationMarker(t);
+                    }
+                } else {
+                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit*6+direction.ordinal()]]);
+                }
+            }
+        }
+        GL11.glPopMatrix(); // get back to player center
     }
 
     private static void drawRotationMarker(Transformation transform) {
