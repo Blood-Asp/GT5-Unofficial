@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
@@ -43,7 +42,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Steam Turbine")
                 .addInfo("Controller block for the Large High Pressure Steam Turbine")
@@ -60,11 +59,7 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                 .addInputHatch("Superheated Steam, Side centered")
                 .addOutputHatch("Steam, Side centered")
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override

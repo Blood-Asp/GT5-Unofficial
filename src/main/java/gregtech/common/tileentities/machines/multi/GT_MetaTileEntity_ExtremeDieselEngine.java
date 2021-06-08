@@ -16,7 +16,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE;
@@ -35,7 +34,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Combustion Generator")
                 .addInfo("Controller block for the Extreme Combustion Engine")
@@ -59,11 +58,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
                 .addInputHatch("Lubricant, next to a Gear Box")
                 .addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override
@@ -76,12 +71,12 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[0][60],
-                    TextureFactory.of(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     casingTexturePages[0][60],
-                    TextureFactory.of(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{casingTexturePages[0][60]};
     }

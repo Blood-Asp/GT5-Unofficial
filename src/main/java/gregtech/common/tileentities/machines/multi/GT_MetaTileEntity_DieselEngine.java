@@ -1,15 +1,16 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
@@ -21,18 +22,35 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
-public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_DieselEngine> {
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final IStructureDefinition<GT_MetaTileEntity_DieselEngine> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_DieselEngine>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"---", "iii", "chc", "chc", "ccc", },
+                    {"---", "i~i", "hgh", "hgh", "cdc", },
+                    {"---", "iii", "chc", "chc", "ccc", },
+            }))
+            .addElement('i', defer(t -> ofBlock(t.getIntakeBlock(), t.getIntakeMeta())))
+            .addElement('c', defer(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
+            .addElement('g', defer(t -> ofBlock(t.getGearboxBlock(), t.getGearboxMeta())))
+            .addElement('d', defer(t -> ofHatchAdder(GT_MetaTileEntity_DieselEngine::addDynamoToMachineList, t.getCasingTextureIndex(), 0)))
+            .addElement('h', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_DieselEngine::addToMachineList, t.getCasingTextureIndex(), 0, t.getCasingBlock(), t.getCasingMeta())))
+            .build();
     protected int fuelConsumption = 0;
     protected int fuelValue = 0;
     protected int fuelRemaining = 0;
@@ -41,13 +59,13 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     public GT_MetaTileEntity_DieselEngine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
-    
+
     public GT_MetaTileEntity_DieselEngine(String aName) {
         super(aName);
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Combustion Generator")
                 .addInfo("Controller block for the Large Combustion Engine")
@@ -71,11 +89,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
                 .addInputHatch("Lubricant, next to a Gear Box")
                 .addInputHatch("Oxygen, optional, next to a Gear Box")
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override
@@ -83,12 +97,12 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[0][50],
-                    TextureFactory.of(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     casingTexturePages[0][50],
-                    TextureFactory.of(OVERLAY_FRONT_DIESEL_ENGINE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_DIESEL_ENGINE_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{casingTexturePages[0][50]};
     }
@@ -182,67 +196,13 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     }
 
     @Override
+    public IStructureDefinition<GT_MetaTileEntity_DieselEngine> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        byte tSide = getBaseMetaTileEntity().getBackFacing();
-        int tX = getBaseMetaTileEntity().getXCoord();
-        int tY = getBaseMetaTileEntity().getYCoord();
-        int tZ = getBaseMetaTileEntity().getZCoord();
-
-        if(getBaseMetaTileEntity().getBlockAtSideAndDistance(tSide, 1) != getGearboxBlock() && getBaseMetaTileEntity().getBlockAtSideAndDistance(tSide, 2) != getGearboxBlock()) {
-            return false;
-        }
-        if(getBaseMetaTileEntity().getMetaIDAtSideAndDistance(tSide, 1) != getGearboxMeta() && getBaseMetaTileEntity().getMetaIDAtSideAndDistance(tSide, 2) != getGearboxMeta()) {
-            return false;
-        }
-        for (byte i = -1; i < 2; i = (byte) (i + 1)) {
-            for (byte j = -1; j < 2; j = (byte) (j + 1)) {
-                if ((i != 0) || (j != 0)) {
-                    for (byte k = 0; k < 4; k = (byte) (k + 1)) {
-
-                        final int fX = tX - (tSide == 5 ? 1 : tSide == 4 ? -1 : i),
-                                  fZ = tZ - (tSide == 2 ? -1 : tSide == 3 ? 1 : i),
-                                  aY = tY + j,
-                                  aX = tX + (tSide == 5 ? k : tSide == 4 ? -k : i),
-                                  aZ = tZ + (tSide == 2 ? -k : tSide == 3 ? k : i);
-
-                        final Block frontAir = getBaseMetaTileEntity().getBlock(fX, aY, fZ);
-                        final String frontAirName = frontAir.getUnlocalizedName();
-                        if(!(getBaseMetaTileEntity().getAir(fX, aY, fZ) || frontAirName.equalsIgnoreCase("tile.air") || frontAirName.equalsIgnoreCase("tile.railcraft.residual.heat"))) {
-                            return false; //Fail if vent blocks are obstructed
-                        }
-
-                        if (((i == 0) || (j == 0)) && ((k == 1) || (k == 2))) {
-                            if (getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getCasingBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getCasingMeta()) {
-                                // Do nothing
-                            } else if (!addMufflerToMachineList(getBaseMetaTileEntity().getIGregTechTileEntity(tX + (tSide == 5 ? 2 : tSide == 4 ? -2 : 0), tY + 1, tZ + (tSide == 3 ? 2 : tSide == 2 ? -2 : 0)), getCasingTextureIndex())) {
-                                return false; //Fail if no muffler top middle back
-                            } else if (!addToMachineList(getBaseMetaTileEntity().getIGregTechTileEntity(aX, aY, aZ))) {
-                                return false;
-                            }
-                        } else if (k == 0) {
-                          if(!(getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getIntakeBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getIntakeMeta())) {
-                              return false;
-                          }
-                        } else if (getBaseMetaTileEntity().getBlock(aX, aY, aZ) == getCasingBlock() && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) == getCasingMeta()) {
-                            // Do nothing
-                        } else {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        this.mDynamoHatches.clear();
-        IGregTechTileEntity tTileEntity = getBaseMetaTileEntity().getIGregTechTileEntityAtSideAndDistance(getBaseMetaTileEntity().getBackFacing(), 3);
-        if ((tTileEntity != null) && (tTileEntity.getMetaTileEntity() != null)) {
-            if ((tTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Dynamo)) {
-                this.mDynamoHatches.add((GT_MetaTileEntity_Hatch_Dynamo) tTileEntity.getMetaTileEntity());
-                ((GT_MetaTileEntity_Hatch) tTileEntity.getMetaTileEntity()).updateTexture(getCasingTextureIndex());
-            } else {
-                return false;
-            }
-        }
-        return true;
+        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 1, 1) && !mMufflerHatches.isEmpty() && mMaintenanceHatches.size() == 1;
     }
 
     public Block getCasingBlock() {
@@ -352,5 +312,10 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_MultiBlock
     @Override
     public boolean isGivingInformation() {
         return true;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1, 1, 1);
     }
 }
