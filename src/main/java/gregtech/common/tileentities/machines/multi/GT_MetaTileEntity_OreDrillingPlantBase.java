@@ -332,7 +332,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected abstract int getBaseProgressTime();
 
-    protected String[] getDescriptionInternal(String tierSuffix) {
+    protected GT_Multiblock_Tooltip_Builder createTooltip(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
         
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -356,11 +356,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 		.addInputHatch("Drilling Fluid, any base casing")
 		.addOutputBus("Any base casing")
 		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+		return tt;
     }
 
     @Override

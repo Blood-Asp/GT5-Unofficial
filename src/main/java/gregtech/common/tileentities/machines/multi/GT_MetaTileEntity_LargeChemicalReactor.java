@@ -1,33 +1,63 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTech_API;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_LargeChemicalReactor> {
+    private static final int CASING_INDEX = 176;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final IStructureDefinition<GT_MetaTileEntity_LargeChemicalReactor> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_LargeChemicalReactor>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"ccc", "cxc", "ccc"},
+                    {"c~c", "xPx", "cxc"},
+                    {"ccc", "cxc", "ccc"},
+            }))
+            .addElement('P', ofBlock(GregTech_API.sBlockCasings8, 1))
+            .addElement('c', ofChain(
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addOutputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addMaintenanceToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCasingAdded, ofBlock(GregTech_API.sBlockCasings8, 0))
+            ))
+            .addElement('x', ofChain(
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addOutputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addMaintenanceToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCoilAdded, ofBlock(GregTech_API.sBlockCasings5, 0)),
+                    onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCasingAdded, ofBlock(GregTech_API.sBlockCasings8, 0))
+            ))
+            .build();
 
-    private final int CASING_INDEX = 176;
+    private int mCasingAmount;
+    private int mCoilAmount;
 
     public GT_MetaTileEntity_LargeChemicalReactor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -43,7 +73,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
     }
 
     @Override
-    public String[] getDescription() {
+    public GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Chemical Reactor")
                 .addInfo("Controller block for the Large Chemical Reactor")
@@ -63,11 +93,7 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
                 .addOutputHatch("Any casing")
                 .addStructureInfo("You can have multiple hatches/busses")
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override
@@ -76,12 +102,12 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[1][48],
-                    TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     casingTexturePages[1][48],
-                    TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{casingTexturePages[1][48]};
     }
@@ -162,56 +188,25 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
     }
 
     @Override
+    public IStructureDefinition<GT_MetaTileEntity_LargeChemicalReactor> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
+
+    private void onCasingAdded() {
+        mCasingAmount++;
+    }
+
+    private void onCoilAdded() {
+        mCoilAmount++;
+    }
+
+    @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
-        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
-        int casingAmount = 0;
-        boolean hasHeatingCoil = false;
-        // x=width, z=depth, y=height
-        for (int x = -1 + xDir; x <= xDir + 1; x++) {
-            for (int z = -1 + zDir; z <= zDir + 1; z++) {
-                for (int y = -1; y <= 1; y++) {
-                    if (x == 0 && y == 0 && z == 0) {
-                        continue;
-                    }
-                    IGregTechTileEntity tileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(x, y, z);
-                    Block block = aBaseMetaTileEntity.getBlockOffset(x, y, z);
-                    int centerCoords = 0;
-                    if (x == xDir) {
-                        centerCoords++;
-                    }
-                    if (y == 0) {
-                        centerCoords++;
-                    }
-                    if (z == zDir) {
-                        centerCoords++;
-                    }
-                    if (centerCoords == 3) {
-                        if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 1) {
-                            continue;
-                        } else {
-                            return false;
-                        }
-                    }
-                    if (centerCoords == 2 && block == GregTech_API.sBlockCasings5 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
-                        hasHeatingCoil = true;
-                        continue;
-                    }
-                    if (!addInputToMachineList(tileEntity, CASING_INDEX) && !addOutputToMachineList(tileEntity, CASING_INDEX)
-                            && !addMaintenanceToMachineList(tileEntity, CASING_INDEX)
-                            && !addEnergyInputToMachineList(tileEntity, CASING_INDEX)) {
-                        if (block == GregTech_API.sBlockCasings8 && aBaseMetaTileEntity.getMetaIDOffset(x, y, z) == 0) {
-                            casingAmount++;
-                        } else {
-                            return false;
-                        }
-                    }
-
-                }
-            }
-
-        }
-        return casingAmount >= 8 && hasHeatingCoil && !mEnergyHatches.isEmpty() && !mMaintenanceHatches.isEmpty();
+        mCasingAmount = 0;
+        mCoilAmount = 0;
+        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 1, 0) &&
+                mCasingAmount >= 8 && mCoilAmount == 1 &&
+                !mEnergyHatches.isEmpty() && mMaintenanceHatches.size() == 1;
     }
 
     @Override
@@ -234,4 +229,8 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_Mu
         return false;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1, 1, 0);
+    }
 }

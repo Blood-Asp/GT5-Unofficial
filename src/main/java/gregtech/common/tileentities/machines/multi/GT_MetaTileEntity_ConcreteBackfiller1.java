@@ -4,6 +4,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
 public class GT_MetaTileEntity_ConcreteBackfiller1 extends GT_MetaTileEntity_ConcreteBackfillerBase {
     public GT_MetaTileEntity_ConcreteBackfiller1(int aID, String aName, String aNameRegional) {
@@ -15,8 +16,8 @@ public class GT_MetaTileEntity_ConcreteBackfiller1 extends GT_MetaTileEntity_Con
     }
 
     @Override
-    public String[] getDescription() {
-        return getDescriptionInternal("");
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        return createTooltip("Concrete Backfiller");
     }
 
     @Override

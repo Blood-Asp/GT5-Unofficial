@@ -1,5 +1,7 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.GT_Mod;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -8,7 +10,7 @@ import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
@@ -20,25 +22,52 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_Values.STEAM_PER_WATER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_BOILER_GLOW;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_MultiBlockBase {
+public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_LargeBoiler> {
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final IStructureDefinition<GT_MetaTileEntity_LargeBoiler> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_LargeBoiler>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"ccc", "ccc", "ccc"},
+                    {"ccc", "cPc", "ccc"},
+                    {"ccc", "cPc", "ccc"},
+                    {"ccc", "cPc", "ccc"},
+                    {"f~f", "fff", "fff"},
+            }))
+            .addElement('P', defer(t -> ofBlock(t.getPipeBlock(), t.getPipeMeta())))
+            .addElement('c', defer(t -> ofChain(
+                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addOutputToMachineList, t.getCasingTextureIndex(), 2),
+                    onElementPass(GT_MetaTileEntity_LargeBoiler::onCasingAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
+            )))
+            .addElement('f', defer(t -> ofChain(
+                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMaintenanceToMachineList, t.getCasingTextureIndex(), 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addInputToMachineList, t.getCasingTextureIndex(), 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMufflerToMachineList, t.getCasingTextureIndex(), 1),
+                    onElementPass(GT_MetaTileEntity_LargeBoiler::onFireboxAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
+            )))
+            .build();
     private boolean firstRun = true;
     private int mSuperEfficencyIncrease = 0;
     private int integratedCircuitConfig = 0; //Steam output is reduced by 1000L per config
     private int excessWater = 0; //Eliminate rounding errors for water
     private int excessFuel = 0; //Eliminate rounding errors for fuels that burn half items
     private int excessProjectedEU = 0; //Eliminate rounding errors from throttling the boiler
+    private int mCasingAmount;
+    private int mFireboxAmount;
 
     public GT_MetaTileEntity_LargeBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -49,7 +78,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Boiler")
                 .addInfo("Controller block for the Large " + getCasingMaterial() + " Boiler")
@@ -71,11 +100,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
                 .addInputHatch("Water, Any firebox")
                 .addOutputHatch("Steam, any casing")
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     public abstract String getCasingMaterial();
@@ -107,12 +132,12 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     BlockIcons.getCasingTextureForId(getCasingTextureIndex()),
-                    TextureFactory.of(OVERLAY_FRONT_LARGE_BOILER_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     BlockIcons.getCasingTextureForId(getCasingTextureIndex()),
-                    TextureFactory.of(OVERLAY_FRONT_LARGE_BOILER),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_LARGE_BOILER_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(getCasingTextureIndex())};
     }
@@ -125,11 +150,6 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
     @Override
     public boolean isCorrectMachinePart(ItemStack aStack) {
         return true;
-    }
-
-    @Override
-    public boolean isFacingValid(byte aFacing) {
-        return aFacing > 1;
     }
 
     @Override
@@ -250,64 +270,24 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
-        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
+    public IStructureDefinition<GT_MetaTileEntity_LargeBoiler> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
 
-        int tCasingAmount = 0;
-        int tFireboxAmount = 0;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (i != 0 || j != 0) {
-                    for (int k = 1; k <= 4; k++) {
-                        if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), getCasingTextureIndex())) {
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j) != getCasingBlock()) {
-                                return false;
-                            }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, k, zDir + j) != getCasingMeta()) {
-                                return false;
-                            }
-                            tCasingAmount++;
-                        }
-                    }
-                } else {
-                    for (int k = 1; k <= 3; k++) {
-                        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j) != getPipeBlock()) {
-                            return false;
-                        }
-                        if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, k, zDir + j) != getPipeMeta()) {
-                            return false;
-                        }
-                    }
-                    if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 4, zDir + j), getCasingTextureIndex())) {
-                        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 4, zDir + j) != getCasingBlock()) {
-                            return false;
-                        }
-                        if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 4, zDir + j) != getCasingMeta()) {
-                            return false;
-                        }
-                        tCasingAmount++;
-                    }
-                }
-            }
-        }
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (xDir + i != 0 || zDir + j != 0) {
-                    IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 0, zDir + j);
-                    if (!addMaintenanceToMachineList(tTileEntity, getFireboxTextureIndex()) && !addInputToMachineList(tTileEntity, getFireboxTextureIndex()) && !addMufflerToMachineList(tTileEntity, getFireboxTextureIndex())) {
-                        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 0, zDir + j) != getFireboxBlock()) {
-                            return false;
-                        }
-                        if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 0, zDir + j) != getFireboxMeta()) {
-                            return false;
-                        }
-                        tFireboxAmount++;
-                    }
-                }
-            }
-        }
-        return tCasingAmount >= 24 && tFireboxAmount >= 3;
+    private void onCasingAdded() {
+        mCasingAmount++;
+    }
+
+    private void onFireboxAdded() {
+        mFireboxAmount++;
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        mCasingAmount = 0;
+        mFireboxAmount = 0;
+        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 4, 0) && mCasingAmount >= 24 && mFireboxAmount >= 3 &&
+                mMaintenanceHatches.size() == 1 && !mMufflerHatches.isEmpty();
     }
 
     @Override
@@ -346,5 +326,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_Mu
         adjustedBurnTime += this.excessProjectedEU / adjustedEUt;
         this.excessProjectedEU %= adjustedEUt;
         return adjustedBurnTime;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1, 4, 0);
     }
 }

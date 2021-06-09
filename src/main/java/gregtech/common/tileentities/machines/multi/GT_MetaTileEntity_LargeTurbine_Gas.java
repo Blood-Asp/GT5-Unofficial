@@ -33,7 +33,7 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_SS_ACTIVE5) : TextureFactory.of(LARGETURBINE_SS5) : casingTexturePages[0][58]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.builder().addIcon(LARGETURBINE_SS_ACTIVE5).extFacing().build() : TextureFactory.builder().addIcon(LARGETURBINE_SS5).extFacing().build() : casingTexturePages[0][58]};
     }
 
     @Override

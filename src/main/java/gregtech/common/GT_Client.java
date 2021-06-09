@@ -293,7 +293,7 @@ public class GT_Client extends GT_Proxy
                         drawRotationMarker(t);
                     }
                 } else {
-                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit*6+direction.ordinal()]]);
+                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit * 6 + direction.ordinal()]]);
                 }
             }
         }
