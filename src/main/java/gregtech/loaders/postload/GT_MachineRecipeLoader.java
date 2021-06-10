@@ -513,6 +513,8 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Steel, 2L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 9L), GT_Utility.getIntegratedCircuit(24)}, Materials.Tin.getMolten(144L), ItemList.Long_Distance_Pipeline_Fluid_Pipe.get(64L), 600, 24);
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.Tin, 2L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 9L), GT_Utility.getIntegratedCircuit(24)}, Materials.Tin.getMolten(144L), ItemList.Long_Distance_Pipeline_Item_Pipe.get(64L), 600, 24);
 
+	GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 4L), GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1L), ItemList.Robot_Arm_IV.get(2L), GT_Utility.getIntegratedCircuit(3)}, GT_Values.NF, ItemList.Casing_Gearbox_TungstenSteel.get(1L), 200, 30);
+	    
         {//limiting life time of the variables
             ItemStack flask = ItemList.VOLUMETRIC_FLASK.get(1);
             NBTTagCompound nbtFlask = new NBTTagCompound();
