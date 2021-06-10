@@ -144,6 +144,17 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 		return (IStructureDefinition<GT_MetaTileEntity_EnhancedMultiBlockBase<T>>) getStructureDefinition();
 	}
 
+	/**
+	 * Explanation of the world coordinate these offset means:
+	 *
+	 * Imagine you stand in front of the controller, with controller facing towards you not rotated or flipped.
+	 *
+	 * The horizontalOffset would be the number of blocks on the left side of the controller, not counting controller itself.
+	 * The verticalOffset would be the number of blocks on the top side of the controller, not counting controller itself.
+	 * The depthOffset would be the number of blocks between you and controller, not counting controller itself.
+	 *
+	 * All these offsets can be negative.
+	 */
 	protected final boolean checkPiece(String piece, int horizontalOffset, int verticalOffset, int depthOffset) {
 		IGregTechTileEntity tTile = getBaseMetaTileEntity();
 		return getCastedStructureDefinition().check(this, piece, tTile.getWorld(), getExtendedFacing(), tTile.getXCoord(), tTile.getYCoord(), tTile.getZCoord(), horizontalOffset, verticalOffset, depthOffset, !mMachine);
