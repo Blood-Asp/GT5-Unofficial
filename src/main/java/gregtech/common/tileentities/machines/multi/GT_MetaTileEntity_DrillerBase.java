@@ -354,7 +354,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
     }
 
     @Override
-    public IStructureDefinition<GT_MetaTileEntity_DrillerBase> getStructureDefinition() {
+    public final IStructureDefinition<GT_MetaTileEntity_DrillerBase> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
     }
 
