@@ -120,7 +120,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         return new ITexture[]{aConnected ? getBaseTexture(tThickNess, mPipeAmount, mMaterial, aColorIndex) : TextureFactory.of(mMaterial.mIconSet.mTextures[OrePrefixes.pipe.mTextureIndex], Dyes.getModulation(aColorIndex, mMaterial.mRGBa)), getRestrictorTexture(tMask)};
     }
 
-    protected static ITexture getBaseTexture(float aThickNess, int aPipeAmount, Materials aMaterial, byte aColorIndex) {
+    protected ITexture getBaseTexture(float aThickNess, int aPipeAmount, Materials aMaterial, byte aColorIndex) {
         if (aPipeAmount >= 9)
             return TextureFactory.of(aMaterial.mIconSet.mTextures[OrePrefixes.pipeNonuple.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
         if (aPipeAmount >= 4)
@@ -138,7 +138,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         return TextureFactory.of(aMaterial.mIconSet.mTextures[OrePrefixes.pipeHuge.mTextureIndex], Dyes.getModulation(aColorIndex, aMaterial.mRGBa));
     }
 
-    protected static final ITexture getRestrictorTexture(byte aMask) {
+    protected ITexture getRestrictorTexture(byte aMask) {
         switch (aMask) {
             case 1:
                 return TextureFactory.of(Textures.BlockIcons.PIPE_RESTRICTOR_UP);
