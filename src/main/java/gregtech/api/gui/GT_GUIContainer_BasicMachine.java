@@ -1,6 +1,7 @@
 package gregtech.api.gui;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
         mProgressBarAmount = (byte) Math.max(1, aProgressBarAmount);
         mName = aName;
         mNEI = aNEI;
-        mRenderAutoOutputSlots = !(aTextureFile.startsWith("Steel") || aTextureFile.startsWith("Bronze"));
+        mRenderAutoOutputSlots = !(aTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_BasicMachine_Bronze);
     }
 
     @Override
