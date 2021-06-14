@@ -162,7 +162,7 @@ public class GT_MetaGenerated_Item_03
         ItemList.Circuit_Chip_BioCPU.set(addItem(tLastID = 77, "Bio Processing Unit", "Bio CPU", o));
 
         //Nand Chip
-        ItemList.NandChip.set(addItem(tLastID = 75, "Nand Chip", "A very simple Circuit", OrePrefixes.circuit.get(Materials.Primitive), SubTag.NO_UNIFICATION));
+        ItemList.NandChip.set(addItem(tLastID = 75, "NAND Chip", "A very simple Circuit", OrePrefixes.circuit.get(Materials.Primitive), SubTag.NO_UNIFICATION));
 
         //Vacuum Tube				Item01
         //Basic Circuit				IC2
