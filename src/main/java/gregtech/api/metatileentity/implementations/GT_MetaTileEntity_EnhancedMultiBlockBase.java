@@ -127,16 +127,16 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 	@Override
 	public void saveNBTData(NBTTagCompound aNBT) {
 		super.saveNBTData(aNBT);
-		aNBT.setByte("mRotation", (byte) mExtendedFacing.getRotation().getIndex());
-		aNBT.setByte("mFlip", (byte) mExtendedFacing.getFlip().getIndex());
+		aNBT.setByte("eRotation", (byte) mExtendedFacing.getRotation().getIndex());
+		aNBT.setByte("eFlip", (byte) mExtendedFacing.getFlip().getIndex());
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound aNBT) {
 		super.loadNBTData(aNBT);
 		mExtendedFacing = ExtendedFacing.of(ForgeDirection.getOrientation(getBaseMetaTileEntity().getFrontFacing()),
-				Rotation.byIndex(aNBT.getByte("mRotation")),
-				Flip.byIndex(aNBT.getByte("mFlip")));
+				Rotation.byIndex(aNBT.getByte("eRotation")),
+				Flip.byIndex(aNBT.getByte("eFlip")));
 	}
 
 	@SuppressWarnings("unchecked")
