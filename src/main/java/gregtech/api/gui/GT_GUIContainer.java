@@ -1,7 +1,5 @@
 package gregtech.api.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
@@ -19,9 +17,6 @@ public class GT_GUIContainer extends GuiContainer {
     public ResourceLocation mGUIbackground;
 
     public String mGUIbackgroundPath;
-    
-    public static ResourceLocation mGUITitleBackground;
-    static { mGUITitleBackground = new ResourceLocation(gregtech.api.enums.GT_Values.RES_PATH_GUI + "GUITitle.png");};
 
     public GT_GUIContainer(Container aContainer, String aGUIbackground) {
         super(aContainer);
@@ -34,18 +29,6 @@ public class GT_GUIContainer extends GuiContainer {
 
     public int getTop() {
         return guiTop;
-    }
-    
-    protected void drawGuiContainerTitleBackground() {
-    	int x = (width - xSize) / 2;
-    	int y = (height - ySize) / 2;
-    	GL11.glColor3ub((byte) 255, (byte) 255, (byte) 255);
-    	mc.renderEngine.bindTexture(mGUITitleBackground);
-    	drawTexturedModalRect(x, y - 17, 0, 0, xSize, 17);   
-    }
-    
-    protected void drawGuiContainerTitleForeground(String mName, int xOffset, int yOffset, int colorDec) {
-    	fontRendererObj.drawString(mName, xOffset, yOffset, colorDec);
     }
 
     @Override

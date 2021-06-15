@@ -2,23 +2,18 @@ package gregtech.common.gui;
 
 import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 
 public class GT_GUIContainer_MicrowaveEnergyTransmitter extends GT_GUIContainerMetaTile_Machine {
-	String unlocalisedName;
     public GT_GUIContainer_MicrowaveEnergyTransmitter(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(new GT_Container_MicrowaveEnergyTransmitter(aInventoryPlayer, aTileEntity), RES_PATH_GUI + "Teleporter.png");
-        unlocalisedName = aTileEntity.getMetaTileEntity().getMetaName();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-    	String mName = GT_LanguageManager.getTranslation("gt.blockmachines." + unlocalisedName + ".name");
-    	super.drawGuiContainerTitleForeground(mName, 5, -12, 4210752);
         this.fontRendererObj.drawString("Teleporter", 46, 8, 16448255);
         if (this.mContainer != null) {
             this.fontRendererObj.drawString("X: " + GT_Utility.parseNumberToString(((GT_Container_MicrowaveEnergyTransmitter) this.mContainer).mTargetX), 46, 16, 16448255);
@@ -33,7 +28,6 @@ public class GT_GUIContainer_MicrowaveEnergyTransmitter extends GT_GUIContainerM
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-    	super.drawGuiContainerTitleBackground();
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;

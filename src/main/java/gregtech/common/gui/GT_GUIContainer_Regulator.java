@@ -2,20 +2,15 @@ package gregtech.common.gui;
 
 import gregtech.api.gui.GT_GUIContainerMetaTile_Machine;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GT_GUIContainer_Regulator extends GT_GUIContainerMetaTile_Machine {
-	String unlocalisedName;
     public GT_GUIContainer_Regulator(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(new GT_Container_Regulator(aInventoryPlayer, aTileEntity), "gregtech:textures/gui/Regulator.png");
-        unlocalisedName = aTileEntity.getMetaTileEntity().getMetaName();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-    	String mName = GT_LanguageManager.getTranslation("gt.blockmachines." + unlocalisedName + ".name");
-    	super.drawGuiContainerTitleForeground(mName, 5, -12, 4210752);
         this.fontRendererObj.drawString(String.valueOf(((GT_Container_Regulator) this.mContainer).mTargetSlots[0]), 120, 9, 16448255);
         this.fontRendererObj.drawString(String.valueOf(((GT_Container_Regulator) this.mContainer).mTargetSlots[1]), 137, 9, 16448255);
         this.fontRendererObj.drawString(String.valueOf(((GT_Container_Regulator) this.mContainer).mTargetSlots[2]), 155, 9, 16448255);
@@ -29,7 +24,6 @@ public class GT_GUIContainer_Regulator extends GT_GUIContainerMetaTile_Machine {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
-    	super.drawGuiContainerTitleBackground();
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
