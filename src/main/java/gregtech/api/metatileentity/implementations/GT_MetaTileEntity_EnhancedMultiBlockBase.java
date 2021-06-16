@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_MetaTileEntity_EnhancedMultiBlockBase<T>> extends GT_MetaTileEntity_MultiBlockBase implements IAlignment, IConstructable {
 	private static final AtomicReferenceArray<GT_Multiblock_Tooltip_Builder> tooltips = new AtomicReferenceArray<>(GregTech_API.METATILEENTITIES.length);
 	private ExtendedFacing mExtendedFacing = ExtendedFacing.DEFAULT;
-	private final IAlignmentLimits mLimits = getInitialAlignmentLimits();
+	private IAlignmentLimits mLimits = getInitialAlignmentLimits();
 
 	protected GT_MetaTileEntity_EnhancedMultiBlockBase(int aID, String aName, String aNameRegional) {
 		super(aID, aName, aNameRegional);
@@ -92,6 +92,10 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 	@Override
 	public IAlignmentLimits getAlignmentLimits() {
 		return mLimits;
+	}
+
+	protected void setAlignmentLimits(IAlignmentLimits mLimits) {
+		this.mLimits = mLimits;
 	}
 
 	public abstract IStructureDefinition<T> getStructureDefinition();
