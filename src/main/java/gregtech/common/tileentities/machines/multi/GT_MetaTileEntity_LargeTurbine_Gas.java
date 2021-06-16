@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_SS5;
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_SS_ACTIVE5;
@@ -56,12 +55,9 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
-        FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sTurbineFuels.mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
+        if (aLiquid == null) return 0;
+        GT_Recipe tFuel = GT_Recipe_Map.sTurbineFuels.findFuel(aLiquid);
+        if (tFuel != null) return tFuel.mSpecialValue;
         return 0;
     }
 

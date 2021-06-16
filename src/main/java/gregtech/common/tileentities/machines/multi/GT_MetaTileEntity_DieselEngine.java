@@ -14,7 +14,6 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,7 +23,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -160,40 +158,37 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tFluids = getStoredFluids();
-        Collection<GT_Recipe> tRecipeList = getFuelMap().mRecipeList;
 
-        if(!tFluids.isEmpty() && tRecipeList != null) { //Does input hatch have a diesel fuel?
-            for (FluidStack hatchFluid1 : tFluids) { //Loops through hatches
-                for(GT_Recipe aFuel : tRecipeList) { //Loops through diesel fuel recipes
-                    FluidStack tLiquid;
-                    if ((tLiquid = GT_Utility.getFluidForFilledItem(aFuel.getRepresentativeInput(0), true)) != null) { //Create fluidstack from current recipe
-                        if (hatchFluid1.isFluidEqual(tLiquid)) { //Has a diesel fluid
-                            fuelConsumption = tLiquid.amount = boostEu ? (getBoostFactor() * getNominalOutput() / aFuel.mSpecialValue) : (getNominalOutput() / aFuel.mSpecialValue); //Calc fuel consumption
-                            if(depleteInput(tLiquid)) { //Deplete that amount
-                                boostEu = depleteInput(getBooster().getGas(2L * getAdditiveFactor()));
+        // fast track lookup
+        if (!tFluids.isEmpty()) {
+            for (FluidStack tFluid : tFluids) {
+                GT_Recipe tRecipe = getFuelMap().findFuel(tFluid);
+                if (tRecipe == null) continue;
 
-                                if(tFluids.contains(Materials.Lubricant.getFluid(1L))) { //Has lubricant?
-                                    //Deplete Lubricant. 1000L should = 1 hour of runtime (if baseEU = 2048)
-                                    if(mRuntime % 72 == 0 || mRuntime == 0) depleteInput(Materials.Lubricant.getFluid((boostEu ? 2L : 1L) * getAdditiveFactor()));
-                                } else return false;
+                FluidStack tLiquid = tFluid.copy();
+                fuelConsumption = tLiquid.amount = boostEu ? (getBoostFactor() * getNominalOutput() / tRecipe.mSpecialValue) : (getNominalOutput() / tRecipe.mSpecialValue); //Calc fuel consumption
+                //Deplete that amount
+                if (!depleteInput(tLiquid)) return false;
+                boostEu = depleteInput(getBooster().getGas(2L * getAdditiveFactor()));
 
-                                fuelValue = aFuel.mSpecialValue;
-                                fuelRemaining = hatchFluid1.amount; //Record available fuel
-                                this.mEUt = mEfficiency < 2000 ? 0 : getNominalOutput(); //Output 0 if startup is less than 20%
-                                this.mProgresstime = 1;
-                                this.mMaxProgresstime = 1;
-                                this.mEfficiencyIncrease = getEfficiencyIncrease();
-                                return true;
-                            }
-                        }
-                    }
-                }
+                //Deplete Lubricant. 1000L should = 1 hour of runtime (if baseEU = 2048)
+                if ((mRuntime % 72 == 0 || mRuntime == 0) && !depleteInput(Materials.Lubricant.getFluid((boostEu ? 2L : 1L) * getAdditiveFactor())))
+                    return false;
+
+                fuelValue = tRecipe.mSpecialValue;
+                fuelRemaining = tFluid.amount; //Record available fuel
+                this.mEUt = mEfficiency < 2000 ? 0 : getNominalOutput(); //Output 0 if startup is less than 20%
+                this.mProgresstime = 1;
+                this.mMaxProgresstime = 1;
+                this.mEfficiencyIncrease = getEfficiencyIncrease();
+                return true;
             }
         }
         this.mEUt = 0;
         this.mEfficiency = 0;
         return false;
     }
+
 
     @Override
     public IStructureDefinition<GT_MetaTileEntity_DieselEngine> getStructureDefinition() {
@@ -299,7 +294,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
                 getIdealStatus() == getRepairStatus() ?
                 EnumChatFormatting.GREEN+StatCollector.translateToLocal("GT5U.turbine.maintenance.false")+EnumChatFormatting.RESET :
                 EnumChatFormatting.RED+StatCollector.translateToLocal("GT5U.turbine.maintenance.true")+EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("GT5U.engine.output")+": " +EnumChatFormatting.RED+(-mEUt*mEfficiency/10000)+EnumChatFormatting.RESET+" EU/t",
+                StatCollector.translateToLocal("GT5U.engine.output")+": " +EnumChatFormatting.RED+(mEUt*mEfficiency/10000)+EnumChatFormatting.RESET+" EU/t",
                 StatCollector.translateToLocal("GT5U.engine.consumption")+": " +EnumChatFormatting.YELLOW+fuelConsumption+EnumChatFormatting.RESET+" L/t",
                 StatCollector.translateToLocal("GT5U.engine.value")+": " +EnumChatFormatting.YELLOW+fuelValue+EnumChatFormatting.RESET+" EU/L",
                 StatCollector.translateToLocal("GT5U.turbine.fuel")+": " +EnumChatFormatting.GOLD+fuelRemaining+EnumChatFormatting.RESET+" L",

@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_TU_ACTIVE5;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
@@ -63,12 +62,9 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
-        FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sPlasmaFuels.mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
+        if (aLiquid == null) return 0;
+        GT_Recipe tFuel = GT_Recipe_Map.sPlasmaFuels.findFuel(aLiquid);
+        if (tFuel != null) return tFuel.mSpecialValue;
         return 0;
     }
 

@@ -18,8 +18,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import java.util.Collection;
-
 import static gregtech.api.enums.GT_Values.V;
 
 public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity_BasicTank {
@@ -271,19 +269,18 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
 
     public int getFuelValue(FluidStack aLiquid) {
         //System.out.println("Fluid stack check");
-        if (aLiquid == null || getRecipes() == null) return 0;
-        FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = getRecipes().mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                if (aLiquid.isFluidEqual(tLiquid)){
-                    long val=(long)tFuel.mSpecialValue * getEfficiency() * consumedFluidPerOperation(tLiquid) / 100;
-                    if(val> Integer.MAX_VALUE){
-                        throw new ArithmeticException("Integer LOOPBACK!");
-                    }
-                    return (int) val;
-                }
-        return 0;
+        GT_Recipe_Map tRecipes = getRecipes();
+        if (aLiquid == null || !(tRecipes instanceof GT_Recipe.GT_Recipe_Map_Fuel)) return 0;
+        GT_Recipe.GT_Recipe_Map_Fuel tFuels = (GT_Recipe.GT_Recipe_Map_Fuel) tRecipes;
+        GT_Recipe tFuel = tFuels.findFuel(aLiquid);
+        if (tFuel == null) {
+            return 0;
+        }
+        long val=(long)tFuel.mSpecialValue * getEfficiency() * consumedFluidPerOperation(aLiquid) / 100;
+        if(val> Integer.MAX_VALUE){
+            throw new ArithmeticException("Integer LOOPBACK!");
+        }
+        return (int) val;
     }
 
     public int getFuelValue(ItemStack aStack) {
