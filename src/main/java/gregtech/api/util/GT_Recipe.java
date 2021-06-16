@@ -1010,7 +1010,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         @Override
         public GT_Recipe add(GT_Recipe aRecipe) {
             aRecipe = super.add(aRecipe);
-            if (aRecipe.mInputs != null && aRecipe.mInputs.length == 1 && (aRecipe.mFluidInputs == null || aRecipe.mFluidInputs.length == 0)) {
+            if (aRecipe.mInputs != null && GT_Utility.getNonnullElementCount(aRecipe.mInputs) == 1 &&
+                    (aRecipe.mFluidInputs == null || GT_Utility.getNonnullElementCount(aRecipe.mFluidInputs) == 0)) {
                 FluidStack tFluid = GT_Utility.getFluidForFilledItem(aRecipe.mInputs[0], true);
                 if (tFluid != null) {
                     tFluid.amount = 0;

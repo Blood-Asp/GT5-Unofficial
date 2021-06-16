@@ -2884,4 +2884,8 @@ public class GT_Utility {
             dropItem.delayBeforeCanPickup = 0;
         }
     }
+
+    public static long getNonnullElementCount(Object[] tArray) {
+        return Arrays.stream(tArray).filter(Objects::nonNull).count();
+    }
 }
