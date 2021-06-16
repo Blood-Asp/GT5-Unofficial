@@ -2,6 +2,7 @@ package gregtech.common.render;
 
 import com.gtnewhorizon.structurelib.alignment.IAlignmentProvider;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
+import com.gtnewhorizon.structurelib.alignment.enumerable.Flip;
 import com.gtnewhorizon.structurelib.alignment.enumerable.Rotation;
 import gregtech.GT_Mod;
 import gregtech.api.interfaces.IColorModulationContainer;
@@ -12,7 +13,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.LightingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IconFlipped;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
@@ -225,7 +225,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceYNeg(Blocks.air, x, y, z, new IconFlipped(icon, !stdOrient, false));
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceYNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped() ^ !stdOrient, aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateBottom = 0;
     }
 
@@ -249,7 +250,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceYPos(Blocks.air, x, y, z, icon);
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceYPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateTop = 0;
     }
 
@@ -274,7 +276,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceZNeg(Blocks.air, x, y, z, icon);
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceZNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateEast = 0;
         aRenderer.field_152631_f = false;
     }
@@ -299,7 +302,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceZPos(Blocks.air, x, y, z, icon);
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceZPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateWest = 0;
     }
 
@@ -323,7 +327,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceXNeg(Blocks.air, x, y, z, icon);
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceXNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateNorth = 0;
     }
 
@@ -348,7 +353,8 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
                 break;
         }
 
-        aRenderer.renderFaceXPos(Blocks.air, x, y, z, icon);
+        Flip aFlip = extendedFacing.getFlip();
+        aRenderer.renderFaceXPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateSouth = 0;
         aRenderer.field_152631_f = false;
     }

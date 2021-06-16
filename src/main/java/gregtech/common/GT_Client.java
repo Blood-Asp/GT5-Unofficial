@@ -177,7 +177,7 @@ public class GT_Client extends GT_Proxy
 
     private static boolean checkedForChicken = false;
 
-    private static void drawGrid(DrawBlockHighlightEvent aEvent, boolean showCoverConnections) {
+    private static void drawGrid(DrawBlockHighlightEvent aEvent, boolean showCoverConnections, boolean aIsWrench, boolean aIsSneaking) {
         if (!checkedForChicken) {
             try {
                 Class.forName("codechicken.lib.vec.Rotation");
@@ -280,23 +280,30 @@ public class GT_Client extends GT_Proxy
         }
         GL11.glEnd();
         // draw turning indicator
-        if (tTile instanceof IGregTechTileEntity &&
+        if (aIsWrench && tTile instanceof IGregTechTileEntity &&
                 ((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof IAlignmentProvider) {
             IAlignment tAlignment = ((IAlignmentProvider) ((IGregTechTileEntity) tTile).getMetaTileEntity()).getAlignment();
             if (tAlignment != null) {
                 ForgeDirection direction = tAlignment.getDirection();
                 if (direction.ordinal() == tSideHit)
-                    drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
+                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER, aIsSneaking);
                 else if (direction.getOpposite().ordinal() == tSideHit) {
                     for (Transformation t : ROTATION_MARKER_TRANSFORMS_CORNER) {
-                        drawRotationMarker(t);
+                        drawExtendedRotationMarker(t, aIsSneaking);
                     }
                 } else {
-                    drawRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit * 6 + direction.ordinal()]]);
+                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit * 6 + direction.ordinal()]], aIsSneaking);
                 }
             }
         }
         GL11.glPopMatrix(); // get back to player center
+    }
+
+    private static void drawExtendedRotationMarker(Transformation transform, boolean sneaking) {
+        if (sneaking)
+            drawFlipMarker(transform);
+        else
+            drawRotationMarker(transform);
     }
 
     private static void drawRotationMarker(Transformation transform) {
@@ -315,6 +322,47 @@ public class GT_Client extends GT_Proxy
         t.addVertex(0.3d, 0d, 0.3d);
         t.addVertex(-0.3d, 0d, 0.3d);
         t.addVertex(-0.3d, 0d, -0.4d);
+        t.draw();
+        GL11.glPopMatrix();
+    }
+
+    private static void drawFlipMarker(Transformation transform) {
+        GL11.glPushMatrix();
+        transform.glApply();
+        Tessellator t = Tessellator.instance;
+        // right shape
+        GL11.glLineStipple(4, (short) 0xAAAA);
+        GL11.glEnable(GL11.GL_LINE_STIPPLE);
+        t.startDrawing(GL11.GL_LINE_STRIP);
+        t.addVertex(0.1d, 0d, 0.04d);
+        t.addVertex(0.1d, 0d, 0.2d);
+        t.addVertex(0.35d, 0d, 0.35d);
+        t.addVertex(0.35d, 0d, -0.35d);
+        t.addVertex(0.1d, 0d, -0.2d);
+        t.addVertex(0.1d, 0d, -0.04d);
+        t.draw();
+        GL11.glDisable(GL11.GL_LINE_STIPPLE);
+        // left shape
+        t.startDrawing(GL11.GL_LINE_STRIP);
+        t.addVertex(-0.1d, 0d, 0.04d);
+        t.addVertex(-0.1d, 0d, 0.2d);
+        t.addVertex(-0.35d, 0d, 0.35d);
+        t.addVertex(-0.35d, 0d, -0.35d);
+        t.addVertex(-0.1d, 0d, -0.2d);
+        t.addVertex(-0.1d, 0d, -0.04d);
+        t.draw();
+        // arrow
+        t.startDrawing(GL11.GL_LINE_LOOP);
+        t.addVertex(0.15d, 0d, -0.04d);
+        t.addVertex(0.15d, 0d, -0.1d);
+        t.addVertex(0.25d, 0d, 0.d);
+        t.addVertex(0.15d, 0d, 0.1d);
+        t.addVertex(0.15d, 0d, 0.04d);
+        t.addVertex(-0.15d, 0d, 0.04d);
+        t.addVertex(-0.15d, 0d, 0.1d);
+        t.addVertex(-0.25d, 0d, 0.d);
+        t.addVertex(-0.15d, 0d, -0.1d);
+        t.addVertex(-0.15d, 0d, -0.04d);
         t.draw();
         GL11.glPopMatrix();
     }
@@ -507,7 +555,7 @@ public class GT_Client extends GT_Proxy
         if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))
         {
             if (aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable)
-                drawGrid(aEvent, false);
+                drawGrid(aEvent, false, true, aEvent.player.isSneaking());
             return;
         }
 
@@ -518,7 +566,7 @@ public class GT_Client extends GT_Proxy
             GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList) )
         {
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
-                drawGrid(aEvent, false);
+                drawGrid(aEvent, false, false, aEvent.player.isSneaking());
             return;
         }
 
@@ -529,7 +577,7 @@ public class GT_Client extends GT_Proxy
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
                 for (byte i = 0; i < 6; i++)
                     if (((ICoverable) aTileEntity).getCoverIDAtSide(i) > 0) {
-                        drawGrid(aEvent, true);
+                        drawGrid(aEvent, true, false, true);
                         return;
                     }
             return;
@@ -538,7 +586,7 @@ public class GT_Client extends GT_Proxy
         if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet()))
         {
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
-                drawGrid(aEvent, true);
+                drawGrid(aEvent, true, false, aEvent.player.isSneaking());
         }
     }
 
