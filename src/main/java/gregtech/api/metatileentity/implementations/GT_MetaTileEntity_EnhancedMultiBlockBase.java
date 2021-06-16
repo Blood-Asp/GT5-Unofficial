@@ -123,7 +123,7 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 	}
 
 	protected IAlignmentLimits getInitialAlignmentLimits() {
-		return UNLIMITED;
+		return (d, r, f) -> f.isNotFlipped();
 	}
 
 	@Override

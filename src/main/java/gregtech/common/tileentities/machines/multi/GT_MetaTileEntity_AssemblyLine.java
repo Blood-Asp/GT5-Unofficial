@@ -322,8 +322,12 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
         mDataAccessHatches.clear();
         if (!checkPiece(STRUCTURE_PIECE_FIRST, 0, 1, 0))
             return false;
+        return checkMachine(true) || checkMachine(false);
+    }
+
+    private boolean checkMachine(boolean leftToRight) {
         for (int i = 1; i < 16; i++) {
-            if (!checkPiece(i == 1 ? STRUCTURE_PIECE_SECOND : STRUCTURE_PIECE_LATER, -i, 1, 0))
+            if (!checkPiece(i == 1 ? STRUCTURE_PIECE_SECOND : STRUCTURE_PIECE_LATER, leftToRight ? -i : i, 1, 0))
                 return false;
             if (!mOutputBusses.isEmpty())
                 return !mEnergyHatches.isEmpty() && mMaintenanceHatches.size() == 1;
