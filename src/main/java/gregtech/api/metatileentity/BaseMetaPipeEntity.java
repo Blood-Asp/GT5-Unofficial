@@ -12,6 +12,8 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
+import gregtech.api.graphs.Node;
+import gregtech.api.graphs.paths.NodePath;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IConnectable;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -62,6 +64,25 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
     private int oX = 0, oY = 0, oZ = 0, mTimeStatisticsIndex = 0;
     private short mID = 0;
     private long mTickTimer = 0;
+    protected Node node;
+    protected NodePath nodePath;
+
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
+
+    public NodePath getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(NodePath nodePath) {
+        this.nodePath = nodePath;
+    }
+
 
     public BaseMetaPipeEntity() {
     }
@@ -262,12 +283,15 @@ public class BaseMetaPipeEntity extends BaseTileEntity implements IGregTechTileE
                                         if (!hasValidMetaTileEntity()) return;
                                     }
                                 }
+                            byte oldConections =  mConnections;
                             // Mask-out Connection direction bits to keep only Foam related connections
                             mConnections = (byte) (mMetaTileEntity.mConnections | (mConnections & ~IConnectable.CONNECTED_ALL));
                             // If foam not hardened, tries roll chance to harden
                             if ((mConnections & IConnectable.HAS_FOAM) == IConnectable.HAS_FRESHFOAM && getRandomNumber(1000) == 0) {
                                 mConnections = (byte) ((mConnections & ~IConnectable.HAS_FRESHFOAM) | IConnectable.HAS_HARDENEDFOAM);
                             }
+                            if (mTickTimer > 12 && oldConections != mConnections)
+                                GregTech_API.causeCableUpdate(worldObj,xCoord,yCoord,zCoord);
                         }
                     case 8:
                         tCode = 9;

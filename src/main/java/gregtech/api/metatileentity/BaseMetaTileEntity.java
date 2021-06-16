@@ -14,6 +14,9 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
+import gregtech.api.graphs.GenerateNodeMap;
+import gregtech.api.graphs.GenerateNodeMapPower;
+import gregtech.api.graphs.Node;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
@@ -40,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -90,6 +94,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private String mOwnerName = "";
     private UUID mOwnerUuid = GT_Utility.defaultUuid;
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
+    private int cableUpdateDelay = 10;
 
     public boolean mWasShutdown = false;
 
@@ -444,6 +449,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                         mActiveEUOutputs[i] = temp;
                                     }
                                 }
+                                if (mTickTimer == 22) {
+                                    generatePowerNodes();
+                                }
                             }
 
 
@@ -568,6 +576,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 case 15:
                     tCode++;
                     if (aSideServer) {
+                        if (mTickTimer > 20 && cableUpdateDelay == 0) {
+                            generatePowerNodes();
+                            cableUpdateDelay--;
+                        } else {
+                            cableUpdateDelay--;
+                        }
                         if (mTickTimer % 10 == 0) {
                             if (mSendClientData) {
                                 NW.sendPacketToAllPlayersInRange(worldObj,
@@ -869,6 +883,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
             mMetaTileEntity.onFacingChange();
 
             doEnetUpdate();
+            cableUpdateDelay = 10;
             
             if (mMetaTileEntity.shouldTriggerBlockUpdate()) {
                 // If we're triggering a block update this will call onMachineBlockUpdate()
@@ -971,6 +986,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public void onMachineBlockUpdate() {
         if (canAccessData()) mMetaTileEntity.onMachineBlockUpdate();
+        cableUpdateDelay = 10;
     }
 
     /**
@@ -1096,6 +1112,29 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (aSide == 6) return true;
         if (isServerSide() && waitForActive) return ((aSide >= 0 && aSide < 6) && mActiveEUOutputs[aSide]) || mReleaseEnergy;
         return isEnergyOutputSide(aSide);
+    }
+
+    public void generatePowerNodes() {
+        if (isServerSide() && mMetaTileEntity != null && (mMetaTileEntity.isEnetInput() || mMetaTileEntity.isEnetOutput())) {
+            int time = MinecraftServer.getServer().getTickCounter();
+            for (byte i = 0;i<6;i++) {
+                if (outputsEnergyTo(i,false) || inputEnergyFrom(i,false)) {
+                    IGregTechTileEntity TE = getIGregTechTileEntityAtSide(i);
+                    if (TE instanceof BaseMetaPipeEntity) {
+                        Node node = ((BaseMetaPipeEntity) TE).getNode();
+                        if (node == null) {
+                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
+                        } else if (node.mCreationTime != time) {
+                            GenerateNodeMap.clearNodeMap(node,-1);
+                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
+                        } else {
+//                            GenerateNodeMap.clearNodeMap(node,-1);
+//                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -1399,9 +1438,11 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     	if(aPlayer.isSneaking() && mMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine && ((GT_MetaTileEntity_BasicMachine)mMetaTileEntity).setMainFacing(GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ))){
                             GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
+                            cableUpdateDelay = 10;
                     	}else if (mMetaTileEntity.onWrenchRightClick(aSide, GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ), aPlayer, aX, aY, aZ)) {
                             GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
+                            cableUpdateDelay = 10;
                         }
                         return true;
                     }
@@ -1452,6 +1493,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             issueBlockUpdate();
                         }
                         doEnetUpdate();
+                        cableUpdateDelay = 10;
                         return true;
                     }
 
@@ -1462,6 +1504,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         doEnetUpdate();
+                        cableUpdateDelay = 10;
                         return true;
                     }
 

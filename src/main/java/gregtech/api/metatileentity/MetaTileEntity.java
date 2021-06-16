@@ -63,6 +63,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public final ItemStack[] mInventory;
     public boolean doTickProfilingInThisTick = true;
 
+
     /**
      * accessibility to this Field is no longer given, see below
      */

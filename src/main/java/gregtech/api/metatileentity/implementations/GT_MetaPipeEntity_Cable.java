@@ -9,6 +9,12 @@ import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TextureSet;
 import gregtech.api.enums.Textures;
+import gregtech.api.graphs.PowerNode;
+import gregtech.api.graphs.PowerNodes;
+import gregtech.api.graphs.consumers.ConsumerNode;
+import gregtech.api.graphs.Node;
+import gregtech.api.graphs.NodeList;
+import gregtech.api.graphs.paths.PowerNodePath;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntityCable;
@@ -169,8 +175,28 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public long transferElectricity(byte aSide, long aVoltage, long aAmperage, HashSet<TileEntity> aAlreadyPassedSet) {
-        if (!isConnectedAtSide(aSide) && aSide != 6) return 0;
-
+        if (!getBaseMetaTileEntity().isServerSide() || !isConnectedAtSide(aSide) && aSide != 6) return 0;
+        BaseMetaPipeEntity tBase =(BaseMetaPipeEntity) getBaseMetaTileEntity();
+        PowerNode tNode =(PowerNode) tBase.getNode();
+        if (tNode != null) {
+            int tPlace = 0;
+            Node[] tToPower = new Node[tNode.mConsumers.size()];
+            if (tNode.mHadVoltage) {
+                for (ConsumerNode consumer : tNode.mConsumers) {
+                    if (consumer.needsEnergy())
+                        tToPower[tPlace++] = consumer;
+                }
+            } else {
+                tNode.mHadVoltage = true;
+                for (ConsumerNode consumer : tNode.mConsumers) {
+                    tToPower[tPlace++] = consumer;
+                }
+            }
+            return PowerNodes.powerNode(tNode,null,new NodeList(tToPower),(int)aVoltage,(int)aAmperage);
+        }
+        if (0< 10) {
+            return 0;
+        }
         long rUsedAmperes = 0;
         final IGregTechTileEntity baseMetaTile = getBaseMetaTileEntity();
         byte i = (byte)((((aSide/2)*2)+2)%6); //this bit of trickery makes sure a direction goes to the next cardinal pair.  IE, NS goes to E, EW goes to U, UD goes to N.  It's a lame way to make sure locally connected machines on a wire get EU first.
@@ -506,15 +532,23 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
 
     @Override
     public String[] getInfoData() {
+        BaseMetaPipeEntity base = (BaseMetaPipeEntity) getBaseMetaTileEntity();
+        PowerNodePath path =(PowerNodePath) base.getNodePath();
+        int amps = 0;
+        int volts = 0;
+        if (path != null) {
+            amps = path.getAmps();
+            volts = path.getVoltage(this);
+        }
         return new String[]{
                 //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
                 "Heat: "+
                         EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET,
                 "Max Load (1t):",
-                EnumChatFormatting.GREEN + Integer.toString(mTransferredAmperageOK) + EnumChatFormatting.RESET +" A / "+
+                EnumChatFormatting.GREEN + Integer.toString(amps) + EnumChatFormatting.RESET +" A / "+
                         EnumChatFormatting.YELLOW + mAmperage + EnumChatFormatting.RESET +" A",
                 "Max EU/p (1t):",
-                EnumChatFormatting.GREEN + Long.toString(mTransferredVoltageOK) + EnumChatFormatting.RESET +" EU / "+
+                EnumChatFormatting.GREEN + Long.toString(volts) + EnumChatFormatting.RESET +" EU / "+
                         EnumChatFormatting.YELLOW + mVoltage + EnumChatFormatting.RESET +" EU",
                 "Max Load (20t): "+
                     EnumChatFormatting.GREEN + mTransferredAmperageLast20OK + EnumChatFormatting.RESET +" A",
