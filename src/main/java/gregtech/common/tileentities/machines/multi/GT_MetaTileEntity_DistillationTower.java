@@ -35,7 +35,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_DistillationTower> {
-    private static final int CASING_INDEX = 49;
+    protected static final int CASING_INDEX = 49;
     protected static final String STRUCTURE_PIECE_BASE = "base";
     protected static final String STRUCTURE_PIECE_LAYER = "layer";
     private static final IStructureDefinition<GT_MetaTileEntity_DistillationTower> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_DistillationTower>builder()
@@ -63,10 +63,10 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                     isAir()
             ))
             .build();
-    private final List<List<GT_MetaTileEntity_Hatch_Output>> mOutputHatchesByLayer = new ArrayList<>();
-    private int mHeight;
-    private int mCasing;
-    private boolean mTopLayerFound;
+    protected final List<List<GT_MetaTileEntity_Hatch_Output>> mOutputHatchesByLayer = new ArrayList<>();
+    protected int mHeight;
+    protected int mCasing;
+    protected boolean mTopLayerFound;
 
     public GT_MetaTileEntity_DistillationTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -178,16 +178,16 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
         return false;
     }
 
-    private void onCasingFound() {
+    protected void onCasingFound() {
         mCasing++;
     }
 
-    private void onTopLayerFound() {
+    protected void onTopLayerFound() {
         mTopLayerFound = true;
         onCasingFound();
     }
 
-    private boolean addLayerOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+    protected boolean addLayerOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null || aTileEntity.isDead() || !(aTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Output))
             return false;
         while (mOutputHatchesByLayer.size() < mHeight + 1)

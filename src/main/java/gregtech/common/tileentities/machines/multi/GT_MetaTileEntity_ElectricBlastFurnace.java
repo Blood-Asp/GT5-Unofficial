@@ -46,8 +46,8 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
     protected final FluidStack[] pollutionFluidStacks = {Materials.CarbonDioxide.getGas(1000),
             Materials.CarbonMonoxide.getGas(1000), Materials.SulfurDioxide.getGas(1000)};
 
-    private static final int CASING_INDEX = 11;
-    private static final String STRUCTURE_PIECE_MAIN = "main";
+    protected static final int CASING_INDEX = 11;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<GT_MetaTileEntity_ElectricBlastFurnace> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_ElectricBlastFurnace>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
                     {"ttt", "tmt", "ttt"},
