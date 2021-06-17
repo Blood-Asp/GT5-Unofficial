@@ -226,7 +226,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceYNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped() ^ !stdOrient, aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceYNeg(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped() ^ !stdOrient, aFlip.isVerticallyFliped()) : new GT_IconFlipped(icon, !stdOrient, false));
         aRenderer.uvRotateBottom = 0;
     }
 
@@ -251,7 +251,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceYPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceYPos(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateTop = 0;
     }
 
@@ -277,7 +277,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceZNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceZNeg(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateEast = 0;
         aRenderer.field_152631_f = false;
     }
@@ -303,7 +303,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceZPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceZPos(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateWest = 0;
     }
 
@@ -328,7 +328,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceXNeg(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceXNeg(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateNorth = 0;
     }
 
@@ -354,7 +354,7 @@ class GT_RenderedTexture implements ITexture, IColorModulationContainer {
         }
 
         Flip aFlip = extendedFacing.getFlip();
-        aRenderer.renderFaceXPos(Blocks.air, x, y, z, useExtFacing ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
+        aRenderer.renderFaceXPos(Blocks.air, x, y, z, useExtFacing && GT_Mod.gregtechproxy.mRenderFlippedMachinesFlipped ? new GT_IconFlipped(icon, aFlip.isHorizontallyFlipped(), aFlip.isVerticallyFliped()) : icon);
         aRenderer.uvRotateSouth = 0;
         aRenderer.field_152631_f = false;
     }

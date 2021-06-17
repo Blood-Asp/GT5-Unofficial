@@ -136,7 +136,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_EnhancedM
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
-        return (d, r, f) -> !r.isUpsideDown() && f.isNotFlipped();
+        return (d, r, f) -> !r.isUpsideDown() && !f.isVerticallyFliped();
     }
 
     @Override
