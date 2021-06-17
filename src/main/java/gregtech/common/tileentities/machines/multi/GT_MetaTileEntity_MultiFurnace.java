@@ -181,7 +181,7 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 1, 2, 0))
             return false;
 
-        if (getCoilLevel() == null)
+        if (getCoilLevel() == HeatingCoilLevel.None)
             return false;
 
         this.mLevel = getCoilLevel().getLevel();

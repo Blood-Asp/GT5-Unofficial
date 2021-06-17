@@ -122,7 +122,7 @@ public class GT_StructureUtility {
 					return false;
 				HeatingCoilLevel existingLevel = heatingCoilGetter.apply(t),
 						newLevel = ((IHeatingCoil) block).getCoilHeat(world.getBlockMetadata(x, y, z));
-				if (existingLevel == null) {
+				if (existingLevel == null || existingLevel == HeatingCoilLevel.None) {
 					return heatingCoilSetter.test(t, newLevel);
 				} else {
 					return newLevel == existingLevel;

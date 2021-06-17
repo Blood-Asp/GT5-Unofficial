@@ -265,7 +265,7 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
         if (!checkPiece(STRUCTURE_PIECE_MAIN, 1, 3, 0))
             return false;
 
-        if (getCoilLevel() == null)
+        if (getCoilLevel() == HeatingCoilLevel.None)
             return false;
 
         if (mMaintenanceHatches.size() != 1)
