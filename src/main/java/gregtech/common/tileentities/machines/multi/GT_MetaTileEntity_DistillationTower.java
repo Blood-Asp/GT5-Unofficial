@@ -190,11 +190,11 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     protected boolean addLayerOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null || aTileEntity.isDead() || !(aTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_Hatch_Output))
             return false;
-        while (mOutputHatchesByLayer.size() < mHeight + 1)
+        while (mOutputHatchesByLayer.size() < mHeight)
             mOutputHatchesByLayer.add(new ArrayList<>());
         GT_MetaTileEntity_Hatch_Output tHatch = (GT_MetaTileEntity_Hatch_Output) aTileEntity.getMetaTileEntity();
         tHatch.updateTexture(aBaseCasingIndex);
-        return mOutputHatchesByLayer.get(mHeight).add(tHatch);
+        return mOutputHatchesByLayer.get(mHeight - 1).add(tHatch);
     }
 
     @Override

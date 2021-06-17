@@ -98,6 +98,11 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 		this.mLimits = mLimits;
 	}
 
+	/**
+	 * Due to limitation of Java type system, you might need to do an unchecked cast.
+	 * HOWEVER, the returned IStructureDefinition is expected to be evaluated against current instance only, and should
+	 * not be used against other instances, even for those of the same class.
+	 */
 	public abstract IStructureDefinition<T> getStructureDefinition();
 
 	protected abstract GT_Multiblock_Tooltip_Builder createTooltip();
