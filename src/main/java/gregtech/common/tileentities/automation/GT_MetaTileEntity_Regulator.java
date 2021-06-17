@@ -28,7 +28,7 @@ public class GT_MetaTileEntity_Regulator
                 "Filters up to 9 different Items",
                 "Allows Item-specific output stack size",
                 "Allows Item-specific output slot",
-                "Consumes 1EU per moved Item"});
+                "Does not consume energy to move Item"});
     }
 
     public GT_MetaTileEntity_Regulator(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {

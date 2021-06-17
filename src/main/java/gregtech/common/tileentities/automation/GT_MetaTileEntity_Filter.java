@@ -23,7 +23,7 @@ public class GT_MetaTileEntity_Filter extends GT_MetaTileEntity_Buffer {
         super(aID, aName, aNameRegional, aTier, 19, new String[]{
                 "Filters up to 9 different Items",
                 "Use Screwdriver to regulate output stack size",
-                "Consumes 1EU per moved Item"});
+                "Does not consume energy to move Item"});
     }
 
     public GT_MetaTileEntity_Filter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {

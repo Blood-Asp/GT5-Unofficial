@@ -886,13 +886,16 @@ public class GT_Utility {
     public static boolean listContainsItem(Collection<ItemStack> aList, ItemStack aStack, boolean aTIfListEmpty, boolean aInvertFilter) {
         if (aStack == null || aStack.stackSize < 1) return false;
         if (aList == null) return aTIfListEmpty;
-        aList.removeIf(Objects::isNull);
-        if (aList.size() < 1) return aTIfListEmpty;
-        Iterator<ItemStack> tIterator = aList.iterator();
-        ItemStack tStack = null;
-        while (tIterator.hasNext())
-            if ((tStack = tIterator.next()) != null && areStacksEqual(aStack, tStack)) return !aInvertFilter;
-        return aInvertFilter;
+        boolean tEmpty = true;
+        for (ItemStack tStack : aList) {
+            if (tStack != null) {
+                tEmpty = false;
+                if (areStacksEqual(aStack, tStack)) {
+                    return !aInvertFilter;
+                }
+            }
+        }
+        return tEmpty ? aTIfListEmpty : aInvertFilter;
     }
 
     public static boolean areStacksOrToolsEqual(ItemStack aStack1, ItemStack aStack2) {
