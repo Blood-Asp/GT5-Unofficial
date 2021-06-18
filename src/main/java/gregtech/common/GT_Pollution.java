@@ -313,6 +313,7 @@ public class GT_Pollution {
 	public class GT_PollutionEventHandler {
 		@SubscribeEvent
 		public void chunkWatch(ChunkWatchEvent.Watch event) {
+            if(!GT_Mod.gregtechproxy.mPollution) return;
 			if (chunkData.containsKey(event.chunk)) {
 				int pollution = chunkData.get(event.chunk)[GTPOLLUTION];
 				if (pollution > POLLUTIONPACKET_MINVALUE)
