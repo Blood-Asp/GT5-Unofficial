@@ -550,7 +550,7 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GregTech_API.registerCover(ItemList.Electric_Pump_ZPM.get(1L), TextureFactory.of(MACHINE_CASINGS[7][0], TextureFactory.of(OVERLAY_PUMP)), new GT_Cover_Pump(131072));
         GregTech_API.registerCover(ItemList.Electric_Pump_UV.get(1L), TextureFactory.of(MACHINE_CASINGS[8][0], TextureFactory.of(OVERLAY_PUMP)), new GT_Cover_Pump(524288));
         GregTech_API.registerCover(ItemList.Electric_Pump_UHV.get(1L), TextureFactory.of(MACHINE_CASINGS[9][0], TextureFactory.of(OVERLAY_PUMP)), new GT_Cover_Pump(1048576));
-        GregTech_API.registerCover(ItemList.Electric_Pump_UEV.get(1L), TextureFactory.of(MACHINE_CASINGS[9][0], TextureFactory.of(OVERLAY_PUMP)), new GT_Cover_Pump(2097152));
+        GregTech_API.registerCover(ItemList.Electric_Pump_UEV.get(1L), TextureFactory.of(MACHINE_CASINGS[10][0], TextureFactory.of(OVERLAY_PUMP)), new GT_Cover_Pump(2097152));
 
         ItemList.Steam_Valve_LV.set(addItem(620, "Steam Valve (LV)", "20.480 L/sec (as Cover)", new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.ITER, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 1L)));
         ItemList.Steam_Valve_MV.set(addItem(621, "Steam Valve (MV)", "40.960 L/sec (as Cover)", new TC_Aspects.TC_AspectStack(TC_Aspects.ELECTRUM, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.MACHINA, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.ITER, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 2L)));
