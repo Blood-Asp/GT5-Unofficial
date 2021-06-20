@@ -126,7 +126,7 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
      * @return true if stack is fully accepted. false is stack is partially accepted or nothing is accepted
      */
     public boolean storeAll(ItemStack aStack) {
-        for (int i = 0, mInventoryLength = mInventory.length; i < mInventoryLength; i++) {
+        for (int i = 0, mInventoryLength = mInventory.length; i < mInventoryLength && aStack.stackSize > 0; i++) {
             ItemStack tSlot = mInventory[i];
             if (GT_Utility.isStackInvalid(tSlot)) {
                 if (aStack.stackSize <= getInventoryStackLimit()) {
@@ -170,7 +170,8 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
             IInventory tTileEntity =aBaseMetaTileEntity.getIInventoryAtSide(aBaseMetaTileEntity.getFrontFacing());
             if(tTileEntity!=null){
                 moveMultipleItemStacks(aBaseMetaTileEntity,tTileEntity,aBaseMetaTileEntity.getFrontFacing(),aBaseMetaTileEntity.getBackFacing(),null,false,(byte)64,(byte)1,(byte)64,(byte)1,mInventory.length);
-
+                for (int i = 0; i < mInventory.length; i++)
+                    if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
 //                GT_Utility.moveOneItemStack(aBaseMetaTileEntity, tTileEntity,
 //                        aBaseMetaTileEntity.getFrontFacing(), aBaseMetaTileEntity.getBackFacing(),
 //                        null, false, (byte) 64, (byte) 1, (byte)( 64 * aBaseMetaTileEntity.getSizeInventory()), (byte) 1);
