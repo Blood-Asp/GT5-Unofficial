@@ -85,7 +85,7 @@ abstract public class GenerateNodeMap {
             aNodeMap.add(tPipeNode);
             tPipeNode.mSelfPath = getNewPath(new MetaPipeEntity[]{tMetaPipe});
             tThisNode = tPipeNode;
-            if (tInvalidSide>0) {
+            if (tInvalidSide>-1) {
                 tPipeNode.mNeigbourNodes[tInvalidSide] = aPreviousNode;
                 tPipeNode.mNodePats[tInvalidSide] = getNewPath(aPipes.toArray(new MetaPipeEntity[0]));
                 aPreviousNode.mReturnPath = tPipeNode.mNodePats[tInvalidSide];
