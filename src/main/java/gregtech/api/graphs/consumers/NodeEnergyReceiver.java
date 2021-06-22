@@ -17,7 +17,7 @@ import static gregtech.api.enums.GT_Values.V;
 
 //consumer for RF machines
 public class NodeEnergyReceiver extends ConsumerNode {
-    public NodeEnergyReceiver(int aNodeValue, IEnergyReceiver aTileEntity, int aSide, ArrayList<ConsumerNode> aConsumers) {
+    public NodeEnergyReceiver(int aNodeValue, IEnergyReceiver aTileEntity, byte aSide, ArrayList<ConsumerNode> aConsumers) {
         super(aNodeValue, (TileEntity) aTileEntity, aSide, aConsumers);
     }
 

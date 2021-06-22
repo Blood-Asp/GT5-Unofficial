@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 //node atached to a tileentity that can consume stuff from the network
 public class ConsumerNode extends Node {
-    public int mSide;
-    public ConsumerNode(int aNodeValue, TileEntity aTileEntity, int aSide, ArrayList<ConsumerNode> aConsumers) {
+    public byte mSide;
+    public ConsumerNode(int aNodeValue, TileEntity aTileEntity, byte aSide, ArrayList<ConsumerNode> aConsumers) {
         super(aNodeValue,aTileEntity,aConsumers);
         this.mSide = aSide;
     }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 //this is here to aply voltage to death ends
 public class EmptyPowerConsumer extends ConsumerNode{
-    public EmptyPowerConsumer(int aNodeValue, TileEntity aTileEntity, int aSide, ArrayList<ConsumerNode> aConsumers) {
+    public EmptyPowerConsumer(int aNodeValue, TileEntity aTileEntity, byte aSide, ArrayList<ConsumerNode> aConsumers) {
         super(aNodeValue, aTileEntity, aSide, aConsumers);
     }
 

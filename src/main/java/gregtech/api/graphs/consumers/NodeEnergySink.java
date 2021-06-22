@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 //consumer for IC2 machines
 public class NodeEnergySink extends ConsumerNode {
-    public NodeEnergySink(int nodeValue, IEnergySink tileEntity, int side, ArrayList<ConsumerNode> consumers) {
+    public NodeEnergySink(int nodeValue, IEnergySink tileEntity, byte side, ArrayList<ConsumerNode> consumers) {
         super(nodeValue, (TileEntity) tileEntity, side, consumers);
     }
 

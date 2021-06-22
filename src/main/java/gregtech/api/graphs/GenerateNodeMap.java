@@ -39,7 +39,7 @@ abstract public class GenerateNodeMap {
     }
 
     //gets the next node
-    protected void generateNextNode(BaseMetaPipeEntity aPipe, Node aPipeNode, int aInvalidSide, int aNextNodeVale,
+    protected void generateNextNode(BaseMetaPipeEntity aPipe, Node aPipeNode, byte aInvalidSide, int aNextNodeVale,
                                          ArrayList<ConsumerNode> tConsumers, HashSet<Node> tNodeMap) {
         MetaPipeEntity tMetaPipe = (MetaPipeEntity) aPipe.getMetaTileEntity();
         for (byte i = 0;i<6;i++) {
@@ -67,8 +67,8 @@ abstract public class GenerateNodeMap {
     protected Node generateNode(TileEntity aTileEntity, Node aPreviousNode, int aNextNodeVale, ArrayList<MetaPipeEntity> aPipes,
                                      int aSide, ArrayList<ConsumerNode> aConsumers, HashSet<Node> aNodeMap) {
         if (aTileEntity.isInvalid()) return null;
-        int tSideOp = getOppositeSide(aSide);
-        int tInvalidSide = aPreviousNode == null ? -1 : tSideOp;
+        byte tSideOp = getOppositeSide(aSide);
+        byte tInvalidSide = aPreviousNode == null ? -1 : tSideOp;
         Node tThisNode = null;
         if (isPipe(aTileEntity)){
             BaseMetaPipeEntity tPipe = (BaseMetaPipeEntity) aTileEntity;
@@ -103,7 +103,7 @@ abstract public class GenerateNodeMap {
     }
 
     //go over the pipes until we see a valid tileentity that needs a node
-    protected Pair getNextValidTileEntity(TileEntity aTileEntity, ArrayList<MetaPipeEntity> aPipes, int aSide, HashSet<Node> aNodeMap) {
+    protected Pair getNextValidTileEntity(TileEntity aTileEntity, ArrayList<MetaPipeEntity> aPipes, byte aSide, HashSet<Node> aNodeMap) {
         if (isPipe(aTileEntity)) {
             BaseMetaPipeEntity tPipe = (BaseMetaPipeEntity) aTileEntity;
             MetaPipeEntity tMetaPipe = (MetaPipeEntity) tPipe.getMetaTileEntity();
@@ -114,7 +114,7 @@ abstract public class GenerateNodeMap {
             }
             int tConections = getNumberOfConections(tMetaPipe);
             if (tConections == 2) {
-                int tSideOp = getOppositeSide(aSide);
+                byte tSideOp = getOppositeSide(aSide);
                 for (byte i = 0;i<6;i++) {
                     if (i == tSideOp || !(tMetaPipe.isConnectedAtSide(i))) continue;
                     TileEntity tNewTileEntity = tPipe.getTileEntityAtSide(i);
@@ -135,10 +135,10 @@ abstract public class GenerateNodeMap {
         return null;
     }
 
-    private class Pair {
-        public int mSide;
+    private static class Pair {
+        public byte mSide;
         public TileEntity mTileEntity;
-        public Pair(TileEntity aTileEntity, int aSide) {
+        public Pair(TileEntity aTileEntity, byte aSide) {
             this.mTileEntity = aTileEntity;
             this.mSide = aSide;
         }
@@ -149,17 +149,17 @@ abstract public class GenerateNodeMap {
         return aTileEntity instanceof BaseMetaPipeEntity;
     }
     //checks if the tileentity is a consumer and add to the list
-    abstract protected boolean addConsumer(TileEntity aTileEntity, int aSide, int aNodeValue, ArrayList<ConsumerNode> aConsumers);
+    abstract protected boolean addConsumer(TileEntity aTileEntity, byte aSide, int aNodeValue, ArrayList<ConsumerNode> aConsumers);
     //get correct pathClass  that you need for your node network
     protected abstract NodePath getNewPath(MetaPipeEntity[] aPipes);
 
     //used for if you need to use death ends for somthing
     //can be null
-    protected Node getEmptyNode(int aNodeValue, int aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
+    protected Node getEmptyNode(int aNodeValue, byte aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
         return null;
     }
     //get correct node type you need for your network
-    protected Node getPipeNode(int aNodeValue, int aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
+    protected Node getPipeNode(int aNodeValue, byte aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
         return new Node(aNodeValue,aTileEntity,aConsumers);
     }
 

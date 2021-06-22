@@ -35,22 +35,22 @@ public class GenerateNodeMapPower extends GenerateNodeMap {
 
     //used to apply voltage on death ends
     @Override
-    protected Node getEmptyNode(int aNodeValue, int aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
+    protected Node getEmptyNode(int aNodeValue, byte aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
         Node tNode = new EmptyPowerConsumer(aNodeValue, aTileEntity, aSide, aConsumers);
         aConsumers.add((ConsumerNode) tNode);
         return tNode;
     }
 
     @Override
-    protected Node getPipeNode(int aNodeValue, int aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
+    protected Node getPipeNode(int aNodeValue, byte aSide, TileEntity aTileEntity, ArrayList<ConsumerNode> aConsumers) {
         return new PowerNode(aNodeValue, aTileEntity, aConsumers);
     }
 
     @Override
-    protected boolean addConsumer(TileEntity aTileEntity, int aSide, int aNodeValue, ArrayList<ConsumerNode> aConsumers) {
+    protected boolean addConsumer(TileEntity aTileEntity, byte aSide, int aNodeValue, ArrayList<ConsumerNode> aConsumers) {
         if (aTileEntity instanceof BaseMetaTileEntity) {
             BaseMetaTileEntity tBaseTileEntity = (BaseMetaTileEntity) aTileEntity;
-            if (tBaseTileEntity.inputEnergyFrom((byte) aSide,false)) {
+            if (tBaseTileEntity.inputEnergyFrom(aSide,false)) {
                 ConsumerNode tConsumerNode = new NodeGTBaseMetaTile(aNodeValue,tBaseTileEntity, aSide, aConsumers);
                 aConsumers.add(tConsumerNode);
                 return true;
