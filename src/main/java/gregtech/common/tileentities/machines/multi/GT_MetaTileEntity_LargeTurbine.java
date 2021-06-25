@@ -32,11 +32,11 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_E
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<GT_MetaTileEntity_LargeTurbine> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_LargeTurbine>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {"     ", " xxx ", "     ", "     ", "     ",},
-                    {" --- ", "xcccx", " chc ", " chc ", " ccc ",},
-                    {" --- ", "xc~cx", " h-h ", " h-h ", " cdc ",},
-                    {" --- ", "xcccx", " chc ", " chc ", " ccc ",},
-                    {"     ", " xxx ", "     ", "     ", "     ",},
+                    {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
+                    {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
+                    {" --- ", "xc~cx", "xh-hx", "xh-hx", "xcdcx",},
+                    {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
+                    {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
             }))
             .addElement('c', defer(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
             .addElement('d', defer(t -> ofHatchAdder(GT_MetaTileEntity_LargeTurbine::addDynamoToMachineList, t.getCasingTextureIndex(), 0)))
