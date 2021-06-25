@@ -222,7 +222,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
 
         @Override
         public void resetTextBox(GT_GuiIntegerTextBox box) {
-            box.setText(String.valueOf(0));
+            box.setText(String.valueOf(coverVariable & PUBLIC_MASK));
         }
 
         @Override
@@ -256,7 +256,8 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             public boolean textboxKeyTyped(char c, int key) {
                 int tValue = 0;
 
-                super.textboxKeyTyped(c, key);
+                if(!super.textboxKeyTyped(c, key))
+                    return false;
 
                 int cursorPos = this.getCursorPosition();
 
