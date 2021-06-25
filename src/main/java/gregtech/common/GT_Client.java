@@ -286,22 +286,24 @@ public class GT_Client extends GT_Proxy
             if (tAlignment != null) {
                 ForgeDirection direction = tAlignment.getDirection();
                 if (direction.ordinal() == tSideHit)
-                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER, aIsSneaking);
+                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER, aIsSneaking, false);
                 else if (direction.getOpposite().ordinal() == tSideHit) {
                     for (Transformation t : ROTATION_MARKER_TRANSFORMS_CORNER) {
-                        drawExtendedRotationMarker(t, aIsSneaking);
+                        drawExtendedRotationMarker(t, aIsSneaking, true);
                     }
                 } else {
-                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit * 6 + direction.ordinal()]], aIsSneaking);
+                    drawExtendedRotationMarker(ROTATION_MARKER_TRANSFORMS_SIDES_TRANSFORMS[ROTATION_MARKER_TRANSFORMS_SIDES[tSideHit * 6 + direction.ordinal()]], aIsSneaking, true);
                 }
             }
         }
         GL11.glPopMatrix(); // get back to player center
     }
 
-    private static void drawExtendedRotationMarker(Transformation transform, boolean sneaking) {
+    private static void drawExtendedRotationMarker(Transformation transform, boolean sneaking, boolean small) {
         if (sneaking)
             drawFlipMarker(transform);
+        else if (small)
+            drawRotationMarkerSmall(transform);
         else
             drawRotationMarker(transform);
     }
@@ -311,17 +313,37 @@ public class GT_Client extends GT_Proxy
         transform.glApply();
         Tessellator t = Tessellator.instance;
         t.startDrawing(GL11.GL_LINE_LOOP);
-        t.addVertex(-0.4d, 0d, -0.4d);
-        t.addVertex(-0.4d, 0d, 0.4d);
-        t.addVertex(0.4d, 0d, 0.4d);
-        t.addVertex(0.4d, 0d, -0.325d);
-        t.addVertex(0.45d, 0d, -0.325d);
-        t.addVertex(0.35d, 0d, -0.425d);
-        t.addVertex(0.25d, 0d, -0.325d);
-        t.addVertex(0.3d, 0d, -0.325d);
-        t.addVertex(0.3d, 0d, 0.3d);
-        t.addVertex(-0.3d, 0d, 0.3d);
-        t.addVertex(-0.3d, 0d, -0.4d);
+        t.addVertex(-0.3000d, 0d, -0.3000d);
+        t.addVertex(-0.3000d, 0d, +0.3000d);
+        t.addVertex(+0.3000d, 0d, +0.3000d);
+        t.addVertex(+0.3000d, 0d, -0.1750d);
+        t.addVertex(+0.3600d, 0d, -0.1750d);
+        t.addVertex(+0.2500d, 0d, -0.3000d);
+        t.addVertex(+0.1400d, 0d, -0.1750d);
+        t.addVertex(+0.2000d, 0d, -0.1750d);
+        t.addVertex(+0.2000d, 0d, +0.2000d);
+        t.addVertex(-0.2000d, 0d, +0.2000d);
+        t.addVertex(-0.2000d, 0d, -0.3000d);
+        t.draw();
+        GL11.glPopMatrix();
+    }
+
+    private static void drawRotationMarkerSmall(Transformation transform) {
+        GL11.glPushMatrix();
+        transform.glApply();
+        Tessellator t = Tessellator.instance;
+        t.startDrawing(GL11.GL_LINE_LOOP);
+        t.addVertex(-0.3500d, 0d, -0.3500d);
+        t.addVertex(-0.3500d, 0d, +0.3500d);
+        t.addVertex(+0.3500d, 0d, +0.3500d);
+        t.addVertex(+0.3500d, 0d, -0.2000d);
+        t.addVertex(+0.4500d, 0d, -0.2000d);
+        t.addVertex(+0.3000d, 0d, -0.3500d);
+        t.addVertex(+0.1500d, 0d, -0.2000d);
+        t.addVertex(+0.2500d, 0d, -0.2000d);
+        t.addVertex(+0.2500d, 0d, +0.2500d);
+        t.addVertex(-0.2500d, 0d, +0.2500d);
+        t.addVertex(-0.2500d, 0d, -0.3500d);
         t.draw();
         GL11.glPopMatrix();
     }

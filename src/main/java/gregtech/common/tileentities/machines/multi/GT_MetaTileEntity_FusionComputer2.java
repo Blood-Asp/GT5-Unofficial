@@ -14,8 +14,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION2_GLOW;
 public class GT_MetaTileEntity_FusionComputer2 extends GT_MetaTileEntity_FusionComputer {
 
     private static final ITexture textureOverlay = TextureFactory.of(
-            TextureFactory.of(OVERLAY_FUSION2),
-            TextureFactory.builder().addIcon(OVERLAY_FUSION2_GLOW).glow().build());
+            TextureFactory.builder().addIcon(OVERLAY_FUSION2).extFacing().build(),
+            TextureFactory.builder().addIcon(OVERLAY_FUSION2_GLOW).extFacing().glow().build());
 
     public GT_MetaTileEntity_FusionComputer2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 6);
