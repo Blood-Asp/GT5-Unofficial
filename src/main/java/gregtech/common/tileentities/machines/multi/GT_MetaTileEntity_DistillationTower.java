@@ -59,9 +59,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                     onElementPass(GT_MetaTileEntity_DistillationTower::onCasingFound, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('c', ofChain(
-                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addEnergyInputToMachineList, CASING_INDEX, 1)),
                     onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addOutputToMachineList, CASING_INDEX, 1)),
-                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addInputToMachineList, CASING_INDEX, 1)),
                     onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 1)),
                     onElementPass(t -> t.onTopLayerFound(true), ofBlock(GregTech_API.sBlockCasings4, 1)),
                     isAir()
