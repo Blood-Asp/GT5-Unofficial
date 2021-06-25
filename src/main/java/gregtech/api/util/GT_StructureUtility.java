@@ -7,6 +7,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.common.blocks.GT_Block_Casings5;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,8 +20,6 @@ import java.util.function.Function;
 import static com.gtnewhorizon.structurelib.StructureLibAPI.HINT_BLOCK_META_GENERIC_11;
 
 public class GT_StructureUtility {
-	public static final int HINT_COIL_DEFAULT_DOTS = HINT_BLOCK_META_GENERIC_11;
-
 	private GT_StructureUtility() {
 		throw new AssertionError("Not instantiable");
 	}
@@ -81,22 +80,14 @@ public class GT_StructureUtility {
 	}
 
 	/**
-	 * Assume a default of LV coil. Assume all coils accepted. Assumes using {@link #HINT_COIL_DEFAULT_DOTS} as dots.
-	 * @see #ofCoil(BiPredicate, Function, int, Block, int)
+	 * Assume all coils accepted.
+	 * @see #ofCoil(BiPredicate, Function)
 	 */
 	public static <T> IStructureElement<T> ofCoil(BiConsumer<T, HeatingCoilLevel> heatingCoilSetter, Function<T, HeatingCoilLevel> heatingCoilGetter) {
 		return ofCoil((t, l) -> {
 			heatingCoilSetter.accept(t, l);
 			return true;
-		}, heatingCoilGetter, HINT_COIL_DEFAULT_DOTS, GregTech_API.sBlockCasings5, 0);
-	}
-
-	/**
-	 * Assumes using {@link #HINT_COIL_DEFAULT_DOTS} as dots
-	 * @see #ofCoil(BiPredicate, Function, int, Block, int)
-	 */
-	public static <T> IStructureElement<T> ofCoil(BiPredicate<T, HeatingCoilLevel> heatingCoilSetter, Function<T, HeatingCoilLevel> heatingCoilGetter, Block defaultCoil, int defaultMeta) {
-		return ofCoil(heatingCoilSetter, heatingCoilGetter, HINT_COIL_DEFAULT_DOTS, defaultCoil, defaultMeta);
+		}, heatingCoilGetter);
 	}
 
 	/**
@@ -106,11 +97,8 @@ public class GT_StructureUtility {
 	 *                            Might be called less times if structure test fails.
 	 *                            If the setter returns false then it assumes the coil is rejected.
 	 * @param heatingCoilGetter Get the current heating level. Null means no coil recorded yet.
-	 * @param dots The hinting dots
-	 * @param defaultCoil The block to place when auto constructing
-	 * @param defaultMeta The block meta to place when auto constructing
 	 */
-	public static <T> IStructureElement<T> ofCoil(BiPredicate<T, HeatingCoilLevel> heatingCoilSetter, Function<T, HeatingCoilLevel> heatingCoilGetter, int dots, Block defaultCoil, int defaultMeta) {
+	public static <T> IStructureElement<T> ofCoil(BiPredicate<T, HeatingCoilLevel> heatingCoilSetter, Function<T, HeatingCoilLevel> heatingCoilGetter) {
 		if (heatingCoilSetter == null || heatingCoilGetter == null) {
 			throw new IllegalArgumentException();
 		}
@@ -131,13 +119,17 @@ public class GT_StructureUtility {
 
 			@Override
 			public boolean spawnHint(T t, World world, int x, int y, int z, ItemStack trigger) {
-				StructureLibAPI.hintParticle(world, x, y, z, StructureLibAPI.getBlockHint(), dots);
+				StructureLibAPI.hintParticle(world, x, y, z, GregTech_API.sBlockCasings5, getMeta(trigger));
 				return true;
+			}
+
+			private int getMeta(ItemStack trigger) {
+				return GT_Block_Casings5.getMetaFromCoilHeat(HeatingCoilLevel.getFromTier((byte) Math.min(HeatingCoilLevel.size(), Math.max(0, trigger.stackSize))));
 			}
 
 			@Override
 			public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
-				return world.setBlock(x, y, z, defaultCoil, defaultMeta, 3);
+				return world.setBlock(x, y, z, GregTech_API.sBlockCasings5, getMeta(trigger), 3);
 			}
 		};
 	}

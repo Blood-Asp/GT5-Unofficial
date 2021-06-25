@@ -79,7 +79,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_E
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, 2, 2, 1);
+        return checkPiece(STRUCTURE_PIECE_MAIN, 2, 2, 1) && mMaintenanceHatches.size() == 1 && mMufflerHatches.isEmpty() == (getPollutionPerTick(null) == 0);
     }
 
     public abstract Block getCasingBlock();

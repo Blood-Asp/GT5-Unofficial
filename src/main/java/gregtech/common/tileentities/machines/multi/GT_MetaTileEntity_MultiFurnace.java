@@ -184,6 +184,9 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         if (getCoilLevel() == HeatingCoilLevel.None)
             return false;
 
+        if (mMaintenanceHatches.size() != 1)
+            return false;
+
         this.mLevel = getCoilLevel().getLevel();
         this.mCostDiscount = getCoilLevel().getCostDiscount();
         return true;

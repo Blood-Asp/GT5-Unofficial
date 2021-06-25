@@ -188,7 +188,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
         coilHeat = HeatingCoilLevel.None;
         mCasingAmount = 0;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
-        return checkPiece("main", 2, 3, 0) && mCasingAmount >= 60;
+        return checkPiece("main", 2, 3, 0) && mCasingAmount >= 60 &&
+                mMaintenanceHatches.size() == 1 && !mMufflerHatches.isEmpty();
     }
 
     @Override

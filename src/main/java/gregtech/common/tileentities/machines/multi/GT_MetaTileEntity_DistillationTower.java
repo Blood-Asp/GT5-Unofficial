@@ -59,7 +59,11 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                     onElementPass(GT_MetaTileEntity_DistillationTower::onCasingFound, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('c', ofChain(
-                    onElementPass(GT_MetaTileEntity_DistillationTower::onTopLayerFound, ofBlock(GregTech_API.sBlockCasings4, 1)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addEnergyInputToMachineList, CASING_INDEX, 1)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addOutputToMachineList, CASING_INDEX, 1)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addInputToMachineList, CASING_INDEX, 1)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 1)),
+                    onElementPass(t -> t.onTopLayerFound(true), ofBlock(GregTech_API.sBlockCasings4, 1)),
                     isAir()
             ))
             .build();
@@ -96,7 +100,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                 .addMaintenanceHatch("Any casing")
                 .addInputHatch("Any bottom layer casing")
                 .addOutputBus("Any bottom layer casing")
-                .addOutputHatch("2-11x Output Hatches (One per layer except bottom layer)")
+                .addOutputHatch("2-11x Output Hatches (At least one per layer except bottom layer)")
                 .toolTipFinisher("Gregtech");
         return tt;
     }
@@ -182,9 +186,10 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
         mCasing++;
     }
 
-    protected void onTopLayerFound() {
+    protected void onTopLayerFound(boolean aIsCasing) {
         mTopLayerFound = true;
-        onCasingFound();
+        if (aIsCasing)
+            onCasingFound();
     }
 
     protected boolean addLayerOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
@@ -220,9 +225,13 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
             return false;
 
         // check each layer
-        while (mHeight < 12 && checkPiece(STRUCTURE_PIECE_LAYER, 1, mHeight, 0) && !mTopLayerFound)
+        while (mHeight < 12 && checkPiece(STRUCTURE_PIECE_LAYER, 1, mHeight, 0) && !mTopLayerFound) {
+            if (mOutputHatchesByLayer.get(mHeight - 1).isEmpty())
+                // layer without output hatch
+                return false;
             // not top
             mHeight++;
+        }
 
         // validate final invariants...
         return mCasing >= 7 * mHeight - 5 && mHeight >= 2 && mTopLayerFound && mMaintenanceHatches.size() == 1;

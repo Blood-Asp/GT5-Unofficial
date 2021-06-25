@@ -23,6 +23,8 @@ public enum HeatingCoilLevel {
         MAX,
         ;
 
+        private static final HeatingCoilLevel[] VALUES = values();
+
         /**
          * @return the Coils Tier Name
          */
@@ -61,9 +63,13 @@ public enum HeatingCoilLevel {
         }
 
         public static HeatingCoilLevel getFromTier(byte tier){
-            if (tier < 0 || tier > HeatingCoilLevel.values().length -1)
+            if (tier < 0 || tier > VALUES.length -1)
                 return HeatingCoilLevel.None;
 
-            return HeatingCoilLevel.values()[tier+2];
+            return VALUES[tier+2];
+        }
+
+        public static int size() {
+            return VALUES.length;
         }
 }

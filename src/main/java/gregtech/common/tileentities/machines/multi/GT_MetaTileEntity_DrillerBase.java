@@ -361,7 +361,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         updateCoordinates();
-        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 6, 0) && checkHatches() && GT_Utility.getTier(getMaxInputVoltage()) >= getMinTier();
+        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 6, 0) && checkHatches() && GT_Utility.getTier(getMaxInputVoltage()) >= getMinTier() && mMaintenanceHatches.size() == 1;
     }
 
     private void updateCoordinates() {

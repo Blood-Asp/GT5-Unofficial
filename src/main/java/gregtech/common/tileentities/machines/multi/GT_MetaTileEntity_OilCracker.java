@@ -49,11 +49,11 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
             .addElement('c', ofCoil(GT_MetaTileEntity_OilCracker::setCoilLevel, GT_MetaTileEntity_OilCracker::getCoilLevel))
             .addElement('l', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_OilCracker::addLeftHatchToMachineList, CASING_INDEX, 2),
-                    onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 2))
+                    onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('r', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_OilCracker::addRightHatchToMachineList, CASING_INDEX, 2),
-                    onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 3))
+                    onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('m', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_OilCracker::addMiddleInputToMachineList, CASING_INDEX, 1),
@@ -90,10 +90,10 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
                 .addController("Front center")
                 .addCasingInfo("Clean Stainless Steel Machine Casing", 18)
                 .addOtherStructurePart("2 Rings of 8 Coils", "Each side of the controller")
-                .addInfo("Gets 5% energy cost reduction per coil tier")
+                .addInfo("Gets 5% EU/t reduction per coil tier")
                 .addEnergyHatch("Any casing")
                 .addMaintenanceHatch("Any casing")
-                .addInputHatch("Steam/Hydrogen, Any middle ring casing")
+                .addInputHatch("Steam/Hydrogen ONLY, Any middle ring casing")
                 .addInputHatch("Any left/right side casing")
                 .addOutputHatch("Any left/right side casing")
                 .addStructureInfo("Input/Output Hatches must be on opposite sides!")
@@ -120,13 +120,18 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
     }
 
     @Override
+    public GT_Recipe.GT_Recipe_Map getRecipeMap() {
+        return GT_Recipe.GT_Recipe_Map.sCrakingRecipes;
+    }
+
+    @Override
     public boolean checkRecipe(ItemStack aStack) {
         ArrayList<FluidStack> tInputList = getStoredFluids();
         FluidStack[] tFluidInputs = tInputList.toArray(new FluidStack[0]);
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
 
-        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sCrakingRecipes.findRecipe(
+        GT_Recipe tRecipe = getRecipeMap().findRecipe(
                 getBaseMetaTileEntity(),
                 false,
                 gregtech.api.enums.GT_Values.V[tTier],
@@ -140,12 +145,10 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
         if (tRecipe.isRecipeInputEqual(true, tFluidInputs, mInventory[1])) {
             this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
             this.mEfficiencyIncrease = 10000;
-            this.mEUt = tRecipe.mEUt;
-            this.mMaxProgresstime = tRecipe.mDuration;
-            while (this.mEUt <= gregtech.api.enums.GT_Values.V[(tTier - 1)]) {
-                this.mEUt *= 4;
-                this.mMaxProgresstime /= 2;
-            }
+            calculateOverclockedNessMulti(tRecipe.mEUt, tRecipe.mDuration, 1, tVoltage);
+            //In case recipe is too OP for that machine
+            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+                return false;
 
             this.mEUt *= Math.pow(0.95D, this.heatLevel.getTier());
 
@@ -248,7 +251,9 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
         mInputOnSide = -1;
         mOutputOnSide = -1;
         replaceDeprecatedCoils(aBaseMetaTileEntity);
-        return checkPiece(STRUCTURE_PIECE_MAIN, 2, 1, 0) && mInputOnSide != -1 && mOutputOnSide != -1 && mCasingAmount >= 18;
+        return checkPiece(STRUCTURE_PIECE_MAIN, 2, 1, 0) &&
+                mInputOnSide != -1 && mOutputOnSide != -1 && mCasingAmount >= 18 &&
+                mMaintenanceHatches.size() == 1 && !mMiddleInputHatches.isEmpty();
     }
 
     @Override

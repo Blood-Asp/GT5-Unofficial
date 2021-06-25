@@ -108,6 +108,35 @@ public class GT_Block_Casings5 extends GT_Block_Casings_Abstract implements IHea
         }
     }
 
+    public static int getMetaFromCoilHeat(HeatingCoilLevel level) {
+        switch (level) {
+            case LV:
+                return 0;
+            case MV:
+                return 1;
+            case HV:
+                return 2;
+            case EV:
+                return 3;
+            case IV:
+                return 4;
+            case ZPM:
+                return 5;
+            case UV:
+                return 6;
+            case UEV:
+                return 7;
+            case UIV:
+                return 8;
+            case LuV:
+                return 9;
+            case UHV:
+                return 10;
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public HeatingCoilLevel getCoilHeat(int meta) {
         getOnCoilCheck().accept(this);
