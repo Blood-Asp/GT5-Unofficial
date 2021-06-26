@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import static gregtech.api.util.GT_Utility.*;
@@ -36,11 +36,9 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
         byte fromSide = !mExport ? GT_Utility.getOppositeSide(aSide) : aSide,
                 toSide = mExport ? GT_Utility.getOppositeSide(aSide) : aSide;
 
-        int FilterId = aCoverVariable >> 1;
-        List<ItemStack> Filter = new LinkedList<ItemStack>() {{add(intToStack(FilterId));}};
-
+        int FilterId = aCoverVariable >>> 1;
+        List<ItemStack> Filter = Collections.singletonList(intToStack(FilterId));
         boolean isWhiteList = (aCoverVariable & 1) != 0;
-
         moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, Filter, isWhiteList, (byte) 64, (byte) 1, (byte) 64, (byte) 1,64);
 
         return aCoverVariable;
@@ -57,23 +55,24 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
             else{
                 aCoverVariable = aCoverVariable & 1;
                 aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
-                GT_Utility.sendChatToPlayer(aPlayer, trans("300", "Clear Filter!"));
+                GT_Utility.sendChatToPlayer(aPlayer, trans("300", "Filter Cleared!"));
             }
+            GT_Utility.sendChatToPlayer(aPlayer, ""+aCoverVariable);
             return true;
     }
 
     @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        int model = aCoverVariable & 1;
-        if (model == 1) model = 0;
-        else model = 1;
-        if (model == 1){
-            GT_Utility.sendChatToPlayer(aPlayer, trans("124", "Black List Model"));
+        int mode = aCoverVariable & 1;
+        if (mode == 1) mode = 0;
+        else mode = 1;
+        if (mode == 1){
+            GT_Utility.sendChatToPlayer(aPlayer, trans("124", "Blacklist Mode"));
         }
         else{
-            GT_Utility.sendChatToPlayer(aPlayer, trans("125", "White List Model"));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("125", "Whitelist Mode"));
         }
-        aCoverVariable = (aCoverVariable & ~0x1) + model;
+        aCoverVariable = (aCoverVariable & ~0x1) + mode;
         return aCoverVariable;
     }
 
@@ -159,16 +158,17 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
             this.coverVariable = aCoverVariable;
 
             GT_GuiIconButton b;
-            b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.WHITELIST).setTooltipText(trans("125","White List"));
-            b = new GT_GuiIconButton(this, 1, startX + spaceX*1, startY+spaceY*0, GT_GuiIcon.BLACKLIST).setTooltipText(trans("124","Black List"));
+            b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.WHITELIST).setTooltipText(trans("125","Whitelist"));
+            b = new GT_GuiIconButton(this, 1, startX + spaceX*1, startY+spaceY*0, GT_GuiIcon.BLACKLIST).setTooltipText(trans("124","Blacklist"));
 
-            itemFilterButtons = new GT_GuiFakeItemButton(this ,startX + spaceX*0, startY+spaceY*3, GT_GuiIcon.SLOT_GRAY);
+            itemFilterButtons = new GT_GuiFakeItemButton(this ,startX + spaceX*0, startY+spaceY*2, GT_GuiIcon.SLOT_GRAY);
         }
 
         @Override
         public void drawExtras(int mouseX, int mouseY, float parTicks) {
             super.drawExtras(mouseX, mouseY, parTicks);
-            this.fontRendererObj.drawString(trans("302", "Check Model"),  startX + spaceX*2, 3+startY+spaceY*0, 0xFF555555);
+            this.fontRendererObj.drawString(trans("303", "Filter: "),    startX + spaceX*0, 3+startY+spaceY*1, 0xFF555555);
+            this.fontRendererObj.drawString(trans("302", "Check Mode"),  startX + spaceX*2, 3+startY+spaceY*0, 0xFF555555);
         }
 
         @Override
@@ -191,7 +191,7 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
                 b = (GuiButton) o;
                 b.enabled = getClickable(b.id);
             }
-            ItemStack tItemStack = intToStack(coverVariable >> 1);
+            ItemStack tItemStack = intToStack(coverVariable >>> 1);
             if (tItemStack != null){
                 itemFilterButtons.setItem(tItemStack);
                 return;
