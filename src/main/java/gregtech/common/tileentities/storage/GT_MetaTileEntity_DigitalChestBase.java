@@ -28,6 +28,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_SCHEST_GLOW;
 public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEntity_TieredMachineBlock implements appeng.api.storage.IMEMonitor<appeng.api.storage.data.IAEItemStack> {
     protected boolean mVoidOverflow = false;
     private Map<appeng.api.storage.IMEMonitorHandlerReceiver<appeng.api.storage.data.IAEItemStack>, Object> listeners = null;
+    private int mItemCount = 0;
+    private ItemStack mItemStack = null;
 
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, new String[]{
@@ -132,9 +134,13 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return true;
     }
 
-    protected abstract ItemStack getItemStack();
+    public ItemStack getItemStack() {
+        return mItemStack;
+    }
 
-    protected abstract void setItemStack(ItemStack s);
+    public void setItemStack(ItemStack mItemStack) {
+        this.mItemStack = mItemStack;
+    }
 
     @Override
     @Optional.Method(modid = "appliedenergistics2")
@@ -161,10 +167,14 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         return res;
     }
 
-    protected abstract int getItemCount();
+    public int getItemCount() {
+        return mItemCount;
+    }
 
     @Override
-    public abstract void setItemCount(int aCount);
+    public void setItemCount(int mItemCount) {
+        this.mItemCount = mItemCount;
+    }
 
     @Override
     public int getMaxItemCount() {
