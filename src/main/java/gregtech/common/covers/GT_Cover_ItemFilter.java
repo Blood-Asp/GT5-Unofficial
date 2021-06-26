@@ -38,7 +38,9 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
 
         int FilterId = aCoverVariable >>> 1;
         List<ItemStack> Filter = Collections.singletonList(intToStack(FilterId));
+
         boolean isWhiteList = (aCoverVariable & 1) != 0;
+
         moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, Filter, isWhiteList, (byte) 64, (byte) 1, (byte) 64, (byte) 1,64);
 
         return aCoverVariable;
@@ -57,7 +59,6 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
                 aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
                 GT_Utility.sendChatToPlayer(aPlayer, trans("300", "Filter Cleared!"));
             }
-            GT_Utility.sendChatToPlayer(aPlayer, ""+aCoverVariable);
             return true;
     }
 
@@ -158,8 +159,8 @@ public class GT_Cover_ItemFilter extends GT_CoverBehavior {
             this.coverVariable = aCoverVariable;
 
             GT_GuiIconButton b;
-            b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.WHITELIST).setTooltipText(trans("125","Whitelist"));
-            b = new GT_GuiIconButton(this, 1, startX + spaceX*1, startY+spaceY*0, GT_GuiIcon.BLACKLIST).setTooltipText(trans("124","Blacklist"));
+            b = new GT_GuiIconButton(this, 0, startX + spaceX*0, startY+spaceY*0, GT_GuiIcon.WHITELIST).setTooltipText(trans("125","Whitelist Mode"));
+            b = new GT_GuiIconButton(this, 1, startX + spaceX*1, startY+spaceY*0, GT_GuiIcon.BLACKLIST).setTooltipText(trans("124","Blacklist Mode"));
 
             itemFilterButtons = new GT_GuiFakeItemButton(this ,startX + spaceX*0, startY+spaceY*2, GT_GuiIcon.SLOT_GRAY);
         }
