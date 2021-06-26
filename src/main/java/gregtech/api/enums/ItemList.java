@@ -1571,6 +1571,8 @@ public enum ItemList implements IItemContainer {
     FluidRegulator_ZPM,
     FluidRegulator_UV,
     FluidFilter,
+    ItemFilter_Export,
+    ItemFilter_Import,
     CuringOven,
     Machine_Multi_Assemblyline,
     Machine_Multi_DieselEngine,
