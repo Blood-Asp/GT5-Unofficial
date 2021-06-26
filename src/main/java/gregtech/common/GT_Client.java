@@ -569,21 +569,8 @@ public class GT_Client extends GT_Proxy
         Block aBlock = aEvent.player.worldObj.getBlock(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
         TileEntity aTileEntity = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
 
-        if (aBlock == Blocks.glass) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(-(aEvent.player.lastTickPosX + (aEvent.player.posX - aEvent.player.lastTickPosX) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosY + (aEvent.player.posY - aEvent.player.lastTickPosY) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosZ + (aEvent.player.posZ - aEvent.player.lastTickPosZ) * (double) aEvent.partialTicks));
-            GL11.glTranslated((float) aEvent.target.blockX + 0.5F, (float) aEvent.target.blockY + 0.5F, (float) aEvent.target.blockZ + 0.5F);
-            int tSideHit = aEvent.target.sideHit;
-            Rotation.sideRotations[tSideHit].glApply();
-            // draw grid
-            GL11.glTranslated(0.0D, -0.501D, 0.0D);
-            GL11.glLineWidth(2.0F);
-            GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.5F);
-            drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
-            GL11.glPopMatrix();
-        }
-
-        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList)) {
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))
+        {
             if (aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable)
                 drawGrid(aEvent, false, true, aEvent.player.isSneaking());
             return;
