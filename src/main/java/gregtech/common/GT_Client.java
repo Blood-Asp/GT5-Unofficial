@@ -46,6 +46,7 @@ import gregtech.common.render.GT_Renderer_Entity_Arrow;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -68,6 +69,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
 
 // Referenced classes of package gregtech.common:
 //            GT_Proxy
@@ -110,6 +113,8 @@ public class GT_Client extends GT_Proxy
             new Scale(0.25).with(new Translation(0.375, 0, -0.375)).compile(),
             new Scale(0.25).with(new Translation(-0.375, 0, -0.375)).compile(),
     };
+    private static int rotationMarkerDisplayList;
+    private static boolean rotationMarkerDisplayListCompiled = false;
 
     static {
         ROTATABLE_VANILLA_BLOCKS = Arrays.asList(Blocks.piston, Blocks.sticky_piston, Blocks.furnace, Blocks.lit_furnace, Blocks.dropper, Blocks.dispenser, Blocks.chest, Blocks.trapped_chest, Blocks.ender_chest, Blocks.hopper,
@@ -148,6 +153,8 @@ public class GT_Client extends GT_Proxy
     private String mMessage;
     private GT_ClientPreference mPreference;
     private boolean mFirstTick = false;
+    public static final int ROTATION_MARKER_RESOLUTION = 120;
+
     public GT_Client() {
         mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
@@ -222,7 +229,7 @@ public class GT_Client extends GT_Proxy
                 tConnections = ((BaseMetaPipeEntity) tTile).mConnections;
         }
 
-        if (tConnections>0) {
+        if (tConnections > 0) {
             for (byte i = 0; i < 6; i++) {
                 if ((tConnections & (1 << i)) != 0) {
                     switch (GRID_SWITCH_ARR[aEvent.target.sideHit][i]) {
@@ -302,50 +309,36 @@ public class GT_Client extends GT_Proxy
     private static void drawExtendedRotationMarker(Transformation transform, boolean sneaking, boolean small) {
         if (sneaking)
             drawFlipMarker(transform);
-        else if (small)
-            drawRotationMarkerSmall(transform);
         else
             drawRotationMarker(transform);
     }
 
     private static void drawRotationMarker(Transformation transform) {
+        if (!rotationMarkerDisplayListCompiled) {
+            rotationMarkerDisplayList = GLAllocation.generateDisplayLists(1);
+            compileRotationMarkerDisplayList(rotationMarkerDisplayList);
+            rotationMarkerDisplayListCompiled = true;
+        }
         GL11.glPushMatrix();
         transform.glApply();
-        Tessellator t = Tessellator.instance;
-        t.startDrawing(GL11.GL_LINE_LOOP);
-        t.addVertex(-0.3000d, 0d, -0.3000d);
-        t.addVertex(-0.3000d, 0d, +0.3000d);
-        t.addVertex(+0.3000d, 0d, +0.3000d);
-        t.addVertex(+0.3000d, 0d, -0.1750d);
-        t.addVertex(+0.3600d, 0d, -0.1750d);
-        t.addVertex(+0.2500d, 0d, -0.3000d);
-        t.addVertex(+0.1400d, 0d, -0.1750d);
-        t.addVertex(+0.2000d, 0d, -0.1750d);
-        t.addVertex(+0.2000d, 0d, +0.2000d);
-        t.addVertex(-0.2000d, 0d, +0.2000d);
-        t.addVertex(-0.2000d, 0d, -0.3000d);
-        t.draw();
+        GL11.glCallList(rotationMarkerDisplayList);
         GL11.glPopMatrix();
     }
 
-    private static void drawRotationMarkerSmall(Transformation transform) {
-        GL11.glPushMatrix();
-        transform.glApply();
-        Tessellator t = Tessellator.instance;
-        t.startDrawing(GL11.GL_LINE_LOOP);
-        t.addVertex(-0.3500d, 0d, -0.3500d);
-        t.addVertex(-0.3500d, 0d, +0.3500d);
-        t.addVertex(+0.3500d, 0d, +0.3500d);
-        t.addVertex(+0.3500d, 0d, -0.2000d);
-        t.addVertex(+0.4500d, 0d, -0.2000d);
-        t.addVertex(+0.3000d, 0d, -0.3500d);
-        t.addVertex(+0.1500d, 0d, -0.2000d);
-        t.addVertex(+0.2500d, 0d, -0.2000d);
-        t.addVertex(+0.2500d, 0d, +0.2500d);
-        t.addVertex(-0.2500d, 0d, +0.2500d);
-        t.addVertex(-0.2500d, 0d, -0.3500d);
-        t.draw();
-        GL11.glPopMatrix();
+    private static void compileRotationMarkerDisplayList(int displayList) {
+        GL11.glNewList(displayList, GL11.GL_COMPILE);
+        GL11.glBegin(GL_LINE_LOOP);
+        for (int i = 0; i <= ROTATION_MARKER_RESOLUTION; i++) {
+            GL11.glVertex3d(Math.cos(i * Math.PI * 1.75 / ROTATION_MARKER_RESOLUTION) * 0.4, 0, Math.sin(i * Math.PI * 1.75 / ROTATION_MARKER_RESOLUTION) * 0.4);
+        }
+        for (int i = ROTATION_MARKER_RESOLUTION; i >=0; i--) {
+            GL11.glVertex3d(Math.cos(i * Math.PI * 1.75 / ROTATION_MARKER_RESOLUTION) * 0.24, 0, Math.sin(i * Math.PI * 1.75 / ROTATION_MARKER_RESOLUTION) * 0.24);
+        }
+        GL11.glVertex3d(0.141114561800, 0, 0);
+        GL11.glVertex3d(0.32, 0, -0.178885438199);
+        GL11.glVertex3d(0.498885438199, 0, 0);
+        GL11.glEnd();
+        GL11.glEndList();
     }
 
     private static void drawFlipMarker(Transformation transform) {
@@ -469,7 +462,9 @@ public class GT_Client extends GT_Proxy
                     }
                     i++;
                 } while (true);
-        } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
+        } catch (Throwable e) {
+            e.printStackTrace(GT_Log.err);
+        }
 
 
 //        super.onPostLoad();
@@ -574,8 +569,21 @@ public class GT_Client extends GT_Proxy
         Block aBlock = aEvent.player.worldObj.getBlock(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
         TileEntity aTileEntity = aEvent.player.worldObj.getTileEntity(aEvent.target.blockX, aEvent.target.blockY, aEvent.target.blockZ);
 
-        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList))
-        {
+        if (aBlock == Blocks.glass) {
+            GL11.glPushMatrix();
+            GL11.glTranslated(-(aEvent.player.lastTickPosX + (aEvent.player.posX - aEvent.player.lastTickPosX) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosY + (aEvent.player.posY - aEvent.player.lastTickPosY) * (double) aEvent.partialTicks), -(aEvent.player.lastTickPosZ + (aEvent.player.posZ - aEvent.player.lastTickPosZ) * (double) aEvent.partialTicks));
+            GL11.glTranslated((float) aEvent.target.blockX + 0.5F, (float) aEvent.target.blockY + 0.5F, (float) aEvent.target.blockZ + 0.5F);
+            int tSideHit = aEvent.target.sideHit;
+            Rotation.sideRotations[tSideHit].glApply();
+            // draw grid
+            GL11.glTranslated(0.0D, -0.501D, 0.0D);
+            GL11.glLineWidth(2.0F);
+            GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.5F);
+            drawRotationMarker(ROTATION_MARKER_TRANSFORM_CENTER);
+            GL11.glPopMatrix();
+        }
+
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWrenchList)) {
             if (aTileEntity instanceof ITurnable || ROTATABLE_VANILLA_BLOCKS.contains(aBlock) || aTileEntity instanceof IWrenchable)
                 drawGrid(aEvent, false, true, aEvent.player.isSneaking());
             return;
@@ -585,17 +593,15 @@ public class GT_Client extends GT_Proxy
             return;
 
         if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sWireCutterList) ||
-            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList) )
-        {
+                GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sSolderingToolList)) {
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
                 drawGrid(aEvent, false, false, aEvent.player.isSneaking());
             return;
         }
 
         if ((aEvent.currentItem == null && aEvent.player.isSneaking()) ||
-            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList) ||
-            GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList))
-        {
+                GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCrowbarList) ||
+                GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sScrewdriverList)) {
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
                 for (byte i = 0; i < 6; i++)
                     if (((ICoverable) aTileEntity).getCoverIDAtSide(i) > 0) {
@@ -605,8 +611,7 @@ public class GT_Client extends GT_Proxy
             return;
         }
 
-        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet()))
-        {
+        if (GT_Utility.isStackInList(aEvent.currentItem, GregTech_API.sCovers.keySet())) {
             if (((ICoverable) aTileEntity).getCoverIDAtSide((byte) aEvent.target.sideHit) == 0)
                 drawGrid(aEvent, true, false, aEvent.player.isSneaking());
         }
@@ -776,13 +781,12 @@ public class GT_Client extends GT_Proxy
                     tString = (new StringBuilder()).append(tString).append("wherearewenow").toString();
                     break;
             }
-        if (tString.startsWith("streaming.")){
+        if (tString.startsWith("streaming.")) {
             new WorldSpawnedEventBuilder.RecordEffectEventBuilder()
                     .setIdentifier(tString.substring(10))
                     .setPosition(aX, aY, aZ)
                     .run();
-        }
-        else{
+        } else {
             new WorldSpawnedEventBuilder.SoundEventBuilder()
                     .setVolume(3f)
                     .setPitch(tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F)
@@ -792,13 +796,14 @@ public class GT_Client extends GT_Proxy
         }
     }
 
-    public static int hideValue=0;
+    public static int hideValue = 0;
 
-    /** <p>Client tick counter that is set to 5 on hiding pipes and covers.</p>
+    /**
+     * <p>Client tick counter that is set to 5 on hiding pipes and covers.</p>
      * <p>It triggers a texture update next client tick when reaching 4, with provision for 3 more update tasks,
      * spreading client change detection related work and network traffic on different ticks, until it reaches 0.</p>
      */
-    public static int changeDetected=0;
+    public static int changeDetected = 0;
 
     private static int shouldHeldItemHideThings() {
         try {
@@ -815,17 +820,17 @@ public class GT_Client extends GT_Proxy
                 }
             }
             if (GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWrenchList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sHardHammerList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSoftHammerList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)
-            		|| GT_Utility.isStackInList(tCurrentItem, GregTech_API.sCrowbarList)
-            		|| GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
-            	hide |= 0x2;
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sScrewdriverList)
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sHardHammerList)
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSoftHammerList)
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sWireCutterList)
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sSolderingToolList)
+                    || GT_Utility.isStackInList(tCurrentItem, GregTech_API.sCrowbarList)
+                    || GregTech_API.sCovers.containsKey(new GT_ItemStack(tCurrentItem))) {
+                hide |= 0x2;
             }
             return hide;
-        }catch(Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
