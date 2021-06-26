@@ -775,6 +775,12 @@ achievement.gt.blockmachines.hatch.energy.tier.08=UV Energy Hatch
 achievement.gt.blockmachines.hatch.energy.tier.08.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.hatch.energy.tier.09=UHV Energy Hatch
 achievement.gt.blockmachines.hatch.energy.tier.09.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.10=UEV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.10.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.11=UIV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.11.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.energy.tier.12=UMV Energy Hatch
+achievement.gt.blockmachines.hatch.energy.tier.12.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.blockmachines.hatch.dynamo.tier.06=LuV Dynamo Hatch
 achievement.gt.blockmachines.hatch.dynamo.tier.06.desc=Pickup this item to see the recipe in NEI
@@ -784,6 +790,12 @@ achievement.gt.blockmachines.hatch.dynamo.tier.08=UV Dynamo Hatch
 achievement.gt.blockmachines.hatch.dynamo.tier.08.desc=Pickup this item to see the recipe in NEI
 achievement.gt.blockmachines.hatch.dynamo.tier.09=UHV Dynamo Hatch
 achievement.gt.blockmachines.hatch.dynamo.tier.09.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.10=UEV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.10.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.11=UIV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.11.desc=Pickup this item to see the recipe in NEI
+achievement.gt.blockmachines.hatch.dynamo.tier.12=UMV Dynamo Hatch
+achievement.gt.blockmachines.hatch.dynamo.tier.12.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.blockmachines.fusioncomputer.tier.06=Fusion Computer Mark I
 achievement.gt.blockmachines.fusioncomputer.tier.06.desc=Pickup this item to see the recipe in NEI
@@ -809,6 +821,8 @@ achievement.item.PikoCircuit=Piko Circuit
 achievement.item.PikoCircuit.desc=Pickup this item to see the recipe in NEI
 achievement.item.QuantumCircuit=Quantum Circuit
 achievement.item.QuantumCircuit.desc=Pickup this item to see the recipe in NEI
+achievement.item.relocator=Relocator
+achievement.item.relocator.desc=Pickup this item to see the recipe in NEI
 
 achievement.gt.blockmachines.multimachine.em.computer=Quantum Computer
 achievement.gt.blockmachines.multimachine.em.computer.desc=Pickup this item to see the recipe in NEI
