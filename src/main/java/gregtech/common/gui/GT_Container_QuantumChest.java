@@ -6,8 +6,7 @@ import gregtech.api.gui.GT_ContainerMetaTile_Machine;
 import gregtech.api.gui.GT_Slot_Output;
 import gregtech.api.gui.GT_Slot_Render;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_QuantumChest;
-import gregtech.common.tileentities.storage.GT_MetaTileEntity_SuperChest;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
@@ -32,10 +31,8 @@ public class GT_Container_QuantumChest extends GT_ContainerMetaTile_Machine {
         super.detectAndSendChanges();
 
         if (mTileEntity.isClientSide() || mTileEntity.getMetaTileEntity() == null) return;
-        if (mTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_QuantumChest) {
-            mContent = ((GT_MetaTileEntity_QuantumChest) mTileEntity.getMetaTileEntity()).mItemCount;
-        } else if (mTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_SuperChest) {
-            mContent = ((GT_MetaTileEntity_SuperChest) mTileEntity.getMetaTileEntity()).mItemCount;
+        if (mTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_DigitalChestBase) {
+            mContent = ((GT_MetaTileEntity_DigitalChestBase) mTileEntity.getMetaTileEntity()).getItemCount();
         } else {
             mContent = 0;
         }
