@@ -563,9 +563,9 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
 
         ItemList.FluidFilter.set(addItem(669, "Fluid Filter Cover", "Set with Fluid Container to only accept one Fluid Type"));
         GregTech_API.registerCover(ItemList.FluidFilter.get(1L), TextureFactory.of(MACHINE_CASINGS[1][0], TextureFactory.of(OVERLAY_SHUTTER)), new GT_Cover_Fluidfilter());
-        ItemList.ItemFilter_Export.set(addItem(270,"Item Filter Cover (Export)", "Right click with Item to set filter (Only support Export Mode)"));
+        ItemList.ItemFilter_Export.set(addItem(270,"Item Filter Cover (Export)", "Right click with an item to set filter (Only supports Export Mode)"));
         GregTech_API.registerCover(ItemList.ItemFilter_Export.get(1L), TextureFactory.of(MACHINE_CASINGS[5][0], TextureFactory.of(OVERLAY_CONVEYOR)), new GT_Cover_ItemFilter(true));
-        ItemList.ItemFilter_Import.set(addItem(271,"Item Filter Cover (Import)", "Right click with Item to set filter (Only support Import Mode)"));
+        ItemList.ItemFilter_Import.set(addItem(271,"Item Filter Cover (Import)", "Right click with an item to set filter (Only supports Import Mode)"));
         GregTech_API.registerCover(ItemList.ItemFilter_Import.get(1L), TextureFactory.of(MACHINE_CASINGS[5][0], TextureFactory.of(OVERLAY_CONVEYOR)), new GT_Cover_ItemFilter(false));
 
         /*ItemList.Rotor_LV.set(addItem(tLastID = 620, "Tin Rotor", "", new Object[] { OrePrefixes.rotor.get(Materials.Tin), new TC_Aspects.TC_AspectStack(TC_Aspects.METALLUM, 1L), new TC_Aspects.TC_AspectStack(TC_Aspects.MOTUS, 1L) }));
