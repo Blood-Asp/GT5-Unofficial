@@ -252,10 +252,17 @@ public abstract class GT_GUICover extends GuiScreen implements GT_IToolTipRender
             textBox.setFocused(textBox.equals(boxToFocus) && textBox.isEnabled());
         }
     }
+
+    /**
+     * Given textbox's value might have changed.
+     */
     public void applyTextBox(GT_GuiIntegerTextBox box) {
 
     }
 
+    /**
+     * Reset the given textbox to the last valid value, <b>NOT</b> 0.
+     */
     public void resetTextBox(GT_GuiIntegerTextBox box) {
 
     }
