@@ -33,6 +33,10 @@ public class GT_MetaTileEntity_Boiler_Bronze extends GT_MetaTileEntity_Boiler {
                 "Causes 20 Pollution per second"});
     }
 
+    public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional, int aTier, String[] aDescription) {
+        super(aID, aName, aNameRegional, aTier, aDescription);
+    }
+
     public GT_MetaTileEntity_Boiler_Bronze(int aID, String aName, String aNameRegional, String[] aDescription) {
         super(aID, aName, aNameRegional, aDescription);
     }

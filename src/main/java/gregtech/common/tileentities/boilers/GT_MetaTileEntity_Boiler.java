@@ -28,6 +28,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public boolean mHadNoWater = false;
     private int mExcessWater = 0;
 
+    public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, int aTier, String[] aDescription, ITexture... aTextures) {
+        super(aID, aName, aNameRegional, aTier, 4, aDescription, aTextures);
+    }
+
     public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
     }
