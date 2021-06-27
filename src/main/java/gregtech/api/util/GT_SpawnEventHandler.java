@@ -9,12 +9,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.CheckSpawn;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GT_SpawnEventHandler {
 
-    public static volatile List<int[]> mobReps = new ArrayList();
+    public static volatile List<int[]> mobReps = new CopyOnWriteArrayList<>();
 
     public GT_SpawnEventHandler() {
         MinecraftForge.EVENT_BUS.register(this);
