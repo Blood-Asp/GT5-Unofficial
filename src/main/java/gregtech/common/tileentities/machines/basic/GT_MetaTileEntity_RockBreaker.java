@@ -64,7 +64,7 @@ public class GT_MetaTileEntity_RockBreaker extends GT_MetaTileEntity_BasicMachin
 
     @Override
     protected boolean allowPutStackValidated(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
-        return super.allowPutStack(aBaseMetaTileEntity, aIndex, aSide, aStack) && getRecipeList().containsInput(aStack);
+        return super.allowPutStackValidated(aBaseMetaTileEntity, aIndex, aSide, aStack) && getRecipeList().containsInput(aStack);
     }
 
     @Override
