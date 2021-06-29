@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,6 +57,12 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
         }
     }
 
+    public List<GT_Recipe> getSortedRecipes() {
+        List<GT_Recipe> result = new ArrayList<>(this.mRecipeMap.mRecipeList);
+        Collections.sort(result);
+        return result;
+    }
+    
     public static void drawText(int aX, int aY, String aString, int aColor) {
         Minecraft.getMinecraft().fontRenderer.drawString(aString, aX, aY, aColor);
     }
@@ -69,7 +76,7 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
     @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
-            for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
+            for (GT_Recipe tRecipe : getSortedRecipes()) {
                 if (!tRecipe.mHidden) {
                     this.arecipes.add(new CachedDefaultRecipe(tRecipe));
                 }else{
@@ -102,7 +109,7 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
                 }
             }
         }
-        for (GT_Recipe tRecipe : this.mRecipeMap.mRecipeList) {
+        for (GT_Recipe tRecipe : getSortedRecipes()) {
             if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
                 for (ItemStack tStack : tResults) {
