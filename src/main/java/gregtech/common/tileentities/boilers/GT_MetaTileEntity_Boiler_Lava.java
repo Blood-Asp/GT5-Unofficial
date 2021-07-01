@@ -23,11 +23,19 @@ import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE;
 
 public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
+
+    public static final int COOLDOWN_INTERVAL = 20;
+    public static final int ENERGY_PER_LAVA = 1;
+    public static final int CONSUMPTION_PER_HEATUP = 3;
+    public static final int PRODUCTION_PER_SECOND = 600;
+    public static final int POLLUTION_PER_SECOND = 20;
+
     public GT_MetaTileEntity_Boiler_Lava(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
                 "A Boiler running off Lava",
-                "Produces 600L of Steam per second",
-                "Causes 20 Pollution per second"});
+                "Produces " + PRODUCTION_PER_SECOND + "L of Steam per second",
+                "Causes " + POLLUTION_PER_SECOND + " Pollution per second",
+                "Consumes " + ((double) CONSUMPTION_PER_HEATUP / ENERGY_PER_LAVA) + "L of Lava every " + COOLDOWN_INTERVAL + " ticks when fully heat up"});
     }
 
     public GT_MetaTileEntity_Boiler_Lava(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
@@ -85,12 +93,12 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
 
     @Override
     protected int getPollution() {
-        return 20;
+        return POLLUTION_PER_SECOND;
     }
 
     @Override
     protected int getProductionPerSecond() {
-        return 600;
+        return PRODUCTION_PER_SECOND;
     }
 
     @Override
@@ -100,18 +108,18 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
 
     @Override
     protected int getEnergyConsumption() {
-        return 3;
+        return CONSUMPTION_PER_HEATUP;
     }
 
     @Override
     protected int getCooldownInterval() {
-        return 20;
+        return COOLDOWN_INTERVAL;
     }
 
     @Override
     protected void updateFuel(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.bucket.get(Materials.Lava))) {
-            this.mProcessingEnergy += 1000;
+            this.mProcessingEnergy += 1000 * ENERGY_PER_LAVA;
             aBaseMetaTileEntity.decrStackSize(2, 1);
             aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Empty, 1L));
         }
@@ -122,7 +130,7 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
         if ((GT_ModHandler.isLava(aFluid)) && (this.mProcessingEnergy < 50)) {
             int tFilledAmount = Math.min(50, aFluid.amount);
             if (doFill) {
-                this.mProcessingEnergy += tFilledAmount;
+                this.mProcessingEnergy += tFilledAmount * ENERGY_PER_LAVA;
             }
             return tFilledAmount;
         }
