@@ -48,7 +48,7 @@ public class PowerNodePath extends NodePath {
 
     public void addAmps(int aAmps) {
         this.mAmps += aAmps;
-        if (false && this.mAmps > mMaxAmps * 40) {
+        if (this.mAmps > mMaxAmps * 40) {
             for (MetaPipeEntity tCable : mPipes) {
                 if (((GT_MetaPipeEntity_Cable)tCable).mAmperage*40 < this.mAmps) {
                     BaseMetaPipeEntity tBaseCable = (BaseMetaPipeEntity) tCable.getBaseMetaTileEntity();

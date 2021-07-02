@@ -33,11 +33,6 @@ public class GT_MetaTileEntity_Hatch_Dynamo extends GT_MetaTileEntity_Hatch {
     }
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-    }
-
-    @Override
     public boolean isSimpleMachine() {
         return true;
     }

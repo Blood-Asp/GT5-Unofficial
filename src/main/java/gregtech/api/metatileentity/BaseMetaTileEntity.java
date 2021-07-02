@@ -1124,9 +1124,6 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                         } else if (node.mCreationTime != time) {
                             GenerateNodeMap.clearNodeMap(node,-1);
                             new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
-                        } else {
-//                            GenerateNodeMap.clearNodeMap(node,-1);
-//                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
                         }
                     }
                 }
