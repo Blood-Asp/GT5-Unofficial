@@ -6,7 +6,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import net.minecraft.server.MinecraftServer;
 
 //path for cables
-//al calculations like ams and voltage hapens here
+//all calculations like amp and voltage happens here
 public class PowerNodePath extends NodePath {
     int mMaxAmps;
     int mAmps = 0;
@@ -59,7 +59,7 @@ public class PowerNodePath extends NodePath {
     }
 
     //if no amps pass trough for more then 0.5 second reduce them to minimize wrong results
-    //but still allow the player to see if activity is hapening
+    //but still allow the player to see if activity is happening
     public int getAmps() {
         int tTime = MinecraftServer.getServer().getTickCounter() - 10;
         if (mTick < tTime) {

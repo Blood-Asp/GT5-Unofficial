@@ -11,8 +11,8 @@ public class NodeGTBaseMetaTile extends ConsumerNode {
     }
 
     @Override
-    public int injectEnergy(int aVoltage, int aMaxApms) {
-        return (int)((IEnergyConnected) mTileEntity).injectEnergyUnits(mSide,aVoltage, aMaxApms);
+    public int injectEnergy(int aVoltage, int aMaxAmps) {
+        return (int)((IEnergyConnected) mTileEntity).injectEnergyUnits(mSide,aVoltage, aMaxAmps);
     }
 
     @Override

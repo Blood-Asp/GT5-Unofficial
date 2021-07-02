@@ -1,23 +1,23 @@
 package gregtech.api.graphs;
 
-//keep track on wich node is being looked for accrouse the recursif functions
+//keep track on which node is being looked for across the recursive functions
 public class NodeList {
     Node[] mNodes;
-    int mConter = 0;
+    int mCounter = 0;
     public NodeList(Node[] mNodes) {
         this.mNodes = mNodes;
     }
 
     Node getNextNode() {
-        if (++mConter < mNodes.length)
-            return mNodes[mConter];
+        if (++mCounter < mNodes.length)
+            return mNodes[mCounter];
         else
             return null;
     }
 
     Node getNode() {
-        if (mConter < mNodes.length)
-            return mNodes[mConter];
+        if (mCounter < mNodes.length)
+            return mNodes[mCounter];
         else
             return null;
     }
