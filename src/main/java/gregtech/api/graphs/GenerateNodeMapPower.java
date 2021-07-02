@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-//node map generator for power distrubution
+//node map generator for power distribution
 public class GenerateNodeMapPower extends GenerateNodeMap {
     public GenerateNodeMapPower(BaseMetaPipeEntity aTileEntity) {
         generateNode(aTileEntity,null,1,null,

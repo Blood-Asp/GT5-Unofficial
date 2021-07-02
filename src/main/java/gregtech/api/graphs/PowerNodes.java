@@ -12,9 +12,9 @@ import gregtech.api.graphs.paths.PowerNodePath;
  * this network only includes nodes that have a higher value then it self so it does not know the highest known value that
  * the return node knows
  *
- * with these rules we can know what a node contains the target node in its network as long the target node has a value
- * more or equal then the node we are looking but is less or equal then the highest value that node knows
- * this way we don't have to go over the entire network too look for it
+ * with these rules we can know for the target node to be in the network of a node, the target node must have a value no
+ * less than the node we are looking and no greater than the highest value that node knows
+ * this way we don't have to go over the entire network to look for it
  *
  * we also hold a list of all consumers so we can check before looking if that consumer actually needs power
  * and only look for nodes that actually need power
@@ -27,11 +27,11 @@ public class PowerNodes {
         ConsumerNode tConsumer =(ConsumerNode) aConsumers.getNode();
         int tLoopProtection = 0;
         while (tConsumer != null) {
-            int tTagetNodeValue = tConsumer.mNodeValue;
+            int tTargetNodeValue = tConsumer.mNodeValue;
             //if the target node has a value less then the current node
-            if (tTagetNodeValue < aCurrentNode.mNodeValue || tTagetNodeValue > aCurrentNode.mHigestNodeValue) {
+            if (tTargetNodeValue < aCurrentNode.mNodeValue || tTargetNodeValue > aCurrentNode.mHighestNodeValue) {
                 for (int j = 0;j<6;j++) {
-                    Node tNextNode = aCurrentNode.mNeigbourNodes[j];
+                    Node tNextNode = aCurrentNode.mNeighbourNodes[j];
                     if (tNextNode != null && tNextNode.mNodeValue < aCurrentNode.mNodeValue) {
                         if (tNextNode.mNodeValue == tConsumer.mNodeValue) {
                             tAmpsUsed += processNodeInject(aCurrentNode,tConsumer,j,aMaxAmps-tAmpsUsed,aVoltage,false);
@@ -46,16 +46,16 @@ public class PowerNodes {
                     }
                 }
             } else {
-                //if the target node has a node value greater then current node vale
+                //if the target node has a node value greater then current node value
                 for (int side = 5;side>-1;side--) {
-                    Node tNextNode = aCurrentNode.mNeigbourNodes[side];
+                    Node tNextNode = aCurrentNode.mNeighbourNodes[side];
                     if (tNextNode == null) continue;
-                    if (tNextNode.mNodeValue > aCurrentNode.mNodeValue && tNextNode.mNodeValue < tTagetNodeValue) {
+                    if (tNextNode.mNodeValue > aCurrentNode.mNodeValue && tNextNode.mNodeValue < tTargetNodeValue) {
                         if (tNextNode == aPreviousNode) return tAmpsUsed;
                         tAmpsUsed += processNextNodeAbove(aCurrentNode,tNextNode,aConsumers,side,aMaxAmps-tAmpsUsed,aVoltage);
                         tConsumer =(ConsumerNode) aConsumers.getNode();
                         break;
-                    } else if (tNextNode.mNodeValue == tTagetNodeValue) {
+                    } else if (tNextNode.mNodeValue == tTargetNodeValue) {
                         tAmpsUsed += processNodeInject(aCurrentNode,tConsumer,side,aMaxAmps-tAmpsUsed,aVoltage,true);
                         tConsumer =(ConsumerNode) aConsumers.getNextNode();
                         break;
@@ -66,32 +66,32 @@ public class PowerNodes {
                 return tAmpsUsed;
             }
             if (tLoopProtection++ > 20) {
-                throw new NullPointerException("infinit loop in powering nodes ");
+                throw new NullPointerException("infinite loop in powering nodes ");
             }
         }
         return tAmpsUsed;
     }
 
-    //checking if target node is next to it ot has a higer value then current node value
-    //thse functions are difrent to eayer go down or up the stack
+    //checking if target node is next to it or has a higher value then current node value
+    //these functions are different to either go down or up the stack
     protected static int powerNodeAbove(Node aCurrentNode, Node aPreviousNode, NodeList aConsumers, int aVoltage, int aMaxAmps) {
         int tAmpsUsed = 0;
         int tLoopProtection = 0;
         ConsumerNode tConsumer =(ConsumerNode) aConsumers.getNode();
         while (tConsumer != null) {
-            int tTagetNodeValue = tConsumer.mNodeValue;
-            if (tTagetNodeValue > aCurrentNode.mHigestNodeValue || tTagetNodeValue < aCurrentNode.mNodeValue) {
+            int tTargetNodeValue = tConsumer.mNodeValue;
+            if (tTargetNodeValue > aCurrentNode.mHighestNodeValue || tTargetNodeValue < aCurrentNode.mNodeValue) {
                 return tAmpsUsed;
             } else {
                 for (int side = 5;side>-1;side--) {
-                    Node tNextNode = aCurrentNode.mNeigbourNodes[side];
+                    Node tNextNode = aCurrentNode.mNeighbourNodes[side];
                     if (tNextNode == null) continue;
-                    if (tNextNode.mNodeValue > aCurrentNode.mNodeValue && tNextNode.mNodeValue < tTagetNodeValue) {
+                    if (tNextNode.mNodeValue > aCurrentNode.mNodeValue && tNextNode.mNodeValue < tTargetNodeValue) {
                         if (tNextNode == aPreviousNode) return tAmpsUsed;
                         tAmpsUsed += processNextNodeAbove(aCurrentNode,tNextNode,aConsumers,side,aMaxAmps-tAmpsUsed,aVoltage);
                         tConsumer =(ConsumerNode) aConsumers.getNode();
                         break;
-                    } else if (tNextNode.mNodeValue == tTagetNodeValue) {
+                    } else if (tNextNode.mNodeValue == tTargetNodeValue) {
                         tAmpsUsed += processNodeInject(aCurrentNode,tConsumer,side,aMaxAmps-tAmpsUsed,aVoltage,true);
                         tConsumer =(ConsumerNode) aConsumers.getNextNode();
                         break;
@@ -102,14 +102,14 @@ public class PowerNodes {
                 return tAmpsUsed;
             }
             if (tLoopProtection++ > 20) {
-                throw new NullPointerException("infinit loop in powering nodes ");
+                throw new NullPointerException("infinite loop in powering nodes ");
             }
         }
         return tAmpsUsed;
     }
 
     protected static int processNextNode(Node aCurrentNode, Node aNextNode, NodeList aConsumers, int aSide, int aMaxAmps, int aVoltage) {
-        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePats[aSide];
+        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePaths[aSide];
         PowerNodePath tSelfPath = (PowerNodePath) aCurrentNode.mSelfPath;
         int tVoltLoss = 0;
         if (tSelfPath != null) {
@@ -126,7 +126,7 @@ public class PowerNodes {
     }
 
     protected static int processNextNodeAbove(Node aCurrentNode, Node aNextNode, NodeList aConsumers, int aSide, int aMaxAmps, int aVoltage) {
-        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePats[aSide];
+        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePaths[aSide];
         PowerNodePath tSelfPath = (PowerNodePath) aCurrentNode.mSelfPath;
         int tVoltLoss = 0;
         if (tSelfPath != null) {
@@ -144,7 +144,7 @@ public class PowerNodes {
 
     protected static int processNodeInject(Node aCurrentNode, ConsumerNode aConsumer, int aSide,int aMaxAmps, int aVoltage,
                                            boolean isUp) {
-        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePats[aSide];
+        PowerNodePath tPath = (PowerNodePath)aCurrentNode.mNodePaths[aSide];
         PowerNodePath tSelfPath = (PowerNodePath) aCurrentNode.mSelfPath;
         int tVoltLoss = 0;
         if (tSelfPath != null) {

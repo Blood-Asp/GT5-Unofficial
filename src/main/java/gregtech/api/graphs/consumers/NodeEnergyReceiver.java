@@ -22,7 +22,7 @@ public class NodeEnergyReceiver extends ConsumerNode {
     }
 
     @Override
-    public int injectEnergy(int aVoltage, int aMaxApms) {
+    public int injectEnergy(int aVoltage, int aMaxAmps) {
         ForgeDirection tDirection = ForgeDirection.getOrientation(mSide);
         int rfOut = GT_Utility.safeInt(aVoltage * GregTech_API.mEUtoRF / 100);
         if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
@@ -36,7 +36,7 @@ public class NodeEnergyReceiver extends ConsumerNode {
         return 0;
     }
 
-    //copyed from IEnergyConnected
+    //copied from IEnergyConnected
     private void explode(int aRfOut) {
         if (aRfOut > 32L * GregTech_API.mEUtoRF / 100L) {
             int aExplosionPower = aRfOut;

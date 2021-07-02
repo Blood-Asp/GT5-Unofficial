@@ -18,9 +18,9 @@ public class NodeEnergySink extends ConsumerNode {
     }
 
     @Override
-    public int injectEnergy(int aVoltage, int aMaxApms) {
+    public int injectEnergy(int aVoltage, int aMaxAmps) {
         int tUsedAmps = 0;
-        while (aMaxApms > tUsedAmps && ((IEnergySink) mTileEntity).getDemandedEnergy() > 0 &&
+        while (aMaxAmps > tUsedAmps && ((IEnergySink) mTileEntity).getDemandedEnergy() > 0 &&
                 ((IEnergySink) mTileEntity).injectEnergy(ForgeDirection.getOrientation(mSide), aVoltage, aVoltage) < aVoltage)
             tUsedAmps++;
         return tUsedAmps;

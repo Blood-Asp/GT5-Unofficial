@@ -21,18 +21,16 @@ public class GT_Runnable_Cable_Update extends GT_Runnable_MachineBlockUpdate {
         }
     }
 
-
     @Override
     public void run() {
         try {
             while (!tQueue.isEmpty()) {
                 final ChunkCoordinates aCoords = tQueue.poll();
                 final TileEntity tTileEntity;
-                final boolean isMachineBlock;
 
                 GT_Proxy.TICK_LOCK.lock();
                 try {
-                    //we dont want to go over cables that are in unloaded chuncks
+                    //we dont want to go over cables that are in unloaded chunks
                     //keeping the lock just to make sure no CME happens
                     if (world.blockExists(aCoords.posX, aCoords.posY, aCoords.posZ)) {
                         tTileEntity = world.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
@@ -48,7 +46,7 @@ public class GT_Runnable_Cable_Update extends GT_Runnable_MachineBlockUpdate {
                     ((IMachineBlockUpdateable) tTileEntity).onMachineBlockUpdate();
 
                 // Now see if we should add the nearby blocks to the queue:
-                //only add blocks wich the cable is conected too
+                // only add blocks the cable is connected to
                 if (tTileEntity instanceof BaseMetaPipeEntity &&
                         ((BaseMetaPipeEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)
                 {
