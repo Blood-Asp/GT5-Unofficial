@@ -17,6 +17,7 @@ import gregtech.api.objects.GT_Cover_Default;
 import gregtech.api.objects.GT_Cover_None;
 import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.threads.GT_Runnable_Cable_Update;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.*;
 import gregtech.api.world.GT_Worldgen;
@@ -405,6 +406,15 @@ public class GregTech_API {
             return true;
         }
         return false;
+    }
+
+    public static boolean causeCableUpdate(World aWorld, int aX, int aY, int aZ) {
+        if (aWorld != null && !aWorld.isRemote) { // World might be null during Worldgen
+            GT_Runnable_Cable_Update.setCableUpdateValues(aWorld, new ChunkCoordinates(aX, aY, aZ));
+            return true;
+        }
+        return false;
+
     }
 
     /**

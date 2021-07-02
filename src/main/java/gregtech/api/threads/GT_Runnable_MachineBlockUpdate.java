@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 
 public class GT_Runnable_MachineBlockUpdate implements Runnable {
     // used by runner thread
-    private final ChunkCoordinates mCoords;
-    private final World world;
-    private final Set<ChunkCoordinates> visited = new HashSet<>(80);
-    private final Queue<ChunkCoordinates> tQueue = new LinkedList<>();
+    protected final ChunkCoordinates mCoords;
+    protected final World world;
+    protected final Set<ChunkCoordinates> visited = new HashSet<>(80);
+    protected final Queue<ChunkCoordinates> tQueue = new LinkedList<>();
     
     // Threading
     private static final ThreadFactory THREAD_FACTORY = r -> {
@@ -30,15 +30,14 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         thread.setName("GT_MachineBlockUpdate");
         return thread;
     };
-    private static ExecutorService EXECUTOR_SERVICE;
+    protected static ExecutorService EXECUTOR_SERVICE;
 
     // This class should never be initiated outside of this class!
-    private GT_Runnable_MachineBlockUpdate(World aWorld, ChunkCoordinates aCoords) {
+    protected GT_Runnable_MachineBlockUpdate(World aWorld, ChunkCoordinates aCoords) {
         this.world = aWorld;
         this.mCoords = aCoords;
         visited.add(aCoords);
         tQueue.add(aCoords);
-        
     }
 
     public static boolean isEnabled() {
@@ -57,11 +56,10 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
         GT_Runnable_MachineBlockUpdate.isEnabled = isEnabled;
     }
 
-    private static boolean isEnabled = true;
+    protected static boolean isEnabled = true;
 
     public static void setMachineUpdateValues(World aWorld, ChunkCoordinates aCoords) {
         if (isEnabled) {
-            aWorld.getTileEntity(aCoords.posX, aCoords.posY, aCoords.posZ);
             EXECUTOR_SERVICE.submit(new GT_Runnable_MachineBlockUpdate(aWorld, aCoords));
         }
     }
