@@ -849,13 +849,13 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GregTech_API.registerCover(ItemList.Cover_NeedsMaintainance.get(1L), TextureFactory.of(MACHINE_CASINGS[2][0], TextureFactory.of(TextureFactory.of(OVERLAY_ACTIVITYDETECTOR), TextureFactory.builder().addIcon(OVERLAY_ACTIVITYDETECTOR_GLOW).glow().build())), new GT_Cover_NeedMaintainance());
         GT_Values.RA.addAssemblerRecipe(ItemList.Emitter_MV.get(1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 1L), ItemList.Cover_NeedsMaintainance.get(1L), 600, 24);
 
-        GT_ModHandler.addCraftingRecipe(ItemList.ItemFilter_Export.get(1L),new Object[]{"SPS","dIC","SPS",'P',OrePrefixes.plate.get(Materials.Tin),'S',OrePrefixes.screw.get(Materials.Iron),'I',ItemList.Component_Filter,'C',ItemList.Conveyor_Module_LV});
-        GT_ModHandler.addCraftingRecipe(ItemList.ItemFilter_Import.get(1L),new Object[]{"SPS","CId","SPS",'P',OrePrefixes.plate.get(Materials.Tin),'S',OrePrefixes.screw.get(Materials.Iron),'I',ItemList.Component_Filter,'C',ItemList.Conveyor_Module_LV});
-        GT_ModHandler.addShapelessCraftingRecipe(ItemList.ItemFilter_Export.get(1L),new Object[]{ItemList.ItemFilter_Import.get(1L)});
-        GT_ModHandler.addShapelessCraftingRecipe(ItemList.ItemFilter_Import.get(1L),new Object[]{ItemList.ItemFilter_Export.get(1L)});
+        GT_ModHandler.addCraftingRecipe(ItemList.ItemFilter_Export.get(1L), new Object[]{"SPS", "dIC", "SPS", 'P', OrePrefixes.plate.get(Materials.Tin), 'S', OrePrefixes.screw.get(Materials.Iron), 'I', ItemList.Component_Filter, 'C', ItemList.Conveyor_Module_LV});
+        GT_ModHandler.addCraftingRecipe(ItemList.ItemFilter_Import.get(1L), new Object[]{"SPS", "CId", "SPS", 'P', OrePrefixes.plate.get(Materials.Tin), 'S', OrePrefixes.screw.get(Materials.Iron), 'I', ItemList.Component_Filter, 'C', ItemList.Conveyor_Module_LV});
+        GT_ModHandler.addShapelessCraftingRecipe(ItemList.ItemFilter_Export.get(1L), new Object[]{ItemList.ItemFilter_Import.get(1L)});
+        GT_ModHandler.addShapelessCraftingRecipe(ItemList.ItemFilter_Import.get(1L), new Object[]{ItemList.ItemFilter_Export.get(1L)});
 
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate,Materials.Tin,2L),ItemList.Component_Filter.get(1L),ItemList.Conveyor_Module_LV.get(1L),GT_Utility.getIntegratedCircuit(1)},null,ItemList.ItemFilter_Export.get(1L),100,30);
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate,Materials.Tin,2L),ItemList.Component_Filter.get(1L),ItemList.Conveyor_Module_LV.get(1L),GT_Utility.getIntegratedCircuit(2)},null,ItemList.ItemFilter_Import.get(1L),100,30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate,Materials.Tin,2L), ItemList.Component_Filter.get(1L), ItemList.Conveyor_Module_LV.get(1L), GT_Utility.getIntegratedCircuit(1)}, null, ItemList.ItemFilter_Export.get(1L), 100, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.plate,Materials.Tin,2L), ItemList.Component_Filter.get(1L), ItemList.Conveyor_Module_LV.get(1L), GT_Utility.getIntegratedCircuit(2)}, null, ItemList.ItemFilter_Import.get(1L), 100, 30);
     }
 
     private static final Map<Materials,Materials> cauldronRemap =new HashMap<>();
