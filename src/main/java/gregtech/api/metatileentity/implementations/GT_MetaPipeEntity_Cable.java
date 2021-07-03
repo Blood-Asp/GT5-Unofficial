@@ -205,6 +205,15 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         }
     }
 
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aTick%20 == 0 && aBaseMetaTileEntity.isServerSide() && (!GT_Mod.gregtechproxy.gt6Cable || mCheckConnections)) {
+            checkConnections();
+        }
+    }
+
     @Override
     public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (GT_Mod.gregtechproxy.gt6Cable && GT_ModHandler.damageOrDechargeItem(aPlayer.inventory.getCurrentItem(), 1, 500, aPlayer)) {
