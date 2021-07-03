@@ -5,6 +5,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.graphs.consumers.*;
 import gregtech.api.graphs.paths.NodePath;
 import gregtech.api.graphs.paths.PowerNodePath;
+import gregtech.api.interfaces.tileentity.IEnergyConnected;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
@@ -50,8 +51,16 @@ public class GenerateNodeMapPower extends GenerateNodeMap {
     protected boolean addConsumer(TileEntity aTileEntity, byte aSide, int aNodeValue, ArrayList<ConsumerNode> aConsumers) {
         if (aTileEntity instanceof BaseMetaTileEntity) {
             BaseMetaTileEntity tBaseTileEntity = (BaseMetaTileEntity) aTileEntity;
-            if (tBaseTileEntity.inputEnergyFrom(aSide,false)) {
-                ConsumerNode tConsumerNode = new NodeGTBaseMetaTile(aNodeValue,tBaseTileEntity, aSide, aConsumers);
+            if (tBaseTileEntity.inputEnergyFrom(aSide, false)) {
+                ConsumerNode tConsumerNode = new NodeGTBaseMetaTile(aNodeValue, tBaseTileEntity, aSide, aConsumers);
+                aConsumers.add(tConsumerNode);
+                return true;
+            }
+
+        } else if (aTileEntity instanceof IEnergyConnected) {
+            IEnergyConnected tTileEntity = (IEnergyConnected) aTileEntity;
+            if (tTileEntity.inputEnergyFrom(aSide,false)) {
+                ConsumerNode tConsumerNode = new NodeEnergyConnected(aNodeValue,tTileEntity,aSide,aConsumers);
                 aConsumers.add(tConsumerNode);
                 return true;
             }
