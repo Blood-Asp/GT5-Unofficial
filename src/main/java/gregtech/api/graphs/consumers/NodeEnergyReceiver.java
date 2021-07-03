@@ -17,6 +17,7 @@ import static gregtech.api.enums.GT_Values.V;
 
 //consumer for RF machines
 public class NodeEnergyReceiver extends ConsumerNode {
+    int mRestRF = 0;
     public NodeEnergyReceiver(int aNodeValue, IEnergyReceiver aTileEntity, byte aSide, ArrayList<ConsumerNode> aConsumers) {
         super(aNodeValue, (TileEntity) aTileEntity, aSide, aConsumers);
     }
@@ -25,9 +26,15 @@ public class NodeEnergyReceiver extends ConsumerNode {
     public int injectEnergy(int aVoltage, int aMaxApms) {
         ForgeDirection tDirection = ForgeDirection.getOrientation(mSide);
         int rfOut = GT_Utility.safeInt(aVoltage * GregTech_API.mEUtoRF / 100);
+        int ampsUsed = 1;
+        if (mRestRF > rfOut) {
+            rfOut = mRestRF;
+            ampsUsed = 0;
+        }
         if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
-            ((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, false);
-            return 1;
+            int consumed = ((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, false);
+            mRestRF = rfOut - consumed;
+            return ampsUsed;
         }
         if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions &&
                 ((IEnergyReceiver) mTileEntity).getMaxEnergyStored(tDirection) < rfOut * 600L) {
