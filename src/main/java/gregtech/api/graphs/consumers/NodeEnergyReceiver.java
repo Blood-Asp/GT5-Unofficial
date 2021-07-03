@@ -26,14 +26,14 @@ public class NodeEnergyReceiver extends ConsumerNode {
     public int injectEnergy(int aVoltage, int aMaxAmps) {
         ForgeDirection tDirection = ForgeDirection.getOrientation(mSide);
         int rfOut = GT_Utility.safeInt(aVoltage * GregTech_API.mEUtoRF / 100);
-        int ampsUsed = 1;
-        if (mRestRF > rfOut) {
-            rfOut = mRestRF;
-            ampsUsed = 0;
+        int ampsUsed = 0;
+        if (mRestRF < rfOut) {
+            mRestRF += rfOut;
+            ampsUsed = 1;
         }
-        if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, true) > 0) {
-            int consumed = ((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, false);
-            mRestRF = rfOut - consumed;
+        if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, mRestRF, true) > 0) {
+            int consumed = ((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, mRestRF, false);
+            mRestRF -= consumed;
             return ampsUsed;
         }
         if (GregTech_API.mRFExplosions && GregTech_API.sMachineExplosions &&
