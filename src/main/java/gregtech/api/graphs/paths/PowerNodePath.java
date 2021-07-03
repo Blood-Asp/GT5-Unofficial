@@ -52,7 +52,8 @@ public class PowerNodePath extends NodePath {
             for (MetaPipeEntity tCable : mPipes) {
                 if (((GT_MetaPipeEntity_Cable)tCable).mAmperage*40 < this.mAmps) {
                     BaseMetaPipeEntity tBaseCable = (BaseMetaPipeEntity) tCable.getBaseMetaTileEntity();
-                    tBaseCable.setToFire();
+                    if (tBaseCable != null) {
+                        tBaseCable.setToFire();
                 }
             }
         }
