@@ -31,7 +31,7 @@ public class NodeEnergyReceiver extends ConsumerNode {
             rfOut = mRestRF;
             ampsUsed = 0;
         }
-        if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, true) == rfOut) {
+        if (((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, true) > 0) {
             int consumed = ((IEnergyReceiver) mTileEntity).receiveEnergy(tDirection, rfOut, false);
             mRestRF = rfOut - consumed;
             return ampsUsed;
