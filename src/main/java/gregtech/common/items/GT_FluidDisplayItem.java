@@ -28,6 +28,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         ItemList.Display_Fluid.set(this);
     }
 
+    @Override
     protected void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         NBTTagCompound aNBT = aStack.getTagCompound();
         if (GT_Values.D1) {
@@ -46,10 +47,12 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aIconRegister) {
     }
 
+    @Override
     public IIcon getIconFromDamage(int aMeta) {
         return Stream.of(FluidRegistry.getFluid(aMeta), FluidRegistry.WATER)
                 .filter(Objects::nonNull)
@@ -59,16 +62,19 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
                 .orElseThrow(IllegalStateException::new);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public int getColorFromItemStack(ItemStack aStack, int aRenderPass) {
         Fluid tFluid = FluidRegistry.getFluid(aStack.getItemDamage());
         return tFluid == null ? 16777215 : tFluid.getColor();
     }
 
+    @Override
     public int getSpriteNumber() {
         return 0;
     }
 
+    @Override
     public String getUnlocalizedName(ItemStack aStack) {
         if (aStack != null) {
             return GT_Utility.getFluidName(FluidRegistry.getFluid(aStack.getItemDamage()), false);
@@ -76,6 +82,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         return "";
     }
 
+    @Override
     public String getItemStackDisplayName(ItemStack aStack) {
         if (aStack != null) {
             return GT_Utility.getFluidName(FluidRegistry.getFluid(aStack.getItemDamage()), true);
@@ -83,6 +90,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         return "";
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item aItem, CreativeTabs aTab, List aList) {
         if (GT_Values.D1) {

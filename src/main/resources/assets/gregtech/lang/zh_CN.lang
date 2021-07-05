@@ -77,19 +77,6 @@ GT5U.multiblock.problems=问题
 GT5U.multiblock.mei=最大输入
 GT5U.multiblock.usage=大概功率
 
-item.gregtech:modulararmor_helmet.name=基础模块化装甲头盔
-item.gregtech:modulararmor_chestplate.name=基础模块化装甲胸甲
-item.gregtech:modulararmor_leggings.name=基础模块化装甲护腿
-item.gregtech:modulararmor_boots.name=基础模块化装甲靴子
-item.gregtech:modularelectric1_helmet.name=模块化动力外骨骼头盔
-item.gregtech:modularelectric1_chestplate.name=模块化动力外骨骼胸甲
-item.gregtech:modularelectric1_leggings.name=模块化动力外骨骼护腿
-item.gregtech:modularelectric1_boots.name=模块化动力外骨骼靴子
-item.gregtech:modularelectric2_helmet.name=模块化纳米套装头盔
-item.gregtech:modularelectric2_chestplate.name=模块化纳米套装胸甲
-item.gregtech:modularelectric2_leggings.name=模块化纳米套装护腿
-item.gregtech:modularelectric2_boots.name=模块化纳米套装靴子
-
 achievement.Naquadah=找到硅岩矿石
 achievement.Naquadah.desc=高度：10-90，几率：10，小行星/金星/土卫六/天卫四/冥王星/柯伊伯带/织女一B/巴德纳E/巴德纳F//
 achievement.NaquadahEnriched=找到富集硅岩矿石

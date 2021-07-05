@@ -92,6 +92,7 @@ public class GT_RadioactiveCell_Item
         return 0;
     }
 
+    @Override
     public boolean isBookEnchantable(ItemStack itemstack1, ItemStack itemstack2) {
         return false;
     }
@@ -138,6 +139,7 @@ public class GT_RadioactiveCell_Item
         setDamageForStack(stack, getDamageOfStack(stack) + Dmg);
     }
 
+    @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
     	super.addAdditionalToolTips(aList, aStack, aPlayer);
         //aList.add("Time left: " + (this.maxDelay - getDurabilityOfStack(aStack)) + " secs");

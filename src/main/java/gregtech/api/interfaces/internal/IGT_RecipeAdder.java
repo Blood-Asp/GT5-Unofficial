@@ -171,17 +171,17 @@ public interface IGT_RecipeAdder {
     boolean addChemicalRecipe(ItemStack aInput1, ItemStack aInput2, FluidStack aFluidInput, FluidStack aFluidOutput, ItemStack aOutput, ItemStack aOutput2, int aDuration, int aEUtick);
 
     /**
-     * +     * Adds a Chemical Recipe that only exists in the Large Chemical Reactor
-     * +     *
-     * +     * @param aInputs   item inputs
-     * +     * @param aFluidInputs fluid inputs
-     * +     * @param aFluidOutputs fluid outputs
-     * +     * @param aOutputs  item outputs
-     * +     * @param aDuration must be > 0
-     * +     * @param aEUtick   must be > 0
-     * +     * aInputs and aFluidInputs must contain at least one valid input.
-     * +     * aOutputs and aFluidOutputs must contain at least one valid output.
-     * +
+     * Adds a Chemical Recipe that only exists in the Large Chemical Reactor
+     * 
+     * @param aInputs   item inputs
+     * @param aFluidInputs fluid inputs
+     * @param aFluidOutputs fluid outputs
+     * @param aOutputs  item outputs
+     * @param aDuration must be > 0
+     * @param aEUtick   must be > 0
+     * <br>aInputs and aFluidInputs must contain at least one valid input.
+     * <br>aOutputs and aFluidOutputs must contain at least one valid output.
+     * 
      */
 
     boolean addMultiblockChemicalRecipe(ItemStack[] aInputs, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, ItemStack[] aOutputs, int aDuration, int aEUtick);
@@ -275,13 +275,13 @@ public interface IGT_RecipeAdder {
     boolean addAssemblerRecipe(ItemStack aInput1, ItemStack aInput2, ItemStack aOutput1, int aDuration, int aEUt);
 
     /**
-     * +     * Adds an Assembler Recipe
-     * +     *
-     * +     * @param aInputs   must be != null
-     * +     * @param aOutput1  must be != null
-     * +     * @param aDuration must be > 0
-     * +     * @param aEUt      should be > 0
-     * +
+     * Adds an Assembler Recipe
+     * 
+     * @param aInputs   must be != null
+     * @param aOutput1  must be != null
+     * @param aDuration must be > 0
+     * @param aEUt      should be > 0
+     * 
      */
     boolean addAssemblerRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aOutput1, int aDuration, int aEUt);
 
@@ -610,9 +610,12 @@ public interface IGT_RecipeAdder {
 
     boolean addAutoclaveRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
 
+    boolean addAutoclaveRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, FluidStack aFluidOut, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
+
     boolean addAutoclaveSpaceRecipe(ItemStack aInput, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
 
     boolean addAutoclaveSpaceRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
+
 
     /**
      * Adds a Recipe for the Mixer

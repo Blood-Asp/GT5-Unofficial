@@ -5,7 +5,6 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures;
 import gregtech.api.gui.GT_Container_2by2;
 import gregtech.api.gui.GT_Container_MaintenanceHatch;
 import gregtech.api.gui.GT_GUIContainer_2by2;
@@ -13,7 +12,7 @@ import gregtech.api.gui.GT_GUIContainer_MaintenanceHatch;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -23,6 +22,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_IDLE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_IDLE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DUCTTAPE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_MAINTENANCE;
 
 public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch {
     public boolean mWrench = false, mScrewdriver = false, mSoftHammer = false, mHardHammer = false, mSolderingTool = false, mCrowbar = false, mAuto;
@@ -66,14 +72,25 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE_IDLE)};
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE)};
+        if (mAuto) return new ITexture[]{
+                aBaseTexture,
+                TextureFactory.of(OVERLAY_AUTOMAINTENANCE_IDLE),
+                TextureFactory.builder().addIcon(OVERLAY_AUTOMAINTENANCE_IDLE_GLOW).glow().build()};
+        return new ITexture[]{
+                aBaseTexture,
+                TextureFactory.of(OVERLAY_MAINTENANCE)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        if(mAuto)return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_AUTOMAINTENANCE)};
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MAINTENANCE), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_DUCTTAPE)};
+        if (mAuto) return new ITexture[]{
+                aBaseTexture,
+                TextureFactory.of(OVERLAY_AUTOMAINTENANCE),
+                TextureFactory.builder().addIcon(OVERLAY_AUTOMAINTENANCE_GLOW).glow().build()};
+        return new ITexture[]{
+                aBaseTexture,
+                TextureFactory.of(OVERLAY_MAINTENANCE),
+                TextureFactory.of(OVERLAY_DUCTTAPE)};
     }
 
     @Override
@@ -146,7 +163,7 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
     }
 
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess) {
-        ItemStack[] mInputs=new ItemStack[]{ItemList.Duct_Tape.get(4, new Object[]{}),
+        ItemStack[] mInputs= {ItemList.Duct_Tape.get(4),
                 GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Lubricant, 2),
                 GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 4),
                 GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 2)};
@@ -188,12 +205,12 @@ public class GT_MetaTileEntity_Hatch_Maintenance extends GT_MetaTileEntity_Hatch
                     }
                 }
             }
-            this.mCrowbar = true;
-            this.mHardHammer = true;
-            this.mScrewdriver = true;
-            this.mSoftHammer = true;
-            this.mSolderingTool = true;
-            this.mWrench = true;
+            mCrowbar = true;
+            mHardHammer = true;
+            mScrewdriver = true;
+            mSoftHammer = true;
+            mSolderingTool = true;
+            mWrench = true;
             updateSlots();
         }
         return true;

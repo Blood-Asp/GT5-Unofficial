@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyReceiver;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Pollution;
 import ic2.api.energy.tile.IEnergySink;
 import net.minecraft.init.Blocks;
@@ -60,7 +61,7 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
          */
         public static final long emitEnergyToNetwork(long aVoltage, long aAmperage, IEnergyConnected aEmitter) {
             long rUsedAmperes = 0;
-            for (byte i = 0, j = 0; i < 6 && aAmperage > rUsedAmperes; i++)
+            for (byte i = 0, j = 0; i < 6 && aAmperage > rUsedAmperes; i++) {
                 if (aEmitter.outputsEnergyTo(i)) {
                     j = GT_Utility.getOppositeSide(i);
                     TileEntity tTileEntity = aEmitter.getTileEntityAtSide(i);
@@ -70,6 +71,7 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                             if (tColor >= 0 && tColor != aEmitter.getColorization()) continue;
                         }
                         rUsedAmperes += ((IEnergyConnected) tTileEntity).injectEnergyUnits(j, aVoltage, aAmperage - rUsedAmperes);
+
                     } else if (tTileEntity instanceof IEnergySink) {
                         if (((IEnergySink) tTileEntity).acceptsEnergyFrom((TileEntity) aEmitter, ForgeDirection.getOrientation(j))) {
                             while (aAmperage > rUsedAmperes && ((IEnergySink) tTileEntity).getDemandedEnergy() > 0 && ((IEnergySink) tTileEntity).injectEnergy(ForgeDirection.getOrientation(j), aVoltage, aVoltage) < aVoltage)
@@ -112,11 +114,18 @@ public interface IEnergyConnected extends IColoredTileEntity, IHasWorldObjectAnd
                                 if (GregTech_API.sMachineExplosions)
                                     if (GT_Mod.gregtechproxy.mPollution)
                                         GT_Pollution.addPollution(tWorld.getChunkFromBlockCoords(tX, tZ), 100000);
-                                tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
+
+                                new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                                        .setStrength(tStrength)
+                                        .setSmoking(true)
+                                        .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                                        .setWorld(tWorld)
+                                        .run();
                             }
                         }
                     }
                 }
+            }
             return rUsedAmperes;
         }
     }

@@ -20,9 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class GT_SensorCard_Item
-        extends GT_Generic_Item
-        implements IRemoteSensor, IPanelDataSource {
+public class GT_SensorCard_Item extends GT_Generic_Item implements IRemoteSensor, IPanelDataSource {
     private static final UUID CARD_TYPE = new UUID(0L, 41L);
 
     private int strCount;
@@ -32,6 +30,7 @@ public class GT_SensorCard_Item
         setMaxStackSize(1);
     }
 
+    @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         super.addAdditionalToolTips(aList, aStack, aPlayer);
         if (aStack != null) {
@@ -40,7 +39,7 @@ public class GT_SensorCard_Item
             	aList.add(trans("014", "Missing Coodinates!"));
             } else {
             	aList.add(trans("015", "Device at:"));
-                aList.add(String.format("x: %d, y: %d, z: %d", new Object[]{Integer.valueOf(tNBT.getInteger("x")), Integer.valueOf(tNBT.getInteger("y")), Integer.valueOf(tNBT.getInteger("z"))}));
+                aList.add(String.format("x: %d, y: %d, z: %d", tNBT.getInteger("x"), tNBT.getInteger("y"), tNBT.getInteger("z")));
             }
         }
     }
@@ -66,6 +65,7 @@ public class GT_SensorCard_Item
         return CardState.NO_TARGET;
     }
 
+    @Override
     public List<PanelString> getStringData(int aSettings, ICardWrapper aCard, boolean aLabels) {
         List<PanelString> rList = new LinkedList<>();
         for (int i = 0; i < (strCount=aCard.getInt("mString")); i++) {
@@ -78,6 +78,7 @@ public class GT_SensorCard_Item
         return rList;
     }
 
+    @Override
     public List<PanelSetting> getSettingsList() {
         List<PanelSetting> rList = new ArrayList<>();
         for (int i = 0; i < strCount; i++) {
@@ -86,10 +87,12 @@ public class GT_SensorCard_Item
         return rList;
     }
 
+    @Override
     public UUID getCardType() {
         return CARD_TYPE;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item var1, CreativeTabs aTab, List aList) {
     }

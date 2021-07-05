@@ -13,6 +13,8 @@ import gregtech.api.util.GT_Config;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
+import gregtech.common.GT_Client;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -130,6 +132,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
      */
     public abstract boolean renderInside(byte aSide);
 
+    public boolean isDisplaySecondaryDescription() {
+        return false;
+    }
+
     @Override
     public IGregTechTileEntity getBaseMetaTileEntity() {
         return mBaseMetaTileEntity;
@@ -239,7 +245,15 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected == 4) {
+            /* Client tick counter that is set to 5 on hiding pipes and covers.
+             * It triggers a texture update next client tick when reaching 4, with provision for 3 more update tasks,
+             * spreading client change detection related work and network traffic on different ticks, until it reaches 0.
+             */
+            aBaseMetaTileEntity.issueTextureUpdate();
+        }
+    }
 
     @Override
     public void inValidate() {/*Do nothing*/}
@@ -693,8 +707,14 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         int tX = getBaseMetaTileEntity().getXCoord(), tY = getBaseMetaTileEntity().getYCoord(), tZ = getBaseMetaTileEntity().getZCoord();
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
-        if (GregTech_API.sMachineExplosions)
-            tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
+        if (GregTech_API.sMachineExplosions){
+            new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                    .setStrength(tStrength)
+                    .setSmoking(true)
+                    .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                    .setWorld(tWorld)
+                    .run();
+        }
     }
 
     @Override
@@ -827,7 +847,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 			((MetaPipeEntity) tPipe).disconnect(tSide);
 	}
 
-	public boolean isConnectedAtSide(int aSide) {
+	@Override
+    public boolean isConnectedAtSide(int aSide) {
 		return (mConnections & (1 << aSide)) != 0;
 	}
 
@@ -838,6 +859,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
 	public boolean getGT6StyleConnection() { return false; }
 
+    @Override
     public boolean shouldJoinIc2Enet() { return false; }
 
     @Override

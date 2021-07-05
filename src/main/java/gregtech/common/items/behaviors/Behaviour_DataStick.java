@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class Behaviour_DataStick
-        extends Behaviour_None {
+public class Behaviour_DataStick extends Behaviour_None {
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         String tString = GT_Utility.ItemNBT.getBookTitle(aStack);
         if (GT_Utility.isStringValid(tString)) {

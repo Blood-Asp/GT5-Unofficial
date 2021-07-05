@@ -11,8 +11,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class GT_ScrapboxDropLoader
-        implements Runnable {
+public class GT_ScrapboxDropLoader implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: (re-)adding Scrapbox Drops.");
 
@@ -37,11 +37,11 @@ public class GT_ScrapboxDropLoader
         GT_ModHandler.addScrapboxDrop(0.5F, new ItemStack(Items.apple));
         GT_ModHandler.addScrapboxDrop(0.5F, new ItemStack(Items.bread));
         GT_ModHandler.addScrapboxDrop(0.1F, new ItemStack(Items.cake));
-        GT_ModHandler.addScrapboxDrop(1.0F, ItemList.IC2_Food_Can_Filled.get(1L, new Object[0]));
-        GT_ModHandler.addScrapboxDrop(2.0F, ItemList.IC2_Food_Can_Spoiled.get(1L, new Object[0]));
+        GT_ModHandler.addScrapboxDrop(1.0F, ItemList.IC2_Food_Can_Filled.get(1L));
+        GT_ModHandler.addScrapboxDrop(2.0F, ItemList.IC2_Food_Can_Spoiled.get(1L));
         GT_ModHandler.addScrapboxDrop(0.2F, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Silicon, 1L));
         GT_ModHandler.addScrapboxDrop(1.0F, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Water, 1L));
-        GT_ModHandler.addScrapboxDrop(2.0F, ItemList.Cell_Empty.get(1L, new Object[0]));
+        GT_ModHandler.addScrapboxDrop(2.0F, ItemList.Cell_Empty.get(1L));
         GT_ModHandler.addScrapboxDrop(5.0F, GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Paper, 1L));
         GT_ModHandler.addScrapboxDrop(1.0F, new ItemStack(Items.leather));
         GT_ModHandler.addScrapboxDrop(1.0F, new ItemStack(Items.feather));
@@ -50,11 +50,11 @@ public class GT_ScrapboxDropLoader
         GT_ModHandler.addScrapboxDrop(0.6F, new ItemStack(Items.slime_ball));
         GT_ModHandler.addScrapboxDrop(0.8F, GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Rubber, 1L));
         GT_ModHandler.addScrapboxDrop(2.7F, GT_ModHandler.getIC2Item("suBattery", 1L));
-        GT_ModHandler.addScrapboxDrop(3.6F, ItemList.Circuit_Primitive.get(1L, new Object[0]));
-        GT_ModHandler.addScrapboxDrop(0.8F, ItemList.Circuit_Parts_Advanced.get(1L, new Object[0]));
-        GT_ModHandler.addScrapboxDrop(1.8F, ItemList.Circuit_Board_Basic.get(1L, new Object[0]));
-        GT_ModHandler.addScrapboxDrop(0.4F, ItemList.Circuit_Board_Advanced.get(1L, new Object[0]));
-        GT_ModHandler.addScrapboxDrop(0.2F, ItemList.Circuit_Board_Elite.get(1L, new Object[0]));
+        GT_ModHandler.addScrapboxDrop(3.6F, ItemList.Circuit_Primitive.get(1L));
+        GT_ModHandler.addScrapboxDrop(0.8F, ItemList.Circuit_Parts_Advanced.get(1L));
+        GT_ModHandler.addScrapboxDrop(1.8F, ItemList.Circuit_Board_Basic.get(1L));
+        GT_ModHandler.addScrapboxDrop(0.4F, ItemList.Circuit_Board_Advanced.get(1L));
+        GT_ModHandler.addScrapboxDrop(0.2F, ItemList.Circuit_Board_Elite.get(1L));
         if (!GT_Mod.gregtechproxy.mDisableIC2Cables) {
             GT_ModHandler.addScrapboxDrop(2.0F, GT_ModHandler.getIC2Item("insulatedCopperCableItem", 1L));
             GT_ModHandler.addScrapboxDrop(0.4F, GT_ModHandler.getIC2Item("insulatedGoldCableItem", 1L));

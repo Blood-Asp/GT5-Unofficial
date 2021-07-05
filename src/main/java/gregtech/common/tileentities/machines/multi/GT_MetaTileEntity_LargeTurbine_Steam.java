@@ -1,18 +1,11 @@
 package gregtech.common.tileentities.machines.multi;
 
-import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
-
-import java.util.ArrayList;
-
-import org.lwjgl.input.Keyboard;
-
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Utility;
@@ -21,12 +14,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+
+import static gregtech.api.enums.GT_Values.STEAM_PER_WATER;
+import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_ST5;
+import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_ST_ACTIVE5;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
+import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
 public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_LargeTurbine {
 
-    private float water;
+    private int excessWater;
     private boolean achievement = false;
-    private boolean looseFit=false;
+    private boolean looseFit = false;
 
     public GT_MetaTileEntity_LargeTurbine_Steam(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -39,31 +42,32 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ST_ACTIVE5) : new GT_RenderedTexture(Textures.BlockIcons.LARGETURBINE_ST5) : Textures.BlockIcons.casingTexturePages[0][57]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_ST_ACTIVE5) : TextureFactory.of(LARGETURBINE_ST5) : casingTexturePages[0][57]};
     }
 
+    @Override
     public String[] getDescription() {
-    	final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-		tt.addMachineType("Steam Turbine")
-		.addInfo("Controller block for the Large Steam Turbine")
-		.addInfo("Needs a Turbine, place inside controller")
-		.addInfo("Outputs Distilled Water as well as producing power")
-		.addInfo("Power output depends on turbine and fitting")
-		.addInfo("Use screwdriver to adjust fitting of turbine")
-		.addSeparator()
-		.beginStructureBlock(3, 3, 4, true)
-		.addController("Front center")
-		.addCasingInfo("Turbine Casing", 24)
-		.addDynamoHatch("Back center")
-		.addMaintenanceHatch("Side centered")
-		.addInputHatch("Steam, Side centered")
-		.addOutputHatch("Distilled Water, Side centered")
-		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addMachineType("Steam Turbine")
+                .addInfo("Controller block for the Large Steam Turbine")
+                .addInfo("Needs a Turbine, place inside controller")
+                .addInfo("Outputs Distilled Water as well as producing power")
+                .addInfo("Power output depends on turbine and fitting")
+                .addInfo("Use screwdriver to adjust fitting of turbine")
+                .addSeparator()
+                .beginStructureBlock(3, 3, 4, true)
+                .addController("Front center")
+                .addCasingInfo("Turbine Casing", 24)
+                .addDynamoHatch("Back center")
+                .addMaintenanceHatch("Side centered")
+                .addInputHatch("Steam, Side centered")
+                .addOutputHatch("Distilled Water, Side centered")
+                .toolTipFinisher("Gregtech");
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+            return tt.getStructureInformation();
+        } else {
+            return tt.getInformation();
+        }
     }
 
     @Override
@@ -91,61 +95,60 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
         return 0;
     }
 
-    private int useWater(float input) {
-        water = water + input;
-        int usage = (int) water;
-        water = water - usage;
-        return usage;
+    private int condenseSteam(int steam) {
+        excessWater += steam;
+        int water = excessWater / STEAM_PER_WATER;
+        excessWater %= STEAM_PER_WATER;
+        return water;
     }
 
     @Override
     int fluidIntoPower(ArrayList<FluidStack> aFluids, int aOptFlow, int aBaseEff) {
-        if(looseFit) {
-            aOptFlow*=4;
-            if(aBaseEff>10000){
-                aOptFlow*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
-                aBaseEff=7500;
-            }else if(aBaseEff>7500){
-                aOptFlow*=Math.pow(1.1f,((aBaseEff-7500)/10000F)*20f);
-                aBaseEff*=0.75f;
-            }else{
-                aBaseEff*=0.75f;
+        if (looseFit) {
+            aOptFlow *= 4;
+            if (aBaseEff > 10000) {
+                aOptFlow *= Math.pow(1.1f, ((aBaseEff - 7500) / 10000F) * 20f);
+                aBaseEff = 7500;
+            } else if (aBaseEff > 7500) {
+                aOptFlow *= Math.pow(1.1f, ((aBaseEff - 7500) / 10000F) * 20f);
+                aBaseEff *= 0.75f;
+            } else {
+                aBaseEff *= 0.75f;
             }
         }
         int tEU = 0;
         int totalFlow = 0; // Byproducts are based on actual flow
         int flow = 0;
-        int remainingFlow = GT_Utility.safeInt((long)(aOptFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
+        int remainingFlow = GT_Utility.safeInt((long) (aOptFlow * 1.25f)); // Allowed to use up to 125% of optimal flow.  Variable required outside of loop for multi-hatch scenarios.
         this.realOptFlow = aOptFlow;
 
-        storedFluid=0;
+        storedFluid = 0;
         for (int i = 0; i < aFluids.size() && remainingFlow > 0; i++) { // loop through each hatch; extract inputs and track totals.
-            String fluidName = aFluids.get(i).getFluid().getUnlocalizedName(aFluids.get(i));
-            if (fluidName.equals("fluid.steam") || fluidName.equals("ic2.fluidSteam") || fluidName.equals("fluid.mfr.steam.still.name")) {
-                flow = Math.min(aFluids.get(i).amount, remainingFlow); // try to use up w/o exceeding remainingFlow
-                depleteInput(new FluidStack(aFluids.get(i), flow)); // deplete that amount
-                this.storedFluid += aFluids.get(i).amount;
+            final FluidStack aFluidStack = aFluids.get(i);
+            if (GT_ModHandler.isAnySteam(aFluidStack)) {
+                flow = Math.min(aFluidStack.amount, remainingFlow); // try to use up w/o exceeding remainingFlow
+                depleteInput(new FluidStack(aFluidStack, flow)); // deplete that amount
+                this.storedFluid += aFluidStack.amount;
                 remainingFlow -= flow; // track amount we're allowed to continue depleting from hatches
                 totalFlow += flow; // track total input used
                 if (!achievement) {
-                    GT_Mod.instance.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
+                    GT_Mod.achievements.issueAchievement(this.getBaseMetaTileEntity().getWorld().getPlayerEntityByName(this.getBaseMetaTileEntity().getOwnerName()), "muchsteam");
                     achievement = true;
                 }
-            }else if(fluidName.equals("ic2.fluidSuperheatedSteam")){
-                depleteInput(new FluidStack(aFluids.get(i), aFluids.get(i).amount));
+            } else if (GT_ModHandler.isSuperHeatedSteam(aFluidStack)) {
+                depleteInput(new FluidStack(aFluidStack, aFluidStack.amount));
             }
         }
-        if(totalFlow<=0)return 0;
+        if (totalFlow <= 0) return 0;
         tEU = totalFlow;
-        int waterToOutput = useWater(totalFlow / 160.0f);
+        int waterToOutput = condenseSteam(totalFlow);
         addOutput(GT_ModHandler.getDistilledWater(waterToOutput));
-        if (totalFlow != aOptFlow) {
-            float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float)aOptFlow);
-            //if(totalFlow>aOptFlow){efficiency = 1.0f;}
-            tEU *= efficiency;
-            tEU = Math.max(1, GT_Utility.safeInt((long)tEU * (long)aBaseEff / 20000L));
+        if (totalFlow == aOptFlow) {
+            tEU = GT_Utility.safeInt((long) tEU * (long) aBaseEff / 20000L);
         } else {
-            tEU = GT_Utility.safeInt((long)tEU * (long)aBaseEff / 20000L);
+            float efficiency = 1.0f - Math.abs((totalFlow - aOptFlow) / (float) aOptFlow);
+            tEU *= efficiency;
+            tEU = Math.max(1, GT_Utility.safeInt((long) tEU * (long) aBaseEff / 20000L));
         }
 
         return tEU;
@@ -154,77 +157,32 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aSide == getBaseMetaTileEntity().getFrontFacing()) {
-            looseFit^=true;
+            looseFit ^= true;
             GT_Utility.sendChatToPlayer(aPlayer, looseFit ? trans("500", "Fitting: Loose - More Flow") : trans("501", "Fitting: Tight - More Efficiency"));
         }
     }
 
     @Override
     public int getDamageToComponent(ItemStack aStack) {
-        return (looseFit && XSTR_INSTANCE.nextInt(4)==0)?0:1;
+        return (looseFit && XSTR_INSTANCE.nextInt(4) == 0) ? 0 : 1;
     }
 
- 
+
     @Override
     public String[] getInfoData() {
-    	super.looseFit = looseFit;
-    	return super.getInfoData();
+        super.looseFit = looseFit;
+        return super.getInfoData();
     }
-    	/*
-        int mPollutionReduction=0;
-        for (GT_MetaTileEntity_Hatch_Muffler tHatch : mMufflerHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                mPollutionReduction=Math.max(tHatch.calculatePollutionReduction(100),mPollutionReduction);
-            }
-        }
-
-        String tRunning = mMaxProgresstime>0 ?
-                EnumChatFormatting.GREEN+"Turbine running"+EnumChatFormatting.RESET :
-                EnumChatFormatting.RED+"Turbine stopped"+EnumChatFormatting.RESET;
-        String tMaintainance = getIdealStatus() == getRepairStatus() ?
-                EnumChatFormatting.GREEN+"No Maintainance issues"+EnumChatFormatting.RESET :
-                EnumChatFormatting.RED+"Needs Maintainance"+EnumChatFormatting.RESET ;
-        int tDura = 0;
-
-        if (mInventory[1] != null && mInventory[1].getItem() instanceof GT_MetaGenerated_Tool_01) {
-            tDura = GT_Utility.safeInt((long)(100.0f / GT_MetaGenerated_Tool.getToolMaxDamage(mInventory[1]) * (GT_MetaGenerated_Tool.getToolDamage(mInventory[1]))+1));
-        }
-
-        long storedEnergy=0;
-        long maxEnergy=0;
-        for(GT_MetaTileEntity_Hatch_Dynamo tHatch : mDynamoHatches) {
-            if (isValidMetaTileEntity(tHatch)) {
-                storedEnergy+=tHatch.getBaseMetaTileEntity().getStoredEU();
-                maxEnergy+=tHatch.getBaseMetaTileEntity().getEUCapacity();
-            }
-        }
-
-        return new String[]{
-                // 8 Lines available for information panels
-                tRunning + ": " + EnumChatFormatting.RED+mEUt+EnumChatFormatting.RESET+" EU/t", // 1 
-                tMaintainance, // 2 
-                "Current Speed: "+EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.RESET+"%", // 2 
-                "Stored Energy:" + EnumChatFormatting.GREEN + Long.toString(storedEnergy) + EnumChatFormatting.RESET +" EU / "+ // 3 
-                        EnumChatFormatting.YELLOW + Long.toString(maxEnergy) + EnumChatFormatting.RESET +" EU", 
-                "Optimal Flow: "+EnumChatFormatting.YELLOW+GT_Utility.safeInt((long)realOptFlow)+EnumChatFormatting.RESET+" L/t" + // 4 
-                        EnumChatFormatting.YELLOW+" ("+(looseFit?"Loose":"Tight")+")", // 5 
-                "Fuel Remaining: "+EnumChatFormatting.GOLD+storedFluid+EnumChatFormatting.RESET+"L", // 6 
-                "Turbine Damage: "+EnumChatFormatting.RED+Integer.toString(tDura)+EnumChatFormatting.RESET+"%", // 7 
-                "Pollution reduced to: "+ EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %" // 8 
-        };
-    }
-
-     */
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setBoolean("turbineFitting",looseFit);
+        aNBT.setBoolean("turbineFitting", looseFit);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        looseFit=aNBT.getBoolean("turbineFitting");
+        looseFit = aNBT.getBoolean("turbineFitting");
     }
 }

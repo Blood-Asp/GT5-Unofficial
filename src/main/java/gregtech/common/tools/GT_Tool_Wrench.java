@@ -20,112 +20,125 @@ import net.minecraft.util.IChatComponent;
 import java.util.Arrays;
 import java.util.List;
 
-public class GT_Tool_Wrench
-        extends GT_Tool {
-    public static final List<String> mEffectiveList = Arrays.asList(new String[]{EntityIronGolem.class.getName(), "EntityTowerGuardian"});
+public class GT_Tool_Wrench extends GT_Tool {
+    public static final List<String> mEffectiveList = Arrays.asList(EntityIronGolem.class.getName(), "EntityTowerGuardian");
 
+    @Override
     public float getNormalDamageAgainstEntity(float aOriginalDamage, Entity aEntity, ItemStack aStack, EntityPlayer aPlayer) {
         String tName = aEntity.getClass().getName();
         tName = tName.substring(tName.lastIndexOf('.') + 1);
         return (mEffectiveList.contains(tName)) || (tName.contains("Golem")) ? aOriginalDamage * 2.0F : aOriginalDamage;
     }
 
+    @Override
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
 
+    @Override
     public int getToolDamagePerDropConversion() {
         return 100;
     }
 
+    @Override
     public int getToolDamagePerContainerCraft() {
         return 800;
     }
 
+    @Override
     public int getToolDamagePerEntityAttack() {
         return 200;
     }
 
+    @Override
     public int getBaseQuality() {
         return 0;
     }
 
+    @Override
     public float getBaseDamage() {
         return 3.0F;
     }
 
+    @Override
     public int getHurtResistanceTime(int aOriginalHurtResistance, Entity aEntity) {
         return aOriginalHurtResistance * 2;
     }
 
+    @Override
     public float getSpeedMultiplier() {
         return 1.0F;
     }
 
+    @Override
     public float getMaxDurabilityMultiplier() {
         return 1.0F;
     }
 
+    @Override
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(100));
+        return (String) GregTech_API.sSoundList.get(100);
     }
 
+    @Override
     public String getEntityHitSound() {
         return null;
     }
 
+    @Override
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
+    @Override
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(100));
+        return (String) GregTech_API.sSoundList.get(100);
     }
 
+    @Override
     public boolean canBlock() {
         return false;
     }
 
+    @Override
     public boolean isCrowbar() {
         return false;
     }
 
+    @Override
     public boolean isWrench() {
         return true;
     }
     
+    @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
         String tTool = aBlock.getHarvestTool(aMetaData);
         return aBlock.getHarvestLevel(aMetaData) != -1 && (tTool == null || tTool.isEmpty() || (tTool.equals("wrench"))) || (aBlock.getMaterial() == Material.piston) || (aBlock == Blocks.hopper) || (aBlock == Blocks.dispenser) || (aBlock == Blocks.dropper);
     }
 
+    @Override
     public ItemStack getBrokenItem(ItemStack aStack) {
         return null;
     }
 
+    @Override
     public IIconContainer getIcon(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? Textures.ItemIcons.WRENCH : null;
     }
 
+    @Override
     public short[] getRGBa(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mRGBa : null;
     }
 
+    @Override
     public void onStatsAddedToTool(GT_MetaGenerated_Tool aItem, int aID) {
         aItem.addItemBehavior(aID, new Behaviour_Wrench(100));
     }
 
+    @Override
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE + " threw a Monkey Wrench into the Plans of " + EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE);
     }
 }
 
-
-
-/* Location:           F:\Torrent\minecraft\jd-gui-0.3.6.windows\gregtech_1.7.10-5.07.07-dev.jar
-
- * Qualified Name:     gregtech.common.tools.GT_Tool_Wrench
-
- * JD-Core Version:    0.7.0.1
-
- */

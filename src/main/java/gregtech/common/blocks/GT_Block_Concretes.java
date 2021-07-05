@@ -11,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class GT_Block_Concretes
-        extends GT_Block_Stones_Abstract implements IBlockOnWalkOver{
+public class GT_Block_Concretes extends GT_Block_Stones_Abstract implements IBlockOnWalkOver{
     public GT_Block_Concretes() {
         super(GT_Item_Concretes.class, "gt.blockconcretes");
         setResistance(20.0F);
@@ -51,14 +50,17 @@ public class GT_Block_Concretes
         GT_OreDictUnificator.registerOre(OrePrefixes.stone, Materials.Concrete, new ItemStack(this, 1, 15));
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         return 1;
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return this.blockHardness = Blocks.stone.getBlockHardness(aWorld, aX, aY, aZ);
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             return gregtech.api.enums.Textures.BlockIcons.CONCRETES[aMeta].getIcon();
@@ -73,29 +75,4 @@ public class GT_Block_Concretes
             aEntity.motionX *= tSpeed; aEntity.motionZ *= tSpeed;
         }
     }
-
-    /**
-    public void onEntityCollidedWithBlock(World aWorld, int aX, int aY, int aZ, Entity aEntity) {
-        Block tBlock = aWorld.getBlock(aX, aY + 1, aZ);
-        if (((aEntity instanceof EntityLivingBase)) && (!(tBlock instanceof IFluidBlock)) && (!(tBlock instanceof BlockLiquid)) && (aEntity.onGround) && (!aEntity.isInWater()) && (!aEntity.isWet())) {
-            if (aEntity.isSneaking()) {
-                aEntity.motionX *= 0.8999999761581421D;
-                aEntity.motionZ *= 0.8999999761581421D;
-            } else {
-                if (aEntity.motionX < 6.0 && aEntity.motionZ < 6.0) {
-                    aEntity.motionX *= 1.100000023841858D;
-                    aEntity.motionZ *= 1.100000023841858D;
-                }
-            }
-        }
-    }
-
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World aWorld, int aX, int aY, int aZ) {
-        Block tBlock = aWorld.getBlock(aX, aY + 1, aZ);
-        if (((tBlock instanceof IFluidBlock)) || ((tBlock instanceof BlockLiquid))) {
-            return super.getCollisionBoundingBoxFromPool(aWorld, aX, aY, aZ);
-        }
-        return AxisAlignedBB.getBoundingBox(aX, aY, aZ, aX + 1, aY + 0.875D, aZ + 1);
-    }
-	**/
 }

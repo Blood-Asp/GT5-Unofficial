@@ -241,7 +241,7 @@ public enum Element {
     $Np(-93, -144, 0, -1, null, "Anti-Neptunium", false),
     $Pu(-94, -152, 0, -1, null, "Anti-Plutonium", false),
     $Pu_241(-94, -149, 0, -1, null, "Anti-Plutonium-241", true),
-    $Am(-95, -150, 0, -1, null, "Anti-Americum", false),
+    $Am(-95, -150, 0, -1, null, "Anti-Americium", false),
     $Cm(-96, -153, 0, -1, null, "Anti-Curium", false),
     $Bk(-97, -152, 0, -1, null, "Anti-Berkelium", false),
     $Cf(-98, -153, 0, -1, null, "Anti-Californium", false),

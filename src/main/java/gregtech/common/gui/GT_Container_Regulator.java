@@ -13,16 +13,14 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import java.util.Iterator;
-
-public class GT_Container_Regulator
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
     public int[] mTargetSlots = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public GT_Container_Regulator(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         this.mTargetSlots = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -61,6 +59,7 @@ public class GT_Container_Regulator
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 18, 8, 63, false, true, 1));
     }
 
+    @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         if (aSlotIndex < 10) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
@@ -106,6 +105,7 @@ public class GT_Container_Regulator
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 
+    @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         if ((this.mTileEntity.isClientSide()) || (this.mTileEntity.getMetaTileEntity() == null)) {
@@ -115,15 +115,15 @@ public class GT_Container_Regulator
         for (int i = 0; i < 9; i++) {
             this.mTargetSlots[i] = ((GT_MetaTileEntity_Regulator) this.mTileEntity.getMetaTileEntity()).mTargetSlots[i];
         }
-        Iterator var2 = this.crafters.iterator();
-        while (var2.hasNext()) {
-            ICrafting var1 = (ICrafting) var2.next();
+        for (Object crafter : this.crafters) {
+            ICrafting var1 = (ICrafting) crafter;
             for (int i = 0; i < 9; i++) {
                 var1.sendProgressBarUpdate(this, 100 + i, this.mTargetSlots[i]);
             }
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);
@@ -157,10 +157,12 @@ public class GT_Container_Regulator
         }
     }
 
+    @Override
     public int getSlotCount() {
         return 10;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 10;
     }

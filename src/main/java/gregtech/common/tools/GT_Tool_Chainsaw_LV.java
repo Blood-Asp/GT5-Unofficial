@@ -22,74 +22,89 @@ import net.minecraftforge.event.world.BlockEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GT_Tool_Chainsaw_LV
-        extends GT_Tool_Saw {
+public class GT_Tool_Chainsaw_LV extends GT_Tool_Saw {
+    @Override
     public int getToolDamagePerBlockBreak() {
         return 50;
     }
 
+    @Override
     public int getToolDamagePerDropConversion() {
         return 100;
     }
 
+    @Override
     public int getToolDamagePerContainerCraft() {
         return 800;
     }
 
+    @Override
     public int getToolDamagePerEntityAttack() {
         return 200;
     }
 
+    @Override
     public int getBaseQuality() {
         return 0;
     }
 
+    @Override
     public float getBaseDamage() {
         return 3.0F;
     }
 
+    @Override
     public float getSpeedMultiplier() {
         return 2.0F;
     }
 
+    @Override
     public float getMaxDurabilityMultiplier() {
         return 1.0F;
     }
 
+    @Override
     public String getCraftingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
+    @Override
     public String getEntityHitSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(105));
+        return (String) GregTech_API.sSoundList.get(105);
     }
 
+    @Override
     public String getBreakingSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(0));
+        return (String) GregTech_API.sSoundList.get(0);
     }
 
+    @Override
     public String getMiningSound() {
-        return (String) GregTech_API.sSoundList.get(Integer.valueOf(104));
+        return (String) GregTech_API.sSoundList.get(104);
     }
 
+    @Override
     public boolean canBlock() {
         return false;
     }
 
+    @Override
     public boolean isChainsaw(){
     	return true;
     }
     
+    @Override
     public boolean isWeapon() {
         return true;
     }
 
+    @Override
     public void onToolCrafted(ItemStack aStack, EntityPlayer aPlayer) {
         super.onToolCrafted(aStack, aPlayer);
         try {
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "brrrr");
             GT_Mod.instance.achievements.issueAchievement(aPlayer, "buildChainsaw");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
     @Override
@@ -100,20 +115,7 @@ public class GT_Tool_Chainsaw_LV
             if (((IShearable) aBlock).isShearable(aStack, aPlayer.worldObj, aX, aY, aZ)) {
                 ArrayList<ItemStack> tDrops = ((IShearable) aBlock).onSheared(aStack, aPlayer.worldObj, aX, aY, aZ, aFortune);
                 aDrops.clear();
-//                aDrops.addAll(tDrops);
-//                aEvent.dropChance = 1.0F;
-//                for (ItemStack stack : tDrops)
-//                {
-//                Random itemRand = new Random();
-//                  float f = 0.7F;
-//                  double d = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  double d1 = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  double d2 = itemRand.nextFloat() * f + (1.0F - f) * 0.5D;
-//                  EntityItem entityitem = new EntityItem(aPlayer.worldObj, aX + d, aY + d1, aZ + d2, stack);
-//                  entityitem.delayBeforeCanPickup = 10;
-//                  aPlayer.worldObj.spawnEntityInWorld(entityitem);
-//                }
-//                aPlayer.addStat(net.minecraft.stats.StatList.mineBlockStatArray[Block.getIdFromBlock(aBlock)], 1);                
+       
             }
             aPlayer.worldObj.setBlock(aX, aY, aZ, Blocks.air, 0, 0);
         } else 
@@ -135,6 +137,7 @@ public class GT_Tool_Chainsaw_LV
         return rAmount;
     }
     
+    @Override
     public float getMiningSpeed(Block aBlock, byte aMetaData, float aDefault, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ)
     {
       if (aBlock.isWood(aPlayer.worldObj, aX, aY, aZ) && OrePrefixes.log.contains(new ItemStack(aBlock, 1, aMetaData))){
@@ -150,14 +153,17 @@ public class GT_Tool_Chainsaw_LV
       return (aBlock.getMaterial() == Material.leaves) || (aBlock.getMaterial() == Material.vine) || (aBlock.getMaterial() == Material.plants) || (aBlock.getMaterial() == Material.gourd) ? aDefault / 4.0F : aDefault;
     }
 
+    @Override
     public IIconContainer getIcon(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mIconSet.mTextures[gregtech.api.enums.OrePrefixes.toolHeadChainsaw.mTextureIndex] : Textures.ItemIcons.POWER_UNIT_LV;
     }
 
+    @Override
     public short[] getRGBa(boolean aIsToolHead, ItemStack aStack) {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mRGBa : GT_MetaGenerated_Tool.getSecondaryMaterial(aStack).mRGBa;
     }
 
+    @Override
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.RED + aEntity.getCommandSenderName() + EnumChatFormatting.WHITE + " was massacred by " + EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE);
     }

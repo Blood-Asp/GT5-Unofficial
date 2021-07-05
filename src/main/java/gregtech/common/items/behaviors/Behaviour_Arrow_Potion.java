@@ -12,8 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class Behaviour_Arrow_Potion
-        extends Behaviour_Arrow {
+public class Behaviour_Arrow_Potion extends Behaviour_Arrow {
     private final int[] mPotions;
 
     public Behaviour_Arrow_Potion(float aSpeed, float aPrecision, int... aPotions) {
@@ -26,6 +25,7 @@ public class Behaviour_Arrow_Potion
         this.mPotions = aPotions;
     }
 
+    @Override
     public boolean onLeftClickEntity(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
         if ((aEntity instanceof EntityLivingBase)) {
             for (int i = 3; i < this.mPotions.length; i += 4) {
@@ -37,6 +37,7 @@ public class Behaviour_Arrow_Potion
         return super.onLeftClickEntity(aItem, aStack, aPlayer, aEntity);
     }
 
+    @Override
     public EntityArrow getProjectile(GT_MetaBase_Item aItem, SubTag aProjectileType, ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;
@@ -47,6 +48,7 @@ public class Behaviour_Arrow_Potion
         return rArrow;
     }
 
+    @Override
     public EntityArrow getProjectile(GT_MetaBase_Item aItem, SubTag aProjectileType, ItemStack aStack, World aWorld, EntityLivingBase aEntity, float aSpeed) {
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;

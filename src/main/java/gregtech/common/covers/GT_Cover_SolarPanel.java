@@ -9,14 +9,14 @@ import net.minecraft.item.ItemStack;
 
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
-public class GT_Cover_SolarPanel
-        extends GT_CoverBehavior {
+public class GT_Cover_SolarPanel extends GT_CoverBehavior {
     private final int mVoltage;
 
     public GT_Cover_SolarPanel(int aVoltage) {
         this.mVoltage = aVoltage;
     }
 
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if(aSide != 1)return 0;
         int coverState=aCoverVariable&0x3;
@@ -43,7 +43,7 @@ public class GT_Cover_SolarPanel
                 }
             }
         }
-        if (coverState == 1 /*|| (coverState == 2 && aTimer % 8L == 0L)*/) {
+        if (coverState == 1 ) {
             aTileEntity.injectEnergyUnits((byte) 6, ((100L-(long)coverNum)*((long)this.mVoltage))/100L, 1L);
             
         }
@@ -74,10 +74,12 @@ public class GT_Cover_SolarPanel
         return false;
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
     
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 1;
     }

@@ -4,7 +4,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
-import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.objects.ItemData;
@@ -37,7 +36,7 @@ import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.VN;
 
-public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_DrillerBase implements IChunkLoader {
+public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_DrillerBase {
     private final ArrayList<ChunkPosition> oreBlockPositions = new ArrayList<>();
     protected int mTier = 1;
     private int chunkRadiusConfig = getRadiusInChunks();
@@ -62,9 +61,6 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (aNBT.hasKey("chunkRadiusConfig"))
             chunkRadiusConfig = aNBT.getInteger("chunkRadiusConfig");
     }
-
-    @Override
-    public ChunkCoordIntPair getActiveChunk(){return mCurrentChunk;}
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -327,7 +323,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
                 TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
                 if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                     oreBlockPositions.add(blockPos);
-            } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+            } else if (GT_Utility.isOre(block, blockMeta))
                 oreBlockPositions.add(blockPos);
         }
     }

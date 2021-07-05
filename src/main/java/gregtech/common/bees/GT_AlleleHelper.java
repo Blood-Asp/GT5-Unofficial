@@ -23,6 +23,7 @@ public class GT_AlleleHelper extends AlleleHelper {
 
     private Map<Class<?>, Map<?, ? extends IAllele>> alleleMaps = new HashMap<>();
 
+    @Override
     public void init() {
         if (PluginManager.Module.APICULTURE.isEnabled()) {
             createAlleles(EnumAllele.Fertility.class, EnumBeeChromosome.FERTILITY);

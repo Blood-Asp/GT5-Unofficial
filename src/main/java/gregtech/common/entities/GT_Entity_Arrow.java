@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -29,8 +30,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import java.util.List;
 import java.util.UUID;
 
-public class GT_Entity_Arrow
-        extends EntityArrow {
+public class GT_Entity_Arrow extends EntityArrow {
     private int mHitBlockX = -1;
     private int mHitBlockY = -1;
     private int mHitBlockZ = -1;
@@ -62,6 +62,7 @@ public class GT_Entity_Arrow
         setArrowItem(aStack);
     }
 
+    @Override
     public void onUpdate() {
         onEntityUpdate();
         if ((this.mArrow == null) && (!this.worldObj.isRemote)) {
@@ -242,10 +243,19 @@ public class GT_Entity_Arrow
                     }
                 }
             }
+            WorldSpawnedEventBuilder.ParticleEventBuilder events = new WorldSpawnedEventBuilder.ParticleEventBuilder()
+                    .setWorld(this.worldObj);
+
             if (getIsCritical()) {
-                for (int i = 0; i < 4; i++) {
-                    this.worldObj.spawnParticle("crit", this.posX + this.motionX * i / 4.0D, this.posY + this.motionY * i / 4.0D, this.posZ + this.motionZ * i / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
-                }
+                events.setIdentifier("crit")
+                        .setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
+                        .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(4, (x, i) ->
+                                       x.setPosition(
+                                                this.posX + this.motionX * i / 4.0D,
+                                                this.posY + this.motionY * i / 4.0D,
+                                                this.posZ + this.motionZ * i / 4.0D
+                                        ).run()
+                        );
             }
             this.posX += this.motionX;
             this.posY += this.motionY;
@@ -267,9 +277,14 @@ public class GT_Entity_Arrow
             this.rotationYaw = (this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F);
             float tFrictionMultiplier = 0.99F;
             if (isInWater()) {
-                for (int l = 0; l < 4; l++) {
-                    this.worldObj.spawnParticle("bubble", this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
-                }
+                events.setMotion(-this.motionX, -this.motionY + 0.2D, -this.motionZ)
+                        .setIdentifier("bubble")
+                        .setPosition(
+                                this.posX - this.motionX * 0.25D,
+                                this.posY - this.motionY * 0.25D,
+                                this.posZ - this.motionZ * 0.25D
+                        )
+                        .times(4, Runnable::run);
                 tFrictionMultiplier = 0.8F;
             }
             if (isWet()) {
@@ -284,6 +299,7 @@ public class GT_Entity_Arrow
         }
     }
 
+    @Override
     public void writeEntityToNBT(NBTTagCompound aNBT) {
         super.writeEntityToNBT(aNBT);
         aNBT.setShort("xTile", (short) this.mHitBlockX);
@@ -299,6 +315,7 @@ public class GT_Entity_Arrow
         aNBT.setTag("mArrow", this.mArrow == null ? null : this.mArrow.writeToNBT(new NBTTagCompound()));
     }
 
+    @Override
     public void readEntityFromNBT(NBTTagCompound aNBT) {
         super.readEntityFromNBT(aNBT);
         this.mHitBlockX = aNBT.getShort("xTile");
@@ -314,6 +331,7 @@ public class GT_Entity_Arrow
         this.mArrow = GT_Utility.loadItem(aNBT, "mArrow");
     }
 
+    @Override
     public void onCollideWithPlayer(EntityPlayer aPlayer) {
         if ((!this.worldObj.isRemote) && (this.inGround) && (this.arrowShake <= 0) && (this.canBePickedUp == 1) && (aPlayer.inventory.addItemStackToInventory(getArrowItem()))) {
             playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -327,17 +345,18 @@ public class GT_Entity_Arrow
     }
 
     public ItemStack getArrowItem() {
-        return GT_Utility.copy(new Object[]{this.mArrow});
+        return GT_Utility.copy(this.mArrow);
     }
 
     public void setArrowItem(ItemStack aStack) {
-        this.mArrow = GT_Utility.updateItemStack(GT_Utility.copyAmount(1L, new Object[]{aStack}));
+        this.mArrow = GT_Utility.updateItemStack(GT_Utility.copyAmount(1L, aStack));
     }
 
     public boolean breaksOnImpact() {
         return false;
     }
 
+    @Override
     public void setKnockbackStrength(int aKnockback) {
         this.mKnockback = aKnockback;
     }

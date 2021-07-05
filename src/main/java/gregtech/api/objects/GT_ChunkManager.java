@@ -7,8 +7,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.GT_Log;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -74,7 +72,7 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
 
     // Request a chunk to be loaded for this machine
     // may pass null chunk to load just the machine itself, if "alwaysReloadChunkloaders" is enabled in config
-    static public boolean requestPlayerChunkLoad(TileEntity owner, ChunkCoordIntPair chunkXZ, String player) {
+    public static boolean requestPlayerChunkLoad(TileEntity owner, ChunkCoordIntPair chunkXZ, String player) {
         if (!GT_Values.enableChunkloaders)
             return false;
         if (!GT_Values.alwaysReloadChunkloaders && chunkXZ == null)
@@ -84,11 +82,11 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
         if (instance.registeredTickets.containsKey(owner)) {
             ForgeChunkManager.forceChunk(instance.registeredTickets.get(owner), chunkXZ);
         } else {
-            Ticket ticket = null;
-            if (player != "")
-                ticket = ForgeChunkManager.requestPlayerTicket(GT_Mod.instance, player, owner.getWorldObj(), ForgeChunkManager.Type.NORMAL);
-            else
+            Ticket ticket;
+            if (player.equals(""))
                 ticket = ForgeChunkManager.requestTicket(GT_Mod.instance, owner.getWorldObj(), ForgeChunkManager.Type.NORMAL);
+            else
+                ticket = ForgeChunkManager.requestPlayerTicket(GT_Mod.instance, player, owner.getWorldObj(), ForgeChunkManager.Type.NORMAL);
             if (ticket == null) {
                 if (GT_Values.debugChunkloaders)
                     GT_Log.out.println("GT_ChunkManager: ForgeChunkManager.requestTicket failed");
@@ -102,17 +100,17 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
             tag.setInteger("OwnerZ", owner.zCoord);
             ForgeChunkManager.forceChunk(ticket, chunkXZ);
             if (GT_Values.alwaysReloadChunkloaders)
-                ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(owner.xCoord << 4, owner.zCoord << 4));
+                ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(owner.xCoord >> 4, owner.zCoord >> 4));
             instance.registeredTickets.put(owner, ticket);
         }
         return true;
     }
 
-    static public boolean requestChunkLoad(TileEntity owner, ChunkCoordIntPair chunkXZ) {
+    public static boolean requestChunkLoad(TileEntity owner, ChunkCoordIntPair chunkXZ) {
         return requestPlayerChunkLoad(owner, chunkXZ, "");
     }
 
-    static public void releaseChunk(TileEntity owner, ChunkCoordIntPair chunkXZ) {
+    public static void releaseChunk(TileEntity owner, ChunkCoordIntPair chunkXZ) {
         if (!GT_Values.enableChunkloaders)
             return;
         Ticket ticket = instance.registeredTickets.get(owner);
@@ -123,7 +121,7 @@ public class GT_ChunkManager implements ForgeChunkManager.OrderedLoadingCallback
         }
     }
 
-    static public void releaseTicket(TileEntity owner) {
+    public static void releaseTicket(TileEntity owner) {
         if (!GT_Values.enableChunkloaders)
             return;
         Ticket ticket = instance.registeredTickets.get(owner);

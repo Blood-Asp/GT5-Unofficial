@@ -9,33 +9,37 @@ import codechicken.lib.vec.Rotation;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
+import gregtech.api.interfaces.IHasFluidDisplayItem;
 import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.ITurnable;
 import gregtech.api.metatileentity.BaseMetaPipeEntity;
-import gregtech.api.metatileentity.BaseTileEntity;
+import gregtech.api.net.GT_Packet_ClientPreference;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_PlayedSound;
-import gregtech.api.util.GT_Recipe;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.entities.GT_Entity_Arrow_Potion;
+import gregtech.common.net.MessageUpdateFluidDisplayItem;
 import gregtech.common.render.*;
 import ic2.api.tile.IWrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
 
@@ -58,7 +62,7 @@ public class GT_Client extends GT_Proxy
     }
 
     private final HashSet<String> mCapeList = new HashSet<>();
-    public final static GT_PollutionRenderer mPollutionRenderer = new GT_PollutionRenderer();
+    public static final GT_PollutionRenderer mPollutionRenderer = new GT_PollutionRenderer();
     private final GT_CapeRenderer mCapeRenderer;
     private final List mPosR;
     private final List mPosG;
@@ -80,8 +84,13 @@ public class GT_Client extends GT_Proxy
     /**This is the place to def the value used below**/
     private long afterSomeTime;
     private boolean mAnimationDirection;
+    private int mLastUpdatedBlockX;
+    private int mLastUpdatedBlockY;
+    private int mLastUpdatedBlockZ;
     private boolean isFirstClientPlayerTick;
     private String mMessage;
+    private GT_ClientPreference mPreference;
+    private boolean mFirstTick = false;
     public GT_Client() {
     	mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
@@ -249,26 +258,32 @@ public class GT_Client extends GT_Proxy
         drawGrid(aEvent, false);
     }
 
+    @Override
     public boolean isServerSide() {
         return true;
     }
 
+    @Override
     public boolean isClientSide() {
         return true;
     }
 
+    @Override
     public boolean isBukkitSide() {
         return false;
     }
 
+    @Override
     public EntityPlayer getThePlayer() {
         return Minecraft.getMinecraft().thePlayer;
     }
 
+    @Override
     public int addArmor(String aPrefix) {
         return RenderingRegistry.addNewArmourRendererPrefix(aPrefix);
     }
 
+    @Override
     public void onPreLoad() {
         super.onPreLoad();
         String arr$[] = {
@@ -294,8 +309,11 @@ public class GT_Client extends GT_Proxy
         (new Thread(this)).start();
 
         mPollutionRenderer.preLoad();
+
+        mPreference = new GT_ClientPreference(GregTech_API.sClientDataFile);
     }
 
+    @Override
     public void onLoad() {
         super.onLoad();
         new GT_Renderer_Block();
@@ -307,6 +325,7 @@ public class GT_Client extends GT_Proxy
         new GT_FluidDisplayStackRenderer();
     }
 
+    @Override
     public void onPostLoad() {
         super.onPostLoad();
         try {
@@ -315,8 +334,10 @@ public class GT_Client extends GT_Proxy
                 do {
                     if (i >= GregTech_API.METATILEENTITIES.length)
                         continue label0;
-                    if (GregTech_API.METATILEENTITIES[i] != null)
+                    if (GregTech_API.METATILEENTITIES[i] != null) {
                         GregTech_API.METATILEENTITIES[i].getStackForm(1L).getTooltip(null, true);
+                        GT_Log.out.println("META " + i + " " + GregTech_API.METATILEENTITIES[i].getMetaName());
+                    }
                     i++;
                 } while (true);
         } catch (Throwable e) {e.printStackTrace(GT_Log.err);}
@@ -333,6 +354,7 @@ public class GT_Client extends GT_Proxy
 //            }
     }
 
+    @Override
     public void run() {
         try {
             GT_Log.out.println("GT_Mod: Downloading Cape List.");
@@ -376,7 +398,13 @@ public class GT_Client extends GT_Proxy
         } catch (Throwable e) {
         }**/
     }
-    
+
+    @Override
+    @SubscribeEvent
+    public void onClientConnectedToServerEvent(FMLNetworkEvent.ClientConnectedToServerEvent aEvent) {
+        mFirstTick = true;
+    }
+
     @SubscribeEvent
     public void receiveRenderSpecialsEvent(net.minecraftforge.client.event.RenderPlayerEvent.Specials.Pre aEvent) {
         mCapeRenderer.receiveRenderSpecialsEvent(aEvent);
@@ -385,15 +413,19 @@ public class GT_Client extends GT_Proxy
     @SubscribeEvent
     public void onPlayerTickEventClient(TickEvent.PlayerTickEvent aEvent) {
         if ((aEvent.side.isClient()) && (aEvent.phase == TickEvent.Phase.END) && (!aEvent.player.isDead)) {
+            if (mFirstTick) {
+                mFirstTick = false;
+                GT_Values.NW.sendToServer(new GT_Packet_ClientPreference(mPreference));
+            }
             afterSomeTime++;
-            if(afterSomeTime>=100L){
+            if(afterSomeTime>=100L) {
                 afterSomeTime=0;
                 StatFileWriter sfw= Minecraft.getMinecraft().thePlayer.getStatFileWriter();
                 try {
-                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList){
-                        recipe.mHidden=!sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
+                    for(GT_Recipe recipe:GT_Recipe.GT_Recipe_Map.sAssemblylineVisualRecipes.mRecipeList) {
+                        recipe.mHidden=GT_Values.hideAssLineRecipes && !sfw.hasAchievementUnlocked(GT_Mod.achievements.getAchievement(recipe.getOutput(0).getUnlocalizedName()));
                     }
-                }catch (Exception e){}
+                } catch (Exception ignored){}
             }
             ArrayList<GT_PlayedSound> tList = new ArrayList();
             for (Map.Entry<GT_PlayedSound, Integer> tEntry : GT_Utility.sPlayedSoundMap.entrySet()) {
@@ -407,30 +439,25 @@ public class GT_Client extends GT_Proxy
             for (Iterator i$ = tList.iterator(); i$.hasNext(); GT_Utility.sPlayedSoundMap.remove(tKey)) {
                 tKey = (GT_PlayedSound) i$.next();
             }
-            if(GregTech_API.mServerStarted == false)GregTech_API.mServerStarted = true;
-            /*if ((this.isFirstClientPlayerTick) && (aEvent.player == GT_Values.GT.getThePlayer())) {
-                this.isFirstClientPlayerTick = false;
-                GT_FluidStack.fixAllThoseFuckingFluidIDs();
-                if ((this.mMessage.length() > 5) && (GregTech_API.sSpecialFile.get(ConfigCategories.news, this.mMessage, true))) {
-                    aEvent.player.addChatComponentMessage(new ChatComponentText(this.mMessage));
-                }
-                try {
-                    int tVersion = Integer.parseInt(((String) Class.forName("ic2.core.IC2").getField("VERSION").get(null)).substring(4, 7));
-                    if (GT_Values.D1) {
-                        GT_Log.out.println("Industrialcraft Version: " + tVersion);
+            if(!GregTech_API.mServerStarted) GregTech_API.mServerStarted = true;
+            if (GT_Values.updateFluidDisplayItems) {
+                MovingObjectPosition trace = Minecraft.getMinecraft().objectMouseOver;
+                if (trace != null && trace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK &&
+                        (mLastUpdatedBlockX != trace.blockX &&
+                        mLastUpdatedBlockY != trace.blockY &&
+                        mLastUpdatedBlockZ != trace.blockZ || afterSomeTime % 10 == 0)) {
+                    mLastUpdatedBlockX = trace.blockX;
+                    mLastUpdatedBlockY = trace.blockY;
+                    mLastUpdatedBlockZ = trace.blockZ;
+                    TileEntity tileEntity = aEvent.player.worldObj.getTileEntity(trace.blockX, trace.blockY, trace.blockZ);
+                    if (tileEntity instanceof IGregTechTileEntity) {
+                        IGregTechTileEntity gtTile = (IGregTechTileEntity) tileEntity;
+                        if (gtTile.getMetaTileEntity() instanceof IHasFluidDisplayItem) {
+                            GT_Values.NW.sendToServer(new MessageUpdateFluidDisplayItem(trace.blockX, trace.blockY, trace.blockZ, gtTile.getWorld().provider.dimensionId));
+                        }
                     }
-                    if (tVersion < 624) {
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please update your IndustrialCraft here:"));
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + (GT_Mod.MAX_IC2 < Integer.MAX_VALUE ? GT_Mod.MAX_IC2 : 624) + "/"));
-                    } else if (tVersion > GT_Mod.MAX_IC2) {
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please downgrade your IndustrialCraft here:"));
-                        aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + GT_Mod.MAX_IC2 + "/"));
-                    }
-                } catch (Throwable e) {
-                    aEvent.player.addChatComponentMessage(new ChatComponentText("GregTech: Please get the recommended Version of IndustrialCraft here:"));
-                    aEvent.player.addChatComponentMessage(new ChatComponentText("ic2api.player.to:8080/job/IC2_experimental/" + (GT_Mod.MAX_IC2 < Integer.MAX_VALUE ? GT_Mod.MAX_IC2 : 624) + "/"));
                 }
-            }*/
+            }
         }
     }
 
@@ -583,6 +610,7 @@ public class GT_Client extends GT_Proxy
         }
     }
 
+    @Override
     public void doSonictronSound(ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         if (GT_Utility.isStackInvalid(aStack))
             return;
@@ -657,13 +685,28 @@ public class GT_Client extends GT_Proxy
                     tString = (new StringBuilder()).append(tString).append("wherearewenow").toString();
                     break;
             }
-        if (tString.startsWith("streaming."))
-            aWorld.playRecord(tString.substring(10, tString.length()), (int) aX, (int) aY, (int) aZ);
-        else
-            aWorld.playSound(aX, aY, aZ, tString, 3F, tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F, false);
+        if (tString.startsWith("streaming.")){
+            new WorldSpawnedEventBuilder.RecordEffectEventBuilder()
+                    .setIdentifier(tString.substring(10))
+                    .setPosition(aX, aY, aZ)
+                    .run();
+        }
+        else{
+            new WorldSpawnedEventBuilder.SoundEventBuilder()
+                    .setVolume(3f)
+                    .setPitch(tString.startsWith("note.") ? (float) Math.pow(2D, (double) (aStack.stackSize - 13) / 12D) : 1.0F)
+                    .setIdentifier(tString)
+                    .setPosition(aX, aY, aZ)
+                    .run();
+        }
     }
 
     public static int hideValue=0;
+
+    /** <p>Client tick counter that is set to 5 on hiding pipes and covers.</p>
+     * <p>It triggers a texture update next client tick when reaching 4, with provision for 3 more update tasks,
+     * spreading client change detection related work and network traffic on different ticks, until it reaches 0.</p>
+     */
     public static int changeDetected=0;
 
     private static int shouldHeldItemHideThings() {

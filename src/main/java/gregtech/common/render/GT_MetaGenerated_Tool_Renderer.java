@@ -15,8 +15,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 
-public class GT_MetaGenerated_Tool_Renderer
-        implements IItemRenderer {
+public class GT_MetaGenerated_Tool_Renderer implements IItemRenderer {
     public GT_MetaGenerated_Tool_Renderer() {
         for (GT_MetaGenerated_Tool tItem : GT_MetaGenerated_Tool.sInstances.values()) {
             if (tItem != null) {
@@ -25,6 +24,7 @@ public class GT_MetaGenerated_Tool_Renderer
         }
     }
 
+    @Override
     public boolean handleRenderType(ItemStack aStack, IItemRenderer.ItemRenderType aType) {
         if ((GT_Utility.isStackInvalid(aStack)) || (aStack.getItemDamage() < 0)) {
             return false;
@@ -32,6 +32,7 @@ public class GT_MetaGenerated_Tool_Renderer
         return (aType == IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON) || (aType == IItemRenderer.ItemRenderType.INVENTORY) || (aType == IItemRenderer.ItemRenderType.EQUIPPED) || (aType == IItemRenderer.ItemRenderType.ENTITY);
     }
 
+    @Override
     public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType aType, ItemStack aStack, IItemRenderer.ItemRendererHelper aHelper) {
         if (GT_Utility.isStackInvalid(aStack)) {
             return false;
@@ -39,6 +40,7 @@ public class GT_MetaGenerated_Tool_Renderer
         return aType == IItemRenderer.ItemRenderType.ENTITY;
     }
 
+    @Override
     public void renderItem(IItemRenderer.ItemRenderType aType, ItemStack aStack, Object... data) {
         if (GT_Utility.isStackInvalid(aStack)) {
             return;
@@ -143,14 +145,14 @@ public class GT_MetaGenerated_Tool_Renderer
                     }
                 }
                 Long[] tStats = aItem.getElectricStats(aStack);
-                if ((tStats != null) && (tStats[3].longValue() < 0L)) {
+                if ((tStats != null) && (tStats[3] < 0L)) {
                     long tCharge = aItem.getRealCharge(aStack);
                     if (tCharge <= 0L) {
                         aIcon = gregtech.api.enums.Textures.ItemIcons.ENERGY_BAR[0];
-                    } else if (tCharge >= tStats[0].longValue()) {
+                    } else if (tCharge >= tStats[0]) {
                         aIcon = gregtech.api.enums.Textures.ItemIcons.ENERGY_BAR[8];
                     } else {
-                        aIcon = gregtech.api.enums.Textures.ItemIcons.ENERGY_BAR[(7 - (int) java.lang.Math.max(0L, java.lang.Math.min(6L, (tStats[0].longValue() - tCharge) * 7L / tStats[0].longValue())))];
+                        aIcon = gregtech.api.enums.Textures.ItemIcons.ENERGY_BAR[(7 - (int) java.lang.Math.max(0L, java.lang.Math.min(6L, (tStats[0] - tCharge) * 7L / tStats[0])))];
                     }
                 } else {
                     aIcon = null;

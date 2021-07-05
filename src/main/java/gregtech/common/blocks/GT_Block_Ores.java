@@ -4,13 +4,18 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.objects.GT_CopiedBlockTexture;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+
+import java.util.Arrays;
+
+import static gregtech.api.enums.Textures.BlockIcons.BASALT_STONE;
+import static gregtech.api.enums.Textures.BlockIcons.GRANITE_BLACK_STONE;
+import static gregtech.api.enums.Textures.BlockIcons.GRANITE_RED_STONE;
+import static gregtech.api.enums.Textures.BlockIcons.MARBLE_STONE;
 
 public class GT_Block_Ores extends GT_Block_Ores_Abstract {
     public GT_Block_Ores() {
@@ -57,7 +62,15 @@ public class GT_Block_Ores extends GT_Block_Ores_Abstract {
     }
 
     @Override
-    public ITexture[] getTextureSet() { //Must have 16 entries.
-        return new ITexture[]{new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.netherrack, 0, 0), new GT_CopiedBlockTexture(Blocks.end_stone, 0, 0), new GT_RenderedTexture(Textures.BlockIcons.GRANITE_BLACK_STONE), new GT_RenderedTexture(Textures.BlockIcons.GRANITE_RED_STONE), new GT_RenderedTexture(Textures.BlockIcons.MARBLE_STONE), new GT_RenderedTexture(Textures.BlockIcons.BASALT_STONE), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0), new GT_CopiedBlockTexture(Blocks.stone, 0, 0)};
+    public ITexture[] getTextureSet() {
+        final ITexture[] rTextures = new ITexture[16]; //Must have 16 entries.
+        Arrays.fill(rTextures, TextureFactory.of(Blocks.stone));
+        rTextures[1] = TextureFactory.of(Blocks.netherrack);
+        rTextures[2] = TextureFactory.of(Blocks.end_stone);
+        rTextures[3] = TextureFactory.builder().addIcon(GRANITE_BLACK_STONE).stdOrient().build();
+        rTextures[4] = TextureFactory.builder().addIcon(GRANITE_RED_STONE).stdOrient().build();
+        rTextures[5] = TextureFactory.builder().addIcon(MARBLE_STONE).stdOrient().build();
+        rTextures[6] = TextureFactory.builder().addIcon(BASALT_STONE).stdOrient().build();
+        return rTextures;
     }
 }

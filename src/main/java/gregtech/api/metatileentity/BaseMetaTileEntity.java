@@ -1,9 +1,22 @@
 package gregtech.api.metatileentity;
 
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.security.IActionHost;
+import appeng.api.util.AECableType;
+import appeng.api.util.DimensionalCoord;
+import appeng.me.helpers.AENetworkProxy;
+import appeng.me.helpers.IGridProxyable;
+import appeng.tile.TileEvent;
+import appeng.tile.events.TileEventType;
+import cpw.mods.fml.common.Optional;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
+import gregtech.api.graphs.GenerateNodeMap;
+import gregtech.api.graphs.GenerateNodeMapPower;
+import gregtech.api.graphs.Node;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IEnergyConnected;
@@ -12,7 +25,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachin
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.net.GT_Packet_TileEntity;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_CoverBehavior;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_Utility;
+import gregtech.common.GT_Client;
 import gregtech.common.GT_Pollution;
 import ic2.api.Direction;
 import net.minecraft.block.Block;
@@ -25,6 +43,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -51,7 +70,10 @@ import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
  * <p/>
  * This is the main TileEntity for EVERYTHING.
  */
-public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileEntity {
+@Optional.InterfaceList(value = {
+    @Optional.Interface(iface = "appeng.api.networking.security.IActionHost", modid = "appliedenergistics2", striprefs = true),
+    @Optional.Interface(iface = "appeng.me.helpers.IGridProxyable", modid = "appliedenergistics2", striprefs = true)})
+public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileEntity, IActionHost, IGridProxyable {
     private final GT_CoverBehavior[] mCoverBehaviors = new GT_CoverBehavior[]{GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior, GregTech_API.sNoBehavior};
     protected MetaTileEntity mMetaTileEntity;
     protected long mStoredEnergy = 0, mStoredSteam = 0;
@@ -72,6 +94,9 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     private String mOwnerName = "";
     private UUID mOwnerUuid = GT_Utility.defaultUuid;
     private NBTTagCompound mRecipeStuff = new NBTTagCompound();
+    private int cableUpdateDelay = 30;
+
+    public boolean mWasShutdown = false;
 
     private static final Field ENTITY_ITEM_HEALTH_FIELD;
     static
@@ -548,6 +573,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                 case 15:
                     tCode++;
                     if (aSideServer) {
+                        if (mTickTimer > 20 && cableUpdateDelay == 0) {
+                            generatePowerNodes();
+                            cableUpdateDelay--;
+                        } else {
+                            cableUpdateDelay--;
+                        }
                         if (mTickTimer % 10 == 0) {
                             if (mSendClientData) {
                                 NW.sendPacketToAllPlayersInRange(worldObj,
@@ -813,6 +844,10 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     }
 
     public ITexture getCoverTexture(byte aSide) {
+        if (getCoverIDAtSide(aSide) == 0) return null;
+        if (GT_Mod.instance.isClientSide() && (GT_Client.hideValue & 0x1) != 0) {
+            return BlockIcons.HIDDEN_TEXTURE[0]; // See through
+        }
         return GregTech_API.sCovers.get(new GT_ItemStack(getCoverIDAtSide(aSide)));
     }
 
@@ -843,8 +878,17 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         if (isValidFacing(aFacing)) {
             mFacing = aFacing;
             mMetaTileEntity.onFacingChange();
-            onMachineBlockUpdate();
+
             doEnetUpdate();
+            cableUpdateDelay = 10;
+            
+            if (mMetaTileEntity.shouldTriggerBlockUpdate()) {
+                // If we're triggering a block update this will call onMachineBlockUpdate()
+                GregTech_API.causeMachineUpdate(worldObj, xCoord, yCoord, zCoord);
+            } else {
+                // If we're not trigger a cascading one, call the update here.
+                onMachineBlockUpdate();
+            }
         }
     }
 
@@ -906,6 +950,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         tileEntityInvalid = false;
         leaveEnet();
         if (canAccessData()) {
+            if (GregTech_API.mAE2)
+                invalidateAE();
             mMetaTileEntity.onRemoval();
             mMetaTileEntity.setBaseMetaTileEntity(null);
         }
@@ -915,6 +961,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
+        if (GregTech_API.mAE2)
+            onChunkUnloadAE();
     }
 
     @Override
@@ -935,6 +983,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     @Override
     public void onMachineBlockUpdate() {
         if (canAccessData()) mMetaTileEntity.onMachineBlockUpdate();
+        cableUpdateDelay = 10;
     }
 
     /**
@@ -969,6 +1018,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     public void enableWorking() {
         if (!mWorks) mWorkUpdate = true;
         mWorks = true;
+        mWasShutdown = false;
     }
 
     @Override
@@ -1061,6 +1111,26 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         return isEnergyOutputSide(aSide);
     }
 
+    public void generatePowerNodes() {
+        if (isServerSide() && mMetaTileEntity != null && (mMetaTileEntity.isEnetInput() || mMetaTileEntity.isEnetOutput())) {
+            int time = MinecraftServer.getServer().getTickCounter();
+            for (byte i = 0;i<6;i++) {
+                if (outputsEnergyTo(i,false) || inputEnergyFrom(i,false)) {
+                    IGregTechTileEntity TE = getIGregTechTileEntityAtSide(i);
+                    if (TE instanceof BaseMetaPipeEntity) {
+                        Node node = ((BaseMetaPipeEntity) TE).getNode();
+                        if (node == null) {
+                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
+                        } else if (node.mCreationTime != time) {
+                            GenerateNodeMap.clearNodeMap(node,-1);
+                            new GenerateNodeMapPower((BaseMetaPipeEntity) TE);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public long getOutputAmperage() {
         if (canAccessData() && mMetaTileEntity.isElectric()) return mMetaTileEntity.maxAmperesOut();
@@ -1144,11 +1214,18 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
     @Override
     public ITexture[] getTexture(Block aBlock, byte aSide) {
-        ITexture rIcon = getCoverTexture(aSide);
-        if (rIcon != null) return new ITexture[]{rIcon};
-        if (hasValidMetaTileEntity())
-            return mMetaTileEntity.getTexture(this, aSide, mFacing, (byte) (mColor - 1), mActive, getOutputRedstoneSignal(aSide) > 0);
-        return Textures.BlockIcons.ERROR_RENDERING;
+        ITexture coverTexture = getCoverTexture(aSide);
+        ITexture[] textureUncovered = hasValidMetaTileEntity() ?
+                mMetaTileEntity.getTexture(this, aSide, mFacing, (byte) (mColor - 1), mActive, getOutputRedstoneSignal(aSide) > 0) :
+                Textures.BlockIcons.ERROR_RENDERING;
+        ITexture[] textureCovered;
+        if (coverTexture != null) {
+            textureCovered = Arrays.copyOf(textureUncovered, textureUncovered.length + 1);
+            textureCovered[textureUncovered.length] = coverTexture;
+            return textureCovered;
+        } else {
+            return textureUncovered;
+        }
     }
 
     private boolean isEnergyInputSide(byte aSide) {
@@ -1355,9 +1432,11 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                     	if(aPlayer.isSneaking() && mMetaTileEntity instanceof GT_MetaTileEntity_BasicMachine && ((GT_MetaTileEntity_BasicMachine)mMetaTileEntity).setMainFacing(GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ))){
                             GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
+                            cableUpdateDelay = 10;
                     	}else if (mMetaTileEntity.onWrenchRightClick(aSide, GT_Utility.determineWrenchingSide(aSide, aX, aY, aZ), aPlayer, aX, aY, aZ)) {
                             GT_ModHandler.damageOrDechargeItem(tCurrentItem, 1, 1000, aPlayer);
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
+                            cableUpdateDelay = 10;
                         }
                         return true;
                     }
@@ -1408,6 +1487,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             issueBlockUpdate();
                         }
                         doEnetUpdate();
+                        cableUpdateDelay = 10;
                         return true;
                     }
 
@@ -1418,6 +1498,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                             GT_Utility.sendSoundToPlayers(worldObj, GregTech_API.sSoundList.get(100), 1.0F, -1, xCoord, yCoord, zCoord);
                         }
                         doEnetUpdate();
+                        cableUpdateDelay = 10;
                         return true;
                     }
 
@@ -2202,5 +2283,88 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
          }
          return slotIndex + indexShift;
      }
-}
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public IGridNode getGridNode(ForgeDirection forgeDirection) {
+        if (mFacing != forgeDirection.ordinal())
+            return null;
+        AENetworkProxy gp = getProxy();
+        return gp != null ? gp.getNode() : null;
+    }
 
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public AECableType getCableConnectionType(ForgeDirection forgeDirection) {
+        return mMetaTileEntity == null ? AECableType.NONE : mMetaTileEntity.getCableConnectionType(forgeDirection);
+     }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public void securityBreak() {}
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public IGridNode getActionableNode() {
+        AENetworkProxy gp = getProxy();
+        return gp != null ? gp.getNode() : null;
+     }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public AENetworkProxy getProxy() {
+        return mMetaTileEntity == null ? null : mMetaTileEntity.getProxy();
+    }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public DimensionalCoord getLocation() { return new DimensionalCoord( this ); }
+
+    @Override
+    @Optional.Method(modid = "appliedenergistics2")
+    public void gridChanged() {
+        if (mMetaTileEntity != null)
+            mMetaTileEntity.gridChanged();
+    }
+
+    @TileEvent( TileEventType.WORLD_NBT_READ )
+    @Optional.Method(modid = "appliedenergistics2")
+    public void readFromNBT_AENetwork( final NBTTagCompound data )
+    {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            getProxy().readFromNBT( data );
+    }
+
+    @TileEvent( TileEventType.WORLD_NBT_WRITE )
+    @Optional.Method(modid = "appliedenergistics2")
+    public void writeToNBT_AENetwork( final NBTTagCompound data )
+    {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.writeToNBT( data );
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    void onChunkUnloadAE() {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.onChunkUnload();
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    void invalidateAE() {
+        AENetworkProxy gp = getProxy();
+        if (gp != null)
+            gp.invalidate();
+    }
+
+    @Override
+    public boolean wasShutdown() {
+         return mWasShutdown;
+    }
+
+    @Override
+    public void setShutdownStatus(boolean newStatus) {
+         mWasShutdown = newStatus;
+    }
+}

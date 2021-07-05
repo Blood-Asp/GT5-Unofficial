@@ -3,7 +3,7 @@ package gregtech.common.tileentities.machines.multi;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -12,7 +12,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_DataA
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.objects.GT_ChunkManager;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
@@ -28,8 +28,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 
 import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
 
-public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_MultiBlockBase {
+public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_MultiBlockBase  implements IChunkLoader {
     private static final ItemStack miningPipe = GT_ModHandler.getIC2Item("miningPipe", 0);
     private static final ItemStack miningPipeTip = GT_ModHandler.getIC2Item("miningPipeTip", 0);
     private static final Block miningPipeBlock = GT_Utility.getBlockFromStack(miningPipe);
@@ -38,7 +43,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private Block casingBlock;
     private int casingMeta;
     private int frameMeta;
-    private int casingTextureIndex;
+    protected int casingTextureIndex;
     protected boolean isPickingPipes;
 
     private ForgeDirection back;
@@ -72,10 +77,19 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         workState = STATE_DOWNWARD;
     }
 
+    @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        if (aSide == aFacing)
-            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(casingTextureIndex),new GT_RenderedTexture(aActive ? Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE : Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL)};
-        return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(casingTextureIndex)};
+        if (aSide == aFacing) {
+            if (aActive) return new ITexture[]{
+                    getCasingTextureForId(casingTextureIndex),
+                    TextureFactory.of(OVERLAY_FRONT_ORE_DRILL_ACTIVE),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW).glow().build()};
+            return new ITexture[]{
+                    getCasingTextureForId(casingTextureIndex),
+                    TextureFactory.of(OVERLAY_FRONT_ORE_DRILL),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_ORE_DRILL_GLOW).glow().build()};
+        }
+        return new ITexture[]{getCasingTextureForId(casingTextureIndex)};
     }
 
     @Override
@@ -145,7 +159,9 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     /**
      * Added for compability reasons
      * @return true if the state is 0 false otherwise.
+     * @deprecated compatibility reason
      */
+    @Deprecated
     protected boolean tryLowerPipe() {
         return tryLowerPipeState(false) == 0;
     }
@@ -168,10 +184,14 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
             case 2: return 3;
         }
 
-        if (!GT_Utility.setBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), xPipe, yHead - 1, zPipe, miningPipeTipBlock, 0, isSimulating)) return 3;
+        Block b = getBaseMetaTileEntity().getBlock(xPipe, yHead - 1, zPipe);
+        if (b != miningPipeTipBlock && !GT_Utility.setBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), xPipe, yHead - 1, zPipe, miningPipeTipBlock, 0, isSimulating))
+            return 3;
         if (!isSimulating) {
-            if (yHead != yDrill) getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
-            getBaseMetaTileEntity().decrStackSize(1, 1);
+            if (yHead != yDrill)
+                getBaseMetaTileEntity().getWorld().setBlock(xPipe, yHead, zPipe, miningPipeBlock);
+            if (b != miningPipeBlock && b != miningPipeTipBlock)
+                getBaseMetaTileEntity().decrStackSize(1, 1);
         }
 
         return 0;
@@ -194,7 +214,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
             if (pipes.stackSize == maxPipes) break;
 
             int needPipes = maxPipes - pipes.stackSize;
-            int transferPipes = storedItem.stackSize < needPipes ? storedItem.stackSize : needPipes;
+            int transferPipes = Math.min(storedItem.stackSize, needPipes);
 
             pipes.stackSize += transferPipes;
             storedItem.stackSize -= transferPipes;
@@ -233,9 +253,10 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     }
 
     /**
-     * Readded for compability
+     * @deprecated Readded for compability
      * @return if no pipes are present
      */
+    @Deprecated
     protected boolean waitForPipes(){
         return !isHasMiningPipes();
     }
@@ -420,7 +441,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         return config;
     }
 
-    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<GT_MetaTileEntity_Hatch_DataAccess>();
+    public ArrayList<GT_MetaTileEntity_Hatch_DataAccess> mDataAccessHatches = new ArrayList<>();
 
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
@@ -428,15 +449,14 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
     private boolean isCorrectDataItem(ItemStack aStack, int state){
         if ((state & 1) != 0 && ItemList.Circuit_Integrated.isStackEqual(aStack, true, true)) return true;
         if ((state & 2) != 0 && ItemList.Tool_DataStick.isStackEqual(aStack, false, true)) return true;
-        if ((state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true)) return true;
-        return false;
+        return (state & 4) != 0 && ItemList.Tool_DataOrb.isStackEqual(aStack, false, true);
     }
 
     /**
      * @param state using bitmask, 1 for IntegratedCircuit, 2 for DataStick, 4 for DataOrb
      */
     public ArrayList<ItemStack> getDataItems(int state) {
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
         if (GT_Utility.isStackValid(mInventory[1]) && isCorrectDataItem(mInventory[1], state)) {
             rList.add(mInventory[1]);
         }
@@ -462,4 +482,6 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
         }
         return false;
     }
+    @Override
+    public ChunkCoordIntPair getActiveChunk(){return mCurrentChunk;}
 }

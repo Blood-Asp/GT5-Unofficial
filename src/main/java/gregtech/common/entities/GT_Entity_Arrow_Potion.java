@@ -7,8 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class GT_Entity_Arrow_Potion
-        extends GT_Entity_Arrow {
+public class GT_Entity_Arrow_Potion extends GT_Entity_Arrow {
     private int[] mPotions = new int[0];
 
     public GT_Entity_Arrow_Potion(World aWorld) {
@@ -23,16 +22,19 @@ public class GT_Entity_Arrow_Potion
         super(aWorld, aEntity, aSpeed);
     }
 
+    @Override
     public void writeEntityToNBT(NBTTagCompound aNBT) {
         super.writeEntityToNBT(aNBT);
         aNBT.setIntArray("mPotions", this.mPotions);
     }
 
+    @Override
     public void readEntityFromNBT(NBTTagCompound aNBT) {
         super.readEntityFromNBT(aNBT);
         setPotions(aNBT.getIntArray("mPotions"));
     }
 
+    @Override
     public boolean breaksOnImpact() {
         return true;
     }
@@ -47,6 +49,7 @@ public class GT_Entity_Arrow_Potion
         }
     }
 
+    @Override
     public int[] onHitEntity(Entity aHitEntity, Entity aShootingEntity, ItemStack aArrow, int aRegularDamage, int aMagicDamage, int aKnockback, int aFireDamage, int aHitTimer) {
         if ((aHitEntity instanceof EntityLivingBase)) {
             for (int i = 3; i < this.mPotions.length; i += 4) {

@@ -43,12 +43,14 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         setNoRepair();
     }
 
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if (!world.isRemote && isEmpty(stack) && getMovingObjectPositionFromPlayer(world, player, true) == null)
             player.openGui(GT_Values.GT, 1010, world, 0, 0, 0);
         return super.onItemRightClick(stack, world, player);
     }
 
+    @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float xOffset, float yOffset, float zOffset) {
         if (player instanceof FakePlayer) {
             return false;
@@ -100,6 +102,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         return this.maxCapacity;
     }
 
+    @Override
     public int getCapacity(ItemStack stack) {
         int capacity = 1000;
         if (stack.hasTagCompound()) {
@@ -126,6 +129,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         nbt.setInteger("Capacity", capacity);
     }
 
+    @Override
     public FluidStack getFluid(ItemStack stack) {
         if (stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
@@ -153,6 +157,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         }
     }
 
+    @Override
     public int fill(ItemStack stack, FluidStack resource, boolean doFill) {
         if (stack.stackSize != 1)
             return 0;
@@ -173,6 +178,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         return amount;
     }
 
+    @Override
     public FluidStack drain(ItemStack stack, int maxDrain, boolean doDrain) {
         if (stack.stackSize != 1)
             return null;
@@ -187,6 +193,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         return new FluidStack(fluidStack, maxDrain);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean b) {
         super.addInformation(stack, player, info, b);
@@ -199,6 +206,7 @@ public class GT_VolumetricFlask extends GT_Generic_Item implements IFluidContain
         info.add("Rightclick on air to set volume (only while empty)");
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item item, CreativeTabs creativeTabs, List itemList) {
         itemList.add(new ItemStack(this));

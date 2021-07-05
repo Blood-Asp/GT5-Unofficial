@@ -17,8 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 
-public class GT_MetaGenerated_Item_Renderer
-        implements IItemRenderer {
+public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
     public GT_MetaGenerated_Item_Renderer() {
         GT_MetaGenerated_Item tItem;
         for (Iterator i$ = GT_MetaGenerated_Item.sInstances.values().iterator(); i$.hasNext(); MinecraftForgeClient.registerItemRenderer(tItem, this)) {
@@ -26,6 +25,7 @@ public class GT_MetaGenerated_Item_Renderer
         }
     }
 
+    @Override
     public boolean handleRenderType(ItemStack aStack, IItemRenderer.ItemRenderType aType) {
         if ((GT_Utility.isStackInvalid(aStack)) || (aStack.getItemDamage() < 0)) {
             return false;
@@ -33,6 +33,7 @@ public class GT_MetaGenerated_Item_Renderer
         return (aType == IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON) || (aType == IItemRenderer.ItemRenderType.INVENTORY) || (aType == IItemRenderer.ItemRenderType.EQUIPPED) || (aType == IItemRenderer.ItemRenderType.ENTITY);
     }
 
+    @Override
     public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType aType, ItemStack aStack, IItemRenderer.ItemRendererHelper aHelper) {
         if (GT_Utility.isStackInvalid(aStack)) {
             return false;
@@ -40,6 +41,7 @@ public class GT_MetaGenerated_Item_Renderer
         return aType == IItemRenderer.ItemRenderType.ENTITY;
     }
 
+    @Override
     public void renderItem(IItemRenderer.ItemRenderType type, ItemStack aStack, Object... data) {
         if (GT_Utility.isStackInvalid(aStack)) {
             return;

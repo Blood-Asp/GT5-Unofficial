@@ -1,6 +1,10 @@
 package gregtech.common;
 
-import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.ProgressManager;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -11,8 +15,16 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.genetics.AlleleManager;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.*;
+import gregtech.api.enums.ConfigCategories;
+import gregtech.api.enums.Dyes;
+import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OreDictNames;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
+import gregtech.api.enums.ToolDictNames;
 import gregtech.api.interfaces.IBlockOnWalkOver;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.internal.IGT_Mod;
@@ -21,15 +33,12 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
-import gregtech.api.net.GT_Packet_Pollution;
 import gregtech.api.objects.*;
 import gregtech.api.util.*;
 import gregtech.common.entities.GT_Entity_Arrow;
 import gregtech.common.gui.GT_ContainerVolumetricFlask;
 import gregtech.common.gui.GT_GUIContainerVolumetricFlask;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
-import gregtech.common.items.armor.ModularArmor_Item;
-import gregtech.common.items.armor.gui.*;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -39,7 +48,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -82,7 +90,22 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
@@ -92,12 +115,13 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             OreGenEvent.GenerateMinable.EventType.IRON, OreGenEvent.GenerateMinable.EventType.GOLD,
             OreGenEvent.GenerateMinable.EventType.DIAMOND, OreGenEvent.GenerateMinable.EventType.REDSTONE, OreGenEvent.GenerateMinable.EventType.LAPIS,
             OreGenEvent.GenerateMinable.EventType.QUARTZ);
-    public final HashSet<ItemStack> mRegisteredOres = new HashSet<ItemStack>(10000);
-    public final ArrayList<String> mSoundNames = new ArrayList<String>();
-    public final ArrayList<ItemStack> mSoundItems = new ArrayList<ItemStack>();
-    public final ArrayList<Integer> mSoundCounts = new ArrayList<Integer>();
-    private final Collection<OreDictEventContainer> mEvents = new HashSet<OreDictEventContainer>();
-    private final Collection<String> mIgnoredItems = new HashSet<String>(Arrays.asList("itemGhastTear", "itemFlint", "itemClay", "itemBucketSaltWater",
+    public final HashSet<ItemStack> mRegisteredOres = new HashSet<>(10000);
+    public final ArrayList<String> mSoundNames = new ArrayList<>();
+    public final ArrayList<ItemStack> mSoundItems = new ArrayList<>();
+    public final ArrayList<Integer> mSoundCounts = new ArrayList<>();
+    private final Collection<OreDictEventContainer> mEvents = new HashSet<>();
+    private final Collection<String> mIgnoredItems = new HashSet<>(Arrays.asList(
+            "itemGhastTear", "itemFlint", "itemClay", "itemBucketSaltWater",
             "itemBucketFreshWater", "itemBucketWater", "itemRock", "itemReed", "itemArrow", "itemSaw", "itemKnife", "itemHammer", "itemChisel", "itemRubber",
             "itemEssence", "itemIlluminatedPanel", "itemSkull", "itemRawRubber", "itemBacon", "itemJetpackAccelerator", "itemLazurite", "itemIridium",
             "itemTear", "itemClaw", "itemFertilizer", "itemTar", "itemSlimeball", "itemCoke", "itemBeeswax", "itemBeeQueen", "itemForcicium", "itemForcillium",
@@ -108,7 +132,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             "itemWhippingCream", "itemGlisteningWhippingCream", "itemCleaver", "itemHerbalMedicineWhippingCream", "itemStrangeWhippingCream",
             "itemBlazeCleaver", "itemBakedCakeSponge", "itemMagmaCake", "itemGlisteningCake", "itemOgreCleaver", "itemFishandPumpkinCake",
             "itemMagmaWhippingCream", "itemMultimeter", "itemSuperconductor"));
-    private final Collection<String> mIgnoredNames = new HashSet<String>(Arrays.asList("grubBee", "chainLink", "candyCane", "bRedString", "bVial",
+    private final Collection<String> mIgnoredNames = new HashSet<>(Arrays.asList("grubBee", "chainLink", "candyCane", "bRedString", "bVial",
             "bFlask", "anorthositeSmooth", "migmatiteSmooth", "slateSmooth", "travertineSmooth", "limestoneSmooth", "orthogneissSmooth", "marbleSmooth",
             "honeyDrop", "lumpClay", "honeyEqualssugar", "flourEqualswheat", "bluestoneInsulated", "blockWaterstone", "blockSand", "blockTorch",
             "blockPumpkin", "blockClothRock", "blockStainedHardenedClay", "blockQuartzPillar", "blockQuartzChiselled", "blockSpawner", "blockCloth", "mobHead",
@@ -125,8 +149,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             "unfinishedTank", "valvePart", "aquaRegia", "leatherSeal", "leatherSlimeSeal", "hambone", "slimeball", "clay", "enrichedUranium", "camoPaste",
             "antiBlock", "burntQuartz", "salmonRaw", "blockHopper", "blockEnderObsidian", "blockIcestone", "blockMagicWood", "blockEnderCore", "blockHeeEndium",
             "oreHeeEndPowder", "oreHeeStardust", "oreHeeIgneousRock", "oreHeeInstabilityOrb", "crystalPureFluix", "shardNether", "gemFluorite",
-            "stickObsidian", "caveCrystal", "shardCrystal", "dyeCrystal","shardFire","shardWater","shardAir","shardEarth","ingotRefinedIron","blockMarble","ingotUnstable"));
-    private final Collection<String> mInvalidNames = new HashSet<String>(Arrays.asList("diamondShard", "redstoneRoot", "obsidianStick", "bloodstoneOre",
+            "stickObsidian", "caveCrystal", "shardCrystal", "dyeCrystal", "shardFire", "shardWater", "shardAir", "shardEarth", "ingotRefinedIron", "blockMarble", "ingotUnstable"));
+    private final Collection<String> mInvalidNames = new HashSet<>(Arrays.asList("diamondShard", "redstoneRoot", "obsidianStick", "bloodstoneOre",
             "universalCable", "bronzeTube", "ironTube", "netherTube", "obbyTube", "infiniteBattery", "eliteBattery", "advancedBattery", "10kEUStore",
             "blueDye", "MonazitOre", "quartzCrystal", "whiteLuminiteCrystal", "darkStoneIngot", "invisiumIngot", "demoniteOrb", "enderGem", "starconiumGem",
             "osmoniumIngot", "tapaziteGem", "zectiumIngot", "foolsRubyGem", "rubyGem", "meteoriteGem", "adamiteShard", "sapphireGem", "copperIngot",
@@ -200,7 +224,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean mTEMachineRecipes = false;
     public boolean mEnableAllMaterials = false;
     public boolean mEnableAllComponents = false;
-    public boolean mAddGTRecipesToIC2Machines = true;
     public boolean mEnableCleanroom = true;
     public boolean mLowGravProcessing = false;
     public boolean mAprilFool = false;
@@ -219,7 +242,73 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public boolean gt6Cable = true;
     public boolean ic2EnergySourceCompat = true;
     public boolean costlyCableConnection = false;
+
+    /**
+     *  This enables ambient-occlusion smooth lighting on tiles
+     */
+    public boolean mRenderTileAmbientOcclusion = true;
+
+    /**
+     * This enables rendering of glowing textures
+     */
+    public boolean mRenderGlowTextures = true;
+
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
+
+    public static Map<String, Integer> oreDictBurnTimes = new HashMap<>();
+
+    // Locking
+    public static ReentrantLock TICK_LOCK = new ReentrantLock();
+    
+    private final ConcurrentMap<UUID, GT_ClientPreference> mClientPrefernces = new ConcurrentHashMap<>();
+
+    static {
+        oreDictBurnTimes.put("dustTinyWood", 11);
+        oreDictBurnTimes.put("dustTinySodium", 44);
+        oreDictBurnTimes.put("dustSmallWood", 25);
+        oreDictBurnTimes.put("dustSmallSodium", 100);
+        oreDictBurnTimes.put("dustWood", 100);
+        oreDictBurnTimes.put("dustTinyCoal", 177);
+        oreDictBurnTimes.put("dustTinyCharcoal", 177);
+        oreDictBurnTimes.put("dustTinyLignite", 166);
+        oreDictBurnTimes.put("plateWood", 300);
+        oreDictBurnTimes.put("dustSmallLignite", 375);
+        oreDictBurnTimes.put("dustSodium", 400);
+        oreDictBurnTimes.put("dustSmallCoal", 400);
+        oreDictBurnTimes.put("dustSmallCharcoal", 400);
+        oreDictBurnTimes.put("dustTinyLithium", 888);
+        oreDictBurnTimes.put("dustTinyCaesium", 888);
+        oreDictBurnTimes.put("gemLignite", 1200);
+        oreDictBurnTimes.put("crushedLignite", 1200);
+        oreDictBurnTimes.put("dustImpureLignite", 1200);
+        oreDictBurnTimes.put("dustLignite", 1200);
+        oreDictBurnTimes.put("dustSulfur", 1600);
+        oreDictBurnTimes.put("gemCoal", 1600);
+        oreDictBurnTimes.put("crushedCoal", 1600);
+        oreDictBurnTimes.put("dustImpureCoal", 1600);
+        oreDictBurnTimes.put("dustCoal", 1600);
+        oreDictBurnTimes.put("gemCharcoal", 1600);
+        oreDictBurnTimes.put("crushedCharcoal", 1600);
+        oreDictBurnTimes.put("dustImpureCharcoal", 1600);
+        oreDictBurnTimes.put("dustCharcoal", 1600);
+        oreDictBurnTimes.put("dustSmallLithium", 2000);
+        oreDictBurnTimes.put("dustSmallCaesium", 2000);
+        oreDictBurnTimes.put("gemSodium", 4000);
+        oreDictBurnTimes.put("crushedSodium", 4000);
+        oreDictBurnTimes.put("dustImpureSodium", 4000);
+        oreDictBurnTimes.put("gemLithium", 6000);
+        oreDictBurnTimes.put("crushedLithium", 6000);
+        oreDictBurnTimes.put("dustImpureLithium", 6000);
+        oreDictBurnTimes.put("dustLithium", 6000);
+        oreDictBurnTimes.put("gemCaesium", 6000);
+        oreDictBurnTimes.put("crushedCaesium", 6000);
+        oreDictBurnTimes.put("dustImpureCaesium", 6000);
+        oreDictBurnTimes.put("dustCaesium", 6000);
+        oreDictBurnTimes.put("blockLignite", 12000);
+        oreDictBurnTimes.put("blockCharcoal", 16000);
+    }
+
+
 
     public GT_Proxy() {
         GameRegistry.registerFuelHandler(this);
@@ -687,8 +776,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
             }
             aEvent.bow.damageItem(1, aEvent.entityPlayer);
             aEvent.bow.getItem();
-            aEvent.entityPlayer.worldObj.playSoundAtEntity(aEvent.entityPlayer, "random.bow", 1.0F, 0.64893958288F + tSpeed
-                    * 0.5F);
+
+            new WorldSpawnedEventBuilder.SoundAtEntityEventBuilder()
+                    .setPitch(0.64893958288F + tSpeed * 0.5F)
+                    .setVolume(1f)
+                    .setIdentifier("random.bow")
+                    .setEntity(aEvent.entityPlayer)
+                    .setWorld(aEvent.entityPlayer.worldObj)
+                    .run();
 
             tArrowEntity.canBePickedUp = 1;
             if (!aEvent.entityPlayer.capabilities.isCreativeMode) {
@@ -982,7 +1077,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                                 aMaterial.add(GT_Utility.copyAmount(1L, aEvent.Ore));
 
                                 if (GregTech_API.sThaumcraftCompat != null && aPrefix.doGenerateItem(aMaterial) && !aPrefix.isIgnored(aMaterial)) {
-                                    List<TC_AspectStack> tAspects = new ArrayList<TC_AspectStack>();
+                                    List<TC_AspectStack> tAspects = new ArrayList<>();
                                     for (TC_AspectStack tAspect : aPrefix.mAspects) tAspect.addToAspectList(tAspects);
                                     if (aPrefix.mMaterialAmount >= 3628800 || aPrefix.mMaterialAmount < 0) for (TC_AspectStack tAspect : aMaterial.mAspects) tAspect.addToAspectList(tAspects);
                                     GregTech_API.sThaumcraftCompat.registerThaumcraftAspectsToItem(GT_Utility.copyAmount(1, aEvent.Ore), tAspects, aEvent.Name);
@@ -1241,6 +1336,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     @SubscribeEvent
     public void onServerTickEvent(TickEvent.ServerTickEvent aEvent) {
+        if (aEvent.side.isServer()) {
+            if (aEvent.phase == TickEvent.Phase.START) {
+                TICK_LOCK.lock();
+            } else {
+                TICK_LOCK.unlock();
+            }
+        }
+
     }
 
     @SubscribeEvent
@@ -1282,8 +1385,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             Class tClass = tEntity.getClass();
                             int tEntityCount = 1;
                             if (tList != null) {
-                                for (int j = 0; j < tList.size(); j++) {
-                                    if ((tList.get(j) != null) && (tList.get(j).getClass() == tClass)) {
+                                for (Object o : tList) {
+                                    if ((o != null) && (o.getClass() == tClass)) {
                                         tEntityCount++;
                                     }
                                 }
@@ -1493,35 +1596,22 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
     }
 
+    public GT_ClientPreference getClientPreference(UUID aPlayerID) {
+        return mClientPrefernces.get(aPlayerID);
+    }
+
+    public void setClientPreference(UUID aPlayerID, GT_ClientPreference aPreference) {
+        mClientPrefernces.put(aPlayerID, aPreference);
+    }
+
+    @Override
     public Object getServerGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
         if(aID>=1000){
             int ID = aID-1000;
-            switch(ID){
-                case 0:
-                    return new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-                case 1:
-                    return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-                case 2:
-                    return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem()));
-                case 10:
-                    return new GT_ContainerVolumetricFlask(aPlayer.inventory);
-                    default:
-                    return getRightItem(aPlayer, ID);
+            if (ID == 10) {
+                return new GT_ContainerVolumetricFlask(aPlayer.inventory);
             }
-        }
-        if(aID>=100){
-        	int tSlot = aID / 100;
-            int ID = aID%100;
-            switch(ID){
-            case 0:
-                return new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot)));
-            case 1:
-                return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot)));
-            case 2:
-                return new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot)));
-                    default:
-                return getRightItem(aPlayer, ID);
-        }
+            return null;
         }
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
@@ -1536,52 +1626,14 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         return null;
     }
 
-    public Object getRightItem(EntityPlayer player, int ID){
-        ItemStack mStack = player.getEquipmentInSlot(ID/100);
-        if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
-
-        switch(ID % 100){
-            case 0:
-                return new ContainerBasicArmor(player, new InventoryArmor(ModularArmor_Item.class, mStack));
-            case 1:
-                return new ContainerElectricArmor1(player, new InventoryArmor(ModularArmor_Item.class, mStack));
-            case 2:
-                return new ContainerElectricArmor1(player, new InventoryArmor(ModularArmor_Item.class, mStack));
-        }
-        return null;
-
-    }
-
     @Override
     public Object getClientGuiElement(int aID, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ) {
         if(aID>=1000){
             int ID = aID-1000;
-            switch(ID){
-                case 0:
-                    return new GuiModularArmor(new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-                case 1:
-                    return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-                case 2:
-                    return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getCurrentEquippedItem())), aPlayer);
-                case 10:
-                    return new GT_GUIContainerVolumetricFlask(new GT_ContainerVolumetricFlask(aPlayer.inventory));
-                default:
-                    return getRightItemGui(aPlayer, ID);
+            if (ID == 10) {
+                return new GT_GUIContainerVolumetricFlask(new GT_ContainerVolumetricFlask(aPlayer.inventory));
             }
-        }
-        if(aID>=100){
-        	int tSlot = aID / 100;
-            int ID = aID%100;
-            switch(ID){
-            case 0:
-                return new GuiModularArmor(new ContainerBasicArmor(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot))), aPlayer);
-            case 1:
-                return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot))), aPlayer);
-            case 2:
-                return new GuiElectricArmor1(new ContainerElectricArmor1(aPlayer, new InventoryArmor(ModularArmor_Item.class, aPlayer.getEquipmentInSlot(tSlot))), aPlayer);
-            default:
-                return getRightItem(aPlayer, ID);
-        }
+            return null;
         }
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof IGregTechTileEntity)) {
@@ -1604,139 +1656,45 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         return null;
     }
 
-	public Object getRightItemGui(EntityPlayer player, int ID){
-		ItemStack mStack = player.getEquipmentInSlot(ID/100);
-		if(mStack==null||!(mStack.getItem() instanceof ModularArmor_Item))return null;
+    private static List<String> getOreDictNames(ItemStack stack) {
+        return Arrays.stream(OreDictionary.getOreIDs(stack)).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
+    }
 
-        switch(ID % 100){
-            case 0:
-                return new GuiModularArmor(new ContainerBasicArmor(player, new InventoryArmor(ModularArmor_Item.class, mStack)),player);
-            case 1:
-                return new GuiElectricArmor1(new ContainerElectricArmor1(player, new InventoryArmor(ModularArmor_Item.class, mStack)), player);
-            case 2:
-                return new GuiElectricArmor1(new ContainerElectricArmor1(player, new InventoryArmor(ModularArmor_Item.class, mStack)), player);
-        }
-        return null;
 
-	}
-
+    @Override
     public int getBurnTime(ItemStack aFuel) {
         if ((aFuel == null) || (aFuel.getItem() == null)) {
             return 0;
         }
         int rFuelValue = 0;
         if ((aFuel.getItem() instanceof GT_MetaGenerated_Item)) {
-            Short tFuelValue = ((GT_MetaGenerated_Item) aFuel.getItem()).mBurnValues.get(Short.valueOf((short) aFuel.getItemDamage()));
+            Short tFuelValue = ((GT_MetaGenerated_Item) aFuel.getItem()).mBurnValues.get((short) aFuel.getItemDamage());
             if (tFuelValue != null) {
-                rFuelValue = Math.max(rFuelValue, tFuelValue.shortValue());
+                rFuelValue = Math.max(rFuelValue, tFuelValue);
             }
         }
         NBTTagCompound tNBT = aFuel.getTagCompound();
         if (tNBT != null) {
+            // See if we have something defined by NBT
             short tValue = tNBT.getShort("GT.ItemFuelValue");
             rFuelValue = Math.max(rFuelValue, tValue);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 4000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallSodium")) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinySodium")) {
-            rFuelValue =   Math.max(rFuelValue, 44);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSulfur")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 2000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyLithium")) {
-            rFuelValue =   Math.max(rFuelValue, 888);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 6000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 2000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCaesium")) {
-            rFuelValue =   Math.max(rFuelValue, 888);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 1200);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 375);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 166);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCoal")) {
-            rFuelValue =   Math.max(rFuelValue, 177);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "gemCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "crushedCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustImpureCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 1600);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 400);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 177);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustWood")) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustSmallWood")) {
-            rFuelValue =   Math.max(rFuelValue, 25);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "dustTinyWood")) {
-            rFuelValue =   Math.max(rFuelValue, 11);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "plateWood")) {
-            rFuelValue =   Math.min(rFuelValue, 300);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "blockLignite")) {
-            rFuelValue =   Math.max(rFuelValue, 12000);
-        } else if (GT_OreDictUnificator.isItemStackInstanceOf(aFuel, "blockCharcoal")) {
-            rFuelValue =   Math.max(rFuelValue, 16000);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.wooden_button, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 150);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.ladder, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 100);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.sign, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 600);
-        } else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.wooden_door, 1))) {
-            rFuelValue =   Math.max(rFuelValue, 600);
-        } else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1))) {
-            rFuelValue = Math.max(rFuelValue, 150000);
+        } else {
+            // If not check the ore dict
+            rFuelValue = Math.max(rFuelValue, getOreDictNames(aFuel).stream().mapToInt(f -> oreDictBurnTimes.getOrDefault(f, 0)).max().orElse(0));
         }
-        if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1))) {
-            rFuelValue = Math.max(rFuelValue, 100000);
-        }
+        
+        // If we have something from the GT MetaGenerated_Item, ItemFuelValue, or OreDict return
+        if (rFuelValue > 0) return rFuelValue;
+        
+        // Otherwise a few more checks
+        if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.wooden_button, 1)))    return 150; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Blocks.ladder, 1)))      return 100; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.sign, 1)))         return 600; 
+        else if (GT_Utility.areStacksEqual(aFuel, new ItemStack(Items.wooden_door, 1)))  return 600; 
+        else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_MSSFUEL.get(1)))          return 150000; 
+        else if (GT_Utility.areStacksEqual(aFuel, ItemList.Block_SSFUEL.get(1)))           return 100000;
 
-        return rFuelValue;
+        return 0;
     }
 
     public Fluid addAutoGeneratedCorrespondingFluid(Materials aMaterial){
@@ -1954,6 +1912,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     public void activateOreDictHandler() {
         this.mOreDictActivated = true;
         ProgressManager.ProgressBar progressBar = ProgressManager.push("Register materials", mEvents.size());
+        
         if (Loader.isModLoaded("betterloadingscreen")){
             GT_Values.cls_enabled = true;
             try {
@@ -1964,6 +1923,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         }
         else
             GT_Proxy.stepMaterialsVanilla(this.mEvents,progressBar);
+
     }
 
     public static final HashMap<Integer,HashMap<ChunkCoordIntPair,int []>> dimensionWiseChunkData = new HashMap<>(16);//stores chunk data that is loaded/saved
@@ -2002,11 +1962,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
     @SubscribeEvent
     public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
         final int worldID=event.world.provider.dimensionId;
-        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.get(worldID);
-        if (chunkData == null){
-            chunkData=new HashMap<>(1024);
-            dimensionWiseChunkData.put(worldID, chunkData);
-        }
+        HashMap<ChunkCoordIntPair, int[]> chunkData = dimensionWiseChunkData.computeIfAbsent(worldID, k -> new HashMap<>(1024));
         if (dimensionWisePollution.get(worldID) == null)
             dimensionWisePollution.put(worldID, new GT_Pollution(event.world));
 

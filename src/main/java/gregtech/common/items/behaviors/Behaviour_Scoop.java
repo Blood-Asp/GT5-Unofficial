@@ -13,8 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class Behaviour_Scoop
-        extends Behaviour_None {
+public class Behaviour_Scoop extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.scoop", "Catches Butterflies on Leftclick");
 
@@ -22,6 +21,7 @@ public class Behaviour_Scoop
         this.mCosts = aCosts;
     }
 
+    @Override
     public boolean onLeftClickEntity(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
         if ((aEntity instanceof IEntityButterfly)) {
             if (aPlayer.worldObj.isRemote) {
@@ -38,6 +38,7 @@ public class Behaviour_Scoop
         return false;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         aList.add(this.mTooltip);
         return aList;

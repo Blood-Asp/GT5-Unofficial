@@ -8,4 +8,8 @@ public interface IPipeRenderedTileEntity extends ICoverable, ITexturedTileEntity
     byte getConnections();
 
     ITexture[] getTextureUncovered(byte aSide);
+
+    default ITexture[] getTextureCovered(byte aSide) {
+        return getTextureUncovered(aSide);
+    }
 }

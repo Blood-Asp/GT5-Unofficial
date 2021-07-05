@@ -19,8 +19,7 @@ import java.util.Random;
 
 import static gregtech.api.enums.GT_Values.debugStones;
 
-public class GT_Worldgen_Stone
-        extends GT_Worldgen_Ore {
+public class GT_Worldgen_Stone extends GT_Worldgen_Ore {
 
     static final double sizeConversion[] = { 1, 1, 1.333333, 1.333333, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 }; // Bias the sizes towards skinnier boulders, ie more "shafts" than dikes or sills. 
 
@@ -46,6 +45,7 @@ public class GT_Worldgen_Stone
         super(aName, aDefault, aBlock, aBlockMeta, aDimensionType, aAmount, aSize, aProbability, aMinY, aMaxY, aBiomeList, aAllowToGenerateinVoid);
     }
 
+    @Override
     public boolean executeWorldgen(World aWorld, Random aRandom, String aBiome, int aDimensionType, int aChunkX, int aChunkZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         XSTR stoneRNG = new XSTR();
         ArrayList<ValidSeeds> stones = new ArrayList();

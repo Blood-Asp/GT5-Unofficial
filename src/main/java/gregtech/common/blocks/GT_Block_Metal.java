@@ -15,13 +15,14 @@ public class GT_Block_Metal extends GT_Block_Storage {
     public OrePrefixes mPrefix;
     public IIconContainer[] mBlockIcons;
     public boolean mHideBlocks;
+    public static boolean mNEIisLoaded = Loader.isModLoaded("NotEnoughItems");
 
     public GT_Block_Metal(String aName, Materials[] aMats, OrePrefixes aPrefix, IIconContainer[] aBlockIcons) {
         super(GT_Item_Storage.class, aName, Material.iron);
         mMats = aMats;
         mPrefix = aPrefix;
         mBlockIcons = aBlockIcons;
-        mHideBlocks = Loader.isModLoaded("NotEnoughItems");
+        mHideBlocks = mNEIisLoaded;
 
         for (int i = 0; i < aMats.length; i++) {
             if (aMats[i].mMetaItemSubID > 0 && aMats[i].mHasParentMod) {
@@ -29,11 +30,12 @@ public class GT_Block_Metal extends GT_Block_Storage {
                 GT_OreDictUnificator.registerOre(aPrefix, aMats[i], new ItemStack(this, 1, i));
             }
         }
-        if (aMats.length<16 && Loader.isModLoaded("NotEnoughItems")) {
+        if (aMats.length<16 && mNEIisLoaded) {
             for (int i = aMats.length; i < 16; i++) codechicken.nei.api.API.hideItem(new ItemStack(this, 1, i));
         }
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16) && aMeta < mMats.length) {
             return mBlockIcons[aMeta].getIcon();

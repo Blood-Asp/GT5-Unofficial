@@ -10,6 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 
 public abstract class GT_Tool_Turbine extends GT_Tool {
+    @Override
     public abstract float getBaseDamage();
 
     @Override
@@ -27,6 +28,7 @@ public abstract class GT_Tool_Turbine extends GT_Tool {
         return aIsToolHead ? GT_MetaGenerated_Tool.getPrimaryMaterial(aStack).mRGBa : null;
     }
 
+    @Override
     public IChatComponent getDeathMessage(EntityLivingBase aPlayer, EntityLivingBase aEntity) {
         return new ChatComponentText(EnumChatFormatting.GREEN + aPlayer.getCommandSenderName() + EnumChatFormatting.WHITE + " put " + EnumChatFormatting.RED +
                 aEntity.getCommandSenderName() + "s" + EnumChatFormatting.WHITE + " head into a turbine");
@@ -34,10 +36,13 @@ public abstract class GT_Tool_Turbine extends GT_Tool {
 
     public abstract IIconContainer getTurbineIcon();
 
+    @Override
     public abstract float getSpeedMultiplier();
 
+    @Override
     public abstract float getMaxDurabilityMultiplier();
 
+    @Override
     public ItemStack getBrokenItem(ItemStack aStack) {
         return null;
     }

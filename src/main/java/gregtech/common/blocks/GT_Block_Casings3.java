@@ -2,17 +2,16 @@ package gregtech.common.blocks;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class GT_Block_Casings3
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings3 extends GT_Block_Casings_Abstract {
     public GT_Block_Casings3() {
         super(GT_Item_Casings3.class, "gt.blockcasings3", GT_Material_Casings.INSTANCE);
         for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.casingTexturePages[0][(i + 32)] = new GT_CopiedBlockTexture(this, 6, i);
+            Textures.BlockIcons.casingTexturePages[0][(i + 32)] = TextureFactory.of(this, i);
         }
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Yellow Stripes Block");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "Yellow Stripes Block");
@@ -48,6 +47,7 @@ public class GT_Block_Casings3
         ItemList.Casing_Firebox_TungstenSteel.set(new ItemStack(this, 1, 15));
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         switch (aMeta) {
             case 0:
