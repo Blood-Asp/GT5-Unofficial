@@ -197,7 +197,7 @@ public class GT_Worldgenloader implements Runnable {
         new GT_Worldgen_GT_Ore_Layer("ore.mix.netherstar", true, 20, 60, 60, 2, 24, false, false, false, Materials.GarnetSand, Materials.NetherStar, Materials.GarnetRed, Materials.GarnetYellow);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.garnet", true, 10, 30, 40, 2, 16, false, false, false, Materials.GarnetRed, Materials.GarnetYellow, Materials.Chrysotile, Materials.Realgar);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.rareearth", true, 30, 60, 40, 2, 24, false, false, false, Materials.Cadmium, Materials.Caesium, Materials.Lanthanum, Materials.Cerium);
-        new GT_Worldgen_GT_Ore_Layer("ore.mix.richnuclear", true, 65, 120, 5, 2, 8, false, false, false, Materials.Uranium, Materials.Plutonium, Materials.Thorium, Materials.Thorium);
+        new GT_Worldgen_GT_Ore_Layer("ore.mix.richnuclear", true, 55, 120, 5, 2, 8, false, false, false, Materials.Uranium, Materials.Plutonium, Materials.Thorium, Materials.Thorium);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.heavypentele", true, 40, 60, 60, 5, 32, false, false, false, Materials.Arsenic, Materials.Bismuth, Materials.Antimony, Materials.Antimony);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.europa", true, 55, 65, 110, 4, 24, false, false, false, Materials.Magnesite, Materials.BandedIron, Materials.Sulfur, Materials.Opal);
         new GT_Worldgen_GT_Ore_Layer("ore.mix.europacore", true, 5, 15, 5, 2, 16, false, false, false, Materials.Chrome, Materials.Tungstate, Materials.Molybdenum, Materials.Manganese);
