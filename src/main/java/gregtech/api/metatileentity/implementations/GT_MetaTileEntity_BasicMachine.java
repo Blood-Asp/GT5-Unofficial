@@ -594,7 +594,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 if (ItemList.Display_Fluid.isStackEqual(mInventory[tDisplayStackSlot], true, true))
                     mInventory[tDisplayStackSlot] = null;
             } else {
-                mInventory[tDisplayStackSlot] = GT_Utility.getFluidDisplayStack(getFillableStack(), displaysStackSize());
+                mInventory[tDisplayStackSlot] = GT_Utility.getFluidDisplayStack(getFillableStack(), true, !displaysStackSize());
             }
         }
     }
