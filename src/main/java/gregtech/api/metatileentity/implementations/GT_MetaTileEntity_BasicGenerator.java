@@ -303,7 +303,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
     public ItemStack getEmptyContainer(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack) || getRecipes() == null) return null;
         GT_Recipe tFuel = getRecipes().findRecipe(getBaseMetaTileEntity(), false, Long.MAX_VALUE, null, aStack);
-        if (tFuel != null) return GT_Utility.copy(tFuel.getOutput(0));
+        if (tFuel != null) return GT_Utility.copyOrNull(tFuel.getOutput(0));
         return GT_Utility.getContainerItem(aStack, true);
     }
 

@@ -102,7 +102,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             tResults.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tResults.add(GT_Utility.copy(tData.filledContainer));
+                    tResults.add(GT_Utility.copyOrNull(tData.filledContainer));
                 }
             }
         }
@@ -136,7 +136,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             tInputs.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tInputs.add(GT_Utility.copy(tData.filledContainer));
+                    tInputs.add(GT_Utility.copyOrNull(tData.filledContainer));
                 }
             }
         }
@@ -385,7 +385,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
                             tDisplayStacks.add(base);
                         }
                     } else {
-                        tDisplayStacks.add(GT_Utility.copy(tStack));
+                        tDisplayStacks.add(GT_Utility.copyOrNull(tStack));
                     }
                 }
             }

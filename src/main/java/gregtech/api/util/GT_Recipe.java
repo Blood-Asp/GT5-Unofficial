@@ -312,12 +312,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
     public ItemStack getRepresentativeInput(int aIndex) {
         if (aIndex < 0 || aIndex >= mInputs.length) return null;
-        return GT_Utility.copy(mInputs[aIndex]);
+        return GT_Utility.copyOrNull(mInputs[aIndex]);
     }
 
     public ItemStack getOutput(int aIndex) {
         if (aIndex < 0 || aIndex >= mOutputs.length) return null;
-        return GT_Utility.copy(mOutputs[aIndex]);
+        return GT_Utility.copyOrNull(mOutputs[aIndex]);
     }
 
     public int getOutputChance(int aIndex) {
@@ -1215,7 +1215,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_Recipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) return null;
             if (aRecipe != null && aRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) return aRecipe;
-            ItemStack tComparedInput = GT_Utility.copy(aInputs[0]);
+            ItemStack tComparedInput = GT_Utility.copyOrNull(aInputs[0]);
             ItemStack[] tOutputItems = GT_ModHandler.getMachineOutput(tComparedInput, ic2.api.recipe.Recipes.compressor.getRecipes(), true, new NBTTagCompound(), null, null, null);
             return GT_Utility.arrayContainsNonNull(tOutputItems) ? new GT_Recipe(false, new ItemStack[]{GT_Utility.copyAmount(aInputs[0].stackSize - tComparedInput.stackSize, aInputs[0])}, tOutputItems, null, null, null, null, 400, 2, 0) : null;
         }
@@ -1238,7 +1238,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_Recipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) return null;
             if (aRecipe != null && aRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) return aRecipe;
-            ItemStack tComparedInput = GT_Utility.copy(aInputs[0]);
+            ItemStack tComparedInput = GT_Utility.copyOrNull(aInputs[0]);
             ItemStack[] tOutputItems = GT_ModHandler.getMachineOutput(tComparedInput, ic2.api.recipe.Recipes.extractor.getRecipes(), true, new NBTTagCompound(), null, null, null);
             return GT_Utility.arrayContainsNonNull(tOutputItems) ? new GT_Recipe(false, new ItemStack[]{GT_Utility.copyAmount(aInputs[0].stackSize - tComparedInput.stackSize, aInputs[0])}, tOutputItems, null, null, null, null, 400, 2, 0) : null;
         }
@@ -1261,7 +1261,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public GT_Recipe findRecipe(IHasWorldObjectAndCoords aTileEntity, GT_Recipe aRecipe, boolean aNotUnificated, long aVoltage, FluidStack[] aFluids, ItemStack aSpecialSlot, ItemStack... aInputs) {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null) return null;
             if (aRecipe != null && aRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) return aRecipe;
-            ItemStack tComparedInput = GT_Utility.copy(aInputs[0]);
+            ItemStack tComparedInput = GT_Utility.copyOrNull(aInputs[0]);
             ItemStack[] tOutputItems = GT_ModHandler.getMachineOutput(tComparedInput, ic2.api.recipe.Recipes.centrifuge.getRecipes(), true, new NBTTagCompound(), null, null, null);
             return GT_Utility.arrayContainsNonNull(tOutputItems) ? new GT_Recipe(false, new ItemStack[]{GT_Utility.copyAmount(aInputs[0].stackSize - tComparedInput.stackSize, aInputs[0])}, tOutputItems, null, null, null, null, 400, 48, 0) : null;
         }
@@ -1285,7 +1285,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             if (aInputs == null || aInputs.length <= 0 || aInputs[0] == null || aFluids == null || aFluids.length < 1 || !GT_ModHandler.isWater(aFluids[0]))
                 return null;
             if (aRecipe != null && aRecipe.isRecipeInputEqual(false, true, aFluids, aInputs)) return aRecipe;
-            ItemStack tComparedInput = GT_Utility.copy(aInputs[0]);
+            ItemStack tComparedInput = GT_Utility.copyOrNull(aInputs[0]);
             NBTTagCompound aRecipeMetaData = new NBTTagCompound();
             ItemStack[] tOutputItems = GT_ModHandler.getMachineOutput(tComparedInput, ic2.api.recipe.Recipes.oreWashing.getRecipes(), true, aRecipeMetaData, null, null, null);
             return GT_Utility.arrayContainsNonNull(tOutputItems) ? new GT_Recipe(false, new ItemStack[]{GT_Utility.copyAmount(aInputs[0].stackSize - tComparedInput.stackSize, aInputs[0])}, tOutputItems, null, null, new FluidStack[]{new FluidStack(aFluids[0].getFluid(), ((NBTTagCompound) aRecipeMetaData.getTag("return")).getInteger("amount"))}, null, 400, 16, 0) : null;
@@ -1334,7 +1334,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 if (D1) GT_Log.err.println("Railcraft Not loaded");
             } catch (NullPointerException e) {/**/}
 
-            ItemStack tComparedInput = GT_Utility.copy(aInputs[0]);
+            ItemStack tComparedInput = GT_Utility.copyOrNull(aInputs[0]);
             ItemStack[] tOutputItems = GT_ModHandler.getMachineOutput(tComparedInput, ic2.api.recipe.Recipes.macerator.getRecipes(), true, new NBTTagCompound(), null, null, null);
             return GT_Utility.arrayContainsNonNull(tOutputItems) ? new GT_Recipe(false, new ItemStack[]{GT_Utility.copyAmount(aInputs[0].stackSize - tComparedInput.stackSize, aInputs[0])}, tOutputItems, null, null, null, null, 400, 2, 0) : null;
         }
@@ -1823,13 +1823,13 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 	        	if (mOreDictAlt[aIndex] != null && mOreDictAlt[aIndex].length > 0) {
 	        		ItemStack[] rStacks = new ItemStack[mOreDictAlt[aIndex].length];
 	        		for (int i = 0; i < mOreDictAlt[aIndex].length; i++) {
-	        			rStacks[i] = GT_Utility.copy(mOreDictAlt[aIndex][i]);
+	        			rStacks[i] = GT_Utility.copyOrNull(mOreDictAlt[aIndex][i]);
 	        		}
 	        		return rStacks;
 	        	}
 	        }
 	        if (aIndex >= mInputs.length) return null;
-	        return GT_Utility.copy(mInputs[aIndex]);
+	        return GT_Utility.copyOrNull(mInputs[aIndex]);
 	    }
     	
     }

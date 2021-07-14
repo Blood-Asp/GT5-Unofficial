@@ -549,7 +549,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                         for (int i = getInputSlot(), j = i + mInputSlotCount; i < j; i++)
                             if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
                         for (int i = 0; i < mOutputItems.length; i++) {
-                            mOutputItems[i] = GT_Utility.copy(mOutputItems[i]);
+                            mOutputItems[i] = GT_Utility.copyOrNull(mOutputItems[i]);
                             if (mOutputItems[i] != null && mOutputItems[i].stackSize > 64)
                                 mOutputItems[i].stackSize = 64;
                             mOutputItems[i] = GT_OreDictUnificator.get(true, mOutputItems[i]);

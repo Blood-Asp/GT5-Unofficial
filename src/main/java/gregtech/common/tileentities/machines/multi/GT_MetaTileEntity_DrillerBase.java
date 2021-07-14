@@ -207,7 +207,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_Mu
             if (!storedItem.isItemEqual(miningPipe)) continue;
 
             if (pipes == null) {
-                setInventorySlotContents(1, GT_Utility.copy(miningPipe));
+                setInventorySlotContents(1, GT_Utility.copyOrNull(miningPipe));
                 pipes = getStackInSlot(1);
             }
 
