@@ -90,6 +90,7 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -1648,6 +1649,12 @@ public class GT_Utility {
 
     public static ItemStack copy(Object... aStacks) {
         for (Object tStack : aStacks) if (isStackValid(tStack)) return ((ItemStack) tStack).copy();
+        return null;
+    }
+
+    @Nullable
+    public static ItemStack copyOrNull(@Nullable ItemStack stack) {
+        if (isStackValid(stack)) return stack.copy();
         return null;
     }
 
