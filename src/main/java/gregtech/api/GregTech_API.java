@@ -426,7 +426,7 @@ public class GregTech_API {
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
+        if (aBlock == null)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -438,7 +438,7 @@ public class GregTech_API {
      * Like above but with boolean Parameters instead of a BitMask
      */
     public static boolean registerMachineBlock(Block aBlock, boolean... aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock) || aMeta == null || aMeta.length == 0)
+        if (aBlock == null || aMeta == null || aMeta.length == 0)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -452,9 +452,11 @@ public class GregTech_API {
      * if this Block is a Machine Update Conducting Block
      */
     public static boolean isMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
-            return false;
-        return (sMachineIDs.containsKey(aBlock) && (sMachineIDs.get(aBlock) & B[aMeta]) != 0);
+        if (aBlock != null) {
+            Integer id = sMachineIDs.get(aBlock);
+            return id != null && (id & B[aMeta]) != 0;
+        }
+        return false;
     }
 
     /**

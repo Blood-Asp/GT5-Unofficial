@@ -1286,6 +1286,7 @@ public class GT_Utility {
         return rList;
     }
 
+    @Deprecated // why do you use Objects?
     public static Block getBlock(Object aBlock) {
         return (Block) aBlock;
     }
@@ -1299,12 +1300,14 @@ public class GT_Utility {
         return Block.getBlockFromItem(item);
     }
 
+    @Deprecated // why do you use Objects? And if you want to check your block to be not null, check it directly!
     public static boolean isBlockValid(Object aBlock) {
         return (aBlock instanceof Block);
     }
 
+    @Deprecated // why do you use Objects? And if you want to check your block to be null, check it directly!
     public static boolean isBlockInvalid(Object aBlock) {
-        return aBlock == null || !(aBlock instanceof Block);
+        return !(aBlock instanceof Block);
     }
 
     public static boolean isStringValid(Object aString) {
