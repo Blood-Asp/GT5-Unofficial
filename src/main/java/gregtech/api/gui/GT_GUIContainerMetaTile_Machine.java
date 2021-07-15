@@ -27,7 +27,9 @@ public class GT_GUIContainerMetaTile_Machine extends GT_GUIContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
-        if (GregTech_API.sColoredGUI && mContainer != null && mContainer.mTileEntity != null) {
+        if (GregTech_API.sMachineMetalGUI) {
+            GL11.glColor3ub((byte) Dyes.MACHINE_METAL.mRGBa[0], (byte) Dyes.MACHINE_METAL.mRGBa[1], (byte) Dyes.MACHINE_METAL.mRGBa[2]);
+        } else if (GregTech_API.sColoredGUI && mContainer != null && mContainer.mTileEntity != null) {
             byte colorByte = mContainer.mTileEntity.getColorization();
             Dyes color;
             if (colorByte != -1)
@@ -35,7 +37,8 @@ public class GT_GUIContainerMetaTile_Machine extends GT_GUIContainer {
             else
                 color = Dyes.MACHINE_METAL;
             GL11.glColor3ub((byte) color.mRGBa[0], (byte) color.mRGBa[1], (byte) color.mRGBa[2]);
-        } else
+        } else {
             GL11.glColor3ub((byte) 255, (byte) 255, (byte) 255);
+        }
     }
 }

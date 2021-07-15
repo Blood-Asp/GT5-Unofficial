@@ -277,6 +277,7 @@ public class GregTech_API {
             sMultiThreadedSounds = false,
             sDoShowAllItemsInCreative = false,
             sColoredGUI = true,
+            sMachineMetalGUI = false,
             sConstantEnergy = true,
             sMachineExplosions = true,
             sMachineFlammable = true,
