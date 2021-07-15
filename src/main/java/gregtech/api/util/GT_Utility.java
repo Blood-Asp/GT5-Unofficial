@@ -108,7 +108,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -999,6 +998,10 @@ public class GT_Utility {
     }
 
     public static ItemStack getFluidDisplayStack(FluidStack aFluid, boolean aUseStackSize) {
+        return getFluidDisplayStack(aFluid, aUseStackSize, false);
+    }
+
+    public static ItemStack getFluidDisplayStack(FluidStack aFluid, boolean aUseStackSize, boolean aHideStackSize) {
         if (aFluid == null || aFluid.getFluid() == null) return null;
         int tmp = 0;
         try {
@@ -1011,6 +1014,7 @@ public class GT_Utility {
         tNBT.setLong("mFluidDisplayAmount", aUseStackSize ? aFluid.amount : 0);
         tNBT.setLong("mFluidDisplayHeat", aFluid.getFluid().getTemperature(aFluid));
         tNBT.setBoolean("mFluidState", aFluid.getFluid().isGaseous(aFluid));
+        tNBT.setBoolean("mHideStackSize", aHideStackSize);
         rStack.setTagCompound(tNBT);
         return rStack;
     }
