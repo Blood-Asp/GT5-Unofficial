@@ -81,7 +81,7 @@ public class GT_Container_Regulator extends GT_ContainerMetaTile_Machine {
             if ((aSlotIndex < 19)) {
                 ItemStack tStack = aPlayer.inventory.getItemStack();
                 if (tStack != null) {
-                    tSlot.putStack(GT_Utility.copy(new Object[]{tStack}));
+                    tSlot.putStack(GT_Utility.copyOrNull(tStack));
                 } else if (tSlot.getStack() != null) {
                     if (aMouseclick == 0) {
                         tSlot.getStack().stackSize -= (aShifthold == 1 ? 8 : 1);

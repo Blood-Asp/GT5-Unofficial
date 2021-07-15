@@ -345,7 +345,7 @@ public class GT_Entity_Arrow extends EntityArrow {
     }
 
     public ItemStack getArrowItem() {
-        return GT_Utility.copy(this.mArrow);
+        return GT_Utility.copyOrNull(this.mArrow);
     }
 
     public void setArrowItem(ItemStack aStack) {

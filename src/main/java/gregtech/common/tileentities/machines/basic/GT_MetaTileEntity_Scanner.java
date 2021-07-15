@@ -86,7 +86,7 @@ public class GT_MetaTileEntity_Scanner extends GT_MetaTileEntity_BasicMachine {
                     if (tIndividual != null) {
                         if (tIndividual.analyze()) {
                             getFillableStack().amount -= 100;
-                            this.mOutputItems[0] = GT_Utility.copy(aStack);
+                            this.mOutputItems[0] = GT_Utility.copyOrNull(aStack);
                             aStack.stackSize = 0;
                             NBTTagCompound tNBT = new NBTTagCompound();
                             tIndividual.writeToNBT(tNBT);
@@ -97,7 +97,7 @@ public class GT_MetaTileEntity_Scanner extends GT_MetaTileEntity_BasicMachine {
                                 return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
                             return 2;
                         }
-                        this.mOutputItems[0] = GT_Utility.copy(aStack);
+                        this.mOutputItems[0] = GT_Utility.copyOrNull(aStack);
                         aStack.stackSize = 0;
                         this.mMaxProgresstime = 1;
                         this.mEUt = 1;

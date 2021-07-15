@@ -90,7 +90,7 @@ public class Behaviour_Sonictron extends Behaviour_None {
             if (aNewContent[i] == null) {
                 aInventory[i] = null;
             } else {
-                aInventory[i] = GT_Utility.copy(aNewContent[i]);
+                aInventory[i] = GT_Utility.copyOrNull(aNewContent[i]);
             }
         }
     }

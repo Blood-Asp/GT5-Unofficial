@@ -89,7 +89,10 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -437,7 +440,7 @@ public class GT_Utility {
                         if (isAllowedToTakeFromSlot(aTileEntity1, aGrabSlot, (byte) aGrabFrom, aTileEntity1.getStackInSlot(aGrabSlot))) {
                             if (Math.max(aMinMoveAtOnce, aMinTargetStackSize) <= aTileEntity1.getStackInSlot(aGrabSlot).stackSize) {
                                 ItemStack tStack = copyAmount(Math.min(aTileEntity1.getStackInSlot(aGrabSlot).stackSize, Math.min(aMaxMoveAtOnce, aMaxTargetStackSize)), aTileEntity1.getStackInSlot(aGrabSlot));
-                                ItemStack rStack = ((IItemDuct) aTileEntity2).insertItem(ForgeDirection.getOrientation(aPutTo), copy(tStack));
+                                ItemStack rStack = ((IItemDuct) aTileEntity2).insertItem(ForgeDirection.getOrientation(aPutTo), copyOrNull(tStack));
                                 byte tMovedItemCount = (byte) (tStack.stackSize - (rStack == null ? 0 : rStack.stackSize));
                                 if (tMovedItemCount >= 1/*Math.max(aMinMoveAtOnce, aMinTargetStackSize)*/) {
                                     //((cofh.api.transport.IItemConduit)aTileEntity2).insertItem(ForgeDirection.getOrientation(aPutTo), copyAmount(tMovedItemCount, tStack), F);
@@ -457,7 +460,7 @@ public class GT_Utility {
                         if (isAllowedToTakeFromSlot(aTileEntity1, aGrabSlot, (byte) aGrabFrom, aTileEntity1.getStackInSlot(aGrabSlot))) {
                             if (Math.max(aMinMoveAtOnce, aMinTargetStackSize) <= aTileEntity1.getStackInSlot(aGrabSlot).stackSize) {
                                 ItemStack tStack = copyAmount(Math.min(aTileEntity1.getStackInSlot(aGrabSlot).stackSize, Math.min(aMaxMoveAtOnce, aMaxTargetStackSize)), aTileEntity1.getStackInSlot(aGrabSlot));
-                                byte tMovedItemCount = (byte) ((buildcraft.api.transport.IPipeTile) aTileEntity2).injectItem(copy(tStack), false, ForgeDirection.getOrientation(aPutTo));
+                                byte tMovedItemCount = (byte) ((buildcraft.api.transport.IPipeTile) aTileEntity2).injectItem(copyOrNull(tStack), false, ForgeDirection.getOrientation(aPutTo));
                                 if (tMovedItemCount >= Math.max(aMinMoveAtOnce, aMinTargetStackSize)) {
                                     tMovedItemCount = (byte) (((buildcraft.api.transport.IPipeTile) aTileEntity2).injectItem(copyAmount(tMovedItemCount, tStack), true, ForgeDirection.getOrientation(aPutTo)));
                                     aTileEntity1.decrStackSize(aGrabSlot, tMovedItemCount);
@@ -508,7 +511,7 @@ public class GT_Utility {
         ItemStack tStack1 = aTileEntity1.getStackInSlot(aGrabFrom), tStack2 = aTileEntity2.getStackInSlot(aPutTo), tStack3 = null;
         if (tStack1 != null) {
             if (tStack2 != null && !areStacksEqual(tStack1, tStack2)) return 0;
-            tStack3 = copy(tStack1);
+            tStack3 = copyOrNull(tStack1);
             aMaxTargetStackSize = (byte) Math.min(aMaxTargetStackSize, Math.min(tStack3.getMaxStackSize(), Math.min(tStack2 == null ? Integer.MAX_VALUE : tStack2.getMaxStackSize(), aTileEntity2.getInventoryStackLimit())));
             tStack3.stackSize = Math.min(tStack3.stackSize, aMaxTargetStackSize - (tStack2 == null ? 0 : tStack2.stackSize));
             if (tStack3.stackSize > aMaxMoveAtOnce) tStack3.stackSize = aMaxMoveAtOnce;
@@ -517,7 +520,7 @@ public class GT_Utility {
                 aTileEntity1.markDirty();
                 if (tStack3 != null) {
                     if (tStack2 == null) {
-                        aTileEntity2.setInventorySlotContents(aPutTo, copy(tStack3));
+                        aTileEntity2.setInventorySlotContents(aPutTo, copyOrNull(tStack3));
                     } else {
                         tStack2.stackSize += tStack3.stackSize;
                     }
@@ -1150,7 +1153,7 @@ public class GT_Utility {
         	if(tOreName.toString().equals("dustAsh")&&tStack[0].getUnlocalizedName().equals("tile.volcanicAsh"))return false;
             aRecipeList.put(new RecipeInputOreDict(tOreName.toString(), aInput.stackSize), new RecipeOutput(aNBT, tStack));
         } else {
-            aRecipeList.put(new RecipeInputItemStack(copy(aInput), aInput.stackSize), new RecipeOutput(aNBT, tStack));
+            aRecipeList.put(new RecipeInputItemStack(copyOrNull(aInput), aInput.stackSize), new RecipeOutput(aNBT, tStack));
         }
         return true;
     }
@@ -1194,7 +1197,7 @@ public class GT_Utility {
         rStack.setTagCompound(tNBT);
         GT_Log.out.println("GT_Mod: Added Book to Book List  -  Mapping: '" + aMapping + "'  -  Name: '" + aTitle + "'  -  Author: '" + aAuthor + "'");
         GregTech_API.sBookList.put(aMapping, rStack);
-        return copy(rStack);
+        return copyOrNull(rStack);
     }
 
     public static boolean doSoundAtClient(String aSoundName, int aTimeUntilNextSound, float aSoundStrength) {
@@ -1652,6 +1655,12 @@ public class GT_Utility {
 
     public static ItemStack copy(Object... aStacks) {
         for (Object tStack : aStacks) if (isStackValid(tStack)) return ((ItemStack) tStack).copy();
+        return null;
+    }
+
+    @Nullable
+    public static ItemStack copyOrNull(@Nullable ItemStack stack) {
+        if (isStackValid(stack)) return stack.copy();
         return null;
     }
 

@@ -741,7 +741,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public boolean addOutput(ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return false;
-        aStack = GT_Utility.copy(aStack);
+        aStack = GT_Utility.copyOrNull(aStack);
         for (GT_MetaTileEntity_Hatch_OutputBus tHatch : mOutputBusses) {
             if (isValidMetaTileEntity(tHatch) && tHatch.storeAll(aStack)) {
                 return true;

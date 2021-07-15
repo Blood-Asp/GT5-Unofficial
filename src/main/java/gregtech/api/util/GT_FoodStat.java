@@ -36,7 +36,7 @@ public class GT_FoodStat implements IFoodStat {
         mSaturation = aSaturation;
         mAction = aAction == null ? EnumAction.eat : aAction;
         mPotionEffects = aPotionEffects;
-        mEmptyContainer = GT_Utility.copy(aEmptyContainer);
+        mEmptyContainer = GT_Utility.copyOrNull(aEmptyContainer);
         mInvisibleParticles = aInvisibleParticles;
         mAlwaysEdible = aAlwaysEdible;
         mIsRotten = aIsRotten;
@@ -65,7 +65,7 @@ public class GT_FoodStat implements IFoodStat {
     @Override
     public void onEaten(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
         aStack.stackSize--;
-        ItemStack tStack = GT_OreDictUnificator.get(GT_Utility.copy(mEmptyContainer));
+        ItemStack tStack = GT_OreDictUnificator.get(GT_Utility.copyOrNull(mEmptyContainer));
         if (tStack != null && !aPlayer.inventory.addItemStackToInventory(tStack))
             aPlayer.dropPlayerItemWithRandomChoice(tStack, true);
 

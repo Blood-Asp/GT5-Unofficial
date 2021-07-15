@@ -282,7 +282,7 @@ public abstract class GT_MetaTileEntity_PrimitiveBlastFurnace extends MetaTileEn
         for (int i = 0; i < limit; i++) {
             int absi = INPUT_SLOTS + i;
             if (this.mInventory[absi] == null) {
-                this.mInventory[absi] = GT_Utility.copy(this.mOutputItems[i]);
+                this.mInventory[absi] = GT_Utility.copyOrNull(this.mOutputItems[i]);
             } else if (GT_Utility.areStacksEqual(this.mInventory[absi], this.mOutputItems[i])) {
                 this.mInventory[absi].stackSize = Math.min(this.mInventory[absi].getMaxStackSize(),
                         this.mInventory[absi].stackSize + this.mOutputItems[i].stackSize);
