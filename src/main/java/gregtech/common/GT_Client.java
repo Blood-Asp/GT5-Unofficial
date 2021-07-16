@@ -82,7 +82,7 @@ public class GT_Client extends GT_Proxy
     public static final String GT_CAPE_LIST_URL = "http://gregtech.overminddl1.com/com/gregoriust/gregtech/supporterlist.txt";
     private static final List<Block> ROTATABLE_VANILLA_BLOCKS;
 
-    private static final int[][] GRID_SWITCH_ARR = new int[][]{
+    private static final int[][] GRID_SWITCH_TABLE = new int[][]{
             {0, 5, 3, 1, 2, 4},
             {5, 0, 1, 3, 2, 4},
             {1, 3, 0, 5, 2, 4},
@@ -149,8 +149,6 @@ public class GT_Client extends GT_Proxy
     private int mLastUpdatedBlockX;
     private int mLastUpdatedBlockY;
     private int mLastUpdatedBlockZ;
-    private boolean isFirstClientPlayerTick;
-    private String mMessage;
     private GT_ClientPreference mPreference;
     private boolean mFirstTick = false;
     public static final int ROTATION_MARKER_RESOLUTION = 120;
@@ -159,8 +157,6 @@ public class GT_Client extends GT_Proxy
         mCapeRenderer = new GT_CapeRenderer(mCapeList);
         mAnimationTick = 0L;
         mAnimationDirection = false;
-        isFirstClientPlayerTick = true;
-        mMessage = "";
         mPosR = Arrays.asList(Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
                 Materials.Pyrotheum, Materials.Sunnarium, Materials.Glowstone, Materials.Thaumium, Materials.InfusedVis, Materials.InfusedAir, Materials.InfusedFire, Materials.FierySteel, Materials.Firestone);
         mPosG = Arrays.asList(Materials.Enderium, Materials.Vinteum, Materials.Uranium235, Materials.InfusedGold, Materials.Plutonium241, Materials.NaquadahEnriched, Materials.Naquadria, Materials.InfusedOrder, Materials.Force,
@@ -232,7 +228,7 @@ public class GT_Client extends GT_Proxy
         if (tConnections > 0) {
             for (byte i = 0; i < 6; i++) {
                 if ((tConnections & (1 << i)) != 0) {
-                    switch (GRID_SWITCH_ARR[aEvent.target.sideHit][i]) {
+                    switch (GRID_SWITCH_TABLE[aEvent.target.sideHit][i]) {
                         case 0:
                             GL11.glVertex3d(+.25D, .0D, +.25D);
                             GL11.glVertex3d(-.25D, .0D, -.25D);
