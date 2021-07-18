@@ -1,9 +1,9 @@
 package gregtech.common.tileentities.machines.multi;
 
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
@@ -17,12 +17,10 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -32,6 +30,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW;
+import static gregtech.api.util.GT_StructureUtility.ofBlockUnlocalizedName;
 import static gregtech.api.util.GT_StructureUtility.ofCoil;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
@@ -43,16 +42,11 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
     private static final IStructureDefinition<GT_MetaTileEntity_PyrolyseOven> STRUCTURE_DEFINITION = createStructureDefinition();
 
     private static IStructureDefinition<GT_MetaTileEntity_PyrolyseOven> createStructureDefinition() {
-        Block casingBlock;
-        int casingMeta;
+        IStructureElement<GT_MetaTileEntity_PyrolyseOven> tCasingElement =
+                Loader.isModLoaded("dreamcraft") ?
+                        ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2) :
+                        ofBlock(GregTech_API.sBlockCasings1, 0);
 
-        if (Loader.isModLoaded("dreamcraft")) {
-            casingBlock = GameRegistry.findBlock("dreamcraft", "gt.blockcasingsNH");
-            casingMeta = 2;
-        } else {
-            casingBlock = GregTech_API.sBlockCasings1;
-            casingMeta = 0;
-        }
         return StructureDefinition.<GT_MetaTileEntity_PyrolyseOven>builder()
                 .addShape("main", transpose(new String[][]{
                         {"ccccc", "ctttc", "ctttc", "ctttc", "ccccc"},
@@ -60,18 +54,18 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
                         {"ccccc", "c---c", "c---c", "c---c", "ccccc"},
                         {"bb~bb", "bCCCb", "bCCCb", "bCCCb", "bbbbb"},
                 }))
-                .addElement('c', onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, ofBlock(casingBlock, casingMeta)))
+                .addElement('c', onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, tCasingElement))
                 .addElement('C', ofCoil(GT_MetaTileEntity_PyrolyseOven::setCoilLevel, GT_MetaTileEntity_PyrolyseOven::getCoilLevel))
                 .addElement('b', ofChain(
                         ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addMaintenanceToMachineList, CASING_INDEX, 1),
                         ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addOutputToMachineList, CASING_INDEX, 1),
                         ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addEnergyInputToMachineList, CASING_INDEX, 1),
-                        onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, ofBlock(casingBlock, casingMeta))
+                        onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, tCasingElement)
                 ))
                 .addElement('t', ofChain(
                         ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addInputToMachineList, CASING_INDEX, 1),
                         ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addMufflerToMachineList, CASING_INDEX, 1),
-                        onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, ofBlock(casingBlock, casingMeta))
+                        onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, tCasingElement)
                 ))
                 .build();
     }

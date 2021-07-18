@@ -3,6 +3,7 @@ package gregtech.api.util;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.IStructureElementNoPlacement;
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.IHeatingCoil;
@@ -12,12 +13,11 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-
-import static com.gtnewhorizon.structurelib.StructureLibAPI.HINT_BLOCK_META_GENERIC_11;
 
 public class GT_StructureUtility {
 	private GT_StructureUtility() {
@@ -130,6 +130,39 @@ public class GT_StructureUtility {
 			@Override
 			public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
 				return world.setBlock(x, y, z, GregTech_API.sBlockCasings5, getMeta(trigger), 3);
+			}
+		};
+	}
+
+	public static <T> IStructureElement<T> ofBlockUnlocalizedName(String modid, String unlocalizedName, int meta) {
+		if (StringUtils.isBlank(unlocalizedName)) throw new IllegalArgumentException();
+		if (meta < 0) throw new IllegalArgumentException();
+		if (meta > 15) throw new IllegalArgumentException();
+		if (StringUtils.isBlank(modid)) throw new IllegalArgumentException();
+		return new IStructureElement<T>() {
+			private Block block;
+
+			private Block getBlock() {
+				if (block == null)
+					block = GameRegistry.findBlock(modid, unlocalizedName);
+				return block;
+			}
+
+			@Override
+			public boolean check(T t, World world, int x, int y, int z) {
+				return world.getBlock(x, y, z) != getBlock() && world.getBlockMetadata(x, y, z) == meta;
+			}
+
+			@Override
+			public boolean spawnHint(T t, World world, int x, int y, int z, ItemStack trigger) {
+				StructureLibAPI.hintParticle(world, x, y, z, getBlock(), meta);
+				return true;
+			}
+
+			@Override
+			public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
+				world.setBlock(x, y, z, getBlock(), meta, 2);
+				return true;
 			}
 		};
 	}
