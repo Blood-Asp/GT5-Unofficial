@@ -124,45 +124,13 @@ public class GT_StructureUtility {
 			}
 
 			private int getMeta(ItemStack trigger) {
-				return GT_Block_Casings5.getMetaFromCoilHeat(HeatingCoilLevel.getFromTier((byte) Math.min(HeatingCoilLevel.size(), Math.max(0, trigger.stackSize))));
+				// -4 to skip unimplemented tiers
+				return GT_Block_Casings5.getMetaFromCoilHeat(HeatingCoilLevel.getFromTier((byte) Math.min(HeatingCoilLevel.getMaxTier() - 4, Math.max(0, trigger.stackSize))));
 			}
 
 			@Override
 			public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
 				return world.setBlock(x, y, z, GregTech_API.sBlockCasings5, getMeta(trigger), 3);
-			}
-		};
-	}
-
-	public static <T> IStructureElement<T> ofBlockUnlocalizedName(String modid, String unlocalizedName, int meta) {
-		if (StringUtils.isBlank(unlocalizedName)) throw new IllegalArgumentException();
-		if (meta < 0) throw new IllegalArgumentException();
-		if (meta > 15) throw new IllegalArgumentException();
-		if (StringUtils.isBlank(modid)) throw new IllegalArgumentException();
-		return new IStructureElement<T>() {
-			private Block block;
-
-			private Block getBlock() {
-				if (block == null)
-					block = GameRegistry.findBlock(modid, unlocalizedName);
-				return block;
-			}
-
-			@Override
-			public boolean check(T t, World world, int x, int y, int z) {
-				return world.getBlock(x, y, z) != getBlock() && world.getBlockMetadata(x, y, z) == meta;
-			}
-
-			@Override
-			public boolean spawnHint(T t, World world, int x, int y, int z, ItemStack trigger) {
-				StructureLibAPI.hintParticle(world, x, y, z, getBlock(), meta);
-				return true;
-			}
-
-			@Override
-			public boolean placeBlock(T t, World world, int x, int y, int z, ItemStack trigger) {
-				world.setBlock(x, y, z, getBlock(), meta, 2);
-				return true;
 			}
 		};
 	}
