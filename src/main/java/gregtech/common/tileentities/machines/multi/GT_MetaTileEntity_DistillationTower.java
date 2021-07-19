@@ -53,14 +53,14 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                     onElementPass(GT_MetaTileEntity_DistillationTower::onCasingFound, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('l', ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_DistillationTower::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_DistillationTower::addEnergyInputToMachineList, CASING_INDEX, 2),
                     ofHatchAdder(GT_MetaTileEntity_DistillationTower::addLayerOutputHatch, CASING_INDEX, 2),
-                    ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 2),
                     onElementPass(GT_MetaTileEntity_DistillationTower::onCasingFound, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('c', ofChain(
-                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addOutputToMachineList, CASING_INDEX, 1)),
-                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 1)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addOutputToMachineList, CASING_INDEX, 3)),
+                    onElementPass(t -> t.onTopLayerFound(false), ofHatchAdder(GT_MetaTileEntity_DistillationTower::addMaintenanceToMachineList, CASING_INDEX, 3)),
                     onElementPass(t -> t.onTopLayerFound(true), ofBlock(GregTech_API.sBlockCasings4, 1)),
                     isAir()
             ))
@@ -94,11 +94,11 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
                 .beginVariableStructureBlock(3, 3, 3, 12, 3, 3, true)
                 .addController("Front bottom")
                 .addOtherStructurePart("Clean Stainless Steel Machine Casing", "7 x h - 5 (minimum)")
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addInputHatch("Any bottom layer casing")
-                .addOutputBus("Any bottom layer casing")
-                .addOutputHatch("2-11x Output Hatches (At least one per layer except bottom layer)")
+                .addEnergyHatch("Any casing", 1, 2)
+                .addMaintenanceHatch("Any casing", 1, 2, 3)
+                .addInputHatch("Any bottom layer casing", 1)
+                .addOutputBus("Any bottom layer casing", 1)
+                .addOutputHatch("2-11x Output Hatches (At least one per layer except bottom layer)", 2, 3)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

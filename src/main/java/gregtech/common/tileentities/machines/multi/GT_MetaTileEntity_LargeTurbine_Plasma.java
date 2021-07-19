@@ -53,10 +53,10 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Tungstensteel Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addInputHatch("Plasma Fluid, Side centered")
-                .addOutputHatch("Molten Fluid, optional, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addInputHatch("Plasma Fluid, Side centered", 2)
+                .addOutputHatch("Molten Fluid, optional, Side centered", 2)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

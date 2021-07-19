@@ -47,10 +47,10 @@ public class GT_MetaTileEntity_VacuumFreezer extends GT_MetaTileEntity_CubicMult
                 .beginStructureBlock(3, 3, 3, true)
                 .addController("Front center")
                 .addCasingInfo("Frost Proof Machine Casing", 16)
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addInputBus("Any casing")
-                .addOutputBus("Any casing")
+                .addEnergyHatch("Any casing", 1)
+                .addMaintenanceHatch("Any casing", 1)
+                .addInputBus("Any casing", 1)
+                .addOutputBus("Any casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

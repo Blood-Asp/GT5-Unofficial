@@ -76,12 +76,12 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
                 .beginStructureBlock(3, 3, 3, true)
                 .addController("Front center")
                 .addCasingInfo("Robust Tungstensteel Machine Casing", 14)
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addInputBus("Any casing")
-                .addInputHatch("Any casing")
-                .addOutputBus("Any casing")
-                .addOutputHatch("Any casing")
+                .addEnergyHatch("Any casing", 1)
+                .addMaintenanceHatch("Any casing", 1)
+                .addInputBus("Any casing", 1)
+                .addInputHatch("Any casing", 1)
+                .addOutputBus("Any casing", 1)
+                .addOutputHatch("Any casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

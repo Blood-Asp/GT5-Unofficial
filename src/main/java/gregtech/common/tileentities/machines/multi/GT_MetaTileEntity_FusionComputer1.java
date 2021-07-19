@@ -75,9 +75,9 @@ public class GT_MetaTileEntity_FusionComputer1 extends GT_MetaTileEntity_FusionC
                 .addCasingInfo("LuV Machine Casing", 79)
                 .addStructureInfo("Cover the coils with casing")
                 .addOtherStructurePart("Superconducting Coil Block", "Center part of the ring")
-                .addEnergyHatch("1-16, Specified casings")
-                .addInputHatch("2-16, Specified casings")
-                .addOutputHatch("1-16, Specified casings")
+                .addEnergyHatch("1-16, Specified casings", 2)
+                .addInputHatch("2-16, Specified casings", 1)
+                .addOutputHatch("1-16, Specified casings", 3)
                 .addStructureInfo("ALL Hatches must be LuV or better")
                 .toolTipFinisher("Gregtech");
         return tt;

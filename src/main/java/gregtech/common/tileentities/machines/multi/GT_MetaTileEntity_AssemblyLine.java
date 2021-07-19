@@ -69,18 +69,18 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
             .addElement('m', ofBlock(GregTech_API.sBlockCasings2, 5)) // assembling line casing
             .addElement('g', ofBlockAnyMeta(GameRegistry.findBlock("IC2", "blockAlloyGlass")))
             .addElement('e', ofHatchAdderOptional(GT_MetaTileEntity_AssemblyLine::addEnergyInputToMachineList, 16, 1, GregTech_API.sBlockCasings2, 0))
-            .addElement('d', ofHatchAdderOptional(GT_MetaTileEntity_AssemblyLine::addDataAccessToMachineList, 42, 1, GregTech_API.sBlockCasings3, 10))
+            .addElement('d', ofHatchAdderOptional(GT_MetaTileEntity_AssemblyLine::addDataAccessToMachineList, 42, 2, GregTech_API.sBlockCasings3, 10))
             .addElement('b', ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addMaintenanceToMachineList, 16, 2),
-                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputHatchToMachineList, 16, 2),
+                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addMaintenanceToMachineList, 16, 3),
+                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputHatchToMachineList, 16, 3),
                     ofBlock(GregTech_API.sBlockCasings2, 0)
             ))
             .addElement('I', ofChain(
                     // all blocks nearby use solid steel casing, so let's use the texture of that
-                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputToMachineList, 16, 2),
-                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addOutputToMachineList, 16, 2)
+                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputToMachineList, 16, 4),
+                    ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addOutputToMachineList, 16,4)
             ))
-            .addElement('i', ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputToMachineList, 16, 2))
+            .addElement('i', ofHatchAdder(GT_MetaTileEntity_AssemblyLine::addInputToMachineList, 16, 5))
             .build();
 
     public GT_MetaTileEntity_AssemblyLine(int aID, String aName, String aNameRegional) {
@@ -111,15 +111,14 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
                 .addStructureInfo("Layer 3 - Grate Machine Casing, Assembler Machine Casing, Grate Machine Casing")
                 .addStructureInfo("Layer 4 - Empty, Solid Steel Machine Casing, Empty")
                 .addStructureInfo("Up to 16 repeating slices, each one allows for 1 more item in recipes, aside from the last")
-                .addStructureInfo("Optional - Replace 1x Grate with (Advanced) Data Access Hatch next to the Controller")
-                .addStructureInfo("Optional - Replace 1x Grate with (Advanced) Data Access Hatch next to the Controller")//TT
 
                 .addController("Either Grate on layer 3 of the first slice")
-                .addEnergyHatch("Any layer 4 casing")
-                .addMaintenanceHatch("Any layer 1 casing")
-                .addInputBus("As specified on layer 1")
-                .addInputHatch("Any layer 1 casing")
-                .addOutputBus("Replaces Input Bus on final slice")
+                .addEnergyHatch("Any layer 4 casing", 1)
+                .addMaintenanceHatch("Any layer 1 casing", 3)
+                .addInputBus("As specified on layer 1", 4, 5)
+                .addInputHatch("Any layer 1 casing", 3)
+                .addOutputBus("Replaces Input Bus on final slice", 4)
+                .addOtherStructurePart("Data Access Hatch", "Optional, next to controller", 2)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

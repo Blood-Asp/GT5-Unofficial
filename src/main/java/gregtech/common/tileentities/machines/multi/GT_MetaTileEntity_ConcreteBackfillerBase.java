@@ -39,11 +39,11 @@ public abstract class GT_MetaTileEntity_ConcreteBackfillerBase extends GT_MetaTi
 		.addStructureInfo(casings + " form the 3x1x3 Base")
 		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
 		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
-		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
-		.addMaintenanceHatch("Any base casing")
-		.addInputBus("Mining Pipes, optional, any base casing")
-		.addInputHatch("GT Concrete, any base casing")
-		.addOutputBus("Mining Pipes, optional, any base casing")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing", 1)
+		.addMaintenanceHatch("Any base casing", 1)
+		.addInputBus("Mining Pipes, optional, any base casing", 1)
+		.addInputHatch("GT Concrete, any base casing", 1)
+		.addOutputBus("Mining Pipes, optional, any base casing", 1)
 		.toolTipFinisher("Gregtech");
 		return tt;
     }

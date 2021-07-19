@@ -6,7 +6,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.item.ItemStack;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -16,7 +16,8 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
  * A simple 3x3x3 hollow cubic multiblock, that can be arbitrarily rotated, made of a single type of machine casing and accepts hatches everywhere.
  * Controller will be placed in front center of the structure.
  * <p>
- * Note: You cannot use different casing for the same Class. Make a new subclass for it.
+ * Note: You cannot use different casing for the same Class. Make a new subclass for it. You also should not change the casing
+ * dynamically, i.e. it should be a dumb method returning some sort of constant.
  * <p>
  * Implementation tips:
  * 1. To restrict hatches, override {@link #addDynamoToMachineList(IGregTechTileEntity, int)} and its cousins instead of overriding the whole
@@ -28,20 +29,25 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
  */
 public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTileEntity_CubicMultiBlockBase<T>> extends GT_MetaTileEntity_EnhancedMultiBlockBase<T> {
 	protected static final String STRUCTURE_PIECE_MAIN = "main";
-	protected static final IStructureDefinition<GT_MetaTileEntity_CubicMultiBlockBase<?>> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_CubicMultiBlockBase<?>>builder()
-			.addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-					{"hhh", "hhh", "hhh"},
-					{"h-h", "hhh", "hhh"},
-					{"hhh", "hhh", "hhh"},
-			}))
-			.addElement('h', ofChain(
-					defer(t -> ofHatchAdder(GT_MetaTileEntity_CubicMultiBlockBase::addToMachineList, t.getHatchTextureIndex(), 1)),
-					onElementPass(
-							GT_MetaTileEntity_CubicMultiBlockBase::onCorrectCasingAdded,
-							defer(GT_MetaTileEntity_CubicMultiBlockBase::getCasingElement)
-					)
-			))
-			.build();
+	protected static final ClassValue<IStructureDefinition<GT_MetaTileEntity_CubicMultiBlockBase<?>>> STRUCTURE_DEFINITION = new ClassValue<IStructureDefinition<GT_MetaTileEntity_CubicMultiBlockBase<?>>>() {
+		@Override
+		protected IStructureDefinition<GT_MetaTileEntity_CubicMultiBlockBase<?>> computeValue(Class<?> type) {
+			return StructureDefinition.<GT_MetaTileEntity_CubicMultiBlockBase<?>>builder()
+					.addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+							{"hhh", "hhh", "hhh"},
+							{"h-h", "hhh", "hhh"},
+							{"hhh", "hhh", "hhh"},
+					}))
+					.addElement('h', ofChain(
+							lazy(t -> ofHatchAdder(GT_MetaTileEntity_CubicMultiBlockBase::addToMachineList, t.getHatchTextureIndex(), 1)),
+							onElementPass(
+									GT_MetaTileEntity_CubicMultiBlockBase::onCorrectCasingAdded,
+									lazy(GT_MetaTileEntity_CubicMultiBlockBase::getCasingElement)
+							)
+					))
+					.build();
+		}
+	};
 	private int mCasingAmount = 0;
 
 	protected GT_MetaTileEntity_CubicMultiBlockBase(int aID, String aName, String aNameRegional) {

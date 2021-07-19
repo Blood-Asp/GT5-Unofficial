@@ -57,10 +57,10 @@ public class GT_MetaTileEntity_LargeTurbine_Steam extends GT_MetaTileEntity_Larg
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addInputHatch("Steam, Side centered")
-                .addOutputHatch("Distilled Water, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addInputHatch("Steam, Side centered", 2)
+                .addOutputHatch("Distilled Water, Side centered", 2)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

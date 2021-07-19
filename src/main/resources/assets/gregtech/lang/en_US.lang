@@ -18,7 +18,27 @@ GT5U.MBTT.Causes=Causes
 GT5U.MBTT.PPS=pollution per second
 GT5U.MBTT.Hold=Hold
 GT5U.MBTT.Display=to display structure guidelines
+GT5U.MBTT.StructureHint=Some blocks have multiple candidates or can use any tier
 GT5U.MBTT.Mod=Added by
+GT5U.MBTT.Air=Mandatory Air
+GT5U.MBTT.Dots.0=No Dot
+GT5U.MBTT.Dots.1=Dot 1
+GT5U.MBTT.Dots.2=Dot 2
+GT5U.MBTT.Dots.3=Dot 3
+GT5U.MBTT.Dots.4=Dot 4
+GT5U.MBTT.Dots.5=Dot 5
+GT5U.MBTT.Dots.6=Dot 6
+GT5U.MBTT.Dots.7=Dot 7
+GT5U.MBTT.Dots.8=Dot 8
+GT5U.MBTT.Dots.9=Dot 9
+GT5U.MBTT.Dots.10=Dot 10
+GT5U.MBTT.Dots.11=Dot 11
+GT5U.MBTT.Dots.12=Dot 12
+GT5U.MBTT.Dots.13=Dot 13
+GT5U.MBTT.Dots.14=Dot 14
+GT5U.MBTT.Dots.15=Dot 15
+
+GT5U.cracker.io_side=Input/Output Hatches must be on opposite sides!
 
 GT5U.turbine.running.true=Turbine running
 GT5U.turbine.running.false=Turbine stopped

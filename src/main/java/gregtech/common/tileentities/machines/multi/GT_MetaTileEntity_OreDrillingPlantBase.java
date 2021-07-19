@@ -350,11 +350,11 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 		.addStructureInfo(casings + " form the 3x1x3 Base")
 		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
 		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
-		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
-		.addMaintenanceHatch("Any base casing")
-		.addInputBus("Mining Pipes, optional, any base casing")
-		.addInputHatch("Drilling Fluid, any base casing")
-		.addOutputBus("Any base casing")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing", 1)
+		.addMaintenanceHatch("Any base casing", 1)
+		.addInputBus("Mining Pipes, optional, any base casing", 1)
+		.addInputHatch("Drilling Fluid, any base casing", 1)
+		.addOutputBus("Any base casing", 1)
 		.toolTipFinisher("Gregtech");
 		return tt;
     }

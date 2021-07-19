@@ -30,7 +30,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -48,27 +48,32 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
     private static final Block miningPipeBlock = GT_Utility.getBlockFromStack(miningPipe);
     private static final Block miningPipeTipBlock = GT_Utility.getBlockFromStack(miningPipeTip);
     protected static final String STRUCTURE_PIECE_MAIN = "main";
-    protected static final IStructureDefinition<GT_MetaTileEntity_DrillerBase> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_DrillerBase>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {"   ", " f ", "   "},
-                    {"   ", " f ", "   "},
-                    {"   ", " f ", "   "},
-                    {" f ", "fcf", " f "},
-                    {" f ", "fcf", " f "},
-                    {" f ", "fcf", " f "},
-                    {"b~b", "bbb", "bbb"},
-            }))
-            .addElement('f', defer(t -> ofBlock(GregTech_API.sBlockMachines, t.frameMeta)))
-            .addElement('c', defer(t -> ofBlock(t.casingBlock, t.casingMeta)))
-            .addElement('b', defer(t -> ofChain(
-                    ofBlock(t.casingBlock, t.casingMeta),
-                    ofHatchAdder(GT_MetaTileEntity_DrillerBase::addMaintenanceToMachineList, t.casingTextureIndex, 1),
-                    ofHatchAdder(GT_MetaTileEntity_DrillerBase::addInputToMachineList, t.casingTextureIndex, 1),
-                    ofHatchAdder(GT_MetaTileEntity_DrillerBase::addOutputToMachineList, t.casingTextureIndex, 1),
-                    ofHatchAdder(GT_MetaTileEntity_DrillerBase::addEnergyInputToMachineList, t.casingTextureIndex, 1),
-                    ofHatchAdder(GT_MetaTileEntity_DrillerBase::addDataAccessToMachineList, t.casingTextureIndex, 1)
-            )))
-            .build();
+    protected static final ClassValue<IStructureDefinition<GT_MetaTileEntity_DrillerBase>> STRUCTURE_DEFINITION = new ClassValue<IStructureDefinition<GT_MetaTileEntity_DrillerBase>>() {
+        @Override
+        protected IStructureDefinition<GT_MetaTileEntity_DrillerBase> computeValue(Class<?> type) {
+            return StructureDefinition.<GT_MetaTileEntity_DrillerBase>builder()
+                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                            {"   ", " f ", "   "},
+                            {"   ", " f ", "   "},
+                            {"   ", " f ", "   "},
+                            {" f ", "fcf", " f "},
+                            {" f ", "fcf", " f "},
+                            {" f ", "fcf", " f "},
+                            {"b~b", "bbb", "bbb"},
+                    }))
+                    .addElement('f', lazy(t -> ofBlock(GregTech_API.sBlockMachines, t.frameMeta)))
+                    .addElement('c', lazy(t -> ofBlock(t.casingBlock, t.casingMeta)))
+                    .addElement('b', lazy(t -> ofChain(
+                            ofBlock(t.casingBlock, t.casingMeta),
+                            ofHatchAdder(GT_MetaTileEntity_DrillerBase::addMaintenanceToMachineList, t.casingTextureIndex, 1),
+                            ofHatchAdder(GT_MetaTileEntity_DrillerBase::addInputToMachineList, t.casingTextureIndex, 1),
+                            ofHatchAdder(GT_MetaTileEntity_DrillerBase::addOutputToMachineList, t.casingTextureIndex, 1),
+                            ofHatchAdder(GT_MetaTileEntity_DrillerBase::addEnergyInputToMachineList, t.casingTextureIndex, 1),
+                            ofHatchAdder(GT_MetaTileEntity_DrillerBase::addDataAccessToMachineList, t.casingTextureIndex, 1)
+                    )))
+                    .build();
+        }
+    };
 
     private Block casingBlock;
     private int casingMeta;
@@ -355,7 +360,7 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
 
     @Override
     public final IStructureDefinition<GT_MetaTileEntity_DrillerBase> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
+        return STRUCTURE_DEFINITION.get(getClass());
     }
 
     @Override

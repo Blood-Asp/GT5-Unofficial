@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_FUSION_GLASS;
@@ -39,66 +39,71 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
 public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_FusionComputer> {
     public static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final IStructureDefinition<GT_MetaTileEntity_FusionComputer> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_FusionComputer>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {
-                            "               ",
-                            "      ihi      ",
-                            "    hh   hh    ",
-                            "   h       h   ",
-                            "  h         h  ",
-                            "  h         h  ",
-                            " i           i ",
-                            " h           h ",
-                            " i           i ",
-                            "  h         h  ",
-                            "  h         h  ",
-                            "   h       h   ",
-                            "    hh   hh    ",
-                            "      ihi      ",
-                            "               ",
-                    },
-                    {
-                            "      xhx      ",
-                            "    hhccchh    ",
-                            "   eccxhxcce   ",
-                            "  eceh   hece  ",
-                            " hce       ech ",
-                            " hch       hch ",
-                            "xcx         xcx",
-                            "hch         hch",
-                            "xcx         xcx",
-                            " hch       hch ",
-                            " hce       ech ",
-                            "  eceh   hece  ",
-                            "   eccx~xcce   ",
-                            "    hhccchh    ",
-                            "      xhx      ",
-                    },
-                    {
-                            "               ",
-                            "      ihi      ",
-                            "    hh   hh    ",
-                            "   h       h   ",
-                            "  h         h  ",
-                            "  h         h  ",
-                            " i           i ",
-                            " h           h ",
-                            " i           i ",
-                            "  h         h  ",
-                            "  h         h  ",
-                            "   h       h   ",
-                            "    hh   hh    ",
-                            "      ihi      ",
-                            "               ",
-                    }
-            }))
-            .addElement('c', defer(t -> ofBlock(t.getFusionCoil(), t.getFusionCoilMeta())))
-            .addElement('h', defer(t -> ofBlock(t.getCasing(), t.getCasingMeta())))
-            .addElement('i', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addInjector, 53, 1, t.getCasing(), t.getCasingMeta())))
-            .addElement('e', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addEnergyInjector, 53, 1, t.getCasing(), t.getCasingMeta())))
-            .addElement('x', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addExtractor, 53, 1, t.getCasing(), t.getCasingMeta())))
-            .build();
+    private static final ClassValue<IStructureDefinition<GT_MetaTileEntity_FusionComputer>> STRUCTURE_DEFINITION = new ClassValue<IStructureDefinition<GT_MetaTileEntity_FusionComputer>>() {
+        @Override
+        protected IStructureDefinition<GT_MetaTileEntity_FusionComputer> computeValue(Class<?> type) {
+            return StructureDefinition.<GT_MetaTileEntity_FusionComputer>builder()
+                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                            {
+                                    "               ",
+                                    "      ihi      ",
+                                    "    hh   hh    ",
+                                    "   h       h   ",
+                                    "  h         h  ",
+                                    "  h         h  ",
+                                    " i           i ",
+                                    " h           h ",
+                                    " i           i ",
+                                    "  h         h  ",
+                                    "  h         h  ",
+                                    "   h       h   ",
+                                    "    hh   hh    ",
+                                    "      ihi      ",
+                                    "               ",
+                            },
+                            {
+                                    "      xhx      ",
+                                    "    hhccchh    ",
+                                    "   eccxhxcce   ",
+                                    "  eceh   hece  ",
+                                    " hce       ech ",
+                                    " hch       hch ",
+                                    "xcx         xcx",
+                                    "hch         hch",
+                                    "xcx         xcx",
+                                    " hch       hch ",
+                                    " hce       ech ",
+                                    "  eceh   hece  ",
+                                    "   eccx~xcce   ",
+                                    "    hhccchh    ",
+                                    "      xhx      ",
+                            },
+                            {
+                                    "               ",
+                                    "      ihi      ",
+                                    "    hh   hh    ",
+                                    "   h       h   ",
+                                    "  h         h  ",
+                                    "  h         h  ",
+                                    " i           i ",
+                                    " h           h ",
+                                    " i           i ",
+                                    "  h         h  ",
+                                    "  h         h  ",
+                                    "   h       h   ",
+                                    "    hh   hh    ",
+                                    "      ihi      ",
+                                    "               ",
+                            }
+                    }))
+                    .addElement('c', lazy(t -> ofBlock(t.getFusionCoil(), t.getFusionCoilMeta())))
+                    .addElement('h', lazy(t -> ofBlock(t.getCasing(), t.getCasingMeta())))
+                    .addElement('i', lazy(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addInjector, 53, 1, t.getCasing(), t.getCasingMeta())))
+                    .addElement('e', lazy(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addEnergyInjector, 53, 2, t.getCasing(), t.getCasingMeta())))
+                    .addElement('x', lazy(t -> ofHatchAdderOptional(GT_MetaTileEntity_FusionComputer::addExtractor, 53, 3, t.getCasing(), t.getCasingMeta())))
+                    .build();
+        }
+    };
     public GT_Recipe mLastRecipe;
     public int mEUStore;
 
@@ -154,7 +159,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
 
     @Override
     public IStructureDefinition<GT_MetaTileEntity_FusionComputer> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
+        return STRUCTURE_DEFINITION.get(getClass());
     }
 
     @Override

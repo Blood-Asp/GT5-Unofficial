@@ -47,10 +47,10 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_En
                     onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCasingAdded, ofBlock(GregTech_API.sBlockCasings8, 0))
             ))
             .addElement('x', ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addInputToMachineList, CASING_INDEX, 1),
-                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addOutputToMachineList, CASING_INDEX, 1),
-                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addMaintenanceToMachineList, CASING_INDEX, 1),
-                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addInputToMachineList, CASING_INDEX, 2),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addOutputToMachineList, CASING_INDEX, 2),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addMaintenanceToMachineList, CASING_INDEX, 2),
+                    ofHatchAdder(GT_MetaTileEntity_LargeChemicalReactor::addEnergyInputToMachineList, CASING_INDEX, 2),
                     onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCoilAdded, ofBlock(GregTech_API.sBlockCasings5, 0)),
                     onElementPass(GT_MetaTileEntity_LargeChemicalReactor::onCasingAdded, ofBlock(GregTech_API.sBlockCasings8, 0))
             ))
@@ -84,13 +84,13 @@ public class GT_MetaTileEntity_LargeChemicalReactor extends GT_MetaTileEntity_En
                 .addController("Front center")
                 .addCasingInfo("Chemically Inert Machine Casing", 8)
                 .addOtherStructurePart("PTFE Pipe Machine Casing", "Center")
-                .addOtherStructurePart("Cupronickel Coil Block", "Adjacent to the PTFE Pipe Machine Casing")
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addInputBus("Any casing")
-                .addInputHatch("Any casing")
-                .addOutputBus("Any casing")
-                .addOutputHatch("Any casing")
+                .addOtherStructurePart("Cupronickel Coil Block", "Adjacent to the PTFE Pipe Machine Casing", 1)
+                .addEnergyHatch("Any casing", 1, 2)
+                .addMaintenanceHatch("Any casing", 1, 2)
+                .addInputBus("Any casing", 1, 2)
+                .addInputHatch("Any casing", 1, 2)
+                .addOutputBus("Any casing", 1, 2)
+                .addOutputHatch("Any casing", 1, 2)
                 .addStructureInfo("You can have multiple hatches/busses")
                 .toolTipFinisher("Gregtech");
         return tt;

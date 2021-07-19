@@ -51,11 +51,11 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
                 .addController("Front center")
                 .addCasingInfo("Solid Steel Machine Casing", 16)
                 .addStructureInfo("Casings can be replaced with Explosion Warning Signs")
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addMufflerHatch("Any casing")
-                .addInputBus("Any casing")
-                .addOutputBus("Any casing")
+                .addEnergyHatch("Any casing", 1)
+                .addMaintenanceHatch("Any casing", 1)
+                .addMufflerHatch("Any casing", 1)
+                .addInputBus("Any casing", 1)
+                .addOutputBus("Any casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

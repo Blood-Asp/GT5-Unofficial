@@ -52,7 +52,6 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_EnhancedM
                     ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addInputToMachineList, CASING_INDEX, 1),
                     ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addOutputToMachineList, CASING_INDEX, 1),
                     ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addMaintenanceToMachineList, CASING_INDEX, 1),
-                    ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addEnergyInputToMachineList, CASING_INDEX, 1),
                     onElementPass(GT_MetaTileEntity_HeatExchanger::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, (byte) 2))
             ))
             .build();
@@ -87,11 +86,11 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_EnhancedM
                 .addController("Front bottom")
                 .addCasingInfo("Stable Titanium Machine Casing", 20)
                 .addOtherStructurePart("Titanium Pipe Casing", "Center 2 blocks")
-                .addMaintenanceHatch("Any casing")
-                .addInputHatch("Hot fluid, bottom center")
-                .addInputHatch("Distilled water, any casing")
-                .addOutputHatch("Cold fluid, top center")
-                .addOutputHatch("Steam/SH Steam, any casing")
+                .addMaintenanceHatch("Any casing", 1)
+                .addInputHatch("Hot fluid, bottom center", 2)
+                .addInputHatch("Distilled water, any casing", 1)
+                .addOutputHatch("Cold fluid, top center", 3)
+                .addOutputHatch("Steam/SH Steam, any casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

@@ -26,7 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -40,26 +40,31 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_LargeBoiler> {
     private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final IStructureDefinition<GT_MetaTileEntity_LargeBoiler> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_LargeBoiler>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {"ccc", "ccc", "ccc"},
-                    {"ccc", "cPc", "ccc"},
-                    {"ccc", "cPc", "ccc"},
-                    {"ccc", "cPc", "ccc"},
-                    {"f~f", "fff", "fff"},
-            }))
-            .addElement('P', defer(t -> ofBlock(t.getPipeBlock(), t.getPipeMeta())))
-            .addElement('c', defer(t -> ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addOutputToMachineList, t.getCasingTextureIndex(), 2),
-                    onElementPass(GT_MetaTileEntity_LargeBoiler::onCasingAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
-            )))
-            .addElement('f', defer(t -> ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMaintenanceToMachineList, t.getCasingTextureIndex(), 1),
-                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addInputToMachineList, t.getCasingTextureIndex(), 1),
-                    ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMufflerToMachineList, t.getCasingTextureIndex(), 1),
-                    onElementPass(GT_MetaTileEntity_LargeBoiler::onFireboxAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
-            )))
-            .build();
+    private static final ClassValue<IStructureDefinition<GT_MetaTileEntity_LargeBoiler>> STRUCTURE_DEFINITION =new ClassValue<IStructureDefinition<GT_MetaTileEntity_LargeBoiler>>() {
+        @Override
+        protected IStructureDefinition<GT_MetaTileEntity_LargeBoiler> computeValue(Class<?> type) {
+            return  StructureDefinition.<GT_MetaTileEntity_LargeBoiler>builder()
+                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                            {"ccc", "ccc", "ccc"},
+                            {"ccc", "cPc", "ccc"},
+                            {"ccc", "cPc", "ccc"},
+                            {"ccc", "cPc", "ccc"},
+                            {"f~f", "fff", "fff"},
+                    }))
+                    .addElement('P', lazy(t -> ofBlock(t.getPipeBlock(), t.getPipeMeta())))
+                    .addElement('c', lazy(t -> ofChain(
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addOutputToMachineList, t.getCasingTextureIndex(), 2),
+                            onElementPass(GT_MetaTileEntity_LargeBoiler::onCasingAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
+                    )))
+                    .addElement('f', lazy(t -> ofChain(
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMaintenanceToMachineList, t.getCasingTextureIndex(), 1),
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addInputToMachineList, t.getCasingTextureIndex(), 1),
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMufflerToMachineList, t.getCasingTextureIndex(), 1),
+                            onElementPass(GT_MetaTileEntity_LargeBoiler::onFireboxAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
+                    )))
+                    .build();
+        }
+    };
     private boolean firstRun = true;
     private int mSuperEfficencyIncrease = 0;
     private int integratedCircuitConfig = 0; //Steam output is reduced by 1000L per config
@@ -92,13 +97,13 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
                 .addCasingInfo(getCasingMaterial() + " " + getCasingBlockType() + " Casing", 24)//?
                 .addOtherStructurePart(getCasingMaterial() + " Fire Boxes", "Bottom layer, 3 minimum")
                 .addOtherStructurePart(getCasingMaterial() + " Pipe Casing Blocks", "Inner 3 blocks")
-                .addMaintenanceHatch("Any firebox")
-                .addMufflerHatch("Any firebox")
-                .addInputBus("Solid fuel, Any firebox")
-                .addInputHatch("Liquid fuel, Any firebox")
+                .addMaintenanceHatch("Any firebox", 1)
+                .addMufflerHatch("Any firebox", 1)
+                .addInputBus("Solid fuel, Any firebox", 1)
+                .addInputHatch("Liquid fuel, Any firebox", 1)
                 .addStructureInfo("You can use either, or both")
-                .addInputHatch("Water, Any firebox")
-                .addOutputHatch("Steam, any casing")
+                .addInputHatch("Water, Any firebox", 1)
+                .addOutputHatch("Steam, any casing", 2)
                 .toolTipFinisher("Gregtech");
         return tt;
     }
@@ -271,7 +276,7 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
 
     @Override
     public IStructureDefinition<GT_MetaTileEntity_LargeBoiler> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
+        return STRUCTURE_DEFINITION.get(getClass());
     }
 
     private void onCasingAdded() {

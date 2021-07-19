@@ -22,7 +22,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
@@ -30,22 +30,27 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
 public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_LargeTurbine> {
     private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final IStructureDefinition<GT_MetaTileEntity_LargeTurbine> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_LargeTurbine>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
-                    {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
-                    {" --- ", "xc~cx", "xh-hx", "xh-hx", "xcdcx",},
-                    {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
-                    {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
-            }))
-            .addElement('c', defer(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
-            .addElement('d', defer(t -> ofHatchAdder(GT_MetaTileEntity_LargeTurbine::addDynamoToMachineList, t.getCasingTextureIndex(), 0)))
-            .addElement('h', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_LargeTurbine::addToMachineList, t.getCasingTextureIndex(), 0, t.getCasingBlock(), t.getCasingMeta())))
-            .addElement('x', (IStructureElementCheckOnly<GT_MetaTileEntity_LargeTurbine>) (aContext, aWorld, aX, aY, aZ) -> {
-                TileEntity tTile = aWorld.getTileEntity(aX, aY, aZ);
-                return !(tTile instanceof IGregTechTileEntity) || !(((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof GT_MetaTileEntity_LargeTurbine);
-            })
-            .build();
+    private static final ClassValue<IStructureDefinition<GT_MetaTileEntity_LargeTurbine>> STRUCTURE_DEFINITION = new ClassValue<IStructureDefinition<GT_MetaTileEntity_LargeTurbine>>() {
+        @Override
+        protected IStructureDefinition<GT_MetaTileEntity_LargeTurbine> computeValue(Class<?> type) {
+            return StructureDefinition.<GT_MetaTileEntity_LargeTurbine>builder()
+                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                            {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
+                            {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
+                            {" --- ", "xc~cx", "xh-hx", "xh-hx", "xcdcx",},
+                            {" --- ", "xcccx", "xchcx", "xchcx", "xcccx",},
+                            {"     ", "xxxxx", "xxxxx", "xxxxx", "xxxxx",},
+                    }))
+                    .addElement('c', lazy(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
+                    .addElement('d', lazy(t -> ofHatchAdder(GT_MetaTileEntity_LargeTurbine::addDynamoToMachineList, t.getCasingTextureIndex(), 1)))
+                    .addElement('h', lazy(t -> ofHatchAdderOptional(GT_MetaTileEntity_LargeTurbine::addToMachineList, t.getCasingTextureIndex(), 2, t.getCasingBlock(), t.getCasingMeta())))
+                    .addElement('x', (IStructureElementCheckOnly<GT_MetaTileEntity_LargeTurbine>) (aContext, aWorld, aX, aY, aZ) -> {
+                        TileEntity tTile = aWorld.getTileEntity(aX, aY, aZ);
+                        return !(tTile instanceof IGregTechTileEntity) || !(((IGregTechTileEntity) tTile).getMetaTileEntity() instanceof GT_MetaTileEntity_LargeTurbine);
+                    })
+                    .build();
+        }
+    };
 
     protected int baseEff = 0;
     protected int optFlow = 0;
@@ -74,7 +79,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_E
 
     @Override
     public IStructureDefinition<GT_MetaTileEntity_LargeTurbine> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
+        return STRUCTURE_DEFINITION.get(getClass());
     }
 
     @Override

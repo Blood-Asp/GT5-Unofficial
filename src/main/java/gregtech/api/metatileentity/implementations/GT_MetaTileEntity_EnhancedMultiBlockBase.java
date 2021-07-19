@@ -128,7 +128,7 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 
 	@Override
 	public String[] getStructureDescription(ItemStack stackSize) {
-		return getTooltip().getStructureInformation();
+		return getTooltip().getStructureHint();
 	}
 
 	protected IAlignmentLimits getInitialAlignmentLimits() {

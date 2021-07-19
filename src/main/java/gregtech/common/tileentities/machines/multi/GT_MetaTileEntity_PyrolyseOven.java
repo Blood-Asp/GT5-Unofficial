@@ -63,8 +63,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
                         onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, tCasingElement)
                 ))
                 .addElement('t', ofChain(
-                        ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addInputToMachineList, CASING_INDEX, 1),
-                        ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addMufflerToMachineList, CASING_INDEX, 1),
+                        ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addInputToMachineList, CASING_INDEX, 2),
+                        ofHatchAdder(GT_MetaTileEntity_PyrolyseOven::addMufflerToMachineList, CASING_INDEX, 2),
                         onElementPass(GT_MetaTileEntity_PyrolyseOven::onCasingAdded, tCasingElement)
                 ))
                 .build();
@@ -95,13 +95,13 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
                 .addController("Front center")
                 .addCasingInfo("Pyrolyse Oven Casing", 60)
                 .addOtherStructurePart("Heating Coils", "Center 3x1x3 of the bottom layer")
-                .addEnergyHatch("Any bottom layer casing")
-                .addMaintenanceHatch("Any bottom layer casing")
-                .addMufflerHatch("Center 3x1x3 area in top layer")
-                .addInputBus("Center 3x1x3 area in top layer")
-                .addInputHatch("Center 3x1x3 area in top layer")
-                .addOutputBus("Any bottom layer casing")
-                .addOutputHatch("Any bottom layer casing")
+                .addEnergyHatch("Any bottom layer casing", 1)
+                .addMaintenanceHatch("Any bottom layer casing", 1)
+                .addMufflerHatch("Center 3x1x3 area in top layer", 2)
+                .addInputBus("Center 3x1x3 area in top layer", 2)
+                .addInputHatch("Center 3x1x3 area in top layer", 2)
+                .addOutputBus("Any bottom layer casing", 1)
+                .addOutputHatch("Any bottom layer casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

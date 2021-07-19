@@ -51,12 +51,12 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
                 .addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
                 .addOtherStructurePart("Extreme Engine Intake Machine Casing", "8x, ring around controller")
                 .addStructureInfo("Extreme Engine Intake Casings must not be obstructed in front (only air blocks)")
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("One of the casings next to a Gear Box")
-                .addMufflerHatch("Top middle back, above the rear Gear Box")
-                .addInputHatch("HOG, next to a Gear Box")
-                .addInputHatch("Lubricant, next to a Gear Box")
-                .addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
+                .addDynamoHatch("Back center", 2)
+                .addMaintenanceHatch("One of the casings next to a Gear Box", 1)
+                .addMufflerHatch("Top middle back, above the rear Gear Box", 1)
+                .addInputHatch("HOG, next to a Gear Box", 1)
+                .addInputHatch("Lubricant, next to a Gear Box", 1)
+                .addInputHatch("Liquid Oxygen, optional, next to a Gear Box", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

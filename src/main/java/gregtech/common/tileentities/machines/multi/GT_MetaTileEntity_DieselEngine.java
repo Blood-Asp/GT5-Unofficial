@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.defer;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.lazy;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DIESEL_ENGINE;
@@ -37,18 +37,23 @@ import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
 public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_DieselEngine> {
     private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final IStructureDefinition<GT_MetaTileEntity_DieselEngine> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_DieselEngine>builder()
-            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                    {"---", "iii", "chc", "chc", "ccc", },
-                    {"---", "i~i", "hgh", "hgh", "cdc", },
-                    {"---", "iii", "chc", "chc", "ccc", },
-            }))
-            .addElement('i', defer(t -> ofBlock(t.getIntakeBlock(), t.getIntakeMeta())))
-            .addElement('c', defer(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
-            .addElement('g', defer(t -> ofBlock(t.getGearboxBlock(), t.getGearboxMeta())))
-            .addElement('d', defer(t -> ofHatchAdder(GT_MetaTileEntity_DieselEngine::addDynamoToMachineList, t.getCasingTextureIndex(), 0)))
-            .addElement('h', defer(t -> ofHatchAdderOptional(GT_MetaTileEntity_DieselEngine::addToMachineList, t.getCasingTextureIndex(), 0, t.getCasingBlock(), t.getCasingMeta())))
-            .build();
+    private static final ClassValue<IStructureDefinition<GT_MetaTileEntity_DieselEngine>> STRUCTURE_DEFINITION = new ClassValue<IStructureDefinition<GT_MetaTileEntity_DieselEngine>>() {
+        @Override
+        protected IStructureDefinition<GT_MetaTileEntity_DieselEngine> computeValue(Class<?> type) {
+            return StructureDefinition.<GT_MetaTileEntity_DieselEngine>builder()
+                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                            {"---", "iii", "chc", "chc", "ccc", },
+                            {"---", "i~i", "hgh", "hgh", "cdc", },
+                            {"---", "iii", "chc", "chc", "ccc", },
+                    }))
+                    .addElement('i', lazy(t -> ofBlock(t.getIntakeBlock(), t.getIntakeMeta())))
+                    .addElement('c', lazy(t -> ofBlock(t.getCasingBlock(), t.getCasingMeta())))
+                    .addElement('g', lazy(t -> ofBlock(t.getGearboxBlock(), t.getGearboxMeta())))
+                    .addElement('d', lazy(t -> ofHatchAdder(GT_MetaTileEntity_DieselEngine::addDynamoToMachineList, t.getCasingTextureIndex(), 2)))
+                    .addElement('h', lazy(t -> ofHatchAdderOptional(GT_MetaTileEntity_DieselEngine::addToMachineList, t.getCasingTextureIndex(), 1, t.getCasingBlock(), t.getCasingMeta())))
+                    .build();
+        }
+    };
     protected int fuelConsumption = 0;
     protected int fuelValue = 0;
     protected int fuelRemaining = 0;
@@ -80,12 +85,12 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
                 .addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
                 .addOtherStructurePart("Engine Intake Machine Casing", "8x, ring around controller")
                 .addStructureInfo("Engine Intake Casings must not be obstructed in front (only air blocks)")
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("One of the casings next to a Gear Box")
-                .addMufflerHatch("Top middle back, above the rear Gear Box")
-                .addInputHatch("Diesel Fuel, next to a Gear Box")
-                .addInputHatch("Lubricant, next to a Gear Box")
-                .addInputHatch("Oxygen, optional, next to a Gear Box")
+                .addDynamoHatch("Back center", 2)
+                .addMaintenanceHatch("One of the casings next to a Gear Box", 1)
+                .addMufflerHatch("Top middle back, above the rear Gear Box", 1)
+                .addInputHatch("Diesel Fuel, next to a Gear Box", 1)
+                .addInputHatch("Lubricant, next to a Gear Box", 1)
+                .addInputHatch("Oxygen, optional, next to a Gear Box", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }
@@ -192,7 +197,7 @@ public class GT_MetaTileEntity_DieselEngine extends GT_MetaTileEntity_EnhancedMu
 
     @Override
     public IStructureDefinition<GT_MetaTileEntity_DieselEngine> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
+        return STRUCTURE_DEFINITION.get(getClass());
     }
 
     @Override

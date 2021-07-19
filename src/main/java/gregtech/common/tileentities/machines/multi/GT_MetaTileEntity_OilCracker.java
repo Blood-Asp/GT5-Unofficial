@@ -52,7 +52,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
                     onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('r', ofChain(
-                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addRightHatchToMachineList, CASING_INDEX, 2),
+                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addRightHatchToMachineList, CASING_INDEX, 3),
                     onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('m', ofChain(
@@ -91,12 +91,13 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
                 .addCasingInfo("Clean Stainless Steel Machine Casing", 18)
                 .addOtherStructurePart("2 Rings of 8 Coils", "Each side of the controller")
                 .addInfo("Gets 5% EU/t reduction per coil tier")
-                .addEnergyHatch("Any casing")
-                .addMaintenanceHatch("Any casing")
-                .addInputHatch("Steam/Hydrogen ONLY, Any middle ring casing")
-                .addInputHatch("Any left/right side casing")
-                .addOutputHatch("Any left/right side casing")
+                .addEnergyHatch("Any casing", 1)
+                .addMaintenanceHatch("Any casing", 1)
+                .addInputHatch("Steam/Hydrogen ONLY, Any middle ring casing", 1)
+                .addInputHatch("Any left/right side casing",2, 3)
+                .addOutputHatch("Any right/left side casing", 2, 3)
                 .addStructureInfo("Input/Output Hatches must be on opposite sides!")
+                .addStructureHint("GT5U.cracker.io_side")
                 .toolTipFinisher("Gregtech");
         return tt;
     }

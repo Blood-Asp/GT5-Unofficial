@@ -46,10 +46,10 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Stainless Steel Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addMufflerHatch("Side centered")
-                .addInputHatch("Gas Fuel, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addMufflerHatch("Side centered", 2)
+                .addInputHatch("Gas Fuel, Side centered", 2)
                 .toolTipFinisher("Gregtech");
         return tt;
     }

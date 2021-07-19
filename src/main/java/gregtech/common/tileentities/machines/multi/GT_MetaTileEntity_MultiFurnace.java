@@ -51,7 +51,7 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
             .addElement('c', ofBlock(GregTech_API.sBlockCasings1, CASING_INDEX))
             .addElement('m', ofHatchAdder(GT_MetaTileEntity_MultiFurnace::addMufflerToMachineList, CASING_INDEX, 2))
             .addElement('C', GT_StructureUtility.ofCoil(GT_MetaTileEntity_MultiFurnace::setCoilLevel, GT_MetaTileEntity_MultiFurnace::getCoilLevel))
-            .addElement('b', ofHatchAdderOptional(GT_MetaTileEntity_MultiFurnace::addBottomHatch, CASING_INDEX, 3, GregTech_API.sBlockCasings1, CASING_INDEX))
+            .addElement('b', ofHatchAdderOptional(GT_MetaTileEntity_MultiFurnace::addBottomHatch, CASING_INDEX, 1, GregTech_API.sBlockCasings1, CASING_INDEX))
             .build();
 
     public GT_MetaTileEntity_MultiFurnace(int aID, String aName, String aNameRegional) {
@@ -80,11 +80,11 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
                 .addController("Front bottom")
                 .addCasingInfo("Heat Proof Machine Casing", 8)
                 .addOtherStructurePart("Heating Coils", "Middle layer")
-                .addEnergyHatch("Any bottom casing")
-                .addMaintenanceHatch("Any bottom casing")
-                .addMufflerHatch("Top Middle")
-                .addInputBus("Any bottom casing")
-                .addOutputBus("Any bottom casing")
+                .addEnergyHatch("Any bottom casing", 1)
+                .addMaintenanceHatch("Any bottom casing", 1)
+                .addMufflerHatch("Top Middle", 2)
+                .addInputBus("Any bottom casing", 1)
+                .addOutputBus("Any bottom casing", 1)
                 .toolTipFinisher("Gregtech");
         return tt;
     }
