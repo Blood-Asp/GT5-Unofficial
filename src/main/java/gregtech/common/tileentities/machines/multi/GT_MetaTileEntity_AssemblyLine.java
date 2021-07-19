@@ -401,9 +401,9 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_FIRST, stackSize, hintsOnly, 0, 1, 0);
-        buildPiece(STRUCTURE_PIECE_SECOND, stackSize, hintsOnly, -1, 1, 0);
-        for (int i = 2; i < 16; i++) {
-            buildPiece(STRUCTURE_PIECE_LATER, stackSize, hintsOnly, -i, 1, 0);
+        int tLength = Math.min(stackSize.stackSize + 1, 16);
+        for (int i = 1; i < tLength; i++) {
+            buildPiece(i == 1 ? STRUCTURE_PIECE_SECOND : STRUCTURE_PIECE_LATER, stackSize, hintsOnly, -i, 1, 0);
         }
     }
 }

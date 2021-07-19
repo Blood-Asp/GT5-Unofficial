@@ -267,7 +267,8 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 1, 0, 0);
-        for (int i = 1; i < 12; i++) {
+        int tLength = Math.max(12, stackSize.stackSize + 1);
+        for (int i = 1; i < tLength; i++) {
             buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 1, i, 0);
         }
     }
