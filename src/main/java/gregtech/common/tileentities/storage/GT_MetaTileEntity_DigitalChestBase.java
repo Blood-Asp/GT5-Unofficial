@@ -102,7 +102,10 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
     @Optional.Method(modid = "appliedenergistics2")
     @Override
     public boolean isPrioritized(appeng.api.storage.data.IAEItemStack iaeItemStack) {
-        return false;
+        ItemStack s = getItemStack();
+        if (s == null || iaeItemStack == null)
+            return false;
+        return iaeItemStack.isSameType(s);
     }
 
     @Optional.Method(modid = "appliedenergistics2")
