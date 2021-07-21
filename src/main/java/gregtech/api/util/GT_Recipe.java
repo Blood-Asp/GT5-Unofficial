@@ -367,8 +367,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
 
-        HashSet<Integer> isVisited = new HashSet<>();
-
+        if (mInputs.length > 0 && aInputs == null) return false;
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
         int amt;
         for (FluidStack tFluid : mFluidInputs)
@@ -390,8 +389,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 if (temp) return false;
             }
 
-        if (mInputs.length > 0 && aInputs == null) return false;
-
+        HashSet<Integer> isVisited = new HashSet<>();
+        
         for (ItemStack tStack : mInputs) {
             ItemStack unified_tStack = GT_OreDictUnificator.get_nocopy(true, tStack);
             if (unified_tStack != null) {
