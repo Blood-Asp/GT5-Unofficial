@@ -366,6 +366,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     public static boolean GTppRecipeHelper;
 
     public boolean isRecipeInputEqual(boolean aDecreaseStacksizeBySuccess, boolean aDontCheckStackSizes, FluidStack[] aFluidInputs, ItemStack... aInputs) {
+
+        HashSet<Integer> isVisited = new HashSet<>();
+
         if (mFluidInputs.length > 0 && aFluidInputs == null) return false;
         int amt;
         for (FluidStack tFluid : mFluidInputs)
@@ -389,8 +392,6 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         if (mInputs.length > 0 && aInputs == null) return false;
 
-        ConcurrentHashMap<Integer, Boolean> isUsed = new ConcurrentHashMap<>();
-
         for (ItemStack tStack : mInputs) {
             ItemStack unified_tStack = GT_OreDictUnificator.get_nocopy(true, tStack);
             if (unified_tStack != null) {
@@ -399,8 +400,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 int it = 0;
                 for (ItemStack aStack : aInputs) {
                     it ++;
-                    if (GT_OreDictUnificator.isInputStackEqual(aStack, unified_tStack) && !isUsed.containsKey(it)) {
-                        isUsed.put(it, true);
+                    if (GT_OreDictUnificator.isInputStackEqual(aStack, unified_tStack) && !isVisited.contains(it)) {
+                        isVisited.add(it);
                         if (GTppRecipeHelper) {//remove once the fix is out
                             if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
                                 if (!GT_Utility.areStacksEqual(aStack, tStack, false))
