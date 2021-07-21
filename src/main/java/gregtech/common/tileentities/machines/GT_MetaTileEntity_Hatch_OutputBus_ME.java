@@ -65,12 +65,16 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     public boolean storeAll(ItemStack aStack) {
         if (!GregTech_API.mAE2)
             return false;
-        int tTotal = aStack.stackSize;
-        int tStored = store(aStack);
-        aStack.stackSize -= tStored;
-        return tTotal == tStored;
+        aStack.stackSize = store(aStack);
+        return aStack.stackSize == 0;
     }
 
+    /**
+     * Attempt to store items in connected ME network. Returns how many items did not fit (if the network was down e.g.)
+     *
+     * @param stack  input stack
+     * @return amount of items left over
+     */
     @Optional.Method(modid = "appliedenergistics2")
     public int store(final ItemStack stack) {
         if (stack == null)
@@ -80,9 +84,8 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
             if (proxy == null)
                 return stack.stackSize;
             IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
-            final IEnergySource src = proxy.getEnergy();
             IAEItemStack toStore = AEApi.instance().storage().createItemStack(stack);
-            IAEItemStack rest = Platform.poweredInsert( src, sg, toStore, getRequest());
+            IAEItemStack rest = Platform.poweredInsert( proxy.getEnergy(), sg, toStore, getRequest());
             if (rest != null)
                 return (int)rest.getStackSize();
             return 0;
