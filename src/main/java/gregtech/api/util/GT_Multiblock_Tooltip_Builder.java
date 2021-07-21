@@ -2,6 +2,7 @@ package gregtech.api.util;
 
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
 import gregtech.api.enums.Materials;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -72,14 +73,14 @@ public class GT_Multiblock_Tooltip_Builder {
 	private static final String TT_structurehint = StatCollector.translateToLocal("GT5U.MBTT.StructureHint");
 	private static final String TT_mod = StatCollector.translateToLocal("GT5U.MBTT.Mod");
 	private static final String TT_air = StatCollector.translateToLocal("GT5U.MBTT.Air");
-	private static final String[] TT_dots = IntStream.range(0, 16).mapToObj(i -> StatCollector.translateToLocal("GT5U.MBTT.Dots." + i)).toArray(String[]::new);
+	private static final String[] TT_dots = IntStream.range(0, 16).mapToObj(i -> StatCollector.translateToLocal("structurelib.blockhint." + i + ".name")).toArray(String[]::new);
 
 	public GT_Multiblock_Tooltip_Builder() {
 		iLines = new LinkedList<>();
 		sLines = new LinkedList<>();
 		hLines = new LinkedList<>();
 		hBlocks = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
-		hBlocks.put(0, TT_air);
+		hBlocks.put(StructureLibAPI.HINT_BLOCK_META_AIR, TT_air);
 	}
 	
 	/**
