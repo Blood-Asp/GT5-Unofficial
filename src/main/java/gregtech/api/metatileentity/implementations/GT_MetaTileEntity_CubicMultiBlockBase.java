@@ -66,7 +66,7 @@ public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTil
 	@Override
 	@SuppressWarnings("unchecked")
 	public IStructureDefinition<T> getStructureDefinition() {
-		return (IStructureDefinition<T>) STRUCTURE_DEFINITION;
+		return (IStructureDefinition<T>) STRUCTURE_DEFINITION.get(getClass());
 	}
 
 	@Override
