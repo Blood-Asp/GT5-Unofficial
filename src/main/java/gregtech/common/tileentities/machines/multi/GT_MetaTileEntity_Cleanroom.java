@@ -190,7 +190,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                             ++mGlassCount;
                         } else {
                             IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
-                            if ((!this.addMaintenanceToMachineList(tTileEntity, 82)) && (!this.addEnergyInputToMachineList(tTileEntity, 82))) {
+                            if ((!this.addMaintenanceToMachineList(tTileEntity, 210)) && (!this.addEnergyInputToMachineList(tTileEntity, 210))) {
                                 if (tBlock instanceof ic2.core.block.BlockIC2Door) {
                                     if ((tMeta & 8) == 0) {
                                         // let's not fiddle with bits anymore.
