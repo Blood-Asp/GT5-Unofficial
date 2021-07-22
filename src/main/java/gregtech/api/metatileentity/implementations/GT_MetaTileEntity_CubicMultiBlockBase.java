@@ -35,7 +35,7 @@ public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTil
 			return StructureDefinition.<GT_MetaTileEntity_CubicMultiBlockBase<?>>builder()
 					.addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
 							{"hhh", "hhh", "hhh"},
-							{"h-h", "hhh", "hhh"},
+							{"h~h", "h-h", "hhh"},
 							{"hhh", "hhh", "hhh"},
 					}))
 					.addElement('h', ofChain(
