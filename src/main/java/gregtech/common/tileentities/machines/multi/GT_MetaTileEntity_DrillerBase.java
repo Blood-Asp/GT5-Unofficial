@@ -40,6 +40,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACT
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ORE_DRILL_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.getCasingTextureForId;
+import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_DrillerBase> implements IChunkLoader {
@@ -61,10 +62,10 @@ public abstract class GT_MetaTileEntity_DrillerBase extends GT_MetaTileEntity_En
                             {" f ", "fcf", " f "},
                             {"b~b", "bbb", "bbb"},
                     }))
-                    .addElement('f', lazy(t -> ofBlock(GregTech_API.sBlockMachines, t.frameMeta)))
-                    .addElement('c', lazy(t -> ofBlock(t.casingBlock, t.casingMeta)))
+                    .addElement('f', lazy(t -> ofFrame(t.getFrameMaterial())))
+                    .addElement('c', lazy(t -> ofBlock(t.getCasingBlockItem().getBlock(), t.getCasingBlockItem().get(0).getItemDamage())))
                     .addElement('b', lazy(t -> ofChain(
-                            ofBlock(t.casingBlock, t.casingMeta),
+                            ofBlock(t.getCasingBlockItem().getBlock(), t.getCasingBlockItem().get(0).getItemDamage()),
                             ofHatchAdder(GT_MetaTileEntity_DrillerBase::addMaintenanceToMachineList, t.casingTextureIndex, 1),
                             ofHatchAdder(GT_MetaTileEntity_DrillerBase::addInputToMachineList, t.casingTextureIndex, 1),
                             ofHatchAdder(GT_MetaTileEntity_DrillerBase::addOutputToMachineList, t.casingTextureIndex, 1),
