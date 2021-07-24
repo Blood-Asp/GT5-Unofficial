@@ -52,8 +52,8 @@ public class GT_Container_Boiler extends GT_ContainerMetaTile_Machine {
         this.mWaterAmount = (((GT_MetaTileEntity_Boiler) this.mTileEntity.getMetaTileEntity()).mFluid == null ? 0 : ((GT_MetaTileEntity_Boiler) this.mTileEntity.getMetaTileEntity()).mFluid.amount);
 
         this.mTemperature = Math.min(54, Math.max(0, this.mTemperature * 54 / (((GT_MetaTileEntity_Boiler) this.mTileEntity.getMetaTileEntity()).maxProgresstime() - 10)));
-        this.mSteamAmount = Math.min(54, Math.max(0, this.mSteamAmount * 54 / capacity));
-        this.mWaterAmount = Math.min(54, Math.max(0, this.mWaterAmount * 54 / capacity));
+        this.mSteamAmount = Math.min(54, Math.max(0, this.mSteamAmount * 54 / (capacity - 100)));
+        this.mWaterAmount = Math.min(54, Math.max(0, this.mWaterAmount * 54 / (capacity - 100)));
         this.mProcessingEnergy = Math.min(14, Math.max(this.mProcessingEnergy > 0 ? 1 : 0, this.mProcessingEnergy * 14 / 1000));
 
         for (Object crafter : this.crafters) {
