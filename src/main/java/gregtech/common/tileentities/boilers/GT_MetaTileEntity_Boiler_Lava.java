@@ -87,7 +87,9 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
     }
 
     @Override
-    public int getCapacity() { return 32000; }
+    public int getCapacity() {
+        return 32000;
+    }
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
