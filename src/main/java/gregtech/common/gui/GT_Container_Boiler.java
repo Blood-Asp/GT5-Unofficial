@@ -43,7 +43,7 @@ public class GT_Container_Boiler extends GT_ContainerMetaTile_Machine {
             return;
         }
 
-        // GT_MetaTileEntity_Boilder.getCapacity() is used for both water and steam capacity.
+        // GT_MetaTileEntity_Boiler.getCapacity() is used for both water and steam capacity.
         int capacity = ((GT_MetaTileEntity_Boiler) this.mTileEntity.getMetaTileEntity()).getCapacity();
 
         this.mTemperature = ((GT_MetaTileEntity_Boiler) this.mTileEntity.getMetaTileEntity()).mTemperature;
