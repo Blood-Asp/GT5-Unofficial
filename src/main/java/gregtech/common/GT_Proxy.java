@@ -60,6 +60,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -70,10 +71,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -2125,5 +2123,31 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GregTech_API.sHeatHazmatList.add(item);
         GregTech_API.sRadioHazmatList.add(item);
         GregTech_API.sElectroHazmatList.add(item);
+    }
+
+    public static boolean providesProtection(ItemStack aStack){
+        boolean isGas = GT_Utility.isStackInList(aStack, GregTech_API.sGasHazmatList);
+        boolean isBio = GT_Utility.isStackInList(aStack, GregTech_API.sBioHazmatList);
+        boolean isFrost = GT_Utility.isStackInList(aStack, GregTech_API.sFrostHazmatList);
+        boolean isHeat = GT_Utility.isStackInList(aStack, GregTech_API.sHeatHazmatList);
+        boolean isRadio = GT_Utility.isStackInList(aStack, GregTech_API.sRadioHazmatList);
+        boolean isElectro = GT_Utility.isStackInList(aStack, GregTech_API.sElectroHazmatList);
+        if(isGas && isBio && isFrost && isHeat && isRadio && isElectro)
+            return true;
+        return false;
+    }
+
+    @SubscribeEvent
+    public void onItemTooltip(ItemTooltipEvent event) {
+        if (event.itemStack == null) {
+            return;
+        }
+        else {
+            ItemStack aStackTemp = event.itemStack;
+            GT_ItemStack aStack = new GT_ItemStack(aStackTemp);
+            if (providesProtection(aStackTemp)) {
+                event.toolTip.add(EnumChatFormatting.LIGHT_PURPLE + "Provides full hazmat protection.");
+            }
+        }
     }
 }
