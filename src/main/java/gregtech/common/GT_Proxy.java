@@ -107,6 +107,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static gregtech.api.enums.GT_Values.W;
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
 
@@ -477,39 +478,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         OrePrefixes.cellMolten.mContainerItem = ItemList.Cell_Empty.get(1L);
         OrePrefixes.cell.mContainerItem = ItemList.Cell_Empty.get(1L);
 
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
 
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_helmet, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_chestplate, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, 32767));
 
         GT_ModHandler.sNonReplaceableItems.add(new ItemStack(Items.bow, 1, 32767));
         GT_ModHandler.sNonReplaceableItems.add(new ItemStack(Items.fishing_rod, 1, 32767));
@@ -586,10 +555,94 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_OreDictUnificator.registerOre("cropGrape", GT_ModHandler.getModItem("magicalcrops", "magicalcrops_CropProduce", 1L, 4));
         GT_OreDictUnificator.registerOre("cropTea", GT_ModHandler.getModItem("ganyssurface", "teaLeaves", 1L, 0));
 
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanoBootsTraveller", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanosuitGogglesRevealing", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumBootsTraveller", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumGogglesRevealing", 1L, 32767));
+        // IC2 Hazmat
+        addFullHazmatToIC2Item("hazmatHelmet");
+        addFullHazmatToIC2Item("hazmatChestplate");
+        addFullHazmatToIC2Item("hazmatLeggings");
+        addFullHazmatToIC2Item("hazmatBoots");
+        addFullHazmatToIC2Item("nanoHelmet");
+        addFullHazmatToIC2Item("nanoBoots");
+        addFullHazmatToIC2Item("nanoLegs");
+        addFullHazmatToIC2Item("nanoChestplate");
+        addFullHazmatToIC2Item("quantumHelmet");
+        addFullHazmatToIC2Item("quantumBodyarmor");
+        addFullHazmatToIC2Item("quantumLeggings");
+        addFullHazmatToIC2Item("quantumBoots");
+
+        //GraviSuite Hazmat
+        addFullHazmatToGeneralItem("GraviSuite", "graviChestPlate", 1L);
+        addFullHazmatToGeneralItem("GraviSuite", "advNanoChestPlate", 1L);
+
+        // EMT Hazmat
+        addFullHazmatToGeneralItem("EMT", "itemArmorQuantumChestplate", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanoBootsTraveller", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanosuitGogglesRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumBootsTraveller", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumGogglesRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "SolarHelmetRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanosuitWing", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumWing", 1L);
+
+        // DraconicEvolution Hazmat
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicBoots", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicHelm", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicLeggs", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicChest", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernBoots", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernHelm", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernLeggs", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernChest", 1L, 0);
+
+        //AdvancedSolarPanel
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "advanced_solar_helmet", 1L);
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "hybrid_solar_helmet", 1L);
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "ultimate_solar_helmet", 1L);
+
+        //TaintedMagic Hazmat
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidwalkerBoots", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressHelmet", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressChestplate", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressLeggings", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressHelmet", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressChestplate", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressLeggings", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidmetalGoggles", 1L);
+        //TaintedMagic Hazmat
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidwalkerBoots", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressHelmet", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressChestplate", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressLeggings", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressHelmet", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressChestplate", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressLeggings", 1L, 0);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidmetalGoggles", 1L, 0);
+
+        //WitchingGadgets Hazmat
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialHelm", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialChest", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialLegs", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialBoots", 1L);
+
+        //ThaumicTinkerer Hazmat
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothChestGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothBootsGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothHelmGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothLegsGem", 1L);
+
+        //GalaxySpace Hazmat
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_helmet", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_helmetglasses", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_plate", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_jetplate", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_leg", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_boots", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_gravityboots", 1L);
+
+        //Extra Hazmat
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_helmet, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_chestplate, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, W));
 
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
@@ -2042,5 +2095,35 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      public void onBlockEvent(BlockEvent event) {
         if (event.block.getUnlocalizedName().equals("blockAlloyGlass"))
             GregTech_API.causeMachineUpdate(event.world, event.x, event.y, event.z);
+    }
+
+    public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount, int aMeta){
+        ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, aMeta);
+        GregTech_API.sGasHazmatList.add(item);
+        GregTech_API.sBioHazmatList.add(item);
+        GregTech_API.sFrostHazmatList.add(item);
+        GregTech_API.sHeatHazmatList.add(item);
+        GregTech_API.sRadioHazmatList.add(item);
+        GregTech_API.sElectroHazmatList.add(item);
+    }
+
+    public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount){
+        ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, W);
+        GregTech_API.sGasHazmatList.add(item);
+        GregTech_API.sBioHazmatList.add(item);
+        GregTech_API.sFrostHazmatList.add(item);
+        GregTech_API.sHeatHazmatList.add(item);
+        GregTech_API.sRadioHazmatList.add(item);
+        GregTech_API.sElectroHazmatList.add(item);
+    }
+
+    public static void addFullHazmatToIC2Item(String aItem){
+        ItemStack item = GT_ModHandler.getIC2Item(aItem, 1L, W);
+        GregTech_API.sGasHazmatList.add(item);
+        GregTech_API.sBioHazmatList.add(item);
+        GregTech_API.sFrostHazmatList.add(item);
+        GregTech_API.sHeatHazmatList.add(item);
+        GregTech_API.sRadioHazmatList.add(item);
+        GregTech_API.sElectroHazmatList.add(item);
     }
 }
