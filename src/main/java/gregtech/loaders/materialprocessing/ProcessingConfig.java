@@ -15,7 +15,7 @@ public class ProcessingConfig implements gregtech.api.interfaces.IMaterialHandle
     @Override
     public void onMaterialsInit() {
         /** This is just left here as an example of how to add new materials. **/
-        // If you uncomment this, these custom ores will get added to the Deep Dark void miner ore list and cause bugged ores to be generated!
+        // If you uncomment this, these custom materials will get added to the Deep Dark void miner ore list and cause bugged ores to be generated!
         // See: com.dreammaster.bartworksHandler.VoidMinerLoader
         /*
         int i = 0;
