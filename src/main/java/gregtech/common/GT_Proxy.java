@@ -560,8 +560,8 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         addFullHazmatToIC2Item("hazmatBoots");
         addFullHazmatToIC2Item("nanoHelmet");
         addFullHazmatToIC2Item("nanoBoots");
-        addFullHazmatToIC2Item("nanoLegs");
-        addFullHazmatToIC2Item("nanoChestplate");
+        addFullHazmatToIC2Item("nanoLeggings");
+        addFullHazmatToIC2Item("nanoBodyarmor");
         addFullHazmatToIC2Item("quantumHelmet");
         addFullHazmatToIC2Item("quantumBodyarmor");
         addFullHazmatToIC2Item("quantumLeggings");
@@ -605,15 +605,6 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressChestplate", 1L);
         addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressLeggings", 1L);
         addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidmetalGoggles", 1L);
-        //TaintedMagic Hazmat
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidwalkerBoots", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressHelmet", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressChestplate", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressLeggings", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressHelmet", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressChestplate", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressLeggings", 1L, 0);
-        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidmetalGoggles", 1L, 0);
 
         //WitchingGadgets Hazmat
         addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialHelm", 1L);
@@ -2097,26 +2088,20 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
 
     public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount, int aMeta){
         ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, aMeta);
-        GregTech_API.sGasHazmatList.add(item);
-        GregTech_API.sBioHazmatList.add(item);
-        GregTech_API.sFrostHazmatList.add(item);
-        GregTech_API.sHeatHazmatList.add(item);
-        GregTech_API.sRadioHazmatList.add(item);
-        GregTech_API.sElectroHazmatList.add(item);
+        addItemToHazmatLists(item);
     }
 
     public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount){
         ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, W);
-        GregTech_API.sGasHazmatList.add(item);
-        GregTech_API.sBioHazmatList.add(item);
-        GregTech_API.sFrostHazmatList.add(item);
-        GregTech_API.sHeatHazmatList.add(item);
-        GregTech_API.sRadioHazmatList.add(item);
-        GregTech_API.sElectroHazmatList.add(item);
+        addItemToHazmatLists(item);
     }
 
     public static void addFullHazmatToIC2Item(String aItem){
         ItemStack item = GT_ModHandler.getIC2Item(aItem, 1L, W);
+        addItemToHazmatLists(item);
+    }
+
+    private static void addItemToHazmatLists(ItemStack item){
         GregTech_API.sGasHazmatList.add(item);
         GregTech_API.sBioHazmatList.add(item);
         GregTech_API.sFrostHazmatList.add(item);
