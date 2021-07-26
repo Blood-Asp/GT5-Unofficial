@@ -15,15 +15,13 @@ public class ProcessingConfig implements gregtech.api.interfaces.IMaterialHandle
     @Override
     public void onMaterialsInit() {
         /** This is just left here as an example of how to add new materials. **/
-        // If you uncomment this, these custom materials will get added to the Deep Dark void miner ore list and cause bugged ores to be generated!
-        // See: com.dreammaster.bartworksHandler.VoidMinerLoader
-        /*
-        int i = 0;
-        for (int j = GregTech_API.sMaterialProperties.get("general", "AmountOfCustomMaterialSlots", 16); i < j; i++) {
-            String aID = (i < 10 ? "0" : "") + i;
-            new Materials(-1, TextureSet.SET_METALLIC, 1.0F, 0, 0, 0, 255, 255, 255, 0, "CustomMat" + aID, "CustomMat" + aID, 0, 0, 0, 0, false, false, 1, 1, 1, Dyes._NULL, "custom", true, aID);
+        if (false) {
+            int i = 0;
+            for (int j = GregTech_API.sMaterialProperties.get("general", "AmountOfCustomMaterialSlots", 16); i < j; i++) {
+                String aID = (i < 10 ? "0" : "") + i;
+                new Materials(-1, TextureSet.SET_METALLIC, 1.0F, 0, 0, 0, 255, 255, 255, 0, "CustomMat" + aID, "CustomMat" + aID, 0, 0, 0, 0, false, false, 1, 1, 1, Dyes._NULL, "custom", true, aID);
+            }
         }
-        */
     }
 
     @Override
