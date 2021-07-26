@@ -38,12 +38,20 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     protected static final int CASING_INDEX = 49;
     protected static final String STRUCTURE_PIECE_BASE = "base";
     protected static final String STRUCTURE_PIECE_LAYER = "layer";
+    protected static final String STRUCTURE_PIECE_LAYER_HINT = "layerHint";
+    protected static final String STRUCTURE_PIECE_TOP_HINT = "topHint";
     private static final IStructureDefinition<GT_MetaTileEntity_DistillationTower> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_DistillationTower>builder()
             .addShape(STRUCTURE_PIECE_BASE, transpose(new String[][]{
                     {"b~b", "bbb", "bbb"},
             }))
             .addShape(STRUCTURE_PIECE_LAYER, transpose(new String[][]{
                     {"lll", "lcl", "lll"}
+            }))
+            .addShape(STRUCTURE_PIECE_LAYER_HINT, transpose(new String[][]{
+                    {"lll", "l-l", "lll"}
+            }))
+            .addShape(STRUCTURE_PIECE_TOP_HINT, transpose(new String[][]{
+                    {"lll", "lll", "lll"}
             }))
             .addElement('b', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_DistillationTower::addEnergyInputToMachineList, CASING_INDEX, 1),
@@ -267,9 +275,10 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_BASE, stackSize, hintsOnly, 1, 0, 0);
-        int tLength = Math.max(12, stackSize.stackSize + 1);
-        for (int i = 1; i < tLength; i++) {
-            buildPiece(STRUCTURE_PIECE_LAYER, stackSize, hintsOnly, 1, i, 0);
+        int tTotalHeight = Math.max(12, stackSize.stackSize + 2); // min 2 output layer, so at least 1 + 2 height
+        for (int i = 1; i < tTotalHeight - 1; i++) {
+            buildPiece(STRUCTURE_PIECE_LAYER_HINT, stackSize, hintsOnly, 1, i, 0);
         }
+        buildPiece(STRUCTURE_PIECE_TOP_HINT, stackSize, hintsOnly, 1, tTotalHeight - 1, 0);
     }
 }

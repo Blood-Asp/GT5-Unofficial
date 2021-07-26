@@ -144,7 +144,7 @@ public class GT_MetaTileEntity_ImplosionCompressor extends GT_MetaTileEntity_Cub
 
     @Override
     protected int getHatchTextureIndex() {
-        return 17;
+        return 16;
     }
 
     @Override
