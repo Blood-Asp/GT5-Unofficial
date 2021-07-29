@@ -118,7 +118,6 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
                 if (rest != null && rest.getStackSize() > 0)
                 {
                     lastOutputFailed = true;
-                    cachedStack.stackSize = (int)rest.getStackSize();
                     if (sameStack) // return all that was cached to sender
                     {
                         cachedStack = null;
@@ -191,9 +190,39 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     public void gridChanged() {
     }
 
+    @Optional.Method(modid = "appliedenergistics2")
+    private void flushCachedStack()
+    {
+        if (cachedStack == null)
+            return;
+        AENetworkProxy proxy = getProxy();
+        if (proxy == null) {
+            lastOutputFailed = true;
+            return;
+        }
+        try {
+            IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
+            IAEItemStack toStore = AEApi.instance().storage().createItemStack(cachedStack);
+            IAEItemStack rest = Platform.poweredInsert(proxy.getEnergy(), sg, toStore, getRequest());
+            if (rest != null && rest.getStackSize() > 0) {
+                lastOutputFailed = true;
+                cachedStack.stackSize = (int) rest.getStackSize();
+            }
+            else
+                cachedStack = null;
+        }
+        catch( final GridAccessException ignored )
+        {
+            lastOutputFailed = true;
+        }
+        lastOutputTick = tickCounter;
+    }
+
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         tickCounter = aTick;
+        if (tickCounter > (lastOutputTick + 40))
+            flushCachedStack();
         super.onPostTick(aBaseMetaTileEntity, aTick);
     }
 
