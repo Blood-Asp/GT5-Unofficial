@@ -57,10 +57,10 @@ public abstract class GT_MetaTileEntity_LargeBoiler extends GT_MetaTileEntity_En
                             onElementPass(GT_MetaTileEntity_LargeBoiler::onCasingAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
                     )))
                     .addElement('f', lazy(t -> ofChain(
-                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMaintenanceToMachineList, t.getCasingTextureIndex(), 1),
-                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addInputToMachineList, t.getCasingTextureIndex(), 1),
-                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMufflerToMachineList, t.getCasingTextureIndex(), 1),
-                            onElementPass(GT_MetaTileEntity_LargeBoiler::onFireboxAdded, ofBlock(t.getCasingBlock(), t.getCasingMeta()))
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMaintenanceToMachineList, t.getFireboxTextureIndex(), 1),
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addInputToMachineList, t.getFireboxTextureIndex(), 1),
+                            ofHatchAdder(GT_MetaTileEntity_LargeBoiler::addMufflerToMachineList, t.getFireboxTextureIndex(), 1),
+                            onElementPass(GT_MetaTileEntity_LargeBoiler::onFireboxAdded, ofBlock(t.getFireboxBlock(), t.getFireboxMeta()))
                     )))
                     .build();
         }
