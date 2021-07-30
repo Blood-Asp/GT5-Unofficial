@@ -127,6 +127,10 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
             this.mProcessingEnergy += 1000 * ENERGY_PER_LAVA;
             aBaseMetaTileEntity.decrStackSize(2, 1);
             aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Empty, 1L));
+        } else if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.bucketClay.get(Materials.Lava))) {
+            this.mProcessingEnergy += 1000 * ENERGY_PER_LAVA;
+            aBaseMetaTileEntity.decrStackSize(2, 1);
+            // Clay lava buckets break, so you don't get it back.
         }
     }
 

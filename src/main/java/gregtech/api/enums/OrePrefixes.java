@@ -102,6 +102,7 @@ public enum OrePrefixes {
     cellMolten("Cells of Molten stuff", "Molten ", " Cell", true, true, true, true, false, false, false, true, false, false, 0, M * 1, 64, 31), // Hot Cell full of molten stuff, which can be used in the Plasma Generator.
     cell("Cells", "", " Cell", true, true, true, true, false, false, true, true, false, false, B[4] | B[8], M * 1, 64, 30), // Regular Gas/Fluid Cell. Introduced by Calclavia
     bucket("Buckets", "", " Bucket", true, true, true, true, false, false, true, false, false, false, B[4] | B[8], M * 1, 16, -1), // A vanilla Iron Bucket filled with the Material.
+    bucketClay("Clay Buckets", "", " Clay Bucket", true, true, true, true, false, false, true, false, false, false, B[4] | B[8], M * 1, 16, -1), // An Iguana Tweaks Clay Bucket filled with the Material.
     bottle("Bottles", "", " Bottle", true, true, true, true, false, false, false, false, false, false, B[4] | B[8], -1, 16, -1), // Glass Bottle containing a Fluid.
     capsule("Capsules", "", " Capsule", false, true, true, true, false, false, false, false, false, false, B[4] | B[8], M * 1, 16, -1),
     crystal("Crystals", "", " Crystal", false, true, false, false, false, false, true, false, false, false, B[2], M * 1, 64, -1),
@@ -413,6 +414,10 @@ public enum OrePrefixes {
         bucket.mNotGeneratedItems.add(Materials.Lava);
         bucket.mNotGeneratedItems.add(Materials.Milk);
         bucket.mNotGeneratedItems.add(Materials.Water);
+        bucketClay.mNotGeneratedItems.add(Materials.Empty);
+        bucketClay.mNotGeneratedItems.add(Materials.Lava);
+        bucketClay.mNotGeneratedItems.add(Materials.Milk);
+        bucketClay.mNotGeneratedItems.add(Materials.Water);
         bottle.mNotGeneratedItems.add(Materials.Empty);
         bottle.mNotGeneratedItems.add(Materials.Water);
         bottle.mNotGeneratedItems.add(Materials.Milk);
@@ -522,6 +527,7 @@ public enum OrePrefixes {
         cableGt02.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount);
         cableGt01.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount);
         bucket.mSecondaryMaterial = new MaterialStack(Materials.Iron, ingot.mMaterialAmount * 3);
+        bucketClay.mSecondaryMaterial = new MaterialStack(Materials.Clay, dust.mMaterialAmount * 5);
         cell.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
         cellPlasma.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
         cellMolten.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
