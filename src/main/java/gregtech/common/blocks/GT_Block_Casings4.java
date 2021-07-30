@@ -14,7 +14,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 public class GT_Block_Casings4 extends GT_Block_Casings_Abstract {
-    private static int[][] mapping = new int[][]{
+    /**
+     * This mapping is used to look up which texture should be used to render the connected texture for fusion casings.
+     *
+     * This mapping is computed from that giant if ladder from #getIcon in commit da3421547afadc49938b5b6a7f9a9679afa1d570
+     * The exact meaning of these numbers are like black magic. Read the original getIcon implementation to understand why
+     * it is 0, 1, etc, if that if ladder is even intelligible.
+     */
+    private static final int[][] mapping = new int[][]{
             {7, 7, 7, 7, 0, 7, 0, 7, 1, 7, 1, 7, 8, 7, 8, 7, 0, 7, 0, 7, 0, 7, 0, 7, 9, 7, 9, 7, 3, 7, 3, 7, 1, 7, 1, 7, 11, 7, 11, 7, 1, 7, 1, 7, 2, 7, 2, 7, 10, 7, 10, 7, 5, 7, 5, 7, 4, 7, 4, 7, 6, 7, 6, 7},
             {7, 7, 7, 7, 0, 0, 7, 7, 1, 1, 7, 7, 8, 8, 7, 7, 0, 0, 7, 7, 0, 0, 7, 7, 9, 9, 7, 7, 3, 3, 7, 7, 1, 1, 7, 7, 11, 11, 7, 7, 1, 1, 7, 7, 2, 2, 7, 7, 10, 10, 7, 7, 5, 5, 7, 7, 4, 4, 7, 7, 6, 6, 7, 7},
             {7, 1, 1, 1, 0, 9, 10, 4, 7, 1, 1, 1, 0, 9, 10, 4, 0, 8, 11, 2, 0, 3, 5, 6, 0, 8, 11, 2, 0, 3, 5, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},
