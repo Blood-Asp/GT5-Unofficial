@@ -197,6 +197,11 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         this(aInput1, aOutput1, null, null, null, aFuelValue, aType);
     }
 
+    private static FluidStack[] tryGetFluidInputsFromCells(ItemStack aInput) {
+        FluidStack tFluid = GT_Utility.getFluidForFilledItem(aInput, true);
+        return tFluid == null ? null : new FluidStack[] {tFluid};
+    }
+
     // aSpecialValue = EU per Liter! If there is no Liquid for this Object, then it gets multiplied with 1000!
     public GT_Recipe(ItemStack aInput1, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, ItemStack aOutput4, int aSpecialValue, int aType) {
         this(true, new ItemStack[]{aInput1}, new ItemStack[]{aOutput1, aOutput2, aOutput3, aOutput4}, null, null, null, null, 0, 0, Math.max(1, aSpecialValue));
@@ -977,6 +982,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
      * Just a Recipe Map with Utility specifically for Fuels.
      */
     public static class GT_Recipe_Map_Fuel extends GT_Recipe_Map {
+        private final Map<String, GT_Recipe> mRecipesByFluidInput = new HashMap<>();
         public GT_Recipe_Map_Fuel(Collection<GT_Recipe> aRecipeList, String aUnlocalizedName, String aLocalName, String aNEIName, String aNEIGUIPath, int aUsualInputCount, int aUsualOutputCount, int aMinimalInputItems, int aMinimalInputFluids, int aAmperage, String aNEISpecialValuePre, int aNEISpecialValueMultiplier, String aNEISpecialValuePost, boolean aShowVoltageAmperageInNEI, boolean aNEIAllowed) {
             super(aRecipeList, aUnlocalizedName, aLocalName, aNEIName, aNEIGUIPath, aUsualInputCount, aUsualOutputCount, aMinimalInputItems, aMinimalInputFluids, aAmperage, aNEISpecialValuePre, aNEISpecialValueMultiplier, aNEISpecialValuePost, aShowVoltageAmperageInNEI, aNEIAllowed);
         }
@@ -999,6 +1005,24 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         public GT_Recipe addFuel(ItemStack aInput, ItemStack aOutput, FluidStack aFluidInput, FluidStack aFluidOutput, int aChance, int aFuelValueInEU) {
             return addRecipe(true, new ItemStack[]{aInput}, new ItemStack[]{aOutput}, null, new int[]{aChance}, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, 0, 0, aFuelValueInEU);
+        }
+
+        @Override
+        public GT_Recipe add(GT_Recipe aRecipe) {
+            aRecipe = super.add(aRecipe);
+            if (aRecipe.mInputs != null && GT_Utility.getNonnullElementCount(aRecipe.mInputs) == 1 &&
+                    (aRecipe.mFluidInputs == null || GT_Utility.getNonnullElementCount(aRecipe.mFluidInputs) == 0)) {
+                FluidStack tFluid = GT_Utility.getFluidForFilledItem(aRecipe.mInputs[0], true);
+                if (tFluid != null) {
+                    tFluid.amount = 0;
+                    mRecipesByFluidInput.put(tFluid.getUnlocalizedName(), aRecipe);
+                }
+            }
+            return aRecipe;
+        }
+
+        public GT_Recipe findFuel(FluidStack aFluidInput) {
+            return mRecipesByFluidInput.get(aFluidInput.getUnlocalizedName());
         }
     }
 

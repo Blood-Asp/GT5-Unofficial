@@ -1,6 +1,7 @@
 package gregtech;
 
 import com.google.common.base.Stopwatch;
+import com.gtnewhorizon.structurelib.StructureLib;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.EntityRegistry;
@@ -74,6 +75,7 @@ import static gregtech.api.enums.GT_Values.MOD_ID_FR;
 @SuppressWarnings("ALL")
 @Mod(modid = "gregtech", name = "GregTech", version = "MC1710", useMetadata = false,
         dependencies = " required-after:IC2;" +
+                " required-after:" + StructureLib.MOD_ID + ";" +
                 " after:dreamcraft;" +
                 " after:Forestry;" +
                 " after:PFAAGeologica;" +
@@ -327,6 +329,7 @@ public class GT_Mod implements IGT_Mod {
         );
         gregtechproxy.mRenderTileAmbientOcclusion = GregTech_API.sClientDataFile.get("render", "TileAmbientOcclusion", true);
         gregtechproxy.mRenderGlowTextures = GregTech_API.sClientDataFile.get("render", "GlowTextures", true);
+        gregtechproxy.mRenderFlippedMachinesFlipped = GregTech_API.sClientDataFile.get("render", "RenderFlippedMachinesFlipped", true);
 
         gregtechproxy.mMaxEqualEntitiesAtOneSpot = tMainConfig.get(aTextGeneral, "MaxEqualEntitiesAtOneSpot", 3).getInt(3);
         gregtechproxy.mSkeletonsShootGTArrows = tMainConfig.get(aTextGeneral, "SkeletonsShootGTArrows", 16).getInt(16);

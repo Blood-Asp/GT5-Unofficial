@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
@@ -39,11 +38,11 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_TI_ACTIVE5) : TextureFactory.of(LARGETURBINE_TI5) : casingTexturePages[0][59]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.builder().addIcon(LARGETURBINE_TI_ACTIVE5).extFacing().build() : TextureFactory.builder().addIcon(LARGETURBINE_TI5).extFacing().build() : casingTexturePages[0][59]};
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Steam Turbine")
                 .addInfo("Controller block for the Large High Pressure Steam Turbine")
@@ -55,16 +54,12 @@ public class GT_MetaTileEntity_LargeTurbine_HPSteam extends GT_MetaTileEntity_La
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Titanium Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addInputHatch("Superheated Steam, Side centered")
-                .addOutputHatch("Steam, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addInputHatch("Superheated Steam, Side centered", 2)
+                .addOutputHatch("Steam, Side centered", 2)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override

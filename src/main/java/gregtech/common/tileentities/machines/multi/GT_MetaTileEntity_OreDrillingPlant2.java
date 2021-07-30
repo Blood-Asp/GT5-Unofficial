@@ -4,6 +4,7 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
 public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDrillingPlantBase {
     public GT_MetaTileEntity_OreDrillingPlant2(int aID, String aName, String aNameRegional) {
@@ -17,8 +18,8 @@ public class GT_MetaTileEntity_OreDrillingPlant2 extends GT_MetaTileEntity_OreDr
     }
 
     @Override
-    public String[] getDescription() {
-        return getDescriptionInternal("II");
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        return createTooltip("II");
     }
 
     @Override

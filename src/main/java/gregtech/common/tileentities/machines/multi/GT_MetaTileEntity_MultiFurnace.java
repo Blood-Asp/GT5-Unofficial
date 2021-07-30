@@ -1,9 +1,11 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
-import gregtech.api.interfaces.IHeatingCoil;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -13,29 +15,44 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_StructureUtility;
 import gregtech.api.util.GT_Utility;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_MULTI_SMELTER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdderOptional;
 
-public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMultiFurnace {
+public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_MultiFurnace> implements IConstructable {
     private int mLevel = 0;
     private int mCostDiscount = 1;
 
     private static final int CASING_INDEX = 11;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final IStructureDefinition<GT_MetaTileEntity_MultiFurnace> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_MultiFurnace>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"ccc", "cmc", "ccc"},
+                    {"CCC", "C-C", "CCC",},
+                    {"b~b", "bbb", "bbb"}
+            }))
+            .addElement('c', ofBlock(GregTech_API.sBlockCasings1, CASING_INDEX))
+            .addElement('m', ofHatchAdder(GT_MetaTileEntity_MultiFurnace::addMufflerToMachineList, CASING_INDEX, 2))
+            .addElement('C', GT_StructureUtility.ofCoil(GT_MetaTileEntity_MultiFurnace::setCoilLevel, GT_MetaTileEntity_MultiFurnace::getCoilLevel))
+            .addElement('b', ofHatchAdderOptional(GT_MetaTileEntity_MultiFurnace::addBottomHatch, CASING_INDEX, 1, GregTech_API.sBlockCasings1, CASING_INDEX))
+            .build();
 
     public GT_MetaTileEntity_MultiFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -51,8 +68,8 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
     }
 
     @Override
-    public String[] getDescription() {
-        final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Furnace")
                 .addInfo("Controller Block for the Multi Smelter")
                 .addInfo("Smelts up to 8-128 items at once")
@@ -63,15 +80,13 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
                 .addController("Front bottom")
                 .addCasingInfo("Heat Proof Machine Casing", 8)
                 .addOtherStructurePart("Heating Coils", "Middle layer")
-                .addEnergyHatch("Any bottom casing")
-                .addMaintenanceHatch("Any bottom casing")
-                .addMufflerHatch("Top Middle")
-                .addInputBus("Any bottom casing")
-                .addOutputBus("Any bottom casing")
+                .addEnergyHatch("Any bottom casing", 1)
+                .addMaintenanceHatch("Any bottom casing", 1)
+                .addMufflerHatch("Top Middle", 2)
+                .addInputBus("Any bottom casing", 1)
+                .addOutputBus("Any bottom casing", 1)
                 .toolTipFinisher("Gregtech");
-        if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-            return tt.getInformation();
-        return tt.getStructureInformation();
+        return tt;
     }
 
     @Override
@@ -79,12 +94,12 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         if (aSide != aFacing) return new ITexture[]{casingTexturePages[0][CASING_INDEX]};
         if (aActive) return new ITexture[]{
                 casingTexturePages[0][CASING_INDEX],
-                TextureFactory.of(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE),
-                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW).glow().build()};
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE).extFacing().build(),
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_ACTIVE_GLOW).extFacing().glow().build()};
         return new ITexture[]{
                 casingTexturePages[0][CASING_INDEX],
-                TextureFactory.of(OVERLAY_FRONT_MULTI_SMELTER),
-                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_GLOW).glow().build()};
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER).extFacing().build(),
+                TextureFactory.builder().addIcon(OVERLAY_FRONT_MULTI_SMELTER_GLOW).extFacing().glow().build()};
     }
 
     @Override
@@ -149,55 +164,32 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         return true;
     }
 
-    private boolean checkMachineFunction(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
-        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
-
-        this.mLevel = 0;
-        this.mCostDiscount = 1;
-
-        replaceDeprecatedCoils(aBaseMetaTileEntity);
-        HeatingCoilLevel heatingCap = getInitialHeatLevel(aBaseMetaTileEntity, xDir, zDir);
-        if (heatingCap == null)
-            return false;
-
-        if (!checkStructure(heatingCap, xDir, zDir, aBaseMetaTileEntity))
-            return false;
-
-        this.mLevel = heatingCap.getLevel();
-        this.mCostDiscount = heatingCap.getCostDiscount();
-        return true;
-    }
-
     @Override
-    protected boolean checkCoils(HeatingCoilLevel heatingCap, int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
-        if ((i == 0) && (j == 0))
-            return aBaseMetaTileEntity.getAirOffset(xDir, 1, zDir);
-
-        Block coilM = aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j);
-        if (!(coilM instanceof IHeatingCoil))
-            return false;
-        byte usedMetaM = aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j);
-
-        IHeatingCoil heatingCoilM = (IHeatingCoil) coilM;
-        HeatingCoilLevel heatingLevelM = heatingCoilM.getCoilHeat(usedMetaM);
-
-        return heatingLevelM == heatingCap;
-    }
-
-    @Override
-    protected boolean checkTopLayer(int i, int j, int xDir, int zDir, IGregTechTileEntity aBaseMetaTileEntity) {
-        if ((i == 0) && (j == 0)) {
-            return addMufflerToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir, 2, zDir), CASING_INDEX);
-        }
-        if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != GregTech_API.sBlockCasings1)
-            return false;
-        return aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) == CASING_INDEX;
+    public IStructureDefinition<GT_MetaTileEntity_MultiFurnace> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
     }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack){
-        return this.checkMachineFunction(aBaseMetaTileEntity,aStack);
+        this.mLevel = 0;
+        this.mCostDiscount = 1;
+
+        replaceDeprecatedCoils(aBaseMetaTileEntity);
+
+        setCoilLevel(HeatingCoilLevel.None);
+
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 1, 2, 0))
+            return false;
+
+        if (getCoilLevel() == HeatingCoilLevel.None)
+            return false;
+
+        if (mMaintenanceHatches.size() != 1)
+            return false;
+
+        this.mLevel = getCoilLevel().getLevel();
+        this.mCostDiscount = getCoilLevel().getCostDiscount();
+        return true;
     }
 
     private void replaceDeprecatedCoils(IGregTechTileEntity aBaseMetaTileEntity) {
@@ -254,4 +246,8 @@ public class GT_MetaTileEntity_MultiFurnace extends GT_MetaTileEntity_AbstractMu
         };
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1, 2, 0);
+    }
 }
