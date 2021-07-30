@@ -553,6 +553,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_OreDictUnificator.registerOre("cropGrape", GT_ModHandler.getModItem("magicalcrops", "magicalcrops_CropProduce", 1L, 4));
         GT_OreDictUnificator.registerOre("cropTea", GT_ModHandler.getModItem("ganyssurface", "teaLeaves", 1L, 0));
 
+        // Clay buckets, which don't get registered until Iguana Tweaks pre-init
+        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Empty, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Water, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketWater", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Lava, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketLava", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Milk, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketMilk", 1L, 0));
+
         // IC2 Hazmat
         addFullHazmatToIC2Item("hazmatHelmet");
         addFullHazmatToIC2Item("hazmatChestplate");
