@@ -6,9 +6,9 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.GT_MetaGenerated_Tool;
-import gregtech.api.render.TextureFactory;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
@@ -20,10 +20,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_TU_ACTIVE5;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASINGS;
@@ -41,11 +39,11 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_TU_ACTIVE5) : TextureFactory.of(Textures.BlockIcons.LARGETURBINE_TU5) : casingTexturePages[0][60]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.builder().addIcon(LARGETURBINE_TU_ACTIVE5).extFacing().build() : TextureFactory.builder().addIcon(Textures.BlockIcons.LARGETURBINE_TU5).extFacing().build() : casingTexturePages[0][60]};
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Plasma Turbine")
                 .addInfo("Controller block for the Large Plasma Generator")
@@ -55,25 +53,18 @@ public class GT_MetaTileEntity_LargeTurbine_Plasma extends GT_MetaTileEntity_Lar
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Tungstensteel Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addInputHatch("Plasma Fluid, Side centered")
-                .addOutputHatch("Molten Fluid, optional, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addInputHatch("Plasma Fluid, Side centered", 2)
+                .addOutputHatch("Molten Fluid, optional, Side centered", 2)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
-        FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sPlasmaFuels.mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
+        if (aLiquid == null) return 0;
+        GT_Recipe tFuel = GT_Recipe_Map.sPlasmaFuels.findFuel(aLiquid);
+        if (tFuel != null) return tFuel.mSpecialValue;
         return 0;
     }
 

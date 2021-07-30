@@ -55,8 +55,8 @@ public class GT_Item_Machines extends ItemBlock {
                             if(tDescription.contains("%%%")){
                                 String[] tString = tDescription.split("%%%");
                                 if(tString.length>=2){
-                                    StringBuffer tBuffer = new StringBuffer();
-                                    Object tRep[] = new String[tString.length / 2];
+                                    StringBuilder tBuffer = new StringBuilder();
+                                    String[] tRep = new String[tString.length / 2];
                                     for (int j = 0; j < tString.length; j++)
                                         if (j % 2 == 0) tBuffer.append(tString[j]);
                                         else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}

@@ -18,7 +18,11 @@ GT5U.MBTT.Causes=Causes
 GT5U.MBTT.PPS=pollution per second
 GT5U.MBTT.Hold=Hold
 GT5U.MBTT.Display=to display structure guidelines
+GT5U.MBTT.StructureHint=Some blocks have multiple candidates or can use any tier
 GT5U.MBTT.Mod=Added by
+GT5U.MBTT.Air=Mandatory Air
+
+GT5U.cracker.io_side=Input/Output Hatches must be on opposite sides!
 
 GT5U.turbine.running.true=Turbine running
 GT5U.turbine.running.false=Turbine stopped
