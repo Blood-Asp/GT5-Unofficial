@@ -554,10 +554,12 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_OreDictUnificator.registerOre("cropTea", GT_ModHandler.getModItem("ganyssurface", "teaLeaves", 1L, 0));
 
         // Clay buckets, which don't get registered until Iguana Tweaks pre-init
-        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Empty, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0));
-        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Water, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketWater", 1L, 0));
-        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Lava, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketLava", 1L, 0));
-        GT_OreDictUnificator.set(OrePrefixes.bucket, Materials.Milk, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketMilk", 1L, 0));
+        OrePrefixes.bucketClay.mContainerItem = GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0);
+        GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Empty, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Water, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketWater", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Lava, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketLava", 1L, 0));
+        GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Milk, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketMilk", 1L, 0));
+        FluidContainerRegistry.registerFluidContainer(new FluidContainerRegistry.FluidContainerData(Materials.Milk.getFluid(1000L), GT_OreDictUnificator.get(OrePrefixes.bucketClay, Materials.Milk, 1L), GT_OreDictUnificator.get(OrePrefixes.bucketClay, Materials.Empty, 1L)));
 
         // IC2 Hazmat
         addFullHazmatToIC2Item("hazmatHelmet");
