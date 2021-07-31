@@ -13,56 +13,19 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
 /**
- * A simple 3x3x3 hollow cubic multiblock, that can be arbitrarily rotated, made of a single type of machine casing, accepts hatches everywhere.
- *
+ * A simple 3x3x3 hollow cubic multiblock, that can be arbitrarily rotated, made of a single type of machine casing and accepts hatches everywhere.
  * Controller will be placed in front center of the structure.
  * <p>
  * Note: You cannot use different casing for the same Class. Make a new subclass for it. You also should not change the casing
  * dynamically, i.e. it should be a dumb method returning some sort of constant.
  * <p>
  * Implementation tips:
- * <ul>
- * <li>To restrict hatches, override {@link #addDynamoToMachineList(IGregTechTileEntity, int)} and its cousins instead of overriding the whole
+ * 1. To restrict hatches, override {@link #addDynamoToMachineList(IGregTechTileEntity, int)} and its cousins instead of overriding the whole
  * {@link #getStructureDefinition()} or change {@link #checkHatches(IGregTechTileEntity, ItemStack)}. The former is a total overkill, while the later cannot
  * stop the structure check early.
- *   Example 1: Require ULV input only:
- * <pre>
- * {@code
- * @Override
- * public boolean addInputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
- *     if (aTileEntity == null) return false;
- *     IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
- *     if (aMetaTileEntity == null) return false;
- *     if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input) {
- *         if (((GT_MetaTileEntity_Hatch_InputBus) aMetaTileEntity).mTier != 0) return false; // addition
- *         ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
- *         ((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity).mRecipeMap = getRecipeMap();
- *         return mInputHatches.add((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity);
- *     }
- *     if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_InputBus) {
- *         if (((GT_MetaTileEntity_Hatch_InputBus) aMetaTileEntity).mTier != 0) return false; // addition
- *         ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
- *         ((GT_MetaTileEntity_Hatch_InputBus) aMetaTileEntity).mRecipeMap = getRecipeMap();
- *         return mInputBusses.add((GT_MetaTileEntity_Hatch_InputBus) aMetaTileEntity);
- *     }
- *     return false;
- * }
- * }</pre>
- *   Example 2: Allow dynamo, muffler and prevent energy hatch
- * <pre>
- * {@code
- * @Override
- * public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
- *     return addInputToMachineList(aTileEntity, aBaseCasingIndex) ||
- *         addOutputToMachineList(aTileEntity, aBaseCasingIndex) ||
- *         addDynamoToMachineList(aTileEntity, aBaseCasingIndex) ||
- *         addMufflerToMachineList(aTileEntity, aBaseCasingIndex) ||
- *         addMaintenanceToMachineList(aTileEntity, aBaseCasingIndex);
- * }
- * }</pre></li>
- * <li>To limit rotation, override {@link #getInitialAlignmentLimits()}</li>
- *</ul>
- * @param <T> this
+ * 2. To limit rotation, override {@link #getInitialAlignmentLimits()}
+ *
+ * @param <T>
  */
 public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTileEntity_CubicMultiBlockBase<T>> extends GT_MetaTileEntity_EnhancedMultiBlockBase<T> {
 	protected static final String STRUCTURE_PIECE_MAIN = "main";
@@ -95,14 +58,6 @@ public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTil
 		super(aName);
 	}
 
-	@Override
-	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-		return addInputToMachineList(aTileEntity, aBaseCasingIndex) ||
-				addOutputToMachineList(aTileEntity, aBaseCasingIndex) ||
-				addEnergyInputToMachineList(aTileEntity, aBaseCasingIndex) ||
-				addMaintenanceToMachineList(aTileEntity, aBaseCasingIndex);
-	}
-
 	/**
 	 * Create a simple 3x3x3 hollow cubic structure made of a single type of machine casing and accepts hatches everywhere.
 	 * <p>
@@ -123,7 +78,7 @@ public abstract class GT_MetaTileEntity_CubicMultiBlockBase<T extends GT_MetaTil
 	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 		mCasingAmount = 0;
 		return checkPiece(STRUCTURE_PIECE_MAIN, 1, 1, 0) &&
-				mCasingAmount > getRequiredCasingCount() &&
+				mCasingAmount >= getRequiredCasingCount() &&
 				checkHatches(aBaseMetaTileEntity, aStack);
 	}
 
