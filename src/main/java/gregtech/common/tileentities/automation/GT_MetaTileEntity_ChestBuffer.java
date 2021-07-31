@@ -125,6 +125,8 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
     protected void fillStacksIntoFirstSlots() {
         sortStacks();
         // Merge small stacks together
+        // The last slot of mInventory is invalid, so we need to avoid iterating over it.
+        // Thus all max indices are reduced by 1 here.
         for (int i = 0; i < this.mInventory.length - 2;) {
             //GT_FML_LOGGER.info( (this.mInventory[i] == null) ? "Slot empty " + i : "Slot " + i + " holds " + this.mInventory[i].getDisplayName());
             for (int j = i + 1; j < this.mInventory.length - 1; j++) {

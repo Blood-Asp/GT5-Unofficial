@@ -51,6 +51,8 @@ public class GT_MetaTileEntity_ItemDistributor extends GT_MetaTileEntity_Buffer 
 
     @Override
     protected void fillStacksIntoFirstSlots() {
+        // The last slot of mInventory is invalid, so we need to avoid iterating over it.
+        // Thus all max indices are reduced by 1 here.
         for (int i = 0; i < this.mInventory.length - 2; i++) {
             for (int j = i + 1; j < this.mInventory.length - 1; j++) {
                 if ((this.mInventory[j] != null)
