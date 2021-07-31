@@ -596,17 +596,21 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 
                         if (mTickTimer > 10) {
                             byte tData = (byte) ((mFacing & 7) | (mActive ? 8 : 0) | (mRedstone ? 16 : 0) | (mLockUpgrade ? 32 : 0)| (mWorks ? 64 : 0));
-                            if (tData != oTextureData) sendBlockEvent((byte) 0, oTextureData = tData);
+                            if (tData != oTextureData)
+                                sendBlockEvent(ClientEvents.CHANGE_COMMON_DATA, oTextureData = tData);
 
                             tData = mMetaTileEntity.getUpdateData();
-                            if (tData != oUpdateData) sendBlockEvent((byte) 1, oUpdateData = tData);
-                            if(mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) {
+                            if (tData != oUpdateData)
+                                sendBlockEvent(ClientEvents.CHANGE_CUSTOM_DATA, oUpdateData = tData);
+                            if (mMetaTileEntity instanceof GT_MetaTileEntity_Hatch) {
                                 tData = ((GT_MetaTileEntity_Hatch) mMetaTileEntity).getTexturePage();
-                                if (tData != oTexturePage) sendBlockEvent((byte) 1, (byte)((oTexturePage = tData)|0x80));//set last bit as a flag for page
+                                if (tData != oTexturePage)
+                                    sendBlockEvent(ClientEvents.CHANGE_CUSTOM_DATA, (byte) ((oTexturePage = tData) | 0x80));//set last bit as a flag for page
                             }
-                            if (mColor != oColor) sendBlockEvent((byte) 2, oColor = mColor);
+                            if (mColor != oColor) sendBlockEvent(ClientEvents.CHANGE_COLOR, oColor = mColor);
                             tData = (byte) (((mSidedRedstone[0] > 0) ? 1 : 0) | ((mSidedRedstone[1] > 0) ? 2 : 0) | ((mSidedRedstone[2] > 0) ? 4 : 0) | ((mSidedRedstone[3] > 0) ? 8 : 0) | ((mSidedRedstone[4] > 0) ? 16 : 0) | ((mSidedRedstone[5] > 0) ? 32 : 0));
-                            if (tData != oRedstoneData) sendBlockEvent((byte) 3, oRedstoneData = tData);
+                            if (tData != oRedstoneData)
+                                sendBlockEvent(ClientEvents.CHANGE_REDSTONE_OUTPUT, oRedstoneData = tData);
                             if (mLightValue != oLightValue) {
                                 worldObj.setLightValue(EnumSkyBlock.Block, xCoord, yCoord, zCoord, mLightValue);
                                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
@@ -617,7 +621,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
                                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord + 1);
                                 worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord - 1);
                                 issueTextureUpdate();
-                                sendBlockEvent((byte) 7, oLightValue = mLightValue);
+                                sendBlockEvent(ClientEvents.CHANGE_LIGHT, oLightValue = mLightValue);
                             }
                         }
 
@@ -670,8 +674,8 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         for (byte i = 0; i < 6; i++) mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
 
         receiveClientEvent(ClientEvents.CHANGE_COMMON_DATA, aTextureData);
-        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_VALUE, aUpdateData & 0x7F);
-        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_VALUE, aTexturePage | 0x80);
+        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_DATA, aUpdateData & 0x7F);
+        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_DATA, aTexturePage | 0x80);
         receiveClientEvent(ClientEvents.CHANGE_COLOR, aColorData);
         receiveClientEvent(ClientEvents.CHANGE_REDSTONE_OUTPUT, aRedstoneData);
     }
@@ -694,21 +698,21 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
         for (byte i = 0; i < 6; i++) mCoverBehaviors[i] = GregTech_API.getCoverBehavior(mCoverSides[i]);
 
         receiveClientEvent(ClientEvents.CHANGE_COMMON_DATA, aTextureData);
-        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_VALUE, aUpdateData & 0x7F);
-        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_VALUE, 0x80);
+        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_DATA, aUpdateData & 0x7F);
+        receiveClientEvent(ClientEvents.CHANGE_CUSTOM_DATA, 0x80);
         receiveClientEvent(ClientEvents.CHANGE_COLOR, aColorData);
         receiveClientEvent(ClientEvents.CHANGE_REDSTONE_OUTPUT, aRedstoneData);
     }
 
     public static class ClientEvents {
-        public static final int CHANGE_COMMON_DATA = 0;
-        public static final int CHANGE_CUSTOM_VALUE = 1;
-        public static final int CHANGE_COLOR = 2;
-        public static final int CHANGE_REDSTONE_OUTPUT = 3;
-        public static final int DO_SOUND = 4;
-        public static final int START_SOUND_LOOP = 5;
-        public static final int STOP_SOUND_LOOP = 6;
-        public static final int CHANGE_LIGHT = 7;
+        public static final byte CHANGE_COMMON_DATA = 0;
+        public static final byte CHANGE_CUSTOM_DATA = 1;
+        public static final byte CHANGE_COLOR = 2;
+        public static final byte CHANGE_REDSTONE_OUTPUT = 3;
+        public static final byte DO_SOUND = 4;
+        public static final byte START_SOUND_LOOP = 5;
+        public static final byte STOP_SOUND_LOOP = 6;
+        public static final byte CHANGE_LIGHT = 7;
     }
 
     @Override
@@ -734,7 +738,7 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
 				    //mLockUpgrade	= ((aValue&32) != 0);
                     mWorks =  ((aValue & 64) != 0);
                     break;
-                case ClientEvents.CHANGE_CUSTOM_VALUE:
+                case ClientEvents.CHANGE_CUSTOM_DATA:
                     if (hasValidMetaTileEntity()) {
                         if ((aValue & 0x80) == 0) //Is texture index
                             mMetaTileEntity.onValueUpdate((byte) (aValue & 0x7F));
