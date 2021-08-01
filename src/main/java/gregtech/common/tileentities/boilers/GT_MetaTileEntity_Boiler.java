@@ -248,7 +248,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     }
 
     private void calculateHeatUp(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if ((this.mTemperature < getMaxTemperature()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
+        if ((this.mTemperature < getMaxTemperature()) && (this.mProcessingEnergy > 0) && (aTick % getHeatUpRate() == 0L)) {
             this.mProcessingEnergy -= getEnergyConsumption();
             this.mTemperature += getHeatUpAmount();
         }
@@ -277,8 +277,8 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
                 this.mHadNoWater = true;
             } else {
                 if (this.mHadNoWater) {
-                    GT_Log.exp.println("Boiler "+this.mName+" had no Water!");
-                    aBaseMetaTileEntity.doExplosion(2048L);
+                    GT_Log.exp.println("Boiler " + this.mName + " had no Water!");
+                    onDangerousWaterLack(aBaseMetaTileEntity, aTick);
                     return true;
                 }
                 produceSteam(getProductionPerSecond() / 2);
@@ -287,6 +287,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
             this.mHadNoWater = false;
         }
         return false;
+    }
+
+    protected void onDangerousWaterLack(IGregTechTileEntity tile, long ticks) {
+        tile.doExplosion(2048L);
     }
 
     protected final void pushSteamToSide(IGregTechTileEntity aBaseMetaTileEntity, int aSide) {
@@ -374,6 +378,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     protected abstract int getEnergyConsumption();
 
     protected abstract int getCooldownInterval();
+
+    protected int getHeatUpRate() {
+        return 12;
+    }
 
     protected int getHeatUpAmount() {
         return 1;
