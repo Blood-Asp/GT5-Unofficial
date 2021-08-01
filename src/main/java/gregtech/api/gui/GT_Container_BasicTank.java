@@ -52,9 +52,6 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
             IFluidAccess tDrainableAccess = IFluidAccess.from(tTank, false);
             return handleFluidSlotClick(tDrainableAccess, aPlayer, aMouseclick == 0, true, !tTank.isDrainableStackSeparate());
         }
-        if (mTileEntity.isServerSide()) {
-            aPlayer.addChatComponentMessage(new ChatComponentText(String.format("Slot Index: %d, aMouseClick: %d, Shift Hold: %d", aShifthold, aMouseclick, aShifthold)));
-        }
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 

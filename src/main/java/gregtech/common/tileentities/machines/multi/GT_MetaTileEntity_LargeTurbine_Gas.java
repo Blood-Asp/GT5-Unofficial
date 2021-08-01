@@ -12,10 +12,8 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_SS5;
 import static gregtech.api.enums.Textures.BlockIcons.LARGETURBINE_SS_ACTIVE5;
@@ -34,11 +32,11 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.of(LARGETURBINE_SS_ACTIVE5) : TextureFactory.of(LARGETURBINE_SS5) : casingTexturePages[0][58]};
+        return new ITexture[]{MACHINE_CASINGS[1][aColorIndex + 1], aFacing == aSide ? aActive ? TextureFactory.builder().addIcon(LARGETURBINE_SS_ACTIVE5).extFacing().build() : TextureFactory.builder().addIcon(LARGETURBINE_SS5).extFacing().build() : casingTexturePages[0][58]};
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Gas Turbine")
                 .addInfo("Controller block for the Large Gas Turbine")
@@ -48,25 +46,18 @@ public class GT_MetaTileEntity_LargeTurbine_Gas extends GT_MetaTileEntity_LargeT
                 .beginStructureBlock(3, 3, 4, true)
                 .addController("Front center")
                 .addCasingInfo("Stainless Steel Turbine Casing", 24)
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("Side centered")
-                .addMufflerHatch("Side centered")
-                .addInputHatch("Gas Fuel, Side centered")
+                .addDynamoHatch("Back center", 1)
+                .addMaintenanceHatch("Side centered", 2)
+                .addMufflerHatch("Side centered", 2)
+                .addInputHatch("Gas Fuel, Side centered", 2)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     public int getFuelValue(FluidStack aLiquid) {
-        if (aLiquid == null || GT_Recipe_Map.sTurbineFuels == null) return 0;
-        FluidStack tLiquid;
-        Collection<GT_Recipe> tRecipeList = GT_Recipe_Map.sTurbineFuels.mRecipeList;
-        if (tRecipeList != null) for (GT_Recipe tFuel : tRecipeList)
-            if ((tLiquid = GT_Utility.getFluidForFilledItem(tFuel.getRepresentativeInput(0), true)) != null)
-                if (aLiquid.isFluidEqual(tLiquid)) return tFuel.mSpecialValue;
+        if (aLiquid == null) return 0;
+        GT_Recipe tFuel = GT_Recipe_Map.sTurbineFuels.findFuel(aLiquid);
+        if (tFuel != null) return tFuel.mSpecialValue;
         return 0;
     }
 

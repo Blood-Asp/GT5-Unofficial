@@ -383,14 +383,14 @@ public class GT_ModHandler {
     }
 
     /**
-     * Gets an Item from RailCraft
+     * Gets an Item from the specified mod
      */
     public static ItemStack getModItem(String aModID, String aItem, long aAmount) {
         return getModItem(aModID, aItem, aAmount, null);
     }
 
     /**
-     * Gets an Item from RailCraft, and returns a Replacement Item if not possible
+     * Gets an Item from the specified mod, and returns a Replacement Item if not possible
      */
     public static ItemStack getModItem(String aModID, String aItem, long aAmount, ItemStack aReplacement) {
         if (GT_Utility.isStringInvalid(aItem) || !GregTech_API.sPreloadStarted) return null;
@@ -398,7 +398,7 @@ public class GT_ModHandler {
     }
 
     /**
-     * Gets an Item from RailCraft, but the Damage Value can be specified
+     * Gets an Item from the specified mod, but the Damage Value can be specified
      */
     public static ItemStack getModItem(String aModID, String aItem, long aAmount, int aMeta) {
         ItemStack rStack = getModItem(aModID, aItem, aAmount);
@@ -408,7 +408,7 @@ public class GT_ModHandler {
     }
 
     /**
-     * Gets an Item from RailCraft, but the Damage Value can be specified, and returns a Replacement Item with the same Damage if not possible
+     * Gets an Item from the specified mod, but the Damage Value can be specified, and returns a Replacement Item with the same Damage if not possible
      */
     public static ItemStack getModItem(String aModID, String aItem, long aAmount, int aMeta, ItemStack aReplacement) {
         ItemStack rStack = getModItem(aModID, aItem, aAmount, aReplacement);
