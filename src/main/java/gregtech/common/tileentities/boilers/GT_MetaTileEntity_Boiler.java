@@ -31,7 +31,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public boolean mHadNoWater = false;
     private int mExcessWater = 0;
 
-    public static final int SOUND_EVENT_LET_OFF_EXCESS_STEAM = 1;
+    public static final byte SOUND_EVENT_LET_OFF_EXCESS_STEAM = 1;
 
     public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
@@ -262,7 +262,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     private void ventSteamIfTankIsFull() {
         if ((this.mSteam != null) && (this.mSteam.amount > getCapacity())) {
-            sendSound((byte) 1);
+            sendSound(SOUND_EVENT_LET_OFF_EXCESS_STEAM);
             this.mSteam.amount = getCapacity() * 3 / 4;
         }
     }
