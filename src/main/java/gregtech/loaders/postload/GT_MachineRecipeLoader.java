@@ -266,16 +266,6 @@ public class GT_MachineRecipeLoader implements Runnable {
         GT_Values.RA.addFluidCannerRecipe(ItemList.Battery_Hull_HV.get(1L), ItemList.Battery_SU_HV_SulfuricAcid.getWithCharge(1L, Integer.MAX_VALUE), Materials.SulfuricAcid.getFluid(16000L), GT_Values.NF);
         GT_Values.RA.addFluidCannerRecipe(ItemList.TF_Vial_FieryTears.get(1L), ItemList.Bottle_Empty.get(1L), GT_Values.NF, Materials.FierySteel.getFluid(250L));
 
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Concrete.getMolten(144L));
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Concrete, 1L)), Materials.Concrete.getMolten(144L), GT_Values.NF);
-
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L)), Materials.Redstone.getMolten(144L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L)), Materials.Glass.getMolten(144L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(ItemList.Cell_Empty.get(1L), (GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L)), Materials.Blaze.getMolten(144L), GT_Values.NF);
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Redstone.getMolten(144L));
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Glass.getMolten(144L));
-        GT_Values.RA.addFluidCannerRecipe(GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L), ItemList.Cell_Empty.get(1L), GT_Values.NF, Materials.Blaze.getMolten(144L));
-
         Materials tMaterial = Materials.Iron;
         if (tMaterial.mStandardMoltenFluid != null) {
             GT_Values.RA.addFluidSolidifierRecipe(ItemList.Shape_Mold_Casing.get(0L), tMaterial.getMolten(72L), ItemList.IC2_Item_Casing_Iron.get(1L), 16, 8);
