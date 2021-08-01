@@ -8,7 +8,10 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,6 +30,8 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public FluidStack mSteam = null;
     public boolean mHadNoWater = false;
     private int mExcessWater = 0;
+
+    public static final byte SOUND_EVENT_LET_OFF_EXCESS_STEAM = 1;
 
     public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, String aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, 0, 4, aDescription, aTextures);
@@ -257,7 +262,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     private void ventSteamIfTankIsFull() {
         if ((this.mSteam != null) && (this.mSteam.amount > getCapacity())) {
-            sendSound((byte) 1);
+            sendSound(SOUND_EVENT_LET_OFF_EXCESS_STEAM);
             this.mSteam.amount = getCapacity() * 3 / 4;
         }
     }
@@ -329,13 +334,13 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     @Override
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
-        if (aIndex == 1) {
+        if (aIndex == GT_MetaTileEntity_Boiler.SOUND_EVENT_LET_OFF_EXCESS_STEAM) {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 2, 1.0F, aX, aY, aZ);
 
             new WorldSpawnedEventBuilder.ParticleEventBuilder()
                     .setIdentifier("largesmoke")
                     .setWorld(getBaseMetaTileEntity().getWorld())
-                    .setMotion(0D,0D,0D)
+                    .setMotion(0D, 0D, 0D)
                     .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(8, x -> x
                             .setPosition(
                                     aX - 0.5D + XSTR_INSTANCE.nextFloat(),
