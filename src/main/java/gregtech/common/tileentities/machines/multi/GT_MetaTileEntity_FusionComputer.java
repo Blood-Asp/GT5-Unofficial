@@ -16,6 +16,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_GUIContainer_FusionReactor;
@@ -160,6 +161,19 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
     @Override
     public IStructureDefinition<GT_MetaTileEntity_FusionComputer> getStructureDefinition() {
         return STRUCTURE_DEFINITION.get(getClass());
+    }
+
+    @Override
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
+        GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
+        tt.addController("Fusion Reactor")
+                .addInfo("Some kind of fusion reactor, maybe")
+                .addSeparator()
+                .addInfo("Some kind of fusion reactor, maybe")
+                .addStructureInfo("Should probably be built similar to other fusions")
+                .addStructureInfo("See controller tooltip for details")
+                .toolTipFinisher("Gregtech");
+        return tt;
     }
 
     @Override
