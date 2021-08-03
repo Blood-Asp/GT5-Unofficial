@@ -44,10 +44,6 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
         super(aName, aTier, getSlots(aTier), aDescription, aTextures);
     }
 
-    public GT_MetaTileEntity_Hatch_OutputBus(String aName, int aTier, String[] aDescription, int inventorySize, ITexture[][][] aTextures) {
-        super(aName, aTier, inventorySize, aDescription, aTextures);
-    }
-
     public GT_MetaTileEntity_Hatch_OutputBus(String name, int tier, int slots, String[] description, ITexture[][][] textures) {
         super(name, tier, slots, description, textures);
     }
