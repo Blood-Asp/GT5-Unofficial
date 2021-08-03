@@ -111,7 +111,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
         if (aPlayer != null) {
             if (GT_Utility.areStacksEqual(aPlayer.getCurrentEquippedItem(), new ItemStack(Items.water_bucket, 1))) {
                 fill(Materials.Water.getFluid(1000L * (long) aPlayer.getCurrentEquippedItem().stackSize), true);
-                aPlayer.getCurrentEquippedItem().func_150996_a(Items.bucket);
+
+                if (!aPlayer.capabilities.isCreativeMode) {
+                    aPlayer.getCurrentEquippedItem().func_150996_a(Items.bucket);
+                }
             } else {
                 aBaseMetaTileEntity.openGUI(aPlayer);
             }
