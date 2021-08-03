@@ -10,7 +10,7 @@ import gregtech.api.util.GT_ClientPreference;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
-import gregtech.api.util.extensions.Arrays;
+import gregtech.api.util.extensions.ArrayExt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     }
 
     public GT_MetaTileEntity_Hatch_InputBus(int id, String name, String nameRegional, int tier, int slots) {
-        super(id, name, nameRegional, tier, slots, Arrays.of(
+        super(id, name, nameRegional, tier, slots, ArrayExt.of(
                 "Item Input for Multiblocks",
                 "Shift + right click with screwdriver to turn Sort mode on/off",
                 "Capacity: " + slots + " stack" + (slots >= 2 ? "s" : "")));
@@ -38,7 +38,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     @Deprecated
     // having too many constructors is bad, don't be so lazy, use GT_MetaTileEntity_Hatch_InputBus(String, int, String[], ITexture[][][])
     public GT_MetaTileEntity_Hatch_InputBus(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        this(aName, aTier, Arrays.of(aDescription), aTextures);
+        this(aName, aTier, ArrayExt.of(aDescription), aTextures);
     }
 
     public GT_MetaTileEntity_Hatch_InputBus(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
