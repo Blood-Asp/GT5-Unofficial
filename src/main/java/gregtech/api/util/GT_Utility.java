@@ -24,6 +24,7 @@ import gregtech.api.net.GT_Packet_Sound;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
+import gregtech.api.util.extensions.ArrayExt;
 import gregtech.common.GT_Proxy;
 import ic2.api.recipe.IRecipeInput;
 import ic2.api.recipe.RecipeInputItemStack;
@@ -81,6 +82,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.IntFunction;
 
 import static gregtech.GT_Mod.GT_FML_LOGGER;
 import static gregtech.api.enums.GT_Values.*;
@@ -1236,6 +1238,9 @@ public class GT_Utility {
         return false;
     }
 
+    /**
+     * Note: use {@link ArrayExt#withoutNulls(Object[], IntFunction)} if you want an array as a result.
+     */
     public static <T> ArrayList<T> getArrayListWithoutNulls(T... aArray) {
         if (aArray == null) return new ArrayList<>();
         ArrayList<T> rList = new ArrayList<>(Arrays.asList(aArray));
@@ -1243,6 +1248,9 @@ public class GT_Utility {
         return rList;
     }
 
+    /**
+     * Note: use {@link ArrayExt#withoutTrailingNulls(Object[], IntFunction)} if you want an array as a result.
+     */
     public static <T> ArrayList<T> getArrayListWithoutTrailingNulls(T... aArray) {
         if (aArray == null) return new ArrayList<>();
         ArrayList<T> rList = new ArrayList<>(Arrays.asList(aArray));

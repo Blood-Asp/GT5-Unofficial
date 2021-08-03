@@ -32,6 +32,29 @@ public class ArrayExt {
         return objects;
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
+    public static <T> T[] withoutNulls(T[] array, IntFunction<T[]> arrayFactory) {
+        int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null) {
+                count++;
+            }
+        }
+
+        T[] newArr = arrayFactory.apply(count);
+        if (count == 0) return newArr;
+
+        int j = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null) {
+                newArr[j] = array[i];
+                j++;
+            }
+        }
+
+        return newArr;
+    }
+
     public static <T> T[] withoutTrailingNulls(T[] array, IntFunction<T[]> arrayFactory) {
         int firstNull = -1;
         for (int i = 0; i < array.length; i++) {
