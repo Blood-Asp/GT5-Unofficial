@@ -6,7 +6,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Utility;
-import gregtech.api.util.extensions.Arrays;
+import gregtech.api.util.extensions.ArrayExt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -21,7 +21,7 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
     }
 
     public GT_MetaTileEntity_Hatch_OutputBus(int id, String name, String nameRegional, int tier, int slots) {
-        super(id, name, nameRegional, tier, slots, Arrays.of(
+        super(id, name, nameRegional, tier, slots, ArrayExt.of(
                 "Item Output for Multiblocks",
                 "Capacity: " + getSlots(tier) + " stack" + (getSlots(tier) >= 2 ? "s" : "")));
     }
@@ -37,7 +37,7 @@ public class GT_MetaTileEntity_Hatch_OutputBus extends GT_MetaTileEntity_Hatch {
     @Deprecated
     // having too many constructors is bad, don't be so lazy, use GT_MetaTileEntity_Hatch_OutputBus(String, int, String[], ITexture[][][])
     public GT_MetaTileEntity_Hatch_OutputBus(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        this(aName, aTier, getSlots(aTier), Arrays.of(aDescription), aTextures);
+        this(aName, aTier, getSlots(aTier), ArrayExt.of(aDescription), aTextures);
     }
 
     public GT_MetaTileEntity_Hatch_OutputBus(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
