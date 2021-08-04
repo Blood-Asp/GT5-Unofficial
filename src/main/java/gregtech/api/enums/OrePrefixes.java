@@ -543,15 +543,7 @@ public enum OrePrefixes {
         cableGt01.mSecondaryMaterial = new MaterialStack(Materials.Rubber, plate.mMaterialAmount);
         bucket.mSecondaryMaterial = new MaterialStack(Materials.Iron, ingot.mMaterialAmount * 3);
         bucketClay.mSecondaryMaterial = new MaterialStack(Materials.Clay, dust.mMaterialAmount * 5);
-        cell.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellPlasma.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellMolten.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellHydroCracked1.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellHydroCracked2.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellHydroCracked3.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellSteamCracked1.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellSteamCracked2.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
-        cellSteamCracked3.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2);
+        CELL_TYPES.forEach(prefix -> prefix.mSecondaryMaterial = new MaterialStack(Materials.Tin, plate.mMaterialAmount * 2));
         oreRedgranite.mSecondaryMaterial = new MaterialStack(Materials.GraniteRed, dust.mMaterialAmount);
         oreBlackgranite.mSecondaryMaterial = new MaterialStack(Materials.GraniteBlack, dust.mMaterialAmount);
         oreNetherrack.mSecondaryMaterial = new MaterialStack(Materials.Netherrack, dust.mMaterialAmount);
@@ -1004,7 +996,6 @@ public enum OrePrefixes {
                 return mLocalizedMaterialPre + OrePrefixes.gem.getDefaultLocalNameFormatForItem(aMaterial);
             case crateGtPlate:
                 return mLocalizedMaterialPre + OrePrefixes.plate.getDefaultLocalNameFormatForItem(aMaterial);
-            case cellMolten:
         }
         switch (aMaterial.mName) {
             case "Glass":
