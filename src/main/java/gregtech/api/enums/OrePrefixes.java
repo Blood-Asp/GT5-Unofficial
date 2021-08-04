@@ -336,11 +336,6 @@ public enum OrePrefixes {
                     cellHydroCracked1, cellHydroCracked2, cellHydroCracked3,
                     cellSteamCracked1, cellSteamCracked2, cellSteamCracked3);
 
-    public static final ImmutableList<OrePrefixes> CRACKED_CELL_TYPES =
-            ImmutableList.of(
-                    cellHydroCracked1, cellHydroCracked2, cellHydroCracked3,
-                    cellSteamCracked1, cellSteamCracked2, cellSteamCracked3);
-
     public static volatile int VERSION = 509;
 
     static {
