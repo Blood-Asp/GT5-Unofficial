@@ -49,10 +49,14 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
             .addElement('c', ofCoil(GT_MetaTileEntity_OilCracker::setCoilLevel, GT_MetaTileEntity_OilCracker::getCoilLevel))
             .addElement('l', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_OilCracker::addLeftHatchToMachineList, CASING_INDEX, 2),
+                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addMaintenanceToMachineList, CASING_INDEX, 1),
                     onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('r', ofChain(
                     ofHatchAdder(GT_MetaTileEntity_OilCracker::addRightHatchToMachineList, CASING_INDEX, 3),
+                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addEnergyInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_OilCracker::addMaintenanceToMachineList, CASING_INDEX, 1),
                     onElementPass(GT_MetaTileEntity_OilCracker::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, 1))
             ))
             .addElement('m', ofChain(
