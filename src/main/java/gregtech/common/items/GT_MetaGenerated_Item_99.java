@@ -1,5 +1,6 @@
 package gregtech.common.items;
 
+import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
@@ -24,145 +25,174 @@ import static gregtech.api.enums.OrePrefixes.cellMolten;
 public class GT_MetaGenerated_Item_99 extends GT_MetaGenerated_Item {
     public static GT_MetaGenerated_Item_99 INSTANCE;
 
-    private BitSet enabled=new BitSet();
+    /**
+     * Ore prefixes appear in this list in the order in which they will be assigned ID blocks.
+     *
+     * <p>In order to avoid breaking existing worlds, the entries in this list must not be re-ordered! The only safe
+     * modification that can be made to this list is adding new entries to the end.
+     */
+    private static final ImmutableList<OrePrefixes> CRACKED_CELL_TYPES =
+            ImmutableList.of(
+                    OrePrefixes.cellHydroCracked1, OrePrefixes.cellHydroCracked2, OrePrefixes.cellHydroCracked3,
+                    OrePrefixes.cellSteamCracked1, OrePrefixes.cellSteamCracked2, OrePrefixes.cellSteamCracked3);
+    private static final int NUM_CRACKED_CELL_TYPES = CRACKED_CELL_TYPES.size();
 
-    private void register(Materials tMaterial,int i){
+    /**
+     * Assignment of metadata IDs:
+     *        0 -    999: Molten cells
+     *   10_000 - 15_999: Cracked fluid cells (# IDs used is NUM_CRACKED_CELL_TYPES * 1_000; update this if you add any)
+     */
+    private BitSet enabled = new BitSet();
+
+    public GT_MetaGenerated_Item_99() {
+        super("metaitem.99", (short) (10_000 + NUM_CRACKED_CELL_TYPES * 1_000), (short) 0);
+
+        INSTANCE = this;
+
+        for (Materials tMaterial : GregTech_API.sGeneratedMaterials) {
+            if (tMaterial == null || tMaterial.mMetaItemSubID < 0 || tMaterial.mMetaItemSubID >= 1_000) {
+                continue;
+            }
+
+            if ((tMaterial.contains(SubTag.SMELTING_TO_FLUID)) && (!tMaterial.contains(SubTag.NO_SMELTING)) && !tMaterial.contains(SubTag.SMELTING_TO_GEM)) {
+                registerMolten(tMaterial, tMaterial.mMetaItemSubID);
+                if (tMaterial.mSmeltInto != tMaterial
+                        && tMaterial.mSmeltInto.mMetaItemSubID >= 0 && tMaterial.mSmeltInto.mMetaItemSubID < 1_000) {
+                    registerMolten(tMaterial.mSmeltInto, tMaterial.mSmeltInto.mMetaItemSubID);
+                }
+            }
+
+            if (tMaterial.canBeCracked()) {
+                registerCracked(tMaterial, tMaterial.mMetaItemSubID);
+            }
+        }
+
+        // We're not going to use these BitSets, so clear them to save memory.
+        mEnabledItems.clear();
+        mVisibleItems.clear();
+    }
+
+    private void registerMolten(Materials tMaterial,int i){
         ItemStack tStack = new ItemStack(this, 1, i);
         enabled.set(i);
-        GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", getDefaultLocalizationFormat(cellMolten, tMaterial, i));
+
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", cellMolten.getDefaultLocalNameFormatForItem(tMaterial));
         GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".tooltip", tMaterial.getToolTip(cellMolten.mMaterialAmount / M));
+
         if (cellMolten.mIsUnificatable) {
             GT_OreDictUnificator.set(cellMolten, tMaterial, tStack);
         } else {
             GT_OreDictUnificator.registerOre(cellMolten.get(tMaterial), tStack);
         }
     }
-    //x32
 
-    public GT_MetaGenerated_Item_99() {
-        super("metaitem.99", (short) 1000, (short) 0);
+    private void registerCracked(Materials tMaterial, int i) {
+        int offset = 10_000;
+        for (OrePrefixes prefix : CRACKED_CELL_TYPES) {
+            ItemStack tStack = new ItemStack(this, 1, offset + i);
+            enabled.set(offset + i);
 
-        INSTANCE = this;
+            GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".name", prefix.getDefaultLocalNameFormatForItem(tMaterial));
+            GT_LanguageManager.addStringLocalization(getUnlocalizedName(tStack) + ".tooltip", tMaterial.getToolTip(prefix.mMaterialAmount / M));
 
-        for (Materials tMaterial:GregTech_API.sGeneratedMaterials) {
-            if (tMaterial == null || tMaterial.mMetaItemSubID<0 || tMaterial.mMetaItemSubID>=1000) continue;
-            //if (tMaterial.getcells(1)==null) {
-            if ((tMaterial.contains(SubTag.SMELTING_TO_FLUID)) && (!tMaterial.contains(SubTag.NO_SMELTING)) && !tMaterial.contains(SubTag.SMELTING_TO_GEM)) {
-                register(tMaterial,tMaterial.mMetaItemSubID);
-                if (tMaterial.mSmeltInto != tMaterial) {
-                    register(tMaterial.mSmeltInto,tMaterial.mSmeltInto.mMetaItemSubID);
-                }
+            if (prefix.mIsUnificatable) {
+                GT_OreDictUnificator.set(prefix, tMaterial, tStack);
+            } else {
+                GT_OreDictUnificator.registerOre(prefix.get(tMaterial), tStack);
             }
-            //}
+
+            offset += 1_000;
         }
-        mEnabledItems.clear();
-        mVisibleItems.clear();
     }
 
-	/* ---------- OVERRIDEABLE FUNCTIONS ---------- */
+    /** Returns null for item damage out of bounds. */
+    private Materials getMaterial(int damage) {
+        if (damage < 0) {
+            return null;
+        }
+        return GregTech_API.sGeneratedMaterials[damage % 1_000];
+    }
 
-    /**
-     * @return the Color Modulation the Material is going to be rendered with.
-     */
+    /** Returns null for item damage out of bounds. */
+    private OrePrefixes getOrePrefix(int damage) {
+        if (damage < 0) {
+            return null;
+        } else if (damage < 1_000) {
+            return cellMolten;
+        } else if (damage >= 10_000 && damage < 10_000 + (NUM_CRACKED_CELL_TYPES * 1_000)) {
+            return CRACKED_CELL_TYPES.get((damage / 1_000) - 10);
+        }
+        return null;
+    }
+
     @Override
     public short[] getRGBa(ItemStack aStack) {
-        Materials tMaterial = GregTech_API.sGeneratedMaterials[getDamage(aStack)];
-        return tMaterial == null ? Materials._NULL.mMoltenRGBa : tMaterial.mMoltenRGBa;
+        OrePrefixes prefix = getOrePrefix(aStack.getItemDamage());
+        Materials material = getMaterial(aStack.getItemDamage());
+        if (material == null) {
+            material = Materials._NULL;
+        }
+
+        if (prefix == cellMolten) {
+            return material.mMoltenRGBa;
+        } else {
+            return material.mRGBa;
+        }
     }
-
-	/* ---------- OVERRIDEABLE FUNCTIONS ---------- */
-
-    /**
-     * @param aPrefix   the OreDict Prefix
-     * @param aMaterial the Material
-     * @param aMetaData a Index from [0 - 31999]
-     * @return the Localized Name when default LangFiles are used.
-     */
-    @Deprecated
-    public String getDefaultLocalization(OrePrefixes aPrefix, Materials aMaterial, int aMetaData) {
-        return aPrefix.getDefaultLocalNameForItem(aMaterial);
-    }
-
-    /**
-     * @param aPrefix   the OreDict Prefix
-     * @param aMaterial the Material
-     * @param aMetaData a Index from [0 - 31999]
-     * @return the Localized Name Format when default LangFiles are used.
-     */
-    public String getDefaultLocalizationFormat(OrePrefixes aPrefix, Materials aMaterial, int aMetaData) {
-        return aPrefix.getDefaultLocalNameFormatForItem(aMaterial);
-    }
-
-    /**
-     * @param aPrefix         always != null
-     * @param aMaterial       always != null
-     * @param aDoShowAllItems this is the Configuration Setting of the User, if he wants to see all the Stuff like Tiny Dusts or Crushed Ores as well.
-     * @return if this Item should be visible in NEI or Creative
-     */
-    public boolean doesShowInCreative(OrePrefixes aPrefix, Materials aMaterial, boolean aDoShowAllItems) {
-        return true;
-    }
-
-	/* ---------- INTERNAL OVERRIDES ---------- */
 
     @Override
     public String getItemStackDisplayName(ItemStack aStack) {
         String aName = super.getItemStackDisplayName(aStack);
-        int aDamage = aStack.getItemDamage();
-        if (aDamage < 1000 && aDamage >= 0)
-            return Materials.getLocalizedNameForItem(aName, aDamage);
+        Materials material = getMaterial(aStack.getItemDamage());
+        if (material != null) {
+            return material.getLocalizedNameForItem(aName);
+        }
         return aName;
     }
 
     @Override
     public ItemStack getContainerItem(ItemStack aStack) {
-        int aDamage = aStack.getItemDamage();
-        if (aDamage < 1000 && aDamage >= 0) {
-            return cellMolten.mContainerItem;
+        OrePrefixes prefix = getOrePrefix(aStack.getItemDamage());
+        if (prefix != null) {
+            return prefix.mContainerItem;
         }
         return null;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public final void getSubItems(Item var1, CreativeTabs aCreativeTab, List aList) {
-        for (int i = 0; i < 1000; i++) {
-            Materials aMaterial = GregTech_API.sGeneratedMaterials[i];
-            if (aMaterial != null && enabled.get(i)) {
-                ItemStack tStack = new ItemStack(this, 1, i);
-                isItemStackUsable(tStack);
-                aList.add(tStack);
-            }
-        }
-        super.getSubItems(var1, aCreativeTab, aList);
+    public void getSubItems(Item var1, CreativeTabs aCreativeTab, List aList) {
+        enabled.stream()
+                .mapToObj(i -> new ItemStack(this, 1, i))
+                .forEach(aList::add);
     }
 
     @Override
     public final IIcon getIconFromDamage(int aMetaData) {
-        if (aMetaData < 0) return null;
-        if (aMetaData < 1000) {
-            Materials tMaterial = GregTech_API.sGeneratedMaterials[aMetaData];
-            if (tMaterial == null) return null;
-            IIconContainer tIcon = getIconContainer(aMetaData);
-            if (tIcon != null) return tIcon.getIcon();
-            return null;
+        IIconContainer iconContainer = getIconContainer(aMetaData);
+        if (iconContainer != null) {
+            return iconContainer.getIcon();
         }
         return null;
     }
 
     @Override
     public IIconContainer getIconContainer(int aMetaData) {
-        if (aMetaData < 0) return null;
-        if (aMetaData < 1000) {
-            Materials tMaterial = GregTech_API.sGeneratedMaterials[aMetaData];
-            if (tMaterial == null) return null;
-            return tMaterial.mIconSet.mTextures[cellMolten.mTextureIndex];
+        Materials material = getMaterial(aMetaData);
+        OrePrefixes prefix = getOrePrefix(aMetaData);
+        if (material != null && prefix != null) {
+            return material.mIconSet.mTextures[prefix.mTextureIndex];
         }
         return null;
     }
 
     @Override
     public int getItemStackLimit(ItemStack aStack) {
-        return cellMolten.mDefaultStackSize;
+        OrePrefixes prefix = getOrePrefix(aStack.getItemDamage());
+        if (prefix != null) {
+            return prefix.mDefaultStackSize;
+        } else {
+            return 64;
+        }
     }
 }
