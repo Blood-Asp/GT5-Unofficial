@@ -172,9 +172,6 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         )
             return DID_NOT_FIND_RECIPE;
 
-        if (checkTier(is))
-            return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
-
         Integer handleHardOverride = handleHardOverride(is);
         if (handleHardOverride != null)
             return handleHardOverride;
@@ -241,17 +238,31 @@ public class GT_MetaTileEntity_Disassembler extends GT_MetaTileEntity_BasicMachi
         GT_Recipe gt_recipe = GT_Recipe.GT_Recipe_Map.sDisassemblerRecipes.findRecipe(this.getBaseMetaTileEntity(), true, this.maxEUInput(), null, this.getAllInputs());
         if (gt_recipe == null)
             return DID_NOT_FIND_RECIPE;
-        if (gt_recipe.isRecipeInputEqual(false, null, this.getAllInputs()))
-            return setOutputsAndTime(gt_recipe.mOutputs, gt_recipe.mInputs[0].stackSize)
-                    ? FOUND_AND_SUCCESSFULLY_USED_RECIPE
-                    : FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+        if (gt_recipe.isRecipeInputEqual(false, null, this.getAllInputs())) {
+            if (gt_recipe.mSpecialValue == -100) {
+                // Bypass standard disassembler restrictions.
+                this.getInputAt(0).stackSize -= gt_recipe.mInputs[0].stackSize;
+                System.arraycopy(gt_recipe.mOutputs, 0, this.mOutputItems, 0, gt_recipe.mOutputs.length);
+
+                this.calculateOverclockedNess(gt_recipe);
+                return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
+            } else {
+                return setOutputsAndTime(gt_recipe.mOutputs, gt_recipe.mInputs[0].stackSize)
+                        ? FOUND_AND_SUCCESSFULLY_USED_RECIPE
+                        : FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+            }
+        }
 
         return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
     }
 
     private boolean setOutputsAndTime(ItemStack[] inputs, int stackSize){
-        if (this.getInputAt(0).stackSize >= stackSize)
-            this.getInputAt(0).stackSize -= stackSize;
+        ItemStack machineInput = this.getInputAt(0);
+        if (checkTier(machineInput))
+            return false;
+
+        if (machineInput.stackSize >= stackSize)
+            machineInput.stackSize -= stackSize;
         else
             return false;
 
