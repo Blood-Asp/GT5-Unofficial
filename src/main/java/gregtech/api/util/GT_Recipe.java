@@ -9,6 +9,7 @@ import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.MaterialStack;
+import gregtech.api.util.extensions.ArrayExt;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Replicator;
 import gregtech.nei.GT_NEI_DefaultHandler.FixedPositionedStack;
 import ic2.core.Ic2Items;
@@ -23,7 +24,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static gregtech.api.enums.GT_Values.*;
@@ -97,7 +97,8 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         mEnabled = aRecipe.mEnabled;
         mHidden = aRecipe.mHidden;
     }
-    protected GT_Recipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
+
+    public GT_Recipe(boolean aOptimize, ItemStack[] aInputs, ItemStack[] aOutputs, Object aSpecialItems, int[] aChances, FluidStack[] aFluidInputs, FluidStack[] aFluidOutputs, int aDuration, int aEUt, int aSpecialValue) {
         if (aInputs == null)
             aInputs = new ItemStack[0];
         if (aOutputs == null)
@@ -111,10 +112,10 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         if (aChances.length < aOutputs.length)
             aChances = Arrays.copyOf(aChances, aOutputs.length);
 
-        aInputs = GT_Utility.getArrayListWithoutTrailingNulls(aInputs).toArray(new ItemStack[0]);
-        aOutputs = GT_Utility.getArrayListWithoutTrailingNulls(aOutputs).toArray(new ItemStack[0]);
-        aFluidInputs = GT_Utility.getArrayListWithoutNulls(aFluidInputs).toArray(new FluidStack[0]);
-        aFluidOutputs = GT_Utility.getArrayListWithoutNulls(aFluidOutputs).toArray(new FluidStack[0]);
+        aInputs = ArrayExt.withoutTrailingNulls(aInputs, ItemStack[]::new);
+        aOutputs = ArrayExt.withoutTrailingNulls(aOutputs, ItemStack[]::new);
+        aFluidInputs = ArrayExt.withoutNulls(aFluidInputs, FluidStack[]::new);
+        aFluidOutputs = ArrayExt.withoutNulls(aFluidOutputs, FluidStack[]::new);
 
         GT_OreDictUnificator.setStackArray(true, aInputs);
         GT_OreDictUnificator.setStackArray(true, aOutputs);
@@ -1627,12 +1628,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
     	}
     	
     }
-    
-    public static class GT_Recipe_Map_LargeChemicalReactor extends GT_Recipe_Map{
-        private static int TOTAL_INPUT_COUNT = 6;
-    	private static int OUTPUT_COUNT = 2;
-    	private static int FLUID_OUTPUT_COUNT = 4;
-    	
+
+    public static class GT_Recipe_Map_LargeChemicalReactor extends GT_Recipe_Map {
+        private static final int TOTAL_INPUT_COUNT = 6;
+        private static final int OUTPUT_COUNT = 2;
+        private static final int FLUID_OUTPUT_COUNT = 4;
+
         public GT_Recipe_Map_LargeChemicalReactor() {
             super(new HashSet<>(1000), "gt.recipe.largechemicalreactor", "Large Chemical Reactor", null, RES_PATH_GUI + "basicmachines/Default", 2, OUTPUT_COUNT, 0, 0, 1, E, 1, E, true, true);
         }
@@ -1648,7 +1649,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             if (aInputs == null) {
                 aInputs = new ItemStack[0];
             } else {
-                aInputs = GT_Utility.getArrayListWithoutTrailingNulls(aInputs).toArray(new ItemStack[0]);
+                aInputs = ArrayExt.withoutTrailingNulls(aInputs, ItemStack[]::new);
             }
 
             for (ItemStack input : aInputs) {
@@ -1688,7 +1689,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
             if (aOutputs == null) {
                 aOutputs = new ItemStack[0];
             } else {
-                aOutputs = GT_Utility.getArrayListWithoutTrailingNulls(aOutputs).toArray(new ItemStack[0]);
+                aOutputs = ArrayExt.withoutTrailingNulls(aOutputs, ItemStack[]::new);
             }
 
             for (ItemStack output : aOutputs) {
@@ -1734,9 +1735,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                 for (int i = 0; i < itemLimit; i++, j++) {
                     if (this.mInputs == null || (this.mInputs[i] == null && (i == 0 && itemLimit == 1))) {
                         if (this.mOutputs != null && this.mOutputs.length > 0 && this.mOutputs[0] != null)
-                            GT_Log.out.println("recipe " + this.toString() + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
+                            GT_Log.out.println("recipe " + this + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
                         else
-                            GT_Log.out.println("recipe " + this.toString() + " has errored!");
+                            GT_Log.out.println("recipe " + this + " has errored!");
 
                         new Exception("Recipe Fixme").printStackTrace(GT_Log.out);
                     }
@@ -1751,9 +1752,9 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 				for (int i = 0; i < fluidLimit; i++, j++) {
                     if (this.mFluidInputs == null || this.mFluidInputs[i] == null) {
                         if (this.mOutputs != null && this.mOutputs.length > 0 && this.mOutputs[0] != null)
-                            GT_Log.out.println("recipe " + this.toString() + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
+                            GT_Log.out.println("recipe " + this + " Output 0:" + this.mOutputs[0].getDisplayName() + " has errored!");
                         else
-                            GT_Log.out.println("recipe " + this.toString() + " has errored!");
+                            GT_Log.out.println("recipe " + this + " has errored!");
 
                         new Exception("Recipe Fixme").printStackTrace(GT_Log.out);
                     }
