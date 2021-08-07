@@ -2245,7 +2245,7 @@ public class GT_Utility {
             // Try to figure out if number is a (small multiple of a) power of 2.
             long curr = number;
             int pow = 0;
-            while ((curr & 1) == 0) {
+            while ((curr & 1) == 0) { // N.B. this won't terminate if curr == 0
                 curr = curr >>> 1;
                 pow++;
             }
