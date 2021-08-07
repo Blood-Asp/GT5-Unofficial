@@ -60,7 +60,7 @@ public class GT_Item_Machines extends ItemBlock {
                                     for (int j = 0; j < tString.length; j++)
                                         if (j % 2 == 0) tBuffer.append(tString[j]);
                                         else {tBuffer.append(" %s"); tRep[j / 2] = tString[j];}
-                                    aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_" + suffix + "DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished ), tRep));
+                                    aList.add(String.format(GT_LanguageManager.addStringLocalization("TileEntity_" + suffix + "DESCRIPTION_" + tDamage + "_Index_" + i++, tBuffer.toString(), !GregTech_API.sPostloadFinished ), (Object[]) tRep));
                                 }
                             }else{String tTranslated = GT_LanguageManager.addStringLocalization("TileEntity_" + suffix + "DESCRIPTION_" + tDamage + "_Index_" + i++, tDescription, !GregTech_API.sPostloadFinished );
                                 aList.add(tTranslated.equals("") ? tDescription : tTranslated);}
