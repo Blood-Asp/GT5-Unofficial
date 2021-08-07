@@ -329,9 +329,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public String[] getDescription() {
         return new String[]{
-                "Max Voltage: %%%" + EnumChatFormatting.GREEN + GT_Utility.formatPow2(mVoltage) + " (" + VN[GT_Utility.getTier(mVoltage)] + ")" + EnumChatFormatting.GRAY,
-                "Max Amperage: %%%" + EnumChatFormatting.YELLOW + GT_Utility.formatPow2(mAmperage) + EnumChatFormatting.GRAY,
-                "Loss/Meter/Ampere: %%%" + EnumChatFormatting.RED + GT_Utility.formatPow2(mCableLossPerMeter) + EnumChatFormatting.GRAY + "%%% EU-Volt"
+                "Max Voltage: %%%" + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mVoltage) + " (" + VN[GT_Utility.getTier(mVoltage)] + ")" + EnumChatFormatting.GRAY,
+                "Max Amperage: %%%" + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mAmperage) + EnumChatFormatting.GRAY,
+                "Loss/Meter/Ampere: %%%" + EnumChatFormatting.RED + GT_Utility.formatNumbers(mCableLossPerMeter) + EnumChatFormatting.GRAY + "%%% EU-Volt"
         };
     }
 

@@ -94,7 +94,11 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  * Just a few Utility Functions I use.
  */
 public class GT_Utility {
-    private static final DecimalFormat decimalFormat = new DecimalFormat();
+    /** Formats a number with group separator and at most 2 fraction digits. */
+    private static final DecimalFormat basicFormatter = new DecimalFormat();
+    /** Formats a number into scientific notation with at most 2 fraction digits. Meant for large numbers. */
+    private static final DecimalFormat scientificNotationFormatter = new DecimalFormat("0.##E0");
+
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
@@ -108,10 +112,10 @@ public class GT_Utility {
     public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
-        DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+        DecimalFormatSymbols symbols = basicFormatter.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(' ');
-        decimalFormat.setDecimalFormatSymbols(symbols);
-        decimalFormat.setMaximumFractionDigits(2);
+        basicFormatter.setDecimalFormatSymbols(symbols);
+        basicFormatter.setMaximumFractionDigits(2);
 
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
@@ -2226,35 +2230,17 @@ public class GT_Utility {
     }
 
     public static String formatNumbers(long aNumber) {
-        return decimalFormat.format(aNumber);
+        String formatted = basicFormatter.format(aNumber);
+        if (aNumber >= 1_000_000_000L) {
+            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
+        }
+        return formatted;
     }
 
     public static String formatNumbers(double aNumber) {
-        return decimalFormat.format(aNumber);
-    }
-
-    /**
-     * Formats a positive integer with grouping separators, and also attempts to display it as a (small multiple of a)
-     * power of 2.
-     */
-    public static String formatPow2(long number) {
-        String formatted = formatNumbers(number);
-        if (number == V[V.length - 1]) {
-            formatted += " (MAX)";
-        } else if (number >= 256) {
-            // Try to figure out if number is a (small multiple of a) power of 2.
-            long curr = number;
-            int pow = 0;
-            while ((curr & 1) == 0) { // N.B. this won't terminate if curr == 0
-                curr = curr >>> 1;
-                pow++;
-            }
-
-            if (curr == 1) {
-                formatted += String.format(" (2^%d)", pow);
-            } else if (curr <= 7) {
-                formatted += String.format(" (%d*2^%d)", curr, pow);
-            }
+        String formatted = basicFormatter.format(aNumber);
+        if (aNumber >= 1_000_000_000d) {
+            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
         }
         return formatted;
     }
