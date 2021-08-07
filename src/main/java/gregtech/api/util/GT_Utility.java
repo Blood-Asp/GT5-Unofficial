@@ -2224,7 +2224,34 @@ public class GT_Utility {
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(' ');
+        formatter.setDecimalFormatSymbols(symbols);
         return formatter.format(aNumber);
+    }
+
+    /**
+     * Formats a positive integer with grouping separators, and also attempts to display it as a (small multiple of a)
+     * power of 2.
+     */
+    public static String formatPow2(long number) {
+        String formatted = formatNumbers(number);
+        if (number == V[V.length - 1]) {
+            formatted += " (MAX)";
+        } else if (number >= 256) {
+            // Try to figure out if number is a (small multiple of a) power of 2.
+            long curr = number;
+            int pow = 0;
+            while ((curr & 1) == 0) {
+                curr = curr >>> 1;
+                pow++;
+            }
+
+            if (curr == 1) {
+                formatted += String.format(" (2^%d)", pow);
+            } else if (curr <= 7) {
+                formatted += String.format(" (%d*2^%d)", curr, pow);
+            }
+        }
+        return formatted;
     }
 
     /*

@@ -235,11 +235,11 @@ public class GT_NEI_AssLineHandler extends TemplateRecipeHandler {
         String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
         if (recipeDesc == null) {
             if (tEUt != 0) {
-                drawText(10, 73, trans("152","Total: ") + ((long)tDuration * tEUt) + " EU", -16777216);
-                drawText(10, 83, trans("153","Usage: ") + tEUt + " EU/t", -16777216);
+                drawText(10, 73, trans("152","Total: ") + GT_Utility.formatNumbers((long)tDuration * tEUt) + " EU", -16777216);
+                drawText(10, 83, trans("153","Usage: ") + GT_Utility.formatNumbers(tEUt) + " EU/t", -16777216);
                 if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-                    drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", -16777216);
-                    drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
+                    drawText(10, 93, trans("154","Voltage: ") + GT_Utility.formatNumbers(tEUt / this.mRecipeMap.mAmperage) + " EU", -16777216);
+                    drawText(10, 103, trans("155","Amperage: ") + GT_Utility.formatNumbers(this.mRecipeMap.mAmperage), -16777216);
                 } else {
                     drawText(10, 93, trans("156","Voltage: unspecified"), -16777216);
                     drawText(10, 103, trans("157","Amperage: unspecified"), -16777216);
