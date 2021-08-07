@@ -79,7 +79,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.IntFunction;
@@ -95,6 +94,11 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  * Just a few Utility Functions I use.
  */
 public class GT_Utility {
+    /** Formats a number with group separator and at most 2 fraction digits. */
+    private static final DecimalFormat basicFormatter = new DecimalFormat();
+    /** Formats a number into scientific notation with at most 2 fraction digits. Meant for large numbers. */
+    private static final DecimalFormat scientificNotationFormatter = new DecimalFormat("0.##E0");
+
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
@@ -108,6 +112,11 @@ public class GT_Utility {
     public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
+        DecimalFormatSymbols symbols = basicFormatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        basicFormatter.setDecimalFormatSymbols(symbols);
+        basicFormatter.setMaximumFractionDigits(2);
+
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
     }
@@ -2221,10 +2230,19 @@ public class GT_Utility {
     }
 
     public static String formatNumbers(long aNumber) {
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(' ');
-        return formatter.format(aNumber);
+        String formatted = basicFormatter.format(aNumber);
+        if (aNumber >= 1_000_000_000L) {
+            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
+        }
+        return formatted;
+    }
+
+    public static String formatNumbers(double aNumber) {
+        String formatted = basicFormatter.format(aNumber);
+        if (aNumber >= 1_000_000_000d) {
+            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
+        }
+        return formatted;
     }
 
     /*
