@@ -79,7 +79,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.IntFunction;
@@ -95,6 +94,7 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  * Just a few Utility Functions I use.
  */
 public class GT_Utility {
+    private static final DecimalFormat decimalFormat = new DecimalFormat();
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
      */
@@ -108,6 +108,11 @@ public class GT_Utility {
     public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
+        DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        decimalFormat.setDecimalFormatSymbols(symbols);
+        decimalFormat.setMaximumFractionDigits(2);
+
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
     }
@@ -2221,20 +2226,11 @@ public class GT_Utility {
     }
 
     public static String formatNumbers(long aNumber) {
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(' ');
-        formatter.setDecimalFormatSymbols(symbols);
-        return formatter.format(aNumber);
+        return decimalFormat.format(aNumber);
     }
 
     public static String formatNumbers(double aNumber) {
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
-        symbols.setGroupingSeparator(' ');
-        formatter.setDecimalFormatSymbols(symbols);
-        formatter.setMaximumFractionDigits(2);
-        return formatter.format(aNumber);
+        return decimalFormat.format(aNumber);
     }
 
     /**
