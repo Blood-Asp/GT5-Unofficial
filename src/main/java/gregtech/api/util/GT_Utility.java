@@ -2228,6 +2228,15 @@ public class GT_Utility {
         return formatter.format(aNumber);
     }
 
+    public static String formatNumbers(double aNumber) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        formatter.setDecimalFormatSymbols(symbols);
+        formatter.setMaximumFractionDigits(2);
+        return formatter.format(aNumber);
+    }
+
     /**
      * Formats a positive integer with grouping separators, and also attempts to display it as a (small multiple of a)
      * power of 2.
