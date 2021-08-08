@@ -1912,15 +1912,25 @@ public class GT_Utility {
 
         Block tBlock = aWorld.getBlock(aX, aY, aZ);
 
-        tList.add("----- X: " +EnumChatFormatting.AQUA+ aX +EnumChatFormatting.RESET+ " Y: " +EnumChatFormatting.AQUA+ aY +EnumChatFormatting.RESET+ " Z: " +EnumChatFormatting.AQUA+ aZ +EnumChatFormatting.RESET+ " D: " +EnumChatFormatting.AQUA+ aWorld.provider.dimensionId +EnumChatFormatting.RESET+ " -----");
+        tList.add(
+                "----- X: " + EnumChatFormatting.AQUA + formatNumbers(aX) + EnumChatFormatting.RESET +
+                        " Y: " + EnumChatFormatting.AQUA + formatNumbers(aY) + EnumChatFormatting.RESET +
+                        " Z: " + EnumChatFormatting.AQUA + formatNumbers(aZ) + EnumChatFormatting.RESET +
+                        " D: " + EnumChatFormatting.AQUA + aWorld.provider.dimensionId + EnumChatFormatting.RESET + " -----");
         try {
             if (tTileEntity instanceof IInventory)
-                tList.add(trans("162","Name: ") +EnumChatFormatting.BLUE+ ((IInventory) tTileEntity).getInventoryName() +EnumChatFormatting.RESET+ trans("163"," MetaData: ") +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ) +EnumChatFormatting.RESET);
+                tList.add(
+                        trans("162","Name: ") + EnumChatFormatting.BLUE + ((IInventory) tTileEntity).getInventoryName() + EnumChatFormatting.RESET +
+                                trans("163"," MetaData: ") + EnumChatFormatting.AQUA + aWorld.getBlockMetadata(aX, aY, aZ) + EnumChatFormatting.RESET);
             else
-                tList.add(trans("162","Name: ") +EnumChatFormatting.BLUE+ tBlock.getUnlocalizedName() +EnumChatFormatting.RESET+ trans("163"," MetaData: ") +EnumChatFormatting.AQUA+ aWorld.getBlockMetadata(aX, aY, aZ) +EnumChatFormatting.RESET);
+                tList.add(
+                        trans("162","Name: ") + EnumChatFormatting.BLUE + tBlock.getUnlocalizedName() + EnumChatFormatting.RESET +
+                                trans("163"," MetaData: ") + EnumChatFormatting.AQUA + aWorld.getBlockMetadata(aX, aY, aZ) + EnumChatFormatting.RESET);
 
-            tList.add(trans("164","Hardness: ") +EnumChatFormatting.YELLOW+ tBlock.getBlockHardness(aWorld, aX, aY, aZ) +EnumChatFormatting.RESET+ trans("165"," Blast Resistance: ") +EnumChatFormatting.YELLOW+ tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ) +EnumChatFormatting.RESET);
-            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add(EnumChatFormatting.GOLD+ trans("166","Is valid Beacon Pyramid Material") +EnumChatFormatting.RESET);
+            tList.add(
+                    trans("164","Hardness: ") + EnumChatFormatting.YELLOW + tBlock.getBlockHardness(aWorld, aX, aY, aZ) + EnumChatFormatting.RESET +
+                            trans("165"," Blast Resistance: ") + EnumChatFormatting.YELLOW + tBlock.getExplosionResistance(aPlayer, aWorld, aX, aY, aZ, aPlayer.posX, aPlayer.posY, aPlayer.posZ) + EnumChatFormatting.RESET);
+            if (tBlock.isBeaconBase(aWorld, aX, aY, aZ, aX, aY + 1, aZ)) tList.add(EnumChatFormatting.GOLD + trans("166","Is valid Beacon Pyramid Material") + EnumChatFormatting.RESET);
         } catch (Throwable e) {
             if (D1) e.printStackTrace(GT_Log.err);
         }
@@ -1930,7 +1940,10 @@ public class GT_Utility {
                     rEUAmount += 500;
                     FluidTankInfo[] tTanks = ((IFluidHandler) tTileEntity).getTankInfo(ForgeDirection.getOrientation(aSide));
                     if (tTanks != null) for (byte i = 0; i < tTanks.length; i++) {
-                    tList.add(trans("167","Tank ") + i + ": " +EnumChatFormatting.GREEN+ formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) +EnumChatFormatting.RESET+ " L / " +EnumChatFormatting.YELLOW+ formatNumbers(tTanks[i].capacity) +EnumChatFormatting.RESET+ " L " +EnumChatFormatting.GOLD+ getFluidName(tTanks[i].fluid, true)+EnumChatFormatting.RESET);
+                    tList.add(
+                            trans("167","Tank ") + i + ": " +
+                                    EnumChatFormatting.GREEN + formatNumbers((tTanks[i].fluid == null ? 0 : tTanks[i].fluid.amount)) + EnumChatFormatting.RESET + " L / " +
+                                    EnumChatFormatting.YELLOW + formatNumbers(tTanks[i].capacity) + EnumChatFormatting.RESET + " L " + EnumChatFormatting.GOLD + getFluidName(tTanks[i].fluid, true) + EnumChatFormatting.RESET);
                     }
                 }
             } catch (Throwable e) {
@@ -1947,8 +1960,12 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.reactor.IReactor) {
                     rEUAmount += 500;
-                    tList.add(trans("168","Heat: ") +EnumChatFormatting.GREEN+ ((ic2.api.reactor.IReactor) tTileEntity).getHeat() +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ ((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()+EnumChatFormatting.RESET);
-                    tList.add(trans("169","HEM: ") +EnumChatFormatting.YELLOW+((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() +EnumChatFormatting.RESET/*+ trans("170"," Base EU Output: ")/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
+                    tList.add(
+                            trans("168","Heat: ") + EnumChatFormatting.GREEN + formatNumbers(((ic2.api.reactor.IReactor) tTileEntity).getHeat()) + EnumChatFormatting.RESET + " / " +
+                                    EnumChatFormatting.YELLOW + formatNumbers(((ic2.api.reactor.IReactor) tTileEntity).getMaxHeat()) + EnumChatFormatting.RESET);
+                    tList.add(
+                            trans("169","HEM: ") + EnumChatFormatting.YELLOW + ((ic2.api.reactor.IReactor) tTileEntity).getHeatEffectModifier() + EnumChatFormatting.RESET
+                                    /* + trans("170"," Base EU Output: ")/* + ((ic2.api.reactor.IReactor)tTileEntity).getOutput()*/);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2002,7 +2019,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.energy.tile.IEnergyConductor) {
                     rEUAmount += 200;
-                    tList.add(trans("175","Conduction Loss: ") +EnumChatFormatting.YELLOW+ ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss()+EnumChatFormatting.RESET);
+                    tList.add(trans("175","Conduction Loss: ") + EnumChatFormatting.YELLOW + ((ic2.api.energy.tile.IEnergyConductor) tTileEntity).getConductionLoss() + EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2010,7 +2027,9 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof ic2.api.tile.IEnergyStorage) {
                     rEUAmount += 200;
-                    tList.add(trans("176","Contained Energy: ") +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getStored() +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ ((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity()+EnumChatFormatting.RESET+" EU");
+                    tList.add(
+                            trans("176","Contained Energy: ") + EnumChatFormatting.YELLOW + formatNumbers(((ic2.api.tile.IEnergyStorage) tTileEntity).getStored()) + EnumChatFormatting.RESET + " EU / " +
+                                    EnumChatFormatting.YELLOW + formatNumbers(((ic2.api.tile.IEnergyStorage) tTileEntity).getCapacity()) + EnumChatFormatting.RESET + " EU");
                     //aList.add(((ic2.api.tile.IEnergyStorage)tTileEntity).isTeleporterCompatible(ic2.api.Direction.YP)?"Teleporter Compatible":"Not Teleporter Compatible");
                 }
             } catch (Throwable e) {
@@ -2019,7 +2038,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof IUpgradableMachine) {
                     rEUAmount += 500;
-                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add(EnumChatFormatting.GREEN+ trans("177","Has Muffler Upgrade") +EnumChatFormatting.RESET);
+                    if (((IUpgradableMachine) tTileEntity).hasMufflerUpgrade()) tList.add(EnumChatFormatting.GREEN + trans("177","Has Muffler Upgrade") + EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2027,7 +2046,7 @@ public class GT_Utility {
             try {
                 if (tTileEntity instanceof IMachineProgress) {
                     if (((IMachineProgress) tTileEntity).isAllowedToWork()) {
-                        tList.add("Disabled."  + EnumChatFormatting.RED + EnumChatFormatting.RESET);
+                        tList.add("Disabled." + EnumChatFormatting.RED + EnumChatFormatting.RESET);
                     }
                     if (((IMachineProgress) tTileEntity).wasShutdown()) {
                         tList.add("Shut down due to power loss." + EnumChatFormatting.RED + EnumChatFormatting.RESET);
@@ -2035,7 +2054,8 @@ public class GT_Utility {
                     rEUAmount += 400;
                     int tValue = 0;
                     if (0 < (tValue = ((IMachineProgress) tTileEntity).getMaxProgress()))
-                        tList.add(trans("178","Progress/Load: ") +EnumChatFormatting.GREEN+ formatNumbers(((IMachineProgress) tTileEntity).getProgress())  +EnumChatFormatting.RESET+ " / " +EnumChatFormatting.YELLOW+ formatNumbers(tValue) +EnumChatFormatting.RESET);
+                        tList.add(trans("178","Progress/Load: ") + EnumChatFormatting.GREEN + formatNumbers(((IMachineProgress) tTileEntity).getProgress())  + EnumChatFormatting.RESET + " / " +
+                                EnumChatFormatting.YELLOW + formatNumbers(tValue) + EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2051,16 +2071,22 @@ public class GT_Utility {
             }
             try {
                 if (tTileEntity instanceof IBasicEnergyContainer && ((IBasicEnergyContainer) tTileEntity).getEUCapacity() > 0) {
-                    tList.add(trans("179","Max IN: ")  +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getInputVoltage()  + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getInputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+((IBasicEnergyContainer)tTileEntity).getInputAmperage()+EnumChatFormatting.RESET+trans("183"," A"));
-                    tList.add(trans("181","Max OUT: ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputVoltage() + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getOutputVoltage())] + ") " +EnumChatFormatting.RESET+ trans("182"," EU at ") +EnumChatFormatting.RED+ ((IBasicEnergyContainer) tTileEntity).getOutputAmperage() +EnumChatFormatting.RESET+ trans("183"," A"));
-                    tList.add(trans("184","Energy: ")  +EnumChatFormatting.GREEN+ formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) +EnumChatFormatting.RESET+ " EU / " +EnumChatFormatting.YELLOW+ formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) +EnumChatFormatting.RESET+ " EU");
+                    tList.add(
+                            trans("179","Max IN: ") + EnumChatFormatting.RED + formatNumbers(((IBasicEnergyContainer) tTileEntity).getInputVoltage()) + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getInputVoltage())] + ") " + EnumChatFormatting.RESET +
+                                    trans("182"," EU at ") + EnumChatFormatting.RED + formatNumbers(((IBasicEnergyContainer)tTileEntity).getInputAmperage()) + EnumChatFormatting.RESET + trans("183"," A"));
+                    tList.add(
+                            trans("181","Max OUT: ") + EnumChatFormatting.RED + formatNumbers(((IBasicEnergyContainer) tTileEntity).getOutputVoltage()) + " (" + GT_Values.VN[getTier(((IBasicEnergyContainer) tTileEntity).getOutputVoltage())] + ") " + EnumChatFormatting.RESET +
+                                    trans("182"," EU at ") + EnumChatFormatting.RED + formatNumbers(((IBasicEnergyContainer) tTileEntity).getOutputAmperage()) + EnumChatFormatting.RESET + trans("183"," A"));
+                    tList.add(
+                            trans("184","Energy: ") + EnumChatFormatting.GREEN + formatNumbers(((IBasicEnergyContainer) tTileEntity).getStoredEU()) + EnumChatFormatting.RESET + " EU / " +
+                                    EnumChatFormatting.YELLOW + formatNumbers(((IBasicEnergyContainer) tTileEntity).getEUCapacity()) + EnumChatFormatting.RESET + " EU");
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
             }
             try {
                 if (tTileEntity instanceof IGregTechTileEntity) {
-                    tList.add(trans("186","Owned by: ") +EnumChatFormatting.BLUE+ ((IGregTechTileEntity) tTileEntity).getOwnerName()+EnumChatFormatting.RESET);
+                    tList.add(trans("186","Owned by: ") + EnumChatFormatting.BLUE + ((IGregTechTileEntity) tTileEntity).getOwnerName() + EnumChatFormatting.RESET);
                 }
             } catch (Throwable e) {
                 if (D1) e.printStackTrace(GT_Log.err);
@@ -2112,15 +2138,15 @@ public class GT_Utility {
         if (aPlayer.capabilities.isCreativeMode) {
             FluidStack tFluid = undergroundOilReadInformation(aWorld.getChunkFromBlockCoords(aX,aZ));//-# to only read
             if (tFluid!=null)
-            	tList.add(EnumChatFormatting.GOLD+tFluid.getLocalizedName()+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ tFluid.amount +EnumChatFormatting.RESET+" L");
+            	tList.add(EnumChatFormatting.GOLD + tFluid.getLocalizedName() + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + formatNumbers(tFluid.amount) + EnumChatFormatting.RESET + " L");
             else
-                tList.add(EnumChatFormatting.GOLD+trans("201","Nothing")+EnumChatFormatting.RESET+": " +EnumChatFormatting.YELLOW+ '0' +EnumChatFormatting.RESET+" L");
+                tList.add(EnumChatFormatting.GOLD + trans("201","Nothing") + EnumChatFormatting.RESET + ": " + EnumChatFormatting.YELLOW + '0' + EnumChatFormatting.RESET + " L");
         }
 //      if(aPlayer.capabilities.isCreativeMode){
         int[] chunkData = GT_Proxy.dimensionWiseChunkData.get(aWorld.provider.dimensionId).get(aWorld.getChunkFromBlockCoords(aX,aZ).getChunkCoordIntPair());
-        if(chunkData !=null){
+        if(chunkData != null){
             if(chunkData[GTPOLLUTION]>0){
-                tList.add(trans("202","Pollution in Chunk: ")+EnumChatFormatting.RED+chunkData[GTPOLLUTION]+EnumChatFormatting.RESET+trans("203"," gibbl"));
+                tList.add(trans("202","Pollution in Chunk: ") + EnumChatFormatting.RED + formatNumbers(chunkData[GTPOLLUTION]) + EnumChatFormatting.RESET + trans("203"," gibbl"));
             }else{
                 tList.add(EnumChatFormatting.GREEN+trans("204","No Pollution in Chunk! HAYO!")+EnumChatFormatting.RESET);
             }
