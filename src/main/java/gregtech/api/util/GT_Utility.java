@@ -95,9 +95,7 @@ import static gregtech.common.GT_UndergroundOil.undergroundOilReadInformation;
  */
 public class GT_Utility {
     /** Formats a number with group separator and at most 2 fraction digits. */
-    private static final DecimalFormat basicFormatter = new DecimalFormat();
-    /** Formats a number into scientific notation with at most 2 fraction digits. Meant for large numbers. */
-    private static final DecimalFormat scientificNotationFormatter = new DecimalFormat("0.##E0");
+    private static final DecimalFormat decimalFormat = new DecimalFormat();
 
     /**
      * Forge screwed the Fluid Registry up again, so I make my own, which is also much more efficient than the stupid Stuff over there.
@@ -112,10 +110,10 @@ public class GT_Utility {
     public static UUID defaultUuid = null; // maybe default non-null? UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     static {
-        DecimalFormatSymbols symbols = basicFormatter.getDecimalFormatSymbols();
+        DecimalFormatSymbols symbols = decimalFormat.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(' ');
-        basicFormatter.setDecimalFormatSymbols(symbols);
-        basicFormatter.setMaximumFractionDigits(2);
+        decimalFormat.setDecimalFormatSymbols(symbols);
+        decimalFormat.setMaximumFractionDigits(2);
 
         GregTech_API.sItemStackMappings.add(sFilledContainerToData);
         GregTech_API.sItemStackMappings.add(sEmptyContainerToFluidToData);
@@ -2230,19 +2228,11 @@ public class GT_Utility {
     }
 
     public static String formatNumbers(long aNumber) {
-        String formatted = basicFormatter.format(aNumber);
-        if (aNumber >= 1_000_000_000L) {
-            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
-        }
-        return formatted;
+        return decimalFormat.format(aNumber);
     }
 
     public static String formatNumbers(double aNumber) {
-        String formatted = basicFormatter.format(aNumber);
-        if (aNumber >= 1_000_000_000d) {
-            formatted += " [" + scientificNotationFormatter.format(aNumber) + "]";
-        }
-        return formatted;
+        return decimalFormat.format(aNumber);
     }
 
     /*
