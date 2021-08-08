@@ -315,11 +315,11 @@ public class GT_MetaTileEntity_Hatch_Output extends GT_MetaTileEntity_Hatch {
     @Override
     public String[] getInfoData() {
         return new String[]{
-            EnumChatFormatting.BLUE + "Output Hatch"+ EnumChatFormatting.RESET,
+            EnumChatFormatting.BLUE + "Output Hatch" + EnumChatFormatting.RESET,
             "Stored Fluid:",
-            EnumChatFormatting.GOLD + (mFluid == null ? "No Fluid" : mFluid.getLocalizedName())+ EnumChatFormatting.RESET,
-            EnumChatFormatting.GREEN + Integer.toString(mFluid == null ? 0 : mFluid.amount) + " L"+ EnumChatFormatting.RESET+" "+
-                EnumChatFormatting.YELLOW+ getCapacity() + " L"+ EnumChatFormatting.RESET,
+            EnumChatFormatting.GOLD + (mFluid == null ? "No Fluid" : mFluid.getLocalizedName()) + EnumChatFormatting.RESET,
+            EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mFluid == null ? 0 : mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L"+ EnumChatFormatting.RESET,
             lockedFluidName == null ? "Not Locked" : ("Locked to " + StatCollector.translateToLocal(getLockedFluidName()))
         };
     }
