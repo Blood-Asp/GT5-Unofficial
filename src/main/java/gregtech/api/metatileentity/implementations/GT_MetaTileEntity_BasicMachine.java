@@ -792,14 +792,14 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return new String[]{
                 EnumChatFormatting.BLUE + mNEIName + EnumChatFormatting.RESET,
                 "Progress:",
-                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
-                EnumChatFormatting.YELLOW + mMaxProgresstime / 20 + EnumChatFormatting.RESET +" s",
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers((mProgresstime/20)) + EnumChatFormatting.RESET +" s / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
                 "Stored Energy:",
-                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
-                EnumChatFormatting.YELLOW + getBaseMetaTileEntity().getEUCapacity() + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET + " EU / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET + " EU",
                 "Probably uses: " +
-                        EnumChatFormatting.RED + mEUt + EnumChatFormatting.RESET + " EU/t at " +
-                        EnumChatFormatting.RED + (mEUt == 0 ? 0 : mAmperage) + EnumChatFormatting.RESET +" A"
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(mEUt) + EnumChatFormatting.RESET + " EU/t at " +
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(mEUt == 0 ? 0 : mAmperage) + EnumChatFormatting.RESET +" A"
         };
     }
 

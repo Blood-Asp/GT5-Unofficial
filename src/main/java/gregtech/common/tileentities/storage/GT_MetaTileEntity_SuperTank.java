@@ -145,15 +145,15 @@ public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
                     "Stored Fluid:",
                     EnumChatFormatting.GOLD + "No Fluid" + EnumChatFormatting.RESET,
                     EnumChatFormatting.GREEN + "0 L" + EnumChatFormatting.RESET + " " +
-                            EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+                            EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L" + EnumChatFormatting.RESET
             };
         }
         return new String[]{
                 EnumChatFormatting.BLUE + "Super Tank" + EnumChatFormatting.RESET,
                 "Stored Fluid:",
                 EnumChatFormatting.GOLD + mFluid.getLocalizedName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
-                        EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L" + EnumChatFormatting.RESET
         };
     }
 

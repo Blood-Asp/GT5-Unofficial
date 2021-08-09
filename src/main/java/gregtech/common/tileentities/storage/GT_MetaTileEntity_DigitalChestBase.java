@@ -367,15 +367,15 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
                     "Stored Items:",
                     EnumChatFormatting.GOLD + "No Items" + EnumChatFormatting.RESET,
                     EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET + " " +
-                            EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+                            EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxItemCount()) + EnumChatFormatting.RESET
             };
         }
         return new String[]{
                 EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
                 "Stored Items:",
                 EnumChatFormatting.GOLD + getItemStack().getDisplayName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(getItemCount()) + EnumChatFormatting.RESET + " " +
-                        EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(getItemCount()) + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxItemCount()) + EnumChatFormatting.RESET
         };
     }
 
