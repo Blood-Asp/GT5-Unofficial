@@ -1,10 +1,6 @@
 package gregtech.common;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.ProgressManager;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -15,16 +11,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.genetics.AlleleManager;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OreDictNames;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.SubTag;
+import gregtech.api.enums.*;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
-import gregtech.api.enums.ToolDictNames;
 import gregtech.api.interfaces.IBlockOnWalkOver;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.internal.IGT_Mod;
@@ -88,22 +76,11 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 import static gregtech.api.enums.GT_Values.W;
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
@@ -1520,7 +1497,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             float tHeat = GT_Utility.getHeatDamageFromItem(tStack);
                             if (tHeat != 0.0F) {
                                 if (tHeat > 0.0F) {
-                                    GT_Utility.applyHeatDamage(aEvent.player, tHeat);
+                                    GT_Utility.applyHeatDamageFromItem(aEvent.player, tHeat, tStack);
                                 } else {
                                     GT_Utility.applyFrostDamage(aEvent.player, -tHeat);
                                 }
@@ -1640,7 +1617,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             float tHeat = GT_Utility.getHeatDamageFromItem(tStack);
                             if (tHeat != 0.0F) {
                                 if (tHeat > 0.0F) {
-                                    GT_Utility.applyHeatDamage(aEvent.player, tHeat);
+                                    GT_Utility.applyHeatDamageFromItem(aEvent.player, tHeat, tStack);
                                 } else {
                                     GT_Utility.applyFrostDamage(aEvent.player, -tHeat);
                                 }
@@ -1795,7 +1772,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     orePrefixes[i].mLocalizedMaterialPre + aMaterial.mDefaultLocalName,
                     null, aMaterial.mRGBa, 2, 775,
                     GT_OreDictUnificator.get(orePrefixes[i], aMaterial, 1L),
-                    ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+                    ItemList.Cell_Empty.get(1L), 1000);
 
             int hydrogenAmount = 2 * i + 2;
             GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000),
@@ -1824,7 +1801,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                     orePrefixes[i].mLocalizedMaterialPre + aMaterial.mDefaultLocalName,
                     null, aMaterial.mRGBa, 2, 775,
                     GT_OreDictUnificator.get(orePrefixes[i], aMaterial, 1L),
-                    ItemList.Cell_Empty.get(1L, new Object[0]), 1000);
+                    ItemList.Cell_Empty.get(1L), 1000);
 
             GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000),
                     new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
@@ -2142,9 +2119,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         boolean isHeat = GT_Utility.isStackInList(aStack, GregTech_API.sHeatHazmatList);
         boolean isRadio = GT_Utility.isStackInList(aStack, GregTech_API.sRadioHazmatList);
         boolean isElectro = GT_Utility.isStackInList(aStack, GregTech_API.sElectroHazmatList);
-        if(isGas && isBio && isFrost && isHeat && isRadio && isElectro)
-            return true;
-        return false;
+        return isGas && isBio && isFrost && isHeat && isRadio && isElectro;
     }
 
     @SubscribeEvent
