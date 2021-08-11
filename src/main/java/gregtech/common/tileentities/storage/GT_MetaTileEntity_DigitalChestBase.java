@@ -421,7 +421,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             }
         }
         // if there are no active storage buses - clear the listeners
-        listeners = null;
+        listeners.clear();
         return false;
     }
 
