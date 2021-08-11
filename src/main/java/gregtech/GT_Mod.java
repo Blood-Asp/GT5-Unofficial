@@ -289,7 +289,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.enableChunkloaders = tMainConfig.get("machines", "enableChunkloaders", true).getBoolean(true);
         GT_Values.alwaysReloadChunkloaders = tMainConfig.get("machines", "alwaysReloadChunkloaders", false).getBoolean(false);
         GT_Values.debugChunkloaders = tMainConfig.get("machines", "debugChunkloaders", false).getBoolean(false);
-
+        GT_Values.disableDigitalChestsExternalAccess = tMainConfig.get("machines", "disableDigitalChestsExternalAccess", false).getBoolean(false);
         GregTech_API.TICKS_FOR_LAG_AVERAGING = tMainConfig.get(aTextGeneral, "TicksForLagAveragingWithScanner", 25).getInt(25);
         GregTech_API.MILLISECOND_THRESHOLD_UNTIL_LAG_WARNING = tMainConfig.get(aTextGeneral, "MillisecondsPassedInGTTileEntityUntilLagWarning", 100).getInt(100);
         if (tMainConfig.get(aTextGeneral, "disable_STDOUT", false).getBoolean(false)) {
