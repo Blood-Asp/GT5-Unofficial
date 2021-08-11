@@ -9,6 +9,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.GregTech_API;
 import gregtech.api.damagesources.GT_DamageSources;
+import gregtech.api.damagesources.GT_DamageSources.DamageSourceHotItem;
 import gregtech.api.enchants.Enchantment_Radioactivity;
 import gregtech.api.enums.*;
 import gregtech.api.events.BlockScanningEvent;
@@ -55,10 +56,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
@@ -1571,9 +1569,17 @@ public class GT_Utility {
         return isWearingFullGasHazmat(aEntity);
     }
 
-    public static boolean applyHeatDamage(EntityLivingBase aEntity, float aDamage) {
+    public static boolean applyHeatDamage(EntityLivingBase entity, float damage) {
+        return applyHeatDamage(entity, damage, GT_DamageSources.getHeatDamage());
+    }
+
+    public static boolean applyHeatDamageFromItem(EntityLivingBase entity, float damage, ItemStack item) {
+        return applyHeatDamage(entity, damage, new DamageSourceHotItem(item));
+    }
+
+    private static boolean applyHeatDamage(EntityLivingBase aEntity, float aDamage, DamageSource source) {
         if (aDamage > 0 && aEntity != null && aEntity.getActivePotionEffect(Potion.fireResistance) == null && !isWearingFullHeatHazmat(aEntity)) {
-            aEntity.attackEntityFrom(GT_DamageSources.getHeatDamage(), aDamage);
+            aEntity.attackEntityFrom(source, aDamage);
             return true;
         }
         return false;

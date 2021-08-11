@@ -1,7 +1,10 @@
 package gregtech.api.damagesources;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+
+import javax.annotation.Nullable;
 
 public class GT_DamageSources {
     public static DamageSource getElectricDamage() {
@@ -33,7 +36,7 @@ public class GT_DamageSources {
     }
 
     private static class DamageSourceCombat extends EntityDamageSource {
-        private IChatComponent mDeathMessage;
+        private final IChatComponent mDeathMessage;
 
         public DamageSourceCombat(String aType, EntityLivingBase aPlayer, IChatComponent aDeathMessage) {
             super(aType, aPlayer);
@@ -67,6 +70,20 @@ public class GT_DamageSources {
         @Override
         public IChatComponent func_151519_b(EntityLivingBase aTarget) {
             return new ChatComponentText(EnumChatFormatting.RED + aTarget.getCommandSenderName() + EnumChatFormatting.WHITE + " was boiled alive");
+        }
+    }
+
+    public static class DamageSourceHotItem extends DamageSourceHeat {
+        @Nullable
+        private final ItemStack stack;
+
+        public DamageSourceHotItem(@Nullable ItemStack cause) {
+            this.stack = cause;
+        }
+
+        @Nullable
+        public ItemStack getDamagingStack() {
+            return stack;
         }
     }
 
