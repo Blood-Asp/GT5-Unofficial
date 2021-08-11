@@ -15,13 +15,10 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Iterator;
-
 public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
     public GT_MetaGenerated_Item_Renderer() {
-        GT_MetaGenerated_Item tItem;
-        for (Iterator i$ = GT_MetaGenerated_Item.sInstances.values().iterator(); i$.hasNext(); MinecraftForgeClient.registerItemRenderer(tItem, this)) {
-            tItem = (GT_MetaGenerated_Item) i$.next();
+        for (GT_MetaGenerated_Item item : GT_MetaGenerated_Item.sInstances.values()) {
+            MinecraftForgeClient.registerItemRenderer(item, this);
         }
     }
 
@@ -53,7 +50,7 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
         GT_MetaGenerated_Item aItem = (GT_MetaGenerated_Item) aStack.getItem();
 
 
-        GL11.glEnable(3042);
+        GL11.glEnable(GL11.GL_BLEND);
         if (type == IItemRenderer.ItemRenderType.ENTITY) {
             if (RenderItem.renderInFrame) {
                 GL11.glScalef(0.85F, 0.85F, 0.85F);
@@ -67,7 +64,7 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
         if (aMetaData < aItem.mOffset) {
             IIconContainer aIcon = aItem.getIconContainer(aMetaData);
             IIcon tOverlay = null;
-            IIcon tFluidIcon = null;
+            IIcon fluidIcon = null;
             IIcon tIcon;
             if (aIcon == null) {
                 tIcon = aStack.getIconIndex();
@@ -79,12 +76,12 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
                 return;
             }
             FluidStack tFluid = GT_Utility.getFluidForFilledItem(aStack, true);
-            if ((tOverlay != null) && (tFluid != null) && (tFluid.getFluid() != null)) {
-                tFluidIcon = tFluid.getFluid().getIcon(tFluid);
+            if (tOverlay != null && tFluid != null && tFluid.getFluid() != null) {
+                fluidIcon = tFluid.getFluid().getIcon(tFluid);
             }
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-            GL11.glBlendFunc(770, 771);
-            if (tFluidIcon == null) {
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            if (fluidIcon == null) {
                 short[] tModulation = aItem.getRGBa(aStack);
                 GL11.glColor3f(tModulation[0] / 255.0F, tModulation[1] / 255.0F, tModulation[2] / 255.0F);
             }
@@ -93,24 +90,23 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
             } else {
                 ItemRenderer.renderItemIn2D(Tessellator.instance, tIcon.getMaxU(), tIcon.getMinV(), tIcon.getMinU(), tIcon.getMaxV(), tIcon.getIconWidth(), tIcon.getIconHeight(), 0.0625F);
             }
-            if (tFluidIcon != null) {
-                assert (tFluid != null);
+            if (fluidIcon != null) {
                 int tColor = tFluid.getFluid().getColor(tFluid);
                 GL11.glColor3f((tColor >> 16 & 0xFF) / 255.0F, (tColor >> 8 & 0xFF) / 255.0F, (tColor & 0xFF) / 255.0F);
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-                GL11.glBlendFunc(770, 771);
-                GL11.glDepthFunc(514);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                GL11.glDepthFunc(GL11.GL_EQUAL);
                 if (type.equals(IItemRenderer.ItemRenderType.INVENTORY)) {
-                    GT_RenderUtil.renderItemIcon(tFluidIcon, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
+                    GT_RenderUtil.renderItemIcon(fluidIcon, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
                 } else {
-                    ItemRenderer.renderItemIn2D(Tessellator.instance, tFluidIcon.getMaxU(), tFluidIcon.getMinV(), tFluidIcon.getMinU(), tFluidIcon.getMaxV(), tFluidIcon.getIconWidth(), tFluidIcon.getIconHeight(), 0.0625F);
+                    ItemRenderer.renderItemIn2D(Tessellator.instance, fluidIcon.getMaxU(), fluidIcon.getMinV(), fluidIcon.getMinU(), fluidIcon.getMaxV(), fluidIcon.getIconWidth(), fluidIcon.getIconHeight(), 0.0625F);
                 }
-                GL11.glDepthFunc(515);
+                GL11.glDepthFunc(GL11.GL_LEQUAL);
             }
             GL11.glColor3f(1.0F, 1.0F, 1.0F);
             if (tOverlay != null) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-                GL11.glBlendFunc(770, 771);
+                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 if (type.equals(IItemRenderer.ItemRenderType.INVENTORY)) {
                     GT_RenderUtil.renderItemIcon(tOverlay, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
                 } else {
@@ -120,19 +116,19 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
         } else {
             IIcon tIcon;
             if (aItem.mIconList[(aMetaData - aItem.mOffset)].length > 1) {
-                Long[] tStats = (Long[]) aItem.mElectricStats.get(Short.valueOf(aMetaData));
+                Long[] tStats = aItem.mElectricStats.get(aMetaData);
 
-                if ((tStats != null) && (tStats[3].longValue() < 0L)) {
+                if ((tStats != null) && (tStats[3] < 0L)) {
                     long tCharge = aItem.getRealCharge(aStack);
 
                     if (tCharge <= 0L) {
                         tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][1];
                     } else {
 
-                        if (tCharge >= tStats[0].longValue()) {
+                        if (tCharge >= tStats[0]) {
                             tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][8];
                         } else {
-                            tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][(7 - (int) java.lang.Math.max(0L, java.lang.Math.min(5L, (tStats[0].longValue() - tCharge) * 6L / tStats[0].longValue())))];
+                            tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][(7 - (int) Math.max(0L, Math.min(5L, (tStats[0] - tCharge) * 6L / tStats[0])))];
                         }
                     }
                 } else {
@@ -142,13 +138,13 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
                 tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][0];
             }
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-            GL11.glBlendFunc(770, 771);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             if (type.equals(IItemRenderer.ItemRenderType.INVENTORY)) {
                 GT_RenderUtil.renderItemIcon(tIcon, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
             } else {
                 ItemRenderer.renderItemIn2D(Tessellator.instance, tIcon.getMaxU(), tIcon.getMinV(), tIcon.getMinU(), tIcon.getMaxV(), tIcon.getIconWidth(), tIcon.getIconHeight(), 0.0625F);
             }
         }
-        GL11.glDisable(3042);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 }
