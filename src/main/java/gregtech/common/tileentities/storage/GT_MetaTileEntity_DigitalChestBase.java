@@ -2,6 +2,7 @@ package gregtech.common.tileentities.storage;
 
 import cpw.mods.fml.common.Optional;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
@@ -406,6 +407,24 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         });
     }
 
+    @Optional.Method(modid = "appliedenergistics2")
+    private boolean hasActiveMEConnection() {
+        if (listeners == null || listeners.isEmpty())
+            return false;
+        for (Map.Entry<appeng.api.storage.IMEMonitorHandlerReceiver<appeng.api.storage.data.IAEItemStack>, Object> e : listeners.entrySet())
+        {
+            if ((e.getKey() instanceof appeng.api.parts.IPart))
+            {
+                appeng.api.networking.IGridNode n = ((appeng.api.parts.IPart) e.getKey()).getGridNode();
+                if (n != null && n.isActive())
+                    return true;
+            }
+        }
+        // if there are no active storage buses - clear the listeners
+        listeners = null;
+        return false;
+    }
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("mItemCount", getItemCount());
@@ -426,11 +445,15 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+        if (GregTech_API.mAE2 && GT_Values.disableDigitalChestsExternalAccess && hasActiveMEConnection())
+            return false;
         return aIndex == 1;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+        if (GregTech_API.mAE2 && GT_Values.disableDigitalChestsExternalAccess && hasActiveMEConnection())
+            return false;
         return aIndex == 0 && (mInventory[0] == null || GT_Utility.areStacksEqual(mInventory[0], aStack));
     }
 
