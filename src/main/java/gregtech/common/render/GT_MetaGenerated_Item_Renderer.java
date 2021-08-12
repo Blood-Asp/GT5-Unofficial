@@ -1,8 +1,10 @@
 package gregtech.common.render;
 
+import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Item;
 import gregtech.api.util.GT_Utility;
+import gregtech.loaders.ExtraIcons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,6 +16,10 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+
+import static gregtech.api.enums.ItemList.*;
 
 public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
     public GT_MetaGenerated_Item_Renderer() {
@@ -137,6 +143,12 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
             } else {
                 tIcon = aItem.mIconList[(aMetaData - aItem.mOffset)][0];
             }
+
+            ItemList largeFluidCell = getLargeFluidCell(aStack);
+            if (largeFluidCell != null) {
+                renderLargeFluidCellExtraParts(type, largeFluidCell, aStack);
+            }
+
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             if (type.equals(IItemRenderer.ItemRenderType.INVENTORY)) {
@@ -146,5 +158,69 @@ public class GT_MetaGenerated_Item_Renderer implements IItemRenderer {
             }
         }
         GL11.glDisable(GL11.GL_BLEND);
+    }
+
+    @Nullable
+    private static ItemList getLargeFluidCell(ItemStack stack) {
+        if (isSame(Large_Fluid_Cell_Steel, stack)) return Large_Fluid_Cell_Steel;
+        if (isSame(Large_Fluid_Cell_Aluminium, stack)) return Large_Fluid_Cell_Aluminium;
+        if (isSame(Large_Fluid_Cell_TungstenSteel, stack)) return Large_Fluid_Cell_TungstenSteel;
+        if (isSame(Large_Fluid_Cell_StainlessSteel, stack)) return Large_Fluid_Cell_StainlessSteel;
+        if (isSame(Large_Fluid_Cell_Titanium, stack)) return Large_Fluid_Cell_Titanium;
+        if (isSame(Large_Fluid_Cell_Chrome, stack)) return Large_Fluid_Cell_Chrome;
+        if (isSame(Large_Fluid_Cell_Iridium, stack)) return Large_Fluid_Cell_Iridium;
+        if (isSame(Large_Fluid_Cell_Osmium, stack)) return Large_Fluid_Cell_Osmium;
+        if (isSame(Large_Fluid_Cell_Neutronium, stack)) return Large_Fluid_Cell_Neutronium;
+
+        return null;
+    }
+
+    private static void renderLargeFluidCellExtraParts(IItemRenderer.ItemRenderType type, ItemList item, ItemStack stack) {
+
+        IIcon inner;
+        if (item == Large_Fluid_Cell_Steel) inner = ExtraIcons.steelLargeCellInner;
+        else if (item == Large_Fluid_Cell_Aluminium) inner = ExtraIcons.aluminiumLargeCellInner;
+        else if (item == Large_Fluid_Cell_StainlessSteel) inner = ExtraIcons.stainlesssteelLargeCellInner;
+        else if (item == Large_Fluid_Cell_Titanium) inner = ExtraIcons.titaniumLargeCellInner;
+        else if (item == Large_Fluid_Cell_TungstenSteel) inner = ExtraIcons.tungstensteelLargeCellInner;
+        else if (item == Large_Fluid_Cell_Iridium) inner = ExtraIcons.iridiumLargeCellInner;
+        else if (item == Large_Fluid_Cell_Osmium) inner = ExtraIcons.osmiumLargeCellInner;
+        else if (item == Large_Fluid_Cell_Chrome) inner = ExtraIcons.chromiumLargeCellInner;
+        else inner = ExtraIcons.neutroniumLargeCellInner;
+
+        // Empty inner side
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
+        if (type.equals(ItemRenderType.INVENTORY)) {
+            GT_RenderUtil.renderItemIcon(inner, 16.0D, -0.001D, 0.0F, 0.0F, -1.0F);
+        } else {
+            ItemRenderer.renderItemIn2D(Tessellator.instance, inner.getMaxU(), inner.getMinV(), inner.getMinU(), inner.getMaxV(), inner.getIconWidth(), inner.getIconHeight(), 0.0625F);
+        }
+
+        FluidStack fluidStack = GT_Utility.getFluidForFilledItem(stack, true);
+
+        if (fluidStack != null && fluidStack.getFluid() != null) {
+            IIcon fluidIcon = fluidStack.getFluid().getIcon(fluidStack);
+            int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDepthFunc(GL11.GL_EQUAL);
+            GL11.glColor3ub((byte) (fluidColor >> 16), (byte) (fluidColor >> 8), (byte) fluidColor);
+            if (type.equals(ItemRenderType.INVENTORY)) {
+                GT_RenderUtil.renderItemIcon(fluidIcon, 16.0D, -0.001D, 0.0F, 0.0F, -1.0F);
+            } else {
+                ItemRenderer.renderItemIn2D(Tessellator.instance, fluidIcon.getMaxU(), fluidIcon.getMinV(), fluidIcon.getMinU(), fluidIcon.getMaxV(), fluidIcon.getIconWidth(), fluidIcon.getIconHeight(), 0.0625F);
+            }
+
+            GL11.glColor3ub((byte) -1, (byte) -1, (byte) -1);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
+        }
+    }
+
+    private static boolean isSame(ItemList item, ItemStack stack) {
+        ItemStack internal = item.getInternalStack_unsafe();
+        if (GT_Utility.isStackInvalid(internal)) return false;
+
+        return internal.getItem() == stack.getItem() && internal.getItemDamage() == stack.getItemDamage();
     }
 }

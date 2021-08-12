@@ -29,6 +29,7 @@ import gregtech.common.items.behaviors.Behaviour_DataOrb;
 import gregtech.common.misc.GT_Command;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_Massfabricator;
 import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
+import gregtech.loaders.ExtraIcons;
 import gregtech.loaders.load.GT_CoverBehaviorLoader;
 import gregtech.loaders.load.GT_FuelLoader;
 import gregtech.loaders.load.GT_ItemIterator;
@@ -53,6 +54,7 @@ import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -175,6 +177,10 @@ public class GT_Mod implements IGT_Mod {
             } catch (Throwable e) {
                 e.printStackTrace(GT_Log.err);
             }
+        }
+
+        if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(new ExtraIcons());
         }
 
         File tFile = new File(new File(aEvent.getModConfigurationDirectory(), "GregTech"), "GregTech.cfg");
