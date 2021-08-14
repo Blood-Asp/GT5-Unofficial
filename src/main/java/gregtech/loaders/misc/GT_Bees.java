@@ -2,6 +2,7 @@ package gregtech.loaders.misc;
 
 import cpw.mods.fml.common.Loader;
 import forestry.api.apiculture.EnumBeeChromosome;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.*;
 import forestry.core.genetics.alleles.Allele;
 import forestry.core.utils.StringUtil;
@@ -133,7 +134,7 @@ public class GT_Bees {
         }
 
         @Override
-        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0,IGenome genome1) {
+        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
             if(world.provider.dimensionId == dimID)return 1;
             return 0;
         }
@@ -156,8 +157,8 @@ public class GT_Bees {
         }
 
         @Override
-        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0,IGenome genome1) {
-            if(world.getBiomeGenForCoords(x, z).biomeID == biomeID) return 1;
+        public float getChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
+            if(climate.getBiome().biomeID == biomeID) return 1;
             return 0;
         }
 

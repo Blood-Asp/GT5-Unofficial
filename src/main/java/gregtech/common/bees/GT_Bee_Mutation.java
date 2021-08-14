@@ -1,6 +1,7 @@
 package gregtech.common.bees;
 
 import forestry.api.apiculture.*;
+import forestry.api.core.IClimateProvider;
 import forestry.api.genetics.IAllele;
 import forestry.api.genetics.IGenome;
 import forestry.api.genetics.IMutationCondition;
@@ -37,7 +38,7 @@ public class GT_Bee_Mutation extends BeeMutation {
         int y = housingCoordinates != null ? housingCoordinates.posY : 0;
         int z = housingCoordinates != null ? housingCoordinates.posZ : 0;
 
-        float processedChance = getBasicChance(world, x, y, z, allele0, allele1, genome0, genome1);
+        float processedChance = getBasicChance(world, x, y, z, allele0, allele1, genome0, genome1, housing);
 
         if (processedChance <= 0f) {
             return 0f;
@@ -53,7 +54,7 @@ public class GT_Bee_Mutation extends BeeMutation {
     }
 
     @SuppressWarnings("unchecked")
-    private float getBasicChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1) {
+    private float getBasicChance(World world, int x, int y, int z, IAllele allele0, IAllele allele1, IGenome genome0, IGenome genome1, IClimateProvider climate) {
         float mutationChance = this.getBaseChance();
         List<IMutationCondition> mutationConditions = null;
         Field f = FieldUtils.getDeclaredField(Mutation.class, "mutationConditions", true);
@@ -69,7 +70,7 @@ public class GT_Bee_Mutation extends BeeMutation {
 
         if (mutationConditions != null)
             for (IMutationCondition mutationCondition : mutationConditions) {
-                mutationChance *= mutationCondition.getChance(world, x, y, z, allele0, allele1, genome0, genome1);
+                mutationChance *= mutationCondition.getChance(world, x, y, z, allele0, allele1, genome0, genome1, climate);
                 if (mutationChance == 0) {
                     return 0;
                 }
