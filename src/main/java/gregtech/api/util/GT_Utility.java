@@ -22,6 +22,7 @@ import gregtech.api.items.GT_EnergyArmor_Item;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.net.GT_Packet_Sound;
+import gregtech.api.objects.CollectorUtils;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.threads.GT_Runnable_Sound;
@@ -1752,15 +1753,8 @@ public class GT_Utility {
         return aMap;
     }
 
-    /**
-     * Why the fuck do neither Java nor Guava have a Function to do this?
-     */
-    public static <X, Y extends Comparable> LinkedHashMap<X, Y> sortMapByValuesAcending(Map<X, Y> aMap) {
-        List<Map.Entry<X, Y>> tEntrySet = new LinkedList<>(aMap.entrySet());
-        tEntrySet.sort(Entry.comparingByValue());
-        LinkedHashMap<X, Y> rMap = new LinkedHashMap<>();
-        for (Map.Entry<X, Y> tEntry : tEntrySet) rMap.put(tEntry.getKey(), tEntry.getValue());
-        return rMap;
+    public static <X, Y extends Comparable<Y>> LinkedHashMap<X, Y> sortMapByValuesAcending(Map<X, Y> map) {
+        return map.entrySet().stream().sorted(Entry.comparingByValue()).collect(CollectorUtils.entriesToMap(LinkedHashMap::new));
     }
 
     /**
