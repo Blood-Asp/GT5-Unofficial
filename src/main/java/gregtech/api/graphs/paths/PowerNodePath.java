@@ -13,13 +13,12 @@ public class PowerNodePath extends NodePath {
     int mLoss;
     int mVoltage = 0;
     int mMaxVoltage;
-    int mTick;
+    int mTick = 0;
     boolean mCountUp = true;
 
 
-    public PowerNodePath(MetaPipeEntity[] aCables,int startTime) {
+    public PowerNodePath(MetaPipeEntity[] aCables) {
         super(aCables);
-        mTick = startTime;
     }
 
     public int getLoss() {
@@ -97,7 +96,9 @@ public class PowerNodePath extends NodePath {
     }
 
     private void reset(int aTimePassed) {
-        if (aTimePassed < 0) return;
+        if (aTimePassed < 0 || aTimePassed > 100) {
+            mAmps = 0;
+        }
         mAmps = Math.max(0, mAmps - (mMaxAmps * aTimePassed));
     }
 

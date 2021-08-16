@@ -32,8 +32,7 @@ public class GenerateNodeMapPower extends GenerateNodeMap {
 
     @Override
     protected NodePath getNewPath(MetaPipeEntity[] aPipes) {
-        int startTime = MinecraftServer.getServer().getTickCounter();
-        return new PowerNodePath(aPipes,startTime);
+        return new PowerNodePath(aPipes);
     }
 
     //used to apply voltage on death ends
