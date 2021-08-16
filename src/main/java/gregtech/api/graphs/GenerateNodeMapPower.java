@@ -11,6 +11,7 @@ import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.MetaPipeEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import ic2.api.energy.tile.IEnergySink;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -31,7 +32,8 @@ public class GenerateNodeMapPower extends GenerateNodeMap {
 
     @Override
     protected NodePath getNewPath(MetaPipeEntity[] aPipes) {
-        return new PowerNodePath(aPipes);
+        int startTime = MinecraftServer.getServer().getTickCounter();
+        return new PowerNodePath(aPipes,startTime);
     }
 
     //used to apply voltage on death ends

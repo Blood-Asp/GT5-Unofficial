@@ -13,12 +13,13 @@ public class PowerNodePath extends NodePath {
     int mLoss;
     int mVoltage = 0;
     int mMaxVoltage;
-    int mTick = 0;
+    int mTick;
     boolean mCountUp = true;
 
 
-    public PowerNodePath(MetaPipeEntity[] aCables) {
+    public PowerNodePath(MetaPipeEntity[] aCables,int startTime) {
         super(aCables);
+        mTick = startTime;
     }
 
     public int getLoss() {
@@ -54,8 +55,9 @@ public class PowerNodePath extends NodePath {
             for (MetaPipeEntity tCable : mPipes) {
                 if (((GT_MetaPipeEntity_Cable)tCable).mAmperage*40 < this.mAmps) {
                     BaseMetaPipeEntity tBaseCable = (BaseMetaPipeEntity) tCable.getBaseMetaTileEntity();
-                    if (tBaseCable != null)
+                    if (tBaseCable != null) {
                         tBaseCable.setToFire();
+                    }
                 }
             }
         }
@@ -95,6 +97,7 @@ public class PowerNodePath extends NodePath {
     }
 
     private void reset(int aTimePassed) {
+        if (aTimePassed < 0) return;
         mAmps = Math.max(0, mAmps - (mMaxAmps * aTimePassed));
     }
 
