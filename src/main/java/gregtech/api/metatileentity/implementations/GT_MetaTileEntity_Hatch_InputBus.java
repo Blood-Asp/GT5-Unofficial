@@ -1,14 +1,7 @@
 package gregtech.api.metatileentity.implementations;
 
 import gregtech.GT_Mod;
-import gregtech.api.gui.GT_Container_1by1;
-import gregtech.api.gui.GT_Container_2by2;
-import gregtech.api.gui.GT_Container_3by3;
-import gregtech.api.gui.GT_Container_4by4;
-import gregtech.api.gui.GT_GUIContainer_1by1;
-import gregtech.api.gui.GT_GUIContainer_2by2;
-import gregtech.api.gui.GT_GUIContainer_3by3;
-import gregtech.api.gui.GT_GUIContainer_4by4;
+import gregtech.api.gui.*;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -17,6 +10,7 @@ import gregtech.api.util.GT_ClientPreference;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.extensions.ArrayExt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,19 +24,29 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     public boolean disableSort;
     public boolean disableFilter = false;
 
-    public GT_MetaTileEntity_Hatch_InputBus(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, getSlots(aTier), new String[]{
-                "Item Input for Multiblocks",
-                "Shift + right click with screwdriver to turn Sort mode on/off",
-                "Capacity: " + getSlots(aTier) + " stack" + (getSlots(aTier) >= 2 ? "s" : "")});
+    public GT_MetaTileEntity_Hatch_InputBus(int id, String name, String nameRegional, int tier) {
+        this(id, name, nameRegional, tier, getSlots(tier));
     }
 
+    public GT_MetaTileEntity_Hatch_InputBus(int id, String name, String nameRegional, int tier, int slots) {
+        super(id, name, nameRegional, tier, slots, ArrayExt.of(
+                "Item Input for Multiblocks",
+                "Shift + right click with screwdriver to turn Sort mode on/off",
+                "Capacity: " + slots + " stack" + (slots >= 2 ? "s" : "")));
+    }
+
+    @Deprecated
+    // having too many constructors is bad, don't be so lazy, use GT_MetaTileEntity_Hatch_InputBus(String, int, String[], ITexture[][][])
     public GT_MetaTileEntity_Hatch_InputBus(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aTier < 1 ? 1 : aTier == 1 ? 4 : aTier == 2 ? 9 : 16, aDescription, aTextures);
+        this(aName, aTier, ArrayExt.of(aDescription), aTextures);
     }
 
     public GT_MetaTileEntity_Hatch_InputBus(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aTier < 1 ? 1 : aTier == 1 ? 4 : aTier == 2 ? 9 : 16, aDescription, aTextures);
+        this(aName, aTier, getSlots(aTier), aDescription, aTextures);
+    }
+
+    public GT_MetaTileEntity_Hatch_InputBus(String aName, int aTier, int aSlots, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aSlots, aDescription, aTextures);
     }
 
     @Override
@@ -176,7 +180,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
             GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Sort mode: " + (disableSort ? "Disabled" : "Enabled")));
         } else {
             disableFilter = !disableFilter;
-            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.hatch.disableFilter."+disableFilter));
+            GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.hatch.disableFilter." + disableFilter));
         }
     }
 

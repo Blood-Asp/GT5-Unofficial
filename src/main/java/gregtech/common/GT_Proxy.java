@@ -1,10 +1,6 @@
 package gregtech.common;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.ProgressManager;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -15,16 +11,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import forestry.api.genetics.AlleleManager;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
-import gregtech.api.enums.ConfigCategories;
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OreDictNames;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.SubTag;
+import gregtech.api.enums.*;
 import gregtech.api.enums.TC_Aspects.TC_AspectStack;
-import gregtech.api.enums.ToolDictNames;
 import gregtech.api.interfaces.IBlockOnWalkOver;
 import gregtech.api.interfaces.IProjectileItem;
 import gregtech.api.interfaces.internal.IGT_Mod;
@@ -60,6 +48,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -70,10 +59,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -90,23 +76,13 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
+import static gregtech.api.enums.GT_Values.W;
 import static gregtech.api.enums.GT_Values.debugEntityCramming;
 
 
@@ -252,6 +228,11 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      * This enables rendering of glowing textures
      */
     public boolean mRenderGlowTextures = true;
+
+    /**
+     * Render flipped textures
+     */
+    public boolean mRenderFlippedMachinesFlipped = true;
 
     public static final int GUI_ID_COVER_SIDE_BASE = 10; // Takes GUI ID 10 - 15
 
@@ -477,39 +458,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         OrePrefixes.cellMolten.mContainerItem = ItemList.Cell_Empty.get(1L);
         OrePrefixes.cell.mContainerItem = ItemList.Cell_Empty.get(1L);
 
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sFrostHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
 
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sHeatHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sBioHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sRadioHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatHelmet", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatChestplate", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatLeggings", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(GT_ModHandler.getIC2Item("hazmatBoots", 1L, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_helmet, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_chestplate, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, 32767));
-        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, 32767));
 
         GT_ModHandler.sNonReplaceableItems.add(new ItemStack(Items.bow, 1, 32767));
         GT_ModHandler.sNonReplaceableItems.add(new ItemStack(Items.fishing_rod, 1, 32767));
@@ -586,10 +535,100 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
         GT_OreDictUnificator.registerOre("cropGrape", GT_ModHandler.getModItem("magicalcrops", "magicalcrops_CropProduce", 1L, 4));
         GT_OreDictUnificator.registerOre("cropTea", GT_ModHandler.getModItem("ganyssurface", "teaLeaves", 1L, 0));
 
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanoBootsTraveller", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "NanosuitGogglesRevealing", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumBootsTraveller", 1L, 32767));
-        GregTech_API.sGasHazmatList.add(GT_ModHandler.getModItem("EMT", "QuantumGogglesRevealing", 1L, 32767));
+        // Clay buckets, which don't get registered until Iguana Tweaks pre-init
+        if (Loader.isModLoaded("IguanaTweaksTConstruct")) {
+            OrePrefixes.bucketClay.mContainerItem = GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0);
+            GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Empty, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketFired", 1L, 0));
+            GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Water, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketWater", 1L, 0));
+            GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Lava, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketLava", 1L, 0));
+            GT_OreDictUnificator.set(OrePrefixes.bucketClay, Materials.Milk, GT_ModHandler.getModItem("IguanaTweaksTConstruct", "clayBucketMilk", 1L, 0));
+
+            FluidContainerRegistry.registerFluidContainer(
+                    new FluidContainerRegistry.FluidContainerData(
+                            Materials.Milk.getFluid(1000L),
+                            GT_OreDictUnificator.get(OrePrefixes.bucketClay, Materials.Milk, 1L),
+                            GT_OreDictUnificator.get(OrePrefixes.bucketClay, Materials.Empty, 1L)));
+        }
+
+        // IC2 Hazmat
+        addFullHazmatToIC2Item("hazmatHelmet");
+        addFullHazmatToIC2Item("hazmatChestplate");
+        addFullHazmatToIC2Item("hazmatLeggings");
+        addFullHazmatToIC2Item("hazmatBoots");
+        addFullHazmatToIC2Item("nanoHelmet");
+        addFullHazmatToIC2Item("nanoBoots");
+        addFullHazmatToIC2Item("nanoLeggings");
+        addFullHazmatToIC2Item("nanoBodyarmor");
+        addFullHazmatToIC2Item("quantumHelmet");
+        addFullHazmatToIC2Item("quantumBodyarmor");
+        addFullHazmatToIC2Item("quantumLeggings");
+        addFullHazmatToIC2Item("quantumBoots");
+
+        //GraviSuite Hazmat
+        addFullHazmatToGeneralItem("GraviSuite", "graviChestPlate", 1L);
+        addFullHazmatToGeneralItem("GraviSuite", "advNanoChestPlate", 1L);
+
+        // EMT Hazmat
+        addFullHazmatToGeneralItem("EMT", "itemArmorQuantumChestplate", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanoBootsTraveller", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanosuitGogglesRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumBootsTraveller", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumGogglesRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "SolarHelmetRevealing", 1L);
+        addFullHazmatToGeneralItem("EMT", "NanosuitWing", 1L);
+        addFullHazmatToGeneralItem("EMT", "QuantumWing", 1L);
+
+        // DraconicEvolution Hazmat
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicBoots", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicHelm", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicLeggs", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "draconicChest", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernBoots", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernHelm", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernLeggs", 1L, 0);
+        addFullHazmatToGeneralItem("DraconicEvolution", "wyvernChest", 1L, 0);
+
+        //AdvancedSolarPanel
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "advanced_solar_helmet", 1L);
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "hybrid_solar_helmet", 1L);
+        addFullHazmatToGeneralItem("AdvancedSolarPanel", "ultimate_solar_helmet", 1L);
+
+        //TaintedMagic Hazmat
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidwalkerBoots", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressHelmet", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressChestplate", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemShadowFortressLeggings", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressHelmet", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressChestplate", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidFortressLeggings", 1L);
+        addFullHazmatToGeneralItem("TaintedMagic", "ItemVoidmetalGoggles", 1L);
+
+        //WitchingGadgets Hazmat
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialHelm", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialChest", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialLegs", 1L);
+        addFullHazmatToGeneralItem("WitchingGadgets", "item.WG_PrimordialBoots", 1L);
+
+        //ThaumicTinkerer Hazmat
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothChestGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothBootsGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothHelmGem", 1L);
+        addFullHazmatToGeneralItem("ThaumicTinkerer", "ichorclothLegsGem", 1L);
+
+        //GalaxySpace Hazmat
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_helmet", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_helmetglasses", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_plate", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_jetplate", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_leg", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_boots", 1L);
+        addFullHazmatToGeneralItem("GalaxySpace", "item.spacesuit_gravityboots", 1L);
+
+        //Extra Hazmat
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_helmet, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_chestplate, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_leggings, 1, W));
+        GregTech_API.sElectroHazmatList.add(new ItemStack(Items.chainmail_boots, 1, W));
 
         GregTech_API.sLoadStarted = true;
         for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
@@ -1458,7 +1497,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             float tHeat = GT_Utility.getHeatDamageFromItem(tStack);
                             if (tHeat != 0.0F) {
                                 if (tHeat > 0.0F) {
-                                    GT_Utility.applyHeatDamage(aEvent.player, tHeat);
+                                    GT_Utility.applyHeatDamageFromItem(aEvent.player, tHeat, tStack);
                                 } else {
                                     GT_Utility.applyFrostDamage(aEvent.player, -tHeat);
                                 }
@@ -1578,7 +1617,7 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                             float tHeat = GT_Utility.getHeatDamageFromItem(tStack);
                             if (tHeat != 0.0F) {
                                 if (tHeat > 0.0F) {
-                                    GT_Utility.applyHeatDamage(aEvent.player, tHeat);
+                                    GT_Utility.applyHeatDamageFromItem(aEvent.player, tHeat, tStack);
                                 } else {
                                     GT_Utility.applyFrostDamage(aEvent.player, -tHeat);
                                 }
@@ -1712,61 +1751,66 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
                 aMaterial.mMoltenRGBa, 4, aMaterial.mMeltingPoint <= 0 ? 1000 : aMaterial.mMeltingPoint, GT_OreDictUnificator.get(OrePrefixes.cellMolten, aMaterial, 1L), ItemList.Cell_Empty.get(1L), 144);
     }
 
-    public Fluid addAutogeneratedWetFluid(Materials aMaterial) {
-                return addFluid("wet." + aMaterial.mName.toLowerCase(Locale.ENGLISH), "wet.autogenerated", "Wet " + aMaterial.mDefaultLocalName, aMaterial,
-                        aMaterial.mMoltenRGBa, 4, aMaterial.mMeltingPoint <= 0 ? 1000 : aMaterial.mMeltingPoint, GT_OreDictUnificator.get(OrePrefixes.cell, aMaterial, 1L), ItemList.Cell_Empty.get(1L), 144);
-    }
-
     public Fluid addAutogeneratedPlasmaFluid(Materials aMaterial) {
         return addFluid("plasma." + aMaterial.mName.toLowerCase(Locale.ENGLISH), "plasma.autogenerated", aMaterial.mDefaultLocalName + " Plasma", aMaterial,
                 aMaterial.mMoltenRGBa, 3, 10000, GT_OreDictUnificator.get(OrePrefixes.cellPlasma, aMaterial, 1L), ItemList.Cell_Empty.get(1L), 1000);
     }
 
     public void addAutoGeneratedHydroCrackedFluids(Materials aMaterial){
-    	Fluid[] crackedFluids = new Fluid[3];
-    	String[] prefixes = {"lightlyhydrocracked.", "moderatelyhydrocracked.", "severelyhydrocracked."};
-    	String[] localPrefixes = {"Lightly Hydro-Cracked ", "Moderately Hydro-Cracked ", "Severely Hydro-Cracked "};
-    	GT_Fluid uncrackedFluid = null;
-    	if (aMaterial.mFluid != null) {
-    		uncrackedFluid = (GT_Fluid) aMaterial.mFluid;
-    	} else if (aMaterial.mGas != null) {
-    		uncrackedFluid = (GT_Fluid) aMaterial.mGas;
-    	}
-    	for (int i = 0; i < 3; i++) {
-    		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
-    				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
-    		int hydrogenAmount = 2 * i + 2;
-    		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 120 + 60 * i);
-    		GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(hydrogenAmount), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30);
-    		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), Materials.Hydrogen.getGas(hydrogenAmount * 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
-    	}
-    	aMaterial.setHydroCrackedFluids(crackedFluids);
+        Fluid[] crackedFluids = new Fluid[3];
+        String[] namePrefixes = { "lightlyhydrocracked.", "moderatelyhydrocracked.", "severelyhydrocracked." };
+        OrePrefixes[] orePrefixes = { OrePrefixes.cellHydroCracked1, OrePrefixes.cellHydroCracked2, OrePrefixes.cellHydroCracked3 };
+        GT_Fluid uncrackedFluid = null;
+        if (aMaterial.mFluid != null) {
+            uncrackedFluid = (GT_Fluid) aMaterial.mFluid;
+        } else if (aMaterial.mGas != null) {
+            uncrackedFluid = (GT_Fluid) aMaterial.mGas;
+        }
+        for (int i = 0; i < 3; i++) {
+            crackedFluids[i] = addFluid(
+                    namePrefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName,
+                    orePrefixes[i].mLocalizedMaterialPre + aMaterial.mDefaultLocalName,
+                    null, aMaterial.mRGBa, 2, 775,
+                    GT_OreDictUnificator.get(orePrefixes[i], aMaterial, 1L),
+                    ItemList.Cell_Empty.get(1L), 1000);
+
+            int hydrogenAmount = 2 * i + 2;
+            GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), Materials.Hydrogen.getGas(hydrogenAmount * 1000),
+                    new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 120 + 60 * i);
+            GT_Values.RA.addChemicalRecipe(Materials.Hydrogen.getCells(hydrogenAmount), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000),
+                    new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(hydrogenAmount), 160 + 80 * i, 30);
+            GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), Materials.Hydrogen.getGas(hydrogenAmount * 1000),
+                    new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+        }
+        aMaterial.setHydroCrackedFluids(crackedFluids);
     }
     
     public void addAutoGeneratedSteamCrackedFluids(Materials aMaterial){
-    	Fluid[] crackedFluids = new Fluid[3];
-    	String[] prefixes = {"lightlysteamcracked.", "moderatelysteamcracked.", "severelysteamcracked."};
-    	String[] localPrefixes = {"Lightly Steam-Cracked ", "Moderately Steam-Cracked ", "Severely Steam-Cracked "};
-    	GT_Fluid uncrackedFluid = null;
-    	if (aMaterial.mFluid != null) {
-    		uncrackedFluid = (GT_Fluid) aMaterial.mFluid;
-    	} else if (aMaterial.mGas != null) {
-    		uncrackedFluid = (GT_Fluid) aMaterial.mGas;
-    	}
-    	for (int i = 0; i < 3; i++) {
-    		crackedFluids[i] = addFluid(prefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName, 
-    				localPrefixes[i] + aMaterial.mDefaultLocalName, null, aMaterial.mRGBa, 2, 775, null, null, 0);
-    		GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
-    		GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
-    		GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000), 
-    				new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
-    	}
-    	aMaterial.setSteamCrackedFluids(crackedFluids);
+        Fluid[] crackedFluids = new Fluid[3];
+        String[] namePrefixes = { "lightlysteamcracked.", "moderatelysteamcracked.", "severelysteamcracked." };
+        OrePrefixes[] orePrefixes = { OrePrefixes.cellSteamCracked1, OrePrefixes.cellSteamCracked2, OrePrefixes.cellSteamCracked3 };
+        GT_Fluid uncrackedFluid = null;
+        if (aMaterial.mFluid != null) {
+            uncrackedFluid = (GT_Fluid) aMaterial.mFluid;
+        } else if (aMaterial.mGas != null) {
+            uncrackedFluid = (GT_Fluid) aMaterial.mGas;
+        }
+        for (int i = 0; i < 3; i++) {
+            crackedFluids[i] = addFluid(
+                    namePrefixes[i] + aMaterial.mName.toLowerCase(Locale.ENGLISH), uncrackedFluid.mTextureName,
+                    orePrefixes[i].mLocalizedMaterialPre + aMaterial.mDefaultLocalName,
+                    null, aMaterial.mRGBa, 2, 775,
+                    GT_OreDictUnificator.get(orePrefixes[i], aMaterial, 1L),
+                    ItemList.Cell_Empty.get(1L), 1000);
+
+            GT_Values.RA.addCrackingRecipe(i + 1, new FluidStack(uncrackedFluid, 1000), GT_ModHandler.getSteam(1000),
+                    new FluidStack(crackedFluids[i], 1000), 40 + 20 * i, 240 + 120 * i);
+            GT_Values.RA.addChemicalRecipe(GT_ModHandler.getIC2Item("steamCell", 1L), GT_Utility.getIntegratedCircuit(i + 1), new FluidStack(uncrackedFluid, 1000),
+                    new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+            GT_Values.RA.addChemicalRecipe(aMaterial.getCells(1), GT_Utility.getIntegratedCircuit(i + 1), GT_ModHandler.getSteam(1000),
+                    new FluidStack(crackedFluids[i], 800), Materials.Empty.getCells(1), 160 + 80 * i, 30);
+        }
+        aMaterial.setSteamCrackedFluids(crackedFluids);
     }
     
     public Fluid addFluid(String aName, String aLocalized, Materials aMaterial, int aState, int aTemperatureK) {
@@ -2042,5 +2086,53 @@ public abstract class GT_Proxy implements IGT_Mod, IGuiHandler, IFuelHandler {
      public void onBlockEvent(BlockEvent event) {
         if (event.block.getUnlocalizedName().equals("blockAlloyGlass"))
             GregTech_API.causeMachineUpdate(event.world, event.x, event.y, event.z);
+    }
+
+    public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount, int aMeta){
+        ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, aMeta);
+        addItemToHazmatLists(item);
+    }
+
+    public static void addFullHazmatToGeneralItem(String aModID, String aItem, long aAmount){
+        ItemStack item = GT_ModHandler.getModItem(aModID, aItem, aAmount, W);
+        addItemToHazmatLists(item);
+    }
+
+    public static void addFullHazmatToIC2Item(String aItem){
+        ItemStack item = GT_ModHandler.getIC2Item(aItem, 1L, W);
+        addItemToHazmatLists(item);
+    }
+
+    private static void addItemToHazmatLists(ItemStack item){
+        GregTech_API.sGasHazmatList.add(item);
+        GregTech_API.sBioHazmatList.add(item);
+        GregTech_API.sFrostHazmatList.add(item);
+        GregTech_API.sHeatHazmatList.add(item);
+        GregTech_API.sRadioHazmatList.add(item);
+        GregTech_API.sElectroHazmatList.add(item);
+    }
+
+    public static boolean providesProtection(ItemStack aStack){
+        boolean isGas = GT_Utility.isStackInList(aStack, GregTech_API.sGasHazmatList);
+        boolean isBio = GT_Utility.isStackInList(aStack, GregTech_API.sBioHazmatList);
+        boolean isFrost = GT_Utility.isStackInList(aStack, GregTech_API.sFrostHazmatList);
+        boolean isHeat = GT_Utility.isStackInList(aStack, GregTech_API.sHeatHazmatList);
+        boolean isRadio = GT_Utility.isStackInList(aStack, GregTech_API.sRadioHazmatList);
+        boolean isElectro = GT_Utility.isStackInList(aStack, GregTech_API.sElectroHazmatList);
+        return isGas && isBio && isFrost && isHeat && isRadio && isElectro;
+    }
+
+    @SubscribeEvent
+    public void onItemTooltip(ItemTooltipEvent event) {
+        if (event.itemStack == null) {
+            return;
+        }
+        else {
+            ItemStack aStackTemp = event.itemStack;
+            GT_ItemStack aStack = new GT_ItemStack(aStackTemp);
+            if (providesProtection(aStackTemp)) {
+                event.toolTip.add(EnumChatFormatting.LIGHT_PURPLE + "Provides full hazmat protection.");
+            }
+        }
     }
 }

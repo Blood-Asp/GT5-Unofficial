@@ -47,6 +47,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -645,7 +646,7 @@ public abstract class GT_MetaGenerated_Tool extends GT_MetaBase_Item implements 
             return false;
         }
         Materials aMaterial = getPrimaryMaterial(aStack);
-        ConcurrentHashMap<Integer, Integer> tMap = new ConcurrentHashMap<Integer, Integer>(), tResult = new ConcurrentHashMap<Integer, Integer>();
+        HashMap<Integer, Integer> tMap = new HashMap<>(), tResult = new HashMap<>();
         if (aMaterial.mEnchantmentTools != null) {
             tMap.put(aMaterial.mEnchantmentTools.effectId, (int) aMaterial.mEnchantmentToolsLevel);
             if (aMaterial.mEnchantmentTools == Enchantment.fortune)

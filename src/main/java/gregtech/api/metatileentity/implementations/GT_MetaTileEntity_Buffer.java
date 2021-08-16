@@ -329,11 +329,19 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
     }
 
     protected void fillStacksIntoFirstSlots() {
-        if (bSortStacks) {
-            for (int i = 0; i < mInventory.length; i++)
-                for (int j = i + 1; j < mInventory.length; j++)
-                    if (mInventory[j] != null && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
-                        GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+        for (int i = 0; i < mInventory.length - 1; i++) {
+            if (!isValidSlot(i)) {
+                continue;
+            }
+
+            for (int j = i + 1; j < mInventory.length; j++) {
+                if (!isValidSlot(j)) {
+                    continue;
+                }
+
+                if (mInventory[j] != null && (mInventory[i] == null || GT_Utility.areStacksEqual(mInventory[i], mInventory[j])))
+                    GT_Utility.moveStackFromSlotAToSlotB(getBaseMetaTileEntity(), getBaseMetaTileEntity(), j, i, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
+            }
         }
     }
 
@@ -342,7 +350,7 @@ public abstract class GT_MetaTileEntity_Buffer extends GT_MetaTileEntity_TieredM
         if (aPlayer.isSneaking()) {
             // I was so proud of all this but I literally just copied code from OutputBus
             bSortStacks = !bSortStacks;
-            GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Sort mode: " + (bSortStacks ? "Disabled" : "Enabled")));
+            GT_Utility.sendChatToPlayer(aPlayer, trans("200", "Sort mode: " + (bSortStacks ? "Enabled" : "Disabled")));
             return true;
         }
         return super.onSolderingToolRightClick(aSide,aWrenchingSide,aPlayer,aX,aY,aZ);

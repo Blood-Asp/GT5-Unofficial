@@ -8,12 +8,9 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IColoredTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity.ClientEvents;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.GT_Config;
-import gregtech.api.util.GT_CoverBehavior;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
-import gregtech.api.util.WorldSpawnedEventBuilder;
+import gregtech.api.util.*;
 import gregtech.common.GT_Client;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -181,10 +178,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (difference > 1.05 && difference < 1.4) {
             aSide = 5;
         }
-        boolean tCovered = false;
-        if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
-            tCovered = true;
-        }
+        boolean tCovered = aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0;
         if(isConnectedAtSide(aSide)){
         	tCovered = true;
         }
@@ -305,17 +299,20 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     @Override
     public final void sendSound(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 4, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.DO_SOUND, aIndex);
     }
 
     @Override
     public final void sendLoopStart(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 5, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.START_SOUND_LOOP, aIndex);
     }
 
     @Override
     public final void sendLoopEnd(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 6, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.STOP_SOUND_LOOP, aIndex);
     }
 
     @Override
@@ -503,7 +500,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     @Override
     public ItemStack decrStackSize(int aIndex, int aAmount) {
-        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copy(tStack);
+        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copyOrNull(tStack);
         if (tStack != null) {
             if (tStack.stackSize <= aAmount) {
                 if (setStackToZeroInsteadOfNull(aIndex)) tStack.stackSize = 0;
@@ -769,7 +766,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (tTileEntity instanceof IColoredTileEntity) {
             if (getBaseMetaTileEntity().getColorization() >= 0) {
                 byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
+                return tColor < 0 || tColor == getBaseMetaTileEntity().getColorization();
             }
         }
 

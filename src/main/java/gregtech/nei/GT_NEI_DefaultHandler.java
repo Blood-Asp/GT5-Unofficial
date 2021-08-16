@@ -102,7 +102,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             tResults.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tResults.add(GT_Utility.copy(tData.filledContainer));
+                    tResults.add(GT_Utility.copyOrNull(tData.filledContainer));
                 }
             }
         }
@@ -136,7 +136,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             tInputs.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
-                    tInputs.add(GT_Utility.copy(tData.filledContainer));
+                    tInputs.add(GT_Utility.copyOrNull(tData.filledContainer));
                 }
             }
         }
@@ -217,23 +217,23 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
 		String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
 		if (recipeDesc == null) {
 			if (tEUt != 0) {
-				drawText(10, 73, trans("152","Total: ") + ((long)tDuration * tEUt) + " EU", -16777216);
-				drawText(10, 83, trans("153","Usage: ") + tEUt + " EU/t", -16777216);
+				drawText(10, 73, trans("152","Total: ") + GT_Utility.formatNumbers((long)tDuration * tEUt) + " EU", -16777216);
+				drawText(10, 83, trans("153","Usage: ") + GT_Utility.formatNumbers(tEUt) + " EU/t", -16777216);
 				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
                     byte tier=GT_Utility.getTier(tEUt / this.mRecipeMap.mAmperage);
                     if(tier<0||tier>=16){
-                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", 0xffFF0000);
+                        drawText(10, 93, trans("154","Voltage: ") + GT_Utility.formatNumbers(tEUt / this.mRecipeMap.mAmperage) + " EU", 0xffFF0000);
 //add here gt logger
                     }else{
-                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU ("+GT_Values.VN[tier]+")", -16777216);
-                    }drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
+                        drawText(10, 93, trans("154","Voltage: ") + GT_Utility.formatNumbers(tEUt / this.mRecipeMap.mAmperage) + " EU ("+GT_Values.VN[tier]+")", -16777216);
+                    }drawText(10, 103, trans("155","Amperage: ") + GT_Utility.formatNumbers(this.mRecipeMap.mAmperage), -16777216);
 				} else {
 					drawText(10, 93, trans("156","Voltage: unspecified"), -16777216);
 					drawText(10, 103, trans("157","Amperage: unspecified"), -16777216);
 				}
 			}
 			if (tDuration > 0) {
-				drawText(10, 113, trans("158","Time: ")+String.format("%.2f " + trans("161"," secs"), 0.05F * tDuration), -16777216);
+				drawText(10, 113, trans("158","Time: ") + GT_Utility.formatNumbers(0.05d * tDuration) + trans("161"," secs"), -16777216);
 			}
 			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
 			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
@@ -247,7 +247,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             } else if (tSpecial == -400) {
                 drawText(10, 123, trans("216","Deprecated Recipe"), -16777216);
             } else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
-				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
+				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + GT_Utility.formatNumbers(tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier) + this.mRecipeMap.mNEISpecialValuePost, -16777216);
 			}
 		} else {
 			int i = 0;
@@ -385,7 +385,7 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
                             tDisplayStacks.add(base);
                         }
                     } else {
-                        tDisplayStacks.add(GT_Utility.copy(tStack));
+                        tDisplayStacks.add(GT_Utility.copyOrNull(tStack));
                     }
                 }
             }

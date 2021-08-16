@@ -19,7 +19,6 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
@@ -52,12 +51,12 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    TextureFactory.of(OVERLAY_FRONT_OIL_DRILL_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     getCasingTextureForId(casingTextureIndex),
-                    TextureFactory.of(OVERLAY_FRONT_OIL_DRILL),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_OIL_DRILL_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{getCasingTextureForId(casingTextureIndex)};
     }
@@ -77,7 +76,7 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
             chunkRangeConfig = aNBT.getInteger("chunkRangeConfig");
     }
 
-    protected String[] getDescriptionInternal(String tierSuffix) {
+    protected GT_Multiblock_Tooltip_Builder createTooltip(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
 
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -93,16 +92,12 @@ public abstract class GT_MetaTileEntity_OilDrillBase extends GT_MetaTileEntity_D
                 .addStructureInfo(casings + " form the 3x1x3 Base")
                 .addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
                 .addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
-                .addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
-                .addMaintenanceHatch("Any base casing")
-                .addInputBus("Mining Pipes or Circuits, optional, any base casing")
-                .addOutputHatch("Any base casing")
+                .addEnergyHatch(VN[getMinTier()] + "+, Any base casing", 1)
+                .addMaintenanceHatch("Any base casing", 1)
+                .addInputBus("Mining Pipes or Circuits, optional, any base casing", 1)
+                .addOutputHatch("Any base casing", 1)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
 

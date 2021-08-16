@@ -540,10 +540,10 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
         Materials.Water.mSolid = Materials.Ice.mSolid;
 
 
-        GT_Mod.gregtechproxy.addFluid("molten.glass", "Molten Glass", Materials.Glass, 4, 1500);
-        GT_Mod.gregtechproxy.addFluid("molten.redstone", "Molten Redstone", Materials.Redstone, 4, 500);
-        GT_Mod.gregtechproxy.addFluid("molten.blaze", "Molten Blaze", Materials.Blaze, 4, 6400);
-        GT_Mod.gregtechproxy.addFluid("wet.concrete", "Wet Concrete", Materials.Concrete, 4, 300);
+        GT_Mod.gregtechproxy.addFluid("molten.glass", "Molten Glass", Materials.Glass, 4, 1500, GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Glass, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 144);
+        GT_Mod.gregtechproxy.addFluid("molten.redstone", "Molten Redstone", Materials.Redstone, 4, 500, GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Redstone, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 144);
+        GT_Mod.gregtechproxy.addFluid("molten.blaze", "Molten Blaze", Materials.Blaze, 4, 6400, GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Blaze, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 144);
+        GT_Mod.gregtechproxy.addFluid("wet.concrete", "Wet Concrete", Materials.Concrete, 4, 300, GT_OreDictUnificator.get(OrePrefixes.cellMolten, Materials.Concrete, 1L), ItemList.Cell_Empty.get(1L, new Object[0]), 144);
 
         for (Materials tMaterial : Materials.values()) {
             if ((tMaterial.mStandardMoltenFluid == null) && (tMaterial.contains(SubTag.SMELTING_TO_FLUID)) && (!tMaterial.contains(SubTag.NO_SMELTING))) {

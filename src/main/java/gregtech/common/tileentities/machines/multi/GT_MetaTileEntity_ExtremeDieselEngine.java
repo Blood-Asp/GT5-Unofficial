@@ -11,12 +11,12 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffl
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE;
@@ -35,7 +35,7 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Combustion Generator")
                 .addInfo("Controller block for the Extreme Combustion Engine")
@@ -52,18 +52,14 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
                 .addOtherStructurePart("Titanium Gear Box Machine Casing", "Inner 2 blocks")
                 .addOtherStructurePart("Extreme Engine Intake Machine Casing", "8x, ring around controller")
                 .addStructureInfo("Extreme Engine Intake Casings must not be obstructed in front (only air blocks)")
-                .addDynamoHatch("Back center")
-                .addMaintenanceHatch("One of the casings next to a Gear Box")
-                .addMufflerHatch("Top middle back, above the rear Gear Box")
-                .addInputHatch("HOG, next to a Gear Box")
-                .addInputHatch("Lubricant, next to a Gear Box")
-                .addInputHatch("Liquid Oxygen, optional, next to a Gear Box")
+                .addDynamoHatch("Back center", 2)
+                .addMaintenanceHatch("One of the casings next to a Gear Box", 1)
+                .addMufflerHatch("Top middle back, above the rear Gear Box", 1)
+                .addInputHatch("HOG, next to a Gear Box", 1)
+                .addInputHatch("Lubricant, next to a Gear Box", 1)
+                .addInputHatch("Liquid Oxygen, optional, next to a Gear Box", 1)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override
@@ -76,12 +72,12 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
         if (aSide == aFacing) {
             if (aActive) return new ITexture[]{
                     casingTexturePages[0][60],
-                    TextureFactory.of(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
                     casingTexturePages[0][60],
-                    TextureFactory.of(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW).glow().build()};
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_EXTREME_DIESEL_ENGINE_GLOW).extFacing().glow().build()};
         }
         return new ITexture[]{casingTexturePages[0][60]};
     }
@@ -185,19 +181,25 @@ public class GT_MetaTileEntity_ExtremeDieselEngine extends GT_MetaTileEntity_Die
         }
       
         return new String[]{
-                EnumChatFormatting.BLUE+"Extreme Diesel Engine"+EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("GT5U.multiblock.energy")+": " +
-                EnumChatFormatting.GREEN + storedEnergy + EnumChatFormatting.RESET +" EU / "+
-                EnumChatFormatting.YELLOW + maxEnergy + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.BLUE + "Extreme Diesel Engine" + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " +
+                        EnumChatFormatting.GREEN + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
                 getIdealStatus() == getRepairStatus() ?
-                EnumChatFormatting.GREEN+StatCollector.translateToLocal("GT5U.turbine.maintenance.false")+EnumChatFormatting.RESET :
-                EnumChatFormatting.RED+StatCollector.translateToLocal("GT5U.turbine.maintenance.true")+EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("GT5U.engine.output")+": " +EnumChatFormatting.RED+(-mEUt*mEfficiency/10000)+EnumChatFormatting.RESET+" EU/t",
-                StatCollector.translateToLocal("GT5U.engine.consumption")+": " +EnumChatFormatting.YELLOW+fuelConsumption+EnumChatFormatting.RESET+" L/t",
-                StatCollector.translateToLocal("GT5U.engine.value")+": " +EnumChatFormatting.YELLOW+fuelValue+EnumChatFormatting.RESET+" EU/L",
-                StatCollector.translateToLocal("GT5U.turbine.fuel")+": " +EnumChatFormatting.GOLD+fuelRemaining+EnumChatFormatting.RESET+" L",
-                StatCollector.translateToLocal("GT5U.engine.efficiency")+": " +EnumChatFormatting.YELLOW+(mEfficiency/100F)+EnumChatFormatting.YELLOW+" %",
-                StatCollector.translateToLocal("GT5U.multiblock.pollution")+": " + EnumChatFormatting.GREEN + mPollutionReduction+ EnumChatFormatting.RESET+" %"
+                        EnumChatFormatting.GREEN + StatCollector.translateToLocal("GT5U.turbine.maintenance.false") + EnumChatFormatting.RESET :
+                        EnumChatFormatting.RED + StatCollector.translateToLocal("GT5U.turbine.maintenance.true") + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("GT5U.engine.output") + ": " +
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(-mEUt*mEfficiency/10000) + EnumChatFormatting.RESET + " EU/t",
+                StatCollector.translateToLocal("GT5U.engine.consumption") + ": " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(fuelConsumption) + EnumChatFormatting.RESET + " L/t",
+                StatCollector.translateToLocal("GT5U.engine.value") + ": " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(fuelValue) + EnumChatFormatting.RESET + " EU/L",
+                StatCollector.translateToLocal("GT5U.turbine.fuel") + ": " +
+                        EnumChatFormatting.GOLD + GT_Utility.formatNumbers(fuelRemaining) + EnumChatFormatting.RESET + " L",
+                StatCollector.translateToLocal("GT5U.engine.efficiency") + ": " +
+                        EnumChatFormatting.YELLOW + (mEfficiency/100F) + EnumChatFormatting.YELLOW + " %",
+                StatCollector.translateToLocal("GT5U.multiblock.pollution") + ": " +
+                        EnumChatFormatting.GREEN + mPollutionReduction + EnumChatFormatting.RESET + " %"
         };
     }
 }

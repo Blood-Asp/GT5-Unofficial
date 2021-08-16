@@ -329,9 +329,9 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
     @Override
     public String[] getDescription() {
         return new String[]{
-                "Max Voltage: %%%" + EnumChatFormatting.GREEN + mVoltage + " (" + VN[GT_Utility.getTier(mVoltage)] + ")" + EnumChatFormatting.GRAY,
-                "Max Amperage: %%%" + EnumChatFormatting.YELLOW + mAmperage + EnumChatFormatting.GRAY,
-                "Loss/Meter/Ampere: %%%" + EnumChatFormatting.RED + mCableLossPerMeter + EnumChatFormatting.GRAY + "%%% EU-Volt"
+                "Max Voltage: %%%" + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mVoltage) + " (" + VN[GT_Utility.getTier(mVoltage)] + ")" + EnumChatFormatting.GRAY,
+                "Max Amperage: %%%" + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mAmperage) + EnumChatFormatting.GRAY,
+                "Loss/Meter/Ampere: %%%" + EnumChatFormatting.RED + GT_Utility.formatNumbers(mCableLossPerMeter) + EnumChatFormatting.GRAY + "%%% EU-Volt"
         };
     }
 
@@ -371,18 +371,19 @@ public class GT_MetaPipeEntity_Cable extends MetaPipeEntity implements IMetaTile
         }
         return new String[]{
                 //EnumChatFormatting.BLUE + mName + EnumChatFormatting.RESET,
-                "Heat: "+
-                        EnumChatFormatting.RED+ mOverheat +EnumChatFormatting.RESET+" / "+EnumChatFormatting.YELLOW+ mMaxOverheat + EnumChatFormatting.RESET,
+                "Heat: " +
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(mOverheat) + EnumChatFormatting.RESET + " / " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxOverheat) + EnumChatFormatting.RESET,
                 "Max Load (1t):",
-                EnumChatFormatting.GREEN + Integer.toString(amps) + EnumChatFormatting.RESET +" A / "+
-                        EnumChatFormatting.YELLOW + mAmperage + EnumChatFormatting.RESET +" A",
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(amps) + EnumChatFormatting.RESET + " A / " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mAmperage) + EnumChatFormatting.RESET + " A",
                 "Max EU/p (1t):",
-                EnumChatFormatting.GREEN + Long.toString(volts) + EnumChatFormatting.RESET +" EU / "+
-                        EnumChatFormatting.YELLOW + mVoltage + EnumChatFormatting.RESET +" EU",
-                "Max Load (20t): "+
-                    EnumChatFormatting.GREEN + mTransferredAmperageLast20OK + EnumChatFormatting.RESET +" A",
-                "Max EU/p (20t): "+
-                    EnumChatFormatting.GREEN + mTransferredVoltageLast20OK + EnumChatFormatting.RESET +" EU"
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(volts) + EnumChatFormatting.RESET + " EU / " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mVoltage) + EnumChatFormatting.RESET + " EU",
+                "Max Load (20t): " +
+                    EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mTransferredAmperageLast20OK) + EnumChatFormatting.RESET + " A",
+                "Max EU/p (20t): " +
+                    EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mTransferredVoltageLast20OK) + EnumChatFormatting.RESET + " EU"
         };
     }
 

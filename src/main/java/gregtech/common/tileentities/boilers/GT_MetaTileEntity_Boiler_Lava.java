@@ -78,12 +78,17 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
 
     @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity, 32000);
+        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity);
     }
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png", 32000);
+        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png");
+    }
+
+    @Override
+    public int getCapacity() {
+        return 32000;
     }
 
     @Override
@@ -122,6 +127,10 @@ public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
             this.mProcessingEnergy += 1000 * ENERGY_PER_LAVA;
             aBaseMetaTileEntity.decrStackSize(2, 1);
             aBaseMetaTileEntity.addStackToSlot(3, GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Empty, 1L));
+        } else if (GT_OreDictUnificator.isItemStackInstanceOf(this.mInventory[2], OrePrefixes.bucketClay.get(Materials.Lava))) {
+            this.mProcessingEnergy += 1000 * ENERGY_PER_LAVA;
+            aBaseMetaTileEntity.decrStackSize(2, 1);
+            // Clay lava buckets break, so you don't get it back.
         }
     }
 

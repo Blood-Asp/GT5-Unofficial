@@ -2026,11 +2026,11 @@ public enum ItemList implements IItemContainer {
         }
         if (tCamelCasedDisplayNameBuilder.length() == 0) {
             // CamelCased DisplayName is empty, so use hash of aDisplayName
-            tCamelCasedDisplayNameBuilder.append(((Long) (long)aDisplayName.hashCode()).toString());
+            tCamelCasedDisplayNameBuilder.append(((Long) (long) aDisplayName.hashCode()));
         }
 
         // Construct a translation key from UnlocalizedName and CamelCased DisplayName
-        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder.toString() + ".name";
+        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder + ".name";
 
         rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
@@ -2070,5 +2070,14 @@ public enum ItemList implements IItemContainer {
         for (Object tOreName : aOreNames)
             GT_OreDictUnificator.registerOre(tOreName, getWildcard(1));
         return this;
+    }
+
+    /**
+     * Returns the internal stack.
+     * This method is unsafe. It's here only for quick operations.
+     * DON'T CHANGE THE RETURNED VALUE!
+     */
+    public ItemStack getInternalStack_unsafe() {
+        return mStack;
     }
 }
