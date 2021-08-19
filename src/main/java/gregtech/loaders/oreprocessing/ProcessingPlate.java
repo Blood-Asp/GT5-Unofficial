@@ -540,6 +540,18 @@ public class ProcessingPlate implements gregtech.api.interfaces.IOreRecipeRegist
                         GT_ModHandler.getIC2Item("windMill", 1L),
                         6400, 8);
 
+                GT_ModHandler.addAlloySmelterRecipe(
+                        GT_Utility.copyAmount(1L, aStack),
+                        new ItemStack(Blocks.glass, 3, W),
+                        GT_ModHandler.getIC2Item("reinforcedGlass", 4L),
+                        400, 4, false);
+
+                GT_ModHandler.addAlloySmelterRecipe(
+                        GT_Utility.copyAmount(1L, aStack),
+                        Materials.Glass.getDust(3),
+                        GT_ModHandler.getIC2Item("reinforcedGlass", 4L),
+                        400, 4, false);
+
                 break;
 
             case "plateAlloyAdvanced":
