@@ -248,6 +248,8 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
             if (!tTag.hasKey("eu"))
                 continue;
 
+            if (GT_Values.D1) GT_FML_LOGGER.info("Check overclock");
+
             calculateOverclockedNessMulti(tTag.getInteger("eu"), tMaxProgressTime, 1, getMaxInputVoltage());
             //In case recipe is too OP for that machine
             if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1) {
@@ -277,8 +279,8 @@ public class GT_MetaTileEntity_AssemblyLine extends GT_MetaTileEntity_EnhancedMu
                 mInputHatches.get(i).mFluid = null;
             }
         }
-        if (GT_Values.D1) GT_FML_LOGGER.info("Check overclock");
 
+        this.mEUt = -this.mEUt;
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
         updateSlots();
