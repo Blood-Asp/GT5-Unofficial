@@ -453,7 +453,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         boolean ret = false;
 
         for (int oreID : OreDictionary.getOreIDs(aOutput1)) {
-            if (OreDictionary.getOreName(oreID).contains("circuit")){
+            if (OreDictionary.getOreName(oreID).startsWith("circuit")){
                 return this.addAssemblerRecipeNonOD(aInputs, aFluidInput, aOutput1, aDuration, aEUt, aCleanroom);
             }
         }
@@ -465,7 +465,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             }
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
-                if (odName.contains("circuit")) {
+                if (odName.startsWith("circuit")) {
                     for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
@@ -1383,7 +1383,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         boolean ret = false;
 
         for (int oreID : OreDictionary.getOreIDs(aOutput)) {
-            if (OreDictionary.getOreName(oreID).contains("circuit")){
+            if (OreDictionary.getOreName(oreID).startsWith("circuit")){
                 return this.addCircuitAssemblerRecipeNonOredicted(aInputs, aFluidInput, aOutput, aDuration, aEUt, aCleanroom);
             }
         }
@@ -1391,7 +1391,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         for (int i = 0; i < aInputs.length; ++i) {
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
-                if (odName.contains("circuit")) {
+                if (odName.startsWith("circuit")) {
                     for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
