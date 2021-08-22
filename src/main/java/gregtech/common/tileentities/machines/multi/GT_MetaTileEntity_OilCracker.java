@@ -328,7 +328,8 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
         for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch) && tHatch.getFillableStack() != null) {
-                rList.add(tHatch.getFillableStack());
+                if (!GT_Recipe.GT_Recipe_Map.sCrackingRecipes.isValidCatalystFluid(tHatch.getFillableStack()))
+                    rList.add(tHatch.getFillableStack());
             }
         }
         for (GT_MetaTileEntity_Hatch_Input tHatch : mMiddleInputHatches) {
