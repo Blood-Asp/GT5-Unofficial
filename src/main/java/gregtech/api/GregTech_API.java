@@ -17,6 +17,7 @@ import gregtech.api.objects.GT_Cover_Default;
 import gregtech.api.objects.GT_Cover_None;
 import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.threads.GT_Runnable_Cable_Update;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.*;
 import gregtech.api.world.GT_Worldgen;
@@ -276,6 +277,7 @@ public class GregTech_API {
             sMultiThreadedSounds = false,
             sDoShowAllItemsInCreative = false,
             sColoredGUI = true,
+            sMachineMetalGUI = false,
             sConstantEnergy = true,
             sMachineExplosions = true,
             sMachineFlammable = true,
@@ -407,6 +409,15 @@ public class GregTech_API {
         return false;
     }
 
+    public static boolean causeCableUpdate(World aWorld, int aX, int aY, int aZ) {
+        if (aWorld != null && !aWorld.isRemote) { // World might be null during Worldgen
+            GT_Runnable_Cable_Update.setCableUpdateValues(aWorld, new ChunkCoordinates(aX, aY, aZ));
+            return true;
+        }
+        return false;
+
+    }
+
     /**
      * Adds a Multi-Machine Block, like my Machine Casings for example.
      * You should call @causeMachineUpdate in @Block.breakBlock and in @Block.onBlockAdded of your registered Block.
@@ -416,7 +427,7 @@ public class GregTech_API {
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
+        if (aBlock == null)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -428,7 +439,7 @@ public class GregTech_API {
      * Like above but with boolean Parameters instead of a BitMask
      */
     public static boolean registerMachineBlock(Block aBlock, boolean... aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock) || aMeta == null || aMeta.length == 0)
+        if (aBlock == null || aMeta == null || aMeta.length == 0)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -442,9 +453,11 @@ public class GregTech_API {
      * if this Block is a Machine Update Conducting Block
      */
     public static boolean isMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
-            return false;
-        return (sMachineIDs.containsKey(aBlock) && (sMachineIDs.get(aBlock) & B[aMeta]) != 0);
+        if (aBlock != null) {
+            Integer id = sMachineIDs.get(aBlock);
+            return id != null && (id & B[aMeta]) != 0;
+        }
+        return false;
     }
 
     /**

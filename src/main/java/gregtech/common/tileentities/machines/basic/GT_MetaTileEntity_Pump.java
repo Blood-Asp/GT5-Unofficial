@@ -366,7 +366,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     }
 
     private boolean hasValidFluid() {
-        return (!GT_Utility.isBlockInvalid(this.mPrimaryPumpedBlock) && !GT_Utility.isBlockInvalid(this.mSecondaryPumpedBlock));
+        return mPrimaryPumpedBlock != null && mSecondaryPumpedBlock != null;
     }
 
     private boolean moveOneDown() {
@@ -522,7 +522,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             return;
 
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
-        if (GT_Utility.isBlockValid(aBlock)) {
+        if (aBlock != null) {
             if ((aBlock == Blocks.water) || (aBlock == Blocks.flowing_water)) {
                 this.mPrimaryPumpedBlock = Blocks.water;
                 this.mSecondaryPumpedBlock = Blocks.flowing_water;
@@ -549,7 +549,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
 
-        return GT_Utility.isBlockValid(aBlock) &&
+        return aBlock != null &&
                 (aBlock == Blocks.water ||
                         aBlock == Blocks.flowing_water ||
                         aBlock == Blocks.lava ||
@@ -565,7 +565,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
 
-        if ((GT_Utility.isBlockValid(aBlock)) && ((this.mPrimaryPumpedBlock == aBlock) || (this.mSecondaryPumpedBlock == aBlock))) {
+        if (aBlock != null && ((this.mPrimaryPumpedBlock == aBlock) || (this.mSecondaryPumpedBlock == aBlock))) {
             boolean isWaterOrLava = ((this.mPrimaryPumpedBlock == Blocks.water || this.mPrimaryPumpedBlock == Blocks.lava));
 
             if (isWaterOrLava && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) != 0) {

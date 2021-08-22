@@ -2,7 +2,6 @@ package gregtech.common.tileentities.machines;
 
 import appeng.api.AEApi;
 import appeng.api.networking.GridFlags;
-import appeng.api.networking.energy.IEnergySource;
 import appeng.api.networking.security.BaseActionSource;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.networking.security.MachineSource;
@@ -21,8 +20,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_OutputBus;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_HATCH;
@@ -30,6 +32,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_HATCH;
 public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatch_OutputBus {
     private BaseActionSource requestSource = null;
     private AENetworkProxy gridProxy = null;
+    ItemStack cachedStack = null;
+    long lastOutputTick = 0;
+    long tickCounter = 0;
+    boolean lastOutputFailed = false;
 
     public GT_MetaTileEntity_Hatch_OutputBus_ME(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 1, new String[]{
@@ -37,7 +43,7 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     }
 
     public GT_MetaTileEntity_Hatch_OutputBus_ME(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aDescription, 0, aTextures);
+        super(aName, aTier, 0, aDescription, aTextures);
     }
 
     @Override
@@ -65,12 +71,16 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     public boolean storeAll(ItemStack aStack) {
         if (!GregTech_API.mAE2)
             return false;
-        int tTotal = aStack.stackSize;
-        int tStored = store(aStack);
-        aStack.stackSize -= tStored;
-        return tTotal == tStored;
+        aStack.stackSize = store(aStack);
+        return aStack.stackSize == 0;
     }
 
+    /**
+     * Attempt to store items in connected ME network. Returns how many items did not fit (if the network was down e.g.)
+     *
+     * @param stack  input stack
+     * @return amount of items left over
+     */
     @Optional.Method(modid = "appliedenergistics2")
     public int store(final ItemStack stack) {
         if (stack == null)
@@ -78,17 +88,66 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
         try {
             AENetworkProxy proxy = getProxy();
             if (proxy == null)
-                return stack.stackSize;
-            IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
-            final IEnergySource src = proxy.getEnergy();
-            IAEItemStack toStore = AEApi.instance().storage().createItemStack(stack);
-            IAEItemStack rest = Platform.poweredInsert( src, sg, toStore, getRequest());
-            if (rest != null)
-                return (int)rest.getStackSize();
+            {
+                lastOutputFailed = true;
+                int cacheSize = cachedStack == null ? 0 : cachedStack.stackSize;
+                cachedStack = null;
+                return stack.stackSize + cacheSize;
+            }
+            if (lastOutputFailed) // if last output failed, don't buffer
+            {
+                IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
+                IAEItemStack toStore = AEApi.instance().storage().createItemStack(stack);
+                IAEItemStack rest = Platform.poweredInsert(proxy.getEnergy(), sg, toStore, getRequest());
+                if (rest != null && rest.getStackSize() > 0)
+                    return (int) rest.getStackSize();
+                else
+                    lastOutputFailed = false;
+            }
+            else if (cachedStack != null && ((tickCounter > (lastOutputTick+20)) || !cachedStack.isItemEqual(stack)))
+            {
+                lastOutputTick = tickCounter;
+                boolean sameStack = cachedStack.isItemEqual(stack);
+                if (sameStack)
+                    cachedStack.stackSize += stack.stackSize;
+                IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
+                IAEItemStack toStore = AEApi.instance().storage().createItemStack(cachedStack);
+                IAEItemStack rest = Platform.poweredInsert(proxy.getEnergy(), sg, toStore, getRequest());
+                if (rest != null && rest.getStackSize() > 0)
+                {
+                    lastOutputFailed = true;
+                    if (sameStack) // return all that was cached to sender
+                    {
+                        cachedStack = null;
+                        return (int) rest.getStackSize();
+                    }
+                    else // leave the cache, and return input to sender
+                    {
+                        cachedStack.stackSize = (int)rest.getStackSize();
+                        return stack.stackSize;
+                    }
+                }
+                else
+                {
+                    if (!sameStack)
+                        cachedStack = stack.copy();
+                    else
+                        cachedStack = null;
+                    return 0;
+                }
+            }
+            else
+            {
+                if (cachedStack == null)
+                    cachedStack = stack.copy();
+                else
+                    cachedStack.stackSize += stack.stackSize;
+            }
             return 0;
         }
         catch( final GridAccessException ignored )
         {
+            lastOutputFailed = true;
         }
         return stack.stackSize;
     }
@@ -127,5 +186,64 @@ public class GT_MetaTileEntity_Hatch_OutputBus_ME extends GT_MetaTileEntity_Hatc
     @Override
     @Optional.Method(modid = "appliedenergistics2")
     public void gridChanged() {
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    private void flushCachedStack()
+    {
+        if (cachedStack == null)
+            return;
+        AENetworkProxy proxy = getProxy();
+        if (proxy == null) {
+            lastOutputFailed = true;
+            return;
+        }
+        try {
+            IMEMonitor<IAEItemStack> sg = proxy.getStorage().getItemInventory();
+            IAEItemStack toStore = AEApi.instance().storage().createItemStack(cachedStack);
+            IAEItemStack rest = Platform.poweredInsert(proxy.getEnergy(), sg, toStore, getRequest());
+            if (rest != null && rest.getStackSize() > 0) {
+                lastOutputFailed = true;
+                cachedStack.stackSize = (int) rest.getStackSize();
+            }
+            else
+                cachedStack = null;
+        }
+        catch( final GridAccessException ignored )
+        {
+            lastOutputFailed = true;
+        }
+        lastOutputTick = tickCounter;
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        tickCounter = aTick;
+        if (tickCounter > (lastOutputTick + 40))
+            flushCachedStack();
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT)
+    {
+        super.saveNBTData(aNBT);
+        if (cachedStack != null) {
+            NBTTagCompound tTag = new NBTTagCompound();
+            cachedStack.writeToNBT(tTag);
+            aNBT.setTag("cachedStack", tTag);
+        }
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        NBTBase t = aNBT.getTag("cachedStack");
+        if (t instanceof NBTTagCompound)
+            cachedStack = GT_Utility.loadItem((NBTTagCompound)t);
+    }
+
+    public boolean isLastOutputFailed() {
+        return lastOutputFailed;
     }
 }

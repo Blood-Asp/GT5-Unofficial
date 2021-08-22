@@ -67,7 +67,7 @@ public class GT_FluidDisplayStackRenderer implements IItemRenderer {
 
         // Render Fluid amount text
         long fluidAmount = item.getTagCompound().getLong("mFluidDisplayAmount");
-        if (fluidAmount > 0L) {
+        if (fluidAmount > 0L && !item.getTagCompound().getBoolean("mHideStackSize")) {
             String amountString;
 
             if (fluidAmount < 10000) {

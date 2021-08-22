@@ -68,7 +68,7 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
         aID = GT_Config.addIDConfig(ConfigCategories.IDs.crops, mName.replaceAll(" ", "_"), aID);
         if (aDiscoveredBy != null && !aDiscoveredBy.equals(E)) mDiscoveredBy = aDiscoveredBy;
         if (aDrop != null && aID > 0 && aID < 256) {
-            mDrop = GT_Utility.copy(aDrop);
+            mDrop = GT_Utility.copyOrNull(aDrop);
             mSpecialDrops = aSpecialDrops;
             mTier = Math.max(1, aTier);
             mMaxSize = Math.max(3, aMaxSize);
@@ -177,9 +177,9 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
     public ItemStack getGain(ICropTile aCrop) {
         int tDrop = 0;
         if (mSpecialDrops != null && (tDrop = java.util.concurrent.ThreadLocalRandom.current().nextInt(0, (mSpecialDrops.length*2) + 2)) < mSpecialDrops.length && mSpecialDrops[tDrop] != null) {
-            return GT_Utility.copy(mSpecialDrops[tDrop]);
+            return GT_Utility.copyOrNull(mSpecialDrops[tDrop]);
         }
-        return GT_Utility.copy(mDrop);
+        return GT_Utility.copyOrNull(mDrop);
     }
 
     @Override
@@ -247,9 +247,9 @@ public class GT_BaseCrop extends CropCard implements ICropCardInfo {
     @Override
     public ItemStack getDisplayItem() {
         if (mSpecialDrops != null && mSpecialDrops[mSpecialDrops.length - 1] != null) {
-            return GT_Utility.copy(mSpecialDrops[mSpecialDrops.length - 1]);
+            return GT_Utility.copyOrNull(mSpecialDrops[mSpecialDrops.length - 1]);
         }
-        return GT_Utility.copy(mDrop);
+        return GT_Utility.copyOrNull(mDrop);
     }
 
 }

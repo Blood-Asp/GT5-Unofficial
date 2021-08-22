@@ -1,44 +1,69 @@
 package gregtech.common.tileentities.machines.multi;
 
+import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTech_API;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_EnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
-import net.minecraft.block.Block;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.input.Keyboard;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GT_StructureUtility.ofHatchAdder;
 
-public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBlockBase {
+public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_EnhancedMultiBlockBase<GT_MetaTileEntity_HeatExchanger> {
+    private static final int CASING_INDEX = 50;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final IStructureDefinition<GT_MetaTileEntity_HeatExchanger> STRUCTURE_DEFINITION = StructureDefinition.<GT_MetaTileEntity_HeatExchanger>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
+                    {"ccc", "cCc", "ccc"},
+                    {"ccc", "cPc", "ccc"},
+                    {"ccc", "cPc", "ccc"},
+                    {"c~c", "cHc", "ccc"},
+            }))
+            .addElement('P', ofBlock(GregTech_API.sBlockCasings2, 14))
+            .addElement('C', ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addColdFluidOutputToMachineList, CASING_INDEX, 2))
+            .addElement('H', ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addHotFluidInputToMachineList, CASING_INDEX, 3))
+            .addElement('c', ofChain(
+                    ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addInputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addOutputToMachineList, CASING_INDEX, 1),
+                    ofHatchAdder(GT_MetaTileEntity_HeatExchanger::addMaintenanceToMachineList, CASING_INDEX, 1),
+                    onElementPass(GT_MetaTileEntity_HeatExchanger::onCasingAdded, ofBlock(GregTech_API.sBlockCasings4, (byte) 2))
+            ))
+            .build();
     public static float penalty_per_config = 0.015f;  // penalize 1.5% efficiency per circuitry level (1-25)
 
-    private static boolean controller;
     private GT_MetaTileEntity_Hatch_Input mInputHotFluidHatch;
     private GT_MetaTileEntity_Hatch_Output mOutputColdFluidHatch;
     private boolean superheated = false;
     private int superheated_threshold=0;
     private float water;
+    private int mCasingAmount;
 
     public GT_MetaTileEntity_HeatExchanger(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -48,7 +73,7 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     @Override
-    public String[] getDescription() {
+    protected GT_Multiblock_Tooltip_Builder createTooltip() {
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Heat Exchanger")
                 .addInfo("Controller Block for the Large Heat Exchanger")
@@ -62,17 +87,13 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
                 .addController("Front bottom")
                 .addCasingInfo("Stable Titanium Machine Casing", 20)
                 .addOtherStructurePart("Titanium Pipe Casing", "Center 2 blocks")
-                .addMaintenanceHatch("Any casing")
-                .addInputHatch("Hot fluid, bottom center")
-                .addInputHatch("Distilled water, any casing")
-                .addOutputHatch("Cold fluid, top center")
-                .addOutputHatch("Steam/SH Steam, any casing")
+                .addMaintenanceHatch("Any casing", 1)
+                .addInputHatch("Hot fluid, bottom center", 2)
+                .addInputHatch("Distilled water, any casing", 1)
+                .addOutputHatch("Cold fluid, top center", 3)
+                .addOutputHatch("Steam/SH Steam, any casing", 1)
                 .toolTipFinisher("Gregtech");
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            return tt.getStructureInformation();
-        } else {
-            return tt.getInformation();
-        }
+        return tt;
     }
 
     @Override
@@ -92,15 +113,15 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
         if (aSide == aFacing) {
             if (aActive)
                 return new ITexture[]{
-                        casingTexturePages[0][50],
-                        TextureFactory.of(OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE),
-                        TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW).glow().build()};
+                        casingTexturePages[0][CASING_INDEX],
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE).extFacing().build(),
+                        TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE_GLOW).extFacing().glow().build()};
             return new ITexture[]{
-                    casingTexturePages[0][50],
-                    TextureFactory.of(OVERLAY_FRONT_HEAT_EXCHANGER),
-                    TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER_GLOW).glow().build()};
+                    casingTexturePages[0][CASING_INDEX],
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER).extFacing().build(),
+                    TextureFactory.builder().addIcon(OVERLAY_FRONT_HEAT_EXCHANGER_GLOW).extFacing().glow().build()};
         }
-        return new ITexture[]{casingTexturePages[0][50]};
+        return new ITexture[]{casingTexturePages[0][CASING_INDEX]};
     }
 
     @Override
@@ -114,8 +135,8 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     @Override
-    public boolean isFacingValid(byte aFacing) {
-        return aFacing > 1;
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        return (d, r, f) -> !r.isUpsideDown() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -208,57 +229,20 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        int xDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetX;
-        int zDir = ForgeDirection.getOrientation(aBaseMetaTileEntity.getBackFacing()).offsetZ;
-
-        int tCasingAmount = 0;
-        controller = false;
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if ((i != 0) || (j != 0)) {
-                    for (int k = 0; k <= 3; k++) {
-                        if (!addOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
-                                !addInputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
-                                !addMaintenanceToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, k, zDir + j), 50) &&
-                                !ignoreController(aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j))) {
-                            if (aBaseMetaTileEntity.getBlockOffset(xDir + i, k, zDir + j) != getCasingBlock()) {
-                                return false;
-                            }
-                            if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, k, zDir + j) != getCasingMeta()) {
-                                return false;
-                            }
-                            tCasingAmount++;
-                        }
-                    }
-                } else {
-                    if (!addHotFluidInputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 0, zDir + j), 50)) {
-                        return false;
-                    }
-                    if (!addColdFluidOutputToMachineList(aBaseMetaTileEntity.getIGregTechTileEntityOffset(xDir + i, 3, zDir + j), 50)) {
-                        return false;
-                    }
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 1, zDir + j) != getPipeBlock()) {
-                        return false;
-                    }
-                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 1, zDir + j) != getPipeMeta()) {
-                        return false;
-                    }
-
-                    if (aBaseMetaTileEntity.getBlockOffset(xDir + i, 2, zDir + j) != getPipeBlock()) {
-                        return false;
-                    }
-                    if (aBaseMetaTileEntity.getMetaIDOffset(xDir + i, 2, zDir + j) != getPipeMeta()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return tCasingAmount >= 20;
+    public IStructureDefinition<GT_MetaTileEntity_HeatExchanger> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
     }
 
-    public boolean ignoreController(Block tTileEntity) {
-        return !controller && tTileEntity == GregTech_API.sBlockMachines;
+    private void onCasingAdded() {
+        mCasingAmount++;
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        mOutputColdFluidHatch = null;
+        mInputHotFluidHatch = null;
+        mCasingAmount = 0;
+        return checkPiece(STRUCTURE_PIECE_MAIN, 1, 3, 0) && mCasingAmount >= 20 && mMaintenanceHatches.size() == 1;
     }
 
     public boolean addColdFluidOutputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
@@ -284,26 +268,6 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
             return true;
         }
         return false;
-    }
-
-    public Block getCasingBlock() {
-        return GregTech_API.sBlockCasings4;
-    }
-
-    public byte getCasingMeta() {
-        return 2;
-    }
-
-    public byte getCasingTextureIndex() {
-        return 50;
-    }
-
-    public Block getPipeBlock() {
-        return GregTech_API.sBlockCasings2;
-    }
-
-    public byte getPipeMeta() {
-        return 14;
     }
 
     @Override
@@ -339,16 +303,23 @@ public class GT_MetaTileEntity_HeatExchanger extends GT_MetaTileEntity_MultiBloc
     public String[] getInfoData() {
         return new String[]{
                 StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " +
-                        EnumChatFormatting.GREEN + mProgresstime / 20 + EnumChatFormatting.RESET + " s / " +
-                        EnumChatFormatting.YELLOW + mMaxProgresstime / 20 + EnumChatFormatting.RESET + " s",
+                        EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mProgresstime / 20) + EnumChatFormatting.RESET + " s / " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
                 StatCollector.translateToLocal("GT5U.multiblock.usage") + " " + StatCollector.translateToLocal("GT5U.LHE.steam") + ": " +
-                        (superheated ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW) + (superheated ? -2 * mEUt : -mEUt) + EnumChatFormatting.RESET + " EU/t",
+                        (superheated ? EnumChatFormatting.RED : EnumChatFormatting.YELLOW) + GT_Utility.formatNumbers(superheated ? -2 * mEUt : -mEUt) + EnumChatFormatting.RESET + " EU/t",
                 StatCollector.translateToLocal("GT5U.multiblock.problems") + ": " +
-                        EnumChatFormatting.RED + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET +
-                        " " + StatCollector.translateToLocal("GT5U.multiblock.efficiency") + ": " +
+                        EnumChatFormatting.RED + (getIdealStatus() - getRepairStatus()) + EnumChatFormatting.RESET + " " +
+                        StatCollector.translateToLocal("GT5U.multiblock.efficiency") + ": " +
                         EnumChatFormatting.YELLOW + mEfficiency / 100.0F + EnumChatFormatting.RESET + " %",
-                StatCollector.translateToLocal("GT5U.LHE.superheated") + ": " + (superheated ? EnumChatFormatting.RED : EnumChatFormatting.BLUE) + superheated + EnumChatFormatting.RESET,
-                StatCollector.translateToLocal("GT5U.LHE.superheated") + " " + StatCollector.translateToLocal("GT5U.LHE.threshold") + ": " + EnumChatFormatting.GREEN + superheated_threshold + EnumChatFormatting.RESET
+                StatCollector.translateToLocal("GT5U.LHE.superheated") + ": " +
+                        (superheated ? EnumChatFormatting.RED : EnumChatFormatting.BLUE) + superheated + EnumChatFormatting.RESET,
+                StatCollector.translateToLocal("GT5U.LHE.superheated") + " " + StatCollector.translateToLocal("GT5U.LHE.threshold") + ": " +
+                        EnumChatFormatting.GREEN + GT_Utility.formatNumbers(superheated_threshold) + EnumChatFormatting.RESET
         };
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 1, 3, 0);
     }
 }

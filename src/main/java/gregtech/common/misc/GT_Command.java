@@ -1,5 +1,6 @@
 package gregtech.common.misc;
 
+import com.gtnewhorizon.structurelib.StructureLib;
 import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.objects.GT_ChunkManager;
@@ -40,6 +41,7 @@ public final class GT_Command extends CommandBase {
         sender.addChatMessage(new ChatComponentText("\"toggle debugSmallOres\" - toggles worldgen small vein debug"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugStones\" - toggles worldgen stones debug"));
         sender.addChatMessage(new ChatComponentText("\"toggle debugChunkloaders\" - toggles chunkloaders debug"));
+        sender.addChatMessage(new ChatComponentText("\"toggle debugMulti\" - toggles structurelib debug"));
         sender.addChatMessage(new ChatComponentText("\"chunks\" - print a list of the force loaded chunks"));
         sender.addChatMessage(new ChatComponentText(
                 "\"pollution <amount>\" - adds the <amount> of the pollution to the current chunk, " +
@@ -59,7 +61,7 @@ public final class GT_Command extends CommandBase {
         } else if (test.equals("toggle")) {
             String test1 = ss[1].trim();
             Stream.of("D1", "D2", "debugCleanroom", "debugDriller", "debugBlockPump", "debugBlockMiner", "debugWorldGen", "debugEntityCramming",
-                    "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders")
+                    "debugOrevein", "debugSmallOres", "debugStones", "debugChunkloaders", "debugMulti")
                     .filter(s -> test1.isEmpty() || s.startsWith(test1))
                     .forEach(l::add);
 
@@ -77,6 +79,11 @@ public final class GT_Command extends CommandBase {
             case "toggle":
                 if (strings.length < 2) {
                     printHelp(sender);
+                    return;
+                }
+                if ("debugMulti".equals(strings[1])) {
+                    StructureLib.DEBUG_MODE = !StructureLib.DEBUG_MODE;
+                    sender.addChatMessage(new ChatComponentText(strings[1] + " = " + (StructureLib.DEBUG_MODE ? "true" : "false")));
                     return;
                 }
                 try {

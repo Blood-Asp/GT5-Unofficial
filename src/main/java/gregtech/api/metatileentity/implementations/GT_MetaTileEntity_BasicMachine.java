@@ -549,7 +549,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                         for (int i = getInputSlot(), j = i + mInputSlotCount; i < j; i++)
                             if (mInventory[i] != null && mInventory[i].stackSize <= 0) mInventory[i] = null;
                         for (int i = 0; i < mOutputItems.length; i++) {
-                            mOutputItems[i] = GT_Utility.copy(mOutputItems[i]);
+                            mOutputItems[i] = GT_Utility.copyOrNull(mOutputItems[i]);
                             if (mOutputItems[i] != null && mOutputItems[i].stackSize > 64)
                                 mOutputItems[i].stackSize = 64;
                             mOutputItems[i] = GT_OreDictUnificator.get(true, mOutputItems[i]);
@@ -594,7 +594,7 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
                 if (ItemList.Display_Fluid.isStackEqual(mInventory[tDisplayStackSlot], true, true))
                     mInventory[tDisplayStackSlot] = null;
             } else {
-                mInventory[tDisplayStackSlot] = GT_Utility.getFluidDisplayStack(getFillableStack(), displaysStackSize());
+                mInventory[tDisplayStackSlot] = GT_Utility.getFluidDisplayStack(getFillableStack(), true, !displaysStackSize());
             }
         }
     }
@@ -792,14 +792,14 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         return new String[]{
                 EnumChatFormatting.BLUE + mNEIName + EnumChatFormatting.RESET,
                 "Progress:",
-                EnumChatFormatting.GREEN + Integer.toString(mProgresstime/20) + EnumChatFormatting.RESET +" s / "+
-                EnumChatFormatting.YELLOW + mMaxProgresstime / 20 + EnumChatFormatting.RESET +" s",
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers((mProgresstime/20)) + EnumChatFormatting.RESET +" s / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(mMaxProgresstime / 20) + EnumChatFormatting.RESET + " s",
                 "Stored Energy:",
-                EnumChatFormatting.GREEN + Long.toString(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET +" EU / "+
-                EnumChatFormatting.YELLOW + getBaseMetaTileEntity().getEUCapacity() + EnumChatFormatting.RESET +" EU",
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(getBaseMetaTileEntity().getStoredEU()) + EnumChatFormatting.RESET + " EU / " +
+                EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getBaseMetaTileEntity().getEUCapacity()) + EnumChatFormatting.RESET + " EU",
                 "Probably uses: " +
-                        EnumChatFormatting.RED + mEUt + EnumChatFormatting.RESET + " EU/t at " +
-                        EnumChatFormatting.RED + (mEUt == 0 ? 0 : mAmperage) + EnumChatFormatting.RESET +" A"
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(mEUt) + EnumChatFormatting.RESET + " EU/t at " +
+                        EnumChatFormatting.RED + GT_Utility.formatNumbers(mEUt == 0 ? 0 : mAmperage) + EnumChatFormatting.RESET +" A"
         };
     }
 

@@ -5,6 +5,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -15,7 +16,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_QTANK_GLOW;
 
 public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
     public GT_MetaTileEntity_SuperTank(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 3, "Stores " + commonSizeCompute(aTier) + "L of fluid");
+        super(aID, aName, aNameRegional, aTier, 3,
+                "Stores " + GT_Utility.formatNumbers(commonSizeCompute(aTier)) + "L of fluid");
     }
 
     private static int commonSizeCompute(int tier) {
@@ -143,15 +145,15 @@ public class GT_MetaTileEntity_SuperTank extends GT_MetaTileEntity_BasicTank {
                     "Stored Fluid:",
                     EnumChatFormatting.GOLD + "No Fluid" + EnumChatFormatting.RESET,
                     EnumChatFormatting.GREEN + "0 L" + EnumChatFormatting.RESET + " " +
-                            EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+                            EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L" + EnumChatFormatting.RESET
             };
         }
         return new String[]{
                 EnumChatFormatting.BLUE + "Super Tank" + EnumChatFormatting.RESET,
                 "Stored Fluid:",
                 EnumChatFormatting.GOLD + mFluid.getLocalizedName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
-                        EnumChatFormatting.YELLOW + getCapacity() + " L" + EnumChatFormatting.RESET
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(mFluid.amount) + " L" + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCapacity()) + " L" + EnumChatFormatting.RESET
         };
     }
 

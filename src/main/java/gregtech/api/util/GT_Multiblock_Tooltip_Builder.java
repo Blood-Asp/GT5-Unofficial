@@ -1,10 +1,18 @@
 package gregtech.api.util;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import com.google.common.collect.Multimaps;
+import com.google.common.collect.SetMultimap;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
+import gregtech.api.enums.Materials;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * This makes it easier to build multi tooltips, with a standardized format. <br>
@@ -32,12 +40,16 @@ import net.minecraft.util.StatCollector;
 public class GT_Multiblock_Tooltip_Builder {
 	private static final String TAB = "   ";
 	private static final String COLON = ": ";
-	
+	private static final String SEPARATOR = ", ";
+
 	private final List<String> iLines;
 	private final List<String> sLines;
-	
+	private final List<String> hLines;
+	private final SetMultimap<Integer, String> hBlocks;
+
 	private String[] iArray;
 	private String[] sArray;
+	private String[] hArray;
 
 	//Localized tooltips
 	private static final String TT_machineType = StatCollector.translateToLocal("GT5U.MBTT.MachineType");
@@ -58,11 +70,17 @@ public class GT_Multiblock_Tooltip_Builder {
 	private static final String TT_pps = StatCollector.translateToLocal("GT5U.MBTT.PPS");
 	private static final String TT_hold = StatCollector.translateToLocal("GT5U.MBTT.Hold");
 	private static final String TT_todisplay = StatCollector.translateToLocal("GT5U.MBTT.Display");
+	private static final String TT_structurehint = StatCollector.translateToLocal("GT5U.MBTT.StructureHint");
 	private static final String TT_mod = StatCollector.translateToLocal("GT5U.MBTT.Mod");
+	private static final String TT_air = StatCollector.translateToLocal("GT5U.MBTT.Air");
+	private static final String[] TT_dots = IntStream.range(0, 16).mapToObj(i -> StatCollector.translateToLocal("structurelib.blockhint." + i + ".name")).toArray(String[]::new);
 
 	public GT_Multiblock_Tooltip_Builder() {
 		iLines = new LinkedList<>();
 		sLines = new LinkedList<>();
+		hLines = new LinkedList<>();
+		hBlocks = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
+		hBlocks.put(StructureLibAPI.HINT_BLOCK_META_AIR, TT_air);
 	}
 	
 	/**
@@ -103,11 +121,10 @@ public class GT_Multiblock_Tooltip_Builder {
 	}
 	
 	/**
-	 * Add a line telling you what the machine type is. Usually, this will be the name of a SB version.<br>
-	 * Machine Type: machine
+	 * Add a line telling how much this machine pollutes.
 	 * 
-	 * @param machine
-	 * 		Name of the machine type
+	 * @param pollution
+	 * 		Amount of pollution per second when active
 	 * 
 	 * @return Instance this method was called on.
 	 */
@@ -307,7 +324,136 @@ public class GT_Multiblock_Tooltip_Builder {
 		sLines.add(TAB + TT_outputhatch + COLON + info);
 		return this;
 	}
-	
+
+	/**
+	 * Use this method to add a structural part that isn't covered by the other methods.<br>
+	 * (indent)name: info
+	 * @param name
+	 * 		Name of the hatch or other component.
+	 * @param info
+	 * 		Positional information.
+	 * @param dots
+	 * 		The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addOtherStructurePart(String name, String info, int... dots) {
+		sLines.add(TAB + name + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, name);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Maintenance Hatch: info
+	 *
+	 * @param info Positional information.
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addMaintenanceHatch(String info, int... dots) {
+		sLines.add(TAB + TT_maintenancehatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_maintenancehatch);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Muffler Hatch: info
+	 *
+	 * @param info Location where the hatch goes
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addMufflerHatch(String info, int... dots) {
+		sLines.add(TAB + TT_mufflerhatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_mufflerhatch);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Energy Hatch: info
+	 *
+	 * @param info Positional information.
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addEnergyHatch(String info, int... dots) {
+		sLines.add(TAB + TT_energyhatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_energyhatch);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Dynamo Hatch: info
+	 *
+	 * @param info Positional information.
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addDynamoHatch(String info, int... dots) {
+		sLines.add(TAB + TT_dynamohatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_dynamohatch);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Input Bus: info
+	 *
+	 * @param info Location where the bus goes
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addInputBus(String info, int... dots) {
+		sLines.add(TAB + TT_inputbus + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_inputbus);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Input Hatch: info
+	 *
+	 * @param info Location where the hatch goes
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addInputHatch(String info, int... dots) {
+		sLines.add(TAB + TT_inputhatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_inputhatch);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Output Bus: info
+	 *
+	 * @param info Location where the bus goes
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addOutputBus(String info, int... dots) {
+		sLines.add(TAB + TT_outputbus + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_outputbus);
+		return this;
+	}
+
+	/**
+	 * Add a line of information about the structure:<br>
+	 * (indent)Output Hatch: info
+	 *
+	 * @param info Location where the bus goes
+	 * @param dots The valid locations for this part when asked to display hints
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addOutputHatch(String info, int... dots) {
+		sLines.add(TAB + TT_outputhatch + COLON + info);
+		for (int dot : dots) hBlocks.put(dot, TT_outputhatch);
+		return this;
+	}
+
 	/**
 	 * Use this method to add non-standard structural info.<br>
 	 * (indent)info
@@ -317,6 +463,30 @@ public class GT_Multiblock_Tooltip_Builder {
 	 */
 	public GT_Multiblock_Tooltip_Builder addStructureInfo(String info) {
 		sLines.add(TAB + info);
+		return this;
+	}
+
+	/**
+	 * Use this method to add non-standard structural hint. This info will appear before the standard structural hint.
+	 * @param info
+	 * 		The line to be added. This should be an entry into minecraft's localization system.
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addStructureHint(String info) {
+		hLines.add(StatCollector.translateToLocal(info));
+		return this;
+	}
+
+	/**
+	 * Use this method to add an entry to standard structural hint without creating a corresponding line in structure information
+	 * @param name
+	 * 		The name of block This should be an entry into minecraft's localization system.
+	 * @param dots
+	 * 		Possible locations of this block
+	 * @return Instance this method was called on.
+	 */
+	public GT_Multiblock_Tooltip_Builder addStructureHint(String name, int... dots) {
+		for (int dot : dots) hBlocks.put(dot, StatCollector.translateToLocal(name));
 		return this;
 	}
 	
@@ -331,10 +501,11 @@ public class GT_Multiblock_Tooltip_Builder {
 	public void toolTipFinisher(String mod) {
 		iLines.add(TT_hold + " " + EnumChatFormatting.BOLD + "[LSHIFT]" + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + " " + TT_todisplay);
 		iLines.add(TT_mod + COLON + EnumChatFormatting.GREEN + mod + EnumChatFormatting.GRAY);
-		iArray = new String[iLines.size()];
-		sArray = new String[sLines.size()];
-		iLines.toArray(iArray);
-		sLines.toArray(sArray);
+		hLines.add(TT_structurehint);
+		iArray = iLines.toArray(new String[0]);
+		sArray = sLines.toArray(new String[0]);
+		// e.getKey() - 1 because 1 dot is meta 0.
+		hArray = Stream.concat(hLines.stream(), hBlocks.asMap().entrySet().stream().map(e -> TT_dots[e.getKey() - 1] + COLON + String.join(SEPARATOR, e.getValue()))).toArray(String[]::new);
 	}
 	
 	public String[] getInformation() {
@@ -345,4 +516,7 @@ public class GT_Multiblock_Tooltip_Builder {
 		return sArray;
 	}
 
+	public String[] getStructureHint() {
+		return hArray;
+	}
 }

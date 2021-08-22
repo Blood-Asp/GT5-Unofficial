@@ -2,6 +2,7 @@ package gregtech.common.tileentities.storage;
 
 import cpw.mods.fml.common.Optional;
 import gregtech.api.GregTech_API;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_TieredMachineBlock;
@@ -33,7 +34,7 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     public GT_MetaTileEntity_DigitalChestBase(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3, new String[]{
-                "This Chest stores " + commonSizeCompute(aTier) + " Blocks",
+                "This Chest stores " + GT_Utility.formatNumbers(commonSizeCompute(aTier)) + " Blocks",
                 "Use a screwdriver to enable",
                 "voiding items on overflow"
         });
@@ -104,7 +105,10 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
     @Optional.Method(modid = "appliedenergistics2")
     @Override
     public boolean isPrioritized(appeng.api.storage.data.IAEItemStack iaeItemStack) {
-        return false;
+        ItemStack s = getItemStack();
+        if (s == null || iaeItemStack == null)
+            return false;
+        return iaeItemStack.isSameType(s);
     }
 
     @Optional.Method(modid = "appliedenergistics2")
@@ -374,15 +378,15 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
                     "Stored Items:",
                     EnumChatFormatting.GOLD + "No Items" + EnumChatFormatting.RESET,
                     EnumChatFormatting.GREEN + "0" + EnumChatFormatting.RESET + " " +
-                            EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+                            EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxItemCount()) + EnumChatFormatting.RESET
             };
         }
         return new String[]{
                 EnumChatFormatting.BLUE + chestName() + EnumChatFormatting.RESET,
                 "Stored Items:",
                 EnumChatFormatting.GOLD + getItemStack().getDisplayName() + EnumChatFormatting.RESET,
-                EnumChatFormatting.GREEN + Integer.toString(getItemCount()) + EnumChatFormatting.RESET + " " +
-                        EnumChatFormatting.YELLOW + getMaxItemCount() + EnumChatFormatting.RESET
+                EnumChatFormatting.GREEN + GT_Utility.formatNumbers(getItemCount()) + EnumChatFormatting.RESET + " " +
+                        EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getMaxItemCount()) + EnumChatFormatting.RESET
         };
     }
 
@@ -413,6 +417,24 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         });
     }
 
+    @Optional.Method(modid = "appliedenergistics2")
+    private boolean hasActiveMEConnection() {
+        if (listeners == null || listeners.isEmpty())
+            return false;
+        for (Map.Entry<appeng.api.storage.IMEMonitorHandlerReceiver<appeng.api.storage.data.IAEItemStack>, Object> e : listeners.entrySet())
+        {
+            if ((e.getKey() instanceof appeng.api.parts.IPart))
+            {
+                appeng.api.networking.IGridNode n = ((appeng.api.parts.IPart) e.getKey()).getGridNode();
+                if (n != null && n.isActive())
+                    return true;
+            }
+        }
+        // if there are no active storage buses - clear the listeners
+        listeners.clear();
+        return false;
+    }
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("mItemCount", getItemCount());
@@ -433,11 +455,15 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
 
     @Override
     public boolean allowPullStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+        if (GregTech_API.mAE2 && GT_Values.disableDigitalChestsExternalAccess && hasActiveMEConnection())
+            return false;
         return aIndex == 1;
     }
 
     @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
+        if (GregTech_API.mAE2 && GT_Values.disableDigitalChestsExternalAccess && hasActiveMEConnection())
+            return false;
         return aIndex == 0 && (mInventory[0] == null || GT_Utility.areStacksEqual(mInventory[0], aStack));
     }
 

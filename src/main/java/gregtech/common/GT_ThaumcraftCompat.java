@@ -182,7 +182,7 @@ public class GT_ThaumcraftCompat implements IThaumcraftCompat {
         if ((GT_Utility.isStringInvalid(aResearch)) || (aInput == null) || (aOutput == null) || (aAspects == null) || (aAspects.isEmpty())) {
             return null;
         }
-        return ThaumcraftApi.addCrucibleRecipe(aResearch, GT_Utility.copy(new Object[]{aOutput}), ((aInput instanceof ItemStack)) || ((aInput instanceof ArrayList)) ? aInput : aInput.toString(), getAspectList(aAspects));
+        return ThaumcraftApi.addCrucibleRecipe(aResearch, GT_Utility.copyOrNull(aOutput), ((aInput instanceof ItemStack)) || ((aInput instanceof ArrayList)) ? aInput : aInput.toString(), getAspectList(aAspects));
     }
 
     @Override
@@ -190,7 +190,7 @@ public class GT_ThaumcraftCompat implements IThaumcraftCompat {
         if ((GT_Utility.isStringInvalid(aResearch)) || (aMainInput == null) || (aSideInputs == null) || (aOutput == null) || (aAspects == null) || (aAspects.isEmpty())) {
             return null;
         }
-        return ThaumcraftApi.addInfusionCraftingRecipe(aResearch, GT_Utility.copy(new Object[]{aOutput}), aInstability, getAspectList(aAspects), aMainInput, aSideInputs);
+        return ThaumcraftApi.addInfusionCraftingRecipe(aResearch, GT_Utility.copyOrNull(aOutput), aInstability, getAspectList(aAspects), aMainInput, aSideInputs);
     }
     
 	@Override

@@ -14,7 +14,7 @@ public class Behaviour_DataOrb extends Behaviour_None {
             if (aNewContent[i] == null) {
                 aInventory[i] = null;
             } else {
-                aInventory[i] = GT_Utility.copy(new Object[]{aNewContent[i]});
+                aInventory[i] = GT_Utility.copyOrNull(aNewContent[i]);
             }
         }
     }

@@ -8,7 +8,10 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.*;
+import gregtech.api.util.GT_Log;
+import gregtech.api.util.GT_ModHandler;
+import gregtech.api.util.GT_Utility;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,6 +30,8 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     public FluidStack mSteam = null;
     public boolean mHadNoWater = false;
     private int mExcessWater = 0;
+
+    public static final byte SOUND_EVENT_LET_OFF_EXCESS_STEAM = 1;
 
     public GT_MetaTileEntity_Boiler(int aID, String aName, String aNameRegional, int aTier, String[] aDescription, ITexture... aTextures) {
         super(aID, aName, aNameRegional, aTier, 4, aDescription, aTextures);
@@ -110,7 +115,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
         if (aPlayer != null) {
             if (GT_Utility.areStacksEqual(aPlayer.getCurrentEquippedItem(), new ItemStack(Items.water_bucket, 1))) {
                 fill(Materials.Water.getFluid(1000L * (long) aPlayer.getCurrentEquippedItem().stackSize), true);
-                aPlayer.getCurrentEquippedItem().func_150996_a(Items.bucket);
+
+                if (!aPlayer.capabilities.isCreativeMode) {
+                    aPlayer.getCurrentEquippedItem().func_150996_a(Items.bucket);
+                }
             } else {
                 aBaseMetaTileEntity.openGUI(aPlayer);
             }
@@ -247,7 +255,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     }
 
     private void calculateHeatUp(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if ((this.mTemperature < getMaxTemperature()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
+        if ((this.mTemperature < getMaxTemperature()) && (this.mProcessingEnergy > 0) && (aTick % getHeatUpRate() == 0L)) {
             this.mProcessingEnergy -= getEnergyConsumption();
             this.mTemperature += getHeatUpAmount();
         }
@@ -261,7 +269,7 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     private void ventSteamIfTankIsFull() {
         if ((this.mSteam != null) && (this.mSteam.amount > getCapacity())) {
-            sendSound((byte) 1);
+            sendSound(SOUND_EVENT_LET_OFF_EXCESS_STEAM);
             this.mSteam.amount = getCapacity() * 3 / 4;
         }
     }
@@ -276,8 +284,8 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
                 this.mHadNoWater = true;
             } else {
                 if (this.mHadNoWater) {
-                    GT_Log.exp.println("Boiler "+this.mName+" had no Water!");
-                    aBaseMetaTileEntity.doExplosion(2048L);
+                    GT_Log.exp.println("Boiler " + this.mName + " had no Water!");
+                    onDangerousWaterLack(aBaseMetaTileEntity, aTick);
                     return true;
                 }
                 produceSteam(getProductionPerSecond() / 2);
@@ -286,6 +294,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
             this.mHadNoWater = false;
         }
         return false;
+    }
+
+    protected void onDangerousWaterLack(IGregTechTileEntity tile, long ticks) {
+        tile.doExplosion(2048L);
     }
 
     protected final void pushSteamToSide(IGregTechTileEntity aBaseMetaTileEntity, int aSide) {
@@ -333,13 +345,13 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
 
     @Override
     public void doSound(byte aIndex, double aX, double aY, double aZ) {
-        if (aIndex == 1) {
+        if (aIndex == GT_MetaTileEntity_Boiler.SOUND_EVENT_LET_OFF_EXCESS_STEAM) {
             GT_Utility.doSoundAtClient(GregTech_API.sSoundList.get(4), 2, 1.0F, aX, aY, aZ);
 
             new WorldSpawnedEventBuilder.ParticleEventBuilder()
                     .setIdentifier("largesmoke")
                     .setWorld(getBaseMetaTileEntity().getWorld())
-                    .setMotion(0D,0D,0D)
+                    .setMotion(0D, 0D, 0D)
                     .<WorldSpawnedEventBuilder.ParticleEventBuilder>times(8, x -> x
                             .setPosition(
                                     aX - 0.5D + XSTR_INSTANCE.nextFloat(),
@@ -373,6 +385,10 @@ public abstract class GT_MetaTileEntity_Boiler extends GT_MetaTileEntity_BasicTa
     protected abstract int getEnergyConsumption();
 
     protected abstract int getCooldownInterval();
+
+    protected int getHeatUpRate() {
+        return 12;
+    }
 
     protected int getHeatUpAmount() {
         return 1;
