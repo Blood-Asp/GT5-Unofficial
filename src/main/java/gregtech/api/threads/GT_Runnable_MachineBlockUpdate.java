@@ -65,7 +65,7 @@ public class GT_Runnable_MachineBlockUpdate implements Runnable {
     }
 
     public static void initExecutorService() {
-        EXECUTOR_SERVICE = Executors.newFixedThreadPool((Runtime.getRuntime().availableProcessors() * 2 / 3), THREAD_FACTORY);
+        EXECUTOR_SERVICE = Executors.newFixedThreadPool(Math.max(1, (Runtime.getRuntime().availableProcessors() * 2 / 3)), THREAD_FACTORY);
     }
 
     public static void shutdownExecutorService() {
