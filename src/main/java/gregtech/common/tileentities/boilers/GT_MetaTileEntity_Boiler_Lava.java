@@ -23,7 +23,6 @@ import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE;
 
 public class GT_MetaTileEntity_Boiler_Lava extends GT_MetaTileEntity_Boiler {
-
     public static final int COOLDOWN_INTERVAL = 20;
     public static final int ENERGY_PER_LAVA = 1;
     public static final int CONSUMPTION_PER_HEATUP = 3;

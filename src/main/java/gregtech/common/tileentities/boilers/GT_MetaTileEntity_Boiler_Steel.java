@@ -18,8 +18,6 @@ import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE;
 
 public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bronze {
-
-
     public GT_MetaTileEntity_Boiler_Steel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[]{
                 "Faster than the Bronze Boiler",
