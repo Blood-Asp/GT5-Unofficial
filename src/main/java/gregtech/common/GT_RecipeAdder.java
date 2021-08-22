@@ -162,7 +162,8 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             aCleanroom = false;
         }
         GT_Recipe.GT_Recipe_Map.sChemicalRecipes.addRecipe(true, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, aCleanroom ? -200 : 0);
-        if (!(aInput1 != null && aInput1.getItem() instanceof GT_IntegratedCircuit_Item && aInput1.getItemDamage() >= 10)
+        if (!(aInput1 != null && aInput1.getItem() instanceof GT_Integrated
+	      _Item && aInput1.getItemDamage() >= 10)
                 && !(aInput2 != null && aInput2.getItem() instanceof GT_IntegratedCircuit_Item && aInput2.getItemDamage() >= 10)) {
             GT_Recipe.GT_Recipe_Map.sMultiblockChemicalRecipes.addRecipe(false, new ItemStack[]{aInput1, aInput2}, new ItemStack[]{aOutput, aOutput2}, null, null, new FluidStack[]{aFluidInput}, new FluidStack[]{aFluidOutput}, aDuration, aEUtick, 0);
         }
@@ -453,7 +454,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         boolean ret = false;
 
         for (int oreID : OreDictionary.getOreIDs(aOutput1)) {
-            if (OreDictionary.getOreName(oreID).contains("circuit")){
+            if (OreDictionary.getOreName(oreID).startsWith("circuit")){
                 return this.addAssemblerRecipeNonOD(aInputs, aFluidInput, aOutput1, aDuration, aEUt, aCleanroom);
             }
         }
@@ -465,7 +466,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             }
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
-                if (odName.contains("circuit")) {
+                if (odName.startsWith("circuit")) {
                     for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
@@ -1383,7 +1384,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         boolean ret = false;
 
         for (int oreID : OreDictionary.getOreIDs(aOutput)) {
-            if (OreDictionary.getOreName(oreID).contains("circuit")){
+            if (OreDictionary.getOreName(oreID).startsWith("circuit")){
                 return this.addCircuitAssemblerRecipeNonOredicted(aInputs, aFluidInput, aOutput, aDuration, aEUt, aCleanroom);
             }
         }
@@ -1391,7 +1392,7 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
         for (int i = 0; i < aInputs.length; ++i) {
             for (int oreID : OreDictionary.getOreIDs(aInputs[i])) {
                 String odName = OreDictionary.getOreName(oreID);
-                if (odName.contains("circuit")) {
+                if (odName.startsWith("circuit")) {
                     for (ItemStack tStack : GT_OreDictUnificator.getOresImmutable(odName)) {
                         if (!GT_Utility.isStackValid(tStack))
                             continue;
