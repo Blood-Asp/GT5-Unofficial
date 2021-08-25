@@ -417,24 +417,13 @@ public class GT_Block_Machines extends GT_Generic_Block implements IDebugableBlo
             }
         }
         super.breakBlock(aWorld, aX, aY, aZ, par5, par6);
-        aWorld.removeTileEntity(aX, aY, aZ);
     }
 
     @Override
     public ArrayList<ItemStack> getDrops(World aWorld, int aX, int aY, int aZ, int aMeta, int aFortune) {
-        TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
-        if ((tTileEntity instanceof IGregTechTileEntity)) {
-            return ((IGregTechTileEntity) tTileEntity).getDrops();
-        }
         IGregTechTileEntity tGregTechTileEntity = mTemporaryTileEntity.get();
-        ArrayList<ItemStack> tDrops;
-        if (tGregTechTileEntity == null) {
-            tDrops = (ArrayList<ItemStack>) Collections.<ItemStack>emptyList();
-        } else {
-            tDrops = tGregTechTileEntity.getDrops();
-            mTemporaryTileEntity.remove();
-        }
-        return tDrops;
+        mTemporaryTileEntity.remove();
+        return tGregTechTileEntity == null ? new ArrayList<>() : tGregTechTileEntity.getDrops();
     }
 
     @Override
