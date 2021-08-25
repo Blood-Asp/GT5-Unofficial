@@ -353,49 +353,44 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                     if (this.mEUStore <= 0 && mMaxProgresstime > 0) {
                         stopMachine();
                     }
-                    if (getRepairStatus() > 0) {
-                        if (mMaxProgresstime > 0 && doRandomMaintenanceDamage()) {
-                            this.getBaseMetaTileEntity().decreaseStoredEnergyUnits(mEUt, true);
-                            if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
-                                if (mOutputItems != null)
-                                    for (ItemStack tStack : mOutputItems) if (tStack != null) addOutput(tStack);
-                                if (mOutputFluids != null)
-                                    for (FluidStack tStack : mOutputFluids) if (tStack != null) addOutput(tStack);
-                                mEfficiency = Math.max(0, Math.min(mEfficiency + mEfficiencyIncrease, getMaxEfficiency(mInventory[1]) - ((getIdealStatus() - getRepairStatus()) * 1000)));
-                                mOutputItems = null;
-                                mProgresstime = 0;
-                                mMaxProgresstime = 0;
-                                mEfficiencyIncrease = 0;
-                                if (mOutputFluids != null && mOutputFluids.length > 0) {
-                                    try {
-                                        GT_Mod.achievements.issueAchivementHatchFluid(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), mOutputFluids[0]);
-                                    } catch (Exception ignored) {
-                                    }
+                    if (mMaxProgresstime > 0) {
+                        this.getBaseMetaTileEntity().decreaseStoredEnergyUnits(mEUt, true);
+                        if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
+                            if (mOutputItems != null)
+                                for (ItemStack tStack : mOutputItems) if (tStack != null) addOutput(tStack);
+                            if (mOutputFluids != null)
+                                for (FluidStack tStack : mOutputFluids) if (tStack != null) addOutput(tStack);
+                            mEfficiency = Math.max(0, Math.min(mEfficiency + mEfficiencyIncrease, getMaxEfficiency(mInventory[1]) - (getIdealStatus() * 1000)));
+                            mOutputItems = null;
+                            mProgresstime = 0;
+                            mMaxProgresstime = 0;
+                            mEfficiencyIncrease = 0;
+                            if (mOutputFluids != null && mOutputFluids.length > 0) {
+                                try {
+                                    GT_Mod.achievements.issueAchivementHatchFluid(aBaseMetaTileEntity.getWorld().getPlayerEntityByName(aBaseMetaTileEntity.getOwnerName()), mOutputFluids[0]);
+                                } catch (Exception ignored) {
                                 }
-                                this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
-                                if (aBaseMetaTileEntity.isAllowedToWork())
-                                    checkRecipe(mInventory[1]);
                             }
-                        } else {
-                            if (aTick % 100 == 0 || aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified()) {
-                                turnCasingActive(mMaxProgresstime > 0);
-                                if (aBaseMetaTileEntity.isAllowedToWork()) {
-                                    this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
-                                    if (checkRecipe(mInventory[1])) {
-                                        if (this.mEUStore < this.mLastRecipe.mSpecialValue - this.mEUt) {
-                                            mMaxProgresstime = 0;
-                                            turnCasingActive(false);
-                                        }
-                                        aBaseMetaTileEntity.decreaseStoredEnergyUnits(this.mLastRecipe.mSpecialValue - this.mEUt, true);
-                                    }
-                                }
-                                if (mMaxProgresstime <= 0)
-                                    mEfficiency = Math.max(0, mEfficiency - 1000);
-                            }
+                            this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
+                            if (aBaseMetaTileEntity.isAllowedToWork())
+                                checkRecipe(mInventory[1]);
                         }
                     } else {
-                        this.mLastRecipe = null;
-                        stopMachine();
+                        if (aTick % 100 == 0 || aBaseMetaTileEntity.hasWorkJustBeenEnabled() || aBaseMetaTileEntity.hasInventoryBeenModified()) {
+                            turnCasingActive(mMaxProgresstime > 0);
+                            if (aBaseMetaTileEntity.isAllowedToWork()) {
+                                this.mEUStore = (int) aBaseMetaTileEntity.getStoredEU();
+                                if (checkRecipe(mInventory[1])) {
+                                    if (this.mEUStore < this.mLastRecipe.mSpecialValue - this.mEUt) {
+                                        mMaxProgresstime = 0;
+                                        turnCasingActive(false);
+                                    }
+                                    aBaseMetaTileEntity.decreaseStoredEnergyUnits(this.mLastRecipe.mSpecialValue - this.mEUt, true);
+                                }
+                            }
+                            if (mMaxProgresstime <= 0)
+                                mEfficiency = Math.max(0, mEfficiency - 1000);
+                        }
                     }
                 } else {
                     turnCasingActive(false);
@@ -403,8 +398,7 @@ public abstract class GT_MetaTileEntity_FusionComputer extends GT_MetaTileEntity
                     stopMachine();
                 }
             }
-            aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mWrench ? 0 : 1) | (mScrewdriver ? 0 : 2) | (mSoftHammer ? 0 : 4) | (mHardHammer ? 0 : 8)
-                    | (mSolderingTool ? 0 : 16) | (mCrowbar ? 0 : 32) | (mMachine ? 0 : 64));
+            aBaseMetaTileEntity.setErrorDisplayID((aBaseMetaTileEntity.getErrorDisplayID() & ~127) | (mMachine ? 0 : 64));
             aBaseMetaTileEntity.setActive(mMaxProgresstime > 0);
         }
     }
