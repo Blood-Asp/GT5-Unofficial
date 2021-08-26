@@ -377,6 +377,8 @@ public interface IGT_RecipeAdder {
      */
     boolean addBenderRecipe(ItemStack aInput, ItemStack aOutput, int aDuration, int aEUt);
 
+    boolean addBenderRecipe(ItemStack aInput, ItemStack aCircuit, ItemStack aOutput, int aDuration, int aEUt);
+
     /**
      * Adds a Extruder Machine Recipe
      *

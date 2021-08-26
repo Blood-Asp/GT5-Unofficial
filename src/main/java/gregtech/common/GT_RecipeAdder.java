@@ -533,13 +533,18 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
 
     @Override
     public boolean addBenderRecipe(ItemStack aInput1, ItemStack aOutput1, int aDuration, int aEUt) {
+        return addBenderRecipe(aInput1, aOutput1, aDuration, aEUt);
+    }
+    @Override
+    public boolean addBenderRecipe(ItemStack aInput1, ItemStack aCircuit, ItemStack aOutput1, int aDuration, int aEUt) {
         if ((aInput1 == null) || (aOutput1 == null)) {
             return false;
         }
         if ((aDuration = GregTech_API.sRecipeFile.get("bender", aInput1, aDuration)) <= 0) {
             return false;
         }
-        new GT_Recipe(aEUt, aDuration, aInput1, aOutput1);
+        GT_Recipe tRecipe = new GT_Recipe(new ItemStack[]{aInput1, aCircuit}, new ItemStack[]{aOutput1}, null, null, null, null, aDuration, Math.max(aEUt, 1), 0);
+        GT_Recipe.GT_Recipe_Map.sBenderRecipes.addRecipe(tRecipe);
         return true;
     }
 
