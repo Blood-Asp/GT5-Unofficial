@@ -29,7 +29,6 @@ public interface IGT_RecipeAdder {
      * Adds a Centrifuge Recipe
      *
      * @param aInput1    must be != null
-     * @param aCellInput this is for the needed Cells, > 0 for Tincellcount, < 0 for negative Fuelcancount, == 0 for nothing
      * @param aOutput1   must be != null
      * @param aOutput2   can be null
      * @param aOutput3   can be null
@@ -66,7 +65,6 @@ public interface IGT_RecipeAdder {
      * Adds a Electrolyzer Recipe
      *
      * @param aInput1    must be != null
-     * @param aCellInput this is for the needed Cells, > 0 for Tincellcount, < 0 for negative Fuelcancount, == 0 for nothing
      * @param aOutput1   must be != null
      * @param aOutput2   can be null
      * @param aOutput3   can be null
@@ -80,7 +78,6 @@ public interface IGT_RecipeAdder {
      * Adds a Electrolyzer Recipe
      *
      * @param aInput1    must be != null
-     * @param aCellInput this is for the needed Cells, > 0 for Tincellcount, < 0 for negative Fuelcancount, == 0 for nothing
      * @param aOutput1   must be != null
      * @param aOutput2   can be null
      * @param aOutput3   can be null
@@ -118,7 +115,7 @@ public interface IGT_RecipeAdder {
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput1  must be != null
+     * @param aOutput  must be != null
      * @param aOutput2  must be != null
      * @param aDuration must be > 0
      */
@@ -130,7 +127,7 @@ public interface IGT_RecipeAdder {
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput1  must be != null
+     * @param aOutput  must be != null
      * @param aOutput2  must be != null
      * @param aDuration must be > 0
      */
@@ -150,7 +147,7 @@ public interface IGT_RecipeAdder {
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput1  must be != null
+     * @param aOutput  must be != null
      * @param aDuration must be > 0
      * @param aEUtick   must be > 0
      */
@@ -163,7 +160,7 @@ public interface IGT_RecipeAdder {
      *
      * @param aInput1   must be != null
      * @param aInput2   must be != null
-     * @param aOutput1  must be != null
+     * @param aOutput  must be != null
      * @param aOutput2  must be != null
      * @param aDuration must be > 0
      * @param aEUtick   must be > 0
@@ -244,7 +241,6 @@ public interface IGT_RecipeAdder {
      * @param aInput1   must be != null
      * @param aInput2   can be null
      * @param aOutput1  must be != null
-     * @param aOutput2  can be null
      * @param aDuration must be > 0
      * @param aEUt      should be > 0
      */
