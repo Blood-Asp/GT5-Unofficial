@@ -1604,6 +1604,14 @@ public class GT_MachineRecipeLoader implements Runnable {
 
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Bed_Wood.get(1L), ItemList.RC_Rail_Wooden.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, tRailWood, 100, 30);
 
+            ItemStack tRailWoodB = GT_ModHandler.getModItem("Railcraft", "track.slow", 16);
+            NBTTagCompound tTagWoodB = new NBTTagCompound();
+            tTagWoodB.setString("track", "railcraft:track.slow.boost");
+            tRailWoodB.stackTagCompound = tTagWoodB;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Bed_Wood.get(1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_Utility.getIntegratedCircuit(22)}, GT_Values.NF, tRailWoodB, 200, 30);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{new ItemStack(Blocks.rail, 1, 0), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_Utility.getIntegratedCircuit(22)}, GT_Values.NF, new ItemStack(Blocks.golden_rail, 16, 0), 300, 30);
+
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Bed_Wood.get(1L), ItemList.RC_Rail_Standard.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, new ItemStack(Blocks.rail, 64, 0), 200, 30);
 
             ItemStack tRailRe = GT_ModHandler.getModItem("Railcraft", "track", 64);
@@ -1612,6 +1620,13 @@ public class GT_MachineRecipeLoader implements Runnable {
             tRailRe.stackTagCompound = tTagRe;
 
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Bed_Stone.get(1L), ItemList.RC_Rail_Reinforced.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, tRailRe, 200, 30);
+
+            ItemStack tRailReB = GT_ModHandler.getModItem("Railcraft", "track.reinforced", 16);
+            NBTTagCompound tTagReB = new NBTTagCompound();
+            tTagReB.setString("track", "railcraft:track.reinforced.boost");
+            tRailReB.stackTagCompound = tTagReB;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Rail_Reinforced.get(1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_Utility.getIntegratedCircuit(22)}, GT_Values.NF, tRailReB, 300, 30);
 
             ItemStack tRailEl = GT_ModHandler.getModItem("Railcraft", "track", 64);
             NBTTagCompound tTagEl = new NBTTagCompound();
@@ -1626,6 +1641,13 @@ public class GT_MachineRecipeLoader implements Runnable {
             tRailHs.stackTagCompound = tTagHs;
 
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Bed_Stone.get(1L), ItemList.RC_Rail_HS.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, tRailHs, 200, 30);
+
+            ItemStack tRailHsB = GT_ModHandler.getModItem("Railcraft", "track.speed", 16);
+            NBTTagCompound tTagHsB = new NBTTagCompound();
+            tTagHsB.setString("track", "railcraft:track.speed.boost");
+            tRailHsB.stackTagCompound = tTagHsB;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{ItemList.RC_Rail_HS.get(1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_Utility.getIntegratedCircuit(22)}, GT_Values.NF, tRailHsB, 300, 30);
         }
         GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("carbonFiber", 2L), ItemList.Circuit_Integrated.getWithDamage(0L, 2L), GT_ModHandler.getIC2Item("carbonMesh", 1L), 800, 2);
 
