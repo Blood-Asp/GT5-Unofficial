@@ -760,7 +760,7 @@ public enum OrePrefixes {
                     gearGt.mDisabledItems.add(aMaterial);
                 //Small Gears
                 if (!enableUnusedSmallGears && !(aMaterial == Materials.Aluminium || aMaterial == Materials.Titanium || aMaterial == Materials.Steel || aMaterial == Materials.StainlessSteel ||
-                        aMaterial == Materials.TungstenSteel || aMaterial == Materials.HSSG || aMaterial == Materials.HSSE || aMaterial == Materials.Neutronium))
+                        aMaterial == Materials.TungstenSteel || aMaterial == Materials.HSSG || aMaterial == Materials.HSSE || aMaterial == Materials.Neutronium || aMaterial == Materials.VanadiumGallium || aMaterial == Materials.Naquadah))
                     gearGtSmall.mDisabledItems.add(aMaterial);
                 //Bolts
                 if (!enableUnusedBolts && ((aMaterial.mTypes & 0x40) == 0) && !(aMaterial == Materials.Titanium || aMaterial == Materials.Chrome || aMaterial == Materials.Iron ||
