@@ -1585,7 +1585,7 @@ public class GT_MachineRecipeLoader implements Runnable {
         tTagWood.setString("track", "railcraft:track.slow");
         tRailWood.stackTagCompound = tTagWood;
 
-        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.RC_Bed_Wood.get(1L), ItemList.RC_Rail_Wooden.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, tRailWood, 200, 30);
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.RC_Bed_Wood.get(1L), ItemList.RC_Rail_Wooden.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, tRailWood, 100, 30);
 
         GT_Values.RA.addAssemblerRecipe(new ItemStack[] {ItemList.RC_Bed_Wood.get(1L), ItemList.RC_Rail_Standard.get(6L), GT_Utility.getIntegratedCircuit(21)}, GT_Values.NF, new ItemStack(Blocks.rail, 64, 0), 200, 30);
 
