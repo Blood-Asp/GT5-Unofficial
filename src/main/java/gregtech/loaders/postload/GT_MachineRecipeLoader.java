@@ -3864,6 +3864,9 @@ public class GT_MachineRecipeLoader implements Runnable {
                 GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.VanadiumGallium, 1L), GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Platinum, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(64L), 200, 120);
             }
         }
+
+        GT_Values.RA.addAssemblerRecipe(new ItemStack[]{new ItemStack(Blocks.piston, 1, 0), ItemList.FR_Casing_Sturdy.get(1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lapis, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.SeedOil.getFluid(250L), GT_ModHandler.getModItem("dreamcraft","item.EngineCore", 1L, 0), 100, 16);
+
         GT_Values.RA.addBenderRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Aluminium, 20L), (GT_Utility.getIntegratedCircuit(10)), ItemList.RC_Rail_Standard.get(64L), 300, 30);
         GT_Values.RA.addBenderRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Iron, 48L), (GT_Utility.getIntegratedCircuit(10)), ItemList.RC_Rail_Standard.get(64L), 300, 30);
         GT_Values.RA.addBenderRecipe(GT_OreDictUnificator.get(OrePrefixes.stick, Materials.WroughtIron, 32L), (GT_Utility.getIntegratedCircuit(10)), ItemList.RC_Rail_Standard.get(64L), 300, 30);
