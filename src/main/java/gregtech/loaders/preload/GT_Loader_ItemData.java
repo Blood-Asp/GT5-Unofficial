@@ -13,6 +13,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
+
 public class GT_Loader_ItemData implements Runnable {
     @Override
     public void run() {
@@ -72,7 +74,7 @@ public class GT_Loader_ItemData implements Runnable {
         GT_OreDictUnificator.addItemData(new ItemStack(Items.iron_door, 1), new ItemData(Materials.Iron, 21772800L));
         GT_OreDictUnificator.addItemData(new ItemStack(Items.cauldron, 1), new ItemData(Materials.Iron, 25401600L));
         GT_OreDictUnificator.addItemData(new ItemStack(Blocks.iron_bars, 8, 32767), new ItemData(Materials.Iron, 10886400L));
-        GT_OreDictUnificator.addItemData(GT_ModHandler.getModItem("dreamcraft", "item.SteelBars", 8L, 0), new ItemData(Materials.Steel, 10886400L));
+        GT_OreDictUnificator.addItemData(GT_ModHandler.getModItem(MOD_ID_DC, "item.SteelBars", 8L, 0), new ItemData(Materials.Steel, 10886400L));
         GT_OreDictUnificator.addItemData(GT_ModHandler.getIC2Item("ironFurnace", 1L), new ItemData(Materials.Iron, 18144000L));
         GT_OreDictUnificator.addItemData(ItemList.IC2_Food_Can_Empty.get(1L), new ItemData(Materials.Tin, 1814400L));
         GT_OreDictUnificator.addItemData(ItemList.IC2_Fuel_Rod_Empty.get(1L), new ItemData(Materials.Iron, 3628800L));

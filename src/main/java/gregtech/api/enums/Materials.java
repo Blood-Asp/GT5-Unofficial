@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
 
 @SuppressWarnings("ALL")
 public class Materials implements IColorModulationContainer, ISubTagContainer {
@@ -2094,7 +2095,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         initMaterialProperties(); //No more material addition or manipulation should be done past this point!
         MATERIALS_ARRAY = MATERIALS_MAP.values().toArray(new Materials[0]); //Generate standard object array. This is a lot faster to loop over.
         VALUES = Arrays.asList(MATERIALS_ARRAY);
-        if (!Loader.isModLoaded("dreamcraft") && !GT_Mod.gregtechproxy.mEnableAllComponents)
+        if (!Loader.isModLoaded(MOD_ID_DC) && !GT_Mod.gregtechproxy.mEnableAllComponents)
             OrePrefixes.initMaterialComponents();
         else {
             OrePrefixes.ingotHot.mDisabledItems.addAll(
@@ -2800,6 +2801,13 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         return new FluidStack(steamCrackedFluids[2], amount);
     }
 
+    /** Check that the material is a proper soldering fluid
+     ** @return true if Materials is a proper soldering fluid
+     */
+    public boolean isProperSolderingFluid() {
+        return mStandardMoltenFluid != null && contains(SubTag.SOLDERING_MATERIAL) && !(GregTech_API.mUseOnlyGoodSolderingMaterials && !contains(SubTag.SOLDERING_MATERIAL_GOOD));
+    }
+
     public ItemStack getCells(int amount) {
         return GT_OreDictUnificator.get(OrePrefixes.cell, this, amount);
     }
@@ -2835,4 +2843,5 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
     public ItemStack getPlates(int amount) {
         return GT_OreDictUnificator.get(OrePrefixes.plate, this, amount);
     }
+
 }
