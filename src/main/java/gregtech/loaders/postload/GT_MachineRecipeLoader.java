@@ -1562,15 +1562,10 @@ public class GT_MachineRecipeLoader implements Runnable {
 
         GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("waterMill", 2L), GT_Utility.getIntegratedCircuit(2), GT_ModHandler.getIC2Item("generator", 1L), 6400, 8);
         GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("batPack", 1L, 32767), GT_Utility.getIntegratedCircuit(1), ItemList.IC2_ReBattery.get(6L), 800, 4);
-        if(Loader.isModLoaded(MOD_ID_RC)) {
+        GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("carbonFiber", 2L), ItemList.Circuit_Integrated.getWithDamage(0L, 2L), GT_ModHandler.getIC2Item("carbonMesh", 1L), 800, 2);
+        if (Loader.isModLoaded(MOD_ID_RC)) {
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{new ItemStack(Blocks.stone_slab, 1, 0), ItemList.RC_Rebar.get(1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.RC_Tie_Stone.get(1L), 128, 8);
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{new ItemStack(Blocks.stone_slab, 1, 7), ItemList.RC_Rebar.get(1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, ItemList.RC_Tie_Stone.get(1L), 128, 8);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Copper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.Lead.getMolten(36L), ItemList.RC_ShuntingWire.get(1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Copper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.Tin.getMolten(18L), ItemList.RC_ShuntingWire.get(1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Copper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getMolten(9L), ItemList.RC_ShuntingWire.get(1L), 200, 30);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.Lead.getMolten(36L), ItemList.RC_ShuntingWire.get(1L), 150, 30);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.Tin.getMolten(18L), ItemList.RC_ShuntingWire.get(1L), 150, 30);
-            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 1L), GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, Materials.SolderingAlloy.getMolten(9L), ItemList.RC_ShuntingWire.get(1L), 150, 30);
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 3L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Electrum, 3L), GT_Utility.getIntegratedCircuit(8)}, Materials.Blaze.getMolten(216L), ItemList.RC_Rail_HS.get(16L), 100, 16);
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 3L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Electrum, 3L), GT_Utility.getIntegratedCircuit(9)}, Materials.ConductiveIron.getMolten(432L), ItemList.RC_Rail_HS.get(8L), 100, 16);
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Steel, 3L), GT_OreDictUnificator.get(OrePrefixes.stick, Materials.Electrum, 3L), GT_Utility.getIntegratedCircuit(9)}, Materials.VibrantAlloy.getMolten(216L), ItemList.RC_Rail_HS.get(32L), 100, 30);
@@ -1596,7 +1591,6 @@ public class GT_MachineRecipeLoader implements Runnable {
             GT_Values.RA.addAssemblerRecipe(ItemList.RC_Tie_Wood.get(64L), GT_Utility.getIntegratedCircuit(24), ItemList.RC_Bed_Wood.get(48L), 200, 48);
             GT_Values.RA.addAssemblerRecipe(ItemList.RC_Tie_Stone.get(32L), GT_Utility.getIntegratedCircuit(20), ItemList.RC_Bed_Stone.get(24L), 200, 30);
             GT_Values.RA.addAssemblerRecipe(ItemList.RC_Tie_Stone.get(64L), GT_Utility.getIntegratedCircuit(24), ItemList.RC_Bed_Stone.get(48L), 200, 48);
-
             ItemStack tRailWood = GT_ModHandler.getModItem("Railcraft", "track", 64, 736);
             NBTTagCompound tTagWood = new NBTTagCompound();
             tTagWood.setString("track", "railcraft:track.slow");
@@ -1648,9 +1642,61 @@ public class GT_MachineRecipeLoader implements Runnable {
             tRailHsB.stackTagCompound = tTagHsB;
 
             GT_Values.RA.addAssemblerRecipe(new ItemStack[]{tRailHs, GT_OreDictUnificator.get(OrePrefixes.plate, Materials.RedAlloy, 1L), GT_Utility.getIntegratedCircuit(22)}, GT_Values.NF, tRailHsB, 300, 30);
-        }
-        GT_Values.RA.addAssemblerRecipe(GT_ModHandler.getIC2Item("carbonFiber", 2L), ItemList.Circuit_Integrated.getWithDamage(0L, 2L), GT_ModHandler.getIC2Item("carbonMesh", 1L), 800, 2);
 
+            // --- Wooden Switch Track ---
+            ItemStack tRailSS = GT_ModHandler.getModItem("Railcraft", "track.slow", 1, 19986);
+            NBTTagCompound tTagSS = new NBTTagCompound();
+            tTagSS.setString("track", "railcraft:track.slow.switch");
+            tRailSS.stackTagCompound = tTagSS;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.AnyIron, 4L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, tRailSS, 100, 8);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Steel, 2L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(2, tRailSS), 100, 16);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.StainlessSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(4, tRailSS), 100, 30);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Titanium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(8, tRailSS), 100, 48);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.TungstenSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(16, tRailSS), 100, 64);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Iridium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(32, tRailSS), 100, 120);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.springSmall, Materials.Osmium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(64, tRailSS), 100, 256);
+            // --- Wooden Wye Track ---
+            ItemStack tRailSW = GT_ModHandler.getModItem("Railcraft", "track.slow", 1, 19986);
+            NBTTagCompound tTagSW = new NBTTagCompound();
+            tTagSW.setString("track", "railcraft:track.slow.wye");
+            tRailSW.stackTagCompound = tTagSW;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.AnyIron, 4L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, tRailSW, 100, 8);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Steel, 2L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(2, tRailSW), 100, 16);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.StainlessSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(4, tRailSW), 100, 30);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Titanium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(8, tRailSW), 100, 48);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.TungstenSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(16, tRailSW), 100, 64);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Iridium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(32, tRailSW), 100, 120);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Osmium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(64, tRailSW), 100, 256);
+            // --- Wooden Junction Tack ---
+            ItemStack tRailSJ = GT_ModHandler.getModItem("Railcraft", "track.slow", 1);
+            NBTTagCompound tTagSJ = new NBTTagCompound();
+            tTagSJ.setString("track", "railcraft:track.slow.junction");
+            tRailSJ.stackTagCompound = tTagSJ;
+
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.AnyIron, 4L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, tRailSJ, 100, 8);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Steel, 2L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(2, tRailSJ), 100, 16);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.StainlessSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(4, tRailSJ), 100, 30);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Titanium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(8, tRailSJ), 100, 48);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.TungstenSteel, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(16, tRailSJ), 100, 64);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Iridium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(32, tRailSJ), 100, 120);
+            GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_Utility.copyAmount(2, tRailWood), GT_OreDictUnificator.get(OrePrefixes.screw, Materials.Osmium, 1L), GT_Utility.getIntegratedCircuit(1)}, GT_Values.NF, GT_Utility.copyAmount(64, tRailSJ), 100, 256);
+
+            //Shunting Wire
+            for (Materials tMat : Materials.values()) {
+                if (tMat.mStandardMoltenFluid != null && tMat.contains(SubTag.SOLDERING_MATERIAL) && !(GregTech_API.mUseOnlyGoodSolderingMaterials && !tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD))) {
+                    int tMultiplier = tMat.contains(SubTag.SOLDERING_MATERIAL_GOOD) ? 1 : tMat.contains(SubTag.SOLDERING_MATERIAL_BAD) ? 4 : 2;
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Copper, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(1L), 200, 16);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.AnnealedCopper, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(1L), 200, 16);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Gold, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Lead, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(4L), 200, 24);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Electrum, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Gold, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(8L), 200, 30);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Titanium, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Electrum, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(16L), 200, 48);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Platinum, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Titanium, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(32L), 200, 64);
+                    GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.VanadiumGallium, 1L), GT_OreDictUnificator.get(OrePrefixes.wire, Materials.Platinum, 1L), GT_Utility.getIntegratedCircuit(1)}, tMat.getMolten(16L * tMultiplier / 2L), ItemList.RC_ShuntingWire.get(64L), 200, 120);
+                }
+            }
+        }
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Aluminium, 4L), GT_ModHandler.getIC2Item("generator", 1L), GT_ModHandler.getIC2Item("waterMill", 2L), 6400, 8);
 
         GT_Values.RA.addAssemblerRecipe(GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Iron, 5L), new ItemStack(Blocks.chest, 1, 32767), new ItemStack(Blocks.hopper), 800, 2);
