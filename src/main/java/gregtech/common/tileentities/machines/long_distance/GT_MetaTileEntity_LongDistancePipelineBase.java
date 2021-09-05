@@ -105,6 +105,7 @@ public abstract class GT_MetaTileEntity_LongDistancePipelineBase extends GT_Meta
         final IGregTechTileEntity gt_tile = getBaseMetaTileEntity();
         if (gt_tile == null || !gt_tile.isAllowedToWork() || gt_tile.isClientSide()) return false;
         World world = gt_tile.getWorld();
+        if (world == null) return false;
         
         if (mTargetPos == null) {
             // We don't have a target position, scan the pipes
