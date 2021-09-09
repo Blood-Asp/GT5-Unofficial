@@ -226,13 +226,22 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                                             }
                                             return false;
                                         }
-                                    } else {
-                                        if (config.containsKey(tBlock.getUnlocalizedName()))
-                                            otherBlocks.compute(tBlock.getUnlocalizedName(), (k,v) -> v == null ? 1 : v + 1 );
+                                    }
+                                    else {
+                                        String key = tBlock.getUnlocalizedName() + ":"+ tMeta;
+                                        if (config.containsKey(key)) { // check with meta first
+                                            otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
+                                        }
                                         else {
-                                            if (debugCleanroom)
-                                                GT_Log.out.println("Cleanroom: not allowed block " + tBlock.getUnlocalizedName());
-                                            return false;
+                                            key = tBlock.getUnlocalizedName();
+                                            if (config.containsKey(key)) {
+                                                otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
+                                            }
+                                            else {
+                                                if (debugCleanroom)
+                                                    GT_Log.out.println("Cleanroom: not allowed block " + tBlock.getUnlocalizedName());
+                                                return false;
+                                            }
                                         }
                                     }
                                 }
@@ -361,34 +370,51 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
     private static class ConfigEntry {
         int percentage;
         int allowedCount;
-        ConfigEntry(int percentage, int count) {
+        int meta;
+        ConfigEntry(int percentage, int count, int meta) {
             this.percentage = percentage;
             this.allowedCount = count;
+            this.meta = meta;
         }
     }
     private final static HashMap<String, ConfigEntry> config = new HashMap<>();
 
     private static final String category = "cleanroom_allowed_blocks";
+    private static final int wildcard_meta = Short.MAX_VALUE;
 
     private static void setDefaultConfigValues(Configuration cfg) {
         cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Name","blockAlloyGlass");
         cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Percentage",5);
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Name","BW_GlasBlocks");
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Percentage",50);
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Meta",0);
         cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Name","BW_GlasBlocks");
         cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Percentage",100);
         cfg.get("cleanroom_allowed_blocks.elevator", "Name","tile.openblocks.elevator");
         cfg.get("cleanroom_allowed_blocks.elevator", "Count",1);
         cfg.get("cleanroom_allowed_blocks.travel_anchor", "Name","tile.blockTravelAnchor");
         cfg.get("cleanroom_allowed_blocks.travel_anchor", "Count",1);
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Name","tile.blockCosmeticOpaque");
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Meta",2);
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Percentage",50);
     }
     public static void loadConfig(Configuration cfg) {
         if (!cfg.hasCategory(category))
             setDefaultConfigValues(cfg);
         for (ConfigCategory cc : cfg.getCategory(category).getChildren()) {
             String name = cc.get("Name").getString();
-            if (cc.containsKey("Count"))
-                config.put(name, new ConfigEntry(0, cc.get("Count").getInt()));
-            else if (cc.containsKey("Percentage"))
-                config.put(name, new ConfigEntry(cc.get("Percentage").getInt(), 0));
+            if (cc.containsKey("Count")) {
+                if (cc.containsKey("Meta"))
+                    config.put(name+":"+cc.get("Meta").getInt(), new ConfigEntry(0, cc.get("Count").getInt(), cc.get("Meta").getInt()));
+                else
+                    config.put(name, new ConfigEntry(0, cc.get("Count").getInt(), wildcard_meta));
+            }
+            else if (cc.containsKey("Percentage")) {
+                if (cc.containsKey("Meta"))
+                    config.put(name+":"+cc.get("Meta").getInt(), new ConfigEntry(cc.get("Percentage").getInt(), 0, cc.get("Meta").getInt()));
+                else
+                    config.put(name, new ConfigEntry(cc.get("Percentage").getInt(), 0, wildcard_meta));
+            }
         }
     }
 }
