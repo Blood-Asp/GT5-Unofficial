@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.List;
 
 import static gregtech.api.enums.GT_Values.MOD_ID;
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
 
 public class ItemDrop extends Item {
 	@SideOnly(Side.CLIENT)
@@ -104,7 +105,7 @@ public class ItemDrop extends Item {
 		addProcessLV(tDrop, new FluidStack(FluidRegistry.getFluid("ic2hotcoolant"), 100), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), 3000, 8);
 		RecipeManagers.squeezerManager.addRecipe(40, new ItemStack[]{tDrop}, new FluidStack(FluidRegistry.getFluid("ic2hotcoolant"), 100), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 2), 30);
 		tDrop = getStackForType(DropType.SNOW_QUEEN);
-		addProcessMV(tDrop, Materials.FierySteel.getFluid(200L), GT_ModHandler.getModItem("dreamcraft", "SnowQueenBloodDrop", 1L, 0), 1500, 48);
+		addProcessMV(tDrop, Materials.FierySteel.getFluid(200L), GT_ModHandler.getModItem(MOD_ID_DC, "SnowQueenBloodDrop", 1L, 0), 1500, 48);
 		tDrop = getStackForType(DropType.LAPIS);
 		addProcessLV(tDrop,new FluidStack(FluidRegistry.getFluid("ic2coolant"), 200), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), 5000, 1200,2);
 		RecipeManagers.squeezerManager.addRecipe(400, new ItemStack[]{tDrop}, new FluidStack(FluidRegistry.getFluid("ic2coolant"), 100), GT_ModHandler.getModItem("MagicBees", "propolis", 1L, 3), 30);

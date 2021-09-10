@@ -12,6 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
+
 public class GT_Loader_OreDictionary implements Runnable {
     @Override
     public void run() {
@@ -214,14 +216,14 @@ public class GT_Loader_OreDictionary implements Runnable {
         GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Steel, GT_ModHandler.getModItem("IC2","itemCasing", 1L, 5));
         GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Lead, GT_ModHandler.getModItem("IC2","itemCasing", 1L, 6));
 
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Osmium, GT_ModHandler.getModItem("dreamcraft","item.OsmiumItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Aluminium, GT_ModHandler.getModItem("dreamcraft","item.AluminiumItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.StainlessSteel, GT_ModHandler.getModItem("dreamcraft","item.StainlessSteelItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Tungsten, GT_ModHandler.getModItem("dreamcraft","item.TungstenItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Neutronium, GT_ModHandler.getModItem("dreamcraft","item.NeutroniumItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.TungstenSteel, GT_ModHandler.getModItem("dreamcraft","item.TungstenSteelItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Iridium, GT_ModHandler.getModItem("dreamcraft","item.IridiumItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Titanium, GT_ModHandler.getModItem("dreamcraft","item.TitaniumItemCasing", 1L, 0));
-        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Chrome, GT_ModHandler.getModItem("dreamcraft","item.ChromeItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Osmium, GT_ModHandler.getModItem(MOD_ID_DC,"item.OsmiumItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Aluminium, GT_ModHandler.getModItem(MOD_ID_DC,"item.AluminiumItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.StainlessSteel, GT_ModHandler.getModItem(MOD_ID_DC,"item.StainlessSteelItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Tungsten, GT_ModHandler.getModItem(MOD_ID_DC,"item.TungstenItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Neutronium, GT_ModHandler.getModItem(MOD_ID_DC,"item.NeutroniumItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.TungstenSteel, GT_ModHandler.getModItem(MOD_ID_DC,"item.TungstenSteelItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Iridium, GT_ModHandler.getModItem(MOD_ID_DC,"item.IridiumItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Titanium, GT_ModHandler.getModItem(MOD_ID_DC,"item.TitaniumItemCasing", 1L, 0));
+        GT_OreDictUnificator.registerOre(OrePrefixes.itemCasing, Materials.Chrome, GT_ModHandler.getModItem(MOD_ID_DC,"item.ChromeItemCasing", 1L, 0));
        }
 }
