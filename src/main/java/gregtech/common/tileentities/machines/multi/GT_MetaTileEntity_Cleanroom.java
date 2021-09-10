@@ -21,11 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.debugCleanroom;
-import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.*;
 
 public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBase {
     private int mHeight = -1;
@@ -48,10 +44,12 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addMachineType("Cleanroom")
                 .addInfo("Controller block for the Cleanroom")
-                .addInfo("Consumes 40 EU/t when first turned on and 4 EU/t once at 100% efficiency when not overclocked")//?
+                .addInfo("Consumes 40 EU/t when first turned on")
+                .addInfo("and 4 EU/t once at 100% efficiency when not overclocked")//?
                 .addInfo("An energy hatch accepts up to 2A, so you can use 2A LV or 1A MV")
                 .addInfo("2 LV batteries + 1 LV generator or 1 MV generator")//?
-                .addInfo("Time required to reach full efficiency is propotional to the height of empty space within")
+                .addInfo("Time required to reach full efficiency is proportional to")
+                .addInfo("the height of empty space within")
                 .addInfo("Make sure your Energy Hatch matches! ?")
                 .addSeparator()
                 .beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true)
