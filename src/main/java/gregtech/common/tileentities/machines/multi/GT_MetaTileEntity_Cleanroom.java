@@ -1,5 +1,8 @@
 package gregtech.common.tileentities.machines.multi;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
@@ -17,6 +20,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
@@ -89,7 +94,7 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
         int mDoorCount = 0;
         int mHullCount = 0;
         int mPlascreteCount = 0;
-        int mGlassCount = 0;
+        HashMap<String, Integer> otherBlocks = new HashMap<>();
         boolean doorState = false;
         this.mUpdate = 100;
 
@@ -184,8 +189,6 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                             }
                         } else if (tBlock == GregTech_API.sBlockReinforced && tMeta == 2) {
                             mPlascreteCount++;
-                        } else if (tBlock != null && tBlock.getUnlocalizedName().equals("blockAlloyGlass")) {
-                            ++mGlassCount;
                         } else {
                             IGregTechTileEntity tTileEntity = aBaseMetaTileEntity.getIGregTechTileEntityOffset(dX, dY, dZ);
                             if ((!this.addMaintenanceToMachineList(tTileEntity, 210)) && (!this.addEnergyInputToMachineList(tTileEntity, 210))) {
@@ -200,32 +203,44 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                                     }
                                     mDoorCount++;
                                 } else {
-                                    if (tTileEntity == null) {
-                                        if (debugCleanroom) {
-                                            GT_Log.out.println(
-                                                    "Cleanroom: Missing block? Not a tTileEntity"
-                                            );
-                                        }
-                                        return false;
-                                    }
-                                    IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
-                                    if (aMetaTileEntity == null) {
-                                        if (debugCleanroom) {
-                                            GT_Log.out.println(
+                                    if (tTileEntity != null) {
+                                        IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
+                                        if (aMetaTileEntity == null) {
+                                            if (debugCleanroom) {
+                                                GT_Log.out.println(
                                                     "Cleanroom: Missing block? Not a aMetaTileEntity"
-                                            );
+                                                );
+                                            }
+                                            return false;
                                         }
-                                        return false;
+                                        if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicHull) {
+                                            mHullCount++;
+                                        }
+                                        else {
+                                            if (debugCleanroom) {
+                                                GT_Log.out.println(
+                                                    "Cleanroom: Incorrect GT block? " + tBlock.getUnlocalizedName()
+                                                );
+                                            }
+                                            return false;
+                                        }
                                     }
-                                    if (aMetaTileEntity instanceof GT_MetaTileEntity_BasicHull) {
-                                        mHullCount++;
-                                    } else {
-                                        if (debugCleanroom) {
-                                            GT_Log.out.println(
-                                                    "Cleanroom: Incorrect block?"
-                                            );
+                                    else {
+                                        String key = tBlock.getUnlocalizedName() + ":"+ tMeta;
+                                        if (config.containsKey(key)) { // check with meta first
+                                            otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
                                         }
-                                        return false;
+                                        else {
+                                            key = tBlock.getUnlocalizedName();
+                                            if (config.containsKey(key)) {
+                                                otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
+                                            }
+                                            else {
+                                                if (debugCleanroom)
+                                                    GT_Log.out.println("Cleanroom: not allowed block " + tBlock.getUnlocalizedName());
+                                                return false;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -234,8 +249,19 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
                 }
             }
         }
-        if (this.mMaintenanceHatches.size() != 1 || this.mEnergyHatches.size() != 1 || mDoorCount != 2 || mHullCount > 10) {
+        if (this.mMaintenanceHatches.size() != 1 || this.mEnergyHatches.size() != 1 || mDoorCount > 2 || mHullCount > 10) {
             return false;
+        }
+        if (mPlascreteCount < 20)
+            return false;
+        float ratio = (((float) mPlascreteCount) / 100f);
+        for (Map.Entry<String, Integer> e : otherBlocks.entrySet()) {
+            ConfigEntry ce = config.get(e.getKey());
+            if (ce.allowedCount > 0) { // count has priority
+                if (e.getValue() > ce.allowedCount)
+                    return false;
+            } else if (e.getValue() > ratio * ce.percentage)
+                return false;
         }
 
         setCallbacks(x, y, z, aBaseMetaTileEntity);
@@ -247,12 +273,8 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
             byte t = (byte) Math.max(1, (byte) (15 / (10000f / this.mEfficiency)));
             aBaseMetaTileEntity.setInternalOutputRedstoneSignal(i, t);
         }
-
-        float ratio = (((float) mPlascreteCount) / 100f) * GT_Values.cleanroomGlass;
-
         this.mHeight = -y;
-
-        return mPlascreteCount >= 20 && mGlassCount < (int) Math.floor(ratio);
+        return true;
     }
 
     private void setCallbacks(int x, int y, int z, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -341,5 +363,56 @@ public class GT_MetaTileEntity_Cleanroom extends GT_MetaTileEntity_MultiBlockBas
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
+    }
+
+    private static class ConfigEntry {
+        int percentage;
+        int allowedCount;
+        int meta;
+        ConfigEntry(int percentage, int count, int meta) {
+            this.percentage = percentage;
+            this.allowedCount = count;
+            this.meta = meta;
+        }
+    }
+    private final static HashMap<String, ConfigEntry> config = new HashMap<>();
+
+    private static final String category = "cleanroom_allowed_blocks";
+    private static final int wildcard_meta = Short.MAX_VALUE;
+
+    private static void setDefaultConfigValues(Configuration cfg) {
+        cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Name","blockAlloyGlass");
+        cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Percentage",5);
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Name","BW_GlasBlocks");
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Percentage",50);
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Meta",0);
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Name","BW_GlasBlocks");
+        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Percentage",100);
+        cfg.get("cleanroom_allowed_blocks.elevator", "Name","tile.openblocks.elevator");
+        cfg.get("cleanroom_allowed_blocks.elevator", "Count",1);
+        cfg.get("cleanroom_allowed_blocks.travel_anchor", "Name","tile.blockTravelAnchor");
+        cfg.get("cleanroom_allowed_blocks.travel_anchor", "Count",1);
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Name","tile.blockCosmeticOpaque");
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Meta",2);
+        cfg.get("cleanroom_allowed_blocks.warded_glass", "Percentage",50);
+    }
+    public static void loadConfig(Configuration cfg) {
+        if (!cfg.hasCategory(category))
+            setDefaultConfigValues(cfg);
+        for (ConfigCategory cc : cfg.getCategory(category).getChildren()) {
+            String name = cc.get("Name").getString();
+            if (cc.containsKey("Count")) {
+                if (cc.containsKey("Meta"))
+                    config.put(name+":"+cc.get("Meta").getInt(), new ConfigEntry(0, cc.get("Count").getInt(), cc.get("Meta").getInt()));
+                else
+                    config.put(name, new ConfigEntry(0, cc.get("Count").getInt(), wildcard_meta));
+            }
+            else if (cc.containsKey("Percentage")) {
+                if (cc.containsKey("Meta"))
+                    config.put(name+":"+cc.get("Meta").getInt(), new ConfigEntry(cc.get("Percentage").getInt(), 0, cc.get("Meta").getInt()));
+                else
+                    config.put(name, new ConfigEntry(cc.get("Percentage").getInt(), 0, wildcard_meta));
+            }
+        }
     }
 }
