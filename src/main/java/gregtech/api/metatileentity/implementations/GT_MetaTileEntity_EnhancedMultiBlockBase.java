@@ -50,7 +50,8 @@ public abstract class GT_MetaTileEntity_EnhancedMultiBlockBase<T extends GT_Meta
 	@Override
 	public void setExtendedFacing(ExtendedFacing newExtendedFacing) {
 		if (mExtendedFacing != newExtendedFacing) {
-			stopMachine();
+			if(mMachine)
+				stopMachine();
 			mExtendedFacing = newExtendedFacing;
 			IGregTechTileEntity base = getBaseMetaTileEntity();
 			mMachine = false;
