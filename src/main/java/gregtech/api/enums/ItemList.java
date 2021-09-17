@@ -780,6 +780,7 @@ public enum ItemList implements IItemContainer {
     Casing_Grate,
     Casing_Vent,
     Casing_RadiationProof,
+    Casing_AdvancedRadiationProof,
     Casing_Firebox_Bronze,
     Casing_Firebox_Steel,
     Casing_Firebox_TungstenSteel,
