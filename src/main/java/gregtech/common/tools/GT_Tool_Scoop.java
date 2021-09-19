@@ -6,6 +6,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.common.items.behaviors.Behaviour_None;
 import gregtech.common.items.behaviors.Behaviour_Scoop;
 import net.minecraft.block.Block;
@@ -91,8 +92,8 @@ public class GT_Tool_Scoop extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("scoop"))) || (aBlock.getMaterial() == sBeeHiveMaterial);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock , aMetaData ,"scoop")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock ,sBeeHiveMaterial);
     }
 
     @Override
