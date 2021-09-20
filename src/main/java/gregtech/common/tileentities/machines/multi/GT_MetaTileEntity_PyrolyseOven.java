@@ -27,6 +27,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUn
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
@@ -43,8 +44,8 @@ public class GT_MetaTileEntity_PyrolyseOven extends GT_MetaTileEntity_EnhancedMu
 
     private static IStructureDefinition<GT_MetaTileEntity_PyrolyseOven> createStructureDefinition() {
         IStructureElement<GT_MetaTileEntity_PyrolyseOven> tCasingElement =
-                Loader.isModLoaded("dreamcraft") ?
-                        ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2) :
+                Loader.isModLoaded(MOD_ID_DC) ?
+                        ofBlockUnlocalizedName(MOD_ID_DC, "gt.blockcasingsNH", 2) :
                         ofBlock(GregTech_API.sBlockCasings1, 0);
 
         return StructureDefinition.<GT_MetaTileEntity_PyrolyseOven>builder()

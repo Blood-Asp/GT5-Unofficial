@@ -613,7 +613,12 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public static final GT_Recipe_Map sChemicalRecipes = new GT_Recipe_Map(new HashSet<>(1170), "gt.recipe.chemicalreactor", "Chemical Reactor", null, RES_PATH_GUI + "basicmachines/ChemicalReactor", 2, 2, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sMultiblockChemicalRecipes = new GT_Recipe_Map_LargeChemicalReactor();
         public static final GT_Recipe_Map sDistillationRecipes = new GT_Recipe_Map_DistillationTower();
-        public static final GT_Recipe_Map sCrakingRecipes = new GT_Recipe_Map(new HashSet<>(70), "gt.recipe.craker", "Oil Cracker", null, RES_PATH_GUI + "basicmachines/OilCracker", 1, 1, 1, 2, 1, E, 1, E, true, true);
+        public static final GT_Recipe_Map_OilCracker sCrackingRecipes = new GT_Recipe_Map_OilCracker();
+        /**
+         * Use sCrackingRecipes instead
+         */
+        @Deprecated
+        public static final GT_Recipe_Map sCrakingRecipes = sCrackingRecipes;
         public static final GT_Recipe_Map sPyrolyseRecipes = new GT_Recipe_Map(new HashSet<>(150), "gt.recipe.pyro", "Pyrolyse Oven", null, RES_PATH_GUI + "basicmachines/Default", 2, 1, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sWiremillRecipes = new GT_Recipe_Map(new HashSet<>(450), "gt.recipe.wiremill", "Wiremill", null, RES_PATH_GUI + "basicmachines/Wiremill", 1, 1, 1, 0, 1, E, 1, E, true, true);
         public static final GT_Recipe_Map sBenderRecipes = new GT_Recipe_Map(new HashSet<>(5000), "gt.recipe.metalbender", "Bending Machine", null, RES_PATH_GUI + "basicmachines/Bender", 2, 1, 2, 0, 1, E, 1, E, true, true);
@@ -1838,6 +1843,26 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
                   }
 
            	}
+    }
+
+    public static class GT_Recipe_Map_OilCracker extends GT_Recipe_Map {
+        private final Set<String> mValidCatalystFluidNames = new HashSet<>();
+        public GT_Recipe_Map_OilCracker() {
+            super(new HashSet<>(70), "gt.recipe.craker", "Oil Cracker", null, RES_PATH_GUI + "basicmachines/OilCracker", 1, 1, 1, 2, 1, E, 1, E, true, true);
+        }
+
+        @Override
+        public GT_Recipe add(GT_Recipe aRecipe) {
+            GT_Recipe ret = super.add(aRecipe);
+            if (ret != null && ret.mFluidInputs != null && ret.mFluidInputs.length>1 && ret.mFluidInputs[1] != null) {
+                mValidCatalystFluidNames.add(ret.mFluidInputs[1].getFluid().getName());
+            }
+            return ret;
+        }
+
+        public boolean isValidCatalystFluid(FluidStack aFluidStack) {
+            return mValidCatalystFluidNames.contains(aFluidStack.getFluid().getName());
+        }
     }
 
     public static class GT_Recipe_WithAlt extends GT_Recipe {

@@ -19,6 +19,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import java.util.List;
 
 import static gregtech.api.enums.GT_Values.MOD_ID;
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
 
 public class ItemPropolis extends Item {
 	@SideOnly(Side.CLIENT)
@@ -81,9 +82,9 @@ public class ItemPropolis extends Item {
 		tPropolis = getStackForType(PropolisType.Stardust);
 		addProcessHV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "stardust", 1, 0));
 		tPropolis = getStackForType(PropolisType.Ectoplasma);
-		addProcessEV(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.EctoplasmaChip", 1, 0));
+		addProcessEV(tPropolis, GT_ModHandler.getModItem(MOD_ID_DC, "item.EctoplasmaChip", 1, 0));
 		tPropolis = getStackForType(PropolisType.Arcaneshard);
-		addProcessEV(tPropolis, GT_ModHandler.getModItem("dreamcraft", "item.ArcaneShardChip", 1, 0));
+		addProcessEV(tPropolis, GT_ModHandler.getModItem(MOD_ID_DC, "item.ArcaneShardChip", 1, 0));
 		tPropolis = getStackForType(PropolisType.Dragonessence);
 		addProcessIV(tPropolis, GT_ModHandler.getModItem("HardcoreEnderExpansion", "essence", 16, 0));
 		tPropolis = getStackForType(PropolisType.Enderman);

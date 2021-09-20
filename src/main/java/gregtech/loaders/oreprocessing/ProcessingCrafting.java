@@ -10,6 +10,8 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
+import static gregtech.api.enums.GT_Values.MOD_ID_DC;
+
 public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeRegistrator {
     public ProcessingCrafting() {
         OrePrefixes.crafting.add(this);
@@ -62,7 +64,7 @@ public class ProcessingCrafting implements gregtech.api.interfaces.IOreRecipeReg
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer.get(1), GT_Utility.copyAmount(0L, aStack), ItemList.Circuit_Wafer_ILC.get(1), 1200, 120, false);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer2.get(1), GT_Utility.copyAmount(0L, aStack), ItemList.Circuit_Wafer_ILC.get(4), 900, 480, true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer3.get(1), GT_Utility.copyAmount(0L, aStack), ItemList.Circuit_Wafer_ILC.get(8), 600, 1920, true);
-                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.RedAlloy, 1L), GT_Utility.copyAmount(0L, aStack), GT_ModHandler.getModItem("dreamcraft", "item.EtchedLowVoltageWiring", 1L, 0), 200, 16);
+                GT_Values.RA.addLaserEngraverRecipe(GT_OreDictUnificator.get(OrePrefixes.foil, Materials.RedAlloy, 1L), GT_Utility.copyAmount(0L, aStack), GT_ModHandler.getModItem(MOD_ID_DC, "item.EtchedLowVoltageWiring", 1L, 0), 200, 16);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer4.get(1), GT_Utility.copyAmount(0L, aStack), ItemList.Circuit_Wafer_SoC2.get(2), 1800, 7680, true);
                 GT_Values.RA.addLaserEngraverRecipe(ItemList.Circuit_Silicon_Wafer5.get(1), GT_Utility.copyAmount(0L, aStack), ItemList.Circuit_Wafer_SoC2.get(4), 1800, 30720, true);
                 break;
