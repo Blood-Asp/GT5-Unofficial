@@ -4,6 +4,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.common.items.behaviors.Behaviour_Screwdriver;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -107,8 +108,9 @@ public class GT_Tool_Soldering_Iron extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("soldering_iron"))) || (aBlock.getMaterial() == Material.circuits);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "soldering_iron")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock, Material.circuits);
+
     }
 
     @Override
