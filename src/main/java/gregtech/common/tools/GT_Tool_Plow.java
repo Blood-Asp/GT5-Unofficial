@@ -2,6 +2,7 @@ package gregtech.common.tools;
 
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -32,8 +33,9 @@ public class GT_Tool_Plow extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("plow"))) || (aBlock.getMaterial() == Material.snow) || (aBlock.getMaterial() == Material.craftedSnow);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock , aMetaData ,"plow")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock ,Material.snow ,Material.craftedSnow);
+
     }
 
     @Override

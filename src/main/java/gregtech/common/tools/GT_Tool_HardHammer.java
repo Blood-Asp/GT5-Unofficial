@@ -5,6 +5,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
 import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.behaviors.Behaviour_Prospecting;
 import net.minecraft.block.Block;
@@ -114,8 +115,13 @@ public class GT_Tool_HardHammer extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || ((tTool.equals("hammer")) || (tTool.equals("pickaxe")))) || (aBlock.getMaterial() == Material.rock) || (aBlock.getMaterial() == Material.glass) || (aBlock.getMaterial() == Material.ice) || (aBlock.getMaterial() == Material.packedIce) || (GT_Recipe.GT_Recipe_Map.sHammerRecipes.containsInput(new ItemStack(aBlock, 1, aMetaData)));
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "hammer", "pickaxe")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,
+                Material.rock,
+                Material.glass,
+                Material.ice,
+                Material.packedIce)
+                || GT_Recipe.GT_Recipe_Map.sHammerRecipes.containsInput(new ItemStack(aBlock, 1, aMetaData));
     }
 
     @Override

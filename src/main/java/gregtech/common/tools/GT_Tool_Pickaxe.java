@@ -4,6 +4,7 @@ import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -87,8 +88,13 @@ public class GT_Tool_Pickaxe extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || (tTool.equals("pickaxe"))) || (aBlock.getMaterial() == Material.rock) || (aBlock.getMaterial() == Material.iron) || (aBlock.getMaterial() == Material.anvil) || (aBlock.getMaterial() == Material.glass);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock , aMetaData ,"pickaxe")//
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,//
+                Material.rock,
+                Material.iron,
+                Material.anvil,
+                Material.glass
+        );
     }
 
     @Override

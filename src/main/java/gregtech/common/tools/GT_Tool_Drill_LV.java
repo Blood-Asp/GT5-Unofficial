@@ -5,6 +5,7 @@ import gregtech.api.GregTech_API;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -88,8 +89,19 @@ public class GT_Tool_Drill_LV extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || ((tTool.equals("pickaxe")) || (tTool.equals("shovel")))) || (aBlock.getMaterial() == Material.rock) || (aBlock.getMaterial() == Material.iron) || (aBlock.getMaterial() == Material.anvil) || (aBlock.getMaterial() == Material.sand) || (aBlock.getMaterial() == Material.grass) || (aBlock.getMaterial() == Material.ground) || (aBlock.getMaterial() == Material.snow) || (aBlock.getMaterial() == Material.clay) || (aBlock.getMaterial() == Material.glass);
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock, aMetaData, "pickaxe", "shovel")
+                || GT_ToolHarvestHelper.isAppropriateMaterial(aBlock,
+                Material.rock,
+                Material.iron,
+                Material.anvil,
+                Material.sand,
+                Material.grass,
+                Material.ground,
+                Material.snow,
+                Material.clay,
+                Material.glass
+        );
+
     }
 
     @Override
