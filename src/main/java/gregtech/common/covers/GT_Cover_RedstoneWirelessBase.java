@@ -36,7 +36,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
             aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | (((Integer)GT_Utility.stackToInt(aPlayer.inventory.getCurrentItem())).hashCode() & PUBLIC_MASK);
 
             aTileEntity.setCoverDataAtSide(aSide, aCoverVariable);
-            GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
+            GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + (aCoverVariable & PUBLIC_MASK));
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ public abstract class GT_Cover_RedstoneWirelessBase extends GT_CoverBehavior {
                 aCoverVariable = (aCoverVariable & (PRIVATE_MASK | CHECKBOX_MASK)) | tPublicChannel;
             }
         }
-        GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + aCoverVariable);
+        GT_Utility.sendChatToPlayer(aPlayer, trans("081", "Frequency: ") + (aCoverVariable & PUBLIC_MASK));
         return aCoverVariable;
     }
 
