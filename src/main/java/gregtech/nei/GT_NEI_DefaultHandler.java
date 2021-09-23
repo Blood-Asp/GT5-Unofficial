@@ -12,6 +12,7 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
 import gregtech.api.objects.ItemData;
@@ -106,6 +107,14 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
                 }
             }
         }
+        FluidStack tFluidStack = GT_Utility.getFluidFromDisplayStack(aResult);
+        if (tFluidStack != null) {
+            for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+                if (tData.fluid.isFluidEqual(tFluidStack)) {
+                    tResults.add(GT_Utility.copyOrNull(tData.filledContainer));
+                }
+            }
+        }
         for (GT_Recipe tRecipe : getSortedRecipes()) {
             if (!tRecipe.mHidden) {
                 CachedDefaultRecipe tNEIRecipe = new CachedDefaultRecipe(tRecipe);
@@ -136,6 +145,14 @@ public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
             tInputs.add(GT_Utility.getFluidDisplayStack(tFluid, false));
             for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
                 if (tData.fluid.isFluidEqual(tFluid)) {
+                    tInputs.add(GT_Utility.copyOrNull(tData.filledContainer));
+                }
+            }
+        }
+        FluidStack tFluidStack = GT_Utility.getFluidFromDisplayStack(aInput);
+        if (tFluidStack != null) {
+            for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
+                if (tData.fluid.isFluidEqual(tFluidStack)) {
                     tInputs.add(GT_Utility.copyOrNull(tData.filledContainer));
                 }
             }
