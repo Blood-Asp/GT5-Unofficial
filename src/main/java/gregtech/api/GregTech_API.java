@@ -353,6 +353,7 @@ public class GregTech_API {
         sSoundList.put(106, aTextIC2Lower + ":" + "tools.drill.DrillSoft");
         sSoundList.put(107, aTextIC2Lower + ":" + "tools.drill.DrillHard");
         sSoundList.put(108, aTextIC2Lower + ":" + "tools.ODScanner");
+        sSoundList.put(109, aTextIC2Lower + ":" + "tools.InsulationCutters");
 
         sSoundList.put(200, aTextIC2Lower + ":" + "machines.ExtractorOp");
         sSoundList.put(201, aTextIC2Lower + ":" + "machines.MaceratorOp");

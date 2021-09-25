@@ -20,6 +20,7 @@ import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GT_Recipe.GT_Recipe_Map.sCrakingRecipes;
+        return GT_Recipe.GT_Recipe_Map.sCrackingRecipes;
     }
 
     @Override
@@ -140,7 +141,7 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
                 getBaseMetaTileEntity(),
                 false,
                 gregtech.api.enums.GT_Values.V[tTier],
-                tFluidInputs ,
+                tFluidInputs,
                 mInventory[1]
         );
 
@@ -327,14 +328,15 @@ public class GT_MetaTileEntity_OilCracker extends GT_MetaTileEntity_EnhancedMult
         for (GT_MetaTileEntity_Hatch_Input tHatch : mInputHatches) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch) && tHatch.getFillableStack() != null) {
-                rList.add(tHatch.getFillableStack());
+                if (!GT_Recipe.GT_Recipe_Map.sCrackingRecipes.isValidCatalystFluid(tHatch.getFillableStack()))
+                    rList.add(tHatch.getFillableStack());
             }
         }
         for (GT_MetaTileEntity_Hatch_Input tHatch : mMiddleInputHatches) {
             tHatch.mRecipeMap = getRecipeMap();
             if (isValidMetaTileEntity(tHatch) && tHatch.getFillableStack() != null) {
                 FluidStack tStack = tHatch.getFillableStack();
-                if (tStack.isFluidEqual(GT_ModHandler.getSteam(1000)) || tStack.isFluidEqual(Materials.Hydrogen.getGas(1000))) {
+                if (GT_Recipe.GT_Recipe_Map.sCrackingRecipes.isValidCatalystFluid(tStack)) {
                     rList.add(tStack);
                 }
             }

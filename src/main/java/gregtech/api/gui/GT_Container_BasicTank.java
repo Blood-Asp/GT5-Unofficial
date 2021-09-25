@@ -42,7 +42,7 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
                  * While a logical client don't really need to process fluid cells upon click (it could have just wait
                  * for server side to send the result), doing so would result in every fluid interaction having a
                  * noticeable delay between clicking and changes happening even on single player.
-                 * I'd imagine this delay to get only more severe when playing MP over ethernet, which would have much more latency
+                 * I'd imagine this lag to become only more severe when playing MP over ethernet, which would have much more latency
                  * than a memory connection
                  */
                 GT_MetaTileEntity_BasicTank tTank = (GT_MetaTileEntity_BasicTank) mTileEntity.getMetaTileEntity();
@@ -53,18 +53,6 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
             return handleFluidSlotClick(tDrainableAccess, aPlayer, aMouseclick == 0, true, !tTank.isDrainableStackSeparate());
         }
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
-    }
-
-    /**
-     * Expected to be called on client side only. Load fluid stacks from fluid display items as they were not sent
-     * over the network.
-     * Override this if you have more than one fluid display stack. This implementation will set drainable stack according to items
-     * in slot indexed 2.
-     *
-     */
-    protected void syncFluidFromFluidDisplayItems() {
-        GT_MetaTileEntity_BasicTank tTank = (GT_MetaTileEntity_BasicTank) mTileEntity.getMetaTileEntity();
-        tTank.setDrainableStack(GT_Utility.getFluidFromDisplayStack(tTank.getStackInSlot(2)));
     }
 
     protected static ItemStack handleFluidSlotClick(IFluidAccess aFluidAccess, EntityPlayer aPlayer, boolean aProcessFullStack, boolean aCanDrain, boolean aCanFill) {
@@ -95,37 +83,35 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
                 // cannot take AND cannot fill, why make this call then?
                 return null;
             // the slot does not allow filling, so try take some
-            return drainFluid(aFluidAccess.get(), aPlayer, aProcessFullStack);
+            return drainFluid(aFluidAccess, aPlayer, aProcessFullStack);
         } else {
             // cannot fill and there is something to take
             if (!aCanDrain)
                 // but the slot does not allow taking, so bail out
                 return null;
-            ItemStack tResultStack = drainFluid(tInputFluid, aPlayer, aProcessFullStack);
-            if (tInputFluid.amount == 0)
-                aFluidAccess.set(null);
-            return tResultStack;
+            return drainFluid(aFluidAccess, aPlayer, aProcessFullStack);
         }
     }
 
-    protected static ItemStack drainFluid(FluidStack aTankStack, EntityPlayer aPlayer, boolean aProcessFullStack) {
-        if (aTankStack == null) return null;
+    protected static ItemStack drainFluid(IFluidAccess aFluidAccess, EntityPlayer aPlayer, boolean aProcessFullStack) {
+        FluidStack tTankStack = aFluidAccess.get();
+        if (tTankStack == null) return null;
         ItemStack tStackHeld = aPlayer.inventory.getItemStack();
         ItemStack tStackSizedOne = GT_Utility.copyAmount(1, tStackHeld);
         if (tStackSizedOne == null || tStackHeld.stackSize == 0) return null;
-        int tOriginalFluidAmount = aTankStack.amount;
-        ItemStack tFilled = GT_Utility.fillFluidContainer(aTankStack, tStackSizedOne, true, false);
-        if (tFilled == null && tStackSizedOne.getItem() instanceof IFluidContainerItem) {
+        int tOriginalFluidAmount = tTankStack.amount;
+        ItemStack tFilledContainer = GT_Utility.fillFluidContainer(tTankStack, tStackSizedOne, true, false);
+        if (tFilledContainer == null && tStackSizedOne.getItem() instanceof IFluidContainerItem) {
             IFluidContainerItem tContainerItem = (IFluidContainerItem) tStackSizedOne.getItem();
-            int tFilledAmount = tContainerItem.fill(tStackSizedOne, aTankStack, true);
+            int tFilledAmount = tContainerItem.fill(tStackSizedOne, tTankStack, true);
             if (tFilledAmount > 0) {
-                tFilled = tStackSizedOne;
-                aTankStack.amount -= tFilledAmount;
+                tFilledContainer = tStackSizedOne;
+                tTankStack.amount -= tFilledAmount;
             }
         }
-        if (tFilled != null) {
+        if (tFilledContainer != null) {
             if (aProcessFullStack) {
-                int tFilledAmount = tOriginalFluidAmount - aTankStack.amount;
+                int tFilledAmount = tOriginalFluidAmount - tTankStack.amount;
                 /*
                  work out how many more items we can fill
                  one cell is already used, so account for that
@@ -133,13 +119,15 @@ public class GT_Container_BasicTank extends GT_ContainerMetaTile_Machine {
                  the user then get to decide what to do with it
                  it will not be too fancy if it spills out partially filled cells
                 */
-                int tAdditionalParallel = Math.min(tStackHeld.stackSize - 1, aTankStack.amount / tFilledAmount);
-                aTankStack.amount -= tFilledAmount * tAdditionalParallel;
-                tFilled.stackSize += tAdditionalParallel;
+                int tAdditionalParallel = Math.min(tStackHeld.stackSize - 1, tTankStack.amount / tFilledAmount);
+                tTankStack.amount -= tFilledAmount * tAdditionalParallel;
+                tFilledContainer.stackSize += tAdditionalParallel;
             }
-            replaceCursorItemStack(aPlayer, tFilled);
+            replaceCursorItemStack(aPlayer, tFilledContainer);
         }
-        return tFilled;
+        if (tTankStack.amount <= 0)
+            aFluidAccess.set(null);
+        return tFilledContainer;
     }
 
     protected static ItemStack fillFluid(IFluidAccess aFluidAccess, EntityPlayer aPlayer, FluidStack aFluidHeld, boolean aProcessFullStack) {

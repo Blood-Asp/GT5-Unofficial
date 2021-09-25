@@ -12,6 +12,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_CubicMultiBlockBase;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -26,12 +27,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.GT_Values.VN;
@@ -43,10 +43,12 @@ import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Basi
 
 public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMultiBlockBase<GT_MetaTileEntity_ProcessingArray> {
 
+    private GT_Recipe_Map mLastRecipeMap;
     private GT_Recipe mLastRecipe;
     private int tTier = 0;
     private int mMult = 0;
     private boolean mSeparate = false;
+    private String mMachineName = "";
 
     public GT_MetaTileEntity_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -67,7 +69,7 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
         tt.addMachineType("Processing Array")
                 .addInfo("Runs supplied machines as if placed in the world")
                 .addInfo("Place up to 64 singleblock GT machines into the controller")
-                .addInfo("Note that tou still need to supply power to them all")
+                .addInfo("Note that you still need to supply power to them all")
                 .addInfo("Use a screwdriver to enable separate input busses")
                 .addInfo("Maximal overclockedness of machines inside: Tier 9")
                 .addInfo("Doesn't work on certain machines, deal with it")
@@ -142,8 +144,6 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
         return aStack != null && aStack.getUnlocalizedName().startsWith("gt.blockmachines.basicmachine.");
     }
 
-    private String mMachine = "";
-
     @Override
     public boolean checkRecipe(ItemStack aStack) {
         if (!isCorrectMachinePart(mInventory[1])) {
@@ -152,18 +152,18 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
         GT_Recipe.GT_Recipe_Map map = getRecipeMap();
         if (map == null) return false;
 
-        if (!mMachine.equals(mInventory[1].getUnlocalizedName())) {
+        if (!mMachineName.equals(mInventory[1].getUnlocalizedName())) {
             mLastRecipe = null;
-            mMachine = mInventory[1].getUnlocalizedName();
+            mMachineName = mInventory[1].getUnlocalizedName();
         }
 
         int machineTier = 0;
 
         if (mLastRecipe == null) {
             try {
-                int length = mMachine.length();
+                int length = mMachineName.length();
 
-                machineTier = Integer.parseInt(mMachine.substring(length - 2));
+                machineTier = Integer.parseInt(mMachineName.substring(length - 2));
 
             } catch (NumberFormatException ignored) {
                 /* do nothing */
@@ -285,37 +285,43 @@ public class GT_MetaTileEntity_ProcessingArray extends GT_MetaTileEntity_CubicMu
             int tSize = tFOut.amount;
             tFOut.amount = tSize * i;
         }
-        tOut = clean(tOut);
         this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-        List<ItemStack> overStacks = new ArrayList<>();
-        for (ItemStack itemStack : tOut) {
-            while (itemStack != null && itemStack.getMaxStackSize() < itemStack.stackSize) {
-                ItemStack tmp = itemStack.copy();
-                tmp.stackSize = tmp.getMaxStackSize();
-                itemStack.stackSize = itemStack.stackSize - itemStack.getMaxStackSize();
-                overStacks.add(tmp);
-            }
-        }
-        if (!overStacks.isEmpty()) {
-            ItemStack[] tmp = new ItemStack[overStacks.size()];
-            tmp = overStacks.toArray(tmp);
-            tOut = ArrayUtils.addAll(tOut, tmp);
-        }
-        List<ItemStack> tSList = new ArrayList<>();
-        for (ItemStack tS : tOut) {
-            if (tS.stackSize > 0) tSList.add(tS);
-        }
-        tOut = tSList.toArray(new ItemStack[0]);
-        this.mOutputItems = tOut;
+        this.mOutputItems = Arrays.stream(tOut)
+                .filter(Objects::nonNull)
+                .flatMap(GT_MetaTileEntity_ProcessingArray::splitOversizedStack)
+                .filter(is -> is.stackSize > 0)
+                .toArray(ItemStack[]::new);
         this.mOutputFluids = new FluidStack[]{tFOut};
         updateSlots();
         return true;
     }
 
-    public static ItemStack[] clean(final ItemStack[] v) {
-        List<ItemStack> list = new ArrayList<>(Arrays.asList(v));
-        list.removeAll(Collections.singleton(null));
-        return list.toArray(new ItemStack[0]);
+    private static Stream<ItemStack> splitOversizedStack(ItemStack aStack) {
+        int tMaxStackSize = aStack.getMaxStackSize();
+        if (aStack.stackSize <= tMaxStackSize) return Stream.of(aStack);
+        int tRepeat = aStack.stackSize / tMaxStackSize;
+        aStack.stackSize = aStack.stackSize % tMaxStackSize;
+        Stream.Builder<ItemStack> tBuilder = Stream.builder();
+        tBuilder.add(aStack);
+        for (int i = 0; i < tRepeat; i++) {
+            ItemStack rStack = aStack.copy();
+            rStack.stackSize = tMaxStackSize;
+            tBuilder.add(rStack);
+        }
+        return tBuilder.build();
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (mMachine && aTick % 20 == 0) {
+            GT_Recipe_Map tCurrentMap = getRecipeMap();
+            if (tCurrentMap != mLastRecipeMap) {
+                for (GT_MetaTileEntity_Hatch_InputBus tInputBus : mInputBusses) tInputBus.mRecipeMap = tCurrentMap;
+                for (GT_MetaTileEntity_Hatch_Input tInputHatch : mInputHatches) tInputHatch.mRecipeMap = tCurrentMap;
+                mLastRecipeMap = tCurrentMap;
+            }
+        }
     }
 
     @Override

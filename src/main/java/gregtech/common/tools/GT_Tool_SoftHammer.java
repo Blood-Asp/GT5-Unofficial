@@ -3,6 +3,7 @@ package gregtech.common.tools;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.util.GT_ToolHarvestHelper;
 import gregtech.common.items.behaviors.Behaviour_SoftHammer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -100,8 +101,7 @@ public class GT_Tool_SoftHammer extends GT_Tool {
 
     @Override
     public boolean isMinableBlock(Block aBlock, byte aMetaData) {
-        String tTool = aBlock.getHarvestTool(aMetaData);
-        return aBlock.getHarvestLevel(aMetaData) != -1 &&  (tTool == null || tTool.isEmpty() || tTool.equals("softhammer"));
+        return GT_ToolHarvestHelper.isAppropriateTool(aBlock , aMetaData ,"softhammer");
     }
 
     @Override

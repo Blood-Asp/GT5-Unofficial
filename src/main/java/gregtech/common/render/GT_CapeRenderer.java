@@ -44,7 +44,7 @@ public class GT_CapeRenderer extends RenderPlayer {
             return;
         }
         try {
-            ResourceLocation tResource = null;
+            ResourceLocation tResource  = aPlayer.getLocationCape();
             if (aPlayer.getDisplayName().equalsIgnoreCase("Friedi4321")) {
                 tResource = this.mCapes[0];
             }
