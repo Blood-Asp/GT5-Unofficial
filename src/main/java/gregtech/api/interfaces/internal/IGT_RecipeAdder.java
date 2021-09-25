@@ -615,6 +615,8 @@ public interface IGT_RecipeAdder {
     boolean addAutoclaveSpaceRecipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluid, ItemStack aOutput, int aChance, int aDuration, int aEUt, boolean aCleanroom);
 
 
+    boolean addAutoclave4Recipe(ItemStack aInput, ItemStack aCircuit, FluidStack aFluidIn, FluidStack aFluidOut, ItemStack[] aOutputs, int[] aChances, int aDuration, int aEUt, boolean aCleanroom);
+
     /**
      * Adds a Recipe for the Mixer
      */
