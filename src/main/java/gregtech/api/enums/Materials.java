@@ -1369,11 +1369,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Chalcopyrite.addOreByProducts(Pyrite, Cobalt, Cadmium, Gold);
         Sphalerite.addOreByProducts(GarnetYellow, Cadmium, Gallium, Zinc);
         MeteoricIron.addOreByProducts(Iron, Nickel, Iridium, Platinum);
-        GlauconiteSand.addOreByProducts(Sodium, Aluminium, Iron);
-        Glauconite.addOreByProducts(Sodium, Aluminium, Iron);
-        Vermiculite.addOreByProducts(Iron, Aluminium, Magnesium);
-        FullersEarth.addOreByProducts(Aluminium, SiliconDioxide, Magnesium);
-        Bentonite.addOreByProducts(Aluminium, Calcium, Magnesium);
+        GlauconiteSand.addOreByProducts(Sodium, Aluminiumoxide, Iron);
+        Glauconite.addOreByProducts(Sodium, Aluminiumoxide, Iron);
+        Vermiculite.addOreByProducts(Iron, Aluminiumoxide, Magnesium);
+        FullersEarth.addOreByProducts(Aluminiumoxide, SiliconDioxide, Magnesium);
+        Bentonite.addOreByProducts(Aluminiumoxide, Calcium, Magnesium);
         Uraninite.addOreByProducts(Uranium, Thorium, Uranium235);
         Pitchblende.addOreByProducts(Thorium, Uranium, Lead);
         Galena.addOreByProducts(Sulfur, Silver, Lead);
@@ -1386,7 +1386,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Cooperite.addOreByProducts(Palladium, Nickel, Iridium);
         Cinnabar.addOreByProducts(Redstone, Sulfur, Glowstone);
         Tantalite.addOreByProducts(Manganese, Niobium, Tantalum);
-        Pollucite.addOreByProducts(Caesium, Aluminium, Rubidium);
+        Pollucite.addOreByProducts(Caesium, Aluminiumoxide, Rubidium);
         Chrysotile.addOreByProducts(Asbestos, SiliconDioxide, Magnesium);
         Asbestos.addOreByProducts(Asbestos, SiliconDioxide, Magnesium);
         Pentlandite.addOreByProducts(Iron, Sulfur, Cobalt);
@@ -1431,10 +1431,10 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Coal.addOreByProducts(Lignite, Thorium);
         Ilmenite.addOreByProducts(Iron, Rutile);
         Manganese.addOreByProducts(Chrome, Iron);
-        Sapphire.addOreByProducts(Aluminium, GreenSapphire);
-        GreenSapphire.addOreByProducts(Aluminium, Sapphire);
+        Sapphire.addOreByProducts(Aluminiumoxide, GreenSapphire);
+        GreenSapphire.addOreByProducts(Aluminiumoxide, Sapphire);
         Platinum.addOreByProducts(Nickel, Iridium);
-        Emerald.addOreByProducts(Beryllium, Aluminium);
+        Emerald.addOreByProducts(Beryllium, Aluminiumoxide);
         Olivine.addOreByProducts(Pyrope, Magnesium);
         Chrome.addOreByProducts(Iron, Magnesium);
         Chromite.addOreByProducts(Iron, Magnesium);
@@ -1447,11 +1447,11 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         VanadiumMagnetite.addOreByProducts(Magnetite, Vanadium);
         Lazurite.addOreByProducts(Sodalite, Lapis);
         Sodalite.addOreByProducts(Lazurite, Lapis);
-        Spodumene.addOreByProducts(Aluminium, Lithium);
+        Spodumene.addOreByProducts(Aluminiumoxide, Lithium);
         Ruby.addOreByProducts(Chrome, GarnetRed);
         Iridium.addOreByProducts(Platinum, Osmium);
         Pyrope.addOreByProducts(GarnetRed, Magnesium);
-        Almandine.addOreByProducts(GarnetRed, Aluminium);
+        Almandine.addOreByProducts(GarnetRed, Aluminiumoxide);
         Spessartine.addOreByProducts(GarnetRed, Manganese);
         Grossular.addOreByProducts(GarnetYellow, Calcium);
         Uvarovite.addOreByProducts(GarnetYellow, Chrome);
@@ -1519,7 +1519,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Lithium.addOreByProducts(Lithium);
         Silicon.addOreByProducts(SiliconDioxide);
         InfusedGold.addOreByProduct(Gold);
-        Cryolite.addOreByProduct(Aluminium);
+        Cryolite.addOreByProducts(Aluminiumoxide, Sodium);
     }
 
     private static void setColors() {
