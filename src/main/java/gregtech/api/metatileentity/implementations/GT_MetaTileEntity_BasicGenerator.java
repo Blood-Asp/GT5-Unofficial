@@ -206,7 +206,7 @@ public abstract class GT_MetaTileEntity_BasicGenerator extends GT_MetaTileEntity
                 } else {
                     if (mInventory[getStackDisplaySlot()] == null)
                         mInventory[getStackDisplaySlot()] = new ItemStack(Blocks.fire, 1);
-                    mInventory[getStackDisplaySlot()].setStackDisplayName("Draining internal buffer: " + (aBaseMetaTileEntity.getUniversalEnergyStored() - getMinimumStoredEU()) + " EU");
+                    mInventory[getStackDisplaySlot()].setStackDisplayName("Draining internal buffer: " + GT_Utility.formatNumbers(aBaseMetaTileEntity.getUniversalEnergyStored() - getMinimumStoredEU()) + " EU");
                 }
             } else {
                 long tFuelValue = getFuelValue(mFluid), tConsumed = consumedFluidPerOperation(mFluid);
