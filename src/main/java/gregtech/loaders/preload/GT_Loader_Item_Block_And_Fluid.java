@@ -777,4 +777,3 @@ public class GT_Loader_Item_Block_And_Fluid implements Runnable {
             GregTech_API.registerMachineBlock(GT_Utility.getBlockFromStack(GT_ModHandler.getIC2Item("reinforcedGlass", 0)), 0);
         }
 }
-
