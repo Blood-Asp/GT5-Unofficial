@@ -72,6 +72,10 @@ GT5U.machines.voidoveflow.disabled=Overflow voiding disabled
 
 GT5U.hatch.disableFilter.true=Input Filter Off
 GT5U.hatch.disableFilter.false=Input Filter On
+GT5U.hatch.disableSort.true=Sorting mode: OFF
+GT5U.hatch.disableSort.false=Sorting mode: ON
+GT5U.hatch.disableLimited.true=Limiting mode: OFF
+GT5U.hatch.disableLimited.false=Limiting mode: ON
 
 GT5U.multiblock.pollution=Pollution reduced to
 GT5U.multiblock.energy=Stored Energy
