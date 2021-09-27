@@ -172,7 +172,8 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
         super.loadNBTData(aNBT);
         disableSort = aNBT.getBoolean("disableSort");
         disableFilter = aNBT.getBoolean("disableFilter");
-        disableLimited = aNBT.getBoolean("disableLimited");
+        if(aNBT.hasKey("disableLimited"))
+            disableLimited = aNBT.getBoolean("disableLimited");
     }
 
     @Override
