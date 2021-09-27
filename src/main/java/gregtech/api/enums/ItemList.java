@@ -354,6 +354,7 @@ public enum ItemList implements IItemContainer {
     Schematic_2by2,
     Schematic_3by3,
     Schematic_Dust,
+    
     Circuit_Integrated,
     Circuit_Board_Basic,
     Circuit_Board_Advanced,
@@ -374,14 +375,25 @@ public enum ItemList implements IItemContainer {
     Circuit_Ultimate,
     Circuit_Biowarecomputer,
     Circuit_Biowaresupercomputer,
-    Rotor_LV,
-    Rotor_MV,
-    Rotor_HV,
-    Rotor_EV,
-    Rotor_IV,
-    Rotor_LuV,
-    Rotor_ZPM,
-    Rotor_UV,
+
+    //These are the fan things that get used in pumps and such. For some reason there's one for every(?) material, most sitting unused
+    //LV-IV are set in GT_Loader_Item_Block_And_Fluid. Above that is not being used. The coremod has higher tier SB recipes
+    //ULV: energy/dynamo hatch is lead, pump is potin
+    Rotor_LV,//tin
+    Rotor_MV,//bronze
+    Rotor_HV,//steel
+    Rotor_EV,//stainlesssteel
+    Rotor_IV,//tungstensteel
+    Rotor_LuV,//LuV muffler is enderium, pump (TT) is hss-s, LuV CR, LuV mixer, LuV OWP is the BW RPP, though this enum is unused 
+    Rotor_ZPM,//ZPM muffler, pump (TT) is naq alloy, ZPM CR, ZPM mixer, ZPM OWP is iridium, though this enum is unused
+    Rotor_UV,//UV muffler, pump (TT) is neutronium in TT, UV CR, UV mixer, UV OWP is osmium, though this enum is unused
+    Rotor_UHV,//UHV muffler, pump (TT) is cosmic neutronium, UHV CR, UHV OWP is osmium, UHV mixer is neutronium
+    Rotor_UEV,//pump (TT) is infinity, UEV CR UEV OWP is osmium, UEV mixer is neutronium
+    Rotor_UIV,
+    Rotor_UMV,
+    Rotor_UXV,
+    Rotor_OpV,
+    Rotor_MAX,
 
     Electric_Motor_LV,
     Electric_Motor_MV,
@@ -393,6 +405,11 @@ public enum ItemList implements IItemContainer {
     Electric_Motor_UV,
     Electric_Motor_UHV,
     Electric_Motor_UEV,
+    Electric_Motor_UIV,
+    Electric_Motor_UMV,
+    Electric_Motor_UXV,
+    Electric_Motor_OpV,
+    Electric_Motor_MAX,
 
     Electric_Pump_LV,
     Electric_Pump_MV,
@@ -404,12 +421,26 @@ public enum ItemList implements IItemContainer {
     Electric_Pump_UV,
     Electric_Pump_UHV,
     Electric_Pump_UEV,
+    Electric_Pump_UIV,
+    Electric_Pump_UMV,
+    Electric_Pump_UXV,
+    Electric_Pump_OpV,
+    Electric_Pump_MAX,
 
     Steam_Valve_LV,
     Steam_Valve_MV,
     Steam_Valve_HV,
     Steam_Valve_EV,
     Steam_Valve_IV,
+    
+    FluidRegulator_LV,
+    FluidRegulator_MV,
+    FluidRegulator_HV,
+    FluidRegulator_EV,
+    FluidRegulator_IV,
+    FluidRegulator_LuV,
+    FluidRegulator_ZPM,
+    FluidRegulator_UV,
 
     Conveyor_Module_LV,
     Conveyor_Module_MV,
@@ -421,6 +452,11 @@ public enum ItemList implements IItemContainer {
     Conveyor_Module_UV,
     Conveyor_Module_UHV,
     Conveyor_Module_UEV,
+    Conveyor_Module_UIV,
+    Conveyor_Module_UMV,
+    Conveyor_Module_UXV,
+    Conveyor_Module_OpV,
+    Conveyor_Module_MAX,
 
     Electric_Piston_LV,
     Electric_Piston_MV,
@@ -432,17 +468,11 @@ public enum ItemList implements IItemContainer {
     Electric_Piston_UV,
     Electric_Piston_UHV,
     Electric_Piston_UEV,
-
-    Field_Generator_LV,
-    Field_Generator_MV,
-    Field_Generator_HV,
-    Field_Generator_EV,
-    Field_Generator_IV,
-    Field_Generator_LuV,
-    Field_Generator_ZPM,
-    Field_Generator_UV,
-    Field_Generator_UHV,
-    Field_Generator_UEV,
+    Electric_Piston_UIV,
+    Electric_Piston_UMV,
+    Electric_Piston_UXV,
+    Electric_Piston_OpV,
+    Electric_Piston_MAX,
 
     Robot_Arm_LV,
     Robot_Arm_MV,
@@ -454,6 +484,11 @@ public enum ItemList implements IItemContainer {
     Robot_Arm_UV,
     Robot_Arm_UHV,
     Robot_Arm_UEV,
+    Robot_Arm_UIV,
+    Robot_Arm_UMV,
+    Robot_Arm_UXV,
+    Robot_Arm_OpV,
+    Robot_Arm_MAX,
 
     Emitter_LV,
     Emitter_MV,
@@ -465,6 +500,11 @@ public enum ItemList implements IItemContainer {
     Emitter_UV,
     Emitter_UHV,
     Emitter_UEV,
+    Emitter_UIV,
+    Emitter_UMV,
+    Emitter_UXV,
+    Emitter_OpV,
+    Emitter_MAX,
 
     Sensor_LV,
     Sensor_MV,
@@ -476,7 +516,28 @@ public enum ItemList implements IItemContainer {
     Sensor_UV,
     Sensor_UHV,
     Sensor_UEV,
+    Sensor_UIV,
+    Sensor_UMV,
+    Sensor_UXV,
+    Sensor_OpV,
+    Sensor_MAX,
 
+    Field_Generator_LV,
+    Field_Generator_MV,
+    Field_Generator_HV,
+    Field_Generator_EV,
+    Field_Generator_IV,
+    Field_Generator_LuV,
+    Field_Generator_ZPM,
+    Field_Generator_UV,
+    Field_Generator_UHV,
+    Field_Generator_UEV,
+    Field_Generator_UIV,
+    Field_Generator_UMV,
+    Field_Generator_UXV,
+    Field_Generator_OpV,
+    Field_Generator_MAX,
+    
     Battery_Hull_LV,
     Battery_Hull_MV,
     Battery_Hull_HV,
@@ -1563,14 +1624,6 @@ public enum ItemList implements IItemContainer {
     Block_Powderbarrel,
     GelledToluene,
 
-    FluidRegulator_LV,
-    FluidRegulator_MV,
-    FluidRegulator_HV,
-    FluidRegulator_EV,
-    FluidRegulator_IV,
-    FluidRegulator_LuV,
-    FluidRegulator_ZPM,
-    FluidRegulator_UV,
     FluidFilter,
     ItemFilter_Export,
     ItemFilter_Import,
@@ -1585,15 +1638,23 @@ public enum ItemList implements IItemContainer {
     Block_MSSFUEL,
     SFMixture,
     MSFMixture,
+    
     Depleted_Naquadah_1,
     Depleted_Naquadah_2,
     Depleted_Naquadah_4,
     NaquadahCell_1,
     NaquadahCell_2,
     NaquadahCell_4,
+    Depleted_MNq_1,
+    Depleted_MNq_2,
+    Depleted_MNq_4,
+    MNqCell_1,
+    MNqCell_2,
+    MNqCell_4,
+    
     Hatch_AutoMaintenance,
-
     Machine_Multi_Cleanroom,
+    
     Circuit_Board_Coated,
     Circuit_Board_Coated_Basic,
     Circuit_Board_Phenolic,
@@ -1723,6 +1784,7 @@ public enum ItemList implements IItemContainer {
     Machine_LuV_CircuitAssembler,
     Machine_ZPM_CircuitAssembler,
     Machine_UV_CircuitAssembler,
+    
     Circuit_Integrated_Good,
     Machine_IV_LightningRod,
     Machine_HV_LightningRod,
@@ -1739,15 +1801,8 @@ public enum ItemList implements IItemContainer {
     UV_Coil,
     UHV_Coil,
 
-    Depleted_MNq_1,
-    Depleted_MNq_2,
-    Depleted_MNq_4,
-
-    MNqCell_1,
-    MNqCell_2,
-    MNqCell_4,
-
     VOLUMETRIC_FLASK;
+	
     public static final ItemList[]
             DYE_ONLY_ITEMS = {
             Color_00,
