@@ -1,5 +1,6 @@
 package gregtech.api.util;
 
+import com.google.common.base.Stopwatch;
 import gregtech.GT_Mod;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.*;
@@ -28,52 +29,52 @@ public class GT_RecipeRegistrator {
     public static final List<Materials> sRodMaterialList = new ArrayList<Materials>();
     private static final ItemStack sMt1 = new ItemStack(Blocks.dirt, 1, 0), sMt2 = new ItemStack(Blocks.dirt, 1, 0);
     private static final String s_H = "h", s_F = "f", s_I = "I", s_P = "P", s_R = "R";
-    private static final ItemStack[][]
-            sShapes1 = new ItemStack[][]{
-            {sMt1, null, sMt1, sMt1, sMt1, sMt1, null, sMt1, null},
-            {sMt1, null, sMt1, sMt1, null, sMt1, sMt1, sMt1, sMt1},
-            {null, sMt1, null, sMt1, sMt1, sMt1, sMt1, null, sMt1},
-            {sMt1, sMt1, sMt1, sMt1, null, sMt1, null, null, null},
-            {sMt1, null, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1},
-            {sMt1, sMt1, sMt1, sMt1, null, sMt1, sMt1, null, sMt1},
-            {null, null, null, sMt1, null, sMt1, sMt1, null, sMt1},
-            {null, sMt1, null, null, sMt1, null, null, sMt2, null},
-            {sMt1, sMt1, sMt1, null, sMt2, null, null, sMt2, null},
-            {null, sMt1, null, null, sMt2, null, null, sMt2, null},
-            {sMt1, sMt1, null, sMt1, sMt2, null, null, sMt2, null},
-            {null, sMt1, sMt1, null, sMt2, sMt1, null, sMt2, null},
-            {sMt1, sMt1, null, null, sMt2, null, null, sMt2, null},
-            {null, sMt1, sMt1, null, sMt2, null, null, sMt2, null},
-            {null, sMt1, null, sMt1, null, null, null, sMt1, sMt2},
-            {null, sMt1, null, null, null, sMt1, sMt2, sMt1, null},
-            {null, sMt1, null, sMt1, null, sMt1, null, null, sMt2},
-            {null, sMt1, null, sMt1, null, sMt1, sMt2, null, null},
-            {null, sMt2, null, null, sMt1, null, null, sMt1, null},
-            {null, sMt2, null, null, sMt2, null, sMt1, sMt1, sMt1},
-            {null, sMt2, null, null, sMt2, null, null, sMt1, null},
-            {null, sMt2, null, sMt1, sMt2, null, sMt1, sMt1, null},
-            {null, sMt2, null, null, sMt2, sMt1, null, sMt1, sMt1},
-            {null, sMt2, null, null, sMt2, null, sMt1, sMt1, null},
-            {sMt1, null, null, null, sMt2, null, null, null, sMt2},
-            {null, null, sMt1, null, sMt2, null, sMt2, null, null},
-            {sMt1, null, null, null, sMt2, null, null, null, null},
-            {null, null, sMt1, null, sMt2, null, null, null, null},
-            {sMt1, sMt2, null, null, null, null, null, null, null},
-            {sMt2, sMt1, null, null, null, null, null, null, null},
-            {sMt1, null, null, sMt2, null, null, null, null, null},
-            {sMt2, null, null, sMt1, null, null, null, null, null},
-            {sMt1, sMt1, sMt1, sMt1, sMt1, sMt1, null, sMt2, null},
-            {sMt1, sMt1, null, sMt1, sMt1, sMt2, sMt1, sMt1, null},
-            {null, sMt1, sMt1, sMt2, sMt1, sMt1, null, sMt1, sMt1},
-            {null, sMt2, null, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1},
-            {sMt1, sMt1, sMt1, sMt1, sMt2, sMt1, null, sMt2, null},
-            {sMt1, sMt1, null, sMt1, sMt2, sMt2, sMt1, sMt1, null},
-            {null, sMt1, sMt1, sMt2, sMt2, sMt1, null, sMt1, sMt1},
-            {null, sMt2, null, sMt1, sMt2, sMt1, sMt1, sMt1, sMt1},
-            {sMt1, null, null, null, sMt1, null, null, null, null},
-            {null, sMt1, null, sMt1, null, null, null, null, null},
-            {sMt1, sMt1, null, sMt2, null, sMt1, sMt2, null, null},
-            {null, sMt1, sMt1, sMt1, null, sMt2, null, null, sMt2}
+    private static final RecipeShape[]
+            sShapes = new RecipeShape[]{
+            new RecipeShape(sMt1, null, sMt1, sMt1, sMt1, sMt1, null, sMt1, null),
+            new RecipeShape(sMt1, null, sMt1, sMt1, null, sMt1, sMt1, sMt1, sMt1),
+            new RecipeShape(null, sMt1, null, sMt1, sMt1, sMt1, sMt1, null, sMt1),
+            new RecipeShape(sMt1, sMt1, sMt1, sMt1, null, sMt1, null, null, null),
+            new RecipeShape(sMt1, null, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1),
+            new RecipeShape(sMt1, sMt1, sMt1, sMt1, null, sMt1, sMt1, null, sMt1),
+            new RecipeShape(null, null, null, sMt1, null, sMt1, sMt1, null, sMt1),
+            new RecipeShape(null, sMt1, null, null, sMt1, null, null, sMt2, null),
+            new RecipeShape(sMt1, sMt1, sMt1, null, sMt2, null, null, sMt2, null),
+            new RecipeShape(null, sMt1, null, null, sMt2, null, null, sMt2, null),
+            new RecipeShape(sMt1, sMt1, null, sMt1, sMt2, null, null, sMt2, null),
+            new RecipeShape(null, sMt1, sMt1, null, sMt2, sMt1, null, sMt2, null),
+            new RecipeShape(sMt1, sMt1, null, null, sMt2, null, null, sMt2, null),
+            new RecipeShape(null, sMt1, sMt1, null, sMt2, null, null, sMt2, null),
+            new RecipeShape(null, sMt1, null, sMt1, null, null, null, sMt1, sMt2),
+            new RecipeShape(null, sMt1, null, null, null, sMt1, sMt2, sMt1, null),
+            new RecipeShape(null, sMt1, null, sMt1, null, sMt1, null, null, sMt2),
+            new RecipeShape(null, sMt1, null, sMt1, null, sMt1, sMt2, null, null),
+            new RecipeShape(null, sMt2, null, null, sMt1, null, null, sMt1, null),
+            new RecipeShape(null, sMt2, null, null, sMt2, null, sMt1, sMt1, sMt1),
+            new RecipeShape(null, sMt2, null, null, sMt2, null, null, sMt1, null),
+            new RecipeShape(null, sMt2, null, sMt1, sMt2, null, sMt1, sMt1, null),
+            new RecipeShape(null, sMt2, null, null, sMt2, sMt1, null, sMt1, sMt1),
+            new RecipeShape(null, sMt2, null, null, sMt2, null, sMt1, sMt1, null),
+            new RecipeShape(sMt1, null, null, null, sMt2, null, null, null, sMt2),
+            new RecipeShape(null, null, sMt1, null, sMt2, null, sMt2, null, null),
+            new RecipeShape(sMt1, null, null, null, sMt2, null, null, null, null),
+            new RecipeShape(null, null, sMt1, null, sMt2, null, null, null, null),
+            new RecipeShape(sMt1, sMt2, null, null, null, null, null, null, null),
+            new RecipeShape(sMt2, sMt1, null, null, null, null, null, null, null),
+            new RecipeShape(sMt1, null, null, sMt2, null, null, null, null, null),
+            new RecipeShape(sMt2, null, null, sMt1, null, null, null, null, null),
+            new RecipeShape(sMt1, sMt1, sMt1, sMt1, sMt1, sMt1, null, sMt2, null),
+            new RecipeShape(sMt1, sMt1, null, sMt1, sMt1, sMt2, sMt1, sMt1, null),
+            new RecipeShape(null, sMt1, sMt1, sMt2, sMt1, sMt1, null, sMt1, sMt1),
+            new RecipeShape(null, sMt2, null, sMt1, sMt1, sMt1, sMt1, sMt1, sMt1),
+            new RecipeShape(sMt1, sMt1, sMt1, sMt1, sMt2, sMt1, null, sMt2, null),
+            new RecipeShape(sMt1, sMt1, null, sMt1, sMt2, sMt2, sMt1, sMt1, null),
+            new RecipeShape(null, sMt1, sMt1, sMt2, sMt2, sMt1, null, sMt1, sMt1),
+            new RecipeShape(null, sMt2, null, sMt1, sMt2, sMt1, sMt1, sMt1, sMt1),
+            new RecipeShape(sMt1, null, null, null, sMt1, null, null, null, null),
+            new RecipeShape(null, sMt1, null, sMt1, null, null, null, null, null),
+            new RecipeShape(sMt1, sMt1, null, sMt2, null, sMt1, sMt2, null, null),
+            new RecipeShape(null, sMt1, sMt1, sMt1, null, sMt2, null, null, sMt2)
     };
     private static final String[][] sShapesA = new String[][]{
             null,
@@ -260,14 +261,15 @@ public class GT_RecipeRegistrator {
         long tAmount = 0;
         for (MaterialStack tMaterial : aData.getAllMaterialStacks())
             tAmount += tMaterial.mAmount * tMaterial.mMaterial.getMass();
-        boolean tHide = (aData.mMaterial.mMaterial != Materials.Iron)&&(GT_Mod.gregtechproxy.mHideRecyclingRecipes);
+        boolean tHide = (aData.mMaterial.mMaterial != Materials.Iron) && (GT_Mod.gregtechproxy.mHideRecyclingRecipes);
         RA.addPulveriserRecipe(aStack, new ItemStack[]{GT_OreDictUnificator.getDust(aData.mMaterial), GT_OreDictUnificator.getDust(aData.getByProduct(0)), GT_OreDictUnificator.getDust(aData.getByProduct(1)), GT_OreDictUnificator.getDust(aData.getByProduct(2))}, null, aData.mMaterial.mMaterial==Materials.Marble ? 1 : (int) Math.max(16, tAmount / M), 4, tHide);
 
-        if (aAllowHammer) for (MaterialStack tMaterial : aData.getAllMaterialStacks())
-            if (tMaterial.mMaterial.contains(SubTag.CRYSTAL) && !tMaterial.mMaterial.contains(SubTag.METAL) && tMaterial.mMaterial != Materials.Glass) {
-                if (RA.addForgeHammerRecipe(GT_Utility.copyAmount(1, aStack), GT_OreDictUnificator.getDust(aData.mMaterial), 200, 30))
-                    break;
-            }
+        if (aAllowHammer) 
+        	for (MaterialStack tMaterial : aData.getAllMaterialStacks())
+        		if (tMaterial.mMaterial.contains(SubTag.CRYSTAL) && !tMaterial.mMaterial.contains(SubTag.METAL) && tMaterial.mMaterial != Materials.Glass) {
+        			if (RA.addForgeHammerRecipe(GT_Utility.copyAmount(1, aStack), GT_OreDictUnificator.getDust(aData.mMaterial), 200, 30))
+        				break;
+        		}
         ItemStack tDust = GT_OreDictUnificator.getDust(aData.mMaterial);
         if (tDust != null && GT_ModHandler.addPulverisationRecipe(GT_Utility.copyAmount(1, aStack), tDust, GT_OreDictUnificator.getDust(aData.getByProduct(0)), 100, GT_OreDictUnificator.getDust(aData.getByProduct(1)), 100, true)) {
             if (GregTech_API.sThaumcraftCompat != null)
@@ -278,7 +280,7 @@ public class GT_RecipeRegistrator {
     /**
      * Place Materials which you want to replace in Non-GT-Recipes here (warning HUGHE impact on loading times!)
      */
-    private final static Materials[] VANILLA_MATS = {
+    private static final Materials[] VANILLA_MATS = {
             Cobalt,
             Gold,
             Iron,
@@ -306,10 +308,7 @@ public class GT_RecipeRegistrator {
      */
     public static synchronized void registerUsagesForMaterials(String aPlate, boolean aRecipeReplacing, ItemStack... aMats) {
         for (ItemStack aMat : aMats) {
-            if (aMat == null)
-                continue;
-
-            aMat = GT_Utility.copy(aMat);
+            aMat = GT_Utility.copyOrNull(aMat);
 
             if (aMat == null)
                 continue;
@@ -326,20 +325,17 @@ public class GT_RecipeRegistrator {
             sMt2.stackSize = 1;
             Items.feather.setDamage(sMt2, 0);
 
-            for (ItemStack[] tRecipe : sShapes1) {
-                int tAmount1 = 0;
-                for (ItemStack tMat : tRecipe) {
-                    if (tMat == sMt1) tAmount1++;
-                }
-                if (aItemData != null && aItemData.hasValidPrefixMaterialData())
-                    for (ItemStack tCrafted : GT_ModHandler.getRecipeOutputsBuffered(tRecipe)) {
-                        GT_OreDictUnificator.addItemData(tCrafted, new ItemData(aItemData.mMaterial.mMaterial, aItemData.mMaterial.mAmount * tAmount1));
-//                        GT_Log.out.println("###################################################################################");
-//                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aPlate);
-//                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aMat.getUnlocalizedName());
-//                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aMat.getDisplayName());
-//                        GT_Log.out.println("###################################################################################");
+            if(aItemData != null && aItemData.hasValidPrefixMaterialData()) {
+                for (RecipeShape tRecipe : sShapes) {
+                    for (ItemStack tCrafted : GT_ModHandler.getRecipeOutputsBuffered(tRecipe.shape)) {
+                        GT_OreDictUnificator.addItemData(tCrafted, new ItemData(aItemData.mMaterial.mMaterial, aItemData.mMaterial.mAmount * tRecipe.amount1));
+                        //                        GT_Log.out.println("###################################################################################");
+                        //                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aPlate);
+                        //                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aMat.getUnlocalizedName());
+                        //                        GT_Log.out.println("registerUsagesForMaterials used aPlate: "+aMat.getDisplayName());
+                        //                        GT_Log.out.println("###################################################################################");
                     }
+                }
             }
             registerStickStuff(aPlate, aItemData, aRecipeReplacing);
         }
@@ -354,22 +350,17 @@ public class GT_RecipeRegistrator {
                 sMt2.stackSize = 1;
                 Items.feather.setDamage(sMt2, Items.feather.getDamage(tMt2));
 
-                for (int i = 0; i < sShapes1.length; i++) {
-                    ItemStack[] tRecipe = sShapes1[i];
+                for (int i = 0; i < sShapes.length; i++) {
+                    RecipeShape tRecipe = sShapes[i];
 
-                    int tAmount1 = 0, tAmount2 = 0;
-                    for (ItemStack tMat : tRecipe) {
-                        if (tMat == sMt1) tAmount1++;
-                        if (tMat == sMt2) tAmount2++;
-                    }
-                    for (ItemStack tCrafted : GT_ModHandler.getVanillyToolRecipeOutputs(tRecipe)) {
+                    for (ItemStack tCrafted : GT_ModHandler.getVanillyToolRecipeOutputs(tRecipe.shape)) {
                         if (aItemData != null && aItemData.hasValidPrefixMaterialData())
-                            GT_OreDictUnificator.addItemData(tCrafted, new ItemData(aItemData.mMaterial.mMaterial, aItemData.mMaterial.mAmount * tAmount1, new MaterialStack(tMaterial, OrePrefixes.stick.mMaterialAmount * tAmount2)));
+                            GT_OreDictUnificator.addItemData(tCrafted, new ItemData(aItemData.mMaterial.mMaterial, aItemData.mMaterial.mAmount * tRecipe.amount1, new MaterialStack(tMaterial, OrePrefixes.stick.mMaterialAmount * tRecipe.amount2)));
 
                         if (aRecipeReplacing && aPlate != null && sShapesA[i] != null && sShapesA[i].length > 1) {
                             assert aItemData != null;
                             if (GregTech_API.sRecipeFile.get(ConfigCategories.Recipes.recipereplacements, aItemData.mMaterial.mMaterial + "." + sShapesA[i][0], true)) {
-                                if (null != (tStack = GT_ModHandler.removeRecipe(tRecipe))) {
+                                if (null != (tStack = GT_ModHandler.removeRecipe(tRecipe.shape))) {
 //                                    GT_Log.out.println("###################################################################################");
 //                                    GT_Log.out.println("registerStickStuff used aPlate: "+aPlate);
 //                                    GT_Log.out.println("###################################################################################");
@@ -397,4 +388,18 @@ public class GT_RecipeRegistrator {
         return Arrays.stream(VANILLA_MATS).anyMatch(mat -> mat == materials);
     }
 
+    private static class RecipeShape {
+        private final ItemStack[] shape;
+        private int amount1;
+        private int amount2;
+
+        public RecipeShape(ItemStack... shape) {
+            this.shape = shape;
+
+            for (ItemStack stack : shape) {
+                if(stack == sMt1) this.amount1++;
+                if(stack == sMt2) this.amount2++;
+            }
+        }
+    }
 }

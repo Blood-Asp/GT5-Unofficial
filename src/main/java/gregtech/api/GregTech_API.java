@@ -17,6 +17,7 @@ import gregtech.api.objects.GT_Cover_Default;
 import gregtech.api.objects.GT_Cover_None;
 import gregtech.api.objects.GT_HashSet;
 import gregtech.api.objects.GT_ItemStack;
+import gregtech.api.threads.GT_Runnable_Cable_Update;
 import gregtech.api.threads.GT_Runnable_MachineBlockUpdate;
 import gregtech.api.util.*;
 import gregtech.api.world.GT_Worldgen;
@@ -25,6 +26,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -89,8 +91,16 @@ public class GregTech_API {
      * 9728 - 10239 are reserved for 28Smiles.
      * 10240 - 10751 are reserved for VirMan.
      * 10752 - 11263 are reserved for Briareos81.
-     * 11264 - 12000 are reserved for the next one who asks me.
-     * 9728 - 32766 are currently free.
+     * 11264 - 12000 are reserved for Quantum64.
+     * 12001 - 12500 are reserved for RedMage17.
+     * 12501 - 13000 are reserved for bartimaeusnek.
+     * 13001 - 13100 are reserved for Techlone
+     * 13101 - 13500 are reserved for kekzdealer
+     * 13501 - 14999 are currently free.
+     * 15000 - 16999 are reserved for TecTech.
+     * 17000 - 29999 are currently free.
+     * 30000 - 31999 are reserved for Alkalus.
+     * 32001 - 32766 are currently free.
      * <p/>
      * Contact me if you need a free ID-Range, which doesn't conflict with other Addons.
      * You could make an ID-Config, but we all know, what "stupid" customers think about conflicting ID's
@@ -212,7 +222,6 @@ public class GregTech_API {
             sRecipeFile = null,
             sMachineFile = null,
             sWorldgenFile = null,
-            sModularArmor = null,
             sMaterialProperties = null,
             sMaterialComponents = null,
             sUnification = null,
@@ -257,6 +266,8 @@ public class GregTech_API {
             sBlockCasings5,
             sBlockCasings6,
             sBlockCasings8;
+    public static Block
+            sBlockLongDistancePipes;
     /**
      * Getting assigned by the Config
      */
@@ -266,6 +277,7 @@ public class GregTech_API {
             sMultiThreadedSounds = false,
             sDoShowAllItemsInCreative = false,
             sColoredGUI = true,
+            sMachineMetalGUI = false,
             sConstantEnergy = true,
             sMachineExplosions = true,
             sMachineFlammable = true,
@@ -285,7 +297,8 @@ public class GregTech_API {
             mGTPlusPlus = false,
             mTranslocator = false,
             mTConstruct = false,
-            mGalacticraft = false;
+            mGalacticraft = false,
+            mAE2 = false;
     public static int
             mEUtoRF = 360,
             mRFtoEU = 20;
@@ -340,6 +353,7 @@ public class GregTech_API {
         sSoundList.put(106, aTextIC2Lower + ":" + "tools.drill.DrillSoft");
         sSoundList.put(107, aTextIC2Lower + ":" + "tools.drill.DrillHard");
         sSoundList.put(108, aTextIC2Lower + ":" + "tools.ODScanner");
+        sSoundList.put(109, aTextIC2Lower + ":" + "tools.InsulationCutters");
 
         sSoundList.put(200, aTextIC2Lower + ":" + "machines.ExtractorOp");
         sSoundList.put(201, aTextIC2Lower + ":" + "machines.MaceratorOp");
@@ -389,11 +403,20 @@ public class GregTech_API {
      * @param aZ     is the Z-Coord of the update causing Block
      */
     public static boolean causeMachineUpdate(World aWorld, int aX, int aY, int aZ) {
-        if (aWorld != null && !aWorld.isRemote) { //World might be null during Worldgen
-            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, aX, aY, aZ);
+        if (aWorld != null && !aWorld.isRemote) { // World might be null during Worldgen
+            GT_Runnable_MachineBlockUpdate.setMachineUpdateValues(aWorld, new ChunkCoordinates(aX, aY, aZ));
             return true;
         }
         return false;
+    }
+
+    public static boolean causeCableUpdate(World aWorld, int aX, int aY, int aZ) {
+        if (aWorld != null && !aWorld.isRemote) { // World might be null during Worldgen
+            GT_Runnable_Cable_Update.setCableUpdateValues(aWorld, new ChunkCoordinates(aX, aY, aZ));
+            return true;
+        }
+        return false;
+
     }
 
     /**
@@ -405,7 +428,7 @@ public class GregTech_API {
      * @param aMeta the Metadata of the Blocks as Bitmask! -1 or ~0 for all Metavalues
      */
     public static boolean registerMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
+        if (aBlock == null)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -417,7 +440,7 @@ public class GregTech_API {
      * Like above but with boolean Parameters instead of a BitMask
      */
     public static boolean registerMachineBlock(Block aBlock, boolean... aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock) || aMeta == null || aMeta.length == 0)
+        if (aBlock == null || aMeta == null || aMeta.length == 0)
             return false;
         if (GregTech_API.sThaumcraftCompat != null)
             GregTech_API.sThaumcraftCompat.registerPortholeBlacklistedBlock(aBlock);
@@ -431,9 +454,11 @@ public class GregTech_API {
      * if this Block is a Machine Update Conducting Block
      */
     public static boolean isMachineBlock(Block aBlock, int aMeta) {
-        if (GT_Utility.isBlockInvalid(aBlock))
-            return false;
-        return (sMachineIDs.containsKey(aBlock) && (sMachineIDs.get(aBlock) & B[aMeta]) != 0);
+        if (aBlock != null) {
+            Integer id = sMachineIDs.get(aBlock);
+            return id != null && (id & B[aMeta]) != 0;
+        }
+        return false;
     }
 
     /**
@@ -728,4 +753,23 @@ public class GregTech_API {
         sToolList.add(new GT_ItemStack(GT_Utility.copyAmount(1, aTool)));
         return true;
     }
+
+    /**
+     * Sets the {@link IIconRegister} for Block Icons
+     * @param aIconRegister The {@link IIconRegister} Icon Register
+     */
+    @SideOnly(Side.CLIENT)
+    public static void setBlockIconRegister(IIconRegister aIconRegister) {
+        sBlockIcons = aIconRegister;
+    };
+
+    /**
+     * Sets the {@link IIconRegister} for Items Icons
+     * @param aIconRegister The {@link IIconRegister} Icon Register
+     */
+    @SideOnly(Side.CLIENT)
+    public static void setItemIconRegister(IIconRegister aIconRegister) {
+        GregTech_API.sItemIcons = aIconRegister;
+    }
+
 }

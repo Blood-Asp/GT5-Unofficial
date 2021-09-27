@@ -5,11 +5,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GT_Recipe;
 
-public class NEI_GT_Config
-        implements IConfigureNEI {
+public class NEI_GT_Config implements IConfigureNEI {
     public static boolean sIsAdded = true;
     public static GT_NEI_AssLineHandler ALH;
 
+    @Override
     public void loadConfig() {
         sIsAdded = false;
         for (GT_Recipe.GT_Recipe_Map tMap : GT_Recipe.GT_Recipe_Map.sMappings) {
@@ -24,10 +24,12 @@ public class NEI_GT_Config
         sIsAdded = true;
     }
 
+    @Override
     public String getName() {
         return "GregTech NEI Plugin";
     }
 
+    @Override
     public String getVersion() {
         return "(5.03a)";
     }

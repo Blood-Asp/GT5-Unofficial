@@ -12,8 +12,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class GT_Block_Granites
-        extends GT_Block_Stones_Abstract {
+public class GT_Block_Granites extends GT_Block_Stones_Abstract {
     public GT_Block_Granites() {
         super(GT_Item_Granites.class, "gt.blockgranites");
         setResistance(60.0F);
@@ -51,14 +50,17 @@ public class GT_Block_Granites
         GT_OreDictUnificator.registerOre(OrePrefixes.stone, Materials.GraniteRed, new ItemStack(this, 1, 15));
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         return 3;
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return this.blockHardness = Blocks.stone.getBlockHardness(aWorld, aX, aY, aZ) * 3.0F;
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             return gregtech.api.enums.Textures.BlockIcons.GRANITES[aMeta].getIcon();
@@ -66,6 +68,7 @@ public class GT_Block_Granites
         return gregtech.api.enums.Textures.BlockIcons.GRANITES[0].getIcon();
     }
 
+    @Override
     public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
         return !(entity instanceof EntityWither);
     }

@@ -13,13 +13,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static gregtech.api.enums.GT_Values.*;
+import static gregtech.api.enums.GT_Values.E;
+import static gregtech.api.enums.GT_Values.M;
+import static gregtech.api.enums.GT_Values.W;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -31,10 +35,10 @@ import static gregtech.api.enums.GT_Values.*;
  * P.S. It is intended to be named "Unificator" and not "Unifier", because that sounds more awesome.
  */
 public class GT_OreDictUnificator {
-    private static final /*ConcurrentHash*/Map<String, ItemStack> sName2StackMap = new /*ConcurrentHash*/HashMap<String, ItemStack>();
-    private static final /*ConcurrentHash*/Map<GT_ItemStack, ItemData> sItemStack2DataMap = new /*ConcurrentHash*/HashMap<GT_ItemStack, ItemData>();
-    private static final /*ConcurrentHash*/Map<GT_ItemStack, List<ItemStack>> sUnificationTable = new /*ConcurrentHash*/HashMap<GT_ItemStack, List<ItemStack>>();
-    private static final GT_HashSet<GT_ItemStack> sNoUnificationList = new GT_HashSet<GT_ItemStack>();
+    private static final Map<String, ItemStack> sName2StackMap = new HashMap<>();
+    private static final Map<GT_ItemStack, ItemData> sItemStack2DataMap = new HashMap<>();
+    private static final Map<GT_ItemStack, List<ItemStack>> sUnificationTable = new HashMap<>();
+    private static final GT_HashSet<GT_ItemStack> sNoUnificationList = new GT_HashSet<>();
     public static volatile int VERSION = 509;
     private static int isRegisteringOre = 0, isAddingOre = 0;
     private static boolean mRunThroughTheList = true;
@@ -81,7 +85,7 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(aName)) return null;
         ItemStack tStack = sName2StackMap.get(aName.toString());
         if (GT_Utility.isStackValid(tStack)) return GT_Utility.copyAmount(aAmount, tStack);
-        return GT_Utility.copyAmount(aAmount, getOres(aName).toArray());
+        return GT_Utility.copyAmount(aAmount, getOresImmutable(aName).toArray());
     }
 
     public static ItemStack get(Object aName, long aAmount) {
@@ -104,13 +108,22 @@ public class GT_OreDictUnificator {
 
     public static ItemStack get(Object aName, ItemStack aReplacement, long aAmount, boolean aMentionPossibleTypos, boolean aNoInvalidAmounts) {
         if (aNoInvalidAmounts && aAmount < 1) return null;
-        if (!sName2StackMap.containsKey(aName.toString()) && aMentionPossibleTypos)
+        final ItemStack stackFromName = sName2StackMap.get(aName.toString());
+        if (stackFromName != null) return GT_Utility.copyAmount(aAmount, stackFromName);
+        if (aMentionPossibleTypos) {
             GT_Log.err.println("Unknown Key for Unification, Typo? " + aName);
-        return GT_Utility.copyAmount(aAmount, sName2StackMap.get(aName.toString()), getFirstOre(aName, aAmount), aReplacement);
+            // Debug callstack of entries not in sName2StackMap
+            // StackTraceElement[] cause = Thread.currentThread().getStackTrace();
+            // GT_Log.err.println(Arrays.toString(cause));
+
+        }
+        final ItemStack stackFirstOre = getFirstOre(aName, aAmount);
+        if (stackFirstOre != null) return GT_Utility.copyAmount(aAmount, stackFirstOre);
+        return GT_Utility.copyAmount(aAmount, aReplacement);
     }
 
     public static ItemStack[] setStackArray(boolean aUseBlackList, ItemStack... aStacks) {
-        for (int i = 0; i < aStacks.length; i++) aStacks[i] = get(aUseBlackList, GT_Utility.copy(aStacks[i]));
+        for (int i = 0; i < aStacks.length; i++) aStacks[i] = get(aUseBlackList, GT_Utility.copyOrNull(aStacks[i]));
         return aStacks;
     }
 
@@ -142,20 +155,26 @@ public class GT_OreDictUnificator {
         ItemData tPrefixMaterial = getAssociation(aStack);
         ItemStack rStack = null;
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData() || (aUseBlackList && tPrefixMaterial.mBlackListed))
-            return GT_Utility.copy(aStack);
+            return GT_Utility.copyOrNull(aStack);
         if (aUseBlackList && !GregTech_API.sUnificationEntriesRegistered && isBlacklisted(aStack)) {
             tPrefixMaterial.mBlackListed = true;
-            return GT_Utility.copy(aStack);
+            return GT_Utility.copyOrNull(aStack);
         }
         if (tPrefixMaterial.mUnificationTarget == null)
             tPrefixMaterial.mUnificationTarget = sName2StackMap.get(tPrefixMaterial.toString());
         rStack = tPrefixMaterial.mUnificationTarget;
-        if (GT_Utility.isStackInvalid(rStack)) return GT_Utility.copy(aStack);
+        if (GT_Utility.isStackInvalid(rStack)) return GT_Utility.copyOrNull(aStack);
         assert rStack != null;
         rStack.setTagCompound(aStack.getTagCompound());
         return GT_Utility.copyAmount(aStack.stackSize, rStack);
     }
 
+    /** Doesn't copy the returned stack or set quantity. Be careful and do not mutate it;
+     * intended only to optimize comparisons */
+    public static ItemStack get_nocopy(ItemStack aStack) {
+        return get_nocopy(true, aStack);
+    }
+    
     /** Doesn't copy the returned stack or set quantity. Be careful and do not mutate it;
      * intended only to optimize comparisons */
     static ItemStack get_nocopy(boolean aUseBlackList, ItemStack aStack) {
@@ -217,10 +236,8 @@ public class GT_OreDictUnificator {
             		ItemStack tStack1 = get(false, tStack0);
             		if (!GT_Utility.areStacksEqual(tStack0, tStack1)) {
             			GT_ItemStack tGTStack1 = new GT_ItemStack(tStack1);
-            			List<ItemStack> list = sUnificationTable.get(tGTStack1);
-            			if (list == null)
-            			    sUnificationTable.put(tGTStack1, list = new ArrayList<ItemStack>());
-            			if (!list.contains(tStack0))
+                        List<ItemStack> list = sUnificationTable.computeIfAbsent(tGTStack1, k -> new ArrayList<>());
+                        if (!list.contains(tStack0))
             			    list.add(tStack0);
             		}
             	}
@@ -233,7 +250,7 @@ public class GT_OreDictUnificator {
     	    aStacks = (ItemStack[]) obj;
     	else if (obj instanceof List) aStacks = (ItemStack[])
                 ((List)obj).toArray(new ItemStack[0]);
-    	List<ItemStack> rList = new ArrayList<ItemStack>();
+    	List<ItemStack> rList = new ArrayList<>();
     	for (ItemStack aStack : aStacks) {
     		rList.add(aStack);
     		List<ItemStack> tList = sUnificationTable.get(new GT_ItemStack(aStack));
@@ -309,7 +326,7 @@ public class GT_OreDictUnificator {
 
     public static boolean isItemStackInstanceOf(ItemStack aStack, Object aName) {
         if (GT_Utility.isStringInvalid(aName) || GT_Utility.isStackInvalid(aStack)) return false;
-        for (ItemStack tOreStack : getOres(aName.toString()))
+        for (ItemStack tOreStack : getOresImmutable(aName.toString()))
             if (GT_Utility.areStacksEqual(tOreStack, aStack, true)) return true;
         return false;
     }
@@ -338,10 +355,8 @@ public class GT_OreDictUnificator {
         if (GT_Utility.isStringInvalid(tName))
             return false;
 
-        ArrayList<ItemStack> tList = getOres(tName);
-
-        for (int i = 0; i < tList.size(); i++)
-            if (GT_Utility.areStacksEqual(tList.get(i), aStack, true))
+        for (ItemStack itemStack : getOresImmutable(tName))
+            if (GT_Utility.areStacksEqual(itemStack, aStack, true))
                 return false;
 
         isRegisteringOre++;
@@ -433,7 +448,6 @@ public class GT_OreDictUnificator {
 
     public static ItemStack getIngotOrDust(MaterialStack aMaterial) {
         ItemStack rStack = getIngot(aMaterial);
-        if(aMaterial!=null&&aMaterial.mMaterial!=null&&(aMaterial.mMaterial==Materials.Naquadah||aMaterial.mMaterial==Materials.NaquadahEnriched))rStack = getDust(aMaterial);
         if (rStack == null) rStack = getDust(aMaterial);
         return rStack;
     }
@@ -463,8 +477,18 @@ public class GT_OreDictUnificator {
      */
     public static ArrayList<ItemStack> getOres(Object aOreName) {
         String aName = aOreName == null ? E : aOreName.toString();
-        ArrayList<ItemStack> rList = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> rList = new ArrayList<>();
         if (GT_Utility.isStringValid(aName)) rList.addAll(OreDictionary.getOres(aName));
         return rList;
+    }
+
+    /**
+     * Fast version of {@link #getOres(Object)},
+     * which doesn't call {@link System#arraycopy(Object, int, Object, int, int)} in {@link ArrayList#addAll}
+     */
+    public static List<ItemStack> getOresImmutable(@Nullable Object aOreName) {
+        String aName = aOreName == null ? E : aOreName.toString();
+        
+        return GT_Utility.isStringValid(aName) ? Collections.unmodifiableList(OreDictionary.getOres(aName)) : Collections.emptyList();
     }
 }

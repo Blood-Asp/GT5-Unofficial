@@ -36,7 +36,7 @@ public class GT_FoodStat implements IFoodStat {
         mSaturation = aSaturation;
         mAction = aAction == null ? EnumAction.eat : aAction;
         mPotionEffects = aPotionEffects;
-        mEmptyContainer = GT_Utility.copy(aEmptyContainer);
+        mEmptyContainer = GT_Utility.copyOrNull(aEmptyContainer);
         mInvisibleParticles = aInvisibleParticles;
         mAlwaysEdible = aAlwaysEdible;
         mIsRotten = aIsRotten;
@@ -65,10 +65,18 @@ public class GT_FoodStat implements IFoodStat {
     @Override
     public void onEaten(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer) {
         aStack.stackSize--;
-        ItemStack tStack = GT_OreDictUnificator.get(GT_Utility.copy(mEmptyContainer));
+        ItemStack tStack = GT_OreDictUnificator.get(GT_Utility.copyOrNull(mEmptyContainer));
         if (tStack != null && !aPlayer.inventory.addItemStackToInventory(tStack))
             aPlayer.dropPlayerItemWithRandomChoice(tStack, true);
-        aPlayer.worldObj.playSoundAtEntity(aPlayer, "random.burp", 0.5F, aPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+
+        new WorldSpawnedEventBuilder.SoundAtEntityEventBuilder()
+                .setIdentifier("random.burp")
+                .setVolume(0.5F)
+                .setPitch(aPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F)
+                .setEntity(aPlayer)
+                .setWorld(aPlayer.worldObj)
+                .run();
+
         if (!aPlayer.worldObj.isRemote) {
             if (mMilk) {
                 aPlayer.curePotionEffects(new ItemStack(Items.milk_bucket, 1, 0));
@@ -79,7 +87,14 @@ public class GT_FoodStat implements IFoodStat {
                 }
             }
             if (mExplosive) {
-                aPlayer.worldObj.newExplosion(aPlayer, aPlayer.posX, aPlayer.posY, aPlayer.posZ, 4, true, true);
+                new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                        .setSmoking(true)
+                        .setFlaming(true)
+                        .setStrength(4f)
+                        .setPosition(aPlayer.posX, aPlayer.posY, aPlayer.posZ)
+                        .setEntity(aPlayer)
+                        .setWorld(aPlayer.worldObj)
+                        .run();
                 aPlayer.attackEntityFrom(GT_DamageSources.getExplodingDamage(), Float.MAX_VALUE);
             }
         }

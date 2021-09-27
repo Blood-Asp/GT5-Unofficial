@@ -8,14 +8,13 @@ import net.minecraft.nbt.NBTTagList;
 
 import java.util.List;
 
-public class Behaviour_DataOrb
-        extends Behaviour_None {
+public class Behaviour_DataOrb extends Behaviour_None {
     public static void copyInventory(ItemStack[] aInventory, ItemStack[] aNewContent, int aIndexlength) {
         for (int i = 0; i < aIndexlength; i++) {
             if (aNewContent[i] == null) {
                 aInventory[i] = null;
             } else {
-                aInventory[i] = GT_Utility.copy(new Object[]{aNewContent[i]});
+                aInventory[i] = GT_Utility.copyOrNull(aNewContent[i]);
             }
         }
     }
@@ -93,6 +92,7 @@ public class Behaviour_DataOrb
         return tNBT;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         if (!(getDataTitle(aStack).length() == 0)) {
             aList.add(getDataTitle(aStack));

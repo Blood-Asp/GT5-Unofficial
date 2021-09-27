@@ -4,6 +4,7 @@ import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.net.IGT_NetworkHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -126,6 +127,16 @@ public class GT_Values {
                     "Ultimate High Voltage", "Ultimate Extreme Voltage", "Ultimate Insane Voltage",
                     "Ultimate Mega Voltage", "Ultimate Extended Mega Voltage", "Overpowered Voltage",
                     "Maximum Voltage"};
+
+    public static final String[] TIER_COLORS =
+            new String[]{
+                    EnumChatFormatting.RED.toString(), EnumChatFormatting.GRAY.toString(), EnumChatFormatting.AQUA.toString(),
+                    EnumChatFormatting.GOLD.toString(), EnumChatFormatting.DARK_PURPLE.toString(), EnumChatFormatting.DARK_BLUE.toString(),
+                    EnumChatFormatting.LIGHT_PURPLE.toString(), EnumChatFormatting.WHITE.toString(), EnumChatFormatting.DARK_AQUA.toString(),
+                    EnumChatFormatting.DARK_RED.toString(), EnumChatFormatting.GREEN.toString(), EnumChatFormatting.DARK_GREEN.toString(),
+                    EnumChatFormatting.YELLOW.toString(), EnumChatFormatting.UNDERLINE.toString(), EnumChatFormatting.BOLD.toString(),
+                    EnumChatFormatting.OBFUSCATED.toString()};
+
     /**
      * This way it is possible to have a Call Hierarchy of NullPointers in ItemStack based Functions, and also because most of the time I don't know what kind of Data Type the "null" stands for
      */
@@ -163,7 +174,8 @@ public class GT_Values {
             MOD_ID_BC_CORE = "BuildCraft|Core",
             MOD_ID_GC_CORE = "GalacticraftCore",
             MOD_ID_GC_MARS = "GalacticraftMars",
-            MOD_ID_GC_PLANETS = "GalacticraftPlanets";
+            MOD_ID_GC_PLANETS = "GalacticraftPlanets",
+            MOD_ID_DC = "dreamcraft";
     /**
      * File Paths and Resource Paths
      */
@@ -287,4 +299,12 @@ public class GT_Values {
 
     public static boolean debugChunkloaders = false;
     public static boolean cls_enabled;
+    
+    public static boolean hideAssLineRecipes = false;
+    public static boolean updateFluidDisplayItems = true;
+    public static final int STEAM_PER_WATER = 160;
+    /**
+     *  If true, then digital chest with AE2 storage bus will be accessible only through AE2
+     */
+    public static boolean disableDigitalChestsExternalAccess = false;
 }

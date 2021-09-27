@@ -77,6 +77,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         return 0;
     }
 
+    @Override
     public void onNeighborChange(IBlockAccess aWorld, int aX, int aY, int aZ, int aTileX, int aTileY, int aTileZ) {
         if (!FUCKING_LOCK) {
             FUCKING_LOCK = true;
@@ -88,6 +89,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         FUCKING_LOCK = false;
     }
 
+    @Override
     public void onNeighborBlockChange(World aWorld, int aX, int aY, int aZ, Block aBlock) {
         if (!FUCKING_LOCK) {
             FUCKING_LOCK = true;
@@ -132,42 +134,52 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         return aMaterial.getDefaultLocalizedNameForItem(getLocalizedNameFormat(aMaterial));
     }
 
+    @Override
     public boolean onBlockEventReceived(World p_149696_1_, int p_149696_2_, int p_149696_3_, int p_149696_4_, int p_149696_5_, int p_149696_6_) {
         super.onBlockEventReceived(p_149696_1_, p_149696_2_, p_149696_3_, p_149696_4_, p_149696_5_, p_149696_6_);
         TileEntity tileentity = p_149696_1_.getTileEntity(p_149696_2_, p_149696_3_, p_149696_4_);
         return tileentity != null ? tileentity.receiveClientEvent(p_149696_5_, p_149696_6_) : false;
     }
 
+    @Override
     public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity) {
         return (!(entity instanceof EntityDragon)) && (super.canEntityDestroy(world, x, y, z, entity));
     }
 
+    @Override
     public String getHarvestTool(int aMeta) {
         return aMeta < 8 ? "pickaxe" : "shovel";
     }
 
+    @Override
     public int getHarvestLevel(int aMeta) {
         return aMeta == 5 || aMeta == 6 ? 2 : aMeta % 8;
     }
 
+    @Override
     public float getBlockHardness(World aWorld, int aX, int aY, int aZ) {
         return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
     }
 
+    @Override
     public float getExplosionResistance(Entity par1Entity, World aWorld, int aX, int aY, int aZ, double explosionX, double explosionY, double explosionZ) {
         return 1.0F + getHarvestLevel(aWorld.getBlockMetadata(aX, aY, aZ)) * 1.0F;
     }
 
+    @Override
     protected boolean canSilkHarvest() {
         return false;
     }
 
+    @Override
     public abstract String getUnlocalizedName();
 
+    @Override
     public String getLocalizedName() {
         return StatCollector.translateToLocal(getUnlocalizedName() + aTextName);
     }
 
+    @Override
     public int getRenderType() {
         if (GT_Renderer_Block.INSTANCE == null) {
             return super.getRenderType();
@@ -175,42 +187,52 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         return GT_Renderer_Block.INSTANCE.mRenderID;
     }
 
+    @Override
     public boolean canBeReplacedByLeaves(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return false;
     }
 
+    @Override
     public boolean isNormalCube(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return true;
     }
 
+    @Override
     public boolean hasTileEntity(int aMeta) {
         return true;
     }
 
+    @Override
     public boolean renderAsNormalBlock() {
         return true;
     }
 
+    @Override
     public boolean isOpaqueCube() {
         return true;
     }
 
+    @Override
     public TileEntity createNewTileEntity(World aWorld, int aMeta) {
         return createTileEntity(aWorld, aMeta);
     }
 
+    @Override
     public IIcon getIcon(IBlockAccess aIBlockAccess, int aX, int aY, int aZ, int aSide) {
         return Blocks.stone.getIcon(0, 0);
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         return Blocks.stone.getIcon(0, 0);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister aIconRegister) {
     }
 
+    @Override
     public int getDamageValue(World aWorld, int aX, int aY, int aZ) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if (((tTileEntity instanceof GT_TileEntity_Ores))) {
@@ -219,6 +241,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         return 0;
     }
 
+    @Override
     public void breakBlock(World aWorld, int aX, int aY, int aZ, Block par5, int par6) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof GT_TileEntity_Ores)) {
@@ -236,6 +259,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
 
     public abstract Materials[] getDroppedDusts(); //Must have 8 entries; can be null.
 
+    @Override
     public ArrayList<ItemStack> getDrops(World aWorld, int aX, int aY, int aZ, int aMeta, int aFortune) {
         TileEntity tTileEntity = aWorld.getTileEntity(aX, aY, aZ);
         if ((tTileEntity instanceof GT_TileEntity_Ores)) {
@@ -244,6 +268,7 @@ public abstract class GT_Block_Ores_Abstract extends GT_Generic_Block implements
         return mTemporaryTileEntity.get() == null ? new ArrayList() : ((GT_TileEntity_Ores) mTemporaryTileEntity.get()).getDrops(getDroppedBlock(), aFortune);
     }
 
+    @Override
     public TileEntity createTileEntity(World aWorld, int aMeta) {
         return new GT_TileEntity_Ores();
     }

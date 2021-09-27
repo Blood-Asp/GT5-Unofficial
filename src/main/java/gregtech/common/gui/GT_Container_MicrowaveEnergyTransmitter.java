@@ -12,10 +12,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import java.util.Iterator;
-
-public class GT_Container_MicrowaveEnergyTransmitter
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_MicrowaveEnergyTransmitter extends GT_ContainerMetaTile_Machine {
     public int mEgg = 0;
     public int mTargetD = 0;
     public int mTargetZ = 0;
@@ -121,9 +118,8 @@ public class GT_Container_MicrowaveEnergyTransmitter
         this.mTargetD = ((GT_MetaTileEntity_MicrowaveEnergyTransmitter) this.mTileEntity.getMetaTileEntity()).mTargetD;
         this.mEgg = (((GT_MetaTileEntity_MicrowaveEnergyTransmitter) this.mTileEntity.getMetaTileEntity()).hasDimensionalTeleportCapability() ? 1 : 0);
 
-        Iterator var2 = this.crafters.iterator();
-        while (var2.hasNext()) {
-            ICrafting var1 = (ICrafting) var2.next();
+        for (Object crafter : this.crafters) {
+            ICrafting var1 = (ICrafting) crafter;
             var1.sendProgressBarUpdate(this, 100, this.mTargetX & 0xFFFF);
             var1.sendProgressBarUpdate(this, 101, this.mTargetX >>> 16);
             var1.sendProgressBarUpdate(this, 102, this.mTargetY & 0xFFFF);
@@ -136,6 +132,7 @@ public class GT_Container_MicrowaveEnergyTransmitter
         }
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int par1, int par2) {
         super.updateProgressBar(par1, par2);

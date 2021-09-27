@@ -49,6 +49,7 @@ public class GT_CoolantCell_Item
         }
     }
 
+    @Override
     public void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
     	super.addAdditionalToolTips(aList, aStack, aPlayer);
         int rHeat = getHeatOfStack(aStack) * 10 / this.heatStorage;

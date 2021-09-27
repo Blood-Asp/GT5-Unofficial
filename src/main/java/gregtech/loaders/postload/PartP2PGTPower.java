@@ -86,6 +86,7 @@ public class PartP2PGTPower extends PartP2PIC2Power implements IGridTickable {
         return outputEnergy() ? TickRateModulation.FASTER : TickRateModulation.SLOWER;
     }
 
+    @Override
     public ForgeDirection getSide(){
     	try {
     		Field fSide = AEBasePart.class.getDeclaredField("side");

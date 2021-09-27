@@ -13,6 +13,7 @@ public class GT_Container_PrimitiveBlastFurnace extends GT_ContainerMetaTile_Mac
         super(inventoryPlayer, tileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         for (int i = 0; i < GT_MetaTileEntity_PrimitiveBlastFurnace.INPUT_SLOTS; i++) {
             addSlotToContainer(new Slot(this.mTileEntity, i, 34, 16 + 18 * i));
@@ -22,11 +23,13 @@ public class GT_Container_PrimitiveBlastFurnace extends GT_ContainerMetaTile_Mac
         }
     }
 
+    @Override
     public int getSlotCount() {
         return GT_MetaTileEntity_PrimitiveBlastFurnace.INPUT_SLOTS
                 + GT_MetaTileEntity_PrimitiveBlastFurnace.OUTPUT_SLOTS;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return GT_MetaTileEntity_PrimitiveBlastFurnace.INPUT_SLOTS;
     }

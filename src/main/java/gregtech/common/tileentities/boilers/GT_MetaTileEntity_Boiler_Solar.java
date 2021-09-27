@@ -1,105 +1,234 @@
 package gregtech.common.tileentities.boilers;
 
 import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Textures;
+import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
-import gregtech.api.util.GT_Log;
-import gregtech.api.util.GT_ModHandler;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidHandler;
 
+import static gregtech.api.GregTech_API.sMachineFile;
+import static gregtech.api.enums.ConfigCategories.machineconfig;
 
-public class GT_MetaTileEntity_Boiler_Solar
-        extends GT_MetaTileEntity_Boiler {
+public class GT_MetaTileEntity_Boiler_Solar extends GT_MetaTileEntity_Boiler {
+    public static final String LPS_FMT = "%s L/s";
+    private static final String localizedDescFormat = GT_LanguageManager.addStringLocalization(
+            "gt.blockmachines.boiler.solar.desc.format",
+            "Steam Power by the Sun%n" +
+                    "Produces %sL of Steam per second%n" +
+                    "Calcifies over time, reducing Steam output to %sL/s%n" +
+                    "Break and replace to descale");
+    protected final Config mConfig;
+    protected int basicTemperatureMod = 5; // Base Celsius gain or loss
+    private int mRunTimeTicks = 0;
+
     public GT_MetaTileEntity_Boiler_Solar(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, new String[0]);
+        mConfig = createConfig();
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+        mConfig = createConfig();
     }
 
     public GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+        mConfig = createConfig();
+    }
+
+    protected GT_MetaTileEntity_Boiler_Solar(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures, Config aConfig) {
+        super(aName, aTier, aDescription, aTextures);
+        mConfig = aConfig;
+    }
+
+    protected Config createConfig() {
+        return new Config(machineconfig + ".boiler.solar.bronze",1080000,40,120,45);
+    }
+
+    /**
+     * for WAILA
+     *
+     * @deprecated replaced by {@link #getMaxOutputPerSecond()}
+     */
+    @Deprecated
+    public int getBasicOutput() {
+        return (int) (getMaxOutputPerSecond() * 1.25F);
+    }
+
+    public int getMaxOutputPerSecond() {
+        return mConfig.getMaxOutputPerSecond();
+    }
+
+    /**
+     * for WAILA
+     *
+     * @deprecated replaced by {@link #getProductionPerSecond()}
+     */
+    @SuppressWarnings("unused")
+    @Deprecated
+    public int getCalcificationOutput() {
+        return (int) (getProductionPerSecond() * 1.25F);
     }
 
     @Override
     public String[] getDescription() {
-        return new String[]{
-                "Steam Power by the Sun",
-                "Produces 120L of Steam per second",
-                "Calcifies over time, reducing Steam output to 40L/s",
-                "Break and replace to decalcify"};
+        return String.format(localizedDescFormat,
+                GT_Utility.formatNumbers(getMaxOutputPerSecond()),
+                GT_Utility.formatNumbers(getMinOutputPerSecond()))
+                .split("\\R");
     }
 
+    public int getMinOutputPerSecond() {
+        return mConfig.getMinOutputPerSecond();
+    }
 
+    @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[4][17][];
-        for (byte i = -1; i < 16; i = (byte) (i + 1)) {
-            ITexture[] tmp0 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBRICKS_BOTTOM, Dyes.getModulation(i, Dyes._NULL.mRGBa))};
-            rTextures[0][(i + 1)] = tmp0;
-            ITexture[] tmp1 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBRICKS_TOP, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.BOILER_SOLAR)};
-            rTextures[1][(i + 1)] = tmp1;
-            ITexture[] tmp2 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa))};
-            rTextures[2][(i + 1)] = tmp2;
-            ITexture[] tmp3 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_BRONZEBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE)};
-            rTextures[3][(i + 1)] = tmp3;
+        for (int color = -1; color < 16; color++) {
+            int i = color + 1;
+            short[] colorModulation = Dyes.getModulation(color, Dyes._NULL.mRGBa);
+            rTextures[0][i] = new ITexture[]{
+                    TextureFactory.of(BlockIcons.MACHINE_BRONZEBRICKS_BOTTOM, colorModulation)};
+            rTextures[1][i] = new ITexture[]{
+                    TextureFactory.of(BlockIcons.MACHINE_BRONZEBRICKS_TOP, colorModulation),
+                    TextureFactory.of(BlockIcons.BOILER_SOLAR)};
+            rTextures[2][i] = new ITexture[]{
+                    TextureFactory.of(BlockIcons.MACHINE_BRONZEBRICKS_SIDE, colorModulation)};
+            rTextures[3][i] = new ITexture[]{
+                    TextureFactory.of(BlockIcons.MACHINE_BRONZEBRICKS_SIDE, colorModulation),
+                    TextureFactory.of(BlockIcons.OVERLAY_PIPE)};
         }
         return rTextures;
     }
 
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return mTextures[aSide >= 2 ? ((byte) (aSide != aFacing ? 2 : 3)) : aSide][aColorIndex + 1];
+    @Override
+    public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity);
     }
 
+    @Override
+    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
+        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SolarBoiler.png");
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
+        int i = aColorIndex + 1;
+        if (aSide >= 2) {
+            if (aSide != aFacing) return mTextures[2][i];
+            return mTextures[3][i];
+        }
+        return mTextures[aSide][i];
+    }
+
+    @Override
     public int maxProgresstime() {
         return 500;
     }
 
-    public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity, 16000);
-    }
-
-    public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SolarBoiler.png", 16000);
-    }
-
-    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Boiler_Solar(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
-    }
-    
-    private int mRunTime = 0;
-    
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setInteger("mRunTime", this.mRunTime);
+        aNBT.setInteger("mRunTime", mRunTimeTicks);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        this.mRunTime = aNBT.getInteger("mRunTime");
+        mRunTimeTicks = aNBT.getInteger("mRunTime");
     }
 
     @Override
-    public String[] getInfoData() {
-        return new String[]{
-                "Heat Capacity: " + EnumChatFormatting.GREEN +  GT_Utility.formatNumbers(this.mTemperature * 100 / maxProgresstime()) + " % " + EnumChatFormatting.RESET
-                + "    Hot time: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.mRunTime*25/20)+EnumChatFormatting.RESET+" s",
-                "Min output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicMaxOuput*20/25)+EnumChatFormatting.RESET+ " L/s"
-                + "    Max output: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(this.basicOutput*20/25)+EnumChatFormatting.RESET+" L/s",
-                "Current Output: " + EnumChatFormatting.YELLOW + GT_Utility.formatNumbers(getCalcificationOutput()*20/25) +EnumChatFormatting.RESET+" L/s"};
+    protected void produceSteam(int aAmount) {
+        super.produceSteam(aAmount);
+        // produceSteam is getting called every 10 ticks
+        if (mRunTimeTicks >= 0 && mRunTimeTicks < (Integer.MAX_VALUE - 10)) mRunTimeTicks += 10;
+        else mRunTimeTicks = Integer.MAX_VALUE; // Prevent Integer overflow wrap
+    }
+
+    @Override
+    protected void pushSteamToInventories(IGregTechTileEntity aBaseMetaTileEntity) {
+        if (mSteam == null || mSteam.amount == 0) return;
+        pushSteamToSide(aBaseMetaTileEntity, aBaseMetaTileEntity.getFrontFacing());
+    }
+
+    @Override
+    protected int getPollution() {
+        return 0;
+    }
+
+    @Override
+    public int getProductionPerSecond() {
+        if (mTemperature < 100) {
+            return 0;
+        }
+        if (mRunTimeTicks > mConfig.getMaxRuntimeTicks()) {
+            return mConfig.getMinOutputPerSecond();
+        } else if (mRunTimeTicks > mConfig.getCalcificationTicks()) {
+            /* When reaching calcification ticks; discount the proportion of run-time spent on calcification
+             *  from the maximum output per second, and return this or the minimum output per second
+             */
+            return mConfig.getMaxOutputPerSecond()
+                            - mConfig.getMaxOutputPerSecond() * (mRunTimeTicks - mConfig.getCalcificationTicks()) / mConfig.getCalcificationTicks();
+        } else {
+            return mConfig.getMaxOutputPerSecond();
+        }
+    }
+
+    @Override
+    protected int getMaxTemperature() {
+        return 500;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return basicTemperatureMod;
+    }
+
+    @Override
+    protected int getCooldownInterval() {
+        return mConfig.getCoolDownTicks() / basicTemperatureMod;
+    }
+
+    @Override
+    protected int getHeatUpAmount() {
+        return basicTemperatureMod;
+    }
+
+    @Override
+    protected void updateFuel(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        World world = aBaseMetaTileEntity.getWorld();
+        // Heat-up every 12s (240 ticks), has to be multiple of 20 ticks
+        if ((aTick % 240L != 0L) || (world.isThundering())) {
+            return;
+        }
+        if (!aBaseMetaTileEntity.getSkyAtSide((byte) ForgeDirection.UP.ordinal())) {
+            return;
+        }
+        boolean weatherClear = !world.isRaining() || aBaseMetaTileEntity.getBiome().rainfall == 0.0F;
+        if (!weatherClear && world.skylightSubtracted >= 4) {
+            return;
+        }
+        if (weatherClear) {
+            if (world.isDaytime()) {
+                mProcessingEnergy += 8 * basicTemperatureMod;
+            } else {
+                mProcessingEnergy += basicTemperatureMod;
+            }
+        } else {
+            mProcessingEnergy += basicTemperatureMod;
+        }
     }
 
     @Override
@@ -107,94 +236,82 @@ public class GT_MetaTileEntity_Boiler_Solar
         return true;
     }
 
-    protected int basicOutput = 150;
-    protected int basicMaxOuput = 50;
-    protected int basicTemperatureMod = 5;
-    protected int basicLossTimerLimit = 45;
-
-    // Calcification start time is 43200*25/20=54,000s or 15 hours of game time.
-    static final int CALCIFICATION_TIME = 43200;
-    
-    public int getCalcificationOutput() { // Returns how much output the boiler can do.
-        if (this.mTemperature < 100 ) {
-            return 0;
-        }
-        if (this.mRunTime > CALCIFICATION_TIME) {
-            // Calcification takes about 2/3 CALCIFICATION_TIME to completely calcify on basic solar. For HP solar, it takes about 2x CALCIFICATION_TIME
-            return Math.max(this.basicMaxOuput, this.basicOutput - ((this.mRunTime - CALCIFICATION_TIME) / (CALCIFICATION_TIME/150))); // Every 288*25 ticks, or 6 minutes, lose 1 L output.
-        } else {
-            return this.basicOutput;
-        }
+    @Override
+    public String[] getInfoData() {
+        return String.format("Heat Capacity: " + EnumChatFormatting.GREEN + "%s %%" + EnumChatFormatting.RESET +
+                        "    Hot time: " + EnumChatFormatting.RED + "%s s" + EnumChatFormatting.RESET + "%n" +
+                        "Min output: " + EnumChatFormatting.RED + LPS_FMT + EnumChatFormatting.RESET +
+                        "    Max output: " + EnumChatFormatting.RED + LPS_FMT + EnumChatFormatting.RESET + "%n" +
+                        "Current Output: " + EnumChatFormatting.YELLOW + LPS_FMT + EnumChatFormatting.RESET,
+                GT_Utility.formatNumbers(getHeatCapacityPercent()),
+                GT_Utility.formatNumbers(getHotTimeSeconds()),
+                GT_Utility.formatNumbers(getMinOutputPerSecond()),
+                GT_Utility.formatNumbers(getMaxOutputPerSecond()),
+                GT_Utility.formatNumbers(getProductionPerSecond()))
+                .split("\\R");
     }
 
-    public int getBasicOutput() {
-        return this.basicOutput;
+    public int getHeatCapacityPercent() {
+        return mTemperature * 100 / maxProgresstime();
     }
 
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if ((aBaseMetaTileEntity.isServerSide()) && (aTick > 20L)) {
-            if (this.mTemperature <= 20) {
-                this.mTemperature = 20;
-                this.mLossTimer = 0;
-            }
-            if (++this.mLossTimer > basicLossTimerLimit) {
-                this.mTemperature -= basicTemperatureMod;
-                this.mLossTimer = 0;
-            }
-            if (this.mSteam != null) {
-                byte i = aBaseMetaTileEntity.getFrontFacing();
-                IFluidHandler tTileEntity = aBaseMetaTileEntity.getITankContainerAtSide(i);
-                if (tTileEntity != null) {
-                    FluidStack tDrained = aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), Math.max(1, this.mSteam.amount / 2), false);
-                    if (tDrained != null) {
-                        int tFilledAmount = tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), tDrained, false);
-                        if (tFilledAmount > 0) {
-                            tTileEntity.fill(ForgeDirection.getOrientation(i).getOpposite(), aBaseMetaTileEntity.drain(ForgeDirection.getOrientation(i), tFilledAmount, true), true);
-                        }
-                    }
-                }
-            }
-            if (aTick % 25L == 0L) { // Every 25 ticks since 1L of water = 150L of steam. So for 120L, have to use 25 instead of 20.
-                if (this.mTemperature > 100) {
-                    if ((this.mFluid == null) || (!GT_ModHandler.isWater(this.mFluid)) || (this.mFluid.amount <= 0)) {
-                        this.mHadNoWater = true;
-                    } else {
-                        if (this.mHadNoWater) {
-                            GT_Log.exp.println("Boiler "+this.mName+" had no Water!");
-                            aBaseMetaTileEntity.doExplosion(2048L);
-                            return;
-                        }
-                        this.mFluid.amount -= (basicOutput/150);
-                        mRunTime += 1;
+    public int getHotTimeSeconds() {
+        return mRunTimeTicks / 20;
+    }
 
-                        int tOutput = getCalcificationOutput();
+    @Override
+    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_MetaTileEntity_Boiler_Solar(mName, mTier, mDescriptionArray, mTextures, mConfig);
+    }
 
-                        if (this.mSteam == null) {
-                            this.mSteam = GT_ModHandler.getSteam(tOutput);
-                        } else if (GT_ModHandler.isSteam(this.mSteam)) {
-                            this.mSteam.amount += tOutput;
-                        } else {
-                            this.mSteam = GT_ModHandler.getSteam(tOutput);
-                        }
-                    }
-                } else {
-                    this.mHadNoWater = false;
-                }
-            }
-            if ((this.mSteam != null) &&
-                    (this.mSteam.amount > this.getCapacity())) {
-                sendSound((byte) 1);
-                this.mSteam.amount = 3*(this.getCapacity()/4);
-            }
-            if ((this.mProcessingEnergy <= 0) && (aBaseMetaTileEntity.isAllowedToWork()) && (aTick % 256L == 0L) && (!aBaseMetaTileEntity.getWorld().isThundering())) {
-                boolean bRain = aBaseMetaTileEntity.getWorld().isRaining() && aBaseMetaTileEntity.getBiome().rainfall > 0.0F;
-                mProcessingEnergy += bRain && aBaseMetaTileEntity.getWorld().skylightSubtracted >= 4 || !aBaseMetaTileEntity.getSkyAtSide((byte) 1) ? 0 : !bRain && aBaseMetaTileEntity.getWorld().isDaytime() ? 8*basicTemperatureMod : basicTemperatureMod;
-            }
-            if ((this.mTemperature < maxProgresstime()) && (this.mProcessingEnergy > 0) && (aTick % 12L == 0L)) {
-                this.mProcessingEnergy -= basicTemperatureMod;
-                this.mTemperature += basicTemperatureMod;
-            }
-            aBaseMetaTileEntity.setActive(this.mProcessingEnergy > 0);
+    protected static class Config {
+        private final int calcificationTicks;
+        private final int minOutputPerSecond;
+        private final int maxOutputPerSecond;
+        private final int coolDownTicks;
+        private final int maxRuntimeTicks;
+
+        public Config(String aCategory,
+                      int aDefaultCalcificationTicks,
+                      int aDefaultMinOutputPerSecond,
+                      int aDefaultMaxOutputPerSecond,
+                      int aDefaultCoolDownTicks) {
+            calcificationTicks = get(aCategory,"CalcificationTicks", aDefaultCalcificationTicks,
+                    "Number of run-time ticks before boiler starts calcification.",
+                    "100% calcification and minimal output will be reached at 2 times this.");
+            minOutputPerSecond = get(aCategory,"MinOutputPerSecond", aDefaultMinOutputPerSecond);
+            maxOutputPerSecond = get(aCategory,"MaxOutputPerSecond", aDefaultMaxOutputPerSecond);
+            coolDownTicks = get(aCategory,"CoolDownTicks", aDefaultCoolDownTicks, "Number of ticks it takes to lose 1°C.");
+            // After which min output is reached.
+            maxRuntimeTicks = (getMaxOutputPerSecond() - getMinOutputPerSecond()) * getCalcificationTicks() / getMaxOutputPerSecond() + getCalcificationTicks();
+        }
+
+        protected int get(final String aCategory, final String aKey, final int aDefaultValue, final String... aComments) {
+            final StringBuilder tCommentBuilder = new StringBuilder();
+            for (String tComment: aComments)
+                tCommentBuilder.append(tComment).append('\n');
+            tCommentBuilder.append("Default: ").append(aDefaultValue);
+            return sMachineFile.mConfig.get(aCategory, aKey, aDefaultValue, tCommentBuilder.toString()).getInt();
+        }
+
+        public int getCalcificationTicks() {
+            return calcificationTicks;
+        }
+
+        public int getMinOutputPerSecond() {
+            return minOutputPerSecond;
+        }
+
+        public int getMaxOutputPerSecond() {
+            return maxOutputPerSecond;
+        }
+
+        public int getCoolDownTicks() {
+            return coolDownTicks;
+        }
+
+        public int getMaxRuntimeTicks() {
+            return maxRuntimeTicks;
         }
     }
 }

@@ -1,5 +1,6 @@
 package gregtech.common.render;
 
+import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.ItemList;
 import gregtech.common.items.GT_VolumetricFlask;
@@ -15,26 +16,29 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(cpw.mods.fml.relauncher.Side.CLIENT)
-public final class GT_FlaskRenderer implements net.minecraftforge.client.IItemRenderer {
+@SideOnly(Side.CLIENT)
+public final class GT_FlaskRenderer implements IItemRenderer {
     public GT_FlaskRenderer() {
         MinecraftForgeClient.registerItemRenderer(ItemList.VOLUMETRIC_FLASK.getItem(), this);
     }
 
+    @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return type != ItemRenderType.FIRST_PERSON_MAP;
     }
 
 
+    @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper) {
         return type == ItemRenderType.ENTITY;
     }
 
+    @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         GT_VolumetricFlask cell = (GT_VolumetricFlask) item.getItem();
         IIcon icon = item.getIconIndex();
-        GL11.glEnable(3042);
-        GL11.glEnable(3008);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         if (type.equals(ItemRenderType.ENTITY)) {
             GL11.glRotated(180.0D, 0.0D, 0.0D, 1.0D);
             GL11.glRotated(90.0D, 0.0D, 1.0D, 0.0D);
@@ -53,7 +57,7 @@ public final class GT_FlaskRenderer implements net.minecraftforge.client.IItemRe
             IIcon fluidicon = fs.getFluid().getIcon(fs);
             int fluidColor = fs.getFluid().getColor(fs);
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-            GL11.glBlendFunc(0, 1);
+            GL11.glBlendFunc(GL11.GL_ZERO, GL11.GL_ONE);
             if (type.equals(ItemRenderType.INVENTORY)) {
                 DrawUtil.renderIcon(iconWindow, 16.0D, 0.0D, 0.0F, 0.0F, -1.0F);
             } else {
@@ -62,8 +66,8 @@ public final class GT_FlaskRenderer implements net.minecraftforge.client.IItemRe
             }
 
             Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-            GL11.glBlendFunc(770, 771);
-            GL11.glDepthFunc(514);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glDepthFunc(GL11.GL_EQUAL);
             GL11.glColor3ub((byte) (fluidColor >> 16), (byte) (fluidColor >> 8), (byte) fluidColor);
             if (type.equals(ItemRenderType.INVENTORY)) {
                 DrawUtil.renderIcon(fluidicon, 16.0D, 0.0D, 0.0F, 0.0F, -1.0F);
@@ -73,17 +77,17 @@ public final class GT_FlaskRenderer implements net.minecraftforge.client.IItemRe
             }
 
             GL11.glColor3ub((byte) -1, (byte) -1, (byte) -1);
-            GL11.glDepthFunc(515);
+            GL11.glDepthFunc(GL11.GL_LEQUAL);
         }
 
         Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
-        GL11.glBlendFunc(770, 771);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         if (type.equals(ItemRenderType.INVENTORY)) {
             DrawUtil.renderIcon(icon, 16.0D, 0.001D, 0.0F, 0.0F, -1.0F);
         } else {
             ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
         }
-        GL11.glDisable(3008);
-        GL11.glDisable(3042);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 }

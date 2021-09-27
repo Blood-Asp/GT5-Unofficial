@@ -1,6 +1,7 @@
 package gregtech.api.gui;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_Bronze;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
     public final byte
             mProgressBarDirection,
             mProgressBarAmount;
+    public final boolean
+        mRenderAutoOutputSlots;
 
     public GT_GUIContainer_BasicMachine(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity, String aName, String aTextureFile, String aNEI) {
         this(aInventoryPlayer, aTileEntity, aName, aTextureFile, aNEI, (byte) 0, (byte) 1);
@@ -34,12 +37,15 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
         mProgressBarAmount = (byte) Math.max(1, aProgressBarAmount);
         mName = aName;
         mNEI = aNEI;
+        mRenderAutoOutputSlots = !(aTileEntity.getMetaTileEntity() instanceof GT_MetaTileEntity_BasicMachine_Bronze);
     }
 
     @Override
     public void drawScreen(int par1, int par2, float par3) {
         super.drawScreen(par1, par2, par3);
-        drawTooltip(par1, par2);
+        if (mRenderAutoOutputSlots){
+            drawTooltip(par1, par2);
+        }
     }
 
     @Override
@@ -72,10 +78,12 @@ public class GT_GUIContainer_BasicMachine extends GT_GUIContainerMetaTile_Machin
         int y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
         if (mContainer != null) {
-            if (((GT_Container_BasicMachine) mContainer).mFluidTransfer)
-                drawTexturedModalRect(x + 7, y + 62, 176, 18, 18, 18);
-            if (((GT_Container_BasicMachine) mContainer).mItemTransfer)
-                drawTexturedModalRect(x + 25, y + 62, 176, 36, 18, 18);
+            if (mRenderAutoOutputSlots){
+                if (((GT_Container_BasicMachine) mContainer).mFluidTransfer)
+                    drawTexturedModalRect(x + 7, y + 62, 176, 18, 18, 18);
+                if (((GT_Container_BasicMachine) mContainer).mItemTransfer)
+                    drawTexturedModalRect(x + 25, y + 62, 176, 36, 18, 18);
+            }
             if (((GT_Container_BasicMachine) mContainer).mStuttering)
                 drawTexturedModalRect(x + 79, y + 44, 176, 54, 18, 18);
 

@@ -4,11 +4,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicTank;
+import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
+import static gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine.OTHER_SLOT_COUNT;
 
 /**
  * NEVER INCLUDE THIS FILE IN YOUR MOD!!!
@@ -179,17 +184,30 @@ public class GT_Container_BasicMachine extends GT_Container_BasicTank {
 
     @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
+        GT_MetaTileEntity_BasicMachine machine = (GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity();
+        if (machine == null) return null;
+        ItemStack tResultStack;
         switch (aSlotIndex) {
             case 0:
-                if (mTileEntity.getMetaTileEntity() == null) return null;
-                ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mFluidTransfer = !((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mFluidTransfer;
+                machine.mFluidTransfer = !machine.mFluidTransfer;
                 return null;
             case 1:
                 if (mTileEntity.getMetaTileEntity() == null) return null;
-                ((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer = !((GT_MetaTileEntity_BasicMachine) mTileEntity.getMetaTileEntity()).mItemTransfer;
+                machine.mItemTransfer = !machine.mItemTransfer;
                 return null;
             default:
-                return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
+                if (aSlotIndex == OTHER_SLOT_COUNT + 1 + machine.mInputSlotCount + machine.mOutputItems.length && aMouseclick < 2) {
+                    if (mTileEntity.isClientSide()) {
+                        // see parent class slotClick for an explanation on why doing this
+                        GT_MetaTileEntity_BasicTank tTank = (GT_MetaTileEntity_BasicTank) mTileEntity.getMetaTileEntity();
+                        tTank.setFillableStack(GT_Utility.getFluidFromDisplayStack(tTank.getStackInSlot(2)));
+                    }
+                    GT_MetaTileEntity_BasicTank tTank = (GT_MetaTileEntity_BasicTank) mTileEntity.getMetaTileEntity();
+                    IFluidAccess tFillableAccess = IFluidAccess.from(tTank, true);
+                    return handleFluidSlotClick(tFillableAccess, aPlayer, aMouseclick == 0, true, true);
+                } else {
+                    return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
+                }
         }
     }
 

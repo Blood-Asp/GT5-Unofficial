@@ -6,24 +6,34 @@ import gregtech.api.gui.widgets.GT_GuiFakeItemButton;
 import gregtech.api.gui.widgets.GT_GuiIcon;
 import gregtech.api.gui.widgets.GT_GuiIconCheckButton;
 import gregtech.api.gui.widgets.GT_GuiIntegerTextBox;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.net.GT_Packet_TileEntityCover;
 import gregtech.api.util.GT_CoverBehavior;
 import gregtech.api.util.GT_Utility;
+import gregtech.common.tileentities.machines.GT_MetaTileEntity_Hatch_OutputBus_ME;
+import gregtech.common.tileentities.storage.GT_MetaTileEntity_DigitalChestBase;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_ItemMeter
-        extends GT_CoverBehavior {
+public class GT_Cover_ItemMeter extends GT_CoverBehavior {
 
     // format:
     private static final int SLOT_MASK = 0x3FFFFFF; // 0 = all, 1 = 0 ...
     private static final int CONVERTED_BIT = 0x80000000;
     private static final int INVERT_BIT = 0x40000000;
 
+    @Override
+    public boolean isRedstoneSensitive(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
+        return false;
+    }
+
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         //Convert from ver. 5.09.33.50
         if ((CONVERTED_BIT & aCoverVariable) == 0)
@@ -34,20 +44,35 @@ public class GT_Cover_ItemMeter
             else if (aCoverVariable > 1)
                 aCoverVariable = CONVERTED_BIT | Math.min((aCoverVariable - 2), SLOT_MASK);
 
-        int[] tSlots;
-        if ((aCoverVariable & SLOT_MASK) > 0)
-            tSlots = new int[]{(aCoverVariable & SLOT_MASK) - 1};
-        else
-            tSlots = aTileEntity.getAccessibleSlotsFromSide(aSide);
+        long tMax = 0;
+        long tUsed = 0;
+        IMetaTileEntity mte = ((IGregTechTileEntity)aTileEntity).getMetaTileEntity();
+        if (mte instanceof GT_MetaTileEntity_DigitalChestBase) {
+            GT_MetaTileEntity_DigitalChestBase dc = (GT_MetaTileEntity_DigitalChestBase)mte;
+            tMax = dc.getMaxItemCount(); // currently it is limited by int, but there is not much reason for that
+            ItemStack[] inv = dc.getStoredItemData();
+            if (inv != null && inv.length > 1 && inv[1] != null)
+                tUsed = inv[1].stackSize;
+        }
+        else if (mte instanceof GT_MetaTileEntity_Hatch_OutputBus_ME) {
+            if (((GT_MetaTileEntity_Hatch_OutputBus_ME)mte).isLastOutputFailed())
+            {
+                tMax = 64;
+                tUsed = 64;
+            }
+        }
+        else {
+            int[] tSlots = (aCoverVariable & SLOT_MASK) > 0 ?
+                 new int[] {(aCoverVariable & SLOT_MASK) - 1} :
+                 aTileEntity.getAccessibleSlotsFromSide(aSide);
 
-        int tMax = 0;
-        int tUsed = 0;
-        for (int i : tSlots) {
-            if (i >= 0 && i < aTileEntity.getSizeInventory()) {
-                tMax+=64;
-                ItemStack tStack = aTileEntity.getStackInSlot(i);
-                if (tStack != null)
-                    tUsed += (tStack.stackSize<<6)/tStack.getMaxStackSize();
+            for (int i : tSlots) {
+                if (i >= 0 && i < aTileEntity.getSizeInventory()) {
+                    tMax += 64;
+                    ItemStack tStack = aTileEntity.getStackInSlot(i);
+                    if (tStack != null)
+                        tUsed += (tStack.stackSize << 6) / tStack.getMaxStackSize();
+                }
             }
         }
 
@@ -61,6 +86,7 @@ public class GT_Cover_ItemMeter
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         if (aPlayer.isSneaking()) {
             if ((aCoverVariable & INVERT_BIT) == INVERT_BIT) {
@@ -85,34 +111,42 @@ public class GT_Cover_ItemMeter
         return CONVERTED_BIT | (aCoverVariable & INVERT_BIT) | slot;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean manipulatesSidedRedstoneOutput(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 5;
     }
@@ -139,10 +173,10 @@ public class GT_Cover_ItemMeter
         private final GT_GuiFakeItemButton intSlotIcon;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         private final int maxSlot;
 
@@ -169,7 +203,7 @@ public class GT_Cover_ItemMeter
             else
                 maxSlot = -1;
 
-            if (maxSlot == -1)
+            if (maxSlot == -1 || tile instanceof GT_MetaTileEntity_DigitalChestBase)
                 intSlot.setEnabled(false);
         }
 

@@ -1,13 +1,12 @@
 package gregtech.common.tileentities.automation;
 
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Buffer;
-import gregtech.api.objects.GT_RenderedTexture;
 import gregtech.api.objects.ItemData;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_TypeFilter;
@@ -16,8 +15,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class GT_MetaTileEntity_TypeFilter
-        extends GT_MetaTileEntity_Buffer {
+import static gregtech.api.enums.GT_Values.W;
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_TYPEFILTER;
+import static gregtech.api.enums.Textures.BlockIcons.AUTOMATION_TYPEFILTER_GLOW;
+
+public class GT_MetaTileEntity_TypeFilter extends GT_MetaTileEntity_Buffer {
     public boolean bNBTAllowed = false;
     public boolean bInvertFilter = false;
     public int mRotationIndex = 0;
@@ -25,9 +27,9 @@ public class GT_MetaTileEntity_TypeFilter
 
     public GT_MetaTileEntity_TypeFilter(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 11, new String[]{
-                        		"Filters 1 Item Type",
-                        		"Use Screwdriver to regulate output stack size",
-                        		"Consumes 1 EU per moved Item"});
+                "Filters 1 Item Type",
+                "Use Screwdriver to regulate output stack size",
+                "Does not consume energy to move Item"});
     }
 
     public GT_MetaTileEntity_TypeFilter(String aName, int aTier, int aInvSlotCount, String aDescription, ITexture[][][] aTextures) {
@@ -38,22 +40,29 @@ public class GT_MetaTileEntity_TypeFilter
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_TypeFilter(this.mName, this.mTier, this.mInventory.length, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public ITexture getOverlayIcon() {
-        return new GT_RenderedTexture(Textures.BlockIcons.AUTOMATION_TYPEFILTER);
+        return TextureFactory.of(
+                TextureFactory.of(AUTOMATION_TYPEFILTER),
+                TextureFactory.builder().addIcon(AUTOMATION_TYPEFILTER_GLOW).glow().build());
     }
 
+    @Override
     public boolean isValidSlot(int aIndex) {
         return aIndex < 9;
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_TypeFilter(aPlayerInventory, aBaseMetaTileEntity);
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_TypeFilter(aPlayerInventory, aBaseMetaTileEntity);
     }
@@ -87,21 +96,21 @@ public class GT_MetaTileEntity_TypeFilter
         }
     }
 
+    @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPreTick(aBaseMetaTileEntity, aTick);
-        if ((getBaseMetaTileEntity().isServerSide()) && ((aTick % 8L == 0L) || mRotationIndex == -1)) {
-            if (this.mPrefix.mPrefixedItems.isEmpty()) {
-                this.mInventory[9] = null;
-            } else {
-                this.mInventory[9] = GT_Utility.copyAmount(1L, this.mPrefix.mPrefixedItems.get(this.mRotationIndex = (this.mRotationIndex + 1) % this.mPrefix.mPrefixedItems.size()));
-                if (this.mInventory[9].getItemDamage() == 32767) {
-                    this.mInventory[9].setItemDamage(0);
-                }
-                this.mInventory[9].setStackDisplayName(this.mPrefix.toString());
-            }
+        if ((!getBaseMetaTileEntity().isServerSide()) || ((aTick % 8L != 0L) && mRotationIndex != -1)) return;
+        if (this.mPrefix.mPrefixedItems.isEmpty()) {
+            this.mInventory[9] = null;
+            return;
         }
+        this.mInventory[9] = GT_Utility.copyAmount(1L, this.mPrefix.mPrefixedItems.get(this.mRotationIndex = (this.mRotationIndex + 1) % this.mPrefix.mPrefixedItems.size()));
+        if (this.mInventory[9] == null) return;
+        if (this.mInventory[9].getItemDamage() == W) this.mInventory[9].setItemDamage(0);
+        this.mInventory[9].setStackDisplayName(this.mPrefix.toString());
     }
 
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setString("mPrefix", this.mPrefix.toString());
@@ -109,6 +118,7 @@ public class GT_MetaTileEntity_TypeFilter
         aNBT.setBoolean("bNBTAllowed", this.bNBTAllowed);
     }
 
+    @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         this.mPrefix = OrePrefixes.getPrefix(aNBT.getString("mPrefix"), this.mPrefix);
@@ -116,6 +126,7 @@ public class GT_MetaTileEntity_TypeFilter
         this.bNBTAllowed = aNBT.getBoolean("bNBTAllowed");
     }
 
+    @Override
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         boolean tAllowPrefix = this.mPrefix.contains(aStack);
         if (this.mPrefix == OrePrefixes.ore) {

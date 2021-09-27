@@ -1,11 +1,14 @@
 package gregtech.api.metatileentity.implementations;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.GT_Mod;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GT_LanguageManager;
+import gregtech.api.util.WorldSpawnedEventBuilder;
 import gregtech.common.GT_Pollution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,40 +17,49 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Arrays;
 
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_MUFFLER;
 import static gregtech.api.objects.XSTR.XSTR_INSTANCE;
 
+@SuppressWarnings("unused") // Unused API is expected within scope
 public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
+    private static final String localizedDescFormat = GT_LanguageManager.addStringLocalization(
+            "gt.blockmachines.hatch.muffler.desc.format",
+            "Outputs the Pollution (Might cause ... things)%n" +
+                    "DO NOT OBSTRUCT THE OUTPUT!%n" +
+                    "Reduces Pollution to %d%%%n" +
+                    "Recovers %d%% of CO2/CO/SO2");
+    private final int pollutionReduction = calculatePollutionReduction(100);
+    private final int pollutionRecover = 100 - pollutionReduction;
+    private final String[] description = String.format(localizedDescFormat, pollutionReduction, pollutionRecover)
+            .split("\\R");
+    private final boolean[] facings = new boolean[ForgeDirection.VALID_DIRECTIONS.length];
+
     public GT_MetaTileEntity_Hatch_Muffler(int aID, String aName, String aNameRegional, int aTier) {
-        super(aID, aName, aNameRegional, aTier, 0, "Outputs the Pollution (Might cause ... things)");
+        super(aID, aName, aNameRegional, aTier, 0, "");
     }
 
     public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, 0, aDescription, aTextures);
+        this(aName, aTier, new String[]{aDescription}, aTextures);
     }
 
     public GT_MetaTileEntity_Hatch_Muffler(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
+        setInValidFacings(ForgeDirection.DOWN);
     }
 
     @Override
     public String[] getDescription() {
-        String[] desc = new String[mDescriptionArray.length + 3];
-        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        desc[mDescriptionArray.length] = "DO NOT OBSTRUCT THE OUTPUT!";
-        desc[mDescriptionArray.length + 1] = "Reduces Pollution to " + calculatePollutionReduction(100) + "%";
-        //Pollution Recovery scales from 5% at LV to 100% at MAX Voltage
-        desc[mDescriptionArray.length + 2] = "Recovers " + (105 - calculatePollutionReduction(100)) + "% of CO2/CO/SO2";
-        return desc;
+        return description;
     }
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MUFFLER)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_MUFFLER)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return new ITexture[]{aBaseTexture, new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_MUFFLER)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_MUFFLER)};
     }
 
     @Override
@@ -55,49 +67,9 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
         return true;
     }
 
-    private int[] mFacings;
-
-    /*private void init()*/ {
-        setInValidFacings(ForgeDirection.DOWN);
-    }
-
-    public void setInValidFacings(ForgeDirection... aFacings) {
-        mFacings = Arrays.stream(aFacings).mapToInt(Enum::ordinal).toArray();
-    }
-
-    @Override
-    public boolean isFacingValid(byte aFacing) {
-        for (int x : mFacings)
-            if (x == aFacing)
-                return false;
-        return true;
-    }
-
-    @Override
-    public boolean isAccessAllowed(EntityPlayer aPlayer) {
-        return true;
-    }
-
     @Override
     public boolean isValidSlot(int aIndex) {
         return false;
-    }
-
-    @Override
-    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
-    }
-
-    public boolean polluteEnvironment() {
-        if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
-            GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
-            return true;
-        }
-        return false;
-    }
-
-    public int calculatePollutionReduction(int aPollution) {
-        return (int) (aPollution * (Math.pow(0.85F, mTier - 1)));
     }
 
     @Override
@@ -111,15 +83,32 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
     }
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive())
-            pollutionParticles(this.getBaseMetaTileEntity().getWorld(), "largesmoke");
+    public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_MetaTileEntity_Hatch_Muffler(mName, mTier, mDescriptionArray, mTextures);
     }
 
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isClientSide() && this.getBaseMetaTileEntity().isActive()) {
+            pollutionParticles(this.getBaseMetaTileEntity().getWorld(), "largesmoke");
+        }
+    }
+
+    @Override
+    public boolean isFacingValid(byte aFacing) {
+        return facings[aFacing];
+    }
+
+    @Override
+    public boolean isAccessAllowed(EntityPlayer aPlayer) {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
     public void pollutionParticles(World aWorld, String name) {
         boolean chk1, chk2, chk3;
-        float ran1 = XSTR_INSTANCE.nextFloat(), ran2 = 0, ran3 = 0;
+        float ran1 = XSTR_INSTANCE.nextFloat(), ran2, ran3;
         chk1 = ran1 * 100 < calculatePollutionReduction(100);
         if (GT_Pollution.getPollution(getBaseMetaTileEntity()) >= GT_Mod.gregtechproxy.mPollutionSmogLimit) {
             ran2 = XSTR_INSTANCE.nextFloat();
@@ -129,6 +118,7 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             if (!(chk1 || chk2 || chk3)) return;
         } else {
             if (!chk1) return;
+            ran2 = ran3 = 0.0F;
             chk2 = chk3 = false;
         }
 
@@ -151,13 +141,60 @@ public class GT_MetaTileEntity_Hatch_Muffler extends GT_MetaTileEntity_Hatch {
             zSpd = aDir.offsetZ * (0.1F + 0.2F * XSTR_INSTANCE.nextFloat());
         }
 
-        if (chk1)
-            aWorld.spawnParticle(name, xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F, xSpd, ySpd, zSpd);
+        WorldSpawnedEventBuilder.ParticleEventBuilder events = new WorldSpawnedEventBuilder.ParticleEventBuilder()
+                .setIdentifier(name)
+                .setWorld(aWorld)
+                .setMotion(xSpd, ySpd, zSpd);
 
-        if (chk2)
-            aWorld.spawnParticle(name, xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F, xSpd, ySpd, zSpd);
+        if (chk1) {
+            events.setPosition(xPos + ran1 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
+        }
+        if (chk2) {
+            events.setPosition(xPos + ran2 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
+        }
+        if (chk3) {
+            events.setPosition(xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F)
+                  .run();
+        }
+    }
 
-        if (chk3)
-            aWorld.spawnParticle(name, xPos + ran3 * 0.5F, yPos + XSTR_INSTANCE.nextFloat() * 0.5F, zPos + XSTR_INSTANCE.nextFloat() * 0.5F, xSpd, ySpd, zSpd);
+    public int calculatePollutionReduction(int aPollution) {
+        if (mTier < 2) {
+            return aPollution;
+        }
+        return (int) ((float) aPollution * ((100F - 12.5F * ((float) mTier - 1F)) / 100F));
+    }
+
+    /**
+     * @return pollution success
+     * @deprecated replaced by {@link .polluteEnvironment(MetaTileEntity)}
+     */
+    @Deprecated
+    public boolean polluteEnvironment() {
+        return polluteEnvironment(null);
+    }
+
+    /**
+     * @param mte The multi-block controller's {@link MetaTileEntity}
+     *            MetaTileEntity is passed so newer muffler hatches can do wacky things with the multis
+     * @return pollution success
+     */
+    public boolean polluteEnvironment(MetaTileEntity mte) {
+        if (getBaseMetaTileEntity().getAirAtSide(getBaseMetaTileEntity().getFrontFacing())) {
+            GT_Pollution.addPollution(getBaseMetaTileEntity(), calculatePollutionReduction(10000));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param aFacings the {@link ForgeDirection} invalid facings
+     * @apiNote API Code, BartWorks/TecTech based EBF relies on this. It's marked here, not anywhere else.
+     */
+    public void setInValidFacings(ForgeDirection... aFacings) {
+        Arrays.fill(facings, true);
+        Arrays.stream(aFacings).forEach(face -> facings[face.ordinal()] = false);
     }
 }

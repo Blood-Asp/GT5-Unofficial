@@ -4,7 +4,6 @@ import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
-import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.objects.ItemData;
@@ -37,7 +36,7 @@ import org.lwjgl.input.Keyboard;
 
 import static gregtech.api.enums.GT_Values.VN;
 
-public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_DrillerBase implements IChunkLoader {
+public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTileEntity_DrillerBase {
     private final ArrayList<ChunkPosition> oreBlockPositions = new ArrayList<>();
     protected int mTier = 1;
     private int chunkRadiusConfig = getRadiusInChunks();
@@ -62,9 +61,6 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         if (aNBT.hasKey("chunkRadiusConfig"))
             chunkRadiusConfig = aNBT.getInteger("chunkRadiusConfig");
     }
-
-    @Override
-    public ChunkCoordIntPair getActiveChunk(){return mCurrentChunk;}
 
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
@@ -324,10 +320,10 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
         ChunkPosition blockPos = new ChunkPosition(x, y, z);
         if (!oreBlockPositions.contains(blockPos)) {
             if (block instanceof GT_Block_Ores_Abstract) {
-                TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityOffset(x, y, z);
+                TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntity(x, y, z);
                 if (tTileEntity instanceof GT_TileEntity_Ores && ((GT_TileEntity_Ores) tTileEntity).mNatural)
                     oreBlockPositions.add(blockPos);
-            } else if (GT_Utility.isOre(new ItemStack(block, 1, blockMeta)))
+            } else if (GT_Utility.isOre(block, blockMeta))
                 oreBlockPositions.add(blockPos);
         }
     }
@@ -336,7 +332,7 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 
     protected abstract int getBaseProgressTime();
 
-    protected String[] getDescriptionInternal(String tierSuffix) {
+    protected GT_Multiblock_Tooltip_Builder createTooltip(String tierSuffix) {
         String casings = getCasingBlockItem().get(0).getDisplayName();
         
         final GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
@@ -354,17 +350,13 @@ public abstract class GT_MetaTileEntity_OreDrillingPlantBase extends GT_MetaTile
 		.addStructureInfo(casings + " form the 3x1x3 Base")
 		.addOtherStructurePart(casings, " 1x3x1 pillar above the center of the base (2 minimum total)")
 		.addOtherStructurePart(getFrameMaterial().mName + " Frame Boxes", "Each pillar's side and 1x3x1 on top")
-		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing")
-		.addMaintenanceHatch("Any base casing")
-		.addInputBus("Mining Pipes, optional, any base casing")
-		.addInputHatch("Drilling Fluid, any base casing")
-		.addOutputBus("Any base casing")
+		.addEnergyHatch(VN[getMinTier()] + "+, Any base casing", 1)
+		.addMaintenanceHatch("Any base casing", 1)
+		.addInputBus("Mining Pipes, optional, any base casing", 1)
+		.addInputHatch("Drilling Fluid, any base casing", 1)
+		.addOutputBus("Any base casing", 1)
 		.toolTipFinisher("Gregtech");
-		if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			return tt.getInformation();
-		} else {
-			return tt.getStructureInformation();
-		}
+		return tt;
     }
 
     @Override

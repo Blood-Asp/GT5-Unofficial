@@ -7,12 +7,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import static gregtech.api.enums.GT_Values.RES_PATH_GUI;
 
-public class GT_GUIContainer_MicrowaveEnergyTransmitter
-        extends GT_GUIContainerMetaTile_Machine {
+public class GT_GUIContainer_MicrowaveEnergyTransmitter extends GT_GUIContainerMetaTile_Machine {
     public GT_GUIContainer_MicrowaveEnergyTransmitter(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(new GT_Container_MicrowaveEnergyTransmitter(aInventoryPlayer, aTileEntity), RES_PATH_GUI + "Teleporter.png");
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRendererObj.drawString("Teleporter", 46, 8, 16448255);
         if (this.mContainer != null) {
@@ -26,6 +26,7 @@ public class GT_GUIContainer_MicrowaveEnergyTransmitter
         }
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         super.drawGuiContainerBackgroundLayer(par1, par2, par3);
         int x = (this.width - this.xSize) / 2;

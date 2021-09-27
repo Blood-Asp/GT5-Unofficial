@@ -10,12 +10,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class GT_Container_SuperBuffer
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_SuperBuffer extends GT_ContainerMetaTile_Machine {
     public GT_Container_SuperBuffer(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 256, 8, 63, false, true, 1));
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 256, 26, 63, false, true, 1));
@@ -23,6 +23,7 @@ public class GT_Container_SuperBuffer
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 256, 62, 63, false, true, 1));
     }
 
+    @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         if (aSlotIndex < 0) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
@@ -72,10 +73,12 @@ public class GT_Container_SuperBuffer
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 
+    @Override
     public int getSlotCount() {
         return 0;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 0;
     }

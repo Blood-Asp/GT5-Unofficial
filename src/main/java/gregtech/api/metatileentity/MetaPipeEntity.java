@@ -8,11 +8,10 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IColoredTileEntity;
 import gregtech.api.interfaces.tileentity.ICoverable;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity.ClientEvents;
 import gregtech.api.objects.GT_ItemStack;
-import gregtech.api.util.GT_Config;
-import gregtech.api.util.GT_CoverBehavior;
-import gregtech.api.util.GT_LanguageManager;
-import gregtech.api.util.GT_Utility;
+import gregtech.api.util.*;
+import gregtech.common.GT_Client;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -130,6 +129,10 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
      */
     public abstract boolean renderInside(byte aSide);
 
+    public boolean isDisplaySecondaryDescription() {
+        return false;
+    }
+
     @Override
     public IGregTechTileEntity getBaseMetaTileEntity() {
         return mBaseMetaTileEntity;
@@ -175,10 +178,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (difference > 1.05 && difference < 1.4) {
             aSide = 5;
         }
-        boolean tCovered = false;
-        if (aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0) {
-            tCovered = true;
-        }
+        boolean tCovered = aSide < 6 && mBaseMetaTileEntity.getCoverIDAtSide(aSide) > 0;
         if(isConnectedAtSide(aSide)){
         	tCovered = true;
         }
@@ -239,7 +239,15 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected == 4) {
+            /* Client tick counter that is set to 5 on hiding pipes and covers.
+             * It triggers a texture update next client tick when reaching 4, with provision for 3 more update tasks,
+             * spreading client change detection related work and network traffic on different ticks, until it reaches 0.
+             */
+            aBaseMetaTileEntity.issueTextureUpdate();
+        }
+    }
 
     @Override
     public void inValidate() {/*Do nothing*/}
@@ -291,17 +299,20 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     @Override
     public final void sendSound(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 4, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.DO_SOUND, aIndex);
     }
 
     @Override
     public final void sendLoopStart(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 5, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.START_SOUND_LOOP, aIndex);
     }
 
     @Override
     public final void sendLoopEnd(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 6, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.STOP_SOUND_LOOP, aIndex);
     }
 
     @Override
@@ -489,7 +500,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 
     @Override
     public ItemStack decrStackSize(int aIndex, int aAmount) {
-        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copy(tStack);
+        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copyOrNull(tStack);
         if (tStack != null) {
             if (tStack.stackSize <= aAmount) {
                 if (setStackToZeroInsteadOfNull(aIndex)) tStack.stackSize = 0;
@@ -693,8 +704,14 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         int tX = getBaseMetaTileEntity().getXCoord(), tY = getBaseMetaTileEntity().getYCoord(), tZ = getBaseMetaTileEntity().getZCoord();
         World tWorld = getBaseMetaTileEntity().getWorld();
         tWorld.setBlock(tX, tY, tZ, Blocks.air);
-        if (GregTech_API.sMachineExplosions)
-            tWorld.createExplosion(null, tX + 0.5, tY + 0.5, tZ + 0.5, tStrength, true);
+        if (GregTech_API.sMachineExplosions){
+            new WorldSpawnedEventBuilder.ExplosionEffectEventBuilder()
+                    .setStrength(tStrength)
+                    .setSmoking(true)
+                    .setPosition(tX + 0.5, tY + 0.5, tZ + 0.5)
+                    .setWorld(tWorld)
+                    .run();
+        }
     }
 
     @Override
@@ -749,7 +766,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
         if (tTileEntity instanceof IColoredTileEntity) {
             if (getBaseMetaTileEntity().getColorization() >= 0) {
                 byte tColor = ((IColoredTileEntity) tTileEntity).getColorization();
-                if (tColor >= 0 && tColor != getBaseMetaTileEntity().getColorization()) return false;
+                return tColor < 0 || tColor == getBaseMetaTileEntity().getColorization();
             }
         }
 
@@ -827,7 +844,8 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 			((MetaPipeEntity) tPipe).disconnect(tSide);
 	}
 
-	public boolean isConnectedAtSide(int aSide) {
+	@Override
+    public boolean isConnectedAtSide(int aSide) {
 		return (mConnections & (1 << aSide)) != 0;
 	}
 
@@ -838,6 +856,7 @@ public abstract class MetaPipeEntity implements IMetaTileEntity, IConnectable {
 	public boolean canConnect(byte aSide, TileEntity tTileEntity) { return false; }
 	public boolean getGT6StyleConnection() { return false; }
 
+    @Override
     public boolean shouldJoinIc2Enet() { return false; }
 
     @Override

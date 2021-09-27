@@ -2,14 +2,13 @@ package gregtech.common.blocks;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
-import gregtech.api.objects.GT_CopiedBlockTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
-public class GT_Block_Casings1
-        extends GT_Block_Casings_Abstract {
+public class GT_Block_Casings1 extends GT_Block_Casings_Abstract {
 	
 	/**
 	 * Texture Index Information
@@ -28,8 +27,8 @@ public class GT_Block_Casings1
 	
     public GT_Block_Casings1() {
         super(GT_Item_Casings1.class, "gt.blockcasings", GT_Material_Casings.INSTANCE);
-        for (byte i = 0; i < 16; i = (byte) (i + 1)) {
-            Textures.BlockIcons.casingTexturePages[0][i] = new GT_CopiedBlockTexture(this, 6, i);
+        for (int i = 0; i < 16; i++) {
+            Textures.BlockIcons.casingTexturePages[0][i] = TextureFactory.of(this, i);
         }
 
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "ULV Machine Casing");
@@ -66,6 +65,7 @@ public class GT_Block_Casings1
         ItemList.Casing_Coil_Superconductor.set(new ItemStack(this, 1, 15));
     }
 
+    @Override
     public IIcon getIcon(int aSide, int aMeta) {
         if ((aMeta >= 0) && (aMeta < 16)) {
             switch (aMeta) {
@@ -93,6 +93,7 @@ public class GT_Block_Casings1
         return Textures.BlockIcons.MACHINE_CASING_SOLID_STEEL.getIcon();
     }
 
+    @Override
     public int colorMultiplier(IBlockAccess aWorld, int aX, int aY, int aZ) {
         return aWorld.getBlockMetadata(aX, aY, aZ) > 9 ? super.colorMultiplier(aWorld, aX, aY, aZ) : gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[0] << 16 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[1] << 8 | gregtech.api.enums.Dyes.MACHINE_METAL.mRGBa[2];
     }

@@ -1,6 +1,7 @@
 package gregtech.api.enums;
 
 import gregtech.api.interfaces.IItemContainer;
+import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -9,6 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
+import java.util.Locale;
+
+import static gregtech.api.enums.GT_Values.NI;
 import static gregtech.api.enums.GT_Values.W;
 
 /**
@@ -401,6 +405,12 @@ public enum ItemList implements IItemContainer {
     Electric_Pump_UHV,
     Electric_Pump_UEV,
 
+    Steam_Valve_LV,
+    Steam_Valve_MV,
+    Steam_Valve_HV,
+    Steam_Valve_EV,
+    Steam_Valve_IV,
+
     Conveyor_Module_LV,
     Conveyor_Module_MV,
     Conveyor_Module_HV,
@@ -770,6 +780,7 @@ public enum ItemList implements IItemContainer {
     Casing_Grate,
     Casing_Vent,
     Casing_RadiationProof,
+    Casing_AdvancedRadiationProof,
     Casing_Firebox_Bronze,
     Casing_Firebox_Steel,
     Casing_Firebox_TungstenSteel,
@@ -1215,9 +1226,6 @@ public enum ItemList implements IItemContainer {
     Machine_HV_Massfab,
     Machine_EV_Massfab,
     Machine_IV_Massfab,
-    Machine_LuV_Massfab,
-    Machine_ZPM_Massfab,
-    Machine_UV_Massfab,
 
     Machine_LV_Amplifab,
     Machine_MV_Amplifab,
@@ -1395,6 +1403,14 @@ public enum ItemList implements IItemContainer {
     Super_Chest_HV,
     Super_Chest_EV,
     Super_Chest_IV,
+    
+    Long_Distance_Pipeline_Fluid,
+    Long_Distance_Pipeline_Item,
+
+    Long_Distance_Pipeline_Fluid_Pipe,
+    Long_Distance_Pipeline_Item_Pipe,
+
+    Hatch_Output_Bus_ME,
 
     NULL,
     Cover_RedstoneTransmitterExternal,
@@ -1434,7 +1450,9 @@ public enum ItemList implements IItemContainer {
     Casing_Coil_Nichrome,
     Casing_Coil_TungstenSteel,
     Casing_Coil_HSSG,
+    Casing_Coil_HSSS,
     Casing_Coil_Naquadah,
+    Casing_Coil_Trinium,
     Casing_Coil_NaquadahAlloy,
     Casing_Coil_ElectrumFlux,
     Casing_Coil_AwakenedDraconium,
@@ -1542,20 +1560,6 @@ public enum ItemList implements IItemContainer {
     Moxcell_2,
     Moxcell_4,
 
-    ModularBasicHelmet,
-    ModularBasicChestplate,
-    ModularBasicLeggings,
-    ModularBasicBoots,
-
-    ModularElectric1Helmet,
-    ModularElectric1Chestplate,
-    ModularElectric1Leggings,
-    ModularElectric1Boots,
-
-    ModularElectric2Helmet,
-    ModularElectric2Chestplate,
-    ModularElectric2Leggings,
-    ModularElectric2Boots,
     Block_Powderbarrel,
     GelledToluene,
 
@@ -1568,6 +1572,8 @@ public enum ItemList implements IItemContainer {
     FluidRegulator_ZPM,
     FluidRegulator_UV,
     FluidFilter,
+    ItemFilter_Export,
+    ItemFilter_Import,
     CuringOven,
     Machine_Multi_Assemblyline,
     Machine_Multi_DieselEngine,
@@ -2010,8 +2016,24 @@ public enum ItemList implements IItemContainer {
     public ItemStack getWithName(long aAmount, String aDisplayName, Object... aReplacements) {
         ItemStack rStack = get(1, aReplacements);
         if (GT_Utility.isStackInvalid(rStack))
-            return null;
-        rStack.setStackDisplayName(aDisplayName);
+            return NI;
+
+        // CamelCase alphanumeric words from aDisplayName
+        StringBuilder tCamelCasedDisplayNameBuilder = new StringBuilder();
+        final String[] tDisplayNameWords = aDisplayName.split("\\W");
+        for (String tWord : tDisplayNameWords){
+            if (tWord.length() > 0) tCamelCasedDisplayNameBuilder.append(tWord.substring(0, 1).toUpperCase(Locale.US));
+            if (tWord.length() > 1) tCamelCasedDisplayNameBuilder.append(tWord.substring(1).toLowerCase(Locale.US));
+        }
+        if (tCamelCasedDisplayNameBuilder.length() == 0) {
+            // CamelCased DisplayName is empty, so use hash of aDisplayName
+            tCamelCasedDisplayNameBuilder.append(((Long) (long) aDisplayName.hashCode()));
+        }
+
+        // Construct a translation key from UnlocalizedName and CamelCased DisplayName
+        final String tKey = rStack.getUnlocalizedName() + ".with." + tCamelCasedDisplayNameBuilder + ".name";
+
+        rStack.setStackDisplayName(GT_LanguageManager.addStringLocalization(tKey, aDisplayName));
         return GT_Utility.copyAmount(aAmount, rStack);
     }
 
@@ -2049,5 +2071,14 @@ public enum ItemList implements IItemContainer {
         for (Object tOreName : aOreNames)
             GT_OreDictUnificator.registerOre(tOreName, getWildcard(1));
         return this;
+    }
+
+    /**
+     * Returns the internal stack.
+     * This method is unsafe. It's here only for quick operations.
+     * DON'T CHANGE THE RETURNED VALUE!
+     */
+    public ItemStack getInternalStack_unsafe() {
+        return mStack;
     }
 }

@@ -17,8 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class Behaviour_Arrow
-        extends Behaviour_None {
+public class Behaviour_Arrow extends Behaviour_None {
     public static Behaviour_Arrow DEFAULT_WOODEN = new Behaviour_Arrow(GT_Entity_Arrow.class, 1.0F, 6.0F);
     public static Behaviour_Arrow DEFAULT_PLASTIC = new Behaviour_Arrow(GT_Entity_Arrow.class, 1.5F, 6.0F);
     private final int mLevel;
@@ -39,6 +38,7 @@ public class Behaviour_Arrow
         this.mLevel = aLevel;
     }
 
+    @Override
     public boolean onLeftClickEntity(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, Entity aEntity) {
         if ((aEntity instanceof EntityLivingBase)) {
             GT_Utility.GT_EnchantmentHelper.applyBullshitA((EntityLivingBase) aEntity, aPlayer, aStack);
@@ -54,6 +54,7 @@ public class Behaviour_Arrow
         return false;
     }
 
+    @Override
     public boolean isItemStackUsable(GT_MetaBase_Item aItem, ItemStack aStack) {
         if ((this.mEnchantment != null) && (this.mLevel > 0)) {
             NBTTagCompound tNBT = GT_Utility.ItemNBT.getNBT(aStack);
@@ -66,10 +67,12 @@ public class Behaviour_Arrow
         return true;
     }
 
+    @Override
     public boolean canDispense(GT_MetaBase_Item aItem, IBlockSource aSource, ItemStack aStack) {
         return true;
     }
 
+    @Override
     public ItemStack onDispense(GT_MetaBase_Item aItem, IBlockSource aSource, ItemStack aStack) {
         World aWorld = aSource.getWorld();
         IPosition tPosition = BlockDispenser.func_149939_a(aSource);
@@ -88,10 +91,12 @@ public class Behaviour_Arrow
         return super.onDispense(aItem, aSource, aStack);
     }
 
+    @Override
     public boolean hasProjectile(GT_MetaBase_Item aItem, SubTag aProjectileType, ItemStack aStack) {
         return aProjectileType == SubTag.PROJECTILE_ARROW;
     }
 
+    @Override
     public EntityArrow getProjectile(GT_MetaBase_Item aItem, SubTag aProjectileType, ItemStack aStack, World aWorld, double aX, double aY, double aZ) {
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;
@@ -101,6 +106,7 @@ public class Behaviour_Arrow
         return rArrow;
     }
 
+    @Override
     public EntityArrow getProjectile(GT_MetaBase_Item aItem, SubTag aProjectileType, ItemStack aStack, World aWorld, EntityLivingBase aEntity, float aSpeed) {
         if (!hasProjectile(aItem, aProjectileType, aStack)) {
             return null;

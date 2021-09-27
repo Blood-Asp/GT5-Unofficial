@@ -12,8 +12,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 
-import java.util.Iterator;
-
 public class GT_Container_QuantumChest extends GT_ContainerMetaTile_Machine {
 
     public int mContent = 0;
@@ -42,9 +40,8 @@ public class GT_Container_QuantumChest extends GT_ContainerMetaTile_Machine {
             mContent = 0;
         }
 
-        Iterator var2 = this.crafters.iterator();
-        while (var2.hasNext()) {
-            ICrafting var1 = (ICrafting) var2.next();
+        for (Object crafter : this.crafters) {
+            ICrafting var1 = (ICrafting) crafter;
             var1.sendProgressBarUpdate(this, 100, mContent & 65535);
             var1.sendProgressBarUpdate(this, 101, mContent >>> 16);
         }

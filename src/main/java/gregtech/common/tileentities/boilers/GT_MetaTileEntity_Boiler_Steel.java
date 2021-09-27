@@ -1,17 +1,23 @@
 package gregtech.common.tileentities.boilers;
 
-import gregtech.api.enums.Dyes;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.common.gui.GT_Container_Boiler;
 import gregtech.common.gui.GT_GUIContainer_Boiler;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GT_MetaTileEntity_Boiler_Steel
-        extends GT_MetaTileEntity_Boiler_Bronze {//TODO CHECK POLLUTION VALUES AND DESCRIPTIONS FOR POLLUTION SPOILERS
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.BOILER_FRONT_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE;
+import static gregtech.api.enums.Textures.BlockIcons.MACHINE_STEELBRICKS_TOP;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE;
+
+public class GT_MetaTileEntity_Boiler_Steel extends GT_MetaTileEntity_Boiler_Bronze {
 
 
     public GT_MetaTileEntity_Boiler_Steel(int aID, String aName, String aNameRegional) {
@@ -29,40 +35,77 @@ public class GT_MetaTileEntity_Boiler_Steel
         super(aName, aTier, aDescription, aTextures);
     }
 
+    @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
         ITexture[][][] rTextures = new ITexture[5][17][];
-        for (byte i = -1; i < 16; i = (byte) (i + 1)) {
-            ITexture[] tmp0 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_BOTTOM, Dyes.getModulation(i, Dyes._NULL.mRGBa))};
-            rTextures[0][(i + 1)] = tmp0;
-            ITexture[] tmp1 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_TOP, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE)};
-            rTextures[1][(i + 1)] = tmp1;
-            ITexture[] tmp2 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE)};
-            rTextures[2][(i + 1)] = tmp2;
-            ITexture[] tmp4 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.BOILER_FRONT)};
-            rTextures[3][(i + 1)] = tmp4;
-            ITexture[] tmp5 = {new GT_RenderedTexture(Textures.BlockIcons.MACHINE_STEELBRICKS_SIDE, Dyes.getModulation(i, Dyes._NULL.mRGBa)), new GT_RenderedTexture(Textures.BlockIcons.BOILER_FRONT_ACTIVE)};
-            rTextures[4][(i + 1)] = tmp5;
+        final ITexture[]
+                texBottom = {TextureFactory.of(MACHINE_STEELBRICKS_BOTTOM)},
+                texTop = {TextureFactory.of(MACHINE_STEELBRICKS_TOP), TextureFactory.of(OVERLAY_PIPE)},
+                texSide = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE), TextureFactory.of(OVERLAY_PIPE)},
+                texFront = {TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_FRONT),
+                        TextureFactory.builder().addIcon(BOILER_FRONT_GLOW).glow().build()},
+                texFrontActive = {
+                        TextureFactory.of(MACHINE_STEELBRICKS_SIDE),
+                        TextureFactory.of(BOILER_FRONT_ACTIVE),
+                        TextureFactory.builder().addIcon(BOILER_FRONT_ACTIVE_GLOW).glow().build()};
+        for (int i = 0; i < 17; i++) {
+            rTextures[0][i] = texBottom;
+            rTextures[1][i] = texTop;
+            rTextures[2][i] = texSide;
+            rTextures[3][i] = texFront;
+            rTextures[4][i] = texFrontActive;
         }
         return rTextures;
     }
 
+    @Override
     public int maxProgresstime() {
         return 1000;
     }
 
+    @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity, 32000);
+        return new GT_Container_Boiler(aPlayerInventory, aBaseMetaTileEntity);
     }
 
+    @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
-        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png", 32000);
+        return new GT_GUIContainer_Boiler(aPlayerInventory, aBaseMetaTileEntity, "SteelBoiler.png");
     }
 
+    @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_Boiler_Steel(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-       super.singleBlockBoilerLogic(aBaseMetaTileEntity,aTick,2,40,10L,30);
+    @Override
+    protected int getPollution() {
+        return 30;
+    }
+
+    @Override
+    public int getCapacity() {
+        return 32000;
+    }
+
+    @Override
+    protected int getProductionPerSecond() {
+        return 300;
+    }
+
+    @Override
+    protected int getMaxTemperature() {
+        return 1000;
+    }
+
+    @Override
+    protected int getEnergyConsumption() {
+        return 2;
+    }
+
+    @Override
+    protected int getCooldownInterval() {
+        return 40;
     }
 }

@@ -10,12 +10,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class GT_Container_Filter
-        extends GT_ContainerMetaTile_Machine {
+public class GT_Container_Filter extends GT_ContainerMetaTile_Machine {
     public GT_Container_Filter(InventoryPlayer aInventoryPlayer, IGregTechTileEntity aTileEntity) {
         super(aInventoryPlayer, aTileEntity);
     }
 
+    @Override
     public void addSlots(InventoryPlayer aInventoryPlayer) {
         addSlotToContainer(new Slot(this.mTileEntity, 0, 98, 5));
         addSlotToContainer(new Slot(this.mTileEntity, 1, 116, 5));
@@ -44,6 +44,7 @@ public class GT_Container_Filter
         addSlotToContainer(new GT_Slot_Holo(this.mTileEntity, 18, 80, 63, false, true, 1));
     }
 
+    @Override
     public ItemStack slotClick(int aSlotIndex, int aMouseclick, int aShifthold, EntityPlayer aPlayer) {
         if (aSlotIndex < 9) {
             return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
@@ -117,10 +118,12 @@ public class GT_Container_Filter
         return super.slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
     }
 
+    @Override
     public int getSlotCount() {
         return 9;
     }
 
+    @Override
     public int getShiftClickSlotCount() {
         return 9;
     }

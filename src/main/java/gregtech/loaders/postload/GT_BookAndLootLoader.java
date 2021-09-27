@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
 
-public class GT_BookAndLootLoader
-        implements Runnable {
+public class GT_BookAndLootLoader implements Runnable {
+    @Override
     public void run() {
         GT_Log.out.println("GT_Mod: Adding worldgenerated Chest Content.");
         if (GT_Mod.gregtechproxy.mIncreaseDungeonLoot) {
@@ -47,11 +47,11 @@ public class GT_BookAndLootLoader
             tChest.setMax(tChest.getMax() + 16);
             tChest.setMin(tChest.getMin() + 8);
         }
-        ChestGenHooks.addItem("bonusChest", new WeightedRandomChestContent(ItemList.Bottle_Purple_Drink.get(1L, new Object[0]), 8, 16, 2));
+        ChestGenHooks.addItem("bonusChest", new WeightedRandomChestContent(ItemList.Bottle_Purple_Drink.get(1L), 8, 16, 2));
 
 
-        ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L, new Object[0]), 4, 8, 20));
-        ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(ItemList.Bottle_Purple_Drink.get(1L, new Object[0]), 8, 16, 80));
+        ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L), 4, 8, 20));
+        ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(ItemList.Bottle_Purple_Drink.get(1L), 8, 16, 80));
         ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Silver, 1L), 1, 6, 120));
         ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Lead, 1L), 1, 6, 30));
         ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L), 1, 6, 60));
@@ -68,7 +68,7 @@ public class GT_BookAndLootLoader
         ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 1L), 1, 6, 40));
         ChestGenHooks.addItem("dungeonChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Chrome, 1L), 1, 3, 40));
 
-        ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L, new Object[0]), 4, 8, 2));
+        ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L), 4, 8, 2));
         ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Silver, 1L), 4, 16, 12));
         ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Platinum, 1L), 2, 8, 4));
         ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Ruby, 1L), 2, 8, 2));
@@ -78,8 +78,8 @@ public class GT_BookAndLootLoader
         ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.GarnetRed, 1L), 2, 8, 4));
         ChestGenHooks.addItem("pyramidDesertyChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.GarnetYellow, 1L), 2, 8, 4));
 
-        ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(ItemList.Coin_Gold_Ancient.get(1L, new Object[0]), 16, 64, 10));
-        ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(ItemList.ZPM.getWithCharge(1L, 2147483647, new Object[0]), 1, 1, 1));
+        ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(ItemList.Coin_Gold_Ancient.get(1L), 16, 64, 10));
+        ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(ItemList.ZPM.getWithCharge(1L, 2147483647), 1, 1, 1));
         ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Bronze, 1L), 4, 16, 12));
         ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Ruby, 1L), 2, 8, 2));
         ChestGenHooks.addItem("pyramidJungleChest", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Sapphire, 1L), 2, 8, 2));
@@ -106,7 +106,7 @@ public class GT_BookAndLootLoader
         ChestGenHooks.addItem("mineshaftCorridor", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.toolHeadPickaxe, Materials.DamascusSteel, 1L), 1, 4, 1));
         ChestGenHooks.addItem("mineshaftCorridor", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.toolHeadShovel, Materials.DamascusSteel, 1L), 1, 4, 1));
 
-        ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(ItemList.McGuffium_239.get(1L, new Object[0]), 1, 1, 1));
+        ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(ItemList.McGuffium_239.get(1L), 1, 1, 1));
         ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Chrome, 1L), 1, 4, 6));
         ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neodymium, 1L), 2, 8, 6));
         ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Manganese, 1L), 2, 8, 12));
@@ -115,8 +115,8 @@ public class GT_BookAndLootLoader
         ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Brass, 1L), 4, 12, 12));
         ChestGenHooks.addItem("villageBlacksmith", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.DamascusSteel, 1L), 4, 12, 1));
 
-        ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L, new Object[0]), 4, 8, 6));
-        ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(ItemList.McGuffium_239.get(1L, new Object[0]), 1, 1, 10));
+        ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(ItemList.Bottle_Holy_Water.get(1L), 4, 8, 6));
+        ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(ItemList.McGuffium_239.get(1L), 1, 1, 10));
 
         ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.crateGtIngot, Materials.DamascusSteel, 1L), 4, 8, 6));
         ChestGenHooks.addItem("strongholdCrossing", new WeightedRandomChestContent(GT_OreDictUnificator.get(OrePrefixes.crateGtIngot, Materials.Steel, 1L), 8, 16, 12));

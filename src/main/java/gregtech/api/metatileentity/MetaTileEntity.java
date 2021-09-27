@@ -1,13 +1,18 @@
 package gregtech.api.metatileentity;
 
+import appeng.api.util.AECableType;
+import appeng.me.helpers.AENetworkProxy;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTech_API;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity.ClientEvents;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.util.*;
+import gregtech.common.GT_Client;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -43,6 +48,7 @@ import static gregtech.api.enums.GT_Values.V;
  * Call the Constructor like the following example inside the Load Phase, to register it.
  * "new GT_MetaTileEntity_E_Furnace(54, "GT_E_Furnace", "Automatic E-Furnace");"
  */
+@SuppressWarnings("unused")
 public abstract class MetaTileEntity implements IMetaTileEntity {
     /**
      * Only assigned for the MetaTileEntity in the List! Also only used to get the localized Name for the ItemStack and for getInvName.
@@ -53,6 +59,8 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
      */
     public final ItemStack[] mInventory;
     public boolean doTickProfilingInThisTick = true;
+
+
     /**
      * accessibility to this Field is no longer given, see below
      */
@@ -80,7 +88,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         } else {
             throw new IllegalArgumentException("MetaMachine-Slot Nr. " + aID + " is already occupied!");
         }
-        mName = aBasicName.replaceAll(" ", "_").toLowerCase(Locale.ENGLISH);
+        mName = aBasicName.replace(" ", "_").toLowerCase(Locale.ENGLISH);
         setBaseMetaTileEntity(GregTech_API.constructBaseMetaTileEntity());
         getBaseMetaTileEntity().setMetaTileID((short) aID);
         GT_LanguageManager.addStringLocalization("gt.blockmachines." + mName + ".name", aRegionalName);
@@ -93,6 +101,14 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public MetaTileEntity(String aName, int aInvSlotCount) {
         mInventory = new ItemStack[aInvSlotCount];
         mName = aName;
+    }
+
+    /**
+     * This method will only be called on client side
+     * @return whether the secondary description should be display. default is false
+     */
+    public boolean isDisplaySecondaryDescription() {
+        return false;
     }
 
     @Override
@@ -162,7 +178,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         if(!aPlayer.isSneaking()) return false;
         byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
         TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
-        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
+        if ((tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
             // The tile entity we're facing is a cable, let's try to connect to it
             return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onWireCutterRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
         }
@@ -174,7 +190,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
         if(!aPlayer.isSneaking()) return false;
         byte tSide = GT_Utility.getOppositeSide(aWrenchingSide);
         TileEntity tTileEntity = getBaseMetaTileEntity().getTileEntityAtSide(aWrenchingSide);
-        if (tTileEntity != null && (tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
+        if ((tTileEntity instanceof IGregTechTileEntity) && (((IGregTechTileEntity) tTileEntity).getMetaTileEntity() instanceof GT_MetaPipeEntity_Cable)) {
             // The tile entity we're facing is a cable, let's try to connect to it
             return ((IGregTechTileEntity) tTileEntity).getMetaTileEntity().onSolderingToolRightClick(aWrenchingSide, tSide, aPlayer, aX, aY, aZ);
         }
@@ -193,7 +209,15 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
 
     @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {/*Do nothing*/}
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aBaseMetaTileEntity.isClientSide() && GT_Client.changeDetected == 4) {
+            /* Client tick counter that is set to 5 on hiding pipes and covers.
+             * It triggers a texture update next client tick when reaching 4, with provision for 3 more update tasks,
+             * spreading client change detection related work and network traffic on different ticks, until it reaches 0.
+             */
+            aBaseMetaTileEntity.issueTextureUpdate();
+        }
+    }
 
     @Override
     public void inValidate() {/*Do nothing*/}
@@ -249,18 +273,21 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
     @Override
     public final void sendSound(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 4, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.DO_SOUND, aIndex);
     }
 
     @Override
     public final void sendLoopStart(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 5, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.START_SOUND_LOOP, aIndex);
         mSoundRequests++;
     }
 
     @Override
     public final void sendLoopEnd(byte aIndex) {
-        if (!getBaseMetaTileEntity().hasMufflerUpgrade()) getBaseMetaTileEntity().sendBlockEvent((byte) 6, aIndex);
+        if (!getBaseMetaTileEntity().hasMufflerUpgrade())
+            getBaseMetaTileEntity().sendBlockEvent(ClientEvents.STOP_SOUND_LOOP, aIndex);
     }
 
     /**
@@ -669,7 +696,7 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
     @Override
     public ItemStack decrStackSize(int aIndex, int aAmount) {
-        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copy(tStack);
+        ItemStack tStack = getStackInSlot(aIndex), rStack = GT_Utility.copyOrNull(tStack);
         if (tStack != null) {
             if (tStack.stackSize <= aAmount) {
                 if (setStackToZeroInsteadOfNull(aIndex)) tStack.stackSize = 0;
@@ -932,5 +959,21 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
     	return "";
     }
 
+    @Override
     public boolean shouldJoinIc2Enet() { return false; }
+    
+    public boolean shouldTriggerBlockUpdate() { return false; }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    public AECableType getCableConnectionType(ForgeDirection forgeDirection) {
+        return AECableType.NONE;
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    public AENetworkProxy getProxy() {
+        return null;
+    }
+
+    @Optional.Method(modid = "appliedenergistics2")
+    public void gridChanged() {}
 }

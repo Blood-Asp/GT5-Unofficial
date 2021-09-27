@@ -11,8 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class Behaviour_Sense
-        extends Behaviour_None {
+public class Behaviour_Sense extends Behaviour_None {
     private final int mCosts;
     private final String mTooltip = GT_LanguageManager.addStringLocalization("gt.behaviour.sense", "Rightclick to harvest Crop Sticks");
 
@@ -20,6 +19,7 @@ public class Behaviour_Sense
         this.mCosts = aCosts;
     }
 
+    @Override
     public boolean onItemUseFirst(GT_MetaBase_Item aItem, ItemStack aStack, EntityPlayer aPlayer, World aWorld, int aX, int aY, int aZ, int aSide, float hitX, float hitY, float hitZ) {
         if (aWorld.isRemote) {
             return false;
@@ -40,6 +40,7 @@ public class Behaviour_Sense
         return false;
     }
 
+    @Override
     public List<String> getAdditionalToolTips(GT_MetaBase_Item aItem, List<String> aList, ItemStack aStack) {
         aList.add(this.mTooltip);
         return aList;

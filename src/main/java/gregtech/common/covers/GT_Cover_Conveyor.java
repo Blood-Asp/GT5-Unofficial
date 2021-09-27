@@ -30,6 +30,12 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
         this.mMaxStacks = maxStacks;
     }
 
+    @Override
+    public boolean isRedstoneSensitive(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
+        return false;
+    }
+
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((aCoverVariable % 6 > 1) && ((aTileEntity instanceof IMachineProgress))) {
             if (((IMachineProgress) aTileEntity).isAllowedToWork() != aCoverVariable % 6 < 4) {
@@ -41,36 +47,13 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
                  toEntity = aCoverVariable % 2 != 0 ? aTileEntity : tTileEntity;
         byte fromSide = aCoverVariable % 2 != 0 ? GT_Utility.getOppositeSide(aSide) : aSide,
                toSide = aCoverVariable % 2 == 0 ? GT_Utility.getOppositeSide(aSide) : aSide;
-        boolean costsEnergy = ((aCoverVariable % 2 == 0) || (aSide != 1)) && ((aCoverVariable % 2 != 0) || (aSide != 0)) && (aTileEntity.getUniversalEnergyCapacity() >= 128L);
-        byte moved;
 
-
-        if (costsEnergy) {
-            long tStoredEnergy = aTileEntity.getUniversalEnergyStored();
-            int tMaxStacks = (int)(tStoredEnergy/(4*64*this.mMaxStacks));
-            if (tMaxStacks > this.mMaxStacks)
-                tMaxStacks = this.mMaxStacks;
-            int tCost = moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,tMaxStacks);
-            aTileEntity.decreaseStoredEnergyUnits(4 * tCost, true);
-        } else {
-            moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
-        }
-
-
-//        for(int i=0 ; i < this.mMaxStacks ; i++) {
-//            // Costs energy but we don't have enough, bail
-//            if ((costsEnergy && !aTileEntity.isUniversalEnergyStored(256L)))
-//                break;
-//
-//            moved = GT_Utility.moveOneItemStack(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1);
-//
-//            if(moved == 0)
-//                break;
-//        }
+        moveMultipleItemStacks(fromEntity, toEntity, fromSide , toSide, null, false, (byte) 64, (byte) 1, (byte) 64, (byte) 1,this.mMaxStacks);
 
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         aCoverVariable = (aCoverVariable + (aPlayer.isSneaking()? -1 : 1)) % 12;
         if(aCoverVariable <0){aCoverVariable = 11;}
@@ -91,42 +74,52 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return (aCoverVariable >= 6) || (aCoverVariable % 2 != 0);
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return (aCoverVariable >= 6) || (aCoverVariable % 2 == 0);
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return this.mTickRate;
     }
@@ -150,10 +143,10 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
         private final int coverID;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         public GUI(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
             super(aTileEntity, 176, 107, GT_Utility.intToStack(aCoverID));
@@ -184,6 +177,7 @@ public class GT_Cover_Conveyor extends GT_CoverBehavior {
             updateButtons();
         }
 
+        @Override
         public void buttonClicked(GuiButton btn){
             if (getClickable(btn.id)){
                 coverVariable = getNewCoverVariable(btn.id);

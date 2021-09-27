@@ -1,7 +1,7 @@
 package gregtech.api.util;
 
 import gregtech.api.interfaces.internal.IGT_CraftingRecipe;
-import gregtech.api.items.GT_MetaGenerated_Tool;
+import gregtech.api.objects.ReverseShapedRecipe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.InventoryCrafting;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class GT_Shaped_Recipe extends ShapedOreRecipe implements IGT_CraftingRecipe {
-    public final boolean mDismantleable, mRemovableByGT, mKeepingNBT;
+    public final boolean mRemovableByGT, mKeepingNBT;
     private final Enchantment[] mEnchantmentsAdded;
     private final int[] mEnchantmentLevelsAdded;
 
@@ -21,7 +21,9 @@ public class GT_Shaped_Recipe extends ShapedOreRecipe implements IGT_CraftingRec
         mEnchantmentLevelsAdded = aEnchantmentLevelsAdded;
         mRemovableByGT = aRemovableByGT;
         mKeepingNBT = aKeepingNBT;
-        mDismantleable = aDismantleAble;
+        if (aDismantleAble) {
+            new ReverseShapedRecipe(aResult, aRecipe);
+        }
     }
 
     @Override
@@ -63,23 +65,6 @@ public class GT_Shaped_Recipe extends ShapedOreRecipe implements IGT_CraftingRec
                 for (int i = 0; i < aGrid.getSizeInventory(); i++)
                     tCharge += GT_ModHandler.dischargeElectricItem(aGrid.getStackInSlot(i), Integer.MAX_VALUE, Integer.MAX_VALUE, true, true, true);
                 if (tCharge > 0) GT_ModHandler.chargeElectricItem(rStack, tCharge, Integer.MAX_VALUE, true, false);
-            }
-
-            // Saving Ingredients inside the Item.
-            if (mDismantleable) {
-                NBTTagCompound rNBT = rStack.getTagCompound(), tNBT = new NBTTagCompound();
-                if (rNBT == null) rNBT = new NBTTagCompound();
-                for (int i = 0; i < 9; i++) {
-                    ItemStack tStack = aGrid.getStackInSlot(i);
-                    if (tStack != null && GT_Utility.getContainerItem(tStack, true) == null && !(tStack.getItem() instanceof GT_MetaGenerated_Tool)) {
-                        tStack = GT_Utility.copyAmount(1, tStack);
-                        if(GT_Utility.isStackValid(tStack)){
-                        GT_ModHandler.dischargeElectricItem(tStack, Integer.MAX_VALUE, Integer.MAX_VALUE, true, false, true);
-                        tNBT.setTag("Ingredient." + i, tStack.writeToNBT(new NBTTagCompound()));}
-                    }
-                }
-                rNBT.setTag("GT.CraftingComponents", tNBT);
-                rStack.setTagCompound(rNBT);
             }
 
             // Add Enchantments

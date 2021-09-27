@@ -8,7 +8,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.BaseTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
@@ -27,9 +27,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import static gregtech.api.enums.GT_Values.D1;
 import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.enums.GT_Values.debugBlockPump;
 
@@ -54,13 +57,16 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     public Block mSecondaryPumpedBlock = null;
 
     private int radiusConfig; //Pump configured radius
+    private boolean mRetractDone = false;
 
     public GT_MetaTileEntity_Pump(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 3,
                 new String[]{"The best way to empty Oceans! Outputs on top",
-                        getEuUsagePerTier(aTier) + " EU/operation, " + GT_Utility.safeInt(160 / (long)Math.pow(2, aTier) ) + " sec per bucket, no stuttering",
+                        getEuUsagePerTier(aTier) + " EU/operation, " + GT_Utility.safeInt(160 / 20 / (long)Math.pow(2, aTier) ) + " sec per bucket, no stuttering",
                         "Maximum pumping area: " + (getMaxDistanceForTier( aTier) * 2 + 1) + "x" + (getMaxDistanceForTier( aTier) * 2 + 1),
-                        "Use Screwdriver to regulate pumping area"});
+                        "Use Screwdriver to regulate pumping area",
+                        "Disable itself upon hitting rocks",
+                        "Disable the bottom pump to retract the pipe!"});
         radiusConfig = getMaxDistanceForTier(mTier);
     }
 
@@ -79,6 +85,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         return new GT_MetaTileEntity_Pump(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         boolean wasPumping = this.wasPumping || !this.mPumpList.isEmpty();
         if (debugBlockPump) {
@@ -91,6 +98,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         aNBT.setInteger("radiusConfig", radiusConfig);
     }
 
+    @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         this.wasPumping = aNBT.getBoolean("wasPumping");
@@ -205,86 +213,131 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             }
             if (this.mPumpCountBelow <= 0) {
                 // Only the bottom most pump does anything
-                if ((getBaseMetaTileEntity().isAllowedToWork()) && (getBaseMetaTileEntity().isUniversalEnergyStored(this.getEuUsagePerAction()))
-                        && ((this.mFluid == null) || (this.mFluid.amount + 1000 <= getCapacity()))) {
-                    boolean tMovedOneDown = false;
-                    if ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 100L == 0L)) {
-                        if (!this.wasPumping){
-                            tMovedOneDown = moveOneDown();
-                            if (debugBlockPump) {
-                                GT_Log.out.println("PUMP: Moved down");
-                            }
-                        } else if (debugBlockPump) {
-                            GT_Log.out.println("PUMP: Was pumping, didn't move down");
-                        }
-                    }
-                    int x = getBaseMetaTileEntity().getXCoord(), z = getBaseMetaTileEntity().getZCoord();
-
-                    if (!this.hasValidFluid()) {
-                        // We don't have a valid block, let's try to find one
-                        int y = getYOfPumpHead();
-
-                        if (debugBlockPump && this.mPrimaryPumpedBlock != null) {
-                            GT_Log.out.println("PUMP: Had an invalid pump block. Trying to find a fluid at Y: " + y + 
-                                    " Previous blocks 1: " + this.mPrimaryPumpedBlock + " 2: " + this.mSecondaryPumpedBlock);
-                        }
-                        // First look down
-                        checkForFluidToPump(x,     y - 1, z    );
-
-                        // Then look all around
-                        checkForFluidToPump(x,     y,     z + 1);
-                        checkForFluidToPump(x,     y,     z - 1);
-                        checkForFluidToPump(x + 1, y,     z    );
-                        checkForFluidToPump(x - 1, y,     z    );
-                        this.clearQueue(false);
-
-                        if(this.hasValidFluid()) {
-                            // Don't move down and rebuild the queue if we now have a valid fluid
-                            this.wasPumping = true;
-                        }
-
-                    } else if (getYOfPumpHead() < getBaseMetaTileEntity().getYCoord()) {
-                        // We didn't just look for a block, and the pump head is below the pump
-                        if ((tMovedOneDown) || this.wasPumping ||
-                                ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 200L == 100L)) ||
-                                (getBaseMetaTileEntity().getTimer() % 72000L == 100L)) 
-                        {
-                            // Rebuild the list to pump if any of the following conditions are true:
-                            //  1) We just moved down
-                            //  2) We were previously pumping (and possibly just reloaded)
-                            //  3) We have an empty queue and enough time has passed
-                            //  4) A long while has has passed
-                            if (debugBlockPump) {
-                                GT_Log.out.println("PUMP: Rebuilding pump list - Size " +
-                                        this.mPumpList.size() + " WasPumping: " + this.wasPumping + " Timer " + getBaseMetaTileEntity().getTimer());
-                            }
-                            int yPump = getBaseMetaTileEntity().getYCoord() - 1, yHead = getYOfPumpHead();
-
-                            this.rebuildPumpQueue(x, yPump, z, yHead);
-
-                            if (debugBlockPump) {
-                                GT_Log.out.println("PUMP: Rebuilt pump list - Size " + this.mPumpList.size());
-                            }
-
-                        }
-                        if ((!tMovedOneDown) && (this.mPumpTimer <= 0)) {
-                            while ((!this.mPumpList.isEmpty())) {
-                                ChunkPosition pos = this.mPumpList.pollLast();
-                                if (consumeFluid(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ)) {
-                                    // Keep trying until we consume something, or the list is empty
-                                    break;
+                if (getBaseMetaTileEntity().isAllowedToWork()) {
+                    mRetractDone = false;
+                    if ((getBaseMetaTileEntity().isUniversalEnergyStored(this.getEuUsagePerAction())) && ((this.mFluid == null) || (this.mFluid.amount + 1000 <= getCapacity()))) {
+                        boolean tMovedOneDown = false;
+                        if ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 100L == 0L)) {
+                            if (!this.wasPumping) {
+                                tMovedOneDown = moveOneDown();
+                                if (!tMovedOneDown) {
+                                    if (canMoveDown(getBaseMetaTileEntity().getXCoord(), Math.max(getYOfPumpHead() - 1, 1), getBaseMetaTileEntity().getZCoord())) {
+                                        if (debugBlockPump) {
+                                            GT_Log.out.println("PUMP: No pipe left. Idle for a little longer.");
+                                        }
+                                        this.mPumpTimer = 160;
+                                    } else {
+                                        getBaseMetaTileEntity().disableWorking();
+                                        if (debugBlockPump) {
+                                            GT_Log.out.println("PUMP: Can't move. Retracting in next few ticks");
+                                        }
+                                    }
+                                } else if (debugBlockPump) {
+                                    GT_Log.out.println("PUMP: Moved down");
                                 }
+                            } else if (debugBlockPump) {
+                                GT_Log.out.println("PUMP: Was pumping, didn't move down");
                             }
-                            this.mPumpTimer = GT_Utility.safeInt(160 / (long)Math.pow(2, this.mTier) );
-                            this.mPumpTimer = mPumpTimer==0 ? 1 : mPumpTimer;
                         }
-                    } else {
-                        // We somehow have a valid fluid, but the head of the pump isn't below the pump.  Perhaps someone broke some pipes
-                        // -- Clear the queue and we should try to move down until we can find a valid fluid
-                        this.clearQueue(false);
+                        int x = getBaseMetaTileEntity().getXCoord(), z = getBaseMetaTileEntity().getZCoord();
+
+                        if (!this.hasValidFluid()) {
+                            // We don't have a valid block, let's try to find one
+                            int y = getYOfPumpHead();
+
+                            if (debugBlockPump && this.mPrimaryPumpedBlock != null) {
+                                GT_Log.out.println("PUMP: Had an invalid pump block. Trying to find a fluid at Y: " + y +
+                                        " Previous blocks 1: " + this.mPrimaryPumpedBlock + " 2: " + this.mSecondaryPumpedBlock);
+                            }
+                            // First look down
+                            checkForFluidToPump(x, y - 1, z);
+
+                            // Then look all around
+                            checkForFluidToPump(x, y, z + 1);
+                            checkForFluidToPump(x, y, z - 1);
+                            checkForFluidToPump(x + 1, y, z);
+                            checkForFluidToPump(x - 1, y, z);
+                            this.clearQueue(false);
+
+                            if (this.hasValidFluid()) {
+                                // Don't move down and rebuild the queue if we now have a valid fluid
+                                this.wasPumping = true;
+                            }
+
+                        } else if (getYOfPumpHead() < getBaseMetaTileEntity().getYCoord()) {
+                            // We didn't just look for a block, and the pump head is below the pump
+                            if ((tMovedOneDown) || this.wasPumping ||
+                                    ((this.mPumpList.isEmpty()) && (getBaseMetaTileEntity().getTimer() % 200L == 100L)) ||
+                                    (getBaseMetaTileEntity().getTimer() % 72000L == 100L))
+                            {
+                                // Rebuild the list to pump if any of the following conditions are true:
+                                //  1) We just moved down
+                                //  2) We were previously pumping (and possibly just reloaded)
+                                //  3) We have an empty queue and enough time has passed
+                                //  4) A long while has has passed
+                                if (debugBlockPump) {
+                                    GT_Log.out.println("PUMP: Rebuilding pump list - Size " +
+                                            this.mPumpList.size() + " WasPumping: " + this.wasPumping + " Timer " + getBaseMetaTileEntity().getTimer());
+                                }
+                                int yPump = getBaseMetaTileEntity().getYCoord() - 1, yHead = getYOfPumpHead();
+
+                                this.rebuildPumpQueue(x, yPump, z, yHead);
+
+                                if (debugBlockPump) {
+                                    GT_Log.out.println("PUMP: Rebuilt pump list - Size " + this.mPumpList.size());
+                                }
+
+                            }
+                            if ((!tMovedOneDown) && (this.mPumpTimer <= 0)) {
+                                while ((!this.mPumpList.isEmpty())) {
+                                    ChunkPosition pos = this.mPumpList.pollLast();
+                                    if (consumeFluid(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ)) {
+                                        // Keep trying until we consume something, or the list is empty
+                                        break;
+                                    }
+                                }
+                                this.mPumpTimer = GT_Utility.safeInt(160 / (long) Math.pow(2, this.mTier));
+                                this.mPumpTimer = mPumpTimer == 0 ? 1 : mPumpTimer;
+                            }
+                        } else {
+                            // We somehow have a valid fluid, but the head of the pump isn't below the pump.  Perhaps someone broke some pipes
+                            // -- Clear the queue and we should try to move down until we can find a valid fluid
+                            this.clearQueue(false);
+                        }
+                    } else if (debugBlockPump) {
+                        GT_Log.out.println("PUMP: Not enough energy? Free space?");
                     }
-                } else if (debugBlockPump) {
-                    GT_Log.out.println("PUMP: Disable? Not enough energy? Free space?");
+                } else {
+                    if (!mRetractDone && ((aTick % 5) == 0) && ((this.mInventory[0] == null) || this.mInventory[0].stackSize == 0 || (GT_Utility.areStacksEqual(this.mInventory[0], MINING_PIPE) && (this.mInventory[0].stackSize < this.mInventory[0].getMaxStackSize())))) {
+                        // try retract if all of these conditions are met
+                        // 1. not retracted yet
+                        // 2. once per 5 tick
+                        // 3. can hold retracted pipe in inventory
+                        int tHeadY = getYOfPumpHead();
+                        if (tHeadY < this.getBaseMetaTileEntity().getYCoord()) {
+                            final int tXCoord = this.getBaseMetaTileEntity().getXCoord();
+                            final int tZCoord = this.getBaseMetaTileEntity().getZCoord();
+                            this.getBaseMetaTileEntity().getWorld().setBlockToAir(tXCoord, tHeadY, tZCoord);
+                            if (tHeadY < this.getBaseMetaTileEntity().getYCoord() - 1) {
+                                getBaseMetaTileEntity().getWorld().setBlock(tXCoord, tHeadY + 1, tZCoord, MINING_PIPE_TIP_BLOCK);
+                            }
+                            if (this.mInventory[0] == null) {
+                                final ItemStack copy = MINING_PIPE.copy();
+                                copy.stackSize = 1;
+                                this.setInventorySlotContents(0, copy);
+                            } else {
+                                this.mInventory[0].stackSize++;
+                            }
+                            if (debugBlockPump) {
+                                GT_Log.out.println("PUMP: Retracted one pipe");
+                            }
+                        } else {
+                            mRetractDone = true;
+                            if (debugBlockPump) {
+                                GT_Log.out.println("PUMP: Retract done");
+                            }
+                        }
+                    }
                 }
                 getBaseMetaTileEntity().setActive(!this.mPumpList.isEmpty());
             }
@@ -305,15 +358,15 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     }
 
     private int getMaxPumpableDistance() {
-        return GT_MetaTileEntity_Pump.getMaxDistanceForTier(this.mTier);
+        return getMaxDistanceForTier(this.mTier);
     }
 
     private long getEuUsagePerAction() {
-        return GT_MetaTileEntity_Pump.getEuUsagePerTier(this.mTier); 
+        return getEuUsagePerTier(this.mTier);
     }
 
     private boolean hasValidFluid() {
-        return (!GT_Utility.isBlockInvalid(this.mPrimaryPumpedBlock) && !GT_Utility.isBlockInvalid(this.mSecondaryPumpedBlock));
+        return mPrimaryPumpedBlock != null && mSecondaryPumpedBlock != null;
     }
 
     private boolean moveOneDown() {
@@ -469,7 +522,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
             return;
 
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
-        if (GT_Utility.isBlockValid(aBlock)) {
+        if (aBlock != null) {
             if ((aBlock == Blocks.water) || (aBlock == Blocks.flowing_water)) {
                 this.mPrimaryPumpedBlock = Blocks.water;
                 this.mSecondaryPumpedBlock = Blocks.flowing_water;
@@ -490,6 +543,21 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
         this.mSecondaryPumpedBlock = null;
     }
 
+    /** only check if block below can be replaced with pipe tip. pipe stockpile condition is ignored */
+    private boolean canMoveDown(int aX, int aY, int aZ) {
+        if (!GT_Utility.eraseBlockByFakePlayer(getFakePlayer(getBaseMetaTileEntity()), aX, aY, aZ, true)) return false;
+
+        Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
+
+        return aBlock != null &&
+                (aBlock == Blocks.water ||
+                        aBlock == Blocks.flowing_water ||
+                        aBlock == Blocks.lava ||
+                        aBlock == Blocks.flowing_lava ||
+                        aBlock instanceof IFluidBlock ||
+                        aBlock.isAir(getBaseMetaTileEntity().getWorld(), aX, aY, aZ));
+    }
+
     private boolean consumeFluid(int aX, int aY, int aZ) {
         // Try to consume a fluid at a location
         // Returns true if something was consumed, otherwise false
@@ -497,7 +565,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
         Block aBlock = getBaseMetaTileEntity().getBlock(aX, aY, aZ);
 
-        if ((GT_Utility.isBlockValid(aBlock)) && ((this.mPrimaryPumpedBlock == aBlock) || (this.mSecondaryPumpedBlock == aBlock))) {
+        if (aBlock != null && ((this.mPrimaryPumpedBlock == aBlock) || (this.mSecondaryPumpedBlock == aBlock))) {
             boolean isWaterOrLava = ((this.mPrimaryPumpedBlock == Blocks.water || this.mPrimaryPumpedBlock == Blocks.lava));
 
             if (isWaterOrLava && getBaseMetaTileEntity().getMetaID(aX, aY, aZ) != 0) {
@@ -656,7 +724,7 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, byte aSide, byte aFacing, byte aColorIndex, boolean aActive, boolean aRedstone) {
-        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_PIPE_OUT) : new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
+        return new ITexture[]{Textures.BlockIcons.MACHINE_CASINGS[mTier][aColorIndex + 1], (aSide == 0 || aSide == 1) ? TextureFactory.of(Textures.BlockIcons.OVERLAY_PIPE_OUT) : TextureFactory.of(Textures.BlockIcons.OVERLAY_ADV_PUMP)};
     }
 
     @Override
@@ -667,8 +735,8 @@ public class GT_MetaTileEntity_Pump extends GT_MetaTileEntity_Hatch {
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         return new ITexture[]{
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP),
-                new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP), new GT_RenderedTexture(Textures.BlockIcons.OVERLAY_ADV_PUMP),};
+                TextureFactory.of(Textures.BlockIcons.OVERLAY_ADV_PUMP), TextureFactory.of(Textures.BlockIcons.OVERLAY_ADV_PUMP),
+                TextureFactory.of(Textures.BlockIcons.OVERLAY_ADV_PUMP), TextureFactory.of(Textures.BlockIcons.OVERLAY_ADV_PUMP),};
     }
     private FakePlayer mFakePlayer = null;
 

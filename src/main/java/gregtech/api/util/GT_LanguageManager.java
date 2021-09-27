@@ -33,8 +33,12 @@ public class GT_LanguageManager {
         TEMPMAP.put(aKey.trim(), aEnglish);
         LanguageRegistry.instance().injectLanguage("en_US", TEMPMAP);
         TEMPMAP.clear();
-        if(sUseEnglishFile && !aWriteIntoLangFile && LANGMAP.containsKey(aKey)){
-        	aEnglish = LANGMAP.get(aKey);
+        if(sUseEnglishFile && !aWriteIntoLangFile){
+            if (!LANGMAP.containsKey(aKey)) {
+                Property tProperty = sEnglishFile.get("LanguageFile", aKey, aEnglish);
+                aEnglish = tProperty.getString();
+                LANGMAP.put(aKey, aEnglish);
+            } else aEnglish = LANGMAP.get(aKey);
         }
         return aEnglish;
     }
@@ -63,7 +67,12 @@ public class GT_LanguageManager {
 
     public static String getTranslation(String aKey) {
         if (aKey == null) return E;
-        String tTrimmedKey = aKey.trim(), rTranslation = LanguageRegistry.instance().getStringLocalization(tTrimmedKey);
+        String tTrimmedKey = aKey.trim(), rTranslation;
+        if (sUseEnglishFile) {
+        	rTranslation = LanguageRegistry.instance().getStringLocalization(tTrimmedKey);
+        } else {
+        	rTranslation = StatCollector.translateToLocal(tTrimmedKey);
+        }
         if (GT_Utility.isStringInvalid(rTranslation)) {
             rTranslation = StatCollector.translateToLocal(tTrimmedKey);
             if (GT_Utility.isStringInvalid(rTranslation) || tTrimmedKey.equals(rTranslation)) {

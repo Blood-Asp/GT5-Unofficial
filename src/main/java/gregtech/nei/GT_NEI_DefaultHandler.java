@@ -12,8 +12,10 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import gregtech.GT_Mod;
 import gregtech.api.enums.GT_Values;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.gui.GT_GUIContainer_BasicMachine;
+import gregtech.api.objects.GT_ItemStack;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_LanguageManager;
 import gregtech.api.util.GT_Log;
@@ -36,8 +38,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class GT_NEI_DefaultHandler
-        extends TemplateRecipeHandler {
+public class GT_NEI_DefaultHandler extends TemplateRecipeHandler {
     public static final int sOffsetX = 5;
     public static final int sOffsetY = 11;
 
@@ -50,7 +51,7 @@ public class GT_NEI_DefaultHandler
 
     public GT_NEI_DefaultHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {
         this.mRecipeMap = aRecipeMap;
-        this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 13, 36, 18), getOverlayIdentifier(), new Object[0]));
+        this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 13, 36, 18), getOverlayIdentifier()));
         if (!NEI_GT_Config.sIsAdded) {
             FMLInterModComms.sendRuntimeMessage(GT_Values.GT, "NEIPlugins", "register-crafting-handler", "gregtech@" + getRecipeName() + "@" + getOverlayIdentifier());
             GuiCraftingRecipe.craftinghandlers.add(this);
@@ -68,10 +69,12 @@ public class GT_NEI_DefaultHandler
         Minecraft.getMinecraft().fontRenderer.drawString(aString, aX, aY, aColor);
     }
 
+    @Override
     public TemplateRecipeHandler newInstance() {
         return new GT_NEI_DefaultHandler(this.mRecipeMap);
     }
 
+    @Override
     public void loadCraftingRecipes(String outputId, Object... results) {
         if (outputId.equals(getOverlayIdentifier())) {
             for (GT_Recipe tRecipe : getSortedRecipes()) {
@@ -84,6 +87,7 @@ public class GT_NEI_DefaultHandler
         }
     }
 
+    @Override
     public void loadCraftingRecipes(ItemStack aResult) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aResult);
 
@@ -96,13 +100,14 @@ public class GT_NEI_DefaultHandler
             }
         }
         FluidStack tFluid = GT_Utility.getFluidForFilledItem(aResult, true);
+        FluidStack tFluidStack;
         if (tFluid != null) {
+            tFluidStack = tFluid;
             tResults.add(GT_Utility.getFluidDisplayStack(tFluid, false));
-            for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-                if (tData.fluid.isFluidEqual(tFluid)) {
-                    tResults.add(GT_Utility.copy(new Object[]{tData.filledContainer}));
-                }
-            }
+        }
+        else tFluidStack = GT_Utility.getFluidFromDisplayStack(aResult);
+        if (tFluidStack != null) {
+            tResults.addAll(GT_Utility.getContainersFromFluid(tFluidStack));
         }
         for (GT_Recipe tRecipe : getSortedRecipes()) {
             if (!tRecipe.mHidden) {
@@ -117,6 +122,7 @@ public class GT_NEI_DefaultHandler
         }
     }
 
+    @Override
     public void loadUsageRecipes(ItemStack aInput) {
         ItemData tPrefixMaterial = GT_OreDictUnificator.getAssociation(aInput);
 
@@ -129,13 +135,14 @@ public class GT_NEI_DefaultHandler
             }
         }
         FluidStack tFluid = GT_Utility.getFluidForFilledItem(aInput, true);
+        FluidStack tFluidStack;
         if (tFluid != null) {
+            tFluidStack = tFluid;
             tInputs.add(GT_Utility.getFluidDisplayStack(tFluid, false));
-            for (FluidContainerRegistry.FluidContainerData tData : FluidContainerRegistry.getRegisteredFluidContainerData()) {
-                if (tData.fluid.isFluidEqual(tFluid)) {
-                    tInputs.add(GT_Utility.copy(new Object[]{tData.filledContainer}));
-                }
-            }
+        }
+        else tFluidStack = GT_Utility.getFluidFromDisplayStack(aInput);
+        if (tFluidStack != null) {
+            tInputs.addAll(GT_Utility.getContainersFromFluid(tFluidStack));
         }
         for (GT_Recipe tRecipe : getSortedRecipes()) {
             if (!tRecipe.mHidden) {
@@ -151,29 +158,35 @@ public class GT_NEI_DefaultHandler
         CachedDefaultRecipe tNEIRecipe;
     }
 
+    @Override
     public String getOverlayIdentifier() {
         return this.mRecipeMap.mNEIName;
     }
 
+    @Override
     public void drawBackground(int recipe) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GuiDraw.changeTexture(getGuiTexture());
         GuiDraw.drawTexturedModalRect(-4, -8, 1, 3, 174, 78);
     }
 
+    @Override
     public int recipiesPerPage() {
         return 1;
     }
 
+    @Override
     public String getRecipeName() {
         return GT_LanguageManager.getTranslation(this.mRecipeMap.mUnlocalizedName);
     }
 
+    @Override
     public String getGuiTexture() {
 //    return "gregtech:textures/gui/" + this.mRecipeMap.mUnlocalizedName + ".png";
         return this.mRecipeMap.mNEIGUIPath;
     }
 
+    @Override
     public List<String> handleItemTooltip(GuiRecipe gui, ItemStack aStack, List<String> currenttip, int aRecipeIndex) {
         TemplateRecipeHandler.CachedRecipe tObject = (TemplateRecipeHandler.CachedRecipe) this.arecipes.get(aRecipeIndex);
         if ((tObject instanceof CachedDefaultRecipe)) {
@@ -201,55 +214,59 @@ public class GT_NEI_DefaultHandler
         return currenttip;
     }
 
-	public void drawExtras(int aRecipeIndex) {
-		int tEUt = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mEUt;
-		int tDuration = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mDuration;
-		String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
-		if (recipeDesc == null) {
-			if (tEUt != 0) {
-				drawText(10, 73, trans("152","Total: ") + ((long)tDuration * tEUt) + " EU", -16777216);
-				drawText(10, 83, trans("153","Usage: ") + tEUt + " EU/t", -16777216);
-				if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
-                    byte tier=GT_Utility.getTier(tEUt / this.mRecipeMap.mAmperage);
-                    if(tier<0||tier>=16){
-                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU", 0xffFF0000);
+    @Override
+    public void drawExtras(int aRecipeIndex) {
+        int tEUt = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mEUt;
+        int tDuration = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mDuration;
+        String[] recipeDesc = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.getNeiDesc();
+        if (recipeDesc == null) {
+            if (tEUt != 0) {
+                drawText(10, 73, trans("152","Total: ") + GT_Utility.formatNumbers((long) tDuration * tEUt) + " EU", 0xFF000000);
+                drawText(10, 83, trans("153","Usage: ") + GT_Utility.formatNumbers(tEUt) + " EU/t", 0xFF000000);
+                if (this.mRecipeMap.mShowVoltageAmperageInNEI) {
+                    int voltage = tEUt / this.mRecipeMap.mAmperage;
+                    byte tier = GT_Utility.getTier(voltage);
+                    if (tier < 0 || tier >= 16) {
+                        drawText(10, 93, trans("154","Voltage: ") + GT_Utility.formatNumbers(voltage) + " EU", 0xFFFF0000);
 //add here gt logger
-                    }else{
-                        drawText(10, 93, trans("154","Voltage: ") + tEUt / this.mRecipeMap.mAmperage + " EU ("+GT_Values.VN[tier]+")", -16777216);
-                    }drawText(10, 103, trans("155","Amperage: ") + this.mRecipeMap.mAmperage, -16777216);
-				} else {
-					drawText(10, 93, trans("156","Voltage: unspecified"), -16777216);
-					drawText(10, 103, trans("157","Amperage: unspecified"), -16777216);
-				}
-			}
-			if (tDuration > 0) {
-				drawText(10, 113, trans("158","Time: ")+String.format("%.2f " + trans("161"," secs"), 0.05F * tDuration), -16777216);
-			}
-			int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
-			if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
-				drawText(10, 123, trans("159","Needs Low Gravity"), -16777216);
-			} else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
-				drawText(10, 123, trans("160","Needs Cleanroom"), -16777216);
+                    } else {
+                        drawText(10, 93, trans("154","Voltage: ") + GT_Utility.formatNumbers(voltage) + " EU (" + GT_Values.VN[tier] + ")", 0xFF000000);
+                    }
+                    drawText(10, 103, trans("155","Amperage: ") + GT_Utility.formatNumbers(this.mRecipeMap.mAmperage), 0xFF000000);
+                } else {
+                    drawText(10, 93, trans("156","Voltage: unspecified"), 0xFF000000);
+                    drawText(10, 103, trans("157","Amperage: unspecified"), 0xFF000000);
+                }
+            }
+            if (tDuration > 0) {
+                drawText(10, 113, trans("158","Time: ") + GT_Utility.formatNumbers(0.05d * tDuration) + trans("161"," secs"), 0xFF000000);
+            }
+            int tSpecial = ((CachedDefaultRecipe) this.arecipes.get(aRecipeIndex)).mRecipe.mSpecialValue;
+            if (tSpecial == -100 && GT_Mod.gregtechproxy.mLowGravProcessing) {
+                drawText(10, 123, trans("159","Needs Low Gravity"), 0xFF000000);
+            } else if (tSpecial == -200 && GT_Mod.gregtechproxy.mEnableCleanroom) {
+                drawText(10, 123, trans("160","Needs Cleanroom"), 0xFF000000);
             } else if (tSpecial == -201) {
-                drawText(10, 123, trans("206","Scan for Assembly Line"), -16777216);
+                drawText(10, 123, trans("206","Scan for Assembly Line"), 0xFF000000);
             } else if (tSpecial == -300 && GT_Mod.gregtechproxy.mEnableCleanroom) {
-                drawText(10, 123, trans("160","Needs Cleanroom & LowGrav"), -16777216);
+                drawText(10, 123, trans("160","Needs Cleanroom & LowGrav"), 0xFF000000);
             } else if (tSpecial == -400) {
-                drawText(10, 123, trans("216","Deprecated Recipe"), -16777216);
+                drawText(10, 123, trans("216","Deprecated Recipe"), 0xFF000000);
             } else if ((GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)) || (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePost))) {
-				drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier + this.mRecipeMap.mNEISpecialValuePost, -16777216);
-			}
-		} else {
-			int i = 0;
-			for (String descLine : recipeDesc) {
-				drawText(10, 73 + 10 * i, descLine, -16777216);
-				i++;
-			}
-		}
-	}
+                drawText(10, 123, this.mRecipeMap.mNEISpecialValuePre + GT_Utility.formatNumbers(tSpecial * this.mRecipeMap.mNEISpecialValueMultiplier) + this.mRecipeMap.mNEISpecialValuePost, 0xFF000000);
+            }
+        } else {
+            int i = 0;
+            for (String descLine : recipeDesc) {
+                drawText(10, 73 + 10 * i, descLine, 0xFF000000);
+                i++;
+            }
+        }
+    }
 
     public static class GT_RectHandler
             implements IContainerInputHandler, IContainerTooltipHandler {
+        @Override
         public boolean mouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
             if (canHandle(gui)) {
                 if (button == 0) {
@@ -262,16 +279,18 @@ public class GT_NEI_DefaultHandler
             return false;
         }
 
+        @Override
         public boolean lastKeyTyped(GuiContainer gui, char keyChar, int keyCode) {
             return false;
         }
 
         public boolean canHandle(GuiContainer gui) {
             return (gui instanceof GT_GUIContainer_BasicMachine && GT_Utility.isStringValid(((GT_GUIContainer_BasicMachine) gui).mNEI))
-            		|| (gui instanceof GT_GUIContainer_FusionReactor && GT_Utility.isStringValid(((GT_GUIContainer_FusionReactor) gui).mNEI))
-            		|| (gui instanceof GT_GUIContainer_PrimitiveBlastFurnace && GT_Utility.isStringValid(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI));
+                    || (gui instanceof GT_GUIContainer_FusionReactor && GT_Utility.isStringValid(((GT_GUIContainer_FusionReactor) gui).mNEI))
+                    || (gui instanceof GT_GUIContainer_PrimitiveBlastFurnace && GT_Utility.isStringValid(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI));
         }
 
+        @Override
         public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
             if ((canHandle(gui)) && (currenttip.isEmpty())) {
                 if (gui instanceof GT_GUIContainer_BasicMachine && new Rectangle(65, 13, 36, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) {
@@ -288,43 +307,52 @@ public class GT_NEI_DefaultHandler
 
         private boolean transferRect(GuiContainer gui, boolean usage) {
             if (gui instanceof GT_GUIContainer_BasicMachine) {
-                return (canHandle(gui)) && (new Rectangle(65, 13, 36, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_BasicMachine) gui).mNEI, new Object[0]) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_BasicMachine) gui).mNEI, new Object[0]));
+                return (canHandle(gui)) && (new Rectangle(65, 13, 36, 18).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_BasicMachine) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_BasicMachine) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_BasicMachine) gui).mNEI) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_BasicMachine) gui).mNEI));
             } else if (gui instanceof GT_GUIContainer_FusionReactor) {
-                return (canHandle(gui)) && (new Rectangle(145, 0, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_FusionReactor) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_FusionReactor) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI, new Object[0]) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI, new Object[0]));
+                return (canHandle(gui)) && (new Rectangle(145, 0, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_FusionReactor) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_FusionReactor) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_FusionReactor) gui).mNEI));
             } else if (gui instanceof GT_GUIContainer_PrimitiveBlastFurnace) {
-                return (canHandle(gui)) && (new Rectangle(51, 10, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI, new Object[0]) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI, new Object[0]));
+                return (canHandle(gui)) && (new Rectangle(51, 10, 24, 24).contains(new Point(GuiDraw.getMousePosition().x - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getLeft() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[0], GuiDraw.getMousePosition().y - ((GT_GUIContainer_PrimitiveBlastFurnace) gui).getTop() - codechicken.nei.recipe.RecipeInfo.getGuiOffset(gui)[1]))) && (usage ? GuiUsageRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI) : GuiCraftingRecipe.openRecipeGui(((GT_GUIContainer_PrimitiveBlastFurnace) gui).mNEI));
             }
             return false;
         }
 
+        @Override
         public List<String> handleItemDisplayName(GuiContainer gui, ItemStack itemstack, List<String> currenttip) {
             return currenttip;
         }
 
+        @Override
         public List<String> handleItemTooltip(GuiContainer gui, ItemStack itemstack, int mousex, int mousey, List<String> currenttip) {
             return currenttip;
         }
 
+        @Override
         public boolean keyTyped(GuiContainer gui, char keyChar, int keyCode) {
             return false;
         }
 
+        @Override
         public void onKeyTyped(GuiContainer gui, char keyChar, int keyID) {
         }
 
+        @Override
         public void onMouseClicked(GuiContainer gui, int mousex, int mousey, int button) {
         }
 
+        @Override
         public void onMouseUp(GuiContainer gui, int mousex, int mousey, int button) {
         }
 
+        @Override
         public boolean mouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
             return false;
         }
 
+        @Override
         public void onMouseScrolled(GuiContainer gui, int mousex, int mousey, int scrolled) {
         }
 
+        @Override
         public void onMouseDragged(GuiContainer gui, int mousex, int mousey, int button, long heldTime) {
         }
     }
@@ -342,6 +370,7 @@ public class GT_NEI_DefaultHandler
             this.mChance = aChance;
         }
 
+        @Override
         public void generatePermutations() {
             if (this.permutated) {
                 return;
@@ -353,7 +382,7 @@ public class GT_NEI_DefaultHandler
                         List<ItemStack> permutations = codechicken.nei.ItemList.itemMap.get(tStack.getItem());
                         if (!permutations.isEmpty()) {
                             ItemStack stack;
-                            for (Iterator i$ = permutations.iterator(); i$.hasNext(); tDisplayStacks.add(GT_Utility.copyAmount(tStack.stackSize, new Object[]{stack}))) {
+                            for (Iterator i$ = permutations.iterator(); i$.hasNext(); tDisplayStacks.add(GT_Utility.copyAmount(tStack.stackSize, stack))) {
                                 stack = (ItemStack) i$.next();
                             }
                         } else {
@@ -362,7 +391,7 @@ public class GT_NEI_DefaultHandler
                             tDisplayStacks.add(base);
                         }
                     } else {
-                        tDisplayStacks.add(GT_Utility.copy(new Object[]{tStack}));
+                        tDisplayStacks.add(GT_Utility.copyOrNull(tStack));
                     }
                 }
             }
@@ -384,33 +413,33 @@ public class GT_NEI_DefaultHandler
         public CachedDefaultRecipe(GT_Recipe aRecipe) {
             super();
             this.mRecipe = aRecipe;
-			List<PositionedStack> maybeIn; 
-			List<PositionedStack> maybeOut;
-			
-			try {
+            List<PositionedStack> maybeIn;
+            List<PositionedStack> maybeOut;
+
+            try {
                 maybeIn = aRecipe.getInputPositionedStacks();
             } catch(NullPointerException npe) {
-			    maybeIn = null;
-			    GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe.toString());
+                maybeIn = null;
+                GT_Log.err.println("CachedDefaultRecipe - Invalid InputPositionedStacks " + aRecipe.toString());
                 npe.printStackTrace(GT_Log.err);
             }
-			try {
+            try {
                 maybeOut = aRecipe.getOutputPositionedStacks();
             } catch (NullPointerException npe) {
-			    maybeOut = null;
+                maybeOut = null;
                 GT_Log.err.println("CachedDefaultRecipe - Invalid OutputPositionedStacks " + aRecipe.toString());
                 npe.printStackTrace(GT_Log.err);
             }
-			
+
             if ( maybeIn != null && maybeOut != null) {
-            	mInputs = maybeIn;
-            	mOutputs = maybeOut;
-            	return;
+                mInputs = maybeIn;
+                mOutputs = maybeOut;
+                return;
             }
 
             mOutputs = new ArrayList<>();
             mInputs = new ArrayList<>();
-            
+
             int tStartIndex = 0;
             switch (GT_NEI_DefaultHandler.this.mRecipeMap.mUsualInputCount) {
                 case 0:
@@ -845,20 +874,23 @@ public class GT_NEI_DefaultHandler
             }
         }
 
+        @Override
         public List<PositionedStack> getIngredients() {
             return getCycledIngredients(GT_NEI_DefaultHandler.this.cycleticks / 10, this.mInputs);
         }
 
+        @Override
         public PositionedStack getResult() {
             return null;
         }
 
+        @Override
         public List<PositionedStack> getOtherStacks() {
             return this.mOutputs;
         }
-    } 
-    
+    }
+
     public String trans(String aKey, String aEnglish){
-    	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+        return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
     }
 }

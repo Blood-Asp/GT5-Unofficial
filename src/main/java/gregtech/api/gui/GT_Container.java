@@ -26,6 +26,7 @@ public class GT_Container extends Container {
 
         mTileEntity = aTileEntityInventory;
         mPlayerInventory = aPlayerInventory;
+        mTileEntity.openInventory();
     }
 
     /**
@@ -141,7 +142,7 @@ public class GT_Container extends Container {
                 if (aSlot != null && aSlot.canTakeStack(aPlayer)) {
                     tTempStack = this.transferStackInSlot(aPlayer, aSlotIndex);
                     if (tTempStack != null) {
-                        rStack = GT_Utility.copy(tTempStack);
+                        rStack = GT_Utility.copyOrNull(tTempStack);
                         if (aSlot.getStack() != null && aSlot.getStack().getItem() == tTempStack.getItem()) {
                             slotClick(aSlotIndex, aMouseclick, aShifthold, aPlayer);
                         }
@@ -156,7 +157,7 @@ public class GT_Container extends Container {
                     tTempStack = aSlot.getStack();
                     ItemStack var13 = aPlayerInventory.getItemStack();
                     if (tTempStack != null) {
-                        rStack = GT_Utility.copy(tTempStack);
+                        rStack = GT_Utility.copyOrNull(tTempStack);
                     }
                     if (tTempStack == null) {
                         if (var13 != null && aSlot.isItemValid(var13)) {
@@ -252,7 +253,7 @@ public class GT_Container extends Container {
         } else if (aShifthold == 3 && aPlayer.capabilities.isCreativeMode && aPlayerInventory.getItemStack() == null && aSlotIndex >= 0) {
             aSlot = (Slot) this.inventorySlots.get(aSlotIndex);
             if (aSlot != null && aSlot.getHasStack()) {
-                tTempStack = GT_Utility.copy(aSlot.getStack());
+                tTempStack = GT_Utility.copyOrNull(aSlot.getStack());
                 tTempStack.stackSize = tTempStack.getMaxStackSize();
                 aPlayerInventory.setItemStack(tTempStack);
             }
@@ -270,7 +271,7 @@ public class GT_Container extends Container {
         //null checks and checks if the item can be stacked (maxStackSize > 1)
         if (getSlotCount() > 0 && slotObject != null && slotObject.getHasStack() && !(slotObject instanceof GT_Slot_Holo)) {
             ItemStack stackInSlot = slotObject.getStack();
-            stack = GT_Utility.copy(stackInSlot);
+            stack = GT_Utility.copyOrNull(stackInSlot);
 
             //TileEntity -> Player
             if (aSlotIndex < getAllSlotCount()) {
@@ -468,6 +469,7 @@ public class GT_Container extends Container {
     public void onContainerClosed(EntityPlayer par1EntityPlayer) {
         try {
             super.onContainerClosed(par1EntityPlayer);
+            mTileEntity.closeInventory();
         } catch (Throwable e) {
             e.printStackTrace(GT_Log.err);
         }

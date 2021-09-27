@@ -1,17 +1,5 @@
 package gregtech.common;
 
-import static gregtech.api.enums.GT_Values.debugOrevein;
-import static gregtech.api.enums.GT_Values.debugWorldGen;
-import static gregtech.api.enums.GT_Values.oreveinAttempts;
-import static gregtech.api.enums.GT_Values.oreveinMaxPlacementAttempts;
-import static gregtech.api.enums.GT_Values.oreveinPercentage;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Random;
-
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTech_API;
@@ -26,18 +14,23 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
-// Disabled for hardcoded value.    import static gregtech.api.enums.GT_Values.oreveinMaxSize;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Random;
 
-public class GT_Worldgenerator
-implements IWorldGenerator {
-    //public static boolean sAsteroids = true;
+import static gregtech.api.enums.GT_Values.debugOrevein;
+import static gregtech.api.enums.GT_Values.debugWorldGen;
+import static gregtech.api.enums.GT_Values.oreveinAttempts;
+import static gregtech.api.enums.GT_Values.oreveinMaxPlacementAttempts;
+import static gregtech.api.enums.GT_Values.oreveinPercentage;
+
+public class GT_Worldgenerator implements IWorldGenerator {
     private static int mEndAsteroidProbability = 300;
-    //private static int mGCAsteroidProbability = 50;
     private static int mSize = 100;
     private static int endMinSize = 50;
     private static int endMaxSize = 200;
-    //private static int gcMinSize = 100;
-    //private static int gcMaxSize = 400;
     private static boolean endAsteroids = true;
     public static List<Runnable> mList = new ArrayList();
     public static HashSet<Long> ProcChunks = new HashSet<Long>();
@@ -46,7 +39,6 @@ implements IWorldGenerator {
     public static Hashtable<Long, GT_Worldgen_GT_Ore_Layer> validOreveins = new Hashtable(1024);
     public boolean mIsGenerating = false;
     public static final Object listLock = new Object();
-    //private static boolean gcAsteroids = true;
 
 
     public GT_Worldgenerator() {
@@ -54,10 +46,6 @@ implements IWorldGenerator {
         endMinSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMinSize", 50);
         endMaxSize = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidMaxSize", 200);
         mEndAsteroidProbability = GregTech_API.sWorldgenFile.get("endasteroids", "AsteroidProbability", 300);
-        //gcAsteroids = GregTech_API.sWorldgenFile.get("gcasteroids", "GenerateGCAsteroids", true);
-        //gcMinSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMinSize", 100);
-        //gcMaxSize = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidMaxSize", 400);
-        //mGCAsteroidProbability = GregTech_API.sWorldgenFile.get("gcasteroids", "GCAsteroidProbability", 300);
         GameRegistry.registerWorldGenerator(this, 1073741823);
         if (debugWorldGen) {
             GT_Log.out.println(
@@ -66,36 +54,37 @@ implements IWorldGenerator {
         }
     }
 
+    @Override
     public void generate(Random aRandom, int aX, int aZ, World aWorld, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
         synchronized (listLock)
         {
-            this.mList.add(new WorldGenContainer(new XSTR(Math.abs(aRandom.nextInt()) +1), aX, aZ, aWorld.provider.dimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
+            mList.add(new WorldGenContainer(new XSTR(Math.abs(aRandom.nextInt()) +1), aX, aZ, aWorld.provider.dimensionId, aWorld, aChunkGenerator, aChunkProvider, aWorld.getBiomeGenForCoords(aX * 16 + 8, aZ * 16 + 8).biomeName));
             if (debugWorldGen) GT_Log.out.println(
                 "ADD WorldSeed:"+aWorld.getSeed() +
                 " DimId" + aWorld.provider.dimensionId + 
                 " chunk x:" + aX + 
                 " z:" + aZ + 
-                " SIZE: " + this.mList.size()
+                " SIZE: " + mList.size()
             );
         }
 
         if (!this.mIsGenerating) {
             this.mIsGenerating = true;
-            int mList_sS=this.mList.size();
+            int mList_sS= mList.size();
             mList_sS = Math.min(mList_sS, 5); // Run a maximum of 5 chunks at a time through worldgen. Extra chunks get done later.
             for (int i = 0; i < mList_sS; i++) {
-                WorldGenContainer toRun = (WorldGenContainer) this.mList.get(0);
+                WorldGenContainer toRun = (WorldGenContainer) mList.get(0);
                 if (debugWorldGen) GT_Log.out.println(
                     "RUN WorldSeed:"+aWorld.getSeed()+
                     " DimId" + aWorld.provider.dimensionId + 
                     " chunk x:" + toRun.mX + 
                     " z:" + toRun.mZ + 
-                    " SIZE: " + this.mList.size() + 
+                    " SIZE: " + mList.size() + 
                     " i: " + i 
                 );
                 synchronized (listLock)
                 {
-                    this.mList.remove(0);
+                    mList.remove(0);
                 }
                 toRun.run();
             }
@@ -339,6 +328,7 @@ implements IWorldGenerator {
             }
         }
 
+        @Override
         public void run() {
             long startTime = System.nanoTime();
             int oreveinMaxSize;
@@ -480,16 +470,7 @@ implements IWorldGenerator {
                                                 } else if (ranOre < 10) {
                                                     GT_TileEntity_Ores.setOreBlock(mWorld, eX, eY, eZ, sporadicMeta, false);
                                                 } else {
-                                                    //if (tDimensionType == 1) {//TODO CHECK
                                                     mWorld.setBlock(eX, eY, eZ, Blocks.end_stone, 0, 0);
-                                                    //} else if (tDimensionName.equals("Asteroids")) {
-                                                    ////int asteroidType = aRandom.nextInt(20);
-                                                    ////if (asteroidType == 19) { //Rare Asteroid?
-                                                    ////mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
-                                                    ////} else {
-                                                    //mWorld.setBlock(eX, eY, eZ, GregTech_API.sBlockGranites, 8, 3);
-                                                    ////}
-                                                    //}
                                                 }
                                             }
                                         }

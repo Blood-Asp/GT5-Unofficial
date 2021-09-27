@@ -17,20 +17,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 
-public class GT_Cover_Arm
-        extends GT_CoverBehavior {
+public class GT_Cover_Arm extends GT_CoverBehavior {
     public final int mTickRate;
     //msb converted, 2nd : direction (1=export)
     //right 14 bits: internalSlot, next 14 bits adjSlot, 0 = all, slot = -1
-    protected final static int EXPORT_MASK = 0x40000000;
-    protected final static int SLOT_ID_MASK = 0x3FFF;
-    protected final static int SLOT_ID_MIN = 0;
-    protected final static int CONVERTED_BIT = 0x80000000;
+    protected static final int EXPORT_MASK = 0x40000000;
+    protected static final int SLOT_ID_MASK = 0x3FFF;
+    protected static final int SLOT_ID_MIN = 0;
+    protected static final int CONVERTED_BIT = 0x80000000;
 
     public GT_Cover_Arm(int aTickRate) {
         this.mTickRate = aTickRate;
     }
 
+    @Override
+    public boolean isRedstoneSensitive(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
+        return false;
+    }
+
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         if ((((aTileEntity instanceof IMachineProgress)) && (!((IMachineProgress) aTileEntity).isAllowedToWork()))) {
             return aCoverVariable;
@@ -41,15 +46,6 @@ public class GT_Cover_Arm
             aCoverVariable = CONVERTED_BIT | (((aCoverVariable+1) & SLOT_ID_MASK) << 14) | EXPORT_MASK;
         } else if ((aCoverVariable >>> 29) == 7) {
             aCoverVariable = CONVERTED_BIT | Math.min(Math.abs(aCoverVariable-1), SLOT_ID_MASK);
-        }
-
-        boolean usePower = false;
-        if (aTileEntity.getUniversalEnergyCapacity() >= 128L) {
-            if (aTileEntity.isUniversalEnergyStored(256L)) {
-                usePower = true;
-            } else {
-                return aCoverVariable;
-            }
         }
 
         TileEntity toTile, fromTile;
@@ -98,12 +94,10 @@ public class GT_Cover_Arm
             movedItems = GT_Utility.moveOneItemStack(fromTile, toTile, fromSide, toSide, null, false, (byte)64, (byte)1, (byte)64, (byte)1);
         }
 
-        if (usePower)
-            aTileEntity.decreaseStoredEnergyUnits(4*movedItems, true);
-
         return aCoverVariable;
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         int step = 0;
         if (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) {
@@ -116,6 +110,7 @@ public class GT_Cover_Arm
         return aCoverVariable;
     }
 
+    @Override
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         int step = (GT_Utility.getClickedFacingCoords(aSide, aX, aY, aZ)[0] >= 0.5F) ? 1 : -1;
         aCoverVariable = getNewVar(aCoverVariable, step);
@@ -157,42 +152,52 @@ public class GT_Cover_Arm
         return  CONVERTED_BIT | export | ((adjSlot & SLOT_ID_MASK) << 14) | (intSlot & SLOT_ID_MASK);
     }
 
+    @Override
     public boolean letsRedstoneGoIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsRedstoneGoOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyIn(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsEnergyOut(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidIn(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsFluidOut(byte aSide, int aCoverID, int aCoverVariable, Fluid aFluid, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsIn(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean letsItemsOut(byte aSide, int aCoverID, int aCoverVariable, int aSlot, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return this.mTickRate;
     }
@@ -218,10 +223,10 @@ public class GT_Cover_Arm
         private GT_GuiFakeItemButton intSlotIcon, adjSlotIcon;
         private int coverVariable;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         private final String ANY_TEXT = trans("ANY", "Any");
 
@@ -402,33 +407,5 @@ public class GT_Cover_Arm
                 return !export;
             return export;
         }
-
-//        getStackInSlot wasn't available client side..
-//        private void updateInventorySlots() {
-//            updateInventorySlot(intSlotIcon, internalSlotID, true);
-//            updateInventorySlot(adjSlotIcon, adjacentSlotID, false);
-//        }
-//
-//        private void updateInventorySlot(GT_GuiFakeItemButton button, int slotID, boolean internal) {
-//            if (slotID == SLOT_ID_ANY) {
-//                button.setItem(null);
-//                return;
-//            }
-//
-//            if (super.tile instanceof TileEntity && !super.tile.isDead()) {
-//                TileEntity tile;
-//                if (internal)
-//                    tile = (TileEntity) super.tile;
-//                else
-//                    tile = super.tile.getTileEntityAtSide(side);
-//
-//                if (tile instanceof IInventory && ((IInventory) tile).getSizeInventory() >= slotID) {
-//                    ItemStack item = ((IInventory) tile).getStackInSlot(slotID);
-//                    button.setItem(item);
-//                    return;
-//                }
-//            }
-//            button.setItem(null);
-//        }
     }
 }

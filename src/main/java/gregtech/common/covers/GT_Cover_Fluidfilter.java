@@ -28,6 +28,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
     private final int ANY_INPUT_FILTER_OUTPUT = 6;  //  110
     private final int ANY_INPUT_INVERT_OUTPUT = 7;  //  111
 
+    @Override
     public String getDescription(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         int aFilterMode = aCoverVariable & 7;
         int aFilterFluid = aCoverVariable >>> 3;
@@ -38,7 +39,12 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
         return(String.format("Filtering Fluid: %s  Mode: %s", sFluid.getLocalizedName(), getFilterMode(aFilterMode)));
     }
 
+    @Override
+    public boolean isRedstoneSensitive(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
+        return false;
+    }
 
+    @Override
     public int doCoverThings(byte aSide, byte aInputRedstone, int aCoverID, int aCoverVariable, ICoverable aTileEntity, long aTimer) {
         return aCoverVariable;
     }
@@ -58,6 +64,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
 
     }
 
+    @Override
     public int onCoverScrewdriverclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         int aFilterMode = aCoverVariable & 7;
         aCoverVariable ^= aFilterMode;
@@ -73,6 +80,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
         return aCoverVariable;
     }
 
+    @Override
     public boolean onCoverRightclick(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         //GT_FML_LOGGER.info("rightclick");
         if (
@@ -143,10 +151,12 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
 
     }
     
+    @Override
     public boolean alwaysLookConnected(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return true;
     }
 
+    @Override
     public int getTickRate(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity) {
         return 0;
     }
@@ -171,10 +181,10 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
         private final GT_GuiFakeItemButton fluidFilterButton;
         protected String fluidFilterName;
 
-        private final static int startX = 10;
-        private final static int startY = 25;
-        private final static int spaceX = 18;
-        private final static int spaceY = 18;
+        private static final int startX = 10;
+        private static final int startY = 25;
+        private static final int spaceX = 18;
+        private static final int spaceY = 18;
 
         public GT_FluidFilterGUICover(byte aSide, int aCoverID, int aCoverVariable, ICoverable aTileEntity)
         {
@@ -239,6 +249,7 @@ public class GT_Cover_Fluidfilter extends GT_CoverBehavior {
             updateButtons();
         }
 
+        @Override
         public void buttonClicked(GuiButton btn){
             if (getClickable(btn.id)){
                 coverVariable = getNewCoverVariable(btn.id);

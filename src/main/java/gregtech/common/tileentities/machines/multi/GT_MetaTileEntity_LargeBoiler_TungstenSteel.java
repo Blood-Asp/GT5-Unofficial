@@ -5,8 +5,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.block.Block;
 
-public class GT_MetaTileEntity_LargeBoiler_TungstenSteel
-        extends GT_MetaTileEntity_LargeBoiler {
+public class GT_MetaTileEntity_LargeBoiler_TungstenSteel extends GT_MetaTileEntity_LargeBoiler {
     public GT_MetaTileEntity_LargeBoiler_TungstenSteel(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -15,10 +14,12 @@ public class GT_MetaTileEntity_LargeBoiler_TungstenSteel
         super(aName);
     }
 
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_MetaTileEntity_LargeBoiler_TungstenSteel(this.mName);
     }
     
+    @Override
     public String getCasingMaterial(){
     	return "TungstenSteel";
     }
@@ -28,42 +29,52 @@ public class GT_MetaTileEntity_LargeBoiler_TungstenSteel
         return "Machine Casings";
     }
 
+    @Override
     public Block getCasingBlock() {
         return GregTech_API.sBlockCasings4;
     }
 
+    @Override
     public byte getCasingMeta() {
         return 0;
     }
 
+    @Override
     public byte getCasingTextureIndex() {
         return 48;
     }
 
+    @Override
     public Block getPipeBlock() {
         return GregTech_API.sBlockCasings2;
     }
 
+    @Override
     public byte getPipeMeta() {
         return 15;
     }
 
+    @Override
     public Block getFireboxBlock() {
         return GregTech_API.sBlockCasings3;
     }
 
+    @Override
     public byte getFireboxMeta() {
         return 15;
     }
 
+    @Override
     public byte getFireboxTextureIndex() {
         return 47;
     }
 
+    @Override
     public int getEUt() {
         return 1000;
     }
 
+    @Override
     public int getEfficiencyIncrease() {
         return 4;
     }
