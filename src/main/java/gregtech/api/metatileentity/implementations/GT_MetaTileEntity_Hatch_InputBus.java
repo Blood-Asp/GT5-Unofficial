@@ -218,7 +218,7 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
 
     protected boolean limitedAllowPutStack(int aIndex, ItemStack aStack) {
         for (int i = 0; i < getSizeInventory(); i++)
-            if (GT_Utility.areStacksEqual(GT_OreDictUnificator.get(aStack), mInventory[i]))
+            if (GT_Utility.areStacksEqual(GT_OreDictUnificator.get_nocopy(aStack), mInventory[i]))
                 return i == aIndex;
         return mInventory[aIndex] == null;
     }
