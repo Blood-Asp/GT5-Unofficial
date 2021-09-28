@@ -10,11 +10,8 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.objects.GT_FluidStack;
 import gregtech.api.objects.ItemData;
-import gregtech.api.util.GT_ModHandler;
-import gregtech.api.util.GT_OreDictUnificator;
-import gregtech.api.util.GT_Recipe;
+import gregtech.api.util.*;
 import gregtech.api.util.GT_Recipe.GT_Recipe_AssemblyLine;
-import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
@@ -660,6 +657,11 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         new GT_Recipe(aInput1, aOutput1, aDuration, aEUt, 0);//Since all other methods are taken
+        FluidStack tInputFluid = GT_Utility.getFluidForFilledItem(aInput1, true);
+        FluidStack tOutputFluid = GT_Utility.getFluidForFilledItem(aOutput1, true);
+        if (tInputFluid != null && tOutputFluid != null) {
+            addVacuumFreezerRecipe(tInputFluid, tOutputFluid, aDuration, aEUt);
+        }
         return true;
     }
 
@@ -672,6 +674,20 @@ public class GT_RecipeAdder implements IGT_RecipeAdder {
             return false;
         }
         new GT_Recipe(aInput1, aOutput1, aDuration);
+        FluidStack tInputFluid = GT_Utility.getFluidForFilledItem(aInput1, true);
+        FluidStack tOutputFluid = GT_Utility.getFluidForFilledItem(aOutput1, true);
+        if (tInputFluid != null && tOutputFluid != null) {
+            addVacuumFreezerRecipe(tInputFluid, tOutputFluid, aDuration, 120);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addVacuumFreezerRecipe(FluidStack aInput1, FluidStack aOutput1, int aDuration, int aEUt) {
+        if ((aInput1 == null) || (aOutput1 == null)) {
+            return false;
+        }
+        new GT_Recipe(aInput1,  aOutput1, aDuration, aEUt);
         return true;
     }
 
