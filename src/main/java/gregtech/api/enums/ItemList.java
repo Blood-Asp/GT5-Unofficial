@@ -376,24 +376,11 @@ public enum ItemList implements IItemContainer {
     Circuit_Biowarecomputer,
     Circuit_Biowaresupercomputer,
 
-    //These are the fan things that get used in pumps and such. For some reason there's one for every(?) material, most sitting unused
-    //LV-IV are set in GT_Loader_Item_Block_And_Fluid. Above that is not being used. The coremod has higher tier SB recipes
-    //ULV: energy/dynamo hatch is lead, pump is potin
-    Rotor_LV,//tin
-    Rotor_MV,//bronze
-    Rotor_HV,//steel
-    Rotor_EV,//stainlesssteel
-    Rotor_IV,//tungstensteel
-    Rotor_LuV,//LuV muffler is enderium, pump (TT) is hss-s, LuV CR, LuV mixer, LuV OWP is the BW RPP, though this enum is unused 
-    Rotor_ZPM,//ZPM muffler, pump (TT) is naq alloy, ZPM CR, ZPM mixer, ZPM OWP is iridium, though this enum is unused
-    Rotor_UV,//UV muffler, pump (TT) is neutronium in TT, UV CR, UV mixer, UV OWP is osmium, though this enum is unused
-    Rotor_UHV,//UHV muffler, pump (TT) is cosmic neutronium, UHV CR, UHV OWP is osmium, UHV mixer is neutronium
-    Rotor_UEV,//pump (TT) is infinity, UEV CR UEV OWP is osmium, UEV mixer is neutronium
-    Rotor_UIV,
-    Rotor_UMV,
-    Rotor_UXV,
-    Rotor_OpV,
-    Rotor_MAX,
+    Rotor_LV,//these aren't actually used
+    Rotor_MV,
+    Rotor_HV,
+    Rotor_EV,
+    Rotor_IV,
 
     Electric_Motor_LV,
     Electric_Motor_MV,
