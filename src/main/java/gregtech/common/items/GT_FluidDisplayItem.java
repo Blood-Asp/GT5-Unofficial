@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
 import gregtech.api.items.GT_Generic_Item;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,13 +17,20 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class GT_FluidDisplayItem extends GT_Generic_Item {
+
+    private static final Map<Fluid, String> sFluidTooltips = new HashMap<>();
+
     public GT_FluidDisplayItem() {
         super("GregTech_FluidDisplay", "Fluid Display", null);
         ItemList.Display_Fluid.set(this);
@@ -30,6 +38,10 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
 
     @Override
     protected void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
+        if (FluidRegistry.getFluid(aStack.getItemDamage()) != null) {
+            String tChemicalFormula = getChemicalFormula(new FluidStack(FluidRegistry.getFluid(aStack.getItemDamage()), 1));
+            if (!tChemicalFormula.equals("")) aList.add(EnumChatFormatting.GRAY + tChemicalFormula + EnumChatFormatting.GRAY);
+        }
         NBTTagCompound aNBT = aStack.getTagCompound();
         if (GT_Values.D1) {
             Fluid tFluid = FluidRegistry.getFluid(aStack.getItemDamage());
@@ -40,7 +52,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         if (aNBT != null) {
             long tToolTipAmount = aNBT.getLong("mFluidDisplayAmount");
             if (tToolTipAmount > 0L) {
-            	aList.add(EnumChatFormatting.BLUE + String.format(trans("016", "Amount: %s L"), "" + tToolTipAmount) + EnumChatFormatting.GRAY);
+                aList.add(EnumChatFormatting.BLUE + String.format(trans("016", "Amount: %s L"), "" + tToolTipAmount) + EnumChatFormatting.GRAY);
             }
             aList.add(EnumChatFormatting.RED + String.format(trans("017", "Temperature: %s K"), "" + aNBT.getLong("mFluidDisplayHeat")) + EnumChatFormatting.GRAY);
             aList.add(EnumChatFormatting.GREEN + String.format(trans("018", "State: %s"), aNBT.getBoolean("mFluidState") ? "Gas" : "Liquid") + EnumChatFormatting.GRAY);
@@ -90,6 +102,37 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
         return "";
     }
 
+    @SideOnly(Side.CLIENT)
+    public String getChemicalFormula(FluidStack aRealFluid) {
+        return sFluidTooltips.computeIfAbsent(aRealFluid.getFluid(),
+                fluid -> {
+                    for(ItemStack tContainer : GT_Utility.getContainersFromFluid(aRealFluid)) {
+                        if (isCell(tContainer)) {
+                            Materials tMaterial = getMaterialFromCell(tContainer);
+                            if (!tMaterial.equals(Materials._NULL)) {
+                                if (tMaterial.mChemicalFormula.equals("?")) {
+                                    return "";
+                                }
+                                else {
+                                    return tMaterial.mChemicalFormula;
+                                }
+                            }
+                            else {
+                                // For GT++ Fluid Display
+                                // GT++ didn't register a Material in GT, so I have too find the Chemical Formula in its cell's tooltip
+                                List tTooltip = tContainer.getTooltip(null, true);
+                                for (Object tInfo : tTooltip) {
+                                    if (!((String) tInfo).contains(" ") && !((String) tInfo).contains(":") && tTooltip.indexOf(tInfo) != 0) {
+                                        return (String) tInfo;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return "";
+        });
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item aItem, CreativeTabs aTab, List aList) {
@@ -102,5 +145,27 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
                 }
             }
         }
+    }
+
+    public static boolean isCell(ItemStack tItemStack) {
+        for (int tOreDict : OreDictionary.getOreIDs(tItemStack)) {
+            String tOreDictName = OreDictionary.getOreName(tOreDict);
+            if (tOreDictName.startsWith("cell")) return true;
+        }
+        return false;
+    }
+
+    public static Materials getMaterialFromCell(ItemStack tItemStack) {
+        for (int tOreDict : OreDictionary.getOreIDs(tItemStack)) {
+            String tOreDictName = OreDictionary.getOreName(tOreDict);
+            if (tOreDictName.startsWith("cell")) {
+                return Materials.getRealMaterial(
+                        tOreDictName.replace("cell", "")
+                                .replace("Molten", "")
+                                .replace("Plasma", "")
+                );
+            }
+        }
+        return Materials._NULL;
     }
 }
