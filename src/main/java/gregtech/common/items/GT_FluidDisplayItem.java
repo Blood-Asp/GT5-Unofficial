@@ -104,7 +104,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
 
     @SideOnly(Side.CLIENT)
     public String getChemicalFormula(FluidStack aRealFluid) {
-        sFluidTooltips.computeIfAbsent(aRealFluid.getFluid(),
+        return sFluidTooltips.computeIfAbsent(aRealFluid.getFluid(),
                 fluid -> {
                     for(ItemStack tContainer : GT_Utility.getContainersFromFluid(aRealFluid)) {
                         if (isCell(tContainer)) {
@@ -131,7 +131,6 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
                     }
                     return "";
         });
-        return sFluidTooltips.get(aRealFluid.getFluid());
     }
 
     @Override
