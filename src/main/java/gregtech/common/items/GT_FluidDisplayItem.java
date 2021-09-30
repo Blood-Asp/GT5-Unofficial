@@ -40,7 +40,7 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
     protected void addAdditionalToolTips(List aList, ItemStack aStack, EntityPlayer aPlayer) {
         if (FluidRegistry.getFluid(aStack.getItemDamage()) != null) {
             String tChemicalFormula = getChemicalFormula(new FluidStack(FluidRegistry.getFluid(aStack.getItemDamage()), 1));
-            if (!tChemicalFormula.equals("")) aList.add(EnumChatFormatting.GRAY + tChemicalFormula + EnumChatFormatting.GRAY);
+            if (!tChemicalFormula.isEmpty()) aList.add(EnumChatFormatting.GRAY + tChemicalFormula + EnumChatFormatting.GRAY);
         }
         NBTTagCompound aNBT = aStack.getTagCompound();
         if (GT_Values.D1) {
