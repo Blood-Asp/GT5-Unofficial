@@ -104,33 +104,33 @@ public class GT_FluidDisplayItem extends GT_Generic_Item {
 
     @SideOnly(Side.CLIENT)
     public String getChemicalFormula(FluidStack aRealFluid) {
-        if (sFluidTooltips.get(aRealFluid.getFluid()) == null) {
-            for(ItemStack tContainer : GT_Utility.getContainersFromFluid(aRealFluid)) {
-                if (isCell(tContainer)) {
-                    Materials tMaterial = getMaterialFromCell(tContainer);
-                    if (!tMaterial.equals(Materials._NULL)) {
-                        if (tMaterial.mChemicalFormula.equals("?")) {
-                            sFluidTooltips.put(aRealFluid.getFluid(), "");
-                        }
-                        else {
-                            sFluidTooltips.put(aRealFluid.getFluid(), tMaterial.mChemicalFormula);
-                        }
-                    }
-                    else {
-                        // For GT++ Fluid Display
-                        // GT++ didn't register a Material in GT, so I have too find the Chemical Formula in its cell's tooltip
-                        List tTooltip = tContainer.getTooltip(null, true);
-                        for (Object tInfo : tTooltip) {
-                            if (!((String) tInfo).contains(" ") && !((String) tInfo).contains(":") && tTooltip.indexOf(tInfo) != 0) {
-                                sFluidTooltips.put(aRealFluid.getFluid(), (String) tInfo);
-                                break;
+        sFluidTooltips.computeIfAbsent(aRealFluid.getFluid(),
+                fluid -> {
+                    for(ItemStack tContainer : GT_Utility.getContainersFromFluid(aRealFluid)) {
+                        if (isCell(tContainer)) {
+                            Materials tMaterial = getMaterialFromCell(tContainer);
+                            if (!tMaterial.equals(Materials._NULL)) {
+                                if (tMaterial.mChemicalFormula.equals("?")) {
+                                    return "";
+                                }
+                                else {
+                                    return tMaterial.mChemicalFormula;
+                                }
+                            }
+                            else {
+                                // For GT++ Fluid Display
+                                // GT++ didn't register a Material in GT, so I have too find the Chemical Formula in its cell's tooltip
+                                List tTooltip = tContainer.getTooltip(null, true);
+                                for (Object tInfo : tTooltip) {
+                                    if (!((String) tInfo).contains(" ") && !((String) tInfo).contains(":") && tTooltip.indexOf(tInfo) != 0) {
+                                        return (String) tInfo;
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-            sFluidTooltips.putIfAbsent(aRealFluid.getFluid(), "");
-        }
+                    return "";
+        });
         return sFluidTooltips.get(aRealFluid.getFluid());
     }
 
