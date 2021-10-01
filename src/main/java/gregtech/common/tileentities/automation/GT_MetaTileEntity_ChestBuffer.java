@@ -70,7 +70,7 @@ public class GT_MetaTileEntity_ChestBuffer extends GT_MetaTileEntity_Buffer {
     protected void moveItems(IGregTechTileEntity aBaseMetaTileEntity, long aTimer) {
         if (aTimer % tickRate[mTier] > 0) return;
 
-        if(aBaseMetaTileEntity.hasInventoryBeenModified()) {
+        if(this.bSortStacks && aBaseMetaTileEntity.hasInventoryBeenModified()) {
             fillStacksIntoFirstSlots();
         }
         // mSuccess will be negative if the call is caused by the %200 aTimer, always try to push. Otherwise it will be positive.
