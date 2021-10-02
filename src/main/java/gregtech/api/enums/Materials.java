@@ -1218,6 +1218,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         Sodalite.setOreMultiplier(6).setSmeltingMultiplier(6).setByProductMultiplier(4);
         Lazurite.setOreMultiplier(6).setSmeltingMultiplier(6).setByProductMultiplier(4);
         Monazite.setOreMultiplier(8).setSmeltingMultiplier(8).setByProductMultiplier(2);
+        Cryolite.setOreMultiplier(4).setByProductMultiplier(4);
     }
 
     private static void setEnchantmentKnockbackTools() {

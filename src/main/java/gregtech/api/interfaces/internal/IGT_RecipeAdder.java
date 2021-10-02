@@ -584,6 +584,8 @@ public interface IGT_RecipeAdder {
      */
     boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt);
 
+    boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, FluidStack aFluidOutput, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, int[] aChances, int aDuration, int aEUt);
+
     /**
      * Adds a Recipe for the Electromagnetic Separator
      */
@@ -723,4 +725,6 @@ public interface IGT_RecipeAdder {
      * @return true if the Sound got added, otherwise false.
      */
     boolean addSonictronSound(ItemStack aItemStack, String aSoundName);
+
+    boolean addChemicalBathRecipe(ItemStack aInput, FluidStack aBathingFluid, ItemStack aOutput1, ItemStack aOutput2, ItemStack aOutput3, FluidStack aFluidOutput, int[] aChances, int aDuration, int aEUt);
 }
