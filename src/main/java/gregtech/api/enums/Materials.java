@@ -1585,6 +1585,7 @@ public class Materials implements IColorModulationContainer, ISubTagContainer {
         InfinityCatalyst.mChemicalFormula = "If";
         //Pentacadmiummagneiumhexaoxid.mChemicalFormula="Cd5MgO6";
         CosmicNeutronium.mChemicalFormula = "SpNt";
+        Aluminiumhydroxide.mChemicalFormula = "Al\u0028OH\u0029\u2083";
     }
 
     private static void initSubTags() {
