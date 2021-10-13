@@ -225,6 +225,7 @@ public class GT_MetaTileEntity_DistillationTower extends GT_MetaTileEntity_Enhan
         mOutputHatchesByLayer.forEach(List::clear);
         mHeight = 1;
         mTopLayerFound = false;
+        mCasing = 0;
 
         // check base
         if (!checkPiece(STRUCTURE_PIECE_BASE, 1, 0, 0))
