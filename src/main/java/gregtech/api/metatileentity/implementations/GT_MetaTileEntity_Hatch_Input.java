@@ -1,6 +1,5 @@
 package gregtech.api.metatileentity.implementations;
 
-import gregtech.GT_Mod;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -12,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
-import static gregtech.api.enums.Textures.BlockIcons.FLUID_IN_SIGN;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE_IN;
 
 public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
@@ -34,16 +32,12 @@ public class GT_MetaTileEntity_Hatch_Input extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return GT_Mod.gregtechproxy.mRenderIndicatorsOnHatch ?
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), TextureFactory.of(FLUID_IN_SIGN)} :
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return GT_Mod.gregtechproxy.mRenderIndicatorsOnHatch ?
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), TextureFactory.of(FLUID_IN_SIGN)} :
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
     }
 
     @Override

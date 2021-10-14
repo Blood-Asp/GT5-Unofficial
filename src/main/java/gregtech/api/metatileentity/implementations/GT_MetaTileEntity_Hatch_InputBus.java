@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 
-import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE_IN;
 
 public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
     public GT_Recipe_Map mRecipeMap = null;
@@ -53,16 +53,12 @@ public class GT_MetaTileEntity_Hatch_InputBus extends GT_MetaTileEntity_Hatch {
 
     @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
-        return GT_Mod.gregtechproxy.mRenderIndicatorsOnHatch ?
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), TextureFactory.of(ITEM_IN_SIGN)} :
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
     }
 
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
-        return GT_Mod.gregtechproxy.mRenderIndicatorsOnHatch ?
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN), TextureFactory.of(ITEM_IN_SIGN)} :
-                new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
+        return new ITexture[]{aBaseTexture, TextureFactory.of(OVERLAY_PIPE_IN)};
     }
 
     @Override
