@@ -12,7 +12,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Muffler;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.render.TextureFactory;
@@ -142,72 +141,57 @@ public class GT_MetaTileEntity_ElectricBlastFurnace extends GT_MetaTileEntity_Ab
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
+        ItemStack[] tInputs = getCompactedInputs();
+        FluidStack[] tFluids = getCompactedFluids();
+
+        if (tInputs.length <= 0)
+            return false;
+
         long tVoltage = getMaxInputVoltage();
         byte tTier = (byte) Math.max(1, GT_Utility.getTier(tVoltage));
+        GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sBlastRecipes.findRecipe(
+                getBaseMetaTileEntity(),
+                false,
+                V[tTier],
+                tFluids,
+                tInputs
+        );
+
+        if (tRecipe == null)
+            return false;
+        if (this.mHeatingCapacity < tRecipe.mSpecialValue)
+            return false;
+        if (!tRecipe.isRecipeInputEqual(true, tFluids, tInputs))
+            return false;
+
         this.mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
         this.mEfficiencyIncrease = 10000;
-
-        FluidStack[] tFluids = getStoredFluids().toArray(new FluidStack[0]);
-
-        for (GT_MetaTileEntity_Hatch_InputBus tBus : mInputBusses) {
-            ArrayList<ItemStack> tInputs = new ArrayList<>();
-            tBus.mRecipeMap = getRecipeMap();
-
-            if (isValidMetaTileEntity(tBus)) {
-                for (int i = tBus.getBaseMetaTileEntity().getSizeInventory() - 1; i >= 0; i--) {
-                    if (tBus.getBaseMetaTileEntity().getStackInSlot(i) != null) {
-                        tInputs.add(tBus.getBaseMetaTileEntity().getStackInSlot(i));
-                    }
-                }
-            }
-
-            if (tInputs.size() <= 0)
-                continue;
-
-            ItemStack[] tItems = tInputs.toArray(new ItemStack[0]);
-
-            GT_Recipe tRecipe = GT_Recipe.GT_Recipe_Map.sBlastRecipes.findRecipe(
-                    getBaseMetaTileEntity(),
-                    false,
-                    V[tTier],
-                    tFluids,
-                    tItems
-            );
-
-            if (tRecipe == null)
-                continue;
-            if (this.mHeatingCapacity < tRecipe.mSpecialValue)
-                continue;
-            if (!tRecipe.isRecipeInputEqual(true, tFluids, tItems))
-                continue;
-            //In case recipe is too OP for that machine
-            if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
-                continue;
-
-            int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue) / 900;
-            byte overclockCount = calculateOverclockednessEBF(tRecipe.mEUt, tRecipe.mDuration, tVoltage);
-            if (this.mEUt > 0) {
-                this.mEUt = (-this.mEUt);
-            }
-            if (tHeatCapacityDivTiers > 0) {
-                this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
-                this.mMaxProgresstime >>= Math.min(tHeatCapacityDivTiers / 2, overclockCount);//extra free overclocking if possible
-                if (this.mMaxProgresstime < 1)
-                    this.mMaxProgresstime = 1;//no eu efficiency correction
-            }
-            this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
-            this.mOutputItems = new ItemStack[]{
-                    tRecipe.getOutput(0),
-                    tRecipe.getOutput(1)
-            };
-            this.mOutputFluids = new FluidStack[]{
-                    tRecipe.getFluidOutput(0)
-            };
-            updateSlots();
-            return true;
+        int tHeatCapacityDivTiers = (mHeatingCapacity - tRecipe.mSpecialValue) / 900;
+        byte overclockCount = calculateOverclockednessEBF(tRecipe.mEUt, tRecipe.mDuration, tVoltage);
+        //In case recipe is too OP for that machine
+        if (mMaxProgresstime == Integer.MAX_VALUE - 1 && mEUt == Integer.MAX_VALUE - 1)
+            return false;
+        if (this.mEUt > 0) {
+            this.mEUt = (-this.mEUt);
         }
-        return false;
+        if (tHeatCapacityDivTiers > 0) {
+            this.mEUt = (int) (this.mEUt * (Math.pow(0.95, tHeatCapacityDivTiers)));
+            this.mMaxProgresstime >>= Math.min(tHeatCapacityDivTiers / 2, overclockCount);//extra free overclocking if possible
+            if (this.mMaxProgresstime < 1)
+                this.mMaxProgresstime = 1;//no eu efficiency correction
+        }
+        this.mMaxProgresstime = Math.max(1, this.mMaxProgresstime);
+        this.mOutputItems = new ItemStack[]{
+                tRecipe.getOutput(0),
+                tRecipe.getOutput(1)
+        };
+        this.mOutputFluids = new FluidStack[]{
+                tRecipe.getFluidOutput(0)
+        };
+        updateSlots();
+        return true;
     }
+
     /**
      * Calcualtes overclocked ness using long integers
      *
